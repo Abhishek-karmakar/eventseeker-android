@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootRltLayout"
+  	android:layout_width="match_parent"
+  	android:layout_height="match_parent" >
+  
+  	<ImageView android:id="@+id/imgFriend"
+    	android:layout_width="match_parent"
+    	android:layout_height="@dimen/img_friend_ht_grid_friend"
+    	android:scaleType="fitXY" />
+  
+	<TextView android:id="@+id/txtFriendName"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@id/imgFriend"
+	    android:layout_alignLeft="@id/imgFriend"
+	    android:layout_alignRight="@id/imgFriend"
+	    style="@style/SingleLineMarqueeTxt"
+	    android:textSize="@dimen/txt_friend_name_txt_size_grid_friend" />
+
+</RelativeLayout>

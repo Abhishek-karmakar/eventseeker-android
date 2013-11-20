@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+    
+    <TextView android:id="@+id/txtTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/txt_title_margin_l_navigation_drawer_list_section_header"
+        android:textColor="@color/darker_gray"
+        android:textSize="@dimen/txt_title_txt_size_navigation_drawer_list_section_header" />
+    
+    <View android:id="@+id/dividerSection"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/divider_section_ht_navigation_drawer_list_item"
+        android:layout_below="@id/txtTitle"
+        android:background="@drawable/side_nav_topic_divider" />
+    
+</RelativeLayout>

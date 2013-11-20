@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/rltLayoutDesc"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/story_space"
+    android:layout_marginTop="@dimen/rlt_layout_evt_desc_margin_t_fragment_event_info"
+    android:layout_weight="1"
+    android:layout_marginRight="@dimen/rlt_layout_img_evt_margin_r_fragment_event_info"
+    android:minHeight="@dimen/rlt_layout_item_desc_min_ht_fragment_event_info" >
+ 
+ 	<TextView android:id="@+id/txtDesc"
+     	android:layout_width="match_parent"
+     	android:layout_height="wrap_content"
+     	android:ellipsize="end"
+     	android:padding="@dimen/txt_evt_desc_pad_fragment_evt_info" />
+ 
+ 	<ImageView android:id="@+id/imgDown"
+    	android:layout_width="wrap_content"
+     	android:layout_height="wrap_content"
+     	android:layout_below="@id/txtDesc"
+     	android:src="@drawable/down"
+     	android:layout_alignParentRight="true"
+     	android:layout_marginRight="@dimen/img_down_margin_r_fragment_evt_info"
+     	android:layout_marginBottom="@dimen/img_down_margin_b_fragment_event_info" />
+
+</RelativeLayout>

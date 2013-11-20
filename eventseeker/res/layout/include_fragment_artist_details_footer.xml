@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rltLayoutRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/lnr_layout_btns_margin_t_include_fragment_event_details_footer"
+    android:background="@color/font_blue" >
+    
+    <ImageView android:id="@+id/imgFollow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/follow"
+        android:contentDescription="Follow Image"
+        android:layout_marginLeft="@dimen/img_follow_margin_l_include_fragment_artist_details_footer"
+        android:layout_centerVertical="true" />
+    
+    <TextView android:id="@+id/txtFollow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="@dimen/txt_follow_margin_t_include_fragment_artist_details_footer"
+        android:layout_marginBottom="@dimen/txt_follow_margin_b_include_fragment_artist_details_footer"
+        android:text="Follow"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/txt_follow_txt_size_include_fragment_artist_details_footer" />
+
+</RelativeLayout>

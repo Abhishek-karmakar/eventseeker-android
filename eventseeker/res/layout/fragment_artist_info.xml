@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootRltLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_gray" >
+    
+    <ProgressBar android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+    
+    <RelativeLayout android:id="@+id/rltLayoutLoadedContent"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent" >
+    
+	    <include layout="@layout/include_fragment_artist_details_footer"
+	        android:id="@+id/fragmentArtistDetailsFooter"
+	        android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_marginTop="@dimen/lnr_layout_btns_margin_t_include_fragment_event_details_footer"
+	        android:layout_alignParentBottom="true" />
+	    
+	    <com.wcities.eventseeker.custom.view.ScrollViewContainingViewPager android:id="@+id/scrlVContent"
+	        android:layout_width="match_parent"
+		    android:layout_height="match_parent"
+		    android:layout_above="@id/fragmentArtistDetailsFooter" >
+		
+		    <LinearLayout android:id="@+id/lnrLayoutRoot"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="vertical" >
+		        
+		        <include layout="@layout/include_fragment_artist_details_img_artist"/>
+		        
+		        <ProgressBar android:id="@+id/progressBar2"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_gravity="center_horizontal"
+			        android:visibility="gone" />
+		        
+		        <include layout="@layout/include_desc" />
+		        
+		        <RelativeLayout android:id="@+id/rltLayoutVideos"
+				    android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		        	android:layout_marginTop="@dimen/rlt_layout_videos_margin_t_fragment_artist_info"
+				    android:background="@drawable/story_space"
+				    android:orientation="vertical"
+				    android:paddingTop="@dimen/rlt_layout_videos_pad_fragment_artist_info"
+				    android:paddingLeft="@dimen/rlt_layout_videos_pad_fragment_artist_info"
+				    android:paddingRight="@dimen/rlt_layout_videos_pad_fragment_artist_info" >
+				 
+				    <TextView android:id="@+id/txtVideos"
+						android:layout_width="match_parent"
+				     	android:layout_height="wrap_content"
+				     	android:text="Videos"
+				     	android:layout_marginBottom="@dimen/txt_videos_margin_b_fragment_artist_info"
+				     	android:textSize="@dimen/txt_videos_txt_size_fragment_artist_info" />
+				    
+				    <android.support.v4.view.ViewPager
+						android:id="@+id/viewPager"
+						android:layout_width="match_parent"
+						android:layout_height="@dimen/view_pager_ht_fragment_artist_info"
+						android:layout_below="@id/txtVideos" />
+				    
+				    <com.viewpagerindicator.CirclePageIndicator
+				  		android:id="@+id/pageIndicator"
+				  		android:padding="@dimen/page_indicator_pad_fragment_artist_info"
+				  		android:layout_height="wrap_content"
+				  		android:layout_width="match_parent"
+				  		android:layout_below="@id/viewPager"
+				 	 	app:radius="@dimen/page_indicator_radius_fragment_artist_info"
+				  		app:fillColor="@color/font_blue"
+				  		app:pageColor="@android:color/white"
+				  		app:strokeColor="@color/font_blue"
+				  		app:strokeWidth="@dimen/page_indicator_stroke_w_fragment_artist_info" />
+				 
+				</RelativeLayout>
+				
+		        <include layout="@layout/include_friends" />
+		        
+		    </LinearLayout>
+		
+		</com.wcities.eventseeker.custom.view.ScrollViewContainingViewPager>
+		
+	</RelativeLayout>
+    
+</RelativeLayout>

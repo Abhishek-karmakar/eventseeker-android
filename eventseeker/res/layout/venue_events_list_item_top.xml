@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rltLayoutTopItemContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/dark_gray"
+    android:paddingBottom="@dimen/rlt_layout_top_item_container_pad_b_venue_events_list_item_top" >
+    
+	<include layout="@layout/include_fragment_artist_details_img_artist"/>
+    
+</RelativeLayout>

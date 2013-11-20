@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   	xmlns:app="http://schemas.android.com/apk/res-auto"
+   	android:id="@+id/rltLayoutNewsItemContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/rlt_layout_news_item_container_pad_artist_news_item"
+    android:background="@drawable/story_space">
+    
+    <TextView android:id="@+id/txtTitle"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textSize="@dimen/txt_title_txt_size_artist_news_item"
+		android:text="posted a new photo"
+		android:layout_marginLeft="@dimen/txt_margin_l_artist_news_item"
+		android:layout_marginRight="@dimen/txt_margin_r_artist_news_item"
+		android:textColor="@android:color/black" />
+ 
+	<TextView android:id="@+id/txtTime"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/txtTitle"
+		android:layout_marginBottom="@dimen/txt_time_margin_b_artist_news_item"
+		android:textSize="@dimen/txt_time_txt_size_artist_news_item"
+		android:text="8 hours ago"
+		android:layout_marginLeft="@dimen/txt_margin_l_artist_news_item"
+		android:layout_marginRight="@dimen/txt_margin_r_artist_news_item"
+		android:textColor="@android:color/black" />
+	 
+	<com.wcities.eventseeker.custom.view.ResizableImageView android:id="@+id/imgPhoto"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/txtTime"
+		android:layout_marginBottom="@dimen/img_photo_margin_b_artist_news_item"
+		android:contentDescription="photo"
+		app:removeXtraHeight="true" />
+	 
+	<ImageView android:id="@+id/imgVideo"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignLeft="@id/imgPhoto"
+		android:layout_alignTop="@id/imgPhoto"
+		android:layout_alignRight="@id/imgPhoto"
+		android:layout_alignBottom="@id/imgPhoto"
+		android:scaleType="centerInside"
+		android:src="@drawable/play_small" />
+	 
+	<ImageView android:id="@+id/imgLink"
+		android:layout_width="@dimen/img_link_w_artist_news_item"
+		android:layout_height="@dimen/img_link_ht_artist_news_item"
+		android:layout_marginRight="@dimen/img_link_margin_r_artist_news_item"
+		android:scaleType="centerInside"
+		android:layout_below="@id/imgPhoto"
+		android:background="@drawable/image_border_black" />
+	 
+	<TextView android:id="@+id/txtLinkTitle"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/imgPhoto"
+		android:layout_toRightOf="@id/imgLink"
+		android:layout_marginBottom="@dimen/txt_link_title_margin_b_artist_news_item"
+		android:textSize="@dimen/txt_link_title_txt_size_artist_news_item"
+		android:text="link title"
+		android:textColor="@android:color/black" />
+	 
+	<TextView android:id="@+id/txtDesc"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@id/txtLinkTitle"
+	    android:layout_toRightOf="@id/imgLink"
+	    android:textSize="@dimen/txt_desc_txt_size_artist_news_item"
+	    android:text="Description"
+	    android:layout_marginLeft="@dimen/txt_margin_l_artist_news_item"
+	    android:layout_marginRight="@dimen/txt_margin_r_artist_news_item" 
+	    android:textColor="@color/txt_desc_txt_color_artist_news_item"/>
+
+</RelativeLayout>

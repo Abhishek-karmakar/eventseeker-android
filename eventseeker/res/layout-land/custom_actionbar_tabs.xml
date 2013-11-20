@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tabBar"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+    
+	<Button android:id="@+id/btnTab1"
+	    android:layout_width="wrap_content"
+	    android:layout_height="match_parent"
+	    android:text="TAB 1"
+	    style="@style/CustomTabBar" />
+	
+	<View android:id="@+id/vDivider1"
+	    android:layout_width="@dimen/v_divider_w_custom_actionbar_tabs"
+	    android:layout_height="match_parent"
+	    android:background="@color/darker_gray"
+	    android:layout_marginTop="@dimen/v_divider_margin_t_custom_actionbar_tabs"
+	    android:layout_marginBottom="@dimen/v_divider_margin_b_custom_actionbar_tabs" />
+	
+	<Button android:id="@+id/btnTab2"
+	    android:layout_width="wrap_content"
+	    android:layout_height="match_parent"
+	    android:text="TAB 2"
+	    style="@style/CustomTabBar" />
+	
+	<View android:id="@+id/vDivider2"
+	    android:layout_width="@dimen/v_divider_w_custom_actionbar_tabs"
+	    android:layout_height="match_parent"
+	    android:background="@color/darker_gray"
+	    android:layout_marginTop="@dimen/v_divider_margin_t_custom_actionbar_tabs"
+	    android:layout_marginBottom="@dimen/v_divider_margin_b_custom_actionbar_tabs" />
+	
+	<Button android:id="@+id/btnTab3"
+	    android:layout_width="wrap_content"
+	    android:layout_height="match_parent"
+	    android:text="TAB 3"
+	    style="@style/CustomTabBar" />
+	
+</LinearLayout>

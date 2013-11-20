@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="navigation_drawer_item_titles">
+        <item>@string/navigation_drawer_section_browse</item>
+        <item>@string/navigation_drawer_item_discover</item>
+	  	<item>@string/navigation_drawer_item_my_events</item>
+	  	<item>@string/navigation_drawer_item_artists_news</item>
+	  	<item>@string/navigation_drawer_item_friends_activity</item>
+	  	<item>@string/navigation_drawer_item_following</item>
+	  	<item>@string/navigation_drawer_section_settings</item>
+	  	<item>@string/navigation_drawer_item_sync_accounts</item>
+	  	<item>@string/navigation_drawer_item_change_location</item>
+	  	<item>@string/navigation_drawer_section_about</item>
+	  	<item>@string/navigation_drawer_item_invite_friends</item>
+		<item>@string/navigation_drawer_item_rate_app</item>
+	  	<item>@string/navigation_drawer_item_about</item>
+	  	<item>@string/navigation_drawer_item_eula</item>
+	  	<item>@string/navigation_drawer_item_enter_rep_code</item>
+	</string-array>
+	
+    <array name="navigation_drawer_item_icons">
+        <item>@null</item>
+	  	<item>@drawable/discover</item>
+	  	<item>@drawable/myevents</item>
+	  	<item>@drawable/latestnews</item>
+	  	<item>@drawable/friendsactivity</item>
+	  	<item>@drawable/favorites</item>
+	  	<item>@null</item>
+        <item>@drawable/sync</item>
+	  	<item>@drawable/changelocation</item>
+	  	<item>@null</item>
+	  	<item>@drawable/invitefriends</item>
+        <item>@drawable/store</item>
+	  	<item>@drawable/info</item>
+	  	<item>@drawable/eula</item>
+	  	<item>@drawable/repcode</item>
+    </array>
+    
+    <string-array name="connect_accounts_item_titles">
+        <item>@string/connect_accounts_item_facebook</item>
+	  	<item>@string/connect_accounts_item_facebook</item>
+	  	<item>@string/connect_accounts_item_device_library</item>
+	  	<item>@string/connect_accounts_item_twitter</item>
+	  	<!-- <item>@string/connect_accounts_item_spotify</item> -->
+	  	<item>@string/connect_accounts_item_rdio</item>
+	  	<item>@string/connect_accounts_item_last.fm</item>
+	  	<item>@string/connect_accounts_item_pandora</item>
+	</string-array>
+	
+    <array name="connect_accounts_item_icons">
+	  	<item>@drawable/facebook_colored</item>
+	  	<item>@drawable/facebook_colored</item>
+	  	<item>@drawable/devicelibrary</item>
+	  	<item>@drawable/twitter_colored</item>
+	  	<!-- <item>@drawable/spotify</item> -->
+        <item>@drawable/rdio</item>
+	  	<item>@drawable/lastfm</item>
+	  	<item>@drawable/pandora</item>
+    </array>
+    
+</resources>

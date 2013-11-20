@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:top="@dimen/top_left_most_tab_selected">
+        <shape android:shape="rectangle" >
+            <solid android:color="@color/tab_selection" />
+            <!-- Radius on reversed side due to android bug:
+            https://code.google.com/p/android/issues/detail?id=9161.
+            For v12 onwards file from drawable-v12 is used -->
+            <corners android:bottomRightRadius="@dimen/corners_radius_left_most_tab_selected" />
+        </shape>
+    </item>
+</layer-list>

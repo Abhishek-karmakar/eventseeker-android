@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootRltLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_gray" >
+    
+    <ProgressBar android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+    
+    <RelativeLayout android:id="@+id/rltLayoutLoadedContent"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent" >
+    
+	    <include layout="@layout/include_fragment_event_details_footer"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentBottom="true"
+	        android:layout_marginTop="@dimen/lnr_layout_btns_margin_t_include_fragment_event_details_footer" />
+	    
+	    <ScrollView android:id="@+id/scrlVContent"
+	        android:layout_width="match_parent"
+		    android:layout_height="match_parent"
+		    android:layout_above="@id/lnrLayoutBtns" >
+		
+		    <LinearLayout android:id="@+id/rootLnrLayout"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="vertical" >
+		        
+		        <include layout="@layout/include_fragment_event_details_img_evt" />
+		        
+		        <include layout="@layout/include_desc" />
+		        
+		        <include layout="@layout/include_address_map" />
+		        
+		        <include layout="@layout/include_friends" />
+		        
+		    </LinearLayout>
+		
+		</ScrollView>
+		
+	</RelativeLayout>
+    
+</RelativeLayout>

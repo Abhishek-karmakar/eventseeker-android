@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rltLayoutRoot"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/rlt_layout_root_ht_fragment_discover_by_category_list_item_evt" >
+    
+    <ImageView android:id="@+id/imgEvent"
+        android:layout_width="@dimen/img_event_w_fragment_discover_by_category_list_item_evt"
+        android:layout_height="@dimen/img_event_ht_fragment_discover_by_category_list_item_evt"
+        android:scaleType="fitXY"
+        android:layout_marginTop="@dimen/img_event_margin_t_fragment_discover_by_category_list_item_evt"
+        android:layout_marginLeft="@dimen/img_event_margin_l_fragment_discover_by_category_list_item_evt"
+        android:layout_marginBottom="@dimen/img_event_margin_b_fragment_discover_by_category_list_item_evt" />
+    
+    <include layout="@layout/include_evt_details"
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/imgEvent"
+	    android:layout_alignTop="@id/imgEvent"
+	    android:layout_alignBottom="@id/imgEvent"
+        android:layout_marginLeft="@dimen/rlt_layout_evt_details_margin_l_fragment_discover_by_category_list_item_evt"
+        android:layout_marginRight="@dimen/rlt_layout_evt_details_margin_r_fragment_discover_by_category_list_item_evt"
+        android:gravity="center_vertical" />
+    
+    <View android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_ht_fragment_discover_by_category_list_item_evt"
+        android:background="@drawable/event_divide"
+        android:layout_below="@id/imgEvent"
+        android:layout_marginLeft="@dimen/divider_margin_l_fragment_discover_by_category_list_item_evt"
+        android:layout_marginRight="@dimen/divider_margin_r_fragment_discover_by_category_list_item_evt" />
+    
+</RelativeLayout>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+    
+	<ImageView android:id="@+id/imgItem"
+        android:layout_width="@dimen/img_artist_w_fragment_search_artists_list_item"
+        android:layout_height="@dimen/img_artist_ht_fragment_search_artists_list_item"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="@dimen/img_artist_margin_t_fragment_search_artists_list_item"
+        android:layout_marginLeft="@dimen/img_artist_margin_l_fragment_search_artists_list_item"
+        android:layout_marginBottom="@dimen/img_artist_margin_b_fragment_search_artists_list_item" />
+	
+	<RelativeLayout android:id="@+id/relLayoutArtistDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+	    android:layout_toRightOf="@id/imgItem"
+	    android:layout_alignTop="@id/imgItem"
+	    android:layout_alignBottom="@id/imgItem"
+        android:layout_marginLeft="@dimen/rel_layout_artist_details_margin_l_fragment_search_artists_list_item"
+        android:layout_marginRight="@dimen/rel_layout_artist_details_margin_r_fragment_search_artists_list_item" >
+        
+	    <TextView android:id="@+id/txtArtistName"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:textStyle="bold"
+		    android:textSize="@dimen/txt_artist_name_txt_size_fragment_search_artists_list_item"
+		    android:maxLines="2"
+		    android:ellipsize="end"
+		    android:layout_marginTop="@dimen/txt_artist_name_margin_t_fragment_search_artists_list_item" />
+	    
+	    <TextView android:id="@+id/txtOnTour"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/artist_on_tour"
+	        android:textColor="@android:color/white"
+	        android:textSize="@dimen/txt_on_tour_txt_size_fragment_search_artists_list_item"
+	        android:background="@drawable/txt_on_tour_rounded_corners"
+	        android:layout_below="@id/txtArtistName"
+	        android:layout_marginTop="@dimen/txt_on_tour_margin_t_fragment_search_artists_list_item" />
+        
+	</RelativeLayout>
+	
+	<View android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_h_fragment_search_artists_list_item"
+        android:background="@drawable/event_divide"
+        android:layout_below="@id/imgItem"
+        android:layout_marginLeft="@dimen/divider_margin_l_fragment_search_artists_list_item"
+        android:layout_marginRight="@dimen/divider_margin_r_fragment_search_artists_list_item" />
+    
+</RelativeLayout>

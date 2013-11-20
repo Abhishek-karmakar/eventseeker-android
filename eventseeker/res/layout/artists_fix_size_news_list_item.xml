@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootLnrLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/root_lnr_layout_pad_l_artists_news_list_item"
+    android:paddingTop="@dimen/root_lnr_layout_pad_t_artists_news_list_item"
+    android:paddingRight="@dimen/root_lnr_layout_pad_r_artists_news_list_item"
+    android:background="@color/dark_gray"
+    android:orientation="horizontal" >
+    
+    <include layout="@layout/artist_fix_size_news_item"
+        android:id="@+id/rltLayoutNewsItemContainer"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+    
+    <include layout="@layout/artist_fix_size_news_item"
+        android:id="@+id/rltLayoutNewsItemContainer2"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginLeft="@dimen/rlt_layout_news_item_container2_margin_l_artists_news_list_item"
+        android:visibility="gone" />
+    
+</LinearLayout>

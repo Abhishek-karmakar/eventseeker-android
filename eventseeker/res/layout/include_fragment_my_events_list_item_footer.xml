@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+	android:id="@+id/lnrLayoutBtns"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/lnr_layout_btns_margin_t_include_fragment_event_details_footer"
+    android:orientation="horizontal"
+    android:background="@color/lnr_layout_btns_bg_include_fragment_my_events_list_item_footer">
+ 
+    <LinearLayout android:id="@+id/lnrLayoutChkBoxGoing"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center" >
+    
+    	<CheckBox android:id="@+id/chkBoxGoing"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="GOING"
+			android:textSize="@dimen/lnr_layout_btns_txt_size_include_fragment_my_events_list_item_footer"
+			android:button="@drawable/checkbox_button_checked_blue_unchecked_grey" />
+    
+    </LinearLayout>
+    
+    <View android:id="@+id/divider1"
+        android:layout_width="@dimen/divider_lnr_layout_btns_w_include_fragment_event_details_footer"
+        android:layout_height="@dimen/divider_lnr_layout_btns_ht_include_fragment_event_details_footer"
+        android:layout_gravity="center_vertical"
+        android:background="@color/divider1_bg_fragment_discover_by_category_list_item_header" />
+    
+    <LinearLayout android:id="@+id/lnrLayoutChkBoxWantToGo"
+		android:layout_width="0dp"
+		android:layout_height="match_parent"
+		android:layout_weight="1"
+		android:gravity="center" >
+    
+	    <CheckBox android:id="@+id/chkBoxWantToGo"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="WANT TO"
+			android:textSize="@dimen/lnr_layout_btns_txt_size_include_fragment_my_events_list_item_footer"
+			android:button="@drawable/checkbox_button_checked_blue_unchecked_grey" />
+    
+    </LinearLayout>
+    
+    <View android:id="@+id/divider2"
+        android:layout_width="@dimen/divider_lnr_layout_btns_w_include_fragment_event_details_footer"
+        android:layout_height="@dimen/divider_lnr_layout_btns_ht_include_fragment_event_details_footer"
+        android:layout_gravity="center_vertical"
+        android:background="@color/divider1_bg_fragment_discover_by_category_list_item_header" />
+    
+    <LinearLayout android:id="@+id/lnrLayoutTickets"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:background="@drawable/bg_btn" >
+        
+        <Button android:id="@+id/btnBuyTickets"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:background="@color/transparent"
+	        android:text="TICKETS"
+	        android:textSize="@dimen/lnr_layout_btns_txt_size_include_fragment_my_events_list_item_footer"
+        	android:textColor="@android:color/black"
+	        android:drawableLeft="@drawable/tickets_grey"
+	        android:clickable="false" />
+        
+    </LinearLayout>
+    
+</LinearLayout>

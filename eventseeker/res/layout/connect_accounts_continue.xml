@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <Button android:id="@+id/btnContinue"
+        android:layout_width="@dimen/btn_continue_w_fb_login"
+        android:layout_height="@dimen/btn_continue_ht_fb_login"
+        android:layout_marginBottom="@dimen/btn_continue_margin_b_fb_login"
+        android:layout_marginTop="@dimen/btn_continue_margin_b_fb_login"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/btn_fb_sign_up_bg"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/btn_continue_txt_size_fb_login"
+        android:text="Continue" />
+
+</LinearLayout>

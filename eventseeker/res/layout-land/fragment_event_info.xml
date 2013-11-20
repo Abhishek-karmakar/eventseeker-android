@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootRltLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_gray" >
+    
+    <ProgressBar android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+    
+    <RelativeLayout android:id="@+id/rltLayoutLoadedContent"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent" >
+    
+	    <include layout="@layout/include_fragment_event_details_footer"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentBottom="true"
+	        android:layout_marginTop="@dimen/lnr_layout_btns_margin_t_include_fragment_event_details_footer" />
+	    
+	    <ScrollView android:id="@+id/scrlVContent"
+	        android:layout_width="match_parent"
+		    android:layout_height="match_parent"
+		    android:layout_above="@id/lnrLayoutBtns" >
+		
+		    <LinearLayout android:id="@+id/rootLnrLayout"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="vertical" >
+		        
+		        <LinearLayout android:id="@+id/lnrLayoutTop"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:orientation="horizontal"
+		            android:baselineAligned="false"
+		            android:layout_marginLeft="@dimen/lnr_layout_top_margin_l_fragment_event_info"
+		            android:layout_marginRight="@dimen/lnr_layout_top_margin_r_fragment_event_info" >
+		            
+		            <RelativeLayout android:id="@+id/rltLayoutImgEvt"
+			            android:layout_width="0dp"
+			            android:layout_height="wrap_content"
+			            android:background="@android:color/white"
+			            android:layout_weight="1"
+			            android:layout_marginRight="@dimen/rlt_layout_img_evt_margin_r_fragment_event_info" >
+			        
+				        <com.wcities.eventseeker.custom.view.ResizableImageView android:id="@+id/imgEvt"
+					        android:layout_width="match_parent"
+					        android:layout_height="wrap_content"
+					        android:contentDescription="event image" />
+				        
+				        <RelativeLayout android:id="@+id/lnrLayoutEvtInfo"
+				            android:layout_width="match_parent"
+				            android:layout_height="wrap_content"
+				            android:layout_alignParentBottom="true"
+				            android:background="@color/bg_black_transparent_strip">
+				        
+					        <TextView android:id="@+id/txtEvtTitle"
+							    android:layout_width="match_parent"
+							    android:layout_height="wrap_content"
+							    android:textColor="@android:color/white"
+							    android:text="Event Title"
+							    android:textSize="@dimen/txt_evt_title_txt_size_include_fragment_event_details_img_evt"
+							    android:layout_marginLeft="@dimen/txt_evt_title_margin_l_include_fragment_event_details_img_evt"
+							    android:maxLines="2"
+								android:ellipsize="end" />
+					        
+					        <TextView android:id="@+id/txtEvtTime"
+							    android:layout_width="match_parent"
+							    android:layout_height="wrap_content"
+							    android:layout_below="@id/txtEvtTitle"
+							    android:textColor="@android:color/white"
+							    style="@style/SingleLineMarqueeTxt"
+							    android:layout_alignLeft="@id/txtEvtTitle"
+							    android:textSize="@dimen/txt_evt_time_txt_size_include_fragment_event_details_img_evt" />
+				        
+				        </RelativeLayout>
+			        
+			        </RelativeLayout>
+			        
+		            <include layout="@layout/include_address_map" />
+		            
+		        </LinearLayout>
+		        
+		        <LinearLayout android:id="@+id/lnrLayoutBtm"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:orientation="horizontal"
+		            android:baselineAligned="false"
+		            android:layout_marginLeft="@dimen/lnr_layout_btm_margin_l_fragment_event_info"
+		            android:layout_marginRight="@dimen/lnr_layout_btm_margin_r_fragment_event_info" >
+		            
+		            <include layout="@layout/include_desc"/>
+		            
+		            <include layout="@layout/include_friends" />"
+		            
+		        </LinearLayout>
+		        
+		    </LinearLayout>
+		
+		</ScrollView>
+		
+	</RelativeLayout>
+    
+</RelativeLayout>
+

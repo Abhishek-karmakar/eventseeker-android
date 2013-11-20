@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.wcities.eventseeker.custom.view.ScrollViewContainingViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scrlVRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_gray" >
+
+	<RelativeLayout android:id="@+id/rootRelLayout"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content" >
+	    
+	    <!-- <TextView android:id="@+id/txtFeaturedEvtsTitle"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/title_featured_evts"
+	        android:background="@color/bg_bar_below_action_bar"
+	        style="@style/SingleLineMarqueeTxtViewXtraPadding" /> -->
+	    
+	    <RelativeLayout android:id="@+id/rltLayoutFeaturedEvtsParent"
+	        android:layout_width="match_parent"
+	        android:layout_height="@dimen/rlt_layout_featured_evts_parent_ht_discover"
+	        android:layout_margin="@dimen/rlt_layout_featured_evts_parent_margin_discover"
+	        android:background="@drawable/story_space" >
+	    
+	        <com.viewpagerindicator.CirclePageIndicator
+		        android:id="@+id/pageIndicator"
+		        android:padding="@dimen/page_indicator_pad_discover"
+		        android:layout_height="wrap_content"
+		        android:layout_width="match_parent"
+		        android:layout_alignParentBottom="true"
+		        app:radius="@dimen/page_indicator_radius_discover"
+		        app:fillColor="@color/font_blue"
+		        app:pageColor="@android:color/white"
+		        app:strokeColor="@color/font_blue"
+		        app:strokeWidth="@dimen/page_indicator_stroke_w_discover" />
+	        
+		    <android.support.v4.view.ViewPager
+		     	android:id="@+id/viewPager"
+		     	android:layout_width="match_parent"
+		     	android:layout_height="match_parent"
+		     	android:layout_above="@id/pageIndicator"
+		     	android:paddingLeft="@dimen/view_pager_pad_discover"
+		     	android:paddingRight="@dimen/view_pager_pad_discover"
+		     	android:paddingTop="@dimen/view_pager_pad_discover" />
+		    
+		    <!-- <ImageView android:id="@+id/imgPrev"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_alignLeft="@id/viewPager"
+			    android:layout_centerVertical="true"
+			    android:src="@drawable/ic_menu_back"
+			    android:visibility="invisible" />
+			
+			<ImageView android:id="@+id/imgNext"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_alignRight="@id/viewPager"
+			    android:layout_centerVertical="true"
+			    android:src="@drawable/ic_menu_forward"
+			    android:visibility="invisible" /> -->
+	    
+		</RelativeLayout>
+		
+	    <com.wcities.eventseeker.custom.view.ExpandableGridView android:id="@+id/grdEvtCategories" 
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/rltLayoutFeaturedEvtsParent"
+	        android:layout_alignLeft="@id/rltLayoutFeaturedEvtsParent"
+	        android:layout_alignRight="@id/rltLayoutFeaturedEvtsParent"
+	        android:layout_marginBottom="@dimen/grd_evt_categories_margin_b_discover"
+	        android:background="@drawable/story_space"
+	        android:numColumns="2"
+	        android:horizontalSpacing="@dimen/grd_evt_categories_hor_space_discover"
+	        android:verticalSpacing="@dimen/grd_evt_categories_ver_space_discover"
+	        android:padding="@dimen/grd_evt_categories_pad_discover" />
+	 
+	</RelativeLayout>
+
+</com.wcities.eventseeker.custom.view.ScrollViewContainingViewPager>
