@@ -143,27 +143,6 @@
         
 	</TableLayout>
     
-    <!-- <include layout="@layout/include_fragment_my_events_list_item_footer"
-		android:id="@+id/lnrLayoutBtns"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/lnr_layout_btns_ht_fragment_my_events_list_item"
-        android:layout_toRightOf="@id/imgEvent"
-        android:layout_alignBottom="@id/imgEvent"
-        android:layout_marginTop="@dimen/lnr_layout_btns_margin_t_fragment_my_events_list_item"
-        android:layout_marginLeft="@dimen/lnr_layout_btns_margin_l_fragment_my_events_list_item"
-        android:layout_marginRight="@dimen/lnr_layout_btns_margin_r_fragment_my_events_list_item" /> 
-    
-    <include layout="@layout/include_evt_details"
-        android:id="@+id/lnrLayoutEvtDetails"
-        android:layout_width="match_parent"
-    	android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/imgEvent"
-	    android:layout_alignTop="@id/imgEvent"
-	    android:layout_above="@id/lnrLayoutBtns"
-        android:layout_marginLeft="@dimen/rlt_layout_evt_details_margin_l_fragment_discover_by_category_list_item_evt"
-        android:layout_marginRight="@dimen/rlt_layout_evt_details_margin_r_fragment_discover_by_category_list_item_evt"
-        android:gravity="center_vertical" /> -->
-    
     <View android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/divider_ht_fragment_discover_by_category_list_item_evt"

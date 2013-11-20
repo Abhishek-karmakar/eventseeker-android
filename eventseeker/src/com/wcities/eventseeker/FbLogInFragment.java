@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.facebook.LoggingBehavior;
 import com.facebook.Request;
@@ -20,6 +21,7 @@ import com.facebook.Settings;
 import com.facebook.model.GraphUser;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
@@ -29,9 +31,11 @@ public class FbLogInFragment extends Fragment {
 
 	private FbLogInFragmentListener mListener;
 	
+	private LinearLayout lnrLayoutProgress;
+	private Button btnContinue;
 	private ImageView imgFbSignUp;
     private Session.StatusCallback statusCallback = new SessionStatusCallback();
-	
+    
 	// Container Activity must implement this interface
     public interface FbLogInFragmentListener {
         public void replaceFbLoginFragmentBy(String fragmentTag);
@@ -53,7 +57,7 @@ public class FbLogInFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_fb_login, container, false);
 		
-		Button btnContinue = (Button) v.findViewById(R.id.btnContinue);
+		btnContinue = (Button) v.findViewById(R.id.btnContinue);
 		btnContinue.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -63,6 +67,7 @@ public class FbLogInFragment extends Fragment {
 		});
 		
 		imgFbSignUp = (ImageView) v.findViewById(R.id.imgFbSignUp);
+		lnrLayoutProgress = (LinearLayout) v.findViewById(R.id.lnrLayoutProgress);
 		
 		if (!FbUtil.hasUserLoggedInBefore(FragmentUtil.getActivity(this).getApplicationContext())) {
 			Log.d(TAG, "not logged in");
@@ -125,6 +130,12 @@ public class FbLogInFragment extends Fragment {
         Session.saveSession(session, outState);
     }
     
+    private void showProgress() {
+    	imgFbSignUp.setVisibility(View.GONE);
+    	btnContinue.setVisibility(View.GONE);
+    	lnrLayoutProgress.setVisibility(View.VISIBLE);
+    }
+    
 	private void updateView() {
 		Log.d(TAG, "updateView()");
         final Session session = Session.getActiveSession();
@@ -137,8 +148,16 @@ public class FbLogInFragment extends Fragment {
     				// If the response is successful
     	            if (session == Session.getActiveSession()) {
     	                if (user != null) {
-    	                	((EventSeekr) (FragmentUtil.getActivity(FbLogInFragment.this)).getApplicationContext()).updateFbUserId(user.getId());
-    	                	mListener.replaceFbLoginFragmentBy(AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS);
+    	                	showProgress();
+    	                	
+    	                	((EventSeekr) (FragmentUtil.getActivity(FbLogInFragment.this))
+    	                			.getApplicationContext()).updateFbUserId(user.getId(), new AsyncTaskListener() {
+
+										@Override
+										public void onTaskCompleted() {
+				    	                	mListener.replaceFbLoginFragmentBy(AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS);
+										}
+    	                			});
     	                }
     	            }
     	            if (response.getError() != null) {

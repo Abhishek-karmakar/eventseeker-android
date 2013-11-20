@@ -34,7 +34,7 @@
 	        android:layout_alignParentRight="true"
 	        android:layout_marginRight="@dimen/img_plus_margin_r_connect_accounts_list_item"
 	        android:contentDescription="plus image"
-	        android:src="@drawable/next"
+	        android:src="@drawable/plus"
 	        android:layout_centerVertical="true" />
 	    
 	    <TextView android:id="@+id/txtCount"

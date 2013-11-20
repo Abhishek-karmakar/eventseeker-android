@@ -63,7 +63,6 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	private AccountsListAdapter listAdapter;
 	private List<ServiceAccount> serviceAccounts;
 	
-	private int orientation;
 	private boolean fbLoggedIn;
 	
     private Session.StatusCallback statusCallback = new SessionStatusCallback();
@@ -92,8 +91,6 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		orientation = getResources().getConfiguration().orientation;
-		
 		View v = LayoutInflater.from(FragmentUtil.getActivity(this)).inflate(R.layout.fragment_connect_accounts_list, null);
 		return v;
 	}
@@ -199,7 +196,8 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     				// If the response is successful
     	            if (session == Session.getActiveSession()) {
     	                if (user != null) {
-    	                	((EventSeekr) (FragmentUtil.getActivity(ConnectAccountsFragment.this)).getApplicationContext()).updateFbUserId(user.getId());
+    	                	((EventSeekr) (FragmentUtil.getActivity(ConnectAccountsFragment.this))
+    	                			.getApplicationContext()).updateFbUserId(user.getId(), null);
     	                }
     	                serviceAccounts.get(0).name = FB_LOGOUT;
     					fbLoggedIn = true;

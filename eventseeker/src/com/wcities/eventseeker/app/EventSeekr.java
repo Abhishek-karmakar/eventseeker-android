@@ -12,7 +12,7 @@ import org.json.JSONObject;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.util.Log;
+import android.os.AsyncTask;
 
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.api.Api;
@@ -20,6 +20,7 @@ import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.SharedPrefKeys;
 import com.wcities.eventseeker.gcm.GcmUtil;
+import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.util.DeviceUtil;
 
@@ -142,7 +143,7 @@ public class EventSeekr extends Application {
 		return fbUserId;
 	}
 
-	public void updateFbUserId(String fbUserId) {
+	public void updateFbUserId(String fbUserId, AsyncTaskListener listener) {
 		this.fbUserId = fbUserId;
 		
 		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
@@ -150,7 +151,7 @@ public class EventSeekr extends Application {
 		editor.putString(SharedPrefKeys.FACEBOOK_USER_ID, fbUserId);
 		editor.commit();
 		
-		new Thread(new GetWcitiesId()).start();
+		new GetWcitiesId(listener).execute();
 	}
 	
 	public void removeFbUserId() {
@@ -172,7 +173,7 @@ public class EventSeekr extends Application {
 		
 		// generate wcitiesId if not found in shared preference & if fbUserId is existing
 		if (wcitiesId == null && getFbUserId() != null) {
-			new Thread(new GetWcitiesId()).start();
+			new GetWcitiesId(null).execute();
 		}
 		return wcitiesId;
 	}
@@ -276,10 +277,17 @@ public class EventSeekr extends Application {
 		}
 	}
 	
-	private class GetWcitiesId implements Runnable {
+	private class GetWcitiesId extends AsyncTask<Void, Void, String> {
+		
+		private AsyncTaskListener listener;
+		
+		public GetWcitiesId(AsyncTaskListener listener) {
+			this.listener = listener;
+		}
 
 		@Override
-		public void run() {
+		protected String doInBackground(Void... params) {
+			String wcitiesId = null;
 			UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
 			userInfoApi.setDeviceId(DeviceUtil.getDeviceId(EventSeekr.this));
 			try {
@@ -290,7 +298,7 @@ public class EventSeekr extends Application {
 				userInfoApi.setFbUserId(getFbUserId());
 				userInfoApi.setUserId(userId);
 				jsonObject = userInfoApi.syncAccount();
-				String wcitiesId = jsonParser.getWcitiesId(jsonObject);
+				wcitiesId = jsonParser.getWcitiesId(jsonObject);
 				updateWcitiesId(wcitiesId);
 				
 			} catch (ClientProtocolException e) {
@@ -301,6 +309,18 @@ public class EventSeekr extends Application {
 				
 			} catch (JSONException e) {
 				e.printStackTrace();
+			}
+			return wcitiesId;
+		}
+		
+		@Override
+		protected void onPostExecute(String wcitiesId) {
+			if (wcitiesId != null) {
+				updateWcitiesId(wcitiesId);
+			}
+			
+			if (listener != null) {
+				listener.onTaskCompleted();
 			}
 		}
 	}
