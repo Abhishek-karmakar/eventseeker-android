@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.text.Html;
 import android.util.Log;
 
 import com.wcities.eventseeker.core.Artist;
@@ -20,6 +21,7 @@ import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.core.Video;
 import com.wcities.eventseeker.core.Artist.Attending;
+import com.wcities.eventseeker.util.ConversionUtil;
 
 public class ArtistApiJSONParser {
 	
@@ -61,7 +63,8 @@ public class ArtistApiJSONParser {
 			try {
 				JSONObject jObjArtist = jsonObject.getJSONObject(KEY_ARTIST_DETAIL).getJSONObject(KEY_ARTIST);
 				if (jObjArtist.has(KEY_DESCRIPTION)) {
-					artist.setDescription(jObjArtist.getString(KEY_DESCRIPTION));
+					artist.setDescription(ConversionUtil.removeBuggyTextsFromDesc(Html.fromHtml(
+							jObjArtist.getString(KEY_DESCRIPTION)).toString()));
 				}
 				
 				if (jObjArtist.has(KEY_MEDIA)) {

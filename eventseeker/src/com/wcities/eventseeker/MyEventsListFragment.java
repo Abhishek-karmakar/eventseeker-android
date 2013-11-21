@@ -13,6 +13,7 @@ import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadDateWiseMyEvents;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
@@ -72,7 +73,8 @@ public class MyEventsListFragment extends ListFragment implements DateWiseMyEven
 	
 	@Override
 	public void loadEventsInBackground() {
-		loadEvents = new LoadDateWiseMyEvents(dateWiseEvtList, eventListAdapter, wcitiesId, loadType);
+		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getActivity(this));
+		loadEvents = new LoadDateWiseMyEvents(dateWiseEvtList, eventListAdapter, wcitiesId, loadType, latLon[0], latLon[1]);
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);
         loadEvents.execute();
 	}

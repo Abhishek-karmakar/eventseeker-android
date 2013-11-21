@@ -526,6 +526,7 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 
 	@Override
 	public void onEventUpdatedByEventDetailsFragment() {
+		Log.d(TAG, "onEventUpdatedByEventDetailsFragment()");
 		allDetailsLoaded = true;
 		
 		updateEventImg();
@@ -549,7 +550,7 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 
 	@Override
 	public void onImageLoaded() {
-		//Log.d(TAG, "onImageLoaded()");
+		Log.d(TAG, "onImageLoaded()");
 		rltLayoutLoadedContent.setVisibility(View.VISIBLE);
 		progressBar.setVisibility(View.GONE);
 	}

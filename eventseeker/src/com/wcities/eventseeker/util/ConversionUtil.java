@@ -187,4 +187,9 @@ public class ConversionUtil {
 			}
 		}
 	}
+	
+	public static String removeBuggyTextsFromDesc(String src) {
+		String dest = src.replace("amp;", "");
+		return dest;
+	}
 }

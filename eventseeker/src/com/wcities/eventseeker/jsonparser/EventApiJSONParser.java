@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.text.Html;
 import android.util.SparseArray;
 
 import com.wcities.eventseeker.core.Address;
@@ -104,7 +105,8 @@ public class EventApiJSONParser {
 			}
 			
 			if (jObjEvent.has(KEY_DESC)) {
-				event.setDescription(jObjEvent.getString(KEY_DESC));
+				event.setDescription(ConversionUtil.removeBuggyTextsFromDesc(Html.fromHtml(
+						jObjEvent.getString(KEY_DESC)).toString()));
 			}
 			
 			JSONObject jObjSchedule = jObjEvent.getJSONObject(KEY_SCHEDULE); 
@@ -391,7 +393,8 @@ public class EventApiJSONParser {
 		event.setHasArtists(hasArtists);
 		
 		if (jsonObject.has(KEY_DESC)) {
-			event.setDescription(jsonObject.getString(KEY_DESC));
+			event.setDescription(ConversionUtil.removeBuggyTextsFromDesc(Html.fromHtml(
+					jsonObject.getString(KEY_DESC)).toString()));
 		}
 		if (jsonObject.has(KEY_CITY_ID)) {
 			event.setCityId(jsonObject.getInt(KEY_CITY_ID));

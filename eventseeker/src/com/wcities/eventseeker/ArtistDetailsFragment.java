@@ -22,6 +22,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -176,6 +177,7 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 	
 	private void updateShareIntent() {
 	    if (mShareActionProvider != null && artist != null) {
+			Log.d(TAG, "updateShareIntent()");
 	    	Intent shareIntent = new Intent(Intent.ACTION_SEND);
 		    shareIntent.setType("image/*");
 		    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Artist Details");
@@ -184,13 +186,16 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 		    	message += ": " + artist.getArtistUrl();
 		    }
 		    shareIntent.putExtra(Intent.EXTRA_TEXT, message);
+		    /*if (artist.doesValidImgUrlExist()) {
+		    	Log.d(TAG, "url = " + artist.getValidImgUrl());
+		    	shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(artist.getValidImgUrl()));
+		    }*/
 			
 			String key = artist.getKey(ImgResolution.LOW);
 	        BitmapCache bitmapCache = BitmapCache.getInstance();
 			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 			if (bitmap != null) {
-				shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(BitmapUtil.getContentUri(contentResolver, 
-						bitmap)));
+				shareIntent.putExtra(Intent.EXTRA_STREAM, BitmapUtil.getImgFileUri(bitmap));
 			}
 		    
 	        mShareActionProvider.setShareIntent(shareIntent);

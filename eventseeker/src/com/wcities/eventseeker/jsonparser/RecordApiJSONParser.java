@@ -7,9 +7,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.text.Html;
+
 import com.wcities.eventseeker.core.Address;
 import com.wcities.eventseeker.core.Country;
 import com.wcities.eventseeker.core.Venue;
+import com.wcities.eventseeker.util.ConversionUtil;
 
 public class RecordApiJSONParser {
 
@@ -76,7 +79,8 @@ public class RecordApiJSONParser {
 			venue.setName(jsonObject.getString(KEY_NAME));
 		}
 		if (jsonObject.has(KEY_LONG_DESC)) {
-			venue.setLongDesc(jsonObject.getString(KEY_LONG_DESC));
+			venue.setLongDesc(ConversionUtil.removeBuggyTextsFromDesc(Html.fromHtml(
+					jsonObject.getString(KEY_LONG_DESC)).toString()));
 		}
 		
 		String imagefile = jsonObject.getString(KEY_IMAGEFILE);

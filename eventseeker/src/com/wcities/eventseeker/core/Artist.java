@@ -98,7 +98,7 @@ public class Artist implements Serializable, BitmapCacheable {
 		this.imageAttribution = imageAttribution;
 	}
 
-	public String getImageUrl() {
+	private String getImageUrl() {
 		return imageUrl;
 	}
 
@@ -162,6 +162,19 @@ public class Artist implements Serializable, BitmapCacheable {
 			return false;
 		}
 	}
+	
+	/*public String getValidImgUrl() {
+		if (getLowResImgUrl() != null) {
+			return getLowResImgUrl();
+			
+		} else if (getHighResImgUrl() != null) {
+			return getHighResImgUrl();
+			
+		} else if (getLowResImgUrl() != null) {
+			return getLowResImgUrl();
+		}
+		return null;
+	}*/
 
 	@Override
 	public String getLowResImgUrl() {

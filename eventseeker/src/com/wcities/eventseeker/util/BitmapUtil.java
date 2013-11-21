@@ -1,16 +1,19 @@
 package com.wcities.eventseeker.util;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import android.content.ContentResolver;
-import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 
@@ -58,11 +61,11 @@ public class BitmapUtil {
 		return bitmap;
 	}
 	
-	public static String getContentUri(ContentResolver contentResolver, Bitmap bitmap) {
-		return MediaStore.Images.Media.insertImage(contentResolver, bitmap, "Image title", "Image description");
+	public static Uri getImgFileUri(Bitmap bitmap) {
+		//return MediaStore.Images.Media.insertImage(contentResolver, bitmap, "Image title", "Image description");
 		 
-		/*File rootSdDirectory = Environment.getExternalStorageDirectory();
-	    File pictureFile = new File(rootSdDirectory, "attachment.jpg");
+		File rootSdDirectory = Environment.getExternalStorageDirectory();
+	    File pictureFile = new File(rootSdDirectory, "share_attachment.jpg");
 	    if (pictureFile.exists()) {
 	        pictureFile.delete();
 	    }
@@ -84,6 +87,7 @@ public class BitmapUtil {
 				}
 			}
 		}
-	    return pictureFile;*/
+	    Log.d(TAG, "path = " + pictureFile.getAbsolutePath());
+	    return Uri.fromFile(pictureFile);
 	}
 }

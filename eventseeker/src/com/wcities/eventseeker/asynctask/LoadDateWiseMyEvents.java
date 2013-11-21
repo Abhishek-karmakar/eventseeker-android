@@ -24,16 +24,20 @@ public class LoadDateWiseMyEvents extends AsyncTask<Void, Void, Void> {
 	
 	private String wcitiesId;
 	private Type loadType;
+	private double lat, lon;
 	
 	private DateWiseEventList eventList;
 	
 	private DateWiseMyEventListAdapter eventListAdapter;
 	
-	public LoadDateWiseMyEvents(DateWiseEventList eventList, DateWiseMyEventListAdapter eventListAdapter, String wcitiesId, Type loadType) {
+	public LoadDateWiseMyEvents(DateWiseEventList eventList, DateWiseMyEventListAdapter eventListAdapter, String wcitiesId, 
+			Type loadType, double lat, double lon) {
 		this.eventList = eventList;
 		this.eventListAdapter = eventListAdapter;
 		this.wcitiesId = wcitiesId;
 		this.loadType = loadType;
+		this.lat = lat;
+		this.lon = lon;
 	}
 	
 	@Override
@@ -44,6 +48,8 @@ public class LoadDateWiseMyEvents extends AsyncTask<Void, Void, Void> {
 		userInfoApi.setLimit(EVENTS_LIMIT);
 		userInfoApi.setAlreadyRequested(eventsAlreadyRequested);
 		userInfoApi.setUserId(wcitiesId);
+		userInfoApi.setLat(lat);
+		userInfoApi.setLon(lon);
 		
 		try {
 			JSONObject jsonObject = userInfoApi.getMyProfileInfoFor(loadType);

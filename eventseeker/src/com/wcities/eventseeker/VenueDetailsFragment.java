@@ -134,8 +134,7 @@ public class VenueDetailsFragment extends FragmentLoadableFromBackStack implemen
 	        BitmapCache bitmapCache = BitmapCache.getInstance();
 			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 			if (bitmap != null) {
-				shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(BitmapUtil.getContentUri(contentResolver, 
-						bitmap)));
+				shareIntent.putExtra(Intent.EXTRA_STREAM, BitmapUtil.getImgFileUri(bitmap));
 			}
 		    
 	        mShareActionProvider.setShareIntent(shareIntent);
