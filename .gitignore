@@ -2,6 +2,7 @@
 .project
 project.properties
 proguard-project.txt
+debug.log
 .settings/
 bin/
 gen/

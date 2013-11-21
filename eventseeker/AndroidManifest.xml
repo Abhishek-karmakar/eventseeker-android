@@ -14,20 +14,27 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.EventSeekr" >
+       
         <activity android:name="com.wcities.eventseeker.MainActivity" >
-            <intent-filter>
+           <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <!-- for twitter call back -->
             <intent-filter>
-		        <action android:name="android.intent.action.VIEW"/>
-		        <category android:name="android.intent.category.DEFAULT"/>
-		        <category android:name="android.intent.category.BROWSABLE"/>
-		        <data android:scheme="com.wcities.eventseeker" android:host="twitter_callback" />
-    		</intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="twitter_callback"
+                    android:scheme="com.wcities.eventseeker" />
+            </intent-filter>
         </activity>
-        <!-- <activity android:name="com.wcities.eventseeker.MainActivity2" >
+        <!--
+        <activity android:name="com.wcities.eventseeker.MainActivity2" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -39,12 +46,12 @@
 		        <category android:name="android.intent.category.BROWSABLE"/>
 		        <data android:scheme="com.wcities.eventseeker" android:host="twitter_callback" />
     		</intent-filter>
-        </activity> -->
+        </activity>        -->
         <activity
             android:name="com.facebook.LoginActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        
+
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyC4DsIo1BknPFbcHZ5y89UygHgWxgUhFic" />
@@ -57,23 +64,25 @@
             android:label="Locked"
             android:screenOrientation="portrait" >
         </activity>
-        
-        <receiver android:name="com.wcities.eventseeker.widget.EventseekerWidgetProvider"
-       		android:icon="@drawable/ic_launcher"
-       		android:label="@string/app_name" >
-			<intent-filter >
-	        	<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-	        	<action android:name="eventseeker.appwidget.action.WIDGET_UPDATE" />
-	        	<action android:name="eventseeker.appwidget.action.WIDGET_PREV_EVENT" />
-	        	<action android:name="eventseeker.appwidget.action.WIDGET_NEXT_EVENT" />
-	        	<action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-	       	</intent-filter>
-	       	<meta-data android:name="android.appwidget.provider"
-	          	android:resource="@xml/widget_info" />
-		</receiver> 
-		
+
+        <receiver
+            android:name="com.wcities.eventseeker.widget.EventseekerWidgetProvider"
+            android:icon="@drawable/ic_launcher"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="eventseeker.appwidget.action.WIDGET_UPDATE" />
+                <action android:name="eventseeker.appwidget.action.WIDGET_PREV_EVENT" />
+                <action android:name="eventseeker.appwidget.action.WIDGET_NEXT_EVENT" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info" />
+        </receiver>
+
         <service android:name="com.wcities.eventseeker.widget.EventseekerWidgetService" />
-        
         <service android:name="com.wcities.eventseeker.applink.service.AppLinkService" />
 
         <receiver android:name="com.wcities.eventseeker.applink.receiver.AppLinkReceiver" >
@@ -85,16 +94,15 @@
                 <action android:name="android.media.AUDIO_BECOMING_NOISY" />
             </intent-filter>
         </receiver>
-        
         <receiver
             android:name="com.wcities.eventseeker.gcm.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
                 <category android:name="com.wcities.eventseeker" />
             </intent-filter>
         </receiver>
-
     </application>
 
     <permission
@@ -112,13 +120,14 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <!-- Required to pair Bluetooth devices -->
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    
-    <permission android:name="com.wcities.eventseeker.permission.C2D_MESSAGE"
+
+    <permission
+        android:name="com.wcities.eventseeker.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
+
     <uses-permission android:name="com.wcities.eventseeker.permission.C2D_MESSAGE" />
 
     <uses-feature

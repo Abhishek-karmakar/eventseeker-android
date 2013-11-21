@@ -1,6 +1,6 @@
 <resources>
 
-    <dimen name="padding_small">8dp</dimen>
+    <!-- <dimen name="padding_small">8dp</dimen>
     <dimen name="padding_medium">16dp</dimen>
     <dimen name="padding_large">16dp</dimen>
     
@@ -60,7 +60,7 @@
     <dimen name="divider_margin_r_fragment_search_artists_list_item">10dp</dimen>
     <dimen name="divider_margin_r_fragment_search_artists_list_item_for_indexed_list">35dp</dimen>
     
-    <!-- activity_artist_details.xml -->
+    activity_artist_details.xml
 	<dimen name="rlt_layout_artist_details_pad_artist_details">10dp</dimen>
 	<dimen name="txt_artist_name_ht_artist_details">70dp</dimen>
 	<dimen name="txt_artist_name_txt_size_artist_details">28sp</dimen>
@@ -91,9 +91,9 @@
     <dimen name="txt_news_list_title_margin_t_artist_details">12dp</dimen>
     <dimen name="txt_news_list_title_txt_size_artist_details">@dimen/txt_upcoming_evts_list_title_txt_size_artist_details</dimen>
     
-    <!-- activity_discover_by_category_list_item_evt.xml -->
-    <!-- summation of img_event_ht_discover_by_category_list_item_evt + img_event_margin_t_discover_by_category_list_item_evt +
-    img_event_margin_b_discover_by_category_list_item_evt + divider_ht_discover_by_category_list_item_evt -->
+    activity_discover_by_category_list_item_evt.xml
+    summation of img_event_ht_discover_by_category_list_item_evt + img_event_margin_t_discover_by_category_list_item_evt +
+    img_event_margin_b_discover_by_category_list_item_evt + divider_ht_discover_by_category_list_item_evt
     <dimen name="rlt_layout_root_ht_fragment_discover_by_category_list_item_evt">198dp</dimen>
     <dimen name="img_event_w_fragment_discover_by_category_list_item_evt">240dp</dimen>
     <dimen name="img_event_ht_fragment_discover_by_category_list_item_evt">180dp</dimen>
@@ -117,7 +117,7 @@
     <dimen name="divider_margin_l_fragment_discover_by_category_list_item_evt">5dp</dimen>
     <dimen name="divider_margin_r_fragment_discover_by_category_list_item_evt">5dp</dimen>
     
-    <!-- activity_venue_details.xml -->
+    activity_venue_details.xml
 	<dimen name="rlt_layout_root_pad_venue_details">10dp</dimen>
 	<dimen name="img_venue_w_venue_details">240dp</dimen>
     <dimen name="img_venue_ht_venue_details">180dp</dimen>
@@ -146,34 +146,34 @@
     <dimen name="hor_divider_ht_venue_details">3dp</dimen>
     <dimen name="hor_divider_margin_b_venue_details">8dp</dimen>
     
-    <!-- activity_main.xml -->
+    activity_main.xml
 	<dimen name="root_navigation_drawer_w_main">320dp</dimen>
 	
-	<!-- navigation_drawer_section_header.xml -->
+	navigation_drawer_section_header.xml
 	<dimen name="txt_title_margin_l_navigation_drawer_section_header">25dp</dimen>
 	<dimen name="txt_title_margin_t_navigation_drawer_section_header">20dp</dimen>
 	<dimen name="txt_title_txt_size_navigation_drawer_section_header">20sp</dimen>
 	
-	<!-- navigation_drawer_list_item.xml -->
+	navigation_drawer_list_item.xml
 	<dimen name="rlt_layout_content_pad_t_navigation_drawer_list_item">20dp</dimen>
 	<dimen name="rlt_layout_content_pad_b_navigation_drawer_list_item">@dimen/rlt_layout_content_pad_t_navigation_drawer_list_item</dimen>
 	<dimen name="rlt_layout_content_margin_l_navigation_drawer_list_item">@dimen/txt_title_margin_l_navigation_drawer_section_header</dimen>
 	<dimen name="txt_title_margin_l_navigation_drawer_list_item">20dp</dimen>
 	<dimen name="txt_title_txt_size_navigation_drawer_list_item">28sp</dimen>
-	<!-- <dimen name="txt_count_margin_r_navigation_drawer_list_item">25dp</dimen>
+	<dimen name="txt_count_margin_r_navigation_drawer_list_item">25dp</dimen>
 	<dimen name="txt_count_pad_l_navigation_drawer_list_item">10dp</dimen>
 	<dimen name="txt_count_pad_r_navigation_drawer_list_item">@dimen/txt_count_pad_l_navigation_drawer_list_item</dimen>
-	<dimen name="txt_count_txt_size_navigation_drawer_list_item">@dimen/txt_title_txt_size_navigation_drawer_list_item</dimen> -->
+	<dimen name="txt_count_txt_size_navigation_drawer_list_item">@dimen/txt_title_txt_size_navigation_drawer_list_item</dimen>
 	<dimen name="divider_ht_navigation_drawer_list_item">1dp</dimen>
-	<!-- <dimen name="divider_margin_t_navigation_drawer_list_item">8dp</dimen> -->
+	<dimen name="divider_margin_t_navigation_drawer_list_item">8dp</dimen>
 	
-	<!-- activity_discover_by_category_list_item_header.xml -->
+	activity_discover_by_category_list_item_header.xml
 	<dimen name="txt_date_margin_t_fragment_discover_by_category_list_item_header">15dp</dimen>
 	<dimen name="txt_date_margin_l_fragment_discover_by_category_list_item_header">20dp</dimen>
 	<dimen name="txt_date_txt_size_fragment_discover_by_category_list_item_header">24sp</dimen>
 	<dimen name="divider_ht_fragment_discover_by_category_list_item_header">3dp</dimen>
     
-	<!-- fragment_fb_login.xml -->
+	fragment_fb_login.xml
 	<dimen name="txt_fb_connect_txt_size_fb_login">26sp</dimen>
 	<dimen name="btn_fb_sign_up_margin_t_fb_login">60dp</dimen>
 	<dimen name="btn_fb_sign_up_txt_size_fb_login">24sp</dimen>
@@ -187,7 +187,7 @@
 	<dimen name="btn_continue_w_fb_login">260dp</dimen>
 	<dimen name="btn_continue_txt_size_fb_login">@dimen/btn_fb_sign_up_txt_size_fb_login</dimen>
 	
-	<!-- artist_news_item.xml -->
+	artist_news_item.xml
 	<dimen name="root_rlt_layout_pad_artist_news_item">8dp</dimen>
 	<dimen name="txt_title_txt_size_artist_news_item">28sp</dimen>
 	<dimen name="txt_time_margin_b_artist_news_item">6dp</dimen>
@@ -199,7 +199,7 @@
 	<dimen name="txt_link_title_txt_size_artist_news_item">22sp</dimen>
 	<dimen name="txt_link_title_margin_b_artist_news_item">@dimen/txt_time_margin_b_artist_news_item</dimen>
 	
-	<!-- friend_news_item.xml -->
+	friend_news_item.xml
 	<dimen name="root_rlt_layout_pad_friend_news_item">@dimen/root_rlt_layout_pad_artist_news_item</dimen>
 	<dimen name="txt_title_txt_size_friend_news_item">@dimen/txt_title_txt_size_artist_news_item</dimen>
 	<dimen name="txt_title_margin_b_friend_news_item">20dp</dimen>
@@ -208,6 +208,6 @@
 	<dimen name="tbl_layout_evt_details_pad_l_friend_news_item">16dp</dimen>
 	<dimen name="tbl_layout_evt_details_txt_size_friend_news_item">@dimen/txt_title_txt_size_friend_news_item</dimen>
 	<dimen name="img_evt_loc_size_friend_news_item">30dp</dimen>
-	<dimen name="row_1_margin_b_friend_news_item">-10dp</dimen>
+	<dimen name="row_1_margin_b_friend_news_item">-10dp</dimen> -->
 	
 </resources>

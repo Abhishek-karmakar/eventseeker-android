@@ -9,7 +9,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -21,14 +20,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -40,6 +37,7 @@ import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.DiscoverFragment.DiscoverFragmentListener;
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.FbLogInFragment.FbLogInFragmentListener;
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -88,6 +86,8 @@ public class MainActivity extends ActionBarActivity implements DrawerListFragmen
     private String currentContentFragmentTag;
     private int drawerItemSelectedPosition = AppConstants.INVALID_INDEX;
 	private String searchQuery;
+	
+	private boolean isTabletAndInLandscapeMode;
     
     public static MainActivity getInstance() {
 		return instance;
@@ -98,6 +98,13 @@ public class MainActivity extends ActionBarActivity implements DrawerListFragmen
 		super.onCreate(savedInstanceState);
 		//Log.d(TAG, "onCreate");
 		setContentView(R.layout.activity_main);
+		
+		/**
+		 * check whether the current device is Tablet and if it is in Landscape mode
+		 */
+		EventSeekr eventSeekr = ((EventSeekr)getApplication());
+		eventSeekr.checkAndSetIfInLandscapeMode();
+		isTabletAndInLandscapeMode = eventSeekr.isTabletAndInLandscapeMode();
 		
 		/**
     	 * if user moves away quickly to any other screen resulting in fragment replacement & if we are adding 
@@ -113,44 +120,48 @@ public class MainActivity extends ActionBarActivity implements DrawerListFragmen
 			mTitle = savedInstanceState.getString(BundleKeys.ACTION_BAR_TITLE);
 			currentContentFragmentTag = savedInstanceState.getString(BundleKeys.CURRENT_CONTENT_FRAGMENT_TAG);
 			drawerItemSelectedPosition = savedInstanceState.getInt(BundleKeys.DRAWER_ITEM_SELECTED_POSITION);
-			isDrawerIndicatorEnabled = savedInstanceState.getBoolean(BundleKeys.IS_DRAWER_INDICATOR_ENABLED);
+			if(!isTabletAndInLandscapeMode){
+				isDrawerIndicatorEnabled = savedInstanceState.getBoolean(BundleKeys.IS_DRAWER_INDICATOR_ENABLED);
+			}
 		}
 	    
-		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		lnrLayoutRootNavDrawer = (LinearLayout) findViewById(R.id.rootNavigationDrawer);
 		
-		mDrawerToggle = new ActionBarDrawerToggle(
-                this,                   //host Activity 
-                mDrawerLayout,          //DrawerLayout object 
-                R.drawable.sidenav,   //nav drawer icon to replace 'Up' caret 
-                R.string.drawer_open,   //"open drawer" description 
-                R.string.drawer_close   //"close drawer" description 
-                ) {
-
-            /** Called when a drawer has settled in a completely closed state. */
-            /*public void onDrawerClosed(View view) {
-                getSupportActionBar().setTitle(mTitle);
-            }*/
-
-            /** Called when a drawer has settled in a completely open state. */
-            public void onDrawerOpened(View drawerView) {
-                //getSupportActionBar().setTitle(AppConstants.NAVIGATION_DRAWER_TITLE);
-            	/**
-            	 * On some devices drawer is partially overlapped by map. To negate this effect
-            	 * following workaround is required.
-            	 */
-            	if (currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_CHANGE_LOCATION) || 
-            			currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_FULL_SCREEN_ADDRESS_MAP)) {
-            		lnrLayoutRootNavDrawer.getParent().requestLayout();
-            		//((View)lnrLayoutRootNavDrawer.getParent()).invalidate();
-            	}
-            }
-        };
+		if(!isTabletAndInLandscapeMode) {
+			mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);		
+			mDrawerToggle = new ActionBarDrawerToggle(
+	                this,                   //host Activity 
+	                mDrawerLayout,          //DrawerLayout object 
+	                R.drawable.sidenav,   //nav drawer icon to replace 'Up' caret 
+	                R.string.drawer_open,   //"open drawer" description 
+	                R.string.drawer_close   //"close drawer" description 
+	                ) {
+	
+	            /** Called when a drawer has settled in a completely closed state. */
+	            /*public void onDrawerClosed(View view) {
+	                getSupportActionBar().setTitle(mTitle);
+	            }*/
+	
+	            /** Called when a drawer has settled in a completely open state. */
+	            public void onDrawerOpened(View drawerView) {
+	                //getSupportActionBar().setTitle(AppConstants.NAVIGATION_DRAWER_TITLE);
+	            	/**
+	            	 * On some devices drawer is partially overlapped by map. To negate this effect
+	            	 * following workaround is required.
+	            	 */
+	            	if (currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_CHANGE_LOCATION) || 
+	            			currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_FULL_SCREEN_ADDRESS_MAP)) {
+	            		lnrLayoutRootNavDrawer.getParent().requestLayout();
+	            		//((View)lnrLayoutRootNavDrawer.getParent()).invalidate();
+	            	}
+	            }
+	        };
         
-        mDrawerToggle.setDrawerIndicatorEnabled(isDrawerIndicatorEnabled);
+	        mDrawerToggle.setDrawerIndicatorEnabled(isDrawerIndicatorEnabled);
         
-        // Set the drawer toggle as the DrawerListener
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        	// Set the drawer toggle as the DrawerListener
+        	mDrawerLayout.setDrawerListener(mDrawerToggle);
+		}
         
         /**
          * setIcon null throws NullPointerException while expanding searchView in SearchFragment.
@@ -195,9 +206,10 @@ public class MainActivity extends ActionBarActivity implements DrawerListFragmen
 	@Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        mDrawerToggle.syncState();
-        
+        if(!isTabletAndInLandscapeMode) {
+        	// Sync the toggle state after onRestoreInstanceState has occurred.
+        	mDrawerToggle.syncState();
+        }
 		updateTitle();
     }
 	
@@ -247,7 +259,9 @@ public class MainActivity extends ActionBarActivity implements DrawerListFragmen
 	@Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
+        if(!isTabletAndInLandscapeMode) {
+        	mDrawerToggle.onConfigurationChanged(newConfig);
+        }
     }
 	
 	@Override
@@ -288,16 +302,18 @@ public class MainActivity extends ActionBarActivity implements DrawerListFragmen
 		switch (item.getItemId()) {
 		
 		case android.R.id.home:
-			if (mDrawerToggle.isDrawerIndicatorEnabled()) {
-				if (mDrawerLayout.isDrawerOpen(lnrLayoutRootNavDrawer)) {
-					mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
+			if(!isTabletAndInLandscapeMode) {
+				if (mDrawerToggle.isDrawerIndicatorEnabled()) {
+					if (mDrawerLayout.isDrawerOpen(lnrLayoutRootNavDrawer)) {
+						mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
 					
-				} else {
-					mDrawerLayout.openDrawer(lnrLayoutRootNavDrawer);
-				}
+					} else {
+						mDrawerLayout.openDrawer(lnrLayoutRootNavDrawer);
+					}
 
-			} else {
-				onBackPressed();
+				} else {
+					onBackPressed();
+				}
 			}
 			return true;
 			
@@ -321,29 +337,36 @@ public class MainActivity extends ActionBarActivity implements DrawerListFragmen
 		outState.putString(BundleKeys.ACTION_BAR_TITLE, mTitle);
 		outState.putString(BundleKeys.CURRENT_CONTENT_FRAGMENT_TAG, currentContentFragmentTag);
 		outState.putInt(BundleKeys.DRAWER_ITEM_SELECTED_POSITION, drawerItemSelectedPosition);
-		outState.putBoolean(BundleKeys.IS_DRAWER_INDICATOR_ENABLED, mDrawerToggle.isDrawerIndicatorEnabled());
+		if(!isTabletAndInLandscapeMode){
+			outState.putBoolean(BundleKeys.IS_DRAWER_INDICATOR_ENABLED, mDrawerToggle.isDrawerIndicatorEnabled());
+		}
 	}
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		//Log.d(TAG, "onKeyDown()");
-		if (keyCode == KeyEvent.KEYCODE_MENU) {
-			if (mDrawerToggle.isDrawerIndicatorEnabled()) {
-				if (mDrawerLayout.isDrawerOpen(lnrLayoutRootNavDrawer)) {
-					mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
+		if(!isTabletAndInLandscapeMode) {
+			if (keyCode == KeyEvent.KEYCODE_MENU) {
+				if (mDrawerToggle.isDrawerIndicatorEnabled()) {
+					if (mDrawerLayout.isDrawerOpen(lnrLayoutRootNavDrawer)) {
+						mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
 					
-				} else {
-					mDrawerLayout.openDrawer(lnrLayoutRootNavDrawer);
-				}
-		        return true;
+					} else {
+						mDrawerLayout.openDrawer(lnrLayoutRootNavDrawer);
+					}
+		        	return true;
 		        
-			} else {
-				return super.onKeyDown(keyCode, event);
-			}
+				} else {
+					return super.onKeyDown(keyCode, event);
+				}
 			
-	    } else {
-	        return super.onKeyDown(keyCode, event);
-	    }
+	    	} else {
+	        	return super.onKeyDown(keyCode, event);
+	    	}
+		
+		} else {
+        	return super.onKeyDown(keyCode, event);
+		}
 	}
 	
 	public boolean isActivityonTop(){
@@ -462,10 +485,11 @@ public class MainActivity extends ActionBarActivity implements DrawerListFragmen
 	private void onFragmentResumed(int position, String title, String fragmentTag) {
 		//Log.d(TAG, "onFragmentResumed() - " + fragmentTag);
 		drawerItemSelectedPosition = position;
-		if (drawerItemSelectedPosition != AppConstants.INVALID_INDEX) {
-			mDrawerToggle.setDrawerIndicatorEnabled(true);
+		if(!isTabletAndInLandscapeMode){
+			if (drawerItemSelectedPosition != AppConstants.INVALID_INDEX) {
+				mDrawerToggle.setDrawerIndicatorEnabled(true);
+			}
 		}
-		
 		mTitle = title;
 		updateTitle();
 		
@@ -475,7 +499,9 @@ public class MainActivity extends ActionBarActivity implements DrawerListFragmen
 	private void onFragmentCalledFromOtherTaskResumed(int position, String title, String fragmentTag) {
 		//Log.d(TAG, "onFragmentResumed() - " + fragmentTag);
 		drawerItemSelectedPosition = position;
-		mDrawerToggle.setDrawerIndicatorEnabled(true);
+		if(!isTabletAndInLandscapeMode){
+			mDrawerToggle.setDrawerIndicatorEnabled(true);
+		}
 		
 		mTitle = title;
 		updateTitle();
@@ -488,7 +514,9 @@ public class MainActivity extends ActionBarActivity implements DrawerListFragmen
 		//Log.d(TAG, "selectItem()");
 		//if (position != INDEX_NAV_ITEM_LATEST_NEWS) {
 			drawerItemSelectedPosition = position;
-			mDrawerToggle.setDrawerIndicatorEnabled(true);
+			if(!isTabletAndInLandscapeMode){
+				mDrawerToggle.setDrawerIndicatorEnabled(true);
+			}
 			
 			DrawerListFragment drawerListFragment = (DrawerListFragment) getSupportFragmentManager()
 					.findFragmentByTag(DRAWER_LIST_FRAGMENT_TAG);
@@ -575,7 +603,9 @@ public class MainActivity extends ActionBarActivity implements DrawerListFragmen
 			break;
 		}
 	    
-	    mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
+	    if(!isTabletAndInLandscapeMode){
+	    	mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
+	    }
 	}
 	
 	private void inviteFriends() {
@@ -675,7 +705,9 @@ public class MainActivity extends ActionBarActivity implements DrawerListFragmen
 		Log.d(TAG, "onDrawerItemSelected(), newTitle = " + newTitle + ", addToBackStack = " + addToBackStack);
 		drawerItemSelectedPosition = AppConstants.INVALID_INDEX;
 		//revertCheckedDrawerItemStateIfAny();
-		mDrawerToggle.setDrawerIndicatorEnabled(!addToBackStack);
+		if(!isTabletAndInLandscapeMode){
+			mDrawerToggle.setDrawerIndicatorEnabled(!addToBackStack);
+		}
 		//getSupportActionBar().setDisplayHomeAsUpEnabled(addToBackStack);
 		replaceContentFrameByFragment(replaceBy, replaceByFragmentTag, newTitle, addToBackStack);
 	}
@@ -711,7 +743,9 @@ public class MainActivity extends ActionBarActivity implements DrawerListFragmen
 			selectItem(pos);
 			
 		} else {
-			mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
+			if(!isTabletAndInLandscapeMode){
+				mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
+			}
 		}
 	}
 

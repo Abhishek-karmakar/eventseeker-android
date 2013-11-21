@@ -1,14 +1,14 @@
 <resources>
 
-    <dimen name="lnr_layout_chk_box_going_margin_b_evt_details">40dp</dimen>
+<!--     <dimen name="lnr_layout_chk_box_going_margin_b_evt_details">40dp</dimen>
     <dimen name="lnr_layout_chk_box_want_to_go_margin_b_evt_details">@dimen/lnr_layout_chk_box_going_margin_b_evt_details</dimen>
     <dimen name="rel_layout_btns_w_evt_details">180dp</dimen>
     <dimen name="rel_layout_btns_ht_evt_details">72dp</dimen>
     
-    <!-- activity_artist_details.xml -->
+    activity_artist_details.xml
     <dimen name="lnr_layout_btn_follow_margin_b_artist_details">40dp</dimen>
     <dimen name="lnr_layout_btn_news_margin_b_artist_details">@dimen/lnr_layout_btn_follow_margin_b_artist_details</dimen>
     <dimen name="rel_layout_btns_w_artist_details">180dp</dimen>
     <dimen name="rel_layout_btns_ht_artist_details">72dp</dimen>
-    
+     -->
 </resources>
