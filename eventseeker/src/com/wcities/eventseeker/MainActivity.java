@@ -292,7 +292,7 @@ public class MainActivity extends ActionBarActivity implements DrawerListFragmen
 	
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
-		//Log.d(TAG, "onOptionsItemSelected()");
+		//Log.d(TAG, "onOptionsItemSelected() itemId = " + item.getItemId()");
         // Pass the event to ActionBarDrawerToggle, if it returns
         // true, then it has handled the app icon touch event
         /*if (mDrawerToggle.onOptionsItemSelected()) {

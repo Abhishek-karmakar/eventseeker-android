@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.wcities.eventseeker.ArtistDetailsFragment.ArtistDetailsFragmentChildListener;
+import com.wcities.eventseeker.ArtistDetailsFragment.ArtistDetailsFragmentListener;
 import com.wcities.eventseeker.ArtistDetailsFragment.FooterTxt;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
@@ -34,7 +34,7 @@ import com.wcities.eventseeker.viewdata.DateWiseEventList;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.EventListItem;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.LIST_ITEM_TYPE;
 
-public class ArtistEventsFragment extends Fragment implements ArtistDetailsFragmentChildListener, OnClickListener {
+public class ArtistEventsFragment extends Fragment implements ArtistDetailsFragmentListener, OnClickListener {
 
 	private static final String TAG = ArtistEventsFragment.class.getName();
 	

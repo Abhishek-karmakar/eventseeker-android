@@ -40,6 +40,8 @@ public class GcmUtil {
 	        @Override
 	        protected Void doInBackground(Void... params) {
 	        	String wcitiesId = eventSeekr.getWcitiesId();
+	        	Log.d(TAG, "wcitiesId=" + wcitiesId);
+	        	
 	        	if (wcitiesId != null) {
 	        		String regId = getRegistrationId();
 		    		//Log.d(TAG, "regId = " + regId);

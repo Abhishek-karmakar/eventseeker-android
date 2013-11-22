@@ -1,11 +1,21 @@
 package com.wcities.eventseeker.util;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import android.app.Application;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.os.AsyncTask;
+import android.os.Environment;
 import android.util.Log;
+
+import com.wcities.eventseeker.constants.AppConstants;
 
 public class FileUtil {
 
@@ -46,5 +56,58 @@ public class FileUtil {
 				Log.e(TAG, "Exception: " + e.getMessage());
 			}
 		}
+	}
+	
+	public static final File createTempShareImgFile(Application application, Bitmap bitmap) {
+		File shareImgFolder = new File(application.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() 
+				+ AppConstants.TMP_SHARE_IMG_FOLDER);
+		if (!shareImgFolder.exists()) {
+			shareImgFolder.mkdir();
+		}
+		
+	    FileOutputStream fos = null;
+	    try {
+	    	File pictureFile = new File(shareImgFolder.getAbsolutePath(), System.currentTimeMillis() + ".jpg");
+			fos = new FileOutputStream(pictureFile);
+		    bitmap.compress(CompressFormat.JPEG, 100, fos);
+
+		    //Log.d(TAG, "path = " + pictureFile.getAbsolutePath());
+		    return pictureFile;
+		    
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			
+		} finally {
+			if (fos != null) {
+				try {
+					fos.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	    
+		return null;
+	}
+	
+	public static void deleteShareImgCacheInBackground(final Application application) {
+		new AsyncTask<Void, Void, Void>() {
+	    	
+	        @Override
+	        protected Void doInBackground(Void... params) {
+	        	File dir = new File(application.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() 
+	        			+ AppConstants.TMP_SHARE_IMG_FOLDER);
+	    		if (dir != null && dir.isDirectory()) {
+	    			File[] files = dir.listFiles();
+					for (int i = 0; i < files.length; i++) {
+						Log.d(TAG, "file = " + files[i].getAbsolutePath());
+						files[i].delete();
+					}
+	    		}
+	    		
+	            return null;
+	        }
+	        
+	    }.execute();
 	}
 }

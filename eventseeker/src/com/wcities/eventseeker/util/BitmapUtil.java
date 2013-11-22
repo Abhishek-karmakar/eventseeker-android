@@ -61,7 +61,7 @@ public class BitmapUtil {
 		return bitmap;
 	}
 	
-	public static Uri getImgFileUri(Bitmap bitmap) {
+	/*public static Uri getImgFileUri(Bitmap bitmap) {
 		//return MediaStore.Images.Media.insertImage(contentResolver, bitmap, "Image title", "Image description");
 		 
 		File rootSdDirectory = Environment.getExternalStorageDirectory();
@@ -89,5 +89,5 @@ public class BitmapUtil {
 		}
 	    Log.d(TAG, "path = " + pictureFile.getAbsolutePath());
 	    return Uri.fromFile(pictureFile);
-	}
+	}*/
 }

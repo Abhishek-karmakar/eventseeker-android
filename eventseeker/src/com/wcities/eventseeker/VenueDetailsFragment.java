@@ -1,6 +1,5 @@
 package com.wcities.eventseeker;
 
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -11,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,7 +26,7 @@ import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
-import com.wcities.eventseeker.util.BitmapUtil;
+import com.wcities.eventseeker.util.FileUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
 
@@ -42,7 +42,6 @@ public class VenueDetailsFragment extends FragmentLoadableFromBackStack implemen
 	private SwipeTabsAdapter mTabsAdapter;
 	private TabBar tabBar;
 	private ShareActionProvider mShareActionProvider;
-	private ContentResolver contentResolver;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,11 +50,9 @@ public class VenueDetailsFragment extends FragmentLoadableFromBackStack implemen
 		setRetainInstance(true);
 		setHasOptionsMenu(true);
 		
-		contentResolver = FragmentUtil.getActivity(this).getContentResolver();
-		
 		if (venue == null) {
 			venue = (Venue) getArguments().getSerializable(BundleKeys.VENUE);
-			setShareIntent();
+			updateShareIntent();
 		}
 	}
 	
@@ -118,23 +115,28 @@ public class VenueDetailsFragment extends FragmentLoadableFromBackStack implemen
 		
 		MenuItem item = (MenuItem) menu.findItem(R.id.action_share);
 	    mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
-	    setShareIntent();
+	    updateShareIntent();
 	    
     	super.onCreateOptionsMenu(menu, inflater);
 	}
 	
-	private void setShareIntent() {
+	protected void updateShareIntent() {
 	    if (mShareActionProvider != null && venue != null) {
 	    	Intent shareIntent = new Intent(Intent.ACTION_SEND);
 		    shareIntent.setType("image/*");
 		    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Venue Details");
 		    shareIntent.putExtra(Intent.EXTRA_TEXT, venue.getName());
 			
-			String key = venue.getKey(ImgResolution.HIGH);
+			String key = venue.getKey(ImgResolution.LOW);
 	        BitmapCache bitmapCache = BitmapCache.getInstance();
 			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 			if (bitmap != null) {
-				shareIntent.putExtra(Intent.EXTRA_STREAM, BitmapUtil.getImgFileUri(bitmap));
+				Log.d(TAG, "bitmap != null");
+				shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(FileUtil.createTempShareImgFile(
+						FragmentUtil.getActivity(this).getApplication(), bitmap)));
+				
+			} else {
+				Log.d(TAG, "bitmap = null");
 			}
 		    
 	        mShareActionProvider.setShareIntent(shareIntent);

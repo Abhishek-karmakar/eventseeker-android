@@ -33,7 +33,7 @@ public class ExpandableGridView extends GridView {
             // Calculate entire height by providing a very large height hint.
             // But do not use the highest 2 bits of this integer; those are
             // reserved for the MeasureSpec mode.
-        	int height = MeasureSpec.getSize(heightMeasureSpec);
+        	//int height = MeasureSpec.getSize(heightMeasureSpec);
         	//Log.d(TAG, "Expanded, height = " + height + ", mode = " + MeasureSpec.getMode(heightMeasureSpec));
             int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2, MeasureSpec.AT_MOST);
             super.onMeasure(widthMeasureSpec, expandSpec);
@@ -42,7 +42,7 @@ public class ExpandableGridView extends GridView {
             params.height = getMeasuredHeight();
             
         } else {
-        	int height = MeasureSpec.getSize(heightMeasureSpec);
+        	//int height = MeasureSpec.getSize(heightMeasureSpec);
         	//Log.d(TAG, "non-expanded, height = " + height + ", mode = " + MeasureSpec.getMode(heightMeasureSpec));
         	int contractSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
             super.onMeasure(widthMeasureSpec, contractSpec);

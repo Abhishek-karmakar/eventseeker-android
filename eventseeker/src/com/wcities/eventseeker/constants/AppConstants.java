@@ -59,4 +59,7 @@ public class AppConstants {
 	
 	public static final int CATEGORY_ID_START = 900;
 	public static final int TOTAL_CATEGORIES = 12;
+	
+	public static final String TMP_SHARE_IMG_FOLDER = "/share_img";
+	public static final String TMP_SHARE_IMG_PREFIX = "img";
 }
