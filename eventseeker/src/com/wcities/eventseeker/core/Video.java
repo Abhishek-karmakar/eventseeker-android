@@ -7,6 +7,8 @@ import com.wcities.eventseeker.util.ConversionUtil;
 
 public class Video implements BitmapCacheable, Serializable {
 	
+	public static final String YOUTUBE_VIDEO_SIZE_HQDEFAULT = "hqdefault";
+	
 	private String videoUrl;
 	
 	public Video(String videoUrl) {
@@ -18,7 +20,7 @@ public class Video implements BitmapCacheable, Serializable {
 	}
 	
 	private String getImgUrl() {
-		return ConversionUtil.getYoutubeScreenShot(videoUrl, "hqdefault");
+		return ConversionUtil.getYoutubeScreenShot(videoUrl, YOUTUBE_VIDEO_SIZE_HQDEFAULT);
 	}
 
 	@Override
