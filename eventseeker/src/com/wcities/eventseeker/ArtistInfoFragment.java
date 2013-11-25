@@ -21,7 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.viewpagerindicator.CirclePageIndicator;
-import com.wcities.eventseeker.ArtistDetailsFragment.ArtistDetailsFragmentChildListener;
+import com.wcities.eventseeker.ArtistDetailsFragment.ArtistDetailsFragmentListener;
 import com.wcities.eventseeker.ArtistDetailsFragment.FooterTxt;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
@@ -38,7 +38,7 @@ import com.wcities.eventseeker.core.Friend;
 import com.wcities.eventseeker.custom.view.ExpandableGridView;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class ArtistInfoFragment extends Fragment implements OnClickListener, ArtistDetailsFragmentChildListener, 
+public class ArtistInfoFragment extends Fragment implements OnClickListener, ArtistDetailsFragmentListener, 
 		AsyncLoadImageListener {
 
 	private static final String TAG = ArtistInfoFragment.class.getName();

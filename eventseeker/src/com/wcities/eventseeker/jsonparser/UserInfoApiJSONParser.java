@@ -22,6 +22,7 @@ import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.core.ArtistNewsItem.PostType;
 import com.wcities.eventseeker.core.Event.Attending;
+import com.wcities.eventseeker.core.Video;
 import com.wcities.eventseeker.util.ConversionUtil;
 
 public class UserInfoApiJSONParser {
@@ -304,10 +305,10 @@ public class UserInfoApiJSONParser {
 			
 		} else if (jsonObject.has(KEY_VIDEO)) {
 			String videoUrl = jsonObject.getString(KEY_VIDEO);
-			String[] videoUrlParts = videoUrl.split("[/?]");
+			//String[] videoUrlParts = videoUrl.split("[/?]");
 			//Log.i(TAG, "video url parts=" + videoUrlParts.length);
-			String imgUrl = "http://img.youtube.com/vi/" + videoUrlParts[4] + "/0.jpg";
-			artistNewsItem.setImgUrl(imgUrl);
+			//String imgUrl = "http://img.youtube.com/vi/" + videoUrlParts[4] + "/0.jpg";
+			artistNewsItem.setImgUrl(ConversionUtil.getYoutubeScreenShot(videoUrl, Video.YOUTUBE_VIDEO_SIZE_HQDEFAULT));
 		}
 		return artistNewsItem;
 	}

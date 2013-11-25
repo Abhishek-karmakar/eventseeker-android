@@ -44,6 +44,7 @@ import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
 import com.wcities.eventseeker.util.BitmapUtil;
+import com.wcities.eventseeker.util.FileUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
 
@@ -66,9 +67,8 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 
 	private Artist artist;
 	private LoadArtistDetails loadArtistDetails;
-	private ContentResolver contentResolver;
 	
-	public interface ArtistDetailsFragmentChildListener {
+	public interface ArtistDetailsFragmentListener {
         public void onArtistUpdatedByArtistDetailsFragment();
         public void onArtistFollowingUpdated();
     }
@@ -79,8 +79,6 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 		
 		setRetainInstance(true);
 		setHasOptionsMenu(true);
-		
-		contentResolver = FragmentUtil.getActivity(this).getContentResolver();
 		
 		if (artist == null) {
 			artist = (Artist) getArguments().getSerializable(BundleKeys.ARTIST);
@@ -177,7 +175,7 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 	
 	private void updateShareIntent() {
 	    if (mShareActionProvider != null && artist != null) {
-			Log.d(TAG, "updateShareIntent()");
+			//Log.d(TAG, "updateShareIntent()");
 	    	Intent shareIntent = new Intent(Intent.ACTION_SEND);
 		    shareIntent.setType("image/*");
 		    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Artist Details");
@@ -186,16 +184,13 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 		    	message += ": " + artist.getArtistUrl();
 		    }
 		    shareIntent.putExtra(Intent.EXTRA_TEXT, message);
-		    /*if (artist.doesValidImgUrlExist()) {
-		    	Log.d(TAG, "url = " + artist.getValidImgUrl());
-		    	shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(artist.getValidImgUrl()));
-		    }*/
 			
 			String key = artist.getKey(ImgResolution.LOW);
 	        BitmapCache bitmapCache = BitmapCache.getInstance();
 			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 			if (bitmap != null) {
-				shareIntent.putExtra(Intent.EXTRA_STREAM, BitmapUtil.getImgFileUri(bitmap));
+				shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(FileUtil.createTempShareImgFile(
+						FragmentUtil.getActivity(this).getApplication(), bitmap)));
 			}
 		    
 	        mShareActionProvider.setShareIntent(shareIntent);
@@ -241,12 +236,12 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 		}    	
     }
 	
-	public void onArtistUpdated() {
+	private void onArtistUpdated() {
 		updateShareIntent();
 		
 		List<Fragment> pageFragments = mTabsAdapter.getTabFragments();
 		for (Iterator<Fragment> iterator = pageFragments.iterator(); iterator.hasNext();) {
-			ArtistDetailsFragmentChildListener fragment = (ArtistDetailsFragmentChildListener) iterator.next();
+			ArtistDetailsFragmentListener fragment = (ArtistDetailsFragmentListener) iterator.next();
 			fragment.onArtistUpdatedByArtistDetailsFragment();
 		}
 	}
@@ -254,7 +249,7 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 	public void onArtistFollowingUpdated() {
 		List<Fragment> pageFragments = mTabsAdapter.getTabFragments();
 		for (Iterator<Fragment> iterator = pageFragments.iterator(); iterator.hasNext();) {
-			ArtistDetailsFragmentChildListener fragment = (ArtistDetailsFragmentChildListener) iterator.next();
+			ArtistDetailsFragmentListener fragment = (ArtistDetailsFragmentListener) iterator.next();
 			fragment.onArtistFollowingUpdated();
 		}
 	}

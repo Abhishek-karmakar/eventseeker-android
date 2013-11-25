@@ -332,14 +332,14 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Log.d(TAG, "onOptionsItemSelected()");
-		// Pass the event to ActionBarDrawerToggle, if it returns
-		// true, then it has handled the app icon touch event
-		/*
-		 * if (mDrawerToggle.onOptionsItemSelected()) { return true; }
-		 */
-		// Handle your other action bar items...
+    public boolean onOptionsItemSelected(MenuItem item) {
+		//Log.d(TAG, "onOptionsItemSelected() itemId = " + item.getItemId()");
+        // Pass the event to ActionBarDrawerToggle, if it returns
+        // true, then it has handled the app icon touch event
+        /*if (mDrawerToggle.onOptionsItemSelected()) {
+        	return true;
+        }*/
+        // Handle your other action bar items...
 		switch (item.getItemId()) {
 
 		case android.R.id.home:

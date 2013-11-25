@@ -9,7 +9,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -44,7 +43,7 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
-import com.wcities.eventseeker.util.BitmapUtil;
+import com.wcities.eventseeker.util.FileUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
 
@@ -103,14 +102,13 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 			//Log.d(TAG, "lat = " + event.getSchedule().getVenue().getAddress().getLat() + ", lon = " + event.getSchedule().getVenue().getAddress().getLon());
 			enableTabs = event.hasArtists();
 			
-			Activity activity = FragmentUtil.getActivity(EventDetailsFragment.this);
-			loadEventDetails = new LoadEventDetails(((EventSeekr)activity.getApplication()).getWcitiesId(), activity.getContentResolver());
+			loadEventDetails = new LoadEventDetails();
 			loadEventDetails.execute();
 			
 			event.getFriends().clear();
 			//event.getFriends().add(null);
 			
-			updateShareIntent(FragmentUtil.getActivity(this).getContentResolver());
+			updateShareIntent();
 		}
 		//Log.d(TAG, "onCreate() done");
 	}
@@ -192,12 +190,12 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 		
 		MenuItem item = (MenuItem) menu.findItem(R.id.action_share);
 	    mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
-	    updateShareIntent(FragmentUtil.getActivity(this).getContentResolver());
+	    updateShareIntent();
 	    
     	super.onCreateOptionsMenu(menu, inflater);
 	}
 	
-	private void updateShareIntent(ContentResolver contentResolver) {
+	private void updateShareIntent() {
 	    if (mShareActionProvider != null && event != null) {
 	    	Intent shareIntent = new Intent(Intent.ACTION_SEND);
 		    shareIntent.setType("image/*");
@@ -215,7 +213,8 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 	        BitmapCache bitmapCache = BitmapCache.getInstance();
 			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 			if (bitmap != null) {
-				shareIntent.putExtra(Intent.EXTRA_STREAM, BitmapUtil.getImgFileUri(bitmap));
+				shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(FileUtil.createTempShareImgFile(
+						FragmentUtil.getActivity(this).getApplication(), bitmap)));
 			}
 		    
 	        mShareActionProvider.setShareIntent(shareIntent);
@@ -224,14 +223,6 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 	
 	private class LoadEventDetails extends AsyncTask<Void, Void, Void> {
 		
-		private String wcitiesId;
-		private ContentResolver contentResolver;
-		
-		public LoadEventDetails(String wcitiesId, ContentResolver contentResolver) {
-			this.wcitiesId = wcitiesId;
-			this.contentResolver = contentResolver;
-		}
-
 		@Override
 		protected Void doInBackground(Void... params) {
 			//Log.d(TAG, "LoadEventDetails doInBackground()");
@@ -264,7 +255,7 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 		@Override
 		protected void onPostExecute(Void result) {
 			//Log.d(TAG, "LoadEventDetails onPostExecute()");
-			updateShareIntent(contentResolver);
+			updateShareIntent();
 			
 			if (mTabsAdapter != null) {
 				List<Fragment> pageFragments = mTabsAdapter.getTabFragments();

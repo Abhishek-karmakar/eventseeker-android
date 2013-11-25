@@ -363,6 +363,9 @@ public class EventApiJSONParser {
 	private Venue getVenue(JSONObject jsonObject) throws JSONException {
 		Venue venue = new Venue(jsonObject.getInt(KEY_ID));
 		venue.setName(jsonObject.getString(KEY_NAME));
+		if (jsonObject.has(KEY_ADDRESS)) {
+			venue.setAddress(getAddress(jsonObject.getJSONObject(KEY_ADDRESS)));
+		}
 		return venue;
 	}
 

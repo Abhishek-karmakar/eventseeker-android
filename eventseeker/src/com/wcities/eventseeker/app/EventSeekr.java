@@ -1,5 +1,6 @@
 package com.wcities.eventseeker.app;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -14,6 +15,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.R;
@@ -25,6 +27,7 @@ import com.wcities.eventseeker.gcm.GcmUtil;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.util.DeviceUtil;
+import com.wcities.eventseeker.util.FileUtil;
 
 public class EventSeekr extends Application {
 
@@ -59,7 +62,7 @@ public class EventSeekr extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		// Log.d(TAG, "onCreate()");
+		Log.d(TAG, "onCreate()");
 		listeners = new ArrayList<EventSeekr.EventSeekrListener>();
 
 		new GcmUtil(EventSeekr.this).registerGCMInBackground();
@@ -67,6 +70,7 @@ public class EventSeekr extends Application {
 
 		isTablet = getResources().getBoolean(R.bool.is_tablet);
 		
+		FileUtil.deleteShareImgCacheInBackground(this);
 	}
 	
 	public void registerListener(EventSeekrListener eventSeekrListener) {
