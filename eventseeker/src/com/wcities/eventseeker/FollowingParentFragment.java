@@ -88,10 +88,11 @@ public class FollowingParentFragment extends FragmentLoadableFromBackStack {
 		loadArtists.execute();
 	}
 
-	private class LoadArtists extends AsyncTask<Void, Void, Void> {
+	private class LoadArtists extends AsyncTask<Void, Void, List<Artist>> {
 
 		@Override
-		protected Void doInBackground(Void... params) {
+		protected List<Artist> doInBackground(Void... params) {
+			List<Artist> tmpArtists = new ArrayList<Artist>();
 			UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
 			userInfoApi.setLimit(ARTISTS_LIMIT);
 			userInfoApi.setAlreadyRequested(artistsAlreadyRequested);
@@ -103,21 +104,7 @@ public class FollowingParentFragment extends FragmentLoadableFromBackStack {
 				UserInfoApiJSONParser jsonParser = new UserInfoApiJSONParser();
 				MyItemsList<Artist> myArtistsList = jsonParser
 						.getArtistList(jsonObject);
-				List<Artist> tmpArtists = myArtistsList.getItems();
-
-				if (!tmpArtists.isEmpty()) {
-					artistList.addAll(artistList.size() - 1, tmpArtists);
-					artistsAlreadyRequested += tmpArtists.size();
-
-					if (tmpArtists.size() < ARTISTS_LIMIT) {
-						isMoreDataAvailable = false;
-						artistList.remove(artistList.size() - 1);
-					}
-
-				} else {
-					isMoreDataAvailable = false;
-					artistList.remove(artistList.size() - 1);
-				}
+				tmpArtists = myArtistsList.getItems();
 
 			} catch (ClientProtocolException e) {
 				e.printStackTrace();
@@ -129,11 +116,24 @@ public class FollowingParentFragment extends FragmentLoadableFromBackStack {
 				e.printStackTrace();
 			}
 
-			return null;
+			return tmpArtists;
 		}
 
 		@Override
-		protected void onPostExecute(Void result) {
+		protected void onPostExecute(List<Artist> tmpArtists) {
+			if (!tmpArtists.isEmpty()) {
+				artistList.addAll(artistList.size() - 1, tmpArtists);
+				artistsAlreadyRequested += tmpArtists.size();
+
+				if (tmpArtists.size() < ARTISTS_LIMIT) {
+					isMoreDataAvailable = false;
+					artistList.remove(artistList.size() - 1);
+				}
+
+			} else {
+				isMoreDataAvailable = false;
+				artistList.remove(artistList.size() - 1);
+			}
 			artistListAdapter.notifyDataSetChanged();
 		}
 	}

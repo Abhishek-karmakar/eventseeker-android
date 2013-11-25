@@ -59,30 +59,32 @@ public class FileUtil {
 	}
 	
 	public static final File createTempShareImgFile(Application application, Bitmap bitmap) {
-		File shareImgFolder = new File(application.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() 
-				+ AppConstants.TMP_SHARE_IMG_FOLDER);
-		if (!shareImgFolder.exists()) {
-			shareImgFolder.mkdir();
-		}
-		
-	    FileOutputStream fos = null;
-	    try {
-	    	File pictureFile = new File(shareImgFolder.getAbsolutePath(), System.currentTimeMillis() + ".jpg");
-			fos = new FileOutputStream(pictureFile);
-		    bitmap.compress(CompressFormat.JPEG, 100, fos);
-
-		    //Log.d(TAG, "path = " + pictureFile.getAbsolutePath());
-		    return pictureFile;
-		    
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+		if (application.getExternalFilesDir(Environment.DIRECTORY_PICTURES) != null) {
+			File shareImgFolder = new File(application.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() 
+					+ AppConstants.TMP_SHARE_IMG_FOLDER);
+			if (!shareImgFolder.exists()) {
+				shareImgFolder.mkdir();
+			}
 			
-		} finally {
-			if (fos != null) {
-				try {
-					fos.close();
-				} catch (IOException e) {
-					e.printStackTrace();
+		    FileOutputStream fos = null;
+		    try {
+		    	File pictureFile = new File(shareImgFolder.getAbsolutePath(), System.currentTimeMillis() + ".jpg");
+				fos = new FileOutputStream(pictureFile);
+			    bitmap.compress(CompressFormat.JPEG, 100, fos);
+	
+			    //Log.d(TAG, "path = " + pictureFile.getAbsolutePath());
+			    return pictureFile;
+			    
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+				
+			} finally {
+				if (fos != null) {
+					try {
+						fos.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
@@ -95,15 +97,17 @@ public class FileUtil {
 	    	
 	        @Override
 	        protected Void doInBackground(Void... params) {
-	        	File dir = new File(application.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() 
-	        			+ AppConstants.TMP_SHARE_IMG_FOLDER);
-	    		if (dir != null && dir.isDirectory()) {
-	    			File[] files = dir.listFiles();
-					for (int i = 0; i < files.length; i++) {
-						Log.d(TAG, "file = " + files[i].getAbsolutePath());
-						files[i].delete();
-					}
-	    		}
+	        	if (application.getExternalFilesDir(Environment.DIRECTORY_PICTURES) != null) {
+		        	File dir = new File(application.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() 
+		        			+ AppConstants.TMP_SHARE_IMG_FOLDER);
+		    		if (dir != null && dir.isDirectory()) {
+		    			File[] files = dir.listFiles();
+						for (int i = 0; i < files.length; i++) {
+							Log.d(TAG, "file = " + files[i].getAbsolutePath());
+							files[i].delete();
+						}
+		    		}
+	        	}
 	    		
 	            return null;
 	        }

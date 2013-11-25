@@ -1,5 +1,6 @@
 package com.wcities.eventseeker;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
@@ -213,8 +214,10 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 	        BitmapCache bitmapCache = BitmapCache.getInstance();
 			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 			if (bitmap != null) {
-				shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(FileUtil.createTempShareImgFile(
-						FragmentUtil.getActivity(this).getApplication(), bitmap)));
+				File tmpFile = FileUtil.createTempShareImgFile(FragmentUtil.getActivity(this).getApplication(), bitmap);
+				if (tmpFile != null) {
+					shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(tmpFile));
+				}
 			}
 		    
 	        mShareActionProvider.setShareIntent(shareIntent);

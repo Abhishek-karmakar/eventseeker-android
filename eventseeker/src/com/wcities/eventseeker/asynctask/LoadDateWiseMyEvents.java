@@ -1,6 +1,7 @@
 package com.wcities.eventseeker.asynctask;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
@@ -18,7 +19,7 @@ import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser.MyItemsList;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
-public class LoadDateWiseMyEvents extends AsyncTask<Void, Void, Void> {
+public class LoadDateWiseMyEvents extends AsyncTask<Void, Void, List<Event>> {
 	
 	private static final int EVENTS_LIMIT = 10;
 	
@@ -41,7 +42,8 @@ public class LoadDateWiseMyEvents extends AsyncTask<Void, Void, Void> {
 	}
 	
 	@Override
-	protected Void doInBackground(Void... params) {
+	protected List<Event> doInBackground(Void... params) {
+		List<Event> tmpEvents = new ArrayList<Event>();
 		int eventsAlreadyRequested = eventListAdapter.getEventsAlreadyRequested();
 		
 		UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
@@ -55,7 +57,6 @@ public class LoadDateWiseMyEvents extends AsyncTask<Void, Void, Void> {
 			JSONObject jsonObject = userInfoApi.getMyProfileInfoFor(loadType);
 			UserInfoApiJSONParser jsonParser = new UserInfoApiJSONParser();
 			
-			List<Event> tmpEvents;
 			if (loadType == Type.myevents) {
 				MyItemsList<Event> myEventsList = jsonParser.getEventList(jsonObject);
 				tmpEvents = myEventsList.getItems();
@@ -65,21 +66,6 @@ public class LoadDateWiseMyEvents extends AsyncTask<Void, Void, Void> {
 				tmpEvents = jsonParser.getRecommendedEventList(jsonObject);
 			}
 
-			if (tmpEvents.size() > 0) {
-				eventList.addEventListItems(tmpEvents, this);
-				eventsAlreadyRequested += tmpEvents.size();
-				eventListAdapter.setEventsAlreadyRequested(eventsAlreadyRequested);
-				
-				if (tmpEvents.size() < EVENTS_LIMIT) {
-					eventListAdapter.setMoreDataAvailable(false);
-					eventList.removeProgressBarIndicator(this);
-				}
-				
-			} else {
-				eventListAdapter.setMoreDataAvailable(false);
-				eventList.removeProgressBarIndicator(this);
-			}
-			
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 			
@@ -90,11 +76,24 @@ public class LoadDateWiseMyEvents extends AsyncTask<Void, Void, Void> {
 			e.printStackTrace();
 		}
 
-		return null;
+		return tmpEvents;
 	}
 	
 	@Override
-	protected void onPostExecute(Void result) {
+	protected void onPostExecute(List<Event> tmpEvents) {
+		if (tmpEvents.size() > 0) {
+			eventList.addEventListItems(tmpEvents, this);
+			eventListAdapter.setEventsAlreadyRequested(eventListAdapter.getEventsAlreadyRequested() + tmpEvents.size());
+			
+			if (tmpEvents.size() < EVENTS_LIMIT) {
+				eventListAdapter.setMoreDataAvailable(false);
+				eventList.removeProgressBarIndicator(this);
+			}
+			
+		} else {
+			eventListAdapter.setMoreDataAvailable(false);
+			eventList.removeProgressBarIndicator(this);
+		}
 		eventListAdapter.notifyDataSetChanged();
 	}    	
 }

@@ -1,5 +1,7 @@
 package com.wcities.eventseeker;
 
+import java.io.File;
+
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -132,8 +134,10 @@ public class VenueDetailsFragment extends FragmentLoadableFromBackStack implemen
 			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 			if (bitmap != null) {
 				Log.d(TAG, "bitmap != null");
-				shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(FileUtil.createTempShareImgFile(
-						FragmentUtil.getActivity(this).getApplication(), bitmap)));
+				File tmpFile = FileUtil.createTempShareImgFile(FragmentUtil.getActivity(this).getApplication(), bitmap);
+				if (tmpFile != null) {
+					shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(tmpFile));
+				}
 				
 			} else {
 				Log.d(TAG, "bitmap = null");

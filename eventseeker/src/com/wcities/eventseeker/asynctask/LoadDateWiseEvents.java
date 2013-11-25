@@ -2,6 +2,7 @@ package com.wcities.eventseeker.asynctask;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
@@ -20,7 +21,7 @@ import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
-public class LoadDateWiseEvents extends AsyncTask<Void, Void, Void> {
+public class LoadDateWiseEvents extends AsyncTask<Void, Void, List<Event>> {
 	
 	private static final int EVENTS_LIMIT = 10;
 	
@@ -58,7 +59,8 @@ public class LoadDateWiseEvents extends AsyncTask<Void, Void, Void> {
 	}
 
 	@Override
-	protected Void doInBackground(Void... params) {
+	protected List<Event> doInBackground(Void... params) {
+		List<Event> tmpEvents = new ArrayList<Event>();
 		int eventsAlreadyRequested = eventListAdapter.getEventsAlreadyRequested();
 		
 		EventApi eventApi;
@@ -84,23 +86,8 @@ public class LoadDateWiseEvents extends AsyncTask<Void, Void, Void> {
 			JSONObject jsonObject = eventApi.getEvents();
 			EventApiJSONParser jsonParser = new EventApiJSONParser();
 			
-			List<Event> tmpEvents = jsonParser.getEventList(jsonObject);
+			tmpEvents = jsonParser.getEventList(jsonObject);
 
-			if (tmpEvents.size() > 0) {
-				eventList.addEventListItems(tmpEvents, this);
-				eventsAlreadyRequested += tmpEvents.size();
-				eventListAdapter.setEventsAlreadyRequested(eventsAlreadyRequested);
-				
-				if (tmpEvents.size() < EVENTS_LIMIT) {
-					eventListAdapter.setMoreDataAvailable(false);
-					eventList.removeProgressBarIndicator(this);
-				}
-				
-			} else {
-				eventListAdapter.setMoreDataAvailable(false);
-				eventList.removeProgressBarIndicator(this);
-			}
-			
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 			
@@ -111,11 +98,24 @@ public class LoadDateWiseEvents extends AsyncTask<Void, Void, Void> {
 			e.printStackTrace();
 		}
 
-		return null;
+		return tmpEvents;
 	}
 	
 	@Override
-	protected void onPostExecute(Void result) {
+	protected void onPostExecute(List<Event> result) {
+		if (result.size() > 0) {
+			eventList.addEventListItems(result, this);
+			eventListAdapter.setEventsAlreadyRequested(eventListAdapter.getEventsAlreadyRequested() + result.size());
+			
+			if (result.size() < EVENTS_LIMIT) {
+				eventListAdapter.setMoreDataAvailable(false);
+				eventList.removeProgressBarIndicator(this);
+			}
+			
+		} else {
+			eventListAdapter.setMoreDataAvailable(false);
+			eventList.removeProgressBarIndicator(this);
+		}
 		eventListAdapter.notifyDataSetChanged();
 	}    	
 }

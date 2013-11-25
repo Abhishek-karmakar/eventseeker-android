@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -108,7 +109,14 @@ public class ArtistNewsListFragment extends ListFragmentLoadableFromBackStack {
 			
 			@Override
 			public void run() {
-				getListView().setSelection(pos);
+				// TODO: remove following try-catch handling if not required
+				try {
+					setSelection(pos);
+					
+				} catch (IllegalStateException e) {
+					Log.e(TAG, "" + e.getMessage());
+					e.printStackTrace();
+				}
 			}
 		});
 		

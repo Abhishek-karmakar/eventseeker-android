@@ -280,16 +280,16 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				} else {
 					holder.rltLayoutServiceDetails.setVisibility(View.VISIBLE);
 				}
-			}
-			
-			convertView.setOnClickListener(new OnClickListener() {
 				
-				@Override
-				public void onClick(View v) {
-					//Log.d(TAG, "onClick()");
-					onItemClick(position);
-				}
-			});
+				convertView.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						//Log.d(TAG, "onClick()");
+						onItemClick(position);
+					}
+				});
+			}
 			
 			return convertView;
 		}
