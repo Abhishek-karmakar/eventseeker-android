@@ -1,8 +1,66 @@
 <resources>
 
-    <!--
-         Customize dimensions originally defined in res/values/dimens.xml (such as
-         screen margins) for sw600dp devices (e.g. 7" tablets) here.
-    -->
+    <!-- activity_main.xml -->
+    <dimen name="root_navigation_drawer_w_main">240dp</dimen>
+
+    <!-- navigation_drawer_list_item.xml -->
+    <dimen name="rlt_layout_content_pad_t_navigation_drawer_list_item">7dp</dimen>
+    <dimen name="rlt_layout_content_pad_b_navigation_drawer_list_item">@dimen/rlt_layout_content_pad_t_navigation_drawer_list_item</dimen>
+    <dimen name="rlt_layout_content_margin_l_navigation_drawer_list_item">15dp</dimen>
+    <dimen name="img_icon_margin_r_navigation_drawer_list_item">10dp</dimen>
+    <dimen name="txt_title_margin_l_navigation_drawer_list_item">10dp</dimen>
+    <dimen name="txt_title_txt_size_navigation_drawer_list_item">18sp</dimen>
+    <dimen name="divider_margin_l_navigation_drawer_list_item">@dimen/txt_title_margin_l_navigation_drawer_list_item</dimen>
+    <dimen name="divider_margin_r_navigation_drawer_list_item">@dimen/img_icon_margin_r_navigation_drawer_list_item</dimen>
+    <dimen name="divider_section_ht_navigation_drawer_list_item">1dp</dimen>
+
+    <!-- fragment_fb_login.xml -->
+    <dimen name="btn_fb_sign_up_ht_fb_login">40dp</dimen>
+    <dimen name="btn_fb_sign_up_txt_size_fb_login">20sp</dimen>
+    <dimen name="txt_fb_login_desc_txt_size_fb_login">20sp</dimen>
+    <dimen name="btn_continue_w_fb_login">130dp</dimen>
+
+    <!-- grid_category.xml -->
+    <dimen name="img_category_ht_grid_category">100dp</dimen>
+    <dimen name="txt_category_txt_size_grid_category">15sp</dimen>
+
+    <!-- fragment_discover.xml -->
+    <dimen name="grd_evt_categories_margin_t_discover">@dimen/rlt_layout_featured_evts_parent_margin_discover</dimen>
+    <dimen name="grd_evt_categories_margin_r_discover">@dimen/rlt_layout_featured_evts_parent_margin_discover</dimen>
+    <dimen name="grd_evt_categories_margin_l_discover">@dimen/rlt_layout_featured_evts_parent_margin_discover</dimen>
+    <dimen name="view_pager_pad_l_r_discover">100dp</dimen>
+    <dimen name="grd_evt_categories_pad_discover">15dp</dimen>
+    <dimen name="grd_evt_categories_hor_space_discover">@dimen/grd_evt_categories_pad_discover</dimen>
+    <dimen name="grd_evt_categories_ver_space_discover">@dimen/grd_evt_categories_pad_discover</dimen>
+    <dimen name="rlt_layout_featured_evts_parent_ht_discover">300dp</dimen>
+
+    <!-- fragment_about_us.xml -->
+    <dimen name="txt_app_name_margin_t_fragment_about_us">10dp</dimen>
+    <dimen name="txt_app_name_txt_size_fragment_about_us">35sp</dimen>
+    <dimen name="txt_app_slogan_margin_t_fragment_about_us">0dp</dimen>
+    <dimen name="txt_app_slogan_txt_size_fragment_about_us">20sp</dimen>
+    <dimen name="txt_desc_margin_l_fragment_about_us">120dp</dimen>
+    <dimen name="txt_desc_margin_r_fragment_about_us">@dimen/txt_desc_margin_l_fragment_about_us</dimen>
+    <dimen name="txt_desc_txt_size_fragment_about_us">18sp</dimen>
+    <dimen name="lnr_layout_icons_margin_t_fragment_about_us">10dp</dimen>
+    <dimen name="txt_powered_by_margin_t_fragment_about_us">2dp</dimen>
+    <dimen name="txt_powered_by_margin_b_fragment_about_us">20dp</dimen>
+    <dimen name="txt_powered_by_txt_size_fragment_about_us">15sp</dimen>
+    <dimen name="img_icons_margin_r_fragment_about_us">25dp</dimen>
+
+    <!-- fragment_search_artists_list_item_tab.xml -->
+    <dimen name="txt_artist_name_txt_size_fragment_search_artists_list_item">22sp</dimen>
+    <dimen name="txt_artist_name_pad_fragment_search_artists_list_item">2dp</dimen>
+    <dimen name="txt_on_tour_margin_t_fragment_search_artists_list_item">23dp</dimen>
+    <dimen name="txt_on_tour_margin_r_fragment_search_artists_list_item">-57dp</dimen>
+    <dimen name="txt_on_tour_txt_size_fragment_search_artists_list_item">20sp</dimen>
+    <dimen name="txt_on_tour_pad_l_r_fragment_search_artists_list_item">30dp</dimen>
+    <dimen name="txt_on_tour_pad_t_b_fragment_search_artists_list_item">2dp</dimen>
+    <dimen name="img_item_h_fragment_search_artists_list_item">165dp</dimen>
+
+    <!-- fragment_following_tab.xml -->
+    <dimen name="grd_following_hor_ver_spacing_fragment_following_tab">15dp</dimen>
+    <dimen name="grd_following_margin_fragment_following_tab">10dp</dimen>
+    <dimen name="grd_following_pad_fragment_following_tab">15dp</dimen>
 
 </resources>

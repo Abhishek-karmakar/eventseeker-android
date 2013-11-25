@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.wcities.eventseeker.custom.view.ScrollViewContainingViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrlVRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_gray" >
+
+    <RelativeLayout
+        android:id="@+id/rootRelLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <RelativeLayout
+            android:id="@+id/rltLayoutFeaturedEvtsParent"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/rlt_layout_featured_evts_parent_ht_discover"
+            android:layout_margin="@dimen/rlt_layout_featured_evts_parent_margin_discover"
+            android:background="@drawable/story_space" >
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:paddingBottom="@dimen/view_pager_pad_discover"
+                android:paddingLeft="@dimen/view_pager_pad_discover"
+                android:paddingRight="@dimen/view_pager_pad_discover"
+                android:paddingTop="@dimen/view_pager_pad_discover" />
+        </RelativeLayout>
+
+        <com.wcities.eventseeker.custom.view.ExpandableGridView
+            android:id="@+id/grdEvtCategories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/rltLayoutFeaturedEvtsParent"
+            android:layout_alignRight="@id/rltLayoutFeaturedEvtsParent"
+            android:layout_below="@id/rltLayoutFeaturedEvtsParent"
+            android:layout_marginBottom="@dimen/grd_evt_categories_margin_b_discover"
+            android:background="@drawable/story_space"
+            android:horizontalSpacing="@dimen/grd_evt_categories_hor_space_discover"
+            android:numColumns="4"
+            android:padding="@dimen/grd_evt_categories_pad_discover"
+            android:verticalSpacing="@dimen/grd_evt_categories_ver_space_discover" />
+    </RelativeLayout>
+
+</com.wcities.eventseeker.custom.view.ScrollViewContainingViewPager>

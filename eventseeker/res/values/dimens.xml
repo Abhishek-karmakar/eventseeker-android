@@ -238,7 +238,6 @@
 	<dimen name="txt_link_title_txt_size_artist_news_item">14sp</dimen>
 	<dimen name="txt_link_title_margin_b_artist_news_item">@dimen/txt_time_margin_b_artist_news_item</dimen>
 	<!-- friend_news_item.xml -->
-	<dimen name="root_rlt_layout_pad_friend_news_item">@dimen/root_rlt_layout_pad_artist_news_item</dimen>
 	<dimen name="txt_title_txt_size_friend_news_item">@dimen/txt_title_txt_size_artist_news_item</dimen>
 	<dimen name="txt_title_margin_b_friend_news_item">10dp</dimen>
 	<dimen name="img_photo_margin_b_friend_news_item">5dp</dimen>

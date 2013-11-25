@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_gray" >
+
+    <GridView
+        android:id="@+id/grdFollowing"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/grd_following_margin_fragment_following_tab"
+        android:background="@drawable/story_space"
+        android:horizontalSpacing="@dimen/grd_following_hor_ver_spacing_fragment_following_tab"
+        android:numColumns="3"
+        android:padding="@dimen/grd_following_pad_fragment_following_tab"
+        android:verticalSpacing="@dimen/grd_following_hor_ver_spacing_fragment_following_tab" >
+    </GridView>
+
+</RelativeLayout>

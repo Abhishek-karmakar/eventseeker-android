@@ -1,0 +1,92 @@
+<resources>
+
+    <!-- activity_main.xml -->
+    <dimen name="root_navigation_drawer_w_main">320dp</dimen>
+
+    <!-- navigation_drawer_list_section_header.xml -->
+    <dimen name="txt_title_margin_l_navigation_drawer_list_section_header">15dp</dimen>
+    <dimen name="txt_title_txt_size_navigation_drawer_list_section_header">15sp</dimen>
+
+    <!-- navigation_drawer_list_item.xml -->
+    <dimen name="rlt_layout_content_pad_t_navigation_drawer_list_item">10dp</dimen>
+    <dimen name="rlt_layout_content_pad_b_navigation_drawer_list_item">@dimen/rlt_layout_content_pad_t_navigation_drawer_list_item</dimen>
+    <dimen name="rlt_layout_content_margin_l_navigation_drawer_list_item">20dp</dimen>
+    <dimen name="img_icon_margin_r_navigation_drawer_list_item">20dp</dimen>
+    <dimen name="txt_title_margin_l_navigation_drawer_list_item">15dp</dimen>
+    <dimen name="txt_title_txt_size_navigation_drawer_list_item">24sp</dimen>
+    <dimen name="divider_ht_navigation_drawer_list_item">1dp</dimen>
+    <dimen name="divider_margin_l_navigation_drawer_list_item">@dimen/txt_title_margin_l_navigation_drawer_list_item</dimen>
+    <dimen name="divider_margin_r_navigation_drawer_list_item">@dimen/img_icon_margin_r_navigation_drawer_list_item</dimen>
+    <dimen name="divider_section_ht_navigation_drawer_list_item">1dp</dimen>
+
+    <!-- fragment_fb_login.xml -->
+    <dimen name="v_divider_ht_fb_login">1dp</dimen>
+    <dimen name="btn_fb_sign_up_ht_fb_login">40dp</dimen>
+    <dimen name="btn_fb_sign_up_margin_t_fb_login">45dp</dimen>
+    <dimen name="btn_fb_sign_up_txt_size_fb_login">20sp</dimen>
+    <dimen name="btn_fb_sign_up_pad_l_fb_login">10dp</dimen>
+    <dimen name="btn_fb_sign_up_pad_r_fb_login">@dimen/btn_fb_sign_up_pad_l_fb_login</dimen>
+    <dimen name="txt_fb_login_desc_margin_t_fb_login">20dp</dimen>
+    <dimen name="txt_fb_login_desc_pad_l_fb_login">30dp</dimen>
+    <dimen name="txt_fb_login_desc_pad_r_fb_login">@dimen/txt_fb_login_desc_pad_l_fb_login</dimen>
+    <dimen name="txt_fb_login_desc_txt_size_fb_login">20sp</dimen>
+    <dimen name="btn_continue_margin_b_fb_login">30dp</dimen>
+    <dimen name="btn_continue_w_fb_login">130dp</dimen>
+    <dimen name="btn_continue_ht_fb_login">@dimen/btn_fb_sign_up_ht_fb_login</dimen>
+    <dimen name="btn_continue_txt_size_fb_login">@dimen/btn_fb_sign_up_txt_size_fb_login</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- grid_category.xml -->
+    <dimen name="img_category_ht_grid_category">150dp</dimen>
+    <dimen name="txt_category_pad_t_grid_category">2dp</dimen>
+    <dimen name="txt_category_pad_b_grid_category">@dimen/txt_category_pad_t_grid_category</dimen>
+    <dimen name="txt_category_txt_size_grid_category">20sp</dimen>
+    <dimen name="txt_category_pad_l_grid_category">5dp</dimen>
+
+    <!-- fragment_discover.xml -->
+    <dimen name="grd_evt_categories_margin_t_discover">@dimen/rlt_layout_featured_evts_parent_margin_discover</dimen>
+    <dimen name="grd_evt_categories_margin_b_discover">@dimen/rlt_layout_featured_evts_parent_margin_discover</dimen>
+    <dimen name="grd_evt_categories_margin_r_discover">@dimen/rlt_layout_featured_evts_parent_margin_discover</dimen>
+    <dimen name="grd_evt_categories_margin_l_discover">@dimen/rlt_layout_featured_evts_parent_margin_discover</dimen>
+    <dimen name="view_pager_pad_l_r_discover">100dp</dimen>
+    <dimen name="grd_evt_categories_pad_discover">20dp</dimen>
+    <dimen name="grd_evt_categories_hor_space_discover">@dimen/grd_evt_categories_pad_discover</dimen>
+    <dimen name="grd_evt_categories_ver_space_discover">@dimen/grd_evt_categories_pad_discover</dimen>
+    <dimen name="rlt_layout_featured_evts_parent_ht_discover">400dp</dimen>
+    <dimen name="rlt_layout_featured_evts_parent_margin_discover">8dp</dimen>
+    <dimen name="page_indicator_pad_discover">8dp</dimen>
+    <dimen name="page_indicator_radius_discover">5dp</dimen>
+    <dimen name="page_indicator_stroke_w_discover">1dp</dimen>
+
+    <!-- fragment_about_us.xml -->
+    <dimen name="txt_app_name_margin_t_fragment_about_us">10dp</dimen>
+    <dimen name="txt_app_name_txt_size_fragment_about_us">45sp</dimen>
+    <dimen name="txt_app_slogan_margin_t_fragment_about_us">0dp</dimen>
+    <dimen name="txt_app_slogan_txt_size_fragment_about_us">25sp</dimen>
+    <dimen name="txt_desc_margin_t_fragment_about_us">15dp</dimen>
+    <dimen name="txt_desc_margin_l_fragment_about_us">150dp</dimen>
+    <dimen name="txt_desc_margin_r_fragment_about_us">@dimen/txt_desc_margin_l_fragment_about_us</dimen>
+    <dimen name="txt_desc_txt_size_fragment_about_us">20sp</dimen>
+    <dimen name="lnr_layout_icons_margin_t_fragment_about_us">10dp</dimen>
+    <dimen name="txt_powered_by_margin_t_fragment_about_us">2dp</dimen>
+    <dimen name="txt_powered_by_margin_b_fragment_about_us">20dp</dimen>
+    <dimen name="txt_powered_by_txt_size_fragment_about_us">20sp</dimen>
+    <dimen name="img_icons_margin_r_fragment_about_us">40dp</dimen>
+
+    <!-- fragment_search_artists_list_item_tab.xml -->
+    <dimen name="txt_artist_name_txt_size_fragment_search_artists_list_item">22sp</dimen>
+    <dimen name="txt_artist_name_pad_fragment_search_artists_list_item">5dp</dimen>
+    <dimen name="txt_on_tour_margin_t_fragment_search_artists_list_item">20dp</dimen>
+    <dimen name="txt_on_tour_margin_r_fragment_search_artists_list_item">-45dp</dimen>
+    <dimen name="txt_on_tour_txt_size_fragment_search_artists_list_item">20sp</dimen>
+    <dimen name="txt_on_tour_pad_l_r_fragment_search_artists_list_item">20dp</dimen>
+    <dimen name="txt_on_tour_pad_t_b_fragment_search_artists_list_item">2dp</dimen>
+    <dimen name="img_item_h_fragment_search_artists_list_item">190dp</dimen>
+
+    <!-- fragment_following_tab.xml -->
+    <dimen name="grd_following_hor_ver_spacing_fragment_following_tab">20dp</dimen>
+    <dimen name="grd_following_margin_fragment_following_tab">15dp</dimen>
+    <dimen name="grd_following_pad_fragment_following_tab">20dp</dimen>
+
+</resources>

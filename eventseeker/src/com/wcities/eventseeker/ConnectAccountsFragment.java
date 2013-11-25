@@ -91,7 +91,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = LayoutInflater.from(FragmentUtil.getActivity(this)).inflate(R.layout.fragment_connect_accounts_list, null);
+		View v = LayoutInflater.from(FragmentUtil.getActivity(this)).inflate(R.layout.fragment_list, null);
 		return v;
 	}
 	

@@ -1,7 +1,0 @@
-<resources>
-
-    <!-- activity_main.xml -->
-    <dimen name="root_navigation_drawer_w_main">0dp</dimen>
-    <dimen name="content_frame_w_main">0dp</dimen>
-
-</resources>
