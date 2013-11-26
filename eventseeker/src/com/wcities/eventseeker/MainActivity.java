@@ -90,9 +90,13 @@ public class MainActivity extends ActionBarActivity implements
 	private int drawerItemSelectedPosition = AppConstants.INVALID_INDEX;
 	private String searchQuery;
 
-	private boolean isTabletAndInLandscapeMode;
+	private boolean isTabletAndInLandscapeMode;/** This will check whether current device is tablet and if it is in 
+	Landscape mode, it is used for the side navigation List to be shown permanently in landscape mode and not in 
+	portrait mode
+	**/
 	private boolean isDrawerIndicatorEnabled;
-	private boolean isTablet;
+	private boolean isTablet; /** it will check whether current device is tablet and according to that we will 
+	select same tab layout file for portrait and landscape mode**/
 
 	public static MainActivity getInstance() {
 		return instance;
