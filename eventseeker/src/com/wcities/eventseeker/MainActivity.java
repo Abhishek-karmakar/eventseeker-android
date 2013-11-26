@@ -116,6 +116,7 @@ public class MainActivity extends ActionBarActivity implements
 		eventSeekr.checkAndSetIfInLandscapeMode();
 		isTabletAndInLandscapeMode = eventSeekr.isTabletAndInLandscapeMode();
 		isTablet = eventSeekr.isTablet();
+		//Log.d(TAG, "isTabletAndInLandscapeMode = " + isTabletAndInLandscapeMode);
 
 		/**
 		 * if user moves away quickly to any other screen resulting in fragment

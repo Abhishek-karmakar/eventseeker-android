@@ -120,7 +120,14 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack {
 			
 			@Override
 			public void run() {
-				getListView().setSelection(pos);
+				// TODO: remove following try-catch handling if not required
+				try {
+					setSelection(pos);
+					
+				} catch (IllegalStateException e) {
+					Log.e(TAG, "" + e.getMessage());
+					e.printStackTrace();
+				}
 			}
 		});
 		

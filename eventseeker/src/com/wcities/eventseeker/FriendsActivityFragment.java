@@ -132,7 +132,14 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 			
 			@Override
 			public void run() {
-				getListView().setSelection(pos);
+				// TODO: remove following try-catch handling if not required
+				try {
+					setSelection(pos);
+					
+				} catch (IllegalStateException e) {
+					Log.e(TAG, "" + e.getMessage());
+					e.printStackTrace();
+				}
 			}
 		});
 		
@@ -188,12 +195,13 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	    }
 	}
 	
-	private class LoadFriendsNews extends AsyncTask<Void, Void, Void> {
+	private class LoadFriendsNews extends AsyncTask<Void, Void, List<FriendNewsItem>> {
 		
 		private static final int FRIENDS_NEWS_LIMIT = 10;
 		
 		@Override
-		protected Void doInBackground(Void... params) {
+		protected List<FriendNewsItem> doInBackground(Void... params) {
+			List<FriendNewsItem> tmpFriendNewsItems = new ArrayList<FriendNewsItem>();
 			UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
 			userInfoApi.setLimit(FRIENDS_NEWS_LIMIT);
 			userInfoApi.setAlreadyRequested(itemsAlreadyRequested);
@@ -204,29 +212,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 				JSONObject jsonObject = userInfoApi.getMyProfileInfoFor(Type.friendsfeed);
 				UserInfoApiJSONParser jsonParser = new UserInfoApiJSONParser();
 				
-				List<FriendNewsItem> tmpFriendNewsItems = jsonParser.getFriendNews(jsonObject);
-				int totalNewItems = tmpFriendNewsItems.size();
-				
-				for (Iterator<FriendNewsItem> iterator = tmpFriendNewsItems.iterator(); iterator.hasNext();) {
-					FriendNewsItem friendNewsItem = iterator.next();
-					if (friendNewsItem.getAttending() == Attending.NOT_GOING) {
-						iterator.remove();
-					}
-				}
-				
-				if (tmpFriendNewsItems.size() > 0) {
-					friendNewsItems.addAll(friendNewsItems.size() - 1, tmpFriendNewsItems);
-					itemsAlreadyRequested += totalNewItems;
-					
-					if (totalNewItems < FRIENDS_NEWS_LIMIT) {
-						isMoreDataAvailable = false;
-						friendNewsItems.remove(friendNewsItems.size() - 1);
-					}
-					
-				} else {
-					isMoreDataAvailable = false;
-					friendNewsItems.remove(friendNewsItems.size() - 1);
-				}
+				tmpFriendNewsItems = jsonParser.getFriendNews(jsonObject);
 				
 			} catch (ClientProtocolException e) {
 				e.printStackTrace();
@@ -238,11 +224,33 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 				e.printStackTrace();
 			}
 
-			return null;
+			return tmpFriendNewsItems;
 		}
 		
 		@Override
-		protected void onPostExecute(Void result) {
+		protected void onPostExecute(List<FriendNewsItem> tmpFriendNewsItems) {
+			int totalNewItems = tmpFriendNewsItems.size();
+			
+			for (Iterator<FriendNewsItem> iterator = tmpFriendNewsItems.iterator(); iterator.hasNext();) {
+				FriendNewsItem friendNewsItem = iterator.next();
+				if (friendNewsItem.getAttending() == Attending.NOT_GOING) {
+					iterator.remove();
+				}
+			}
+			
+			if (tmpFriendNewsItems.size() > 0) {
+				friendNewsItems.addAll(friendNewsItems.size() - 1, tmpFriendNewsItems);
+				itemsAlreadyRequested += totalNewItems;
+				
+				if (totalNewItems < FRIENDS_NEWS_LIMIT) {
+					isMoreDataAvailable = false;
+					friendNewsItems.remove(friendNewsItems.size() - 1);
+				}
+				
+			} else {
+				isMoreDataAvailable = false;
+				friendNewsItems.remove(friendNewsItems.size() - 1);
+			}
 			friendActivityListAdapter.notifyDataSetChanged();
 		}    	
     }

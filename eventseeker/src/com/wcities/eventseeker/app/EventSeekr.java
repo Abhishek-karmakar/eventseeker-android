@@ -69,7 +69,7 @@ public class EventSeekr extends Application {
 		DeviceUtil.getLatLon(this);
 
 		isTablet = getResources().getBoolean(R.bool.is_tablet);
-		
+		//Log.d(TAG, "isTablet = " + isTablet);
 		FileUtil.deleteShareImgCacheInBackground(this);
 	}
 	
