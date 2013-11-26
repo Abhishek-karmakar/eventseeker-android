@@ -4,8 +4,6 @@
     <item name="fragment_about" type="layout">@layout/fragment_about_us_tab</item>
     <item name="fragment_discover" type="layout">@layout/fragment_discover_tab</item>
     <item name="grid_category" type="layout">@layout/grid_category_tab</item>
-    <!-- 
-    <item name="navigation_drawer_list_item" type="layout">@layout/navigation_drawer_list_item_tab</item>
-    <item name="navigation_drawer_list_section_header" type="layout">@layout/navigation_drawer_list_section_header_tab</item>
- -->
+    <item name="fragment_my_events_list_item" type="layout">@layout/fragment_my_events_list_item_tab</item>
+
 </resources>

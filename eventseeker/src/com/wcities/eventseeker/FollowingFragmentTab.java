@@ -33,6 +33,7 @@ public class FollowingFragmentTab extends FollowingParentFragment {
 		super.onActivityCreated(savedInstanceState);
 
 		grdFollowing.setAdapter(artistListAdapter);
+		grdFollowing.setScrollingCacheEnabled(false);
 	}
 
 }

@@ -21,7 +21,8 @@
         android:layout_alignTop="@id/imgEvent"
         android:layout_marginLeft="@dimen/tbl_layout_evt_details_margin_l_fragment_my_events_list_item"
         android:layout_marginRight="@dimen/tbl_layout_evt_details_margin_r_fragment_my_events_list_item"
-        android:layout_toRightOf="@id/imgEvent" >
+        android:layout_toRightOf="@id/imgEvent"
+        android:gravity="center_vertical" >
 
         <TableRow
             android:id="@+id/row1"
