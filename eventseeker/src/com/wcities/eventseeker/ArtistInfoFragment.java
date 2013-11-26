@@ -259,23 +259,27 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 		}
 	}
 	
+	private void makeDescVisible() {
+		rltLayoutArtistDesc.setVisibility(View.VISIBLE);
+		imgDown.setOnClickListener(this);
+
+		txtArtistDesc.setText(artist.getDescription());
+
+		if (isArtistDescExpanded) {
+			expandEvtDesc();
+			
+		} else {
+			collapseEvtDesc();
+		}
+	}
+	
 	private void updateDescVisibility() {
 		if (orientation == Configuration.ORIENTATION_PORTRAIT) {
 			if (!isImgLoaded || !allDetailsLoaded || artist.getDescription() == null) {
 				rltLayoutArtistDesc.setVisibility(View.GONE);
 				
 			} else {
-				rltLayoutArtistDesc.setVisibility(View.VISIBLE);
-				imgDown.setOnClickListener(this);
-
-				txtArtistDesc.setText(artist.getDescription());
-
-				if (isArtistDescExpanded) {
-					expandEvtDesc();
-					
-				} else {
-					collapseEvtDesc();
-				}
+				makeDescVisible();
 			}
 			
 		} else {
@@ -283,17 +287,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 				rltLayoutArtistDesc.setVisibility(View.INVISIBLE);
 				
 			} else {
-				rltLayoutArtistDesc.setVisibility(View.VISIBLE);
-				imgDown.setOnClickListener(this);
-
-				txtArtistDesc.setText(artist.getDescription());
-
-				if (isArtistDescExpanded) {
-					expandEvtDesc();
-					
-				} else {
-					collapseEvtDesc();
-				}
+				makeDescVisible();
 			}
 		}
 	}

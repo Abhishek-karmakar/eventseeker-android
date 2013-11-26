@@ -1,5 +1,5 @@
 package com.wcities.eventseeker.interfaces;
 
-public interface AsyncTaskListener {
-	public void onTaskCompleted();
+public interface AsyncTaskListener<T> {
+	public void onTaskCompleted(T... params);
 }

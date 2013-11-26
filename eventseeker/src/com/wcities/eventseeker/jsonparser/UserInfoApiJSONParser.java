@@ -370,6 +370,11 @@ public class UserInfoApiJSONParser {
 		return myEventsList;
 	}
 	
+	public int getMyEventsCount(JSONObject jsonObject) throws JSONException {
+		JSONObject jObjTracked = jsonObject.getJSONObject(KEY_TRACKED);
+		return jObjTracked.getInt(KEY_TOTAL);
+	}
+	
 	private Artist getArtist(JSONObject jsonObject) throws JSONException {
 		Artist artist = new Artist(jsonObject.getInt(KEY_ID), jsonObject.getString(KEY_NAME));
 		artist.setImageName(jsonObject.getString(KEY_IMAGE));

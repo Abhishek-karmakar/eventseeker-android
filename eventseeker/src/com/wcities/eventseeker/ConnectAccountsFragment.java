@@ -10,10 +10,10 @@ import twitter4j.conf.ConfigurationBuilder;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.AsyncTask.Status;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,9 +35,12 @@ import com.facebook.model.GraphUser;
 import com.wcities.eventseeker.FbLogInFragment.FbLogInFragmentListener;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.app.EventSeekr.EventSeekrListener;
+import com.wcities.eventseeker.asynctask.LoadMyEventsCount;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
+import com.wcities.eventseeker.interfaces.AsyncTaskListener;
+import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
@@ -46,8 +50,6 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     
     private static final String FB_LOGIN = "Facebook Log In";
     private static final String FB_LOGOUT = "Facebook Log Out";
-    
-    private static final int CONTINUE_POS = 8;
     
     public static enum Service {
     	Facebook,
@@ -62,9 +64,12 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     
 	private AccountsListAdapter listAdapter;
 	private List<ServiceAccount> serviceAccounts;
+	private LoadMyEventsCount loadMyEventsCount;
 	
-	private boolean fbLoggedIn;
+	private boolean fbLoggedIn, isProgressVisible;
 	
+	private LinearLayout lnrLayoutProgress;
+
     private Session.StatusCallback statusCallback = new SessionStatusCallback();
     
     public interface ConnectAccountsFragmentListener {
@@ -78,20 +83,21 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     		throw new ClassCastException(activity.toString() + " must implement ConnectAccountsFragmentListener");
     	}
     	
-    	Log.d(TAG, "onAttach()");
+    	//Log.d(TAG, "onAttach()");
     	((EventSeekr)FragmentUtil.getActivity(this).getApplication()).registerListener(this);
     }
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.d(TAG, "onCreate()");
+		//Log.d(TAG, "onCreate()");
 		setRetainInstance(true);
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = LayoutInflater.from(FragmentUtil.getActivity(this)).inflate(R.layout.fragment_list, null);
+		View v = LayoutInflater.from(FragmentUtil.getActivity(this)).inflate(R.layout.fragment_connect_accounts, null);
+		lnrLayoutProgress = (LinearLayout) v.findViewById(R.id.lnrLayoutProgress);
 		return v;
 	}
 	
@@ -112,6 +118,10 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 
 		setListAdapter(listAdapter);
         getListView().setDivider(null);
+        
+        if (isProgressVisible) {
+			showProgress();
+		}
 	}
 	
 	@Override
@@ -134,16 +144,24 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	}
 	
 	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		if (loadMyEventsCount != null && loadMyEventsCount.getStatus() != Status.FINISHED) {
+			loadMyEventsCount.cancel(true);
+		}
+	}
+	
+	@Override
 	public void onDetach() {
 		super.onDetach();
-		Log.d(TAG, "onDetach()");
+		//Log.d(TAG, "onDetach()");
 		((EventSeekr)FragmentUtil.getActivity(this).getApplication()).unregisterListener(this);
 	}
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		Log.d(TAG, "onActivityResult()");
+		//Log.d(TAG, "onActivityResult()");
 		if (!fbLoggedIn) {
 			Session.getActiveSession().onActivityResult(FragmentUtil.getActivity(this), requestCode, resultCode, data);
 		}
@@ -183,6 +201,12 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
         }
         connectAccountsItemIcons.recycle();
 	}
+	
+	private void showProgress() {
+		getListView().setVisibility(View.GONE);
+    	lnrLayoutProgress.setVisibility(View.VISIBLE);
+		isProgressVisible = true;
+    }
 	
 	private void updateView() {
 		Log.d(TAG, "updateView()");
@@ -236,8 +260,34 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 					
 					@Override
 					public void onClick(View v) {
-						((FbLogInFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
+						String wcitiesId = ((EventSeekr)FragmentUtil.getActivity(ConnectAccountsFragment.this)
+								.getApplication()).getWcitiesId();
+						
+						if (wcitiesId != null) {
+							showProgress();
+							double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getActivity(ConnectAccountsFragment.this));
+
+							loadMyEventsCount = new LoadMyEventsCount(wcitiesId, latLon[0], latLon[1], new AsyncTaskListener<Integer>() {
+								
+								@Override
+								public void onTaskCompleted(Integer... params) {
+									Log.d(TAG, "params[0] = " + params[0]);
+									if (params[0] > 0) {
+										((FbLogInFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
+											.replaceFbLoginFragmentBy(AppConstants.FRAGMENT_TAG_MY_EVENTS);
+										
+									} else {
+										((FbLogInFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
+											.replaceFbLoginFragmentBy(AppConstants.FRAGMENT_TAG_DISCOVER);
+									}
+								}
+							});
+							loadMyEventsCount.execute();
+							
+						} else {
+							((FbLogInFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
 								.replaceFbLoginFragmentBy(AppConstants.FRAGMENT_TAG_DISCOVER);
+						}
 					}
 				});
 				
@@ -318,7 +368,10 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(ConnectAccountsFragment.this).getApplication();
 			if (service != Service.Facebook && service != Service.Blank 
 					&& eventSeekr.getWcitiesId() == null) {
-				Toast.makeText(eventSeekr, "Please login with facebook before you sync accounts from other services", Toast.LENGTH_LONG).show();
+				String text = (eventSeekr.getFbUserId() == null) ? 
+						"Please login with facebook before you sync accounts from other services" :
+							"Syncing facebook account...Please Wait...";
+				Toast.makeText(eventSeekr, text, Toast.LENGTH_LONG).show();
 				return;
 			}
 			

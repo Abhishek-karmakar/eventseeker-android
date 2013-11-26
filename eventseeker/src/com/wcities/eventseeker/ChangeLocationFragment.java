@@ -128,7 +128,7 @@ public class ChangeLocationFragment extends FragmentLoadableFromBackStack implem
     	mMap.addMarker(new MarkerOptions().position(latLng).title(strAddress));
     	
     	mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-    	mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+    	mMap.animateCamera(CameraUpdateFactory.zoomTo(8), 2000, null);
     }
     
     private boolean setUpMapIfNeeded() {

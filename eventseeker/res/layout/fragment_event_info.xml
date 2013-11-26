@@ -33,6 +33,12 @@
 		        
 		        <include layout="@layout/include_fragment_event_details_img_evt" />
 		        
+		        <ProgressBar android:id="@+id/progressBar2"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_gravity="center_horizontal"
+			        android:visibility="gone" />
+		        
 		        <include layout="@layout/include_desc" />
 		        
 		        <include layout="@layout/include_address_map" />
