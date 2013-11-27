@@ -2,5 +2,6 @@
 <resources>
     <declare-styleable name="ResizableImageView">
         <attr name="removeXtraHeight" format="boolean" />
+        <attr name="compressAsPerWidth" format="boolean" />
     </declare-styleable>
 </resources>

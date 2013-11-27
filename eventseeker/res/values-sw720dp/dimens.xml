@@ -97,8 +97,7 @@
     <dimen name="txt_evt_location_txt_size_fragment_my_events_list_item">22sp</dimen>
     <dimen name="img_evt_time_w_include_evt_details">25dp</dimen>
     <dimen name="img_evt_time_ht_include_evt_details">25dp</dimen>
-    <dimen name="img_evt_location_w_fragment_my_events_list_item">25dp</dimen>
-    <dimen name="img_evt_location_ht_fragment_my_events_list_item">25dp</dimen>
+    <dimen name="row_img_dim_fragment_my_events_list_item">25dp</dimen>
     <dimen name="img_event_margin_t_fragment_discover_by_category_list_item_evt">20dp</dimen>
     <dimen name="img_event_margin_l_fragment_discover_by_category_list_item_evt">40dp</dimen>
     <dimen name="img_event_margin_b_fragment_discover_by_category_list_item_evt">20dp</dimen>

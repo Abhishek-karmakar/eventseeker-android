@@ -12,7 +12,7 @@ public class ResizableImageView extends ImageView {
 
 	private static final String TAG = "ResizableImageView";
 	
-	private boolean mRemoveXtraHeight;
+	private boolean mRemoveXtraHeight, mCompressAsPerWidth;
 	
 	public ResizableImageView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -29,6 +29,7 @@ public class ResizableImageView extends ImageView {
 	    		0, 0);
 	    try {
 	    	mRemoveXtraHeight = a.getBoolean(R.styleable.ResizableImageView_removeXtraHeight, false);
+	    	mCompressAsPerWidth = a.getBoolean(R.styleable.ResizableImageView_compressAsPerWidth, false);
 	    	
 	    } finally {
 		    //Don't forget this
@@ -45,7 +46,15 @@ public class ResizableImageView extends ImageView {
 			int width = MeasureSpec.getSize(widthMeasureSpec);
 			//Log.d(TAG, "getIntrinsicHeight = " + d.getIntrinsicHeight());
 
-			int height = (int) Math.ceil((float) width * (float) d.getIntrinsicHeight() / (float) d.getIntrinsicWidth());
+			int height;
+			if (mCompressAsPerWidth) {
+				// Compress considering incoming width & maintaining 4:3 aspect ratio
+				height = (int) Math.ceil((float) width * 3.0f / 4.0f);
+				
+			} else {
+				// Compress considering drawable width
+				height = (int) Math.ceil((float) width * (float) d.getIntrinsicHeight() / (float) d.getIntrinsicWidth());
+			}
 
 			if (mRemoveXtraHeight && height > d.getIntrinsicHeight()) {
 				height = d.getIntrinsicHeight();

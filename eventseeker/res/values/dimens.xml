@@ -74,10 +74,10 @@
     <dimen name="img_artist_margin_b_fragment_search_artists_list_item">@dimen/img_artist_margin_t_fragment_search_artists_list_item</dimen>
     <dimen name="rel_layout_artist_details_margin_l_fragment_search_artists_list_item">23dp</dimen>
     <dimen name="rel_layout_artist_details_margin_r_fragment_search_artists_list_item">5dp</dimen>
-    <dimen name="txt_artist_name_margin_t_fragment_search_artists_list_item">8dp</dimen>
+    <dimen name="rel_layout_artist_details_pad_t_fragment_search_artists_list_item">8dp</dimen>
+    <dimen name="rel_layout_artist_details_pad_b_fragment_search_artists_list_item">12dp</dimen>
     <dimen name="txt_artist_name_txt_size_fragment_search_artists_list_item">15sp</dimen>
     <dimen name="txt_on_tour_txt_size_fragment_search_artists_list_item">11sp</dimen>
-    <dimen name="txt_on_tour_margin_t_fragment_search_artists_list_item">5dp</dimen>
     <dimen name="divider_h_fragment_search_artists_list_item">1dp</dimen>
     <dimen name="divider_margin_l_fragment_search_artists_list_item">5dp</dimen>
     <dimen name="divider_margin_r_fragment_search_artists_list_item">5dp</dimen>
@@ -115,8 +115,7 @@
     <!-- fragment_discover_by_category_list_item_evt.xml -->
     <!--
     summation of img_event_ht_fragment_discover_by_category_list_item_evt + img_event_margin_t_fragment_discover_by_category_list_item_evt +
-    img_event_margin_b_fragment_discover_by_category_list_item_evt + divider_ht_fragment_discover_by_category_list_item_evt
-    -->
+    img_event_margin_b_fragment_discover_by_category_list_item_evt + divider_ht_fragment_discover_by_category_list_item_evt    -->
     <dimen name="rlt_layout_root_ht_fragment_discover_by_category_list_item_evt">82dp</dimen>
     <dimen name="img_event_w_fragment_discover_by_category_list_item_evt">112dp</dimen>
     <dimen name="img_event_ht_fragment_discover_by_category_list_item_evt">84dp</dimen>
@@ -378,8 +377,6 @@
     <dimen name="txt_follow_margin_b_include_fragment_artist_details_footer">@dimen/txt_follow_margin_t_include_fragment_artist_details_footer</dimen>
     <!-- fragment_venue_events.xml -->
     <dimen name="lnr_layout_btns_margin_t_fragment_venue_events">0dp</dimen>
-    <!-- venue_events_list_item_top.xml -->
-    <dimen name="rlt_layout_top_item_container_pad_b_venue_events_list_item_top">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <!-- widget_info.xml -->
     <dimen name="min_w_widget_info">250dp</dimen>
     <dimen name="min_ht_widget_info">70dp</dimen>

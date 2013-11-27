@@ -126,7 +126,7 @@ public class EventFeaturingFragment extends Fragment implements OnClickListener,
 	}
 	
 	private void addFeaturingArtists() {
-		Log.d(TAG, "addFeaturingArtists()");
+		//Log.d(TAG, "addFeaturingArtists()");
 		lnrLayoutArtistList.removeAllViews();
 		
 		BitmapCache bitmapCache = BitmapCache.getInstance();
@@ -140,7 +140,7 @@ public class EventFeaturingFragment extends Fragment implements OnClickListener,
 			
 			((TextView)artistView.findViewById(R.id.txtArtistName)).setText(artist.getName());
 			
-			String key = artist.getKey(ImgResolution.MOBILE);
+			String key = artist.getKey(ImgResolution.LOW);
 			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 			ImageView imageView = (ImageView)artistView.findViewById(R.id.imgItem);
 			if (bitmap != null) {
@@ -151,7 +151,7 @@ public class EventFeaturingFragment extends Fragment implements OnClickListener,
 		    	//Log.d(TAG, "addFeaturingArtists() bitmap = null");
 		        imageView.setImageBitmap(null);
 		        AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-		        asyncLoadImg.loadImg(imageView, ImgResolution.MOBILE, artist);
+		        asyncLoadImg.loadImg(imageView, ImgResolution.LOW, artist);
 		    }
 			
 			artistView.setOnClickListener(new OnClickListener() {

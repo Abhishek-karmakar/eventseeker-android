@@ -19,17 +19,8 @@ public class FollowingFragment extends FollowingParentFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		/*
-		 * View v = super.onCreateView(inflater, container, savedInstanceState);
-		 * v.setBackgroundColor(getResources().getColor(R.color.dark_gray)); int
-		 * pad = getResources().getDimensionPixelSize(
-		 * R.dimen.tab_bar_margin_fragment_custom_tabs); v.setPadding(pad, pad,
-		 * pad, 0);
-		 */
 		View v = inflater.inflate(R.layout.fragment_list, null);
-
 		listFollowing = (ListView) v.findViewById(android.R.id.list);
-
 		return v;
 	}
 
@@ -38,10 +29,6 @@ public class FollowingFragment extends FollowingParentFragment {
 		super.onActivityCreated(savedInstanceState);
 
 		listFollowing.setAdapter(artistListAdapter);
-		/*
-		 * getListView().setDivider(null);
-		 * getListView().setBackgroundResource(R.drawable.story_space);
-		 */
+		listFollowing.setDivider(null);
 	}
-
 }

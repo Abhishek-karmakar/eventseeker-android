@@ -67,8 +67,8 @@
 
             <ImageView
                 android:id="@+id/imgEvtLocation"
-                android:layout_width="@dimen/img_evt_location_w_fragment_my_events_list_item"
-                android:layout_height="@dimen/img_evt_location_ht_fragment_my_events_list_item"
+                android:layout_width="@dimen/row_img_dim_fragment_my_events_list_item"
+                android:layout_height="@dimen/row_img_dim_fragment_my_events_list_item"
                 android:src="@drawable/location" />
 
             <TextView
@@ -101,8 +101,8 @@
 
             <ImageView
                 android:id="@+id/imgEvtTime"
-                android:layout_width="@dimen/img_evt_time_w_include_evt_details"
-                android:layout_height="@dimen/img_evt_time_ht_include_evt_details"
+                android:layout_width="@dimen/row_img_dim_fragment_my_events_list_item"
+                android:layout_height="@dimen/row_img_dim_fragment_my_events_list_item"
                 android:src="@drawable/time" />
 
             <LinearLayout
