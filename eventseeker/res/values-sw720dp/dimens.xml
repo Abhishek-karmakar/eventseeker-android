@@ -111,7 +111,7 @@
     <dimen name="divider_margin_r_fragment_discover_by_category_list_item_header">@dimen/divider_margin_l_fragment_discover_by_category_list_item_header</dimen>
     <dimen name="txt_evt_time_am_pm_margin_t_fragment_my_events_list_item">-2dp</dimen>
     <dimen name="btn_buy_tickets_ht_fragment_my_events_list_item">30dp</dimen>
-
+    
     <!-- include_fragment_my_events_list_item_footer.xml -->
     <dimen name="lnr_layout_btns_txt_size_include_fragment_my_events_list_item_footer">18sp</dimen>
 

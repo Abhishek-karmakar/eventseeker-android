@@ -19,13 +19,14 @@ import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Schedule;
+import com.wcities.eventseeker.interfaces.DateWiseEventListener;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.EventListItem;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.LIST_ITEM_TYPE;
 
-public class DateWiseEventListAdapter extends BaseAdapter {
+public class DateWiseEventListAdapter extends BaseAdapter implements DateWiseEventListener{
 
 	private Context mContext;
     private BitmapCache bitmapCache;

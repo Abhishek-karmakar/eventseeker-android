@@ -13,8 +13,6 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_below="@id/imgFriend"
-	    android:layout_alignLeft="@id/imgFriend"
-	    android:layout_alignRight="@id/imgFriend"
 	    style="@style/SingleLineMarqueeTxt"
 	    android:visibility="gone"
 	    android:textSize="@dimen/txt_friend_name_txt_size_grid_friend" />

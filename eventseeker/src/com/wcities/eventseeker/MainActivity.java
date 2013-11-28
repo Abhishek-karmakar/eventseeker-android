@@ -872,11 +872,13 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public void replaceFbLoginFragmentBy(String fragmentTag) {
-		if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_DISCOVER)) {
+		if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_MY_EVENTS)) {
+			selectItem(INDEX_NAV_ITEM_MY_EVENTS);
+			
+		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_DISCOVER)) {
 			selectItem(INDEX_NAV_ITEM_DISCOVER);
 
-		} else if (fragmentTag
-				.equals(AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS)) {
+		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS)) {
 			selectItem(INDEX_NAV_ITEM_CONNECT_ACCOUNTS);
 		}
 	}

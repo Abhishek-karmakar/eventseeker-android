@@ -62,7 +62,7 @@ public class FbLogInFragment extends Fragment {
 			
 			@Override
 			public void onClick(View v) {
-				mListener.replaceFbLoginFragmentBy(AppConstants.FRAGMENT_TAG_DISCOVER);
+				mListener.replaceFbLoginFragmentBy(AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS);
 			}
 		});
 		
@@ -151,10 +151,10 @@ public class FbLogInFragment extends Fragment {
     	                	showProgress();
     	                	
     	                	((EventSeekr) (FragmentUtil.getActivity(FbLogInFragment.this))
-    	                			.getApplicationContext()).updateFbUserId(user.getId(), new AsyncTaskListener() {
+    	                			.getApplicationContext()).updateFbUserId(user.getId(), new AsyncTaskListener<Void>() {
 
 										@Override
-										public void onTaskCompleted() {
+										public void onTaskCompleted(Void... params) {
 				    	                	mListener.replaceFbLoginFragmentBy(AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS);
 										}
     	                			});

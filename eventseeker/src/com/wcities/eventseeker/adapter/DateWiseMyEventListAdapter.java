@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
+import android.support.v4.widget.SearchViewCompat.OnCloseListenerCompat;
 import android.text.TextUtils.TruncateAt;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -53,8 +54,7 @@ import com.wcities.eventseeker.viewdata.DateWiseEventList.LIST_ITEM_TYPE;
 
 public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseEventListener{
 
-	private static final String TAG = DateWiseMyEventListAdapter.class
-			.getName();
+	private static final String TAG = DateWiseMyEventListAdapter.class.getName();
 
 	private Context mContext;
 	private BitmapCache bitmapCache;
@@ -206,30 +206,41 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 						event);
 			}
 
-			LinearLayout lnrLayoutTickets = (LinearLayout) convertView
-					.findViewById(R.id.lnrLayoutTickets);
-			Button btnBuyTickets = (Button) convertView
-					.findViewById(R.id.btnBuyTickets);
-			final boolean doesBookingUrlExist = (event.getSchedule() != null
-					&& !event.getSchedule().getBookingInfos().isEmpty() && event
-					.getSchedule().getBookingInfos().get(0).getBookingUrl() != null) ? true
-					: false;
+			LinearLayout lnrLayoutTickets = (LinearLayout) convertView.findViewById(R.id.lnrLayoutTickets);
+			/**
+			 * Using super class TextView instead of Button since some layouts have Button & 
+			 * others have TextView.
+			 */
+			TextView btnBuyTickets = (TextView) convertView.findViewById(R.id.btnBuyTickets);
+			CheckBox chkBoxTickets = (CheckBox) convertView.findViewById(R.id.chkBoxTickets);
+			
+			final boolean doesBookingUrlExist = (event.getSchedule() != null && !event.getSchedule().getBookingInfos().isEmpty() 
+					&& event.getSchedule().getBookingInfos().get(0).getBookingUrl() != null) ? true : false;
 			lnrLayoutTickets.setEnabled(doesBookingUrlExist);
+			
 			if (doesBookingUrlExist) {
-				btnBuyTickets.setTextColor(mContext.getResources().getColor(
-						color.black));
-				btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(mContext
-						.getResources().getDrawable(R.drawable.tickets_grey),
-						null, null, null);
+				btnBuyTickets.setTextColor(mContext.getResources().getColor(color.black));
+				// Only some layouts use imgBuyTickets in place of button drawable for btnBuyTickets.
+				if (chkBoxTickets == null) {
+					btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(
+							R.drawable.tickets_grey), null, null, null);
+					
+				} else {
+					chkBoxTickets.setButtonDrawable(R.drawable.tickets_grey);
+				}
 
 			} else {
-				btnBuyTickets.setTextColor(mContext.getResources().getColor(
-						R.color.btn_buy_tickets_disabled_txt_color));
-				btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(mContext
-						.getResources()
-						.getDrawable(R.drawable.tickets_disabled), null, null,
-						null);
+				btnBuyTickets.setTextColor(mContext.getResources().getColor(R.color.btn_buy_tickets_disabled_txt_color));
+				// Only some layouts use imgBuyTickets in place of button drawable for btnBuyTickets.
+				if (chkBoxTickets == null) {
+					btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(
+							R.drawable.tickets_disabled), null, null, null);
+					
+				} else {
+					chkBoxTickets.setButtonDrawable(R.drawable.tickets_disabled);
+				}
 			}
+			
 			lnrLayoutTickets.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -243,53 +254,34 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 				}
 			});
 
-			final CheckBox chkBoxGoing = (CheckBox) convertView
-					.findViewById(R.id.chkBoxGoing);
-			final CheckBox chkBoxWantToGo = (CheckBox) convertView
-					.findViewById(R.id.chkBoxWantToGo);
+			final CheckBox chkBoxGoing = (CheckBox) convertView.findViewById(R.id.chkBoxGoing);
+			final CheckBox chkBoxWantToGo = (CheckBox) convertView.findViewById(R.id.chkBoxWantToGo);
 			updateAttendingChkBoxes(event, chkBoxGoing, chkBoxWantToGo);
 
-			/*
-			 * if (((EventSeekr) mContext.getApplicationContext()).isTablet()) {
-			 * int leftPad = (int) mContext .getResources()
-			 * .getDimensionPixelSize(
-			 * R.dimen.chk_box_pad_fragment_my_events_list_item);
-			 * chkBoxGoing.setPadding(leftPad, 0, 0, 0);
-			 * chkBoxWantToGo.setPadding(leftPad, 0, 0, 0);
-			 * 
-			 * }
-			 */
-			chkBoxGoing.setOnClickListener(new OnClickListener() {
-
+			OnClickListener goingClickListener = new OnClickListener() {
+				
 				@Override
-				public void onClick(View arg0) {
-					Attending attending = event.getAttending() == Attending.GOING ? Attending.NOT_GOING
-							: Attending.GOING;
-					event.setAttending(attending);
-					updateAttendingChkBoxes(event, chkBoxGoing, chkBoxWantToGo);
-					new UserTracker((EventSeekr) mContext
-							.getApplicationContext(),
-							UserTrackingItemType.event, event.getId(), event
-									.getAttending().getValue(),
-							UserTrackingType.Add).execute();
+				public void onClick(View v) {
+					onChkBoxClick(event, chkBoxGoing, chkBoxWantToGo, true);					
 				}
-			});
-
-			chkBoxWantToGo.setOnClickListener(new OnClickListener() {
-
+			};
+			OnClickListener wantToClickListener = new OnClickListener() {
+				
 				@Override
-				public void onClick(View arg0) {
-					Attending attending = event.getAttending() == Attending.WANTS_TO_GO ? Attending.NOT_GOING
-							: Attending.WANTS_TO_GO;
-					event.setAttending(attending);
-					updateAttendingChkBoxes(event, chkBoxGoing, chkBoxWantToGo);
-					new UserTracker((EventSeekr) mContext
-							.getApplicationContext(),
-							UserTrackingItemType.event, event.getId(), event
-									.getAttending().getValue(),
-							UserTrackingType.Add).execute();
+				public void onClick(View v) {
+					onChkBoxClick(event, chkBoxGoing, chkBoxWantToGo, false);					
 				}
-			});
+			};
+			
+			chkBoxGoing.setOnClickListener(goingClickListener);
+			chkBoxWantToGo.setOnClickListener(wantToClickListener);
+			
+			TextView txtGoing = (TextView) convertView.findViewById(R.id.txtGoing);
+			TextView txtWantTo = (TextView) convertView.findViewById(R.id.txtWantTo);
+			if (txtGoing != null) {
+				txtGoing.setOnClickListener(goingClickListener);
+				txtWantTo.setOnClickListener(wantToClickListener);
+			}
 
 			convertView.setOnClickListener(new OnClickListener() {
 
@@ -321,7 +313,22 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 
 		return convertView;
 	}
-
+	
+	private void onChkBoxClick(Event event, CheckBox chkBoxGoing, CheckBox chkBoxWantToGo, boolean isGoingClicked) {
+		Attending attending;
+		if (isGoingClicked) {
+			attending = event.getAttending() == Attending.GOING ? Attending.NOT_GOING : Attending.GOING;
+			
+		} else {
+			attending = event.getAttending() == Attending.WANTS_TO_GO ? Attending.NOT_GOING : Attending.WANTS_TO_GO;
+		}
+		
+		event.setAttending(attending);
+		updateAttendingChkBoxes(event, chkBoxGoing, chkBoxWantToGo);
+		new UserTracker((EventSeekr) mContext.getApplicationContext(), UserTrackingItemType.event, 
+				event.getId(), event.getAttending().getValue(), UserTrackingType.Add).execute();
+	}
+	
 	private void updateAttendingChkBoxes(Event event, CheckBox chkBoxGoing,
 			CheckBox chkBoxWantToGo) {
 		switch (event.getAttending()) {

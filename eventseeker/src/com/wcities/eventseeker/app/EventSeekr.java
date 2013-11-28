@@ -189,7 +189,7 @@ public class EventSeekr extends Application {
 		return fbUserId;
 	}
 
-	public void updateFbUserId(String fbUserId, AsyncTaskListener listener) {
+	public void updateFbUserId(String fbUserId, AsyncTaskListener<Void> listener) {
 		this.fbUserId = fbUserId;
 
 		SharedPreferences pref = getSharedPreferences(
@@ -296,8 +296,7 @@ public class EventSeekr extends Application {
 
 		case DeviceLibrary:
 			syncCountDeviceLib = count;
-			editor.putInt(SharedPrefKeys.SYNC_COUNT_DEVICE_LIB,
-					syncCountDeviceLib);
+			editor.putInt(SharedPrefKeys.SYNC_COUNT_DEVICE_LIB, syncCountDeviceLib);
 			break;
 
 		case Twitter:
@@ -335,9 +334,9 @@ public class EventSeekr extends Application {
 	
 	private class GetWcitiesId extends AsyncTask<Void, Void, String> {
 		
-		private AsyncTaskListener listener;
+		private AsyncTaskListener<Void> listener;
 		
-		public GetWcitiesId(AsyncTaskListener listener) {
+		public GetWcitiesId(AsyncTaskListener<Void> listener) {
 			this.listener = listener;
 		}
 

@@ -177,7 +177,7 @@ public class FollowingParentFragment extends FragmentLoadableFromBackStack {
 							.getActivity(FollowingParentFragment.this))
 							.isTablet()) {
 						convertView = mInflater.inflate(
-								R.layout.fragment_search_artists_list_item_tab,
+								R.layout.fragment_following_artists_list_item_tab,
 								null);
 					} else {
 						convertView = mInflater.inflate(

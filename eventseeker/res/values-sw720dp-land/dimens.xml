@@ -7,4 +7,17 @@
     <dimen name="txt_on_tour_txt_size_fragment_search_artists_list_item">20sp</dimen>
     <dimen name="img_item_h_fragment_search_artists_list_item">190dp</dimen>
 
+      <!-- include_desc.xml -->
+    <dimen name="rlt_desc_margin_r_include_desc">20dp</dimen>
+
+    <!-- include_address_map_tab.xml -->
+    <dimen name="rlt_desc_margin_l_include_desc">0dp</dimen>
+    
+    
+    <!-- fragment_event_info.xml -->
+    <dimen name="lnr_layout_top_margin_l_r_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="lnr_event_desc_and_map_margin_l_r_fragment_event_info">20dp</dimen>
+    <dimen name="lnr_layout_btm_margin_l_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="lnr_layout_btm_margin_r_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>    
+    
 </resources>

@@ -31,6 +31,7 @@ import com.wcities.eventseeker.SearchFragment.SearchFragmentChildListener;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.ArtistApi;
 import com.wcities.eventseeker.api.ArtistApi.Method;
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
@@ -184,10 +185,12 @@ public class SearchArtistsFragment extends ListFragment implements SearchFragmen
 		
 	    private LayoutInflater mInflater;
 	    private BitmapCache bitmapCache;
+	    Context mContext;
 
 	    public ArtistListAdapter(Context context) {
 	        mInflater = LayoutInflater.from(context);
 	        bitmapCache = BitmapCache.getInstance();
+	        mContext = context;
 	    }
 	    
 	    public void setmInflater(Context context) {
@@ -216,11 +219,12 @@ public class SearchArtistsFragment extends ListFragment implements SearchFragmen
 				final Artist artist = getItem(position);
 				((TextView)convertView.findViewById(R.id.txtArtistName)).setText(artist.getName());
 				
-				if (artist.isOntour()) {
-					convertView.findViewById(R.id.txtOnTour).setVisibility(View.VISIBLE);
-					
-				} else {
-					convertView.findViewById(R.id.txtOnTour).setVisibility(View.INVISIBLE);
+				if(!((EventSeekr)mContext.getApplicationContext()).isTablet()) {
+					if (artist.isOntour()) {
+						convertView.findViewById(R.id.txtOnTour).setVisibility(View.VISIBLE);
+					} else {
+						convertView.findViewById(R.id.txtOnTour).setVisibility(View.INVISIBLE);
+					}
 				}
 				
 				String key = artist.getKey(ImgResolution.LOW);

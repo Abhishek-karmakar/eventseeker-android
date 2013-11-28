@@ -99,8 +99,16 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 				args);
 		mTabsAdapter.addTab(tabArtists, oldAdapter);
 
-		TabBar.Tab tabEvents = new TabBar.Tab(btnEvents, FRAGMENT_TAG_EVENTS, SearchEventsFragment.class, 
+		
+		TabBar.Tab tabEvents;
+		
+		if(((MainActivity)FragmentUtil.getActivity(this)).isTablet()) {
+			tabEvents = new TabBar.Tab(btnEvents, FRAGMENT_TAG_EVENTS, SearchEventsFragmentTab.class, 
 				args);
+		} else {
+			tabEvents = new TabBar.Tab(btnEvents, FRAGMENT_TAG_EVENTS, SearchEventsFragment.class, 
+					args);			
+		}	
 		mTabsAdapter.addTab(tabEvents, oldAdapter);
 		
 		TabBar.Tab tabVenues = new TabBar.Tab(btnVenues, FRAGMENT_TAG_VENUES, SearchVenuesFragment.class, 

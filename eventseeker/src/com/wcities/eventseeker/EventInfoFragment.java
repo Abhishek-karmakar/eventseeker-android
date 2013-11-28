@@ -64,18 +64,18 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 	private Event event;
 	private boolean isEvtDescExpanded, isFriendsGridExpanded;
 	private int orientation;
-	private boolean allDetailsLoaded;
+	private boolean allDetailsLoaded, isImgLoaded;
 	private String wcitiesId;
 
 	private Resources res;
-	private ProgressBar progressBar;
+	private ProgressBar progressBar, progressBar2;
 	private ImageView imgEvt;
 	private ExpandableGridView grdVFriends;
 	private TextView txtViewAll;
 	private RelativeLayout rltLayoutEvtDesc, rltLayoutLoadedContent;
 	private TextView txtEvtDesc, txtAddress, txtEvtTime;
 	private ImageView imgDown, imgRight;
-	private RelativeLayout rltLayoutFriends;
+	private RelativeLayout rltLayoutFriends, rltLayoutAddress;
 	private LinearLayout lnrLayoutTickets;
 	private CheckBox chkBoxGoing, chkBoxWantToGo;
 	private Button btnBuyTickets;
@@ -106,14 +106,13 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 		
 		progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
 		rltLayoutLoadedContent = (RelativeLayout) v.findViewById(R.id.rltLayoutLoadedContent);
+		if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+			progressBar2 = (ProgressBar) v.findViewById(R.id.progressBar2);
+		}
+		
 		imgEvt = (ImageView) v.findViewById(R.id.imgEvt);
 		
-		boolean isImgLoaded = updateEventImg();
-		if (!isImgLoaded) {
-			//Log.d(TAG, "!isImgLoaded");
-			rltLayoutLoadedContent.setVisibility(View.GONE);
-			progressBar.setVisibility(View.VISIBLE);
-		}
+		updateEventImg();
 		
 		((TextView)v.findViewById(R.id.txtEvtTitle)).setText(event.getName());
 		
@@ -137,23 +136,8 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 		
 		}
 			
-		if (event.getDescription() == null) {
-			int visibility = orientation == Configuration.ORIENTATION_PORTRAIT || isTablet ? View.GONE : View.INVISIBLE;
-			v.findViewById(R.id.rltLayoutDesc).setVisibility(visibility);
-			
-		} else {
-			imgDown.setOnClickListener(this);
+		rltLayoutAddress = (RelativeLayout) v.findViewById(R.id.rltLayoutAddress);
 
-			txtEvtDesc.setText(event.getDescription());
-
-			if (isEvtDescExpanded) {
-				expandEvtDesc();
-				
-			} else {
-				collapseEvtDesc();
-			}
-		}
-		
 		txtAddress = (TextView) v.findViewById(R.id.txtAddress);
 		vDummyAddress = v.findViewById(R.id.vDummyAddress);
 
@@ -189,7 +173,9 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 	
 	private void updateEventScheduleVisibility() {
 		Schedule schedule = event.getSchedule();
-		if (schedule != null) {
+		if (isImgLoaded && allDetailsLoaded && schedule != null) {
+			rltLayoutAddress.setVisibility(View.VISIBLE);
+			
 			if (schedule.getDates().size() > 0) {
 				com.wcities.eventseeker.core.Date date = schedule.getDates().get(0);
 				
@@ -213,11 +199,13 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
         	vDummyAddress.bringToFront();
 			
 		} else {
+			int visibility = (orientation == Configuration.ORIENTATION_PORTRAIT) ? View.GONE : View.INVISIBLE;
+			rltLayoutAddress.setVisibility(visibility);
 			updateBtnBuyTicketsEnabled(false);
 		}
 	}
 	
-	private boolean updateEventImg() {
+	private void updateEventImg() {
 		//Log.d(TAG, "updateEventImg(), url = " + event.getLowResImgUrl());
 		if (event.doesValidImgUrlExist() || allDetailsLoaded) {
 			String key = event.getKey(ImgResolution.LOW);
@@ -225,44 +213,92 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 			if (bitmap != null) {
 		        imgEvt.setImageBitmap(bitmap);
-		        return true;
+		        isImgLoaded = true;
 		        
 		    } else {
 		    	imgEvt.setImageBitmap(null);
 		    	AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
 		        asyncLoadImg.loadImg(imgEvt, ImgResolution.LOW, event, this);
-		        return false;
+		        isImgLoaded = false;
 		    }
+		}
+		updateProgressBarVisibility();
+	}
+	
+	private void updateProgressBarVisibility() {
+		if (isImgLoaded) {
+			rltLayoutLoadedContent.setVisibility(View.VISIBLE);
+			progressBar.setVisibility(View.GONE);
+			
+			if (progressBar2 != null) {
+				if (allDetailsLoaded) {
+					progressBar2.setVisibility(View.GONE);
+					
+				} else {
+					progressBar2.setVisibility(View.VISIBLE);
+				}
+			}
 			
 		} else {
-			return false;
+			rltLayoutLoadedContent.setVisibility(View.GONE);
+			progressBar.setVisibility(View.VISIBLE);
+		}
+	}
+	
+	private void makeDescVisible() {
+		rltLayoutEvtDesc.setVisibility(View.VISIBLE);
+		imgDown.setOnClickListener(this);
+
+		txtEvtDesc.setText(event.getDescription());
+
+		if (isEvtDescExpanded) {
+			expandEvtDesc();
+			
+		} else {
+			collapseEvtDesc();
 		}
 	}
 	
 	private void updateDescVisibility() {
-		if (event.getDescription() == null) {
-			/**
-			 * For landscape orientation, since friends section height depends on description section height 
-			 * or minHeight, we don't make description section visibility GONE. Rather keep it invisible keeping 
-			 * space occupied but components remaining hidden.
-			 */
-			int visibility = orientation == Configuration.ORIENTATION_PORTRAIT || isTablet? View.GONE : View.INVISIBLE;
-			rltLayoutEvtDesc.setVisibility(visibility);
-			
-		} else {
-			rltLayoutEvtDesc.setVisibility(View.VISIBLE);
-			imgDown.setOnClickListener(this);
 
-			txtEvtDesc.setText(event.getDescription());
+		if (isTablet) {
 
-			if (isEvtDescExpanded) {
-				expandEvtDesc();
-				
+			if (event.getDescription() == null) {
+
+				rltLayoutEvtDesc.setVisibility(View.GONE);
+
 			} else {
-				collapseEvtDesc();
+				makeDescVisible();
+			}
+
+		} else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+
+			if (!isImgLoaded || !allDetailsLoaded
+					|| event.getDescription() == null) {
+				rltLayoutEvtDesc.setVisibility(View.GONE);
+
+			} else {
+				makeDescVisible();
+			}
+
+		} else {
+			if (event.getDescription() == null) {
+				
+				/**
+				 * For landscape orientation, since friends section height
+				 * depends on description section height or minHeight, we don't
+				 * make description section visibility GONE. Rather keep it
+				 * invisible keeping space occupied but components remaining
+				 * hidden.
+				 */
+				rltLayoutEvtDesc.setVisibility(View.INVISIBLE);
+
+			} else {
+				makeDescVisible();
 			}
 		}
 	}
+		
 	
 	private void updateBtnBuyTicketsEnabled(boolean enabled) {
 		lnrLayoutTickets.setEnabled(enabled);
@@ -303,34 +339,57 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 	private void updateFriendsVisibility() {
 		if (wcitiesId == null) {
 			rltLayoutFriends.setVisibility(View.GONE);
-			
-		} else if (orientation == Configuration.ORIENTATION_PORTRAIT || isTablet) {
+
+		} else if (isTablet) {
+
 			if (event.getFriends().isEmpty()) {
+				rltLayoutFriends.setVisibility(View.GONE);
+			} else {
+				rltLayoutFriends.setVisibility(View.VISIBLE);
+
+				if (event.getFriends().size() > MAX_FRIENDS_GRID) {
+					RelativeLayout rltLayoutViewAll = 
+							(RelativeLayout) rltLayoutFriends.findViewById(R.id.rltLayoutViewAll);
+					rltLayoutViewAll.setVisibility(View.VISIBLE);
+					rltLayoutViewAll.setOnClickListener(this);
+
+					expandOrCollapseFriendsGrid();
+				}
+			}
+
+		} else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+
+			if (!isImgLoaded || !allDetailsLoaded || event.getFriends().isEmpty()) {
+
 				rltLayoutFriends.setVisibility(View.GONE);
 
 			} else {
 				rltLayoutFriends.setVisibility(View.VISIBLE);
+
 				if (event.getFriends().size() > MAX_FRIENDS_GRID) {
-					RelativeLayout rltLayoutViewAll = (RelativeLayout) rltLayoutFriends.findViewById(R.id.rltLayoutViewAll);
+					RelativeLayout rltLayoutViewAll = 
+							(RelativeLayout) rltLayoutFriends.findViewById(R.id.rltLayoutViewAll);
 					rltLayoutViewAll.setVisibility(View.VISIBLE);
 					rltLayoutViewAll.setOnClickListener(this);
-					
+
 					expandOrCollapseFriendsGrid();
 				}
 			}
-			
+
 		} else {
 			if (event.getFriends().isEmpty()) {
-				
-				// Remove entire bottom part since neither description nor friends are available
+
+				// Remove entire bottom part since neither description nor
+				// friends are available
 				if (event.getDescription() == null) {
 					rltLayoutFriends.setVisibility(View.GONE);
 					rltLayoutEvtDesc.setVisibility(View.GONE);
-					
+
 				} else {
 					/**
-					 * Use INVISIBLE instead of GONE to restrain description section space to half the 
-					 * screen width; otherwise it will expand horizontally to fill screen width
+					 * Use INVISIBLE instead of GONE to restrain description
+					 * section space to half the screen width; otherwise it will
+					 * expand horizontally to fill screen width
 					 */
 					rltLayoutFriends.setVisibility(View.INVISIBLE);
 					rltLayoutEvtDesc.setVisibility(View.VISIBLE);
@@ -537,11 +596,12 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 			break;
 		}
 	}
-
-	@Override
-	public void onEventUpdatedByEventDetailsFragment() {
-		Log.d(TAG, "onEventUpdatedByEventDetailsFragment()");
-		allDetailsLoaded = true;
+	
+	private void updateScreen() {
+		// if fragment is destroyed (user has pressed back)
+		if (FragmentUtil.getActivity(this) == null) {
+			return;
+		}
 		
 		updateEventImg();
 		updateDescVisibility();
@@ -554,7 +614,14 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 		if (!event.getSchedule().getBookingInfos().isEmpty()) {
 			updateBtnBuyTicketsEnabled(true);
 		}
-		updateAttendingChkBoxes();		
+		updateAttendingChkBoxes();	
+	}
+
+	@Override
+	public void onEventUpdatedByEventDetailsFragment() {
+		Log.d(TAG, "onEventUpdatedByEventDetailsFragment()");
+		allDetailsLoaded = true;
+		updateScreen();
 	}
 	
 	@Override
@@ -565,13 +632,13 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 	@Override
 	public void onImageLoaded() {
 		Log.d(TAG, "onImageLoaded()");
-		rltLayoutLoadedContent.setVisibility(View.VISIBLE);
-		progressBar.setVisibility(View.GONE);
+		isImgLoaded = true;
+		updateScreen();
 	}
 
 	@Override
 	public void onImageCouldNotBeLoaded() {
-		rltLayoutLoadedContent.setVisibility(View.VISIBLE);
-		progressBar.setVisibility(View.GONE);
+		isImgLoaded = true;
+		updateScreen();
 	}
 }
