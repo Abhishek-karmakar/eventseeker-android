@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootRltLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_gray" >
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/rltLayoutLoadedContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <ScrollView
+            android:id="@+id/scrlVContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <LinearLayout
+                android:id="@+id/rootLnrLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:id="@+id/lnrLayoutTop"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/lnr_layout_top_margin_l_r_fragment_event_info"
+                    android:layout_marginRight="@dimen/lnr_layout_top_margin_l_r_fragment_event_info"
+                    android:background="@drawable/story_space"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:id="@+id/imgEvt"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="@dimen/img_evt_margin_fragment_event_info"
+                        android:layout_weight="1"
+                        android:contentDescription="event image"
+                        android:scaleType="fitXY" />
+
+                    <RelativeLayout
+                        android:id="@+id/rltLayoutEvtInfo"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/rlt_evt_info_margin_t_b_fragment_event_details_img_evt"
+                        android:layout_marginRight="@dimen/rlt_evt_info_margin_r_fragment_event_details_img_evt"
+                        android:layout_marginTop="@dimen/rlt_evt_info_margin_t_b_fragment_event_details_img_evt"
+                        android:layout_weight="1" >
+
+                        <!-- android:layout_margin="@dimen/rlt_layout_img_evt_margin_fragment_event_info" -->
+
+                        <TextView
+                            android:id="@+id/txtEvtTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/txt_margin_t_b_rlt_evt_info_fragment_event_details_img_evt"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:singleLine="true"
+                            android:text="Event Title"
+                            android:textColor="@color/txt_evt_title_fragment_event_info_tab"
+                            android:textSize="@dimen/txt_evt_title_txt_size_include_fragment_event_details_img_evt" />
+
+                        <View
+                            android:id="@+id/vDivider"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/v_divider_ht_fb_login"
+                            android:layout_below="@id/txtEvtTitle"
+                            android:background="@drawable/fb_login_divider" />
+
+                        <TextView
+                            android:id="@+id/txtVenue"
+                            style="@style/SingleLineMarqueeTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/vDivider"
+                            android:layout_marginBottom="@dimen/txt_margin_t_b_rlt_evt_info_fragment_event_details_img_evt"
+                            android:layout_marginTop="@dimen/txt_margin_t_b_rlt_evt_info_fragment_event_details_img_evt"
+                            android:drawableLeft="@drawable/location"
+                            android:drawablePadding="@dimen/txt_drawable_pad_fragment_event_details_img_evt"
+                            android:gravity="center_vertical"
+                            android:maxLines="2"
+                            android:text="Location"
+                            android:textColor="@color/txt_evt_title_fragment_event_info_tab"
+                            android:textSize="@dimen/txt_evt_time_txt_size_include_fragment_event_details_img_evt" />
+
+                        <TextView
+                            android:id="@+id/txtEvtTime"
+                            style="@style/SingleLineMarqueeTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/txtVenue"
+                            android:layout_marginBottom="@dimen/txt_margin_t_b_rlt_evt_info_fragment_event_details_img_evt"
+                            android:drawableLeft="@drawable/calendar"
+                            android:drawablePadding="@dimen/txt_drawable_pad_fragment_event_details_img_evt"
+                            android:gravity="center_vertical"
+                            android:maxLines="2"
+                            android:text="Time"
+                            android:textColor="@color/txt_evt_title_fragment_event_info_tab"
+                            android:textSize="@dimen/txt_evt_time_txt_size_include_fragment_event_details_img_evt" />
+
+                        <include
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/txtEvtTime"
+                            android:layout_marginBottom="@dimen/lnr_layout_btns_margin_b_include_fragment_event_details_footer"
+                            layout="@layout/include_fragment_event_details_footer" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lnrEventDescAndMap"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/lnr_event_desc_and_map_margin_l_r_fragment_event_info"
+                    android:layout_marginRight="@dimen/lnr_event_desc_and_map_margin_l_r_fragment_event_info"
+                    android:orientation="horizontal" >
+
+                    <include
+                        android:layout_weight="1"
+                        layout="@layout/include_desc" />
+
+                    <include
+                        android:layout_weight="1"
+                        layout="@layout/include_address_map" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lnrLayoutBtm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/lnr_layout_btm_margin_b_fragment_event_info"
+                    android:layout_marginLeft="@dimen/lnr_layout_btm_margin_l_fragment_event_info"
+                    android:layout_marginRight="@dimen/lnr_layout_btm_margin_r_fragment_event_info"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal" >
+
+                    <include layout="@layout/include_friends" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+
+</RelativeLayout>
