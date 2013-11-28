@@ -115,8 +115,7 @@
     <!-- fragment_discover_by_category_list_item_evt.xml -->
     <!--
     summation of img_event_ht_fragment_discover_by_category_list_item_evt + img_event_margin_t_fragment_discover_by_category_list_item_evt +
-    img_event_margin_b_fragment_discover_by_category_list_item_evt + divider_ht_fragment_discover_by_category_list_item_evt
-    -->
+    img_event_margin_b_fragment_discover_by_category_list_item_evt + divider_ht_fragment_discover_by_category_list_item_evt    -->
     <dimen name="rlt_layout_root_ht_fragment_discover_by_category_list_item_evt">82dp</dimen>
     <dimen name="img_event_w_fragment_discover_by_category_list_item_evt">112dp</dimen>
     <dimen name="img_event_ht_fragment_discover_by_category_list_item_evt">84dp</dimen>
@@ -185,8 +184,7 @@
     <dimen name="txt_count_margin_r_navigation_drawer_list_item">10dp</dimen>
     <dimen name="txt_count_pad_l_navigation_drawer_list_item">5dp</dimen>
     <dimen name="txt_count_pad_r_navigation_drawer_list_item">@dimen/txt_count_pad_l_navigation_drawer_list_item</dimen>
-    <dimen name="txt_count_txt_size_navigation_drawer_list_item">@dimen/txt_title_txt_size_navigation_drawer_list_item</dimen>
-    -->
+    <dimen name="txt_count_txt_size_navigation_drawer_list_item">@dimen/txt_title_txt_size_navigation_drawer_list_item</dimen>    -->
     <dimen name="divider_ht_navigation_drawer_list_item">1dp</dimen>
     <dimen name="divider_margin_l_navigation_drawer_list_item">@dimen/txt_title_margin_l_navigation_drawer_list_item</dimen>
     <dimen name="divider_margin_r_navigation_drawer_list_item">@dimen/img_icon_margin_r_navigation_drawer_list_item</dimen>
