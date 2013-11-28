@@ -182,32 +182,34 @@ public class MainActivity extends ActionBarActivity implements
 			};
 
 			setDrawerIndicatorEnabled(isDrawerIndicatorEnabled);
-
+			Log.i(TAG, "isDrawerIndicatorEnabled : " + isDrawerIndicatorEnabled);
 			// Set the drawer toggle as the DrawerListener
 			mDrawerLayout.setDrawerListener(mDrawerToggle);
-			/**
-			 * setIcon null throws NullPointerException while expanding
-			 * searchView in SearchFragment. So need to set any transparent icon
-			 * rather than null.
-			 */
-			getSupportActionBar().setIcon(R.drawable.placeholder);
-
+			
 			getSupportActionBar().setDisplayOptions(
 					ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME
-							| ActionBar.DISPLAY_HOME_AS_UP);
-
+					| ActionBar.DISPLAY_HOME_AS_UP );
 		} else {
-
-			getSupportActionBar().setIcon(R.drawable.placeholder);
-
-			getSupportActionBar().setDisplayOptions(
-					ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME
-							| ActionBar.DISPLAY_HOME_AS_UP);
-
-			getSupportActionBar().setHomeButtonEnabled(false);
-
+			
+			int displayOptions;
+			
+			if(getSupportFragmentManager().getBackStackEntryCount() > 0) {
+				displayOptions = ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME
+						| ActionBar.DISPLAY_HOME_AS_UP;
+			} else {
+				displayOptions = ActionBar.DISPLAY_SHOW_TITLE;	
+			}
+			
+			getSupportActionBar().setDisplayOptions(displayOptions);
 		}
-
+		
+		/**
+		 * setIcon null throws NullPointerException while expanding
+		 * searchView in SearchFragment. So need to set any transparent icon
+		 * rather than null.
+		 */
+		getSupportActionBar().setIcon(R.drawable.placeholder);
+		
 		DrawerListFragment drawerListFragment = (DrawerListFragment) getSupportFragmentManager()
 				.findFragmentByTag(DRAWER_LIST_FRAGMENT_TAG);
 		if (drawerListFragment == null) {
@@ -315,6 +317,14 @@ public class MainActivity extends ActionBarActivity implements
 		searchView.setQueryHint(getResources().getString(R.string.menu_search));
 		searchView.setOnQueryTextListener(this);
 
+		if(AppConstants.FRAGMENT_TAG_SEARCH.equals(currentContentFragmentTag)) {
+			/**
+			 * on some devices onCreateOptionsMenu is called after onFragmentResumed, 
+			 * so we need to expand actionview here after initializing the searchItem
+			 */
+			MenuItemCompat.expandActionView(searchItem);
+		}
+		
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -359,6 +369,12 @@ public class MainActivity extends ActionBarActivity implements
 
 				} else {
 					onBackPressed();
+				}
+			} else {
+				
+				onBackPressed();
+				if(getSupportFragmentManager().getBackStackEntryCount() == 0) {
+					getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
 				}
 			}
 			return true;
@@ -544,10 +560,8 @@ public class MainActivity extends ActionBarActivity implements
 			String fragmentTag) {
 		// Log.d(TAG, "onFragmentResumed() - " + fragmentTag);
 		drawerItemSelectedPosition = position;
-		if (!isTabletAndInLandscapeMode) {
-			if (drawerItemSelectedPosition != AppConstants.INVALID_INDEX) {
+		if (drawerItemSelectedPosition != AppConstants.INVALID_INDEX) {
 				setDrawerIndicatorEnabled(true);
-			}
 		}
 		mTitle = title;
 		updateTitle();
@@ -559,9 +573,7 @@ public class MainActivity extends ActionBarActivity implements
 			String title, String fragmentTag) {
 		// Log.d(TAG, "onFragmentResumed() - " + fragmentTag);
 		drawerItemSelectedPosition = position;
-		if (!isTabletAndInLandscapeMode) {
-			setDrawerIndicatorEnabled(true);
-		}
+		setDrawerIndicatorEnabled(true);
 
 		mTitle = title;
 		updateTitle();
@@ -574,8 +586,14 @@ public class MainActivity extends ActionBarActivity implements
 		//Log.d(TAG, "selectItem()");
 		//if (position != INDEX_NAV_ITEM_LATEST_NEWS) {
 			drawerItemSelectedPosition = position;
-			if(!isTabletAndInLandscapeMode){
-				setDrawerIndicatorEnabled(true);
+				
+			setDrawerIndicatorEnabled(true);
+				
+			if(isTabletAndInLandscapeMode){
+				
+				getSupportActionBar().setIcon(R.drawable.placeholder);
+				getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
+
 			}
 			
 			DrawerListFragment drawerListFragment = (DrawerListFragment) getSupportFragmentManager()
@@ -797,8 +815,11 @@ public class MainActivity extends ActionBarActivity implements
 				+ ", addToBackStack = " + addToBackStack);
 		drawerItemSelectedPosition = AppConstants.INVALID_INDEX;
 		// revertCheckedDrawerItemStateIfAny();
-		if (!isTabletAndInLandscapeMode) {
-			setDrawerIndicatorEnabled(!addToBackStack);
+		setDrawerIndicatorEnabled(!addToBackStack);
+		
+		if (isTabletAndInLandscapeMode) {
+			getSupportActionBar().setIcon(R.drawable.placeholder);				
+			getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_HOME_AS_UP);
 		}
 		// getSupportActionBar().setDisplayHomeAsUpEnabled(addToBackStack);
 		replaceContentFrameByFragment(replaceBy, replaceByFragmentTag,
@@ -1017,7 +1038,13 @@ public class MainActivity extends ActionBarActivity implements
 					AppConstants.FRAGMENT_TAG_SEARCH);
 			// Log.d(TAG, "fragment = " + fragment + ", query = " +
 			// ((SearchFragment) fragment).getSearchQuery());
-			MenuItemCompat.expandActionView(searchItem);
+			/**
+			 * on some devices onCreateOptionsMenu is called after onFragmentResumed, 
+			 * So the search item might be null at this point
+			 */
+			if(searchItem != null) {
+				MenuItemCompat.expandActionView(searchItem);
+			}
 			// searchItem.expandActionView();
 			searchQuery = ((SearchFragment) fragment).getSearchQuery();
 
@@ -1137,7 +1164,9 @@ public class MainActivity extends ActionBarActivity implements
 
 	private void setDrawerIndicatorEnabled(boolean enable) {
 		isDrawerIndicatorEnabled = enable;
-		mDrawerToggle.setDrawerIndicatorEnabled(enable);
+		if(mDrawerToggle != null) {
+			mDrawerToggle.setDrawerIndicatorEnabled(enable);
+		}
 	}
 
 }

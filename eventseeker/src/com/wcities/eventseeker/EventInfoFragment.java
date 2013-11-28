@@ -29,6 +29,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.internal.el;
 import com.wcities.eventseeker.EventDetailsFragment.EventDetailsFragmentChildListener;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
@@ -81,7 +82,9 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 	private View vDummyAddress;
 	
 	private FriendsGridAdapter friendsGridAdapter;
-
+	
+	private boolean isTablet;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -90,6 +93,8 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 		//Log.d(TAG, "lat = " + event.getSchedule().getVenue().getAddress().getLat() + ", lon = " + event.getSchedule().getVenue().getAddress().getLon());
 		
 		res = getResources();
+		
+		isTablet = ((MainActivity)FragmentUtil.getActivity(this)).isTablet();
 	}
 	
 	@Override
@@ -121,10 +126,19 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 		txtEvtDesc = (TextView) v.findViewById(R.id.txtDesc);
 		imgDown = (ImageView) v.findViewById(R.id.imgDown);
 		
-		updateDescVisibility();
+		if(isTablet) {
 		
+			imgDown.setVisibility(View.GONE);
+			expandEvtDesc();
+			
+		} else {
+			
+			updateDescVisibility();
+		
+		}
+			
 		if (event.getDescription() == null) {
-			int visibility = orientation == Configuration.ORIENTATION_PORTRAIT ? View.GONE : View.INVISIBLE;
+			int visibility = orientation == Configuration.ORIENTATION_PORTRAIT || isTablet ? View.GONE : View.INVISIBLE;
 			v.findViewById(R.id.rltLayoutDesc).setVisibility(visibility);
 			
 		} else {
@@ -232,7 +246,7 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 			 * or minHeight, we don't make description section visibility GONE. Rather keep it invisible keeping 
 			 * space occupied but components remaining hidden.
 			 */
-			int visibility = orientation == Configuration.ORIENTATION_PORTRAIT ? View.GONE : View.INVISIBLE;
+			int visibility = orientation == Configuration.ORIENTATION_PORTRAIT || isTablet? View.GONE : View.INVISIBLE;
 			rltLayoutEvtDesc.setVisibility(visibility);
 			
 		} else {
@@ -290,7 +304,7 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 		if (wcitiesId == null) {
 			rltLayoutFriends.setVisibility(View.GONE);
 			
-		} else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+		} else if (orientation == Configuration.ORIENTATION_PORTRAIT || isTablet) {
 			if (event.getFriends().isEmpty()) {
 				rltLayoutFriends.setVisibility(View.GONE);
 
@@ -407,7 +421,7 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 
 		@Override
 		public int getCount() {
-			if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+			if (orientation == Configuration.ORIENTATION_PORTRAIT || isTablet) {
 				return event.getFriends().size() > MAX_FRIENDS_GRID ? 
 						(isFriendsGridExpanded ? event.getFriends().size() : MAX_FRIENDS_GRID) : event.getFriends().size();
 				
