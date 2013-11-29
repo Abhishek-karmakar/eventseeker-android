@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rltLayoutDesc"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="@dimen/rlt_desc_margin_r_include_desc"
+    android:layout_marginTop="@dimen/rlt_desc_margin_t_include_desc"
+    android:layout_weight="1"
+    android:background="@drawable/story_space"
+    android:minHeight="@dimen/rlt_layout_item_desc_min_ht_fragment_event_info" >
+
+    <TextView
+        android:id="@+id/txtDesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:paddingBottom="@dimen/txt_evt_desc_pad_fragment_evt_info"
+        android:paddingLeft="@dimen/txt_evt_desc_pad_fragment_evt_info"
+        android:paddingRight="@dimen/txt_evt_desc_pad_fragment_evt_info"
+        android:paddingTop="@dimen/txt_evt_desc_pad_t_fragment_evt_info"
+        android:textSize="@dimen/txt_evt_desc_txt_size_fragment_evt_info" />
+
+    <ImageView
+        android:id="@+id/imgDown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/txtDesc"
+        android:layout_marginBottom="@dimen/img_down_margin_b_fragment_event_info"
+        android:layout_marginRight="@dimen/img_down_margin_r_fragment_evt_info"
+        android:src="@drawable/down" />
+
+</RelativeLayout>

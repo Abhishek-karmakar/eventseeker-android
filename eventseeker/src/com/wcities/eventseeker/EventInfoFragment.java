@@ -29,6 +29,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.internal.el;
 import com.wcities.eventseeker.EventDetailsFragment.EventDetailsFragmentChildListener;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
@@ -81,7 +82,9 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 	private View vDummyAddress;
 	
 	private FriendsGridAdapter friendsGridAdapter;
-
+	
+	private boolean isTablet;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -90,6 +93,8 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 		//Log.d(TAG, "lat = " + event.getSchedule().getVenue().getAddress().getLat() + ", lon = " + event.getSchedule().getVenue().getAddress().getLon());
 		
 		res = getResources();
+		
+		isTablet = ((MainActivity)FragmentUtil.getActivity(this)).isTablet();
 	}
 	
 	@Override
@@ -120,9 +125,19 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 		txtEvtDesc = (TextView) v.findViewById(R.id.txtDesc);
 		imgDown = (ImageView) v.findViewById(R.id.imgDown);
 		
-		updateDescVisibility();
+		if(isTablet) {
 		
+			imgDown.setVisibility(View.GONE);
+			expandEvtDesc();
+			
+		} else {
+			
+			updateDescVisibility();
+		
+		}
+			
 		rltLayoutAddress = (RelativeLayout) v.findViewById(R.id.rltLayoutAddress);
+
 		txtAddress = (TextView) v.findViewById(R.id.txtAddress);
 		vDummyAddress = v.findViewById(R.id.vDummyAddress);
 
@@ -245,28 +260,45 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 	}
 	
 	private void updateDescVisibility() {
-		if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-			if (!isImgLoaded || !allDetailsLoaded || event.getDescription() == null) {
+
+		if (isTablet) {
+
+			if (event.getDescription() == null) {
+
 				rltLayoutEvtDesc.setVisibility(View.GONE);
-				
+
 			} else {
 				makeDescVisible();
 			}
-			
+
+		} else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+
+			if (!isImgLoaded || !allDetailsLoaded
+					|| event.getDescription() == null) {
+				rltLayoutEvtDesc.setVisibility(View.GONE);
+
+			} else {
+				makeDescVisible();
+			}
+
 		} else {
 			if (event.getDescription() == null) {
+				
 				/**
-				 * For landscape orientation, since friends section height depends on description section height 
-				 * or minHeight, we don't make description section visibility GONE. Rather keep it invisible keeping 
-				 * space occupied but components remaining hidden.
+				 * For landscape orientation, since friends section height
+				 * depends on description section height or minHeight, we don't
+				 * make description section visibility GONE. Rather keep it
+				 * invisible keeping space occupied but components remaining
+				 * hidden.
 				 */
 				rltLayoutEvtDesc.setVisibility(View.INVISIBLE);
-				
+
 			} else {
 				makeDescVisible();
 			}
 		}
 	}
+		
 	
 	private void updateBtnBuyTicketsEnabled(boolean enabled) {
 		lnrLayoutTickets.setEnabled(enabled);
@@ -307,36 +339,57 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 	private void updateFriendsVisibility() {
 		if (wcitiesId == null) {
 			rltLayoutFriends.setVisibility(View.GONE);
-			
+
+		} else if (isTablet) {
+
+			if (event.getFriends().isEmpty()) {
+				rltLayoutFriends.setVisibility(View.GONE);
+			} else {
+				rltLayoutFriends.setVisibility(View.VISIBLE);
+
+				if (event.getFriends().size() > MAX_FRIENDS_GRID) {
+					RelativeLayout rltLayoutViewAll = 
+							(RelativeLayout) rltLayoutFriends.findViewById(R.id.rltLayoutViewAll);
+					rltLayoutViewAll.setVisibility(View.VISIBLE);
+					rltLayoutViewAll.setOnClickListener(this);
+
+					expandOrCollapseFriendsGrid();
+				}
+			}
+
 		} else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-			
+
 			if (!isImgLoaded || !allDetailsLoaded || event.getFriends().isEmpty()) {
+
 				rltLayoutFriends.setVisibility(View.GONE);
 
 			} else {
 				rltLayoutFriends.setVisibility(View.VISIBLE);
-				
+
 				if (event.getFriends().size() > MAX_FRIENDS_GRID) {
-					RelativeLayout rltLayoutViewAll = (RelativeLayout) rltLayoutFriends.findViewById(R.id.rltLayoutViewAll);
+					RelativeLayout rltLayoutViewAll = 
+							(RelativeLayout) rltLayoutFriends.findViewById(R.id.rltLayoutViewAll);
 					rltLayoutViewAll.setVisibility(View.VISIBLE);
 					rltLayoutViewAll.setOnClickListener(this);
-					
+
 					expandOrCollapseFriendsGrid();
 				}
 			}
-			
+
 		} else {
 			if (event.getFriends().isEmpty()) {
-				
-				// Remove entire bottom part since neither description nor friends are available
+
+				// Remove entire bottom part since neither description nor
+				// friends are available
 				if (event.getDescription() == null) {
 					rltLayoutFriends.setVisibility(View.GONE);
 					rltLayoutEvtDesc.setVisibility(View.GONE);
-					
+
 				} else {
 					/**
-					 * Use INVISIBLE instead of GONE to restrain description section space to half the 
-					 * screen width; otherwise it will expand horizontally to fill screen width
+					 * Use INVISIBLE instead of GONE to restrain description
+					 * section space to half the screen width; otherwise it will
+					 * expand horizontally to fill screen width
 					 */
 					rltLayoutFriends.setVisibility(View.INVISIBLE);
 					rltLayoutEvtDesc.setVisibility(View.VISIBLE);
@@ -427,7 +480,7 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 
 		@Override
 		public int getCount() {
-			if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+			if (orientation == Configuration.ORIENTATION_PORTRAIT || isTablet) {
 				return event.getFriends().size() > MAX_FRIENDS_GRID ? 
 						(isFriendsGridExpanded ? event.getFriends().size() : MAX_FRIENDS_GRID) : event.getFriends().size();
 				

@@ -7,20 +7,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wcities.eventseeker.SearchFragment.SearchFragmentChildListener;
-import com.wcities.eventseeker.adapter.DateWiseEventListAdapter;
-import com.wcities.eventseeker.adapter.DateWiseEventListAdapter.DateWiseEventListAdapterListener;
+import com.wcities.eventseeker.adapter.DateWiseMyEventListAdapter;
+import com.wcities.eventseeker.adapter.DateWiseMyEventListAdapter.DateWiseMyEventListAdapterListener;
 import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
-public class SearchEventsFragment extends SearchEventsParentFragment implements
-		DateWiseEventListAdapterListener, SearchFragmentChildListener {
+public class SearchEventsFragmentTab extends SearchEventsParentFragment
+		implements SearchFragmentChildListener,
+		DateWiseMyEventListAdapterListener {
 
-	private static final String TAG = SearchEventsFragment.class.getName();
+	private static final String TAG = SearchEventsFragmentTab.class.getName();
 
-	private DateWiseEventListAdapter eventListAdapter;
+	private DateWiseMyEventListAdapter eventListAdapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,7 +35,7 @@ public class SearchEventsFragment extends SearchEventsParentFragment implements
 
 		if (eventList == null) {
 			eventList = new DateWiseEventList();
-			eventListAdapter = new DateWiseEventListAdapter(
+			eventListAdapter = new DateWiseMyEventListAdapter(
 					FragmentUtil.getActivity(this), eventList, null, this);
 
 			Bundle args = getArguments();

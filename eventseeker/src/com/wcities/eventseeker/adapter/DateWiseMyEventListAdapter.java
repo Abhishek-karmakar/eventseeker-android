@@ -1,5 +1,7 @@
 package com.wcities.eventseeker.adapter;
 
+import java.util.List;
+
 import android.R.color;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +9,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.support.v4.widget.SearchViewCompat.OnCloseListenerCompat;
 import android.text.TextUtils.TruncateAt;
@@ -41,6 +44,7 @@ import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
+import com.wcities.eventseeker.interfaces.DateWiseEventListener;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -48,14 +52,14 @@ import com.wcities.eventseeker.viewdata.DateWiseEventList;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.EventListItem;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.LIST_ITEM_TYPE;
 
-public class DateWiseMyEventListAdapter extends BaseAdapter {
+public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseEventListener{
 
 	private static final String TAG = DateWiseMyEventListAdapter.class.getName();
 
 	private Context mContext;
 	private BitmapCache bitmapCache;
 	private DateWiseEventList dateWiseEvtList;
-	private LoadDateWiseMyEvents loadDateWiseMyEvents;
+	private AsyncTask<Void, Void, List<Event>> loadDateWiseMyEvents;
 	private int eventsAlreadyRequested;
 	private boolean isMoreDataAvailable = true;
 	private DateWiseMyEventListAdapterListener mListener;
@@ -68,7 +72,7 @@ public class DateWiseMyEventListAdapter extends BaseAdapter {
 
 	public DateWiseMyEventListAdapter(Context context,
 			DateWiseEventList dateWiseEvtList,
-			LoadDateWiseMyEvents loadDateWiseEvents,
+			AsyncTask<Void, Void, List<Event>> loadDateWiseEvents,
 			DateWiseMyEventListAdapterListener mListener) {
 		mContext = context;
 		bitmapCache = BitmapCache.getInstance();
@@ -96,7 +100,7 @@ public class DateWiseMyEventListAdapter extends BaseAdapter {
 		orientation = mContext.getResources().getConfiguration().orientation;
 	}
 
-	public void setLoadDateWiseEvents(LoadDateWiseMyEvents loadDateWiseMyEvents) {
+	public void setLoadDateWiseEvents(AsyncTask<Void, Void, List<Event>> loadDateWiseMyEvents) {
 		this.loadDateWiseMyEvents = loadDateWiseMyEvents;
 	}
 
