@@ -68,8 +68,8 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
 		Log.d(TAG, "addNotification() Message: " + message);
 
 		final String title = context.getString(R.string.app_name);
-
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
 		final PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
 		final Notification notification = new Notification(R.drawable.ic_launcher, message, System.currentTimeMillis());

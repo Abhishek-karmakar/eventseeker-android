@@ -6,13 +6,13 @@
     android:background="@color/dark_gray" >
 
     <ImageView android:id="@+id/imgLeft"
-        android:layout_width="20dp"
+        android:layout_width="@dimen/arrow_w_widget_layout"
         android:layout_height="match_parent"
         android:src="@drawable/previous"
         android:layout_centerVertical="true" />
     
     <ImageView android:id="@+id/imgRight"
-        android:layout_width="20dp"
+        android:layout_width="@dimen/arrow_w_widget_layout"
         android:layout_height="match_parent"
         android:src="@drawable/next"
         android:layout_centerVertical="true"
@@ -31,8 +31,7 @@
 			android:layout_width="@dimen/img_evt_w_widget_layout"
 			android:layout_height="match_parent"
 			android:contentDescription="event image"
-			android:src="@drawable/ic_launcher"
-			android:scaleType="centerCrop" />
+			android:scaleType="fitXY" />
 			
 		<LinearLayout android:id="@+id/lnrLayoutEvtDetails"
 		    android:layout_width="match_parent"

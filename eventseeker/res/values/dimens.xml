@@ -388,6 +388,7 @@
     <dimen name="img_evt_w_widget_layout">120dp</dimen>
     <dimen name="txt_date_margin_l_widget_layout">10dp</dimen>
     <dimen name="txt_evt_time_am_pm_margin_t_widget_layout">-3dp</dimen>
+    <dimen name="arrow_w_widget_layout">25dp</dimen>
     <!-- fragment_device_library.xml -->
     <dimen name="rlt_layout_root_pad_fragment_device_library">20dp</dimen>
     <dimen name="txt_service_title_drawable_pad_fragment_device_library">5dp</dimen>

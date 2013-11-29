@@ -229,8 +229,8 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 	}
 	
 	private void apiCallFinished(List<String> artistNames) {
-		Log.d(TAG, "artists size = " + artistNames.size());
-		if (artistNames != null && !artistNames.isEmpty()) {
+		//Log.d(TAG, "artists size = " + artistNames.size());
+		if (artistNames != null) {
 			new SyncArtists(artistNames, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
 					Service.Rdio, this).execute();
 			
