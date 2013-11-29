@@ -43,6 +43,7 @@ import com.wcities.eventseeker.core.ArtistNewsItem;
 import com.wcities.eventseeker.core.ArtistNewsItem.PostType;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
+import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
@@ -171,7 +172,7 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack {
 	
 	private void loadArtistsNewsInBackground() {
 		loadArtistsNews = new LoadArtistsNews();
-		loadArtistsNews.execute();
+		AsyncTaskUtil.executeAsyncTask(loadArtistsNews, true);
 	}
 	
 	private class LoadArtistsNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> {

@@ -378,7 +378,7 @@
     <dimen name="lnr_layout_btns_margin_t_fragment_venue_events">0dp</dimen>
     <!-- widget_info.xml -->
     <dimen name="min_w_widget_info">250dp</dimen>
-    <dimen name="min_ht_widget_info">70dp</dimen>
+    <dimen name="min_ht_widget_info">40dp</dimen>
     <!-- widget_layout.xml -->
     <dimen name="lnr_layout_content_pad_widget_layout">4dp</dimen>
     <dimen name="txt_evt_title_pad_l_widget_layout">5dp</dimen>

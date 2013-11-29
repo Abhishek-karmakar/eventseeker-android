@@ -51,14 +51,14 @@ public class FeaturedEventsFragment extends Fragment {
 		
 		ImageView imgFeaturedEvt = (ImageView) v.findViewById(R.id.imgFeaturedEvt);
 		
-		String key = event.getKey(ImgResolution.MOBILE);
+		String key = event.getKey(ImgResolution.LOW);
 		Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 		if (bitmap != null) {
 	        imgFeaturedEvt.setImageBitmap(bitmap);
 	        
 	    } else {
 	    	AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-	        asyncLoadImg.loadImg(imgFeaturedEvt, ImgResolution.MOBILE, event);
+	        asyncLoadImg.loadImg(imgFeaturedEvt, ImgResolution.LOW, event);
 	    }
 		
 		TextView txtEvtTitle = (TextView)v.findViewById(R.id.txtEvtTitle);

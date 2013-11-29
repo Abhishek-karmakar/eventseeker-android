@@ -13,6 +13,7 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Category;
+import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -94,7 +95,7 @@ public class DateWiseEventListFragment extends ListFragment implements DateWiseE
 		loadEvents = new LoadDateWiseEvents(dateWiseEvtList, eventListAdapter, lat, lon, startDate, 
 				categories.get(categoryPosition).getId());
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);
-        loadEvents.execute();
+		AsyncTaskUtil.executeAsyncTask(loadEvents, true);
 	}
 	
 	protected void resetWith(String newStartDate) {

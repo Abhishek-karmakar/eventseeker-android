@@ -44,6 +44,7 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
+import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FileUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
@@ -104,7 +105,7 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 			enableTabs = event.hasArtists();
 			
 			loadEventDetails = new LoadEventDetails();
-			loadEventDetails.execute();
+			AsyncTaskUtil.executeAsyncTask(loadEventDetails, true);
 			
 			event.getFriends().clear();
 			//event.getFriends().add(null);
