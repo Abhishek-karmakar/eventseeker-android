@@ -1,7 +1,10 @@
 package com.wcities.eventseeker.adapter;
 
+import java.util.List;
+
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,24 +17,23 @@ import android.widget.TextView;
 
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
-import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Schedule;
-import com.wcities.eventseeker.interfaces.DateWiseEventListener;
+import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.EventListItem;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.LIST_ITEM_TYPE;
 
-public class DateWiseEventListAdapter extends BaseAdapter implements DateWiseEventListener{
+public class DateWiseEventListAdapter extends BaseAdapter implements DateWiseEventParentAdapterListener{
 
 	private Context mContext;
     private BitmapCache bitmapCache;
     private DateWiseEventList dateWiseEvtList;
-    private LoadDateWiseEvents loadDateWiseEvents;
+    private AsyncTask<Void, Void, List<Event>> loadDateWiseEvents;
     private int eventsAlreadyRequested;
 	private boolean isMoreDataAvailable = true;
 	private DateWiseEventListAdapterListener mListener;
@@ -41,7 +43,7 @@ public class DateWiseEventListAdapter extends BaseAdapter implements DateWiseEve
 	}
 
     public DateWiseEventListAdapter(Context context, DateWiseEventList dateWiseEvtList, 
-    		LoadDateWiseEvents loadDateWiseEvents, DateWiseEventListAdapterListener mListener) {
+    		AsyncTask<Void, Void, List<Event>> loadDateWiseEvents, DateWiseEventListAdapterListener mListener) {
     	mContext = context;
         bitmapCache = BitmapCache.getInstance();
         this.dateWiseEvtList = dateWiseEvtList;
@@ -49,11 +51,13 @@ public class DateWiseEventListAdapter extends BaseAdapter implements DateWiseEve
         this.mListener = mListener;
     }
     
+    @Override
     public void updateContext(Context context) {
     	mContext = context;
 	}
 
-	public void setLoadDateWiseEvents(LoadDateWiseEvents loadDateWiseEvents) {
+    @Override
+	public void setLoadDateWiseEvents(AsyncTask<Void, Void, List<Event>> loadDateWiseEvents) {
 		this.loadDateWiseEvents = loadDateWiseEvents;
 	}
 
@@ -155,14 +159,17 @@ public class DateWiseEventListAdapter extends BaseAdapter implements DateWiseEve
 		return position;
 	}
 
+	@Override
 	public int getEventsAlreadyRequested() {
 		return eventsAlreadyRequested;
 	}
 
+	@Override
 	public void setEventsAlreadyRequested(int eventsAlreadyRequested) {
 		this.eventsAlreadyRequested = eventsAlreadyRequested;
 	}
 
+	@Override
 	public void setMoreDataAvailable(boolean isMoreDataAvailable) {
 		this.isMoreDataAvailable = isMoreDataAvailable;
 	}

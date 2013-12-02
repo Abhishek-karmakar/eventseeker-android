@@ -12,6 +12,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -91,6 +92,8 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	private boolean isMoreDataAvailable = true;
 	private int firstVisibleActivityItemPosition;
 	
+	private boolean isTablet;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -99,6 +102,8 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 		if (wcitiesId == null) {
 			wcitiesId = ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId();
 		}
+		
+		isTablet = ((MainActivity)FragmentUtil.getActivity(this)).isTablet();
 	}
 	
 	@Override
@@ -126,7 +131,8 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 		getListView().setDivider(null);
 		getListView().setScrollingCacheEnabled(false);
 		
-		final int pos = (orientation == Configuration.ORIENTATION_PORTRAIT) ? 
+		//Mithil: In tablet we have to show two elements in both the cases
+		final int pos = (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) ? 
 				firstVisibleActivityItemPosition : (int)Math.floor(firstVisibleActivityItemPosition / 2.0);
 		getListView().post(new Runnable() {
 			
@@ -155,7 +161,8 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	@Override
 	public void onDestroyView() {
 		//Log.d(TAG, "onDestroyView()");
-		firstVisibleActivityItemPosition = (orientation == Configuration.ORIENTATION_PORTRAIT) ? 
+		//Mithil: In tablet we have to show two elements in both the cases
+		firstVisibleActivityItemPosition = (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) ? 
 				getListView().getFirstVisiblePosition() : getListView().getFirstVisiblePosition() * 2;
 				
 		for (int i = getListView().getFirstVisiblePosition(), j = 0; 
@@ -327,7 +334,8 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 
 		@Override
 		public Object getItem(int position) {
-			if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+			//Mithil: In tablet we have to show two elements in both the cases
+			if (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) {
 				return friendNewsItems.get(position);
 				
 			} else {
@@ -347,7 +355,8 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 
 		@Override
 		public int getCount() {
-			if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+			//Mithil: In tablet we have to show two elements in both the cases
+			if (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) {
 				return friendNewsItems.size();
 				
 			} else {
@@ -461,7 +470,6 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 					//lnrLayoutBtnLike.setOnClickListener(null);
 					//lnrLayoutBtnComment.setOnClickListener(null);
 				}
-				
 				rltLayoutNewsItemContainer.setOnClickListener(new OnClickListener() {
 					
 					@Override
@@ -543,7 +551,6 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 					//lnrLayoutBtnLike2.setOnClickListener(null);
 					//lnrLayoutBtnComment2.setOnClickListener(null);
 				}
-				
 				rltLayoutNewsItem2Container.setOnClickListener(new OnClickListener() {
 					
 					@Override
@@ -560,7 +567,8 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	    /**
 	     * Create a new instance of MyDialogFragment
 	     */
-	    static AddCommentDialogFragment newInstance() {
+	    @SuppressLint("ValidFragment")
+		static AddCommentDialogFragment newInstance() {
 	        return new AddCommentDialogFragment();
 	    }
 

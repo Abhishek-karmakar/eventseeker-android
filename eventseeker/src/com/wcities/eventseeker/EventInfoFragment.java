@@ -130,11 +130,9 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 			imgDown.setVisibility(View.GONE);
 			expandEvtDesc();
 			
-		} else {
-			
-			updateDescVisibility();
-		
 		}
+			
+		updateDescVisibility();
 			
 		rltLayoutAddress = (RelativeLayout) v.findViewById(R.id.rltLayoutAddress);
 
@@ -152,6 +150,7 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 		rltLayoutFriends = (RelativeLayout) v.findViewById(R.id.rltLayoutFriends);
 		txtViewAll = (TextView) v.findViewById(R.id.txtViewAll);
 		imgRight = (ImageView) v.findViewById(R.id.imgRight);
+		
 		updateFriendsVisibility();
 		
 		chkBoxGoing = (CheckBox) v.findViewById(R.id.chkBoxGoing);
@@ -463,7 +462,6 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
         if (address != null && fragment != null) {
         	if (address.getLat() != 0 && address.getLon() != 0) {
             	fragment.updateLatLon(address.getLat(), address.getLon());
-            	
         	} else {
         		fragment.updateAddress(address);
         	}

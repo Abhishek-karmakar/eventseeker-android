@@ -16,6 +16,8 @@ import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Video;
+import com.wcities.eventseeker.custom.view.ResizableImageView;
+import com.wcities.eventseeker.util.FragmentUtil;
 
 public class VideoFragment extends Fragment {
 	
@@ -36,6 +38,55 @@ public class VideoFragment extends Fragment {
 	}
     
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    		Bundle savedInstanceState) {
+    	//Log.d(TAG, "onCreateView()");
+    	final Video video = (Video) getArguments().getSerializable(BundleKeys.VIDEO);
+    	View v = inflater.inflate(R.layout.fragment_video, null);
+    	
+    	if(((MainActivity)FragmentUtil.getActivity(this)).isTablet()) {
+    		
+    		ResizableImageView imgVideo = (ResizableImageView) v.findViewById(R.id.imgVideo);
+    		
+    		String key = video.getKey(ImgResolution.LOW);
+    		Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
+    		if (bitmap != null) {
+    			imgVideo.setImageBitmap(bitmap);
+    			
+    		} else {
+    			imgVideo.setImageResource(R.drawable.placeholder);
+    			AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
+    			asyncLoadImg.loadImg(imgVideo, ImgResolution.LOW, video);
+    		}
+
+    	} else {
+			
+	    	ImageView imgVideo = (ImageView) v.findViewById(R.id.imgVideo);
+	    	
+	    	String key = video.getKey(ImgResolution.LOW);
+	    	Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
+	    	if (bitmap != null) {
+	    		imgVideo.setImageBitmap(bitmap);
+	    		
+	    	} else {
+	    		imgVideo.setImageBitmap(null);
+	    		AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
+	    		asyncLoadImg.loadImg(imgVideo, ImgResolution.LOW, video);
+	    	}
+    	}    	
+    	v.setOnClickListener(new OnClickListener() {
+    		
+    		@Override
+    		public void onClick(View v) {
+    			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(video.getVideoUrl()));
+    			startActivity(Intent.createChooser(intent, ""));
+    		}
+    	});
+    	
+    	return v;
+    }
+    
+    /*@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		//Log.d(TAG, "onCreateView()");
@@ -65,5 +116,5 @@ public class VideoFragment extends Fragment {
 		});
 		
 		return v;
-	}
+	}*/
 }

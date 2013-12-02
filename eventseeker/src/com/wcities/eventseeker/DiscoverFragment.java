@@ -315,27 +315,6 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements
 		}
 	}
 
-	/*
-	 * private class LoadEvtCategories extends AsyncTask<Void, Void, Void> {
-	 * 
-	 * @Override protected Void doInBackground(Void... params) { InfoApi infoApi
-	 * = new InfoApi(Api.OAUTH_TOKEN); try { JSONObject jsonObject =
-	 * infoApi.getCategories(); InfoApiJSONParser jsonParser = new
-	 * InfoApiJSONParser(); evtCategories =
-	 * jsonParser.getCategoryList(jsonObject);
-	 * 
-	 * } catch (ClientProtocolException e) { e.printStackTrace();
-	 * 
-	 * } catch (IOException e) { e.printStackTrace();
-	 * 
-	 * } catch (JSONException e) { e.printStackTrace(); }
-	 * 
-	 * return null; }
-	 * 
-	 * @Override protected void onPostExecute(Void result) {
-	 * evtCategoriesListAdapter.notifyDataSetChanged(); } }
-	 */
-
 	private class LoadFeaturedEvts extends AsyncTask<Void, Void, List<Event>> {
 
 		@Override
@@ -480,52 +459,4 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements
 		viewPagerSelectedPos = arg0;
 	}
 
-	/*
-	 * @Override public void onClick(View v) { switch (v.getId()) {
-	 * 
-	 * case R.id.imgPrev: viewPager.setCurrentItem(viewPager.getCurrentItem() -
-	 * 1); break;
-	 * 
-	 * case R.id.imgNext: viewPager.setCurrentItem(viewPager.getCurrentItem() +
-	 * 1); break;
-	 * 
-	 * default: break; } }
-	 */
-
-	/*
-	 * @Override public void onPageScrollStateChanged(int arg0) { // TODO
-	 * Auto-generated method stub }
-	 * 
-	 * @Override public void onPageScrolled(int arg0, float arg1, int arg2) { //
-	 * TODO Auto-generated method stub }
-	 * 
-	 * @Override public void onPageSelected(int arg0) {
-	 * updateRightLeftArrows(arg0); updateCityNameIfRequired(arg0); }
-	 */
-
-	/*
-	 * private void updateRightLeftArrows(int pos) {
-	 *//**
-	 * Condition 'pos < featuredEvts.size()' is required in case when pos
-	 * goes beyond bounds due to data source length (featuredEvts.size())
-	 * becoming less after changing location & coming back to this screen.
-	 */
-	/*
-	 * if (pos > 0 && pos < featuredEvts.size()) {
-	 * imgPrev.setVisibility(View.VISIBLE);
-	 * 
-	 * } else { imgPrev.setVisibility(View.GONE); }
-	 * 
-	 * if (pos < featuredEvts.size() - 1) { imgNext.setVisibility(View.VISIBLE);
-	 * 
-	 * } else { imgNext.setVisibility(View.GONE); } }
-	 * 
-	 * private void updateCityNameIfRequired(int pos) { if (pos <=
-	 * featuredEvts.size() - 1 &&
-	 * !featuredEvts.get(pos).getCityName().equals(cityName)) { cityName =
-	 * featuredEvts.get(pos).getCityName(); String commonTitle =
-	 * getResources().getString(R.string.title_featured_evts); String city =
-	 * commonTitle + cityName; txtFeaturedEvtsTitle.setText(city);
-	 * txtFeaturedEvtsTitle.setSelected(true); } }
-	 */
 }

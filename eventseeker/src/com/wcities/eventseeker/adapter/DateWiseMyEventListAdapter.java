@@ -44,7 +44,7 @@ import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
-import com.wcities.eventseeker.interfaces.DateWiseEventListener;
+import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -52,7 +52,7 @@ import com.wcities.eventseeker.viewdata.DateWiseEventList;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.EventListItem;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.LIST_ITEM_TYPE;
 
-public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseEventListener{
+public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseEventParentAdapterListener{
 
 	private static final String TAG = DateWiseMyEventListAdapter.class.getName();
 
@@ -74,6 +74,7 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 			DateWiseEventList dateWiseEvtList,
 			AsyncTask<Void, Void, List<Event>> loadDateWiseEvents,
 			DateWiseMyEventListAdapterListener mListener) {
+		
 		mContext = context;
 		bitmapCache = BitmapCache.getInstance();
 		this.dateWiseEvtList = dateWiseEvtList;
@@ -82,9 +83,8 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 		orientation = mContext.getResources().getConfiguration().orientation;
 
 		DisplayMetrics dm = mContext.getResources().getDisplayMetrics();
-		int width = dm.widthPixels < dm.heightPixels ? dm.widthPixels
-				: dm.heightPixels;
-		int widthPort = width
+		int width = dm.widthPixels < dm.heightPixels ? dm.widthPixels : dm.heightPixels;
+		int widthPort = width 
 				- (mContext.getResources().getDimensionPixelSize(
 						R.dimen.tab_bar_margin_fragment_custom_tabs) * 2)
 				- (mContext.getResources().getDimensionPixelSize(
@@ -95,11 +95,13 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 						R.dimen.img_event_margin_fragment_my_events_list_item);
 	}
 
+	@Override
 	public void updateContext(Context context) {
 		mContext = context;
 		orientation = mContext.getResources().getConfiguration().orientation;
 	}
 
+	@Override
 	public void setLoadDateWiseEvents(AsyncTask<Void, Void, List<Event>> loadDateWiseMyEvents) {
 		this.loadDateWiseMyEvents = loadDateWiseMyEvents;
 	}
@@ -363,14 +365,17 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 		return position;
 	}
 
+	@Override
 	public int getEventsAlreadyRequested() {
 		return eventsAlreadyRequested;
 	}
 
+	@Override
 	public void setEventsAlreadyRequested(int eventsAlreadyRequested) {
 		this.eventsAlreadyRequested = eventsAlreadyRequested;
 	}
 
+	@Override
 	public void setMoreDataAvailable(boolean isMoreDataAvailable) {
 		this.isMoreDataAvailable = isMoreDataAvailable;
 	}

@@ -126,27 +126,12 @@
                     android:layout_marginRight="@dimen/lnr_event_desc_and_map_margin_l_r_fragment_event_info"
                     android:orientation="horizontal" >
 
-                    <include
-                        android:layout_weight="1"
-                        layout="@layout/include_desc" />
+                    <include layout="@layout/include_desc" />
 
-                    <include
-                        android:layout_weight="1"
-                        layout="@layout/include_address_map" />
+                    <include layout="@layout/include_address_map" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/lnrLayoutBtm"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/lnr_layout_btm_margin_b_fragment_event_info"
-                    android:layout_marginLeft="@dimen/lnr_layout_btm_margin_l_fragment_event_info"
-                    android:layout_marginRight="@dimen/lnr_layout_btm_margin_r_fragment_event_info"
-                    android:baselineAligned="false"
-                    android:orientation="horizontal" >
-
-                    <include layout="@layout/include_friends" />
-                </LinearLayout>
+                <include layout="@layout/include_friends" />
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>

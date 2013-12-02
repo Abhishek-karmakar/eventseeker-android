@@ -48,9 +48,8 @@
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:orientation="horizontal"
-		    android:layout_below="@id/txtDesc"
 		    android:layout_marginTop="@dimen/lnr_layout_icons_margin_t_fragment_about_us"
-		    android:layout_centerHorizontal="true">
+		    android:layout_centerInParent="true">
 		    
 		    <ImageView android:id="@+id/img1"
 		        android:layout_width="wrap_content"

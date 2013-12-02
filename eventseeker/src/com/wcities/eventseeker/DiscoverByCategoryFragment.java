@@ -18,6 +18,7 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.ConversionUtil;
+import com.wcities.eventseeker.util.FragmentUtil;
 
 public class DiscoverByCategoryFragment extends FragmentLoadableFromBackStack implements OnDateSelectedListener {
 	
@@ -44,8 +45,9 @@ public class DiscoverByCategoryFragment extends FragmentLoadableFromBackStack im
       		day = c.get(Calendar.DAY_OF_MONTH);
         }
         
-		DateWiseEventListFragment dateWiseEventListFragment = (DateWiseEventListFragment) 
+        DateWiseEventListParentFragment dateWiseEventListFragment = (DateWiseEventListParentFragment) 
 				getChildFragmentManager().findFragmentByTag(AppConstants.FRAGMENT_TAG_DATE_WISE_EVENT_LIST);
+        
         if (dateWiseEventListFragment == null) {
         	addDateWiseEventListFragment(getArguments());
         }
@@ -84,7 +86,13 @@ public class DiscoverByCategoryFragment extends FragmentLoadableFromBackStack im
     	FragmentManager fragmentManager = getChildFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         
-        DateWiseEventListFragment dateWiseEventListFragment = new DateWiseEventListFragment();
+        DateWiseEventListParentFragment dateWiseEventListFragment;
+        if(((MainActivity)FragmentUtil.getActivity(this)).isTablet()) {
+        	dateWiseEventListFragment = new DateWiseEventListFragmentTab();
+        } else {
+        	dateWiseEventListFragment = new DateWiseEventListFragment();
+		}
+        
         dateWiseEventListFragment.setArguments(bundle);
         fragmentTransaction.add(R.id.lnrLayoutEvtListContainer, dateWiseEventListFragment, AppConstants.FRAGMENT_TAG_DATE_WISE_EVENT_LIST);
         fragmentTransaction.commit();
@@ -97,8 +105,10 @@ public class DiscoverByCategoryFragment extends FragmentLoadableFromBackStack im
 		this.day = day;
 		
 	    String startDate = ConversionUtil.getDay(year, month, day);
-		DateWiseEventListFragment dateWiseEventListFragment = (DateWiseEventListFragment) 
+	    
+	    DateWiseEventListParentFragment dateWiseEventListFragment = (DateWiseEventListParentFragment) 
 				getChildFragmentManager().findFragmentByTag(AppConstants.FRAGMENT_TAG_DATE_WISE_EVENT_LIST);
+		
 		dateWiseEventListFragment.resetWith(startDate);
 	}
 }

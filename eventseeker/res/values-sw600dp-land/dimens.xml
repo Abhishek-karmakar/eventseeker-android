@@ -1,13 +1,13 @@
 <resources>
 
     <!-- fragment_search_artists_list_item_tab.xml -->
-
     <dimen name="txt_artist_name_txt_size_fragment_search_artists_list_item">16sp</dimen>
     <dimen name="txt_artist_name_pad_fragment_search_artists_list_item">3dp</dimen>
     <dimen name="txt_on_tour_margin_t_fragment_search_artists_list_item">23dp</dimen>
     <dimen name="txt_on_tour_margin_r_fragment_search_artists_list_item">-20dp</dimen>
     <dimen name="txt_on_tour_pad_l_r_fragment_search_artists_list_item">30dp</dimen>
     <dimen name="img_item_h_fragment_search_artists_list_item">165dp</dimen>
+    <dimen name="txt_on_tour_txt_size_fragment_search_artists_list_item">18sp</dimen>
 
     <!-- include_desc.xml -->
     <dimen name="rlt_desc_margin_r_include_desc">15dp</dimen>
@@ -17,8 +17,12 @@
 
     <!-- fragment_event_info.xml -->
     <dimen name="lnr_layout_top_margin_l_r_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="lnr_event_desc_and_map_margin_l_r_fragment_event_info">15dp</dimen>
+    <dimen name="lnr_event_desc_and_map_margin_l_r_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="lnr_layout_btm_margin_l_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="lnr_layout_btm_margin_r_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="lnr_layout_btm_margin_r_fragment_event_info">@dimen/lnr_layout_btm_margin_l_fragment_event_info</dimen>
+
+    <!-- fragment_artist_info.xml -->
+    <dimen name="lnr_layout_top_margin_l_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="lnr_layout_top_margin_r_fragment_event_info">@dimen/lnr_layout_top_margin_l_fragment_event_info</dimen>
 
 </resources>

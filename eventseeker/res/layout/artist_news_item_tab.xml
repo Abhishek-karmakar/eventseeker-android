@@ -28,7 +28,7 @@
 		android:textColor="@android:color/black" />
 	 
 	<com.wcities.eventseeker.custom.view.ResizableImageView android:id="@+id/imgPhoto"
-		android:layout_width="wrap_content"
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_below="@id/txtTime"
 		android:layout_marginBottom="@dimen/img_photo_margin_b_artist_news_item"

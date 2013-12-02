@@ -1,8 +1,10 @@
 package com.wcities.eventseeker;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -70,12 +72,16 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 	private VideoFragmentPagerAdapter videoFragmentPagerAdapter;
 	private FriendsGridAdapter friendsGridAdapter;
 
+	private boolean isTablet;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		artist = (Artist) getArguments().getSerializable(BundleKeys.ARTIST);
 		
 		res = getResources();
+		
+		isTablet = ((MainActivity)FragmentUtil.getActivity(this)).isTablet();
 	}
 	
 	@Override
@@ -131,6 +137,14 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 		fragmentArtistDetailsFooter.setOnClickListener(this);
 		
 		updateFollowingFooter();
+		
+		if(isTablet) {
+			
+			v.findViewById(R.id.imgFacebook).setOnClickListener(this);
+			v.findViewById(R.id.imgTwitter).setOnClickListener(this);
+			v.findViewById(R.id.imgWeb).setOnClickListener(this);
+			
+		}
 		
 		//Log.d(TAG, "onCreateView() done - " + (System.currentTimeMillis() / 1000));
 		return v;
@@ -191,6 +205,11 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 		if (((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId() == null) {
 			rltLayoutFriends.setVisibility(View.GONE);
 			
+		} else if (isTablet) {
+			
+			int visibility = (artist.getFriends().isEmpty()) ? View.GONE : View.VISIBLE;
+			rltLayoutFriends.setVisibility(visibility);
+			
 		} else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
 			
 			if (!isImgLoaded || !allDetailsLoaded || artist.getFriends().isEmpty()) {
@@ -247,7 +266,14 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 	}
 	
 	private void updateVideosVisibility() {
-		if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+
+		if (isTablet) {
+			
+			int visibility = artist.getVideos().isEmpty() ? View.INVISIBLE : View.VISIBLE;
+			rltLayoutVideos.setVisibility(visibility);
+			
+		} else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+			
 			int visibility = artist.getVideos().isEmpty() ? View.GONE : View.VISIBLE;
 			viewPager.setVisibility(visibility);
 			indicator.setVisibility(visibility);
@@ -276,8 +302,32 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 		}
 	}
 	
+	private void makeDescVisibleInExpandedMode() {
+		
+		imgDown.setVisibility(View.GONE);		
+		rltLayoutArtistDesc.setVisibility(View.VISIBLE);
+		txtArtistDesc.setText(artist.getDescription());
+		expandEvtDesc();
+			
+	}
+
 	private void updateDescVisibility() {
-		if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+		
+		/**
+		 * Mithil:added new condition for the Tablet UI. Here if device is tablet then
+		 * if artist description is null then make the rltLayoutArtistDesc invisible else
+		 * expand the Description and make down arrow's visibility as gone.
+		 */
+		if(isTablet) {
+			
+			if (artist.getDescription() == null) {
+				rltLayoutArtistDesc.setVisibility(View.INVISIBLE);
+				
+			} else {
+				makeDescVisibleInExpandedMode();
+			}
+		}
+		else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
 			if (!isImgLoaded || !allDetailsLoaded || artist.getDescription() == null) {
 				rltLayoutArtistDesc.setVisibility(View.GONE);
 				
@@ -295,6 +345,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 		}
 	}
 	
+
 	private void expandEvtDesc() {
 		txtArtistDesc.setMaxLines(Integer.MAX_VALUE);
 		txtArtistDesc.setEllipsize(null);
@@ -479,11 +530,31 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 			expandOrCollapseFriendsGrid();
 			break;
 			
+		case R.id.imgFacebook:
+			String url = "http://www.facebook.com/eventseekr";
+			gotoLink(url);
+			break;
+			
+		case R.id.imgTwitter:
+			url = "https://twitter.com/eventseeker";
+			gotoLink(url);
+			break;
+	
+		case R.id.imgWeb:
+			url = "http://eventseeker.com/";
+			gotoLink(url);
+			break;
+			
 		default:
 			break;
 		}
 	}
 	
+	private void gotoLink(String url) {
+		Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+		startActivity(browserIntent);
+	}
+
 	private void updateScreen() {
 		// if fragment is destroyed (user has pressed back)
 		if (FragmentUtil.getActivity(this) == null) {

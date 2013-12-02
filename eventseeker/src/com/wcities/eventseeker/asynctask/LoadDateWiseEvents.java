@@ -17,7 +17,7 @@ import com.wcities.eventseeker.api.EventApi;
 import com.wcities.eventseeker.api.EventApi.MoreInfo;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
-import com.wcities.eventseeker.interfaces.DateWiseEventListener;
+import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
@@ -34,9 +34,9 @@ public class LoadDateWiseEvents extends AsyncTask<Void, Void, List<Event>> {
 	private int categoryId;
 	private int miles;
 	
-	private DateWiseEventListener eventListAdapter;
+	private DateWiseEventParentAdapterListener eventListAdapter;
 	
-	private LoadDateWiseEvents(DateWiseEventList eventList, DateWiseEventListener eventListAdapter, 
+	private LoadDateWiseEvents(DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, 
 			double lat, double lon) {
 		this.eventList = eventList;
 		this.eventListAdapter = eventListAdapter;
@@ -44,14 +44,14 @@ public class LoadDateWiseEvents extends AsyncTask<Void, Void, List<Event>> {
 		this.lon = lon;
 	}
 
-	public LoadDateWiseEvents(DateWiseEventList eventList, DateWiseEventListener eventListAdapter, String query, 
+	public LoadDateWiseEvents(DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, String query, 
 			double lat, double lon, int miles) {
 		this(eventList, eventListAdapter, lat, lon);
 		this.query = query;
 		this.miles = miles;
 	}
 	
-	public LoadDateWiseEvents(DateWiseEventList eventList, DateWiseEventListener eventListAdapter, double lat, 
+	public LoadDateWiseEvents(DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, double lat, 
 			double lon, String startDate, int categoryId) {
 		this(eventList, eventListAdapter, lat, lon);
 		this.startDate = startDate;
