@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.wcities.eventseeker.adapter.DateWiseEventListAdapter;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
+import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class DateWiseEventListFragment extends DateWiseEventListParentFragment {
@@ -24,7 +25,7 @@ public class DateWiseEventListFragment extends DateWiseEventListParentFragment {
 	public void loadEventsInBackground() {
 		loadEvents = getLoadDateWiseEvents();
 		((DateWiseEventListAdapter) eventListAdapter).setLoadDateWiseEvents(loadEvents);
-		loadEvents.execute();
+		AsyncTaskUtil.executeAsyncTask(loadEvents, true);
 	}
 
 	@Override

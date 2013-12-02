@@ -76,10 +76,8 @@ public class TwitterFragment extends FragmentLoadableFromBackStack {
 									
 								} while ((cursor = responseList.getNextCursor()) != 0);
 								
-								if (!artistNames.isEmpty()) {
-									new SyncArtists(artistNames, (EventSeekr) FragmentUtil.getActivity(TwitterFragment.this).getApplication(), 
-											Service.Twitter, TwitterFragment.this).execute();
-								}
+								new SyncArtists(artistNames, (EventSeekr) FragmentUtil.getActivity(TwitterFragment.this).getApplication(), 
+										Service.Twitter, TwitterFragment.this).execute();
 								
 							} catch (TwitterException e) {
 								e.printStackTrace();

@@ -2,7 +2,9 @@ package com.wcities.eventseeker;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
@@ -12,6 +14,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.wcities.eventseeker.api.Api;
@@ -34,6 +38,7 @@ import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser.MyItemsList;
+import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class FollowingParentFragment extends FragmentLoadableFromBackStack {
@@ -51,6 +56,11 @@ public class FollowingParentFragment extends FragmentLoadableFromBackStack {
 	private boolean isMoreDataAvailable = true;
 
 	private List<Artist> artistList;
+	
+	// only required when child class of this fragment is having listView
+	private String sections = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	private Map<Character, Integer> alphaNumIndexer;
+	private List<Character> indices;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -71,21 +81,22 @@ public class FollowingParentFragment extends FragmentLoadableFromBackStack {
 		if (artistList == null) {
 			artistList = new ArrayList<Artist>();
 			artistList.add(null);
+			
+			alphaNumIndexer = new HashMap<Character, Integer>();
+			indices = new ArrayList<Character>();
 
-			artistListAdapter = new ArtistListAdapter(
-					FragmentUtil.getActivity(this));
+			artistListAdapter = new ArtistListAdapter(FragmentUtil.getActivity(this));
 
 			loadArtistsInBackground();
 
 		} else {
 			artistListAdapter.setmInflater(FragmentUtil.getActivity(this));
 		}
-
 	}
 
 	private void loadArtistsInBackground() {
 		loadArtists = new LoadArtists();
-		loadArtists.execute();
+		AsyncTaskUtil.executeAsyncTask(loadArtists, true);
 	}
 
 	private class LoadArtists extends AsyncTask<Void, Void, List<Artist>> {
@@ -99,11 +110,9 @@ public class FollowingParentFragment extends FragmentLoadableFromBackStack {
 			userInfoApi.setUserId(wcitiesId);
 
 			try {
-				JSONObject jsonObject = userInfoApi
-						.getMyProfileInfoFor(Type.myartists);
+				JSONObject jsonObject = userInfoApi.getMyProfileInfoFor(Type.myartists);
 				UserInfoApiJSONParser jsonParser = new UserInfoApiJSONParser();
-				MyItemsList<Artist> myArtistsList = jsonParser
-						.getArtistList(jsonObject);
+				MyItemsList<Artist> myArtistsList = jsonParser.getArtistList(jsonObject);
 				tmpArtists = myArtistsList.getItems();
 
 			} catch (ClientProtocolException e) {
@@ -122,6 +131,7 @@ public class FollowingParentFragment extends FragmentLoadableFromBackStack {
 		@Override
 		protected void onPostExecute(List<Artist> tmpArtists) {
 			if (!tmpArtists.isEmpty()) {
+				int prevArtistListSize = artistList.size();
 				artistList.addAll(artistList.size() - 1, tmpArtists);
 				artistsAlreadyRequested += tmpArtists.size();
 
@@ -129,23 +139,41 @@ public class FollowingParentFragment extends FragmentLoadableFromBackStack {
 					isMoreDataAvailable = false;
 					artistList.remove(artistList.size() - 1);
 				}
+				
+				for (int i = 0; i < tmpArtists.size(); i++) {
+					Artist artist = tmpArtists.get(i);
+					char key = artist.getName().charAt(0);
+					if (!indices.contains(key)) {
+						indices.add(key);
+						/**
+						 * subtract 1 from prevArtistListSize to compensate for progressbar null item 
+						 * counted in prevArtistListSize
+						 */
+						alphaNumIndexer.put(key, prevArtistListSize - 1 + i);
+					}
+				}
 
 			} else {
 				isMoreDataAvailable = false;
 				artistList.remove(artistList.size() - 1);
 			}
+			
 			artistListAdapter.notifyDataSetChanged();
 		}
 	}
 
-	protected class ArtistListAdapter extends BaseAdapter {
+	/**
+	 * SectionIndexer is only required when child class of this fragment has set this adapter on listview 
+	 * (not on gridview)
+	 */
+	protected class ArtistListAdapter extends BaseAdapter implements SectionIndexer {
 
 		private static final String TAG_PROGRESS_INDICATOR = "progressIndicator";
 		private static final String TAG_CONTENT = "content";
 
 		private LayoutInflater mInflater;
 		private BitmapCache bitmapCache;
-
+		
 		public ArtistListAdapter(Context context) {
 			mInflater = LayoutInflater.from(context);
 			bitmapCache = BitmapCache.getInstance();
@@ -171,10 +199,8 @@ public class FollowingParentFragment extends FragmentLoadableFromBackStack {
 				}
 
 			} else {
-				if (convertView == null
-						|| !convertView.getTag().equals(TAG_CONTENT)) {
-					if (((MainActivity) FragmentUtil
-							.getActivity(FollowingParentFragment.this))
+				if (convertView == null || !convertView.getTag().equals(TAG_CONTENT)) {
+					if (((MainActivity) FragmentUtil.getActivity(FollowingParentFragment.this))
 							.isTablet()) {
 						convertView = mInflater.inflate(
 								R.layout.fragment_following_artists_list_item_tab,
@@ -243,6 +269,22 @@ public class FollowingParentFragment extends FragmentLoadableFromBackStack {
 		@Override
 		public int getCount() {
 			return artistList.size();
+		}
+
+		@Override
+		public int getPositionForSection(int sectionIndex) {
+			//Log.d(TAG, "index = " + alphaNumIndexer.get(indices.get(sectionIndex)));
+			return alphaNumIndexer.get(indices.get(sectionIndex));
+		}
+
+		@Override
+		public int getSectionForPosition(int position) {
+			return 0;
+		}
+
+		@Override
+		public Object[] getSections() {
+			return indices.toArray();
 		}
 	}
 }

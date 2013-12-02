@@ -1,5 +1,6 @@
 package com.wcities.eventseeker;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,5 +31,9 @@ public class FollowingFragment extends FollowingParentFragment {
 
 		listFollowing.setAdapter(artistListAdapter);
 		listFollowing.setDivider(null);
+		listFollowing.setFastScrollEnabled(true);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			listFollowing.setFastScrollAlwaysVisible(true);
+		}
 	}
 }

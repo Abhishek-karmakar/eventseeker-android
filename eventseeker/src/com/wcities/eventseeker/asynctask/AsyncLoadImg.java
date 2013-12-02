@@ -19,6 +19,7 @@ import com.wcities.eventseeker.cache.BitmapCacheable;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.BitmapUtil;
 import com.wcities.eventseeker.widget.EventseekerWidget;
 
@@ -208,13 +209,13 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 			if (asyncLoadImg.getStatus() == Status.PENDING) {
 				//Log.i(TAG, "status is pending, execute now");
 				asyncLoadImg.imgDetailsList.add(0, imgDetails);
-				asyncLoadImg.execute();
+				AsyncTaskUtil.executeAsyncTask(asyncLoadImg, true);
 				
 			} else if (asyncLoadImg.getStatus() == Status.FINISHED) {
 				//Log.i(TAG, "status is finished, get new instance & execute now");
 				asyncLoadImg = getInstance();
 				asyncLoadImg.imgDetailsList.add(0, imgDetails);
-				asyncLoadImg.execute();
+				AsyncTaskUtil.executeAsyncTask(asyncLoadImg, true);
 				
 			} else {
 				asyncLoadImg.imgDetailsList.add(0, imgDetails);

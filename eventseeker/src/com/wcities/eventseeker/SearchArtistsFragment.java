@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -40,6 +41,7 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
+import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class SearchArtistsFragment extends ListFragment implements SearchFragmentChildListener {
@@ -102,7 +104,7 @@ public class SearchArtistsFragment extends ListFragment implements SearchFragmen
 	
 	private void loadArtistsInBackground() {
 		loadArtists = new LoadArtists();
-        loadArtists.execute(query);
+		AsyncTaskUtil.executeAsyncTask(loadArtists, true, query);
 	}
 	
 	private void refresh(String newQuery) {

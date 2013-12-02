@@ -105,7 +105,7 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// Log.d(TAG, "onCreate");
+		Log.d(TAG, "onCreate");
 		setContentView(R.layout.activity_main);
 
 		/**
@@ -219,6 +219,7 @@ public class MainActivity extends ActionBarActivity implements
 
 		// getOverflowMenu();
 		if (currentContentFragmentTag == null) {
+			Log.d(TAG, "currentContentFragmentTag = null");
 			/**
 			 * Above null check is required for widget, because if user
 			 * navigates to any other screen from this event details, we want to
@@ -239,6 +240,9 @@ public class MainActivity extends ActionBarActivity implements
 								.getString(R.string.title_connect_accounts),
 						false);
 			}
+			
+		} else {
+			Log.d(TAG, "currentContentFragmentTag != null");
 		}
 
 		if (AppConstants.FORD_SYNC_APP) {
@@ -247,6 +251,12 @@ public class MainActivity extends ActionBarActivity implements
 		}
 	}
 
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		Log.d(TAG, "onNewIntent()");
+	}
+	
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
@@ -260,6 +270,7 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	protected void onResume() {
 		super.onResume();
+		//Log.d(TAG, "onResume()");
 		if (AppConstants.FORD_SYNC_APP) {
 			activityOnTop = true;
 			// check if lockscreen should be up

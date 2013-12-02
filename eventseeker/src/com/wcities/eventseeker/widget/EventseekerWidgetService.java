@@ -71,6 +71,9 @@ public class EventseekerWidgetService extends Service {
 			UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
 			userInfoApi.setLimit(EVENTS_LIMIT);
 			userInfoApi.setUserId(((EventSeekr)getApplication()).getWcitiesId());
+			double[] latLng = DeviceUtil.getLatLon(EventseekerWidgetService.this);
+			userInfoApi.setLat(latLng[0]);
+			userInfoApi.setLon(latLng[1]);
 			
 			try {
 				// load my events
@@ -90,8 +93,7 @@ public class EventseekerWidgetService extends Service {
 				
 				if (tmpEvents.isEmpty()) {
 					// load featured events
-					double[] latLon = DeviceUtil.getLatLon(EventseekerWidgetService.this.getApplicationContext());
-					EventApi eventApi = new EventApi(Api.OAUTH_TOKEN, latLon[0], latLon[1]);
+					EventApi eventApi = new EventApi(Api.OAUTH_TOKEN, latLng[0], latLng[1]);
 					eventApi.setLimit(EVENTS_LIMIT);
 					jsonObject = eventApi.getFeaturedEvents();
 					EventApiJSONParser eventApiJSONParser = new EventApiJSONParser();

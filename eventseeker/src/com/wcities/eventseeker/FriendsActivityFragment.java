@@ -59,6 +59,7 @@ import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack
 import com.wcities.eventseeker.custom.view.ResizableImageView;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
+import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack implements StatusCallback {
@@ -184,7 +185,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	
 	private void loadFriendsNewsInBackground() {
 		loadFriendsNews = new LoadFriendsNews();
-		loadFriendsNews.execute();
+		AsyncTaskUtil.executeAsyncTask(loadFriendsNews, true);
 	}
 	
 	@Override

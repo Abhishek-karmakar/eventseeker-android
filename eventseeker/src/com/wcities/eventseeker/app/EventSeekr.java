@@ -199,7 +199,6 @@ public class EventSeekr extends Application {
 		editor.commit();
 		
 		new GetWcitiesId(listener).execute();
-
 	}
 
 	public void removeFbUserId() {

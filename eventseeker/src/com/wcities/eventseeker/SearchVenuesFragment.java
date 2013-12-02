@@ -36,6 +36,7 @@ import com.wcities.eventseeker.core.Address;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.interfaces.VenueListener;
 import com.wcities.eventseeker.jsonparser.RecordApiJSONParser;
+import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
@@ -92,7 +93,7 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 	
 	private void loadVenuesInBackground() {
 		loadVenues = new LoadVenues();
-        loadVenues.execute(query);
+        AsyncTaskUtil.executeAsyncTask(loadVenues, true, query);
 	}
 	
 	private void refresh(String newQuery) {

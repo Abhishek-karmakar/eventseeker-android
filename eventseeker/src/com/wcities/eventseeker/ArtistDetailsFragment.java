@@ -44,6 +44,7 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
+import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.BitmapUtil;
 import com.wcities.eventseeker.util.FileUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -85,7 +86,7 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 			artist = (Artist) getArguments().getSerializable(BundleKeys.ARTIST);
 
 			loadArtistDetails = new LoadArtistDetails();
-			loadArtistDetails.execute();
+			AsyncTaskUtil.executeAsyncTask(loadArtistDetails, true);
 			
 			artist.getVideos().clear();
 			

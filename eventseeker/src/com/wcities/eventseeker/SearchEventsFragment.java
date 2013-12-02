@@ -1,6 +1,8 @@
 package com.wcities.eventseeker;
 
 import android.os.AsyncTask.Status;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import com.wcities.eventseeker.adapter.DateWiseEventListAdapter;
 import com.wcities.eventseeker.adapter.DateWiseEventListAdapter.DateWiseEventListAdapterListener;
 import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
@@ -57,7 +60,7 @@ public class SearchEventsFragment extends SearchEventsParentFragment implements
 		loadEvents = new LoadDateWiseEvents(eventList, eventListAdapter, query,
 				latLon[0], latLon[1], MILES_LIMIT);
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);
-		loadEvents.execute();
+		AsyncTaskUtil.executeAsyncTask(loadEvents, true);
 	}
 
 	private void refresh(String newQuery) {

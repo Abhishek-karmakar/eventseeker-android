@@ -72,8 +72,8 @@ public class DeviceLibraryFragment extends FragmentLoadableFromBackStack impleme
 	}
 	
 	private void apiCallFinished(List<String> artists) {
-		Log.d(TAG, "artists size = " + artists.size());
-		if (artists != null && !artists.isEmpty()) {
+		if (artists != null) {
+			//Log.d(TAG, "artists size = " + artists.size());
 			new SyncArtists(artists, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
 					Service.DeviceLibrary, this).execute();
 			

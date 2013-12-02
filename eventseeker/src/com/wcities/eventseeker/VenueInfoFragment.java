@@ -38,6 +38,7 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Address;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.jsonparser.RecordApiJSONParser;
+import com.wcities.eventseeker.util.AsyncTaskUtil;
 
 public class VenueInfoFragment extends Fragment implements OnClickListener, AsyncLoadImageListener {
 	
@@ -63,7 +64,7 @@ public class VenueInfoFragment extends Fragment implements OnClickListener, Asyn
 		if (venue == null) {
 			venue = (Venue) getArguments().getSerializable(BundleKeys.VENUE);
 			loadVenue = new LoadVenue();
-			loadVenue.execute();
+			AsyncTaskUtil.executeAsyncTask(loadVenue, true);
 		}
 	}
 	
