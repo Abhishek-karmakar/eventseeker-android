@@ -57,6 +57,8 @@ public class ArtistApiJSONParser {
 	private static final String KEY_ATTENDING = "attending";
 
 	private static final String KEY_TOTAL = "total";
+
+	private static final String KEY_ARTIST_EVENT_DETAIL = "artistEventDetail";
 	
 	public void fillArtistDetails(Artist artist, JSONObject jsonObject) {
 		if (jsonObject.has(KEY_ARTIST_DETAIL)) {
@@ -373,6 +375,19 @@ public class ArtistApiJSONParser {
 			artist.setOntour(true);
 		}
 		return artist;
+	}
+	
+	public Event getArtistUpcomingEvent(JSONObject jsonObject) throws JSONException {
+		Event event = null;
+		if (jsonObject.has(KEY_ARTIST_EVENT_DETAIL)) {
+			JSONObject jObjArtistEventDetail = jsonObject.getJSONObject(KEY_ARTIST_EVENT_DETAIL);
+			
+			if (jObjArtistEventDetail.has(KEY_EVENTS)) {
+				JSONObject jObjEvent = jObjArtistEventDetail.getJSONArray(KEY_EVENTS).getJSONObject(0);
+				event = new Event(jObjEvent.getLong(KEY_ID), jObjEvent.getString(KEY_NAME));
+			}
+		}
+		return event;
 	}
 	
 	public class ArtistDetails {

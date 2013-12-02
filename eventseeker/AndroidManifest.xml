@@ -86,8 +86,20 @@
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-
                 <category android:name="com.wcities.eventseeker" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.wcities.eventseeker.receiver.MusicNotificationReceiver" >
+            <intent-filter>
+                <action android:name="com.android.music.playstatechanged" />
+                <action android:name="com.android.music.metachanged" />
+                <!-- 
+                <action android:name="com.android.music.playbackcomplete" />
+                <action android:name="com.android.music.queuechanged" />
+                <action android:name="com.google.android.music.metachanged" />
+                <action android:name="com.google.android.music.playstatechanged" />
+                <action android:name="com.google.android.music.playbackcomplete" />
+                <action android:name="com.google.android.music.queuechanged" /> -->
             </intent-filter>
         </receiver>
     </application>

@@ -98,7 +98,7 @@
 			    <TextView android:id="@+id/txtEvtTimeAMPM"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:textSize="@dimen/txt_evt_time_am_pm_txt_size_include_evt_details"
+					android:textSize="@dimen/txt_evt_time_am_pm_txt_size_widget_layout"
 					android:text=" PM"
 					android:textColor="@android:color/black"
 					android:layout_marginTop="@dimen/txt_evt_time_am_pm_margin_t_widget_layout" />

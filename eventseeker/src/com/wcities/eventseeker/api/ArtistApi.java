@@ -33,6 +33,7 @@ public class ArtistApi extends Api {
 	private int artistId;
 	private boolean venueDetail;
 	private boolean friends;
+	private String endDate;
 	
 	private String userId;
 
@@ -130,6 +131,14 @@ public class ArtistApi extends Api {
 		this.userId = userId;
 	}
 
+	public String getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
+	}
+
 	public JSONObject getArtists() throws ClientProtocolException, IOException, JSONException {
 		String METHOD = "getArtist.php?";
 		String uri = COMMON_URL + API + METHOD + "oauth_token=" + getOauthToken();
@@ -139,6 +148,9 @@ public class ArtistApi extends Api {
 		}
 		if (strictSearchEnabled) {
 			uri = uri + "&strictSearch=enable";
+		}
+		if (exactSearchEnabled) {
+			uri = uri + "&exactSearch=enable";
 		}
 		if (limit != NOT_INITIALIZED) {
 			uri = uri + "&limit=" + alreadyRequested + "," + limit;
@@ -151,6 +163,9 @@ public class ArtistApi extends Api {
 		}
 		if (venueDetail) {
 			uri = uri + "&venueDetail=enable";
+		}
+		if (endDate != null) {
+			uri += "&endDate=" + endDate;
 		}
 		if (userId != null) {
 			uri = uri + "&userId=" + userId + "&userType=wcities"; 
