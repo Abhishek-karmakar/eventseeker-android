@@ -71,7 +71,8 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack {
         
         int screenW = getResources().getDisplayMetrics().widthPixels;
         int screenH = getResources().getDisplayMetrics().heightPixels;
-
+        //Log.d(TAG, "w = " + screenW + ", h = " + screenH);
+        
         // keep higher value in screenW.
 		if (screenW < screenH) {
 			int temp = screenW;

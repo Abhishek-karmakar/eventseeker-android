@@ -39,6 +39,11 @@ public class DateWiseEventList {
 		totalSize++;
 	}
 	
+	public void addNoEventsMsg() {
+		dateToEventListMap.put(dummyItemKey, null);
+		totalSize++;
+	}
+	
 	public void updateDummyItem() {
 		if (dummyItemKey != null) {
 			dateToEventListMap.remove(dummyItemKey);
@@ -70,6 +75,10 @@ public class DateWiseEventList {
 			dateToEventListMap.remove(dummyItemKey);
 			totalSize--;
 			currentDate = new Date(Long.MAX_VALUE);
+			
+			/*if (totalSize == 0) {
+				addNoEventsMsg();
+			}*/
 		}
 	}
 	

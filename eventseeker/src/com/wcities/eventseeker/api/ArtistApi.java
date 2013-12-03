@@ -24,9 +24,10 @@ public class ArtistApi extends Api {
 		artistEvent
 	};
 	
+	private double lat = AppConstants.NOT_ALLOWED_LAT;
+	private double lon = AppConstants.NOT_ALLOWED_LON;
 	private String artist;
-	private boolean strictSearchEnabled;
-	private boolean exactSearchEnabled;
+	private boolean strictSearchEnabled, exactSearchEnabled, playingArtistEnabled;
 	private int limit;
 	private int alreadyRequested;
 	private Method method;
@@ -34,6 +35,7 @@ public class ArtistApi extends Api {
 	private boolean venueDetail;
 	private boolean friends;
 	private String endDate;
+	private int miles;
 	
 	private String userId;
 
@@ -59,6 +61,22 @@ public class ArtistApi extends Api {
 		return artistObject.toString();
 	}
 	
+	public double getLat() {
+		return lat;
+	}
+
+	public void setLat(double lat) {
+		this.lat = lat;
+	}
+
+	public double getLon() {
+		return lon;
+	}
+
+	public void setLon(double lon) {
+		this.lon = lon;
+	}
+
 	public boolean isStrictSearchEnabled() {
 		return strictSearchEnabled;
 	}
@@ -73,6 +91,14 @@ public class ArtistApi extends Api {
 
 	public void setExactSearchEnabled(boolean exactSearchEnabled) {
 		this.exactSearchEnabled = exactSearchEnabled;
+	}
+
+	public boolean isPlayingArtistEnabled() {
+		return playingArtistEnabled;
+	}
+
+	public void setPlayingArtistEnabled(boolean playingArtistEnabled) {
+		this.playingArtistEnabled = playingArtistEnabled;
 	}
 
 	public int getLimit() {
@@ -139,6 +165,14 @@ public class ArtistApi extends Api {
 		this.endDate = endDate;
 	}
 
+	public int getMiles() {
+		return miles;
+	}
+
+	public void setMiles(int miles) {
+		this.miles = miles;
+	}
+
 	public JSONObject getArtists() throws ClientProtocolException, IOException, JSONException {
 		String METHOD = "getArtist.php?";
 		String uri = COMMON_URL + API + METHOD + "oauth_token=" + getOauthToken();
@@ -151,6 +185,12 @@ public class ArtistApi extends Api {
 		}
 		if (exactSearchEnabled) {
 			uri = uri + "&exactSearch=enable";
+		}
+		if (playingArtistEnabled) {
+			uri += "&playingArtist=enable";
+		}
+		if (lat != AppConstants.NOT_ALLOWED_LAT && lon != AppConstants.NOT_ALLOWED_LON) {
+			uri = uri.concat("&lat=" + lat + "&lon=" + lon);
 		}
 		if (limit != NOT_INITIALIZED) {
 			uri = uri + "&limit=" + alreadyRequested + "," + limit;
@@ -166,6 +206,9 @@ public class ArtistApi extends Api {
 		}
 		if (endDate != null) {
 			uri += "&endDate=" + endDate;
+		}
+		if (miles != NOT_INITIALIZED) {
+			uri = uri.concat("&miles=" + miles);
 		}
 		if (userId != null) {
 			uri = uri + "&userId=" + userId + "&userType=wcities"; 

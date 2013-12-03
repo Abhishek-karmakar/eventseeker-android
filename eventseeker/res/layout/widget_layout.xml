@@ -18,25 +18,28 @@
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true" />
     
-    <LinearLayout android:id="@+id/lnrLayoutContent"
+    <RelativeLayout android:id="@+id/lnrLayoutContent"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
 	    android:layout_toRightOf="@id/imgLeft"
 	    android:layout_toLeftOf="@id/imgRight"
 	    android:background="@drawable/story_space"
-	    android:padding="@dimen/lnr_layout_content_pad_widget_layout"
-	    android:orientation="horizontal" >
+	    android:padding="@dimen/lnr_layout_content_pad_widget_layout" >
 	    
         <ImageView android:id="@+id/imgEvt"
 			android:layout_width="@dimen/img_evt_w_widget_layout"
-			android:layout_height="match_parent"
+			android:layout_height="@dimen/img_evt_ht_widget_layout"
 			android:contentDescription="event image"
+			android:layout_centerVertical="true"
 			android:scaleType="fitXY" />
 			
 		<LinearLayout android:id="@+id/lnrLayoutEvtDetails"
 		    android:layout_width="match_parent"
 		    android:layout_height="match_parent"
+		    android:layout_toRightOf="@id/imgEvt"
 		    android:layout_marginLeft="@dimen/lnr_layout_evt_details_margin_l_widget_layout"
+		    android:layout_alignTop="@id/imgEvt"
+		    android:layout_alignBottom="@id/imgEvt"
 		    android:orientation="vertical" >
 		    
 		    <TextView android:id="@+id/txtEvtTitle"
@@ -68,6 +71,7 @@
 			    <TextView android:id="@+id/txtDate"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
+					style="@style/SingleLineMarqueeTxt"
 					android:textSize="@dimen/txt_evt_title_txt_size_include_evt_details"
 					android:layout_marginLeft="@dimen/txt_date_margin_l_widget_layout"
 					android:text="Date"
@@ -130,6 +134,17 @@
 		    
 		</LinearLayout>
 			
-    </LinearLayout>
+    </RelativeLayout>
+    
+    <ImageView android:id="@+id/vDummyLeft"
+	    android:layout_width="@dimen/v_dummy_arrow_w_widget_layout"
+	    android:layout_height="match_parent"
+	    android:src="@color/transparent" />
+    
+    <ImageView android:id="@+id/vDummyRight"
+	    android:layout_width="@dimen/v_dummy_arrow_w_widget_layout"
+	    android:layout_height="match_parent"
+	    android:layout_alignParentRight="true"
+	    android:src="@color/transparent" />
     
 </RelativeLayout> 

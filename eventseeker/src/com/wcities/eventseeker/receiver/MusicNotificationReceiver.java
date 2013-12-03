@@ -14,7 +14,6 @@ import org.json.JSONObject;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioManager;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -27,19 +26,21 @@ import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
 import com.wcities.eventseeker.util.ConversionUtil;
+import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.NotificationUtil;
 
 public class MusicNotificationReceiver extends BroadcastReceiver {
 
 	private static final String TAG = MusicNotificationReceiver.class.getName();
 	private static final int NOTIFICATION_ID = 1;
+	private static final String XTRA_PLAYING = "playing";
 	
 	private static String strArtist;
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		String action = intent.getAction();
-		Log.d(TAG, action);
+		//String action = intent.getAction();
+		//Log.d(TAG, action + ", playing = " + intent.getBooleanExtra("playing", false));
 		String artist = intent.getStringExtra(MediaStore.Audio.ArtistColumns.ARTIST);
 		if (artist == null) {
 			return;
@@ -48,7 +49,8 @@ public class MusicNotificationReceiver extends BroadcastReceiver {
 		//String track = intent.getStringExtra(MediaStore.Audio.AudioColumns.TRACK);
 		Log.d(TAG, "Artist: " + artist);
 		
-		if (strArtist == null || !strArtist.equals(artist)) {
+		//if (strArtist == null || !strArtist.equals(artist)) {
+		if (intent.hasExtra(XTRA_PLAYING) && intent.getBooleanExtra(XTRA_PLAYING, false)) {
 			strArtist = artist;
 			new LoadArtistEvent(context).execute();
 		}
@@ -58,6 +60,7 @@ public class MusicNotificationReceiver extends BroadcastReceiver {
 		
 		private static final int TIME_LIMIT_IN_DAYS = 7;
 		private static final int EVENT_LIMIT = 1;
+		private static final int MILES_LIMIT = 50;
 		
 		public Context context;
 		
@@ -67,46 +70,35 @@ public class MusicNotificationReceiver extends BroadcastReceiver {
 
 		@Override
 		protected Artist doInBackground(Void... params) {
-			Log.d(TAG, "create notification");
-			List<Artist> tmpArtists = new ArrayList<Artist>();
-			ArtistApi artistApi = new ArtistApi(Api.OAUTH_TOKEN);
-			artistApi.setExactSearchEnabled(true);
-			artistApi.setMethod(Method.artistSearch);
+			Log.d(TAG, "LoadArtistEvent");
 
 			try {
-				artistApi.setArtist(URLEncoder.encode(strArtist, AppConstants.CHARSET_NAME));
-
-				JSONObject jsonObject = artistApi.getArtists();
-				ArtistApiJSONParser jsonParser = new ArtistApiJSONParser();
-				
-				tmpArtists = jsonParser.getArtistList(jsonObject);
-				
-				artistApi = new ArtistApi(Api.OAUTH_TOKEN);
+				ArtistApi artistApi = new ArtistApi(Api.OAUTH_TOKEN);
 				artistApi.setMethod(Method.artistEvent);
-				artistApi.setLimit(EVENT_LIMIT);
+				artistApi.setArtist(URLEncoder.encode(strArtist, AppConstants.CHARSET_NAME));
+				artistApi.setPlayingArtistEnabled(true);
+				artistApi.setVenueDetailEnabled(true);
 
 				Calendar c = Calendar.getInstance();
 				c.add(Calendar.DATE, TIME_LIMIT_IN_DAYS);
-	      		int year = c.get(Calendar.YEAR);
-	      		int month = c.get(Calendar.MONTH);
-	      		int day = c.get(Calendar.DAY_OF_MONTH);
-	      		String endDate = ConversionUtil.getDay(year, month, day);
+				int year = c.get(Calendar.YEAR);
+				int month = c.get(Calendar.MONTH);
+				int day = c.get(Calendar.DAY_OF_MONTH);
+				String endDate = ConversionUtil.getDay(year, month, day);
 				artistApi.setEndDate(endDate);
-
-				for (Iterator<Artist> iterator = tmpArtists.iterator(); iterator.hasNext();) {
-					Artist artist = (Artist) iterator.next();
-					artistApi.setArtistId(artist.getId());
-					
-					jsonObject = artistApi.getArtists();
-					Event event = jsonParser.getArtistUpcomingEvent(jsonObject);
-					
-					if (event != null) {
-						List<Event> events = new ArrayList<Event>();
-						events.add(event);
-						artist.setEvents(events);
-						return artist;
-					}
-				}
+				
+				double[] latLng = DeviceUtil.getLatLon(context);
+				artistApi.setLat(latLng[0]);
+				artistApi.setLon(latLng[1]);
+				
+				artistApi.setMiles(MILES_LIMIT);
+				artistApi.setLimit(EVENT_LIMIT);
+				
+				JSONObject jsonObject = artistApi.getArtists();
+				ArtistApiJSONParser jsonParser = new ArtistApiJSONParser();
+				Artist artist = jsonParser.getArtistUpcomingEvent(jsonObject);
+				
+				return artist;
 
 			} catch (ClientProtocolException e) {
 				e.printStackTrace();
@@ -123,7 +115,7 @@ public class MusicNotificationReceiver extends BroadcastReceiver {
 		
 		@Override
 		protected void onPostExecute(Artist artist) {
-			if (artist != null) {
+			if (artist != null && !artist.getEvents().isEmpty()) {
 				String message = artist.getName() + " is performing for an event " + artist.getEvents().get(0).getName();
 				NotificationUtil.addNotification(context, artist.getEvents().get(0), message, NOTIFICATION_ID);
 			}
