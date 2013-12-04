@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.wcities.eventseeker.custom.view.ScrollViewContainingViewPager xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res/com.wcities.eventseeker"
     android:id="@+id/scrlVRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,31 +12,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <RelativeLayout
-            android:id="@+id/rltLayoutFeaturedEvtsParent"
+        <us.feras.ecogallery.EcoGallery
+            android:id="@+id/ecoglryFeaturedEvt"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/rlt_layout_featured_evts_parent_ht_discover"
-            android:layout_margin="@dimen/rlt_layout_featured_evts_parent_margin_discover"
-            android:background="@drawable/story_space" >
-
-            <android.support.v4.view.ViewPager
-                android:id="@+id/viewPager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"
-                android:paddingBottom="@dimen/view_pager_pad_discover"
-                android:paddingLeft="@dimen/view_pager_pad_discover"
-                android:paddingRight="@dimen/view_pager_pad_discover"
-                android:paddingTop="@dimen/view_pager_pad_discover" />
-        </RelativeLayout>
+            android:layout_height="@dimen/eco_glry_featured_evt_child_ht_discover_gallery_item"
+            android:layout_alignParentTop="true"
+            app:childHeight="@dimen/eco_glry_featured_evt_child_ht_discover_gallery_item"
+            app:childWidth="@dimen/eco_glry_featured_evt_child_w_discover_gallery_item" />
 
         <com.wcities.eventseeker.custom.view.ExpandableGridView
             android:id="@+id/grdEvtCategories"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/rltLayoutFeaturedEvtsParent"
-            android:layout_alignRight="@id/rltLayoutFeaturedEvtsParent"
-            android:layout_below="@id/rltLayoutFeaturedEvtsParent"
+            android:layout_alignLeft="@id/ecoglryFeaturedEvt"
+            android:layout_alignRight="@id/ecoglryFeaturedEvt"
+            android:layout_below="@id/ecoglryFeaturedEvt"
             android:layout_marginBottom="@dimen/grd_evt_categories_margin_b_discover"
             android:background="@drawable/story_space"
             android:horizontalSpacing="@dimen/grd_evt_categories_hor_space_discover"

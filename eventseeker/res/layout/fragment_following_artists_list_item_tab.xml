@@ -25,7 +25,18 @@
         android:textSize="@dimen/txt_artist_name_txt_size_fragment_search_artists_list_item"
         android:textStyle="bold" />
 
-    <TextView
+    <ImageView
+        android:id="@+id/txtOnTour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+		android:src="@drawable/on_tour"/>
+
+</RelativeLayout>
+
+<!--     <TextView
         android:id="@+id/txtOnTour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,6 +53,4 @@
         android:rotation="45"
         android:text="@string/artist_on_tour"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/txt_on_tour_txt_size_fragment_search_artists_list_item" />
-
-</RelativeLayout>
+        android:textSize="@dimen/txt_on_tour_txt_size_fragment_search_artists_list_item" /> -->

@@ -34,7 +34,8 @@
     <FrameLayout
         android:id="@+id/frmLayoutMapContainer"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/frm_layout_map_container_ht_fragment_event_info"
+        android:layout_height="match_parent"
+        android:minHeight="@dimen/frm_layout_map_container_ht_fragment_event_info"
         android:layout_below="@id/txtAddress" />
 
     <View

@@ -58,7 +58,7 @@ public class SearchEventsFragment extends SearchEventsParentFragment implements
 	public void loadEventsInBackground() {
 		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getActivity(this));
 		loadEvents = new LoadDateWiseEvents(eventList, eventListAdapter, query,
-				latLon[0], latLon[1], MILES_LIMIT);
+				latLon[0], latLon[1], MILES_LIMIT, null);
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);
 		AsyncTaskUtil.executeAsyncTask(loadEvents, true);
 	}

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.wcities.eventseeker.SearchFragment.SearchFragmentChildListener;
 import com.wcities.eventseeker.adapter.DateWiseMyEventListAdapter;
 import com.wcities.eventseeker.adapter.DateWiseMyEventListAdapter.DateWiseMyEventListAdapterListener;
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
@@ -56,8 +57,9 @@ public class SearchEventsFragmentTab extends SearchEventsParentFragment
 	@Override
 	public void loadEventsInBackground() {
 		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getActivity(this));
-		loadEvents = new LoadDateWiseEvents(eventList, eventListAdapter, query,
-				latLon[0], latLon[1], MILES_LIMIT);
+		loadEvents = new LoadDateWiseEvents(eventList, eventListAdapter, query,	latLon[0], latLon[1], MILES_LIMIT, 
+				((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).getWcitiesId());
+		
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);
 		AsyncTaskUtil.executeAsyncTask(loadEvents, true);
 	}

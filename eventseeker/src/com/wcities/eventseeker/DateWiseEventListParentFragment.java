@@ -9,7 +9,9 @@ import android.widget.BaseAdapter;
 
 import com.wcities.eventseeker.adapter.DateWiseEventListAdapter.DateWiseEventListAdapterListener;
 import com.wcities.eventseeker.adapter.DateWiseMyEventListAdapter.DateWiseMyEventListAdapterListener;
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
+import com.wcities.eventseeker.asynctask.LoadDateWiseMyEvents;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Category;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
@@ -114,8 +116,9 @@ public abstract class DateWiseEventListParentFragment extends ListFragment
 	
 
 	protected LoadDateWiseEvents getLoadDateWiseEvents() {
-		return new LoadDateWiseEvents(dateWiseEvtList, eventListAdapter,
-				lat, lon, startDate, categories.get(categoryPosition).getId());
+		return new LoadDateWiseEvents(dateWiseEvtList, eventListAdapter, lat, lon, startDate, 
+				categories.get(categoryPosition).getId(), 
+				((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).getWcitiesId());
 	}
 
 	protected abstract DateWiseEventParentAdapterListener getAdapterInstance();

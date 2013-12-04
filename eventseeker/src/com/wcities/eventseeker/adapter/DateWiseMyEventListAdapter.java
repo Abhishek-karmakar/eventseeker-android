@@ -124,61 +124,44 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (getItemViewType(position) == LIST_ITEM_TYPE.PROGRESS.ordinal()) {
-			if (convertView == null
-					|| convertView.getTag() != LIST_ITEM_TYPE.PROGRESS) {
-				convertView = LayoutInflater.from(mContext).inflate(
-						R.layout.list_progress_bar, null);
+			if (convertView == null	|| convertView.getTag() != LIST_ITEM_TYPE.PROGRESS) {
+				convertView = LayoutInflater.from(mContext).inflate(R.layout.list_progress_bar, null);
 				convertView.setTag(LIST_ITEM_TYPE.PROGRESS);
 			}
 
-			if ((loadDateWiseMyEvents == null || loadDateWiseMyEvents
-					.getStatus() == Status.FINISHED) && isMoreDataAvailable) {
+			if ((loadDateWiseMyEvents == null || loadDateWiseMyEvents.getStatus() == Status.FINISHED) && isMoreDataAvailable) {
 				mListener.loadEventsInBackground();
 			}
 
-		} else if (getItemViewType(position) == LIST_ITEM_TYPE.CONTENT
-				.ordinal()) {
+		} else if (getItemViewType(position) == LIST_ITEM_TYPE.CONTENT.ordinal()) {
 
-			if (convertView == null
-					|| convertView.getTag() != LIST_ITEM_TYPE.CONTENT) {
-				convertView = LayoutInflater.from(mContext).inflate(
-						R.layout.fragment_my_events_list_item, null);
+			if (convertView == null	|| convertView.getTag() != LIST_ITEM_TYPE.CONTENT) {
+				convertView = LayoutInflater.from(mContext).inflate(R.layout.fragment_my_events_list_item, null);
 				convertView.setTag(LIST_ITEM_TYPE.CONTENT);
 			}
 
 			final Event event = getItem(position).getEvent();
-			((TextView) convertView.findViewById(R.id.txtEvtTitle))
-					.setText(event.getName());
+			((TextView) convertView.findViewById(R.id.txtEvtTitle)).setText(event.getName());
 
 			if (event.getSchedule() != null) {
 				Schedule schedule = event.getSchedule();
 
 				if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
 					if (schedule.getDates().get(0).isStartTimeAvailable()) {
-						String[] timeInArray = ConversionUtil
-								.getTimeInArray(schedule.getDates().get(0)
-										.getStartDate());
+						String[] timeInArray = ConversionUtil.getTimeInArray(schedule.getDates().get(0).getStartDate());
 
-						((TextView) convertView.findViewById(R.id.txtEvtTime))
-								.setText(timeInArray[0]);
-						((TextView) convertView
-								.findViewById(R.id.txtEvtTimeAMPM)).setText(" "
-								+ timeInArray[1]);
-						convertView.findViewById(R.id.imgEvtTime)
-								.setVisibility(View.VISIBLE);
+						((TextView) convertView.findViewById(R.id.txtEvtTime)).setText(timeInArray[0]);
+						((TextView) convertView.findViewById(R.id.txtEvtTimeAMPM)).setText(" " + timeInArray[1]);
+						convertView.findViewById(R.id.imgEvtTime).setVisibility(View.VISIBLE);
 
 					} else {
-						((TextView) convertView.findViewById(R.id.txtEvtTime))
-								.setText("");
-						((TextView) convertView
-								.findViewById(R.id.txtEvtTimeAMPM)).setText("");
-						convertView.findViewById(R.id.imgEvtTime)
-								.setVisibility(View.INVISIBLE);
+						((TextView) convertView.findViewById(R.id.txtEvtTime)).setText("");
+						((TextView) convertView.findViewById(R.id.txtEvtTimeAMPM)).setText("");
+						convertView.findViewById(R.id.imgEvtTime).setVisibility(View.INVISIBLE);
 					}
 				}
 
-				TextView txtEvtLocation = (TextView) convertView
-						.findViewById(R.id.txtEvtLocation);
+				TextView txtEvtLocation = (TextView) convertView.findViewById(R.id.txtEvtLocation);
 				if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
 					txtEvtLocation.setMaxLines(1);
 					txtEvtLocation.setEllipsize(TruncateAt.END);
@@ -186,8 +169,7 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 				txtEvtLocation.setText(schedule.getVenue().getName());
 			}
 
-			ImageView imgEvent = (ImageView) convertView
-					.findViewById(R.id.imgEvent);
+			ImageView imgEvent = (ImageView) convertView.findViewById(R.id.imgEvent);
 			if(!((EventSeekr) mContext.getApplicationContext()).isTablet()) {
 				if (orientation == Configuration.ORIENTATION_PORTRAIT) {
 					imgEvent.setLayoutParams(lpImgEvtPort);
@@ -198,7 +180,6 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 			if (bitmap != null) {
 				imgEvent.setImageBitmap(bitmap);
-
 			} else {
 				imgEvent.setImageBitmap(null);
 				AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();

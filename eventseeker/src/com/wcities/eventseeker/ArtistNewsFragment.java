@@ -72,8 +72,10 @@ public class ArtistNewsFragment extends Fragment implements ArtistDetailsFragmen
 	private void updateFollowingFooter() {
 		if (artist.getAttending() == null || ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId() == null) {
 			fragmentArtistDetailsFooter.setVisibility(View.GONE);
-			
+		} else if(((MainActivity)FragmentUtil.getActivity(this)).isTablet()) {
+			fragmentArtistDetailsFooter.setVisibility(View.GONE);		
 		} else {
+		
 			fragmentArtistDetailsFooter.setVisibility(View.VISIBLE);
 			
 			switch (artist.getAttending()) {

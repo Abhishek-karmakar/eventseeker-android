@@ -45,11 +45,16 @@ public class EventFeaturingFragment extends Fragment implements OnClickListener,
 	private LinearLayout lnrLayoutTickets;
 	private CheckBox chkBoxGoing, chkBoxWantToGo;
 	private Button btnBuyTickets;
+
+	private boolean isTablet;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		event = (Event) getArguments().getSerializable(BundleKeys.EVENT);
+	
+		isTablet = ((MainActivity)FragmentUtil.getActivity(this)).isTablet();
+	
 	}
 	
 	@Override
@@ -85,10 +90,13 @@ public class EventFeaturingFragment extends Fragment implements OnClickListener,
 	private void updateBtnBuyTicketsEnabled(boolean enabled) {
 		lnrLayoutTickets.setEnabled(enabled);
 		if (enabled) {
-			btnBuyTickets.setTextColor(getResources().getColor(android.R.color.white));
-			btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.tickets), null, null, 
-					null);
-			
+			if(isTablet) {
+				btnBuyTickets.setTextColor(getResources().getColor(R.color.txt_color_include_fragment_event_details_footer_tab));
+				btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.tic_blue), null, null, null);				
+			} else {
+				btnBuyTickets.setTextColor(getResources().getColor(android.R.color.white));
+				btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.tickets), null, null, null);
+			}
 		} else {
 			btnBuyTickets.setTextColor(getResources().getColor(R.color.btn_buy_tickets_disabled_txt_color));
 			btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.tickets_disabled), null, null, 

@@ -84,6 +84,8 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 	private FriendsGridAdapter friendsGridAdapter;
 	
 	private boolean isTablet;
+
+	private TextView txtVenue;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -115,6 +117,9 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 		updateEventImg();
 		
 		((TextView)v.findViewById(R.id.txtEvtTitle)).setText(event.getName());
+		if(isTablet) {
+			((TextView)v.findViewById(R.id.txtVenue)).setText(event.getSchedule().getVenue().getName());
+		}
 		
 		lnrLayoutTickets = (LinearLayout) v.findViewById(R.id.lnrLayoutTickets);
 		btnBuyTickets = (Button) v.findViewById(R.id.btnBuyTickets);
@@ -186,9 +191,14 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 			if (schedule.getBookingInfos().isEmpty()) {
 				updateBtnBuyTicketsEnabled(false);
 			} 
-			txtAddress.setText(event.getSchedule().getVenue().getName());
-			txtAddress.setOnClickListener(this);
 			
+			if (isTablet) {
+				txtAddress.setText(updateAddressTxt(event.getSchedule().getVenue().getAddress()));
+			} else {
+				txtAddress.setText(event.getSchedule().getVenue().getName());
+			}			
+			txtAddress.setOnClickListener(this);
+
 			AddressMapFragment fragment = (AddressMapFragment) getChildFragmentManager().findFragmentByTag(
 					AppConstants.FRAGMENT_TAG_ADDRESS_MAP);
 	        if (fragment == null) {
@@ -202,6 +212,30 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 			rltLayoutAddress.setVisibility(visibility);
 			updateBtnBuyTicketsEnabled(false);
 		}
+	}
+	
+	private String updateAddressTxt(Address adrs) {
+		String address = "";
+		if (adrs != null) {
+			if (adrs.getAddress1() != null) {
+				address += adrs.getAddress1();
+			}
+			
+			if (adrs.getCity() != null) {
+				if (!address.isEmpty()) {
+					address += ", ";
+				}
+				address += adrs.getCity();
+			} 
+			
+			if (adrs.getCountry() != null) {
+				if (!address.isEmpty()) {
+					address += ", ";
+				}
+				address += adrs.getCountry().getName();
+			} 
+		}
+		return address;
 	}
 	
 	private void updateEventImg() {
@@ -298,14 +332,16 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 		}
 	}
 		
-	
 	private void updateBtnBuyTicketsEnabled(boolean enabled) {
 		lnrLayoutTickets.setEnabled(enabled);
 		if (enabled) {
-			btnBuyTickets.setTextColor(res.getColor(android.R.color.white));
-			btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(res.getDrawable(R.drawable.tickets), null, null, 
-					null);
-			
+			if(isTablet) {
+				btnBuyTickets.setTextColor(res.getColor(R.color.txt_color_include_fragment_event_details_footer_tab));
+				btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(res.getDrawable(R.drawable.tic_blue), null, null, null);				
+			} else {
+				btnBuyTickets.setTextColor(res.getColor(android.R.color.white));
+				btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(res.getDrawable(R.drawable.tickets), null, null, null);
+			}
 		} else {
 			btnBuyTickets.setTextColor(res.getColor(R.color.btn_buy_tickets_disabled_txt_color));
 			btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(res.getDrawable(R.drawable.tickets_disabled), null, null, 

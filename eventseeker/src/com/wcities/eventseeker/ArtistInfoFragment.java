@@ -477,7 +477,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 				
 				holder.txtFriendName.setText(friend.getName());
 				
-				String key = friend.getKey(ImgResolution.LOW);
+				String key = friend.getKey(ImgResolution.MOBILE);
 				Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 				if (bitmap != null) {
 					holder.imgFriend.setImageBitmap(bitmap);
@@ -485,7 +485,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 			    } else {
 			    	holder.imgFriend.setImageBitmap(null);
 			        AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-			        asyncLoadImg.loadImg(holder.imgFriend, ImgResolution.LOW, friend);
+			        asyncLoadImg.loadImg(holder.imgFriend, ImgResolution.MOBILE, friend);
 			    }
 			}
 			return convertView;

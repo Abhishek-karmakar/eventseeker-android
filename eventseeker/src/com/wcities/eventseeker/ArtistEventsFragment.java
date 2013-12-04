@@ -1,12 +1,16 @@
 package com.wcities.eventseeker;
 
+import android.R.color;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -44,11 +48,14 @@ public class ArtistEventsFragment extends Fragment implements ArtistDetailsFragm
 	private RelativeLayout fragmentArtistDetailsFooter;
 	private ImageView imgFollow;
 	private TextView txtFollow;
+
+	private boolean isTablet;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		artist = (Artist) getArguments().getSerializable(BundleKeys.ARTIST);
+		isTablet = ((MainActivity)FragmentUtil.getActivity(this)).isTablet();
 	}
 	
 	@Override
@@ -80,8 +87,13 @@ public class ArtistEventsFragment extends Fragment implements ArtistDetailsFragm
 			View view;
 			
 			if (dateWiseEventList.getItemViewType(i) == LIST_ITEM_TYPE.CONTENT) {
-				view = LayoutInflater.from(FragmentUtil.getActivity(this)).inflate(R.layout.fragment_discover_by_category_list_item_evt, null);
-
+				
+				if(isTablet) {					
+					view = LayoutInflater.from(FragmentUtil.getActivity(this)).inflate(R.layout.fragment_my_events_list_item_tab, null);
+				} else {				
+					view = LayoutInflater.from(FragmentUtil.getActivity(this)).inflate(R.layout.fragment_discover_by_category_list_item_evt, null);
+				}
+				
 				final Event event = eventListItem.getEvent();
 				((TextView)view.findViewById(R.id.txtEvtTitle)).setText(event.getName());
 				
@@ -105,7 +117,7 @@ public class ArtistEventsFragment extends Fragment implements ArtistDetailsFragm
 				
 				ImageView imgVenue = (ImageView) view.findViewById(R.id.imgEvent);
 				Venue venue = event.getSchedule().getVenue();
-				String key = venue.getKey(ImgResolution.MOBILE);
+				String key = venue.getKey(ImgResolution.LOW);
 				Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 				if (bitmap != null) {
 			        imgVenue.setImageBitmap(bitmap);
@@ -113,8 +125,95 @@ public class ArtistEventsFragment extends Fragment implements ArtistDetailsFragm
 			    } else {
 			    	imgVenue.setImageBitmap(null);
 			    	AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-			        asyncLoadImg.loadImg(imgVenue, ImgResolution.MOBILE, venue);
+			        asyncLoadImg.loadImg(imgVenue, ImgResolution.LOW, venue);
 			    }
+				
+				/**
+				 * Added code to handle the going to, want to and tickets functionality
+				 */
+				
+				if(isTablet) {
+					LinearLayout lnrLayoutTickets = (LinearLayout) view.findViewById(R.id.lnrLayoutTickets);
+					/**
+					 * Using super class TextView instead of Button since some layouts have Button & 
+					 * others have TextView.
+					 */
+					TextView btnBuyTickets = (TextView) view.findViewById(R.id.btnBuyTickets);
+					CheckBox chkBoxTickets = (CheckBox) view.findViewById(R.id.chkBoxTickets);
+					
+					final boolean doesBookingUrlExist = (event.getSchedule() != null && !event.getSchedule().getBookingInfos().isEmpty() 
+							&& event.getSchedule().getBookingInfos().get(0).getBookingUrl() != null) ? true : false;
+					lnrLayoutTickets.setEnabled(doesBookingUrlExist);
+					
+					if (doesBookingUrlExist) {
+						btnBuyTickets.setTextColor(getResources().getColor(color.black));
+						// Only some layouts use imgBuyTickets in place of button drawable for btnBuyTickets.
+						if (chkBoxTickets == null) {
+							btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(
+									R.drawable.tickets_grey), null, null, null);
+							
+						} else {
+							chkBoxTickets.setButtonDrawable(R.drawable.tickets_grey);
+						}
+	
+					} else {
+						btnBuyTickets.setTextColor(getResources().getColor(R.color.btn_buy_tickets_disabled_txt_color));
+						// Only some layouts use imgBuyTickets in place of button drawable for btnBuyTickets.
+						if (chkBoxTickets == null) {
+							btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(
+									R.drawable.tickets_disabled), null, null, null);
+							
+						} else {
+							chkBoxTickets.setButtonDrawable(R.drawable.tickets_disabled);
+						}
+					}
+					
+					lnrLayoutTickets.setOnClickListener(new OnClickListener() {
+	
+						@Override
+						public void onClick(View arg0) {
+							if (doesBookingUrlExist) {
+								Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+										Uri.parse(event.getSchedule().getBookingInfos()
+												.get(0).getBookingUrl()));
+								FragmentUtil.getActivity(ArtistEventsFragment.this).startActivity(browserIntent);
+							}
+						}
+					});
+	
+					final CheckBox chkBoxGoing = (CheckBox) view.findViewById(R.id.chkBoxGoing);
+					final CheckBox chkBoxWantToGo = (CheckBox) view.findViewById(R.id.chkBoxWantToGo);
+					updateAttendingChkBoxes(event, chkBoxGoing, chkBoxWantToGo);
+	
+					OnClickListener goingClickListener = new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							onChkBoxClick(event, chkBoxGoing, chkBoxWantToGo, true);					
+						}
+					};
+					OnClickListener wantToClickListener = new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							onChkBoxClick(event, chkBoxGoing, chkBoxWantToGo, false);					
+						}
+					};
+					
+					chkBoxGoing.setOnClickListener(goingClickListener);
+					chkBoxWantToGo.setOnClickListener(wantToClickListener);
+					
+					TextView txtGoing = (TextView) view.findViewById(R.id.txtGoing);
+					TextView txtWantTo = (TextView) view.findViewById(R.id.txtWantTo);
+					if (txtGoing != null) {
+						txtGoing.setOnClickListener(goingClickListener);
+						txtWantTo.setOnClickListener(wantToClickListener);
+					}
+				}
+				
+				/**
+				 * till here
+				 */
 				
 				view.setOnClickListener(new OnClickListener() {
 					
@@ -136,7 +235,7 @@ public class ArtistEventsFragment extends Fragment implements ArtistDetailsFragm
 	}
 	
 	private void updateFollowingFooter() {
-		if (artist.getAttending() == null || ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId() == null) {
+		if (artist.getAttending() == null || ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId() == null || isTablet) {
 			fragmentArtistDetailsFooter.setVisibility(View.GONE);
 			
 		} else {
@@ -194,4 +293,45 @@ public class ArtistEventsFragment extends Fragment implements ArtistDetailsFragm
 	public void onArtistFollowingUpdated() {
 		updateFollowingFooter();
 	}
+	
+
+	private void onChkBoxClick(Event event, CheckBox chkBoxGoing, CheckBox chkBoxWantToGo, boolean isGoingClicked) {
+		Event.Attending attending;
+		if (isGoingClicked) {
+			attending = event.getAttending() == Event.Attending.GOING ? Event.Attending.NOT_GOING : Event.Attending.GOING;
+			
+		} else {
+			attending = event.getAttending() == Event.Attending.WANTS_TO_GO ? Event.Attending.NOT_GOING : Event.Attending.WANTS_TO_GO;
+		}
+		
+		event.setAttending(attending);
+		updateAttendingChkBoxes(event, chkBoxGoing, chkBoxWantToGo);
+		new UserTracker((EventSeekr) FragmentUtil.getActivity(this).getApplicationContext(), UserTrackingItemType.event, 
+				event.getId(), event.getAttending().getValue(), UserTrackingType.Add).execute();
+	}
+	
+	private void updateAttendingChkBoxes(Event event, CheckBox chkBoxGoing,
+			CheckBox chkBoxWantToGo) {
+		switch (event.getAttending()) {
+
+		case GOING:
+			chkBoxGoing.setChecked(true);
+			chkBoxWantToGo.setChecked(false);
+			break;
+
+		case WANTS_TO_GO:
+			chkBoxGoing.setChecked(false);
+			chkBoxWantToGo.setChecked(true);
+			break;
+
+		case NOT_GOING:
+			chkBoxGoing.setChecked(false);
+			chkBoxWantToGo.setChecked(false);
+			break;
+
+		default:
+			break;
+		}
+	}
+
 }

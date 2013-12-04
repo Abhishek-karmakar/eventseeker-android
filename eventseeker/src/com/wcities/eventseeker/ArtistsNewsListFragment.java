@@ -63,6 +63,8 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack {
 	private int itemsAlreadyRequested;
 	private boolean isMoreDataAvailable = true;
 	private int firstVisibleNewsItemPosition;
+
+	private boolean isTablet;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,11 +81,30 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack {
 			screenH = temp;
 		}
         
-        widthPort = screenH - (getResources().getDimensionPixelSize(R.dimen.root_lnr_layout_pad_l_artists_news_list_item) * 2)
+		isTablet = ((MainActivity)FragmentUtil.getActivity(this)).isTablet();
+		if(isTablet) {
+			
+			widthPort = (screenH - (getResources().getDimensionPixelSize(R.dimen.root_lnr_layout_pad_l_artists_news_list_item) * 2)
+					- (getResources().getDimensionPixelSize(R.dimen.rlt_layout_news_item_container_pad_artist_news_item) * 4)
+					- (getResources().getDimensionPixelSize(R.dimen.rlt_layout_news_item_container2_margin_l_artists_news_list_item)))/2;
+
+			widthLan = (screenW - (getResources().getDimensionPixelSize(R.dimen.root_lnr_layout_pad_l_artists_news_list_item) * 2)
+					- (getResources().getDimensionPixelSize(R.dimen.rlt_layout_news_item_container_pad_artist_news_item) * 4)
+					- (getResources().getDimensionPixelSize(R.dimen.rlt_layout_news_item_container2_margin_l_artists_news_list_item))
+					- (getResources().getDimensionPixelSize(R.dimen.root_navigation_drawer_w_main)))/2;
+			
+		} else {			
+			
+			widthPort = screenH - (getResources().getDimensionPixelSize(R.dimen.root_lnr_layout_pad_l_artists_news_list_item) * 2)
                         - (getResources().getDimensionPixelSize(R.dimen.rlt_layout_news_item_container_pad_artist_news_item) * 2);
-        widthLan = (screenW - (getResources().getDimensionPixelSize(R.dimen.root_lnr_layout_pad_l_artists_news_list_item) * 2)
-                        - (getResources().getDimensionPixelSize(R.dimen.rlt_layout_news_item_container_pad_artist_news_item) * 4)
-                        - (getResources().getDimensionPixelSize(R.dimen.rlt_layout_news_item_container2_margin_l_artists_news_list_item))) / 2;
+			
+			widthLan = (screenW - (getResources().getDimensionPixelSize(R.dimen.root_lnr_layout_pad_l_artists_news_list_item) * 2)
+					- (getResources().getDimensionPixelSize(R.dimen.rlt_layout_news_item_container_pad_artist_news_item) * 4)
+					- (getResources().getDimensionPixelSize(R.dimen.rlt_layout_news_item_container2_margin_l_artists_news_list_item))) / 2;
+			
+		}	
+		
+        Log.i(TAG, "widthPort = " + widthPort + "widthLan = " + widthLan);
         
         if (wcitiesId == null) {
         	wcitiesId = ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId();
@@ -116,7 +137,7 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack {
 		getListView().setDivider(null);
 		getListView().setScrollingCacheEnabled(false);
 		
-		final int pos = (orientation == Configuration.ORIENTATION_PORTRAIT) ? 
+		final int pos = (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) ? 
 				firstVisibleNewsItemPosition : (int)Math.floor(firstVisibleNewsItemPosition / 2.0);
 		//Log.d(TAG, "onActivityCreated() firstVisibleNewsItemPosition = " + firstVisibleNewsItemPosition + ", pos = " + pos);
 		getListView().post(new Runnable() {
@@ -147,7 +168,7 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack {
 	public void onDestroyView() {
 		//Log.i(TAG, "onDestroyView()");
 		
-		firstVisibleNewsItemPosition = (orientation == Configuration.ORIENTATION_PORTRAIT) ? 
+		firstVisibleNewsItemPosition = (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) ? 
 				getListView().getFirstVisiblePosition() : getListView().getFirstVisiblePosition() * 2;
 				
 		for (int i = getListView().getFirstVisiblePosition(), j = 0; 
@@ -305,7 +326,7 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack {
 
 		@Override
 		public Object getItem(int position) {
-			if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+			if (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) {
 				return artistsNewsListItems.get(position);
 				
 			} else {
@@ -325,7 +346,7 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack {
 
 		@Override
 		public int getCount() {
-			if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+			if (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) {
 				//Log.d(TAG, "getCount() = " + artistsNewsListItems.size());
 				return artistsNewsListItems.size();
 				
@@ -539,11 +560,13 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack {
 				int setWidth = artistsNewsListItem.width;
 				int setHeight = artistsNewsListItem.height;
 				int width = (orientation == Configuration.ORIENTATION_PORTRAIT) ? widthPort : widthLan;
+				Log.d(TAG, "before setWidth = " + setWidth + ", setHt = " + setHeight);
 				if (width < artistsNewsListItem.width) {
 					setWidth = width;
 					setHeight = (int) Math.ceil((float) width * (float) artistsNewsListItem.height / (float) artistsNewsListItem.width);
+					Log.d(TAG, "in if");
 				}
-				//Log.d(TAG, "setWidth = " + setWidth + ", setHt = " + setHeight);
+				Log.d(TAG, "after setWidth = " + setWidth + ", setHt = " + setHeight);
 				LayoutParams lp = new LayoutParams(setWidth, setHeight);
 				lp.addRule(RelativeLayout.BELOW, R.id.txtTime);
 				lp.addRule(RelativeLayout.CENTER_HORIZONTAL);

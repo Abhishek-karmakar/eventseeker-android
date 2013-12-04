@@ -316,6 +316,7 @@
     <dimen name="rlt_layout_root_pad_l_connect_accounts_list_item">14dp</dimen>
     <dimen name="rlt_layout_root_pad_r_connect_accounts_list_item">@dimen/rlt_layout_root_pad_l_connect_accounts_list_item</dimen>
     <dimen name="rlt_layout_service_details_ht_connect_accounts_list_item">44dp</dimen>
+    <dimen name="img_service_margin_l_r_connect_accounts_list_item">0dp</dimen>
     <dimen name="txt_service_name_margin_l_connect_accounts_list_item">15dp</dimen>
     <dimen name="rlt_layout_service_details_txt_size_connect_accounts_list_item">17sp</dimen>
     <dimen name="img_plus_margin_r_connect_accounts_list_item">10dp</dimen>
@@ -323,6 +324,7 @@
     <dimen name="divider_ht_connect_accounts_list_item">1dp</dimen>
     <!-- fragment_connect_accounts_list.xml -->
     <dimen name="rlt_layout_root_pad_fragment_connect_accounts_list">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="list_margin_t_b_fragment_connect_account">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <!-- fragment_about_us.xml -->
     <dimen name="rlt_layout_root_pad_fragment_about_us">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="txt_app_name_margin_t_fragment_about_us">30dp</dimen>

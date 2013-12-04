@@ -55,6 +55,7 @@
 	<color name="light_txt_txt_color_fragment_my_events_list_item">#666</color>
 	
 	<color name="txt_color_include_fragment_event_details_footer_tab">#666666</color>
+	<color name="txt_color_include_fragment_vaenu_details_footer_tab">#666666</color>	
 	
 	<color name="txt_evt_title_fragment_event_info_tab">#666666</color>
 </resources>

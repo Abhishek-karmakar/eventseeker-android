@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootRltLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_gray" >
+    
+    <include layout="@layout/include_fragment_artist_details_footer"
+        android:id="@+id/fragmentArtistDetailsFooter"
+        android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="@dimen/lnr_layout_btns_margin_t_include_fragment_event_details_footer"
+        android:layout_alignParentBottom="true"/>
+    
+    <ScrollView android:id="@+id/scrlVEventList"
+        android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_above="@id/fragmentArtistDetailsFooter" >
+	
+        <LinearLayout android:id="@+id/lnrLayoutEventList"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical"
+	        android:background="@android:color/white" />
+	        
+	</ScrollView>
+    
+</RelativeLayout>

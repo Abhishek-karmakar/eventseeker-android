@@ -9,6 +9,8 @@
     <RelativeLayout android:id="@+id/rltLayoutServiceDetails"
         android:layout_width="match_parent"
         android:layout_height="@dimen/rlt_layout_service_details_ht_connect_accounts_list_item"
+        android:layout_marginLeft="@dimen/img_service_margin_l_r_connect_accounts_list_item"
+        android:layout_marginRight="@dimen/img_service_margin_l_r_connect_accounts_list_item"
         android:gravity="center_vertical" >
     
 	    <ImageView android:id="@+id/imgService"

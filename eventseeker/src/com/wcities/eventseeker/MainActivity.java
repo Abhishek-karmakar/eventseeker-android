@@ -34,7 +34,6 @@ import com.ford.syncV4.transport.TransportType;
 import com.wcities.eventseeker.ChangeLocationFragment.ChangeLocationFragmentListener;
 import com.wcities.eventseeker.ConnectAccountsFragment.ConnectAccountsFragmentListener;
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
-import com.wcities.eventseeker.DiscoverFragment.DiscoverFragmentListener;
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.FbLogInFragment.FbLogInFragmentListener;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -54,7 +53,7 @@ import com.wcities.eventseeker.util.FragmentUtil;
 
 public class MainActivity extends ActionBarActivity implements
 		DrawerListFragmentListener, FbLogInFragmentListener,
-		DiscoverFragmentListener, EventListener, ArtistListener, VenueListener,
+		com.wcities.eventseeker.DiscoverParentFragment.DiscoverFragmentListener, EventListener, ArtistListener, VenueListener,
 		FragmentLoadedFromBackstackListener, MapListener,
 		ConnectAccountsFragmentListener, SearchView.OnQueryTextListener,
 		ChangeLocationFragmentListener {
@@ -621,7 +620,12 @@ public class MainActivity extends ActionBarActivity implements
 	    switch (position) {
 	    
 		case INDEX_NAV_ITEM_DISCOVER:
-			DiscoverFragment discoverFragment = new DiscoverFragment();
+			DiscoverParentFragment discoverFragment; 
+			if(isTablet) {
+				discoverFragment = new DiscoverFragmentTab();
+			} else {
+				discoverFragment = new DiscoverFragment();
+			}
 			replaceContentFrameByFragment(discoverFragment, AppConstants.FRAGMENT_TAG_DISCOVER, getResources()
 							.getString(R.string.title_discover), false);
 			break;
@@ -645,15 +649,14 @@ public class MainActivity extends ActionBarActivity implements
 			break;
 			
 		case INDEX_NAV_ITEM_FOLLOWING:
+			FollowingParentFragment followingFragment;
 			if(!isTablet) {
-				FollowingFragment followingFragment = new FollowingFragment();
-				replaceContentFrameByFragment(followingFragment, AppConstants.FRAGMENT_TAG_FOLLOWING, 
-						getResources().getString(R.string.title_following), false);
+				followingFragment = new FollowingFragment();
 			} else {
-				FollowingFragmentTab followingFragment = new FollowingFragmentTab();
-				replaceContentFrameByFragment(followingFragment, AppConstants.FRAGMENT_TAG_FOLLOWING, 
-						getResources().getString(R.string.title_following), false);
+				followingFragment = new FollowingFragmentTab();
 			}
+			replaceContentFrameByFragment(followingFragment, AppConstants.FRAGMENT_TAG_FOLLOWING, 
+					getResources().getString(R.string.title_following), false);
 	    	break;
 	    	
 		case INDEX_NAV_ITEM_CONNECT_ACCOUNTS:
@@ -995,7 +998,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public void onFragmentResumed(Fragment fragment) {
-		if (fragment instanceof DiscoverFragment) {
+		if (fragment instanceof DiscoverParentFragment) {
 			onFragmentResumed(INDEX_NAV_ITEM_DISCOVER, getResources()
 					.getString(R.string.title_discover),
 					AppConstants.FRAGMENT_TAG_DISCOVER);
@@ -1015,7 +1018,7 @@ public class MainActivity extends ActionBarActivity implements
 					.getString(R.string.title_friends_activity),
 					AppConstants.FRAGMENT_TAG_FRIENDS_ACTIVITY);
 
-		} else if (fragment instanceof FollowingFragment) {
+		} else if (fragment instanceof FollowingParentFragment) {
 			onFragmentResumed(INDEX_NAV_ITEM_FOLLOWING, getResources()
 					.getString(R.string.title_following),
 					AppConstants.FRAGMENT_TAG_FOLLOWING);

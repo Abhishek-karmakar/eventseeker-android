@@ -33,27 +33,29 @@ public class LoadDateWiseEvents extends AsyncTask<Void, Void, List<Event>> {
 	private String startDate;
 	private int categoryId;
 	private int miles;
+	private String wcitiesId;
 	
 	private DateWiseEventParentAdapterListener eventListAdapter;
 	
 	private LoadDateWiseEvents(DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, 
-			double lat, double lon) {
+			double lat, double lon, String wcitiesId) {
 		this.eventList = eventList;
 		this.eventListAdapter = eventListAdapter;
 		this.lat = lat;
 		this.lon = lon;
+		this.wcitiesId = wcitiesId;
 	}
 
 	public LoadDateWiseEvents(DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, String query, 
-			double lat, double lon, int miles) {
-		this(eventList, eventListAdapter, lat, lon);
+			double lat, double lon, int miles, String wcitiesId) {
+		this(eventList, eventListAdapter, lat, lon, wcitiesId);
 		this.query = query;
 		this.miles = miles;
 	}
 	
 	public LoadDateWiseEvents(DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, double lat, 
-			double lon, String startDate, int categoryId) {
-		this(eventList, eventListAdapter, lat, lon);
+			double lon, String startDate, int categoryId, String wcitiesId) {
+		this(eventList, eventListAdapter, lat, lon, wcitiesId);
 		this.startDate = startDate;
 		this.categoryId = categoryId;
 	}
@@ -68,6 +70,7 @@ public class LoadDateWiseEvents extends AsyncTask<Void, Void, List<Event>> {
 		eventApi.setLimit(EVENTS_LIMIT);
 		eventApi.setAlreadyRequested(eventsAlreadyRequested);
 		eventApi.addMoreInfo(MoreInfo.fallbackimage);
+		eventApi.setUserId(wcitiesId);//it can be null also
 		if (miles != 0) {
 			eventApi.setMiles(miles);
 		}

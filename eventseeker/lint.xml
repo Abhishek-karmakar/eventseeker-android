@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
+    <issue id="NewApi">
+        <ignore path="src/com/wcities/eventseeker/EventInfoFragment.java" />
+        <ignore path="src/com/wcities/eventseeker/MainActivity.java" />
+        <ignore path="src/com/wcities/eventseeker/VenueInfoFragment.java" />
+        <ignore path="src/com/wcities/eventseeker/jsonparser/EventApiJSONParser.java" />
+    </issue>
     <issue id="ValidFragment">
         <ignore path="src/com/wcities/eventseeker/FriendsActivityFragment.java" />
     </issue>

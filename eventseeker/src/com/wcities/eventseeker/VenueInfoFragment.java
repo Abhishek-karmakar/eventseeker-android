@@ -39,6 +39,7 @@ import com.wcities.eventseeker.core.Address;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.jsonparser.RecordApiJSONParser;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
+import com.wcities.eventseeker.util.FragmentUtil;
 
 public class VenueInfoFragment extends Fragment implements OnClickListener, AsyncLoadImageListener {
 	
@@ -58,6 +59,10 @@ public class VenueInfoFragment extends Fragment implements OnClickListener, Asyn
 	private ImageView imgDown;
 	private ImageView imgItem;
 
+	private boolean isTablet;
+
+	private TextView txtVenueAddress;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -66,6 +71,8 @@ public class VenueInfoFragment extends Fragment implements OnClickListener, Asyn
 			loadVenue = new LoadVenue();
 			AsyncTaskUtil.executeAsyncTask(loadVenue, true);
 		}
+		
+		isTablet = ((MainActivity)FragmentUtil.getActivity(this)).isTablet();
 	}
 	
 	@Override
@@ -91,10 +98,19 @@ public class VenueInfoFragment extends Fragment implements OnClickListener, Asyn
 		txtDesc = (TextView) v.findViewById(R.id.txtDesc);
 		imgDown = (ImageView) v.findViewById(R.id.imgDown);
 		
+		if(isTablet) {
+			imgDown.setVisibility(View.GONE);
+			isVenueDescExpanded = true;
+		}
+		
 		updateDescVisibility();
 		
 		txtAddress = (TextView) v.findViewById(R.id.txtAddress);
+		if(isTablet) {
+			txtVenueAddress = (TextView) v.findViewById(R.id.txtVenueAddress);
+		}
 		updateAddressTxt();
+		
 		
 		AddressMapFragment fragment = (AddressMapFragment) getChildFragmentManager().findFragmentByTag(
 				AppConstants.FRAGMENT_TAG_ADDRESS_MAP);
@@ -140,6 +156,10 @@ public class VenueInfoFragment extends Fragment implements OnClickListener, Asyn
 			} 
 		}
 		txtAddress.setText(address);
+		if(isTablet) {
+			txtVenueAddress.setText(address);
+		}
+
 	}
 	
 	private void addAddressMapFragment() {

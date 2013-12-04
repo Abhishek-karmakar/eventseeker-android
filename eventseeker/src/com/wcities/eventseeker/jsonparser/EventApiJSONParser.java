@@ -446,6 +446,11 @@ public class EventApiJSONParser {
 		} else {
 			//Log.i(TAG, "No artist found belonging to this event.");
 		}
+		
+		Attending attending = jsonObject.has(KEY_ATTENDING) ? 
+				Attending.getAttending(jsonObject.getInt(KEY_ATTENDING)) : Attending.NOT_GOING;
+		event.setAttending(attending);
+		
 		return event;
 	}
 	

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rltRootDiscoverGalleryItem"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+
+    <ImageView
+        android:id="@+id/imgFeaturedEvt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imgFeaturedEvt"
+        android:layout_alignLeft="@+id/imgFeaturedEvt"
+        android:layout_alignRight="@+id/imgFeaturedEvt"
+        android:layout_centerInParent="true"
+        android:background="@drawable/story_space"
+        android:padding="@dimen/img_featured_evt_pad_discover_gallery_item"
+        android:scaleType="fitXY" />
+    <!-- android:layout_margin="@dimen/img_featured_evt_pad_discover_gallery_item" -->
+
+    <TextView
+        android:id="@+id/txtCityName"
+        style="@style/SingleLineMarqueeTxtViewXtraPadding"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/txt_evt_city_name_ht_discover_gallery_item"
+        android:layout_alignLeft="@+id/imgFeaturedEvt"
+        android:layout_alignRight="@+id/imgFeaturedEvt"
+        android:layout_alignTop="@+id/imgFeaturedEvt"
+        android:layout_margin="@dimen/img_featured_evt_pad_discover_gallery_item"
+        android:background="@color/bg_black_transparent_strip"
+        android:gravity="center"
+        android:padding="@dimen/txt_evt_pad_discover_gallery_item"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/txt_evt_city_name_txt_size_discover_gallery_item" />
+
+    <LinearLayout
+        android:id="@+id/lnrEvtDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imgFeaturedEvt"
+        android:layout_alignLeft="@+id/imgFeaturedEvt"
+        android:layout_alignRight="@+id/imgFeaturedEvt"
+        android:layout_margin="@dimen/img_featured_evt_pad_discover_gallery_item"
+        android:background="@color/bg_black_transparent_strip"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/txtEvtTitle"
+            style="@style/SingleLineMarqueeTxtViewXtraPadding"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/txt_evt_title_ht_discover_gallery_item"
+            android:gravity="center_horizontal"
+            android:padding="@dimen/txt_evt_pad_discover_gallery_item"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/txt_evt_title_txt_size_discover_gallery_item" />
+
+        <TextView
+            android:id="@+id/txtEvtSchedule"
+            style="@style/SingleLineMarqueeTxtViewXtraPadding"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/txt_evt_schedule_ht_discover_gallery_item"
+            android:gravity="center_horizontal"
+            android:padding="@dimen/txt_evt_pad_discover_gallery_item"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/txt_evt_schedule_txt_size_discover_gallery_item" />
+    </LinearLayout>
+
+</RelativeLayout><!--
+    android:paddingLeft="@dimen/rlt_root_pad_l_r_discover_gallery_item"
+    android:paddingRight="@dimen/rlt_root_pad_l_r_discover_gallery_item"
+     android:layout_marginBottom="@dimen/rlt_root_pad_t_b_discover_gallery_item"
+    android:layout_marginTop="@dimen/rlt_root_pad_t_b_discover_gallery_item"
+-->
