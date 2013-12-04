@@ -124,12 +124,27 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (getItemViewType(position) == LIST_ITEM_TYPE.PROGRESS.ordinal()) {
+
 			if (convertView == null	|| convertView.getTag() != LIST_ITEM_TYPE.PROGRESS) {
 				convertView = LayoutInflater.from(mContext).inflate(R.layout.list_progress_bar, null);
 				convertView.setTag(LIST_ITEM_TYPE.PROGRESS);
 			}
+			
+			/*if (isMoreDataAvailable) {
+				if (loadDateWiseMyEvents == null || loadDateWiseMyEvents.getStatus() == Status.FINISHED) {
+					mListener.loadEventsInBackground();
+				}
+				
+			} else {
+				TextView txtNoData = (TextView)convertView.findViewById(R.id.txtNoData);
+				txtNoData.setText("No events found.");
+				txtNoData.setVisibility(View.VISIBLE);
+				convertView.findViewById(R.id.progressBar).setVisibility(View.GONE);
+			}*/
+			
+			if ((loadDateWiseMyEvents == null || loadDateWiseMyEvents.getStatus() == Status.FINISHED) 
+					&& isMoreDataAvailable) {
 
-			if ((loadDateWiseMyEvents == null || loadDateWiseMyEvents.getStatus() == Status.FINISHED) && isMoreDataAvailable) {
 				mListener.loadEventsInBackground();
 			}
 

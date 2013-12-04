@@ -7,11 +7,11 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.IntentService;
 import android.app.Service;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.IBinder;
-import android.util.Log;
 
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.EventApi;
@@ -27,104 +27,89 @@ import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser.MyItemsList;
 import com.wcities.eventseeker.util.DeviceUtil;
 
-public class EventseekerWidgetService extends Service {
+public class EventseekerWidgetService extends IntentService {
 	
 	private static final String TAG = EventseekerWidgetService.class.getName();
-	
+	private static final int EVENTS_LIMIT = 10;
+
+	public EventseekerWidgetService() {
+		super(TAG);
+	}
+
 	public static enum LoadType {
 		LOAD_EVENTS,
 		LOAD_IMAGE;
 	}
 	
 	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-		//Log.d(TAG, "onStartCommand()");
+	protected void onHandleIntent(Intent intent) {
 		LoadType loadType = (LoadType) intent.getSerializableExtra(BundleKeys.LOAD_TYPE);
+		//Log.d(TAG, "onStartCommand(), loadType = " + loadType.name());
+
 		if (loadType == LoadType.LOAD_EVENTS) {
-			new LoadEvents().execute();  
+			//Log.d(TAG, "execute loadEvents()");
+			loadEvents();
 			
 		} else if (loadType == LoadType.LOAD_IMAGE) {
 			Event event = (Event) intent.getSerializableExtra(BundleKeys.EVENT);
 			AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
 	        asyncLoadImg.loadImg(getApplication(), ImgResolution.LOW, event, intent.getIntExtra(BundleKeys.WIDGET_ID, 0));
 		}
-
-        stopSelf();  
-  
-        return super.onStartCommand(intent, flags, startId); 
-	}
-
-	@Override
-	public IBinder onBind(Intent arg0) {
-		return null;
 	}
 	
-	private class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
+	private void loadEvents() {
+		List<Event> tmpEvents = null;
 		
-		private static final int EVENTS_LIMIT = 10;
+		UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
+		userInfoApi.setLimit(EVENTS_LIMIT);
+		userInfoApi.setUserId(((EventSeekr)getApplication()).getWcitiesId());
+		double[] latLng = DeviceUtil.getLatLon(EventseekerWidgetService.this);
+		userInfoApi.setLat(latLng[0]);
+		userInfoApi.setLon(latLng[1]);
 		
-		@Override
-		protected List<Event> doInBackground(Void... params) {
-			Log.d(TAG, "doInBackground");
-			List<Event> tmpEvents = null;
+		try {
+			// load my events
+			JSONObject jsonObject = userInfoApi.getMyProfileInfoFor(Type.myevents);
+			UserInfoApiJSONParser jsonParser = new UserInfoApiJSONParser();
 			
-			UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
-			userInfoApi.setLimit(EVENTS_LIMIT);
-			userInfoApi.setUserId(((EventSeekr)getApplication()).getWcitiesId());
-			double[] latLng = DeviceUtil.getLatLon(EventseekerWidgetService.this);
-			userInfoApi.setLat(latLng[0]);
-			userInfoApi.setLon(latLng[1]);
+			MyItemsList<Event> myEventsList = jsonParser.getEventList(jsonObject);
+			tmpEvents = myEventsList.getItems();
 			
-			try {
-				// load my events
-				JSONObject jsonObject = userInfoApi.getMyProfileInfoFor(Type.myevents);
-				UserInfoApiJSONParser jsonParser = new UserInfoApiJSONParser();
+			if (tmpEvents.isEmpty()) {
+				// load recommended events
+				jsonObject = userInfoApi.getMyProfileInfoFor(Type.recommendedevent);
+				jsonParser = new UserInfoApiJSONParser();
 				
-				MyItemsList<Event> myEventsList = jsonParser.getEventList(jsonObject);
-				tmpEvents = myEventsList.getItems();
-				
-				if (tmpEvents.isEmpty()) {
-					// load recommended events
-					jsonObject = userInfoApi.getMyProfileInfoFor(Type.recommendedevent);
-					jsonParser = new UserInfoApiJSONParser();
-					
-					tmpEvents = jsonParser.getRecommendedEventList(jsonObject);
-				}
-				
-				if (tmpEvents.isEmpty()) {
-					// load featured events
-					EventApi eventApi = new EventApi(Api.OAUTH_TOKEN, latLng[0], latLng[1]);
-					eventApi.setLimit(EVENTS_LIMIT);
-					jsonObject = eventApi.getFeaturedEvents();
-					EventApiJSONParser eventApiJSONParser = new EventApiJSONParser();
-					tmpEvents = eventApiJSONParser.getFeaturedEventList(jsonObject);
-				}
-					
-			} catch (ClientProtocolException e) {
-				e.printStackTrace();
-				
-			} catch (IOException e) {
-				e.printStackTrace();
-				
-			} catch (JSONException e) {
-				e.printStackTrace();
+				tmpEvents = jsonParser.getRecommendedEventList(jsonObject);
 			}
-
-			return tmpEvents;
+			
+			if (tmpEvents.isEmpty()) {
+				// load featured events
+				EventApi eventApi = new EventApi(Api.OAUTH_TOKEN, latLng[0], latLng[1]);
+				eventApi.setLimit(EVENTS_LIMIT);
+				jsonObject = eventApi.getFeaturedEvents();
+				EventApiJSONParser eventApiJSONParser = new EventApiJSONParser();
+				tmpEvents = eventApiJSONParser.getFeaturedEventList(jsonObject);
+			}
+				
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
 		
-		@Override
-		protected void onPostExecute(List<Event> result) {
-			Log.d(TAG, "onPostExecute");
-			if (result != null && !result.isEmpty()) {
-				EventseekerWidgetList.getInstance().setEvents(result);
-			}
-			
-			Intent intent = new Intent();
-			intent.setAction(EventseekerWidget.WIDGET_UPDATE)
-			.putExtra(BundleKeys.WIDGET_UPDATE_TYPE, EventseekerWidget.UpdateType.REFRESH_WIDGET);
-			
-			getApplication().sendBroadcast(intent);
-		}    	
+		if (tmpEvents != null && !tmpEvents.isEmpty()) {
+			EventseekerWidgetList.getInstance().setEvents(tmpEvents);
+		}
+		
+		Intent intent = new Intent();
+		intent.setAction(EventseekerWidget.WIDGET_UPDATE)
+		.putExtra(BundleKeys.WIDGET_UPDATE_TYPE, EventseekerWidget.UpdateType.REFRESH_WIDGET);
+		
+		getApplication().sendBroadcast(intent);
 	}
 }

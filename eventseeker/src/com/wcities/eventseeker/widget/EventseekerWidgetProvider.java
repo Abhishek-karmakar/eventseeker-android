@@ -15,6 +15,7 @@ import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -57,7 +58,8 @@ public class EventseekerWidgetProvider extends AppWidgetProvider {
 		 */
 		String action = intent.getAction();
 		Bundle bundle = intent.getExtras();
-
+		//Log.d(TAG, "onReceive() action = " + action);
+		
 		if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
 			//Log.d(TAG, "CONNECTIVITY_ACTION");
 			ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService( Context.CONNECTIVITY_SERVICE );
@@ -70,24 +72,32 @@ public class EventseekerWidgetProvider extends AppWidgetProvider {
 		    	//get widget ids for widgets created
 		    	ComponentName widget = new ComponentName(context, EventseekerWidgetProvider.class);
 		    	int[] widgetIds = widgetManager.getAppWidgetIds(widget);
-		    	AppWidgetManager.getInstance(context).updateAppWidget(widgetIds, remoteViews);
+		    	widgetManager.updateAppWidget(widgetIds, remoteViews);
 		    	loadEvents(context);
 		    }
 			
 		} else if (action.equals(EventseekerWidget.WIDGET_PREV_EVENT)) {
+			//Log.d(TAG, "WIDGET_PREV_EVENT");
 			int widgetId = bundle.getInt(BundleKeys.WIDGET_ID);
 			EventseekerWidgetList eventseekerWidgetList = EventseekerWidgetList.getInstance();
 			EventseekerWidget widget = eventseekerWidgetList.getWidget(widgetId);
-			if (widget != null) {
+			if (widget == null) {
+				callOnUpdate(context);
+				
+			} else {
 				widget.setCurrentEvent(eventseekerWidgetList.getPrevious(widget.getCurrentEvent()));
 				refreshWidget(context, eventseekerWidgetList, widget, eventseekerWidgetList.getEvents());
 			}
 			
 		} else if (action.equals(EventseekerWidget.WIDGET_NEXT_EVENT)) {
+			//Log.d(TAG, "WIDGET_NEXT_EVENT");
 			int widgetId = bundle.getInt(BundleKeys.WIDGET_ID);
 			EventseekerWidgetList eventseekerWidgetList = EventseekerWidgetList.getInstance();
 			EventseekerWidget widget = eventseekerWidgetList.getWidget(widgetId);
-			if (widget != null) {
+			if (widget == null) {
+				callOnUpdate(context);
+				
+			} else {
 				widget.setCurrentEvent(eventseekerWidgetList.getNext(widget.getCurrentEvent()));
 				refreshWidget(context, eventseekerWidgetList, widget, eventseekerWidgetList.getEvents());
 			}
@@ -141,7 +151,22 @@ public class EventseekerWidgetProvider extends AppWidgetProvider {
 		EventseekerWidgetList.getInstance().removeWidget(appWidgetIds[0]);
 	}
 	
+	private void callOnUpdate(Context context) {
+		AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+		ComponentName widgetComponent = new ComponentName(context, EventseekerWidgetProvider.class);
+		int[] widgetIds = widgetManager.getAppWidgetIds(widgetComponent);
+		
+		RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_loading);
+		widgetManager.updateAppWidget(widgetIds, remoteViews);
+		
+		Intent update = new Intent();
+		update.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetIds);
+		update.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+		context.sendBroadcast(update);
+	}
+	
 	private void loadEvents(Context context) {
+		//Log.d(TAG, "loadEvents()");
 		Intent intent = new Intent(context.getApplicationContext(), EventseekerWidgetService.class); 
 		intent.putExtra(BundleKeys.LOAD_TYPE, LoadType.LOAD_EVENTS);
         context.startService(intent);
@@ -197,34 +222,34 @@ public class EventseekerWidgetProvider extends AppWidgetProvider {
 		
 		Event prevEvent = eventseekerWidgetList.getPrevious(event);
 		if (prevEvent != null) {
-			remoteViews.setBoolean(R.id.imgLeft, "setEnabled", true);
+			remoteViews.setBoolean(R.id.vDummyLeft, "setEnabled", true);
 			
 			//Log.d(TAG, "prevEvent != null for widget Id = " + eventseekerWidget.getWidgetId());
 			Intent leftIntent = new Intent();
 			leftIntent.setAction(EventseekerWidget.WIDGET_PREV_EVENT)
 			.putExtra(BundleKeys.WIDGET_ID, eventseekerWidget.getWidgetId());
 			PendingIntent pendingIntent = PendingIntent.getBroadcast(context, eventseekerWidget.getWidgetId(), leftIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-			remoteViews.setOnClickPendingIntent(R.id.imgLeft, pendingIntent);
+			remoteViews.setOnClickPendingIntent(R.id.vDummyLeft, pendingIntent);
 			
 		} else {
 			//Log.d(TAG, "prevEvent = null for widget Id = " + eventseekerWidget.getWidgetId());
-			remoteViews.setBoolean(R.id.imgLeft, "setEnabled", false);
+			remoteViews.setBoolean(R.id.vDummyLeft, "setEnabled", false);
 		}
 		
 		Event nextEvent = eventseekerWidgetList.getNext(event);
 		if (nextEvent != null) {
-			remoteViews.setBoolean(R.id.imgRight, "setEnabled", true);
+			remoteViews.setBoolean(R.id.vDummyRight, "setEnabled", true);
 
 			//Log.d(TAG, "nextEvent != null for widget Id = " + eventseekerWidget.getWidgetId());
 			Intent rightIntent = new Intent();
 			rightIntent.setAction(EventseekerWidget.WIDGET_NEXT_EVENT)
 			.putExtra(BundleKeys.WIDGET_ID, eventseekerWidget.getWidgetId());
 			PendingIntent pendingIntent = PendingIntent.getBroadcast(context, eventseekerWidget.getWidgetId(), rightIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-			remoteViews.setOnClickPendingIntent(R.id.imgRight, pendingIntent);
+			remoteViews.setOnClickPendingIntent(R.id.vDummyRight, pendingIntent);
 			
 		} else {
 			//Log.d(TAG, "nextEvent = null for widget Id = " + eventseekerWidget.getWidgetId());
-			remoteViews.setBoolean(R.id.imgRight, "setEnabled", false);
+			remoteViews.setBoolean(R.id.vDummyRight, "setEnabled", false);
 		}
 		
 		Intent mainActivityIntent = new Intent(context, MainActivity.class);
