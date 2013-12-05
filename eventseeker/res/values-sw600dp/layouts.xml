@@ -20,6 +20,5 @@
     <item name="fragment_venue_info" type="layout">@layout/fragment_venue_info_tab</item>
     <item name="fragment_connect_accounts" type="layout">@layout/fragment_connect_accounts_tab</item>
     <item name="fragment_event_featuring" type="layout">@layout/fragment_event_featuring_tab</item>
-    <item name="fragment_artist_events" type="layout">@layout/fragment_artist_events_tab</item>
 
 </resources>

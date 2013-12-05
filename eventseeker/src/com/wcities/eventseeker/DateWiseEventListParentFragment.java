@@ -7,25 +7,21 @@ import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.widget.BaseAdapter;
 
-import com.wcities.eventseeker.adapter.DateWiseEventListAdapter.DateWiseEventListAdapterListener;
-import com.wcities.eventseeker.adapter.DateWiseMyEventListAdapter.DateWiseMyEventListAdapterListener;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
-import com.wcities.eventseeker.asynctask.LoadDateWiseMyEvents;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Category;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
+import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener.LoadEventsInBackgroundListener;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
 public abstract class DateWiseEventListParentFragment extends ListFragment
-		implements DateWiseEventListAdapterListener,
-		DateWiseMyEventListAdapterListener {
+		implements LoadEventsInBackgroundListener {
 
-	private static final String TAG = DateWiseEventListParentFragment.class
-			.getName();
+	private static final String TAG = DateWiseEventListParentFragment.class.getName();
 
 	protected LoadDateWiseEvents loadEvents;
 

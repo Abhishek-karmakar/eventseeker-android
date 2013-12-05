@@ -13,13 +13,14 @@ import com.wcities.eventseeker.adapter.DateWiseEventListAdapter;
 import com.wcities.eventseeker.adapter.DateWiseEventListAdapter.DateWiseEventListAdapterListener;
 import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener.LoadEventsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
 public class SearchEventsFragment extends SearchEventsParentFragment implements
-		DateWiseEventListAdapterListener, SearchFragmentChildListener {
+	LoadEventsInBackgroundListener, SearchFragmentChildListener {
 
 	private static final String TAG = SearchEventsFragment.class.getName();
 

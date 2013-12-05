@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rltRootDiscoverGalleryItem"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
 
     <ImageView
         android:id="@+id/imgFeaturedEvt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignBottom="@+id/imgFeaturedEvt"
         android:layout_alignLeft="@+id/imgFeaturedEvt"
         android:layout_alignRight="@+id/imgFeaturedEvt"
         android:layout_centerInParent="true"
         android:background="@drawable/story_space"
         android:padding="@dimen/img_featured_evt_pad_discover_gallery_item"
+        android:layout_marginTop="@dimen/rlt_root_pad_t_b_discover_gallery_item"
+        android:layout_marginBottom="@dimen/rlt_root_pad_t_b_discover_gallery_item"
+        android:layout_marginLeft="@dimen/rlt_root_pad_l_r_discover_gallery_item"
+        android:layout_marginRight="@dimen/rlt_root_pad_l_r_discover_gallery_item"
         android:scaleType="fitXY" />
     <!-- android:layout_margin="@dimen/img_featured_evt_pad_discover_gallery_item" -->
 

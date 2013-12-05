@@ -12,8 +12,12 @@ import org.json.JSONObject;
 
 import android.text.Html;
 import android.util.Log;
+import android.util.SparseArray;
 
+import com.wcities.eventseeker.core.Address;
 import com.wcities.eventseeker.core.Artist;
+import com.wcities.eventseeker.core.BookingInfo;
+import com.wcities.eventseeker.core.Country;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Friend;
 import com.wcities.eventseeker.core.ImageAttribution;
@@ -42,6 +46,7 @@ public class ArtistApiJSONParser {
 	private static final String KEY_VENUE_ID = "venue_id";
 	private static final String KEY_VENUE_NAME = "venue_name";
 	private static final String KEY_VENUE_IMAGE = "venue_image";
+	private static final String KEY_IMAGEFILE = "imagefile";
 	private static final String KEY_IMAGE_ATTRIBUTION = "image_attribution";
 	private static final String KEY_EVENT_TIME = "event_time";
 	private static final String KEY_EVENT_DATE = "event_date";
@@ -61,6 +66,31 @@ public class ArtistApiJSONParser {
 	private static final String KEY_ARTIST_EVENT_DETAIL = "artistEventDetail";
 	private static final String KEY_ARTIST_ID = "artistId";
 	private static final String KEY_ARTIST_NAME = "artistName";
+
+	private static final String KEY_VENUES = "venues";
+	private static final String KEY_VENUE = "venue";
+	private static final String KEY_ADDRESS = "address";
+
+	private static final String KEY_ADDRESS1 = "address1";
+	private static final String KEY_ADDRESS2 = "address2";
+
+	private static final String KEY_CITY = "city";
+	private static final String KEY_COUNTRY = "country";
+
+	private static final String KEY_LATITUDE = "latitude";
+	private static final String KEY_LONGITUDE = "longitude";
+
+	private static final String KEY_SCHEDULE = "schedule";
+
+	private static final String KEY_DATES = "dates";
+	private static final String KEY_START = "start";
+
+	private static final String KEY_BOOKINGINFO = "bookinginfo";
+	private static final String KEY_BOOKINGLINK = "bookinglink";
+	private static final String KEY_BOOKING_URL = "booking_url";
+	private static final String KEY_PROVIDER = "provider";
+	private static final String KEY_PRICE = "price";
+
 	
 	public void fillArtistDetails(Artist artist, JSONObject jsonObject) {
 		if (jsonObject.has(KEY_ARTIST_DETAIL)) {
@@ -247,6 +277,103 @@ public class ArtistApiJSONParser {
 		return buildSchedule(dates, eventTime, venue);
 	}
 	
+	private Schedule getSchedule(JSONObject jsonObject, SparseArray<Venue> venues) throws JSONException {
+		String eventTime = "";
+		if (jsonObject.has(KEY_EVENT_TIME)) {
+			eventTime = jsonObject.getString(KEY_EVENT_TIME);
+		}
+
+		List<String> dates = getDates(jsonObject.get(KEY_DATES));
+		int venueId = jsonObject.getInt(KEY_VENUE_ID);
+		
+		Schedule schedule = buildSchedule(dates, eventTime, venueId, venues);
+		
+		if (jsonObject.has(KEY_BOOKINGINFO)) {
+			fillBookingInfo(schedule, jsonObject);
+			
+		} else {
+			//Log.i(TAG, "No booking info found for this event.");
+		}
+		return schedule;
+	}
+	
+	private void fillBookingInfo(Schedule schedule, JSONObject jObjSchedule) throws JSONException {
+		Object objBookinglink = jObjSchedule.getJSONObject(KEY_BOOKINGINFO).get(KEY_BOOKINGLINK);
+		
+		if (objBookinglink instanceof JSONArray) {
+			JSONArray jArrBookingLinks = (JSONArray) objBookinglink;
+			for (int i = 0; i < jArrBookingLinks.length(); i++) {
+				JSONObject jObjBookingLink = jArrBookingLinks.getJSONObject(i);
+				schedule.addBookingInfo(getBookingInfo(jObjBookingLink));
+			}
+			
+		} else {
+			schedule.addBookingInfo(getBookingInfo((JSONObject) objBookinglink));
+		}
+	}
+	
+	private BookingInfo getBookingInfo(JSONObject jObjBookinglink) throws JSONException {
+		BookingInfo bookingInfo = new BookingInfo();
+		bookingInfo.setBookingUrl(jObjBookinglink.getString(KEY_BOOKING_URL));
+		bookingInfo.setProvider(jObjBookinglink.getString(KEY_PROVIDER));
+		return bookingInfo;
+	}
+	
+	
+	private Schedule buildSchedule(List<String> startDates, String time, int venueId, SparseArray<Venue> venues) {
+		Schedule schedule = new Schedule();
+		
+		Venue venue = venues.get(venueId);
+		
+		schedule.setVenue(venue);
+		
+		SimpleDateFormat format;  
+		boolean startTimeAvailable;
+		
+		if (time.equals("")) {
+			format = new SimpleDateFormat("yyyy-MM-dd");
+			startTimeAvailable = false;
+			
+		} else {
+			format = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
+			startTimeAvailable = true;
+		}
+
+		for (Iterator<String> iterator = startDates.iterator(); iterator.hasNext();) {
+			com.wcities.eventseeker.core.Date date = new com.wcities.eventseeker.core.Date(startTimeAvailable);
+			String strStartDate = iterator.next();
+			try {  
+				date.setStartDate(format.parse(strStartDate + time));
+			    
+			} catch (ParseException e) {  
+			    e.printStackTrace();  
+			}
+			schedule.addDate(date);
+		}
+
+		return schedule;
+	}
+	
+	
+	private List<String> getDates(Object json) throws JSONException {
+		List<String> dates = new ArrayList<String>();
+		
+		if (json instanceof JSONObject) {
+			JSONObject jObjDate = (JSONObject) json;
+			String strStartDate = jObjDate.getString(KEY_START);
+			dates.add(strStartDate);
+			
+		} else {
+			JSONArray jArrDates = (JSONArray) json;
+
+			for (int i = 0; i < jArrDates.length(); i++) {
+				String strStartDate = jArrDates.getJSONObject(i).getString(KEY_START);
+				dates.add(strStartDate);
+			}
+		}
+		return dates;
+	}
+	
 	private ImageAttribution getImageAttribution(JSONObject jsonObject) throws JSONException {
 		ImageAttribution imageAttribution = new ImageAttribution();
 		if (jsonObject.has(KEY_HIGH_RES_PATH)) {
@@ -397,6 +524,92 @@ public class ArtistApiJSONParser {
 		return artist;
 	}
 	
+	public List<Event> getArtistEvents(JSONObject jsonObject) throws JSONException {
+		List<Event> events = new ArrayList<Event>();
+		SparseArray<Venue> venues = null;
+		
+		if (jsonObject.has(KEY_ARTIST_EVENT_DETAIL)) {
+			JSONObject jObjArtistEventDetail = jsonObject.getJSONObject(KEY_ARTIST_EVENT_DETAIL);
+			
+			if (jObjArtistEventDetail.has(KEY_VENUES)) {
+				venues = getVenues(jObjArtistEventDetail);
+			}
+			
+			if (jObjArtistEventDetail.has(KEY_EVENTS)) {
+				JSONArray jArrEvents = jObjArtistEventDetail.getJSONArray(KEY_EVENTS);
+				for(int i = 0; i < jArrEvents.length();i++ ) {
+					Event event = getEvent(jArrEvents.getJSONObject(i), venues);
+					events.add(event);
+				}
+			}
+		}
+		return events;
+	}
+	
+	private Event getEvent(JSONObject jsonObject, SparseArray<Venue> venues) throws JSONException {
+		Event event = new Event(jsonObject.getInt(KEY_ID), jsonObject.getString(KEY_NAME));
+		
+		event.setSchedule(getSchedule(jsonObject.getJSONObject(KEY_SCHEDULE), venues));
+		/*Attending attending = jsonObject.has(KEY_ATTENDING) ? 
+				Attending.getAttending(jsonObject.getInt(KEY_ATTENDING)) : Attending.NOT_GOING;
+		event.setAttending(attending);
+		*/
+		return event;
+	}
+	
+	
+	private SparseArray<Venue> getVenues(JSONObject jObjArtistEventDetail) throws JSONException {
+		SparseArray<Venue> venues = new SparseArray<Venue>();
+		
+		JSONArray jArrVenues  = jObjArtistEventDetail.getJSONArray(KEY_VENUES);
+
+		for (int i = 0; i < jArrVenues.length(); i++) {
+			Venue venue = getVenue(jArrVenues.getJSONObject(i).getJSONObject(KEY_VENUE));
+			venues.append(venue.getId(), venue);
+		}
+		
+		return venues;
+	}
+	
+	private Venue getVenue(JSONObject jsonObject) throws JSONException {
+		Venue venue = new Venue(jsonObject.getInt(KEY_ID));
+		venue.setName(jsonObject.getString(KEY_NAME));
+		venue.setImagefile(jsonObject.getString(KEY_IMAGEFILE));
+		if (jsonObject.has(KEY_ADDRESS)) {
+			venue.setAddress(getAddress(jsonObject.getJSONObject(KEY_ADDRESS)));
+		}
+		return venue;
+	}
+	
+	private Address getAddress(JSONObject jObjAddress) throws JSONException {
+		Address address = new Address();
+		address.setAddress1(jObjAddress.getString(KEY_ADDRESS1));
+		if (jObjAddress.has(KEY_ADDRESS2)) {
+			address.setAddress2(jObjAddress.getString(KEY_ADDRESS2));
+		}
+		address.setCity(jObjAddress.getString(KEY_CITY));
+		address.setCountry(getCountry(jObjAddress.getJSONObject(KEY_COUNTRY)));
+		
+		if (jObjAddress.has(KEY_LATITUDE)) {
+			String strLat = jObjAddress.getString(KEY_LATITUDE);
+			String strLon = jObjAddress.getString(KEY_LONGITUDE);
+			
+			if (strLat.length() != 0) {
+				address.setLat(Double.parseDouble(strLat));
+			}
+			if (strLon.length() != 0) {
+				address.setLon(Double.parseDouble(strLon));
+			}
+		}
+		return address;
+	}
+	
+	private Country getCountry(JSONObject jsonObject) throws JSONException {
+		Country country = new Country();
+		country.setName(jsonObject.getString(KEY_NAME));
+		return country;
+	}
+
 	public class ArtistDetails {
 		
 		private List<Event> upcomingEvents;

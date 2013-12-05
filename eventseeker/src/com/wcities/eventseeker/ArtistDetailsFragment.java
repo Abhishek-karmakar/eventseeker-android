@@ -9,7 +9,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -23,7 +22,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,7 +43,6 @@ import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
-import com.wcities.eventseeker.util.BitmapUtil;
 import com.wcities.eventseeker.util.FileUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
@@ -137,8 +134,14 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 				getArguments());
 		mTabsAdapter.addTab(tabInfo, oldAdapter);
 
-		TabBar.Tab tabEvents = new TabBar.Tab(btnEvents, FRAGMENT_TAG_EVENTS, ArtistEventsFragment.class, 
-				getArguments());
+		TabBar.Tab tabEvents;
+		
+		if (((MainActivity)FragmentUtil.getActivity(this)).isTablet()) {
+			tabEvents= new TabBar.Tab(btnEvents, FRAGMENT_TAG_EVENTS, ArtistEventsFragmentTab.class, getArguments());			
+		} else {
+			tabEvents= new TabBar.Tab(btnEvents, FRAGMENT_TAG_EVENTS, ArtistEventsFragment.class, getArguments());			
+		}
+		
 		mTabsAdapter.addTab(tabEvents, oldAdapter);
 		
 		TabBar.Tab tabNews = new TabBar.Tab(btnVenues, FRAGMENT_TAG_NEWS, ArtistNewsFragment.class, 

@@ -93,7 +93,6 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 		event = (Event) getArguments().getSerializable(BundleKeys.EVENT);
 		wcitiesId = ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId();
 		//Log.d(TAG, "lat = " + event.getSchedule().getVenue().getAddress().getLat() + ", lon = " + event.getSchedule().getVenue().getAddress().getLon());
-		
 		res = getResources();
 		
 		isTablet = ((MainActivity)FragmentUtil.getActivity(this)).isTablet();
@@ -183,9 +182,19 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 			if (schedule.getDates().size() > 0) {
 				com.wcities.eventseeker.core.Date date = schedule.getDates().get(0);
 				
-				DateFormat dateFormat = date.isStartTimeAvailable() ? new SimpleDateFormat("MMMM dd, yyyy h:mm a") :
-					new SimpleDateFormat("MMMM dd, yyyy");
+				DateFormat dateFormat;
+				
+				if(isTablet) {
+					dateFormat = date.isStartTimeAvailable() ? new SimpleDateFormat("EEEE MMMM d, h:mm a") :
+						new SimpleDateFormat("EEEE MMMM d");
+				} else {
+					dateFormat = date.isStartTimeAvailable() ? new SimpleDateFormat("MMMM dd, yyyy h:mm a") :
+						new SimpleDateFormat("MMMM dd, yyyy");
+				}				
+				
 				txtEvtTime.setText(dateFormat.format(date.getStartDate()));
+				txtEvtTime.setSelected(true);
+				
 			}
 			
 			if (schedule.getBookingInfos().isEmpty()) {

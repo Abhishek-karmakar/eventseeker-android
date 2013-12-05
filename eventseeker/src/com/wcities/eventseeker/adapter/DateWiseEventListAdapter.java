@@ -36,14 +36,14 @@ public class DateWiseEventListAdapter extends BaseAdapter implements DateWiseEve
     private AsyncTask<Void, Void, List<Event>> loadDateWiseEvents;
     private int eventsAlreadyRequested;
 	private boolean isMoreDataAvailable = true;
-	private DateWiseEventListAdapterListener mListener;
+	private LoadEventsInBackgroundListener mListener;
 	
 	public interface DateWiseEventListAdapterListener {
 		public void loadEventsInBackground();
 	}
 
     public DateWiseEventListAdapter(Context context, DateWiseEventList dateWiseEvtList, 
-    		AsyncTask<Void, Void, List<Event>> loadDateWiseEvents, DateWiseEventListAdapterListener mListener) {
+    		AsyncTask<Void, Void, List<Event>> loadDateWiseEvents, LoadEventsInBackgroundListener mListener) {
     	mContext = context;
         bitmapCache = BitmapCache.getInstance();
         this.dateWiseEvtList = dateWiseEvtList;
@@ -172,5 +172,10 @@ public class DateWiseEventListAdapter extends BaseAdapter implements DateWiseEve
 	@Override
 	public void setMoreDataAvailable(boolean isMoreDataAvailable) {
 		this.isMoreDataAvailable = isMoreDataAvailable;
+	}
+
+	@Override
+	public void setDataSet(List<Event> list) {
+		// TODO Auto-generated method stub
 	}
 }

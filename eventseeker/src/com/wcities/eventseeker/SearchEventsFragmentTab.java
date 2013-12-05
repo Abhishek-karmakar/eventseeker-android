@@ -8,18 +8,17 @@ import android.view.ViewGroup;
 
 import com.wcities.eventseeker.SearchFragment.SearchFragmentChildListener;
 import com.wcities.eventseeker.adapter.DateWiseMyEventListAdapter;
-import com.wcities.eventseeker.adapter.DateWiseMyEventListAdapter.DateWiseMyEventListAdapterListener;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener.LoadEventsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
 public class SearchEventsFragmentTab extends SearchEventsParentFragment
-		implements SearchFragmentChildListener,
-		DateWiseMyEventListAdapterListener {
+		implements SearchFragmentChildListener, LoadEventsInBackgroundListener {
 
 	private static final String TAG = SearchEventsFragmentTab.class.getName();
 

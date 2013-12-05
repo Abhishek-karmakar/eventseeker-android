@@ -51,10 +51,6 @@
     <dimen name="txt_powered_by_txt_size_fragment_about_us">15sp</dimen>
     <dimen name="img_icons_margin_r_fragment_about_us">25dp</dimen>
 
-    <!-- fragment_search_artists_list_item.xml -->
-    <dimen name="txt_artist_name_pad_fragment_search_artists_list_item">3dp</dimen>
-    <dimen name="img_item_h_fragment_search_artists_list_item">140dp</dimen>
-
     <!-- fragment_following.xml -->
     <dimen name="grd_following_hor_ver_spacing_fragment_following_tab">15dp</dimen>
     <dimen name="grd_following_margin_fragment_following_tab">10dp</dimen>
@@ -103,7 +99,7 @@
     <!-- fragment_custom_tabs.xml -->
     <dimen name="tab_bar_margin_fragment_custom_tabs">15dp</dimen>
 
-    <!-- fragment_search_artists_list_item -->
+    <!-- fragment_search_artists_list_item.xml -->
     <dimen name="img_artist_w_fragment_search_artists_list_item">@dimen/img_event_w_fragment_my_events_list_item</dimen>
     <dimen name="img_artist_ht_fragment_search_artists_list_item">@dimen/img_event_ht_fragment_my_events_list_item</dimen>
     <dimen name="txt_artist_name_margin_t_fragment_search_artists_list_item">30dp</dimen>
@@ -114,6 +110,15 @@
     <dimen name="rel_layout_artist_details_margin_l_fragment_search_artists_list_item">35dp</dimen>
     <dimen name="rel_layout_artist_details_margin_r_fragment_search_artists_list_item">10dp</dimen>
     <dimen name="txt_artist_name_txt_size_fragment_search_artists_list_item">15sp</dimen>
+    <dimen name="img_item_h_fragment_search_artists_list_item">140dp</dimen>
+    <dimen name="txt_artist_name_pad_fragment_search_artists_list_item">3dp</dimen>
+    <dimen name="img_item_h_fragment_search_artists_list_item">140dp</dimen>
+    <dimen name="txt_on_tour_margin_t_fragment_search_artists_list_item">23dp</dimen>
+    <dimen name="txt_on_tour_margin_r_fragment_search_artists_list_item">-20dp</dimen>
+    <dimen name="txt_on_tour_txt_size_fragment_search_artists_list_item">14sp</dimen>
+    <dimen name="txt_on_tour_pad_l_r_fragment_search_artists_list_item">20dp</dimen>
+    <dimen name="txt_on_tour_pad_t_b_fragment_search_artists_list_item">1dp</dimen>
+
     <!-- fragment_discover_by_category_list_item_evt.xml -->
     <dimen name="img_event_w_fragment_discover_by_category_list_item_evt">@dimen/img_event_w_fragment_my_events_list_item</dimen>
     <dimen name="img_event_ht_fragment_discover_by_category_list_item_evt">@dimen/img_event_ht_fragment_my_events_list_item</dimen>
@@ -231,7 +236,7 @@
     <dimen name="img_video_ht_fragment_video">200dp</dimen>
 
     <!-- discover_gallery_item.xml -->
-    <dimen name="rlt_root_pad_l_r_discover_gallery_item">0dp</dimen>
+    <dimen name="rlt_root_pad_l_r_discover_gallery_item">7dp</dimen>
     <dimen name="rlt_root_pad_t_b_discover_gallery_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="img_featured_evt_pad_discover_gallery_item">3dp</dimen>
     <dimen name="txt_evt_title_txt_size_discover_gallery_item">18sp</dimen>

@@ -17,7 +17,12 @@ public interface DateWiseEventParentAdapterListener {
 
 	public void updateContext(Context context);
 
-	public void setLoadDateWiseEvents(
-			AsyncTask<Void, Void, List<Event>> loadDateWiseEvents);
+	public void setLoadDateWiseEvents(AsyncTask<Void, Void, List<Event>> loadDateWiseEvents);
+	
+	public void setDataSet(List<Event> list);
+	
+	public interface LoadEventsInBackgroundListener {
+		public void loadEventsInBackground();
+	}
 
 }
