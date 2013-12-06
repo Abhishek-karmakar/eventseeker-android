@@ -3,7 +3,8 @@
     android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_gray" >
+    android:gravity="center_vertical"
+    android:background="@drawable/story_space" >
 
     <ImageView android:id="@+id/imgLeft"
         android:layout_width="@dimen/arrow_w_widget_layout"
@@ -23,14 +24,25 @@
 	    android:layout_height="match_parent"
 	    android:layout_toRightOf="@id/imgLeft"
 	    android:layout_toLeftOf="@id/imgRight"
-	    android:background="@drawable/story_space"
-	    android:padding="@dimen/lnr_layout_content_pad_widget_layout" >
+	    android:padding="@dimen/lnr_layout_content_pad_widget_layout"
+	    android:gravity="center_vertical" >
 	    
+        <TextView android:id="@+id/txtEvtTitle"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textColor="@android:color/black"
+			android:text="Event Title"
+			android:textStyle="bold"
+			android:textSize="@dimen/txt_evt_title_txt_size_widget_layout"
+			android:maxLines="2"
+			android:ellipsize="end" />
+			
         <ImageView android:id="@+id/imgEvt"
 			android:layout_width="@dimen/img_evt_w_widget_layout"
 			android:layout_height="@dimen/img_evt_ht_widget_layout"
+			android:layout_below="@id/txtEvtTitle"
+			android:layout_marginTop="@dimen/img_evt_margin_t_widget_layout"
 			android:contentDescription="event image"
-			android:layout_centerVertical="true"
 			android:scaleType="fitXY" />
 			
 		<LinearLayout android:id="@+id/lnrLayoutEvtDetails"
@@ -42,19 +54,12 @@
 		    android:layout_alignBottom="@id/imgEvt"
 		    android:orientation="vertical" >
 		    
-		    <TextView android:id="@+id/txtEvtTitle"
-				android:layout_width="match_parent"
-				android:layout_height="0dp"
-				style="@style/SingleLineMarqueeTxt"
-				android:textColor="@android:color/black"
-				android:text="Event Title"
-				android:layout_weight="1"
-				android:focusable="true"
-        		android:focusableInTouchMode="true" >
-				
-		        <requestFocus android:focusable="true" />
-				
-		    </TextView>
+		<!-- <LinearLayout android:id="@+id/lnrLayoutEvtDetails"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_below="@id/txtEvtTitle"
+		    android:layout_marginLeft="@dimen/lnr_layout_evt_details_margin_l_widget_layout"
+		    android:orientation="vertical" > -->
 		    
 		    <LinearLayout android:id="@+id/lnrLayoutDate"
 		        android:layout_width="match_parent"
@@ -69,17 +74,32 @@
 	           		android:src="@drawable/calendar" />
 		    
 			    <TextView android:id="@+id/txtDate"
-					android:layout_width="match_parent"
+					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					style="@style/SingleLineMarqueeTxt"
 					android:textSize="@dimen/txt_evt_title_txt_size_include_evt_details"
 					android:layout_marginLeft="@dimen/txt_date_margin_l_widget_layout"
 					android:text="Date"
 					android:textColor="@android:color/black" />
+			    
+			    <TextView android:id="@+id/txtEvtTime"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="@dimen/txt_evt_title_txt_size_include_evt_details"
+					android:text=", 10:00"
+					android:textColor="@android:color/black" />
+			    
+			    <TextView android:id="@+id/txtEvtTimeAMPM"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:textSize="@dimen/txt_evt_time_am_pm_txt_size_widget_layout"
+					android:text=" PM"
+					android:textColor="@android:color/black"
+					android:layout_marginTop="@dimen/txt_evt_time_am_pm_margin_t_widget_layout" />
 		        
 		    </LinearLayout>
 		    
-		    <LinearLayout android:id="@+id/lnrLayoutTime"
+		    <!-- <LinearLayout android:id="@+id/lnrLayoutTime"
 		        android:layout_width="match_parent"
 		        android:layout_height="0dp"
 		        android:orientation="horizontal"
@@ -107,7 +127,7 @@
 					android:textColor="@android:color/black"
 					android:layout_marginTop="@dimen/txt_evt_time_am_pm_margin_t_widget_layout" />
 		        
-		    </LinearLayout>
+		    </LinearLayout> -->
 		    
 		    <LinearLayout android:id="@+id/lnrLayoutLoc"
 		        android:layout_width="match_parent"
@@ -132,19 +152,22 @@
 		        
 		    </LinearLayout>
 		    
+		    <LinearLayout android:id="@+id/lnrLayoutLogo"
+		        android:layout_width="match_parent"
+		        android:layout_height="0dp"
+		        android:orientation="horizontal"
+		        android:layout_weight="1"
+		        android:gravity="bottom|right">
+		        
+		        <ImageView android:id="@+id/imgLogo"
+					android:layout_width="@dimen/img_logo_size_widget_layout"
+					android:layout_height="@dimen/img_logo_size_widget_layout"
+					android:src="@drawable/ic_launcher" />
+			    
+		    </LinearLayout>
+		    
 		</LinearLayout>
 			
     </RelativeLayout>
-    
-    <ImageView android:id="@+id/vDummyLeft"
-	    android:layout_width="@dimen/v_dummy_arrow_w_widget_layout"
-	    android:layout_height="match_parent"
-	    android:src="@color/transparent" />
-    
-    <ImageView android:id="@+id/vDummyRight"
-	    android:layout_width="@dimen/v_dummy_arrow_w_widget_layout"
-	    android:layout_height="match_parent"
-	    android:layout_alignParentRight="true"
-	    android:src="@color/transparent" />
     
 </RelativeLayout> 

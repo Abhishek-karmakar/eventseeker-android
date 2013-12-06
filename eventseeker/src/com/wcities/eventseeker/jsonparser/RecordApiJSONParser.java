@@ -117,10 +117,10 @@ public class RecordApiJSONParser {
 		if (jsonObject.has(KEY_LATITUDE)) {
 			String strLat = jsonObject.getString(KEY_LATITUDE);
 			String strLon = jsonObject.getString(KEY_LONGITUDE);
-			if (!strLat.isEmpty()) {
+			if (strLat.length() != 0) {
 				address.setLat(Double.parseDouble(strLat));
 			}
-			if (!strLon.isEmpty()) {
+			if (strLon.length() != 0) {
 				address.setLon(Double.parseDouble(strLon));
 			}
 		}

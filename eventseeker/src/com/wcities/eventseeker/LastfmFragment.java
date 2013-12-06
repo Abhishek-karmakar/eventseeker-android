@@ -92,7 +92,7 @@ public class LastfmFragment extends FragmentLoadableFromBackStack implements OnC
 	}
 	
 	private void searchUserId(final String userId) {
-		if (userId == null || userId.isEmpty()) {
+		if (userId == null || userId.length() == 0) {
 			return;
 		}		
 		

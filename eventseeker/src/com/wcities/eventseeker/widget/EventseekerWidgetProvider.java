@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.List;
 
+import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -37,10 +38,12 @@ public class EventseekerWidgetProvider extends AppWidgetProvider {
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
 			int[] appWidgetIds) {
-		//Log.d(TAG, "onUpdate()");
+		Log.d(TAG, "onUpdate()");
 		EventseekerWidgetList eventseekerWidgetList = EventseekerWidgetList.getInstance();
 		for (int widgetId : appWidgetIds) {
+			Log.d(TAG, "widgetId = " + widgetId);
 			if (!eventseekerWidgetList.contains(widgetId)) {
+				Log.d(TAG, "add widget into eventseekerWidgetList = " + eventseekerWidgetList);
 				eventseekerWidgetList.addWidget(new EventseekerWidget(widgetId));
 			}
 		}
@@ -58,30 +61,26 @@ public class EventseekerWidgetProvider extends AppWidgetProvider {
 		 */
 		String action = intent.getAction();
 		Bundle bundle = intent.getExtras();
-		//Log.d(TAG, "onReceive() action = " + action);
+		Log.d(TAG, "onReceive() action = " + action);
 		
 		if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-			//Log.d(TAG, "CONNECTIVITY_ACTION");
-			ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService( Context.CONNECTIVITY_SERVICE );
+			Log.d(TAG, "CONNECTIVITY_ACTION");
+			ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		    NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
 		    
 		    if (activeNetInfo != null & EventseekerWidgetList.getInstance().getEvents().isEmpty()) {
-		    	//Log.d(TAG, "activeNetInfo != null");
-		    	RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_loading);
-		    	AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-		    	//get widget ids for widgets created
-		    	ComponentName widget = new ComponentName(context, EventseekerWidgetProvider.class);
-		    	int[] widgetIds = widgetManager.getAppWidgetIds(widget);
-		    	widgetManager.updateAppWidget(widgetIds, remoteViews);
-		    	loadEvents(context);
+		    	Log.d(TAG, "activeNetInfo != null");
+		    	callOnUpdate(context);
 		    }
 			
 		} else if (action.equals(EventseekerWidget.WIDGET_PREV_EVENT)) {
 			//Log.d(TAG, "WIDGET_PREV_EVENT");
 			int widgetId = bundle.getInt(BundleKeys.WIDGET_ID);
+			Log.d(TAG, "widgetId = " + widgetId);
 			EventseekerWidgetList eventseekerWidgetList = EventseekerWidgetList.getInstance();
 			EventseekerWidget widget = eventseekerWidgetList.getWidget(widgetId);
 			if (widget == null) {
+				Log.d(TAG, "widget == null for eventseekerWidgetList = " + eventseekerWidgetList);
 				callOnUpdate(context);
 				
 			} else {
@@ -92,9 +91,11 @@ public class EventseekerWidgetProvider extends AppWidgetProvider {
 		} else if (action.equals(EventseekerWidget.WIDGET_NEXT_EVENT)) {
 			//Log.d(TAG, "WIDGET_NEXT_EVENT");
 			int widgetId = bundle.getInt(BundleKeys.WIDGET_ID);
+			Log.d(TAG, "widgetId = " + widgetId);
 			EventseekerWidgetList eventseekerWidgetList = EventseekerWidgetList.getInstance();
 			EventseekerWidget widget = eventseekerWidgetList.getWidget(widgetId);
 			if (widget == null) {
+				Log.d(TAG, "widget == null for eventseekerWidgetList = " + eventseekerWidgetList);
 				callOnUpdate(context);
 				
 			} else {
@@ -121,14 +122,24 @@ public class EventseekerWidgetProvider extends AppWidgetProvider {
 		            
 				} else {
 		            //Log.d(TAG, "null");
-		            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_loading);  
-		            remoteViews.setTextViewText(R.id.btnLoading, "No events found.");  
-		            
-		            // get widget ids for widgets created  
-		            AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-		            ComponentName widget = new ComponentName(context, EventseekerWidgetProvider.class);  
-		            int[] widgetIds = widgetManager.getAppWidgetIds(widget); 
-		            widgetManager.updateAppWidget(widgetIds, remoteViews);
+					/*if (retryLoadingCount < MAX_RETRY_LOADING_COUNT) {
+						Log.d(TAG, "retryLoading - " + retryLoadingCount + "for eventseekerWidgetList = " + eventseekerWidgetList);
+						++retryLoadingCount;
+						callOnUpdate(context);
+						
+					} else {
+						Log.d(TAG, "no events found.");
+						retryLoadingCount = 0;*/
+						
+						RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_loading);  
+						remoteViews.setTextViewText(R.id.btnLoading, "No events found.");  
+						
+						// get widget ids for widgets created  
+						AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+						ComponentName widget = new ComponentName(context, EventseekerWidgetProvider.class);  
+						int[] widgetIds = widgetManager.getAppWidgetIds(widget); 
+						widgetManager.updateAppWidget(widgetIds, remoteViews);
+					//}
 				}
 				
 			} else if (updateType == UpdateType.REFRESH_IMAGE) {
@@ -152,21 +163,29 @@ public class EventseekerWidgetProvider extends AppWidgetProvider {
 	}
 	
 	private void callOnUpdate(Context context) {
+		Log.d(TAG, "callOnUpdate()");
+		Intent updateIntent = buildUpdateIntent(context);
+		context.sendBroadcast(updateIntent);
+	}
+	
+	private Intent buildUpdateIntent(Context context) {
 		AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
 		ComponentName widgetComponent = new ComponentName(context, EventseekerWidgetProvider.class);
 		int[] widgetIds = widgetManager.getAppWidgetIds(widgetComponent);
 		
 		RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_loading);
+		remoteViews.setTextViewText(R.id.btnLoading, "Loading Events...");  
 		widgetManager.updateAppWidget(widgetIds, remoteViews);
 		
-		Intent update = new Intent();
-		update.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetIds);
-		update.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-		context.sendBroadcast(update);
+		Intent updateIntent = new Intent();
+		updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetIds);
+		updateIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+		
+		return updateIntent;
 	}
 	
 	private void loadEvents(Context context) {
-		//Log.d(TAG, "loadEvents()");
+		Log.d(TAG, "loadEvents()");
 		Intent intent = new Intent(context.getApplicationContext(), EventseekerWidgetService.class); 
 		intent.putExtra(BundleKeys.LOAD_TYPE, LoadType.LOAD_EVENTS);
         context.startService(intent);
@@ -205,51 +224,51 @@ public class EventseekerWidgetProvider extends AppWidgetProvider {
 
 			if (schedule.getDates().get(0).isStartTimeAvailable()) {
 				String[] timeInArray = ConversionUtil.getTimeInArray(schedule.getDates().get(0).getStartDate());
-				remoteViews.setTextViewText(R.id.txtEvtTime, timeInArray[0]);
+				remoteViews.setTextViewText(R.id.txtEvtTime, ", " + timeInArray[0]);
 				remoteViews.setTextViewText(R.id.txtEvtTimeAMPM, " " + timeInArray[1]);
 				
 			} else {
-				remoteViews.setViewVisibility(R.id.lnrLayoutTime, View.GONE);
+				//remoteViews.setViewVisibility(R.id.lnrLayoutTime, View.GONE);
 			}
 			
 			remoteViews.setTextViewText(R.id.txtEvtLocation, event.getSchedule().getVenue().getName());
 
 		} else {
 			remoteViews.setViewVisibility(R.id.lnrLayoutDate, View.INVISIBLE);
-			remoteViews.setViewVisibility(R.id.lnrLayoutTime, View.INVISIBLE);
+			//remoteViews.setViewVisibility(R.id.lnrLayoutTime, View.INVISIBLE);
 			remoteViews.setViewVisibility(R.id.lnrLayoutLoc, View.INVISIBLE);
 		}
 		
 		Event prevEvent = eventseekerWidgetList.getPrevious(event);
 		if (prevEvent != null) {
-			remoteViews.setBoolean(R.id.vDummyLeft, "setEnabled", true);
+			remoteViews.setBoolean(R.id.imgLeft, "setEnabled", true);
 			
 			//Log.d(TAG, "prevEvent != null for widget Id = " + eventseekerWidget.getWidgetId());
 			Intent leftIntent = new Intent();
 			leftIntent.setAction(EventseekerWidget.WIDGET_PREV_EVENT)
 			.putExtra(BundleKeys.WIDGET_ID, eventseekerWidget.getWidgetId());
 			PendingIntent pendingIntent = PendingIntent.getBroadcast(context, eventseekerWidget.getWidgetId(), leftIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-			remoteViews.setOnClickPendingIntent(R.id.vDummyLeft, pendingIntent);
+			remoteViews.setOnClickPendingIntent(R.id.imgLeft, pendingIntent);
 			
 		} else {
 			//Log.d(TAG, "prevEvent = null for widget Id = " + eventseekerWidget.getWidgetId());
-			remoteViews.setBoolean(R.id.vDummyLeft, "setEnabled", false);
+			remoteViews.setBoolean(R.id.imgLeft, "setEnabled", false);
 		}
 		
 		Event nextEvent = eventseekerWidgetList.getNext(event);
 		if (nextEvent != null) {
-			remoteViews.setBoolean(R.id.vDummyRight, "setEnabled", true);
+			remoteViews.setBoolean(R.id.imgRight, "setEnabled", true);
 
 			//Log.d(TAG, "nextEvent != null for widget Id = " + eventseekerWidget.getWidgetId());
 			Intent rightIntent = new Intent();
 			rightIntent.setAction(EventseekerWidget.WIDGET_NEXT_EVENT)
 			.putExtra(BundleKeys.WIDGET_ID, eventseekerWidget.getWidgetId());
 			PendingIntent pendingIntent = PendingIntent.getBroadcast(context, eventseekerWidget.getWidgetId(), rightIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-			remoteViews.setOnClickPendingIntent(R.id.vDummyRight, pendingIntent);
+			remoteViews.setOnClickPendingIntent(R.id.imgRight, pendingIntent);
 			
 		} else {
 			//Log.d(TAG, "nextEvent = null for widget Id = " + eventseekerWidget.getWidgetId());
-			remoteViews.setBoolean(R.id.vDummyRight, "setEnabled", false);
+			remoteViews.setBoolean(R.id.imgRight, "setEnabled", false);
 		}
 		
 		Intent mainActivityIntent = new Intent(context, MainActivity.class);
