@@ -12,6 +12,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.IBinder;
+import android.util.Log;
 
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.EventApi;
@@ -44,10 +45,10 @@ public class EventseekerWidgetService extends IntentService {
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		LoadType loadType = (LoadType) intent.getSerializableExtra(BundleKeys.LOAD_TYPE);
-		//Log.d(TAG, "onStartCommand(), loadType = " + loadType.name());
+		Log.d(TAG, "onHandleIntent(), loadType = " + loadType.name());
 
 		if (loadType == LoadType.LOAD_EVENTS) {
-			//Log.d(TAG, "execute loadEvents()");
+			Log.d(TAG, "execute loadEvents()");
 			loadEvents();
 			
 		} else if (loadType == LoadType.LOAD_IMAGE) {
@@ -76,6 +77,7 @@ public class EventseekerWidgetService extends IntentService {
 			tmpEvents = myEventsList.getItems();
 			
 			if (tmpEvents.isEmpty()) {
+				Log.d(TAG, "no my events found");
 				// load recommended events
 				jsonObject = userInfoApi.getMyProfileInfoFor(Type.recommendedevent);
 				jsonParser = new UserInfoApiJSONParser();
@@ -84,6 +86,7 @@ public class EventseekerWidgetService extends IntentService {
 			}
 			
 			if (tmpEvents.isEmpty()) {
+				Log.d(TAG, "no recommended events found");
 				// load featured events
 				EventApi eventApi = new EventApi(Api.OAUTH_TOKEN, latLng[0], latLng[1]);
 				eventApi.setLimit(EVENTS_LIMIT);
@@ -104,6 +107,9 @@ public class EventseekerWidgetService extends IntentService {
 		
 		if (tmpEvents != null && !tmpEvents.isEmpty()) {
 			EventseekerWidgetList.getInstance().setEvents(tmpEvents);
+			
+		} else {
+			Log.d(TAG, "no featured events found");
 		}
 		
 		Intent intent = new Intent();

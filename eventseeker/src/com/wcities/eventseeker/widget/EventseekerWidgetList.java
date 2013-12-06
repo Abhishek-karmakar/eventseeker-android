@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import android.util.Log;
+
 import com.wcities.eventseeker.core.Event;
 
 public class EventseekerWidgetList {
@@ -23,6 +25,7 @@ public class EventseekerWidgetList {
 		if (eventseekerWidgetList == null) {
 			synchronized (EventseekerWidgetList.class) {
 				if (eventseekerWidgetList == null) {
+					Log.d(TAG, "eventseekerWidgetList == null");
 					eventseekerWidgetList = new EventseekerWidgetList();
 				}
 			}

@@ -501,6 +501,10 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 	}
 	
 	private void updateAddress() {
+		if (event.getSchedule() == null) {
+			return;
+		}
+		
 		Address address = event.getSchedule().getVenue().getAddress();
 		AddressMapFragment fragment = (AddressMapFragment) getChildFragmentManager().findFragmentByTag(
 				AppConstants.FRAGMENT_TAG_ADDRESS_MAP);
@@ -654,7 +658,7 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 		updateFriendsVisibility();
 		friendsGridAdapter.notifyDataSetChanged();
 		
-		if (!event.getSchedule().getBookingInfos().isEmpty()) {
+		if (event.getSchedule() != null && !event.getSchedule().getBookingInfos().isEmpty()) {
 			updateBtnBuyTicketsEnabled(true);
 		}
 		updateAttendingChkBoxes();	

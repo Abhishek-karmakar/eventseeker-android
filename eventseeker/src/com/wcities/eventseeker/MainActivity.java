@@ -1146,7 +1146,7 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	public boolean onQueryTextSubmit(String query) {
 		Log.d(TAG, "onQueryTextSubmit(), query = " + query);
-		if (query == null || query.isEmpty()) {
+		if (query == null || query.length() == 0) {
 			return true;
 		}
 

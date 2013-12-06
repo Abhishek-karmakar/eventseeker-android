@@ -142,14 +142,14 @@ public class VenueInfoFragment extends Fragment implements OnClickListener, Asyn
 			}
 			
 			if (venue.getAddress().getCity() != null) {
-				if (!address.isEmpty()) {
+				if (address.length() != 0) {
 					address += ", ";
 				}
 				address += venue.getAddress().getCity();
 			} 
 			
 			if (venue.getAddress().getCountry() != null) {
-				if (!address.isEmpty()) {
+				if (address.length() != 0) {
 					address += ", ";
 				}
 				address += venue.getAddress().getCountry().getName();

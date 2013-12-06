@@ -125,7 +125,7 @@ public class DeviceLibraryFragment extends FragmentLoadableFromBackStack impleme
 							Log.d("ArtistUpdateActivity", "Artist: " + artistName
 									+ ", Albums: " + albumsCount + ", Tracks: "
 									+ tracksCount);*/
-							if (artistName != null && !artistName.isEmpty()) {
+							if (artistName != null && artistName.length() != 0) {
 								artists.add(artistName);
 							}
 							
