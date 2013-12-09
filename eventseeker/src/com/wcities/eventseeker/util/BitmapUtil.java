@@ -5,6 +5,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.wcities.eventseeker.cache.BitmapCacheable;
+import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -51,6 +56,39 @@ public class BitmapUtil {
 		}
 		//Log.i(TAG, "return bitmap");
 		return bitmap;
+	}
+	
+	public static List<String> getUrlsInOrder(BitmapCacheable bitmapCacheable, ImgResolution imgResolution) {
+		List<String> urls = new ArrayList<String>();
+		
+		switch (imgResolution) {
+		
+		case MOBILE:
+			urls.add(bitmapCacheable.getMobiResImgUrl());
+			urls.add(bitmapCacheable.getLowResImgUrl());
+			urls.add(bitmapCacheable.getHighResImgUrl());
+			break;
+			
+		case LOW:
+			urls.add(bitmapCacheable.getLowResImgUrl());
+			urls.add(bitmapCacheable.getHighResImgUrl());
+			urls.add(bitmapCacheable.getMobiResImgUrl());
+			break;
+
+		case HIGH:
+			urls.add(bitmapCacheable.getHighResImgUrl());
+			//Log.i(TAG, "high res=" + bitmapCacheable.getHighResImgUrl());
+			urls.add(bitmapCacheable.getLowResImgUrl());
+			//Log.i(TAG, "low res=" + bitmapCacheable.getLowResImgUrl());
+			urls.add(bitmapCacheable.getMobiResImgUrl());
+			//Log.i(TAG, "mobi res=" + bitmapCacheable.getMobiResImgUrl());
+			break;
+			
+		default:
+			urls.add(bitmapCacheable.getMobiResImgUrl());
+			break;
+		}
+		return urls;
 	}
 	
 	/*public static Uri getImgFileUri(Bitmap bitmap) {

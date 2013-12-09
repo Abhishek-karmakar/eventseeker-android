@@ -380,20 +380,19 @@
     <dimen name="lnr_layout_btns_margin_t_fragment_venue_events">0dp</dimen>
     <!-- widget_info.xml -->
     <dimen name="min_w_widget_info">250dp</dimen>
-    <dimen name="min_ht_widget_info">110dp</dimen>
+    <dimen name="min_ht_widget_info">150dp</dimen>
+    <dimen name="widget_margin_hor">20dp</dimen>
+    <dimen name="widget_margin_vert">4dp</dimen>
     <!-- widget_layout.xml -->
-    <dimen name="lnr_layout_content_pad_widget_layout">4dp</dimen>
-    <dimen name="txt_evt_title_txt_size_widget_layout">16sp</dimen>
+    <dimen name="rlt_layout_root_w_widget_layout">200dp</dimen>
+    <dimen name="rlt_layout_root_ht_widget_layout">150dp</dimen>
+    <dimen name="rlt_layout_root_pad_widget_layout">4dp</dimen>
+    <dimen name="rlt_layout_btm_bar_pad_l_widget_layout">3dp</dimen>
     <dimen name="lnr_layout_evt_details_margin_l_widget_layout">10dp</dimen>
     <dimen name="rlt_layout_evt_details_margin_b_widget_layout">-10dp</dimen>
-    <dimen name="img_evt_w_widget_layout">120dp</dimen>
-    <dimen name="img_evt_ht_widget_layout">90dp</dimen>
-    <dimen name="img_evt_margin_t_widget_layout">3dp</dimen>
     <dimen name="txt_date_margin_l_widget_layout">10dp</dimen>
     <dimen name="txt_evt_time_am_pm_margin_t_widget_layout">-3dp</dimen>
     <dimen name="txt_evt_time_am_pm_txt_size_widget_layout">8sp</dimen>
-    <dimen name="arrow_w_widget_layout">50dp</dimen>
-    <dimen name="img_logo_size_widget_layout">25dp</dimen>
     <!-- fragment_device_library.xml -->
     <dimen name="rlt_layout_root_pad_fragment_device_library">20dp</dimen>
     <dimen name="txt_service_title_drawable_pad_fragment_device_library">5dp</dimen>
