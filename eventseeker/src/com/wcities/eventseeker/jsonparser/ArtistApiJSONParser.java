@@ -550,10 +550,10 @@ public class ArtistApiJSONParser {
 		Event event = new Event(jsonObject.getInt(KEY_ID), jsonObject.getString(KEY_NAME));
 		
 		event.setSchedule(getSchedule(jsonObject.getJSONObject(KEY_SCHEDULE), venues));
-		/*Attending attending = jsonObject.has(KEY_ATTENDING) ? 
-				Attending.getAttending(jsonObject.getInt(KEY_ATTENDING)) : Attending.NOT_GOING;
+		Event.Attending attending = jsonObject.has(KEY_ATTENDING) ? 
+				Event.Attending.getAttending(jsonObject.getInt(KEY_ATTENDING)) : Event.Attending.NOT_GOING;
 		event.setAttending(attending);
-		*/
+		
 		return event;
 	}
 	

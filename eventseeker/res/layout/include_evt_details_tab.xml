@@ -12,11 +12,11 @@
         android:gravity="center_vertical"
         android:orientation="horizontal" >
 
-        <ImageView
+        <!-- <ImageView
             android:id="@+id/imgEvtTitle"
             android:layout_width="@dimen/img_evt_location_w_include_evt_details"
             android:layout_height="@dimen/img_evt_location_ht_include_evt_details"
-            android:visibility="invisible" />
+            android:visibility="invisible" /> -->
 
         <TextView
             android:id="@+id/txtEvtTitle"

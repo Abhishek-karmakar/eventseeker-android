@@ -14,13 +14,11 @@
     
     <include layout="@layout/include_evt_details"
         android:layout_width="match_parent"
-    	android:layout_height="wrap_content"
+    	android:layout_height="match_parent"
         android:layout_toRightOf="@id/imgEvent"
-	    android:layout_alignTop="@id/imgEvent"
-	    android:layout_alignBottom="@id/imgEvent"
         android:layout_marginLeft="@dimen/rlt_layout_evt_details_margin_l_fragment_discover_by_category_list_item_evt"
         android:layout_marginRight="@dimen/rlt_layout_evt_details_margin_r_fragment_discover_by_category_list_item_evt"
-        android:gravity="center_vertical" />
+        android:layout_centerVertical="true" />
     
     <View android:id="@+id/divider"
         android:layout_width="match_parent"

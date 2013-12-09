@@ -36,7 +36,7 @@ public class ArtistApi extends Api {
 	private boolean friends;
 	private String endDate;
 	private int miles;
-	
+	private boolean	trackingEnabled;
 	private String userId;
 
 	public ArtistApi(String oauthToken) {
@@ -172,6 +172,15 @@ public class ArtistApi extends Api {
 	public void setMiles(int miles) {
 		this.miles = miles;
 	}
+	
+	public boolean isTrackingEnabled() {
+		return trackingEnabled;
+	}
+
+	public void setTrackingEnabled(boolean trackingEnabled) {
+		this.trackingEnabled = trackingEnabled;
+	}
+
 
 	public JSONObject getArtists() throws ClientProtocolException, IOException, JSONException {
 		String METHOD = "getArtist.php?";
@@ -182,6 +191,9 @@ public class ArtistApi extends Api {
 		}
 		if (strictSearchEnabled) {
 			uri = uri + "&strictSearch=enable";
+		}
+		if (trackingEnabled) {
+			uri = uri + "&tracking=enable";
 		}
 		if (exactSearchEnabled) {
 			uri = uri + "&exactSearch=enable";

@@ -53,6 +53,7 @@ public class LoadArtistEvents extends AsyncTask<Void, Void, List<Event>> {
 			artistApi.setArtistId(artistId);
 			artistApi.setUserId(wcitiesId);
 			artistApi.setLimit(EVENTS_LIMIT);
+			artistApi.setTrackingEnabled(true);
 
 			Calendar c = Calendar.getInstance();
 			c.add(Calendar.YEAR, TIME_LIMIT_IN_YEARS);
