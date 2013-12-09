@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Venue;
+import com.wcities.eventseeker.util.FragmentUtil;
 
 public class VenueEventsFragment extends Fragment implements OnClickListener {
 
@@ -21,20 +22,27 @@ public class VenueEventsFragment extends Fragment implements OnClickListener {
 	private static final String FRAGMENT_TAG_VENUE_EVENTS_LIST = "venueEventsListFragment";
 	
 	private Venue venue;
+
+	private boolean isTablet;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		venue = (Venue) getArguments().getSerializable(BundleKeys.VENUE);
+		isTablet = ((MainActivity)FragmentUtil.getActivity(this)).isTablet();
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_venue_events, null);
         
-        v.findViewById(R.id.btnPhone).setOnClickListener(this);
-        v.findViewById(R.id.btnWeb).setOnClickListener(this);
-        v.findViewById(R.id.btnDrive).setOnClickListener(this);
+		if(isTablet) {
+			v.findViewById(R.id.lnrLayoutBtns).setVisibility(View.GONE);		
+		} else {
+			v.findViewById(R.id.btnPhone).setOnClickListener(this);
+			v.findViewById(R.id.btnWeb).setOnClickListener(this);
+			v.findViewById(R.id.btnDrive).setOnClickListener(this);			
+		}
 		
         VenueEventsListFragment fragment = (VenueEventsListFragment) getChildFragmentManager().findFragmentByTag(
 				FRAGMENT_TAG_VENUE_EVENTS_LIST);

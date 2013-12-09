@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.cache.BitmapCache;
+import com.wcities.eventseeker.cache.BitmapCacheable;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Schedule;
@@ -116,7 +117,9 @@ public class DateWiseEventListAdapter extends BaseAdapter implements DateWiseEve
 				((TextView)convertView.findViewById(R.id.txtEvtLocation)).setText(schedule.getVenue().getName());
 			}
 			
-			String key = event.getKey(ImgResolution.LOW);
+			BitmapCacheable bitmapCacheable = event.doesValidImgUrlExist() ? event : event.getSchedule().getVenue();  
+			
+			String key = bitmapCacheable.getKey(ImgResolution.LOW);
 			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 			if (bitmap != null) {
 		        ((ImageView)convertView.findViewById(R.id.imgEvent)).setImageBitmap(bitmap);
@@ -125,7 +128,7 @@ public class DateWiseEventListAdapter extends BaseAdapter implements DateWiseEve
 		    	((ImageView)convertView.findViewById(R.id.imgEvent)).setImageBitmap(null);
 		    	AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
 		        asyncLoadImg.loadImg((ImageView) convertView.findViewById(R.id.imgEvent), 
-		        		ImgResolution.LOW, (AdapterView) parent, position, event);
+		        		ImgResolution.LOW, (AdapterView) parent, position, bitmapCacheable);
 		    }
 			
 			convertView.setOnClickListener(new OnClickListener() {
@@ -174,8 +177,4 @@ public class DateWiseEventListAdapter extends BaseAdapter implements DateWiseEve
 		this.isMoreDataAvailable = isMoreDataAvailable;
 	}
 
-	@Override
-	public void setDataSet(List<Event> list) {
-		// TODO Auto-generated method stub
-	}
 }

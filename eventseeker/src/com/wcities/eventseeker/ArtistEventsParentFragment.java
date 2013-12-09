@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView.RecyclerListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -26,6 +27,7 @@ import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener.Loa
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
+import com.wcities.eventseeker.viewdata.DateWiseEventList.LIST_ITEM_TYPE;
 
 public abstract class ArtistEventsParentFragment extends ListFragment implements OnClickListener, 
 	ArtistDetailsFragmentListener, LoadEventsInBackgroundListener {
@@ -91,7 +93,22 @@ public abstract class ArtistEventsParentFragment extends ListFragment implements
 
 		getListView().setDivider(null);
 		getListView().setBackgroundResource(R.drawable.story_space);
+		getListView().setScrollingCacheEnabled(false);
+		getListView().setRecyclerListener(new RecyclerListener() {
+			
+			@Override
+			public void onMovedToScrapHeap(View view) {
+				freeUpBitmapMemory(view);
+			}
 
+		});
+
+	}
+
+	private void freeUpBitmapMemory(View view) {
+		if (view != null && view.getTag() == LIST_ITEM_TYPE.CONTENT) {
+			((ImageView) view.findViewById(R.id.imgEvent)).setImageBitmap(null);
+		}
 	}
 
 	@Override
@@ -136,7 +153,6 @@ public abstract class ArtistEventsParentFragment extends ListFragment implements
 	@Override
 	public void onArtistUpdatedByArtistDetailsFragment() {
 		updateFollowingFooter();
-		adapter.setDataSet(artist.getEvents());
 		((BaseAdapter) adapter).notifyDataSetChanged();
 	}
 
@@ -155,6 +171,17 @@ public abstract class ArtistEventsParentFragment extends ListFragment implements
 		AsyncTaskUtil.executeAsyncTask(loadArtistEvents, true);
 		
 	}
+	
+	@Override
+	public void onDestroyView() {
+		
+		for (int i = getListView().getFirstVisiblePosition(), j = 0; 
+				i <= getListView().getLastVisiblePosition(); i++, j++) {
+			freeUpBitmapMemory(getListView().getChildAt(j));
+		}
+		super.onDestroyView();
+	}
+	
 	
 	protected abstract void updateFollowingFooter();
 	protected abstract DateWiseEventParentAdapterListener getAdapterInstance();

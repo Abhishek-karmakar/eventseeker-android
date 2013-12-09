@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.text.TextUtils.TruncateAt;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -56,7 +57,8 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 	private LoadEventsInBackgroundListener mListener;
 	private int orientation;
 	private LayoutParams lpImgEvtPort;
-
+	private boolean isTablet;
+	
 	public DateWiseMyEventListAdapter(Context context, DateWiseEventList dateWiseEvtList,
 			AsyncTask<Void, Void, List<Event>> loadDateWiseEvents, LoadEventsInBackgroundListener mListener) {
 		
@@ -78,6 +80,7 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 		lpImgEvtPort.topMargin = lpImgEvtPort.leftMargin = lpImgEvtPort.rightMargin = mContext
 				.getResources().getDimensionPixelSize(
 						R.dimen.img_event_margin_fragment_my_events_list_item);
+		isTablet = ((EventSeekr) mContext.getApplicationContext()).isTablet();
 	}
 
 	@Override
@@ -146,7 +149,7 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 			if (event.getSchedule() != null) {
 				Schedule schedule = event.getSchedule();
 
-				if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+				if (orientation == Configuration.ORIENTATION_LANDSCAPE || isTablet) {
 					if (schedule.getDates().get(0).isStartTimeAvailable()) {
 						String[] timeInArray = ConversionUtil.getTimeInArray(schedule.getDates().get(0).getStartDate());
 
@@ -162,15 +165,11 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 				}
 
 				TextView txtEvtLocation = (TextView) convertView.findViewById(R.id.txtEvtLocation);
-				if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-					txtEvtLocation.setMaxLines(1);
-					txtEvtLocation.setEllipsize(TruncateAt.END);
-				}
 				txtEvtLocation.setText(schedule.getVenue().getName());
 			}
 
 			ImageView imgEvent = (ImageView) convertView.findViewById(R.id.imgEvent);
-			if(!((EventSeekr) mContext.getApplicationContext()).isTablet()) {
+			if(!isTablet) {
 				if (orientation == Configuration.ORIENTATION_PORTRAIT) {
 					imgEvent.setLayoutParams(lpImgEvtPort);
 				}
@@ -358,10 +357,6 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 	@Override
 	public void setMoreDataAvailable(boolean isMoreDataAvailable) {
 		this.isMoreDataAvailable = isMoreDataAvailable;
-	}
-
-	@Override
-	public void setDataSet(List<Event> list) {
 	}
 
 }

@@ -31,12 +31,12 @@
 	    
 	    <EditText android:id="@+id/edtRepCode"
 	        android:layout_width="@dimen/edt_rep_code_w_fragment_rep_code"
-	        android:layout_height="wrap_content"
+	        android:layout_height="@dimen/edt_rep_code_ht_fragment_rep_code"
 	        android:layout_below="@id/txtRepCode"
 	        android:layout_marginTop="@dimen/edt_rep_code_margin_t_fragment_rep_code"
 	        android:textColor="@color/edt_rep_code_txt_color"
 	        android:layout_centerHorizontal="true"
-	        android:gravity="center_horizontal"
+	        android:gravity="center"
 	        android:background="@drawable/entry_area" />
 	    
 	    <Button android:id="@+id/btnSubmit"

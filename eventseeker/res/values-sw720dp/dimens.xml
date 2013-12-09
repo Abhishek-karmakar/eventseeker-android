@@ -309,4 +309,7 @@
     <dimen name="rlt_layout_root_pad_r_connect_accounts_list_item">@dimen/rlt_layout_root_pad_l_connect_accounts_list_item</dimen>
     <dimen name="img_service_margin_l_r_connect_accounts_list_item">20dp</dimen>
 
+    <!-- fragment_rep_code.xml -->
+    <dimen name="edt_rep_code_ht_fragment_rep_code">40dp</dimen>
+    
 </resources>

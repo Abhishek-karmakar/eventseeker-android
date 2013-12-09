@@ -2,6 +2,7 @@ package com.wcities.eventseeker.asynctask;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
@@ -17,12 +18,14 @@ import com.wcities.eventseeker.api.ArtistApi.Method;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
+import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
 public class LoadArtistEvents extends AsyncTask<Void, Void, List<Event>> {
 
 	private static final String TAG = LoadArtistEvents.class.getName();
 	private static final int EVENTS_LIMIT = 10;
+	private static final int TIME_LIMIT_IN_YEARS = 1;
 
 	private DateWiseEventList eventList;
 	private DateWiseEventParentAdapterListener eventListAdapter;
@@ -50,6 +53,15 @@ public class LoadArtistEvents extends AsyncTask<Void, Void, List<Event>> {
 			artistApi.setArtistId(artistId);
 			artistApi.setUserId(wcitiesId);
 			artistApi.setLimit(EVENTS_LIMIT);
+
+			Calendar c = Calendar.getInstance();
+			c.add(Calendar.YEAR, TIME_LIMIT_IN_YEARS);
+			int year = c.get(Calendar.YEAR);
+			int month = c.get(Calendar.MONTH);
+			int day = c.get(Calendar.DAY_OF_MONTH);
+			String endDate = ConversionUtil.getDay(year, month, day);
+			artistApi.setEndDate(endDate);
+			
 			artistApi.setAlreadyRequested(eventsAlreadyRequested);
 
 			JSONObject jsonObject = artistApi.getArtists();

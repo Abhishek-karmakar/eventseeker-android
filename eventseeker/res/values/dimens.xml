@@ -403,5 +403,7 @@
     <!-- top_left_most_tab_selected = (tab_bar_ht_fragment_custom_tabs - 6) -->
     <dimen name="top_left_most_tab_selected">39dp</dimen>
     <dimen name="corners_radius_left_most_tab_selected">6dp</dimen>
+    <!-- fragment_rep_code.xml -->
+    <dimen name="edt_rep_code_ht_fragment_rep_code">30dp</dimen>
 
 </resources>

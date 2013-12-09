@@ -21,7 +21,6 @@ public class ScrollViewContainingViewPager extends ScrollView {
 		switch (ev.getAction()) {
 		
 		case MotionEvent.ACTION_DOWN:
-			Log.i(TAG, "In Action Down");
 			xDistance = yDistance = 0f;
 			lastX = ev.getX();
 			lastY = ev.getY();
@@ -36,7 +35,6 @@ public class ScrollViewContainingViewPager extends ScrollView {
 			lastX = curX;
 			lastY = curY;
 			if (xDistance > yDistance) {
-				Log.i(TAG, "In Action Move Else");
 				return false;
 			}
 		}
