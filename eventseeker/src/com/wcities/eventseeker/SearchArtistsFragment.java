@@ -137,7 +137,6 @@ public class SearchArtistsFragment extends ListFragment implements SearchFragmen
 			ArtistApi artistApi = new ArtistApi(Api.OAUTH_TOKEN);
 			artistApi.setLimit(ARTISTS_LIMIT);
 			artistApi.setAlreadyRequested(artistsAlreadyRequested);
-			artistApi.setStrictSearchEnabled(true);
 			artistApi.setMethod(Method.artistSearch);
 
 			try {

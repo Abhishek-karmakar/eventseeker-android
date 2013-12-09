@@ -77,7 +77,6 @@ public class LoadDateWiseEvents extends AsyncTask<Void, Void, List<Event>> {
 
 		try {
 			if (query != null) {
-				eventApi.setStrictSearchEnabled(true);
 				eventApi.setSearchFor(URLEncoder.encode(query, AppConstants.CHARSET_NAME));
 				
 			} else {

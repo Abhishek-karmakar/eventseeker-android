@@ -36,6 +36,7 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.facebook.HttpMethod;
@@ -60,6 +61,7 @@ import com.wcities.eventseeker.custom.view.ResizableImageView;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
+import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack implements StatusCallback {
@@ -576,6 +578,9 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	    @Override
 	    public Dialog onCreateDialog(Bundle savedInstanceState) {
 	    	final EditText input = new EditText(FragmentUtil.getActivity(this));
+	    	LayoutParams lp = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+	    	lp.setMargins(0, ConversionUtil.toPx(getResources(), 50), 0, 0);
+	    	input.setLayoutParams(lp);
 	    	
 	        return new AlertDialog.Builder(FragmentUtil.getActivity(this))
 	                .setTitle("Add Comment")

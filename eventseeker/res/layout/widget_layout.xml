@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rltLayoutRoot"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="@dimen/rlt_layout_root_w_widget_layout"
+    android:layout_height="@dimen/rlt_layout_root_ht_widget_layout"
     android:padding="@dimen/rlt_layout_root_pad_widget_layout"
     android:gravity="center_vertical"
-    android:background="@drawable/story_space"
-    android:layout_marginLeft="@dimen/widget_margin_hor"
-    android:layout_marginRight="@dimen/widget_margin_hor"
-    android:layout_marginTop="@dimen/widget_margin_vert"
-    android:layout_marginBottom="@dimen/widget_margin_vert" >
+    android:background="@drawable/story_space" >
     
     <ImageView android:id="@+id/imgEvt"
 		android:layout_width="match_parent"
@@ -29,18 +25,21 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/txtEvtTitle"
 			android:layout_alignBottom="@id/txtEvtTime"
-			android:layout_alignParentRight="true" >
+			android:layout_alignParentRight="true"
+			android:layout_marginLeft="@dimen/rlt_layout_refresh_margin_l_widget_layout" >
 			
             <ImageView android:id="@+id/imgRefresh"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:src="@drawable/ic_launcher"
-				android:scaleType="centerInside" />
+				android:src="@drawable/refresh"
+				android:scaleType="centerInside"
+				android:layout_centerVertical="true" />
 	        
 	        <ProgressBar android:id="@+id/progressBar"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-				android:visibility="invisible" />
+				android:visibility="invisible"
+				android:layout_centerVertical="true" />
             
         </RelativeLayout>
         
@@ -58,7 +57,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_below="@id/txtEvtTitle"
-			android:layout_toLeftOf="@id/imgRefresh"
+			android:layout_toLeftOf="@id/rltLayoutRefresh"
 			android:textColor="@color/txt_evt_time_widget_layout"
 			android:text="Time"
 			android:singleLine="true"

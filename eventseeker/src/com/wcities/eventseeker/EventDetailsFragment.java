@@ -23,6 +23,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -103,6 +104,7 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 			event = (Event) getArguments().getSerializable(BundleKeys.EVENT);
 			//Log.d(TAG, "lat = " + event.getSchedule().getVenue().getAddress().getLat() + ", lon = " + event.getSchedule().getVenue().getAddress().getLon());
 			enableTabs = event.hasArtists();
+			Log.d(TAG, "enableTabs = " + enableTabs);
 			
 			loadEventDetails = new LoadEventDetails();
 			AsyncTaskUtil.executeAsyncTask(loadEventDetails, true);
@@ -235,7 +237,6 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 			eventApi.setUserId(((EventSeekr)activity.getApplication()).getWcitiesId());
 			eventApi.setFriendsEnabled(true);
 			eventApi.setLinkEnabled(true);
-			eventApi.addMoreInfo(MoreInfo.artistdesc);
 			eventApi.addMoreInfo(MoreInfo.fallbackimage);
 			
 			try {

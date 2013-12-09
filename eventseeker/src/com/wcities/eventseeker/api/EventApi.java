@@ -20,8 +20,7 @@ public class EventApi extends Api {
 	private static final String API = "event_api/";
 	
 	public static enum MoreInfo {
-		fallbackimage,
-		artistdesc
+		fallbackimage
 	};
 	
 	public static enum IdType {
@@ -300,12 +299,11 @@ public class EventApi extends Api {
 			}
 		}
 		
+		uri += "&moreInfo=artistdesc";
 		if (!moreInfo.isEmpty()) {
-			uri += "&moreInfo=";
 			for (Iterator<String> iterator = moreInfo.iterator(); iterator.hasNext();) {
-				uri = uri + iterator.next() + ",";
+				uri = uri + "," + iterator.next();
 			}
-			uri = uri.substring(0, uri.length() - 1);
 		}
 		
 		if (userId != null) {

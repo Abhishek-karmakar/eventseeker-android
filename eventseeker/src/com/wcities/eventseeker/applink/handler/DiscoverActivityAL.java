@@ -477,7 +477,6 @@ public class DiscoverActivityAL implements IProxyListenerALM {
 		eventApi.setLimit(EVENTS_LIMIT);
 		eventApi.setAlreadyRequested(eventsAlreadyRequested);
 		eventApi.setCategory(categoryId);
-		eventApi.addMoreInfo(MoreInfo.artistdesc);
 
 		try {
 			JSONObject jsonObject = eventApi.getEvents();

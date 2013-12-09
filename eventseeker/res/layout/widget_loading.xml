@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_marginLeft="@dimen/widget_margin_hor"
-    android:layout_marginRight="@dimen/widget_margin_hor"
-    android:layout_marginTop="@dimen/widget_margin_vert"
-    android:layout_marginBottom="@dimen/widget_margin_vert" >
+    android:layout_width="@dimen/rlt_layout_root_w_widget_layout"
+    android:layout_height="@dimen/rlt_layout_root_ht_widget_layout"
+    android:orientation="vertical" >
 
     <Button android:id="@+id/btnLoading"
         android:layout_width="match_parent"
