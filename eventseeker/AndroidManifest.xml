@@ -60,7 +60,6 @@
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="eventseeker.appwidget.action.WIDGET_UPDATE" />
-                <action android:name="eventseeker.appwidget.action.WIDGET_PREV_EVENT" />
                 <action android:name="eventseeker.appwidget.action.WIDGET_NEXT_EVENT" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>

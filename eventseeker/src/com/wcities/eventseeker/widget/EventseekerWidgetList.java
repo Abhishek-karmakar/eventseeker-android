@@ -84,14 +84,19 @@ public class EventseekerWidgetList {
 		
 		//Log.d(TAG, "getNext(), i = " + i);
 		if (++i < events.size()) {
+			// return next event
 			return events.get(i);
+			
+		} else if (!events.isEmpty()) {
+			// reached end of list, so restart the loop & return event at index 0
+			return events.get(0);
 			
 		} else {
 			return null;
 		}
 	}
 	
-	public Event getPrevious(Event currentEvent) {
+	/*public Event getPrevious(Event currentEvent) {
 		int i = events.size() - 1;
 		for (; i >= 0; i--) {
 			Event event = events.get(i);
@@ -107,7 +112,7 @@ public class EventseekerWidgetList {
 		} else {
 			return null;
 		}
-	}
+	}*/
 	
 	public void removeWidget(int widgetId){
 		for (int i = 0; i < widgetList.size(); i++) {

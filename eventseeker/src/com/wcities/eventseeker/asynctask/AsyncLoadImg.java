@@ -154,7 +154,7 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 		imgDetails.key = bitmapCacheable.getKey(imgResolution);
 		imgDetails.adapterView = adapterView;
 		imgDetails.pos = pos;
-		imgDetails.urls = getUrlsInOrder(bitmapCacheable, imgResolution);
+		imgDetails.urls = BitmapUtil.getUrlsInOrder(bitmapCacheable, imgResolution);
 		
 		startExecution(imgDetails);
 	}
@@ -164,7 +164,7 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 		ImgDetails imgDetails = new ImgDetails();
 		imgDetails.imageView = imageView;
 		imgDetails.key = bitmapCacheable.getKey(imgResolution);
-		imgDetails.urls = getUrlsInOrder(bitmapCacheable, imgResolution);
+		imgDetails.urls = BitmapUtil.getUrlsInOrder(bitmapCacheable, imgResolution);
 		
 		startExecution(imgDetails);
 	}
@@ -174,7 +174,7 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 		ImgDetails imgDetails = new ImgDetails();
 		this.context = context;
 		imgDetails.key = bitmapCacheable.getKey(imgResolution);
-		imgDetails.urls = getUrlsInOrder(bitmapCacheable, imgResolution);
+		imgDetails.urls = BitmapUtil.getUrlsInOrder(bitmapCacheable, imgResolution);
 		imgDetails.id = ((Event)bitmapCacheable).getId();
 		imgDetails.widgetId = widgetId;
 		
@@ -187,7 +187,7 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 		ImgDetails imgDetails = new ImgDetails();
 		imgDetails.imageView = imageView;
 		imgDetails.key = bitmapCacheable.getKey(imgResolution);
-		imgDetails.urls = getUrlsInOrder(bitmapCacheable, imgResolution);
+		imgDetails.urls = BitmapUtil.getUrlsInOrder(bitmapCacheable, imgResolution);
 		imgDetails.listener = listener;
 		
 		startExecution(imgDetails);
@@ -197,7 +197,7 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 		//Log.i(TAG, "loadImg()");
 		ImgDetails imgDetails = new ImgDetails();
 		imgDetails.key = bitmapCacheable.getKey(imgResolution);
-		imgDetails.urls = getUrlsInOrder(bitmapCacheable, imgResolution);
+		imgDetails.urls = BitmapUtil.getUrlsInOrder(bitmapCacheable, imgResolution);
 		imgDetails.listener = listener;
 		
 		startExecution(imgDetails);
@@ -311,38 +311,5 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 		} else if (imgDetails.listener != null) {
 			imgDetails.listener.onImageCouldNotBeLoaded();
 		}
-	}
-	
-	private List<String> getUrlsInOrder(BitmapCacheable bitmapCacheable, ImgResolution imgResolution) {
-		List<String> urls = new ArrayList<String>();
-		
-		switch (imgResolution) {
-		
-		case MOBILE:
-			urls.add(bitmapCacheable.getMobiResImgUrl());
-			urls.add(bitmapCacheable.getLowResImgUrl());
-			urls.add(bitmapCacheable.getHighResImgUrl());
-			break;
-			
-		case LOW:
-			urls.add(bitmapCacheable.getLowResImgUrl());
-			urls.add(bitmapCacheable.getHighResImgUrl());
-			urls.add(bitmapCacheable.getMobiResImgUrl());
-			break;
-
-		case HIGH:
-			urls.add(bitmapCacheable.getHighResImgUrl());
-			//Log.i(TAG, "high res=" + bitmapCacheable.getHighResImgUrl());
-			urls.add(bitmapCacheable.getLowResImgUrl());
-			//Log.i(TAG, "low res=" + bitmapCacheable.getLowResImgUrl());
-			urls.add(bitmapCacheable.getMobiResImgUrl());
-			//Log.i(TAG, "mobi res=" + bitmapCacheable.getMobiResImgUrl());
-			break;
-			
-		default:
-			urls.add(bitmapCacheable.getMobiResImgUrl());
-			break;
-		}
-		return urls;
 	}
 }
