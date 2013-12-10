@@ -284,5 +284,9 @@
     <dimen name="txt_service_desc_txt_size_fragment_device_library">19sp</dimen>
     <dimen name="txt_service_desc_margin_t_fragment_device_library">17dp</dimen>
     <dimen name="btn_retrieve_artists_margin_t_fragment_device_library">@dimen/txt_service_desc_margin_t_fragment_device_library</dimen>
+   
+    <!-- fragment_event_featuring.xml -->
+    <dimen name="lnr_layout_artist_list_margin_l_fragment_event_featuring">0dp</dimen>
+    <dimen name="lnr_layout_artist_list_margin_r_fragment_event_featuring">@dimen/lnr_layout_artist_list_margin_l_fragment_event_featuring</dimen>
 
 </resources>

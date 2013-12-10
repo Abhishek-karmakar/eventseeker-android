@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,6 +27,8 @@ import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 
 public class ArtistListAdapter<T> extends BaseAdapter {
 	
+	private static final String TAG = ArtistListAdapter.class.getName();
+
 	private static final String TAG_PROGRESS_INDICATOR = "progressIndicator";
 	private static final String TAG_CONTENT = "content";
 	
@@ -92,6 +95,7 @@ public class ArtistListAdapter<T> extends BaseAdapter {
 		        ((ImageView)convertView.findViewById(R.id.imgItem)).setImageBitmap(bitmap);
 		        
 		    } else {
+		    	//Log.d(TAG, "bitmap is null, low res url = " + artist.getLowResImgUrl());
 		    	ImageView imgArtist = (ImageView)convertView.findViewById(R.id.imgItem); 
 		        imgArtist.setImageBitmap(null);
 

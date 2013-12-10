@@ -29,4 +29,8 @@
     <dimen name="btn_drawable_pad_include_venue_details_footer">1dp</dimen>
     <dimen name="lnr_layout_btns_txt_size_include_fragment_venue_details_footer">18sp</dimen>
     
+    <!-- fragment_event_featuring.xml -->
+    <dimen name="lnr_layout_artist_list_margin_l_fragment_event_featuring">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="lnr_layout_artist_list_margin_r_fragment_event_featuring">@dimen/lnr_layout_artist_list_margin_l_fragment_event_featuring</dimen>
+    
 </resources>

@@ -18,7 +18,9 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
         android:background="@android:color/white"
-		android:layout_above="@id/lnrLayoutBtns" />
+		android:layout_above="@id/lnrLayoutBtns"
+		android:layout_marginLeft="@dimen/lnr_layout_artist_list_margin_l_fragment_event_featuring"
+	    android:layout_marginRight="@dimen/lnr_layout_artist_list_margin_r_fragment_event_featuring" />
 
     <!-- <ScrollView
         android:id="@+id/scrlVArtistList"
