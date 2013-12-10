@@ -22,7 +22,7 @@ public class DateWiseEventListFragmentTab extends DateWiseEventListParentFragmen
 	}
 
 	@Override
-	public void loadEventsInBackground() {
+	public void loadItemsInBackground() {
 		loadEvents = getLoadDateWiseEvents();
 		((DateWiseMyEventListAdapter) eventListAdapter).setLoadDateWiseEvents(loadEvents);
 		AsyncTaskUtil.executeAsyncTask(loadEvents, true);

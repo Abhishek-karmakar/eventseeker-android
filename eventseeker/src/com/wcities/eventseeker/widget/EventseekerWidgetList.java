@@ -25,7 +25,7 @@ public class EventseekerWidgetList {
 		if (eventseekerWidgetList == null) {
 			synchronized (EventseekerWidgetList.class) {
 				if (eventseekerWidgetList == null) {
-					Log.d(TAG, "eventseekerWidgetList == null");
+					Log.d(TAG, "eventseekerWidgetList is null");
 					eventseekerWidgetList = new EventseekerWidgetList();
 				}
 			}

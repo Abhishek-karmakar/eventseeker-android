@@ -23,14 +23,14 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
-import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener.LoadEventsInBackgroundListener;
+import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.LIST_ITEM_TYPE;
 
 public abstract class ArtistEventsParentFragment extends ListFragment implements OnClickListener, 
-	ArtistDetailsFragmentListener, LoadEventsInBackgroundListener {
+	ArtistDetailsFragmentListener, LoadItemsInBackgroundListener {
 
 	private static final String TAG = ArtistEventsParentFragment.class.getName();
 
@@ -82,7 +82,7 @@ public abstract class ArtistEventsParentFragment extends ListFragment implements
 
 			adapter = getAdapterInstance();
 
-			loadEventsInBackground();
+			loadItemsInBackground();
 
 		} else {
 			adapter.updateContext(FragmentUtil.getActivity(this));
@@ -163,7 +163,7 @@ public abstract class ArtistEventsParentFragment extends ListFragment implements
 
 
 	@Override
-	public void loadEventsInBackground() {
+	public void loadItemsInBackground() {
 		loadArtistEvents = new LoadArtistEvents(dateWiseEventList, adapter, artist.getId(),
 				((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).getWcitiesId());
 

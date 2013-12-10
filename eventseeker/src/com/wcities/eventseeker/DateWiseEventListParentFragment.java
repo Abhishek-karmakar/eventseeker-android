@@ -12,14 +12,14 @@ import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Category;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
-import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener.LoadEventsInBackgroundListener;
+import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
 public abstract class DateWiseEventListParentFragment extends ListFragment
-		implements LoadEventsInBackgroundListener {
+		implements LoadItemsInBackgroundListener {
 
 	private static final String TAG = DateWiseEventListParentFragment.class.getName();
 
@@ -78,7 +78,7 @@ public abstract class DateWiseEventListParentFragment extends ListFragment
 
 			eventListAdapter = getAdapterInstance();
 
-			loadEventsInBackground();
+			loadItemsInBackground();
 
 		} else {
 			eventListAdapter.updateContext(FragmentUtil.getActivity(this));
@@ -107,7 +107,7 @@ public abstract class DateWiseEventListParentFragment extends ListFragment
 		dateWiseEvtList.reset();
 		((BaseAdapter) eventListAdapter).notifyDataSetChanged();
 
-		loadEventsInBackground();
+		loadItemsInBackground();
 	}
 	
 

@@ -1,8 +1,6 @@
 package com.wcities.eventseeker;
 
 import android.os.AsyncTask.Status;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,17 +8,16 @@ import android.view.ViewGroup;
 
 import com.wcities.eventseeker.SearchFragment.SearchFragmentChildListener;
 import com.wcities.eventseeker.adapter.DateWiseEventListAdapter;
-import com.wcities.eventseeker.adapter.DateWiseEventListAdapter.DateWiseEventListAdapterListener;
 import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
 import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener.LoadEventsInBackgroundListener;
+import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
 public class SearchEventsFragment extends SearchEventsParentFragment implements
-	LoadEventsInBackgroundListener, SearchFragmentChildListener {
+	LoadItemsInBackgroundListener, SearchFragmentChildListener {
 
 	private static final String TAG = SearchEventsFragment.class.getName();
 
@@ -45,7 +42,7 @@ public class SearchEventsFragment extends SearchEventsParentFragment implements
 			if (args != null && args.containsKey(BundleKeys.QUERY)) {
 				eventList.addDummyItem();
 				query = args.getString(BundleKeys.QUERY);
-				loadEventsInBackground();
+				loadItemsInBackground();
 			}
 
 		} else {
@@ -56,7 +53,7 @@ public class SearchEventsFragment extends SearchEventsParentFragment implements
 	}
 
 	@Override
-	public void loadEventsInBackground() {
+	public void loadItemsInBackground() {
 		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getActivity(this));
 		loadEvents = new LoadDateWiseEvents(eventList, eventListAdapter, query,
 				latLon[0], latLon[1], MILES_LIMIT, null);
@@ -78,7 +75,7 @@ public class SearchEventsFragment extends SearchEventsParentFragment implements
 			eventList.reset();
 			eventListAdapter.notifyDataSetChanged();
 
-			loadEventsInBackground();
+			loadItemsInBackground();
 		}
 	}
 

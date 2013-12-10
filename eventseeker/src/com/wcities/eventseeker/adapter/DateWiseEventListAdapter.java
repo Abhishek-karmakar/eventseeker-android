@@ -24,12 +24,13 @@ import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.EventListener;
+import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.EventListItem;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.LIST_ITEM_TYPE;
 
-public class DateWiseEventListAdapter extends BaseAdapter implements DateWiseEventParentAdapterListener{
+public class DateWiseEventListAdapter extends BaseAdapter implements DateWiseEventParentAdapterListener {
 
 	private Context mContext;
     private BitmapCache bitmapCache;
@@ -37,14 +38,10 @@ public class DateWiseEventListAdapter extends BaseAdapter implements DateWiseEve
     private AsyncTask<Void, Void, List<Event>> loadDateWiseEvents;
     private int eventsAlreadyRequested;
 	private boolean isMoreDataAvailable = true;
-	private LoadEventsInBackgroundListener mListener;
+	private LoadItemsInBackgroundListener mListener;
 	
-	public interface DateWiseEventListAdapterListener {
-		public void loadEventsInBackground();
-	}
-
     public DateWiseEventListAdapter(Context context, DateWiseEventList dateWiseEvtList, 
-    		AsyncTask<Void, Void, List<Event>> loadDateWiseEvents, LoadEventsInBackgroundListener mListener) {
+    		AsyncTask<Void, Void, List<Event>> loadDateWiseEvents, LoadItemsInBackgroundListener mListener) {
     	mContext = context;
         bitmapCache = BitmapCache.getInstance();
         this.dateWiseEvtList = dateWiseEvtList;
@@ -87,7 +84,7 @@ public class DateWiseEventListAdapter extends BaseAdapter implements DateWiseEve
 			
 			if ((loadDateWiseEvents == null || loadDateWiseEvents.getStatus() == Status.FINISHED) && 
 					isMoreDataAvailable) {
-				mListener.loadEventsInBackground();
+				mListener.loadItemsInBackground();
 			}
 			
 		} else if (getItemViewType(position) == LIST_ITEM_TYPE.CONTENT.ordinal()) {

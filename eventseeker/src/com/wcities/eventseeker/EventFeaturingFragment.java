@@ -1,13 +1,12 @@
 package com.wcities.eventseeker;
 
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,46 +14,40 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.wcities.eventseeker.EventDetailsFragment.EventDetailsFragmentChildListener;
+import com.wcities.eventseeker.adapter.ArtistListAdapter;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
-import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.asynctask.UserTracker;
-import com.wcities.eventseeker.cache.BitmapCache;
-import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
-import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class EventFeaturingFragment extends Fragment implements OnClickListener, EventDetailsFragmentChildListener {
+public class EventFeaturingFragment extends ListFragment implements OnClickListener, EventDetailsFragmentChildListener {
 	
 	private static final String TAG = EventFeaturingFragment.class.getName();
 	
 	private Event event;
 	
-	private LinearLayout lnrLayoutArtistList;
 	private LinearLayout lnrLayoutTickets;
 	private CheckBox chkBoxGoing, chkBoxWantToGo;
 	private Button btnBuyTickets;
-
+	private ArtistListAdapter<Void> artistListAdapter;
+	private List<Artist> artistList;
+	
 	private boolean isTablet;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		event = (Event) getArguments().getSerializable(BundleKeys.EVENT);
-	
 		isTablet = ((MainActivity)FragmentUtil.getActivity(this)).isTablet();
-	
 	}
 	
 	@Override
@@ -66,9 +59,6 @@ public class EventFeaturingFragment extends Fragment implements OnClickListener,
 		lnrLayoutTickets.setOnClickListener(this);
 		
 		updateEventScheduleVisibility();
-		
-		lnrLayoutArtistList =  (LinearLayout) v.findViewById(R.id.lnrLayoutArtistList);
-		addFeaturingArtists();
 		
 		chkBoxGoing = (CheckBox) v.findViewById(R.id.chkBoxGoing);
 		chkBoxWantToGo = (CheckBox) v.findViewById(R.id.chkBoxWantToGo);
@@ -85,6 +75,28 @@ public class EventFeaturingFragment extends Fragment implements OnClickListener,
 		}
 		
 		return v;
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		
+		if (artistList == null) {
+			artistList = new ArrayList<Artist>();
+			artistList.addAll(event.getArtists());
+			if (artistList.isEmpty()) {
+				// add dummy item to indicate loading progress
+				artistList.add(null);
+			}
+			artistListAdapter = new ArtistListAdapter<Void>(FragmentUtil.getActivity(this), artistList, null, null);
+			artistListAdapter.setMoreDataAvailable(false);
+			
+		} else {
+			artistListAdapter.updateContext(FragmentUtil.getActivity(this));
+		}
+		
+		setListAdapter(artistListAdapter);
+        getListView().setDivider(null);
 	}
 	
 	private void updateBtnBuyTicketsEnabled(boolean enabled) {
@@ -133,45 +145,6 @@ public class EventFeaturingFragment extends Fragment implements OnClickListener,
 		}
 	}
 	
-	private void addFeaturingArtists() {
-		//Log.d(TAG, "addFeaturingArtists()");
-		lnrLayoutArtistList.removeAllViews();
-		
-		BitmapCache bitmapCache = BitmapCache.getInstance();
-		for (Iterator<Artist> iterator = event.getArtists().iterator(); iterator.hasNext();) {
-			final Artist artist = (Artist) iterator.next();
-			View artistView = LayoutInflater.from(FragmentUtil.getActivity(this)).inflate(R.layout.fragment_search_artists_list_item, null);
-
-			lnrLayoutArtistList.addView(artistView);
-			
-			artistView.findViewById(R.id.txtOnTour).setVisibility(View.GONE);
-			
-			((TextView)artistView.findViewById(R.id.txtArtistName)).setText(artist.getName());
-			
-			String key = artist.getKey(ImgResolution.LOW);
-			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
-			ImageView imageView = (ImageView)artistView.findViewById(R.id.imgItem);
-			if (bitmap != null) {
-				//Log.d(TAG, "addFeaturingArtists() bitmap != null");
-		        imageView.setImageBitmap(bitmap);
-		        
-		    } else {
-		    	//Log.d(TAG, "addFeaturingArtists() bitmap = null");
-		        imageView.setImageBitmap(null);
-		        AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-		        asyncLoadImg.loadImg(imageView, ImgResolution.LOW, artist);
-		    }
-			
-			artistView.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					((ArtistListener)FragmentUtil.getActivity(EventFeaturingFragment.this)).onArtistSelected(artist);
-				}
-			});
-		}
-	}
-
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -210,7 +183,15 @@ public class EventFeaturingFragment extends Fragment implements OnClickListener,
 		Log.d(TAG, "onEventUpdatedByEventDetailsFragment()");
 		updateEventScheduleVisibility();
 
-		addFeaturingArtists();
+		if (artistList.get(0) == null) {
+			/**
+			 * if found dummy item (progress indicator), then only add events from here;
+			 * because otherwise we have already added it initially from onActivityCreated()
+			 */
+			artistList.addAll(artistList.size() - 1, event.getArtists());
+			artistList.remove(artistList.size() - 1);
+			artistListAdapter.notifyDataSetChanged();
+		}
 		
 		if (!event.getSchedule().getBookingInfos().isEmpty()) {
 			updateBtnBuyTicketsEnabled(true);

@@ -231,7 +231,8 @@ public class EventApiJSONParser {
 	}
 	
 	private void fillArtists(Event event, JSONObject jObjEvent) throws JSONException {
-		List<Artist> artists = new ArrayList<Artist>();
+		List<Artist> artists = event.getArtists();
+		artists.clear();
 		event.setArtists(artists);
 		
 		Object objArtist = jObjEvent.get(KEY_ARTIST);

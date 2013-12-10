@@ -26,20 +26,24 @@
             android:layout_alignTop="@id/txtEvtTitle"
 			android:layout_alignBottom="@id/txtEvtTime"
 			android:layout_alignParentRight="true"
-			android:layout_marginLeft="@dimen/rlt_layout_refresh_margin_l_widget_layout" >
+			android:paddingLeft="@dimen/rlt_layout_refresh_pad_hor_widget_layout"
+			android:paddingRight="@dimen/rlt_layout_refresh_pad_hor_widget_layout" >
 			
             <ImageView android:id="@+id/imgRefresh"
 				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
+				android:layout_height="match_parent"
 				android:src="@drawable/refresh"
 				android:scaleType="centerInside"
 				android:layout_centerVertical="true" />
 	        
 	        <ProgressBar android:id="@+id/progressBar"
 	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-				android:visibility="invisible"
-				android:layout_centerVertical="true" />
+	            android:layout_height="match_parent"
+	            android:visibility="invisible"
+				android:layout_alignLeft="@id/imgRefresh"
+				android:layout_alignTop="@id/imgRefresh"
+				android:layout_alignRight="@id/imgRefresh"
+				android:layout_alignBottom="@id/imgRefresh" />
             
         </RelativeLayout>
         

@@ -29,6 +29,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wcities.eventseeker.SearchFragment.SearchFragmentChildListener;
+import com.wcities.eventseeker.adapter.ArtistListAdapter;
+import com.wcities.eventseeker.adapter.DateWiseMyEventListAdapter;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.ArtistApi;
 import com.wcities.eventseeker.api.ArtistApi.Method;
@@ -40,11 +42,14 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.interfaces.ArtistListener;
+import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
+import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
-public class SearchArtistsFragment extends ListFragment implements SearchFragmentChildListener {
+public class SearchArtistsFragment extends ListFragment implements SearchFragmentChildListener, LoadItemsInBackgroundListener {
 
 	private static final String TAG = SearchArtistsFragment.class.getName();
 
@@ -52,9 +57,7 @@ public class SearchArtistsFragment extends ListFragment implements SearchFragmen
 	
 	private String query;
 	private LoadArtists loadArtists;
-	private ArtistListAdapter artistListAdapter;
-	private int artistsAlreadyRequested;
-	private boolean isMoreDataAvailable = true;
+	private ArtistListAdapter<String> artistListAdapter;
 	
 	private List<Artist> artistList;
 	
@@ -84,17 +87,16 @@ public class SearchArtistsFragment extends ListFragment implements SearchFragmen
 		
 		if (artistList == null) {
 			artistList = new ArrayList<Artist>();
-			artistListAdapter = new ArtistListAdapter(FragmentUtil.getActivity(this));
-	        
+			artistListAdapter = new ArtistListAdapter<String>(FragmentUtil.getActivity(this), artistList, null, this);
 	        Bundle args = getArguments();
 			if (args != null && args.containsKey(BundleKeys.QUERY)) {
 				artistList.add(null);
 				query = args.getString(BundleKeys.QUERY);
-				loadArtistsInBackground();
+				loadItemsInBackground();
 			}
 			
 		} else {
-			artistListAdapter.setmInflater(FragmentUtil.getActivity(this));
+			artistListAdapter.updateContext(FragmentUtil.getActivity(this));
 		}
 
 		setListAdapter(artistListAdapter);
@@ -102,8 +104,10 @@ public class SearchArtistsFragment extends ListFragment implements SearchFragmen
         getListView().setBackgroundResource(R.drawable.story_space);
 	}
 	
-	private void loadArtistsInBackground() {
-		loadArtists = new LoadArtists();
+	@Override
+	public void loadItemsInBackground() {
+		loadArtists = new LoadArtists(artistList, artistListAdapter);
+		artistListAdapter.setLoadArtists(loadArtists);
 		AsyncTaskUtil.executeAsyncTask(loadArtists, true, query);
 	}
 	
@@ -114,8 +118,8 @@ public class SearchArtistsFragment extends ListFragment implements SearchFragmen
 			Log.d(TAG, "query == null || !query.equals(newQuery)");
 
 			query = newQuery;
-			artistsAlreadyRequested = 0;
-			isMoreDataAvailable = true;
+			artistListAdapter.setArtistsAlreadyRequested(0);
+			artistListAdapter.setMoreDataAvailable(true);
 			
 			if (loadArtists != null && loadArtists.getStatus() != Status.FINISHED) {
 				loadArtists.cancel(true);
@@ -125,18 +129,26 @@ public class SearchArtistsFragment extends ListFragment implements SearchFragmen
 			artistList.add(null);
 			artistListAdapter.notifyDataSetChanged();
 			
-			loadArtistsInBackground();
+			loadItemsInBackground();
 		}
 	}
 	
-	private class LoadArtists extends AsyncTask<String, Void, List<Artist>> {
+	private static class LoadArtists extends AsyncTask<String, Void, List<Artist>> {
 		
+		private List<Artist> artistList;
+		private ArtistListAdapter<String> artistListAdapter;
+		
+		public LoadArtists(List<Artist> artistList, ArtistListAdapter<String> artistListAdapter) {
+			this.artistList = artistList;
+			this.artistListAdapter = artistListAdapter;
+		}
+
 		@Override
 		protected List<Artist> doInBackground(String... params) {
 			List<Artist> tmpArtists = new ArrayList<Artist>();
 			ArtistApi artistApi = new ArtistApi(Api.OAUTH_TOKEN);
 			artistApi.setLimit(ARTISTS_LIMIT);
-			artistApi.setAlreadyRequested(artistsAlreadyRequested);
+			artistApi.setAlreadyRequested(artistListAdapter.getArtistsAlreadyRequested());
 			artistApi.setMethod(Method.artistSearch);
 
 			try {
@@ -164,111 +176,21 @@ public class SearchArtistsFragment extends ListFragment implements SearchFragmen
 		protected void onPostExecute(List<Artist> tmpArtists) {
 			if (!tmpArtists.isEmpty()) {
 				artistList.addAll(artistList.size() - 1, tmpArtists);
-				artistsAlreadyRequested += tmpArtists.size();
+				artistListAdapter.setArtistsAlreadyRequested(artistListAdapter.getArtistsAlreadyRequested() 
+						+ tmpArtists.size());
 				
 				if (tmpArtists.size() < ARTISTS_LIMIT) {
-					isMoreDataAvailable = false;
+					artistListAdapter.setMoreDataAvailable(false);
 					artistList.remove(artistList.size() - 1);
 				}
 				
 			} else {
-				isMoreDataAvailable = false;
+				artistListAdapter.setMoreDataAvailable(false);
 				artistList.remove(artistList.size() - 1);
 			}
 			artistListAdapter.notifyDataSetChanged();
 		}    	
     }
-	
-	private class ArtistListAdapter extends BaseAdapter {
-		
-		private static final String TAG_PROGRESS_INDICATOR = "progressIndicator";
-		private static final String TAG_CONTENT = "content";
-		
-	    private LayoutInflater mInflater;
-	    private BitmapCache bitmapCache;
-	    Context mContext;
-
-	    public ArtistListAdapter(Context context) {
-	        mInflater = LayoutInflater.from(context);
-	        bitmapCache = BitmapCache.getInstance();
-	        mContext = context;
-	    }
-	    
-	    public void setmInflater(Context context) {
-	        mInflater = LayoutInflater.from(context);
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			if (artistList.get(position) == null) {
-				if (convertView == null || !convertView.getTag().equals(TAG_PROGRESS_INDICATOR)) {
-					convertView = mInflater.inflate(R.layout.list_progress_bar, null);
-					convertView.setTag(TAG_PROGRESS_INDICATOR);
-				}
-				
-				if ((loadArtists == null || loadArtists.getStatus() == Status.FINISHED) && 
-						isMoreDataAvailable) {
-					loadArtistsInBackground();
-				}
-				
-			} else {
-				if (convertView == null || !convertView.getTag().equals(TAG_CONTENT)) {
-					convertView = mInflater.inflate(R.layout.fragment_search_artists_list_item, null);
-					convertView.setTag(TAG_CONTENT);
-				}
-				
-				final Artist artist = getItem(position);
-				((TextView)convertView.findViewById(R.id.txtArtistName)).setText(artist.getName());
-				
-				if(!((EventSeekr)mContext.getApplicationContext()).isTablet()) {
-					if (artist.isOntour()) {
-						convertView.findViewById(R.id.txtOnTour).setVisibility(View.VISIBLE);
-					} else {
-						convertView.findViewById(R.id.txtOnTour).setVisibility(View.INVISIBLE);
-					}
-				}
-				
-				String key = artist.getKey(ImgResolution.LOW);
-				Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
-				if (bitmap != null) {
-			        ((ImageView)convertView.findViewById(R.id.imgItem)).setImageBitmap(bitmap);
-			        
-			    } else {
-			    	ImageView imgArtist = (ImageView)convertView.findViewById(R.id.imgItem); 
-			        imgArtist.setImageBitmap(null);
-
-			        AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-			        asyncLoadImg.loadImg(imgArtist, ImgResolution.LOW, 
-			        		(AdapterView) parent, position, artist);
-			    }
-				
-				convertView.setOnClickListener(new OnClickListener() {
-					
-					@Override
-					public void onClick(View v) {
-						((ArtistListener)FragmentUtil.getActivity(SearchArtistsFragment.this)).onArtistSelected(artist);
-					}
-				});
-			}
-			
-			return convertView;
-		}
-
-		@Override
-		public Artist getItem(int position) {
-			return artistList.get(position);
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
-
-		@Override
-		public int getCount() {
-			return artistList.size();
-		}
-	}
 	
 	@Override
 	public void onQueryTextSubmit(String query) {

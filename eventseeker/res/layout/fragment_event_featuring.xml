@@ -12,7 +12,13 @@
         android:layout_alignParentBottom="true"
         android:layout_marginTop="@dimen/lnr_layout_btns_margin_t_include_fragment_event_details_footer" />
     
-    <ScrollView android:id="@+id/scrlVArtistList"
+    <ListView android:id="@id/android:list"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+        android:background="@android:color/white"
+		android:layout_above="@id/lnrLayoutBtns" />
+    
+    <!-- <ScrollView android:id="@+id/scrlVArtistList"
         android:layout_width="match_parent"
 	    android:layout_height="match_parent"
 	    android:layout_above="@id/lnrLayoutBtns" >
@@ -23,6 +29,6 @@
 	        android:orientation="vertical"
 	        android:background="@android:color/white" />
 	        
-	</ScrollView>
+	</ScrollView> -->
     
 </RelativeLayout>

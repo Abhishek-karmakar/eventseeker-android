@@ -58,7 +58,7 @@ public class EventseekerWidgetProvider extends AppWidgetProvider {
 		 */
 		String action = intent.getAction();
 		Bundle bundle = intent.getExtras();
-		Log.d(TAG, "onReceive() action = " + action);
+		//Log.d(TAG, "onReceive() action = " + action);
 		
 		if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
 			Log.d(TAG, "CONNECTIVITY_ACTION");
@@ -88,7 +88,7 @@ public class EventseekerWidgetProvider extends AppWidgetProvider {
 		}*/ else if (action.equals(EventseekerWidget.WIDGET_NEXT_EVENT)) {
 			//Log.d(TAG, "WIDGET_NEXT_EVENT");
 			int widgetId = bundle.getInt(BundleKeys.WIDGET_ID);
-			Log.d(TAG, "widgetId = " + widgetId);
+			//Log.d(TAG, "widgetId = " + widgetId);
 			EventseekerWidgetList eventseekerWidgetList = EventseekerWidgetList.getInstance();
 			EventseekerWidget widget = eventseekerWidgetList.getWidget(widgetId);
 			if (widget == null) {

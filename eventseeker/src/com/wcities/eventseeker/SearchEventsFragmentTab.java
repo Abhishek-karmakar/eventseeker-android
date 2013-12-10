@@ -11,14 +11,14 @@ import com.wcities.eventseeker.adapter.DateWiseMyEventListAdapter;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
 import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener.LoadEventsInBackgroundListener;
+import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
 public class SearchEventsFragmentTab extends SearchEventsParentFragment
-		implements SearchFragmentChildListener, LoadEventsInBackgroundListener {
+		implements SearchFragmentChildListener, LoadItemsInBackgroundListener {
 
 	private static final String TAG = SearchEventsFragmentTab.class.getName();
 
@@ -43,7 +43,7 @@ public class SearchEventsFragmentTab extends SearchEventsParentFragment
 			if (args != null && args.containsKey(BundleKeys.QUERY)) {
 				eventList.addDummyItem();
 				query = args.getString(BundleKeys.QUERY);
-				loadEventsInBackground();
+				loadItemsInBackground();
 			}
 
 		} else {
@@ -54,7 +54,7 @@ public class SearchEventsFragmentTab extends SearchEventsParentFragment
 	}
 
 	@Override
-	public void loadEventsInBackground() {
+	public void loadItemsInBackground() {
 		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getActivity(this));
 		loadEvents = new LoadDateWiseEvents(eventList, eventListAdapter, query,	latLon[0], latLon[1], MILES_LIMIT, 
 				((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).getWcitiesId());
@@ -77,7 +77,7 @@ public class SearchEventsFragmentTab extends SearchEventsParentFragment
 			eventList.reset();
 			eventListAdapter.notifyDataSetChanged();
 
-			loadEventsInBackground();
+			loadItemsInBackground();
 		}
 	}
 

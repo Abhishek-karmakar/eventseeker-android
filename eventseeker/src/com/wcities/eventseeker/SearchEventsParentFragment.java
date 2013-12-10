@@ -1,20 +1,13 @@
 package com.wcities.eventseeker;
 
 import android.content.res.Configuration;
-import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.wcities.eventseeker.SearchFragment.SearchFragmentChildListener;
-import com.wcities.eventseeker.adapter.DateWiseEventListAdapter;
-import com.wcities.eventseeker.adapter.DateWiseEventListAdapter.DateWiseEventListAdapterListener;
 import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
-import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.util.DeviceUtil;
-import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
 public class SearchEventsParentFragment extends ListFragment {

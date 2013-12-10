@@ -12,13 +12,13 @@ import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadDateWiseMyEvents;
 import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener.LoadEventsInBackgroundListener;
+import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
-public class MyEventsListFragment extends ListFragment implements LoadEventsInBackgroundListener {
+public class MyEventsListFragment extends ListFragment implements LoadItemsInBackgroundListener {
 	
 	private Type loadType;
 	private String wcitiesId;
@@ -50,7 +50,7 @@ public class MyEventsListFragment extends ListFragment implements LoadEventsInBa
 			
 	        eventListAdapter = new DateWiseMyEventListAdapter(FragmentUtil.getActivity(this), dateWiseEvtList, null, this);
 
-			loadEventsInBackground();
+			loadItemsInBackground();
 			
 		} else {
 			eventListAdapter.updateContext(FragmentUtil.getActivity(this));
@@ -73,7 +73,7 @@ public class MyEventsListFragment extends ListFragment implements LoadEventsInBa
 	}
 	
 	@Override
-	public void loadEventsInBackground() {
+	public void loadItemsInBackground() {
 		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getActivity(this));
 		loadEvents = new LoadDateWiseMyEvents(dateWiseEvtList, eventListAdapter, wcitiesId, loadType, latLon[0], latLon[1]);
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);

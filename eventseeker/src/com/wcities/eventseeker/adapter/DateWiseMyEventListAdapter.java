@@ -39,6 +39,7 @@ import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.EventListener;
+import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.EventListItem;
@@ -54,13 +55,13 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 	private AsyncTask<Void, Void, List<Event>> loadDateWiseMyEvents;
 	private int eventsAlreadyRequested;
 	private boolean isMoreDataAvailable = true;
-	private LoadEventsInBackgroundListener mListener;
+	private LoadItemsInBackgroundListener mListener;
 	private int orientation;
 	private LayoutParams lpImgEvtPort;
 	private boolean isTablet;
 	
 	public DateWiseMyEventListAdapter(Context context, DateWiseEventList dateWiseEvtList,
-			AsyncTask<Void, Void, List<Event>> loadDateWiseEvents, LoadEventsInBackgroundListener mListener) {
+			AsyncTask<Void, Void, List<Event>> loadDateWiseEvents, LoadItemsInBackgroundListener mListener) {
 		
 		mContext = context;
 		bitmapCache = BitmapCache.getInstance();
@@ -133,7 +134,7 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 			if ((loadDateWiseMyEvents == null || loadDateWiseMyEvents.getStatus() == Status.FINISHED) 
 					&& isMoreDataAvailable) {
 
-				mListener.loadEventsInBackground();
+				mListener.loadItemsInBackground();
 			}
 
 		} else if (getItemViewType(position) == LIST_ITEM_TYPE.CONTENT.ordinal()) {
