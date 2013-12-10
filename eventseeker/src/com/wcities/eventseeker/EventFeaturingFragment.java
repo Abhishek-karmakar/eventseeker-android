@@ -183,15 +183,13 @@ public class EventFeaturingFragment extends ListFragment implements OnClickListe
 		Log.d(TAG, "onEventUpdatedByEventDetailsFragment()");
 		updateEventScheduleVisibility();
 
-		if (artistList.get(0) == null) {
-			/**
-			 * if found dummy item (progress indicator), then only add events from here;
-			 * because otherwise we have already added it initially from onActivityCreated()
-			 */
-			artistList.addAll(artistList.size() - 1, event.getArtists());
-			artistList.remove(artistList.size() - 1);
-			artistListAdapter.notifyDataSetChanged();
-		}
+		/**
+		 * It's possible that initially when we added all the artists in onActivityCreated() there are artists but not with 
+		 * all data (including image url), hence we refill it here.
+		 */
+		artistList.clear();
+		artistList.addAll(event.getArtists());
+		artistListAdapter.notifyDataSetChanged();
 		
 		if (!event.getSchedule().getBookingInfos().isEmpty()) {
 			updateBtnBuyTicketsEnabled(true);
