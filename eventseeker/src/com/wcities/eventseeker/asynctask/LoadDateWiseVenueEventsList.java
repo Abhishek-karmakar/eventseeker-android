@@ -9,13 +9,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
+import android.widget.BaseAdapter;
 
-import com.wcities.eventseeker.VenueEventsListFragment.DateWiseVenueEventsListAdapter;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.EventApi;
 import com.wcities.eventseeker.api.EventApi.IdType;
 import com.wcities.eventseeker.api.EventApi.MoreInfo;
 import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
@@ -27,15 +28,18 @@ public class LoadDateWiseVenueEventsList extends AsyncTask<Void, Void, List<Even
 	
 	private long venueId;
 
-	private DateWiseVenueEventsListAdapter eventListAdapter;
+	private DateWiseEventParentAdapterListener eventListAdapter;
+
+	private String wcitiesId;
 	
-	private LoadDateWiseVenueEventsList(DateWiseEventList eventList, DateWiseVenueEventsListAdapter eventListAdapter) {
+	private LoadDateWiseVenueEventsList(DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, String wcitiesId) {
 		this.eventList = eventList;
 		this.eventListAdapter = eventListAdapter;
+		this.wcitiesId = wcitiesId;
 	}
 
-	public LoadDateWiseVenueEventsList(DateWiseEventList eventList, DateWiseVenueEventsListAdapter eventListAdapter, long venueId) {
-		this(eventList, eventListAdapter);
+	public LoadDateWiseVenueEventsList(DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, String wcitiesId, long venueId) {
+		this(eventList, eventListAdapter, wcitiesId);
 		this.venueId = venueId;
 	}
 
@@ -49,6 +53,7 @@ public class LoadDateWiseVenueEventsList extends AsyncTask<Void, Void, List<Even
 		eventApi.setLimit(EVENTS_LIMIT);
 		eventApi.setAlreadyRequested(eventsAlreadyRequested);
 		eventApi.addMoreInfo(MoreInfo.fallbackimage);
+		eventApi.setUserId(wcitiesId);
 
 		try {
 			JSONObject jsonObject = eventApi.getEvents();
@@ -84,6 +89,6 @@ public class LoadDateWiseVenueEventsList extends AsyncTask<Void, Void, List<Even
 			eventListAdapter.setMoreDataAvailable(false);
 			eventList.removeProgressBarIndicator(this);
 		}
-		eventListAdapter.notifyDataSetChanged();
+		((BaseAdapter)eventListAdapter).notifyDataSetChanged();
 	}    	
 }

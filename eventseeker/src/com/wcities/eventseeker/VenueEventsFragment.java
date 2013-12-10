@@ -44,7 +44,7 @@ public class VenueEventsFragment extends Fragment implements OnClickListener {
 			v.findViewById(R.id.btnDrive).setOnClickListener(this);			
 		}
 		
-        VenueEventsListFragment fragment = (VenueEventsListFragment) getChildFragmentManager().findFragmentByTag(
+        VenueEventsParentListFragment fragment = (VenueEventsParentListFragment) getChildFragmentManager().findFragmentByTag(
 				FRAGMENT_TAG_VENUE_EVENTS_LIST);
         if (fragment == null) {
         	addVenueEventsListFragment();
@@ -56,7 +56,14 @@ public class VenueEventsFragment extends Fragment implements OnClickListener {
     	FragmentManager fragmentManager = getChildFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         
-        VenueEventsListFragment fragment = new VenueEventsListFragment();
+        VenueEventsParentListFragment fragment;
+        
+        if(((MainActivity)FragmentUtil.getActivity(this)).isTablet()) {
+        	fragment = new VenueEventsListFragmentTab();
+        } else {
+        	fragment = new VenueEventsListFragment();
+		}
+        
         fragment.setArguments(getArguments());
         fragmentTransaction.add(R.id.rltLayoutRoot, fragment, FRAGMENT_TAG_VENUE_EVENTS_LIST);
         fragmentTransaction.commit();

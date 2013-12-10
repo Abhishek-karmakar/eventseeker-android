@@ -4,12 +4,13 @@
     android:id="@+id/rootRltLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="@dimen/root_rlt_layout_pad_t_frag_featured_events" >
+    android:paddingTop="@dimen/root_rlt_layout_pad_t_frag_featured_events" 
+    android:paddingRight="@dimen/glry_videos_margin_l_r_fragment_artist_info" >
 
     <com.wcities.eventseeker.custom.view.ResizableImageView
         android:id="@+id/imgVideo"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/img_video_ht_fragment_video"
+        android:layout_width="@dimen/img_video_w_fragment_video"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:scaleType="fitXY"
         app:compressAsPerWidth="true" />

@@ -239,7 +239,7 @@ public class ChangeLocationFragment extends FragmentLoadableFromBackStack implem
 
 	@Override
 	public void onLatlngSearchCompleted(String address) {
-		if (address != null && !address.isEmpty()) {
+		if (address != null && address.length() != 0) {
 			strAddress = address;
 			setMarker(lat, lon);
 		}

@@ -352,6 +352,8 @@ public class MainActivity extends ActionBarActivity implements
 		if (currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_SEARCH)) {
 			searchView.setQuery(searchQuery, false);
 			searchView.clearFocus();
+		} else if (currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_CHANGE_LOCATION)) {
+			searchView.setQuery("", false);			
 		}
 		return super.onPrepareOptionsMenu(menu);
 	}
@@ -382,9 +384,19 @@ public class MainActivity extends ActionBarActivity implements
 				}
 			} else {
 				
-				onBackPressed();
-				if(getSupportFragmentManager().getBackStackEntryCount() == 0) {
-					getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
+				/**
+				 * in some higher version of android even after setting the Display option as 'DISPLAY_SHOW_TITLE',
+				 * the title was taking the touch event and was providing the action which is provided by 
+				 * 'DISPLAY_HOME_AS_UP' Display option, i.e. it shouldn't execute this 'case' but it was. So,
+				 * by using the below condition, we check whether the title is clicked on the page from navigation
+				 * drawer item and if the click is not on the page of navigation drawer item, then it should do the 
+				 * following functionality.
+				 */
+				if(getSupportFragmentManager().getBackStackEntryCount() > 0) {
+					onBackPressed();
+					if(getSupportFragmentManager().getBackStackEntryCount() == 0) {
+						getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
+					}
 				}
 			}
 			return true;

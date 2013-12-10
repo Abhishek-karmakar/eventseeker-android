@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/txt_artist_name_margin_r_fragment_search_artists_list_item"
             android:layout_marginTop="@dimen/txt_artist_name_margin_t_fragment_search_artists_list_item"
-            android:drawableLeft="@drawable/ic_launcher"
+            android:drawableLeft="@drawable/featuring"
             android:drawablePadding="15dp"
             android:ellipsize="end"
             android:gravity="center_vertical"

@@ -1,5 +1,8 @@
 package com.wcities.eventseeker;
 
+import java.util.List;
+
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -22,6 +25,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.scvngr.levelup.views.gallery.Gallery;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.wcities.eventseeker.ArtistDetailsFragment.ArtistDetailsFragmentListener;
 import com.wcities.eventseeker.ArtistDetailsFragment.FooterTxt;
@@ -37,7 +41,9 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.core.Friend;
+import com.wcities.eventseeker.core.Video;
 import com.wcities.eventseeker.custom.view.ExpandableGridView;
+import com.wcities.eventseeker.custom.view.ResizableImageView;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class ArtistInfoFragment extends Fragment implements OnClickListener, ArtistDetailsFragmentListener, 
@@ -61,6 +67,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 	private TextView txtArtistDesc;
 	private ImageView imgDown, imgArtist, imgRight;
 	private ViewPager viewPager;
+	private Gallery glryVideo;
 	private CirclePageIndicator indicator;
 	private RelativeLayout rltLayoutFriends;
 	private ExpandableGridView grdVFriends;
@@ -70,9 +77,11 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 	private TextView txtFollow;
 	
 	private VideoFragmentPagerAdapter videoFragmentPagerAdapter;
+	private VideoGalleryAdapter videoGalleryAdapter;
 	private FriendsGridAdapter friendsGridAdapter;
 
 	private boolean isTablet;
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -89,7 +98,6 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 		//Log.d(TAG, "onCreateView() - " + (System.currentTimeMillis() / 1000));
 		orientation = res.getConfiguration().orientation;
 		//Log.d(TAG, "child manager = " + getChildFragmentManager());
-		videoFragmentPagerAdapter = new VideoFragmentPagerAdapter(artist, getChildFragmentManager());  
 		
 		View v = inflater.inflate(R.layout.fragment_artist_info, null);
 		
@@ -112,12 +120,25 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 		updateDescVisibility();
 		
 		rltLayoutVideos = v.findViewById(R.id.rltLayoutVideos);
-		viewPager = (ViewPager) v.findViewById(R.id.viewPager);
-		viewPager.setAdapter(videoFragmentPagerAdapter);
+
+		if(((MainActivity)FragmentUtil.getActivity(this)).isTablet()) {
 		
-		indicator = (CirclePageIndicator)v.findViewById(R.id.pageIndicator);
-    	indicator.setViewPager(viewPager);
-    	
+			glryVideo = (Gallery) v.findViewById(R.id.glryVideo);
+			videoGalleryAdapter = new VideoGalleryAdapter(artist, FragmentUtil.getActivity(this));
+			glryVideo.setAdapter(videoGalleryAdapter);
+			Log.i(TAG, "Setting the adapter");
+			
+		} else {
+		
+			viewPager = (ViewPager) v.findViewById(R.id.viewPager);
+			videoFragmentPagerAdapter = new VideoFragmentPagerAdapter(artist, getChildFragmentManager());  
+			viewPager.setAdapter(videoFragmentPagerAdapter);
+			
+			indicator = (CirclePageIndicator)v.findViewById(R.id.pageIndicator);
+			indicator.setViewPager(viewPager);
+			
+		}
+		
     	updateVideosVisibility();
 		
 		grdVFriends = (ExpandableGridView) v.findViewById(R.id.grdVFriends);
@@ -326,8 +347,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 			} else {
 				makeDescVisibleInExpandedMode();
 			}
-		}
-		else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+		} else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
 			if (!isImgLoaded || !allDetailsLoaded || artist.getDescription() == null) {
 				rltLayoutArtistDesc.setVisibility(View.GONE);
 				
@@ -421,6 +441,69 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
         	return POSITION_NONE;
         }
     }
+	
+	private class VideoGalleryAdapter extends BaseAdapter {
+
+		private static final int MAX_LIMIT = 5;
+		private LayoutInflater inflater;
+		private BitmapCache bitmapCache;
+		private Artist artist;
+
+		public VideoGalleryAdapter(Artist artist, Context context) {
+			this.artist = artist;
+			inflater = LayoutInflater.from(context);
+			bitmapCache = BitmapCache.getInstance();
+		}
+		
+		@Override
+		public int getCount() {
+			return artist.getVideos().size() > MAX_LIMIT ? MAX_LIMIT : artist.getVideos().size();  
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return artist.getVideos().get(position);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			Log.i(TAG, "in getview");
+			
+			View v = inflater.inflate(R.layout.fragment_video, null);
+	    	
+	    	ResizableImageView imgVideo = (ResizableImageView) v.findViewById(R.id.imgVideo);
+
+	    	final Video video = (Video) getItem(position);
+	    		
+			String key = video.getKey(ImgResolution.LOW);
+	    	Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
+
+	    	if (bitmap != null) {
+	    		imgVideo.setImageBitmap(bitmap);
+    		} else {
+    			imgVideo.setImageResource(R.drawable.placeholder);
+    			AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
+    			asyncLoadImg.loadImg(imgVideo, ImgResolution.LOW, video);
+    		}
+	    	
+	    	/*v.setOnClickListener(new OnClickListener() {
+	    		@Override
+	    		public void onClick(View v) {
+	    			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(video.getVideoUrl()));
+	    			startActivity(Intent.createChooser(intent, ""));
+	    		}
+	    	});*/
+	    	
+	    	return v;
+			
+		}
+		
+	}
 	
 	private class FriendsGridAdapter extends BaseAdapter {
 		
@@ -568,6 +651,9 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 		updateVideosVisibility();
 		if (videoFragmentPagerAdapter != null) {
 			videoFragmentPagerAdapter.notifyDataSetChanged();
+		}
+		if (videoGalleryAdapter != null) {
+			videoGalleryAdapter.notifyDataSetChanged();
 		}
 		
 		updateFriendsVisibility();
