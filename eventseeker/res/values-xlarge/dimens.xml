@@ -15,6 +15,7 @@
     <dimen name="divider_section_ht_navigation_drawer_list_item">1dp</dimen>
 
     <!-- fragment_fb_login.xml -->
+    <dimen name="v_divider_ht_fb_login">2dp</dimen>
     <dimen name="btn_fb_sign_up_ht_fb_login">40dp</dimen>
     <dimen name="btn_fb_sign_up_txt_size_fb_login">20sp</dimen>
     <dimen name="txt_fb_login_desc_txt_size_fb_login">20sp</dimen>
@@ -22,7 +23,7 @@
 
     <!-- grid_category.xml -->
     <dimen name="img_category_ht_grid_category">100dp</dimen>
-    <dimen name="txt_category_txt_size_grid_category">15sp</dimen>
+    <dimen name="txt_category_txt_size_grid_category">18sp</dimen>
 
     <!-- fragment_discover.xml -->
     <dimen name="grd_evt_categories_margin_t_discover">@dimen/rlt_layout_featured_evts_parent_margin_discover</dimen>
@@ -57,15 +58,15 @@
     <dimen name="grd_following_pad_fragment_following_tab">15dp</dimen>
 
     <!-- fragment_my_events_list_item.xml -->
-
     <dimen name="img_event_w_fragment_my_events_list_item">260dp</dimen>
     <dimen name="img_event_ht_fragment_my_events_list_item">195dp</dimen>
     <dimen name="chk_box_pad_fragment_my_events_list_item">45dp</dimen>
     <dimen name="btn_buy_tickets_drawable_pad_fragment_my_events_list_item">0dp</dimen>
-    <dimen name="txt_evt_location_txt_size_fragment_my_events_list_item">19sp</dimen>
+    <dimen name="txt_evt_location_txt_size_fragment_my_events_list_item">16sp</dimen>
     <dimen name="img_evt_time_w_include_evt_details">25dp</dimen>
     <dimen name="img_evt_time_ht_include_evt_details">25dp</dimen>
     <dimen name="row_img_dim_fragment_my_events_list_item">25dp</dimen>
+    <dimen name="tbl_layout_evt_details_margin_t_b_fragment_my_events_list_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="img_event_margin_t_fragment_discover_by_category_list_item_evt">20dp</dimen>
     <dimen name="img_event_margin_l_fragment_discover_by_category_list_item_evt">30dp</dimen>
     <dimen name="img_event_margin_b_fragment_discover_by_category_list_item_evt">15dp</dimen>
@@ -89,7 +90,7 @@
     <dimen name="txt_evt_time_am_pm_txt_size_fragment_my_events_list_item">12sp</dimen>
 
     <!-- include_fragment_my_events_list_item_footer.xml -->
-    <dimen name="lnr_layout_btns_txt_size_include_fragment_my_events_list_item_footer">15sp</dimen>
+    <dimen name="lnr_layout_btns_txt_size_include_fragment_my_events_list_item_footer">16sp</dimen>
 
     <!-- custom_actionbar_tabs.xml -->
     <dimen name="btn_pad_l_custom_actionbar_tabs">25dp</dimen>
@@ -146,8 +147,8 @@
     <!-- include_fragment_event_details_footer.xml -->
     <dimen name="divider_lnr_layout_btns_w_include_fragment_event_details_footer">2dp</dimen>
     <dimen name="divider_lnr_layout_btns_ht_include_fragment_event_details_footer">35dp</dimen>
-    <dimen name="lnr_layout_btns_txt_size_include_fragment_event_details_footer">18sp</dimen>
-    <dimen name="lnr_layout_btns_margin_b_include_fragment_event_details_footer">15dp</dimen>
+    <dimen name="lnr_layout_btns_txt_size_include_fragment_event_details_footer">12sp</dimen>
+    <dimen name="lnr_layout_btns_margin_b_include_fragment_event_details_footer">10dp</dimen>
     <dimen name="chk_box_drawable_pad_include_fragment_event_details_footer">15dp</dimen>
 
     <!-- fragment_custom_tabs.xml -->
@@ -165,7 +166,7 @@
     <dimen name="txt_evt_desc_pad_fragment_evt_info">15dp</dimen>
     <dimen name="txt_evt_desc_pad_t_fragment_evt_info">7dp</dimen>
     <dimen name="txt_evt_desc_pad_b_fragment_evt_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="txt_evt_desc_txt_size_fragment_evt_info">16sp</dimen>
+    <dimen name="txt_evt_desc_txt_size_fragment_evt_info">14sp</dimen>
     <dimen name="img_down_margin_b_fragment_event_info">@dimen/img_down_margin_r_fragment_evt_info</dimen>
     <dimen name="rlt_layout_evt_desc_margin_t_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="lnr_event_desc_and_map_margin_l_r_fragment_event_info">0dp</dimen>
@@ -177,12 +178,12 @@
     <dimen name="v_divider_ht_fragment_event_info">2dp</dimen>
 
     <!-- fragment_event_details_img_evt.xml -->
-    <dimen name="txt_evt_title_txt_size_include_fragment_event_details_img_evt">30sp</dimen>
-    <dimen name="txt_evt_time_txt_size_include_fragment_event_details_img_evt">20sp</dimen>
-    <dimen name="txt_margin_t_b_rlt_evt_info_fragment_event_details_img_evt">15dp</dimen>
+    <dimen name="txt_evt_title_txt_size_include_fragment_event_details_img_evt">24sp</dimen>
+    <dimen name="txt_evt_time_txt_size_include_fragment_event_details_img_evt">17sp</dimen>
+    <dimen name="txt_margin_t_b_rlt_evt_info_fragment_event_details_img_evt">10dp</dimen>
     <dimen name="txt_drawable_pad_fragment_event_details_img_evt">15dp</dimen>
     <dimen name="rlt_evt_info_margin_r_fragment_event_details_img_evt">15dp</dimen>
-    <dimen name="rlt_evt_info_margin_t_b_fragment_event_details_img_evt">15dp</dimen>
+    <dimen name="rlt_evt_info_margin_t_b_fragment_event_details_img_evt">7dp</dimen>
 
     <!-- include_desc.xml -->
     <dimen name="rlt_desc_margin_r_include_desc">15dp</dimen>
@@ -245,9 +246,9 @@
     <dimen name="img_featured_evt_pad_discover_gallery_item">2dp</dimen>
     <dimen name="txt_evt_title_txt_size_discover_gallery_item">18sp</dimen>
     <dimen name="txt_evt_title_ht_discover_gallery_item">25dp</dimen>
-    <dimen name="txt_evt_schedule_txt_size_discover_gallery_item">15sp</dimen>
+    <dimen name="txt_evt_schedule_txt_size_discover_gallery_item">14sp</dimen>
     <dimen name="txt_evt_schedule_ht_discover_gallery_item">20dp</dimen>
-    <dimen name="txt_evt_city_name_txt_size_discover_gallery_item">19sp</dimen>
+    <dimen name="txt_evt_city_name_txt_size_discover_gallery_item">17sp</dimen>
     <dimen name="txt_evt_city_name_ht_discover_gallery_item">24dp</dimen>
     <dimen name="txt_evt_pad_discover_gallery_item">0dp</dimen>
 
@@ -257,6 +258,7 @@
 
     <!-- include_venue_details_footer.xml -->
     <dimen name="btn_drawable_pad_include_venue_details_footer">1dp</dimen>
+    <dimen name="btn_lyt_txt_size_include_venue_details_footer">15sp</dimen>
     <dimen name="lnr_layout_btns_txt_size_include_fragment_venue_details_footer">13sp</dimen>
 
     <!-- connect_accounts_list_item.xml -->
@@ -266,16 +268,16 @@
     <dimen name="img_service_margin_l_r_connect_accounts_list_item">15dp</dimen>
 
     <!-- fragment_rep_code.xml -->
-    <dimen name="edt_rep_code_ht_fragment_rep_code">35dp</dimen>
+    <dimen name="edt_rep_code_ht_fragment_rep_code">33dp</dimen>
     <dimen name="rlt_layout_root_pad_fragment_rep_code">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="img_rep_code_margin_t_fragment_rep_code">50dp</dimen>
     <dimen name="txt_rep_code_margin_t_fragment_rep_code">20dp</dimen>
-    <dimen name="txt_rep_code_txt_size_fragment_rep_code">22sp</dimen>
+    <dimen name="txt_rep_code_txt_size_fragment_rep_code">20sp</dimen>
     <dimen name="edt_rep_code_margin_t_fragment_rep_code">20dp</dimen>
     <dimen name="edt_rep_code_w_fragment_rep_code">250dp</dimen>
-    <dimen name="btn_submit_ht_fragment_rep_code">40dp</dimen>
+    <dimen name="btn_submit_ht_fragment_rep_code">30dp</dimen>
     <dimen name="btn_submit_pad_l_fragment_rep_code">15dp</dimen>
-    <dimen name="btn_submit_txt_size_fragment_rep_code">22sp</dimen>
+    <dimen name="btn_submit_txt_size_fragment_rep_code">17sp</dimen>
 
     <!-- fragment_device_library.xml -->
     <dimen name="rlt_layout_root_pad_fragment_device_library">35dp</dimen>
@@ -288,5 +290,5 @@
     <!-- fragment_event_featuring.xml -->
     <dimen name="lnr_layout_artist_list_margin_l_fragment_event_featuring">0dp</dimen>
     <dimen name="lnr_layout_artist_list_margin_r_fragment_event_featuring">@dimen/lnr_layout_artist_list_margin_l_fragment_event_featuring</dimen>
-
+    
 </resources>

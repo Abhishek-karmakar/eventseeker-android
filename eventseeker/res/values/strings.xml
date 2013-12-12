@@ -18,7 +18,7 @@
     <string name="title_activity_venue_details">My Venues</string>
     <string name="title_following">Following</string>
     <string name="title_my_events">My Events</string>
-    <string name="title_artists_news">Artists News</string>
+    <string name="title_artists_news">Artist News</string>
     <string name="title_friends_activity">Friends Activity</string>
     <string name="title_connect_accounts">Connect Accounts</string>
     <string name="title_about_us">About Us</string>
@@ -35,7 +35,7 @@
     <string name="navigation_drawer_section_browse">BROWSE</string>
     <string name="navigation_drawer_item_discover">Discover</string>
     <string name="navigation_drawer_item_my_events">My Events</string>
-    <string name="navigation_drawer_item_artists_news">Artists News</string>
+    <string name="navigation_drawer_item_artists_news">Artist News</string>
     <string name="navigation_drawer_item_friends_activity">Friends Activity</string>
     <string name="navigation_drawer_item_following">Following</string>
     <string name="navigation_drawer_section_settings">SETTINGS</string>

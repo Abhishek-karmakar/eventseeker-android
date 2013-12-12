@@ -1,5 +1,6 @@
 package com.wcities.eventseeker;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,10 @@ public class FollowingFragmentTab extends FollowingParentFragment {
 
 		grdFollowing.setAdapter(artistListAdapter);
 		grdFollowing.setScrollingCacheEnabled(false);
+		grdFollowing.setFastScrollEnabled(true);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			grdFollowing.setFastScrollAlwaysVisible(true);
+		}
 	}
 
 }

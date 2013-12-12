@@ -86,7 +86,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/v_divider_ht_fb_login"
                                 android:layout_centerVertical="true"
-                                android:background="@drawable/fb_login_divider" />
+                                android:background="@drawable/info_divider" />
                         </RelativeLayout>
 
                         <TextView

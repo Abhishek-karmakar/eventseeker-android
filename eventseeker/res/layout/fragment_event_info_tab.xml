@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootRltLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -38,66 +39,80 @@
                     android:baselineAligned="false"
                     android:orientation="horizontal" >
 
-                    <ImageView
+                    <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgEvt"
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_margin="@dimen/img_evt_margin_fragment_event_info"
                         android:layout_weight="1"
                         android:contentDescription="event image"
-                        android:scaleType="fitXY" />
+                        android:src="@drawable/ic_launcher"
+                        android:scaleType="fitXY"  
+                        app:compressAsPerWidth="true"/>
 
                     <RelativeLayout
                         android:id="@+id/rltLayoutEvtInfo"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginBottom="@dimen/rlt_evt_info_margin_t_b_fragment_event_details_img_evt"
                         android:layout_marginRight="@dimen/rlt_evt_info_margin_r_fragment_event_details_img_evt"
                         android:layout_marginTop="@dimen/rlt_evt_info_margin_t_b_fragment_event_details_img_evt"
                         android:layout_weight="1" >
 
-                        <!-- android:layout_margin="@dimen/rlt_layout_img_evt_margin_fragment_event_info" -->
-
                         <TextView
                             android:id="@+id/txtEvtTitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/txt_margin_t_b_rlt_evt_info_fragment_event_details_img_evt"
                             android:ellipsize="end"
                             android:gravity="center"
+                            android:layout_marginTop="@dimen/txt_margin_t_b_rlt_evt_info_fragment_event_details_img_evt"
                             android:singleLine="true"
                             android:textColor="@color/txt_evt_title_fragment_event_info_tab"
                             android:textSize="@dimen/txt_evt_title_txt_size_include_fragment_event_details_img_evt" />
 
-                        <View
-                            android:id="@+id/vDivider"
+						 <RelativeLayout
+                            android:id="@+id/rltLayoutVenueInfo"
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/v_divider_ht_fb_login"
-                            android:layout_below="@id/txtEvtTitle"
-                            android:background="@drawable/fb_login_divider" />
+                            android:layout_height="match_parent"
+                            android:layout_above="@+id/txtVenue"
+                            android:layout_below="@+id/txtEvtTitle" >
+
+                            <View
+                                android:id="@+id/vDivider"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/v_divider_ht_fb_login"
+                                android:layout_centerVertical="true"
+                                android:background="@drawable/info_divider" />
+                        </RelativeLayout>
 
                         <TextView
                             android:id="@+id/txtVenue"
                             style="@style/SingleLineMarqueeTxt"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/vDivider"
+							android:layout_above="@+id/vEmpty"
                             android:layout_marginBottom="@dimen/txt_margin_t_b_rlt_evt_info_fragment_event_details_img_evt"
-                            android:layout_marginTop="@dimen/txt_margin_t_b_rlt_evt_info_fragment_event_details_img_evt"
                             android:drawableLeft="@drawable/location"
                             android:drawablePadding="@dimen/txt_drawable_pad_fragment_event_details_img_evt"
                             android:gravity="center_vertical"
                             android:maxLines="2"
                             android:textColor="@color/txt_evt_title_fragment_event_info_tab"
                             android:textSize="@dimen/txt_evt_time_txt_size_include_fragment_event_details_img_evt" />
-
+                        
+                        <View
+                            android:id="@+id/vEmpty"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_centerVertical="true" />
+                            
                         <TextView
                             android:id="@+id/txtEvtTime"
                             style="@style/SingleLineMarqueeTxt"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/txtVenue"
+							android:layout_below="@+id/vEmpty"
+                            android:layout_above="@+id/rltFooter"
                             android:layout_marginBottom="@dimen/txt_margin_t_b_rlt_evt_info_fragment_event_details_img_evt"
                             android:drawableLeft="@drawable/calendar"
                             android:drawablePadding="@dimen/txt_drawable_pad_fragment_event_details_img_evt"
@@ -107,11 +122,11 @@
                             android:textSize="@dimen/txt_evt_time_txt_size_include_fragment_event_details_img_evt" />
 
                         <include
+                            android:id="@+id/rltFooter"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/txtEvtTime"
-                            android:layout_marginBottom="@dimen/lnr_layout_btns_margin_b_include_fragment_event_details_footer"
-                            layout="@layout/include_fragment_event_details_footer" />
+                            android:layout_alignParentBottom="true"
+                            layout="@layout/include_fragment_event_details_footer_tab" />
                     </RelativeLayout>
                 </LinearLayout>
 

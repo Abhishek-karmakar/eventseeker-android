@@ -186,10 +186,13 @@ public class FollowingParentFragment extends FragmentLoadableFromBackStack {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (artistList.get(position) == null) {
-				if (convertView == null
-						|| !convertView.getTag().equals(TAG_PROGRESS_INDICATOR)) {
-					convertView = mInflater.inflate(R.layout.list_progress_bar,
-							null);
+				if (convertView == null || !convertView.getTag().equals(TAG_PROGRESS_INDICATOR)) {
+					if(((EventSeekr)FragmentUtil.getActivity(FollowingParentFragment.this).getApplicationContext())
+							.isTablet()) {
+						convertView = mInflater.inflate(R.layout.grd_progress_bar, null);
+					} else {
+						convertView = mInflater.inflate(R.layout.list_progress_bar, null);
+					}
 					convertView.setTag(TAG_PROGRESS_INDICATOR);
 				}
 
@@ -199,31 +202,25 @@ public class FollowingParentFragment extends FragmentLoadableFromBackStack {
 				}
 
 			} else {
+				
 				if (convertView == null || !convertView.getTag().equals(TAG_CONTENT)) {
-					if (((MainActivity) FragmentUtil.getActivity(FollowingParentFragment.this))
+					if (((EventSeekr)FragmentUtil.getActivity(FollowingParentFragment.this).getApplicationContext())
 							.isTablet()) {
-						convertView = mInflater.inflate(
-								R.layout.fragment_following_artists_list_item_tab,
-								null);
+						convertView = mInflater.inflate(R.layout.fragment_following_artists_list_item_tab, null);
 					} else {
-						convertView = mInflater.inflate(
-								R.layout.fragment_search_artists_list_item,
-								null);
+						convertView = mInflater.inflate(R.layout.fragment_search_artists_list_item, null);
 					}
 					convertView.setTag(TAG_CONTENT);
 				}
 
 				final Artist artist = getItem(position);
-				((TextView) convertView.findViewById(R.id.txtArtistName))
-						.setText(artist.getName());
+				((TextView) convertView.findViewById(R.id.txtArtistName)).setText(artist.getName());
 
 				if (artist.isOntour()) {
-					convertView.findViewById(R.id.txtOnTour).setVisibility(
-							View.VISIBLE);
+					convertView.findViewById(R.id.txtOnTour).setVisibility(View.VISIBLE);
 
 				} else {
-					convertView.findViewById(R.id.txtOnTour).setVisibility(
-							View.INVISIBLE);
+					convertView.findViewById(R.id.txtOnTour).setVisibility(View.INVISIBLE);
 				}
 
 				String key = artist.getKey(ImgResolution.LOW);
@@ -233,21 +230,18 @@ public class FollowingParentFragment extends FragmentLoadableFromBackStack {
 							.setImageBitmap(bitmap);
 
 				} else {
-					ImageView imgArtist = (ImageView) convertView
-							.findViewById(R.id.imgItem);
+					ImageView imgArtist = (ImageView) convertView.findViewById(R.id.imgItem);
 					imgArtist.setImageBitmap(null);
 
 					AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-					asyncLoadImg.loadImg(imgArtist, ImgResolution.LOW,
-							(AdapterView) parent, position, artist);
+					asyncLoadImg.loadImg(imgArtist, ImgResolution.LOW, (AdapterView) parent, position, artist);
 				}
 
 				convertView.setOnClickListener(new OnClickListener() {
 
 					@Override
 					public void onClick(View v) {
-						((ArtistListener) FragmentUtil
-								.getActivity(FollowingParentFragment.this))
+						((ArtistListener) FragmentUtil.getActivity(FollowingParentFragment.this))
 								.onArtistSelected(artist);
 					}
 				});

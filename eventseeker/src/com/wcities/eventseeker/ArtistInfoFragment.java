@@ -1,7 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.List;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -25,6 +23,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.scvngr.levelup.views.gallery.AdapterView;
+import com.scvngr.levelup.views.gallery.AdapterView.OnItemClickListener;
 import com.scvngr.levelup.views.gallery.Gallery;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.wcities.eventseeker.ArtistDetailsFragment.ArtistDetailsFragmentListener;
@@ -46,11 +46,11 @@ import com.wcities.eventseeker.custom.view.ExpandableGridView;
 import com.wcities.eventseeker.custom.view.ResizableImageView;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class ArtistInfoFragment extends Fragment implements OnClickListener, ArtistDetailsFragmentListener, 
-		AsyncLoadImageListener {
+public class ArtistInfoFragment extends Fragment implements OnClickListener,
+		ArtistDetailsFragmentListener, AsyncLoadImageListener {
 
 	private static final String TAG = ArtistInfoFragment.class.getName();
-	
+
 	private static final int MAX_FRIENDS_GRID = 3;
 	private static final int MAX_LINES_ARTIST_DESC_PORTRAIT = 3;
 	private static final int MAX_LINES_ARTIST_DESC_LANDSCAPE = 5;
@@ -59,7 +59,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 	private boolean isArtistDescExpanded, isFriendsGridExpanded;
 	private int orientation;
 	private boolean allDetailsLoaded, isImgLoaded;
-	
+
 	private Resources res;
 	private ProgressBar progressBar, progressBar2;
 	private RelativeLayout rltLayoutArtistDesc, rltLayoutLoadedContent;
@@ -75,139 +75,166 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 	private RelativeLayout fragmentArtistDetailsFooter;
 	private ImageView imgFollow;
 	private TextView txtFollow;
-	
+
 	private VideoFragmentPagerAdapter videoFragmentPagerAdapter;
 	private VideoGalleryAdapter videoGalleryAdapter;
 	private FriendsGridAdapter friendsGridAdapter;
 
 	private boolean isTablet;
 
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		artist = (Artist) getArguments().getSerializable(BundleKeys.ARTIST);
-		
+
 		res = getResources();
-		
-		isTablet = ((MainActivity)FragmentUtil.getActivity(this)).isTablet();
+
+		isTablet = ((MainActivity) FragmentUtil.getActivity(this)).isTablet();
 	}
-	
+
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		//Log.d(TAG, "onCreateView() - " + (System.currentTimeMillis() / 1000));
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// Log.d(TAG, "onCreateView() - " + (System.currentTimeMillis() /
+		// 1000));
 		orientation = res.getConfiguration().orientation;
-		//Log.d(TAG, "child manager = " + getChildFragmentManager());
-		
+		// Log.d(TAG, "child manager = " + getChildFragmentManager());
+
 		View v = inflater.inflate(R.layout.fragment_artist_info, null);
-		
+
 		progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
-		rltLayoutLoadedContent = (RelativeLayout) v.findViewById(R.id.rltLayoutLoadedContent);
-		
+		rltLayoutLoadedContent = (RelativeLayout) v
+				.findViewById(R.id.rltLayoutLoadedContent);
+
 		if (orientation == Configuration.ORIENTATION_PORTRAIT) {
 			progressBar2 = (ProgressBar) v.findViewById(R.id.progressBar2);
 		}
-		
+
 		imgArtist = (ImageView) v.findViewById(R.id.imgItem);
 		updateArtistImg();
-		
-		((TextView)v.findViewById(R.id.txtItemTitle)).setText(artist.getName());
-		
-		rltLayoutArtistDesc = (RelativeLayout) v.findViewById(R.id.rltLayoutDesc);
+
+		((TextView) v.findViewById(R.id.txtItemTitle))
+				.setText(artist.getName());
+
+		rltLayoutArtistDesc = (RelativeLayout) v
+				.findViewById(R.id.rltLayoutDesc);
 		txtArtistDesc = (TextView) v.findViewById(R.id.txtDesc);
 		imgDown = (ImageView) v.findViewById(R.id.imgDown);
-		
+
 		updateDescVisibility();
-		
+
 		rltLayoutVideos = v.findViewById(R.id.rltLayoutVideos);
 
-		if(((MainActivity)FragmentUtil.getActivity(this)).isTablet()) {
-		
+		if (((MainActivity) FragmentUtil.getActivity(this)).isTablet()) {
+
 			glryVideo = (Gallery) v.findViewById(R.id.glryVideo);
-			videoGalleryAdapter = new VideoGalleryAdapter(artist, FragmentUtil.getActivity(this));
+			videoGalleryAdapter = new VideoGalleryAdapter(artist,
+					FragmentUtil.getActivity(this));
 			glryVideo.setAdapter(videoGalleryAdapter);
+			glryVideo.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+
+					Video video = (Video) parent.getItemAtPosition(position);
+					Intent intent = new Intent(Intent.ACTION_VIEW, Uri
+							.parse(video.getVideoUrl()));
+					startActivity(Intent.createChooser(intent, ""));
+				}
+			});
+
 			Log.i(TAG, "Setting the adapter");
-			
+
 		} else {
-		
+
 			viewPager = (ViewPager) v.findViewById(R.id.viewPager);
-			videoFragmentPagerAdapter = new VideoFragmentPagerAdapter(artist, getChildFragmentManager());  
+			videoFragmentPagerAdapter = new VideoFragmentPagerAdapter(artist,
+					getChildFragmentManager());
 			viewPager.setAdapter(videoFragmentPagerAdapter);
-			
-			indicator = (CirclePageIndicator)v.findViewById(R.id.pageIndicator);
+
+			indicator = (CirclePageIndicator) v
+					.findViewById(R.id.pageIndicator);
 			indicator.setViewPager(viewPager);
-			
+
 		}
-		
-    	updateVideosVisibility();
-		
+
+		updateVideosVisibility();
+
 		grdVFriends = (ExpandableGridView) v.findViewById(R.id.grdVFriends);
 		if (friendsGridAdapter == null) {
 			friendsGridAdapter = new FriendsGridAdapter();
 		}
 		grdVFriends.setAdapter(friendsGridAdapter);
-		
-		rltLayoutFriends = (RelativeLayout) v.findViewById(R.id.rltLayoutFriends);
+
+		rltLayoutFriends = (RelativeLayout) v
+				.findViewById(R.id.rltLayoutFriends);
 		txtViewAll = (TextView) v.findViewById(R.id.txtViewAll);
 		imgRight = (ImageView) v.findViewById(R.id.imgRight);
 		updateFriendsVisibility();
-		
+
 		imgFollow = (ImageView) v.findViewById(R.id.imgFollow);
 		txtFollow = (TextView) v.findViewById(R.id.txtFollow);
-		fragmentArtistDetailsFooter = (RelativeLayout) v.findViewById(R.id.fragmentArtistDetailsFooter);
+		fragmentArtistDetailsFooter = (RelativeLayout) v
+				.findViewById(R.id.fragmentArtistDetailsFooter);
 		fragmentArtistDetailsFooter.setOnClickListener(this);
-		
+
 		updateFollowingFooter();
-		
-		if(isTablet) {
-			
+
+		if (isTablet) {
+
 			v.findViewById(R.id.imgFacebook).setOnClickListener(this);
 			v.findViewById(R.id.imgTwitter).setOnClickListener(this);
 			v.findViewById(R.id.imgWeb).setOnClickListener(this);
-			
+
 		}
-		
-		//Log.d(TAG, "onCreateView() done - " + (System.currentTimeMillis() / 1000));
+
+		// Log.d(TAG, "onCreateView() done - " + (System.currentTimeMillis() /
+		// 1000));
 		return v;
 	}
-	
+
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
 		Log.d(TAG, "onDestroy()");
 	}
-	
+
 	private void updateArtistImg() {
-		//Log.d(TAG, "updateEventImg(), url = " + event.getLowResImgUrl());
+		// Log.d(TAG, "updateEventImg(), url = " + event.getLowResImgUrl());
 		if (artist.doesValidImgUrlExist() || allDetailsLoaded) {
 			String key = artist.getKey(ImgResolution.LOW);
-	        BitmapCache bitmapCache = BitmapCache.getInstance();
+			BitmapCache bitmapCache = BitmapCache.getInstance();
 			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 			if (bitmap != null) {
-		        imgArtist.setImageBitmap(bitmap);
-		        isImgLoaded = true;
-		        
-		    } else {
-		    	imgArtist.setImageBitmap(null);
-		    	AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-		        asyncLoadImg.loadImg(imgArtist, ImgResolution.LOW, artist, this);
-		        isImgLoaded = false;
-		    }
+				imgArtist.setImageBitmap(bitmap);
+				isImgLoaded = true;
+
+			} else {
+				imgArtist.setImageBitmap(null);
+				AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
+				asyncLoadImg
+						.loadImg(imgArtist, ImgResolution.LOW, artist, this);
+				isImgLoaded = false;
+			}
 		}
-        updateProgressBarVisibility();
+		updateProgressBarVisibility();
 	}
-	
+
 	private void updateFollowingFooter() {
-		if (artist.getAttending() == null || ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId() == null) {
+		if (artist.getAttending() == null
+				|| ((EventSeekr) FragmentUtil.getActivity(this)
+						.getApplication()).getWcitiesId() == null) {
 			fragmentArtistDetailsFooter.setVisibility(View.GONE);
-			
+
 		} else {
 			fragmentArtistDetailsFooter.setVisibility(View.VISIBLE);
-			
+
 			switch (artist.getAttending()) {
 
 			case Tracked:
-				imgFollow.setImageDrawable(res.getDrawable(R.drawable.following));
+				imgFollow.setImageDrawable(res
+						.getDrawable(R.drawable.following));
 				txtFollow.setText(FooterTxt.Following.name());
 				break;
 
@@ -221,45 +248,51 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 			}
 		}
 	}
-	
+
 	private void updateFriendsVisibility() {
-		if (((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId() == null) {
+		if (((EventSeekr) FragmentUtil.getActivity(this).getApplication())
+				.getWcitiesId() == null) {
 			rltLayoutFriends.setVisibility(View.GONE);
-			
+
 		} else if (isTablet) {
-			
-			int visibility = (artist.getFriends().isEmpty()) ? View.GONE : View.VISIBLE;
+
+			int visibility = (artist.getFriends().isEmpty()) ? View.GONE
+					: View.VISIBLE;
 			rltLayoutFriends.setVisibility(visibility);
-			
+
 		} else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-			
-			if (!isImgLoaded || !allDetailsLoaded || artist.getFriends().isEmpty()) {
+
+			if (!isImgLoaded || !allDetailsLoaded
+					|| artist.getFriends().isEmpty()) {
 				rltLayoutFriends.setVisibility(View.GONE);
-				
+
 			} else {
 				rltLayoutFriends.setVisibility(View.VISIBLE);
-				
+
 				if (artist.getFriends().size() > MAX_FRIENDS_GRID) {
-					RelativeLayout rltLayoutViewAll = (RelativeLayout) rltLayoutFriends.findViewById(R.id.rltLayoutViewAll);
+					RelativeLayout rltLayoutViewAll = (RelativeLayout) rltLayoutFriends
+							.findViewById(R.id.rltLayoutViewAll);
 					rltLayoutViewAll.setVisibility(View.VISIBLE);
 					rltLayoutViewAll.setOnClickListener(this);
-					
+
 					expandOrCollapseFriendsGrid();
 				}
 			}
-			
+
 		} else {
 			if (artist.getFriends().isEmpty()) {
-				
-				// Remove entire bottom part since neither description nor friends are available
+
+				// Remove entire bottom part since neither description nor
+				// friends are available
 				if (artist.getDescription() == null) {
 					rltLayoutFriends.setVisibility(View.GONE);
 					rltLayoutArtistDesc.setVisibility(View.GONE);
-					
+
 				} else {
 					/**
-					 * Use INVISIBLE instead of GONE to restrain description section space to half the 
-					 * screen width; otherwise it will expand horizontally to fill screen width
+					 * Use INVISIBLE instead of GONE to restrain description
+					 * section space to half the screen width; otherwise it will
+					 * expand horizontally to fill screen width
 					 */
 					rltLayoutFriends.setVisibility(View.INVISIBLE);
 					rltLayoutArtistDesc.setVisibility(View.VISIBLE);
@@ -270,45 +303,48 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 			}
 		}
 	}
-	
+
 	private void expandOrCollapseFriendsGrid() {
 		if (isFriendsGridExpanded) {
 			txtViewAll.setText(res.getString(R.string.txt_view_less));
 			imgRight.setImageResource(R.drawable.less);
 			grdVFriends.setExpanded(isFriendsGridExpanded);
-			
+
 		} else {
 			txtViewAll.setText(res.getString(R.string.txt_view_all));
 			imgRight.setImageResource(R.drawable.down);
 			grdVFriends.setExpanded(isFriendsGridExpanded);
 		}
-		
+
 		friendsGridAdapter.notifyDataSetChanged();
 	}
-	
+
 	private void updateVideosVisibility() {
 
 		if (isTablet) {
-			
-			int visibility = artist.getVideos().isEmpty() ? View.INVISIBLE : View.VISIBLE;
+
+			int visibility = artist.getVideos().isEmpty() ? View.INVISIBLE
+					: View.VISIBLE;
 			rltLayoutVideos.setVisibility(visibility);
-			
+
 		} else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			
-			int visibility = artist.getVideos().isEmpty() ? View.GONE : View.VISIBLE;
+
+			int visibility = artist.getVideos().isEmpty() ? View.GONE
+					: View.VISIBLE;
 			viewPager.setVisibility(visibility);
 			indicator.setVisibility(visibility);
-			
+
 		} else {
-			if (!isImgLoaded || !allDetailsLoaded || artist.getVideos().isEmpty()) {
+			if (!isImgLoaded || !allDetailsLoaded
+					|| artist.getVideos().isEmpty()) {
 				rltLayoutVideos.setVisibility(View.GONE);
-				
+
 			} else {
 				rltLayoutVideos.setVisibility(View.VISIBLE);
 			}
 		}
 	}
-	
+
 	private void makeDescVisible() {
 		rltLayoutArtistDesc.setVisibility(View.VISIBLE);
 		imgDown.setOnClickListener(this);
@@ -317,75 +353,76 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 
 		if (isArtistDescExpanded) {
 			expandEvtDesc();
-			
+
 		} else {
 			collapseEvtDesc();
 		}
 	}
-	
+
 	private void makeDescVisibleInExpandedMode() {
-		
-		imgDown.setVisibility(View.GONE);		
+
+		imgDown.setVisibility(View.GONE);
 		rltLayoutArtistDesc.setVisibility(View.VISIBLE);
 		txtArtistDesc.setText(artist.getDescription());
 		expandEvtDesc();
-			
+
 	}
 
 	private void updateDescVisibility() {
-		
+
 		/**
-		 * Mithil:added new condition for the Tablet UI. Here if device is tablet then
-		 * if artist description is null then make the rltLayoutArtistDesc invisible else
-		 * expand the Description and make down arrow's visibility as gone.
+		 * Mithil:added new condition for the Tablet UI. Here if device is
+		 * tablet then if artist description is null then make the
+		 * rltLayoutArtistDesc invisible else expand the Description and make
+		 * down arrow's visibility as gone.
 		 */
-		if(isTablet) {
-			
+		if (isTablet) {
+
 			if (artist.getDescription() == null) {
 				rltLayoutArtistDesc.setVisibility(View.INVISIBLE);
-				
+
 			} else {
 				makeDescVisibleInExpandedMode();
 			}
 		} else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-			if (!isImgLoaded || !allDetailsLoaded || artist.getDescription() == null) {
+			if (!isImgLoaded || !allDetailsLoaded
+					|| artist.getDescription() == null) {
 				rltLayoutArtistDesc.setVisibility(View.GONE);
-				
+
 			} else {
 				makeDescVisible();
 			}
-			
+
 		} else {
 			if (artist.getDescription() == null) {
 				rltLayoutArtistDesc.setVisibility(View.INVISIBLE);
-				
+
 			} else {
 				makeDescVisible();
 			}
 		}
 	}
-	
 
 	private void expandEvtDesc() {
 		txtArtistDesc.setMaxLines(Integer.MAX_VALUE);
 		txtArtistDesc.setEllipsize(null);
-		
+
 		imgDown.setImageDrawable(res.getDrawable(R.drawable.less));
 
 		isArtistDescExpanded = true;
 	}
-	
+
 	private void collapseEvtDesc() {
-		int maxLines = orientation == Configuration.ORIENTATION_PORTRAIT ? MAX_LINES_ARTIST_DESC_PORTRAIT : 
-			MAX_LINES_ARTIST_DESC_LANDSCAPE;
+		int maxLines = orientation == Configuration.ORIENTATION_PORTRAIT ? MAX_LINES_ARTIST_DESC_PORTRAIT
+				: MAX_LINES_ARTIST_DESC_LANDSCAPE;
 		txtArtistDesc.setMaxLines(maxLines);
 		txtArtistDesc.setEllipsize(TruncateAt.END);
-		
+
 		imgDown.setImageDrawable(res.getDrawable(R.drawable.down));
-		
+
 		isArtistDescExpanded = false;
 	}
-	
+
 	private void updateProgressBarVisibility() {
 		Log.d(TAG, "updateProgressBarVisibility()");
 		if (isImgLoaded) {
@@ -396,52 +433,56 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 				if (allDetailsLoaded) {
 					Log.d(TAG, "updateProgressBarVisibility() allDetailsLoaded");
 					progressBar2.setVisibility(View.GONE);
-					
+
 				} else {
-					Log.d(TAG, "updateProgressBarVisibility() !allDetailsLoaded");
+					Log.d(TAG,
+							"updateProgressBarVisibility() !allDetailsLoaded");
 					progressBar2.setVisibility(View.VISIBLE);
 				}
 			}
-			
+
 		} else {
 			Log.d(TAG, "updateProgressBarVisibility() !isImgLoaded");
 			rltLayoutLoadedContent.setVisibility(View.GONE);
 			progressBar.setVisibility(View.VISIBLE);
 		}
 	}
-	
-	private static class VideoFragmentPagerAdapter extends FragmentStatePagerAdapter {
-    	
-		private static final int MAX_LIMIT = 5;
-		
-		private Artist artist;
-    	   
-        public VideoFragmentPagerAdapter(Artist artist, FragmentManager fm) {  
-            super(fm);
-            //Log.d(TAG, "VideoFragmentPagerAdapter()");
-            this.artist = artist;
-        }  
-        
-        @Override  
-        public Fragment getItem(int index) { 
-        	//Log.d(TAG, "getItem() for index = " + index);
-        	VideoFragment videoFragment = VideoFragment.newInstance(artist.getVideos().get(index));
-            return videoFragment;
-        }  
 
-        @Override  
-        public int getCount() {  
-        	//Log.d(TAG, "getCount()");
-            return artist.getVideos().size() > MAX_LIMIT ? MAX_LIMIT : artist.getVideos().size();  
-        }  
-        
-        @Override
-        public int getItemPosition(Object object) {
-        	//Log.d(TAG, "getItemPosition()");
-        	return POSITION_NONE;
-        }
-    }
-	
+	private static class VideoFragmentPagerAdapter extends
+			FragmentStatePagerAdapter {
+
+		private static final int MAX_LIMIT = 5;
+
+		private Artist artist;
+
+		public VideoFragmentPagerAdapter(Artist artist, FragmentManager fm) {
+			super(fm);
+			// Log.d(TAG, "VideoFragmentPagerAdapter()");
+			this.artist = artist;
+		}
+
+		@Override
+		public Fragment getItem(int index) {
+			// Log.d(TAG, "getItem() for index = " + index);
+			VideoFragment videoFragment = VideoFragment.newInstance(artist
+					.getVideos().get(index));
+			return videoFragment;
+		}
+
+		@Override
+		public int getCount() {
+			// Log.d(TAG, "getCount()");
+			return artist.getVideos().size() > MAX_LIMIT ? MAX_LIMIT : artist
+					.getVideos().size();
+		}
+
+		@Override
+		public int getItemPosition(Object object) {
+			// Log.d(TAG, "getItemPosition()");
+			return POSITION_NONE;
+		}
+	}
+
 	private class VideoGalleryAdapter extends BaseAdapter {
 
 		private static final int MAX_LIMIT = 5;
@@ -454,10 +495,11 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 			inflater = LayoutInflater.from(context);
 			bitmapCache = BitmapCache.getInstance();
 		}
-		
+
 		@Override
 		public int getCount() {
-			return artist.getVideos().size() > MAX_LIMIT ? MAX_LIMIT : artist.getVideos().size();  
+			return artist.getVideos().size() > MAX_LIMIT ? MAX_LIMIT : artist
+					.getVideos().size();
 		}
 
 		@Override
@@ -473,42 +515,43 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			Log.i(TAG, "in getview");
-			
+
 			View v = inflater.inflate(R.layout.fragment_video, null);
-	    	
-	    	ResizableImageView imgVideo = (ResizableImageView) v.findViewById(R.id.imgVideo);
 
-	    	final Video video = (Video) getItem(position);
-	    		
+			ResizableImageView imgVideo = (ResizableImageView) v
+					.findViewById(R.id.imgVideo);
+
+			final Video video = (Video) getItem(position);
+
 			String key = video.getKey(ImgResolution.LOW);
-	    	Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
+			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 
-	    	if (bitmap != null) {
-	    		imgVideo.setImageBitmap(bitmap);
-    		} else {
-    			imgVideo.setImageResource(R.drawable.placeholder);
-    			AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-    			asyncLoadImg.loadImg(imgVideo, ImgResolution.LOW, video);
-    		}
-	    	
-	    	/*v.setOnClickListener(new OnClickListener() {
-	    		@Override
-	    		public void onClick(View v) {
-	    			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(video.getVideoUrl()));
-	    			startActivity(Intent.createChooser(intent, ""));
-	    		}
-	    	});*/
-	    	
-	    	return v;
-			
+			if (bitmap != null) {
+				imgVideo.setImageBitmap(bitmap);
+			} else {
+				imgVideo.setImageResource(R.drawable.placeholder);
+				AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
+				asyncLoadImg.loadImg(imgVideo, ImgResolution.LOW, video);
+			}
+
+			/*
+			 * v.setOnClickListener(new OnClickListener() {
+			 * 
+			 * @Override public void onClick(View v) { Intent intent = new
+			 * Intent(Intent.ACTION_VIEW, Uri.parse(video.getVideoUrl()));
+			 * startActivity(Intent.createChooser(intent, "")); } });
+			 */
+
+			return v;
+
 		}
-		
+
 	}
-	
+
 	private class FriendsGridAdapter extends BaseAdapter {
-		
+
 		private BitmapCache bitmapCache;
-		
+
 		public FriendsGridAdapter() {
 			this.bitmapCache = BitmapCache.getInstance();
 		}
@@ -516,11 +559,13 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 		@Override
 		public int getCount() {
 			if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-				return artist.getFriends().size() > MAX_FRIENDS_GRID ? 
-						(isFriendsGridExpanded ? artist.getFriends().size() : MAX_FRIENDS_GRID) : artist.getFriends().size();
-				
+				return artist.getFriends().size() > MAX_FRIENDS_GRID ? (isFriendsGridExpanded ? artist
+						.getFriends().size() : MAX_FRIENDS_GRID)
+						: artist.getFriends().size();
+
 			} else {
-				return artist.getFriends().size() > MAX_FRIENDS_GRID ? MAX_FRIENDS_GRID : artist.getFriends().size();
+				return artist.getFriends().size() > MAX_FRIENDS_GRID ? MAX_FRIENDS_GRID
+						: artist.getFriends().size();
 			}
 		}
 
@@ -535,104 +580,117 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 		}
 
 		@Override
-		public View getView(final int position, View convertView, ViewGroup parent) {
+		public View getView(final int position, View convertView,
+				ViewGroup parent) {
 			Friend friend = getItem(position);
-			//Log.d(TAG, "friend = " + friend);
-			
+			// Log.d(TAG, "friend = " + friend);
+
 			if (friend == null) {
-				convertView = LayoutInflater.from(FragmentUtil.getActivity(ArtistInfoFragment.this)).inflate(R.layout.list_progress_bar, null);
-				
+				convertView = LayoutInflater.from(
+						FragmentUtil.getActivity(ArtistInfoFragment.this))
+						.inflate(R.layout.list_progress_bar, null);
+
 			} else {
 				GridFriendHolder holder;
 
 				if (convertView == null || convertView.getTag() == null) {
-					convertView = LayoutInflater.from(FragmentUtil.getActivity(ArtistInfoFragment.this)).inflate(R.layout.grid_friend, null);
-					
+					convertView = LayoutInflater.from(
+							FragmentUtil.getActivity(ArtistInfoFragment.this))
+							.inflate(R.layout.grid_friend, null);
+
 					holder = new GridFriendHolder();
-					holder.imgFriend = (ImageView) convertView.findViewById(R.id.imgFriend);
-					holder.txtFriendName = (TextView) convertView.findViewById(R.id.txtFriendName);
-					
+					holder.imgFriend = (ImageView) convertView
+							.findViewById(R.id.imgFriend);
+					holder.txtFriendName = (TextView) convertView
+							.findViewById(R.id.txtFriendName);
+
 					convertView.setTag(holder);
-					
+
 				} else {
 					holder = (GridFriendHolder) convertView.getTag();
 				}
-				
+
 				holder.txtFriendName.setText(friend.getName());
-				
+
 				String key = friend.getKey(ImgResolution.MOBILE);
 				Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 				if (bitmap != null) {
 					holder.imgFriend.setImageBitmap(bitmap);
-			        
-			    } else {
-			    	holder.imgFriend.setImageBitmap(null);
-			        AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-			        asyncLoadImg.loadImg(holder.imgFriend, ImgResolution.MOBILE, friend);
-			    }
+
+				} else {
+					holder.imgFriend.setImageBitmap(null);
+					AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
+					asyncLoadImg.loadImg(holder.imgFriend,
+							ImgResolution.MOBILE, friend);
+				}
 			}
 			return convertView;
 		}
-		
+
 		private class GridFriendHolder {
 			private TextView txtFriendName;
 			private ImageView imgFriend;
 		}
-    }
-	
+	}
+
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		
+
 		case R.id.imgDown:
 			if (isArtistDescExpanded) {
 				collapseEvtDesc();
-				
+
 			} else {
 				expandEvtDesc();
 			}
 			break;
-			
+
 		case R.id.fragmentArtistDetailsFooter:
 			if (txtFollow.getText().equals(FooterTxt.Follow.name())) {
 				artist.setAttending(Attending.Tracked);
 				updateFollowingFooter();
-				new UserTracker((EventSeekr)FragmentUtil.getActivity(this).getApplication(), UserTrackingItemType.artist, artist.getId()).execute();
-				
+				new UserTracker((EventSeekr) FragmentUtil.getActivity(this)
+						.getApplication(), UserTrackingItemType.artist,
+						artist.getId()).execute();
+
 			} else {
 				artist.setAttending(Attending.NotTracked);
 				updateFollowingFooter();
-				new UserTracker((EventSeekr)FragmentUtil.getActivity(this).getApplication(), UserTrackingItemType.artist, artist.getId(), 
-						Attending.NotTracked.getValue(), UserTrackingType.Edit).execute();
+				new UserTracker((EventSeekr) FragmentUtil.getActivity(this)
+						.getApplication(), UserTrackingItemType.artist,
+						artist.getId(), Attending.NotTracked.getValue(),
+						UserTrackingType.Edit).execute();
 			}
-			((ArtistDetailsFragment) getParentFragment()).onArtistFollowingUpdated();
+			((ArtistDetailsFragment) getParentFragment())
+					.onArtistFollowingUpdated();
 			break;
-			
+
 		case R.id.rltLayoutViewAll:
 			isFriendsGridExpanded = !isFriendsGridExpanded;
 			expandOrCollapseFriendsGrid();
 			break;
-			
+
 		case R.id.imgFacebook:
 			String url = "http://www.facebook.com/eventseekr";
 			gotoLink(url);
 			break;
-			
+
 		case R.id.imgTwitter:
 			url = "https://twitter.com/eventseeker";
 			gotoLink(url);
 			break;
-	
+
 		case R.id.imgWeb:
 			url = "http://eventseeker.com/";
 			gotoLink(url);
 			break;
-			
+
 		default:
 			break;
 		}
 	}
-	
+
 	private void gotoLink(String url) {
 		Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 		startActivity(browserIntent);
@@ -643,11 +701,11 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 		if (FragmentUtil.getActivity(this) == null) {
 			return;
 		}
-		
+
 		updateArtistImg();
-		
+
 		updateDescVisibility();
-		
+
 		updateVideosVisibility();
 		if (videoFragmentPagerAdapter != null) {
 			videoFragmentPagerAdapter.notifyDataSetChanged();
@@ -655,10 +713,10 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 		if (videoGalleryAdapter != null) {
 			videoGalleryAdapter.notifyDataSetChanged();
 		}
-		
+
 		updateFriendsVisibility();
 		friendsGridAdapter.notifyDataSetChanged();
-		
+
 		updateFollowingFooter();
 	}
 
@@ -666,7 +724,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener, Art
 	public void onArtistUpdatedByArtistDetailsFragment() {
 		Log.d(TAG, "onArtistUpdatedByArtistDetailsFragment()");
 		allDetailsLoaded = true;
-		
+
 		updateScreen();
 		Log.d(TAG, "onArtistUpdatedByArtistDetailsFragment() done");
 	}

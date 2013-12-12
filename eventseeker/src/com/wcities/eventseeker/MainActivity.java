@@ -62,9 +62,9 @@ public class MainActivity extends ActionBarActivity implements
 
 	private static final int INDEX_NAV_ITEM_DISCOVER = DrawerListFragment.SECT_1_HEADER_POS + 1;
 	private static final int INDEX_NAV_ITEM_MY_EVENTS = INDEX_NAV_ITEM_DISCOVER + 1;
-	private static final int INDEX_NAV_ITEM_ARTISTS_NEWS = INDEX_NAV_ITEM_MY_EVENTS + 1;
+	private static final int INDEX_NAV_ITEM_FOLLOWING = INDEX_NAV_ITEM_MY_EVENTS + 1;
+	private static final int INDEX_NAV_ITEM_ARTISTS_NEWS = INDEX_NAV_ITEM_FOLLOWING + 1;
 	private static final int INDEX_NAV_ITEM_FRIENDS_ACTIVITY = INDEX_NAV_ITEM_ARTISTS_NEWS + 1;
-	private static final int INDEX_NAV_ITEM_FOLLOWING = INDEX_NAV_ITEM_FRIENDS_ACTIVITY + 1;
 	private static final int INDEX_NAV_ITEM_CONNECT_ACCOUNTS = DrawerListFragment.SECT_2_HEADER_POS + 1;
 	private static final int INDEX_NAV_ITEM_CHANGE_LOCATION = INDEX_NAV_ITEM_CONNECT_ACCOUNTS + 1;
 	private static final int INDEX_NAV_ITEM_INVITE_FRIENDS = DrawerListFragment.SECT_3_HEADER_POS + 1;
@@ -647,6 +647,18 @@ public class MainActivity extends ActionBarActivity implements
 			replaceContentFrameByFragment(fragment, AppConstants.FRAGMENT_TAG_MY_EVENTS, getResources()
 							.getString(R.string.title_my_events), false);
 			break;
+			
+		case INDEX_NAV_ITEM_FOLLOWING:
+			FollowingParentFragment followingFragment;
+			if(!isTablet) {
+				followingFragment = new FollowingFragment();
+			} else {
+				followingFragment = new FollowingFragmentTab();
+			}
+			replaceContentFrameByFragment(followingFragment, AppConstants.FRAGMENT_TAG_FOLLOWING, 
+					getResources().getString(R.string.title_following), false);
+			break;
+			
 
 		case INDEX_NAV_ITEM_ARTISTS_NEWS:
 			ArtistsNewsListFragment artistsNewsFragment = new ArtistsNewsListFragment();
@@ -659,18 +671,6 @@ public class MainActivity extends ActionBarActivity implements
 			replaceContentFrameByFragment(friendsActivityFragment, AppConstants.FRAGMENT_TAG_FRIENDS_ACTIVITY, getResources()
 							.getString(R.string.title_friends_activity), false);
 			break;
-			
-		case INDEX_NAV_ITEM_FOLLOWING:
-			FollowingParentFragment followingFragment;
-			if(!isTablet) {
-				followingFragment = new FollowingFragment();
-			} else {
-				followingFragment = new FollowingFragmentTab();
-			}
-			replaceContentFrameByFragment(followingFragment, AppConstants.FRAGMENT_TAG_FOLLOWING, 
-					getResources().getString(R.string.title_following), false);
-	    	break;
-	    	
 		case INDEX_NAV_ITEM_CONNECT_ACCOUNTS:
 	    	ConnectAccountsFragment connectAccountsFragment = new ConnectAccountsFragment();
 	    	replaceContentFrameByFragment(connectAccountsFragment, AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS, 

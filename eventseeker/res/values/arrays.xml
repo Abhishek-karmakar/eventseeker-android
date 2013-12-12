@@ -4,9 +4,9 @@
         <item>@string/navigation_drawer_section_browse</item>
         <item>@string/navigation_drawer_item_discover</item>
 	  	<item>@string/navigation_drawer_item_my_events</item>
+	  	<item>@string/navigation_drawer_item_following</item>
 	  	<item>@string/navigation_drawer_item_artists_news</item>
 	  	<item>@string/navigation_drawer_item_friends_activity</item>
-	  	<item>@string/navigation_drawer_item_following</item>
 	  	<item>@string/navigation_drawer_section_settings</item>
 	  	<item>@string/navigation_drawer_item_sync_accounts</item>
 	  	<item>@string/navigation_drawer_item_change_location</item>
@@ -22,9 +22,9 @@
         <item>@null</item>
 	  	<item>@drawable/discover</item>
 	  	<item>@drawable/myevents</item>
+	  	<item>@drawable/favorites</item>
 	  	<item>@drawable/latestnews</item>
 	  	<item>@drawable/friendsactivity</item>
-	  	<item>@drawable/favorites</item>
 	  	<item>@null</item>
         <item>@drawable/sync</item>
 	  	<item>@drawable/changelocation</item>

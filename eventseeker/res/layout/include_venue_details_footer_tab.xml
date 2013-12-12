@@ -22,7 +22,7 @@
             android:gravity="center"
             android:text="Phone"
             android:textColor="@color/txt_color_include_fragment_vaenu_details_footer_tab"
-            android:textSize="@dimen/lnr_layout_btns_txt_size_include_fragment_venue_details_footer" />
+            android:textSize="@dimen/btn_lyt_txt_size_include_venue_details_footer" />
     </RelativeLayout>
 
     <View
@@ -48,7 +48,7 @@
             android:gravity="center"
             android:text="Web"
             android:textColor="@color/txt_color_include_fragment_vaenu_details_footer_tab"
-            android:textSize="@dimen/lnr_layout_btns_txt_size_include_fragment_venue_details_footer" />
+            android:textSize="@dimen/btn_lyt_txt_size_include_venue_details_footer" />
     </RelativeLayout>
 
     <View
@@ -74,7 +74,7 @@
             android:gravity="center"
             android:text="Drive"
             android:textColor="@color/txt_color_include_fragment_vaenu_details_footer_tab"
-            android:textSize="@dimen/lnr_layout_btns_txt_size_include_fragment_venue_details_footer" />
+            android:textSize="@dimen/btn_lyt_txt_size_include_venue_details_footer" />
     </RelativeLayout>
 
 </LinearLayout>

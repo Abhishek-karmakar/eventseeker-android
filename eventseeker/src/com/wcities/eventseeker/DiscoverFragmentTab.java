@@ -33,6 +33,8 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 
 	public static final String TAG = DiscoverFragment.class.getName();
 
+	private static final int DEFAULT_SELECTED_FEATURED_EVENT_POSITION = 2;
+
 	private EcoGallery ecoGallery;
 	private FeaturedEventsEcoGalleryAdapter featuredEventsEcoGalleryAdapter;
 
@@ -62,6 +64,9 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 		ecoGallery.setAdapter(featuredEventsEcoGalleryAdapter);
 		ecoGallery.setOnItemClickListener(this);
 
+		if(featuredEventsEcoGalleryAdapter.getCount() > DEFAULT_SELECTED_FEATURED_EVENT_POSITION) {
+			ecoGallery.setSelection(DEFAULT_SELECTED_FEATURED_EVENT_POSITION);
+		}
 		/*
 		 * imgPrev = (ImageView) v.findViewById(R.id.imgPrev); imgNext =
 		 * (ImageView) v.findViewById(R.id.imgNext);
@@ -258,6 +263,9 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 	@Override
 	protected void notifyDataSetChanged() {
 		featuredEventsEcoGalleryAdapter.notifyDataSetChanged();
+		if(featuredEventsEcoGalleryAdapter.getCount() > DEFAULT_SELECTED_FEATURED_EVENT_POSITION) {
+			ecoGallery.setSelection(DEFAULT_SELECTED_FEATURED_EVENT_POSITION);
+		}
 	}
 
 	@Override

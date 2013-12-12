@@ -262,7 +262,7 @@
     <dimen name="rlt_layout_evt_address_margin_t_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="rlt_layout_evt_address_pad_fragment_event_info">@dimen/txt_evt_desc_pad_fragment_evt_info</dimen>
     <dimen name="txt_address_margin_b_fragment_event_info">5dp</dimen>
-    <dimen name="txt_address_txt_size_fragment_event_info">18sp</dimen>
+    <dimen name="txt_address_txt_size_fragment_event_info">16sp</dimen>
     <dimen name="grd_v_friends_hor_space_fragment_event_info">10dp</dimen>
     <dimen name="grd_v_friends_col_w_fragment_event_info">70dp</dimen>
     <dimen name="grd_v_friends_margin_l_fragment_event_info">@dimen/grd_v_friends_hor_space_fragment_event_info</dimen>

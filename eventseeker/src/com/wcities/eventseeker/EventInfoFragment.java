@@ -116,8 +116,12 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 		updateEventImg();
 		
 		((TextView)v.findViewById(R.id.txtEvtTitle)).setText(event.getName());
+		
 		if(isTablet) {
-			((TextView)v.findViewById(R.id.txtVenue)).setText(event.getSchedule().getVenue().getName());
+			
+			txtVenue = (TextView)v.findViewById(R.id.txtVenue);
+			txtVenue.setText(event.getSchedule().getVenue().getName());
+			txtVenue.setOnClickListener(this);
 		}
 		
 		lnrLayoutTickets = (LinearLayout) v.findViewById(R.id.lnrLayoutTickets);
@@ -635,6 +639,7 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 			break;
 			
 		case R.id.txtAddress:
+		case R.id.txtVenue:
 		case R.id.vDummyAddress:
 			((VenueListener)FragmentUtil.getActivity(this)).onVenueSelected(event.getSchedule().getVenue());
 			break;
