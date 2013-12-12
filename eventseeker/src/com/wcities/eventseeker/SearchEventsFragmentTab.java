@@ -36,8 +36,8 @@ public class SearchEventsFragmentTab extends SearchEventsParentFragment
 
 		if (eventList == null) {
 			eventList = new DateWiseEventList();
-			eventListAdapter = new DateWiseMyEventListAdapter(
-					FragmentUtil.getActivity(this), eventList, null, this);
+			eventListAdapter = new DateWiseMyEventListAdapter(FragmentUtil.getActivity(this), getChildFragmentManager(),
+					eventList, null, this);
 
 			Bundle args = getArguments();
 			if (args != null && args.containsKey(BundleKeys.QUERY)) {

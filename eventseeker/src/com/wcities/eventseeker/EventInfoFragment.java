@@ -3,12 +3,9 @@ package com.wcities.eventseeker;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Rect;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,7 +13,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils.TruncateAt;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.TouchDelegate;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -29,7 +25,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.internal.el;
 import com.wcities.eventseeker.EventDetailsFragment.EventDetailsFragmentChildListener;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
@@ -47,10 +42,8 @@ import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Friend;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.custom.view.ExpandableGridView;
-import com.wcities.eventseeker.interfaces.MapListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
 import com.wcities.eventseeker.util.FragmentUtil;
-import com.wcities.eventseeker.util.ViewUtil;
 
 public class EventInfoFragment extends Fragment implements OnClickListener, EventDetailsFragmentChildListener, 
 		AsyncLoadImageListener {
@@ -615,9 +608,8 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 			break;
 			
 		case R.id.lnrLayoutTickets:
-			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(event.getSchedule().getBookingInfos()
-					.get(0).getBookingUrl()));
-			startActivity(browserIntent);
+			TicketProviderDialogFragment ticketProviderDialogFragment = TicketProviderDialogFragment.newInstance(event);
+			ticketProviderDialogFragment.show(getChildFragmentManager(), AppConstants.FRAGMENT_TAG_TICKET_PROVIDER_DIALOG);
 			break;
 			
 		case R.id.chkBoxGoing:

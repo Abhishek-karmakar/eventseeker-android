@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
+import android.support.v4.app.FragmentManager;
 import android.text.TextUtils.TruncateAt;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -26,6 +27,7 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.TicketProviderDialogFragment;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -34,6 +36,7 @@ import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
@@ -50,6 +53,7 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 	private static final String TAG = DateWiseMyEventListAdapter.class.getName();
 
 	private Context mContext;
+	private FragmentManager fm;
 	private BitmapCache bitmapCache;
 	private DateWiseEventList dateWiseEvtList;
 	private AsyncTask<Void, Void, List<Event>> loadDateWiseMyEvents;
@@ -60,10 +64,11 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 	private LayoutParams lpImgEvtPort;
 	private boolean isTablet;
 	
-	public DateWiseMyEventListAdapter(Context context, DateWiseEventList dateWiseEvtList,
+	public DateWiseMyEventListAdapter(Context context, FragmentManager fm, DateWiseEventList dateWiseEvtList,
 			AsyncTask<Void, Void, List<Event>> loadDateWiseEvents, LoadItemsInBackgroundListener mListener) {
 		
 		mContext = context;
+		this.fm = fm;
 		bitmapCache = BitmapCache.getInstance();
 		this.dateWiseEvtList = dateWiseEvtList;
 		this.loadDateWiseMyEvents = loadDateWiseEvents;
@@ -230,10 +235,9 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 				@Override
 				public void onClick(View arg0) {
 					if (doesBookingUrlExist) {
-						Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-								Uri.parse(event.getSchedule().getBookingInfos()
-										.get(0).getBookingUrl()));
-						mContext.startActivity(browserIntent);
+						TicketProviderDialogFragment ticketProviderDialogFragment = TicketProviderDialogFragment
+								.newInstance(event);
+						ticketProviderDialogFragment.show(fm, AppConstants.FRAGMENT_TAG_TICKET_PROVIDER_DIALOG);
 					}
 				}
 			});

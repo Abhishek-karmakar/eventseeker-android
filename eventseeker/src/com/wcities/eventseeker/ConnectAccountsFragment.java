@@ -211,6 +211,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	private void updateView() {
 		Log.d(TAG, "updateView()");
         final Session session = Session.getActiveSession();
+        Log.d(TAG, "session state = " + session.getState().name());
         if (session.isOpened()) {
         	Log.d(TAG, "session is opened");
         	FbUtil.makeMeRequest(session, new Request.GraphUserCallback() {

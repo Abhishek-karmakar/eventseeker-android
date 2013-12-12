@@ -10,7 +10,7 @@ import com.wcities.eventseeker.R;
 
 public class ResizableImageView extends ImageView {
 
-	private static final String TAG = "ResizableImageView";
+	private static final String TAG = ResizableImageView.class.getName();
 	
 	private boolean mRemoveXtraHeight, mCompressAsPerWidth;
 	

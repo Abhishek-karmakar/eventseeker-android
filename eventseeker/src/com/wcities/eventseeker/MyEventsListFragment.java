@@ -48,7 +48,8 @@ public class MyEventsListFragment extends ListFragment implements LoadItemsInBac
 			dateWiseEvtList = new DateWiseEventList();
 			dateWiseEvtList.addDummyItem();
 			
-	        eventListAdapter = new DateWiseMyEventListAdapter(FragmentUtil.getActivity(this), dateWiseEvtList, null, this);
+	        eventListAdapter = new DateWiseMyEventListAdapter(FragmentUtil.getActivity(this), getChildFragmentManager(), 
+	        		dateWiseEvtList, null, this);
 
 			loadItemsInBackground();
 			

@@ -27,7 +27,7 @@ public class ScrollViewContainingViewPager extends ScrollView {
 			break;
 			
 		case MotionEvent.ACTION_MOVE:
-			Log.i(TAG, "In Action Move");
+			//Log.i(TAG, "In Action Move");
 			final float curX = ev.getX();
 			final float curY = ev.getY();
 			xDistance += Math.abs(curX - lastX);

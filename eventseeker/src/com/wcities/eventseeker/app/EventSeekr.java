@@ -62,15 +62,42 @@ public class EventSeekr extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		Log.d(TAG, "onCreate()");
+		//Log.d(TAG, "onCreate()");
 		listeners = new ArrayList<EventSeekr.EventSeekrListener>();
 
+		initConfigParams();
+		
 		new GcmUtil(EventSeekr.this).registerGCMInBackground();
 		DeviceUtil.getLatLon(this);
 
 		isTablet = getResources().getBoolean(R.bool.is_tablet);
 		//Log.d(TAG, "isTablet = " + isTablet);
 		FileUtil.deleteShareImgCacheInBackground(this);
+	}
+	
+	private void initConfigParams() {
+		if (AppConstants.IS_RELEASE_MODE) {
+			AppConstants.TWITTER_CONSUMER_KEY = "1l49nf8bD96xpgUbTrbzg";
+			AppConstants.TWITTER_CONSUMER_SECRET = "9zzFZlJknYRIPrUrLSrTeVSTtkLHNP4d4fNwYHRP5Y";
+			
+			AppConstants.RDIO_KEY = "mbfj65dzv625pyvajtfqq6c2";
+			AppConstants.RDIO_SECRET = "Wvvt3ysYdj";
+			
+			AppConstants.LASTFM_API_KEY = "dce45347e8ec4ce36c107d9d12549907";
+			
+			AppConstants.GCM_SENDER_ID = "972660105461";
+			
+		} else {
+			AppConstants.TWITTER_CONSUMER_KEY = "NVT497UQPpKrtehHabyog";
+			AppConstants.TWITTER_CONSUMER_SECRET = "kxAMzj2HGgQDtcoecwx35lK4etZhM6eQqQ3R9WgeZtI";
+			
+			AppConstants.RDIO_KEY = "x83dzkx2xdmxuqtguqdz2nj6";
+			AppConstants.RDIO_SECRET = "rXNJ5ajSut";
+			
+			AppConstants.LASTFM_API_KEY = "5f7e82824ba8ba0fe1cbe2a6ea80472e";
+			
+			AppConstants.GCM_SENDER_ID = "802382771850";
+		}
 	}
 	
 	public void registerListener(EventSeekrListener eventSeekrListener) {

@@ -185,7 +185,7 @@ public class ChangeLocationFragment extends FragmentLoadableFromBackStack implem
     		}
 
             boolean mapSetUp = ((ChangeLocationFragment) getParentFragment()).setUpMapIfNeeded();
-            Log.i(TAG, "map set up = " + mapSetUp);
+            Log.d(TAG, "map set up = " + mapSetUp);
             if (mapSetUp) {
             	 // The Map is verified. It is now safe to manipulate the map.
             	((ChangeLocationFragment) getParentFragment()).setMarker(lat, lon);

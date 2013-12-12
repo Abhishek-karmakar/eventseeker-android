@@ -2,22 +2,23 @@ package com.wcities.eventseeker.constants;
 
 public class AppConstants {
 	
+	public static final boolean IS_RELEASE_MODE = true;
 	public static final boolean DEBUG = false;
 	public static final boolean FORD_SYNC_APP = false;
 	
 	public static final int TCP_PORT = 50007;
 	public static final String TCP_IP_ADDRESS = "192.168.1.66";
 	
-	public static final String TWITTER_CONSUMER_KEY = "NVT497UQPpKrtehHabyog";
-	public static final String TWITTER_CONSUMER_SECRET = "kxAMzj2HGgQDtcoecwx35lK4etZhM6eQqQ3R9WgeZtI";
+	public static String TWITTER_CONSUMER_KEY;
+	public static String TWITTER_CONSUMER_SECRET;
 	public static final String TWITTER_CALLBACK_URL = "com.wcities.eventseeker://twitter_callback";
 	
-	public static final String RDIO_KEY = "x83dzkx2xdmxuqtguqdz2nj6";
-	public static final String RDIO_SECRET = "rXNJ5ajSut";
+	public static String RDIO_KEY;
+	public static String RDIO_SECRET;
 	
-	public static final String LASTFM_API_KEY = "5f7e82824ba8ba0fe1cbe2a6ea80472e";
+	public static String LASTFM_API_KEY;
 
-	public static final String GCM_SENDER_ID = "802382771850";
+	public static String GCM_SENDER_ID;
 
 	public static final String CHARSET_NAME = "UTF-8";
 	
@@ -54,7 +55,8 @@ public class AppConstants {
 	public static final String FRAGMENT_TAG_RDIO = "rdioFragment";
 	public static final String FRAGMENT_TAG_LASTFM = "lastfmFragment";
 	public static final String FRAGMENT_TAG_PANDORA = "pandoraFragment";
-
+	public static final String FRAGMENT_TAG_TICKET_PROVIDER_DIALOG = "ticketProviderDialogFragment";
+	
 	public static final int INVALID_INDEX = -1;
 	
 	public static final int CATEGORY_ID_START = 900;

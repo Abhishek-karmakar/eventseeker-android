@@ -163,7 +163,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	
 	@Override
 	public void onDestroyView() {
-		//Log.d(TAG, "onDestroyView()");
+		Log.d(TAG, "onDestroyView()");
 		//Mithil: In tablet we have to show two elements in both the cases
 		firstVisibleActivityItemPosition = (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) ? 
 				getListView().getFirstVisiblePosition() : getListView().getFirstVisiblePosition() * 2;
@@ -171,6 +171,12 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 		for (int i = getListView().getFirstVisiblePosition(), j = 0; 
 				i <= getListView().getLastVisiblePosition(); i++, j++) {
 			freeUpBitmapMemory(getListView().getChildAt(j));
+		}
+		
+		Session session = Session.getActiveSession();
+		if (session != null) {
+			Log.d(TAG, "removeCallback");
+			session.removeCallback(this);
 		}
 		super.onDestroyView();
 	}
@@ -192,17 +198,12 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.d(TAG, "onActivityResult(), requestCode = " + requestCode);
-		//super.onActivityResult(requestCode, resultCode, data);
-		switch (requestCode) {
-	    case FACEBOOK_REAUTH_ACTIVITY_CODE:
-	        Session session = Session.getActiveSession();
-	        if (session != null) {
-	        	Log.d(TAG, "session!=null");
-	            session.onActivityResult(FragmentUtil.getActivity(this), requestCode, resultCode, data);
-	        }
-	        break;
-	    }
+		//Log.d(TAG, "onActivityResult(), requestCode = " + requestCode);
+		Session session = Session.getActiveSession();
+        if (session != null) {
+        	//Log.d(TAG, "session!=null");
+            session.onActivityResult(FragmentUtil.getActivity(this), requestCode, resultCode, data);
+        }
 	}
 	
 	private class LoadFriendsNews extends AsyncTask<Void, Void, List<FriendNewsItem>> {
@@ -568,7 +569,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	private static class AddCommentDialogFragment extends DialogFragment {
 
 	    /**
-	     * Create a new instance of MyDialogFragment
+	     * Create a new instance of AddCommentDialogFragment
 	     */
 	    @SuppressLint("ValidFragment")
 		static AddCommentDialogFragment newInstance() {
@@ -578,7 +579,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	    @Override
 	    public Dialog onCreateDialog(Bundle savedInstanceState) {
 	    	final EditText input = new EditText(FragmentUtil.getActivity(this));
-	    	LayoutParams lp = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+	    	LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 	    	lp.setMargins(0, ConversionUtil.toPx(getResources(), 50), 0, 0);
 	    	input.setLayoutParams(lp);
 	    	
@@ -599,7 +600,13 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	    
 	    @Override
 	    public void onDestroyView() {
-	    	Log.i(TAG, "dialog retain instance = " + getRetainInstance());
+	    	//Log.d(TAG, "dialog retain instance = " + getRetainInstance());
+	    	/**
+	    	 * We add this code to stop our dialog from being dismissed on rotation, 
+	    	 * due to a bug with the compatibility library.
+	    	 * If it's a top level fragment then we need to update this if condition as
+	    	 * "if (getDialog() != null && getRetainInstance())"
+	    	 */
 	        if (getDialog() != null) {
 	            getDialog().setDismissMessage(null);
 	        }
@@ -612,24 +619,24 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	    Session session = Session.getActiveSession();
 
 	    if (session == null) {
-	    	Log.i(TAG, "session=null");
+	    	Log.d(TAG, "session=null");
 	    	session = new Session(FragmentUtil.getActivity(this));
 			Session.setActiveSession(session);
 	    }
 	    
-	    Log.i(TAG, "active session, state=" + session.getState().name());
+	    Log.d(TAG, "active session, state=" + session.getState().name());
 	    if (!session.isOpened()) {
-	    	Log.i(TAG, "session is not opened");
+	    	Log.d(TAG, "session is not opened");
 	    	pendingAnnounce = true; // Mark that we are currently waiting for opening of session
-    		Session.openActiveSession(FragmentUtil.getActivity(this), true, this);
+    		Session.openActiveSession(FragmentUtil.getActivity(this), this, true, this);
     		return false;
 	    }
 
 	    if (!hasPublishPermission()) {
-	    	Log.i(TAG, "publish permission is not there");
+	    	Log.d(TAG, "publish permission is not there");
 	        pendingAnnounce = true; // Mark that we are currently waiting for confirmation of publish permissions
 	        session.addCallback(this); 
-	        requestPublishPermissions(FragmentUtil.getActivity(this), session, PERMISSIONS, FACEBOOK_REAUTH_ACTIVITY_CODE);
+	        requestPublishPermissions(session, PERMISSIONS, FACEBOOK_REAUTH_ACTIVITY_CODE);
 	        return false;
 	    }
 	    
@@ -653,16 +660,16 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
         return session != null && session.getPermissions().containsAll(PERMISSIONS);
     }
 	
-	public void requestPublishPermissions(Activity activity, Session session, List<String> permissions,
+	public void requestPublishPermissions(Session session, List<String> permissions,
 		    int requestCode) {
-		Log.i(TAG, "requestPublishPermissions()");
+		Log.d(TAG, "requestPublishPermissions()");
         Session.NewPermissionsRequest reauthRequest = new Session.NewPermissionsRequest(this, permissions)
         	.setRequestCode(requestCode);
         session.requestNewPublishPermissions(reauthRequest);
 	}
 	
 	private void postLikeRequest() {
-		Log.i(TAG, "postLikeRequest()");
+		Log.d(TAG, "postLikeRequest()");
 		Request likeRequest = Request.newPostRequest(Session.getActiveSession(), fbPostId + "/likes", null, new Request.Callback() {
 
 			         @Override
@@ -702,7 +709,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	 * Called when additional permission request is completed successfully.
 	 */
 	private void tokenUpdated() {
-		Log.i(TAG, "tokenUpdated()");
+		Log.d(TAG, "tokenUpdated()");
 	    // Check if a publish action is in progress
 	    // awaiting a successful reauthorization
 	    if (pendingAnnounce) {
@@ -719,7 +726,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	}
 	
 	private void sessionOpened() {
-		Log.i(TAG, "sessionOpened()");
+		Log.d(TAG, "sessionOpened()");
 		// Check if a publish action is in progress
 	    // awaiting a successful reauthorization
 	    if (pendingAnnounce) {
@@ -729,17 +736,17 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	}
 	
 	protected void onSessionStateChange(final Session session, SessionState state, Exception exception) {
-		Log.i(TAG, "onSessionStateChange()");
+		Log.d(TAG, "onSessionStateChange() state = " + state.name());
 	    if (session != null && session.isOpened()) {
-	    	Log.i(TAG, "session != null && session.isOpened(), state = " + state.name());
+	    	Log.d(TAG, "session != null && session.isOpened(), state = " + state.name());
 	    	if (state.equals(SessionState.OPENED)) {
-	    		Log.i(TAG, "OPENED");
+	    		Log.d(TAG, "OPENED");
 	    		// Session opened 
 	            // so try publishing once more.
 	    		sessionOpened();
 	    		
 	    	} else if (state.equals(SessionState.OPENED_TOKEN_UPDATED)) {
-	    		Log.i(TAG, "OPENED_TOKEN_UPDATED");
+	    		Log.d(TAG, "OPENED_TOKEN_UPDATED");
 	            // Session updated with new permissions
 	            // so try publishing once more.
 	            tokenUpdated();
@@ -749,7 +756,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 
 	@Override
 	public void call(Session session, SessionState state, Exception exception) {
-		Log.i(TAG, "call()");
+		Log.d(TAG, "call()");
 		onSessionStateChange(session, state, exception);
 	}
 }

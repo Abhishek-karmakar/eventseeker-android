@@ -2,7 +2,10 @@
 <resources>
 
     <string name="app_name">eventseeker</string>
-    <string name="fb_app_id">687206491296790</string>
+    <!-- development keys -->
+    <!-- <string name="fb_app_id">687206491296790</string> -->
+    <!-- production keys -->
+    <string name="fb_app_id">153033148171841</string>
     <string name="menu_search">Search</string>
     <string name="menu_change_location">Change Location</string>
     <string name="title_discover">Discover</string>

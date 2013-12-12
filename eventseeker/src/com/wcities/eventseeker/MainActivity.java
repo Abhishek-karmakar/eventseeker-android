@@ -1,5 +1,7 @@
 package com.wcities.eventseeker;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Set;
 
@@ -8,6 +10,10 @@ import android.bluetooth.BluetoothDevice;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.Signature;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +26,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -96,7 +103,7 @@ public class MainActivity extends ActionBarActivity implements
 	private boolean isDrawerIndicatorEnabled;
 	private boolean isTablet; /** it will check whether current device is tablet and according to that we will 
 	select same tab layout file for portrait and landscape mode**/
-
+	
 	public static MainActivity getInstance() {
 		return instance;
 	}
@@ -104,7 +111,7 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.d(TAG, "onCreate");
+		//Log.d(TAG, "onCreate");
 		setContentView(R.layout.activity_main);
 
 		/**
@@ -115,8 +122,7 @@ public class MainActivity extends ActionBarActivity implements
 		eventSeekr.checkAndSetIfInLandscapeMode();
 		isTabletAndInLandscapeMode = eventSeekr.isTabletAndInLandscapeMode();
 		isTablet = eventSeekr.isTablet();
-		//Log.d(TAG, "isTabletAndInLandscapeMode = " + isTabletAndInLandscapeMode);
-
+		
 		/**
 		 * if user moves away quickly to any other screen resulting in fragment
 		 * replacement & if we are adding this fragment into backstack, then

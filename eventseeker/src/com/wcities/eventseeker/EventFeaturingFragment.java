@@ -22,6 +22,7 @@ import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.UserTracker;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Event;
@@ -150,9 +151,9 @@ public class EventFeaturingFragment extends ListFragment implements OnClickListe
 		switch (v.getId()) {
 		
 		case R.id.lnrLayoutTickets:
-			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(event.getSchedule().getBookingInfos()
-					.get(0).getBookingUrl()));
-			startActivity(browserIntent);
+			TicketProviderDialogFragment ticketProviderDialogFragment = TicketProviderDialogFragment
+					.newInstance(event);
+			ticketProviderDialogFragment.show(getChildFragmentManager(), AppConstants.FRAGMENT_TAG_TICKET_PROVIDER_DIALOG);
 			break;
 			
 		case R.id.chkBoxGoing:

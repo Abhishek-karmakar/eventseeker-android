@@ -127,7 +127,7 @@ public class LastfmFragment extends FragmentLoadableFromBackStack implements OnC
 				}
 					
 				for (Artist obj: lastFmArtists) {
-					Log.d(TAG, "name = " + obj.getName());
+					//Log.d(TAG, "name = " + obj.getName());
 					artistNames.add(obj.getName());
 				}
 				FragmentUtil.getActivity(LastfmFragment.this).runOnUiThread(new Runnable() {

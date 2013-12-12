@@ -115,7 +115,7 @@ public class EventApiJSONParser {
 				event.setSchedule(getSchedule(jObjSchedule, venues));
 			}
 			
-			if (jObjSchedule.has(KEY_BOOKINGINFO)) {
+			if (jObjSchedule.has(KEY_BOOKINGINFO) && event.getSchedule().getBookingInfos().isEmpty()) {
 				fillBookingInfo(event.getSchedule(), jObjSchedule);
 				
 			} else {

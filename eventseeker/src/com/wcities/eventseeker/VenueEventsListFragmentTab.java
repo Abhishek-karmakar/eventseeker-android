@@ -31,6 +31,7 @@ public class VenueEventsListFragmentTab extends VenueEventsParentListFragment {
 
 	@Override
 	protected DateWiseEventParentAdapterListener getAdapterInstance() {
-		return new DateWiseMyEventListAdapter(FragmentUtil.getActivity(this), dateWiseEvtList, null, this);
+		return new DateWiseMyEventListAdapter(FragmentUtil.getActivity(this), getChildFragmentManager(), 
+				dateWiseEvtList, null, this);
 	}
 }
