@@ -266,7 +266,9 @@ public class EventApiJSONParser {
 	private BookingInfo getBookingInfo(JSONObject jObjBookinglink) throws JSONException {
 		BookingInfo bookingInfo = new BookingInfo();
 		bookingInfo.setBookingUrl(jObjBookinglink.getString(KEY_BOOKING_URL));
-		bookingInfo.setProvider(jObjBookinglink.getString(KEY_PROVIDER));
+		if (jObjBookinglink.has(KEY_PROVIDER)) {
+			bookingInfo.setProvider(jObjBookinglink.getString(KEY_PROVIDER));
+		}
 		if (jObjBookinglink.has(KEY_PRICE)) {
 			JSONObject jObjPrice = jObjBookinglink.getJSONObject(KEY_PRICE);
 			String strPriceVal = jObjPrice.getString(KEY_VALUE);

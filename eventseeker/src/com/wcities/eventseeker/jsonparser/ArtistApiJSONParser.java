@@ -315,7 +315,9 @@ public class ArtistApiJSONParser {
 	private BookingInfo getBookingInfo(JSONObject jObjBookinglink) throws JSONException {
 		BookingInfo bookingInfo = new BookingInfo();
 		bookingInfo.setBookingUrl(jObjBookinglink.getString(KEY_BOOKING_URL));
-		bookingInfo.setProvider(jObjBookinglink.getString(KEY_PROVIDER));
+		if (jObjBookinglink.has(KEY_PROVIDER)) {
+			bookingInfo.setProvider(jObjBookinglink.getString(KEY_PROVIDER));
+		}
 		return bookingInfo;
 	}
 	
