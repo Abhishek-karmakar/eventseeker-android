@@ -34,7 +34,8 @@
         android:gravity="center"
         android:padding="@dimen/txt_evt_pad_discover_gallery_item"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/txt_evt_city_name_txt_size_discover_gallery_item" />
+        android:textSize="@dimen/txt_evt_city_name_txt_size_discover_gallery_item" 
+        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/lnrEvtDetails"

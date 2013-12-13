@@ -1,23 +1,5 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="SingleLineMarqueeTxt" parent="@android:style/TextAppearance.DeviceDefault.Widget.TextView">
-        <item name="android:singleLine">true</item>
-        <item name="android:scrollHorizontally">true</item>
-        <item name="android:ellipsize">marquee</item>
-        <item name="android:marqueeRepeatLimit">marquee_forever</item>
-    </style>
-
-    <style name="SingleLineMarqueeTxtViewXtraPadding" parent="SingleLineMarqueeTxt">
-        <item name="android:paddingLeft">10dp</item>
-        <item name="android:paddingTop">10dp</item>
-        <item name="android:paddingBottom">10dp</item>
-    </style>
-
-    <style name="edtTxtWhiteColor" parent="@android:style/TextAppearance.DeviceDefault.Widget.EditText">
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:textColorHint">@android:color/white</item>
-    </style>
-
     <!-- MainTheme -->
     <style name="Theme.EventSeekr" parent="@style/Theme.AppCompat.Light">
         <item name="android:actionBarStyle">@style/Widget.EventSeekr.ActionBar</item>
@@ -29,20 +11,6 @@
     	<item name="homeAsUpIndicator">@drawable/previous</item>
         <!-- <item name="android:homeAsUpIndicator">@drawable/sidenav</item>
         <item name="homeAsUpIndicator">@drawable/sidenav</item> -->
-
-        <!-- <item name="android:actionDropDownStyle">@style/Widget.EventSeekr.Spinner.DropDown.ActionBar</item> -->
-
-
-        <!-- define text style for tabs -->
-        <!-- <item name="android:actionBarTabTextStyle">@style/Widget.EventSeekr.ActionBar.TabText</item> -->
-
-
-        <!-- height of action bar -->
-        <!-- <item name="android:actionBarSize">@dimen/action_bar_ht</item> -->
-
-
-        <!-- define tab bar style -->
-        <!-- <item name="android:actionBarTabStyle">@style/Widget.EventSeekr.ActionBar.TabView</item> -->
 
     </style>
 
@@ -75,8 +43,7 @@
         <item name="android:paddingRight">@dimen/btn_pad_r_custom_actionbar_tabs</item>
     </style>
 
-    <style name="CustomTabBarTextAppearance" parent="@android:style/TextAppearance.Widget.TabWidget">
-        <item name="android:textStyle">bold</item>
+   <style name="CustomTabBarTextAppearance" parent="@android:style/TextAppearance.Widget.TabWidget">
         <item name="android:textSize">@dimen/txt_size_custom_actionbar_tabs</item>
     </style>
     

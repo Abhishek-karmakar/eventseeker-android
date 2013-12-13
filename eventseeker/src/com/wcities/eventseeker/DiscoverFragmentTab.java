@@ -11,6 +11,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,10 +25,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
-import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -38,6 +42,9 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 	private EcoGallery ecoGallery;
 	private FeaturedEventsEcoGalleryAdapter featuredEventsEcoGalleryAdapter;
 
+	public String cityName;
+	public TextView txtCityName;
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -49,16 +56,11 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		
 		View v = super.onCreateView(inflater, container, savedInstanceState);
 
-		// txtFeaturedEvtsTitle = (TextView)
-		// v.findViewById(R.id.txtFeaturedEvtsTitle);
-		// updateCityName();
-
-		featuredEventsEcoGalleryAdapter = new FeaturedEventsEcoGalleryAdapter(
-				this, FragmentUtil.getActivity(this));
+		featuredEventsEcoGalleryAdapter = new FeaturedEventsEcoGalleryAdapter(this, FragmentUtil.getActivity(this));
 
 		ecoGallery = (EcoGallery) v.findViewById(R.id.ecoglryFeaturedEvt);
 		ecoGallery.setAdapter(featuredEventsEcoGalleryAdapter);
@@ -67,66 +69,64 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 		if(featuredEventsEcoGalleryAdapter.getCount() > DEFAULT_SELECTED_FEATURED_EVENT_POSITION) {
 			ecoGallery.setSelection(DEFAULT_SELECTED_FEATURED_EVENT_POSITION);
 		}
-		/*
-		 * imgPrev = (ImageView) v.findViewById(R.id.imgPrev); imgNext =
-		 * (ImageView) v.findViewById(R.id.imgNext);
-		 * imgPrev.setOnClickListener(this); imgNext.setOnClickListener(this);
-		 */
 
 		return v;
 	}
 
 	@Override
 	public void onDestroyView() {
-		// Log.d(TAG, "onDestroyView()");
-		if (ecoGallery != null) {
+		//if (ecoGallery != null) {
 			// viewPagerSelectedPos = ecoGallery.getCurrentItem();
-		}
+		//}
 		super.onDestroyView();
+		ActionBar actionBar = ((ActionBarActivity)FragmentUtil.getActivity(this)).getSupportActionBar();
+		actionBar.setCustomView(null);
 	}
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
+		createCustomActionBar();
+	}		
+
+	private void createCustomActionBar() {
+		Log.i(TAG, "createCustomActionBar");
+		Log.i(TAG, "txtCityName : " + txtCityName);
+		MainActivity activity = (MainActivity) FragmentUtil.getActivity(this);
+		ActionBar actionBar = activity.getSupportActionBar();
+
+		ActionBar.LayoutParams params = new ActionBar.LayoutParams(
+				ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.MATCH_PARENT);
+		
+		params.gravity = Gravity.CENTER;
+		
+		LayoutInflater lytInflater = (LayoutInflater) activity.getSystemService(activity.LAYOUT_INFLATER_SERVICE);
+		View vActionBar = lytInflater.inflate(R.layout.action_bar_custom_view_item, null);
+		
+		txtCityName = (TextView) vActionBar.findViewById(R.id.txtCityName);
+
+		actionBar.setDisplayShowCustomEnabled(true);
+		if(((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).isTabletAndInLandscapeMode()) {
+			actionBar.setIcon(R.drawable.placeholder);
+		}
+		actionBar.setCustomView(vActionBar, params);
+		
+		updateCity();
 	}
+	
+	public void updateCity() {
+		Log.i(TAG, "City name : " + cityName);
+		if(txtCityName != null && cityName != null) {
+			txtCityName.setText(cityName);
+		}
+		
+	}
+
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		return super.onOptionsItemSelected(item);
 	}
-
-	/*
-	 * @Override public void onActivityResult(int requestCode, int resultCode,
-	 * Intent data) { if (requestCode == CHANGE_LOCATION_REQUEST) { if
-	 * (resultCode == Activity.RESULT_OK) { Bundle extras = data.getExtras();
-	 * double newLat = extras.getDouble(BundleKeys.LAT); double newLon =
-	 * extras.getDouble(BundleKeys.LON);
-	 * 
-	 * if (lat != newLat || lon != newLon) { lat = newLat; lon = newLon;
-	 * 
-	 * updateCityName(); featuredEvts.clear();
-	 * discoverFragmentPagerAdapter.notifyDataSetChanged(); new
-	 * LoadFeaturedEvts().execute(); } } } }
-	 */
-
-	/*
-	 * private void updateCityName() { Geocoder geocoder = new
-	 * Geocoder(((Activity)mListener).getApplicationContext(),
-	 * Locale.getDefault()); try { List<Address> addresses =
-	 * geocoder.getFromLocation(lat, lon, 1);
-	 * 
-	 * if (addresses != null && !addresses.isEmpty()) { Address address =
-	 * addresses.get(0); cityName = address.getLocality();
-	 * 
-	 * String commonTitle =
-	 * getResources().getString(R.string.title_featured_evts); String city =
-	 * commonTitle + cityName; txtFeaturedEvtsTitle.setText(city);
-	 * txtFeaturedEvtsTitle.setSelected(true);
-	 * 
-	 * } else { Log.w(TAG, "No relevant address found."); }
-	 * 
-	 * } catch (IOException e) { e.printStackTrace(); } }
-	 */
 
 	private static class FeaturedEventsEcoGalleryAdapter extends BaseAdapter {
 
@@ -138,36 +138,12 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 		private LayoutInflater mInflater;
 		private BitmapCache bitmapCache;
 
-		public FeaturedEventsEcoGalleryAdapter(
-				DiscoverFragmentTab discoverFragment, Context context) {
-			this.discoverFragment = new WeakReference<DiscoverFragmentTab>(
-					discoverFragment);
+		public FeaturedEventsEcoGalleryAdapter(DiscoverFragmentTab discoverFragment, Context context) {
+			this.discoverFragment = new WeakReference<DiscoverFragmentTab>(discoverFragment);
 			mInflater = LayoutInflater.from(context);
 			bitmapCache = BitmapCache.getInstance();
 
 		}
-
-		/*
-		 * @Override public Fragment getItem(int index) { // Log.d(TAG,
-		 * "getItem() for index = " + index);
-		 *//**
-		 * When viewpager data source changes & notifyDataSetChanged() is
-		 * refreshing viewpager, onPageSelected() method is not called up for
-		 * first time unless we scroll in any direction. Hence to update left &
-		 * right arrow buttons, we need to call this call back method explicitly
-		 * for currently visible index.
-		 */
-		/*
-		 * 
-		 * if (index == discoverActivity.get().viewPager.getCurrentItem()) {
-		 * discoverActivity.get().onPageSelected(index); }
-		 * 
-		 * 
-		 * FeaturedEventsFragment featuredEventsFragment =
-		 * FeaturedEventsFragment
-		 * .newInstance(discoverFragment.get().featuredEvts.get(index)); return
-		 * featuredEventsFragment; }
-		 */
 
 		@Override
 		public Event getItem(int position) {
@@ -188,7 +164,7 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			
+			Log.i(TAG, "getView");
 			if (discoverFragment.get().featuredEvts.get(position) == null) {
 				
 				if (convertView == null	|| !convertView.getTag().equals(TAG_PROGRESS_INDICATOR)) {
@@ -221,38 +197,17 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 
 				com.wcities.eventseeker.core.Date date = event.getSchedule().getDates().get(0);
 				
-				DateFormat dateFormat = date.isStartTimeAvailable() ? new SimpleDateFormat("EEE MMM d h:mm a") :
-					new SimpleDateFormat("EEE MMM d");
+				DateFormat dateFormat = date.isStartTimeAvailable() ? 
+						new SimpleDateFormat("EEE MMM d h:mm a") : new SimpleDateFormat("EEE MMM d");
 				
 				TextView txtEvtSchedule = (TextView)convertView.findViewById(R.id.txtEvtSchedule);
 				txtEvtSchedule.setText(dateFormat.format(date.getStartDate()));
 
-				TextView txtEvtCity = (TextView)convertView.findViewById(R.id.txtCityName);
-				txtEvtCity.setText("Recommended in " + event.getCityName());
+				/*TextView txtEvtCity = (TextView)convertView.findViewById(R.id.txtCityName);
+				txtEvtCity.setText("Recommended in " + event.getCityName());*/
 				
-				/*convertView.setOnClickListener(new OnClickListener() {
-					
-					@Override
-					public void onClick(View v) {
-						//Log.d(TAG, "onCLick() mListener = " + mListener);
-						/**
-						 * Here we can't use mListener directly, because for ViewPager, it throws "IllegalStateException: Activity has been destroyed"
-						 * in following case.
-						 * Change orientation before ViewPager children start loading & then click on any page
-						 * resulting in above mentioned exception while committing fragment replacement
-						 * from MainActivity due to following call which would have been 
-						 * "mListener.onEventSelected(event);" if 
-						 * we use mListener. This happens because onAttach() is not called initially for starting 
-						 * orientation & called only second time when orientation changes, but this call passes activity's old
-						 * reference with onAttach() which can be figured out by logs. And hence using mListener 
-						 * will call following function replaceDiscoverFragmentByFragment() on old activity reference which 
-						 * should not be the case. So prefer using "(EventListener)FragmentUtil.getActivity(FeaturedEventsFragment.this)"
-						 * instead of mListener.
-						 *//*
-						((EventListener)FragmentUtil.getActivity(discoverFragment.get())).onEventSelected(event);
-					}
-				});*/
-				
+				//discoverFragment.get().cityName = event.getCityName();
+				//discoverFragment.get().updateCity();
 			}
 
 			return convertView;
@@ -262,9 +217,15 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 
 	@Override
 	protected void notifyDataSetChanged() {
+		Log.i(TAG, "getView");
 		featuredEventsEcoGalleryAdapter.notifyDataSetChanged();
 		if(featuredEventsEcoGalleryAdapter.getCount() > DEFAULT_SELECTED_FEATURED_EVENT_POSITION) {
 			ecoGallery.setSelection(DEFAULT_SELECTED_FEATURED_EVENT_POSITION);
+		}
+		Event event = featuredEvts.get(0);
+		if(event != null) {
+			cityName = event.getCityName();
+			updateCity();
 		}
 	}
 

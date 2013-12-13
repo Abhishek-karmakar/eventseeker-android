@@ -34,9 +34,13 @@
     <dimen name="lnr_layout_artist_list_margin_r_fragment_event_featuring">@dimen/lnr_layout_artist_list_margin_l_fragment_event_featuring</dimen>
 
     <!-- include_fragment_event_details_footer.xml -->
-    <dimen name="lnr_layout_btns_txt_size_include_fragment_event_details_footer">15sp</dimen>
+    <dimen name="lnr_layout_btns_txt_size_include_fragment_event_details_footer">17sp</dimen>
 
     <!-- fragment_event_details_img_evt.xml -->
     <dimen name="rlt_evt_info_margin_t_b_fragment_event_details_img_evt">25dp</dimen>
+
+    <!-- fragment_my_events_list_item.xml -->
+    <dimen name="tbl_layout_evt_details_margin_l_fragment_my_events_list_item">30dp</dimen>
+    <dimen name="img_event_margin_l_fragment_discover_by_category_list_item_evt">30dp</dimen>
 
 </resources>

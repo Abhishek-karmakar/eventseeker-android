@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootRltLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_gray" >
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/rltLayoutLoadedContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <com.wcities.eventseeker.custom.view.ScrollViewContainingViewPager
+            android:id="@+id/scrlVContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true" >
+
+            <LinearLayout
+                android:id="@+id/lnrLayoutRoot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <!-- 1st row with image and Title Layout with social networking links -->
+
+                <LinearLayout
+                    android:id="@+id/lnrLayoutTop"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/lnr_layout_top_margin_l_fragment_event_info"
+                    android:layout_marginRight="@dimen/lnr_layout_top_margin_r_fragment_event_info"
+                    android:background="@drawable/story_space"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal" >
+
+                    <com.wcities.eventseeker.custom.view.ResizableImageView
+                        android:id="@+id/imgItem"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/img_evt_margin_fragment_event_info"
+                        android:layout_weight="1"
+                        android:contentDescription="artist image"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_launcher"
+                        app:compressAsPerWidth="true" />
+                    <!-- android:layout_marginRight="@dimen/rlt_layout_img_evt_margin_r_fragment_event_info" -->
+
+                    <RelativeLayout
+                        android:id="@+id/rltItemTitleAndSocialLinks"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="@dimen/rlt_evt_info_margin_t_b_fragment_event_details_img_evt"
+                        android:layout_marginRight="@dimen/rlt_evt_info_margin_r_fragment_event_details_img_evt"
+                        android:layout_marginTop="@dimen/rlt_evt_info_margin_t_b_fragment_event_details_img_evt"
+                        android:layout_weight="1" >
+
+                        <!-- android:layout_margin="@dimen/rlt_layout_img_evt_margin_fragment_event_info" -->
+
+                        <TextView
+                            android:id="@+id/txtItemTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:paddingLeft="@dimen/txt_artist_title_pad_l_include_fragment_artist_details_img_artist"
+                            android:singleLine="true"
+                            android:text="Artist Title"
+                            android:textColor="@color/txt_evt_title_fragment_event_info_tab"
+                            android:textSize="@dimen/txt_evt_title_txt_size_include_fragment_event_details_img_evt" />
+
+                        <View
+                            android:id="@+id/vDivider"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/v_divider_ht_fb_login"
+                            android:layout_below="@id/txtItemTitle"
+                            android:layout_marginBottom="@dimen/txt_margin_t_b_rlt_evt_info_fragment_event_details_img_evt"
+                            android:layout_marginTop="@dimen/txt_margin_t_b_rlt_evt_info_fragment_event_details_img_evt"
+                            android:background="@drawable/info_divider" />
+
+                        <include
+                            android:id="@+id/fragmentArtistDetailsFooter"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginTop="@dimen/lnr_layout_btns_margin_t_include_fragment_event_details_footer"
+                            layout="@layout/include_fragment_artist_details_footer" />
+
+                        <LinearLayout
+                            android:id="@+id/lnrBtnSocialNetworkingLinks"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_above="@+id/fragmentArtistDetailsFooter"
+                            android:layout_below="@+id/vDivider"
+                            android:layout_marginBottom="@dimen/lnr_btn_social_networking_links_margin_t_b_fragment_artist_info"
+                            android:layout_marginTop="@dimen/lnr_btn_social_networking_links_margin_t_b_fragment_artist_info"
+                            android:orientation="horizontal" >
+
+                            <ImageView
+                                android:id="@+id/imgFacebook"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="1"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/facebook" />
+
+                            <ImageView
+                                android:id="@+id/imgTwitter"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="1"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/twitter" />
+
+                            <ImageView
+                                android:id="@+id/imgWeb"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="1"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/web" />
+                        </LinearLayout>
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lnrVideos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/lnr_event_desc_and_map_margin_l_r_fragment_event_info"
+                    android:layout_marginRight="@dimen/lnr_event_desc_and_map_margin_l_r_fragment_event_info"
+                    android:baselineAligned="false"
+                    android:minHeight="@dimen/lnr_videos_min_ht_fragment_info_tab" >
+
+                    <include
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/rlt_desc_margin_r_include_desc"
+                        android:layout_marginTop="@dimen/rlt_desc_margin_t_include_desc"
+                        android:layout_weight="1"
+                        layout="@layout/include_desc" />
+
+                    <LinearLayout
+                        android:id="@+id/rltLayoutVideos"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/rlt_desc_margin_l_include_desc"
+                        android:layout_marginTop="@dimen/rlt_desc_margin_t_include_desc"
+                        android:layout_weight="1"
+                        android:background="@drawable/story_space"
+                        android:orientation="vertical"
+                        android:paddingBottom="@dimen/txt_evt_desc_pad_b_fragment_evt_info" 
+                        android:paddingTop="@dimen/txt_evt_desc_pad_t_fragment_evt_info" >
+						
+						<!-- android:paddingLeft="@dimen/rlt_layout_videos_pad_fragment_artist_info"
+                        android:paddingRight="@dimen/rlt_layout_videos_pad_fragment_artist_info" -->
+
+                        <TextView
+                            android:id="@+id/txtVideos"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/rlt_layout_videos_pad_fragment_artist_info"
+                            android:layout_marginBottom="@dimen/txt_videos_margin_b_fragment_artist_info"
+                            android:text="Videos"
+                            android:textSize="@dimen/txt_videos_txt_size_fragment_artist_info" />
+                        
+                        <com.scvngr.levelup.views.gallery.Gallery
+                            android:id="@+id/glryVideo"
+                            android:layout_marginLeft="@dimen/glry_videos_margin_l_r_fragment_artist_info"
+                            android:layout_marginRight="@dimen/glry_videos_margin_l_r_fragment_artist_info"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/img_video_ht_fragment_video" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <include layout="@layout/include_friends" />
+            </LinearLayout>
+        </com.wcities.eventseeker.custom.view.ScrollViewContainingViewPager>
+    </RelativeLayout>
+
+</RelativeLayout>

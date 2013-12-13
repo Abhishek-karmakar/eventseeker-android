@@ -1,7 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Set;
 
@@ -10,10 +8,6 @@ import android.bluetooth.BluetoothDevice;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.pm.Signature;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,7 +20,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
-import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -133,8 +126,7 @@ public class MainActivity extends ActionBarActivity implements
 		 * of all such fragments & we keep this reference updated in all the
 		 * back stack fragments by below call.
 		 */
-		FragmentUtil.updateActivityReferenceInAllFragments(
-				getSupportFragmentManager(), this);
+		FragmentUtil.updateActivityReferenceInAllFragments(getSupportFragmentManager(), this);
 
 		isDrawerIndicatorEnabled = true;
 		if (savedInstanceState != null) {

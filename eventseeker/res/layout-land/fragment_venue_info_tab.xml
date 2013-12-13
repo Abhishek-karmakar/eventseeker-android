@@ -117,23 +117,13 @@
                     android:id="@+id/lnrEventDescAndMap"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/v_margin_t_b_fragment_venue_info"
                     android:layout_marginLeft="@dimen/lnr_event_desc_and_map_margin_l_r_fragment_event_info"
                     android:layout_marginRight="@dimen/lnr_event_desc_and_map_margin_l_r_fragment_event_info"
-                    android:layout_marginTop="@dimen/v_margin_t_b_fragment_venue_info"
-                    android:orientation="vertical" >
+                    android:orientation="horizontal" >
 
-                    <include
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/v_margin_t_b_fragment_venue_info"
-                        layout="@layout/include_desc_tab2" />
+                    <include layout="@layout/include_desc" />
 
-                    <include
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/layout_map_container_ht_fragment_event_info"
-                        layout="@layout/include_address_map_tab2"
-                        android:minHeight="@dimen/frm_layout_map_container_ht_fragment_event_info" />
+                    <include layout="@layout/include_address_map" />
                 </LinearLayout>
             </LinearLayout>
         </com.wcities.eventseeker.custom.view.ScrollViewContainingViewPager>

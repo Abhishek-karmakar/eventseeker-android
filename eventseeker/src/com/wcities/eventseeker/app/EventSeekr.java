@@ -124,6 +124,10 @@ public class EventSeekr extends Application {
 	public boolean isTabletAndInLandscapeMode() {
 		return (isTablet && isInLandscapeMode);
 	}
+	
+	public boolean isTabletAndInPortraitMode() {
+		return (isTablet && !isInLandscapeMode);
+	}
 
 	public void unregisterListener(EventSeekrListener eventSeekrListener) {
 		listeners.remove(eventSeekrListener);

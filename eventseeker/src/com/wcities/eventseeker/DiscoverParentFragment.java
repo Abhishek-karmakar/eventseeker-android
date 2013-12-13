@@ -61,6 +61,8 @@ public abstract class DiscoverParentFragment extends
 
 	protected static final int FEATURED_EVTS_LIMIT = 5;
 
+	private static final int DEFAULT_NUM_OF_COLUMNS_FOR_TABLET_IN_PORTRAIT_MODE = 3;
+
 	// Container Activity must implement this interface
 	public interface DiscoverFragmentListener {
 		public void replaceSelfByFragment(String fragmentTag, Bundle args);
@@ -88,8 +90,7 @@ public abstract class DiscoverParentFragment extends
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 		if (evtCategories == null) {
 			buildEvtCategories();
@@ -104,17 +105,19 @@ public abstract class DiscoverParentFragment extends
 		// v.findViewById(R.id.txtFeaturedEvtsTitle);
 		// updateCityName();
 
-		GridView grdEvtCategories = (GridView) v
-				.findViewById(R.id.grdEvtCategories);
+		GridView grdEvtCategories = (GridView) v.findViewById(R.id.grdEvtCategories);
+		if(((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).isTabletAndInPortraitMode()) {
+			grdEvtCategories.setNumColumns(DEFAULT_NUM_OF_COLUMNS_FOR_TABLET_IN_PORTRAIT_MODE);
+		}
 
 		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
-				|| (((EventSeekr) FragmentUtil.getActivity(this)
-						.getApplicationContext()).isTablet())) {
+				|| (((EventSeekr) FragmentUtil.getActivity(this).getApplicationContext()).isTablet())) {
 			((ExpandableGridView) grdEvtCategories).setExpanded(true);
 		}
 
 		grdEvtCategories.setAdapter(evtCategoriesListAdapter);
 
+		
 		/*
 		 * if (evtCategories.isEmpty()) { new LoadEvtCategories().execute(); }
 		 */
@@ -172,7 +175,6 @@ public abstract class DiscoverParentFragment extends
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.fragment_discover, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
@@ -180,11 +182,6 @@ public abstract class DiscoverParentFragment extends
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 
-		/*
-		 * case R.id.action_chg_location:
-		 * mListener.replaceSelfByFragment(AppConstants
-		 * .FRAGMENT_TAG_CHANGE_LOCATION, null); return true;
-		 */
 
 		default:
 			break;
@@ -267,6 +264,7 @@ public abstract class DiscoverParentFragment extends
 		@Override
 		protected void onPostExecute(List<Event> result) {
 			featuredEvts = result;
+			Log.i(TAG, "onPostExecute");
 			notifyDataSetChanged();
 		}
 	}

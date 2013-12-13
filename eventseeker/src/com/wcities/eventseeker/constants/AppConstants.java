@@ -2,7 +2,7 @@ package com.wcities.eventseeker.constants;
 
 public class AppConstants {
 	
-	public static final boolean IS_RELEASE_MODE = true;
+	public static final boolean IS_RELEASE_MODE = false;
 	public static final boolean DEBUG = false;
 	public static final boolean FORD_SYNC_APP = false;
 	

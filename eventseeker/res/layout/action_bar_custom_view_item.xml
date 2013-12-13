@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/txtCityName"
+    android:layout_width="@dimen/txt_city_name_txt_w_action_bar_custom_view_item"
+    android:layout_height="match_parent"
+    android:layout_centerInParent="true"
+    android:gravity="center"
+    android:singleLine="true"
+    android:textColor="@android:color/black"
+    android:textSize="@dimen/txt_city_name_txt_size_action_bar_custom_view_item" />

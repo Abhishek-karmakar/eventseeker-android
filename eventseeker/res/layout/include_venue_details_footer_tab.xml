@@ -30,7 +30,8 @@
         android:layout_width="@dimen/divider_lnr_layout_btns_w_include_fragment_event_details_footer"
         android:layout_height="@dimen/divider_lnr_layout_btns_ht_include_fragment_event_details_footer"
         android:layout_gravity="center_vertical"
-        android:background="@color/txt_color_include_fragment_vaenu_details_footer_tab" />
+        android:background="@android:color/transparent" />
+    <!-- android:background="@color/txt_color_include_fragment_vaenu_details_footer_tab" /> -->
 
     <RelativeLayout
         android:layout_width="0dp"
@@ -56,7 +57,8 @@
         android:layout_width="@dimen/divider_lnr_layout_btns_w_include_fragment_event_details_footer"
         android:layout_height="@dimen/divider_lnr_layout_btns_ht_include_fragment_event_details_footer"
         android:layout_gravity="center_vertical"
-        android:background="@color/txt_color_include_fragment_vaenu_details_footer_tab" />
+        android:background="@android:color/transparent" />
+    <!-- android:background="@color/txt_color_include_fragment_vaenu_details_footer_tab" /> -->
 
     <RelativeLayout
         android:layout_width="0dp"

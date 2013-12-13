@@ -13,6 +13,7 @@ import com.wcities.eventseeker.constants.AppConstants;
 import android.location.Address;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
+import android.util.Log;
 
 public class GeoUtil {
 	
