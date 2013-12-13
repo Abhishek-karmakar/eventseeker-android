@@ -28,6 +28,7 @@ import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
+import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class EventFeaturingFragment extends ListFragment implements OnClickListener, EventDetailsFragmentChildListener {
@@ -151,9 +152,10 @@ public class EventFeaturingFragment extends ListFragment implements OnClickListe
 		switch (v.getId()) {
 		
 		case R.id.lnrLayoutTickets:
-			TicketProviderDialogFragment ticketProviderDialogFragment = TicketProviderDialogFragment
-					.newInstance(event);
-			ticketProviderDialogFragment.show(getChildFragmentManager(), AppConstants.FRAGMENT_TAG_TICKET_PROVIDER_DIALOG);
+			Bundle args = new Bundle();
+			args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
+			((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
+					AppConstants.FRAGMENT_TAG_TICKET_PROVIDERS, args);
 			break;
 			
 		case R.id.chkBoxGoing:

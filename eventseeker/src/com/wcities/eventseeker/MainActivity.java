@@ -55,12 +55,13 @@ import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.interfaces.MapListener;
+import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class MainActivity extends ActionBarActivity implements
 		DrawerListFragmentListener, FbLogInFragmentListener,
-		com.wcities.eventseeker.DiscoverParentFragment.DiscoverFragmentListener, EventListener, ArtistListener, VenueListener,
+		ReplaceFragmentListener, EventListener, ArtistListener, VenueListener,
 		FragmentLoadedFromBackstackListener, MapListener,
 		ConnectAccountsFragmentListener, SearchView.OnQueryTextListener,
 		ChangeLocationFragmentListener {
@@ -438,6 +439,22 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// Log.d(TAG, "onKeyDown()");
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			if (AppConstants.FRAGMENT_TAG_TICKET_PROVIDERS.equals(currentContentFragmentTag)) {
+				TicketProvidersFragment ticketProvidersFragment = (TicketProvidersFragment) getSupportFragmentManager()
+						.findFragmentByTag(AppConstants.FRAGMENT_TAG_TICKET_PROVIDERS);
+				if (ticketProvidersFragment.onKeyDown()) {
+					return true;
+					
+				} else {
+					return super.onKeyDown(keyCode, event);
+				}
+				
+			} else {
+				return super.onKeyDown(keyCode, event);
+			}
+		}
+		
 		if (!isTabletAndInLandscapeMode) {
 			if (keyCode == KeyEvent.KEYCODE_MENU) {
 				if (mDrawerToggle.isDrawerIndicatorEnabled()) {
@@ -859,17 +876,21 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	@Override
-	public void replaceSelfByFragment(String fragmentTag, Bundle args) {
+	public void replaceByFragment(String fragmentTag, Bundle args) {
 		if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_DISCOVER_BY_CATEGORY)) {
 			int categoryPosition = args.getInt(BundleKeys.CATEGORY_POSITION);
-			List<Category> categories = (List<Category>) args
-					.getSerializable(BundleKeys.CATEGORIES);
+			List<Category> categories = (List<Category>) args.getSerializable(BundleKeys.CATEGORIES);
 
 			DiscoverByCategoryFragment discoverByCategoryFragment = new DiscoverByCategoryFragment();
 			discoverByCategoryFragment.setArguments(args);
-			selectNonDrawerItem(discoverByCategoryFragment,
-					AppConstants.FRAGMENT_TAG_DISCOVER_BY_CATEGORY, categories
-							.get(categoryPosition).getName(), true);
+			selectNonDrawerItem(discoverByCategoryFragment, fragmentTag, 
+					categories.get(categoryPosition).getName(), true);
+			
+		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_TICKET_PROVIDERS)) {
+			TicketProvidersFragment ticketProvidersFragment = new TicketProvidersFragment();
+			ticketProvidersFragment.setArguments(args);
+			selectNonDrawerItem(ticketProvidersFragment, fragmentTag, 
+					getResources().getString(R.string.title_ticket_providers), true);
 		}
 	}
 

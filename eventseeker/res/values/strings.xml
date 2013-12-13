@@ -33,6 +33,7 @@
     <string name="title_rdio">Rdio</string>
     <string name="title_lastfm">last.fm</string>
 	<string name="title_pandora">Pandora</string>
+	<string name="title_ticket_providers">Web</string>
 
     <!-- Strings used for navigation drawer list -->
     <string name="navigation_drawer_section_browse">BROWSE</string>

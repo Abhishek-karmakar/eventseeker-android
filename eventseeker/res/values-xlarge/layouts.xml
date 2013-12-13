@@ -13,7 +13,6 @@
     <item name="include_address_map" type="layout">@layout/include_address_map_tab</item>
     <item name="include_fragment_event_details_footer" type="layout">@layout/include_fragment_event_details_footer_tab</item>
     <item name="grid_friend" type="layout">@layout/grid_friend_tab</item>
-    <item name="artist_news_item" type="layout">@layout/artist_news_item_tab</item>
     <item name="friends_activity_item" type="layout">@layout/friends_activity_item_tab</item>
     <item name="fragment_artist_info" type="layout">@layout/fragment_artist_info_tab</item>
     <item name="fragment_video" type="layout">@layout/fragment_video_tab</item>

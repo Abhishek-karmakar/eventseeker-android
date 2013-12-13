@@ -38,6 +38,7 @@ import com.wcities.eventseeker.core.Category;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.custom.view.ExpandableGridView;
+import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -47,7 +48,7 @@ public abstract class DiscoverParentFragment extends
 
 	public static final String TAG = DiscoverParentFragment.class.getName();
 
-	protected DiscoverFragmentListener mListener;
+	protected ReplaceFragmentListener mListener;
 	// private TextView txtFeaturedEvtsTitle;
 	// private ImageView imgPrev, imgNext;
 
@@ -61,21 +62,16 @@ public abstract class DiscoverParentFragment extends
 
 	protected static final int FEATURED_EVTS_LIMIT = 5;
 
-	// Container Activity must implement this interface
-	public interface DiscoverFragmentListener {
-		public void replaceSelfByFragment(String fragmentTag, Bundle args);
-	}
-
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		// Log.d(TAG, "onAttach");
 		try {
-			mListener = (DiscoverFragmentListener) activity;
+			mListener = (ReplaceFragmentListener) activity;
 
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString()
-					+ " must implement DiscoverFragmentListener");
+					+ " must implement ReplaceFragmentListener");
 		}
 	}
 
@@ -339,7 +335,7 @@ public abstract class DiscoverParentFragment extends
 					args.putInt(BundleKeys.CATEGORY_POSITION, position);
 					args.putSerializable(BundleKeys.CATEGORIES,
 							(ArrayList<Category>) evtCategories);
-					mListener.replaceSelfByFragment(
+					mListener.replaceByFragment(
 							AppConstants.FRAGMENT_TAG_DISCOVER_BY_CATEGORY,
 							args);
 				}
