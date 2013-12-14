@@ -169,56 +169,6 @@ public abstract class DiscoverParentFragment extends
 		lon = latLon[1];
 	}
 
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-
-
-		default:
-			break;
-		}
-
-		return false;
-	}
-
-	/*
-	 * @Override public void onActivityResult(int requestCode, int resultCode,
-	 * Intent data) { if (requestCode == CHANGE_LOCATION_REQUEST) { if
-	 * (resultCode == Activity.RESULT_OK) { Bundle extras = data.getExtras();
-	 * double newLat = extras.getDouble(BundleKeys.LAT); double newLon =
-	 * extras.getDouble(BundleKeys.LON);
-	 * 
-	 * if (lat != newLat || lon != newLon) { lat = newLat; lon = newLon;
-	 * 
-	 * updateCityName(); featuredEvts.clear();
-	 * discoverFragmentPagerAdapter.notifyDataSetChanged(); new
-	 * LoadFeaturedEvts().execute(); } } } }
-	 */
-
-	/*
-	 * private void updateCityName() { Geocoder geocoder = new
-	 * Geocoder(((Activity)mListener).getApplicationContext(),
-	 * Locale.getDefault()); try { List<Address> addresses =
-	 * geocoder.getFromLocation(lat, lon, 1);
-	 * 
-	 * if (addresses != null && !addresses.isEmpty()) { Address address =
-	 * addresses.get(0); cityName = address.getLocality();
-	 * 
-	 * String commonTitle =
-	 * getResources().getString(R.string.title_featured_evts); String city =
-	 * commonTitle + cityName; txtFeaturedEvtsTitle.setText(city);
-	 * txtFeaturedEvtsTitle.setSelected(true);
-	 * 
-	 * } else { Log.w(TAG, "No relevant address found."); }
-	 * 
-	 * } catch (IOException e) { e.printStackTrace(); } }
-	 */
-
 	private void buildEvtCategories() {
 		evtCategories = new ArrayList<Category>();
 		int categoryIdStart = AppConstants.CATEGORY_ID_START;

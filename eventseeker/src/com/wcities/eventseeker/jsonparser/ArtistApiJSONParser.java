@@ -29,7 +29,7 @@ import com.wcities.eventseeker.util.ConversionUtil;
 
 public class ArtistApiJSONParser {
 	
-	private static final String TAG = "ArtistApiJSONParser";
+	private static final String TAG = ArtistApiJSONParser.class.getName();
 	
 	private static final String KEY_ARTIST_SEARCH = "artistSearch";
 	private static final String KEY_ARTISTS = "artists";
@@ -89,7 +89,6 @@ public class ArtistApiJSONParser {
 	private static final String KEY_BOOKINGLINK = "bookinglink";
 	private static final String KEY_BOOKING_URL = "booking_url";
 	private static final String KEY_PROVIDER = "provider";
-	private static final String KEY_PRICE = "price";
 
 	
 	public void fillArtistDetails(Artist artist, JSONObject jsonObject) {
@@ -97,8 +96,8 @@ public class ArtistApiJSONParser {
 			try {
 				JSONObject jObjArtist = jsonObject.getJSONObject(KEY_ARTIST_DETAIL).getJSONObject(KEY_ARTIST);
 				if (jObjArtist.has(KEY_DESCRIPTION)) {
-					artist.setDescription(ConversionUtil.removeBuggyTextsFromDesc(Html.fromHtml(
-							jObjArtist.getString(KEY_DESCRIPTION)).toString()));
+					artist.setDescription(ConversionUtil.removeBuggyTextsFromDesc(ConversionUtil.parseHtmlString(
+							jObjArtist, KEY_DESCRIPTION)));
 				}
 				
 				if (jObjArtist.has(KEY_MEDIA)) {
@@ -251,20 +250,20 @@ public class ArtistApiJSONParser {
 	private Friend getFriend(JSONObject jsonObject) throws JSONException {
 		Friend friend = new Friend();
 		friend.setId(jsonObject.getString(KEY_ID));
-		friend.setName(jsonObject.getString(KEY_NAME));
+		friend.setName(ConversionUtil.parseHtmlString(jsonObject, KEY_NAME));
 		friend.setImgUrl(jsonObject.getString(KEY_IMAGE));
 		return friend;
 	}
 	
 	private Event getEvent(JSONObject jsonObject) throws JSONException {
-		Event event = new Event(jsonObject.getInt(KEY_EVENT_ID), jsonObject.getString(KEY_TITLE));
+		Event event = new Event(jsonObject.getInt(KEY_EVENT_ID), ConversionUtil.parseHtmlString(jsonObject, KEY_TITLE));
 		event.setSchedule(getSchedule(jsonObject));
 		return event;
 	}
 	
 	private Schedule getSchedule(JSONObject jsonObject) throws JSONException {
 		Venue venue = new Venue(jsonObject.getInt(KEY_VENUE_ID));
-		venue.setName(jsonObject.getString(KEY_VENUE_NAME));
+		venue.setName(ConversionUtil.parseHtmlString(jsonObject, KEY_VENUE_NAME));
 		venue.setImagefile(jsonObject.getString(KEY_VENUE_IMAGE));
 		venue.setImageAttribution(getImageAttribution(jsonObject.getJSONObject(KEY_IMAGE_ATTRIBUTION)));
 
@@ -316,7 +315,7 @@ public class ArtistApiJSONParser {
 		BookingInfo bookingInfo = new BookingInfo();
 		bookingInfo.setBookingUrl(jObjBookinglink.getString(KEY_BOOKING_URL));
 		if (jObjBookinglink.has(KEY_PROVIDER)) {
-			bookingInfo.setProvider(jObjBookinglink.getString(KEY_PROVIDER));
+			bookingInfo.setProvider(ConversionUtil.parseHtmlString(jObjBookinglink, KEY_PROVIDER));
 		}
 		return bookingInfo;
 	}
@@ -474,7 +473,7 @@ public class ArtistApiJSONParser {
 	}
 	
 	private Artist getArtist(JSONObject jsonObject) throws JSONException {
-		Artist artist = new Artist(jsonObject.getInt(KEY_ID), jsonObject.getString(KEY_NAME));
+		Artist artist = new Artist(jsonObject.getInt(KEY_ID), ConversionUtil.parseHtmlString(jsonObject, KEY_NAME));
 		if (jsonObject.has(KEY_IMAGE_URL)) {
 			String imageUrl = jsonObject.getString(KEY_IMAGE_URL);
 			String[] urlParts = imageUrl.split("/");
@@ -513,11 +512,11 @@ public class ArtistApiJSONParser {
 		if (jsonObject.has(KEY_ARTIST_EVENT_DETAIL)) {
 			JSONObject jObjArtistEventDetail = jsonObject.getJSONObject(KEY_ARTIST_EVENT_DETAIL);
 			artist = new Artist(jObjArtistEventDetail.getInt(KEY_ARTIST_ID), 
-					jObjArtistEventDetail.getString(KEY_ARTIST_NAME));
+					ConversionUtil.parseHtmlString(jObjArtistEventDetail, KEY_ARTIST_NAME));
 
 			if (jObjArtistEventDetail.has(KEY_EVENTS)) {
 				JSONObject jObjEvent = jObjArtistEventDetail.getJSONArray(KEY_EVENTS).getJSONObject(0);
-				Event event = new Event(jObjEvent.getLong(KEY_ID), jObjEvent.getString(KEY_NAME));
+				Event event = new Event(jObjEvent.getLong(KEY_ID), ConversionUtil.parseHtmlString(jObjEvent, KEY_NAME));
 				List<Event> events = new ArrayList<Event>();
 				events.add(event);
 				artist.setEvents(events);
@@ -549,7 +548,7 @@ public class ArtistApiJSONParser {
 	}
 	
 	private Event getEvent(JSONObject jsonObject, SparseArray<Venue> venues) throws JSONException {
-		Event event = new Event(jsonObject.getInt(KEY_ID), jsonObject.getString(KEY_NAME));
+		Event event = new Event(jsonObject.getInt(KEY_ID), ConversionUtil.parseHtmlString(jsonObject, KEY_NAME));
 		
 		event.setSchedule(getSchedule(jsonObject.getJSONObject(KEY_SCHEDULE), venues));
 		Event.Attending attending = jsonObject.has(KEY_ATTENDING) ? 
@@ -575,7 +574,7 @@ public class ArtistApiJSONParser {
 	
 	private Venue getVenue(JSONObject jsonObject) throws JSONException {
 		Venue venue = new Venue(jsonObject.getInt(KEY_ID));
-		venue.setName(jsonObject.getString(KEY_NAME));
+		venue.setName(ConversionUtil.parseHtmlString(jsonObject, KEY_NAME));
 		venue.setImagefile(jsonObject.getString(KEY_IMAGEFILE));
 		if (jsonObject.has(KEY_ADDRESS)) {
 			venue.setAddress(getAddress(jsonObject.getJSONObject(KEY_ADDRESS)));
@@ -585,11 +584,11 @@ public class ArtistApiJSONParser {
 	
 	private Address getAddress(JSONObject jObjAddress) throws JSONException {
 		Address address = new Address();
-		address.setAddress1(jObjAddress.getString(KEY_ADDRESS1));
+		address.setAddress1(ConversionUtil.parseHtmlString(jObjAddress, KEY_ADDRESS1));
 		if (jObjAddress.has(KEY_ADDRESS2)) {
-			address.setAddress2(jObjAddress.getString(KEY_ADDRESS2));
+			address.setAddress2(ConversionUtil.parseHtmlString(jObjAddress, KEY_ADDRESS2));
 		}
-		address.setCity(jObjAddress.getString(KEY_CITY));
+		address.setCity(ConversionUtil.parseHtmlString(jObjAddress, KEY_CITY));
 		address.setCountry(getCountry(jObjAddress.getJSONObject(KEY_COUNTRY)));
 		
 		if (jObjAddress.has(KEY_LATITUDE)) {
@@ -608,7 +607,7 @@ public class ArtistApiJSONParser {
 	
 	private Country getCountry(JSONObject jsonObject) throws JSONException {
 		Country country = new Country();
-		country.setName(jsonObject.getString(KEY_NAME));
+		country.setName(ConversionUtil.parseHtmlString(jsonObject, KEY_NAME));
 		return country;
 	}
 

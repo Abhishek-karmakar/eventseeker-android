@@ -16,7 +16,7 @@ import com.wcities.eventseeker.util.ConversionUtil;
 
 public class RecordApiJSONParser {
 
-	private static final String TAG = "RecordApiJSONParser";
+	private static final String TAG = RecordApiJSONParser.class.getName();
 	
 	private static final String KEY_RECORDS = "records";
 	private static final String KEY_RECORD = "record";
@@ -76,11 +76,11 @@ public class RecordApiJSONParser {
 	private Venue getVenue(JSONObject jsonObject, Venue venue) throws JSONException {
 		if (venue == null) {
 			venue = new Venue(jsonObject.getInt(KEY_ID));
-			venue.setName(jsonObject.getString(KEY_NAME));
+			venue.setName(ConversionUtil.parseHtmlString(jsonObject, KEY_NAME));
 		}
 		if (jsonObject.has(KEY_LONG_DESC)) {
-			venue.setLongDesc(ConversionUtil.removeBuggyTextsFromDesc(Html.fromHtml(
-					jsonObject.getString(KEY_LONG_DESC)).toString()));
+			venue.setLongDesc(ConversionUtil.removeBuggyTextsFromDesc(ConversionUtil.parseHtmlString(
+					jsonObject, KEY_LONG_DESC)));
 		}
 		
 		String imagefile = jsonObject.getString(KEY_IMAGEFILE);
@@ -108,11 +108,11 @@ public class RecordApiJSONParser {
 	
 	private Address getAddress(JSONObject jsonObject) throws JSONException {
 		Address address = new Address();
-		address.setAddress1(jsonObject.getString(KEY_ADDRESS1));
+		address.setAddress1(ConversionUtil.parseHtmlString(jsonObject, KEY_ADDRESS1));
 		if (jsonObject.has(KEY_ADDRESS2)) {
-			address.setAddress2(jsonObject.getString(KEY_ADDRESS2));
+			address.setAddress2(ConversionUtil.parseHtmlString(jsonObject, KEY_ADDRESS2));
 		}
-		address.setCity(jsonObject.getString(KEY_CITY));
+		address.setCity(ConversionUtil.parseHtmlString(jsonObject, KEY_CITY));
 		address.setCountry(getCountry(jsonObject.getJSONObject(KEY_COUNTRY)));
 		if (jsonObject.has(KEY_LATITUDE)) {
 			String strLat = jsonObject.getString(KEY_LATITUDE);
@@ -129,7 +129,7 @@ public class RecordApiJSONParser {
 	
 	private Country getCountry(JSONObject jsonObject) throws JSONException {
 		Country country = new Country();
-		country.setName(jsonObject.getString(KEY_NAME));
+		country.setName(ConversionUtil.parseHtmlString(jsonObject, KEY_NAME));
 		return country;
 	}
 }
