@@ -381,6 +381,7 @@ public class MainActivity extends ActionBarActivity implements
 				} else {
 					onBackPressed();
 				}
+				
 			} else {
 				
 				/**
@@ -391,10 +392,11 @@ public class MainActivity extends ActionBarActivity implements
 				 * drawer item and if the click is not on the page of navigation drawer item, then it should do the 
 				 * following functionality.
 				 */
-				if(getSupportFragmentManager().getBackStackEntryCount() > 0) {
+				if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
 					onBackPressed();
-					if(getSupportFragmentManager().getBackStackEntryCount() == 0) {
-						getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
+					if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+						// DISPLAY_SHOW_CUSTOM is used for discover screen on tablet
+						getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM);
 					}
 				}
 			}

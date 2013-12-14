@@ -298,6 +298,5 @@
 
     <!-- action_bar_custom_view_item.xml -->
     <dimen name="txt_city_name_txt_size_action_bar_custom_view_item">@dimen/action_bar_title_txt_size</dimen>
-    <dimen name="txt_city_name_txt_w_action_bar_custom_view_item">200dp</dimen>
 
 </resources>

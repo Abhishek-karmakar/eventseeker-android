@@ -334,7 +334,4 @@
     <dimen name="txt_service_desc_margin_t_fragment_device_library">20dp</dimen>
     <dimen name="btn_retrieve_artists_margin_t_fragment_device_library">@dimen/txt_service_desc_margin_t_fragment_device_library</dimen>
 
-    <!-- action_bar_custom_view_item.xml -->
-    <dimen name="txt_city_name_txt_w_action_bar_custom_view_item">250dp</dimen>
-
 </resources>

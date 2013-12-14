@@ -7,7 +7,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.res.Resources;
+import android.text.Html;
 import android.util.Log;
 
 public class ConversionUtil {
@@ -191,5 +195,9 @@ public class ConversionUtil {
 	public static String removeBuggyTextsFromDesc(String src) {
 		String dest = src.replace("amp;", "");
 		return dest;
+	}
+	
+	public static String parseHtmlString(JSONObject jsonObject, String key) throws JSONException {
+		return Html.fromHtml(jsonObject.getString(key)).toString();
 	}
 }

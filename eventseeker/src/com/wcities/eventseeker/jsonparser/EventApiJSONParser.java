@@ -27,7 +27,7 @@ import com.wcities.eventseeker.util.ConversionUtil;
 
 public class EventApiJSONParser {
 	
-	private static final String TAG = "EventApiJSONParser";
+	private static final String TAG = EventApiJSONParser.class.getName();
 	
 	private static final String KEY_FEATURED_EVENT = "featured_event";
 	private static final String KEY_EVENTS = "events";
@@ -105,8 +105,7 @@ public class EventApiJSONParser {
 			}
 			
 			if (jObjEvent.has(KEY_DESC)) {
-				event.setDescription(ConversionUtil.removeBuggyTextsFromDesc(Html.fromHtml(
-						jObjEvent.getString(KEY_DESC)).toString()));
+				event.setDescription(ConversionUtil.removeBuggyTextsFromDesc(ConversionUtil.parseHtmlString(jObjEvent, KEY_DESC)));
 			}
 			
 			JSONObject jObjSchedule = jObjEvent.getJSONObject(KEY_SCHEDULE); 
@@ -198,18 +197,18 @@ public class EventApiJSONParser {
 	private Friend getFriend(JSONObject jsonObject) throws JSONException {
 		Friend friend = new Friend();
 		friend.setId(jsonObject.getString(KEY_ID));
-		friend.setName(jsonObject.getString(KEY_NAME));
+		friend.setName(ConversionUtil.parseHtmlString(jsonObject, KEY_NAME));
 		friend.setImgUrl(jsonObject.getString(KEY_IMAGE));
 		return friend;
 	}
 	
 	private Address getAddress(JSONObject jObjAddress) throws JSONException {
 		Address address = new Address();
-		address.setAddress1(jObjAddress.getString(KEY_ADDRESS1));
+		address.setAddress1(ConversionUtil.parseHtmlString(jObjAddress, KEY_ADDRESS1));
 		if (jObjAddress.has(KEY_ADDRESS2)) {
-			address.setAddress2(jObjAddress.getString(KEY_ADDRESS2));
+			address.setAddress2(ConversionUtil.parseHtmlString(jObjAddress, KEY_ADDRESS2));
 		}
-		address.setCity(jObjAddress.getString(KEY_CITY));
+		address.setCity(ConversionUtil.parseHtmlString(jObjAddress, KEY_CITY));
 		address.setCountry(getCountry(jObjAddress.getJSONObject(KEY_COUNTRY)));
 		if (jObjAddress.has(KEY_LATITUDE)) {
 			String strLat = jObjAddress.getString(KEY_LATITUDE);
@@ -226,7 +225,7 @@ public class EventApiJSONParser {
 	
 	private Country getCountry(JSONObject jsonObject) throws JSONException {
 		Country country = new Country();
-		country.setName(jsonObject.getString(KEY_NAME));
+		country.setName(ConversionUtil.parseHtmlString(jsonObject, KEY_NAME));
 		return country;
 	}
 	
@@ -267,7 +266,7 @@ public class EventApiJSONParser {
 		BookingInfo bookingInfo = new BookingInfo();
 		bookingInfo.setBookingUrl(jObjBookinglink.getString(KEY_BOOKING_URL));
 		if (jObjBookinglink.has(KEY_PROVIDER)) {
-			bookingInfo.setProvider(jObjBookinglink.getString(KEY_PROVIDER));
+			bookingInfo.setProvider(ConversionUtil.parseHtmlString(jObjBookinglink, KEY_PROVIDER));
 		}
 		if (jObjBookinglink.has(KEY_PRICE)) {
 			JSONObject jObjPrice = jObjBookinglink.getJSONObject(KEY_PRICE);
@@ -279,7 +278,7 @@ public class EventApiJSONParser {
 	}
 	
 	private Artist getArtist(JSONObject jsonObject) throws JSONException {
-		Artist artist = new Artist(jsonObject.getInt(KEY_ARTIST_ID), jsonObject.getString(KEY_ARTIST_NAME));
+		Artist artist = new Artist(jsonObject.getInt(KEY_ARTIST_ID), ConversionUtil.parseHtmlString(jsonObject, KEY_ARTIST_NAME));
 		if (jsonObject.has(KEY_ARTIST_IMAGE)) {
 			JSONObject jObjArtistImage = jsonObject.getJSONObject(KEY_ARTIST_IMAGE);
 			
@@ -364,7 +363,7 @@ public class EventApiJSONParser {
 	
 	private Venue getVenue(JSONObject jsonObject) throws JSONException {
 		Venue venue = new Venue(jsonObject.getInt(KEY_ID));
-		venue.setName(jsonObject.getString(KEY_NAME));
+		venue.setName(ConversionUtil.parseHtmlString(jsonObject, KEY_NAME));
 		if (jsonObject.has(KEY_ADDRESS)) {
 			venue.setAddress(getAddress(jsonObject.getJSONObject(KEY_ADDRESS)));
 		}
@@ -377,12 +376,20 @@ public class EventApiJSONParser {
 		try {
 			JSONObject jObjFeaturedEvents = jsonObject.getJSONObject(KEY_FEATURED_EVENT);
 			if (jObjFeaturedEvents.has(KEY_EVENTS)) {
-				JSONArray jArrEvts = jsonObject.getJSONObject(KEY_FEATURED_EVENT).getJSONArray(KEY_EVENTS);
-				
-				for (int i = 0; i < jArrEvts.length(); i++) {
-					Event event = getEvent(jArrEvts.getJSONObject(i), null);
+				Object jEvents = jsonObject.getJSONObject(KEY_FEATURED_EVENT).get(KEY_EVENTS);
+				if (jEvents instanceof JSONArray) {
+					JSONArray jArrEvts = (JSONArray) jEvents;
+					
+					for (int i = 0; i < jArrEvts.length(); i++) {
+						Event event = getEvent(jArrEvts.getJSONObject(i), null);
+						featuredEvts.add(event);
+					}
+					
+				} else {
+					Event event = getEvent((JSONObject) jEvents, null);
 					featuredEvts.add(event);
 				}
+				
 			}
 			
 		} catch (JSONException e) {
@@ -393,19 +400,19 @@ public class EventApiJSONParser {
 	}
 	
 	private Event getEvent(JSONObject jsonObject, SparseArray<Venue> venues) throws JSONException {
-		Event event = new Event(jsonObject.getInt(KEY_ID), jsonObject.getString(KEY_NAME));
+		Event event = new Event(jsonObject.getInt(KEY_ID), ConversionUtil.parseHtmlString(jsonObject, KEY_NAME));
 		boolean hasArtists = jsonObject.has(KEY_ARTIST) ? true : false;
 		event.setHasArtists(hasArtists);
 		
 		if (jsonObject.has(KEY_DESC)) {
-			event.setDescription(ConversionUtil.removeBuggyTextsFromDesc(Html.fromHtml(
-					jsonObject.getString(KEY_DESC)).toString()));
+			event.setDescription(ConversionUtil.removeBuggyTextsFromDesc(ConversionUtil.parseHtmlString(
+					jsonObject, KEY_DESC)));
 		}
 		if (jsonObject.has(KEY_CITY_ID)) {
 			event.setCityId(jsonObject.getInt(KEY_CITY_ID));
 		}
 		if (jsonObject.has(KEY_CITY_NAME)) {
-			event.setCityName(jsonObject.getString(KEY_CITY_NAME));
+			event.setCityName(ConversionUtil.parseHtmlString(jsonObject, KEY_CITY_NAME));
 		}
 		if (jsonObject.has(KEY_IMAGE)) {
 			event.setImageUrl(jsonObject.getString(KEY_IMAGE));
@@ -427,7 +434,7 @@ public class EventApiJSONParser {
 				eventTime = jsonObject.getString(KEY_EVENT_TIME);
 			}
 			int venueId = jsonObject.getInt(KEY_VENUE_ID);
-			String venueName = jsonObject.getString(KEY_VENUE_NAME);
+			String venueName = ConversionUtil.parseHtmlString(jsonObject, KEY_VENUE_NAME);
 			event.setSchedule(buildSchedule(startDates, eventTime, venueId, venueName, null));
 			
 			Venue venue = event.getSchedule().getVenue();
