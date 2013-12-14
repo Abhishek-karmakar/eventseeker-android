@@ -302,8 +302,10 @@ public class VenueInfoFragment extends Fragment implements OnClickListener, Asyn
 			break;
 			
 		case R.id.btnWeb:
-			intent = new Intent(Intent.ACTION_VIEW, Uri.parse(venue.getUrl()));
-			startActivity(intent);
+			if (venue.getUrl() != null) {
+				intent = new Intent(Intent.ACTION_VIEW, Uri.parse(venue.getUrl()));
+				startActivity(intent);
+			}
 			break;
 			
 		case R.id.btnDrive:
