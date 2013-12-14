@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rltLayoutAddress"
-    android:layout_width="0dp"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="@dimen/rlt_desc_margin_l_include_desc"
-    android:layout_marginTop="@dimen/rlt_desc_margin_t_include_desc"
-    android:layout_weight="1"
     android:background="@drawable/story_space"
     android:paddingBottom="@dimen/rlt_layout_evt_address_pad_fragment_event_info"
     android:paddingLeft="@dimen/rlt_layout_evt_address_pad_fragment_event_info"
@@ -34,9 +31,9 @@
     <FrameLayout
         android:id="@+id/frmLayoutMapContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:minHeight="@dimen/frm_layout_map_container_ht_fragment_event_info"
-        android:layout_below="@id/txtAddress" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtAddress"
+        android:minHeight="@dimen/frm_layout_map_container_ht_fragment_event_info" />
 
     <View
         android:id="@+id/vDummyTransparent"

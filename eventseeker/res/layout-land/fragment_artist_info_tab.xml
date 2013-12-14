@@ -58,9 +58,9 @@
                         android:id="@+id/rltItemTitleAndSocialLinks"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_marginBottom="@dimen/rlt_evt_info_margin_t_b_fragment_event_details_img_evt"
+                        android:layout_marginBottom="@dimen/img_evt_margin_fragment_event_info"
                         android:layout_marginRight="@dimen/rlt_evt_info_margin_r_fragment_event_details_img_evt"
-                        android:layout_marginTop="@dimen/rlt_evt_info_margin_t_b_fragment_event_details_img_evt"
+                        android:layout_marginTop="@dimen/rlt_item_title_and_social_links_margin_t_fragment_artist_info"
                         android:layout_weight="1" >
 
                         <!-- android:layout_margin="@dimen/rlt_layout_img_evt_margin_fragment_event_info" -->

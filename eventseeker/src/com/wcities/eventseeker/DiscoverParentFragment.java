@@ -64,11 +64,6 @@ public abstract class DiscoverParentFragment extends
 
 	private static final int DEFAULT_NUM_OF_COLUMNS_FOR_TABLET_IN_PORTRAIT_MODE = 3;
 
-	// Container Activity must implement this interface
-	public interface DiscoverFragmentListener {
-		public void replaceSelfByFragment(String fragmentTag, Bundle args);
-	}
-
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);

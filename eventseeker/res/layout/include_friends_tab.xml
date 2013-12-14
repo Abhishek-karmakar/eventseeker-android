@@ -21,7 +21,7 @@
         android:layout_marginBottom="@dimen/txt_friends_margin_b_fragment_event_info"
         android:gravity="top"
         android:text="Friends Who Like"
-        android:textSize="@dimen/txt_address_txt_size_fragment_event_info" />
+        android:textSize="@dimen/txt_friends_txt_size_include_friends" />
 
     <com.wcities.eventseeker.custom.view.ExpandableGridView
         android:id="@+id/grdVFriends"

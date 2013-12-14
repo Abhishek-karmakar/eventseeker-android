@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rltLayoutDesc"
-    android:layout_width="0dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginRight="@dimen/rlt_desc_margin_r_include_desc"
-    android:layout_marginTop="@dimen/rlt_desc_margin_t_include_desc"
-    android:layout_weight="1"
-    android:background="@drawable/story_space"
-    android:minHeight="@dimen/rlt_layout_item_desc_min_ht_fragment_event_info" >
+    android:background="@drawable/story_space" >
 
     <TextView
         android:id="@+id/txtDesc"

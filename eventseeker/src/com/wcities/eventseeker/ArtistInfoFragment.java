@@ -516,7 +516,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 		public View getView(int position, View convertView, ViewGroup parent) {
 			Log.i(TAG, "in getview");
 
-			View v = inflater.inflate(R.layout.fragment_video, null);
+			View v = inflater.inflate(R.layout.fragment_video_tab, null);
 
 			ResizableImageView imgVideo = (ResizableImageView) v
 					.findViewById(R.id.imgVideo);

@@ -28,16 +28,22 @@
     <!-- include_fragment_event_details_footer.xml -->
     <dimen name="lnr_layout_btns_txt_size_include_fragment_event_details_footer">20sp</dimen>
 
-    
     <!-- fragment_event_details_img_evt.xml -->
-    <dimen name="rlt_evt_info_margin_t_b_fragment_event_details_img_evt">30dp</dimen>
     <dimen name="txt_evt_time_txt_size_include_fragment_event_details_img_evt">22sp</dimen>
-    
-     <!-- fragment_my_events_list_item.xml -->
+    <dimen name="rlt_evt_info_margin_t_b_fragment_event_details_img_evt">20dp</dimen>
+
+    <!-- fragment_my_events_list_item.xml -->
     <dimen name="tbl_layout_evt_details_margin_l_fragment_my_events_list_item">40dp</dimen>
-    
-      <!-- include_venue_details_footer.xml -->
+
+    <!-- include_venue_details_footer.xml -->
     <dimen name="btn_lyt_txt_size_include_venue_details_footer">20sp</dimen>
-    
-    
+
+    <!-- include_video.xml -->
+    <dimen name="root_rlt_layout_pad_r_frag_video_tab">13dp</dimen>
+    <dimen name="img_video_w_fragment_video">200dp</dimen>
+    <dimen name="img_video_ht_fragment_video">150dp</dimen>
+
+    <!-- fragment_venue_info_tab.xml -->
+    <dimen name="v_margin_b_fragment_venue_info">30dp</dimen>
+
 </resources>

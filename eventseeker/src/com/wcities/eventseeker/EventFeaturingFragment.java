@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -14,7 +15,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.wcities.eventseeker.EventDetailsFragment.EventDetailsFragmentChildListener;
 import com.wcities.eventseeker.adapter.ArtistListAdapter;
@@ -37,12 +40,13 @@ public class EventFeaturingFragment extends ListFragment implements OnClickListe
 	
 	private Event event;
 	
-	private LinearLayout lnrLayoutTickets;
+	private View lnrLayoutTickets;
 	private CheckBox chkBoxGoing, chkBoxWantToGo;
 	private Button btnBuyTickets;
 	private ArtistListAdapter<Void> artistListAdapter;
 	private List<Artist> artistList;
-	
+	private ImageView imgBuyTickets;
+	private TextView txtBuyTickets;
 	private boolean isTablet;
 	
 	@Override
@@ -56,8 +60,13 @@ public class EventFeaturingFragment extends ListFragment implements OnClickListe
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_event_featuring, null);
 		
-		lnrLayoutTickets = (LinearLayout) v.findViewById(R.id.lnrLayoutTickets);
-		btnBuyTickets = (Button) v.findViewById(R.id.btnBuyTickets);
+		lnrLayoutTickets = v.findViewById(R.id.lnrLayoutTickets);
+		if(isTablet) {
+			imgBuyTickets =  (ImageView) v.findViewById(R.id.imgBuyTickets);
+			txtBuyTickets =  (TextView) v.findViewById(R.id.txtBuyTickets);
+		} else {
+			btnBuyTickets = (Button) v.findViewById(R.id.btnBuyTickets);
+		}
 		lnrLayoutTickets.setOnClickListener(this);
 		
 		updateEventScheduleVisibility();
@@ -101,7 +110,7 @@ public class EventFeaturingFragment extends ListFragment implements OnClickListe
         getListView().setDivider(null);
 	}
 	
-	private void updateBtnBuyTicketsEnabled(boolean enabled) {
+	/*private void updateBtnBuyTicketsEnabled(boolean enabled) {
 		lnrLayoutTickets.setEnabled(enabled);
 		if (enabled) {
 			if(isTablet) {
@@ -116,7 +125,32 @@ public class EventFeaturingFragment extends ListFragment implements OnClickListe
 			btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.tickets_disabled), null, null, 
 					null);
 		}
+	}*/
+	
+	private void updateBtnBuyTicketsEnabled(boolean enabled) {
+		lnrLayoutTickets.setEnabled(enabled);
+		Resources res = getResources(); 
+		if (enabled) {
+			if (isTablet) {
+				txtBuyTickets.setTextColor(res.getColor(android.R.color.white));
+				imgBuyTickets.setImageDrawable(res.getDrawable(R.drawable.tickets));
+			} else {
+				btnBuyTickets.setTextColor(res.getColor(android.R.color.white));
+				btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(
+						res.getDrawable(R.drawable.tickets), null, null, null);
+			}
+		} else {
+			if (isTablet) {
+				txtBuyTickets.setTextColor(res.getColor(R.color.btn_buy_tickets_disabled_txt_color));
+				imgBuyTickets.setImageDrawable(res.getDrawable(R.drawable.tickets_disabled));
+			} else {
+				btnBuyTickets.setTextColor(res.getColor(R.color.btn_buy_tickets_disabled_txt_color));
+				btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(
+						res.getDrawable(R.drawable.tickets_disabled), null,null, null);
+			}
+		}
 	}
+	
 	
 	private void updateEventScheduleVisibility() {
 		Schedule schedule = event.getSchedule();

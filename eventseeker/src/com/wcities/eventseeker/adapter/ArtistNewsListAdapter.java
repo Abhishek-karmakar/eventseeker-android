@@ -33,6 +33,7 @@ import com.wcities.eventseeker.core.ArtistNewsItem;
 import com.wcities.eventseeker.core.ArtistNewsItem.PostType;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.ConversionUtil;
+import com.wcities.eventseeker.util.FragmentUtil;
 
 public class ArtistNewsListAdapter extends BaseAdapter {
 	
@@ -43,6 +44,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private int orientation;
     private boolean isTablet;
+    private boolean is7InchTabletInPortrait;
     private AsyncTask<Void, Void, List<ArtistNewsItem>> loadArtistNews;
     private List<ArtistNewsListItem> artistsNewsListItems;
     private int imgWidth;
@@ -67,11 +69,15 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 		pad = mContext.getResources().getDimensionPixelSize(R.dimen.tab_bar_margin_fragment_custom_tabs);
         orientation = mContext.getResources().getConfiguration().orientation;
         isTablet = ((EventSeekr)mContext.getApplicationContext()).isTablet();
+        is7InchTabletInPortrait = ((EventSeekr)mContext.getApplicationContext())
+				.is7InchTabletAndInPortraitMode();
     }
     
     public void updateContext(Context context) {
         mContext = context;
         orientation = mContext.getResources().getConfiguration().orientation;
+        is7InchTabletInPortrait = ((EventSeekr)mContext.getApplicationContext())
+        		.is7InchTabletAndInPortraitMode();
 	}
     
     public void setLoadArtistNews(AsyncTask<Void, Void, List<ArtistNewsItem>> loadArtistNews) {
@@ -163,7 +169,8 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 
 	@Override
 	public Object getItem(int position) {
-		if (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) {
+		
+		if (is7InchTabletInPortrait || (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet)) {
 			return artistsNewsListItems.get(position);
 			
 		} else {
@@ -183,7 +190,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		if (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) {
+		if (is7InchTabletInPortrait || (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet)) {
 			//Log.d(TAG, "getCount() = " + artistsNewsListItems.size());
 			return artistsNewsListItems.size();
 			

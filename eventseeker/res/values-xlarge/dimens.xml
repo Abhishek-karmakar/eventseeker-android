@@ -91,6 +91,7 @@
 
     <!-- include_fragment_my_events_list_item_footer.xml -->
     <dimen name="lnr_layout_btns_txt_size_include_fragment_my_events_list_item_footer">16sp</dimen>
+    <dimen name="lnr_layout_btns_min_ht_include_fragment_event_details_footer">80dp</dimen>
 
     <!-- actionbar -->
     <dimen name="action_bar_title_txt_size">23sp</dimen>
@@ -98,7 +99,7 @@
     <!-- custom_actionbar_tabs.xml -->
     <dimen name="btn_pad_l_custom_actionbar_tabs">25dp</dimen>
     <dimen name="btn_pad_r_custom_actionbar_tabs">@dimen/btn_pad_l_custom_actionbar_tabs</dimen>
-    <dimen name="txt_size_custom_actionbar_tabs">18sp</dimen>
+    <dimen name="txt_size_custom_actionbar_tabs">16sp</dimen>
 
     <!-- fragment_custom_tabs.xml -->
     <dimen name="tab_bar_margin_fragment_custom_tabs">15dp</dimen>
@@ -169,7 +170,7 @@
     <dimen name="txt_evt_desc_pad_fragment_evt_info">15dp</dimen>
     <dimen name="txt_evt_desc_pad_t_fragment_evt_info">7dp</dimen>
     <dimen name="txt_evt_desc_pad_b_fragment_evt_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="txt_evt_desc_txt_size_fragment_evt_info">14sp</dimen>
+    <dimen name="txt_evt_desc_txt_size_fragment_evt_info">16sp</dimen>
     <dimen name="img_down_margin_b_fragment_event_info">@dimen/img_down_margin_r_fragment_evt_info</dimen>
     <dimen name="rlt_layout_evt_desc_margin_t_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="lnr_event_desc_and_map_margin_l_r_fragment_event_info">0dp</dimen>
@@ -185,12 +186,13 @@
     <dimen name="txt_evt_title_txt_size_include_fragment_event_details_img_evt">24sp</dimen>
     <dimen name="txt_evt_time_txt_size_include_fragment_event_details_img_evt">17sp</dimen>
     <dimen name="txt_margin_t_b_rlt_evt_info_fragment_event_details_img_evt">10dp</dimen>
+    <dimen name="txt_evt_time_margin_t_b_rlt_evt_info_fragment_event_details_img_evt">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="txt_drawable_pad_fragment_event_details_img_evt">15dp</dimen>
     <dimen name="rlt_evt_info_margin_r_fragment_event_details_img_evt">15dp</dimen>
-    <dimen name="rlt_evt_info_margin_t_b_fragment_event_details_img_evt">7dp</dimen>
+    <dimen name="rlt_evt_info_margin_t_b_fragment_event_details_img_evt">5dp</dimen>
 
     <!-- include_desc.xml -->
-    <dimen name="rlt_desc_margin_r_include_desc">15dp</dimen>
+    <dimen name="rlt_desc_margin_r_include_desc">0dp</dimen>
     <dimen name="rlt_desc_margin_t_include_desc">15dp</dimen>
 
     <!-- include_address_map.xml -->
@@ -200,7 +202,7 @@
     <!-- include_friends.xml -->
     <dimen name="txt_friends_margin_b_fragment_event_info">7dp</dimen>
     <dimen name="txt_friends_txt_size_fragment_event_info">20sp</dimen>
-    <dimen name="rlt_layout_evt_address_pad_fragment_event_info">15dp</dimen>
+    <dimen name="rlt_layout_evt_address_pad_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="rlt_layout_evt_address_pad_t_fragment_event_info">7dp</dimen>
 
     <!-- grid_friend.xml -->
@@ -234,14 +236,17 @@
     <dimen name="view_pager_margin_r_fragment_artist_info">@dimen/view_pager_margin_l_fragment_artist_info</dimen>
     <dimen name="lnr_videos_min_ht_fragment_info_tab">10dp</dimen>
     <dimen name="glry_videos_margin_l_r_fragment_artist_info">7dp</dimen>
+    <dimen name="txt_videos_txt_size_fragment_artist_info">18sp</dimen>
+    <dimen name="txt_videos_margin_b_fragment_artist_info">7dp</dimen>
+    <dimen name="rlt_item_title_and_social_links_margin_t_fragment_artist_info">25dp</dimen>
 
     <!-- include_fragment_event_details_footer.xml -->
     <dimen name="lnr_layout_btns_margin_t_include_fragment_event_details_footer">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="txt_follow_txt_size_include_fragment_artist_details_footer">18sp</dimen>
 
     <!-- include_video.xml -->
-    <dimen name="img_video_w_fragment_video">160dp</dimen>
-    <dimen name="img_video_ht_fragment_video">120dp</dimen>
+    <dimen name="img_video_w_fragment_video">300dp</dimen>
+    <dimen name="img_video_ht_fragment_video">225dp</dimen>
     <dimen name="root_rlt_layout_pad_r_frag_video_tab">8dp</dimen>
 
     <!-- discover_gallery_item.xml -->
@@ -258,6 +263,7 @@
 
     <!-- fragment_venue_info.xml -->
     <dimen name="scrl_v_content_pad_b_fragment_venue_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="v_margin_b_fragment_venue_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="v_divider_margin_t_fragment_venue_info">7dp</dimen>
     <dimen name="v_margin_t_b_fragment_venue_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
 
@@ -300,4 +306,11 @@
     <dimen name="txt_city_name_txt_size_action_bar_custom_view_item">@dimen/action_bar_title_txt_size</dimen>
     <dimen name="txt_city_name_txt_w_action_bar_custom_view_item">200dp</dimen>
 
+    <!-- include_friends_tab.xml -->
+    <dimen name="txt_friends_txt_size_include_friends">18sp</dimen>
+    <dimen name="txt_friends_txt_size_include_friends">18sp</dimen>
+    
+    <!-- friends_activity_item_tab -->
+	<dimen name="lnr_layout_btns_ht_friends_activity_item">50dp</dimen>
+	
 </resources>

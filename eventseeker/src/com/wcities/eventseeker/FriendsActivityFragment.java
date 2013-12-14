@@ -96,6 +96,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	private int firstVisibleActivityItemPosition;
 	
 	private boolean isTablet;
+	private boolean is7InchTabletInPortrait;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -106,11 +107,13 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 			wcitiesId = ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId();
 		}
 		
-		isTablet = ((MainActivity)FragmentUtil.getActivity(this)).isTablet();
+		isTablet = ((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).isTablet();
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		is7InchTabletInPortrait = ((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext())
+				.is7InchTabletAndInPortraitMode();
 		orientation = getResources().getConfiguration().orientation;
 		return super.onCreateView(inflater, container, savedInstanceState);
 	}
@@ -134,9 +137,15 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 		getListView().setDivider(null);
 		getListView().setScrollingCacheEnabled(false);
 		
-		//Mithil: In tablet we have to show two elements in both the cases
-		final int pos = (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) ? 
-				firstVisibleActivityItemPosition : (int)Math.floor(firstVisibleActivityItemPosition / 2.0);
+		final int pos;
+		if(is7InchTabletInPortrait) {
+			pos = firstVisibleActivityItemPosition;
+		} else if (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) {
+			pos = firstVisibleActivityItemPosition;			
+		} else {
+			pos = (int)Math.floor(firstVisibleActivityItemPosition / 2.0);
+		}
+		
 		getListView().post(new Runnable() {
 			
 			@Override
@@ -164,10 +173,15 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	@Override
 	public void onDestroyView() {
 		Log.d(TAG, "onDestroyView()");
-		//Mithil: In tablet we have to show two elements in both the cases
-		firstVisibleActivityItemPosition = (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) ? 
-				getListView().getFirstVisiblePosition() : getListView().getFirstVisiblePosition() * 2;
-				
+		
+		if(is7InchTabletInPortrait) {
+			firstVisibleActivityItemPosition = getListView().getFirstVisiblePosition();
+		} else if (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) {
+			firstVisibleActivityItemPosition = getListView().getFirstVisiblePosition();			
+		} else {
+			firstVisibleActivityItemPosition = getListView().getFirstVisiblePosition() * 2;;
+		}
+		
 		for (int i = getListView().getFirstVisiblePosition(), j = 0; 
 				i <= getListView().getLastVisiblePosition(); i++, j++) {
 			freeUpBitmapMemory(getListView().getChildAt(j));
@@ -338,10 +352,9 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 
 		@Override
 		public Object getItem(int position) {
-			//Mithil: In tablet we have to show two elements in both the cases
-			if (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) {
+
+			if (is7InchTabletInPortrait || (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet)) {
 				return friendNewsItems.get(position);
-				
 			} else {
 				List<FriendNewsItem> friendsNewsItemList = new ArrayList<FriendNewsItem>();
 				friendsNewsItemList.add(friendNewsItems.get(position * 2));
@@ -360,9 +373,8 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 		@Override
 		public int getCount() {
 			//Mithil: In tablet we have to show two elements in both the cases
-			if (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) {
+			if (is7InchTabletInPortrait || (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet)) {
 				return friendNewsItems.size();
-				
 			} else {
 				return (int) Math.ceil(friendNewsItems.size() / 2.0);
 			}

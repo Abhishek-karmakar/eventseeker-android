@@ -70,9 +70,11 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 	private TextView txtEvtDesc, txtAddress, txtEvtTime;
 	private ImageView imgDown, imgRight;
 	private RelativeLayout rltLayoutFriends, rltLayoutAddress;
-	private LinearLayout lnrLayoutTickets;
+	private View lnrLayoutTickets;
 	private CheckBox chkBoxGoing, chkBoxWantToGo;
 	private Button btnBuyTickets;
+	private ImageView imgBuyTickets;
+	private TextView txtBuyTickets;
 	private View vDummyAddress;
 	
 	private FriendsGridAdapter friendsGridAdapter;
@@ -89,7 +91,7 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 		//Log.d(TAG, "lat = " + event.getSchedule().getVenue().getAddress().getLat() + ", lon = " + event.getSchedule().getVenue().getAddress().getLon());
 		res = getResources();
 		
-		isTablet = ((MainActivity)FragmentUtil.getActivity(this)).isTablet();
+		isTablet = ((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).isTablet();
 	}
 	
 	@Override
@@ -118,8 +120,15 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 			txtVenue.setOnClickListener(this);
 		}
 		
-		lnrLayoutTickets = (LinearLayout) v.findViewById(R.id.lnrLayoutTickets);
-		btnBuyTickets = (Button) v.findViewById(R.id.btnBuyTickets);
+		lnrLayoutTickets = v.findViewById(R.id.lnrLayoutTickets);
+
+		if(isTablet) {
+			imgBuyTickets =  (ImageView) v.findViewById(R.id.imgBuyTickets);
+			txtBuyTickets =  (TextView) v.findViewById(R.id.txtBuyTickets);
+		} else {
+			btnBuyTickets = (Button) v.findViewById(R.id.btnBuyTickets);
+		}
+		
 		lnrLayoutTickets.setOnClickListener(this);
 		
 		txtEvtTime = (TextView) v.findViewById(R.id.txtEvtTime);
@@ -196,6 +205,7 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 			}
 			
 			if (schedule.getBookingInfos().isEmpty()) {
+				Log.d(TAG, "if (schedule.getBookingInfos().isEmpty())");
 				updateBtnBuyTicketsEnabled(false);
 			} 
 			
@@ -342,17 +352,23 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 	private void updateBtnBuyTicketsEnabled(boolean enabled) {
 		lnrLayoutTickets.setEnabled(enabled);
 		if (enabled) {
-			if(isTablet) {
-				btnBuyTickets.setTextColor(res.getColor(R.color.txt_color_include_fragment_event_details_footer_tab));
-				btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(res.getDrawable(R.drawable.tic_blue), null, null, null);				
+			if (isTablet) {
+				txtBuyTickets.setTextColor(res.getColor(android.R.color.white));
+				imgBuyTickets.setImageDrawable(res.getDrawable(R.drawable.tickets));
 			} else {
 				btnBuyTickets.setTextColor(res.getColor(android.R.color.white));
-				btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(res.getDrawable(R.drawable.tickets), null, null, null);
+				btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(
+						res.getDrawable(R.drawable.tickets), null, null, null);
 			}
 		} else {
-			btnBuyTickets.setTextColor(res.getColor(R.color.btn_buy_tickets_disabled_txt_color));
-			btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(res.getDrawable(R.drawable.tickets_disabled), null, null, 
-					null);
+			if (isTablet) {
+				txtBuyTickets.setTextColor(res.getColor(R.color.btn_buy_tickets_disabled_txt_color));
+				imgBuyTickets.setImageDrawable(res.getDrawable(R.drawable.tickets_disabled));
+			} else {
+				btnBuyTickets.setTextColor(res.getColor(R.color.btn_buy_tickets_disabled_txt_color));
+				btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(
+						res.getDrawable(R.drawable.tickets_disabled), null,null, null);
+			}
 		}
 	}
 	
@@ -666,7 +682,6 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 
 	@Override
 	public void onEventUpdatedByEventDetailsFragment() {
-		Log.d(TAG, "onEventUpdatedByEventDetailsFragment()");
 		allDetailsLoaded = true;
 		updateScreen();
 	}

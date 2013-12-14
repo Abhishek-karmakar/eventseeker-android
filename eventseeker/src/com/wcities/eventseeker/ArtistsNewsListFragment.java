@@ -36,12 +36,13 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	private int firstVisibleNewsItemPosition;
 
 	private boolean isTablet;
+	private boolean is7InchTabletInPortrait;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-		isTablet = ((MainActivity)FragmentUtil.getActivity(this)).isTablet();
+		isTablet = ((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).isTablet();
 
         if (wcitiesId == null) {
         	wcitiesId = ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId();
@@ -51,13 +52,15 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		orientation = getResources().getConfiguration().orientation;
+		is7InchTabletInPortrait = ((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext())
+				.is7InchTabletAndInPortraitMode();
 
 		int screenW = getResources().getDisplayMetrics().widthPixels;
         //Log.d(TAG, "w = " + screenW);
 
 		if (orientation == Configuration.ORIENTATION_PORTRAIT) {
 
-	        if (isTablet) {
+	        if (isTablet && !is7InchTabletInPortrait) {
 	        	imgWidth = (screenW - (getResources().getDimensionPixelSize(R.dimen.root_lnr_layout_pad_l_artists_news_list_item) * 2)
 						- (getResources().getDimensionPixelSize(R.dimen.rlt_layout_news_item_container_pad_artist_news_item) * 4)
 						- (getResources().getDimensionPixelSize(R.dimen.rlt_layout_news_item_container2_margin_l_artists_news_list_item)))/2;
@@ -106,9 +109,15 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 		getListView().setDivider(null);
 		getListView().setScrollingCacheEnabled(false);
 		
-		final int pos = (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) ? 
-				firstVisibleNewsItemPosition : (int)Math.floor(firstVisibleNewsItemPosition / 2.0);
-		//Log.d(TAG, "onActivityCreated() firstVisibleNewsItemPosition = " + firstVisibleNewsItemPosition + ", pos = " + pos);
+		final int pos;
+		if(is7InchTabletInPortrait) {
+			pos = firstVisibleNewsItemPosition;
+		} else if (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) {
+			pos = firstVisibleNewsItemPosition;			
+		} else {
+			pos = (int)Math.floor(firstVisibleNewsItemPosition / 2.0);
+		}
+		
 		getListView().post(new Runnable() {
 			
 			@Override
@@ -137,9 +146,14 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	public void onDestroyView() {
 		//Log.i(TAG, "onDestroyView()");
 		
-		firstVisibleNewsItemPosition = (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) ? 
-				getListView().getFirstVisiblePosition() : getListView().getFirstVisiblePosition() * 2;
-				
+		if(is7InchTabletInPortrait) {
+			firstVisibleNewsItemPosition = getListView().getFirstVisiblePosition();
+		} else if (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) {
+			firstVisibleNewsItemPosition = getListView().getFirstVisiblePosition();			
+		} else {
+			firstVisibleNewsItemPosition = getListView().getFirstVisiblePosition() * 2;;
+		}
+		
 		for (int i = getListView().getFirstVisiblePosition(), j = 0; 
 				i <= getListView().getLastVisiblePosition(); i++, j++) {
 			freeUpBitmapMemory(getListView().getChildAt(j));

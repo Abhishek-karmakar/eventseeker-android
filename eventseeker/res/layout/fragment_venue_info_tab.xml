@@ -66,7 +66,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
-                            android:layout_marginTop="@dimen/txt_margin_t_b_rlt_evt_info_fragment_event_details_img_evt"
+                            android:layout_marginBottom="@dimen/v_margin_b_fragment_venue_info"
+                            android:layout_marginTop="@dimen/rlt_evt_info_margin_t_b_fragment_event_details_img_evt"
                             android:ellipsize="end"
                             android:gravity="center"
                             android:singleLine="true"
@@ -74,26 +75,19 @@
                             android:textColor="@color/txt_evt_title_fragment_event_info_tab"
                             android:textSize="@dimen/txt_evt_title_txt_size_include_fragment_event_details_img_evt" />
 
-                        <RelativeLayout
-                            android:id="@+id/rltLayoutVenueInfo"
+                        <View
+                            android:id="@+id/vDivider"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_above="@+id/txtVenueAddress"
-                            android:layout_below="@+id/txtItemTitle" >
-
-                            <View
-                                android:id="@+id/vDivider"
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/v_divider_ht_fb_login"
-                                android:layout_centerVertical="true"
-                                android:background="@drawable/info_divider" />
-                        </RelativeLayout>
+                            android:layout_height="@dimen/v_divider_ht_fb_login"
+                            android:layout_below="@+id/txtItemTitle"
+                            android:layout_marginBottom="@dimen/v_margin_b_fragment_venue_info"
+                            android:background="@drawable/info_divider" />
 
                         <TextView
                             android:id="@+id/txtVenueAddress"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
+                            android:layout_below="@+id/vDivider"
                             android:layout_marginBottom="@dimen/txt_margin_t_b_rlt_evt_info_fragment_event_details_img_evt"
                             android:drawableLeft="@drawable/loc_grey"
                             android:drawablePadding="@dimen/txt_drawable_pad_fragment_event_details_img_evt"
@@ -127,12 +121,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/v_margin_t_b_fragment_venue_info"
-                        layout="@layout/include_desc_tab2" />
+                        layout="@layout/include_desc_tab" />
 
                     <include
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/layout_map_container_ht_fragment_event_info"
-                        layout="@layout/include_address_map_tab2"
+                        layout="@layout/include_address_map_tab"
                         android:minHeight="@dimen/frm_layout_map_container_ht_fragment_event_info" />
                 </LinearLayout>
             </LinearLayout>

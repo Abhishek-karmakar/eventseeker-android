@@ -1,6 +1,5 @@
 package com.wcities.eventseeker.app;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,7 +14,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.util.DisplayMetrics;
-import android.util.Log;
 
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.R;
@@ -34,6 +32,7 @@ public class EventSeekr extends Application {
 	private static final String TAG = EventSeekr.class.getName();
 
 	private boolean isTablet;
+	private boolean is7InchTablet;
 	private boolean isInLandscapeMode;
 
 
@@ -71,6 +70,7 @@ public class EventSeekr extends Application {
 		DeviceUtil.getLatLon(this);
 
 		isTablet = getResources().getBoolean(R.bool.is_tablet);
+		is7InchTablet = getResources().getBoolean(R.bool.is_7_inch_tablet);
 		//Log.d(TAG, "isTablet = " + isTablet);
 		FileUtil.deleteShareImgCacheInBackground(this);
 	}
@@ -110,8 +110,8 @@ public class EventSeekr extends Application {
 		return isTablet;
 	}
 
-	public boolean isInLandscapeMode() {
-		return isInLandscapeMode;
+	public boolean isIs7InchTablet() {
+		return is7InchTablet;
 	}
 
 	public void checkAndSetIfInLandscapeMode() {
@@ -127,6 +127,10 @@ public class EventSeekr extends Application {
 	
 	public boolean isTabletAndInPortraitMode() {
 		return (isTablet && !isInLandscapeMode);
+	}
+
+	public boolean is7InchTabletAndInPortraitMode() {
+		return (is7InchTablet && !isInLandscapeMode);
 	}
 
 	public void unregisterListener(EventSeekrListener eventSeekrListener) {
