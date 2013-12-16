@@ -22,7 +22,6 @@
             android:layout_weight="0.35"
             android:contentDescription="Event image"
             android:scaleType="fitXY"
-            android:src="@drawable/cat_900"
             app:compressAsPerWidth="true" />
 
         <!-- layout_height is fixed below because otherwise it doesn't work on some models/higher apis like GT-I9300 running on 4.3 -->
@@ -188,7 +187,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/bg_btn"
-                    android:gravity="center_vertical|right" >
+                    android:gravity="center" >
 
                     <CheckBox
                         android:id="@+id/chkBoxTickets"

@@ -56,7 +56,7 @@ public class AppConstants {
 	public static final String FRAGMENT_TAG_LASTFM = "lastfmFragment";
 	public static final String FRAGMENT_TAG_PANDORA = "pandoraFragment";
 	public static final String FRAGMENT_TAG_TICKET_PROVIDER_DIALOG = "ticketProviderDialogFragment";
-	public static final String FRAGMENT_TAG_TICKET_PROVIDERS = "ticketProvidersFragment";
+	public static final String FRAGMENT_TAG_WEB_VIEW = "webViewFragment";
 	
 	public static final int INVALID_INDEX = -1;
 	

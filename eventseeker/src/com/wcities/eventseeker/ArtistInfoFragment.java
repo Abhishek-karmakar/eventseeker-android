@@ -37,13 +37,16 @@ import com.wcities.eventseeker.asynctask.AsyncLoadImg.AsyncLoadImageListener;
 import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Artist.Attending;
+import com.wcities.eventseeker.core.ArtistLink.LinkType;
 import com.wcities.eventseeker.core.Friend;
 import com.wcities.eventseeker.core.Video;
 import com.wcities.eventseeker.custom.view.ExpandableGridView;
 import com.wcities.eventseeker.custom.view.ResizableImageView;
+import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class ArtistInfoFragment extends Fragment implements OnClickListener,
@@ -672,28 +675,20 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 			break;
 
 		case R.id.imgFacebook:
-			String url = "http://www.facebook.com/eventseekr";
-			gotoLink(url);
+			openURL(artist.getArtistLinkByType(LinkType.FACEBOOK));
 			break;
 
 		case R.id.imgTwitter:
-			url = "https://twitter.com/eventseeker";
-			gotoLink(url);
+			openURL(artist.getArtistLinkByType(LinkType.TWITTER));
 			break;
 
 		case R.id.imgWeb:
-			url = "http://eventseeker.com/";
-			gotoLink(url);
+			openURL(artist.getArtistLinkByType(LinkType.WEBSITE));
 			break;
 
 		default:
 			break;
 		}
-	}
-
-	private void gotoLink(String url) {
-		Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-		startActivity(browserIntent);
 	}
 
 	private void updateScreen() {
@@ -746,4 +741,15 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 		isImgLoaded = true;
 		updateScreen();
 	}
+	
+	private void openURL(String url) {
+		if(url != null) {
+			Bundle args = new Bundle();
+			args.putString(BundleKeys.URL, url);
+			((ReplaceFragmentListener) FragmentUtil.getActivity(this))
+					.replaceByFragment(AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
+		}
+	}
+
+		
 }

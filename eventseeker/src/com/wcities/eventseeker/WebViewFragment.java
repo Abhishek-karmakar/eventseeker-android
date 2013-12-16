@@ -2,7 +2,6 @@ package com.wcities.eventseeker;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +12,13 @@ import android.widget.ProgressBar;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 
-public class TicketProvidersFragment extends FragmentLoadableFromBackStack {
+public class WebViewFragment extends FragmentLoadableFromBackStack {
 
-	private static final String TAG = TicketProvidersFragment.class.getName();
+	private static final String TAG = WebViewFragment.class.getName();
 	
 	private WebView webView;
 	private String url;
+	private Bundle webViewBundle;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class TicketProvidersFragment extends FragmentLoadableFromBackStack {
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.fragment_ticket_providers, null);
+		View v = inflater.inflate(R.layout.fragment_web_view, null);
 		webView = (WebView) v.findViewById(R.id.webview);
 		final ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
 		
@@ -50,12 +50,28 @@ public class TicketProvidersFragment extends FragmentLoadableFromBackStack {
 		});
 		
 		webView.getSettings().setSupportZoom(true) ; 
+		webView.getSettings().setBuiltInZoomControls(true);
 		webView.getSettings().setUseWideViewPort(true) ; 
 		webView.setInitialScale(1) ;
-		
-		webView.loadUrl(url);
-		
+
+		if (webViewBundle == null) {
+			webView.loadUrl(url);
+			
+		} else {
+			//Log.d(TAG, "restore state");
+			webView.restoreState(webViewBundle);
+		}
 		return v;
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		//Log.d(TAG, "onSaveInstanceState()");
+		if (webView != null) {
+			webViewBundle = new Bundle();
+			webView.saveState(webViewBundle);
+		}
 	}
 	
 	public boolean onKeyDown() {

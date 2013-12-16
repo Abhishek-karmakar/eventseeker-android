@@ -189,7 +189,7 @@ public class EventFeaturingFragment extends ListFragment implements OnClickListe
 			Bundle args = new Bundle();
 			args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
 			((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
-					AppConstants.FRAGMENT_TAG_TICKET_PROVIDERS, args);
+					AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
 			break;
 			
 		case R.id.chkBoxGoing:

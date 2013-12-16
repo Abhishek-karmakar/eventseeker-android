@@ -72,8 +72,7 @@ public abstract class DiscoverParentFragment extends
 			mListener = (ReplaceFragmentListener) activity;
 
 		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString()
-					+ " must implement ReplaceFragmentListener");
+			throw new ClassCastException(activity.toString() + " must implement ReplaceFragmentListener");
 		}
 	}
 
@@ -155,8 +154,7 @@ public abstract class DiscoverParentFragment extends
 		 * invoking notifyDataSetChanged() on discoverFragmentPagerAdapter from
 		 * onPostExecute() of LoadFeaturedEvts.
 		 */
-		if (loadFeaturedEvts != null
-				&& loadFeaturedEvts.getStatus() != Status.FINISHED) {
+		if (loadFeaturedEvts != null && loadFeaturedEvts.getStatus() != Status.FINISHED) {
 			Log.d(TAG, "cancel loading events");
 			loadFeaturedEvts.cancel(true);
 		}
@@ -254,15 +252,12 @@ public abstract class DiscoverParentFragment extends
 				ViewGroup parent) {
 			GridItemCategoryHolder holder;
 			if (convertView == null) {
-				convertView = LayoutInflater.from(
-						FragmentUtil.getActivity(DiscoverParentFragment.this))
+				convertView = LayoutInflater.from(FragmentUtil.getActivity(DiscoverParentFragment.this))
 						.inflate(R.layout.grid_category, null);
 
 				holder = new GridItemCategoryHolder();
-				holder.imgCategory = (ImageView) convertView
-						.findViewById(R.id.imgCategory);
-				holder.txtCategory = (TextView) convertView
-						.findViewById(R.id.txtCategory);
+				holder.imgCategory = (ImageView) convertView.findViewById(R.id.imgCategory);
+				holder.txtCategory = (TextView) convertView.findViewById(R.id.txtCategory);
 
 				convertView.setTag(holder);
 
@@ -272,8 +267,7 @@ public abstract class DiscoverParentFragment extends
 
 			holder.txtCategory.setText(evtCategories.get(position).getName());
 			int catId = evtCategories.get(position).getId();
-			Drawable drawable = (categoryImgs.containsKey(catId)) ? getResources()
-					.getDrawable(categoryImgs.get(catId)) : null;
+			Drawable drawable = (categoryImgs.containsKey(catId)) ? getResources().getDrawable(categoryImgs.get(catId)) : null;
 			holder.imgCategory.setImageDrawable(drawable);
 			convertView.setOnClickListener(new OnClickListener() {
 
@@ -281,11 +275,8 @@ public abstract class DiscoverParentFragment extends
 				public void onClick(View v) {
 					Bundle args = new Bundle();
 					args.putInt(BundleKeys.CATEGORY_POSITION, position);
-					args.putSerializable(BundleKeys.CATEGORIES,
-							(ArrayList<Category>) evtCategories);
-					mListener.replaceByFragment(
-							AppConstants.FRAGMENT_TAG_DISCOVER_BY_CATEGORY,
-							args);
+					args.putSerializable(BundleKeys.CATEGORIES, (ArrayList<Category>) evtCategories);
+					mListener.replaceByFragment( AppConstants.FRAGMENT_TAG_DISCOVER_BY_CATEGORY, args);
 				}
 			});
 			return convertView;
@@ -300,10 +291,8 @@ public abstract class DiscoverParentFragment extends
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putSerializable(BundleKeys.EVT_CATEGORIES,
-				(Serializable) evtCategories);
-		outState.putSerializable(BundleKeys.FEATURED_EVTS,
-				(Serializable) featuredEvts);
+		outState.putSerializable(BundleKeys.EVT_CATEGORIES, (Serializable) evtCategories);
+		outState.putSerializable(BundleKeys.FEATURED_EVTS, (Serializable) featuredEvts);
 		outState.putDouble(BundleKeys.LAT, lat);
 		outState.putDouble(BundleKeys.LON, lon);
 	}

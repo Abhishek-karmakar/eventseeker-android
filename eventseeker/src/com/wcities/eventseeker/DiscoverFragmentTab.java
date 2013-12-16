@@ -14,7 +14,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,12 +63,18 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 		
 		ecoGallery = (EcoGallery) v.findViewById(R.id.ecoglryFeaturedEvt);
 		ecoGallery.setAdapter(featuredEventsEcoGalleryAdapter);
+		int numOfFeaturedImages = featuredEventsEcoGalleryAdapter.getCount(); 
+		if(numOfFeaturedImages > 0) {
+			ecoGallery.setSelection(numOfFeaturedImages / 2);
+		}
 		ecoGallery.setOnItemClickListener(this);
 		ecoGallery.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
-			public void onItemSelected(EcoGalleryAdapterView<?> parent,
-					View view, int position, long id) {
+			public void onItemSelected(EcoGalleryAdapterView<?> parent, View view, int position, long id) {
+				
+				position = position % featuredEvts.size();
+				
 				cityName = featuredEvts.get(position).getCityName();
 				//Log.d(TAG, "pos = " + position + ", cityName = " + cityName);
 				txtCityName.setText(cityName);
@@ -82,9 +87,9 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 			}
 		});
 
-		if (featuredEventsEcoGalleryAdapter.getCount() > DEFAULT_SELECTED_FEATURED_EVENT_POSITION) {
+		/*if (featuredEventsEcoGalleryAdapter.getCount() > DEFAULT_SELECTED_FEATURED_EVENT_POSITION) {
 			ecoGallery.setSelection(DEFAULT_SELECTED_FEATURED_EVENT_POSITION);
-		}
+		}*/
 		
 		return v;
 	}
@@ -143,14 +148,20 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 
 		@Override
 		public Event getItem(int position) {
+			int size = discoverFragment.get().featuredEvts.size();
+			if(size > 0) {
+				position = position % size;
+			}
 			return discoverFragment.get().featuredEvts.get(position);
 		}
-
+		
 		@Override
 		public int getCount() {
 			// Log.i(TAG, "count = " +
 			// discoverActivity.get().featuredEvts.size());
-			return discoverFragment.get().featuredEvts.size();
+			
+			int size = (discoverFragment.get().featuredEvts.size() > 0) ? Integer.MAX_VALUE : 0;
+			return size;
 		}
 
 		@Override
@@ -213,8 +224,12 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 	protected void notifyDataSetChanged() {
 		//Log.d(TAG, "notifyDataSetChanged");
 		featuredEventsEcoGalleryAdapter.notifyDataSetChanged();
-		if(featuredEventsEcoGalleryAdapter.getCount() > DEFAULT_SELECTED_FEATURED_EVENT_POSITION) {
+		/*if(featuredEventsEcoGalleryAdapter.getCount() > DEFAULT_SELECTED_FEATURED_EVENT_POSITION) {
 			ecoGallery.setSelection(DEFAULT_SELECTED_FEATURED_EVENT_POSITION);
+		}*/
+		int numOfFeaturedImages = featuredEventsEcoGalleryAdapter.getCount(); 
+		if(numOfFeaturedImages > 0) {
+			ecoGallery.setSelection(numOfFeaturedImages / 2);
 		}
 		/*if (!featuredEvts.isEmpty()) {
 			cityName = featuredEvts.get(0).getCityName();
@@ -223,8 +238,7 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 	}
 
 	@Override
-	public void onItemClick(EcoGalleryAdapterView<?> parent, View view,
-			int position, long id) {
+	public void onItemClick(EcoGalleryAdapterView<?> parent, View view, int position, long id) {
 		Event event = (Event) parent.getItemAtPosition(position);
 		((EventListener)FragmentUtil.getActivity(this)).onEventSelected(event);
 	}

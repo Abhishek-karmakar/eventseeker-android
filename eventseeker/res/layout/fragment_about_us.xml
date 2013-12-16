@@ -3,102 +3,112 @@
     android:id="@+id/rltLayoutRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/rlt_layout_root_pad_fragment_about_us"
-    android:background="@color/dark_gray" >
-    
-    <RelativeLayout android:id="@+id/rltLayoutContent"
+    android:background="@color/dark_gray"
+    android:padding="@dimen/rlt_layout_root_pad_fragment_about_us" >
+
+    <RelativeLayout
+        android:id="@+id/rltLayoutContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/story_space" >
-        
-		<TextView android:id="@+id/txtAppName"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_marginTop="@dimen/txt_app_name_margin_t_fragment_about_us"
-		    android:text="eventseeker"
-		    android:textColor="@color/font_blue"
-		    android:textSize="@dimen/txt_app_name_txt_size_fragment_about_us"
-		    android:textStyle="bold"
-		    android:layout_centerHorizontal="true" /> 
-		    
-		<TextView android:id="@+id/txtSlogan"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_below="@id/txtAppName"
-		    android:layout_marginTop="@dimen/txt_app_slogan_margin_t_fragment_about_us"
-		    android:text="Seek. Share. Live."
-		    android:textColor="@color/font_blue"
-		    android:textSize="@dimen/txt_app_slogan_txt_size_fragment_about_us"
-		    android:textStyle="bold"
-		    android:layout_centerHorizontal="true" />
-		
-		<TextView android:id="@+id/txtDesc"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_below="@id/txtSlogan"
-		    android:layout_marginTop="@dimen/txt_desc_margin_t_fragment_about_us"
-		    android:layout_marginLeft="@dimen/txt_desc_margin_l_fragment_about_us"
-		    android:layout_marginRight="@dimen/txt_desc_margin_r_fragment_about_us"
-		    android:text="eventseeker makes artist and event discovery easy and social. We give you the tools you need so you'll never miss an event again."
-		    android:textSize="@dimen/txt_desc_txt_size_fragment_about_us"
-		    android:layout_centerHorizontal="true"
-		    android:gravity="center_horizontal" />
-		
-		<LinearLayout android:id="@+id/lnr_layout_icons"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:orientation="horizontal"
-		    android:layout_marginTop="@dimen/lnr_layout_icons_margin_t_fragment_about_us"
-		    android:layout_centerInParent="true">
-		    
-		    <ImageView android:id="@+id/img1"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:src="@drawable/facebook"
-		        android:layout_marginRight="@dimen/img_icons_margin_r_fragment_about_us" />
-		    
-		    <ImageView android:id="@+id/img2"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:src="@drawable/instagram"
-		        android:layout_marginRight="@dimen/img_icons_margin_r_fragment_about_us" />
-		    
-		    <ImageView android:id="@+id/img3"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:src="@drawable/twitter"
-		        android:layout_marginRight="@dimen/img_icons_margin_r_fragment_about_us" />
-		    
-		    <ImageView android:id="@+id/img4"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:src="@drawable/blog"
-		        android:layout_marginRight="@dimen/img_icons_margin_r_fragment_about_us" />
-		    
-		    <ImageView android:id="@+id/img5"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:src="@drawable/web"/>
-		    
-		</LinearLayout>
-		
-		<TextView android:id="@+id/txtPoweredBy"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:text="Powered By Wcities"
-		    android:layout_alignParentBottom="true"
-		    android:layout_marginTop="@dimen/txt_powered_by_margin_t_fragment_about_us"
-		    android:layout_marginBottom="@dimen/txt_powered_by_margin_b_fragment_about_us"
-		    android:layout_centerHorizontal="true"
-		    android:textSize="@dimen/txt_powered_by_txt_size_fragment_about_us" />
-		
-		<ImageView android:id="@+id/imgWcities"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_above="@id/txtPoweredBy"
-		    android:src="@drawable/wcities"
-		    android:layout_centerHorizontal="true" />
-        
+
+        <TextView
+            android:id="@+id/txtAppName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/txt_app_name_margin_t_fragment_about_us"
+            android:text="eventseeker"
+            android:textColor="@color/font_blue"
+            android:textSize="@dimen/txt_app_name_txt_size_fragment_about_us"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtSlogan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtAppName"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/txt_app_slogan_margin_t_fragment_about_us"
+            android:text="Seek. Share. Live."
+            android:textColor="@color/font_blue"
+            android:textSize="@dimen/txt_app_slogan_txt_size_fragment_about_us"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtSlogan"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="@dimen/txt_desc_margin_l_fragment_about_us"
+            android:layout_marginRight="@dimen/txt_desc_margin_r_fragment_about_us"
+            android:layout_marginTop="@dimen/txt_desc_margin_t_fragment_about_us"
+            android:gravity="center_horizontal"
+            android:text="eventseeker makes artist and event discovery easy and social. We give you the tools you need so you&apos;ll never miss an event again."
+            android:textSize="@dimen/txt_desc_txt_size_fragment_about_us" />
+
+        <LinearLayout
+            android:id="@+id/lnr_layout_icons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="@dimen/lnr_layout_icons_margin_t_fragment_about_us"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/imgFacebook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/img_icons_margin_r_fragment_about_us"
+                android:src="@drawable/facebook" />
+
+            <ImageView
+                android:id="@+id/imgInstgram"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/img_icons_margin_r_fragment_about_us"
+                android:src="@drawable/instagram" />
+
+            <ImageView
+                android:id="@+id/imgTwitter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/img_icons_margin_r_fragment_about_us"
+                android:src="@drawable/twitter" />
+
+            <ImageView
+                android:id="@+id/imgBlog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/img_icons_margin_r_fragment_about_us"
+                android:src="@drawable/blog" />
+
+            <ImageView
+                android:id="@+id/imgWeb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/web" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtPoweredBy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/txt_powered_by_margin_b_fragment_about_us"
+            android:layout_marginTop="@dimen/txt_powered_by_margin_t_fragment_about_us"
+            android:text="Powered By Wcities"
+            android:textSize="@dimen/txt_powered_by_txt_size_fragment_about_us" />
+
+        <ImageView
+            android:id="@+id/imgWcities"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/txtPoweredBy"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/wcities" />
     </RelativeLayout>
 
 </RelativeLayout>

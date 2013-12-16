@@ -26,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -326,6 +327,9 @@ public class MainActivity extends ActionBarActivity implements
 		searchView.setQueryHint(getResources().getString(R.string.menu_search));
 		searchView.setOnQueryTextListener(this);
 
+		ImageView v = (ImageView) searchView.findViewById(R.id.search_button);
+		v.setImageResource(R.drawable.search);
+		
 		if(AppConstants.FRAGMENT_TAG_SEARCH.equals(currentContentFragmentTag)) {
 			/**
 			 * on some devices onCreateOptionsMenu is called after onFragmentResumed, 
@@ -434,10 +438,10 @@ public class MainActivity extends ActionBarActivity implements
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// Log.d(TAG, "onKeyDown()");
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			if (AppConstants.FRAGMENT_TAG_TICKET_PROVIDERS.equals(currentContentFragmentTag)) {
-				TicketProvidersFragment ticketProvidersFragment = (TicketProvidersFragment) getSupportFragmentManager()
-						.findFragmentByTag(AppConstants.FRAGMENT_TAG_TICKET_PROVIDERS);
-				if (ticketProvidersFragment.onKeyDown()) {
+			if (AppConstants.FRAGMENT_TAG_WEB_VIEW.equals(currentContentFragmentTag)) {
+				WebViewFragment webViewFragment = (WebViewFragment) getSupportFragmentManager()
+						.findFragmentByTag(AppConstants.FRAGMENT_TAG_WEB_VIEW);
+				if (webViewFragment.onKeyDown()) {
 					return true;
 					
 				} else {
@@ -861,8 +865,10 @@ public class MainActivity extends ActionBarActivity implements
 		setDrawerIndicatorEnabled(!addToBackStack);
 		
 		if (isTabletAndInLandscapeMode) {
-			getSupportActionBar().setIcon(R.drawable.placeholder);				
-			getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_HOME_AS_UP);
+			getSupportActionBar().setIcon(R.drawable.placeholder);			
+			if(addToBackStack) {
+				getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_HOME_AS_UP);
+			}
 		}
 		// getSupportActionBar().setDisplayHomeAsUpEnabled(addToBackStack);
 		replaceContentFrameByFragment(replaceBy, replaceByFragmentTag,
@@ -880,11 +886,11 @@ public class MainActivity extends ActionBarActivity implements
 			selectNonDrawerItem(discoverByCategoryFragment, fragmentTag, 
 					categories.get(categoryPosition).getName(), true);
 			
-		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_TICKET_PROVIDERS)) {
-			TicketProvidersFragment ticketProvidersFragment = new TicketProvidersFragment();
-			ticketProvidersFragment.setArguments(args);
-			selectNonDrawerItem(ticketProvidersFragment, fragmentTag, 
-					getResources().getString(R.string.title_ticket_providers), true);
+		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_WEB_VIEW)) {
+			WebViewFragment webViewFragment = new WebViewFragment();
+			webViewFragment.setArguments(args);
+			selectNonDrawerItem(webViewFragment, fragmentTag, 
+					getResources().getString(R.string.title_web), true);
 		}
 	}
 

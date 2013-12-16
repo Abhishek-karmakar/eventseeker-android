@@ -16,6 +16,8 @@ import android.util.SparseArray;
 
 import com.wcities.eventseeker.core.Address;
 import com.wcities.eventseeker.core.Artist;
+import com.wcities.eventseeker.core.ArtistLink;
+import com.wcities.eventseeker.core.ArtistLink.LinkType;
 import com.wcities.eventseeker.core.BookingInfo;
 import com.wcities.eventseeker.core.Country;
 import com.wcities.eventseeker.core.Event;
@@ -90,6 +92,10 @@ public class ArtistApiJSONParser {
 	private static final String KEY_BOOKING_URL = "booking_url";
 	private static final String KEY_PROVIDER = "provider";
 
+	private static final String KEY_LINKS = "links";
+	private static final String KEY_FACEBOOK = "facebook";
+	private static final String KEY_TWITTER = "twitter";
+	private static final String KEY_WEBSITE = "website";
 	
 	public void fillArtistDetails(Artist artist, JSONObject jsonObject) {
 		if (jsonObject.has(KEY_ARTIST_DETAIL)) {
@@ -98,6 +104,19 @@ public class ArtistApiJSONParser {
 				if (jObjArtist.has(KEY_DESCRIPTION)) {
 					artist.setDescription(ConversionUtil.removeBuggyTextsFromDesc(ConversionUtil.parseHtmlString(
 							jObjArtist, KEY_DESCRIPTION)));
+				}
+				
+				if (jObjArtist.has(KEY_LINKS)) {
+					JSONObject jObjLinks = jObjArtist.getJSONObject(KEY_LINKS);
+				
+					artist.addArtistLink(new ArtistLink(LinkType.FACEBOOK,
+							jObjLinks.optString(KEY_FACEBOOK, null)));
+					
+					artist.addArtistLink(new ArtistLink(LinkType.TWITTER,
+							jObjLinks.optString(KEY_TWITTER, null)));
+					
+					artist.addArtistLink(new ArtistLink(LinkType.WEBSITE,
+							jObjLinks.optString(KEY_WEBSITE, null)));
 				}
 				
 				if (jObjArtist.has(KEY_MEDIA)) {

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.wcities.eventseeker.cache.BitmapCacheable;
+import com.wcities.eventseeker.core.ArtistLink.LinkType;
 
 public class Artist implements Serializable, BitmapCacheable {
 	
@@ -49,13 +50,15 @@ public class Artist implements Serializable, BitmapCacheable {
 	private List<Video> videos;
 	private Attending attending;
 	private String artistUrl;
-
+	private List<ArtistLink> listArtistLink;
+	
 	public Artist(int id, String name) {
 		this.id = id;
 		this.name = name;
 		events = new ArrayList<Event>();
 		friends = new ArrayList<Friend>();
 		videos = new ArrayList<Video>();
+		listArtistLink = new ArrayList<ArtistLink>();
 	}
 
 	public int getId() {
@@ -161,6 +164,20 @@ public class Artist implements Serializable, BitmapCacheable {
 		} else {
 			return false;
 		}
+	}
+
+	public void addArtistLink(ArtistLink artistLink) {
+		listArtistLink.add(artistLink);
+	}
+	
+	public String getArtistLinkByType(LinkType link) {
+		for (int i = 0; i < listArtistLink.size(); i++) {
+			ArtistLink artistLink = listArtistLink.get(i);
+			if(artistLink.getLinkType() == link) {
+				return artistLink.getUrl();
+			}
+		}
+		return null;
 	}
 	
 	/*public String getValidImgUrl() {
