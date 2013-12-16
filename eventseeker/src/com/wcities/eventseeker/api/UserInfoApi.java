@@ -148,11 +148,14 @@ public class UserInfoApi extends Api {
 		return execute(RequestMethod.GET, null, null); 
 	}
 	
-	public JSONObject syncAccount() throws ClientProtocolException, IOException, JSONException {
+	public JSONObject syncAccount(String repCode) throws ClientProtocolException, IOException, JSONException {
 		String METHOD = "myProfile.php?";
 		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD).append("oauth_token=")
 				.append(getOauthToken()).append("&type=").append(Type.syncaccount.name()).append("&userId=")
 				.append(fbUserId).append("&userType=fb").append("&wcitiesId=").append(userId);
+		if (repCode != null) {
+			uriBuilder.append("&repCode=" + repCode);
+		}
 		
 		setUri(uriBuilder.toString());
 		Log.i(TAG, "uri=" + getUri());

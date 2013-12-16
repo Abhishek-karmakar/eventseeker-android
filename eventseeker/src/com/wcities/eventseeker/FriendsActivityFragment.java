@@ -672,7 +672,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
         return session != null && session.getPermissions().containsAll(PERMISSIONS);
     }
 	
-	public void requestPublishPermissions(Session session, List<String> permissions,
+	private void requestPublishPermissions(Session session, List<String> permissions,
 		    int requestCode) {
 		Log.d(TAG, "requestPublishPermissions()");
         Session.NewPermissionsRequest reauthRequest = new Session.NewPermissionsRequest(this, permissions)
