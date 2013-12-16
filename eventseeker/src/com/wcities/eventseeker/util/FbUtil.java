@@ -10,6 +10,7 @@ import com.facebook.Request;
 import com.facebook.Request.GraphUserCallback;
 import com.facebook.Response;
 import com.facebook.Session;
+import com.facebook.SessionState;
 import com.facebook.Session.StatusCallback;
 import com.facebook.model.GraphUser;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -49,6 +50,10 @@ public class FbUtil {
 	
 	public static void onClickLogin(Fragment fragment, StatusCallback statusCallback) {
         Session session = Session.getActiveSession();
+        if (session == null) {
+            session = new Session(FragmentUtil.getActivity(fragment));
+            Session.setActiveSession(session);
+        }
         if (!session.isOpened() && !session.isClosed()) {
             session.openForRead(new Session.OpenRequest(fragment).setCallback(statusCallback));
             
