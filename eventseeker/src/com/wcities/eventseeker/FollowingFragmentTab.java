@@ -1,10 +1,10 @@
 package com.wcities.eventseeker;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.GridView;
 
 public class FollowingFragmentTab extends FollowingParentFragment {
@@ -32,13 +32,11 @@ public class FollowingFragmentTab extends FollowingParentFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+	}
 
-		grdFollowing.setAdapter(artistListAdapter);
-		grdFollowing.setScrollingCacheEnabled(false);
-		grdFollowing.setFastScrollEnabled(true);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			grdFollowing.setFastScrollAlwaysVisible(true);
-		}
+	@Override
+	protected AbsListView getScrollableView() {
+		return grdFollowing;
 	}
 
 }

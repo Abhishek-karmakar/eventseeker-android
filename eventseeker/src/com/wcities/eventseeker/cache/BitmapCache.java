@@ -2,6 +2,7 @@ package com.wcities.eventseeker.cache;
 
 import android.graphics.Bitmap;
 import android.support.v4.util.LruCache;
+import android.util.Log;
 
 public class BitmapCache {
 	

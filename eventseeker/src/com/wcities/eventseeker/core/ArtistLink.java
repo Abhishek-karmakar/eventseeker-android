@@ -1,6 +1,8 @@
 package com.wcities.eventseeker.core;
 
-public class ArtistLink {
+import java.io.Serializable;
+
+public class ArtistLink implements Serializable{
 	
 	private LinkType linkType;
 	private String url;

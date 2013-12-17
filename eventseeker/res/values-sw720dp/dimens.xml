@@ -262,16 +262,16 @@
     <dimen name="edt_rep_code_ht_fragment_rep_code">38dp</dimen>
 
     <!-- friends_activity_item.xml -->
-    <dimen name="txt_venue_title_txt_size_friends_activity_item">25sp</dimen>
-    <dimen name="txt_evt_time_txt_size_friends_activity_item">18sp</dimen>
+    <dimen name="txt_venue_title_txt_size_friends_activity_item">18sp</dimen>
+    <dimen name="txt_evt_time_txt_size_friends_activity_item">14sp</dimen>
     <dimen name="lnr_layout_btns_margin_b_friends_activity_item">0dp</dimen>
     <dimen name="lnr_layout_btns_margin_l_friends_activity_item">0dp</dimen>
     <dimen name="lnr_layout_btns_margin_r_friends_activity_item">@dimen/lnr_layout_btns_margin_l_friends_activity_item</dimen>
     <dimen name="img_evt_margin_b_friends_activity_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="txt_title_txt_size_friends_activity_item">20sp</dimen>
+    <dimen name="txt_title_txt_size_friends_activity_item">18sp</dimen>
     <dimen name="txt_title_margin_t_b_friends_activity_item">10dp</dimen>
     <dimen name="txt_title_margin_l_r_friends_activity_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="btn_txt_size_friends_activity_item">18sp</dimen>
+    <dimen name="btn_txt_size_friends_activity_item">16sp</dimen>
     <dimen name="txt_evt_title_margin_l_include_fragment_event_details_img_evt">10dp</dimen>
     <dimen name="v_divider_lnr_ht_friends_activity_item">24dp</dimen>
 
@@ -344,4 +344,12 @@
     <!-- friends_activity_item_tab -->
     <dimen name="lnr_layout_btns_ht_friends_activity_item">40dp</dimen>
 
+    
+	<!-- fragment_sync_account.xml -->
+	<dimen name="v_dummy_ht_fragment_sync_account">40dp</dimen>
+	<dimen name="btn_connect_other_account_pad_l_r_fragment_sync_account">15dp</dimen>
+	<dimen name="txt_sync_account_txt_size_fragment_sync_account">33sp</dimen>
+	<dimen name="btn_connect_accounts_txt_size_fragment_sync_account">25sp</dimen>
+	<dimen name="btn_connect_accounts_ht_fragment_sync_account">50dp</dimen>
+    
 </resources>

@@ -10,12 +10,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.text.Html;
 import android.util.Log;
 import android.util.SparseArray;
 
 import com.wcities.eventseeker.core.Address;
 import com.wcities.eventseeker.core.Artist;
+import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.core.ArtistLink;
 import com.wcities.eventseeker.core.ArtistLink.LinkType;
 import com.wcities.eventseeker.core.BookingInfo;
@@ -26,7 +26,6 @@ import com.wcities.eventseeker.core.ImageAttribution;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.core.Video;
-import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.util.ConversionUtil;
 
 public class ArtistApiJSONParser {

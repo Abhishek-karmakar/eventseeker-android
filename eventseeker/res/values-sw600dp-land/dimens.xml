@@ -50,5 +50,10 @@
     <!-- friends_activity_item_tab -->
 	<dimen name="lnr_layout_btns_ht_friends_activity_item">40dp</dimen>
 	
+	
+    <!-- friends_activity_item.xml -->
+    <dimen name="txt_title_txt_size_friends_activity_item">16sp</dimen>
+    <dimen name="txt_venue_title_txt_size_friends_activity_item">16sp</dimen>
+    <dimen name="txt_evt_time_txt_size_friends_activity_item">12sp</dimen>
     
 </resources>

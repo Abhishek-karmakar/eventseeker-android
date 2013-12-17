@@ -141,7 +141,8 @@
                     android:layout_marginLeft="@dimen/lnr_event_desc_and_map_margin_l_r_fragment_event_info"
                     android:layout_marginRight="@dimen/lnr_event_desc_and_map_margin_l_r_fragment_event_info"
                     android:baselineAligned="false"
-                    android:minHeight="@dimen/lnr_videos_min_ht_fragment_info_tab" >
+                    android:minHeight="@dimen/lnr_videos_min_ht_fragment_info_tab" 
+                    android:visibility="gone">
 
                     <include
                         android:layout_width="0dp"

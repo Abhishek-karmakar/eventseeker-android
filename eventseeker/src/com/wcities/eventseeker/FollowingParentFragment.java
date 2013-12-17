@@ -13,18 +13,20 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.os.AsyncTask.Status;
 import android.os.Build;
+import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
+import android.widget.AbsListView.RecyclerListener;
 
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
@@ -41,7 +43,7 @@ import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser.MyItemsList;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class FollowingParentFragment extends FragmentLoadableFromBackStack {
+public abstract class FollowingParentFragment extends FragmentLoadableFromBackStack {
 
 	private static final String TAG = FollowingParentFragment.class.getName();
 
@@ -61,6 +63,8 @@ public class FollowingParentFragment extends FragmentLoadableFromBackStack {
 	private String sections = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	private Map<Character, Integer> alphaNumIndexer;
 	private List<Character> indices;
+
+	private AbsListView absListView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -91,6 +95,25 @@ public class FollowingParentFragment extends FragmentLoadableFromBackStack {
 
 		} else {
 			artistListAdapter.setmInflater(FragmentUtil.getActivity(this));
+		}
+		
+		absListView = getScrollableView();
+		
+		absListView.setRecyclerListener(new RecyclerListener() {
+			
+			@Override
+			public void onMovedToScrapHeap(View view) {
+				freeUpBitmapMemory(view);
+			}
+		});
+		
+		
+		
+		absListView.setAdapter(artistListAdapter);
+		absListView.setScrollingCacheEnabled(false);
+		absListView.setFastScrollEnabled(true);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			absListView.setFastScrollAlwaysVisible(true);
 		}
 	}
 
@@ -169,7 +192,7 @@ public class FollowingParentFragment extends FragmentLoadableFromBackStack {
 	protected class ArtistListAdapter extends BaseAdapter implements SectionIndexer {
 
 		private static final String TAG_PROGRESS_INDICATOR = "progressIndicator";
-		private static final String TAG_CONTENT = "content";
+		public static final String TAG_CONTENT = "content";
 
 		private LayoutInflater mInflater;
 		private BitmapCache bitmapCache;
@@ -226,8 +249,7 @@ public class FollowingParentFragment extends FragmentLoadableFromBackStack {
 				String key = artist.getKey(ImgResolution.LOW);
 				Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 				if (bitmap != null) {
-					((ImageView) convertView.findViewById(R.id.imgItem))
-							.setImageBitmap(bitmap);
+					((ImageView) convertView.findViewById(R.id.imgItem)).setImageBitmap(bitmap);
 
 				} else {
 					ImageView imgArtist = (ImageView) convertView.findViewById(R.id.imgItem);
@@ -281,4 +303,24 @@ public class FollowingParentFragment extends FragmentLoadableFromBackStack {
 			return indices.toArray();
 		}
 	}
+	
+	protected void freeUpBitmapMemory(View view) {
+		if (view.getTag().equals(ArtistListAdapter.TAG_CONTENT)) {
+			((ImageView) view.findViewById(R.id.imgItem)).setImageBitmap(null);
+		}
+	}
+	
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		for (int i = absListView.getFirstVisiblePosition(), j = 0; 
+				i <= absListView.getLastVisiblePosition(); 
+				i++, j++) {
+			freeUpBitmapMemory(absListView.getChildAt(j));
+		}
+		super.onDestroyView();
+	}
+
+	protected abstract AbsListView getScrollableView();
+	
 }

@@ -15,6 +15,10 @@
         android:layout_marginRight="@dimen/txt_title_margin_l_r_friends_activity_item"
         android:layout_marginTop="@dimen/txt_title_margin_t_b_friends_activity_item"
         android:text="is going"
+        android:maxLines="2"
+        android:lines="2"
+        android:singleLine="false"
+        android:ellipsize="end"
         android:textColor="@android:color/black"
         android:textSize="@dimen/txt_title_txt_size_friends_activity_item" />
 

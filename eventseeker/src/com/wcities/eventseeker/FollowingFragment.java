@@ -1,10 +1,10 @@
 package com.wcities.eventseeker;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ListView;
 
 public class FollowingFragment extends FollowingParentFragment {
@@ -18,8 +18,7 @@ public class FollowingFragment extends FollowingParentFragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_list, null);
 		listFollowing = (ListView) v.findViewById(android.R.id.list);
 		return v;
@@ -28,12 +27,13 @@ public class FollowingFragment extends FollowingParentFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-
-		listFollowing.setAdapter(artistListAdapter);
 		listFollowing.setDivider(null);
-		listFollowing.setFastScrollEnabled(true);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			listFollowing.setFastScrollAlwaysVisible(true);
-		}
 	}
+
+
+	@Override
+	protected AbsListView getScrollableView() {
+		return listFollowing;
+	}
+	
 }

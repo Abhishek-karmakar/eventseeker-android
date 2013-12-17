@@ -66,6 +66,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 	private Resources res;
 	private ProgressBar progressBar, progressBar2;
 	private RelativeLayout rltLayoutArtistDesc, rltLayoutLoadedContent;
+	private View lnrVideos;
 	private View rltLayoutVideos;
 	private TextView txtArtistDesc;
 	private ImageView imgDown, imgArtist, imgRight;
@@ -119,8 +120,8 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 		((TextView) v.findViewById(R.id.txtItemTitle))
 				.setText(artist.getName());
 
-		rltLayoutArtistDesc = (RelativeLayout) v
-				.findViewById(R.id.rltLayoutDesc);
+		lnrVideos = v.findViewById(R.id.lnrVideos);
+		rltLayoutArtistDesc = (RelativeLayout) v.findViewById(R.id.rltLayoutDesc);
 		txtArtistDesc = (TextView) v.findViewById(R.id.txtDesc);
 		imgDown = (ImageView) v.findViewById(R.id.imgDown);
 
@@ -324,22 +325,27 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 
 	private void updateVideosVisibility() {
 
+		Log.i(TAG, "Are Videos Empty : " + artist.getVideos().isEmpty());
 		if (isTablet) {
 
-			int visibility = artist.getVideos().isEmpty() ? View.INVISIBLE
-					: View.VISIBLE;
+			int visibility;
+			if(artist.getVideos().isEmpty()) {
+				visibility = (orientation == Configuration.ORIENTATION_PORTRAIT) ? View.GONE : View.INVISIBLE;
+			} else {
+				visibility = View.VISIBLE;
+			}
 			rltLayoutVideos.setVisibility(visibility);
-
+			if(visibility == View.VISIBLE) {
+				lnrVideos.setVisibility(View.VISIBLE);
+			}
 		} else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
 
-			int visibility = artist.getVideos().isEmpty() ? View.GONE
-					: View.VISIBLE;
+			int visibility = artist.getVideos().isEmpty() ? View.GONE : View.VISIBLE;
 			viewPager.setVisibility(visibility);
 			indicator.setVisibility(visibility);
 
 		} else {
-			if (!isImgLoaded || !allDetailsLoaded
-					|| artist.getVideos().isEmpty()) {
+			if (!isImgLoaded || !allDetailsLoaded || artist.getVideos().isEmpty()) {
 				rltLayoutVideos.setVisibility(View.GONE);
 
 			} else {
@@ -349,6 +355,9 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 	}
 
 	private void makeDescVisible() {
+		if(isTablet) {
+			lnrVideos.setVisibility(View.VISIBLE);
+		}
 		rltLayoutArtistDesc.setVisibility(View.VISIBLE);
 		imgDown.setOnClickListener(this);
 
@@ -363,16 +372,18 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 	}
 
 	private void makeDescVisibleInExpandedMode() {
-
 		imgDown.setVisibility(View.GONE);
+		if(isTablet) {
+			lnrVideos.setVisibility(View.VISIBLE);
+		}
 		rltLayoutArtistDesc.setVisibility(View.VISIBLE);
 		txtArtistDesc.setText(artist.getDescription());
 		expandEvtDesc();
-
 	}
 
 	private void updateDescVisibility() {
 
+		Log.i(TAG, "is Artist Description null : " + artist.getDescription());
 		/**
 		 * Mithil:added new condition for the Tablet UI. Here if device is
 		 * tablet then if artist description is null then make the
@@ -382,14 +393,14 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 		if (isTablet) {
 
 			if (artist.getDescription() == null) {
-				rltLayoutArtistDesc.setVisibility(View.INVISIBLE);
+				int visibility = (orientation == Configuration.ORIENTATION_PORTRAIT) ? View.GONE : View.INVISIBLE;
+				rltLayoutArtistDesc.setVisibility(visibility);
 
 			} else {
 				makeDescVisibleInExpandedMode();
 			}
 		} else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-			if (!isImgLoaded || !allDetailsLoaded
-					|| artist.getDescription() == null) {
+			if (!isImgLoaded || !allDetailsLoaded || artist.getDescription() == null) {
 				rltLayoutArtistDesc.setVisibility(View.GONE);
 
 			} else {
