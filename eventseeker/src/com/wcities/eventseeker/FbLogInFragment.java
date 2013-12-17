@@ -1,5 +1,8 @@
 package com.wcities.eventseeker;
 
+import java.util.Arrays;
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,6 +31,11 @@ import com.wcities.eventseeker.util.FragmentUtil;
 public class FbLogInFragment extends Fragment {
 	
 	private static final String TAG = FbLogInFragment.class.getName();
+	
+	// List of additional write permissions being requested
+	//private static final List<String> PERMISSIONS = Arrays.asList("publish_actions", "publish_stream");
+	// Request code for facebook reauthorization requests.
+	//private static final int FACEBOOK_REAUTH_ACTIVITY_CODE = 100;
 
 	private FbLogInFragmentListener mListener;
 	
@@ -75,6 +83,7 @@ public class FbLogInFragment extends Fragment {
 			
 			Session session = Session.getActiveSession();
 	        if (session == null) {
+	        	//Log.d(TAG, "session == null");
 	            if (savedInstanceState != null) {
 	                session = Session.restoreSession(FragmentUtil.getActivity(this), null, statusCallback, savedInstanceState);
 	            }
@@ -141,30 +150,39 @@ public class FbLogInFragment extends Fragment {
         final Session session = Session.getActiveSession();
         if (session.isOpened()) {
         	Log.d(TAG, "session is opened");
-        	FbUtil.makeMeRequest(session, new Request.GraphUserCallback() {
-
-    			@Override
-    			public void onCompleted(GraphUser user, Response response) {
-    				// If the response is successful
-    	            if (session == Session.getActiveSession()) {
-    	                if (user != null) {
-    	                	showProgress();
-    	                	
-    	                	((EventSeekr) (FragmentUtil.getActivity(FbLogInFragment.this))
-    	                			.getApplicationContext()).updateFbUserId(user.getId(), new AsyncTaskListener<Void>() {
-
-										@Override
-										public void onTaskCompleted(Void... params) {
-				    	                	mListener.replaceFbLoginFragmentBy(AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS);
-										}
-    	                			});
-    	                }
-    	            }
-    	            if (response.getError() != null) {
-    	                // Handle errors, will do so later.
-    	            }
-    			}
-    	    });
+        	/*if (!hasPublishPermission()) {
+        		*//**
+        		 * request for publish permissions now only so that in future user don't need to 
+        		 * login again while using like/comment feature of friends activity screen.
+        		 *//*
+				requestPublishPermissions(session, PERMISSIONS, 0);
+				
+        	} else {*/
+	        	FbUtil.makeMeRequest(session, new Request.GraphUserCallback() {
+	
+	    			@Override
+	    			public void onCompleted(GraphUser user, Response response) {
+	    				// If the response is successful
+	    	            if (session == Session.getActiveSession()) {
+	    	                if (user != null) {
+	    	                	showProgress();
+	    	                	
+	    	                	((EventSeekr) (FragmentUtil.getActivity(FbLogInFragment.this))
+	    	                			.getApplicationContext()).updateFbUserId(user.getId(), new AsyncTaskListener<Void>() {
+	
+											@Override
+											public void onTaskCompleted(Void... params) {
+												mListener.replaceFbLoginFragmentBy(AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS);
+											}
+	    	                			});
+	    	                }
+	    	            }
+	    	            if (response.getError() != null) {
+	    	                // Handle errors, will do so later.
+	    	            }
+	    			}
+	    	    });
+        	//}
         	
         } else {
         	Log.i(TAG, "session is not opened");
@@ -177,6 +195,19 @@ public class FbLogInFragment extends Fragment {
     		});
         }
     }
+	
+	/*private boolean hasPublishPermission() {
+        Session session = Session.getActiveSession();
+        return session != null && session.getPermissions().containsAll(PERMISSIONS);
+    }
+	
+	private void requestPublishPermissions(Session session, List<String> permissions,
+		    int requestCode) {
+		Log.d(TAG, "requestPublishPermissions()");
+        Session.NewPermissionsRequest reauthRequest = new Session.NewPermissionsRequest(this, permissions)
+        	.setRequestCode(requestCode);
+        session.requestNewPublishPermissions(reauthRequest);
+	}*/
 	
 	private class SessionStatusCallback implements Session.StatusCallback {
         @Override

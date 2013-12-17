@@ -407,7 +407,6 @@
     <dimen name="corners_radius_left_most_tab_selected">6dp</dimen>
     <!-- fragment_rep_code.xml -->
     <dimen name="edt_rep_code_ht_fragment_rep_code">30dp</dimen>
-
 	<!-- fragment_sync_account.xml -->
 	<dimen name="v_dummy_ht_fragment_sync_account">20dp</dimen>
 	<dimen name="btn_connect_other_account_pad_l_r_fragment_sync_account">7dp</dimen>

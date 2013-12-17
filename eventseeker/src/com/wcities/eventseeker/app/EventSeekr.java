@@ -386,7 +386,7 @@ public class EventSeekr extends Application {
 
 				userInfoApi.setFbUserId(getFbUserId());
 				userInfoApi.setUserId(userId);
-				jsonObject = userInfoApi.syncAccount();
+				jsonObject = userInfoApi.syncAccount(null);
 				wcitiesId = jsonParser.getWcitiesId(jsonObject);
 				updateWcitiesId(wcitiesId);
 
