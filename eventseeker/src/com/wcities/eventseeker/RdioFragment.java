@@ -24,7 +24,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
@@ -33,13 +33,17 @@ import com.rdio.android.api.Rdio;
 import com.rdio.android.api.RdioApiCallback;
 import com.rdio.android.api.RdioListener;
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
+import com.wcities.eventseeker.ConnectAccountsFragment.ServiceAccount;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.SyncArtists;
 import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
+import com.wcities.eventseeker.interfaces.OnFragmentAliveListener;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.ViewUtil.AnimationUtil;
 
-public class RdioFragment extends FragmentLoadableFromBackStack implements OnClickListener, RdioListener {
+public class RdioFragment extends FragmentLoadableFromBackStack implements OnClickListener, RdioListener, OnFragmentAliveListener {
 
 	private static final String TAG = RdioFragment.class.getName();
 	
@@ -51,12 +55,19 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
     private String accessToken = null;
     private String accessTokenSecret = null;
     
-	private ProgressBar progressBar;
+	//private ProgressBar progressBar;
+    private ImageView imgProgressBar, imgAccount;
 	private TextView txtLoading;
 	private EditText edtUserCredential;
-	private Button btnRetrieveArtists;
+	private Button btnRetrieveArtists, btnConnectOtherAccounts;
+	
+	private View rltMainView, rltSyncAccount;
 	
 	private boolean isLoading;
+
+	private ServiceAccount serviceAccount;
+
+	private boolean isAlive;
 	
 	private static Rdio rdio;
 	
@@ -64,6 +75,8 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
+		serviceAccount = (ServiceAccount) getArguments().getSerializable(BundleKeys.SERVICE_ACCOUNTS);
+		isAlive = true;
 		
 		if (rdio == null) {
             SharedPreferences settings = FragmentUtil.getActivity(this).getPreferences(Context.MODE_PRIVATE);
@@ -90,14 +103,21 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_service_enter_credentials_layout, null);
 		
+		rltMainView = v.findViewById(R.id.rltMainView);
+		rltSyncAccount = v.findViewById(R.id.rltSyncAccount);
+		
 		edtUserCredential = (EditText) v.findViewById(R.id.edtUserCredential);
 		btnRetrieveArtists = (Button) v.findViewById(R.id.btnRetrieveArtists);
-		progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+
+		imgProgressBar = (ImageView) v.findViewById(R.id.progressBar);
+		imgAccount = (ImageView) v.findViewById(R.id.imgAccount);
 		txtLoading = (TextView) v.findViewById(R.id.txtLoading);
+		btnConnectOtherAccounts = (Button) v.findViewById(R.id.btnConnectOtherAccuonts);
 		
 		updateVisibility();
 		
 		btnRetrieveArtists.setOnClickListener(this);
+		btnConnectOtherAccounts.setOnClickListener(this);
 		
 		edtUserCredential.setOnEditorActionListener(new OnEditorActionListener() {
 			@Override
@@ -118,6 +138,7 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 	public void onDestroy() {
 		Log.d(TAG, "Cleaning up..");
 		// Make sure to call the cleanup method on the API object
+		isAlive = false;
 		if (rdio != null) {
 			rdio.cleanup();
 		}
@@ -126,12 +147,21 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 	
 	private void updateVisibility() {
 		int visibilityDesc = isLoading ? View.GONE : View.VISIBLE;
-		edtUserCredential.setVisibility(visibilityDesc);
-		btnRetrieveArtists.setVisibility(visibilityDesc);
+		/*edtUserCredential.setVisibility(visibilityDesc);
+		btnRetrieveArtists.setVisibility(visibilityDesc);*/
+		rltMainView.setVisibility(visibilityDesc);
 		
 		int visibilityLoading = !isLoading ? View.GONE : View.VISIBLE;
-		progressBar.setVisibility(visibilityLoading);
-		txtLoading.setVisibility(visibilityLoading);
+		/*imgProgressBar.setVisibility(visibilityLoading);
+		txtLoading.setVisibility(visibilityLoading);*/
+		rltSyncAccount.setVisibility(visibilityLoading);
+		if(isLoading) {
+			AnimationUtil.startRotationToView(imgProgressBar, 0f, 360f, 0.5f, 0.5f, 1000);
+			txtLoading.setText("Syncing Rdio");
+			imgAccount.setImageResource(R.drawable.rdio_big);
+		} else {
+			AnimationUtil.stopRotationToView(imgProgressBar);
+		}
 	}
 	
 	private void searchUserId(String userId) {
@@ -151,6 +181,7 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 			@Override
 			public void onApiSuccess(JSONObject result) {
 				try {
+					
 					if (result == null) {
 						isLoading = true;
 						updateVisibility();
@@ -207,8 +238,13 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 					
 					Toast toast = Toast.makeText(FragmentUtil.getActivity(RdioFragment.this), "User name could not be found", 
 							Toast.LENGTH_SHORT);
-					toast.setGravity(Gravity.CENTER, 0, -100);
-					toast.show();
+					if(toast != null) {
+						toast.setGravity(Gravity.CENTER, 0, -100);
+						toast.show();
+					}
+					
+					EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(RdioFragment.this).getApplicationContext();
+					eventSeekr.setSyncCount(Service.Rdio, EventSeekr.UNSYNC_COUNT);
 					Log.e(TAG, "Failed to handle JSONObject: ", e);
 				}
 			}
@@ -220,8 +256,13 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 				
 				Toast toast = Toast.makeText(FragmentUtil.getActivity(RdioFragment.this), "User name could not be found", 
 						Toast.LENGTH_SHORT);
-				toast.setGravity(Gravity.CENTER, 0, -100);
-				toast.show();
+				if(toast != null) {
+					toast.setGravity(Gravity.CENTER, 0, -100);
+					toast.show();
+				}
+
+				EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(RdioFragment.this).getApplicationContext();
+				eventSeekr.setSyncCount(Service.Rdio, EventSeekr.UNSYNC_COUNT);
 				Log.e(TAG, "Failed to handle JSONObject: ", e);
 				Log.e(TAG, "getHeavyRotation failed. ", e);
 			}
@@ -244,7 +285,12 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 		switch (v.getId()) {
 		
 		case R.id.btnRetrieveArtists:
+			serviceAccount.isInProgress = true;
 			searchUserId(edtUserCredential.getText().toString().trim());
+			break;
+			
+		case R.id.btnConnectOtherAccuonts:
+			FragmentUtil.getActivity(this).onBackPressed();
 			break;
 			
 		case R.id.edtUserCredential:
@@ -279,4 +325,10 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public boolean isAlive() {
+		return isAlive;
+	}
+
 }

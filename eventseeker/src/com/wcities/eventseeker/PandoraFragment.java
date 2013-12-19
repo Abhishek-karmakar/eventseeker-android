@@ -26,41 +26,62 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
+import com.wcities.eventseeker.ConnectAccountsFragment.ServiceAccount;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.SyncArtists;
+import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.interfaces.OnFragmentAliveListener;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.ViewUtil.AnimationUtil;
 
-public class PandoraFragment extends Fragment implements OnClickListener {
+public class PandoraFragment extends Fragment implements OnClickListener, OnFragmentAliveListener {
 
 	private static final String TAG = PandoraFragment.class.getName();
 	
-	private ProgressBar progressBar;
+	//private ProgressBar progressBar;
+    private ImageView imgProgressBar, imgAccount;
 	private TextView txtLoading;
 	private EditText edtUserCredential;
-	private Button btnRetrieveArtists;
+	private Button btnRetrieveArtists, btnConnectOtherAccounts;
+	
+	private View rltMainView, rltSyncAccount;
 	
 	private boolean isLoading;
+
+	private ServiceAccount serviceAccount;
+
+	private boolean isAlive;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
+		serviceAccount = (ServiceAccount) getArguments().getSerializable(BundleKeys.SERVICE_ACCOUNTS);
+		isAlive = true;
+		
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_service_enter_credentials_layout, null);
 		
+
+		rltMainView = v.findViewById(R.id.rltMainView);
+		rltSyncAccount = v.findViewById(R.id.rltSyncAccount);
+		
 		edtUserCredential = (EditText) v.findViewById(R.id.edtUserCredential);
 		btnRetrieveArtists = (Button) v.findViewById(R.id.btnRetrieveArtists);
-		progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+		imgProgressBar = (ImageView) v.findViewById(R.id.progressBar);
+		//progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
 		txtLoading = (TextView) v.findViewById(R.id.txtLoading);
+		imgAccount = (ImageView) v.findViewById(R.id.imgAccount);
+		btnConnectOtherAccounts = (Button) v.findViewById(R.id.btnConnectOtherAccuonts);
 		
 		TextView txtServiceTitle = (TextView) v.findViewById(R.id.txtServiceTitle);
 		txtServiceTitle.setText(getResources().getString(R.string.title_pandora));
@@ -69,6 +90,7 @@ public class PandoraFragment extends Fragment implements OnClickListener {
 		updateVisibility();
 		
 		btnRetrieveArtists.setOnClickListener(this);
+		btnConnectOtherAccounts.setOnClickListener(this);
 		
 		edtUserCredential.setOnEditorActionListener(new OnEditorActionListener() {
 			@Override
@@ -85,14 +107,34 @@ public class PandoraFragment extends Fragment implements OnClickListener {
 		return v;
 	}
 	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		isAlive = false;
+	}
+
+	
 	private void updateVisibility() {
-		int visibilityDesc = isLoading ? View.GONE : View.VISIBLE;
+		/*int visibilityDesc = isLoading ? View.GONE : View.VISIBLE;
 		edtUserCredential.setVisibility(visibilityDesc);
 		btnRetrieveArtists.setVisibility(visibilityDesc);
 		
 		int visibilityLoading = !isLoading ? View.GONE : View.VISIBLE;
 		progressBar.setVisibility(visibilityLoading);
-		txtLoading.setVisibility(visibilityLoading);
+		txtLoading.setVisibility(visibilityLoading);*/
+		
+		int visibilityDesc = isLoading ? View.GONE : View.VISIBLE;
+		rltMainView.setVisibility(visibilityDesc);
+		
+		int visibilityLoading = !isLoading ? View.GONE : View.VISIBLE;
+		rltSyncAccount.setVisibility(visibilityLoading);
+		if(isLoading) {
+			AnimationUtil.startRotationToView(imgProgressBar, 0f, 360f, 0.5f, 0.5f, 1000);
+			txtLoading.setText("Syncing Pandora");
+			imgAccount.setImageResource(R.drawable.pandora_big);
+		} else {
+			AnimationUtil.stopRotationToView(imgProgressBar);
+		}
 	}
 	
 	private void searchUserId(String userId) {
@@ -153,9 +195,10 @@ public class PandoraFragment extends Fragment implements OnClickListener {
 				
 				Toast toast = Toast.makeText(FragmentUtil.getActivity(PandoraFragment.this),
 						"User name could not be found", Toast.LENGTH_SHORT);
-				toast.setGravity(Gravity.CENTER, 0, -100);
-				toast.show();
-				
+				if(toast != null) {
+					toast.setGravity(Gravity.CENTER, 0, -100);
+					toast.show();
+				}
 			} else {
 				apiCallFinished(artistNames);
 			}
@@ -178,9 +221,14 @@ public class PandoraFragment extends Fragment implements OnClickListener {
 		switch (v.getId()) {
 		
 		case R.id.btnRetrieveArtists:
+			serviceAccount.isInProgress = true;
 			searchUserId(edtUserCredential.getText().toString().trim());
 			break;
-			
+
+		case R.id.btnConnectOtherAccuonts:
+			FragmentUtil.getActivity(this).onBackPressed();
+			break;
+		
 		case R.id.edtUserCredential:
 			edtUserCredential.selectAll();
 			break;
@@ -189,4 +237,10 @@ public class PandoraFragment extends Fragment implements OnClickListener {
 			break;
 		}
 	}
+	
+	@Override
+	public boolean isAlive() {
+		return isAlive;
+	}
+	
 }

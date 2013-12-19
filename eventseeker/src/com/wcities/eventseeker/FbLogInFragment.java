@@ -1,8 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.Arrays;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,8 +19,11 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.Settings;
 import com.facebook.model.GraphUser;
+import com.wcities.eventseeker.ConnectAccountsFragment.ConnectAccountsFragmentListener;
+import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -59,10 +59,19 @@ public class FbLogInFragment extends Fragment {
             throw new ClassCastException(activity.toString() + " must implement FbLogInFragmentListener");
         }
 	}
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+    	super.onCreate(savedInstanceState);
+    	//setRetainInstance(true);
+    	Log.d(TAG, "statusCallback : " + statusCallback);
+    }
     
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		Log.d(TAG, "THIS:" + this);
+		
 		View v = inflater.inflate(R.layout.fragment_fb_login, container, false);
 		
 		btnContinue = (Button) v.findViewById(R.id.btnContinue);
@@ -139,11 +148,11 @@ public class FbLogInFragment extends Fragment {
         Session.saveSession(session, outState);
     }
     
-    private void showProgress() {
+    /*private void showProgress() {
     	imgFbSignUp.setVisibility(View.GONE);
     	btnContinue.setVisibility(View.GONE);
     	lnrLayoutProgress.setVisibility(View.VISIBLE);
-    }
+    }*/
     
 	private void updateView() {
 		Log.d(TAG, "updateView()");
@@ -158,12 +167,38 @@ public class FbLogInFragment extends Fragment {
 				requestPublishPermissions(session, PERMISSIONS, 0);
 				
         	} else {*/
+        	final EventSeekr eventSeekr = ((EventSeekr) (FragmentUtil.getActivity(FbLogInFragment.this))
+        			.getApplicationContext());
 	        	FbUtil.makeMeRequest(session, new Request.GraphUserCallback() {
 	
 	    			@Override
 	    			public void onCompleted(GraphUser user, Response response) {
 	    				// If the response is successful
-	    	            if (session == Session.getActiveSession()) {
+	    	            
+	    				if (session == Session.getActiveSession()) {
+	    	                if (user != null) {
+	    	                	Log.d(TAG, "User : " + user);
+	    	                	Log.d(TAG, "(EventSeekr) (FragmentUtil.getActivity(FbLogInFragment.this))" +
+	    	                			".getApplicationContext()): " 
+	    	                			+ (FragmentUtil.getActivity(FbLogInFragment.this)));
+	    	                			
+	    	                	eventSeekr.updateFbUserId(user.getId(), 
+	    	                					new AsyncTaskListener<Void>() {
+	
+											@Override
+											public void onTaskCompleted(Void... params) {
+												mListener.replaceFbLoginFragmentBy(AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS);
+											}
+	    	                			});
+	    	                	
+	    	                	Bundle bundle = new Bundle();
+	    	                	bundle.putString(BundleKeys.WCITIES_ID, user.getId());
+	    	                	((ConnectAccountsFragmentListener)/*FragmentUtil.getActivity(FbLogInFragment.this)*/mListener)
+	    	                	.onServiceSelected(Service.Facebook, bundle, true);
+	    	                }
+	    	            }
+	    				
+	    				/*if (session == Session.getActiveSession()) {
 	    	                if (user != null) {
 	    	                	showProgress();
 	    	                	
@@ -176,7 +211,7 @@ public class FbLogInFragment extends Fragment {
 											}
 	    	                			});
 	    	                }
-	    	            }
+	    	            }*/
 	    	            if (response.getError() != null) {
 	    	                // Handle errors, will do so later.
 	    	            }

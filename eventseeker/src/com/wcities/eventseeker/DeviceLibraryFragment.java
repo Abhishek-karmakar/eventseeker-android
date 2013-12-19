@@ -8,28 +8,32 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ProgressBar;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.SyncArtists;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.ViewUtil.AnimationUtil;
 
 public class DeviceLibraryFragment extends FragmentLoadableFromBackStack implements OnClickListener {
 	
 	private static final String TAG = DeviceLibraryFragment.class.getName();
 	
-	private ProgressBar progressBar;
+	private ImageView imgProgressBar;
+	private RelativeLayout rltMainView, rltSyncAccount;
 	private TextView txtLoading, txtServiceDesc;
-	private Button btnRetrieveArtists;
+	private Button btnRetrieveArtists, btnConnectOtherAccounts;
+	private ImageView imgAccount;
 	
 	private boolean isLoading;
 
@@ -43,26 +47,43 @@ public class DeviceLibraryFragment extends FragmentLoadableFromBackStack impleme
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_device_library, null);
 		
+		rltMainView = (RelativeLayout) v.findViewById(R.id.rltMainView);
+		rltSyncAccount = (RelativeLayout) v.findViewById(R.id.rltSyncAccount);
+		
 		txtServiceDesc = (TextView) v.findViewById(R.id.txtServiceDesc);
 		btnRetrieveArtists = (Button) v.findViewById(R.id.btnRetrieveArtists);
-		progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+		
+		imgAccount = (ImageView) v.findViewById(R.id.imgAccount);
+		imgProgressBar = (ImageView) v.findViewById(R.id.progressBar);
 		txtLoading = (TextView) v.findViewById(R.id.txtLoading);
+		btnConnectOtherAccounts = (Button) v.findViewById(R.id.btnConnectOtherAccuonts);
 		
 		updateVisibility();
 		
 		btnRetrieveArtists.setOnClickListener(this);
+		btnConnectOtherAccounts.setOnClickListener(this);
 		
 		return v;
 	}
 	
 	private void updateVisibility() {
 		int visibilityDesc = isLoading ? View.GONE : View.VISIBLE;
-		txtServiceDesc.setVisibility(visibilityDesc);
-		btnRetrieveArtists.setVisibility(visibilityDesc);
+		/*txtServiceDesc.setVisibility(visibilityDesc);
+		btnRetrieveArtists.setVisibility(visibilityDesc);*/
+		rltMainView.setVisibility(visibilityDesc);
 		
 		int visibilityLoading = !isLoading ? View.GONE : View.VISIBLE;
-		progressBar.setVisibility(visibilityLoading);
-		txtLoading.setVisibility(visibilityLoading);
+		/*progressBar.setVisibility(visibilityLoading);
+		txtLoading.setVisibility(visibilityLoading);*/
+		rltSyncAccount.setVisibility(visibilityLoading);
+		
+		if (isLoading) {
+			AnimationUtil.startRotationToView(imgProgressBar, 0f, 360f, 0.5f, 0.5f, 1000);
+			txtLoading.setText("Syncing Device Library");
+			imgAccount.setImageResource(R.drawable.devicelibrary_big);
+		} else {
+			AnimationUtil.stopRotationToView(imgProgressBar);			
+		}
 	}
 	
 	private void searchDeviceLirbary() {
@@ -146,6 +167,10 @@ public class DeviceLibraryFragment extends FragmentLoadableFromBackStack impleme
 		
 		case R.id.btnRetrieveArtists:
 			searchDeviceLirbary();
+			break;
+
+		case R.id.btnConnectOtherAccuonts:
+			FragmentUtil.getActivity(this).onBackPressed();
 			break;
 
 		default:

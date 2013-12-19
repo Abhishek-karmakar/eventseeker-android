@@ -51,6 +51,7 @@ public class AppConstants {
 	public static final String FRAGMENT_TAG_ADDRESS_MAP = "addressMapFragment";
 	public static final String FRAGMENT_TAG_FULL_SCREEN_ADDRESS_MAP = "fullScreenAddressMapFragment";
 	public static final String FRAGMENT_TAG_DEVICE_LIBRARY = "deviceLibraryFragment";
+	public static final String FRAGMENT_TAG_FACEBOOK = "FacebookFragment";
 	public static final String FRAGMENT_TAG_TWITTER = "twitterFragment";
 	public static final String FRAGMENT_TAG_RDIO = "rdioFragment";
 	public static final String FRAGMENT_TAG_LASTFM = "lastfmFragment";

@@ -2,51 +2,69 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rltLayoutRoot"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@color/dark_gray"
     android:padding="@dimen/rlt_layout_root_pad_fragment_device_library" >
 
-    <TextView android:id="@+id/txtServiceTitle"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_centerHorizontal="true"
-	    android:text="Device Library"
-	    android:gravity="center_vertical"
-	    android:textAppearance="?android:attr/textAppearanceMedium"
-	    android:drawableLeft="@drawable/devicelibrary"
-	    android:textSize="@dimen/txt_service_title_txt_size_fragment_device_library"
-	    android:drawablePadding="@dimen/txt_service_title_drawable_pad_fragment_device_library" />
-    
-    <TextView android:id="@+id/txtServiceDesc"
+    <RelativeLayout
+        android:id="@+id/rltMainView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtServiceTitle"
-        android:layout_marginTop="@dimen/txt_service_desc_margin_t_fragment_device_library"
-        android:gravity="center"
-	    android:textSize="@dimen/txt_service_desc_txt_size_fragment_device_library"
-        android:text="@string/txt_service_desc_txt_fragment_device_library" />
+        android:layout_height="match_parent"
+        android:background="@drawable/story_space"
+        android:padding="@dimen/rlt_layout_root_pad_fragment_device_library" >
+
+        <TextView
+            android:id="@+id/txtServiceTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:drawableLeft="@drawable/devicelibrary"
+            android:drawablePadding="@dimen/txt_service_title_drawable_pad_fragment_device_library"
+            android:gravity="center_vertical"
+            android:text="Device Library"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="@dimen/txt_service_title_txt_size_fragment_device_library" />
+
+        <TextView
+            android:id="@+id/txtServiceDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtServiceTitle"
+            android:layout_marginTop="@dimen/txt_service_desc_margin_t_fragment_device_library"
+            android:gravity="center"
+            android:text="@string/txt_service_desc_txt_fragment_device_library"
+            android:textSize="@dimen/txt_service_desc_txt_size_fragment_device_library" />
+
+        <Button
+            android:id="@+id/btnRetrieveArtists"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtServiceDesc"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/btn_retrieve_artists_margin_t_fragment_device_library"
+            android:text="Retrieve Artists"
+            android:textSize="@dimen/txt_service_title_txt_size_fragment_device_library" />
+
+        <!-- <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtServiceTitle"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/txt_service_desc_margin_t_fragment_device_library" />
+
+        <TextView
+            android:id="@+id/txtLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/progressBar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/btn_retrieve_artists_margin_t_fragment_device_library"
+            android:text="Retrieving your device&apos;s artists..." /> -->
+    </RelativeLayout>
     
-    <Button android:id="@+id/btnRetrieveArtists"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtServiceDesc"
-        android:layout_centerHorizontal="true"
-	    android:textSize="@dimen/txt_service_title_txt_size_fragment_device_library"
-        android:layout_marginTop="@dimen/btn_retrieve_artists_margin_t_fragment_device_library"
-        android:text="Retrieve Artists" />
-    
-    <ProgressBar android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtServiceTitle"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/txt_service_desc_margin_t_fragment_device_library" />
-    
-    <TextView android:id="@+id/txtLoading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/progressBar"
-        android:layout_marginTop="@dimen/btn_retrieve_artists_margin_t_fragment_device_library"
-        android:layout_centerHorizontal="true"
-        android:text="Retrieving your device's artists..." />
-    
+    <include
+        layout="@layout/include_sync_account"
+        android:visibility="gone" />
+
 </RelativeLayout>

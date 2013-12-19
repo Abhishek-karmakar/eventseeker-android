@@ -373,7 +373,10 @@ public class MainActivity extends ActionBarActivity implements
 		switch (item.getItemId()) {
 
 		case android.R.id.home:
-			if (!isTabletAndInLandscapeMode) {
+			
+			if(AppConstants.FRAGMENT_TAG_FACEBOOK.equals(currentContentFragmentTag)) {
+				return true;
+			} else if (!isTabletAndInLandscapeMode) {
 				if (mDrawerToggle.isDrawerIndicatorEnabled()) {
 					if (mDrawerLayout.isDrawerOpen(lnrLayoutRootNavDrawer)) {
 						mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
@@ -448,6 +451,8 @@ public class MainActivity extends ActionBarActivity implements
 					return super.onKeyDown(keyCode, event);
 				}
 				
+			} else if(AppConstants.FRAGMENT_TAG_FACEBOOK.equals(currentContentFragmentTag)) {
+				return true;
 			} else {
 				return super.onKeyDown(keyCode, event);
 			}
@@ -626,7 +631,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	/** Swaps fragments in the main content view */
 	protected void selectItem(int position) {
-		//Log.d(TAG, "selectItem()");
+		Log.d(TAG, "selectItem() + pos : " + position);
 		//if (position != INDEX_NAV_ITEM_LATEST_NEWS) {
 			drawerItemSelectedPosition = position;
 				
@@ -638,9 +643,11 @@ public class MainActivity extends ActionBarActivity implements
 				getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
 
 			}
-			
 			DrawerListFragment drawerListFragment = (DrawerListFragment) getSupportFragmentManager()
 					.findFragmentByTag(DRAWER_LIST_FRAGMENT_TAG);
+			if(drawerListFragment == null) {
+				return;
+			}
 			try {
 				drawerListFragment.getListView().setItemChecked(position, true);
 				
@@ -992,42 +999,55 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	@Override
-	public void onServiceSelected(Service service, Bundle args) {
+	public void onServiceSelected(Service service, Bundle args, boolean addToBackStack) {
+		
 		switch (service) {
 
 		case DeviceLibrary:
 			DeviceLibraryFragment deviceLibraryFragment = new DeviceLibraryFragment();
+			deviceLibraryFragment.setArguments(args);
 			selectNonDrawerItem(deviceLibraryFragment,
 					AppConstants.FRAGMENT_TAG_DEVICE_LIBRARY, getResources()
-							.getString(R.string.title_device_library), true);
+							.getString(R.string.title_device_library), addToBackStack);
 			break;
-
+			
+		case Facebook:
+			FacebookFragment facebookFragment = new FacebookFragment();
+			facebookFragment.setArguments(args);
+			selectNonDrawerItem(facebookFragment,
+					AppConstants.FRAGMENT_TAG_FACEBOOK, getResources()
+					.getString(R.string.title_facebook), addToBackStack);
+			break;
+			
 		case Twitter:
 			TwitterFragment twitterFragment = new TwitterFragment();
 			twitterFragment.setArguments(args);
 			selectNonDrawerItem(twitterFragment,
 					AppConstants.FRAGMENT_TAG_TWITTER, getResources()
-							.getString(R.string.title_twitter), true);
+							.getString(R.string.title_twitter), addToBackStack);
 			break;
 
 		case Rdio:
 			RdioFragment rdioFragment = new RdioFragment();
+			rdioFragment.setArguments(args);
 			selectNonDrawerItem(rdioFragment, AppConstants.FRAGMENT_TAG_RDIO,
-					getResources().getString(R.string.title_rdio), true);
+					getResources().getString(R.string.title_rdio), addToBackStack);
 			break;
 
 		case Lastfm:
 			LastfmFragment lastfmFragment = new LastfmFragment();
+			lastfmFragment.setArguments(args);
 			selectNonDrawerItem(lastfmFragment,
 					AppConstants.FRAGMENT_TAG_LASTFM,
-					getResources().getString(R.string.title_lastfm), true);
+					getResources().getString(R.string.title_lastfm), addToBackStack);
 			break;
 
 		case Pandora:
 			PandoraFragment pandoraFragment = new PandoraFragment();
+			pandoraFragment.setArguments(args);
 			selectNonDrawerItem(pandoraFragment,
 					AppConstants.FRAGMENT_TAG_PANDORA, getResources()
-							.getString(R.string.title_pandora), true);
+							.getString(R.string.title_pandora), addToBackStack);
 			break;
 
 		default:
@@ -1147,6 +1167,11 @@ public class MainActivity extends ActionBarActivity implements
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources()
 					.getString(R.string.title_device_library),
 					AppConstants.FRAGMENT_TAG_DEVICE_LIBRARY);
+
+		} else if (fragment instanceof FacebookFragment) {
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources()
+					.getString(R.string.title_facebook),
+					AppConstants.FRAGMENT_TAG_FACEBOOK);
 
 		} else if (fragment instanceof TwitterFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources()

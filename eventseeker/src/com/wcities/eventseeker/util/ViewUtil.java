@@ -1,7 +1,11 @@
 package com.wcities.eventseeker.util;
 
 import android.content.res.Resources;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.ListView;
 
 public class ViewUtil {
@@ -33,4 +37,28 @@ public class ViewUtil {
 		    }
 		});
 	}*/
+	
+	public static class AnimationUtil {
+
+		public static void startRotationToView(View view, float toDegrees, 
+				float fromDegrees, float pivotX, float pivotY, int duration) {
+
+			RotateAnimation animation = new RotateAnimation(toDegrees,
+					fromDegrees, Animation.RELATIVE_TO_SELF, pivotX,
+					Animation.RELATIVE_TO_SELF, pivotY);
+			
+			animation.setRepeatCount(Animation.INFINITE);
+			animation.setDuration(duration);
+			animation.setInterpolator(new LinearInterpolator());
+			
+			view.startAnimation(animation);
+			
+		}
+		
+		public static void stopRotationToView(View view) {
+			view.clearAnimation();
+		}
+		
+	}
+	
 }

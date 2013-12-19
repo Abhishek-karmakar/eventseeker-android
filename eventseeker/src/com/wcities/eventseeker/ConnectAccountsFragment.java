@@ -1,5 +1,6 @@
 package com.wcities.eventseeker;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,11 +41,12 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
+import com.wcities.eventseeker.interfaces.SyncApiCallback;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
-
-public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack implements EventSeekrListener {
+import com.wcities.eventseeker.util.ViewUtil.AnimationUtil;
+public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack implements EventSeekrListener, SyncApiCallback {
 	
     private static final String TAG = ConnectAccountsFragment.class.getName();
     
@@ -73,7 +75,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     private Session.StatusCallback statusCallback = new SessionStatusCallback();
     
     public interface ConnectAccountsFragmentListener {
-    	public void onServiceSelected(Service service, Bundle args);
+    	public void onServiceSelected(Service service, Bundle args, boolean addToBackStack);
     }
     
     @Override
@@ -221,12 +223,15 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     				// If the response is successful
     	            if (session == Session.getActiveSession()) {
     	                if (user != null) {
-    	                	((EventSeekr) (FragmentUtil.getActivity(ConnectAccountsFragment.this))
-    	                			.getApplicationContext()).updateFbUserId(user.getId(), null);
+    	                	serviceAccounts.get(0).name = FB_LOGOUT;
+    	                	fbLoggedIn = true;
+    	                	listAdapter.notifyDataSetChanged();
+    	                	
+    	                	Bundle bundle = new Bundle();
+    	                	bundle.putString(BundleKeys.WCITIES_ID, user.getId());
+    	                	((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
+    	                	.onServiceSelected(Service.Facebook, bundle, true);
     	                }
-    	                serviceAccounts.get(0).name = FB_LOGOUT;
-    					fbLoggedIn = true;
-    					listAdapter.notifyDataSetChanged();
     	            }
     	            
     	            if (response.getError() != null) {
@@ -302,6 +307,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 					holder.txtServiceName = (TextView) convertView.findViewById(R.id.txtServiceName);
 					holder.txtCount = (TextView) convertView.findViewById(R.id.txtCount);
 					holder.imgPlus = (ImageView) convertView.findViewById(R.id.imgPlus);
+					holder.imgProgressBar = (ImageView) convertView.findViewById(R.id.progressBar);
 					convertView.setTag(holder);
 					
 				} else {
@@ -310,13 +316,23 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				
 				holder.imgService.setImageDrawable(serviceAccount.drawable);
 				holder.txtServiceName.setText(serviceAccount.name);
-				if (serviceAccount.count != EventSeekr.UNSYNC_COUNT) {
+				
+				if (serviceAccount.isInProgress) {
+					holder.imgProgressBar.setVisibility(View.VISIBLE);
+					holder.imgPlus.setVisibility(View.GONE);
+					holder.txtCount.setVisibility(View.GONE);
+					AnimationUtil.startRotationToView(holder.imgProgressBar, 0f, 360f, 0.5f, 0.5f, 1000);
+				} else if (serviceAccount.count != EventSeekr.UNSYNC_COUNT) {
 					holder.txtCount.setText(serviceAccount.count + "");
 					holder.txtCount.setVisibility(View.VISIBLE);
 					holder.imgPlus.setVisibility(View.GONE);
+					holder.imgProgressBar.setVisibility(View.GONE);
+					AnimationUtil.stopRotationToView(holder.imgProgressBar);
 					
 				} else {
 					holder.txtCount.setVisibility(View.GONE);
+					holder.imgProgressBar.setVisibility(View.GONE);
+					AnimationUtil.stopRotationToView(holder.imgProgressBar);
 					if (serviceAccount.name.equals(FB_LOGOUT)) {
 						holder.imgPlus.setVisibility(View.GONE);
 						
@@ -415,7 +431,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 									 Bundle args = new Bundle();
 			                         args.putString(BundleKeys.URL, requestToken.getAuthenticationURL());
 			                         args.putSerializable(BundleKeys.TWITTER, twitter);
-			                         ((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this)).onServiceSelected(service, args);
+			                         ((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this)).onServiceSelected(service, args, true);
 								}
 							});
                            
@@ -429,22 +445,25 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				break;
 
 			default:
-				((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this)).onServiceSelected(service, null);
+				Bundle bundle = new Bundle();
+				bundle.putSerializable(BundleKeys.SERVICE_ACCOUNTS, getItem(pos));
+				((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this)).onServiceSelected(service, bundle, true);
 				break;
 			}
 		}
 		
 		private class AccountViewHolder {
 			private RelativeLayout rltLayoutServiceDetails;
-			private ImageView imgService, imgPlus;
+			private ImageView imgService, imgPlus, imgProgressBar;
 			private TextView txtServiceName, txtCount;
 		}
 	}
 	
-	private static class ServiceAccount {
+	public static class ServiceAccount implements Serializable {
 		private Drawable drawable;
 		private String name;
 		private int count;
+		public boolean isInProgress;
 	}
 	
 	private class SessionStatusCallback implements Session.StatusCallback {
@@ -463,11 +482,17 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				if (serviceAccounts != null && serviceAccounts.size() > service.ordinal()) {
 					serviceAccounts.get(service.ordinal()).count = ((EventSeekr)FragmentUtil.getActivity(ConnectAccountsFragment.this).getApplication())
 							.getSyncCount(service);
+					serviceAccounts.get(service.ordinal()).isInProgress = false;
 				}
 				if (listAdapter != null) {
 					listAdapter.notifyDataSetChanged();
 				}
 			}
 		});
+	}
+
+	@Override
+	public void OnComplete() {
+		
 	}
 }

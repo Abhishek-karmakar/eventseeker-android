@@ -16,6 +16,7 @@ import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.ArtistApi;
 import com.wcities.eventseeker.api.ArtistApi.Method;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.interfaces.OnFragmentAliveListener;
 import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
 import com.wcities.eventseeker.util.FragmentUtil;
 
@@ -77,7 +78,7 @@ public class SyncArtists extends AsyncTask<Void, Void, Void> {
 	@Override
 	protected void onPostExecute(Void result) {
 		super.onPostExecute(result);
-		if (fragment != null) {
+		if (fragment != null && fragment instanceof OnFragmentAliveListener && ((OnFragmentAliveListener)fragment).isAlive()) {
 			FragmentUtil.getActivity(fragment).onBackPressed();
 		}
 	}
