@@ -86,7 +86,6 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     	}
     	
     	//Log.d(TAG, "onAttach()");
-    	((EventSeekr)FragmentUtil.getActivity(this).getApplication()).registerListener(this);
     }
 	
 	@Override
@@ -94,6 +93,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		super.onCreate(savedInstanceState);
 		//Log.d(TAG, "onCreate()");
 		setRetainInstance(true);
+		((EventSeekr)FragmentUtil.getActivity(this).getApplication()).registerListener(this);
 	}
 	
 	@Override
@@ -151,13 +151,12 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		if (loadMyEventsCount != null && loadMyEventsCount.getStatus() != Status.FINISHED) {
 			loadMyEventsCount.cancel(true);
 		}
+		((EventSeekr)FragmentUtil.getActivity(this).getApplication()).unregisterListener(this);
 	}
 	
 	@Override
 	public void onDetach() {
 		super.onDetach();
-		//Log.d(TAG, "onDetach()");
-		((EventSeekr)FragmentUtil.getActivity(this).getApplication()).unregisterListener(this);
 	}
 	
 	@Override
@@ -211,7 +210,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     }
 	
 	private void updateView() {
-		Log.d(TAG, "updateView()");
+		//Log.d(TAG, "updateView()");
         final Session session = Session.getActiveSession();
         Log.d(TAG, "session state = " + session.getState().name());
         if (session.isOpened()) {
@@ -319,22 +318,22 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				
 				if (serviceAccount.isInProgress) {
 					holder.imgProgressBar.setVisibility(View.VISIBLE);
-					holder.imgPlus.setVisibility(View.GONE);
-					holder.txtCount.setVisibility(View.GONE);
+					holder.imgPlus.setVisibility(View.INVISIBLE);
+					holder.txtCount.setVisibility(View.INVISIBLE);
 					AnimationUtil.startRotationToView(holder.imgProgressBar, 0f, 360f, 0.5f, 0.5f, 1000);
 				} else if (serviceAccount.count != EventSeekr.UNSYNC_COUNT) {
 					holder.txtCount.setText(serviceAccount.count + "");
 					holder.txtCount.setVisibility(View.VISIBLE);
-					holder.imgPlus.setVisibility(View.GONE);
-					holder.imgProgressBar.setVisibility(View.GONE);
+					holder.imgPlus.setVisibility(View.INVISIBLE);
+					holder.imgProgressBar.setVisibility(View.INVISIBLE);
 					AnimationUtil.stopRotationToView(holder.imgProgressBar);
 					
 				} else {
-					holder.txtCount.setVisibility(View.GONE);
-					holder.imgProgressBar.setVisibility(View.GONE);
+					holder.txtCount.setVisibility(View.INVISIBLE);
+					holder.imgProgressBar.setVisibility(View.INVISIBLE);
 					AnimationUtil.stopRotationToView(holder.imgProgressBar);
 					if (serviceAccount.name.equals(FB_LOGOUT)) {
-						holder.imgPlus.setVisibility(View.GONE);
+						holder.imgPlus.setVisibility(View.INVISIBLE);
 						
 					} else {
 						holder.imgPlus.setVisibility(View.VISIBLE);
@@ -475,16 +474,20 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 
 	@Override
 	public void onSyncCountUpdated(final Service service) {
+		//Log.d(TAG, "onSyncCountUpdated");
 		FragmentUtil.getActivity(this).runOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
+				//Log.d(TAG, "run");
 				if (serviceAccounts != null && serviceAccounts.size() > service.ordinal()) {
+					Log.d(TAG, "serviceAccounts != null ");
 					serviceAccounts.get(service.ordinal()).count = ((EventSeekr)FragmentUtil.getActivity(ConnectAccountsFragment.this).getApplication())
 							.getSyncCount(service);
 					serviceAccounts.get(service.ordinal()).isInProgress = false;
 				}
 				if (listAdapter != null) {
+					Log.d(TAG, "listAdapter != null ");
 					listAdapter.notifyDataSetChanged();
 				}
 			}

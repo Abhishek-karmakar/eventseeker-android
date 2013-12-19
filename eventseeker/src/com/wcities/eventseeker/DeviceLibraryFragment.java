@@ -16,16 +16,18 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
+import com.wcities.eventseeker.ConnectAccountsFragment.ServiceAccount;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.SyncArtists;
+import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
+import com.wcities.eventseeker.interfaces.OnFragmentAliveListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.ViewUtil.AnimationUtil;
 
-public class DeviceLibraryFragment extends FragmentLoadableFromBackStack implements OnClickListener {
+public class DeviceLibraryFragment extends FragmentLoadableFromBackStack implements OnClickListener, OnFragmentAliveListener {
 	
 	private static final String TAG = DeviceLibraryFragment.class.getName();
 	
@@ -37,10 +39,16 @@ public class DeviceLibraryFragment extends FragmentLoadableFromBackStack impleme
 	
 	private boolean isLoading;
 
+	private ServiceAccount serviceAccount;
+
+	private boolean isAlive;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
+		serviceAccount = (ServiceAccount) getArguments().getSerializable(BundleKeys.SERVICE_ACCOUNTS);
+		isAlive = true;
 	}
 	
 	@Override
@@ -109,11 +117,13 @@ public class DeviceLibraryFragment extends FragmentLoadableFromBackStack impleme
 		protected List<String> doInBackground(Void... params) {
 			try {
 				return getDeviceArtists();
-				
 			} catch (Exception e) {
 				isLoading = false;
 				updateVisibility();
 				e.printStackTrace();
+				
+				EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(DeviceLibraryFragment.this).getApplicationContext();
+				eventSeekr.setSyncCount(Service.DeviceLibrary, EventSeekr.UNSYNC_COUNT);
 			} 
 			return null;
 		}
@@ -166,6 +176,7 @@ public class DeviceLibraryFragment extends FragmentLoadableFromBackStack impleme
 		switch (v.getId()) {
 		
 		case R.id.btnRetrieveArtists:
+			serviceAccount.isInProgress = true;
 			searchDeviceLirbary();
 			break;
 
@@ -177,4 +188,16 @@ public class DeviceLibraryFragment extends FragmentLoadableFromBackStack impleme
 			break;
 		}
 	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		isAlive = false;
+	}
+
+	@Override
+	public boolean isAlive() {
+		return isAlive;
+	}
+	
 }

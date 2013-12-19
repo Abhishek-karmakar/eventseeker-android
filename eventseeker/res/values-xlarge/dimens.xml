@@ -308,15 +308,17 @@
     <!-- include_friends_tab.xml -->
     <dimen name="txt_friends_txt_size_include_friends">18sp</dimen>
     <dimen name="txt_friends_txt_size_include_friends">18sp</dimen>
-    
+
     <!-- friends_activity_item_tab.xml -->
-	<dimen name="lnr_layout_btns_ht_friends_activity_item">50dp</dimen>
-	
-	<!-- fragment_sync_account.xml -->
-	<dimen name="v_dummy_ht_fragment_sync_account">30dp</dimen>
-	<dimen name="btn_connect_other_account_pad_l_r_fragment_sync_account">10dp</dimen>
-	<dimen name="txt_sync_account_txt_size_fragment_sync_account">27sp</dimen>
-	<dimen name="btn_connect_accounts_txt_size_fragment_sync_account">20sp</dimen>
-	<dimen name="btn_connect_accounts_ht_fragment_sync_account">45dp</dimen>
-	
+    <dimen name="lnr_layout_btns_ht_friends_activity_item">50dp</dimen>
+
+    <!-- fragment_sync_account.xml -->
+    <dimen name="v_dummy_ht_fragment_sync_account">40dp</dimen>
+    <dimen name="btn_connect_other_account_pad_l_r_fragment_sync_account">10dp</dimen>
+    <dimen name="txt_sync_account_txt_size_fragment_sync_account">27sp</dimen>
+    <dimen name="btn_connect_accounts_txt_size_fragment_sync_account">20sp</dimen>
+    <dimen name="btn_connect_accounts_ht_fragment_sync_account">45dp</dimen>
+    <dimen name="img_progress_bar_size_fragment_sync_account">150dp</dimen>
+    <dimen name="img_account_size_fragment_sync_account">70dp</dimen>
+
 </resources>
