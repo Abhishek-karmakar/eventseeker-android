@@ -21,6 +21,7 @@ import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.SharedPrefKeys;
+import com.wcities.eventseeker.exception.DefaultUncaughtExceptionHandler;
 import com.wcities.eventseeker.gcm.GcmUtil;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
@@ -65,6 +66,11 @@ public class EventSeekr extends Application {
 		listeners = new ArrayList<EventSeekr.EventSeekrListener>();
 
 		initConfigParams();
+		
+		//ReportHandler.install(this, "ankur@wcities.com");
+		if (AppConstants.CRASH_REPORTING_ENABLED) {
+			Thread.setDefaultUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(this));
+		}
 		
 		new GcmUtil(EventSeekr.this).registerGCMInBackground();
 		DeviceUtil.getLatLon(this);

@@ -4,13 +4,21 @@
    	android:id="@+id/rltLayoutActivityItemContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/story_space">
+    android:background="@drawable/story_space" >
+    
+    <ProgressBar android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
     
     <TextView android:id="@+id/txtTitle"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:textSize="@dimen/txt_title_txt_size_friends_activity_item"
 		android:text="is going"
+		android:lines="2"
+        android:ellipsize="end"
 		android:layout_margin="@dimen/txt_title_margin_friends_activity_item"
 		android:textColor="@android:color/black" />
     
@@ -22,7 +30,8 @@
 		android:layout_alignRight="@id/txtTitle"
 		android:layout_marginBottom="@dimen/img_evt_margin_b_friends_activity_item"
 		android:contentDescription="event image"
-		android:src="@drawable/placeholder" />
+		android:src="@drawable/placeholder"
+		app:compressAsPerWidth="true" />
     
     <RelativeLayout android:id="@+id/lnrLayoutEvtInfo"
         android:layout_width="match_parent"
