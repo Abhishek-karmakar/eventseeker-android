@@ -15,12 +15,15 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.wcities.eventseeker.app.EventSeekr;
@@ -40,7 +43,9 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 
 	private String cityName = "Loading...";
 	private TextView txtCityName;
-
+	/*private View vActionBar;
+	private int txtCityNameWInLandscape;*/
+	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -54,6 +59,12 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		//Log.d(TAG, "onCreateView");
+		/*ActionBarActivity actionBarActivity = (ActionBarActivity) FragmentUtil.getActivity(this);
+
+		LayoutInflater lytInflater = (LayoutInflater) actionBarActivity.getSystemService(
+				Context.LAYOUT_INFLATER_SERVICE);
+		vActionBar = lytInflater.inflate(R.layout.action_bar_custom_view_item, null);*/
+		
 		createCustomActionBar();
 
 		View v = super.onCreateView(inflater, container, savedInstanceState);
@@ -115,24 +126,50 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 		LayoutInflater lytInflater = (LayoutInflater) actionBarActivity.getSystemService(
 				Context.LAYOUT_INFLATER_SERVICE);
 		View vActionBar = lytInflater.inflate(R.layout.action_bar_custom_view_item, null);
-		
+		txtCityName = (TextView) vActionBar.findViewById(R.id.txtCityName);
+
 		ActionBar.LayoutParams params = new ActionBar.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT, 
 					ActionBar.LayoutParams.MATCH_PARENT);
 		params.gravity = Gravity.CENTER;
 		
-		/*if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+		/*ActionBar.LayoutParams params;
+		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 			params = new ActionBar.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT, 
 					ActionBar.LayoutParams.MATCH_PARENT);
 			params.gravity = Gravity.CENTER;
 			
 		} else {
-			int width = getResources().getDisplayMetrics().widthPixels - 
-					getResources().getDimensionPixelSize(R.dimen.root_navigation_drawer_w_main);
-			params = new ActionBar.LayoutParams(width, ActionBar.LayoutParams.MATCH_PARENT);
-			params.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
+			
+			if (txtCityNameWInLandscape == 0 || txtCityNameWInLandscape == getResources().getDisplayMetrics().widthPixels) {
+				Log.d(TAG, "txtCityNameWInLandscape = " + txtCityNameWInLandscape);
+				txtCityName.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+				    @Override
+				    public void onGlobalLayout() {
+				    	Log.d(TAG, "onGlobalLayout()");
+				    	if (txtCityNameWInLandscape == 0 || txtCityNameWInLandscape == getResources().getDisplayMetrics().widthPixels) {
+					    	Log.d(TAG, "rltLayoutActionBarParent w = " + txtCityName.getWidth());
+				    		txtCityNameWInLandscape = txtCityName.getWidth();
+					    	if (txtCityNameWInLandscape != 0 && txtCityNameWInLandscape != getResources().getDisplayMetrics().widthPixels) {
+					    		Log.d(TAG, "remove()");
+								txtCityName.getViewTreeObserver().addOnGlobalLayoutListener(this);	
+					    	}
+				    		createCustomActionBar();
+				    	}
+				    }
+				});
+				params = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
+				params.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
+				
+			} else {
+				Log.d(TAG, "txtCityNameWInLandscape != 0");
+				int actionItemsWidth = getResources().getDisplayMetrics().widthPixels - txtCityNameWInLandscape;
+				int customViewWidth = getResources().getDisplayMetrics().widthPixels - 
+						getResources().getDimensionPixelSize(R.dimen.root_navigation_drawer_w_main) - 2 * actionItemsWidth;
+				params = new ActionBar.LayoutParams(customViewWidth, ActionBar.LayoutParams.MATCH_PARENT);
+				params.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
+			}
 		}*/
 		
-		txtCityName = (TextView) vActionBar.findViewById(R.id.txtCityName);
 		txtCityName.setText(cityName);
 		actionBar.setCustomView(vActionBar, params);
 		
@@ -253,5 +290,4 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 		Event event = (Event) parent.getItemAtPosition(position);
 		((EventListener)FragmentUtil.getActivity(this)).onEventSelected(event);
 	}
-
 }
