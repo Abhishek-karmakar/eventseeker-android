@@ -151,6 +151,9 @@ public class LastfmFragment extends FragmentLoadableFromBackStack implements OnC
 								toast.setGravity(Gravity.CENTER, 0, -100);
 								toast.show();
 							}
+
+							EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(LastfmFragment.this).getApplicationContext();
+							eventSeekr.setSyncCount(Service.Lastfm, EventSeekr.UNSYNC_COUNT);
 						}
 					});
 					

@@ -115,7 +115,8 @@
     <!-- fragment_discover_by_category_list_item_evt.xml -->
     <!--
     summation of img_event_ht_fragment_discover_by_category_list_item_evt + img_event_margin_t_fragment_discover_by_category_list_item_evt +
-    img_event_margin_b_fragment_discover_by_category_list_item_evt + divider_ht_fragment_discover_by_category_list_item_evt    -->
+    img_event_margin_b_fragment_discover_by_category_list_item_evt + divider_ht_fragment_discover_by_category_list_item_evt
+    -->
     <dimen name="rlt_layout_root_ht_fragment_discover_by_category_list_item_evt">82dp</dimen>
     <dimen name="img_event_w_fragment_discover_by_category_list_item_evt">112dp</dimen>
     <dimen name="img_event_ht_fragment_discover_by_category_list_item_evt">84dp</dimen>
@@ -184,7 +185,8 @@
     <dimen name="txt_count_margin_r_navigation_drawer_list_item">10dp</dimen>
     <dimen name="txt_count_pad_l_navigation_drawer_list_item">5dp</dimen>
     <dimen name="txt_count_pad_r_navigation_drawer_list_item">@dimen/txt_count_pad_l_navigation_drawer_list_item</dimen>
-    <dimen name="txt_count_txt_size_navigation_drawer_list_item">@dimen/txt_title_txt_size_navigation_drawer_list_item</dimen>    -->
+    <dimen name="txt_count_txt_size_navigation_drawer_list_item">@dimen/txt_title_txt_size_navigation_drawer_list_item</dimen>
+    -->
     <dimen name="divider_ht_navigation_drawer_list_item">1dp</dimen>
     <dimen name="divider_margin_l_navigation_drawer_list_item">@dimen/txt_title_margin_l_navigation_drawer_list_item</dimen>
     <dimen name="divider_margin_r_navigation_drawer_list_item">@dimen/img_icon_margin_r_navigation_drawer_list_item</dimen>
@@ -381,8 +383,10 @@
     <!-- widget_info.xml -->
     <dimen name="min_w_widget_info">312dp</dimen>
     <dimen name="min_ht_widget_info">234dp</dimen>
-    <!-- <dimen name="widget_margin_hor">20dp</dimen>
-    <dimen name="widget_margin_vert">4dp</dimen> -->
+    <!--
+    <dimen name="widget_margin_hor">20dp</dimen>
+    <dimen name="widget_margin_vert">4dp</dimen>
+    -->
     <!-- widget_layout.xml -->
     <dimen name="rlt_layout_root_w_widget_layout">312dp</dimen>
     <dimen name="rlt_layout_root_ht_widget_layout">234dp</dimen>
@@ -407,11 +411,14 @@
     <dimen name="corners_radius_left_most_tab_selected">6dp</dimen>
     <!-- fragment_rep_code.xml -->
     <dimen name="edt_rep_code_ht_fragment_rep_code">30dp</dimen>
-	<!-- fragment_sync_account.xml -->
-	<dimen name="v_dummy_ht_fragment_sync_account">20dp</dimen>
-	<dimen name="btn_connect_other_account_pad_l_r_fragment_sync_account">7dp</dimen>
-	<dimen name="txt_sync_account_txt_size_fragment_sync_account">20sp</dimen>
-	<dimen name="btn_connect_accounts_txt_size_fragment_sync_account">18sp</dimen>
-	<dimen name="btn_connect_accounts_ht_fragment_sync_account">30dp</dimen>
-	
+    <!-- fragment_sync_account.xml -->
+    <dimen name="v_dummy_ht_fragment_sync_account">30dp</dimen>
+    <dimen name="btn_connect_other_account_pad_l_r_fragment_sync_account">7dp</dimen>
+    <dimen name="txt_sync_account_txt_size_fragment_sync_account">20sp</dimen>
+    <dimen name="btn_connect_accounts_txt_size_fragment_sync_account">18sp</dimen>
+    <dimen name="btn_connect_accounts_ht_fragment_sync_account">30dp</dimen>
+    <dimen name="img_progress_bar_mar_t_b_fragment_sync_account">10dp</dimen>
+    <dimen name="img_progress_bar_size_fragment_sync_account">80dp</dimen>
+    <dimen name="img_account_size_fragment_sync_account">40dp</dimen>
+
 </resources>

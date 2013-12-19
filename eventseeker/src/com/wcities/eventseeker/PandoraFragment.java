@@ -13,6 +13,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import a.a.ac;
+import android.app.Activity;
+import android.app.Application;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -152,6 +155,14 @@ public class PandoraFragment extends Fragment implements OnClickListener, OnFrag
 	
 	private class NetworkTask extends AsyncTask<String, Void, List<String>> {
 		
+		private EventSeekr eventSeekr;
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			eventSeekr = (EventSeekr) FragmentUtil.getActivity(PandoraFragment.this).getApplicationContext();
+		}
+		
 		@Override
 		protected List<String> doInBackground(String... params) {
 			String link = params[0];
@@ -193,26 +204,29 @@ public class PandoraFragment extends Fragment implements OnClickListener, OnFrag
 				isLoading = false;
 				updateVisibility();
 				
-				Toast toast = Toast.makeText(FragmentUtil.getActivity(PandoraFragment.this),
+				Toast toast = Toast.makeText(eventSeekr,
 						"User name could not be found", Toast.LENGTH_SHORT);
 				if(toast != null) {
 					toast.setGravity(Gravity.CENTER, 0, -100);
 					toast.show();
 				}
+
+				eventSeekr.setSyncCount(Service.Pandora, EventSeekr.UNSYNC_COUNT);
 			} else {
-				apiCallFinished(artistNames);
+				apiCallFinished(artistNames, eventSeekr);
 			}
 		}
 	}
 	
-	private void apiCallFinished(List<String> artistNames) {
+	private void apiCallFinished(List<String> artistNames, EventSeekr app) {
 		//Log.d(TAG, "artists size = " + artistNames.size());
 		if (artistNames != null) {
-			new SyncArtists(artistNames, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
-					Service.Pandora, this).execute();
-			
+			new SyncArtists(artistNames, app, Service.Pandora, this).execute();
 		} else {
-			FragmentUtil.getActivity(this).onBackPressed();
+			Activity activity = FragmentUtil.getActivity(this);
+			if(activity != null) {
+				activity.onBackPressed();
+			}
 		}
 	}
 	

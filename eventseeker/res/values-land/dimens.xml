@@ -114,4 +114,6 @@
     <!-- fragment_venue_info -->
     <dimen name="layout_include_desc_margin_l_fragment_venue_info">@dimen/rlt_layout_img_evt_margin_r_fragment_event_info</dimen>
 
+    <!-- fragment_sync_account.xml -->
+    <dimen name="v_dummy_ht_fragment_sync_account">10dp</dimen>
 </resources>

@@ -46,4 +46,7 @@
     <!-- fragment_venue_info_tab.xml -->
     <dimen name="v_margin_b_fragment_venue_info">30dp</dimen>
 
+    <!-- fragment_sync_account.xml -->
+    <dimen name="v_dummy_ht_fragment_sync_account">40dp</dimen>
+
 </resources>

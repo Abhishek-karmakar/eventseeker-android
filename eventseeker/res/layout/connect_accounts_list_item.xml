@@ -30,34 +30,37 @@
 	        android:textSize="@dimen/rlt_layout_service_details_txt_size_connect_accounts_list_item"
 	        android:layout_centerVertical="true" />
 	    
-	    <ImageView android:id="@+id/imgPlus"
+	    <RelativeLayout
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentRight="true"
-	        android:layout_marginRight="@dimen/img_plus_margin_r_connect_accounts_list_item"
-	        android:contentDescription="plus image"
-	        android:src="@drawable/plus"
-	        android:layout_centerVertical="true" />
-	    
-	    <TextView android:id="@+id/txtCount"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentRight="true"
-	        android:layout_marginRight="@dimen/txt_count_margin_r_connect_accounts_list_item"
-	        android:text="13"
-	        android:textColor="@color/font_blue"
-	        android:textSize="@dimen/rlt_layout_service_details_txt_size_connect_accounts_list_item"
-	        android:layout_centerVertical="true" />
-	    
-	    <ImageView
-	        android:id="@+id/progressBar"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentRight="true"
-	        android:layout_centerVertical="true"
-	        android:layout_marginRight="@dimen/txt_count_margin_r_connect_accounts_list_item"
-	        android:src="@drawable/refresh_smaller" />
-    
+			android:layout_centerVertical="true"
+	        android:layout_marginRight="@dimen/img_plus_margin_r_connect_accounts_list_item" >
+		
+			<ImageView
+                android:id="@+id/imgPlus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:contentDescription="plus image"
+                android:src="@drawable/plus" />
+
+            <TextView
+                android:id="@+id/txtCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="13"
+                android:textColor="@color/font_blue"
+                android:textSize="@dimen/rlt_layout_service_details_txt_size_connect_accounts_list_item" />
+
+            <ImageView
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/refresh_smaller" />
+		</RelativeLayout>
     </RelativeLayout>
     
     <View android:id="@+id/divider"

@@ -344,12 +344,13 @@
     <!-- friends_activity_item_tab -->
     <dimen name="lnr_layout_btns_ht_friends_activity_item">40dp</dimen>
 
-    
-	<!-- fragment_sync_account.xml -->
-	<dimen name="v_dummy_ht_fragment_sync_account">40dp</dimen>
-	<dimen name="btn_connect_other_account_pad_l_r_fragment_sync_account">15dp</dimen>
-	<dimen name="txt_sync_account_txt_size_fragment_sync_account">33sp</dimen>
-	<dimen name="btn_connect_accounts_txt_size_fragment_sync_account">25sp</dimen>
-	<dimen name="btn_connect_accounts_ht_fragment_sync_account">50dp</dimen>
-    
+    <!-- fragment_sync_account.xml -->
+    <dimen name="v_dummy_ht_fragment_sync_account">60dp</dimen>
+    <dimen name="btn_connect_other_account_pad_l_r_fragment_sync_account">15dp</dimen>
+    <dimen name="txt_sync_account_txt_size_fragment_sync_account">33sp</dimen>
+    <dimen name="btn_connect_accounts_txt_size_fragment_sync_account">25sp</dimen>
+    <dimen name="btn_connect_accounts_ht_fragment_sync_account">50dp</dimen>
+    <dimen name="img_progress_bar_size_fragment_sync_account">200dp</dimen>
+    <dimen name="img_account_size_fragment_sync_account">100dp</dimen>
+
 </resources>

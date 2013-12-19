@@ -74,9 +74,20 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setRetainInstance(true);
+		//setRetainInstance(true);
 		serviceAccount = (ServiceAccount) getArguments().getSerializable(BundleKeys.SERVICE_ACCOUNTS);
 		isAlive = true;
+		//Log.d(TAG, "onCreate : SerciveAccount" + serviceAccount);
+
+		/**
+		 * this is because when orientation got change, before that syncing might be in progress, so the value of
+		 * 'serviceAccount.isInProgress' will be true. But now if user doesn't sync again and he goes back then then
+		 * there the status would be syncing(arrow will rotate). 
+		 */
+		serviceAccount.isInProgress = false;
+		//Log.d(TAG, "Setting in progress false");
+		
+		//Log.d(TAG, "rdio : " + rdio);
 		
 		if (rdio == null) {
             SharedPreferences settings = FragmentUtil.getActivity(this).getPreferences(Context.MODE_PRIVATE);
@@ -93,7 +104,7 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
                 Log.d(TAG, "Access token secret: " + accessTokenSecret);
             }
 
-            // Initialise our API object
+            // Initialize our API object
             rdio = new Rdio(AppConstants.RDIO_KEY, AppConstants.RDIO_SECRET, accessToken, accessTokenSecret,
 					FragmentUtil.getActivity(this), this);      
 		}
@@ -136,7 +147,7 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 	
 	@Override
 	public void onDestroy() {
-		Log.d(TAG, "Cleaning up..");
+		//Log.d(TAG, "Cleaning up..");
 		// Make sure to call the cleanup method on the API object
 		isAlive = false;
 		if (rdio != null) {
@@ -146,6 +157,7 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 	}
 	
 	private void updateVisibility() {
+		//Log.d(TAG, "updateVisibility");
 		int visibilityDesc = isLoading ? View.GONE : View.VISIBLE;
 		/*edtUserCredential.setVisibility(visibilityDesc);
 		btnRetrieveArtists.setVisibility(visibilityDesc);*/
@@ -165,6 +177,8 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 	}
 	
 	private void searchUserId(String userId) {
+		//Log.d(TAG, "searchUserId");
+		
 		if (userId == null || userId.length() == 0) {
 			return;
 		}
@@ -183,7 +197,7 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 				try {
 					
 					if (result == null) {
-						isLoading = true;
+						isLoading = false;
 						updateVisibility();
 						throw new Exception("User name could not be found.");
 					}
@@ -210,7 +224,7 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 									apiCallFinished(artistNames);
 								}
 							
-								Log.d(TAG, "result = " + result.toString());
+								//Log.d(TAG, "result = " + result.toString());
 								JSONArray media = result.getJSONArray("result");
 								for (int i = 0; i < media.length(); i++) {
 									try {
@@ -221,12 +235,14 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 										}
 										
 									} catch (Exception e) {
+										//Log.d(TAG, "1");
 										continue;
 									}
 								}
 								apiCallFinished(artistNames);
 										
 							} catch (JSONException e) {
+								//Log.d(TAG, "2");
 								apiCallFinished(artistNames);
 							}
 						}
@@ -235,7 +251,8 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 				} catch (Exception e) {
 					isLoading = false;
 					updateVisibility();
-					
+					//Log.d(TAG, "3");
+
 					Toast toast = Toast.makeText(FragmentUtil.getActivity(RdioFragment.this), "User name could not be found", 
 							Toast.LENGTH_SHORT);
 					if(toast != null) {
@@ -251,6 +268,7 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 
 			@Override
 			public void onApiFailure(String methodName, Exception e) {
+				//Log.d(TAG, "onApiFailure");
 				isLoading = false;
 				updateVisibility();
 				
@@ -270,6 +288,7 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 	}
 	
 	private void apiCallFinished(List<String> artistNames) {
+		//Log.d(TAG, "onApiFailure");
 		//Log.d(TAG, "artists size = " + artistNames.size());
 		if (artistNames != null) {
 			new SyncArtists(artistNames, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
@@ -286,6 +305,7 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 		
 		case R.id.btnRetrieveArtists:
 			serviceAccount.isInProgress = true;
+			//Log.d(TAG, "Setting in progress true");
 			searchUserId(edtUserCredential.getText().toString().trim());
 			break;
 			
