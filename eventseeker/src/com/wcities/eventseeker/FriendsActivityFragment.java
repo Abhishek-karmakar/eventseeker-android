@@ -35,6 +35,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
@@ -331,11 +332,13 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 							= (RelativeLayout) convertView.findViewById(R.id.rltLayoutNewsItemContainer2);
 					holder.txtTitle2 = (TextView) rltLayoutNewsItem2Container.findViewById(R.id.txtTitle);
 					holder.imgEvt2 = (ResizableImageView) rltLayoutNewsItem2Container.findViewById(R.id.imgEvt);
+					holder.lnrLayoutEvtInfo2 = (RelativeLayout) rltLayoutNewsItem2Container.findViewById(R.id.lnrLayoutEvtInfo);
 					holder.lnrLayoutBtns2 = (LinearLayout) rltLayoutNewsItem2Container.findViewById(R.id.lnrLayoutBtns);
 					holder.lnrLayoutBtnLike2 = (LinearLayout) rltLayoutNewsItem2Container.findViewById(R.id.lnrLayoutBtnLike);
 					holder.lnrLayoutBtnComment2 = (LinearLayout) rltLayoutNewsItem2Container.findViewById(R.id.lnrLayoutBtnComment);
 					holder.txtEvtTime2 = (TextView) rltLayoutNewsItem2Container.findViewById(R.id.txtEvtTime);
 					holder.txtVenueTitle2 = (TextView) rltLayoutNewsItem2Container.findViewById(R.id.txtVenueTitle);
+					holder.progressBar2 = (ProgressBar) rltLayoutNewsItem2Container.findViewById(R.id.progressBar);
 					
 					convertView.setTag(holder);
 					
@@ -343,8 +346,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 					holder = (FriendNewsItemViewHolder) convertView.getTag();
 				}
 				
-				final Object listItem = getItem(position);
-				holder.setContent(listItem, parent, position);
+				holder.setContent(item, parent, position);
 			}
 			
 			return convertView;
@@ -355,6 +357,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 
 			if (is7InchTabletInPortrait || (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet)) {
 				return friendNewsItems.get(position);
+				
 			} else {
 				List<FriendNewsItem> friendsNewsItemList = new ArrayList<FriendNewsItem>();
 				friendsNewsItemList.add(friendNewsItems.get(position * 2));
@@ -387,10 +390,11 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 			private TextView txtTitle, txtEvtTime, txtVenueTitle;
 			private LinearLayout lnrLayoutBtns, lnrLayoutBtnLike, lnrLayoutBtnComment;
 			
-			private RelativeLayout rltLayoutNewsItem2Container;
+			private RelativeLayout rltLayoutNewsItem2Container, lnrLayoutEvtInfo2;
 			private ResizableImageView imgEvt2;
 			private TextView txtTitle2, txtEvtTime2, txtVenueTitle2;
 			private LinearLayout lnrLayoutBtns2, lnrLayoutBtnLike2, lnrLayoutBtnComment2;
+			private ProgressBar progressBar2;
 			
 			private void setContent(Object listItem, ViewGroup parent, int pos) {
 				if (listItem instanceof FriendNewsItem) {
@@ -402,16 +406,42 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 					List<FriendNewsItem> friendNewsItemList = (List<FriendNewsItem>) listItem;
 					setNewsItemContent((FriendNewsItem) friendNewsItemList.get(0), parent, pos);
 					
-					if (friendNewsItemList.size() == 2) {
+					// Check if we have 2nd non-null item
+					if (friendNewsItemList.size() == 2 && friendNewsItemList.get(1) != null) {
 						//Log.d(TAG, "not ArtistNewsItem, size = 2");
 						rltLayoutNewsItem2Container.setVisibility(View.VISIBLE);
+						setProgressBar2Visibility(false);
 						setNewsItem2Content((FriendNewsItem) friendNewsItemList.get(1), parent, pos);
+						
+					} else if ((loadFriendsNews == null || loadFriendsNews.getStatus() == Status.FINISHED) && 
+							isMoreDataAvailable) {
+						rltLayoutNewsItem2Container.setVisibility(View.VISIBLE);
+						setProgressBar2Visibility(true);
+						loadFriendsNewsInBackground();
 						
 					} else {
 						//Log.d(TAG, "not ArtistNewsItem, size = 1");
 						rltLayoutNewsItem2Container.setVisibility(View.INVISIBLE);
 					}
 				}
+			}
+			
+			private void setProgressBar2Visibility(boolean isProgress) {
+				int progressVisibility, othersVisibility;
+				if (isProgress) {
+					progressVisibility = View.VISIBLE;
+					othersVisibility = View.INVISIBLE;
+					
+				} else {
+					progressVisibility = View.INVISIBLE;
+					othersVisibility = View.VISIBLE;
+				}
+				
+				progressBar2.setVisibility(progressVisibility);
+				txtTitle2.setVisibility(othersVisibility);
+				imgEvt2.setVisibility(othersVisibility);
+				lnrLayoutEvtInfo2.setVisibility(othersVisibility);
+				lnrLayoutBtns2.setVisibility(othersVisibility);
 			}
 			
 			private void setNewsItemContent(final FriendNewsItem item, ViewGroup parent, int pos) {

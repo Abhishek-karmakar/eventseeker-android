@@ -10,6 +10,7 @@ import us.feras.ecogallery.EcoGalleryAdapterView.OnItemClickListener;
 import us.feras.ecogallery.EcoGalleryAdapterView.OnItemSelectedListener;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -34,13 +35,11 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 
 	public static final String TAG = DiscoverFragmentTab.class.getName();
 
-	private static final int DEFAULT_SELECTED_FEATURED_EVENT_POSITION = 2;
-
 	private EcoGallery ecoGallery;
 	private FeaturedEventsEcoGalleryAdapter featuredEventsEcoGalleryAdapter;
 
-	public String cityName = "Loading...";
-	public TextView txtCityName;
+	private String cityName = "Loading...";
+	private TextView txtCityName;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -117,9 +116,21 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 				Context.LAYOUT_INFLATER_SERVICE);
 		View vActionBar = lytInflater.inflate(R.layout.action_bar_custom_view_item, null);
 		
-		ActionBar.LayoutParams params = new ActionBar.LayoutParams(
-				ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.MATCH_PARENT);
+		ActionBar.LayoutParams params = new ActionBar.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT, 
+					ActionBar.LayoutParams.MATCH_PARENT);
 		params.gravity = Gravity.CENTER;
+		
+		/*if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+			params = new ActionBar.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT, 
+					ActionBar.LayoutParams.MATCH_PARENT);
+			params.gravity = Gravity.CENTER;
+			
+		} else {
+			int width = getResources().getDisplayMetrics().widthPixels - 
+					getResources().getDimensionPixelSize(R.dimen.root_navigation_drawer_w_main);
+			params = new ActionBar.LayoutParams(width, ActionBar.LayoutParams.MATCH_PARENT);
+			params.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
+		}*/
 		
 		txtCityName = (TextView) vActionBar.findViewById(R.id.txtCityName);
 		txtCityName.setText(cityName);
