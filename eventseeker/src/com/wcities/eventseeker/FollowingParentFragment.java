@@ -60,8 +60,6 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 
 	private List<Artist> artistList;
 	
-	// only required when child class of this fragment is having listView
-	private String sections = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	private Map<Character, Integer> alphaNumIndexer;
 	private List<Character> indices;
 
