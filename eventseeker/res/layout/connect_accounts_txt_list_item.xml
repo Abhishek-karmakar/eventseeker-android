@@ -24,7 +24,7 @@
         android:layout_height="@dimen/divider_ht_connect_accounts_list_item"
         android:background="@drawable/side_nav_topic_divider"
         android:layout_below="@id/txtConnectAccounts" 
-        android:paddingLeft="@dimen/rlt_layout_root_pad_l_connect_accounts_list_item"
-    	android:paddingRight="@dimen/rlt_layout_root_pad_r_connect_accounts_list_item" />
+        android:layout_marginLeft="@dimen/rlt_layout_root_pad_l_connect_accounts_list_item"
+    	android:layout_marginRight="@dimen/rlt_layout_root_pad_r_connect_accounts_list_item" />
     
 </RelativeLayout>
