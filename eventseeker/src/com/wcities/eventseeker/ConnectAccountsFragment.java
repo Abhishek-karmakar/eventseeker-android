@@ -11,10 +11,8 @@ import twitter4j.conf.ConfigurationBuilder;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.os.AsyncTask.Status;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +44,7 @@ import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.ViewUtil.AnimationUtil;
+
 public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack implements EventSeekrListener, SyncApiCallback {
 	
     private static final String TAG = ConnectAccountsFragment.class.getName();
@@ -53,15 +52,61 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     private static final String FB_LOGIN = "Facebook Log In";
     private static final String FB_LOGOUT = "Facebook Log Out";
     
+    private boolean isFirstTimeLaunch;
+    
     public static enum Service {
-    	Facebook,
-    	Blank,
-    	DeviceLibrary,
-    	Twitter,
+    	Title(0,"Title",R.drawable.placeholder),
+    	Facebook(1,"Facebook",R.drawable.facebook_colored),
+    	Blank(2,"Blank",R.drawable.placeholder),
+    	DeviceLibrary(3,"Device Library",R.drawable.devicelibrary),
+    	Twitter(4,"Twitter",R.drawable.twitter_colored),
     	//Spotify,
-    	Rdio,
-    	Lastfm,
-    	Pandora;
+    	Rdio(5,"Rdio",R.drawable.rdio),
+    	Lastfm(6,"Last.fm",R.drawable.lastfm),
+    	Pandora(7,"Pandora",R.drawable.pandora),
+    	Button(8,"Button",R.drawable.placeholder);
+    	
+    	int intId;
+    	String str;
+    	int drwResId;
+    	
+    	private Service(int intId, String str, int drwResId) {
+    		this.intId = intId;
+    		this.str = str;
+    		this.drwResId = drwResId;
+		}
+    	
+    	public int getDrwResId() {
+			return drwResId;
+		}
+    	
+    	public String getStr() {
+			return str;
+		}
+    	
+    	public int getIntId() {
+			return intId;
+		}
+    	
+    	public boolean equals(Service s) {
+    		return str.equals(s.getStr());
+		}
+    	
+    	public boolean isOf(String s) {
+    		return str.equals(s);
+    	}
+    	
+    	public static int getValueOf(String s) {
+    		Service[] services = Service.values();
+    		for (int i = 0; i < services.length; i++) {
+    			Service service = services[i];
+    			if(service.isOf(s)) {
+					return service.getIntId();
+				}
+			}
+    		return -1;
+    	}
+    	
     }
     
 	private AccountsListAdapter listAdapter;
@@ -93,7 +138,12 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		super.onCreate(savedInstanceState);
 		//Log.d(TAG, "onCreate()");
 		setRetainInstance(true);
-		((EventSeekr)FragmentUtil.getActivity(this).getApplication()).registerListener(this);
+		
+		EventSeekr eventSeekr = ((EventSeekr)FragmentUtil.getActivity(this).getApplication());
+		eventSeekr.registerListener(this);
+		
+		isFirstTimeLaunch = eventSeekr.getFirstTimeLaunch();
+		eventSeekr.updateFirstTimeLaunch(false);
 	}
 	
 	@Override
@@ -179,28 +229,45 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	
 	private void loadServiceAccountItems() {
 		EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(this).getApplication();
-		String[] connectAccountsItemTitles = getResources().getStringArray(R.array.connect_accounts_item_titles);
-		TypedArray connectAccountsItemIcons = getResources().obtainTypedArray(R.array.connect_accounts_item_icons);
+		//String[] connectAccountsItemTitles = getResources().getStringArray(R.array.connect_accounts_item_titles);
+		//TypedArray connectAccountsItemIcons = getResources().obtainTypedArray(R.array.connect_accounts_item_icons);
+		
+        //for (int i = 0; i < connectAccountsItemTitles.length; i++) {
+        	
+        	//String title = connectAccountsItemTitles[i];
+        	
+		Service[] connectAccountsItemTitles = Service.values();
 		
         for (int i = 0; i < connectAccountsItemTitles.length; i++) {
+        		
+        	Service service = connectAccountsItemTitles[i];
+        		
+        	if((isFirstTimeLaunch && service.equals(Service.Facebook)) 
+        			|| (!isFirstTimeLaunch && service.equals(Service.Title))) {
+        		continue;
+        	}
+        	
 			ServiceAccount serviceAccount = new ServiceAccount();
-			serviceAccount.name = connectAccountsItemTitles[i];
-			serviceAccount.drawable = connectAccountsItemIcons.getDrawable(i);
-			serviceAccount.count = eventSeekr.getSyncCount(Service.values()[i]);
+			serviceAccount.name = service.getStr();
+			serviceAccount.drawable = service.getDrwResId();
+			serviceAccount.count = eventSeekr.getSyncCount(service);
 			serviceAccounts.add(serviceAccount);
 		}
         
         // add null representing Continue button
-        serviceAccounts.add(null);
+        // serviceAccounts.add(null);
         
-        fbLoggedIn = FbUtil.hasUserLoggedInBefore(FragmentUtil.getActivity(this).getApplicationContext());
-		if (fbLoggedIn) {
-			serviceAccounts.get(0).name = FB_LOGOUT;
-        	
-        } else {
-			serviceAccounts.get(0).name = FB_LOGIN;
+        if(!isFirstTimeLaunch) {
+        	fbLoggedIn = FbUtil.hasUserLoggedInBefore(FragmentUtil.getActivity(this).getApplicationContext());
+			if (fbLoggedIn) {
+				serviceAccounts.get(0).name = FB_LOGOUT;
+			
+        	} else {
+        		serviceAccounts.get(0).name = FB_LOGIN;
+        	}
         }
-        connectAccountsItemIcons.recycle();
+        //connectAccountsItemIcons.recycle();
+        
 	}
 	
 	private void showProgress() {
@@ -256,8 +323,11 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		@Override
 		public View getView(final int position, View convertView, ViewGroup parent) {
 			//Log.d(TAG, "getView(), pos = " + position);
-			ServiceAccount serviceAccount = getItem(position);
-			if (serviceAccount == null) {
+			
+			final ServiceAccount serviceAccount = getItem(position);
+			
+			if (serviceAccount.name.equals(Service.Button.getStr())) {
+				
 				// it's for Continue button
 				convertView = mInflater.inflate(R.layout.connect_accounts_continue, null);
 				Button btnContinue = (Button) convertView.findViewById(R.id.btnContinue);
@@ -296,12 +366,24 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 					}
 				});
 				
+			} else if(serviceAccount.name.equals(Service.Title.getStr())) {
+
+				convertView = mInflater.inflate(R.layout.connect_accounts_txt_list_item, null);
+				convertView.setTag("");
+				
+			} else if(serviceAccount.name.equals(Service.Blank.getStr())) {
+				
+				convertView = mInflater.inflate(R.layout.connect_accounts_list_item, null);
+				convertView.findViewById(R.id.rltLayoutServiceDetails).setVisibility(View.INVISIBLE);
+				convertView.setTag("");
+				
 			} else {
+				Log.d(TAG, "setting Title : " + serviceAccount.name);
 				AccountViewHolder holder;
 				if (convertView == null || !(convertView.getTag() instanceof AccountViewHolder)) {
 					convertView = mInflater.inflate(R.layout.connect_accounts_list_item, null);
 					holder = new AccountViewHolder();
-					holder.rltLayoutServiceDetails = (RelativeLayout) convertView.findViewById(R.id.rltLayoutServiceDetails);
+					//holder.rltLayoutServiceDetails = (RelativeLayout) convertView.findViewById(R.id.rltLayoutServiceDetails);
 					holder.imgService = (ImageView) convertView.findViewById(R.id.imgService);
 					holder.txtServiceName = (TextView) convertView.findViewById(R.id.txtServiceName);
 					holder.txtCount = (TextView) convertView.findViewById(R.id.txtCount);
@@ -313,7 +395,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 					holder = (AccountViewHolder) convertView.getTag();
 				}
 				
-				holder.imgService.setImageDrawable(serviceAccount.drawable);
+				holder.imgService.setImageResource(serviceAccount.drawable);
 				holder.txtServiceName.setText(serviceAccount.name);
 				
 				if (serviceAccount.isInProgress) {
@@ -340,19 +422,20 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 					}
 				}
 				
-				if (position == Service.Blank.ordinal()) {
+				/*if (position == Service.Blank.ordinal()) {
 					holder.rltLayoutServiceDetails.setVisibility(View.INVISIBLE);
-					
 				} else {
 					holder.rltLayoutServiceDetails.setVisibility(View.VISIBLE);
-				}
+				}*/
 				
 				convertView.setOnClickListener(new OnClickListener() {
 					
 					@Override
 					public void onClick(View v) {
 						//Log.d(TAG, "onClick()");
-						onItemClick(position);
+						//onItemClick(position);
+						
+						onItemClick(Service.getValueOf(serviceAccount.name));
 					}
 				});
 			}
@@ -382,8 +465,14 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			final Service service = Service.values()[pos];
 			
 			EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(ConnectAccountsFragment.this).getApplication();
+			
+			if(service == Service.Title) {
+				return;
+			}
+			
 			if (service != Service.Facebook && service != Service.Blank 
 					&& eventSeekr.getWcitiesId() == null) {
+				
 				String text = (eventSeekr.getFbUserId() == null) ? 
 						"Please login with facebook before you sync accounts from other services" :
 							"Syncing facebook account...Please Wait...";
@@ -459,7 +548,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	}
 	
 	public static class ServiceAccount implements Serializable {
-		private Drawable drawable;
+		private int drawable;
 		private String name;
 		private int count;
 		public boolean isInProgress;

@@ -40,6 +40,8 @@ public class EventSeekr extends Application {
 	private String fbUserId;
 	private String wcitiesId;
 
+	private boolean firstTimeLaunch;
+
 	private String gcmRegistrationId;
 	private int appVersionCode;
 	private long gcmRegistrationExpirationTime;
@@ -54,6 +56,7 @@ public class EventSeekr extends Application {
 	private int syncCountPandora = NOT_INITIALIZED;
 
 	private List<EventSeekrListener> listeners;
+
 
 	public interface EventSeekrListener {
 		public void onSyncCountUpdated(Service service);
@@ -94,9 +97,9 @@ public class EventSeekr extends Application {
 			AppConstants.GCM_SENDER_ID = "972660105461";
 			
 		} else {
-			AppConstants.TWITTER_CONSUMER_KEY = "NVT497UQPpKrtehHabyog";
-			AppConstants.TWITTER_CONSUMER_SECRET = "kxAMzj2HGgQDtcoecwx35lK4etZhM6eQqQ3R9WgeZtI";
-			
+			AppConstants.TWITTER_CONSUMER_KEY = "Dt4IWLQhJmKVTdrfkvma7w";
+			AppConstants.TWITTER_CONSUMER_SECRET = "MqQWwm7sEqHdTuU47grSTfV5fLct22RY4ilHXCjwA";
+
 			AppConstants.RDIO_KEY = "x83dzkx2xdmxuqtguqdz2nj6";
 			AppConstants.RDIO_SECRET = "rXNJ5ajSut";
 			
@@ -277,6 +280,25 @@ public class EventSeekr extends Application {
 		editor.commit();
 
 		new GcmUtil(this).registerGCMInBackground();
+	}
+	
+	public boolean getFirstTimeLaunch() {
+		SharedPreferences pref = getSharedPreferences(
+				AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+		firstTimeLaunch = pref.getBoolean(SharedPrefKeys.FIRST_TIME_LAUNCHED, true);
+		
+		return firstTimeLaunch;
+	}
+	
+	public void updateFirstTimeLaunch(boolean firstTimeLaunch) {
+		this.firstTimeLaunch = firstTimeLaunch;
+
+		SharedPreferences pref = getSharedPreferences(
+				AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+		Editor editor = pref.edit();
+		editor.putBoolean(SharedPrefKeys.FIRST_TIME_LAUNCHED, firstTimeLaunch);
+		editor.commit();
+		
 	}
 
 	public int getSyncCount(Service service) {

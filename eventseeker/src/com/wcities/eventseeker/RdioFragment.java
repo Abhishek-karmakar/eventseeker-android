@@ -74,6 +74,11 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		/**
+		 * Since there is no way to update activity reference associated with Rdio Api object, we need to create 
+		 * new Rdio Api object each time the orientation changes. And if we do 'setRetainInstance(true)' then it will 
+		 * try to create 2 instances which is not allowed by Rdio Api. So, we won't do 'setRetainInstance(true)'.
+		 */
 		//setRetainInstance(true);
 		serviceAccount = (ServiceAccount) getArguments().getSerializable(BundleKeys.SERVICE_ACCOUNTS);
 		isAlive = true;

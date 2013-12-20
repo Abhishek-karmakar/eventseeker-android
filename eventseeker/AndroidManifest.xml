@@ -40,14 +40,14 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <!-- development keys -->
-        <!-- <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyC4DsIo1BknPFbcHZ5y89UygHgWxgUhFic" /> -->
-            
-        <!-- production keys -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDUaOHXTK9bv4-JhQ3h_1M0iew07JqTb9I" />
+            android:value="AIzaSyC4DsIo1BknPFbcHZ5y89UygHgWxgUhFic" />
+            
+        <!-- production keys -->
+        <!-- <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyDUaOHXTK9bv4-JhQ3h_1M0iew07JqTb9I" /> -->
             
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
