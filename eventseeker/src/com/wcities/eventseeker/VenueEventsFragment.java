@@ -84,6 +84,7 @@ public class VenueEventsFragment extends Fragment implements OnClickListener {
 			break;
 			
 		case R.id.btnDrive:
+			((VenueDetailsFragment)getParentFragment()).onDriveClicked();
 			break;
 			
 		default:

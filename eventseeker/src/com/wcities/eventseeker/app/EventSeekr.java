@@ -94,8 +94,8 @@ public class EventSeekr extends Application {
 			AppConstants.GCM_SENDER_ID = "972660105461";
 			
 		} else {
-			AppConstants.TWITTER_CONSUMER_KEY = "NVT497UQPpKrtehHabyog";
-			AppConstants.TWITTER_CONSUMER_SECRET = "kxAMzj2HGgQDtcoecwx35lK4etZhM6eQqQ3R9WgeZtI";
+			AppConstants.TWITTER_CONSUMER_KEY = "Dt4IWLQhJmKVTdrfkvma7w";
+			AppConstants.TWITTER_CONSUMER_SECRET = "MqQWwm7sEqHdTuU47grSTfV5fLct22RY4ilHXCjwA";
 			
 			AppConstants.RDIO_KEY = "x83dzkx2xdmxuqtguqdz2nj6";
 			AppConstants.RDIO_SECRET = "rXNJ5ajSut";

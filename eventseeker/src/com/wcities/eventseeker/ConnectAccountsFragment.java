@@ -155,11 +155,6 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	}
 	
 	@Override
-	public void onDetach() {
-		super.onDetach();
-	}
-	
-	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		//Log.d(TAG, "onActivityResult()");
@@ -376,7 +371,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			return serviceAccounts.size();
 		}
 		
-		private void onItemClick(int pos) {
+		private void onItemClick(final int pos) {
 			Log.d(TAG, "onItemClick(), pos = " + pos);
 			
 			final Service service = Service.values()[pos];
@@ -430,6 +425,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 									 Bundle args = new Bundle();
 			                         args.putString(BundleKeys.URL, requestToken.getAuthenticationURL());
 			                         args.putSerializable(BundleKeys.TWITTER, twitter);
+			                         args.putSerializable(BundleKeys.SERVICE_ACCOUNTS, getItem(pos));
 			                         ((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this)).onServiceSelected(service, args, true);
 								}
 							});

@@ -49,6 +49,7 @@ public class BundleKeys {
 	
 	public static final String TWITTER = "twitter";
 	public static final String URL = "url";
+	public static final String OAUTH_VERIFIER = "oauthVerifier";
 
 	public static final String SERVICE_ACCOUNTS = "serviceAccounts";
 	public static final String WCITIES_ID = "wcitiesId";

@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.text.Html;
+import android.util.Log;
 
 import com.wcities.eventseeker.core.Address;
 import com.wcities.eventseeker.core.Country;
@@ -93,7 +94,19 @@ public class RecordApiJSONParser {
 		
 		venue.setAddress(getAddress(jsonObject.getJSONObject(KEY_ADDRESS)));
 		if (jsonObject.has(KEY_PHONE)) {
-			venue.setPhone(jsonObject.getString(KEY_PHONE));
+			Object jPhone = jsonObject.get(KEY_PHONE);
+			if (jPhone instanceof JSONArray) {
+				//Log.d(TAG, "array");
+				String phone = ((JSONArray) jPhone).getString(0);
+				phone = phone.replaceAll("[^\\d.]", "");
+				venue.setPhone(phone);
+				
+			} else {
+				//Log.d(TAG, "not array");
+				String phone = (String) jPhone;
+				phone = phone.replaceAll("[^\\d.]", "");
+				venue.setPhone(phone);
+			}
 		}
 		if (jsonObject.has(KEY_URL)) {
 			String url = jsonObject.getString(KEY_URL);

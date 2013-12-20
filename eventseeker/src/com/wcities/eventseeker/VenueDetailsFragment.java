@@ -1,12 +1,15 @@
 package com.wcities.eventseeker;
 
 import java.io.File;
+import java.util.Iterator;
+import java.util.List;
 
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -22,6 +25,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.wcities.eventseeker.EventDetailsFragment.EventDetailsFragmentChildListener;
 import com.wcities.eventseeker.adapter.SwipeTabsAdapter;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
@@ -161,6 +165,16 @@ public class VenueDetailsFragment extends FragmentLoadableFromBackStack implemen
 			
 		default:
 			break;
+		}
+	}
+	
+	protected void onDriveClicked() {
+		List<Fragment> pageFragments = mTabsAdapter.getTabFragments();
+		for (Iterator<Fragment> iterator = pageFragments.iterator(); iterator.hasNext();) {
+			Fragment fragment = iterator.next();
+			if (fragment instanceof VenueInfoFragment) {
+				((VenueInfoFragment)fragment).onDriveClicked();
+			}
 		}
 	}
 }
