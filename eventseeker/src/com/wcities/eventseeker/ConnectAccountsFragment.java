@@ -416,9 +416,18 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 					holder.txtCount.setVisibility(View.INVISIBLE);
 					holder.imgProgressBar.setVisibility(View.INVISIBLE);
 					AnimationUtil.stopRotationToView(holder.imgProgressBar);
-					if (serviceAccount.name.equals(FB_LOGOUT)) {
+					/*if (!fbLoggedIn) {
 						holder.imgPlus.setVisibility(View.INVISIBLE);
 						
+					} else {
+						holder.imgPlus.setVisibility(View.VISIBLE);
+					}*/
+					if (serviceAccount.name.equals(Service.Facebook.getStr())) {
+						if (fbLoggedIn) {
+							holder.imgPlus.setVisibility(View.INVISIBLE);
+						} else {
+							holder.imgPlus.setVisibility(View.VISIBLE);
+						}
 					} else {
 						holder.imgPlus.setVisibility(View.VISIBLE);
 					}
