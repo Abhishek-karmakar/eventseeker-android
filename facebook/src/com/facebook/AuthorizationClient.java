@@ -25,7 +25,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.webkit.CookieSyncManager;
+
 import com.facebook.android.R;
 import com.facebook.internal.ServerProtocol;
 import com.facebook.internal.Utility;
@@ -191,7 +193,6 @@ class AuthorizationClient implements Serializable {
             currentHandler = handlersToTry.remove(0);
 
             boolean started = tryCurrentHandler();
-
             if (started) {
                 return;
             }
@@ -521,6 +522,11 @@ class AuthorizationClient implements Serializable {
     class GetTokenAuthHandler extends AuthHandler {
         private static final long serialVersionUID = 1L;
         private transient GetTokenClient getTokenClient;
+        
+        @Override
+        boolean needsRestart() {
+            return true;
+        }
 
         @Override
         void cancel() {

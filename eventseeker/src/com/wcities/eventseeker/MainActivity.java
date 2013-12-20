@@ -630,7 +630,7 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	/** Swaps fragments in the main content view */
-	protected void selectItem(int position) {
+	private void selectItem(int position) {
 		Log.d(TAG, "selectItem() + pos : " + position);
 		//if (position != INDEX_NAV_ITEM_LATEST_NEWS) {
 			drawerItemSelectedPosition = position;
@@ -786,6 +786,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	private void replaceContentFrameByFragment(Fragment replaceBy,
 			String replaceByFragmentTag, String newTitle, boolean addToBackStack) {
+		//Log.d(TAG, "replaceContentFrameByFragment() - newTitle = " + newTitle);
 		mTitle = newTitle;
 		updateTitle();
 
@@ -898,6 +899,9 @@ public class MainActivity extends ActionBarActivity implements
 			webViewFragment.setArguments(args);
 			selectNonDrawerItem(webViewFragment, fragmentTag, 
 					getResources().getString(R.string.title_web), true);
+			
+		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS)) {
+			selectItem(INDEX_NAV_ITEM_CONNECT_ACCOUNTS);
 		}
 	}
 

@@ -1,6 +1,7 @@
 package com.wcities.eventseeker;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +10,12 @@ import android.widget.TextView;
 
 import com.wcities.eventseeker.ConnectAccountsFragment.ServiceAccount;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.OnFragmentAliveListener;
+import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.ViewUtil.AnimationUtil;
 
@@ -22,8 +25,6 @@ public class FacebookFragment extends FragmentLoadableFromBackStack implements O
 
 	private ImageView imgProgressBar;
 
-	private ServiceAccount serviceAccount;
-
 	private boolean isAlive;
 
 	@Override
@@ -31,8 +32,9 @@ public class FacebookFragment extends FragmentLoadableFromBackStack implements O
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
 		isAlive = true;
+		Bundle args = getArguments();
 		((EventSeekr) (FragmentUtil.getActivity(FacebookFragment.this))
-				.getApplicationContext()).updateFbUserId(getArguments().getString(BundleKeys.WCITIES_ID), this);
+				.getApplicationContext()).updateFbUserId(args.getString(BundleKeys.WCITIES_ID), this);
 	}
 
 	@Override
@@ -73,7 +75,16 @@ public class FacebookFragment extends FragmentLoadableFromBackStack implements O
 	@Override
 	public void onTaskCompleted(Void... params) {
 		if (isAlive()) {
-			FragmentUtil.getActivity(this).onBackPressed();
+			if (((ActionBarActivity)FragmentUtil.getActivity(this)).getSupportFragmentManager()
+					.getBackStackEntryCount() > 0) {
+				// if user has landed on this screen from Connect Accounts screen (ConnectAccountsFragment)
+				FragmentUtil.getActivity(this).onBackPressed();
+				
+			} else {
+				// if user has landed on this screen from FbLoginFragment
+				((ReplaceFragmentListener)FragmentUtil.getActivity(FacebookFragment.this)).replaceByFragment(
+						AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS, null);
+			}
 		}
 	}
 	

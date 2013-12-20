@@ -46,24 +46,6 @@
 	        android:textSize="@dimen/btn_continue_txt_size_fb_login"
 	        android:text="Continue" />
 	    
-	    <LinearLayout android:id="@+id/lnrLayoutProgress"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_centerInParent="true"
-	        android:visibility="gone">
-	    
-		    <ProgressBar android:id="@+id/progressBar"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content" />
-		    
-		    <TextView android:id="@+id/txtSyncing"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:text="Syncing...Please Wait..."
-		        android:layout_gravity="center_vertical" />
-	    
-	    </LinearLayout>
-	    
 	</RelativeLayout>
 	    
 </RelativeLayout>

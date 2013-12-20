@@ -24,7 +24,9 @@ import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
+import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
@@ -37,12 +39,9 @@ public class FbLogInFragment extends Fragment {
 	// Request code for facebook reauthorization requests.
 	//private static final int FACEBOOK_REAUTH_ACTIVITY_CODE = 100;
 
-	private FbLogInFragmentListener mListener;
-	
-	private LinearLayout lnrLayoutProgress;
 	private Button btnContinue;
 	private ImageView imgFbSignUp;
-    private Session.StatusCallback statusCallback = new SessionStatusCallback();
+    private Session.StatusCallback statusCallback;
     
 	// Container Activity must implement this interface
     public interface FbLogInFragmentListener {
@@ -51,11 +50,9 @@ public class FbLogInFragment extends Fragment {
 
     @Override
 	public void onAttach(Activity activity) {
+    	//Log.d(TAG, "onAttach()");
 		super.onAttach(activity);
-		try {
-			mListener = (FbLogInFragmentListener) activity;
-			
-        } catch (ClassCastException e) {
+		if (!(activity instanceof FbLogInFragmentListener)) {
             throw new ClassCastException(activity.toString() + " must implement FbLogInFragmentListener");
         }
 	}
@@ -63,15 +60,15 @@ public class FbLogInFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
-    	//setRetainInstance(true);
-    	Log.d(TAG, "statusCallback : " + statusCallback);
+    	setRetainInstance(true);
     }
     
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		Log.d(TAG, "THIS:" + this);
-		
+		//Log.d(TAG, "onCreateView(), THIS:" + this);
+    	//Log.d(TAG, "statusCallback : " + statusCallback);
+
 		View v = inflater.inflate(R.layout.fragment_fb_login, container, false);
 		
 		btnContinue = (Button) v.findViewById(R.id.btnContinue);
@@ -79,38 +76,49 @@ public class FbLogInFragment extends Fragment {
 			
 			@Override
 			public void onClick(View v) {
-				mListener.replaceFbLoginFragmentBy(AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS);
+				((FbLogInFragmentListener)FragmentUtil.getActivity(FbLogInFragment.this))
+						.replaceFbLoginFragmentBy(AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS);
 			}
 		});
 		
 		imgFbSignUp = (ImageView) v.findViewById(R.id.imgFbSignUp);
-		lnrLayoutProgress = (LinearLayout) v.findViewById(R.id.lnrLayoutProgress);
 		
-		if (!FbUtil.hasUserLoggedInBefore(FragmentUtil.getActivity(this).getApplicationContext())) {
-			Log.d(TAG, "not logged in");
-			Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
+		if (statusCallback == null) {
 			
-			Session session = Session.getActiveSession();
-	        if (session == null) {
-	        	//Log.d(TAG, "session == null");
-	            if (savedInstanceState != null) {
-	                session = Session.restoreSession(FragmentUtil.getActivity(this), null, statusCallback, savedInstanceState);
-	            }
-	            if (session == null) {
-	                session = new Session(FragmentUtil.getActivity(this));
-	            }
-	            Session.setActiveSession(session);
-	            if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
-	            	Log.d(TAG, "CREATED_TOKEN_LOADED");
-	                session.openForRead(new Session.OpenRequest(this).setCallback(statusCallback));
-	            	//session.closeAndClearTokenInformation();
-	            }
-	        }
-	        
-	        updateView();
-	        
+			statusCallback = new SessionStatusCallback();
+			
+			if (!FbUtil.hasUserLoggedInBefore(FragmentUtil.getActivity(this).getApplicationContext())) {
+				Log.d(TAG, "not logged in");
+				Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
+				
+				Session session = Session.getActiveSession();
+		        if (session == null) {
+		        	//Log.d(TAG, "session == null");
+		            if (savedInstanceState != null) {
+		                session = Session.restoreSession(FragmentUtil.getActivity(this), null, statusCallback, savedInstanceState);
+		            }
+		            if (session == null) {
+		                session = new Session(FragmentUtil.getActivity(this));
+		            }
+		            Session.setActiveSession(session);
+		            if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
+		            	Log.d(TAG, "CREATED_TOKEN_LOADED");
+		                session.openForRead(new Session.OpenRequest(this).setCallback(statusCallback));
+		            	//session.closeAndClearTokenInformation();
+		            }
+		        }
+		        
+		        updateView();
+		        
+			} else {
+				((FbLogInFragmentListener)FragmentUtil.getActivity(FbLogInFragment.this))
+						.replaceFbLoginFragmentBy(AppConstants.FRAGMENT_TAG_DISCOVER);
+			}
+			
 		} else {
-			mListener.replaceFbLoginFragmentBy(AppConstants.FRAGMENT_TAG_DISCOVER);
+			if (!FbUtil.hasUserLoggedInBefore(FragmentUtil.getActivity(this).getApplicationContext())) {
+		        updateView();
+			}
 		}
 		
 		return v;
@@ -118,6 +126,7 @@ public class FbLogInFragment extends Fragment {
 	
 	@Override
     public void onStart() {
+		//Log.d(TAG, "onStart()");
         super.onStart();
         // In starting if user's credentials are available, then this active session will be null.
         if (Session.getActiveSession() != null) {
@@ -148,12 +157,6 @@ public class FbLogInFragment extends Fragment {
         Session.saveSession(session, outState);
     }
     
-    /*private void showProgress() {
-    	imgFbSignUp.setVisibility(View.GONE);
-    	btnContinue.setVisibility(View.GONE);
-    	lnrLayoutProgress.setVisibility(View.VISIBLE);
-    }*/
-    
 	private void updateView() {
 		Log.d(TAG, "updateView()");
         final Session session = Session.getActiveSession();
@@ -167,8 +170,6 @@ public class FbLogInFragment extends Fragment {
 				requestPublishPermissions(session, PERMISSIONS, 0);
 				
         	} else {*/
-        	final EventSeekr eventSeekr = ((EventSeekr) (FragmentUtil.getActivity(FbLogInFragment.this))
-        			.getApplicationContext());
 	        	FbUtil.makeMeRequest(session, new Request.GraphUserCallback() {
 	
 	    			@Override
@@ -177,41 +178,20 @@ public class FbLogInFragment extends Fragment {
 	    	            
 	    				if (session == Session.getActiveSession()) {
 	    	                if (user != null) {
-	    	                	Log.d(TAG, "User : " + user);
-	    	                	Log.d(TAG, "(EventSeekr) (FragmentUtil.getActivity(FbLogInFragment.this))" +
-	    	                			".getApplicationContext()): " 
-	    	                			+ (FragmentUtil.getActivity(FbLogInFragment.this)));
-	    	                			
-	    	                	eventSeekr.updateFbUserId(user.getId(), 
-	    	                					new AsyncTaskListener<Void>() {
-	
-											@Override
-											public void onTaskCompleted(Void... params) {
-												mListener.replaceFbLoginFragmentBy(AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS);
-											}
-	    	                			});
-	    	                	
 	    	                	Bundle bundle = new Bundle();
 	    	                	bundle.putString(BundleKeys.WCITIES_ID, user.getId());
-	    	                	((ConnectAccountsFragmentListener)/*FragmentUtil.getActivity(FbLogInFragment.this)*/mListener)
-	    	                	.onServiceSelected(Service.Facebook, bundle, true);
+	    	                	ConnectAccountsFragmentListener listener = (ConnectAccountsFragmentListener)FragmentUtil.getActivity(
+										FbLogInFragment.this);
+	    	                	/**
+	    	                	 * While changing orientation quickly sometimes listener returned is null, 
+	    	                	 * hence the following check.
+	    	                	 */
+	    	                	if (listener != null) {
+		    	                	((ConnectAccountsFragmentListener)listener).onServiceSelected(Service.Facebook, bundle, false);
+	    	                	}
 	    	                }
 	    	            }
 	    				
-	    				/*if (session == Session.getActiveSession()) {
-	    	                if (user != null) {
-	    	                	showProgress();
-	    	                	
-	    	                	((EventSeekr) (FragmentUtil.getActivity(FbLogInFragment.this))
-	    	                			.getApplicationContext()).updateFbUserId(user.getId(), new AsyncTaskListener<Void>() {
-	
-											@Override
-											public void onTaskCompleted(Void... params) {
-												mListener.replaceFbLoginFragmentBy(AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS);
-											}
-	    	                			});
-	    	                }
-	    	            }*/
 	    	            if (response.getError() != null) {
 	    	                // Handle errors, will do so later.
 	    	            }
