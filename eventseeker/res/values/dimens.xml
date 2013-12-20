@@ -213,7 +213,9 @@
     <dimen name="txt_fb_login_desc_margin_t_fb_login">20dp</dimen>
     <dimen name="txt_fb_login_desc_pad_l_fb_login">30dp</dimen>
     <dimen name="txt_fb_login_desc_pad_r_fb_login">@dimen/txt_fb_login_desc_pad_l_fb_login</dimen>
+    <dimen name="v_dummy_ht_fb_login">0dp</dimen>
     <dimen name="txt_fb_login_desc_txt_size_fb_login">16sp</dimen>
+    <dimen name="txt_fb_login_get_started_txt_size_fb_login">18sp</dimen>
     <dimen name="btn_continue_margin_b_fb_login">30dp</dimen>
     <dimen name="btn_continue_w_fb_login">150dp</dimen>
     <dimen name="btn_continue_ht_fb_login">@dimen/btn_fb_sign_up_ht_fb_login</dimen>
@@ -327,7 +329,7 @@
     <!-- fragment_connect_accounts_list.xml -->
     <dimen name="rlt_layout_root_pad_fragment_connect_accounts_list">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="list_margin_t_b_fragment_connect_account">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="txt_connect_accounts_txt_size_fragment_connect_account">12sp</dimen>
+    <dimen name="txt_connect_accounts_txt_size_fragment_connect_account">17sp</dimen>
     <dimen name="txt_connect_accounts_margin_t_b_fragment_connect_account">30dp</dimen>
     <dimen name="txt_connect_accounts_margin_l_r_fragment_connect_account">40dp</dimen>
     <!-- fragment_about_us.xml -->

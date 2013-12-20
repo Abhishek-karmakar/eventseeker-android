@@ -7,7 +7,7 @@
 
     <!-- fragment_fb_login.xml -->
     <dimen name="txt_fb_login_desc_margin_t_fb_login">10dp</dimen>
-    <dimen name="btn_fb_sign_up_margin_t_fb_login">30dp</dimen>
+    <dimen name="btn_fb_sign_up_margin_t_fb_login">10dp</dimen>
     <dimen name="btn_continue_margin_b_fb_login">20dp</dimen>
 
     <!-- fragment_discover.xml -->

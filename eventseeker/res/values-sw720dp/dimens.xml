@@ -29,7 +29,8 @@
     <dimen name="txt_fb_login_desc_margin_t_fb_login">20dp</dimen>
     <dimen name="txt_fb_login_desc_pad_l_fb_login">30dp</dimen>
     <dimen name="txt_fb_login_desc_pad_r_fb_login">@dimen/txt_fb_login_desc_pad_l_fb_login</dimen>
-    <dimen name="txt_fb_login_desc_txt_size_fb_login">20sp</dimen>
+    <dimen name="txt_fb_login_desc_txt_size_fb_login">24sp</dimen>
+    <dimen name="txt_fb_login_get_started_txt_size_fb_login">26sp</dimen>
     <dimen name="btn_continue_margin_b_fb_login">30dp</dimen>
     <dimen name="btn_continue_w_fb_login">130dp</dimen>
     <dimen name="btn_continue_ht_fb_login">@dimen/btn_fb_sign_up_ht_fb_login</dimen>
@@ -325,7 +326,7 @@
     <dimen name="img_service_margin_l_r_connect_accounts_list_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="rlt_layout_root_ht_connect_accounts_list_item">@dimen/rlt_layout_service_details_ht_connect_accounts_list_item</dimen>
     <dimen name="txt_service_name_margin_l_connect_accounts_list_item">15dp</dimen>
-    <dimen name="rlt_layout_service_details_txt_size_connect_accounts_list_item">20sp</dimen>
+    <dimen name="rlt_layout_service_details_txt_size_connect_accounts_list_item">21sp</dimen>
     <dimen name="img_plus_margin_r_connect_accounts_list_item">10dp</dimen>
     <dimen name="txt_count_margin_r_connect_accounts_list_item">20dp</dimen>
     <dimen name="divider_ht_connect_accounts_list_item">1dp</dimen>
@@ -354,7 +355,10 @@
     <dimen name="img_account_size_fragment_sync_account">100dp</dimen>
 
 	<!-- fragment_connect_accounts_list.xml -->
-    <dimen name="txt_connect_accounts_txt_size_fragment_connect_account">23sp</dimen>
-    <dimen name="txt_connect_accounts_margin_fragment_connect_account">40dp</dimen>
+    <dimen name="rlt_layout_root_pad_fragment_connect_accounts_list">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="list_margin_t_b_fragment_connect_account">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="txt_connect_accounts_txt_size_fragment_connect_account">21sp</dimen>
+    <dimen name="txt_connect_accounts_margin_t_b_fragment_connect_account">40dp</dimen>
+    <dimen name="txt_connect_accounts_margin_l_r_fragment_connect_account">50dp</dimen>
     
 </resources>
