@@ -4,48 +4,73 @@
     android:layout_height="match_parent"
     android:background="@color/dark_gray"
     android:padding="@dimen/rlt_layout_root_pad_fragment_connect_accounts_list" >
-    
-    <RelativeLayout android:id="@+id/rltLayoutContent"
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/story_space" >
-    
-	    <TextView android:id="@+id/txtFbLoginDesc"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginTop="@dimen/txt_fb_login_desc_margin_t_fb_login"
-	        android:layout_marginBottom="@dimen/txt_fb_login_desc_margin_t_fb_login"
-	        android:gravity="center_horizontal"
-	        android:paddingLeft="@dimen/txt_fb_login_desc_pad_l_fb_login"
-	        android:paddingRight="@dimen/txt_fb_login_desc_pad_r_fb_login"
-	        android:textSize="@dimen/txt_fb_login_desc_txt_size_fb_login"
-	        android:text="Login with facebook to stay updated with friends activity and invite them to events" />
-	    
-	    <View android:id="@+id/vDivider"
-	        android:layout_width="match_parent"
-	        android:layout_height="@dimen/v_divider_ht_fb_login"
-	        android:layout_below="@id/txtFbLoginDesc"
-	        android:background="@drawable/fb_login_divider" />
-	    
-	    <ImageView android:id="@+id/imgFbSignUp"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_below="@id/vDivider"
-	        android:layout_marginTop="@dimen/btn_fb_sign_up_margin_t_fb_login"
-	        android:layout_centerHorizontal="true"
-	        android:src="@drawable/fb_login" />
-	        
-	    <Button android:id="@+id/btnContinue"
-	        android:layout_width="@dimen/btn_continue_w_fb_login"
-	        android:layout_height="@dimen/btn_continue_ht_fb_login"
-	        android:layout_alignParentBottom="true"
-	        android:layout_marginBottom="@dimen/btn_continue_margin_b_fb_login"
-	        android:layout_centerHorizontal="true"
-	        android:background="@color/btn_fb_sign_up_bg"
-	        android:textColor="@android:color/white"
-	        android:textSize="@dimen/btn_continue_txt_size_fb_login"
-	        android:text="Continue" />
-	    
-	</RelativeLayout>
-	    
+
+        <View
+            android:id="@+id/vDummy"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/v_dummy_ht_fb_login"
+            android:layout_centerInParent="true" />
+
+        <RelativeLayout
+            android:id="@+id/rltLayoutContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/vDummy"
+            android:layout_alignParentTop="true" >
+
+            <TextView
+                android:id="@+id/txtGetStarted"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/txtFbLoginDesc"
+                android:layout_marginTop="@dimen/txt_fb_login_desc_margin_t_fb_login"
+                android:gravity="center_horizontal"
+                android:paddingLeft="@dimen/txt_fb_login_desc_pad_l_fb_login"
+                android:paddingRight="@dimen/txt_fb_login_desc_pad_r_fb_login"
+                android:text="Get Started!"
+                android:textStyle="bold"
+                android:textSize="@dimen/txt_fb_login_get_started_txt_size_fb_login" />
+
+            <TextView
+                android:id="@+id/txtFbLoginDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="@dimen/txt_fb_login_desc_margin_t_fb_login"
+                android:layout_marginTop="@dimen/txt_fb_login_desc_margin_t_fb_login"
+                android:gravity="center_horizontal"
+                android:paddingLeft="@dimen/txt_fb_login_desc_pad_l_fb_login"
+                android:paddingRight="@dimen/txt_fb_login_desc_pad_r_fb_login"
+                android:text="Login with facebook to personalize your accounts"
+                android:textSize="@dimen/txt_fb_login_desc_txt_size_fb_login" />
+
+            <ImageView
+                android:id="@+id/imgFbSignUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/btn_fb_sign_up_margin_t_fb_login"
+                android:src="@drawable/fb_login" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/btnContinue"
+            android:layout_width="@dimen/btn_continue_w_fb_login"
+            android:layout_height="@dimen/btn_continue_ht_fb_login"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/btn_continue_margin_b_fb_login"
+            android:background="@color/btn_fb_sign_up_bg"
+            android:text="Continue"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/btn_continue_txt_size_fb_login" />
+    </RelativeLayout>
+
 </RelativeLayout>

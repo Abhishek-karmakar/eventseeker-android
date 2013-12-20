@@ -63,15 +63,20 @@
     <string name="txt_friends_section_title_txt_activity_artist_details">Friends liking this artist</string>
     <string name="btn_more_txt_more_activity_artist_details">More</string>
     <string name="btn_more_txt_less_activity_artist_details">Less</string>
-    
+        
     <!-- ConnectAccountsFragment -->
+    <!-- Any value chandges in ConnectAccountsFragment's below strings should also needs to be updated in 
+    ConnectAccountsFragment's Service enum -->    
+    <string name="connect_accounts_item_title">Title</string>
     <string name="connect_accounts_item_facebook">Facebook</string>
+    <string name="connect_accounts_item_blank">Blank</string>
     <string name="connect_accounts_item_device_library">Device Library</string>
     <string name="connect_accounts_item_twitter">Twitter</string>
     <string name="connect_accounts_item_spotify">Spotify</string>
     <string name="connect_accounts_item_rdio">Rdio</string>
-    <string name="connect_accounts_item_last.fm">Last.fm</string>
+    <string name="connect_accounts_item_lastfm">Last.fm</string>
     <string name="connect_accounts_item_pandora">Pandora</string>
+    <string name="connect_accounts_item_button">Button</string>
     
     <!-- include_friends.xml -->
     <string name="txt_view_all">View All</string>

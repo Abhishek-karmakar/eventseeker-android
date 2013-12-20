@@ -37,25 +37,29 @@
     </array>
     
     <string-array name="connect_accounts_item_titles">
+        <item>@string/connect_accounts_item_title</item>
         <item>@string/connect_accounts_item_facebook</item>
-	  	<item>@string/connect_accounts_item_facebook</item>
+	  	<item>@string/connect_accounts_item_blank</item>
 	  	<item>@string/connect_accounts_item_device_library</item>
 	  	<item>@string/connect_accounts_item_twitter</item>
 	  	<!-- <item>@string/connect_accounts_item_spotify</item> -->
 	  	<item>@string/connect_accounts_item_rdio</item>
-	  	<item>@string/connect_accounts_item_last.fm</item>
+	  	<item>@string/connect_accounts_item_lastfm</item>
 	  	<item>@string/connect_accounts_item_pandora</item>
+	  	<item>@string/connect_accounts_item_button</item>
 	</string-array>
 	
     <array name="connect_accounts_item_icons">
+	  	<item>@drawable/placeholder</item>
 	  	<item>@drawable/facebook_colored</item>
-	  	<item>@drawable/facebook_colored</item>
+	  	<item>@drawable/placeholder</item>
 	  	<item>@drawable/devicelibrary</item>
 	  	<item>@drawable/twitter_colored</item>
 	  	<!-- <item>@drawable/spotify</item> -->
         <item>@drawable/rdio</item>
 	  	<item>@drawable/lastfm</item>
 	  	<item>@drawable/pandora</item>
+	  	<item>@drawable/placeholder</item>
     </array>
     
 </resources>

@@ -75,7 +75,10 @@ public class DrawerListFragment extends ListFragment {
 		setListAdapter(drawerListAdapter);
         getListView().setDivider(null);
         //getListView().setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
-        getListView().setBackgroundResource(R.drawable.side_nav_bg);
+        //getListView().setBackgroundResource(R.drawable.side_nav_bg);
+        getListView().setBackgroundResource(R.drawable.bg_drawer_list);
+        getListView().setVerticalScrollBarEnabled(false);
+        getListView().setHorizontalScrollBarEnabled(false);
         
         // Set the list's click listener
         getListView().setOnItemClickListener(new OnItemClickListener() {

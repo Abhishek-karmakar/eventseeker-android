@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rltRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <TextView
+        android:id="@+id/txtConnectAccounts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:paddingBottom="@dimen/txt_connect_accounts_margin_t_b_fragment_connect_account"
+        android:paddingLeft="@dimen/txt_connect_accounts_margin_l_r_fragment_connect_account"
+        android:paddingRight="@dimen/txt_connect_accounts_margin_l_r_fragment_connect_account"
+        android:paddingTop="@dimen/txt_connect_accounts_margin_t_b_fragment_connect_account"
+        android:gravity="center"
+        android:text="Connect your accounts with eventseeker to follow your favorite artists and get updates on events"
+        android:textColor="@color/txt_service_name_txt_color"
+        android:textSize="@dimen/txt_connect_accounts_txt_size_fragment_connect_account"
+        android:visibility="visible" />
+
+    <View android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_ht_connect_accounts_list_item"
+        android:background="@drawable/side_nav_topic_divider"
+        android:layout_below="@id/txtConnectAccounts" 
+        android:layout_marginLeft="@dimen/rlt_layout_root_pad_l_connect_accounts_list_item"
+    	android:layout_marginRight="@dimen/rlt_layout_root_pad_r_connect_accounts_list_item" />
+    
+</RelativeLayout>
