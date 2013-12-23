@@ -43,7 +43,6 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 
 	private String cityName = "Loading...";
 	private TextView txtCityName;
-	private View vActionBar;
 	private int txtCityNameWInLandscape;
 	
 	@Override

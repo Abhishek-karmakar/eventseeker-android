@@ -47,7 +47,7 @@
                 android:gravity="center_horizontal"
                 android:paddingLeft="@dimen/txt_fb_login_desc_pad_l_fb_login"
                 android:paddingRight="@dimen/txt_fb_login_desc_pad_r_fb_login"
-                android:text="Login with facebook to personalize your accounts"
+                android:text="Login with Facebook to personalize your accounts"
                 android:textSize="@dimen/txt_fb_login_desc_txt_size_fb_login" />
 
             <ImageView

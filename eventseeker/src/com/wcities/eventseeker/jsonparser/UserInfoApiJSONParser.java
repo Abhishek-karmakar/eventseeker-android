@@ -41,7 +41,8 @@ public class UserInfoApiJSONParser {
 	private static final String KEY_LINK_IMAGE = "link_image";
 	private static final String KEY_PHOTO = "photo";
 	private static final String KEY_VIDEO = "video";
-	
+	private static final String KEY_LINK = "link";
+
 	private static final String KEY_FRIENDSFEED = "friendsfeed";
 	private static final String KEY_TRACK_INFO = "trackInfo";
 	private static final String KEY_FRIEND_ID = "friendId";
@@ -86,7 +87,7 @@ public class UserInfoApiJSONParser {
 
 	private static final String KEY_RECOMMENDED_EVENT = "recommendedEvent";
 	private static final String KEY_EVENT_INFO = "eventInfo";
-	
+
 	public String getUserId(JSONObject jsonObject) throws JSONException {
 		JSONObject jObjSignup = jsonObject.getJSONObject(KEY_SIGN_UP);
 		String userId = jObjSignup.getString(KEY_USER_ID);
@@ -264,9 +265,9 @@ public class UserInfoApiJSONParser {
 		ArtistNewsItem artistNewsItem = new ArtistNewsItem();
 		artistNewsItem.setArtistName(jsonObject.getString(KEY_NAME));
 		String postType = jsonObject.getString(KEY_POST_TYPE);
-		if (postType.equals("swf")) {
+		/*if (postType.equals("swf")) {
 			return null;
-		} 
+		}*/ 
 		artistNewsItem.setPostType(PostType.valueOf(postType));
 		
 		if (jsonObject.has(KEY_POST_TITLE)) {
@@ -308,6 +309,10 @@ public class UserInfoApiJSONParser {
 			//String[] videoUrlParts = videoUrl.split("[/?]");
 			//Log.i(TAG, "video url parts=" + videoUrlParts.length);
 			//String imgUrl = "http://img.youtube.com/vi/" + videoUrlParts[4] + "/0.jpg";
+			artistNewsItem.setImgUrl(ConversionUtil.getYoutubeScreenShot(videoUrl, Video.YOUTUBE_VIDEO_SIZE_HQDEFAULT));
+			
+		} else if (jsonObject.has(KEY_LINK)) {
+			String videoUrl = jsonObject.getString(KEY_LINK);
 			artistNewsItem.setImgUrl(ConversionUtil.getYoutubeScreenShot(videoUrl, Video.YOUTUBE_VIDEO_SIZE_HQDEFAULT));
 		}
 		return artistNewsItem;

@@ -82,6 +82,8 @@ public class EventApiJSONParser {
 	private static final String KEY_LINKS = "links";
 	private static final String KEY_TRACKBACK_URL = "trackback_url";
 
+	private static final String KEY_SUGGESTED_INVITES = "suggested_invites";
+
 	public void fillEventDetails(Event event, JSONObject jsonObject) {
 		try {
 			JSONObject jObjCityevent = jsonObject.getJSONObject(KEY_CITYEVENT);
@@ -128,8 +130,12 @@ public class EventApiJSONParser {
 			JSONObject jObjAddress = jObjCityevent.getJSONObject(KEY_VENUES).getJSONObject(KEY_VENUE).getJSONObject(KEY_ADDRESS);
 			event.getSchedule().getVenue().setAddress(getAddress(jObjAddress));
 			
-			if (jObjEvent.has(KEY_FRIENDS)) {
-				event.setFriends(getFriends(jObjEvent.getJSONObject(KEY_FRIENDS)));
+			if (jObjEvent.has(KEY_FRIENDS) || jObjEvent.has(KEY_SUGGESTED_INVITES)) {
+				JSONObject jObjFriends = jObjEvent.has(KEY_FRIENDS) ? jObjEvent.getJSONObject(KEY_FRIENDS) 
+						: null;
+				Object jSuggestedInvites = jObjEvent.has(KEY_SUGGESTED_INVITES) ? 
+						jObjEvent.get(KEY_SUGGESTED_INVITES) : null;
+				event.setFriends(getFriends(jObjFriends, jSuggestedInvites));
 				
 			} else {
 				/**
@@ -151,42 +157,62 @@ public class EventApiJSONParser {
 		}
 	}
 	
-	private List<Friend> getFriends(JSONObject jsonObject) throws JSONException {
+	private List<Friend> getFriends(JSONObject jObjFriends, Object jSuggestedInvites) throws JSONException {
 		List<Friend> friends = new ArrayList<Friend>();
 		
-		if (jsonObject.has(KEY_GOINGTO)) {
-			Object jGoingto = jsonObject.get(KEY_GOINGTO);
-			
-			if (jGoingto instanceof JSONArray) {
-				JSONArray jArrGoingto = (JSONArray) jGoingto;
-				for (int i = 0; i < jArrGoingto.length(); i++) {
-					JSONObject jObjFriend = jArrGoingto.getJSONObject(i);
-					Friend friend = getFriend(jObjFriend);
+		if (jObjFriends != null) {
+			if (jObjFriends.has(KEY_GOINGTO)) {
+				Object jGoingto = jObjFriends.get(KEY_GOINGTO);
+				
+				if (jGoingto instanceof JSONArray) {
+					JSONArray jArrGoingto = (JSONArray) jGoingto;
+					for (int i = 0; i < jArrGoingto.length(); i++) {
+						JSONObject jObjFriend = jArrGoingto.getJSONObject(i);
+						Friend friend = getFriend(jObjFriend);
+						friend.setAttending(Attending.GOING);
+						friends.add(friend);
+					}
+					
+				} else {
+					Friend friend = getFriend((JSONObject) jGoingto);
 					friend.setAttending(Attending.GOING);
 					friends.add(friend);
 				}
+			}
+			
+			if (jObjFriends.has(KEY_WANTTO)) {
+				Object jWantto = jObjFriends.get(KEY_WANTTO);
 				
-			} else {
-				Friend friend = getFriend((JSONObject) jGoingto);
-				friend.setAttending(Attending.GOING);
-				friends.add(friend);
+				if (jWantto instanceof JSONArray) {
+					JSONArray jArrWantto = (JSONArray) jWantto;
+					for (int i = 0; i < jArrWantto.length(); i++) {
+						JSONObject jObjFriend = jArrWantto.getJSONObject(i);
+						Friend friend = getFriend(jObjFriend);
+						friend.setAttending(Attending.WANTS_TO_GO);
+						friends.add(friend);
+					}
+					
+				} else {
+					Friend friend = getFriend((JSONObject) jWantto);
+					friend.setAttending(Attending.WANTS_TO_GO);
+					friends.add(friend);
+				}
 			}
 		}
 		
-		if (jsonObject.has(KEY_WANTTO)) {
-			Object jWantto = jsonObject.get(KEY_WANTTO);
+		if (jSuggestedInvites != null) {
 			
-			if (jWantto instanceof JSONArray) {
-				JSONArray jArrWantto = (JSONArray) jWantto;
-				for (int i = 0; i < jArrWantto.length(); i++) {
-					JSONObject jObjFriend = jArrWantto.getJSONObject(i);
+			if (jSuggestedInvites instanceof JSONArray) {
+				JSONArray jArrSuggestedInvites = (JSONArray) jSuggestedInvites;
+				for (int i = 0; i < jArrSuggestedInvites.length(); i++) {
+					JSONObject jObjFriend = jArrSuggestedInvites.getJSONObject(i);
 					Friend friend = getFriend(jObjFriend);
 					friend.setAttending(Attending.WANTS_TO_GO);
 					friends.add(friend);
 				}
 				
 			} else {
-				Friend friend = getFriend((JSONObject) jWantto);
+				Friend friend = getFriend((JSONObject) jSuggestedInvites);
 				friend.setAttending(Attending.WANTS_TO_GO);
 				friends.add(friend);
 			}

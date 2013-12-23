@@ -465,11 +465,11 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			return serviceAccounts.size();
 		}
 		
-		private void onItemClick(ServiceAccount serviceAccount) {
+		private void onItemClick(final ServiceAccount serviceAccount) {
 			
-			Log.d(TAG, "Service name = " + serviceAccount.name);
+			//Log.d(TAG, "Service name = " + serviceAccount.name);
 			int serviceId = Service.getValueOf(serviceAccount.name);
-			Log.d(TAG, "onItemClick(), serviceId = " + serviceId);
+			//Log.d(TAG, "onItemClick(), serviceId = " + serviceId);
 			
 			final Service service = Service.values()[serviceId];
 			
@@ -528,6 +528,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 									 Bundle args = new Bundle();
 			                         args.putString(BundleKeys.URL, requestToken.getAuthenticationURL());
 			                         args.putSerializable(BundleKeys.TWITTER, twitter);
+			                         args.putSerializable(BundleKeys.SERVICE_ACCOUNTS, serviceAccount);
 			                         ((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this)).onServiceSelected(service, args, true);
 								}
 							});

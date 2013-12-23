@@ -312,6 +312,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 				break;
 				
 			case video:
+			case swf:
 				imgPhoto.setVisibility(View.VISIBLE);
 				imgVideo.setVisibility(View.VISIBLE);
 				txtLinkTitle.setVisibility(View.GONE);
@@ -383,6 +384,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 				break;
 				
 			case video:
+			case swf:
 				imgPhoto2.setVisibility(View.VISIBLE);
 				imgVideo2.setVisibility(View.VISIBLE);
 				txtLinkTitle2.setVisibility(View.GONE);
