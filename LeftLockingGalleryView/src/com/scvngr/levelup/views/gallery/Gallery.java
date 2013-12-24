@@ -21,9 +21,11 @@ package com.scvngr.levelup.views.gallery;
  */
 
 import android.R;
+import android.R.bool;
 import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -342,24 +344,26 @@ public final class Gallery extends AbsSpinner implements GestureDetector.OnGestu
      * @param deltaX Change in X from the previous event.
      */
     void trackMotionScroll(final int deltaX) {
-
+    	//Log.d(VIEW_LOG_TAG, "deltaX = " + deltaX + ", mSelectedPosition = " + mSelectedPosition);
         if (getChildCount() == 0) {
             return;
         }
-
         final boolean toLeft = deltaX < 0;
 
         final int limitedDeltaX = getLimitedMotionScrollAmount(toLeft, deltaX);
+        //Log.d(VIEW_LOG_TAG, "deltaX = " + deltaX + ", limitedDeltaX = " + limitedDeltaX);
+
         if (limitedDeltaX != deltaX) {
+        	//Log.d(VIEW_LOG_TAG, "stop scrolling");
             // The above call returned a limited amount, so stop any scrolls/flings
             mFlingRunnable.endFling(false);
             onFinishedMovement();
         }
-
+        
         offsetChildrenLeftAndRight(limitedDeltaX);
 
         detachOffScreenChildren(toLeft);
-
+        //Log.d(VIEW_LOG_TAG, "toLeft = " + toLeft);
         if (toLeft) {
             // If moved left, there will be empty space on the right
             fillToGalleryRight();
@@ -392,23 +396,28 @@ public final class Gallery extends AbsSpinner implements GestureDetector.OnGestu
         final int extremeItemPosition = motionToLeft != mIsRtl ? mItemCount - 1 : 0;
         // CHECKSTYLE:ON
         final View extremeChild = getChildAt(extremeItemPosition - mFirstPosition);
-
+        //Log.d(VIEW_LOG_TAG, "extremeChild pos = " + (extremeItemPosition - mFirstPosition));
         if (extremeChild == null) {
+        	//Log.d(VIEW_LOG_TAG, "extremeChild = null");
             return deltaX;
         }
 
         final int extremeChildCenter = getLeftOfView(extremeChild);
         final int galleryLockPoint = getGalleryLockPoint();
+        //Log.d(VIEW_LOG_TAG, "extremeChildCenter = " + extremeChildCenter + ", galleryLockPoint = " + galleryLockPoint);
+        //Log.d(VIEW_LOG_TAG, "gallery width = " + getWidth() + ", parent width = " + ((View)getParent()).getWidth());
 
         if (motionToLeft) {
-            if (extremeChildCenter <= galleryLockPoint) {
-
+        	int extremeChildEnd = extremeChild.getRight();
+        	//Log.d(VIEW_LOG_TAG, "extremeChildEnd = " + extremeChildEnd);
+        	if (extremeChildEnd <= galleryLockPoint + getWidth()) {
+                //Log.d(VIEW_LOG_TAG, "motion to left");
                 // The extreme child is past his boundary point!
                 return 0;
             }
         } else {
             if (extremeChildCenter >= galleryLockPoint) {
-
+            	//Log.d(VIEW_LOG_TAG, "motion to right");
                 // The extreme child is past his boundary point!
                 return 0;
             }
@@ -523,12 +532,29 @@ public final class Gallery extends AbsSpinner implements GestureDetector.OnGestu
             return;
         }
 
-        final int selectedCenter = getLeftOfView(mSelectedChild);
-        final int targetCenter = getGalleryLockPoint();
+        final int selectedCenter, targetCenter, scrollAmount;
+        if (mSelectedPosition == mItemCount - 1) {
+        	selectedCenter = mSelectedChild.getRight();
+        	//Log.d(VIEW_LOG_TAG, "selectedCenter = " + selectedCenter);
+        	//Log.d(VIEW_LOG_TAG, "gallery width = " + getWidth());
+            targetCenter = getWidth();
+            
+            int deltaX = targetCenter - selectedCenter;
+            //Log.d(VIEW_LOG_TAG, "deltaX = " + deltaX);
+            scrollAmount = deltaX; //>= 0 ? 0 : deltaX;
+        	
+        } else {
+        	selectedCenter = getLeftOfView(mSelectedChild);
+            targetCenter = getGalleryLockPoint();
 
-        final int scrollAmount = targetCenter - selectedCenter;
+            scrollAmount = targetCenter - selectedCenter;
+        }
+        
+    	//Log.d(VIEW_LOG_TAG, "scrollIntoSlots(), scrollAmount = " + scrollAmount);
+
         if (scrollAmount != 0) {
             mFlingRunnable.startUsingDistance(scrollAmount);
+            
         } else {
             onFinishedMovement();
         }
@@ -561,24 +587,33 @@ public final class Gallery extends AbsSpinner implements GestureDetector.OnGestu
      * child closest to the gallery's "lock point" (it's left).
      */
     private void setSelectionToChildClosestToLockPoint() {
+    	//Log.d(VIEW_LOG_TAG, "setSelectionToChildClosestToLockPoint()");
         if (mSelectedChild == null) {
             return;
         }
 
         final int lockPoint = getGalleryLockPoint();
+    	//Log.d(VIEW_LOG_TAG, "gallery width = " + getWidth());
 
         // TODO better search
         int closestEdgeDistance = Integer.MAX_VALUE;
         int newSelectedChildIndex = 0;
         for (int i = getChildCount() - 1; i >= 0; i--) {
             final View child = getChildAt(i);
+        	//Log.d(VIEW_LOG_TAG, "for i = " + i + ", child right = " + child.getRight());
 
             /*
              *  Note: Since we are locking on the left edge of the scroller, we want to put more
              *  emphasis on the closest edge calculations because the left edge being on the
              *  left of the screen puts unnecessary weight on the currently selected item.
              */
-            if (child.getLeft() == lockPoint && child.getRight() >=  lockPoint) {
+        	if ((mFirstPosition + i == mItemCount - 1) && (child.getRight() <= getWidth())) {
+        		//Log.d(VIEW_LOG_TAG, "last");
+        		newSelectedChildIndex = mItemCount - 1 - mFirstPosition;
+        		//mShouldStopFling = true;
+        		break;
+        		
+        	} else if (child.getLeft() == lockPoint && child.getRight() >=  lockPoint) {
                 // This child is in the lock point
                 newSelectedChildIndex = i;
                 break;
@@ -592,6 +627,9 @@ public final class Gallery extends AbsSpinner implements GestureDetector.OnGestu
             }
         }
 
+        //Log.d(VIEW_LOG_TAG, "newSelectedChildIndex = " + newSelectedChildIndex + ", mFirstPosition = " + mFirstPosition);
+        //Log.d(VIEW_LOG_TAG, "limitedDeltaX = " + limitedDeltaX);
+        
         final int newPos = mFirstPosition + newSelectedChildIndex;
 
         if (newPos != mSelectedPosition) {
@@ -788,17 +826,22 @@ public final class Gallery extends AbsSpinner implements GestureDetector.OnGestu
     private void fillToGalleryRightLtr() {
         final int itemSpacing = mSpacing;
         final int galleryRight = getRight() - getLeft() - getPaddingRight();
+        //Log.d(VIEW_LOG_TAG, "galleryRight = " + galleryRight);
+
         final int numChildren = getChildCount();
         final int numItems = mItemCount;
 
         // Set state for initial iteration
+        //Log.d(VIEW_LOG_TAG, "numChildren = " + numChildren);
         View prevIterationView = getChildAt(numChildren - 1);
         int curPosition;
         int curLeftEdge;
 
         if (prevIterationView != null) {
             curPosition = mFirstPosition + numChildren;
+            //Log.d(VIEW_LOG_TAG, "curPosition = " + curPosition);
             curLeftEdge = prevIterationView.getRight() + itemSpacing;
+            //Log.d(VIEW_LOG_TAG, "curLeftEdge = " + curLeftEdge);
         } else {
             mFirstPosition = curPosition = mItemCount - 1;
             curLeftEdge = getPaddingLeft();
@@ -806,6 +849,7 @@ public final class Gallery extends AbsSpinner implements GestureDetector.OnGestu
         }
 
         while (curLeftEdge < galleryRight && curPosition < numItems) {
+        	//Log.d(VIEW_LOG_TAG, "while loop numItems = " + numItems);
             prevIterationView = makeAndAddView(curPosition, curPosition - mSelectedPosition,
                     curLeftEdge, true);
 
@@ -1017,7 +1061,7 @@ public final class Gallery extends AbsSpinner implements GestureDetector.OnGestu
     @Override
     public boolean onScroll(final MotionEvent e1, final MotionEvent e2, final float distanceX,
             final float distanceY) {
-
+    	//Log.d(VIEW_LOG_TAG, "onScroll()");
         /*
          * Now's a good time to tell our parent to stop intercepting our events!
          * The user has moved more than the slop amount, since GestureDetector
@@ -1054,6 +1098,7 @@ public final class Gallery extends AbsSpinner implements GestureDetector.OnGestu
         }
 
         // Track the motion
+        //Log.d(VIEW_LOG_TAG, "distanceX = " + distanceX);
         trackMotionScroll(-1 * (int) distanceX);
 
         mIsFirstScroll = false;
@@ -1453,6 +1498,7 @@ public final class Gallery extends AbsSpinner implements GestureDetector.OnGestu
         }
 
         public void startUsingDistance(final int distance) {
+        	//Log.d(VIEW_LOG_TAG, "startUsingDistance()");
             if (distance == 0) return;
 
             startCommon();
@@ -1463,6 +1509,7 @@ public final class Gallery extends AbsSpinner implements GestureDetector.OnGestu
         }
 
         public void stop(final boolean scrollIntoSlots) {
+        	//Log.d(VIEW_LOG_TAG, "stop()");
             removeCallbacks(this);
             endFling(scrollIntoSlots);
         }
@@ -1472,6 +1519,7 @@ public final class Gallery extends AbsSpinner implements GestureDetector.OnGestu
              * Force the scroller's status to finished (without setting its
              * position to the end)
              */
+        	//Log.d(VIEW_LOG_TAG, "endFling()");
             mScroller.forceFinished(true);
 
             if (scrollIntoSlots) scrollIntoSlots();
@@ -1479,7 +1527,7 @@ public final class Gallery extends AbsSpinner implements GestureDetector.OnGestu
 
         @Override
         public void run() {
-
+        	//Log.d(VIEW_LOG_TAG, "run()");
             if (mItemCount == 0) {
                 endFling(true);
                 return;
@@ -1489,12 +1537,14 @@ public final class Gallery extends AbsSpinner implements GestureDetector.OnGestu
 
             final Scroller scroller = mScroller;
             final boolean more = scroller.computeScrollOffset();
+            //Log.d(VIEW_LOG_TAG, "run, more = " + more);
+
             final int x = scroller.getCurrX();
 
             // Flip sign to convert finger direction to list items direction
             // (e.g. finger moving down means list is moving towards the top)
             int delta = mLastFlingX - x;
-
+            //Log.d(VIEW_LOG_TAG, "delta = " + delta);
             // Pretend that each frame of a fling scroll is a touch scroll
             if (delta > 0) {
                 // Moving towards the left. Use leftmost view as mDownTouchPosition
@@ -1511,13 +1561,15 @@ public final class Gallery extends AbsSpinner implements GestureDetector.OnGestu
                 // Don't fling more than 1 screen
                 delta = Math.max(-(getWidth() - getPaddingRight() - getPaddingLeft() - 1), delta);
             }
-
+            //Log.d(VIEW_LOG_TAG, "delta2 = " + delta);
+            
             trackMotionScroll(delta);
 
             if (more && !mShouldStopFling) {
                 mLastFlingX = x;
                 post(this);
             } else {
+            	//Log.d(VIEW_LOG_TAG, "run, endFling()");
                endFling(true);
             }
         }
