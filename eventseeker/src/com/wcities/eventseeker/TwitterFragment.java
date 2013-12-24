@@ -14,6 +14,7 @@ import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,17 +22,27 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
+import com.wcities.eventseeker.ConnectAccountsFragment.ServiceAccount;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.SyncArtists;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
+import com.wcities.eventseeker.interfaces.OnFragmentAliveListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class TwitterFragment extends FragmentLoadableFromBackStack {
+public class TwitterFragment extends FragmentLoadableFromBackStack implements OnFragmentAliveListener {
 	
 	private static final String TAG = TwitterFragment.class.getName();
-
+	
+	private boolean isAlive;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		isAlive = true;
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -45,9 +56,20 @@ public class TwitterFragment extends FragmentLoadableFromBackStack {
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 				if (url.contains(AppConstants.TWITTER_CALLBACK_URL)) {
+					Log.d(TAG, "url = " + url);
+					ServiceAccount serviceAccount = (ServiceAccount) getArguments().getSerializable(
+							BundleKeys.SERVICE_ACCOUNTS);
+					serviceAccount.isInProgress = true;
+					
 					Uri uri = Uri.parse(url);
 					final String oauthVerifier = uri.getQueryParameter("oauth_verifier");
-
+					/*Bundle args = new Bundle();
+					args.putString(BundleKeys.OAUTH_VERIFIER, oauthVerifier);
+					args.putSerializable(BundleKeys.TWITTER, twitter);
+					
+					((ReplaceFragmentListener)FragmentUtil.getActivity(TwitterFragment.this))
+						.replaceByFragment(AppConstants.FRAGMENT_TAG_TWITTER_SYNCING, args);*/
+					
 					// Pair up our request with the response
 					new Thread(new Runnable() {
 						
@@ -84,15 +106,29 @@ public class TwitterFragment extends FragmentLoadableFromBackStack {
 							}
 						}
 					}).start();
-					
 					return true;
 				}
+				
+				EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(TwitterFragment.this).getApplicationContext();
+				eventSeekr.setSyncCount(Service.Twitter, EventSeekr.UNSYNC_COUNT);
+
 				return false;
 			}
 		});
 		webView.loadUrl(url);
 		
 		return v;
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		isAlive = false;
+	}
+
+	@Override
+	public boolean isAlive() {
+		return isAlive;
 	}
 }
 

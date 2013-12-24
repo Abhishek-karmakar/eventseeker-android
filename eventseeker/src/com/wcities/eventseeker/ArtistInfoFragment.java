@@ -562,7 +562,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			Log.i(TAG, "in getview");
+			//Log.i(TAG, "in getview");
 
 			View v = inflater.inflate(R.layout.fragment_video_tab, null);
 

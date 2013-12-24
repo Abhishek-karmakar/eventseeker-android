@@ -9,9 +9,11 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
+import com.wcities.eventseeker.TwitterSyncingFragment;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.ArtistApi;
 import com.wcities.eventseeker.api.ArtistApi.Method;
@@ -78,8 +80,15 @@ public class SyncArtists extends AsyncTask<Void, Void, Void> {
 	@Override
 	protected void onPostExecute(Void result) {
 		super.onPostExecute(result);
-		if (fragment != null && fragment instanceof OnFragmentAliveListener && ((OnFragmentAliveListener)fragment).isAlive()) {
-			FragmentUtil.getActivity(fragment).onBackPressed();
+		if (fragment != null) {
+			/*if (fragment instanceof TwitterSyncingFragment) {
+				if (((ActionBarActivity)FragmentUtil.getActivity(fragment)).getSupportFragmentManager().getBackStackEntryCount() > 0) {
+					FragmentUtil.getActivity(fragment).onBackPressed();
+				}
+				
+			} else*/ if (fragment instanceof OnFragmentAliveListener && ((OnFragmentAliveListener)fragment).isAlive()) {
+				FragmentUtil.getActivity(fragment).onBackPressed();
+			}
 		}
 	}
 }

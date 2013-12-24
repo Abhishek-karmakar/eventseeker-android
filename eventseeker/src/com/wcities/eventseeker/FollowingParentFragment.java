@@ -289,7 +289,18 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 		@Override
 		public int getPositionForSection(int sectionIndex) {
 			//Log.d(TAG, "index = " + alphaNumIndexer.get(indices.get(sectionIndex)));
-			return alphaNumIndexer.get(indices.get(sectionIndex));
+			if (indices.size() > sectionIndex) {
+				/**
+				 * for some devices it has wrong sectionIndex (out of bounds). To prevent this we 
+				 * have this if clause
+				 * e.g. For Galaxy S3 4.3.1 (with custom OS) it throws ArrayIndexOutOfBoundsException, 
+				 * because though indices size is 1, this function is called with sectionIndex=1.
+				 */
+				return alphaNumIndexer.get(indices.get(sectionIndex));
+				
+			} else {
+				return -1;
+			}
 		}
 
 		@Override

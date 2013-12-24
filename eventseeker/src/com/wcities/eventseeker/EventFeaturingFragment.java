@@ -110,23 +110,6 @@ public class EventFeaturingFragment extends ListFragment implements OnClickListe
         getListView().setDivider(null);
 	}
 	
-	/*private void updateBtnBuyTicketsEnabled(boolean enabled) {
-		lnrLayoutTickets.setEnabled(enabled);
-		if (enabled) {
-			if(isTablet) {
-				btnBuyTickets.setTextColor(getResources().getColor(R.color.txt_color_include_fragment_event_details_footer_tab));
-				btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.tic_blue), null, null, null);				
-			} else {
-				btnBuyTickets.setTextColor(getResources().getColor(android.R.color.white));
-				btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.tickets), null, null, null);
-			}
-		} else {
-			btnBuyTickets.setTextColor(getResources().getColor(R.color.btn_buy_tickets_disabled_txt_color));
-			btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.tickets_disabled), null, null, 
-					null);
-		}
-	}*/
-	
 	private void updateBtnBuyTicketsEnabled(boolean enabled) {
 		lnrLayoutTickets.setEnabled(enabled);
 		Resources res = getResources(); 
@@ -150,7 +133,6 @@ public class EventFeaturingFragment extends ListFragment implements OnClickListe
 			}
 		}
 	}
-	
 	
 	private void updateEventScheduleVisibility() {
 		Schedule schedule = event.getSchedule();

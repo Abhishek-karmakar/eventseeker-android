@@ -299,7 +299,7 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onDestroy() {
 		// Log.d(TAG, "onDestroy()");
 		if (AppConstants.FORD_SYNC_APP) {
-			Log.v(TAG, "onDestroy main");
+			//Log.v(TAG, "onDestroy main");
 			endSyncProxyInstance();
 			instance = null;
 			AppLinkService serviceInstance = AppLinkService.getInstance();
@@ -390,7 +390,6 @@ public class MainActivity extends ActionBarActivity implements
 				}
 				
 			} else {
-				
 				/**
 				 * in some higher version of android even after setting the Display option as 'DISPLAY_SHOW_TITLE',
 				 * the title was taking the touch event and was providing the action which is provided by 
@@ -402,7 +401,15 @@ public class MainActivity extends ActionBarActivity implements
 				if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
 					onBackPressed();
 					if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-						// DISPLAY_SHOW_CUSTOM is used for discover screen on tablet
+						/**
+						 * Following line is to reset display options when coming back to initial screen.
+						 * This is required only in case of tablet in landscape orientation, since we don't 
+						 * have navigation drawer in this case resulting in different behavior observed for 
+						 * home_as_up icon.
+						 * DISPLAY_SHOW_CUSTOM is used for discover screen on tablet.
+						 * e.g. - Launch --> Discover --> Event Details --> home as up. In this case tabs & back should 
+						 * disappear from actionbar.
+						 */
 						getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM);
 					}
 				}
@@ -451,9 +458,22 @@ public class MainActivity extends ActionBarActivity implements
 					return super.onKeyDown(keyCode, event);
 				}
 				
-			} else if(AppConstants.FRAGMENT_TAG_FACEBOOK.equals(currentContentFragmentTag)) {
+			} else if (AppConstants.FRAGMENT_TAG_FACEBOOK.equals(currentContentFragmentTag)) {
 				return true;
+				
 			} else {
+				if (isTabletAndInLandscapeMode && getSupportFragmentManager().getBackStackEntryCount() == 1) {
+					/**
+					 * Following line is to reset display options when coming back to initial screen.
+					 * This is required only in case of tablet in landscape orientation, since we don't 
+					 * have navigation drawer in this case resulting in different behavior observed for 
+					 * home_as_up icon.
+					 * DISPLAY_SHOW_CUSTOM is used for discover screen on tablet.
+					 * e.g. - Launch --> Discover --> Event Details --> hardware back. In this case tabs & 
+					 * back should disappear from actionbar.
+					 */
+					getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM);
+				}
 				return super.onKeyDown(keyCode, event);
 			}
 		}
@@ -481,7 +501,7 @@ public class MainActivity extends ActionBarActivity implements
 			return super.onKeyDown(keyCode, event);
 		}
 	}
-
+	
 	public boolean isActivityonTop() {
 		return activityOnTop;
 	}
@@ -902,7 +922,13 @@ public class MainActivity extends ActionBarActivity implements
 			
 		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS)) {
 			selectItem(INDEX_NAV_ITEM_CONNECT_ACCOUNTS);
-		}
+			
+		} /*else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_TWITTER_SYNCING)) {
+			TwitterSyncingFragment twitterSyncingFragment = new TwitterSyncingFragment();
+			twitterSyncingFragment.setArguments(args);
+			selectNonDrawerItem(twitterSyncingFragment, fragmentTag, getResources().getString(
+					R.string.title_twitter), false);
+		}*/
 	}
 
 	@Override

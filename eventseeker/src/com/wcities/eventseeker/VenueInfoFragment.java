@@ -248,6 +248,14 @@ public class VenueInfoFragment extends Fragment implements OnClickListener, Asyn
         }
 	}
 	
+	protected void onDriveClicked() {
+		AddressMapFragment fragment = (AddressMapFragment) getChildFragmentManager().findFragmentByTag(
+				AppConstants.FRAGMENT_TAG_ADDRESS_MAP);
+        if (fragment != null) {
+        	fragment.displayDrivingDirection();
+        }
+	}
+	
 	private class LoadVenue extends AsyncTask<String, Void, Void> {
 		
 		@Override
@@ -309,11 +317,7 @@ public class VenueInfoFragment extends Fragment implements OnClickListener, Asyn
 			break;
 			
 		case R.id.btnDrive:
-			AddressMapFragment fragment = (AddressMapFragment) getChildFragmentManager().findFragmentByTag(
-					AppConstants.FRAGMENT_TAG_ADDRESS_MAP);
-	        if (fragment != null) {
-	        	fragment.displayDrivingDirection();
-	        }
+			onDriveClicked();
 			break;
 			
 		default:

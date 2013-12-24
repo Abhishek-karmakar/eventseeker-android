@@ -99,7 +99,7 @@ public class EventSeekr extends Application {
 		} else {
 			AppConstants.TWITTER_CONSUMER_KEY = "Dt4IWLQhJmKVTdrfkvma7w";
 			AppConstants.TWITTER_CONSUMER_SECRET = "MqQWwm7sEqHdTuU47grSTfV5fLct22RY4ilHXCjwA";
-
+			
 			AppConstants.RDIO_KEY = "x83dzkx2xdmxuqtguqdz2nj6";
 			AppConstants.RDIO_SECRET = "rXNJ5ajSut";
 			

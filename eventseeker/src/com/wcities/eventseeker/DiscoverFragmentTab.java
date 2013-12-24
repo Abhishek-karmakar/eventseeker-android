@@ -43,8 +43,7 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 
 	private String cityName = "Loading...";
 	private TextView txtCityName;
-	/*private View vActionBar;
-	private int txtCityNameWInLandscape;*/
+	private int txtCityNameWInLandscape;
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -59,12 +58,6 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		//Log.d(TAG, "onCreateView");
-		/*ActionBarActivity actionBarActivity = (ActionBarActivity) FragmentUtil.getActivity(this);
-
-		LayoutInflater lytInflater = (LayoutInflater) actionBarActivity.getSystemService(
-				Context.LAYOUT_INFLATER_SERVICE);
-		vActionBar = lytInflater.inflate(R.layout.action_bar_custom_view_item, null);*/
-		
 		createCustomActionBar();
 
 		View v = super.onCreateView(inflater, container, savedInstanceState);
@@ -128,47 +121,38 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 		View vActionBar = lytInflater.inflate(R.layout.action_bar_custom_view_item, null);
 		txtCityName = (TextView) vActionBar.findViewById(R.id.txtCityName);
 
-		ActionBar.LayoutParams params = new ActionBar.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT, 
-					ActionBar.LayoutParams.MATCH_PARENT);
-		params.gravity = Gravity.CENTER;
-		
-		/*ActionBar.LayoutParams params;
+		ActionBar.LayoutParams params;
 		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 			params = new ActionBar.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT, 
 					ActionBar.LayoutParams.MATCH_PARENT);
 			params.gravity = Gravity.CENTER;
 			
 		} else {
-			
+			/**
+			 * Initially txtCityNameWInLandscape = 0 & sometimes txtCityName.getWidth() for first call 
+			 * returns entire actionbar (screen) width not considering any action items on right hand side,
+			 * hence following 2 conditions' check.
+			 */
 			if (txtCityNameWInLandscape == 0 || txtCityNameWInLandscape == getResources().getDisplayMetrics().widthPixels) {
-				Log.d(TAG, "txtCityNameWInLandscape = " + txtCityNameWInLandscape);
 				txtCityName.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
 				    @Override
 				    public void onGlobalLayout() {
-				    	Log.d(TAG, "onGlobalLayout()");
-				    	if (txtCityNameWInLandscape == 0 || txtCityNameWInLandscape == getResources().getDisplayMetrics().widthPixels) {
-					    	Log.d(TAG, "rltLayoutActionBarParent w = " + txtCityName.getWidth());
-				    		txtCityNameWInLandscape = txtCityName.getWidth();
-					    	if (txtCityNameWInLandscape != 0 && txtCityNameWInLandscape != getResources().getDisplayMetrics().widthPixels) {
-					    		Log.d(TAG, "remove()");
-								txtCityName.getViewTreeObserver().addOnGlobalLayoutListener(this);	
-					    	}
-				    		createCustomActionBar();
-				    	}
+			    		txtCityNameWInLandscape = txtCityName.getWidth();
+						txtCityName.getViewTreeObserver().removeGlobalOnLayoutListener(this);	
+			    		createCustomActionBar();
 				    }
 				});
 				params = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
-				params.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
+				params.gravity = Gravity.RIGHT;
 				
 			} else {
-				Log.d(TAG, "txtCityNameWInLandscape != 0");
 				int actionItemsWidth = getResources().getDisplayMetrics().widthPixels - txtCityNameWInLandscape;
 				int customViewWidth = getResources().getDisplayMetrics().widthPixels - 
 						getResources().getDimensionPixelSize(R.dimen.root_navigation_drawer_w_main) - 2 * actionItemsWidth;
 				params = new ActionBar.LayoutParams(customViewWidth, ActionBar.LayoutParams.MATCH_PARENT);
-				params.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
+				params.gravity = Gravity.RIGHT;
 			}
-		}*/
+		}
 		
 		txtCityName.setText(cityName);
 		actionBar.setCustomView(vActionBar, params);
