@@ -41,7 +41,8 @@
     <!-- include_video.xml -->
     <dimen name="root_rlt_layout_pad_r_frag_video_tab">13dp</dimen>
     <dimen name="img_video_w_fragment_video">200dp</dimen>
-    <dimen name="img_video_ht_fragment_video">400dp</dimen>
+    <dimen name="img_video_ht_fragment_video">350dp</dimen>
+    <dimen name="img_video_h_fragment_video">300dp</dimen>
 
     <!-- fragment_venue_info_tab.xml -->
     <dimen name="v_margin_b_fragment_venue_info">30dp</dimen>

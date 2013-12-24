@@ -47,6 +47,7 @@
     <!-- include_video.xml -->
     <dimen name="img_video_w_fragment_video">160dp</dimen>
     <dimen name="img_video_ht_fragment_video">300dp</dimen>
+    <dimen name="img_video_h_fragment_video">250dp</dimen>
 
     <!-- friends_activity_item_tab -->
     <dimen name="lnr_layout_btns_ht_friends_activity_item">40dp</dimen>
