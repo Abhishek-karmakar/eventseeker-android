@@ -272,7 +272,7 @@
     <dimen name="txt_title_txt_size_friends_activity_item">18sp</dimen>
     <dimen name="txt_title_margin_t_b_friends_activity_item">10dp</dimen>
     <dimen name="txt_title_margin_l_r_friends_activity_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="btn_txt_size_friends_activity_item">16sp</dimen>
+    <dimen name="btn_txt_size_friends_activity_item">14sp</dimen>
     <dimen name="txt_evt_title_margin_l_include_fragment_event_details_img_evt">10dp</dimen>
     <dimen name="v_divider_lnr_ht_friends_activity_item">24dp</dimen>
 

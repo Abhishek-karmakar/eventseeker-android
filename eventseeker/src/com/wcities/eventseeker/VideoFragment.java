@@ -46,7 +46,7 @@ public class VideoFragment extends Fragment {
     	
     	if(((MainActivity)FragmentUtil.getActivity(this)).isTablet()) {
     		
-    		ResizableImageView imgVideo = (ResizableImageView) v.findViewById(R.id.imgVideo);
+    		ImageView imgVideo = (ImageView) v.findViewById(R.id.imgVideo);
     		
     		String key = video.getKey(ImgResolution.LOW);
     		Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);

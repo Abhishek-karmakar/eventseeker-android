@@ -20,7 +20,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -51,7 +50,7 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 	
 	private static final String TAG = EventInfoFragment.class.getName();
 
-	private static final int MAX_FRIENDS_GRID = 3;
+	private static int MAX_FRIENDS_GRID = 3;
 	private static final int MAX_LINES_EVENT_DESC_PORTRAIT = 3;
 	private static final int MAX_LINES_EVENT_DESC_LANDSCAPE = 5;
 
@@ -92,12 +91,17 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 		res = getResources();
 		
 		isTablet = ((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).isTablet();
+		
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		//Log.d(TAG, "onCreateView() - " + (System.currentTimeMillis() / 1000));
 		orientation = res.getConfiguration().orientation;
+		if(isTablet) {
+			MAX_FRIENDS_GRID = ((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext())
+					.isTabletAndInLandscapeMode() ? 6 : 5 ;
+		}
 		
 		View v = inflater.inflate(R.layout.fragment_event_info, null);
 		
@@ -111,7 +115,9 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 		
 		updateEventImg();
 		
-		((TextView)v.findViewById(R.id.txtEvtTitle)).setText(event.getName());
+		TextView txtEvtTitle = (TextView)v.findViewById(R.id.txtEvtTitle);
+		txtEvtTitle.setText(event.getName());
+		txtEvtTitle.setSelected(true);
 		
 		if(isTablet) {
 			
@@ -156,6 +162,9 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 		if (friendsGridAdapter == null) {
 			friendsGridAdapter = new FriendsGridAdapter();
 		}
+		if(isTablet) {
+			grdVFriends.setNumColumns(MAX_FRIENDS_GRID);
+		}
 		grdVFriends.setAdapter(friendsGridAdapter);
 		
 		rltLayoutFriends = (RelativeLayout) v.findViewById(R.id.rltLayoutFriends);
@@ -192,15 +201,15 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 				DateFormat dateFormat;
 				
 				if(isTablet) {
-					dateFormat = date.isStartTimeAvailable() ? new SimpleDateFormat("EEEE MMMM d, h:mm a") :
-						new SimpleDateFormat("EEEE MMMM d");
+					dateFormat = date.isStartTimeAvailable() ? new SimpleDateFormat("EEE MMM d, h:mm a") :
+						new SimpleDateFormat("EEE MMM d");
 				} else {
 					dateFormat = date.isStartTimeAvailable() ? new SimpleDateFormat("MMMM dd, yyyy h:mm a") :
 						new SimpleDateFormat("MMMM dd, yyyy");
 				}				
 				
 				txtEvtTime.setText(dateFormat.format(date.getStartDate()));
-				txtEvtTime.setSelected(true);
+				//txtEvtTime.setSelected(true);
 				
 			}
 			
@@ -314,19 +323,15 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 		if (isTablet) {
 
 			if (event.getDescription() == null) {
-
 				rltLayoutEvtDesc.setVisibility(View.GONE);
-
 			} else {
 				makeDescVisible();
 			}
 
 		} else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
 
-			if (!isImgLoaded || !allDetailsLoaded
-					|| event.getDescription() == null) {
+			if (!isImgLoaded || !allDetailsLoaded || event.getDescription() == null) {
 				rltLayoutEvtDesc.setVisibility(View.GONE);
-
 			} else {
 				makeDescVisible();
 			}
@@ -400,6 +405,12 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 
 		} else if (isTablet) {
 
+			/*if (event.getFriends().isEmpty()) {
+				rltLayoutFriends.setVisibility(View.GONE);
+			} else {
+				rltLayoutFriends.setVisibility(View.VISIBLE);
+			}*/
+			
 			if (event.getFriends().isEmpty()) {
 				rltLayoutFriends.setVisibility(View.GONE);
 			} else {
@@ -542,9 +553,8 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 		@Override
 		public int getCount() {
 			if (orientation == Configuration.ORIENTATION_PORTRAIT || isTablet) {
-				return event.getFriends().size() > MAX_FRIENDS_GRID ? 
-						(isFriendsGridExpanded ? event.getFriends().size() : MAX_FRIENDS_GRID) : event.getFriends().size();
-				
+				return event.getFriends().size() > MAX_FRIENDS_GRID ? (isFriendsGridExpanded ? 
+						event.getFriends().size() : MAX_FRIENDS_GRID) : event.getFriends().size();
 			} else {
 				return event.getFriends().size() > MAX_FRIENDS_GRID ? MAX_FRIENDS_GRID : event.getFriends().size();
 			}

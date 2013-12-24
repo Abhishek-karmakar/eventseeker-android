@@ -177,6 +177,27 @@
                             android:layout_height="@dimen/img_video_ht_fragment_video"
                             android:layout_marginLeft="@dimen/glry_videos_margin_l_r_fragment_artist_info"
                             android:layout_marginRight="@dimen/glry_videos_margin_l_r_fragment_artist_info" />
+                        
+                         <android.support.v4.view.ViewPager
+							android:id="@+id/viewPager"
+							android:layout_width="match_parent"
+							android:layout_height="@dimen/img_video_ht_fragment_video"
+							android:layout_marginLeft="@dimen/view_pager_margin_l_fragment_artist_info"
+							android:layout_marginRight="@dimen/view_pager_margin_r_fragment_artist_info" 
+							android:visibility="gone"/>
+					    
+					    <com.viewpagerindicator.CirclePageIndicator
+					  		android:id="@+id/pageIndicator"
+					  		android:paddingTop="@dimen/page_indicator_pad_fragment_artist_info"
+					  		android:layout_height="wrap_content"
+					  		android:layout_width="match_parent"
+					 	 	app:radius="@dimen/page_indicator_radius_fragment_artist_info"
+					  		app:fillColor="@color/font_blue"
+					  		app:pageColor="@android:color/white"
+					  		app:strokeColor="@color/font_blue"
+					  		app:strokeWidth="@dimen/page_indicator_stroke_w_fragment_artist_info"
+							android:visibility="gone"/>
+                        
                     </LinearLayout>
                 </LinearLayout>
 
