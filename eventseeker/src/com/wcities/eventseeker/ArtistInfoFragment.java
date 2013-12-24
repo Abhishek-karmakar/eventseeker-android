@@ -1,5 +1,8 @@
 package com.wcities.eventseeker;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -23,6 +26,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.internal.el;
 import com.scvngr.levelup.views.gallery.AdapterView;
 import com.scvngr.levelup.views.gallery.AdapterView.OnItemClickListener;
 import com.scvngr.levelup.views.gallery.Gallery;
@@ -54,7 +58,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 
 	private static final String TAG = ArtistInfoFragment.class.getName();
 
-	private static final int MAX_FRIENDS_GRID = 3;
+	private static int MAX_FRIENDS_GRID = 3;
 	private static final int MAX_LINES_ARTIST_DESC_PORTRAIT = 3;
 	private static final int MAX_LINES_ARTIST_DESC_LANDSCAPE = 5;
 
@@ -85,30 +89,40 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 	private FriendsGridAdapter friendsGridAdapter;
 
 	private boolean isTablet;
+	private boolean isTabletInPortraitMode;
+	
+	private List<Video> videos;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.d(TAG, "onCreate()");
 		artist = (Artist) getArguments().getSerializable(BundleKeys.ARTIST);
 
 		res = getResources();
 
-		isTablet = ((MainActivity) FragmentUtil.getActivity(this)).isTablet();
+		isTablet = ((EventSeekr) FragmentUtil.getActivity(this).getApplicationContext()).isTablet();
+		
+		videos = new ArrayList<Video>();
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		// Log.d(TAG, "onCreateView() - " + (System.currentTimeMillis() /
-		// 1000));
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		Log.d(TAG, "onCreateView()");
+		// Log.d(TAG, "onCreateView() - " + (System.currentTimeMillis() / 1000));
 		orientation = res.getConfiguration().orientation;
+		isTabletInPortraitMode = ((EventSeekr) FragmentUtil.getActivity(this).getApplicationContext())
+				.isTabletAndInPortraitMode();
 		// Log.d(TAG, "child manager = " + getChildFragmentManager());
-
+		if(isTablet) {
+			MAX_FRIENDS_GRID = ((EventSeekr) FragmentUtil.getActivity(this).getApplicationContext())
+					.isTabletAndInLandscapeMode() ? 6 : 5;
+		}
+		
 		View v = inflater.inflate(R.layout.fragment_artist_info, null);
 
 		progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
-		rltLayoutLoadedContent = (RelativeLayout) v
-				.findViewById(R.id.rltLayoutLoadedContent);
+		rltLayoutLoadedContent = (RelativeLayout) v.findViewById(R.id.rltLayoutLoadedContent);
 
 		if (orientation == Configuration.ORIENTATION_PORTRAIT) {
 			progressBar2 = (ProgressBar) v.findViewById(R.id.progressBar2);
@@ -117,8 +131,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 		imgArtist = (ImageView) v.findViewById(R.id.imgItem);
 		updateArtistImg();
 
-		((TextView) v.findViewById(R.id.txtItemTitle))
-				.setText(artist.getName());
+		((TextView) v.findViewById(R.id.txtItemTitle)).setText(artist.getName());
 
 		lnrVideos = v.findViewById(R.id.lnrVideos);
 		rltLayoutArtistDesc = (RelativeLayout) v.findViewById(R.id.rltLayoutDesc);
@@ -129,36 +142,29 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 
 		rltLayoutVideos = v.findViewById(R.id.rltLayoutVideos);
 
-		if (((MainActivity) FragmentUtil.getActivity(this)).isTablet()) {
+		if (isTabletInPortraitMode) {
 
 			glryVideo = (Gallery) v.findViewById(R.id.glryVideo);
-			videoGalleryAdapter = new VideoGalleryAdapter(artist,
-					FragmentUtil.getActivity(this));
+			videoGalleryAdapter = new VideoGalleryAdapter(videos, FragmentUtil.getActivity(this));
 			glryVideo.setAdapter(videoGalleryAdapter);
 			glryVideo.setOnItemClickListener(new OnItemClickListener() {
 
 				@Override
-				public void onItemClick(AdapterView<?> parent, View view,
-						int position, long id) {
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 					Video video = (Video) parent.getItemAtPosition(position);
-					Intent intent = new Intent(Intent.ACTION_VIEW, Uri
-							.parse(video.getVideoUrl()));
+					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(video.getVideoUrl()));
 					startActivity(Intent.createChooser(intent, ""));
 				}
 			});
 
-			Log.i(TAG, "Setting the adapter");
-
 		} else {
 
 			viewPager = (ViewPager) v.findViewById(R.id.viewPager);
-			videoFragmentPagerAdapter = new VideoFragmentPagerAdapter(artist,
-					getChildFragmentManager());
+			videoFragmentPagerAdapter = new VideoFragmentPagerAdapter(videos, getChildFragmentManager());
 			viewPager.setAdapter(videoFragmentPagerAdapter);
 
-			indicator = (CirclePageIndicator) v
-					.findViewById(R.id.pageIndicator);
+			indicator = (CirclePageIndicator) v.findViewById(R.id.pageIndicator);
 			indicator.setViewPager(viewPager);
 
 		}
@@ -169,18 +175,19 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 		if (friendsGridAdapter == null) {
 			friendsGridAdapter = new FriendsGridAdapter();
 		}
+		if(isTablet) {
+			grdVFriends.setNumColumns(MAX_FRIENDS_GRID);
+		}
 		grdVFriends.setAdapter(friendsGridAdapter);
 
-		rltLayoutFriends = (RelativeLayout) v
-				.findViewById(R.id.rltLayoutFriends);
+		rltLayoutFriends = (RelativeLayout) v.findViewById(R.id.rltLayoutFriends);
 		txtViewAll = (TextView) v.findViewById(R.id.txtViewAll);
 		imgRight = (ImageView) v.findViewById(R.id.imgRight);
 		updateFriendsVisibility();
 
 		imgFollow = (ImageView) v.findViewById(R.id.imgFollow);
 		txtFollow = (TextView) v.findViewById(R.id.txtFollow);
-		fragmentArtistDetailsFooter = (RelativeLayout) v
-				.findViewById(R.id.fragmentArtistDetailsFooter);
+		fragmentArtistDetailsFooter = (RelativeLayout) v.findViewById(R.id.fragmentArtistDetailsFooter);
 		fragmentArtistDetailsFooter.setOnClickListener(this);
 
 		updateFollowingFooter();
@@ -195,6 +202,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 
 		// Log.d(TAG, "onCreateView() done - " + (System.currentTimeMillis() /
 		// 1000));
+		Log.d(TAG, "oncreateview() completed...");
 		return v;
 	}
 
@@ -205,6 +213,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 	}
 
 	private void updateArtistImg() {
+		Log.d(TAG, "updateArtistImg()");
 		// Log.d(TAG, "updateEventImg(), url = " + event.getLowResImgUrl());
 		if (artist.doesValidImgUrlExist() || allDetailsLoaded) {
 			String key = artist.getKey(ImgResolution.LOW);
@@ -217,8 +226,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 			} else {
 				imgArtist.setImageBitmap(null);
 				AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-				asyncLoadImg
-						.loadImg(imgArtist, ImgResolution.LOW, artist, this);
+				asyncLoadImg.loadImg(imgArtist, ImgResolution.LOW, artist, this);
 				isImgLoaded = false;
 			}
 		}
@@ -226,8 +234,8 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 	}
 
 	private void updateFollowingFooter() {
-		if (artist.getAttending() == null
-				|| ((EventSeekr) FragmentUtil.getActivity(this)
+		Log.d(TAG, "updateFollowingFooter()");
+		if (artist.getAttending() == null || ((EventSeekr) FragmentUtil.getActivity(this)
 						.getApplication()).getWcitiesId() == null) {
 			fragmentArtistDetailsFooter.setVisibility(View.GONE);
 
@@ -254,20 +262,34 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 	}
 
 	private void updateFriendsVisibility() {
-		if (((EventSeekr) FragmentUtil.getActivity(this).getApplication())
-				.getWcitiesId() == null) {
+		Log.d(TAG, "updateFriendsVisibility()");
+		if (((EventSeekr) FragmentUtil.getActivity(this).getApplication()).getWcitiesId() == null) {
 			rltLayoutFriends.setVisibility(View.GONE);
 
 		} else if (isTablet) {
 
-			int visibility = (artist.getFriends().isEmpty()) ? View.GONE
-					: View.VISIBLE;
-			rltLayoutFriends.setVisibility(visibility);
+			/*int visibility = (artist.getFriends().isEmpty()) ? View.GONE : View.VISIBLE;
+			rltLayoutFriends.setVisibility(visibility);*/
+			
+			if (artist.getFriends().isEmpty()) {
+				rltLayoutFriends.setVisibility(View.GONE);
+
+			} else {
+				rltLayoutFriends.setVisibility(View.VISIBLE);
+
+				if (artist.getFriends().size() > MAX_FRIENDS_GRID) {
+					RelativeLayout rltLayoutViewAll = (RelativeLayout) rltLayoutFriends
+							.findViewById(R.id.rltLayoutViewAll);
+					rltLayoutViewAll.setVisibility(View.VISIBLE);
+					rltLayoutViewAll.setOnClickListener(this);
+
+					expandOrCollapseFriendsGrid();
+				}
+			}
 
 		} else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
 
-			if (!isImgLoaded || !allDetailsLoaded
-					|| artist.getFriends().isEmpty()) {
+			if (!isImgLoaded || !allDetailsLoaded || artist.getFriends().isEmpty()) {
 				rltLayoutFriends.setVisibility(View.GONE);
 
 			} else {
@@ -309,6 +331,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 	}
 
 	private void expandOrCollapseFriendsGrid() {
+		Log.d(TAG, "expandOrCollapseFriendsGrid()");
 		if (isFriendsGridExpanded) {
 			txtViewAll.setText(res.getString(R.string.txt_view_less));
 			imgRight.setImageResource(R.drawable.less);
@@ -324,7 +347,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 	}
 
 	private void updateVideosVisibility() {
-
+		Log.d(TAG, "updateVideosVisibility()");
 		Log.i(TAG, "Are Videos Empty : " + artist.getVideos().isEmpty());
 		if (isTablet) {
 
@@ -355,6 +378,8 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 	}
 
 	private void makeDescVisible() {
+		Log.d(TAG, "updateVideosVisibility()");
+
 		if(isTablet) {
 			lnrVideos.setVisibility(View.VISIBLE);
 		}
@@ -372,6 +397,8 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 	}
 
 	private void makeDescVisibleInExpandedMode() {
+		Log.d(TAG, "makeDescVisibleInExpandedMode()");
+
 		imgDown.setVisibility(View.GONE);
 		if(isTablet) {
 			lnrVideos.setVisibility(View.VISIBLE);
@@ -382,7 +409,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 	}
 
 	private void updateDescVisibility() {
-
+		Log.d(TAG, "updateDescVisibility");
 		Log.i(TAG, "is Artist Description null : " + artist.getDescription());
 		/**
 		 * Mithil:added new condition for the Tablet UI. Here if device is
@@ -418,6 +445,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 	}
 
 	private void expandEvtDesc() {
+		Log.d(TAG, "expandEvtDesc");
 		txtArtistDesc.setMaxLines(Integer.MAX_VALUE);
 		txtArtistDesc.setEllipsize(null);
 
@@ -427,6 +455,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 	}
 
 	private void collapseEvtDesc() {
+		Log.d(TAG, "collapseEvtDesc");
 		int maxLines = orientation == Configuration.ORIENTATION_PORTRAIT ? MAX_LINES_ARTIST_DESC_PORTRAIT
 				: MAX_LINES_ARTIST_DESC_LANDSCAPE;
 		txtArtistDesc.setMaxLines(maxLines);
@@ -449,8 +478,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 					progressBar2.setVisibility(View.GONE);
 
 				} else {
-					Log.d(TAG,
-							"updateProgressBarVisibility() !allDetailsLoaded");
+					Log.d(TAG, "updateProgressBarVisibility() !allDetailsLoaded");
 					progressBar2.setVisibility(View.VISIBLE);
 				}
 			}
@@ -462,63 +490,69 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 		}
 	}
 
-	private static class VideoFragmentPagerAdapter extends
-			FragmentStatePagerAdapter {
+	private static class VideoFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
+		private static final String TAG = VideoFragmentPagerAdapter.class.getSimpleName();
 		private static final int MAX_LIMIT = 5;
 
-		private Artist artist;
-
-		public VideoFragmentPagerAdapter(Artist artist, FragmentManager fm) {
+		List<Video> videos;
+		
+		public VideoFragmentPagerAdapter(List<Video> videos, FragmentManager fm) {
 			super(fm);
-			// Log.d(TAG, "VideoFragmentPagerAdapter()");
-			this.artist = artist;
+			Log.d(TAG, "VideoFragmentPagerAdapter()");
+			this.videos = videos;
 		}
 
 		@Override
 		public Fragment getItem(int index) {
+			Log.d(TAG, "VideoFragmentPagerAdapter()");
 			// Log.d(TAG, "getItem() for index = " + index);
-			VideoFragment videoFragment = VideoFragment.newInstance(artist
-					.getVideos().get(index));
+			VideoFragment videoFragment = VideoFragment.newInstance(videos.get(index));
 			return videoFragment;
 		}
 
 		@Override
 		public int getCount() {
-			// Log.d(TAG, "getCount()");
-			return artist.getVideos().size() > MAX_LIMIT ? MAX_LIMIT : artist
-					.getVideos().size();
+			Log.d(TAG, "getCount() - " + videos.size());
+			return videos.size() > MAX_LIMIT ? MAX_LIMIT : videos.size();
 		}
 
 		@Override
 		public int getItemPosition(Object object) {
+			Log.d(TAG, "getItemPosition()");
 			// Log.d(TAG, "getItemPosition()");
 			return POSITION_NONE;
 		}
+		
 	}
 
 	private class VideoGalleryAdapter extends BaseAdapter {
+		
+		private final String TAG = VideoGalleryAdapter.class.getSimpleName();
 
 		private static final int MAX_LIMIT = 5;
 		private LayoutInflater inflater;
 		private BitmapCache bitmapCache;
-		private Artist artist;
 
-		public VideoGalleryAdapter(Artist artist, Context context) {
-			this.artist = artist;
+		List<Video> videos;
+		
+		public VideoGalleryAdapter(List<Video> videos, Context context) {
+			Log.d(TAG, "VideoGalleryAdapter()");
+			this.videos = videos;
 			inflater = LayoutInflater.from(context);
 			bitmapCache = BitmapCache.getInstance();
 		}
 
 		@Override
 		public int getCount() {
-			return artist.getVideos().size() > MAX_LIMIT ? MAX_LIMIT : artist
-					.getVideos().size();
+			Log.d(TAG, "getCount() - " + videos.size());
+			return videos.size() > MAX_LIMIT ? MAX_LIMIT : videos.size();
 		}
 
 		@Override
 		public Object getItem(int position) {
-			return artist.getVideos().get(position);
+			Log.d(TAG, "getItem()");
+			return videos.get(position);
 		}
 
 		@Override
@@ -572,14 +606,11 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 
 		@Override
 		public int getCount() {
-			if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-				return artist.getFriends().size() > MAX_FRIENDS_GRID ? (isFriendsGridExpanded ? artist
-						.getFriends().size() : MAX_FRIENDS_GRID)
-						: artist.getFriends().size();
-
+			if (orientation == Configuration.ORIENTATION_PORTRAIT || isTablet) {
+				return artist.getFriends().size() > MAX_FRIENDS_GRID ? (isFriendsGridExpanded ? 
+						artist.getFriends().size() : MAX_FRIENDS_GRID) : artist.getFriends().size();
 			} else {
-				return artist.getFriends().size() > MAX_FRIENDS_GRID ? MAX_FRIENDS_GRID
-						: artist.getFriends().size();
+				return artist.getFriends().size() > MAX_FRIENDS_GRID ? MAX_FRIENDS_GRID : artist.getFriends().size();
 			}
 		}
 
@@ -594,29 +625,24 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 		}
 
 		@Override
-		public View getView(final int position, View convertView,
-				ViewGroup parent) {
+		public View getView(final int position, View convertView, ViewGroup parent) {
 			Friend friend = getItem(position);
 			// Log.d(TAG, "friend = " + friend);
 
 			if (friend == null) {
-				convertView = LayoutInflater.from(
-						FragmentUtil.getActivity(ArtistInfoFragment.this))
+				convertView = LayoutInflater.from(FragmentUtil.getActivity(ArtistInfoFragment.this))
 						.inflate(R.layout.list_progress_bar, null);
 
 			} else {
 				GridFriendHolder holder;
 
 				if (convertView == null || convertView.getTag() == null) {
-					convertView = LayoutInflater.from(
-							FragmentUtil.getActivity(ArtistInfoFragment.this))
+					convertView = LayoutInflater.from(FragmentUtil.getActivity(ArtistInfoFragment.this))
 							.inflate(R.layout.grid_friend, null);
 
 					holder = new GridFriendHolder();
-					holder.imgFriend = (ImageView) convertView
-							.findViewById(R.id.imgFriend);
-					holder.txtFriendName = (TextView) convertView
-							.findViewById(R.id.txtFriendName);
+					holder.imgFriend = (ImageView) convertView.findViewById(R.id.imgFriend);
+					holder.txtFriendName = (TextView) convertView.findViewById(R.id.txtFriendName);
 
 					convertView.setTag(holder);
 
@@ -634,8 +660,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 				} else {
 					holder.imgFriend.setImageBitmap(null);
 					AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-					asyncLoadImg.loadImg(holder.imgFriend,
-							ImgResolution.MOBILE, friend);
+					asyncLoadImg.loadImg(holder.imgFriend, ImgResolution.MOBILE, friend);
 				}
 			}
 			return convertView;
@@ -665,19 +690,16 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 				artist.setAttending(Attending.Tracked);
 				updateFollowingFooter();
 				new UserTracker((EventSeekr) FragmentUtil.getActivity(this)
-						.getApplication(), UserTrackingItemType.artist,
-						artist.getId()).execute();
+						.getApplication(), UserTrackingItemType.artist, artist.getId()).execute();
 
 			} else {
 				artist.setAttending(Attending.NotTracked);
 				updateFollowingFooter();
 				new UserTracker((EventSeekr) FragmentUtil.getActivity(this)
 						.getApplication(), UserTrackingItemType.artist,
-						artist.getId(), Attending.NotTracked.getValue(),
-						UserTrackingType.Edit).execute();
+						artist.getId(), Attending.NotTracked.getValue(), UserTrackingType.Edit).execute();
 			}
-			((ArtistDetailsFragment) getParentFragment())
-					.onArtistFollowingUpdated();
+			((ArtistDetailsFragment) getParentFragment()).onArtistFollowingUpdated();
 			break;
 
 		case R.id.rltLayoutViewAll:
@@ -703,6 +725,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 	}
 
 	private void updateScreen() {
+		Log.d(TAG, "updateScreen()");
 		// if fragment is destroyed (user has pressed back)
 		if (FragmentUtil.getActivity(this) == null) {
 			return;
@@ -713,13 +736,16 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 		updateDescVisibility();
 
 		updateVideosVisibility();
-		if (videoFragmentPagerAdapter != null) {
-			videoFragmentPagerAdapter.notifyDataSetChanged();
-		}
-		if (videoGalleryAdapter != null) {
-			videoGalleryAdapter.notifyDataSetChanged();
-		}
 
+		if(isTabletInPortraitMode) {
+			if (videoGalleryAdapter != null) {
+				videoGalleryAdapter.notifyDataSetChanged();
+			}	
+		} else {
+			if (videoFragmentPagerAdapter != null) {
+				videoFragmentPagerAdapter.notifyDataSetChanged();
+			}
+		}
 		updateFriendsVisibility();
 		friendsGridAdapter.notifyDataSetChanged();
 
@@ -731,6 +757,9 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 		Log.d(TAG, "onArtistUpdatedByArtistDetailsFragment()");
 		allDetailsLoaded = true;
 
+		if(videos.isEmpty()) {
+			videos.addAll(artist.getVideos());
+		}
 		updateScreen();
 		Log.d(TAG, "onArtistUpdatedByArtistDetailsFragment() done");
 	}

@@ -24,6 +24,7 @@
     <!-- fragment_artist_info.xml -->
     <dimen name="lnr_layout_top_margin_l_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="lnr_layout_top_margin_r_fragment_event_info">@dimen/lnr_layout_top_margin_l_fragment_event_info</dimen>
+    <dimen name="view_pager_margin_l_r_fragment_artist_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
 
     <!-- include_venue_details_footer.xml -->
     <dimen name="btn_drawable_pad_include_venue_details_footer">1dp</dimen>
@@ -45,7 +46,7 @@
 
     <!-- include_video.xml -->
     <dimen name="img_video_w_fragment_video">160dp</dimen>
-    <dimen name="img_video_ht_fragment_video">120dp</dimen>
+    <dimen name="img_video_ht_fragment_video">300dp</dimen>
 
     <!-- friends_activity_item_tab -->
     <dimen name="lnr_layout_btns_ht_friends_activity_item">40dp</dimen>

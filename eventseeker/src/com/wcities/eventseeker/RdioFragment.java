@@ -309,9 +309,12 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 		switch (v.getId()) {
 		
 		case R.id.btnRetrieveArtists:
-			serviceAccount.isInProgress = true;
-			//Log.d(TAG, "Setting in progress true");
-			searchUserId(edtUserCredential.getText().toString().trim());
+			String userCredential = edtUserCredential.getText().toString().trim();
+			if(!userCredential.equals("")) {
+				serviceAccount.isInProgress = true;
+				//Log.d(TAG, "Setting in progress true");
+				searchUserId(userCredential);
+			}
 			break;
 			
 		case R.id.btnConnectOtherAccuonts:

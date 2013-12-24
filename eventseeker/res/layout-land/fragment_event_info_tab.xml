@@ -63,12 +63,11 @@
 
                         <TextView
                             android:id="@+id/txtEvtTitle"
+                            style="@style/SingleLineMarqueeTxt"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:layout_weight="0.23"
-                            android:ellipsize="end"
+                            android:layout_weight="0.24"
                             android:gravity="center"
-                            android:singleLine="true"
                             android:textColor="@color/txt_evt_title_fragment_event_info_tab"
                             android:textSize="@dimen/txt_evt_title_txt_size_include_fragment_event_details_img_evt" />
 
@@ -83,7 +82,7 @@
                             style="@style/SingleLineMarqueeTxt"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:layout_weight="0.18"
+                            android:layout_weight="0.21"
                             android:gravity="center"
                             android:maxLines="2"
                             android:textColor="@color/txt_evt_title_fragment_event_info_tab"
@@ -94,7 +93,7 @@
                             style="@style/SingleLineMarqueeTxt"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:layout_weight="0.19"
+                            android:layout_weight="0.15"
                             android:gravity="center"
                             android:maxLines="2"
                             android:textColor="@color/txt_evt_title_fragment_event_info_tab"
@@ -104,7 +103,7 @@
                             android:id="@+id/lnrLayoutChkBoxGoing"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:layout_weight="0.20"
+                            android:layout_weight="0.24"
                             android:gravity="center"
                             android:orientation="horizontal" >
 
@@ -149,7 +148,7 @@
                             android:id="@+id/lnrLayoutTickets"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:layout_weight="0.20"
+                            android:layout_weight="0.16"
                             android:background="@color/font_blue" >
 
                             <ImageView
