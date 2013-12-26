@@ -1,5 +1,6 @@
 package com.wcities.eventseeker.widget;
 
+import java.io.ObjectInputStream.GetField;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
@@ -260,6 +261,7 @@ public class EventseekerWidgetProvider extends AppWidgetProvider {
 		
 		Intent mainActivityIntent = new Intent(context, MainActivity.class);
 		mainActivityIntent.putExtra(BundleKeys.EVENT, event);
+		mainActivityIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		PendingIntent pendingIntent = PendingIntent.getActivity(context, eventseekerWidget.getWidgetId(), 
 				mainActivityIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 		remoteViews.setOnClickPendingIntent(R.id.rltLayoutRoot, pendingIntent);

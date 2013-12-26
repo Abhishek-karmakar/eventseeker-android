@@ -218,7 +218,7 @@ public class MainActivity extends ActionBarActivity implements
 
 		// getOverflowMenu();
 		if (currentContentFragmentTag == null) {
-			Log.d(TAG, "currentContentFragmentTag = null");
+			//Log.d(TAG, "currentContentFragmentTag = null");
 			/**
 			 * Above null check is required for widget, because if user
 			 * navigates to any other screen from this event details, we want to
@@ -230,7 +230,7 @@ public class MainActivity extends ActionBarActivity implements
 			 */
 			if (getIntent().hasExtra(BundleKeys.EVENT)) {
 				onEventSelectedFromOtherTask((Event) getIntent()
-						.getSerializableExtra(BundleKeys.EVENT));
+						.getSerializableExtra(BundleKeys.EVENT), false);
 
 			} else {
 				FbLogInFragment fbLogInFragment = new FbLogInFragment();
@@ -241,7 +241,7 @@ public class MainActivity extends ActionBarActivity implements
 			}
 			
 		} else {
-			Log.d(TAG, "currentContentFragmentTag != null");
+			//Log.d(TAG, "currentContentFragmentTag != null");
 		}
 
 		if (AppConstants.FORD_SYNC_APP) {
@@ -253,7 +253,9 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		Log.d(TAG, "onNewIntent()");
+		if (intent.hasExtra(BundleKeys.EVENT)) {
+			onEventSelectedFromOtherTask((Event) intent.getSerializableExtra(BundleKeys.EVENT), true);
+		}
 	}
 	
 	@Override
@@ -641,8 +643,9 @@ public class MainActivity extends ActionBarActivity implements
 			String title, String fragmentTag) {
 		// Log.d(TAG, "onFragmentResumed() - " + fragmentTag);
 		drawerItemSelectedPosition = position;
-		setDrawerIndicatorEnabled(true);
-
+		if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+			setDrawerIndicatorEnabled(true);
+		} 
 		mTitle = title;
 		updateTitle();
 
@@ -1006,7 +1009,7 @@ public class MainActivity extends ActionBarActivity implements
 						.getString(R.string.title_event_details), true);
 	}
 
-	public void onEventSelectedFromOtherTask(Event event) {
+	public void onEventSelectedFromOtherTask(Event event, boolean addToBackStack) {
 		EventDetailsFragment eventDetailsFragment = new EventDetailsFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(BundleKeys.EVENT, event);
@@ -1016,7 +1019,7 @@ public class MainActivity extends ActionBarActivity implements
 		eventDetailsFragment.setArguments(args);
 		selectNonDrawerItem(eventDetailsFragment,
 				AppConstants.FRAGMENT_TAG_EVENT_DETAILS, getResources()
-						.getString(R.string.title_event_details), false);
+						.getString(R.string.title_event_details), addToBackStack);
 	}
 
 	@Override
