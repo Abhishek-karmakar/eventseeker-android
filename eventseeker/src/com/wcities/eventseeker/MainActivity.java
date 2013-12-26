@@ -847,6 +847,8 @@ public class MainActivity extends ActionBarActivity implements
 						.equals(AppConstants.FRAGMENT_TAG_VENUE_DETAILS)) {
 			supportInvalidateOptionsMenu();
 		}
+		
+		//Log.d(TAG, "back stack count = " + getSupportFragmentManager().getBackStackEntryCount());
 	}
 
 	/*
@@ -923,12 +925,16 @@ public class MainActivity extends ActionBarActivity implements
 		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS)) {
 			selectItem(INDEX_NAV_ITEM_CONNECT_ACCOUNTS);
 			
-		} /*else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_TWITTER_SYNCING)) {
+		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_TWITTER_SYNCING)) {
+			//Log.d(TAG, "FRAGMENT_TAG_TWITTER_SYNCING");
+			if (currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_TWITTER)) {
+				onBackPressed();
+			}
 			TwitterSyncingFragment twitterSyncingFragment = new TwitterSyncingFragment();
 			twitterSyncingFragment.setArguments(args);
 			selectNonDrawerItem(twitterSyncingFragment, fragmentTag, getResources().getString(
-					R.string.title_twitter), false);
-		}*/
+					R.string.title_twitter), true);
+		}
 	}
 
 	@Override

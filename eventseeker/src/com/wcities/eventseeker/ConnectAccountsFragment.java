@@ -366,7 +366,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				convertView.setTag("");
 				
 			} else {
-				Log.d(TAG, "setting Title : " + serviceAccount.name);
+				//Log.d(TAG, "setting Title : " + serviceAccount.name);
 				AccountViewHolder holder;
 				if (convertView == null || !(convertView.getTag() instanceof AccountViewHolder)) {
 					convertView = mInflater.inflate(R.layout.connect_accounts_list_item, null);

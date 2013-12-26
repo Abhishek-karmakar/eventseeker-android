@@ -33,7 +33,7 @@ import com.wcities.eventseeker.interfaces.OnFragmentAliveListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.ViewUtil.AnimationUtil;
 
-public class TwitterSyncingFragment extends FragmentLoadableFromBackStack implements OnClickListener {
+public class TwitterSyncingFragment extends FragmentLoadableFromBackStack implements OnClickListener, OnFragmentAliveListener {
 
 	private static final String TAG = TwitterSyncingFragment.class.getName();
 	
@@ -43,15 +43,18 @@ public class TwitterSyncingFragment extends FragmentLoadableFromBackStack implem
 
 	private Twitter twitter;
 	
+	private boolean isAlive;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
+		isAlive = true;
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		Log.d(TAG, "onCreateView()");
+		//Log.d(TAG, "onCreateView()");
 		View v = inflater.inflate(R.layout.fragment_twitter_syncing, null);
 
 		imgProgressBar = (ImageView) v.findViewById(R.id.progressBar);
@@ -138,11 +141,24 @@ public class TwitterSyncingFragment extends FragmentLoadableFromBackStack implem
 		switch (v.getId()) {
 		
 		case R.id.btnConnectOtherAccuonts:
+			//Log.d(TAG, "btnConnectOtherAccuonts");
 			FragmentUtil.getActivity(this).onBackPressed();
 			break;
 
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		//Log.d(TAG, "onDestroy()");
+		isAlive = false;
+	}
+
+	@Override
+	public boolean isAlive() {
+		return isAlive;
 	}
 }

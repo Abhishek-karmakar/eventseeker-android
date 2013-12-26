@@ -56,7 +56,7 @@ public class SyncArtists extends AsyncTask<Void, Void, Void> {
 			int maxEndIndex = startIndex + MAX_BATCH_SEARCH_LIMIT;
 			try {
 				JSONObject jsonObject = artistApi.getArtists(artistNames, startIndex, maxEndIndex);
-				Log.d(TAG, jsonObject.toString());
+				//Log.d(TAG, jsonObject.toString());
 				ArtistApiJSONParser jsonParser = new ArtistApiJSONParser();
 				
 				synchedArtistsCount += jsonParser.getBatchArtistCount(jsonObject);
@@ -81,12 +81,8 @@ public class SyncArtists extends AsyncTask<Void, Void, Void> {
 	protected void onPostExecute(Void result) {
 		super.onPostExecute(result);
 		if (fragment != null) {
-			/*if (fragment instanceof TwitterSyncingFragment) {
-				if (((ActionBarActivity)FragmentUtil.getActivity(fragment)).getSupportFragmentManager().getBackStackEntryCount() > 0) {
-					FragmentUtil.getActivity(fragment).onBackPressed();
-				}
-				
-			} else*/ if (fragment instanceof OnFragmentAliveListener && ((OnFragmentAliveListener)fragment).isAlive()) {
+			if (fragment instanceof OnFragmentAliveListener && ((OnFragmentAliveListener)fragment).isAlive()) {
+				//Log.d(TAG, "isAlive = " + ((OnFragmentAliveListener)fragment).isAlive());
 				FragmentUtil.getActivity(fragment).onBackPressed();
 			}
 		}
