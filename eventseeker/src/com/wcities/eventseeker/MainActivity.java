@@ -1146,6 +1146,11 @@ public class MainActivity extends ActionBarActivity implements
 					.getString(R.string.title_rep_code),
 					AppConstants.FRAGMENT_TAG_REP_CODE);
 
+		} else if (fragment instanceof FullScreenAddressMapFragment) {
+			onFragmentResumed(AppConstants.INVALID_INDEX, fragment.getArguments()
+					.getString(BundleKeys.VENUE_NAME),
+					AppConstants.FRAGMENT_TAG_FULL_SCREEN_ADDRESS_MAP);
+
 		} else if (fragment instanceof SearchFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources()
 					.getString(R.string.title_search_results),

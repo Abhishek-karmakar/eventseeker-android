@@ -22,8 +22,7 @@ public class NotificationUtil {
 		String title = context.getString(R.string.app_name);
 		Intent notificationIntent = new Intent(context, MainActivity.class);
 		notificationIntent.putExtra(BundleKeys.EVENT, event);
-		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		final PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationId, 
 				notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
