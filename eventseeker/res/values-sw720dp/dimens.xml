@@ -175,7 +175,7 @@
     <dimen name="divider_lnr_layout_btns_ht_include_fragment_event_details_footer">38dp</dimen>
     <dimen name="lnr_layout_btns_txt_size_include_fragment_event_details_footer">20sp</dimen>
     <dimen name="lnr_layout_btns_margin_b_include_fragment_event_details_footer">20dp</dimen>
-    <dimen name="chk_box_drawable_pad_include_fragment_event_details_footer">20dp</dimen>
+    <dimen name="chk_box_drawable_pad_include_fragment_event_details_footer">10dp</dimen>
 
     <!-- fragment_custom_tabs.xml -->
     <dimen name="tab_bar_margin_fragment_custom_tabs">20dp</dimen>

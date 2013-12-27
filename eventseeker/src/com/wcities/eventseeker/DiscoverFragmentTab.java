@@ -121,6 +121,16 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 		View vActionBar = lytInflater.inflate(R.layout.action_bar_custom_view_item, null);
 		txtCityName = (TextView) vActionBar.findViewById(R.id.txtCityName);
 
+		/**
+		 * Below check 'if(!isAdded())' is added as some times while orientation changes when Fragment isn't 
+		 * yet added(Attached to activity) and 'getResources()' gets called. So, this results in crash saying 
+		 * 'java.lang.IllegalStateException: Fragment DiscoverFragmentTab not attached to Activity'.
+		 * Now, if Fragment isn't yet added then the call will be returned from the below check.
+		 */
+		if(!isAdded()) {
+			Log.d(TAG, "FRAGMENT ISN'T ATTACHED TO THE ACTIVITY");
+			return;
+		}
 		ActionBar.LayoutParams params;
 		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 			params = new ActionBar.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT, 

@@ -156,6 +156,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentLeft="true"
+	                            android:layout_margin="@dimen/chk_box_drawable_pad_include_fragment_event_details_footer"
                                 android:layout_centerVertical="true"
                                 android:src="@drawable/tickets" />
 
@@ -165,7 +166,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
                                 android:clickable="false"
-                                android:drawablePadding="@dimen/chk_box_drawable_pad_include_fragment_event_details_footer"
                                 android:gravity="center"
                                 android:text="Tickets"
                                 android:textColor="@android:color/white"
