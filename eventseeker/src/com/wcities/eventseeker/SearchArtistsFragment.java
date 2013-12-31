@@ -187,6 +187,9 @@ public class SearchArtistsFragment extends ListFragment implements SearchFragmen
 			} else {
 				artistListAdapter.setMoreDataAvailable(false);
 				artistList.remove(artistList.size() - 1);
+				if(artistList.isEmpty()) {
+					artistList.add(new Artist(AppConstants.INVALID_ID, null));
+				}
 			}
 			artistListAdapter.notifyDataSetChanged();
 		}    	

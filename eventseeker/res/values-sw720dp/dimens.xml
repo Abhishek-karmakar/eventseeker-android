@@ -82,9 +82,9 @@
     <dimen name="img_item_h_fragment_search_artists_list_item">170dp</dimen>
 
     <!-- fragment_following.xml -->
-    <dimen name="grd_following_hor_ver_spacing_fragment_following_tab">20dp</dimen>
+    <dimen name="grd_following_hor_ver_spacing_fragment_following_tab">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="grd_following_margin_fragment_following_tab">15dp</dimen>
-    <dimen name="grd_following_pad_fragment_following_tab">20dp</dimen>
+    <dimen name="grd_following_pad_fragment_following_tab">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
 
     <!-- fragment_my_events_list_item.xml -->
     <dimen name="img_event_w_fragment_my_events_list_item">320dp</dimen>

@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
@@ -36,6 +37,7 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ArtistListener;
@@ -65,21 +67,32 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 
 	private AbsListView absListView;
 
+	private View rltDummyLyt;
+
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
 
 		if (wcitiesId == null) {
-			wcitiesId = ((EventSeekr) FragmentUtil.getActivity(this)
-					.getApplication()).getWcitiesId();
+			wcitiesId = ((EventSeekr) FragmentUtil.getActivity(this).getApplication()).getWcitiesId();
 		}
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_following, null);
+		rltDummyLyt = v.findViewById(R.id.rltDummyLyt);
+		return v;
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		// Log.d(TAG, "onActivityCreated()");
+		
+		absListView = getScrollableView();
 
 		if (artistList == null) {
 			artistList = new ArrayList<Artist>();
@@ -93,10 +106,11 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 			loadArtistsInBackground();
 
 		} else {
+			if (artistList.isEmpty()) {
+				showNoArtistFound();				
+			}
 			artistListAdapter.setmInflater(FragmentUtil.getActivity(this));
 		}
-		
-		absListView = getScrollableView();
 		
 		absListView.setRecyclerListener(new RecyclerListener() {
 			
@@ -105,8 +119,6 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 				freeUpBitmapMemory(view);
 			}
 		});
-		
-		
 		
 		absListView.setAdapter(artistListAdapter);
 		absListView.setScrollingCacheEnabled(false);
@@ -152,6 +164,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 
 		@Override
 		protected void onPostExecute(List<Artist> tmpArtists) {
+
 			if (!tmpArtists.isEmpty()) {
 				int prevArtistListSize = artistList.size();
 				artistList.addAll(artistList.size() - 1, tmpArtists);
@@ -178,6 +191,9 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 			} else {
 				isMoreDataAvailable = false;
 				artistList.remove(artistList.size() - 1);
+				if (artistList.isEmpty()) {
+					showNoArtistFound();
+				}
 			}
 			
 			artistListAdapter.notifyDataSetChanged();
@@ -209,8 +225,8 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (artistList.get(position) == null) {
 				if (convertView == null || !convertView.getTag().equals(TAG_PROGRESS_INDICATOR)) {
-					if(((EventSeekr)FragmentUtil.getActivity(FollowingParentFragment.this).getApplicationContext())
-							.isTablet()) {
+					if(((EventSeekr)FragmentUtil.getActivity(FollowingParentFragment.this)
+							.getApplicationContext()).isTablet()) {
 						convertView = mInflater.inflate(R.layout.grd_progress_bar, null);
 					} else {
 						convertView = mInflater.inflate(R.layout.list_progress_bar, null);
@@ -218,16 +234,15 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 					convertView.setTag(TAG_PROGRESS_INDICATOR);
 				}
 
-				if ((loadArtists == null || loadArtists.getStatus() == Status.FINISHED)
-						&& isMoreDataAvailable) {
+				if ((loadArtists == null || loadArtists.getStatus() == Status.FINISHED) && isMoreDataAvailable) {
 					loadArtistsInBackground();
 				}
 
 			} else {
 				
 				if (convertView == null || !convertView.getTag().equals(TAG_CONTENT)) {
-					if (((EventSeekr)FragmentUtil.getActivity(FollowingParentFragment.this).getApplicationContext())
-							.isTablet()) {
+					if (((EventSeekr)FragmentUtil.getActivity(FollowingParentFragment.this)
+							.getApplicationContext()).isTablet()) {
 						convertView = mInflater.inflate(R.layout.fragment_following_artists_list_item_tab, null);
 					} else {
 						convertView = mInflater.inflate(R.layout.fragment_search_artists_list_item, null);
@@ -329,6 +344,11 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 			freeUpBitmapMemory(absListView.getChildAt(j));
 		}
 		super.onDestroyView();
+	}
+	
+	void showNoArtistFound() {
+		absListView.setVisibility(View.GONE);
+		rltDummyLyt.setVisibility(View.VISIBLE);
 	}
 
 	protected abstract AbsListView getScrollableView();

@@ -16,6 +16,7 @@ import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -164,7 +165,11 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 			} else {
 				isMoreDataAvailable = false;
 				venueList.remove(venueList.size() - 1);
+				if(venueList.isEmpty()) {
+					venueList.add(new Venue(AppConstants.INVALID_ID));
+				}
 			}
+			
 			venueListAdapter.notifyDataSetChanged();
 		}    	
     }
@@ -200,16 +205,23 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 				}
 				
 			} else {
-				if (convertView == null || !convertView.getTag().equals(TAG_CONTENT)) {
+				
+				final Venue venue = getItem(position);
+				
+				if (venue.getId() == AppConstants.INVALID_ID) {
+					convertView = mInflater.inflate(R.layout.list_no_items_found, null);
+					((TextView)convertView).setText("No Venue Found.");
+					convertView.setTag("");
+					return convertView;
+				
+				} else if (convertView == null || !convertView.getTag().equals(TAG_CONTENT)) {
 					convertView = mInflater.inflate(R.layout.fragment_discover_by_category_list_item_evt, null);
 					convertView.setTag(TAG_CONTENT);
-					
 					convertView.findViewById(R.id.imgEvtTime).setVisibility(View.INVISIBLE);
 					convertView.findViewById(R.id.txtEvtTime).setVisibility(View.INVISIBLE);
 					convertView.findViewById(R.id.txtEvtTimeAMPM).setVisibility(View.INVISIBLE);
 				}
 				
-				final Venue venue = getItem(position);
 				((TextView)convertView.findViewById(R.id.txtEvtTitle)).setText(venue.getName());
 				
 				Address address = venue.getAddress();

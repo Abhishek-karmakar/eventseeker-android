@@ -13,7 +13,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -54,6 +53,7 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.FriendNewsItem;
@@ -98,6 +98,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	
 	private boolean isTablet;
 	private boolean is7InchTabletInPortrait;
+	private View rltDummyLyt;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -113,10 +114,13 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
 		is7InchTabletInPortrait = ((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext())
 				.is7InchTabletAndInPortraitMode();
 		orientation = getResources().getConfiguration().orientation;
-		return super.onCreateView(inflater, container, savedInstanceState);
+		View v = inflater.inflate(R.layout.fragment_friends_activity_list, null);
+		rltDummyLyt = v.findViewById(R.id.rltDummyLyt);
+		return v;
 	}
 	
 	@Override
@@ -131,6 +135,9 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 			loadFriendsNewsInBackground();
 			
 		} else {
+			if (friendNewsItems.isEmpty()) {
+				showNoFriendsActivityFound();
+			}
 			friendActivityListAdapter.setmInflater(FragmentUtil.getActivity(this));
 		}
 
@@ -280,9 +287,18 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 			} else {
 				isMoreDataAvailable = false;
 				friendNewsItems.remove(friendNewsItems.size() - 1);
+				if(friendNewsItems.isEmpty()) {
+					/*FriendNewsItem friendNewsItem = new FriendNewsItem();
+					friendNewsItem.setFriendId(AppConstants.INVALID_STR_ID);
+					friendNewsItems.add(friendNewsItem);*/
+					showNoFriendsActivityFound();
+				}
 			}
+			
+			
 			friendActivityListAdapter.notifyDataSetChanged();
-		}    	
+		}
+
     }
 	
 	private class FriendActivityListAdapter extends BaseAdapter {
@@ -318,7 +334,17 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 			} else {
 				FriendNewsItemViewHolder holder;
 				
-				if (convertView == null || !(convertView.getTag() instanceof FriendNewsItemViewHolder)) {
+				/*if ((item instanceof List)
+						&& ((List<FriendNewsItem>)item).get(0).getFriendId().equals(AppConstants.INVALID_STR_ID) 
+					|| (item instanceof FriendNewsItem)
+						&& ((FriendNewsItem)item).getFriendId().equals(AppConstants.INVALID_STR_ID)) {
+					
+					convertView = mInflater.inflate(R.layout.list_no_items_found, null);
+					((TextView)convertView).setText("No Friends Activity Found.");
+					convertView.setTag("");
+					return convertView;
+					
+				} else */if (convertView == null || !(convertView.getTag() instanceof FriendNewsItemViewHolder)) {
 					convertView = mInflater.inflate(R.layout.friends_activity_list_item, null);
 					holder = new FriendNewsItemViewHolder();
 					
@@ -360,7 +386,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 		public Object getItem(int position) {
 
 			if (is7InchTabletInPortrait || (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet)) {
-				return friendNewsItems.get(position);
+				return friendNewsItems.get(position); // returning an object of FriendNewsItem, NOT A LIST 
 				
 			} else {
 				List<FriendNewsItem> friendsNewsItemList = new ArrayList<FriendNewsItem>();
@@ -368,7 +394,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 				if (friendNewsItems.size() > position * 2 + 1) {
 					friendsNewsItemList.add(friendNewsItems.get(position * 2 + 1));
 				}
-				return friendsNewsItemList;
+				return friendsNewsItemList; // returning an object of List<FriendNewsItem>
 			}
 		}
 
@@ -805,4 +831,10 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 		Log.d(TAG, "call()");
 		onSessionStateChange(session, state, exception);
 	}
+	
+	private void showNoFriendsActivityFound() {
+		rltDummyLyt.setVisibility(View.VISIBLE);
+		getListView().setVisibility(View.GONE);
+	}    	
+
 }

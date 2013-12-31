@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.AbsListView.RecyclerListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -18,16 +19,17 @@ import com.wcities.eventseeker.adapter.ArtistNewsListAdapter;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadArtistNews;
 import com.wcities.eventseeker.asynctask.LoadArtistNews.ArtistNewsListItem;
+import com.wcities.eventseeker.asynctask.LoadArtistNews.OnNewsLoadedListener;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.ArtistNewsItem;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
-import com.wcities.eventseeker.custom.view.ResizableImageView;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class ArtistNewsListFragment extends ListFragmentLoadableFromBackStack implements LoadItemsInBackgroundListener {
+public class ArtistNewsListFragment extends ListFragmentLoadableFromBackStack implements LoadItemsInBackgroundListener, OnNewsLoadedListener {
 	
 	protected static final String TAG = ArtistNewsListFragment.class.getName();
 
@@ -44,6 +46,8 @@ public class ArtistNewsListFragment extends ListFragmentLoadableFromBackStack im
 	private boolean is7InchTabletInPortrait;
 
 	private boolean isTablet;
+
+	private View rltDummyLyt;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -97,7 +101,6 @@ public class ArtistNewsListFragment extends ListFragmentLoadableFromBackStack im
 			}	
 		}
         //Log.d(TAG, "width = " + imgWidth);
-        
 		return v;
 	}
 	
@@ -116,6 +119,7 @@ public class ArtistNewsListFragment extends ListFragmentLoadableFromBackStack im
 		} else {
 			artistNewsListAdapter.updateContext(FragmentUtil.getActivity(this));
 			artistNewsListAdapter.setImgWidth(imgWidth);
+			changeRltDummyLytVisibility();
 		}
 
 		setListAdapter(artistNewsListAdapter);
@@ -202,8 +206,25 @@ public class ArtistNewsListFragment extends ListFragmentLoadableFromBackStack im
 	
 	@Override
 	public void loadItemsInBackground() {
-		loadArtistNews = new LoadArtistNews(artistNewsListAdapter, wcitiesId, artistNewsListItems, artist);
+		loadArtistNews = new LoadArtistNews(artistNewsListAdapter, wcitiesId, artistNewsListItems, artist, this);
 		artistNewsListAdapter.setLoadArtistNews(loadArtistNews);
 		AsyncTaskUtil.executeAsyncTask(loadArtistNews, true);
 	}
+
+	@Override
+	public void onNewsLoaded() {
+		changeRltDummyLytVisibility();
+	}
+
+	private void changeRltDummyLytVisibility() {
+		if(artistNewsListItems.size() == 1 
+				&& artistNewsListItems.get(0) != null
+				&& ((ArtistNewsItem)((ArtistNewsListItem)artistNewsListItems.get(0))
+						.getItem()).getArtistName().equals(AppConstants.INVALID_STR_ID)) {
+			((ArtistNewsFragment)getParentFragment()).changeRltDummyLytVisibility(View.VISIBLE);
+		} else {
+			((ArtistNewsFragment)getParentFragment()).changeRltDummyLytVisibility(View.GONE);
+		}				
+	}
+
 }

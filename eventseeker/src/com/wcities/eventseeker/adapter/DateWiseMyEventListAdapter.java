@@ -140,6 +140,16 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 				mListener.loadItemsInBackground();
 			}
 
+		} else if (getItemViewType(position) == LIST_ITEM_TYPE.NO_EVENTS.ordinal()) {
+
+			final Event event = getItem(position).getEvent();
+
+			if (event.getId() == AppConstants.INVALID_ID) {
+				convertView = LayoutInflater.from(mContext).inflate(R.layout.list_no_items_found, null);
+				((TextView)convertView).setText("No Event Found.");
+				convertView.setTag("");
+			} 
+			
 		} else if (getItemViewType(position) == LIST_ITEM_TYPE.CONTENT.ordinal()) {
 
 			if (convertView == null	|| convertView.getTag() != LIST_ITEM_TYPE.CONTENT) {

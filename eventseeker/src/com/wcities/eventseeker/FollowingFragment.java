@@ -19,7 +19,7 @@ public class FollowingFragment extends FollowingParentFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.fragment_list, null);
+		View v = super.onCreateView(inflater, container, savedInstanceState);
 		listFollowing = (ListView) v.findViewById(android.R.id.list);
 		return v;
 	}
@@ -29,7 +29,6 @@ public class FollowingFragment extends FollowingParentFragment {
 		super.onActivityCreated(savedInstanceState);
 		listFollowing.setDivider(null);
 	}
-
 
 	@Override
 	protected AbsListView getScrollableView() {
