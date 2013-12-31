@@ -98,13 +98,13 @@ public class RecordApiJSONParser {
 			if (jPhone instanceof JSONArray) {
 				//Log.d(TAG, "array");
 				String phone = ((JSONArray) jPhone).getString(0);
-				phone = phone.replaceAll("[^\\d.]", "");
+				phone = ConversionUtil.removeNonNumericChars(phone);
 				venue.setPhone(phone);
 				
 			} else {
 				//Log.d(TAG, "not array");
 				String phone = (String) jPhone;
-				phone = phone.replaceAll("[^\\d.]", "");
+				phone = ConversionUtil.removeNonNumericChars(phone);
 				venue.setPhone(phone);
 			}
 		}

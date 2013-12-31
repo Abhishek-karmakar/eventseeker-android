@@ -305,13 +305,15 @@ public class VenueInfoFragment extends Fragment implements OnClickListener, Asyn
 			break;
 			
 		case R.id.btnPhone:
-			Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + venue.getPhone()));
-			startActivity(Intent.createChooser(intent, "Call..."));
+			if (venue.getPhone() != null) {
+				Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + venue.getPhone()));
+				startActivity(Intent.createChooser(intent, "Call..."));
+			}
 			break;
 			
 		case R.id.btnWeb:
 			if (venue.getUrl() != null) {
-				intent = new Intent(Intent.ACTION_VIEW, Uri.parse(venue.getUrl()));
+				Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(venue.getUrl()));
 				startActivity(intent);
 			}
 			break;

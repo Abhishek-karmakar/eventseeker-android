@@ -105,6 +105,11 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 			//Log.d(TAG, "chkCount() addAll for count = " + count);
 			artistsNewsListItems.addAll(artistsNewsListItems.size() - 1, batchLoaded);
 			
+			/**
+			 * Remove null item indicating progressbar if we have finished loading all items,
+			 * so that adapter won't try loading more items even though we are setting 
+			 * isMoreDataAvailable = true always below.
+			 */
 			if (!artistNewsListAdapter.isMoreDataAvailable()) {
 				artistsNewsListItems.remove(artistsNewsListItems.size() - 1);
 			}

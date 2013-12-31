@@ -6,3 +6,4 @@ debug.log
 .settings/
 bin/
 gen/
+proguard/

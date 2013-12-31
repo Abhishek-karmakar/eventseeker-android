@@ -74,13 +74,17 @@ public class VenueEventsFragment extends Fragment implements OnClickListener {
 		switch (v.getId()) {
 		
 		case R.id.btnPhone:
-			Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + venue.getPhone()));
-			startActivity(Intent.createChooser(intent, "Call..."));
+			if (venue.getPhone() != null) {
+				Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + venue.getPhone()));
+				startActivity(Intent.createChooser(intent, "Call..."));
+			}
 			break;
 			
 		case R.id.btnWeb:
-			intent = new Intent(Intent.ACTION_VIEW, Uri.parse(venue.getUrl()));
-			startActivity(intent);
+			if (venue.getUrl() != null) {
+				Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(venue.getUrl()));
+				startActivity(intent);
+			}
 			break;
 			
 		case R.id.btnDrive:

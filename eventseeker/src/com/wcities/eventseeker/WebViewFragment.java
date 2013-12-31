@@ -49,10 +49,11 @@ public class WebViewFragment extends FragmentLoadableFromBackStack {
 			}
 		});
 		
-		webView.getSettings().setSupportZoom(true) ; 
+		webView.getSettings().setSupportZoom(true); 
 		webView.getSettings().setBuiltInZoomControls(true);
-		webView.getSettings().setUseWideViewPort(true) ; 
-		webView.setInitialScale(1) ;
+		webView.getSettings().setUseWideViewPort(true);
+		webView.getSettings().setJavaScriptEnabled(true);
+		webView.setInitialScale(1);
 
 		if (webViewBundle == null) {
 			webView.loadUrl(url);

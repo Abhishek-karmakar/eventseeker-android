@@ -200,4 +200,8 @@ public class ConversionUtil {
 	public static String parseHtmlString(JSONObject jsonObject, String key) throws JSONException {
 		return Html.fromHtml(jsonObject.getString(key)).toString();
 	}
+	
+	public static String removeNonNumericChars(String src) {
+		return src.replaceAll("[^\\d.]", "");
+	}
 }

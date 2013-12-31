@@ -260,10 +260,10 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 			for (Iterator<FriendNewsItem> iterator = tmpFriendNewsItems.iterator(); iterator.hasNext();) {
 				FriendNewsItem friendNewsItem = iterator.next();
 				/**
-				 * Venue id is 0 by default for events which were tracked in past but afterwards deleted 
+				 * Venue startTime is null by default for events which were tracked in past but afterwards deleted 
 				 * from server due to some reason. We need not show such feeds.
 				 */
-				if (friendNewsItem.getAttending() == Attending.NOT_GOING || friendNewsItem.getVenueId() == 0) {
+				if (friendNewsItem.getAttending() == Attending.NOT_GOING || friendNewsItem.getStartTime() == null) {
 					iterator.remove();
 				}
 			}
