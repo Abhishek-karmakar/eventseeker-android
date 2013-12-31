@@ -16,12 +16,15 @@ import com.wcities.eventseeker.adapter.ArtistNewsListAdapter;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadArtistNews;
 import com.wcities.eventseeker.asynctask.LoadArtistNews.ArtistNewsListItem;
+import com.wcities.eventseeker.asynctask.LoadArtistNews.OnNewsLoadedListener;
+import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.core.ArtistNewsItem;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack implements LoadItemsInBackgroundListener {
+public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack implements LoadItemsInBackgroundListener, OnNewsLoadedListener {
 	
 	protected static final String TAG = ArtistsNewsListFragment.class.getName();
 
@@ -37,6 +40,8 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 
 	private boolean isTablet;
 	private boolean is7InchTabletInPortrait;
+
+	private View rltDummyLyt;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,7 +90,10 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 		}
         //Log.d(TAG, "width = " + imgWidth);
 		
-		return super.onCreateView(inflater, container, savedInstanceState);
+		super.onCreateView(inflater, container, savedInstanceState);
+		View v = inflater.inflate(R.layout.fragment_artists_news_list, null);
+		rltDummyLyt = v.findViewById(R.id.rltDummyLyt);
+		return v;
 	}
 	
 	@Override
@@ -93,6 +101,7 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 		super.onActivityCreated(savedInstanceState);
 		
 		if (artistsNewsListItems == null) {
+
 			artistsNewsListItems = new ArrayList<ArtistNewsListItem>();
 			artistNewsListAdapter = new ArtistNewsListAdapter(FragmentUtil.getActivity(this), null, 
 					this, artistsNewsListItems, imgWidth);
@@ -103,6 +112,7 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 		} else {
 			artistNewsListAdapter.updateContext(FragmentUtil.getActivity(this));
 			artistNewsListAdapter.setImgWidth(imgWidth);
+			changeRltDummyLytVisibility();
 		}
 
 		setListAdapter(artistNewsListAdapter);
@@ -182,8 +192,24 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	
 	@Override
 	public void loadItemsInBackground() {
-		loadArtistsNews = new LoadArtistNews(artistNewsListAdapter, wcitiesId, artistsNewsListItems, null);
+		loadArtistsNews = new LoadArtistNews(artistNewsListAdapter, wcitiesId, artistsNewsListItems, null, this);
 		artistNewsListAdapter.setLoadArtistNews(loadArtistsNews);
 		AsyncTaskUtil.executeAsyncTask(loadArtistsNews, true);
+	}
+	
+	@Override
+	public void onNewsLoaded() {
+		changeRltDummyLytVisibility();
+	}
+
+	private void changeRltDummyLytVisibility() {
+		if(artistsNewsListItems.size() == 1 
+				&& artistsNewsListItems.get(0) != null
+				&& ((ArtistNewsItem)((ArtistNewsListItem)artistsNewsListItems.get(0))
+						.getItem()).getArtistName().equals(AppConstants.INVALID_STR_ID)) {
+			rltDummyLyt.setVisibility(View.VISIBLE);
+		} else {
+			rltDummyLyt.setVisibility(View.GONE);
+		}				
 	}
 }

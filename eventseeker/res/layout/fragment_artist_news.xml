@@ -11,4 +11,14 @@
         android:layout_alignParentBottom="true"
         android:layout_marginTop="@dimen/include_fragment_event_details_footer_margin_t_fragment_event_featuring" />
 
+
+    <RelativeLayout android:id="@+id/rltDummyLyt"
+        android:layout_width="match_parent" 
+        android:layout_height="match_parent"
+        android:background="@drawable/story_space"
+        android:layout_marginLeft="@dimen/txt_list_no_items_found_pad_list_no_items_found"
+        android:layout_marginRight="@dimen/txt_list_no_items_found_pad_list_no_items_found"
+        android:layout_above="@+id/fragmentArtistDetailsFooter"
+        android:visibility="gone" />
+                
 </RelativeLayout>

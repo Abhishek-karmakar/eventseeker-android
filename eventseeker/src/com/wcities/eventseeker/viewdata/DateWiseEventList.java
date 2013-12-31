@@ -12,6 +12,8 @@ import java.util.TreeMap;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.android.gms.internal.el;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.util.ConversionUtil;
 
@@ -25,7 +27,7 @@ public class DateWiseEventList {
 	private Date dummyItemKey;
 	
 	public static enum LIST_ITEM_TYPE {
-		PROGRESS, HEADER, CONTENT
+		PROGRESS, HEADER, CONTENT, NO_EVENTS
 	};
 	
 	public DateWiseEventList() {
@@ -40,7 +42,11 @@ public class DateWiseEventList {
 	}
 	
 	public void addNoEventsMsg() {
-		dateToEventListMap.put(dummyItemKey, null);
+		Event event = new Event(AppConstants.INVALID_ID, null);
+		ArrayList<EventListItem> list = new ArrayList<DateWiseEventList.EventListItem>();
+		list.add(new EventListItem(event));
+		
+		dateToEventListMap.put(dummyItemKey, list);
 		totalSize++;
 	}
 	
@@ -76,6 +82,9 @@ public class DateWiseEventList {
 			totalSize--;
 			currentDate = new Date(Long.MAX_VALUE);
 			
+			if (totalSize == 0) {
+				addNoEventsMsg();
+			}
 			/*if (totalSize == 0) {
 				addNoEventsMsg();
 			}*/
@@ -139,12 +148,18 @@ public class DateWiseEventList {
 			index++;
 			Date date = iterator.next();
 			
+			List<EventListItem> eventListItems = dateToEventListMap.get(date);
 			if (index == position) {
-				LIST_ITEM_TYPE listItemType = (position == limitedCount - 1) ? LIST_ITEM_TYPE.PROGRESS : LIST_ITEM_TYPE.HEADER;
+				LIST_ITEM_TYPE listItemType;
+				if (position == limitedCount - 1) {
+					listItemType = (eventListItems == null) ? LIST_ITEM_TYPE.PROGRESS : LIST_ITEM_TYPE.NO_EVENTS;
+				} else {
+					listItemType = LIST_ITEM_TYPE.HEADER;					
+				}
+				
 				return listItemType;
 			}
 			
-			List<EventListItem> eventListItems = dateToEventListMap.get(date);
 			if (position > index + eventListItems.size()) {
 				index += eventListItems.size();
 				continue;
@@ -169,8 +184,9 @@ public class DateWiseEventList {
 				count++;
 				
 				//Log.d(TAG, "date = " + date + ", dateToEventListMap.get(date) = " + dateToEventListMap.get(date));
-
-				if (dateToEventListMap.get(date) != null) {
+				List<EventListItem> list = dateToEventListMap.get(date); 
+				if (list != null && 
+						!(list.get(0).isEvent && list.get(0).getEvent().getId() == AppConstants.INVALID_ID)) {
 					count += dateToEventListMap.get(date).size();
 				}
 			}
@@ -188,13 +204,18 @@ public class DateWiseEventList {
 			index++;
 			Date date = iterator.next();
 			
+			List<EventListItem> eventListItems = dateToEventListMap.get(date);
 			if (index == position) {
 				// null eventListItem represents progressbar
-				EventListItem eventListItem = (position == limitedCount - 1) ? null : new EventListItem(ConversionUtil.getDay(date));
+				EventListItem eventListItem;
+				if(position == limitedCount - 1) {
+					eventListItem = (eventListItems == null) ? null : eventListItems.get(0);					
+				} else {
+					eventListItem = new EventListItem(ConversionUtil.getDay(date));					
+				}
 				return eventListItem;
 			}
 			
-			List<EventListItem> eventListItems = dateToEventListMap.get(date);
 			if (position > index + eventListItems.size()) {
 				index += eventListItems.size();
 				continue;

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rltLayoutRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_gray" >
+
+    <RelativeLayout
+        android:id="@+id/rltDummyLyt"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+	    android:layout_margin="@dimen/txt_list_no_items_found_margin_list_no_items_found"
+        android:background="@drawable/story_space"
+        android:visibility="gone" />
+
+    <ListView
+    	android:paddingTop="@dimen/txt_list_no_items_found_pad_list_no_items_found"
+    	android:paddingBottom="@dimen/txt_list_no_items_found_pad_list_no_items_found"
+        android:id="@id/android:list"
+	    android:layout_margin="@dimen/rlt_list_no_items_found_pad_list_no_items_found"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</RelativeLayout>

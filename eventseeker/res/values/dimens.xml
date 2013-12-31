@@ -425,5 +425,10 @@
     <dimen name="img_progress_bar_mar_t_b_fragment_sync_account">10dp</dimen>
     <dimen name="img_progress_bar_size_fragment_sync_account">80dp</dimen>
     <dimen name="img_account_size_fragment_sync_account">40dp</dimen>
+    <!-- list_no_items_found.xml -->
+    <dimen name="txt_list_no_items_found_margin_list_no_items_found">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="txt_list_no_items_found_txt_size_list_no_items_found">@dimen/action_bar_title_txt_size</dimen>
+    <dimen name="txt_list_no_items_found_pad_list_no_items_found">0dp</dimen>
+    <dimen name="rlt_list_no_items_found_pad_list_no_items_found">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
 
 </resources>

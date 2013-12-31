@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.BaseAdapter;
 
 import com.wcities.eventseeker.api.Api;
@@ -24,6 +25,8 @@ import com.wcities.eventseeker.viewdata.DateWiseEventList;
 public class LoadDateWiseEvents extends AsyncTask<Void, Void, List<Event>> {
 	
 	private static final int EVENTS_LIMIT = 10;
+
+	private static final String TAG = LoadDateWiseEvents.class.getName();
 	
 	private DateWiseEventList eventList;
 	

@@ -11,14 +11,17 @@ import org.json.JSONObject;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.wcities.eventseeker.adapter.ArtistNewsListAdapter;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg.AsyncLoadImageListener;
+import com.wcities.eventseeker.asynctask.LoadArtistNews.OnNewsLoadedListener;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.ArtistNewsItem;
 import com.wcities.eventseeker.core.ArtistNewsItem.PostType;
@@ -27,6 +30,8 @@ import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> {
 	
 	private static final int ARTISTS_NEWS_LIMIT = 10;
+
+	private static final String TAG = LoadArtistNews.class.getName();
 	
 	private ArtistNewsListAdapter artistNewsListAdapter;
 	private String wcitiesId;
@@ -34,13 +39,19 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 	private List<ArtistNewsListItem> batchLoaded;
 	private List<ArtistNewsListItem> artistsNewsListItems;
 	private int count;
+	private OnNewsLoadedListener newsLoadedListener;
+	
+	public interface OnNewsLoadedListener {
+		public abstract void onNewsLoaded();
+	}
 	
 	public LoadArtistNews(ArtistNewsListAdapter artistNewsListAdapter, String wcitiesId, 
-			List<ArtistNewsListItem> artistsNewsListItems, Artist artist) {
+			List<ArtistNewsListItem> artistsNewsListItems, Artist artist, OnNewsLoadedListener newsLoadedListener) {
 		this.artistNewsListAdapter = artistNewsListAdapter;
 		this.wcitiesId = wcitiesId;
 		this.artist = artist;
 		this.artistsNewsListItems = artistsNewsListItems;
+		this.newsLoadedListener = newsLoadedListener;
 		
 		batchLoaded = new ArrayList<ArtistNewsListItem>();
 		artistNewsListAdapter.setBatchLoaded(batchLoaded);
@@ -100,14 +111,24 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 	}    	
 	
 	private void chkCount() {
-		//Log.d(TAG, "chkCount()");
-		if (count == batchLoaded.size()) {
+		if (count == batchLoaded.size()/*true*/) {
 			//Log.d(TAG, "chkCount() addAll for count = " + count);
 			artistsNewsListItems.addAll(artistsNewsListItems.size() - 1, batchLoaded);
-			
+			//artistNewsListAdapter.setMoreDataAvailable(false);
 			if (!artistNewsListAdapter.isMoreDataAvailable()) {
+				//Log.d(TAG, "!artistNewsListAdapter.isMoreDataAvailable");
 				artistsNewsListItems.remove(artistsNewsListItems.size() - 1);
+				//artistsNewsListItems.clear();
+				if (artistsNewsListItems.isEmpty()) {
+					ArtistNewsItem artistNewsItem = new ArtistNewsItem();
+					artistNewsItem.setArtistName(AppConstants.INVALID_STR_ID);
+					artistsNewsListItems.add(new ArtistNewsListItem(artistNewsItem, this));
+					if(newsLoadedListener != null) {
+						newsLoadedListener.onNewsLoaded();
+					}
+				}
 			}
+			
 			count = 0;
 			batchLoaded.clear();
 			artistNewsListAdapter.setMoreDataAvailable(true);

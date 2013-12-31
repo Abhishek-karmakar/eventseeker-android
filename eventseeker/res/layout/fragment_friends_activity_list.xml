@@ -1,34 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rltLayoutRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/rlt_layout_root_pad_fragment_connect_accounts_list"
     android:background="@color/dark_gray" >
 
-    <GridView
-        android:id="@+id/grdFollowing"
+    <RelativeLayout
+        android:id="@+id/rltDummyLyt"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+	    android:layout_margin="@dimen/txt_list_no_items_found_margin_list_no_items_found"
         android:background="@drawable/story_space"
-        android:horizontalSpacing="@dimen/grd_following_hor_ver_spacing_fragment_following_tab"
-        android:numColumns="3"
-        android:verticalSpacing="@dimen/grd_following_hor_ver_spacing_fragment_following_tab" >
-    </GridView>
-    
-     <RelativeLayout android:id="@+id/rltDummyLyt" 
-        android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-	    android:background="@drawable/story_space"
-	    android:visibility="gone">
+        android:visibility="gone" >
     	
 	    <TextView android:id="@+id/txtNoItemsFound"
 		    android:layout_width="match_parent"
 		    android:layout_height="match_parent"
-		    android:text="No Artist Found."
+		    android:text="No Friends Activity Found."
 		    android:gravity="top|center_horizontal" 
 		    android:textSize="@dimen/txt_list_no_items_found_txt_size_list_no_items_found"
 		    android:padding="@dimen/txt_list_no_items_found_margin_list_no_items_found"/>
 	        
     </RelativeLayout>
+	
+
+    <ListView
+        android:id="@id/android:list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

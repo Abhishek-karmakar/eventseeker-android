@@ -20,6 +20,7 @@ import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
@@ -86,6 +87,16 @@ public class DateWiseEventListAdapter extends BaseAdapter implements DateWiseEve
 					isMoreDataAvailable) {
 				mListener.loadItemsInBackground();
 			}
+			
+		} else if (getItemViewType(position) == LIST_ITEM_TYPE.NO_EVENTS.ordinal()) {
+
+			final Event event = getItem(position).getEvent();
+
+			if (event.getId() == AppConstants.INVALID_ID) {
+				convertView = LayoutInflater.from(mContext).inflate(R.layout.list_no_items_found, null);
+				((TextView)convertView).setText("No Event Found.");
+				convertView.setTag("");
+			} 
 			
 		} else if (getItemViewType(position) == LIST_ITEM_TYPE.CONTENT.ordinal()) {
 			if (convertView == null || convertView.getTag() != LIST_ITEM_TYPE.CONTENT) {

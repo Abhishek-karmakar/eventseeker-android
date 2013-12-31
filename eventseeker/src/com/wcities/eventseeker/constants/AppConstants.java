@@ -62,6 +62,8 @@ public class AppConstants {
 	public static final String FRAGMENT_TAG_TWITTER_SYNCING = "twitterSyncingFragment";
 	
 	public static final int INVALID_INDEX = -1;
+	public static final int INVALID_ID = -1;
+	public static final String INVALID_STR_ID = "-1";
 	
 	public static final int CATEGORY_ID_START = 900;
 	public static final int TOTAL_CATEGORIES = 12;

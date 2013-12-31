@@ -29,11 +29,11 @@ import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.asynctask.LoadArtistNews.ArtistNewsListItem;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.ArtistNewsItem;
 import com.wcities.eventseeker.core.ArtistNewsItem.PostType;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.ConversionUtil;
-import com.wcities.eventseeker.util.FragmentUtil;
 
 public class ArtistNewsListAdapter extends BaseAdapter {
 	
@@ -69,15 +69,13 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 		pad = mContext.getResources().getDimensionPixelSize(R.dimen.tab_bar_margin_fragment_custom_tabs);
         orientation = mContext.getResources().getConfiguration().orientation;
         isTablet = ((EventSeekr)mContext.getApplicationContext()).isTablet();
-        is7InchTabletInPortrait = ((EventSeekr)mContext.getApplicationContext())
-				.is7InchTabletAndInPortraitMode();
+        is7InchTabletInPortrait = ((EventSeekr)mContext.getApplicationContext()).is7InchTabletAndInPortraitMode();
     }
     
     public void updateContext(Context context) {
         mContext = context;
         orientation = mContext.getResources().getConfiguration().orientation;
-        is7InchTabletInPortrait = ((EventSeekr)mContext.getApplicationContext())
-        		.is7InchTabletAndInPortraitMode();
+        is7InchTabletInPortrait = ((EventSeekr)mContext.getApplicationContext()).is7InchTabletAndInPortraitMode();
 	}
     
     public void setLoadArtistNews(AsyncTask<Void, Void, List<ArtistNewsItem>> loadArtistNews) {
@@ -127,8 +125,21 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 			
 		} else {
 			ArtistNewsItemViewHolder holder;
-			
-			if (convertView == null || !(convertView.getTag() instanceof ArtistNewsItemViewHolder)) {
+			if ((item instanceof List)
+					&& ((List<ArtistNewsListItem>)item).get(0).getItem()
+					.getArtistName().equals(AppConstants.INVALID_STR_ID) 
+				|| (item instanceof ArtistNewsListItem)
+					&& ((ArtistNewsListItem)item).getItem()
+					.getArtistName().equals(AppConstants.INVALID_STR_ID)) {
+				
+				convertView = mInflater.inflate(R.layout.list_no_items_found, null);
+				convertView.setTag("");
+		
+				((TextView)convertView).setText("No Artist News Found.");
+				
+				return convertView;
+				
+			} else if (convertView == null || !(convertView.getTag() instanceof ArtistNewsItemViewHolder)) {
 				convertView = mInflater.inflate(R.layout.artists_fix_size_news_list_item, null);
 				
 				holder = new ArtistNewsItemViewHolder();
@@ -231,7 +242,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 		}
 
 		private void setContent(Object listItem, ViewGroup parent, int pos) {
-			if (mListener instanceof ArtistNewsListFragment) {
+			//if (mListener instanceof ArtistNewsListFragment) {
 				/**
 				 * Padding needs to be readjusted in case of ArtistNewsListFragment since it has tabs 
 				 * having their own content padding as well.
@@ -246,7 +257,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 					int padLeftRight = pad;
 					rootLnrLayout.setPadding(padLeftRight, padTop, padLeftRight, 0);
 				}
-			}
+			//}
 			
 			if (listItem instanceof ArtistNewsListItem) {
 				//Log.d(TAG, "ArtistNewsItem");

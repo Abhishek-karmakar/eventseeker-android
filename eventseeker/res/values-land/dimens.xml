@@ -116,4 +116,8 @@
 
     <!-- fragment_sync_account.xml -->
     <dimen name="v_dummy_ht_fragment_sync_account">10dp</dimen>
+    
+    <!-- list_no_items_found.xml -->
+    <dimen name="txt_list_no_items_found_pad_list_no_items_found">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="rlt_list_no_items_found_pad_list_no_items_found">0dp</dimen>
 </resources>

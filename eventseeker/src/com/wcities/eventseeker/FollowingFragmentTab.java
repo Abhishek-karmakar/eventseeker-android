@@ -18,15 +18,10 @@ public class FollowingFragmentTab extends FollowingParentFragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-
-		View v = inflater.inflate(R.layout.fragment_following_tab, null);
-
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View v = super.onCreateView(inflater, container, savedInstanceState);
 		grdFollowing = (GridView) v.findViewById(R.id.grdFollowing);
-
 		return v;
-
 	}
 
 	@Override

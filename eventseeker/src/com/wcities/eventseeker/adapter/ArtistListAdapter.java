@@ -21,6 +21,7 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
@@ -73,12 +74,21 @@ public class ArtistListAdapter<T> extends BaseAdapter {
 			}
 			
 		} else {
-			if (convertView == null || !convertView.getTag().equals(TAG_CONTENT)) {
+			
+			final Artist artist = getItem(position);
+			
+			if (artist.getId() == AppConstants.INVALID_ID) {
+				convertView = LayoutInflater.from(mContext).inflate(R.layout.list_no_items_found, null);
+				((TextView)convertView).setText("No Artist Found.");
+				convertView.setTag("");
+		
+				return convertView;
+			
+			} else if (convertView == null || !convertView.getTag().equals(TAG_CONTENT)) {
 				convertView = LayoutInflater.from(mContext).inflate(R.layout.fragment_search_artists_list_item, null);
 				convertView.setTag(TAG_CONTENT);
 			}
 			
-			final Artist artist = getItem(position);
 			((TextView)convertView.findViewById(R.id.txtArtistName)).setText(artist.getName());
 			
 			if(!((EventSeekr)mContext.getApplicationContext()).isTablet()) {

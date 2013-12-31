@@ -18,8 +18,11 @@ import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.UserTracker;
+import com.wcities.eventseeker.asynctask.LoadArtistNews.ArtistNewsListItem;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
+import com.wcities.eventseeker.core.ArtistNewsItem;
 import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.util.FragmentUtil;
 
@@ -33,6 +36,8 @@ public class ArtistNewsFragment extends Fragment implements ArtistDetailsFragmen
 	private RelativeLayout fragmentArtistDetailsFooter;
 	private ImageView imgFollow;
 	private TextView txtFollow;
+
+	private View rltDummyLyt;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -55,6 +60,8 @@ public class ArtistNewsFragment extends Fragment implements ArtistDetailsFragmen
 		fragmentArtistDetailsFooter.setOnClickListener(this);
 		
 		updateFollowingFooter();
+		
+		rltDummyLyt = v.findViewById(R.id.rltDummyLyt);
 		
 		return v;
 	}
@@ -128,5 +135,10 @@ public class ArtistNewsFragment extends Fragment implements ArtistDetailsFragmen
 	@Override
 	public void onArtistFollowingUpdated() {
 		updateFollowingFooter();
+	}
+	
+	
+	public void changeRltDummyLytVisibility(int visibility) {
+		rltDummyLyt.setVisibility(visibility);
 	}
 }

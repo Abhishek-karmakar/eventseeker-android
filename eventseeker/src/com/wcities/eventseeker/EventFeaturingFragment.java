@@ -208,6 +208,9 @@ public class EventFeaturingFragment extends ListFragment implements OnClickListe
 		 */
 		artistList.clear();
 		artistList.addAll(event.getArtists());
+		if(artistList.isEmpty()) {
+			artistList.add(new Artist(AppConstants.INVALID_ID, null));
+		}
 		artistListAdapter.notifyDataSetChanged();
 		
 		if (!event.getSchedule().getBookingInfos().isEmpty()) {
