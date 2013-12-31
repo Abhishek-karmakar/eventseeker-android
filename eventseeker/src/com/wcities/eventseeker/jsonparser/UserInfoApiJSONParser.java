@@ -171,26 +171,32 @@ public class UserInfoApiJSONParser {
 		}
 		friendNewsItem.setTrackName(jsonObject.getString(KEY_TRACK_NAME));
 		friendNewsItem.setAttending(Attending.getAttending(jsonObject.getInt(KEY_ATTENDING)));
-		friendNewsItem.setVenueId(jsonObject.getInt(KEY_VENUE_ID));
-		friendNewsItem.setVenueName(jsonObject.getString(KEY_VENUE_NAME));
-		
-		JSONObject jObjMedia = jsonObject.getJSONObject(KEY_MEDIA);
-		ImageAttribution imageAttribution = new ImageAttribution();
-		imageAttribution.setHighResPath(jObjMedia.getString(KEY_HIGH_RES_PATH));
-		imageAttribution.setLowResPath(jObjMedia.getString(KEY_LOW_RES_PATH));
-		imageAttribution.setMobiResPath(jObjMedia.getString(KEY_MOBI_RES_PATH));
-		friendNewsItem.setImageAttribution(imageAttribution);
-		
-		String imgName = "";
-		Object jImage = jObjMedia.get(KEY_IMAGE);
-		if (jImage instanceof JSONArray) {
-			JSONArray jArrImage = (JSONArray) jImage;
-			imgName = jArrImage.getString(0);
-			
-		} else {
-			imgName = (String) jImage;
+		if (jsonObject.has(KEY_VENUE_ID)) {
+			friendNewsItem.setVenueId(jsonObject.getInt(KEY_VENUE_ID));
 		}
-		friendNewsItem.setImgName(imgName);
+		if (jsonObject.has(KEY_VENUE_NAME)) {
+			friendNewsItem.setVenueName(jsonObject.getString(KEY_VENUE_NAME));
+		}
+
+		if (jsonObject.has(KEY_MEDIA)) {
+			JSONObject jObjMedia = jsonObject.getJSONObject(KEY_MEDIA);
+			ImageAttribution imageAttribution = new ImageAttribution();
+			imageAttribution.setHighResPath(jObjMedia.getString(KEY_HIGH_RES_PATH));
+			imageAttribution.setLowResPath(jObjMedia.getString(KEY_LOW_RES_PATH));
+			imageAttribution.setMobiResPath(jObjMedia.getString(KEY_MOBI_RES_PATH));
+			friendNewsItem.setImageAttribution(imageAttribution);
+		
+			String imgName = "";
+			Object jImage = jObjMedia.get(KEY_IMAGE);
+			if (jImage instanceof JSONArray) {
+				JSONArray jArrImage = (JSONArray) jImage;
+				imgName = jArrImage.getString(0);
+				
+			} else {
+				imgName = (String) jImage;
+			}
+			friendNewsItem.setImgName(imgName);
+		}
 		
 		if (jsonObject.has(KEY_EVENT_DATE)) {
 			String strStartDate = jsonObject.getString(KEY_EVENT_DATE);
