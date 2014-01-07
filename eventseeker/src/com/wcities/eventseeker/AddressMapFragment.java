@@ -39,7 +39,6 @@ import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GeoUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
-import com.wcities.eventseeker.util.ViewUtil;
 
 public class AddressMapFragment extends SupportMapFragment implements GeoUtilListener {
 	
@@ -298,15 +297,21 @@ public class AddressMapFragment extends SupportMapFragment implements GeoUtilLis
 	}
 
 	@Override
-	public void onLatlngSearchCompleted(String strAddress) {
+	public void onAddressSearchCompleted(String strAddress) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void onAddressSearchCompleted(Address address) {
+	public void onLatlngSearchCompleted(Address address) {
 		if (address != null) {
 			updateLatLon(address.getLatitude(), address.getLongitude());
 		}
+	}
+
+	@Override
+	public void onCitySearchCompleted(String city) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -1,0 +1,66 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical" >
+
+	<LinearLayout android:id="@+id/lnrLayoutIcons"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal">
+	    
+	    <ImageView android:id="@+id/imgDiscover"
+	        android:layout_width="0dp"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1"
+	        android:scaleType="centerInside"
+	        android:src="@drawable/discover" />
+	    
+	    <ImageView android:id="@+id/imgFeatured"
+	        android:layout_width="0dp"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1"
+	        android:scaleType="centerInside"
+	        android:src="@drawable/favorites" />
+	    
+	    <ImageView android:id="@+id/imgSetting"
+	        android:layout_width="0dp"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1"
+	        android:scaleType="centerInside"
+	        android:src="@drawable/search" />
+	    
+	</LinearLayout>
+    
+	<LinearLayout android:id="@+id/lnrLayoutBtns"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@id/lnrLayoutIcons"
+	    android:orientation="horizontal">
+	    
+	    <Button android:id="@+id/btnDiscover"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:background="@android:color/transparent"
+	        android:text="DISCOVER"
+	        android:textColor="@color/b_lnr_layout_btns_txt_color_fragment_plan_travel" />
+	    
+	    <Button android:id="@+id/btnFeatured"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:background="@android:color/transparent"
+	        android:text="FEATURED"
+	        android:textColor="@color/b_lnr_layout_btns_txt_color_fragment_plan_travel" />
+	    
+	    <Button android:id="@+id/btnSetting"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:background="@android:color/transparent"
+	        android:text="SETTING"
+	        android:textColor="@color/b_lnr_layout_btns_txt_color_fragment_plan_travel" />
+	    
+	</LinearLayout>
+	
+</RelativeLayout>

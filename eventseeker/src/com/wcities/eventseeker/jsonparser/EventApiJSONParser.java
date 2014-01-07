@@ -10,7 +10,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.text.Html;
 import android.util.SparseArray;
 
 import com.wcities.eventseeker.core.Address;
@@ -18,11 +17,11 @@ import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.BookingInfo;
 import com.wcities.eventseeker.core.Country;
 import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Friend;
 import com.wcities.eventseeker.core.ImageAttribution;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.core.Venue;
-import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.util.ConversionUtil;
 
 public class EventApiJSONParser {
@@ -274,17 +273,20 @@ public class EventApiJSONParser {
 	}
 	
 	private void fillBookingInfo(Schedule schedule, JSONObject jObjSchedule) throws JSONException {
-		Object objBookinglink = jObjSchedule.getJSONObject(KEY_BOOKINGINFO).get(KEY_BOOKINGLINK);
-		
-		if (objBookinglink instanceof JSONArray) {
-			JSONArray jArrBookingLinks = (JSONArray) objBookinglink;
-			for (int i = 0; i < jArrBookingLinks.length(); i++) {
-				JSONObject jObjBookingLink = jArrBookingLinks.getJSONObject(i);
-				schedule.addBookingInfo(getBookingInfo(jObjBookingLink));
-			}
+		JSONObject jObjBookingInfo = jObjSchedule.getJSONObject(KEY_BOOKINGINFO);
+		if (jObjBookingInfo.has(KEY_BOOKINGLINK)) {
+			Object objBookinglink = jObjBookingInfo.get(KEY_BOOKINGLINK);
 			
-		} else {
-			schedule.addBookingInfo(getBookingInfo((JSONObject) objBookinglink));
+			if (objBookinglink instanceof JSONArray) {
+				JSONArray jArrBookingLinks = (JSONArray) objBookinglink;
+				for (int i = 0; i < jArrBookingLinks.length(); i++) {
+					JSONObject jObjBookingLink = jArrBookingLinks.getJSONObject(i);
+					schedule.addBookingInfo(getBookingInfo(jObjBookingLink));
+				}
+				
+			} else {
+				schedule.addBookingInfo(getBookingInfo((JSONObject) objBookinglink));
+			}
 		}
 	}
 	

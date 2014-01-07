@@ -430,5 +430,36 @@
     <dimen name="txt_list_no_items_found_txt_size_list_no_items_found">@dimen/action_bar_title_txt_size</dimen>
     <dimen name="txt_list_no_items_found_pad_list_no_items_found">0dp</dimen>
     <dimen name="rlt_list_no_items_found_pad_list_no_items_found">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-
+	<!-- starts for bosch -->
+	<!-- activity_bosch_main.xml -->
+    <dimen name="b_root_navigation_drawer_w_main">210dp</dimen>
+	<!-- bosch_navigation_drawer_list_item.xml -->
+    <dimen name="b_rlt_layout_content_pad_vert_navigation_drawer_list_item">12dp</dimen>
+    <dimen name="b_rlt_layout_content_margin_l_navigation_drawer_list_item">10dp</dimen>
+    <dimen name="b_txt_title_margin_l_navigation_drawer_list_item">10dp</dimen>
+    <dimen name="b_txt_title_txt_size_navigation_drawer_list_item">18sp</dimen>
+    <dimen name="b_divider_ht_navigation_drawer_list_item">1dp</dimen>
+    <dimen name="b_divider_margin_l_navigation_drawer_list_item">10dp</dimen>
+    <dimen name="b_divider_margin_r_navigation_drawer_list_item">5dp</dimen>
+    <!-- bosch_actionbar_titleview.xml -->
+    <dimen name="b_actionbar_root_rlt_layout_pad_hor_bosch_actionbar_titleview">10dp</dimen>
+    <dimen name="b_txt_actionbar_title_txt_size_bosch_actionbar_titleview">16sp</dimen>
+    <!-- fragment_bosch_discover.xml -->
+    <dimen name="b_grd_evt_categories_hor_space_fragment_bosch_discover">15dp</dimen>
+    <dimen name="b_grd_evt_categories_vert_space_fragment_bosch_discover">15dp</dimen>
+    <dimen name="b_grd_evt_categories_pad_fragment_bosch_discover">10dp</dimen>
+    <!-- bosch_grid_category.xml -->
+    <dimen name="b_txt_category_pad_vert_bosch_grid_category">2dp</dimen>
+    <!-- bosch_fragment_discover_by_category_list_item_header.xml -->
+    <dimen name="b_txt_date_pad_bosch_fragment_discover_by_category_list_item_header">2dp</dimen>
+    <!-- bosch_fragment_discover_by_category_list_item_evt.xml -->
+    <dimen name="b_rlt_layout_root_pad_t_bosch_fragment_discover_by_category_list_item_evt">3dp</dimen>
+    <dimen name="b_img_event_w_bosch_fragment_discover_by_category_list_item_evt">80dp</dimen>
+    <dimen name="b_img_event_ht_bosch_fragment_discover_by_category_list_item_evt">60dp</dimen>
+    <dimen name="b_img_event_margin_l_bosch_fragment_discover_by_category_list_item_evt">5dp</dimen>
+    <dimen name="b_lnr_layout_details_margin_l_bosch_fragment_discover_by_category_list_item_evt">15dp</dimen>
+    <dimen name="b_txt_title_txt_size_bosch_fragment_discover_by_category_list_item_evt">16sp</dimen>
+    <dimen name="b_divider_ht_bosch_fragment_discover_by_category_list_item_evt">1dp</dimen>
+    <dimen name="b_divider_margin_t_bosch_fragment_discover_by_category_list_item_evt">3dp</dimen>
+    <!-- ends for bosch -->
 </resources>

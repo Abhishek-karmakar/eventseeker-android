@@ -8,11 +8,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.wcities.eventseeker.cache.BitmapCacheable;
-import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
+import com.wcities.eventseeker.cache.BitmapCacheable;
+import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 
 public class BitmapUtil {
 	

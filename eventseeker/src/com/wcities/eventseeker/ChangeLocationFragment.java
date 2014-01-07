@@ -1,25 +1,17 @@
 package com.wcities.eventseeker;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
-import android.net.http.AndroidHttpClient;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.MenuItemCompat.OnActionExpandListener;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.SearchView.OnCloseListener;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,11 +27,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
-import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
-import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GeoUtil;
@@ -181,7 +170,7 @@ public class ChangeLocationFragment extends FragmentLoadableFromBackStack implem
     		
     		// Alternative way to find lat-lon
     		if (addresses == null || addresses.isEmpty()) {
-    			GeoUtil.getFromLocation(lat, lon, (GeoUtilListener) getParentFragment());
+    			GeoUtil.getAddressFromLocation(lat, lon, (GeoUtilListener) getParentFragment());
     		}
 
             boolean mapSetUp = ((ChangeLocationFragment) getParentFragment()).setUpMapIfNeeded();
@@ -238,15 +227,21 @@ public class ChangeLocationFragment extends FragmentLoadableFromBackStack implem
 	}
 
 	@Override
-	public void onLatlngSearchCompleted(String address) {
+	public void onAddressSearchCompleted(String address) {
 		if (address != null && address.length() != 0) {
 			strAddress = address;
 			setMarker(lat, lon);
 		}
 	}
+	
+	@Override
+	public void onCitySearchCompleted(String city) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
-	public void onAddressSearchCompleted(Address address) {
+	public void onLatlngSearchCompleted(Address address) {
 		if (address != null) {
 			onAddressUpdated(address);
 		}

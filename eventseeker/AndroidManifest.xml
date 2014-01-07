@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.wcities.eventseeker"
-    android:installLocation="auto"
+    android:installLocation="internalOnly"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -14,10 +14,10 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.EventSeekr" >
-       
-        <activity android:name="com.wcities.eventseeker.MainActivity" 
-            android:windowSoftInputMode="adjustPan|adjustResize">
-           <intent-filter>
+        <activity
+            android:name="com.wcities.eventseeker.MainActivity"
+            android:windowSoftInputMode="adjustPan|adjustResize" >
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -43,12 +43,12 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyC4DsIo1BknPFbcHZ5y89UygHgWxgUhFic" />
-            
+
         <!-- production keys -->
         <!-- <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDUaOHXTK9bv4-JhQ3h_1M0iew07JqTb9I" /> -->
-            
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/fb_app_id" />
@@ -58,12 +58,12 @@
             android:label="Locked"
             android:screenOrientation="portrait" >
         </activity>
-        
-        <activity android:name=".exception.ReportActivity" android:label="Crash Reporting"
-			android:noHistory="true"
-			android:theme="@android:style/Theme.NoDisplay"
-			/>
-		
+        <activity
+            android:name="com.wcities.eventseeker.exception.ReportActivity"
+            android:label="Crash Reporting"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.NoDisplay" />
+
         <receiver
             android:name="com.wcities.eventseeker.widget.EventseekerWidgetProvider"
             android:icon="@drawable/ic_launcher"
@@ -97,6 +97,7 @@
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
                 <category android:name="com.wcities.eventseeker" />
             </intent-filter>
         </receiver>
@@ -106,6 +107,18 @@
                 <action android:name="com.android.music.metachanged" />
             </intent-filter>
         </receiver>
+
+        <!-- Bosch registrations start -->
+        <meta-data
+            android:name="usesMySPINServerSDK"
+            android:value="true" />
+
+        <activity android:name="com.wcities.eventseeker.bosch.BoschMainActivity"
+            android:label="@string/title_activity_bosch_main"
+            android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <!-- Bosch registrations end -->
+        
     </application>
 
     <permission
@@ -120,9 +133,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <!-- Required to pair Bluetooth devices -->
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <!-- Required to pair Bluetooth devices for ford sync -->
+    <!-- <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" /> -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />

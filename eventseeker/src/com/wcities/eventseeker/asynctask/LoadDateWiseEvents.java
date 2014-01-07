@@ -10,7 +10,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.BaseAdapter;
 
 import com.wcities.eventseeker.api.Api;

@@ -12,7 +12,6 @@ import org.json.JSONObject;
 
 import android.content.res.Resources;
 import android.text.Html;
-import android.util.Log;
 
 public class ConversionUtil {
 	
@@ -105,8 +104,6 @@ public class ConversionUtil {
 	}
 	
 	/**
-	 * @param year
-	 * @param month
 	 * @param day
 	 * @return date in the form (dd MMMM hh:mm a).
 	 */

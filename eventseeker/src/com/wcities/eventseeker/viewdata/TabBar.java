@@ -3,13 +3,9 @@ package com.wcities.eventseeker.viewdata;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.wcities.eventseeker.adapter.SwipeTabsAdapter;
-
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.widget.Button;
 
 public class TabBar {

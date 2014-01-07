@@ -11,8 +11,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.ford.syncV4.exception.SyncException;
@@ -51,10 +49,8 @@ import com.ford.syncV4.proxy.rpc.UnsubscribeButtonResponse;
 import com.ford.syncV4.proxy.rpc.enums.InteractionMode;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.EventApi;
-import com.wcities.eventseeker.api.EventApi.MoreInfo;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.applink.service.AppLinkService;
-import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.jsonparser.EventApiJSONParser;

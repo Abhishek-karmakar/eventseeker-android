@@ -3,15 +3,11 @@ package com.wcities.eventseeker.util;
 import java.util.Iterator;
 import java.util.List;
 
-import com.wcities.eventseeker.EventDetailsFragment;
-import com.wcities.eventseeker.EventFeaturingFragment;
-import com.wcities.eventseeker.FeaturedEventsFragment;
-import com.wcities.eventseeker.interfaces.ActivityImmediateFragmentLoadableFromBackStack;
-
 import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
+
+import com.wcities.eventseeker.interfaces.ActivityImmediateFragmentLoadableFromBackStack;
 
 public class FragmentUtil {
 

@@ -1,5 +1,7 @@
 package com.wcities.eventseeker.viewdata;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,7 +14,6 @@ import java.util.TreeMap;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.google.android.gms.internal.el;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.util.ConversionUtil;
@@ -194,6 +195,44 @@ public class DateWiseEventList {
 		//Log.d(TAG, "count = " + count + ", size = " + totalSize);
 		limitedCount = count;
 		return count;
+	}
+	
+	public EventListItem getItem(int position, String dateFormat) {
+		int index = -1;
+		Set<Date> keys = dateToEventListMap.keySet();
+		
+		for (Iterator<Date> iterator = keys.iterator(); iterator.hasNext();) {
+			index++;
+			Date date = iterator.next();
+			
+			List<EventListItem> eventListItems = dateToEventListMap.get(date);
+			if (index == position) {
+				// null eventListItem represents progressbar
+				EventListItem eventListItem;
+				if (position == limitedCount - 1) {
+					eventListItem = (eventListItems == null) ? null : eventListItems.get(0);	
+					
+				} else {
+					eventListItem = new EventListItem(new SimpleDateFormat(dateFormat).format(date));					
+				}
+				return eventListItem;
+			}
+			
+			if (position > index + eventListItems.size()) {
+				index += eventListItems.size();
+				continue;
+				
+			} else {
+				for (Iterator<EventListItem> iterator2 = eventListItems.iterator(); iterator2.hasNext();) {
+					EventListItem eventListItem = iterator2.next();
+					index++;
+					if (position == index) {
+						return eventListItem;
+					}
+				}
+			}
+		}
+		return null;
 	}
 	
 	public EventListItem getItem(int position) {

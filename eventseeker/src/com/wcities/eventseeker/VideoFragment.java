@@ -16,7 +16,6 @@ import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Video;
-import com.wcities.eventseeker.custom.view.ResizableImageView;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class VideoFragment extends Fragment {

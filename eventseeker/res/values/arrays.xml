@@ -62,4 +62,22 @@
 	  	<item>@drawable/placeholder</item>
     </array>
     
+    <!-- starts for bosch -->
+    <string-array name="bosch_navigation_drawer_item_titles">
+        <item>@string/bosch_navigation_drawer_item_home</item>
+        <item>@string/bosch_navigation_drawer_item_change_city</item>
+	  	<item>@string/bosch_navigation_drawer_item_search</item>
+	  	<item>@string/bosch_navigation_drawer_item_favorites</item>
+	  	<item>@string/bosch_navigation_drawer_item_about_us</item>
+	</string-array>
+	
+    <array name="bosch_navigation_drawer_item_icons">
+        <item>@drawable/discover</item>
+	  	<item>@drawable/changelocation</item>
+	  	<item>@drawable/search</item>
+	  	<item>@drawable/favorites</item>
+	  	<item>@drawable/info</item>
+    </array>
+    <!-- ends for bosch -->
+    
 </resources>

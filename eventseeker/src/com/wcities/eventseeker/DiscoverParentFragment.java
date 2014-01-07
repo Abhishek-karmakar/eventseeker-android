@@ -18,9 +18,6 @@ import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -217,18 +214,18 @@ public abstract class DiscoverParentFragment extends
 
 		private final HashMap<Integer, Integer> categoryImgs = new HashMap<Integer, Integer>() {
 			{
-				put(900, R.drawable.cat_900);
-				put(901, R.drawable.cat_901);
-				put(902, R.drawable.cat_902);
-				put(903, R.drawable.cat_903);
-				put(904, R.drawable.cat_904);
-				put(905, R.drawable.cat_905);
-				put(906, R.drawable.cat_906);
-				put(907, R.drawable.cat_907);
-				put(908, R.drawable.cat_908);
-				put(909, R.drawable.cat_909);
-				put(910, R.drawable.cat_910);
-				put(911, R.drawable.cat_911);
+				put(AppConstants.CATEGORY_ID_START, R.drawable.cat_900);
+				put(AppConstants.CATEGORY_ID_START + 1, R.drawable.cat_901);
+				put(AppConstants.CATEGORY_ID_START + 2, R.drawable.cat_902);
+				put(AppConstants.CATEGORY_ID_START + 3, R.drawable.cat_903);
+				put(AppConstants.CATEGORY_ID_START + 4, R.drawable.cat_904);
+				put(AppConstants.CATEGORY_ID_START + 5, R.drawable.cat_905);
+				put(AppConstants.CATEGORY_ID_START + 6, R.drawable.cat_906);
+				put(AppConstants.CATEGORY_ID_START + 7, R.drawable.cat_907);
+				put(AppConstants.CATEGORY_ID_START + 8, R.drawable.cat_908);
+				put(AppConstants.CATEGORY_ID_START + 9, R.drawable.cat_909);
+				put(AppConstants.CATEGORY_ID_START + 10, R.drawable.cat_910);
+				put(AppConstants.CATEGORY_ID_START + 11, R.drawable.cat_911);
 			}
 		};
 

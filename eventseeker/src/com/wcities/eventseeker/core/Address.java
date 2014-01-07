@@ -2,8 +2,6 @@ package com.wcities.eventseeker.core;
 
 import java.io.Serializable;
 
-import android.util.Log;
-
 public class Address implements Serializable {
 
 	private static final String TAG = Address.class.getName();

@@ -13,8 +13,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 import com.wcities.eventseeker.constants.AppConstants;
 
 public abstract class Api {

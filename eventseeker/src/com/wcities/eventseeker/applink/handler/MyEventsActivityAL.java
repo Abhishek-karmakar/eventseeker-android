@@ -1,7 +1,6 @@
 package com.wcities.eventseeker.applink.handler;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;

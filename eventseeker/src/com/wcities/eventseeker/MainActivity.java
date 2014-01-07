@@ -16,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.MenuItemCompat.OnActionExpandListener;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -25,11 +26,14 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnLayoutChangeListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.bosch.myspin.serversdk.MySpinException;
+import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.ford.syncV4.proxy.SyncProxyALM;
 import com.ford.syncV4.transport.TransportType;
 import com.wcities.eventseeker.ChangeLocationFragment.ChangeLocationFragmentListener;
@@ -39,6 +43,7 @@ import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.FbLogInFragment.FbLogInFragmentListener;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.applink.service.AppLinkService;
+import com.wcities.eventseeker.bosch.BoschMainActivity;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
@@ -107,6 +112,21 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//Log.d(TAG, "onCreate");
+
+		try {
+			MySpinServerSDK.sharedInstance().registerApplication(getApplication());
+			
+		} catch (MySpinException e) {
+			e.printStackTrace();
+		}
+		
+		// TODO: remove negation from following if
+		/*if (!MySpinServerSDK.sharedInstance().isConnected()) {
+			finish();
+			startActivity(new Intent(getApplicationContext(), BoschMainActivity.class));
+			return;
+		}*/
+		
 		setContentView(R.layout.activity_main);
 
 		/**
@@ -328,11 +348,11 @@ public class MainActivity extends ActionBarActivity implements
 		searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 		searchView.setQueryHint(getResources().getString(R.string.menu_search));
 		searchView.setOnQueryTextListener(this);
-
+		
 		ImageView v = (ImageView) searchView.findViewById(R.id.search_button);
 		v.setImageResource(R.drawable.search);
 		
-		if(AppConstants.FRAGMENT_TAG_SEARCH.equals(currentContentFragmentTag)) {
+		if (AppConstants.FRAGMENT_TAG_SEARCH.equals(currentContentFragmentTag)) {
 			/**
 			 * on some devices onCreateOptionsMenu is called after onFragmentResumed, 
 			 * so we need to expand actionview here after initializing the searchItem
@@ -345,8 +365,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		// Log.d(TAG, "onPrepareOptionsMenu(), currentContentFragmentTag = " +
-		// currentContentFragmentTag);
+		//Log.d(TAG, "onPrepareOptionsMenu(), currentContentFragmentTag = " + currentContentFragmentTag);
 		boolean disableSearch = currentContentFragmentTag
 				.equals(AppConstants.FRAGMENT_TAG_CHANGE_LOCATION)
 				|| currentContentFragmentTag
@@ -365,7 +384,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
-		//Log.d(TAG, "onOptionsItemSelected() itemId = " + item.getItemId()");
+		//Log.d(TAG, "onOptionsItemSelected() itemId = " + item.getItemId());
         // Pass the event to ActionBarDrawerToggle, if it returns
         // true, then it has handled the app icon touch event
         /*if (mDrawerToggle.onOptionsItemSelected()) {
@@ -417,7 +436,7 @@ public class MainActivity extends ActionBarActivity implements
 				}
 			}
 			return true;
-
+			
 			/*
 			 * case R.id.action_search: SearchFragment searchFragment = new
 			 * SearchFragment(); selectNonDrawerItem(searchFragment,
@@ -1292,5 +1311,4 @@ public class MainActivity extends ActionBarActivity implements
 			mDrawerToggle.setDrawerIndicatorEnabled(enable);
 		}
 	}
-
 }

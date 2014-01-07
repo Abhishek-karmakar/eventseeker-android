@@ -13,6 +13,7 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
+import android.os.StrictMode;
 import android.util.DisplayMetrics;
 
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
@@ -35,7 +36,6 @@ public class EventSeekr extends Application {
 	private boolean isTablet;
 	private boolean is7InchTablet;
 	private boolean isInLandscapeMode;
-
 
 	private String fbUserId;
 	private String wcitiesId;
@@ -64,7 +64,20 @@ public class EventSeekr extends Application {
 
 	@Override
 	public void onCreate() {
+		// StrictMode testing
+		if (AppConstants.STRICT_MODE_ENABLED) {
+	         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+	                 .detectAll()
+	                 .penaltyLog()
+	                 .build());
+	         StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+	                 .detectAll()
+	                 .penaltyLog()
+	                 .build());
+	    }
+		
 		super.onCreate();
+		
 		//Log.d(TAG, "onCreate()");
 		listeners = new ArrayList<EventSeekr.EventSeekrListener>();
 

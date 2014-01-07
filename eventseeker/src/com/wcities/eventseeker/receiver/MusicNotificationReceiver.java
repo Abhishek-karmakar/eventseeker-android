@@ -2,10 +2,7 @@ package com.wcities.eventseeker.receiver;
 
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
-import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
@@ -23,7 +20,6 @@ import com.wcities.eventseeker.api.ArtistApi;
 import com.wcities.eventseeker.api.ArtistApi.Method;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
-import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
@@ -47,7 +43,7 @@ public class MusicNotificationReceiver extends BroadcastReceiver {
 		}
 		//String album = intent.getStringExtra(MediaStore.Audio.AlbumColumns.ALBUM);
 		//String track = intent.getStringExtra(MediaStore.Audio.AudioColumns.TRACK);
-		Log.d(TAG, "Artist: " + artist);
+		//Log.d(TAG, "Artist: " + artist);
 		
 		//if (strArtist == null || !strArtist.equals(artist)) {
 		if (intent.hasExtra(XTRA_PLAYING) && intent.getBooleanExtra(XTRA_PLAYING, false)) {
@@ -70,7 +66,7 @@ public class MusicNotificationReceiver extends BroadcastReceiver {
 
 		@Override
 		protected Artist doInBackground(Void... params) {
-			Log.d(TAG, "LoadArtistEvent");
+			//Log.d(TAG, "LoadArtistEvent");
 
 			try {
 				ArtistApi artistApi = new ArtistApi(Api.OAUTH_TOKEN);

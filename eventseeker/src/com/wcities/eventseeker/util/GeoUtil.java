@@ -8,14 +8,16 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.wcities.eventseeker.constants.AppConstants;
-
 import android.location.Address;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.wcities.eventseeker.constants.AppConstants;
+
 public class GeoUtil {
+	
+	private static final String TAG = GeoUtil.class.getSimpleName();
 	
     private static final AndroidHttpClient ANDROID_HTTP_CLIENT = AndroidHttpClient.newInstance(GeoUtil.class.getName());
     
@@ -25,18 +27,86 @@ public class GeoUtil {
     private static final String KEY_LOCATION = "location";
     private static final String KEY_LAT = "lat";
     private static final String KEY_LNG = "lng";
-    
+    private static final String KEY_ADDRESS_COMPONENTS = "address_components";
+    private static final String KEY_TYPES = "types";
+    private static final String KEY_LONG_NAME = "long_name";
+
+	private static final String VALUE_LOCALITY = "locality";
+
 	public interface GeoUtilListener {
-		public void onLatlngSearchCompleted(String strAddress);
-		public void onAddressSearchCompleted(Address address);
+		public void onAddressSearchCompleted(String strAddress);
+		public void onCitySearchCompleted(String city);
+		public void onLatlngSearchCompleted(Address address);
 	}
 
-	public static void getFromLocation(double lat, double lon, GeoUtilListener listener) {
+	public static void getAddressFromLocation(double lat, double lon, GeoUtilListener listener) {
 		new GetAddressFromLatlng(lat, lon, listener).execute();
 	}
 	
 	public static void getFromAddress(String address, GeoUtilListener listener) {
 		new GetLatlngFromAddress(address, listener).execute();
+	}
+	
+	public static void getCityFromLocation(double lat, double lon, GeoUtilListener listener) {
+		new GetCityFromLatlng(lat, lon, listener).execute();
+	}
+	
+	private static class GetCityFromLatlng extends AsyncTask<Void, Void, String> {
+		
+		private double lat, lon;
+		private GeoUtilListener listener;
+		
+		public GetCityFromLatlng(double lat, double lon, GeoUtilListener listener) {
+			this.lat = lat;
+			this.lon = lon;
+			this.listener = listener;
+		}
+		
+		@Override
+		protected String doInBackground(Void... params) {
+			String googleMapUrl = "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + ","
+                    + lon + "&sensor=true";
+
+            try {
+                JSONObject googleMapResponse = new JSONObject(ANDROID_HTTP_CLIENT.execute(new HttpGet(googleMapUrl),
+                        new BasicResponseHandler()));
+
+                // many nested loops.. not great -> use expression instead
+                // loop among all results
+				JSONArray results = (JSONArray) googleMapResponse.get(KEY_RESULTS);
+				for (int i = 0; i < results.length(); i++) {
+					
+					// loop among all addresses within this result
+					JSONObject result = results.getJSONObject(i);
+					
+					if (result.has(KEY_ADDRESS_COMPONENTS)) {
+						JSONArray jArrAddressComponents = result.getJSONArray(KEY_ADDRESS_COMPONENTS);
+						
+						for (int j = 0; j < jArrAddressComponents.length(); j++) {
+							JSONObject jObjAddressComponent = jArrAddressComponents.getJSONObject(j);
+							
+							if (jObjAddressComponent.has(KEY_TYPES)) {
+								JSONArray jArrTypes = jObjAddressComponent.getJSONArray(KEY_TYPES);
+								
+								if (jArrTypes.length() > 0 && jArrTypes.getString(0).equals(VALUE_LOCALITY)) {
+									Log.d(TAG, "got city");
+									return jObjAddressComponent.getString(KEY_LONG_NAME);
+								}
+							}
+						}
+					}
+				}
+				
+			} catch (Exception ignored) {
+				ignored.printStackTrace();
+			}
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			listener.onCitySearchCompleted(result);
+		}
 	}
 	
 	private static class GetAddressFromLatlng extends AsyncTask<Void, Void, String> {
@@ -79,7 +149,7 @@ public class GeoUtil {
 		
 		@Override
 		protected void onPostExecute(String result) {
-			listener.onLatlngSearchCompleted(result);
+			listener.onAddressSearchCompleted(result);
 		}
 	}
 	
@@ -131,7 +201,7 @@ public class GeoUtil {
 		
 		@Override
 		protected void onPostExecute(Address address) {
-			listener.onAddressSearchCompleted(address);
+			listener.onLatlngSearchCompleted(address);
 		}
 	}
 }

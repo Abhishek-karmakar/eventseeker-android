@@ -1,6 +1,5 @@
 package com.wcities.eventseeker.widget;
 
-import java.io.ObjectInputStream.GetField;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;

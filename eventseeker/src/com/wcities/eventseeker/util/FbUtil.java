@@ -1,18 +1,14 @@
 package com.wcities.eventseeker.util;
 
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.facebook.Request;
 import com.facebook.Request.GraphUserCallback;
-import com.facebook.Response;
 import com.facebook.Session;
-import com.facebook.SessionState;
 import com.facebook.Session.StatusCallback;
-import com.facebook.model.GraphUser;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.SharedPrefKeys;

@@ -7,9 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.text.Html;
-import android.util.Log;
-
 import com.wcities.eventseeker.core.Address;
 import com.wcities.eventseeker.core.Country;
 import com.wcities.eventseeker.core.Venue;

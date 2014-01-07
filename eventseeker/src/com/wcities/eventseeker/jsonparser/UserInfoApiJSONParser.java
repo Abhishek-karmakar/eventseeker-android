@@ -10,18 +10,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.ArtistNewsItem;
+import com.wcities.eventseeker.core.ArtistNewsItem.PostType;
 import com.wcities.eventseeker.core.BookingInfo;
 import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.FriendNewsItem;
 import com.wcities.eventseeker.core.ImageAttribution;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.core.Venue;
-import com.wcities.eventseeker.core.ArtistNewsItem.PostType;
-import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Video;
 import com.wcities.eventseeker.util.ConversionUtil;
 

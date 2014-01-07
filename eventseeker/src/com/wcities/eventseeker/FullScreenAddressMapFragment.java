@@ -143,7 +143,7 @@ public class FullScreenAddressMapFragment extends FragmentLoadableFromBackStack 
     		
     		// Alternative way to find lat-lon
     		if (addresses == null || addresses.isEmpty()) {
-    			GeoUtil.getFromLocation(lat, lon, (GeoUtilListener) getParentFragment());
+    			GeoUtil.getAddressFromLocation(lat, lon, (GeoUtilListener) getParentFragment());
     		}
 
             boolean mapSetUp = ((FullScreenAddressMapFragment) getParentFragment()).setUpMapIfNeeded();
@@ -199,7 +199,7 @@ public class FullScreenAddressMapFragment extends FragmentLoadableFromBackStack 
 	}
 
 	@Override
-	public void onLatlngSearchCompleted(String strAddress) {
+	public void onAddressSearchCompleted(String strAddress) {
 		this.strAddress = strAddress;
 		boolean mapSetUp = setUpMapIfNeeded();
         if (mapSetUp) {
@@ -209,7 +209,13 @@ public class FullScreenAddressMapFragment extends FragmentLoadableFromBackStack 
 	}
 
 	@Override
-	public void onAddressSearchCompleted(Address address) {
+	public void onLatlngSearchCompleted(Address address) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onCitySearchCompleted(String city) {
 		// TODO Auto-generated method stub
 		
 	}

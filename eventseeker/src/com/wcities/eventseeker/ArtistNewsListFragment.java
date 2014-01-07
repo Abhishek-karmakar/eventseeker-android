@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.AbsListView.RecyclerListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;

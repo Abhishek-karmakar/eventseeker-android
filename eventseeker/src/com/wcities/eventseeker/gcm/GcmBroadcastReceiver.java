@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.wcities.eventseeker.MainActivity;
-import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.util.NotificationUtil;
 

@@ -26,7 +26,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.internal.el;
 import com.scvngr.levelup.views.gallery.AdapterView;
 import com.scvngr.levelup.views.gallery.AdapterView.OnItemClickListener;
 import com.scvngr.levelup.views.gallery.Gallery;
@@ -499,13 +498,13 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 		
 		public VideoFragmentPagerAdapter(List<Video> videos, FragmentManager fm) {
 			super(fm);
-			Log.d(TAG, "VideoFragmentPagerAdapter()");
+			//Log.d(TAG, "VideoFragmentPagerAdapter()");
 			this.videos = videos;
 		}
 
 		@Override
 		public Fragment getItem(int index) {
-			Log.d(TAG, "VideoFragmentPagerAdapter()");
+			//Log.d(TAG, "VideoFragmentPagerAdapter()");
 			// Log.d(TAG, "getItem() for index = " + index);
 			VideoFragment videoFragment = VideoFragment.newInstance(videos.get(index));
 			return videoFragment;
@@ -513,13 +512,13 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 
 		@Override
 		public int getCount() {
-			Log.d(TAG, "getCount() - " + videos.size());
+			//Log.d(TAG, "getCount() - " + videos.size());
 			return videos.size() > MAX_LIMIT ? MAX_LIMIT : videos.size();
 		}
 
 		@Override
 		public int getItemPosition(Object object) {
-			Log.d(TAG, "getItemPosition()");
+			//Log.d(TAG, "getItemPosition()");
 			// Log.d(TAG, "getItemPosition()");
 			return POSITION_NONE;
 		}
@@ -537,7 +536,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 		List<Video> videos;
 		
 		public VideoGalleryAdapter(List<Video> videos, Context context) {
-			Log.d(TAG, "VideoGalleryAdapter()");
+			//Log.d(TAG, "VideoGalleryAdapter()");
 			this.videos = videos;
 			inflater = LayoutInflater.from(context);
 			bitmapCache = BitmapCache.getInstance();
@@ -545,13 +544,13 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 
 		@Override
 		public int getCount() {
-			Log.d(TAG, "getCount() - " + videos.size());
+			//Log.d(TAG, "getCount() - " + videos.size());
 			return videos.size() > MAX_LIMIT ? MAX_LIMIT : videos.size();
 		}
 
 		@Override
 		public Object getItem(int position) {
-			Log.d(TAG, "getItem()");
+			//Log.d(TAG, "getItem()");
 			return videos.get(position);
 		}
 

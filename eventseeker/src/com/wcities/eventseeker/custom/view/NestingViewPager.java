@@ -5,7 +5,6 @@ import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 public class NestingViewPager extends ViewPager {

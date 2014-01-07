@@ -9,11 +9,8 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
-import com.wcities.eventseeker.TwitterSyncingFragment;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.ArtistApi;
 import com.wcities.eventseeker.api.ArtistApi.Method;

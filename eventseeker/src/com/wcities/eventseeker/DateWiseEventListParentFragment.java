@@ -56,7 +56,7 @@ public abstract class DateWiseEventListParentFragment extends ListFragment
 		if (dateWiseEvtList == null) {
 			if (getArguments() != null) {
 				// Bundle has these values when this fragment is called from
-				// DiscoverByCategoryActivity.
+				// DiscoverByCategoryFragment.
 				Bundle bundle = getArguments();
 				categories = (List<Category>) bundle.get(BundleKeys.CATEGORIES);
 				categoryPosition = bundle.getInt(BundleKeys.CATEGORY_POSITION);

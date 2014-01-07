@@ -55,4 +55,10 @@ public class BundleKeys {
 	public static final String WCITIES_ID = "wcitiesId";
 	
 	public static final String STR_CRASH_LOG = "crashLog";
+	
+	/**-------------------- starts for bosch ---------------------------**/
+	
+	public static final String CATEGORY = "category";
+	
+	/**-------------------- ends for bosch ---------------------------**/
 }

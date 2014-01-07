@@ -1,11 +1,11 @@
 package com.wcities.eventseeker.custom.fragment;
 
+import android.app.Activity;
+import android.support.v4.app.Fragment;
+
 import com.wcities.eventseeker.interfaces.ActivityImmediateFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.util.FragmentUtil;
-
-import android.app.Activity;
-import android.support.v4.app.Fragment;
 
 /**
  * Its purpose is to update screen actionbar when subclass of this fragment is resumed (loaded from backstack)

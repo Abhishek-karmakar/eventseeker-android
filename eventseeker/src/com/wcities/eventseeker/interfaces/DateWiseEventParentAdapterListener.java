@@ -2,10 +2,10 @@ package com.wcities.eventseeker.interfaces;
 
 import java.util.List;
 
-import com.wcities.eventseeker.core.Event;
-
 import android.content.Context;
 import android.os.AsyncTask;
+
+import com.wcities.eventseeker.core.Event;
 
 public interface DateWiseEventParentAdapterListener {
 
