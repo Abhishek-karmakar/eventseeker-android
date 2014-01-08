@@ -1,6 +1,7 @@
 package com.wcities.eventseeker;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -103,12 +104,14 @@ public class DiscoverByCategoryFragment extends FragmentLoadableFromBackStack im
 		this.year = year;
 		this.month = month;
 		this.day = day;
-		
-	    String startDate = ConversionUtil.getDay(year, month, day);
+		Calendar calendar = new GregorianCalendar(year, month, day);
+	    String startDate = ConversionUtil.getDay(calendar);
+	    calendar.add(Calendar.YEAR, 1);
+	    String endDate = ConversionUtil.getDay(calendar);
 	    
 	    DateWiseEventListParentFragment dateWiseEventListFragment = (DateWiseEventListParentFragment) 
 				getChildFragmentManager().findFragmentByTag(AppConstants.FRAGMENT_TAG_DATE_WISE_EVENT_LIST);
 		
-		dateWiseEventListFragment.resetWith(startDate);
+		dateWiseEventListFragment.resetWith(startDate, endDate);
 	}
 }

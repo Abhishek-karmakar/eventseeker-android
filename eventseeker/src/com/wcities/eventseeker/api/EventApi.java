@@ -42,7 +42,7 @@ public class EventApi extends Api {
 	private int miles;
 	private int category;
 	private int subcategory;
-	private String start;
+	private String start, end;
 	private String searchFor;
 	private boolean strictSearchEnabled;
 	private boolean mediaEnabled;
@@ -162,6 +162,14 @@ public class EventApi extends Api {
 		this.start = start;
 	}
 
+	public String getEnd() {
+		return end;
+	}
+
+	public void setEnd(String end) {
+		this.end = end;
+	}
+
 	public String getSearchFor() {
 		return searchFor;
 	}
@@ -274,6 +282,10 @@ public class EventApi extends Api {
 		
 		if (start != null) {
 			uri = uri + "&start=" + start;
+		}
+		
+		if (end != null) {
+			uri = uri + "&end=" + end;
 		}
 		
 		if (searchFor != null) {

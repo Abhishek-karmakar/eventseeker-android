@@ -30,7 +30,7 @@ public class BoschDateWiseEventListFragment extends ListFragment implements Load
 
 	private Category selectedCategory;
 	private double lat, lon;
-	private String startDate;
+	private String startDate, endDate;
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -49,10 +49,9 @@ public class BoschDateWiseEventListFragment extends ListFragment implements Load
 			lon = latLon[1];
 
 			Calendar c = Calendar.getInstance();
-			int year = c.get(Calendar.YEAR);
-			int month = c.get(Calendar.MONTH);
-			int day = c.get(Calendar.DAY_OF_MONTH);
-			startDate = ConversionUtil.getDay(year, month, day);
+			startDate = ConversionUtil.getDay(c);
+			c.add(Calendar.YEAR, 1);
+			endDate = ConversionUtil.getDay(c);
 
 			dateWiseEvtList = new DateWiseEventList();
 			dateWiseEvtList.addDummyItem();
@@ -73,7 +72,7 @@ public class BoschDateWiseEventListFragment extends ListFragment implements Load
 	
 	@Override
 	public void loadItemsInBackground() {
-		loadEvents = new LoadDateWiseEvents(dateWiseEvtList, eventListAdapter, lat, lon, startDate, 
+		loadEvents = new LoadDateWiseEvents(dateWiseEvtList, eventListAdapter, lat, lon, startDate, endDate, 
 				selectedCategory.getId(), ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId());
 		((BoschDateWiseEventListAdapter) eventListAdapter).setLoadDateWiseEvents(loadEvents);
 		AsyncTaskUtil.executeAsyncTask(loadEvents, true);

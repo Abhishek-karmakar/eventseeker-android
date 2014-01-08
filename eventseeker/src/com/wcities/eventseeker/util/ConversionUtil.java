@@ -103,6 +103,11 @@ public class ConversionUtil {
 		return df.format(calendar.getTime());
 	}
 	
+	public static String getDay(Calendar calendar) {
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		return df.format(calendar.getTime());
+	}
+	
 	/**
 	 * @param day
 	 * @return date in the form (dd MMMM hh:mm a).

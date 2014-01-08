@@ -26,7 +26,7 @@ public abstract class DateWiseEventListParentFragment extends ListFragment
 	protected LoadDateWiseEvents loadEvents;
 
 	protected int categoryPosition;
-	protected String startDate;
+	protected String startDate, endDate;
 	protected double lat, lon;
 	protected List<Category> categories;
 
@@ -68,10 +68,10 @@ public abstract class DateWiseEventListParentFragment extends ListFragment
 			lon = latLon[1];
 
 			Calendar c = Calendar.getInstance();
-			int year = c.get(Calendar.YEAR);
-			int month = c.get(Calendar.MONTH);
-			int day = c.get(Calendar.DAY_OF_MONTH);
-			startDate = ConversionUtil.getDay(year, month, day);
+			startDate = ConversionUtil.getDay(c);
+			
+			c.add(Calendar.YEAR, 1);
+			endDate = ConversionUtil.getDay(c);
 
 			dateWiseEvtList = new DateWiseEventList();
 			dateWiseEvtList.addDummyItem();
@@ -90,10 +90,11 @@ public abstract class DateWiseEventListParentFragment extends ListFragment
 		getListView().setBackgroundResource(R.drawable.story_space);
 	}
 
-	protected void resetWith(String newStartDate) {
+	protected void resetWith(String newStartDate, String newEndDate) {
 		// if user selection has changed then only reset the list
 		if (!startDate.equals(newStartDate)) {
 			startDate = newStartDate;
+			endDate = newEndDate;
 			reset();
 		}
 	}
@@ -112,7 +113,7 @@ public abstract class DateWiseEventListParentFragment extends ListFragment
 	
 
 	protected LoadDateWiseEvents getLoadDateWiseEvents() {
-		return new LoadDateWiseEvents(dateWiseEvtList, eventListAdapter, lat, lon, startDate, 
+		return new LoadDateWiseEvents(dateWiseEvtList, eventListAdapter, lat, lon, startDate, endDate, 
 				categories.get(categoryPosition).getId(), 
 				((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).getWcitiesId());
 	}
