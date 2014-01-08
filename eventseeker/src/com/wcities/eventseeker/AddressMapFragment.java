@@ -143,27 +143,27 @@ public class AddressMapFragment extends SupportMapFragment implements GeoUtilLis
 	}
 	
 	private void findLatLonFromAddress(com.wcities.eventseeker.core.Address venueAddress) {
-		Log.d(TAG, "findLatLonFromAddress()");
+		//Log.d(TAG, "findLatLonFromAddress()");
 		String strAddress = "";
 		strAddress = (venueAddress.getAddress1() != null) ? strAddress + venueAddress.getAddress1() : strAddress;
 		try {
 			if (!findLatLonFromAddress(strAddress)) {
 				
 				if (venueAddress.getAddress2() != null) {
-					Log.d(TAG, "findLatLonFromAddress() - address2");
+					//Log.d(TAG, "findLatLonFromAddress() - address2");
 					strAddress = venueAddress.getAddress2();
 					
 					if (!findLatLonFromAddress(strAddress) && venueAddress.getCity() != null) {
-						Log.d(TAG, "findLatLonFromAddress() - city");
+						//Log.d(TAG, "findLatLonFromAddress() - city");
 						findLatLonFromAddress(venueAddress.getCity()); 
 					}
 					
 				} else if (venueAddress.getCity() != null) {
-					Log.d(TAG, "findLatLonFromAddress() - city");
+					//Log.d(TAG, "findLatLonFromAddress() - city");
 					findLatLonFromAddress(venueAddress.getCity());
 				}
 			}
-			Log.d(TAG, "findLatLonFromAddress(), done for strAddress = " + strAddress);
+			//Log.d(TAG, "findLatLonFromAddress(), done for strAddress = " + strAddress);
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -172,7 +172,7 @@ public class AddressMapFragment extends SupportMapFragment implements GeoUtilLis
 	}
 	
 	private boolean findLatLonFromAddress(String strAddress) throws IOException {
-		Log.d(TAG, "findLatLonFromAddress(str)");
+		//Log.d(TAG, "findLatLonFromAddress(str)");
 		Geocoder geocoder = new Geocoder(FragmentUtil.getActivity(this));
 		List<Address> addresses = geocoder.getFromLocationName(strAddress, 1);
 		if (addresses != null && !addresses.isEmpty()) {
@@ -182,7 +182,7 @@ public class AddressMapFragment extends SupportMapFragment implements GeoUtilLis
 			lon = address.getLongitude();
 			return true;
 		}
-		Log.d(TAG, "findLatLonFromAddress(str) done");
+		//Log.d(TAG, "findLatLonFromAddress(str) done");
 		return false;
 	}
 

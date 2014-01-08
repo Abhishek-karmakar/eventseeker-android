@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.scvngr.levelup.views.gallery.AdapterView;
 import com.scvngr.levelup.views.gallery.AdapterView.OnItemClickListener;
@@ -707,15 +708,15 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 			break;
 
 		case R.id.imgFacebook:
-			openURL(artist.getArtistLinkByType(LinkType.FACEBOOK));
+			openURL(artist.getArtistLinkByType(LinkType.FACEBOOK), "facebook");
 			break;
 
 		case R.id.imgTwitter:
-			openURL(artist.getArtistLinkByType(LinkType.TWITTER));
+			openURL(artist.getArtistLinkByType(LinkType.TWITTER), "twitter");
 			break;
 
 		case R.id.imgWeb:
-			openURL(artist.getArtistLinkByType(LinkType.WEBSITE));
+			openURL(artist.getArtistLinkByType(LinkType.WEBSITE), "web");
 			break;
 
 		default:
@@ -781,12 +782,16 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 		updateScreen();
 	}
 	
-	private void openURL(String url) {
+	private void openURL(String url, String appendErrorStr) {
 		if(url != null) {
 			Bundle args = new Bundle();
 			args.putString(BundleKeys.URL, url);
 			((ReplaceFragmentListener) FragmentUtil.getActivity(this))
 					.replaceByFragment(AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
+			
+		} else {
+			Toast.makeText(FragmentUtil.getActivity(this), appendErrorStr + " link is not available for this artist.", 
+					Toast.LENGTH_SHORT).show();
 		}
 	}
 

@@ -22,7 +22,9 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
+import com.wcities.eventseeker.MyEventsListFragment;
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.asynctask.LoadArtistNews.ArtistNewsListItem;
@@ -124,17 +126,18 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 			
 		} else {
 			ArtistNewsItemViewHolder holder;
-			if ((item instanceof List)
-					&& ((List<ArtistNewsListItem>)item).get(0).getItem()
-					.getArtistName().equals(AppConstants.INVALID_STR_ID) 
-				|| (item instanceof ArtistNewsListItem)
-					&& ((ArtistNewsListItem)item).getItem()
-					.getArtistName().equals(AppConstants.INVALID_STR_ID)) {
+			if (((item instanceof List) && ((List<ArtistNewsListItem>)item).get(0).getItem().getArtistName().equals(AppConstants.INVALID_STR_ID)) 
+					|| ((item instanceof ArtistNewsListItem) && ((ArtistNewsListItem)item).getItem().getArtistName().equals(AppConstants.INVALID_STR_ID))) {
 				
 				convertView = mInflater.inflate(R.layout.list_no_items_found, null);
 				convertView.setTag("");
 		
-				((TextView)convertView).setText("No Artist News Found.");
+				if (((EventSeekr)mContext.getApplicationContext()).getWcitiesId() == null) {
+					((TextView)convertView).setText(mContext.getResources().getString(R.string.no_items_found_pls_login) + " artist news.");
+					
+				} else {
+					((TextView)convertView).setText("No Artist News Found.");
+				}
 				
 				return convertView;
 				

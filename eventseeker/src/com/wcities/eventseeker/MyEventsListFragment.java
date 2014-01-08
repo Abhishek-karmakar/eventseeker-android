@@ -80,4 +80,8 @@ public class MyEventsListFragment extends ListFragment implements LoadItemsInBac
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);
         AsyncTaskUtil.executeAsyncTask(loadEvents, true);
 	}
+	
+	public Type getLoadType() {
+		return loadType;
+	}
 }

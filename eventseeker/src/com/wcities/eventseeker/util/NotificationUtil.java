@@ -26,7 +26,7 @@ public class NotificationUtil {
 				notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
-		        .setSmallIcon(R.drawable.ic_launcher)
+		        .setSmallIcon(R.drawable.ic_notification)
 		        .setContentTitle(title)
 		        .setContentText(message);
 		mBuilder.setContentIntent(pendingIntent);

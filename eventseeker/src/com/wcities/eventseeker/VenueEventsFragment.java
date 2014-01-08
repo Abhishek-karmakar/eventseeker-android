@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Venue;
@@ -77,6 +78,10 @@ public class VenueEventsFragment extends Fragment implements OnClickListener {
 			if (venue.getPhone() != null) {
 				Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + venue.getPhone()));
 				startActivity(Intent.createChooser(intent, "Call..."));
+				
+			} else {
+				Toast.makeText(FragmentUtil.getActivity(this), "Phone number is not available for this venue.", 
+						Toast.LENGTH_SHORT).show();
 			}
 			break;
 			
@@ -84,6 +89,10 @@ public class VenueEventsFragment extends Fragment implements OnClickListener {
 			if (venue.getUrl() != null) {
 				Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(venue.getUrl()));
 				startActivity(intent);
+				
+			} else {
+				Toast.makeText(FragmentUtil.getActivity(this), "Web address is not available for this venue.", 
+						Toast.LENGTH_SHORT).show();
 			}
 			break;
 			

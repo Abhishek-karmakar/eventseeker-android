@@ -19,6 +19,18 @@
             android:layout_alignParentTop="true"
             app:childHeight="@dimen/eco_glry_featured_evt_child_ht_discover_gallery_item"
             app:childWidth="@dimen/eco_glry_featured_evt_child_w_discover_gallery_item" />
+        
+        <RelativeLayout android:id="@+id/rltLayoutProgressWrapper"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/eco_glry_featured_evt_child_ht_discover_gallery_item">
+        
+	        <ProgressBar android:id="@+id/progressBar"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_centerInParent="true"
+		       	android:visibility="gone" />
+        
+        </RelativeLayout>
 
         <com.wcities.eventseeker.custom.view.ExpandableGridView
             android:id="@+id/grdEvtCategories"

@@ -8,7 +8,7 @@
         <item name="actionOverflowButtonStyle">@style/Widget.EventSeekr.ActionButton.Overflow</item>
         <item name="actionModeShareDrawable">@drawable/share</item>
     	<item name="android:homeAsUpIndicator">@drawable/previous</item>
-    	<item name="homeAsUpIndicator">@drawable/previous</item>
+    	<item name="homeAsUpIndicator">@drawable/back_actionbar</item>
         <!-- <item name="android:homeAsUpIndicator">@drawable/sidenav</item>
         <item name="homeAsUpIndicator">@drawable/sidenav</item> -->
 

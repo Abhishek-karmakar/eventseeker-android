@@ -200,6 +200,9 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		if (loadMyEventsCount != null && loadMyEventsCount.getStatus() != Status.FINISHED) {
 			loadMyEventsCount.cancel(true);
 		}
+		if (Session.getActiveSession() != null) {
+			Session.getActiveSession().removeCallback(statusCallback);
+		}
 		((EventSeekr)FragmentUtil.getActivity(this).getApplication()).unregisterListener(this);
 	}
 	

@@ -346,6 +346,10 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 	void showNoArtistFound() {
 		absListView.setVisibility(View.GONE);
 		rltDummyLyt.setVisibility(View.VISIBLE);
+		if (wcitiesId == null) {
+			TextView txtNoItemsFound = (TextView)rltDummyLyt.findViewById(R.id.txtNoItemsFound);
+			txtNoItemsFound.setText(getResources().getString(R.string.no_items_found_pls_login) + " the list of artists you are following.");
+		}
 	}
 
 	protected abstract AbsListView getScrollableView();

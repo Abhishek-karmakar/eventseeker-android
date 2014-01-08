@@ -23,7 +23,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
+import com.wcities.eventseeker.MyEventsListFragment;
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -42,6 +44,7 @@ import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.ConversionUtil;
+import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.EventListItem;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.LIST_ITEM_TYPE;
@@ -136,7 +139,6 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 			
 			if ((loadDateWiseMyEvents == null || loadDateWiseMyEvents.getStatus() == Status.FINISHED) 
 					&& isMoreDataAvailable) {
-
 				mListener.loadItemsInBackground();
 			}
 
@@ -146,7 +148,23 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 
 			if (event.getId() == AppConstants.INVALID_ID) {
 				convertView = LayoutInflater.from(mContext).inflate(R.layout.list_no_items_found, null);
-				((TextView)convertView).setText("No Event Found.");
+				if (mListener instanceof MyEventsListFragment && 
+						((EventSeekr)mContext.getApplicationContext()).getWcitiesId() == null) {
+					Type loadType = ((MyEventsListFragment)mListener).getLoadType();
+					if (loadType == Type.myevents) {
+						((TextView)convertView).setText(mContext.getResources().getString(R.string.no_items_found_pls_login) + " all the events you are following.");
+						
+					} else if (loadType == Type.recommendedevent) {
+						((TextView)convertView).setText(mContext.getResources().getString(R.string.no_items_found_pls_login) + " recommended events for you.");
+						
+					} else {
+						// fallback condition
+						((TextView)convertView).setText("No Event Found.");
+					}
+					
+				} else {
+					((TextView)convertView).setText("No Event Found.");
+				}
 				convertView.setTag("");
 			} 
 			

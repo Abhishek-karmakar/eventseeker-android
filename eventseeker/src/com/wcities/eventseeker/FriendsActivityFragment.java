@@ -38,6 +38,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.HttpMethod;
 import com.facebook.Request;
@@ -179,7 +180,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	
 	@Override
 	public void onDestroyView() {
-		Log.d(TAG, "onDestroyView()");
+		//Log.d(TAG, "onDestroyView()");
 		
 		if(is7InchTabletInPortrait) {
 			firstVisibleActivityItemPosition = getListView().getFirstVisiblePosition();
@@ -196,7 +197,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 		
 		Session session = Session.getActiveSession();
 		if (session != null) {
-			Log.d(TAG, "removeCallback");
+			//Log.d(TAG, "removeCallback");
 			session.removeCallback(this);
 		}
 		super.onDestroyView();
@@ -733,14 +734,15 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	
 	private void requestPublishPermissions(Session session, List<String> permissions,
 		    int requestCode) {
-		Log.d(TAG, "requestPublishPermissions()");
+		//Log.d(TAG, "requestPublishPermissions()");
         Session.NewPermissionsRequest reauthRequest = new Session.NewPermissionsRequest(this, permissions)
         	.setRequestCode(requestCode);
         session.requestNewPublishPermissions(reauthRequest);
 	}
 	
 	private void postLikeRequest() {
-		Log.d(TAG, "postLikeRequest()");
+		//Log.d(TAG, "postLikeRequest()");
+		Toast.makeText(FragmentUtil.getActivity(this), "Sending like request...", Toast.LENGTH_SHORT).show();
 		Request likeRequest = Request.newPostRequest(Session.getActiveSession(), fbPostId + "/likes", null, new Request.Callback() {
 
 			         @Override
@@ -753,6 +755,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	
 	private void postCommentRequest(String comment) {
 		Log.i(TAG, "postCommentRequest()");
+		Toast.makeText(FragmentUtil.getActivity(this), "Posting comment...", Toast.LENGTH_SHORT).show();
 		Bundle parameters = new Bundle();
 		parameters.putString("message", comment);
 		Request commentRequest = new Request(Session.getActiveSession(), fbPostId + "/comments", 
@@ -833,6 +836,10 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	
 	private void showNoFriendsActivityFound() {
 		rltDummyLyt.setVisibility(View.VISIBLE);
+		if (wcitiesId == null) {
+			TextView txtNoItemsFound = (TextView)rltDummyLyt.findViewById(R.id.txtNoItemsFound);
+			txtNoItemsFound.setText(getResources().getString(R.string.no_items_found_pls_login) + " your friends activity.");
+		}
 		getListView().setVisibility(View.GONE);
 	}    	
 

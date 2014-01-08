@@ -3,9 +3,9 @@
 
     <string name="app_name">eventseeker</string>
     <!-- development keys -->
-    <string name="fb_app_id">687206491296790</string>
+    <!-- <string name="fb_app_id">687206491296790</string> -->
     <!-- production keys -->
-    <!-- <string name="fb_app_id">153033148171841</string> -->
+    <string name="fb_app_id">153033148171841</string>
     <string name="menu_search">Search</string>
     <string name="menu_change_location">Change Location</string>
     <string name="title_discover">Discover</string>
@@ -35,6 +35,8 @@
     <string name="title_lastfm">last.fm</string>
     <string name="title_pandora">Pandora</string>
     <string name="title_web">Web</string>
+    
+    <string name="no_items_found_pls_login">Please login with facebook from \'Sync Accounts\' page to see</string>
 
     <!-- Strings used for navigation drawer list -->
     <string name="navigation_drawer_section_browse">BROWSE</string>
@@ -86,7 +88,7 @@
     <!-- fragment_device_library.xml -->
     <string name="txt_service_desc_txt_fragment_device_library">Would you like the application to search your music library for artists that you can then follow? The artists will be placed under the \"Following\" section.</string>
     
-    <!-- starts for bosch -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>
     
     <!-- Strings used for navigation drawer list -->
@@ -97,6 +99,6 @@
     <string name="bosch_navigation_drawer_item_about_us">About Us</string>
     
     <string name="title_plan_travel">eventseeker | Plan your travel</string>
-    <!-- ends for bosch -->
+  	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 </resources>

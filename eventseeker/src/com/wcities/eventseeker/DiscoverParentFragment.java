@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.wcities.eventseeker.api.Api;
@@ -48,6 +49,8 @@ public abstract class DiscoverParentFragment extends
 	protected ReplaceFragmentListener mListener;
 	// private TextView txtFeaturedEvtsTitle;
 	// private ImageView imgPrev, imgNext;
+	private ProgressBar progressBar;
+	private boolean featuredEventsLoaded;
 
 	protected EvtCategoriesListAdapter evtCategoriesListAdapter;
 
@@ -92,6 +95,9 @@ public abstract class DiscoverParentFragment extends
 		}
 
 		View v = inflater.inflate(R.layout.fragment_discover, container, false);
+		progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+		int progressVisibility = featuredEventsLoaded ? View.GONE : View.VISIBLE;
+		progressBar.setVisibility(progressVisibility);
 
 		// txtFeaturedEvtsTitle = (TextView)
 		// v.findViewById(R.id.txtFeaturedEvtsTitle);
@@ -178,6 +184,13 @@ public abstract class DiscoverParentFragment extends
 	}
 
 	private class LoadFeaturedEvts extends AsyncTask<Void, Void, List<Event>> {
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			featuredEventsLoaded = false;
+			progressBar.setVisibility(View.VISIBLE);
+		}
 
 		@Override
 		protected List<Event> doInBackground(Void... params) {
@@ -205,7 +218,9 @@ public abstract class DiscoverParentFragment extends
 		@Override
 		protected void onPostExecute(List<Event> result) {
 			featuredEvts = result;
-			Log.i(TAG, "onPostExecute");
+			//Log.i(TAG, "onPostExecute");
+			featuredEventsLoaded = true;
+			progressBar.setVisibility(View.GONE);
 			notifyDataSetChanged();
 		}
 	}

@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.RecordApi;
@@ -308,6 +309,10 @@ public class VenueInfoFragment extends Fragment implements OnClickListener, Asyn
 			if (venue.getPhone() != null) {
 				Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + venue.getPhone()));
 				startActivity(Intent.createChooser(intent, "Call..."));
+				
+			} else {
+				Toast.makeText(FragmentUtil.getActivity(this), "Phone number is not available for this venue.", 
+						Toast.LENGTH_SHORT).show();
 			}
 			break;
 			
@@ -315,6 +320,10 @@ public class VenueInfoFragment extends Fragment implements OnClickListener, Asyn
 			if (venue.getUrl() != null) {
 				Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(venue.getUrl()));
 				startActivity(intent);
+				
+			} else {
+				Toast.makeText(FragmentUtil.getActivity(this), "Web address is not available for this venue.", 
+						Toast.LENGTH_SHORT).show();
 			}
 			break;
 			
