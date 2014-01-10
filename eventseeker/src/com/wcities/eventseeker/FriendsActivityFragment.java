@@ -220,10 +220,10 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		//Log.d(TAG, "onActivityResult(), requestCode = " + requestCode);
+		Log.d(TAG, "onActivityResult(), requestCode = " + requestCode);
 		Session session = Session.getActiveSession();
         if (session != null) {
-        	//Log.d(TAG, "session!=null");
+        	Log.d(TAG, "session!=null");
             session.onActivityResult(FragmentUtil.getActivity(this), requestCode, resultCode, data);
         }
 	}
@@ -728,7 +728,12 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	}
 	
 	private boolean hasPublishPermission() {
+		Log.d(TAG, "hasPublishPermission()");
         Session session = Session.getActiveSession();
+        List<String> permissions = session.getPermissions();
+        for (Iterator<String> iterator = permissions.iterator(); iterator.hasNext();) {
+			Log.d(TAG, iterator.next());
+		}
         return session != null && session.getPermissions().containsAll(PERMISSIONS);
     }
 	
@@ -754,7 +759,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	}
 	
 	private void postCommentRequest(String comment) {
-		Log.i(TAG, "postCommentRequest()");
+		//Log.d(TAG, "postCommentRequest()");
 		Toast.makeText(FragmentUtil.getActivity(this), "Posting comment...", Toast.LENGTH_SHORT).show();
 		Bundle parameters = new Bundle();
 		parameters.putString("message", comment);

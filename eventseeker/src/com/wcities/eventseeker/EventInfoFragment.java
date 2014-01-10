@@ -7,7 +7,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils.TruncateAt;
@@ -23,7 +22,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.facebook.Session;
+import com.facebook.SessionState;
 import com.wcities.eventseeker.EventDetailsFragment.EventDetailsFragmentChildListener;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
@@ -43,17 +45,19 @@ import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.custom.view.ExpandableGridView;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
+import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class EventInfoFragment extends Fragment implements OnClickListener, EventDetailsFragmentChildListener, 
-		AsyncLoadImageListener {
+public class EventInfoFragment extends FbPublishEventFragment implements OnClickListener, 
+		EventDetailsFragmentChildListener, AsyncLoadImageListener {
 	
 	private static final String TAG = EventInfoFragment.class.getName();
+	private static final int MAX_FB_CALL_COUNT_FOR_SAME_EVT = 20;
 
 	private static int MAX_FRIENDS_GRID = 3;
 	private static final int MAX_LINES_EVENT_DESC_PORTRAIT = 3;
 	private static final int MAX_LINES_EVENT_DESC_LANDSCAPE = 5;
-
+	
 	private Event event;
 	private boolean isEvtDescExpanded, isFriendsGridExpanded;
 	private int orientation;
@@ -81,6 +85,7 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 	private boolean isTablet;
 
 	private TextView txtVenue;
+	private int fbCallCountForSameEvt = 0;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -91,7 +96,6 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 		res = getResources();
 		
 		isTablet = ((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).isTablet();
-		
 	}
 	
 	@Override
@@ -176,16 +180,10 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 		chkBoxGoing = (CheckBox) v.findViewById(R.id.chkBoxGoing);
 		chkBoxWantToGo = (CheckBox) v.findViewById(R.id.chkBoxWantToGo);
 
-		if (wcitiesId != null) {
-			chkBoxGoing.setOnClickListener(this);
-			chkBoxWantToGo.setOnClickListener(this);
+		chkBoxGoing.setOnClickListener(this);
+		chkBoxWantToGo.setOnClickListener(this);
 			
-			updateAttendingChkBoxes();
-			
-		} else {
-			chkBoxGoing.setEnabled(false);
-			chkBoxWantToGo.setEnabled(false);
-		}
+		updateAttendingChkBoxes();
 		
 		return v;
 	}
@@ -642,21 +640,59 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 			break;
 			
 		case R.id.chkBoxGoing:
-			Attending attending = event.getAttending() == Attending.GOING ? Attending.NOT_GOING : Attending.GOING;
-			event.setAttending(attending);
-			updateAttendingChkBoxes();
-			new UserTracker((EventSeekr) FragmentUtil.getActivity(this).getApplication(), UserTrackingItemType.event, event.getId(), 
-					event.getAttending().getValue(), UserTrackingType.Add).execute();
-			((EventDetailsFragment) getParentFragment()).onEventAttendingUpdated();
+			if (wcitiesId != null) {
+				/**
+				 * call to updateAttendingChkBoxes() to negate the click event for now on checkbox, 
+				 * since it's handled after checking fb publish permission
+				 */
+				updateAttendingChkBoxes();
+				Attending attending = event.getAttending() == Attending.GOING ? Attending.NOT_GOING : Attending.GOING;
+				if (attending == Attending.NOT_GOING) {
+					event.setAttending(attending);
+					new UserTracker((EventSeekr) FragmentUtil.getActivity(EventInfoFragment.this).getApplication(), 
+	                		UserTrackingItemType.event, event.getId(), event.getAttending().getValue(), 
+	                		UserTrackingType.Add).execute();
+	    			((EventDetailsFragment) getParentFragment()).onEventAttendingUpdated();
+					
+				} else {
+					fbCallCountForSameEvt = 0;
+					event.setNewAttending(attending);
+					FbUtil.handlePublishEvent(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT, AppConstants.REQ_CODE_FB_PUBLISH_EVT, event);
+				}
+				
+			} else {
+				chkBoxGoing.setChecked(false);
+				Toast.makeText(FragmentUtil.getActivity(this), getResources().getString(R.string.pls_login_to_track_evt), 
+						Toast.LENGTH_LONG).show();
+			}
 			break;
 			
 		case R.id.chkBoxWantToGo:
-			attending = event.getAttending() == Attending.WANTS_TO_GO ? Attending.NOT_GOING : Attending.WANTS_TO_GO;
-			event.setAttending(attending);
-			updateAttendingChkBoxes();
-			new UserTracker((EventSeekr) FragmentUtil.getActivity(this).getApplication(), UserTrackingItemType.event, event.getId(), 
-					event.getAttending().getValue(), UserTrackingType.Add).execute();
-			((EventDetailsFragment) getParentFragment()).onEventAttendingUpdated();
+			if (wcitiesId != null) {
+				/**
+				 * call to updateAttendingChkBoxes() to negate the click event for now on checkbox, 
+				 * since it's handled after checking fb publish permission
+				 */
+				updateAttendingChkBoxes();
+				Attending attending = event.getAttending() == Attending.WANTS_TO_GO ? Attending.NOT_GOING : Attending.WANTS_TO_GO;
+				if (attending == Attending.NOT_GOING) {
+					event.setAttending(attending);
+					new UserTracker((EventSeekr) FragmentUtil.getActivity(EventInfoFragment.this).getApplication(), 
+	                		UserTrackingItemType.event, event.getId(), event.getAttending().getValue(), 
+	                		UserTrackingType.Add).execute();
+	    			((EventDetailsFragment) getParentFragment()).onEventAttendingUpdated();
+					
+				} else {
+					fbCallCountForSameEvt = 0;
+					event.setNewAttending(attending);
+					FbUtil.handlePublishEvent(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT, AppConstants.REQ_CODE_FB_PUBLISH_EVT, event);
+				}
+				
+			} else {
+				chkBoxWantToGo.setChecked(false);
+				Toast.makeText(FragmentUtil.getActivity(this), getResources().getString(R.string.pls_login_to_track_evt), 
+						Toast.LENGTH_LONG).show();
+			}
 			break;
 			
 		case R.id.txtAddress:
@@ -712,5 +748,27 @@ public class EventInfoFragment extends Fragment implements OnClickListener, Even
 	public void onImageCouldNotBeLoaded() {
 		isImgLoaded = true;
 		updateScreen();
+	}
+
+	@Override
+	public void call(Session session, SessionState state, Exception exception) {
+		//Log.d(TAG, "call()");
+		fbCallCountForSameEvt++;
+		/**
+		 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
+		 */
+		if (fbCallCountForSameEvt < MAX_FB_CALL_COUNT_FOR_SAME_EVT) {
+			FbUtil.call(session, state, exception, this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT, AppConstants.REQ_CODE_FB_PUBLISH_EVT, 
+					event);
+			
+		} else {
+			fbCallCountForSameEvt = 0;
+			setPendingAnnounce(false);
+		}
+	}
+
+	@Override
+	public void onPublishPermissionGranted() {
+		((EventDetailsFragment)getParentFragment()).onEventAttendingUpdated();
 	}
 }

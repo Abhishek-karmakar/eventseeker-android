@@ -429,7 +429,6 @@ public class EventSeekr extends Application {
 				userInfoApi.setUserId(userId);
 				jsonObject = userInfoApi.syncAccount(null);
 				wcitiesId = jsonParser.getWcitiesId(jsonObject);
-				updateWcitiesId(wcitiesId);
 
 			} catch (ClientProtocolException e) {
 				e.printStackTrace();

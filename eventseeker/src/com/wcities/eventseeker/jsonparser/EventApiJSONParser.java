@@ -484,6 +484,13 @@ public class EventApiJSONParser {
 			//Log.i(TAG, "No artist found belonging to this event.");
 		}
 		
+		if (jsonObject.has(KEY_LINKS)) {
+			JSONObject jObjLinks = jsonObject.getJSONObject(KEY_LINKS);
+			if (jObjLinks.has(KEY_TRACKBACK_URL)) {
+				event.setEventUrl(jObjLinks.getString(KEY_TRACKBACK_URL));
+			}
+		}
+		
 		Attending attending = jsonObject.has(KEY_ATTENDING) ? 
 				Attending.getAttending(jsonObject.getInt(KEY_ATTENDING)) : Attending.NOT_GOING;
 		event.setAttending(attending);

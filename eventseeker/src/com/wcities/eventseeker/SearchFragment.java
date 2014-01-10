@@ -3,6 +3,7 @@ package com.wcities.eventseeker;
 import java.util.Iterator;
 import java.util.List;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.wcities.eventseeker.adapter.SwipeTabsAdapter;
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -123,6 +125,20 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 		super.onDestroyView();
 		ActionBar actionBar = ((ActionBarActivity)FragmentUtil.getActivity(this)).getSupportActionBar();
 		actionBar.setCustomView(null);
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (((EventSeekr)FragmentUtil.getActivity(this).getApplication()).isTablet()) {
+			List<Fragment> pageFragments = mTabsAdapter.getTabFragments();
+			for (Iterator<Fragment> iterator = pageFragments.iterator(); iterator.hasNext();) {
+				Fragment fragment = iterator.next();
+				if (fragment instanceof SearchEventsFragmentTab) {
+					fragment.onActivityResult(requestCode, resultCode, data);
+				}
+			}
+		}
 	}
 	
 	public String getSearchQuery() {

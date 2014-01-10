@@ -245,7 +245,7 @@ public class AddressMapFragment extends SupportMapFragment implements GeoUtilLis
     }
 	
 	public void displayDrivingDirection() {
-		if (currentLat != AppConstants.NOT_ALLOWED_LAT && currentLat != AppConstants.NOT_ALLOWED_LON 
+		if (currentLat != AppConstants.NOT_ALLOWED_LAT && currentLon != AppConstants.NOT_ALLOWED_LON 
 				&& mMap != null) {
 			new GetDrivingDirection().execute();
 		}

@@ -175,7 +175,7 @@ public class UserInfoApi extends Api {
 		return execute(RequestMethod.GET, null, null); 
 	}
 	
-	public JSONObject addUserTracking(UserTrackingItemType type, long id, int attending) throws ClientProtocolException, IOException, JSONException {
+	public JSONObject addUserTracking(UserTrackingItemType type, long id, int attending, String fb_postid) throws ClientProtocolException, IOException, JSONException {
 		String METHOD = "addUserTracking.php";
 		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD);
 		setUri(uriBuilder.toString());
@@ -189,6 +189,9 @@ public class UserInfoApi extends Api {
 		jObjTrackInfo.put("type_id", "" + id);
 		if (type == UserTrackingItemType.event) {
 			jObjTrackInfo.put("attending", "" + attending);
+			if (fb_postid != null) {
+				jObjTrackInfo.put("fb_postid", fb_postid);
+			}
 		}
 		
 		JSONObject jObjUserTracking = new JSONObject();
@@ -240,6 +243,10 @@ public class UserInfoApi extends Api {
 		
 		if (artistId != 0) {
 			uriBuilder.append("&artistId=").append(artistId);
+		}
+		
+		if (type == Type.myevents || type == Type.recommendedevent) {
+			uriBuilder.append("&link=enable");
 		}
 		
 		setUri(uriBuilder.toString());

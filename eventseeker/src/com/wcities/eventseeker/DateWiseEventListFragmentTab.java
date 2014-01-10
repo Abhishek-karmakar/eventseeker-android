@@ -2,6 +2,8 @@ package com.wcities.eventseeker;
 
 import android.os.Bundle;
 
+import com.facebook.Session;
+import com.facebook.SessionState;
 import com.wcities.eventseeker.adapter.DateWiseMyEventListAdapter;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
@@ -20,7 +22,7 @@ public class DateWiseEventListFragmentTab extends DateWiseEventListParentFragmen
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 	}
-
+	
 	@Override
 	public void loadItemsInBackground() {
 		loadEvents = getLoadDateWiseEvents();
@@ -30,7 +32,17 @@ public class DateWiseEventListFragmentTab extends DateWiseEventListParentFragmen
 
 	@Override
 	protected DateWiseEventParentAdapterListener getAdapterInstance() {
-		return new DateWiseMyEventListAdapter(FragmentUtil.getActivity(this), getChildFragmentManager(), 
-				dateWiseEvtList, null, this);
+		return new DateWiseMyEventListAdapter(FragmentUtil.getActivity(this),  
+        		dateWiseEvtList, null, this, this);
+	}
+
+	@Override
+	public void call(Session session, SessionState state, Exception exception) {
+		((DateWiseMyEventListAdapter)eventListAdapter).call(session, state, exception);
+	}
+
+	@Override
+	public void onPublishPermissionGranted() {
+		((DateWiseMyEventListAdapter)eventListAdapter).onPublishPermissionGranted();
 	}
 }

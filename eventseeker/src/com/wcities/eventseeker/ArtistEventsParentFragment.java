@@ -1,7 +1,6 @@
 package com.wcities.eventseeker;
 
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,8 +28,8 @@ import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.LIST_ITEM_TYPE;
 
-public abstract class ArtistEventsParentFragment extends ListFragment implements OnClickListener, 
-	ArtistDetailsFragmentListener, LoadItemsInBackgroundListener {
+public abstract class ArtistEventsParentFragment extends FbPublishEventListFragment implements OnClickListener, 
+		ArtistDetailsFragmentListener, LoadItemsInBackgroundListener {
 
 	private static final String TAG = ArtistEventsParentFragment.class.getName();
 

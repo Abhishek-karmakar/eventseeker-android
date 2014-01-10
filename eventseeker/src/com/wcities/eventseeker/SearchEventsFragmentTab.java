@@ -6,19 +6,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.Session;
+import com.facebook.SessionState;
 import com.wcities.eventseeker.SearchFragment.SearchFragmentChildListener;
 import com.wcities.eventseeker.adapter.DateWiseMyEventListAdapter;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.interfaces.FbPublishListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
-public class SearchEventsFragmentTab extends SearchEventsParentFragment
-		implements SearchFragmentChildListener, LoadItemsInBackgroundListener {
+public class SearchEventsFragmentTab extends SearchEventsParentFragment implements 
+		SearchFragmentChildListener, LoadItemsInBackgroundListener, FbPublishListener {
 
 	private static final String TAG = SearchEventsFragmentTab.class.getName();
 
@@ -36,8 +39,8 @@ public class SearchEventsFragmentTab extends SearchEventsParentFragment
 
 		if (eventList == null) {
 			eventList = new DateWiseEventList();
-			eventListAdapter = new DateWiseMyEventListAdapter(FragmentUtil.getActivity(this), getChildFragmentManager(),
-					eventList, null, this);
+			eventListAdapter = new DateWiseMyEventListAdapter(FragmentUtil.getActivity(this),  
+	        		eventList, null, this, this);
 
 			Bundle args = getArguments();
 			if (args != null && args.containsKey(BundleKeys.QUERY)) {
@@ -52,7 +55,7 @@ public class SearchEventsFragmentTab extends SearchEventsParentFragment
 
 		setListAdapter(eventListAdapter);
 	}
-
+	
 	@Override
 	public void loadItemsInBackground() {
 		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getActivity(this));
@@ -84,5 +87,15 @@ public class SearchEventsFragmentTab extends SearchEventsParentFragment
 	@Override
 	public void onQueryTextSubmit(String query) {
 		refresh(query);
+	}
+	
+	@Override
+	public void call(Session session, SessionState state, Exception exception) {
+		eventListAdapter.call(session, state, exception);
+	}
+
+	@Override
+	public void onPublishPermissionGranted() {
+		eventListAdapter.onPublishPermissionGranted();
 	}
 }

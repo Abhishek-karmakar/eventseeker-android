@@ -9,8 +9,9 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,7 +23,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.facebook.Session;
+import com.facebook.SessionState;
 import com.wcities.eventseeker.MyEventsListFragment;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
@@ -41,10 +45,11 @@ import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.EventListener;
+import com.wcities.eventseeker.interfaces.FbPublishListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.ConversionUtil;
-import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.EventListItem;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.LIST_ITEM_TYPE;
@@ -52,9 +57,9 @@ import com.wcities.eventseeker.viewdata.DateWiseEventList.LIST_ITEM_TYPE;
 public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseEventParentAdapterListener{
 
 	private static final String TAG = DateWiseMyEventListAdapter.class.getName();
-
+	private static final int MAX_FB_CALL_COUNT_FOR_SAME_EVT = 20;
+	
 	private Context mContext;
-	private FragmentManager fm;
 	private BitmapCache bitmapCache;
 	private DateWiseEventList dateWiseEvtList;
 	private AsyncTask<Void, Void, List<Event>> loadDateWiseMyEvents;
@@ -64,12 +69,20 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 	private int orientation;
 	private LayoutParams lpImgEvtPort;
 	private boolean isTablet;
+	private String wcitiesId;
 	
-	public DateWiseMyEventListAdapter(Context context, FragmentManager fm, DateWiseEventList dateWiseEvtList,
-			AsyncTask<Void, Void, List<Event>> loadDateWiseEvents, LoadItemsInBackgroundListener mListener) {
+	// vars for fb event publish
+	private FbPublishListener fbPublishListener;
+	private int fbCallCountForSameEvt = 0;
+	
+	private Event eventPendingPublish;
+	private CheckBox eventPendingPublishChkBoxGoing, eventPendingPublishChkBoxWantToGo;
+	
+	public DateWiseMyEventListAdapter(Context context, DateWiseEventList dateWiseEvtList,
+			AsyncTask<Void, Void, List<Event>> loadDateWiseEvents, LoadItemsInBackgroundListener mListener, 
+			FbPublishListener fbPublishListener) {
 		
 		mContext = context;
-		this.fm = fm;
 		bitmapCache = BitmapCache.getInstance();
 		this.dateWiseEvtList = dateWiseEvtList;
 		this.loadDateWiseMyEvents = loadDateWiseEvents;
@@ -88,6 +101,9 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 				.getResources().getDimensionPixelSize(
 						R.dimen.img_event_margin_fragment_my_events_list_item);
 		isTablet = ((EventSeekr) mContext.getApplicationContext()).isTablet();
+		
+		this.fbPublishListener = fbPublishListener;
+		wcitiesId = ((EventSeekr)mContext.getApplicationContext()).getWcitiesId();
 	}
 
 	@Override
@@ -277,14 +293,28 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 				
 				@Override
 				public void onClick(View v) {
-					onChkBoxClick(event, chkBoxGoing, chkBoxWantToGo, true);					
+					if (wcitiesId != null) {
+						onChkBoxClick(event, chkBoxGoing, chkBoxWantToGo, true);
+						
+					} else {
+						chkBoxGoing.setChecked(false);
+						Toast.makeText(mContext, mContext.getString(R.string.pls_login_to_track_evt), 
+								Toast.LENGTH_LONG).show();
+					}
 				}
 			};
 			OnClickListener wantToClickListener = new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
-					onChkBoxClick(event, chkBoxGoing, chkBoxWantToGo, false);					
+					if (wcitiesId != null) {
+						onChkBoxClick(event, chkBoxGoing, chkBoxWantToGo, false);		
+						
+					} else {
+						chkBoxWantToGo.setChecked(false);
+						Toast.makeText(mContext, mContext.getString(R.string.pls_login_to_track_evt), 
+								Toast.LENGTH_LONG).show();
+					}
 				}
 			};
 			
@@ -296,6 +326,16 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 			if (txtGoing != null) {
 				txtGoing.setOnClickListener(goingClickListener);
 				txtWantTo.setOnClickListener(wantToClickListener);
+			}
+			
+			/**
+			 * If user clicks on going or wantToGo & changes orientation instantly before call to 
+			 * onPublishPermissionGranted(), then we need to update both checkboxes with right 
+			 * checkbox pointers in new orientation
+			 */
+			if (eventPendingPublish == event) {
+				eventPendingPublishChkBoxGoing = chkBoxGoing;
+				eventPendingPublishChkBoxWantToGo = chkBoxWantToGo;
 			}
 
 			convertView.setOnClickListener(new OnClickListener() {
@@ -336,10 +376,26 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 			attending = event.getAttending() == Attending.WANTS_TO_GO ? Attending.NOT_GOING : Attending.WANTS_TO_GO;
 		}
 		
-		event.setAttending(attending);
-		updateAttendingChkBoxes(event, chkBoxGoing, chkBoxWantToGo);
-		new UserTracker((EventSeekr) mContext.getApplicationContext(), UserTrackingItemType.event, 
-				event.getId(), event.getAttending().getValue(), UserTrackingType.Add).execute();
+		if (attending == Attending.NOT_GOING) {
+			event.setAttending(attending);
+			updateAttendingChkBoxes(event, chkBoxGoing, chkBoxWantToGo);
+			new UserTracker((EventSeekr) mContext.getApplicationContext(), UserTrackingItemType.event, 
+					event.getId(), event.getAttending().getValue(), UserTrackingType.Add).execute();
+			
+		} else {
+			/**
+			 * call to updateAttendingChkBoxes() to negate the click event for now on checkbox, 
+			 * since it's handled after checking fb publish permission
+			 */
+			updateAttendingChkBoxes(event, chkBoxGoing, chkBoxWantToGo);
+			event.setNewAttending(attending);
+			eventPendingPublish = event;
+			eventPendingPublishChkBoxGoing = chkBoxGoing;
+			eventPendingPublishChkBoxWantToGo = chkBoxWantToGo;
+			fbCallCountForSameEvt = 0;
+			FbUtil.handlePublishEvent(fbPublishListener, (Fragment) mListener, AppConstants.PERMISSIONS_FB_PUBLISH_EVT, 
+					AppConstants.REQ_CODE_FB_PUBLISH_EVT, event);
+		}
 	}
 	
 	private void updateAttendingChkBoxes(Event event, CheckBox chkBoxGoing,
@@ -390,5 +446,24 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 	public void setMoreDataAvailable(boolean isMoreDataAvailable) {
 		this.isMoreDataAvailable = isMoreDataAvailable;
 	}
-
+	
+	public void call(Session session, SessionState state, Exception exception) {
+		Log.d(TAG, "call()");
+		fbCallCountForSameEvt++;
+		/**
+		 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
+		 */
+		if (fbCallCountForSameEvt < MAX_FB_CALL_COUNT_FOR_SAME_EVT) {
+			FbUtil.call(session, state, exception, fbPublishListener, (Fragment) mListener, AppConstants.PERMISSIONS_FB_PUBLISH_EVT, 
+	    			AppConstants.REQ_CODE_FB_PUBLISH_EVT, eventPendingPublish);
+			
+		} else {
+			fbCallCountForSameEvt = 0;
+			fbPublishListener.setPendingAnnounce(false);
+		}
+	}
+	
+	public void onPublishPermissionGranted() {
+		updateAttendingChkBoxes(eventPendingPublish, eventPendingPublishChkBoxGoing, eventPendingPublishChkBoxWantToGo);
+	}
 }

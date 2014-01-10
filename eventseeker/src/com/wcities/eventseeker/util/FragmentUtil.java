@@ -41,6 +41,13 @@ public class FragmentUtil {
 		}
 	}
 	
+	public static Fragment getTopLevelParentFragment(Fragment fragment) {
+		while (fragment.getParentFragment() != null) {
+			fragment = fragment.getParentFragment();
+		}
+		return fragment;
+	}
+	
 	public static void updateActivityReferenceInAllFragments(FragmentManager fm, Activity activity) {
 		List<Fragment> fragments = fm.getFragments();
 		if (fragments != null) {

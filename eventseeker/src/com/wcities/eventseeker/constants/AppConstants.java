@@ -1,5 +1,8 @@
 package com.wcities.eventseeker.constants;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class AppConstants {
 	
 	public static final boolean IS_RELEASE_MODE = true;
@@ -71,4 +74,9 @@ public class AppConstants {
 	
 	public static final String TMP_SHARE_IMG_FOLDER = "/share_img";
 	public static final String TMP_SHARE_IMG_PREFIX = "img";
+	
+	// List of additional write permissions being requested
+	public static final List<String> PERMISSIONS_FB_PUBLISH_EVT = Arrays.asList("publish_actions");
+	// Request code for facebook reauthorization requests. 
+	public static final int REQ_CODE_FB_PUBLISH_EVT = 100; 
 }

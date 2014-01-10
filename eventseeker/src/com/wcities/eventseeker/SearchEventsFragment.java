@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.Session;
+import com.facebook.SessionState;
 import com.wcities.eventseeker.SearchFragment.SearchFragmentChildListener;
 import com.wcities.eventseeker.adapter.DateWiseEventListAdapter;
 import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
@@ -16,8 +18,8 @@ import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
-public class SearchEventsFragment extends SearchEventsParentFragment implements
-	LoadItemsInBackgroundListener, SearchFragmentChildListener {
+public class SearchEventsFragment extends SearchEventsParentFragment implements LoadItemsInBackgroundListener, 
+		SearchFragmentChildListener {
 
 	private static final String TAG = SearchEventsFragment.class.getName();
 
@@ -82,5 +84,17 @@ public class SearchEventsFragment extends SearchEventsParentFragment implements
 	@Override
 	public void onQueryTextSubmit(String query) {
 		refresh(query);
+	}
+
+	@Override
+	public void call(Session session, SessionState state, Exception exception) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPublishPermissionGranted() {
+		// TODO Auto-generated method stub
+		
 	}
 }

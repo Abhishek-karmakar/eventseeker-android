@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.Session;
+import com.facebook.SessionState;
 import com.wcities.eventseeker.ArtistDetailsFragment.FooterTxt;
 import com.wcities.eventseeker.adapter.DateWiseEventListAdapter;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -64,6 +66,18 @@ public class ArtistEventsFragment extends ArtistEventsParentFragment {
 	@Override
 	protected DateWiseEventParentAdapterListener getAdapterInstance() {
 		return new DateWiseEventListAdapter(FragmentUtil.getActivity(this), dateWiseEventList, null, this);
+	}
+
+	@Override
+	public void call(Session session, SessionState state, Exception exception) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPublishPermissionGranted() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

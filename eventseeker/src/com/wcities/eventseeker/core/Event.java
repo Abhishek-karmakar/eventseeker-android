@@ -45,7 +45,7 @@ public class Event implements Serializable, BitmapCacheable {
 	private String cityName;
 	private Schedule schedule;
 	private List<Artist> artists;
-	private Attending attending;
+	private Attending attending, newAttending;
 	private String description;
 	private List<Friend> friends;
 	private String eventUrl;
@@ -57,6 +57,7 @@ public class Event implements Serializable, BitmapCacheable {
 		artists = new ArrayList<Artist>();
 		friends = new ArrayList<Friend>();
 		attending = Attending.NOT_GOING;
+		newAttending = null;
 	}
 
 	public long getId() {
@@ -125,6 +126,17 @@ public class Event implements Serializable, BitmapCacheable {
 
 	public void setAttending(Attending attending) {
 		this.attending = attending;
+	}
+
+	public void updateAttendingToNewAttending() {
+		if (newAttending != null) {
+			attending = newAttending;
+			newAttending = null;
+		}
+	}
+
+	public void setNewAttending(Attending newAttending) {
+		this.newAttending = newAttending;
 	}
 
 	public String getDescription() {

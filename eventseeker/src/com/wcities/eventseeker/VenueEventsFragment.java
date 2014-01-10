@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -51,6 +52,18 @@ public class VenueEventsFragment extends Fragment implements OnClickListener {
         	addVenueEventsListFragment();
         }
 		return v;
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (((EventSeekr)FragmentUtil.getActivity(this).getApplication()).isTablet()) {
+			VenueEventsListFragmentTab fragment = (VenueEventsListFragmentTab) getChildFragmentManager().findFragmentByTag(
+				FRAGMENT_TAG_VENUE_EVENTS_LIST);
+	        if (fragment != null) {
+	        	fragment.onActivityResult(requestCode, resultCode, data);
+	        }
+		}
 	}
 	
 	private void addVenueEventsListFragment() {

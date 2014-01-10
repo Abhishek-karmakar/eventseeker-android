@@ -85,6 +85,9 @@ public class UserInfoApiJSONParser {
 
 	private static final String KEY_RECOMMENDED_EVENT = "recommendedEvent";
 	private static final String KEY_EVENT_INFO = "eventInfo";
+	
+	private static final String KEY_LINKS = "links";
+	private static final String KEY_TRACKBACK_URL = "trackback_url";
 
 	public String getUserId(JSONObject jsonObject) throws JSONException {
 		JSONObject jObjSignup = jsonObject.getJSONObject(KEY_SIGN_UP);
@@ -430,6 +433,13 @@ public class UserInfoApiJSONParser {
 			
 		} else {
 			//Log.d(TAG, "No artist found belonging to this event.");
+		}
+		
+		if (jsonObject.has(KEY_LINKS)) {
+			JSONObject jObjLinks = jsonObject.getJSONObject(KEY_LINKS);
+			if (jObjLinks.has(KEY_TRACKBACK_URL)) {
+				event.setEventUrl(jObjLinks.getString(KEY_TRACKBACK_URL));
+			}
 		}
 		
 		Attending attending = jsonObject.has(KEY_ATTENDING) ? 

@@ -47,7 +47,6 @@ public class EventApi extends Api {
 	private boolean strictSearchEnabled;
 	private boolean mediaEnabled;
 	private boolean friendsEnabled;
-	private boolean linkEnabled;
 	private List<String> moreInfo;
 	private List<String> compactList;
 	private String userId;
@@ -202,14 +201,6 @@ public class EventApi extends Api {
 		this.friendsEnabled = friendsEnabled;
 	}
 
-	public boolean isLinkEnabled() {
-		return linkEnabled;
-	}
-
-	public void setLinkEnabled(boolean linkEnabled) {
-		this.linkEnabled = linkEnabled;
-	}
-
 	public void addCompact(Compact compact) {
 		compactList.add(compact.name());
 	}
@@ -326,11 +317,7 @@ public class EventApi extends Api {
 			}
 		}
 		
-		if (linkEnabled) {
-			uri += "&link=enable";
-		}
-		
-		uri += "&strip_html=name,description";
+		uri += "&link=enable&strip_html=name,description";
 		setUri(uri.toString());
 		Log.d(TAG, "uri=" + uri.toString());
 		return execute(RequestMethod.GET, null, null);

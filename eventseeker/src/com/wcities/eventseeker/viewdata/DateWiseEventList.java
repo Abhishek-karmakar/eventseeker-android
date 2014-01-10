@@ -21,11 +21,10 @@ import com.wcities.eventseeker.util.ConversionUtil;
 public class DateWiseEventList {
 
 	private static final String TAG = DateWiseEventList.class.getName();
+	private static final Date DUMMY_KEY = new Date(Long.MAX_VALUE);
 	
 	private SortedMap<Date, List<EventListItem>> dateToEventListMap;
-	private int totalSize, limitedCount;
-	private Date currentDate;
-	private Date dummyItemKey;
+	private int size;
 	
 	public static enum LIST_ITEM_TYPE {
 		PROGRESS, HEADER, CONTENT, NO_EVENTS
@@ -37,9 +36,8 @@ public class DateWiseEventList {
 	
 	public void addDummyItem() {
 		// insert 1 default value for representing 'loading progressbar'
-		dummyItemKey = new Date(Long.MAX_VALUE);
-		dateToEventListMap.put(dummyItemKey, null);
-		totalSize++;
+		dateToEventListMap.put(DUMMY_KEY, null);
+		size++;
 	}
 	
 	public void addNoEventsMsg() {
@@ -47,16 +45,8 @@ public class DateWiseEventList {
 		ArrayList<EventListItem> list = new ArrayList<DateWiseEventList.EventListItem>();
 		list.add(new EventListItem(event));
 		
-		dateToEventListMap.put(dummyItemKey, list);
-		totalSize++;
-	}
-	
-	public void updateDummyItem() {
-		if (dummyItemKey != null) {
-			dateToEventListMap.remove(dummyItemKey);
-			dummyItemKey = new Date(currentDate.getTime() + 1);
-			dateToEventListMap.put(dummyItemKey, null);
-		}
+		dateToEventListMap.put(DUMMY_KEY, list);
+		size++;
 	}
 	
 	private SortedMap<Date, List<EventListItem>> getDateToEventListMapCopy() {
@@ -76,34 +66,27 @@ public class DateWiseEventList {
 	}
 	
 	public void removeProgressBarIndicator(AsyncTask loadEvents) {
-		Log.d(TAG, "removeProgressBarIndicator()");
+		//Log.d(TAG, "removeProgressBarIndicator()");
 		if (!loadEvents.isCancelled()) {
-			Log.d(TAG, "remove");
-			dateToEventListMap.remove(dummyItemKey);
-			totalSize--;
-			currentDate = new Date(Long.MAX_VALUE);
+			//Log.d(TAG, "remove");
+			dateToEventListMap.remove(DUMMY_KEY);
+			size--;
 			
-			if (totalSize == 0) {
+			if (size == 0) {
 				addNoEventsMsg();
 			}
-			/*if (totalSize == 0) {
-				addNoEventsMsg();
-			}*/
 		}
-	}
-	
-	private void updateCurrentDate(Date date) {
-		currentDate = date;
 	}
 	
 	public void addEventListItems(List<Event> events, AsyncTask loadEvents) {
 		SortedMap<Date, List<EventListItem>> mapCopy = getDateToEventListMapCopy();
-		int tmpSize = totalSize;
+		int tmpSize = size;
 		
 		Calendar calendar = Calendar.getInstance();
 
 		for (Iterator<Event> iterator = events.iterator(); iterator.hasNext();) {
 			Event event = iterator.next();
+			
 			if (event.getSchedule() != null) {
 				List<com.wcities.eventseeker.core.Date> dates = event.getSchedule().getDates();
 				calendar.setTime(dates.get(0).getStartDate());
@@ -111,17 +94,7 @@ public class DateWiseEventList {
 				calendar.set(Calendar.MINUTE, 0);
 				calendar.set(Calendar.SECOND, 0);
 				calendar.set(Calendar.AM_PM, Calendar.AM);
-				updateCurrentDate(calendar.getTime());
-				
-				for (Iterator<com.wcities.eventseeker.core.Date> iterator2 = dates.iterator(); iterator2.hasNext();) {
-					Date date = iterator2.next().getStartDate();
-					calendar.setTime(date);
-					calendar.set(Calendar.HOUR, 0);
-					calendar.set(Calendar.MINUTE, 0);
-					calendar.set(Calendar.SECOND, 0);
-					calendar.set(Calendar.AM_PM, Calendar.AM);
-					tmpSize = addMapping(calendar.getTime(), new EventListItem(event), mapCopy, tmpSize);
-				}
+				tmpSize = addMapping(calendar.getTime(), new EventListItem(event), mapCopy, tmpSize);
 			}
 		}
 		
@@ -132,11 +105,7 @@ public class DateWiseEventList {
 		 */
 		if (loadEvents == null || !loadEvents.isCancelled()) {
 			dateToEventListMap = mapCopy;
-			updateDummyItem();
-			totalSize = tmpSize;
-			
-		} else {
-			currentDate = new Date(Long.MAX_VALUE);
+			size = tmpSize;
 		}
 	}
 	
@@ -152,8 +121,9 @@ public class DateWiseEventList {
 			List<EventListItem> eventListItems = dateToEventListMap.get(date);
 			if (index == position) {
 				LIST_ITEM_TYPE listItemType;
-				if (position == limitedCount - 1) {
+				if (position == size - 1) {
 					listItemType = (eventListItems == null) ? LIST_ITEM_TYPE.PROGRESS : LIST_ITEM_TYPE.NO_EVENTS;
+					
 				} else {
 					listItemType = LIST_ITEM_TYPE.HEADER;					
 				}
@@ -172,70 +142,19 @@ public class DateWiseEventList {
 		return null;
     }
 	
-	private int getTotalSize() {
-		return totalSize;
-	}
-	
 	public int getCount() {
-		//Log.d(TAG, "getCount(), doneForLoading size = " + doneLoadingForDates.size());
-		int count = 0;
-		Set<Date> dates = dateToEventListMap.keySet();
-		for (Date date : dates) {
-			if ((currentDate != null && !date.after(currentDate)) || date.equals(dummyItemKey)) {
-				count++;
-				
-				//Log.d(TAG, "date = " + date + ", dateToEventListMap.get(date) = " + dateToEventListMap.get(date));
-				List<EventListItem> list = dateToEventListMap.get(date); 
-				if (list != null && 
-						!(list.get(0).isEvent && list.get(0).getEvent().getId() == AppConstants.INVALID_ID)) {
-					count += dateToEventListMap.get(date).size();
-				}
-			}
-		}
-		//Log.d(TAG, "count = " + count + ", size = " + totalSize);
-		limitedCount = count;
-		return count;
+		return size;
 	}
 	
 	public EventListItem getItem(int position, String dateFormat) {
-		int index = -1;
-		Set<Date> keys = dateToEventListMap.keySet();
-		
-		for (Iterator<Date> iterator = keys.iterator(); iterator.hasNext();) {
-			index++;
-			Date date = iterator.next();
-			
-			List<EventListItem> eventListItems = dateToEventListMap.get(date);
-			if (index == position) {
-				// null eventListItem represents progressbar
-				EventListItem eventListItem;
-				if (position == limitedCount - 1) {
-					eventListItem = (eventListItems == null) ? null : eventListItems.get(0);	
-					
-				} else {
-					eventListItem = new EventListItem(new SimpleDateFormat(dateFormat).format(date));					
-				}
-				return eventListItem;
-			}
-			
-			if (position > index + eventListItems.size()) {
-				index += eventListItems.size();
-				continue;
-				
-			} else {
-				for (Iterator<EventListItem> iterator2 = eventListItems.iterator(); iterator2.hasNext();) {
-					EventListItem eventListItem = iterator2.next();
-					index++;
-					if (position == index) {
-						return eventListItem;
-					}
-				}
-			}
-		}
-		return null;
+		return getItemWithDateFormat(position, dateFormat);
 	}
 	
 	public EventListItem getItem(int position) {
+		return getItemWithDateFormat(position, null);
+	}
+	
+	private EventListItem getItemWithDateFormat(int position, String dateFormat) {
 		int index = -1;
 		Set<Date> keys = dateToEventListMap.keySet();
 		
@@ -247,10 +166,16 @@ public class DateWiseEventList {
 			if (index == position) {
 				// null eventListItem represents progressbar
 				EventListItem eventListItem;
-				if(position == limitedCount - 1) {
-					eventListItem = (eventListItems == null) ? null : eventListItems.get(0);					
+				if (position == size - 1) {
+					eventListItem = (eventListItems == null) ? null : eventListItems.get(0);	
+					
 				} else {
-					eventListItem = new EventListItem(ConversionUtil.getDay(date));					
+					if (dateFormat == null) {
+						eventListItem = new EventListItem(ConversionUtil.getDay(date));
+						
+					} else {
+						eventListItem = new EventListItem(new SimpleDateFormat(dateFormat).format(date));	
+					}
 				}
 				return eventListItem;
 			}
@@ -274,10 +199,8 @@ public class DateWiseEventList {
 	
 	public void reset() {
 		dateToEventListMap.clear();
-		
-		dummyItemKey = new Date(Long.MAX_VALUE);
-		dateToEventListMap.put(dummyItemKey, null);
-		totalSize = 1;
+		dateToEventListMap.put(DUMMY_KEY, null);
+		size = 1;
 	}
 
 	/**

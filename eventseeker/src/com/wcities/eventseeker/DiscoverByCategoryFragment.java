@@ -3,8 +3,10 @@ package com.wcities.eventseeker;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wcities.eventseeker.DatePickerFragment.OnDateSelectedListener;
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
@@ -54,6 +57,17 @@ public class DiscoverByCategoryFragment extends FragmentLoadableFromBackStack im
         }
         return v;
     }
+    
+    @Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (((EventSeekr)FragmentUtil.getActivity(this).getApplication()).isTablet()) {
+        	Fragment fragment = getChildFragmentManager().findFragmentByTag(AppConstants.FRAGMENT_TAG_DATE_WISE_EVENT_LIST);
+        	if (fragment != null) {
+        		fragment.onActivityResult(requestCode, resultCode, data);
+        	}
+        }
+	}
     
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

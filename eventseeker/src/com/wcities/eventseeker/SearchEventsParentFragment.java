@@ -2,7 +2,6 @@ package com.wcities.eventseeker;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,7 @@ import android.view.ViewGroup;
 import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
-public class SearchEventsParentFragment extends ListFragment {
+public abstract class SearchEventsParentFragment extends FbPublishEventListFragment {
 
 	private static final String TAG = SearchEventsParentFragment.class.getName();
 

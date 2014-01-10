@@ -168,6 +168,20 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 	}
 	
 	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (((EventSeekr)FragmentUtil.getActivity(this).getApplication()).isTablet()) {
+			List<Fragment> pageFragments = mTabsAdapter.getTabFragments();
+			for (Iterator<Fragment> iterator = pageFragments.iterator(); iterator.hasNext();) {
+				Fragment fragment = iterator.next();
+				if (fragment instanceof ArtistEventsFragmentTab) {
+					fragment.onActivityResult(requestCode, resultCode, data);
+				}
+			}
+		}
+	}
+	
+	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.fragment_artist_details, menu);
 		

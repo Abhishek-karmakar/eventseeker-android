@@ -9,7 +9,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -68,29 +67,11 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 	private ShareActionProvider mShareActionProvider;
 	private View vTabBar;
 	
-	private Activity activity;
-	
     public interface EventDetailsFragmentChildListener {
         public void onEventUpdatedByEventDetailsFragment();
         public void onEventAttendingUpdated();
     }
     
-    @Override
-    public void onAttach(Activity activity) {
-    	super.onAttach(activity);
-    	//Log.d(TAG, "onAttach()");
-    	this.activity = activity;
-    }
-    
-	public void setActivity(Activity activity) {
-		//Log.d(TAG, "setActivity()");
-		this.activity = activity;
-	}
-	
-	public Activity getActivityRef() {
-		return activity;
-	}
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		//Log.d(TAG, "onCreate()");
@@ -104,7 +85,7 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 			event = (Event) getArguments().getSerializable(BundleKeys.EVENT);
 			//Log.d(TAG, "lat = " + event.getSchedule().getVenue().getAddress().getLat() + ", lon = " + event.getSchedule().getVenue().getAddress().getLon());
 			enableTabs = event.hasArtists();
-			Log.d(TAG, "enableTabs = " + enableTabs);
+			//Log.d(TAG, "enableTabs = " + enableTabs);
 			
 			loadEventDetails = new LoadEventDetails();
 			AsyncTaskUtil.executeAsyncTask(loadEventDetails, true);
@@ -199,6 +180,17 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
     	super.onCreateOptionsMenu(menu, inflater);
 	}
 	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.d(TAG, "onActivityResult()");
+		super.onActivityResult(requestCode, resultCode, data);
+		List<Fragment> pageFragments = mTabsAdapter.getTabFragments();
+		for (Iterator<Fragment> iterator = pageFragments.iterator(); iterator.hasNext();) {
+			Fragment fragment = iterator.next();
+			fragment.onActivityResult(requestCode, resultCode, data);
+		}
+	}
+	
 	private void updateShareIntent() {
 	    if (mShareActionProvider != null && event != null) {
 	    	Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -234,9 +226,8 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 			//Log.d(TAG, "LoadEventDetails doInBackground()");
 			EventApi eventApi = new EventApi(Api.OAUTH_TOKEN, event.getId(), IdType.EVENT);
 			// null check is not required here, since if it's null, that's handled from eventApi
-			eventApi.setUserId(((EventSeekr)activity.getApplication()).getWcitiesId());
+			eventApi.setUserId(((EventSeekr)FragmentUtil.getActivity(EventDetailsFragment.this).getApplication()).getWcitiesId());
 			eventApi.setFriendsEnabled(true);
-			eventApi.setLinkEnabled(true);
 			eventApi.addMoreInfo(MoreInfo.fallbackimage);
 			
 			try {

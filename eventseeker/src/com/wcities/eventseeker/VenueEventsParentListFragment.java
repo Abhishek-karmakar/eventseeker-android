@@ -2,7 +2,6 @@ package com.wcities.eventseeker;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,8 @@ import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
-public abstract class VenueEventsParentListFragment extends ListFragment implements LoadItemsInBackgroundListener{
+public abstract class VenueEventsParentListFragment extends FbPublishEventListFragment implements 
+		LoadItemsInBackgroundListener {
 	
 	private static final String TAG = VenueEventsParentListFragment.class.getName();
 

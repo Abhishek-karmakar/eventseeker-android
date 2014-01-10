@@ -2,23 +2,27 @@ package com.wcities.eventseeker;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.Session;
+import com.facebook.SessionState;
 import com.wcities.eventseeker.adapter.DateWiseMyEventListAdapter;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadDateWiseMyEvents;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.interfaces.FbPublishListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
-public class MyEventsListFragment extends ListFragment implements LoadItemsInBackgroundListener {
+public class MyEventsListFragment extends FbPublishEventListFragment implements LoadItemsInBackgroundListener, FbPublishListener {
+	
+	private static final String TAG = MyEventsListFragment.class.getSimpleName();
 	
 	private Type loadType;
 	private String wcitiesId;
@@ -48,8 +52,8 @@ public class MyEventsListFragment extends ListFragment implements LoadItemsInBac
 			dateWiseEvtList = new DateWiseEventList();
 			dateWiseEvtList.addDummyItem();
 			
-	        eventListAdapter = new DateWiseMyEventListAdapter(FragmentUtil.getActivity(this), getChildFragmentManager(), 
-	        		dateWiseEvtList, null, this);
+	        eventListAdapter = new DateWiseMyEventListAdapter(FragmentUtil.getActivity(this),  
+	        		dateWiseEvtList, null, this, this);
 
 			loadItemsInBackground();
 			
@@ -83,5 +87,15 @@ public class MyEventsListFragment extends ListFragment implements LoadItemsInBac
 	
 	public Type getLoadType() {
 		return loadType;
+	}
+
+	@Override
+	public void call(Session session, SessionState state, Exception exception) {
+		eventListAdapter.call(session, state, exception);
+	}
+
+	@Override
+	public void onPublishPermissionGranted() {
+		eventListAdapter.onPublishPermissionGranted();
 	}
 }
