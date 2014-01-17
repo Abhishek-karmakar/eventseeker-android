@@ -68,9 +68,8 @@ public class FeaturedEventsFragment extends Fragment {
 		
 		Date date = event.getSchedule().getDates().get(0);
 		
-		DateFormat dateFormat = date.isStartTimeAvailable() ? 
-				new SimpleDateFormat("EEE MMM d h:mm a") : new SimpleDateFormat("EEE MMM d");
-		
+		DateFormat dateFormat = date.isStartTimeAvailable() ? new SimpleDateFormat("MMMM dd, yyyy h:mm a") :
+				new SimpleDateFormat("MMMM dd, yyyy");
 		TextView txtEvtSchedule = (TextView)v.findViewById(R.id.txtEvtTime);
 		txtEvtSchedule.setText(dateFormat.format(date.getStartDate()));
 		
