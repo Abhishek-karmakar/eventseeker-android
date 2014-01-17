@@ -47,8 +47,6 @@ public abstract class DiscoverParentFragment extends
 	public static final String TAG = DiscoverParentFragment.class.getName();
 
 	protected ReplaceFragmentListener mListener;
-	// private TextView txtFeaturedEvtsTitle;
-	// private ImageView imgPrev, imgNext;
 	private ProgressBar progressBar;
 	private boolean featuredEventsLoaded;
 
@@ -174,7 +172,7 @@ public abstract class DiscoverParentFragment extends
 		evtCategories = new ArrayList<Category>();
 		int categoryIdStart = AppConstants.CATEGORY_ID_START;
 		String[] categoryNames = new String[] { "Concerts", "Theater",
-				"Sport Events", "Arts & Museums", "Dance",
+				"Sports", "Arts & Museums", "Dance",
 				"Clubbing & Nightlife", "Educational", "Festivals & Fairs",
 				"Family", "Community", "Business & Tech", "Tours" };
 		for (int i = 0; i < AppConstants.TOTAL_CATEGORIES; i++) {

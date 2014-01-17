@@ -50,7 +50,7 @@
 
         <!-- ellipsize="marquee" results in continuous getView() call for EcoGallery when text (event title) 
         is fitting almost exactly in the EcoGallery item width.
-        For eg - This happens on samsung galaxy tab 750 for event titled 
+        For eg - This happens on samsung galaxy tab 7500 for event titled 
         "San Francisco Symphony: Peter And The Youth" -->
         <TextView
             android:id="@+id/txtEvtTitle"
@@ -74,9 +74,4 @@
             android:textSize="@dimen/txt_evt_schedule_txt_size_discover_gallery_item" />
     </LinearLayout>
 
-</RelativeLayout><!--
-    android:paddingLeft="@dimen/rlt_root_pad_l_r_discover_gallery_item"
-    android:paddingRight="@dimen/rlt_root_pad_l_r_discover_gallery_item"
-     android:layout_marginBottom="@dimen/rlt_root_pad_t_b_discover_gallery_item"
-    android:layout_marginTop="@dimen/rlt_root_pad_t_b_discover_gallery_item"
--->
+</RelativeLayout>

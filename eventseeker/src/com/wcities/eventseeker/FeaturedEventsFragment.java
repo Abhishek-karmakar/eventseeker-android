@@ -1,5 +1,8 @@
 package com.wcities.eventseeker;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,6 +17,7 @@ import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -61,6 +65,14 @@ public class FeaturedEventsFragment extends Fragment {
 		
 		TextView txtEvtTitle = (TextView)v.findViewById(R.id.txtEvtTitle);
 		txtEvtTitle.setText(event.getName());
+		
+		Date date = event.getSchedule().getDates().get(0);
+		
+		DateFormat dateFormat = date.isStartTimeAvailable() ? 
+				new SimpleDateFormat("EEE MMM d h:mm a") : new SimpleDateFormat("EEE MMM d");
+		
+		TextView txtEvtSchedule = (TextView)v.findViewById(R.id.txtEvtTime);
+		txtEvtSchedule.setText(dateFormat.format(date.getStartDate()));
 		
 		v.setOnClickListener(new OnClickListener() {
 			

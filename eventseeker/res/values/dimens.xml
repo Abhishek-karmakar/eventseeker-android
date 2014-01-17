@@ -23,6 +23,10 @@
     <dimen name="root_rlt_layout_pad_t_frag_featured_events">8dp</dimen>
     <dimen name="root_rlt_layout_pad_l_frag_featured_events">@dimen/root_rlt_layout_pad_t_frag_featured_events</dimen>
     <dimen name="root_rlt_layout_pad_r_frag_featured_events">@dimen/root_rlt_layout_pad_t_frag_featured_events</dimen>
+    <dimen name="txt_v_pad_l_frag_featured_events">5dp</dimen>
+    <dimen name="txt_v_pad_r_frag_featured_events">@dimen/txt_v_pad_l_frag_featured_events</dimen>
+    <dimen name="txt_evt_title_txt_size_frag_featured_events">16sp</dimen>
+    <dimen name="txt_evt_time_txt_size_frag_featured_events">13sp</dimen>
     <!-- grid_category.xml -->
     <dimen name="img_category_ht_grid_category">100dp</dimen>
     <dimen name="txt_category_pad_t_grid_category">2dp</dimen>
