@@ -23,6 +23,7 @@ public abstract class Api {
 	protected static final String COMMON_URL = "http://dev.wcities.com/V3/";
 	
 	protected static final float NOT_INITIALIZED = 0;
+	public static final int ERROR_CODE_NO_RECORDS_FOUND = 2;
 	
 	public static enum UserType {
 		fb,

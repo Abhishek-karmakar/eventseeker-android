@@ -23,5 +23,12 @@
         android:text="Follow"
         android:textColor="@android:color/white"
         android:textSize="@dimen/txt_follow_txt_size_include_fragment_artist_details_footer" />
+    
+    <!-- This btnDummy is used to have height of this layout include_fragment_artist_details_footer.xml equal to 
+    height of layout include_fragment_event_details_footer.xml  -->
+    <Button android:id="@+id/btnDummy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible" />
 
 </RelativeLayout>

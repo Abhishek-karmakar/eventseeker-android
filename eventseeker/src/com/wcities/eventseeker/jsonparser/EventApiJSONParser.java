@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import android.util.SparseArray;
 
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.core.Address;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.BookingInfo;
@@ -83,9 +84,19 @@ public class EventApiJSONParser {
 
 	private static final String KEY_SUGGESTED_INVITES = "suggested_invites";
 
+	private static final String KEY_ERROR_CODE = "error_code";
+
 	public void fillEventDetails(Event event, JSONObject jsonObject) {
 		try {
 			JSONObject jObjCityevent = jsonObject.getJSONObject(KEY_CITYEVENT);
+			if (jObjCityevent.has(KEY_ERROR_CODE)) {
+				int errorCode = jObjCityevent.getInt(KEY_ERROR_CODE);
+				
+				if (errorCode == Api.ERROR_CODE_NO_RECORDS_FOUND) {
+					event.setDeletedOrExpired(true);
+					return;
+				}
+			}
 			JSONObject jObjEvent = jObjCityevent.getJSONObject(KEY_EVENTS).getJSONObject(KEY_EVENT);
 			
 			if (jObjEvent.has(KEY_ARTIST)) {

@@ -40,6 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/txtSlogan"
+            android:layout_above="@+id/lnr_layout_icons"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="@dimen/txt_desc_margin_l_fragment_about_us"
             android:layout_marginRight="@dimen/txt_desc_margin_r_fragment_about_us"

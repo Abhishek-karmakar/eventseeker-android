@@ -246,7 +246,7 @@ public class EventFeaturingFragment extends FbPublishEventListFragment implement
 		}
 		artistListAdapter.notifyDataSetChanged();
 		
-		if (!event.getSchedule().getBookingInfos().isEmpty()) {
+		if (event.getSchedule() != null && !event.getSchedule().getBookingInfos().isEmpty()) {
 			updateBtnBuyTicketsEnabled(true);
 		}
 		updateAttendingChkBoxes();		

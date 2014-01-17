@@ -225,6 +225,7 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 		protected Void doInBackground(Void... params) {
 			//Log.d(TAG, "LoadEventDetails doInBackground()");
 			EventApi eventApi = new EventApi(Api.OAUTH_TOKEN, event.getId(), IdType.EVENT);
+			
 			// null check is not required here, since if it's null, that's handled from eventApi
 			eventApi.setUserId(((EventSeekr)FragmentUtil.getActivity(EventDetailsFragment.this).getApplication()).getWcitiesId());
 			eventApi.setFriendsEnabled(true);

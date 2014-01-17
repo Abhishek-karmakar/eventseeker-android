@@ -49,7 +49,7 @@ public class Event implements Serializable, BitmapCacheable {
 	private String description;
 	private List<Friend> friends;
 	private String eventUrl;
-	private boolean hasArtists = true;
+	private boolean hasArtists = true, isDeletedOrExpired = false;
 	
 	public Event(long id, String name) {
 		this.id = id;
@@ -169,6 +169,14 @@ public class Event implements Serializable, BitmapCacheable {
 
 	public void setHasArtists(boolean hasArtists) {
 		this.hasArtists = hasArtists;
+	}
+
+	public boolean isDeletedOrExpired() {
+		return isDeletedOrExpired;
+	}
+
+	public void setDeletedOrExpired(boolean isDeletedOrExpired) {
+		this.isDeletedOrExpired = isDeletedOrExpired;
 	}
 
 	private String getImgName() {

@@ -108,7 +108,6 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		Log.d(TAG, "onCreateView()");
 		// Log.d(TAG, "onCreateView() - " + (System.currentTimeMillis() / 1000));
 		orientation = res.getConfiguration().orientation;
 		isTabletInPortraitMode = ((EventSeekr) FragmentUtil.getActivity(this).getApplicationContext())
@@ -209,11 +208,10 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		Log.d(TAG, "onDestroy()");
+		//Log.d(TAG, "onDestroy()");
 	}
 
 	private void updateArtistImg() {
-		Log.d(TAG, "updateArtistImg()");
 		// Log.d(TAG, "updateEventImg(), url = " + event.getLowResImgUrl());
 		if (artist.doesValidImgUrlExist() || allDetailsLoaded) {
 			String key = artist.getKey(ImgResolution.LOW);
@@ -262,7 +260,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 	}
 
 	private void updateFriendsVisibility() {
-		Log.d(TAG, "updateFriendsVisibility()");
+		//Log.d(TAG, "updateFriendsVisibility()");
 		if (((EventSeekr) FragmentUtil.getActivity(this).getApplication()).getWcitiesId() == null) {
 			rltLayoutFriends.setVisibility(View.GONE);
 
@@ -331,7 +329,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 	}
 
 	private void expandOrCollapseFriendsGrid() {
-		Log.d(TAG, "expandOrCollapseFriendsGrid()");
+		//Log.d(TAG, "expandOrCollapseFriendsGrid()");
 		if (isFriendsGridExpanded) {
 			txtViewAll.setText(res.getString(R.string.txt_view_less));
 			imgRight.setImageResource(R.drawable.less);
@@ -347,8 +345,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 	}
 
 	private void updateVideosVisibility() {
-		Log.d(TAG, "updateVideosVisibility()");
-		Log.i(TAG, "Are Videos Empty : " + artist.getVideos().isEmpty());
+		//Log.d(TAG, "updateVideosVisibility()");
 		if (isTablet) {
 
 			int visibility;
@@ -378,7 +375,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 	}
 
 	private void makeDescVisible() {
-		Log.d(TAG, "updateVideosVisibility()");
+		//Log.d(TAG, "updateVideosVisibility()");
 
 		if(isTablet) {
 			lnrVideos.setVisibility(View.VISIBLE);
@@ -397,7 +394,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 	}
 
 	private void makeDescVisibleInExpandedMode() {
-		Log.d(TAG, "makeDescVisibleInExpandedMode()");
+		//Log.d(TAG, "makeDescVisibleInExpandedMode()");
 
 		imgDown.setVisibility(View.GONE);
 		if(isTablet) {
@@ -409,8 +406,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 	}
 
 	private void updateDescVisibility() {
-		Log.d(TAG, "updateDescVisibility");
-		Log.i(TAG, "is Artist Description null : " + artist.getDescription());
+		//Log.d(TAG, "updateDescVisibility");
 		/**
 		 * Mithil:added new condition for the Tablet UI. Here if device is
 		 * tablet then if artist description is null then make the
@@ -445,7 +441,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 	}
 
 	private void expandEvtDesc() {
-		Log.d(TAG, "expandEvtDesc");
+		//Log.d(TAG, "expandEvtDesc");
 		txtArtistDesc.setMaxLines(Integer.MAX_VALUE);
 		txtArtistDesc.setEllipsize(null);
 
@@ -455,7 +451,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 	}
 
 	private void collapseEvtDesc() {
-		Log.d(TAG, "collapseEvtDesc");
+		//Log.d(TAG, "collapseEvtDesc");
 		int maxLines = orientation == Configuration.ORIENTATION_PORTRAIT ? MAX_LINES_ARTIST_DESC_PORTRAIT
 				: MAX_LINES_ARTIST_DESC_LANDSCAPE;
 		txtArtistDesc.setMaxLines(maxLines);
@@ -467,24 +463,24 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 	}
 
 	private void updateProgressBarVisibility() {
-		Log.d(TAG, "updateProgressBarVisibility()");
+		//Log.d(TAG, "updateProgressBarVisibility()");
 		if (isImgLoaded) {
-			Log.d(TAG, "updateProgressBarVisibility() isImgLoaded");
+			//Log.d(TAG, "updateProgressBarVisibility() isImgLoaded");
 			rltLayoutLoadedContent.setVisibility(View.VISIBLE);
 			progressBar.setVisibility(View.GONE);
 			if (progressBar2 != null) {
 				if (allDetailsLoaded) {
-					Log.d(TAG, "updateProgressBarVisibility() allDetailsLoaded");
+					//Log.d(TAG, "updateProgressBarVisibility() allDetailsLoaded");
 					progressBar2.setVisibility(View.GONE);
 
 				} else {
-					Log.d(TAG, "updateProgressBarVisibility() !allDetailsLoaded");
+					//Log.d(TAG, "updateProgressBarVisibility() !allDetailsLoaded");
 					progressBar2.setVisibility(View.VISIBLE);
 				}
 			}
 
 		} else {
-			Log.d(TAG, "updateProgressBarVisibility() !isImgLoaded");
+			//Log.d(TAG, "updateProgressBarVisibility() !isImgLoaded");
 			rltLayoutLoadedContent.setVisibility(View.GONE);
 			progressBar.setVisibility(View.VISIBLE);
 		}

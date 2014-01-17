@@ -16,7 +16,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.view.MenuItemCompat.OnActionExpandListener;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -26,7 +25,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnLayoutChangeListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -112,7 +110,7 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//Log.d(TAG, "onCreate");
-
+		
 		try {
 			MySpinServerSDK.sharedInstance().registerApplication(getApplication());
 			
@@ -121,12 +119,14 @@ public class MainActivity extends ActionBarActivity implements
 		}
 		
 		// TODO: remove negation from following if
-		/*if (!MySpinServerSDK.sharedInstance().isConnected()) {
+		/*if (MySpinServerSDK.sharedInstance().isConnected()) {
+			Log.d(TAG, "isConnected");
 			finish();
 			startActivity(new Intent(getApplicationContext(), BoschMainActivity.class));
 			return;
 		}*/
 		
+		//Log.d(TAG, "b4 setContentView");
 		setContentView(R.layout.activity_main);
 
 		/**
@@ -268,6 +268,7 @@ public class MainActivity extends ActionBarActivity implements
 			instance = this;
 			startSyncProxyService();
 		}
+		//Log.d(TAG, "onCreate done");
 	}
 
 	@Override
@@ -311,6 +312,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	protected void onPause() {
+		//Log.d(TAG, "onPause()");
 		if (AppConstants.FORD_SYNC_APP) {
 			activityOnTop = false;
 		}
@@ -319,7 +321,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	protected void onDestroy() {
-		// Log.d(TAG, "onDestroy()");
+		//Log.d(TAG, "onDestroy()");
 		if (AppConstants.FORD_SYNC_APP) {
 			//Log.v(TAG, "onDestroy main");
 			endSyncProxyInstance();

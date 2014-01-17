@@ -298,7 +298,8 @@ public class EventInfoFragment extends FbPublishEventFragment implements OnClick
 			
 		} else {
 			rltLayoutLoadedContent.setVisibility(View.GONE);
-			progressBar.setVisibility(View.VISIBLE);
+			int progressbarVisibility = event.isDeletedOrExpired() ? View.GONE : View.VISIBLE;
+			progressBar.setVisibility(progressbarVisibility);
 		}
 	}
 	
