@@ -63,15 +63,19 @@ public class FbUtil {
 	}
 	
 	public static void onClickLogin(Fragment fragment, StatusCallback statusCallback) {
+		//Log.d(TAG, "onClickLogin()");
         Session session = Session.getActiveSession();
         if (session == null) {
+        	//Log.d(TAG, "session == null");
             session = new Session(FragmentUtil.getActivity(fragment));
             Session.setActiveSession(session);
         }
         if (!session.isOpened() && !session.isClosed()) {
+        	//Log.d(TAG, "openForRead");
             session.openForRead(new Session.OpenRequest(fragment).setCallback(statusCallback));
             
         } else {
+        	//Log.d(TAG, "openActiveSession");
             Session.openActiveSession(FragmentUtil.getActivity(fragment), fragment, true, statusCallback);
         }
     }

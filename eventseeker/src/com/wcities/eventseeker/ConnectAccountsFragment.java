@@ -279,7 +279,18 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     			public void onCompleted(GraphUser user, Response response) {
     				// If the response is successful
     	            if (session == Session.getActiveSession()) {
-    	                if (user != null) {
+    	            	/**
+    	            	 * 2nd condition !fbLoggedIn is put due to following reason: 
+    	            	 * Sometimes this updateView() method is called twice. 
+    	            	 * For e.g.: For device not having facebook app,
+    	            	 * 1) Login at least once in the app.
+    	            	 * 2) Log out from facebook.
+    	            	 * 3) Go to my events & select going/want to for any event which will in turn ask 
+    	            	 * for facebook login. Complete this process.
+    	            	 * 4) Go to Sync Accounts screen. Select Login with Facebook. It doesn't ask for 
+    	            	 * fb credentials since session is already open but this calls updateView() twice. 
+    	            	 */
+    	                if (user != null && !fbLoggedIn) {
     	                	//serviceAccounts.get(0).name = FB_LOGOUT;
     	                	fbLoggedIn = true;
     	                	listAdapter.notifyDataSetChanged();

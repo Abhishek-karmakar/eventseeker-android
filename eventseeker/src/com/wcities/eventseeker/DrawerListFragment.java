@@ -13,10 +13,12 @@ import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -72,17 +74,20 @@ public class DrawerListFragment extends ListFragment {
 		
 		setListAdapter(drawerListAdapter);
         getListView().setDivider(null);
-        //getListView().setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+        getListView().setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
         //getListView().setBackgroundResource(R.drawable.side_nav_bg);
         getListView().setBackgroundResource(R.drawable.bg_drawer_list);
         getListView().setVerticalScrollBarEnabled(false);
         getListView().setHorizontalScrollBarEnabled(false);
+        getListView().setCacheColorHint(android.R.color.transparent);
+        getListView().setScrollingCacheEnabled(false);
         
         // Set the list's click listener
         getListView().setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView parent, View view, int position, long id) {
+				//Log.d(TAG, "onItemClick(), pos = " + position);
 				if (!sectionHeaderIndices.contains(position)) {
 					mListener.onDrawerItemSelected(position);
 				}
@@ -222,13 +227,14 @@ public class DrawerListFragment extends ListFragment {
 					listItemViewHolder.vSectionDivider.setVisibility(View.GONE);
 				}
 				
-				/*convertView.setOnClickListener(new OnClickListener() {
+				if (((ListView)parent).getCheckedItemPosition() == position) {
+					convertView.setBackgroundColor(mainActivity.get().getResources().getColor(R.color.font_blue));
+					listItemViewHolder.txtTitle.setTextColor(mainActivity.get().getResources().getColor(android.R.color.white));
 					
-					@Override
-					public void onClick(View v) {
-						((DrawerListFragmentListener)mainActivity).onDrawerItemSelected(position);
-					}
-				});*/
+				} else {
+					convertView.setBackgroundResource(0);
+					listItemViewHolder.txtTitle.setTextColor(mainActivity.get().getResources().getColor(R.color.darker_gray));
+				}
 			}
 			listItemViewHolder.txtTitle.setText(drawerListItem.title);
 			

@@ -1,8 +1,11 @@
 package com.wcities.eventseeker;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningTaskInfo;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.ActivityNotFoundException;
@@ -77,11 +80,14 @@ public class MainActivity extends ActionBarActivity implements
 	private static final int INDEX_NAV_ITEM_ABOUT_US = INDEX_NAV_ITEM_RATE_APP + 1;
 	private static final int INDEX_NAV_ITEM_EULA = INDEX_NAV_ITEM_ABOUT_US + 1;
 	private static final int INDEX_NAV_ITEM_REP_CODE = INDEX_NAV_ITEM_EULA + 1;
+	
+	private static final int REQ_CODE_INVITE_FRIENDS = 1001;
+	private static final int REQ_CODE_RATE_APP = 1002;
 
 	private static final String DRAWER_LIST_FRAGMENT_TAG = "drawerListFragment";
 
 	private static MainActivity instance = null;
-	private boolean activityOnTop;
+	private boolean activityOnTop, hasOtherActivityFinished;
 
 	private DrawerLayout mDrawerLayout;
 	private LinearLayout lnrLayoutRootNavDrawer;
@@ -293,6 +299,7 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onResume() {
 		super.onResume();
 		//Log.d(TAG, "onResume()");
+		
 		if (AppConstants.FORD_SYNC_APP) {
 			activityOnTop = true;
 			// check if lockscreen should be up
@@ -466,6 +473,18 @@ public class MainActivity extends ActionBarActivity implements
 		outState.putBoolean(BundleKeys.IS_DRAWER_INDICATOR_ENABLED,
 				isDrawerIndicatorEnabled);
 	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.d(TAG, "onActivityResult(), requestCode = " + requestCode);
+		if (requestCode == REQ_CODE_INVITE_FRIENDS || requestCode == REQ_CODE_RATE_APP) {
+			hasOtherActivityFinished = true;
+			
+		} else {
+			// pass it to the fragments
+			super.onActivityResult(requestCode, resultCode, data);
+		}
+	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -618,8 +637,7 @@ public class MainActivity extends ActionBarActivity implements
 					serviceInstance.reset();
 
 				} else {
-					Log.e(TAG,
-							"endSyncProxyInstance. No reset required if transport is TCP");
+					Log.e(TAG, "endSyncProxyInstance. No reset required if transport is TCP");
 				}
 				// if proxy == null create proxy
 			} else {
@@ -649,17 +667,36 @@ public class MainActivity extends ActionBarActivity implements
 
 	private void onFragmentResumed(int position, String title,
 			String fragmentTag) {
-		// Log.d(TAG, "onFragmentResumed() - " + fragmentTag);
+		Log.d(TAG, "onFragmentResumed() - " + fragmentTag);
 		drawerItemSelectedPosition = position;
 		if (drawerItemSelectedPosition != AppConstants.INVALID_INDEX) {
-				setDrawerIndicatorEnabled(true);
+			setDrawerIndicatorEnabled(true);
+			
+			/**
+			 * This check is included since otherwise this function gets called up even just before we start
+			 * invite friends activity as in following case:
+			 * Suppose user 
+			 * 1) browses discover -> featured event click -> event details screen.
+			 * 2) Opens side navigation by swiping from left to right
+			 * 3) Selects invite friends.
+			 * In this case as we clear backstack from onDrawerItemSelected() method, onFragmentResumed() is 
+			 * called up first for discover fragment followed by starting activity for inviting friends.
+			 * At this point we should not be marking discover item as checked on navigation drawer & 
+			 * hence the following condition is used. Only when other activity finishes we can allow fragments 
+			 * of MainActivity to mark corresponding items checked.
+			 * Above explanation applies to rate app activity as well similar to invite friends activity.
+			 */
+			if (hasOtherActivityFinished) {
+				hasOtherActivityFinished = false;
+				updateDrawerListCheckedItem(drawerItemSelectedPosition);
+			}
 		}
 		mTitle = title;
 		updateTitle();
 
 		currentContentFragmentTag = fragmentTag;
 	}
-
+	
 	private void onFragmentCalledFromOtherTaskResumed(int position,
 			String title, String fragmentTag) {
 		// Log.d(TAG, "onFragmentResumed() - " + fragmentTag);
@@ -687,17 +724,10 @@ public class MainActivity extends ActionBarActivity implements
 				getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
 
 			}
-			DrawerListFragment drawerListFragment = (DrawerListFragment) getSupportFragmentManager()
-					.findFragmentByTag(DRAWER_LIST_FRAGMENT_TAG);
-			if(drawerListFragment == null) {
+			
+			boolean isDrawerListFragmentFound = updateDrawerListCheckedItem(position);
+			if (!isDrawerListFragmentFound) {
 				return;
-			}
-			try {
-				drawerListFragment.getListView().setItemChecked(position, true);
-				
-			} catch (IllegalStateException e) {
-				// this occurs when call sequence starts from onCreate()
-				Log.i(TAG, "Drawer listview is not yet ready.");
 			}
 		//}
 
@@ -789,6 +819,30 @@ public class MainActivity extends ActionBarActivity implements
 	    	mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
 	    }
 	}
+	
+	/**
+	 * @param position
+	 * @return true if DrawerListFragment instance is existing (not null)
+	 */
+	private boolean updateDrawerListCheckedItem(int position) {
+		if (position == AppConstants.INVALID_INDEX) {
+			return false;
+		}
+		
+		DrawerListFragment drawerListFragment = (DrawerListFragment) getSupportFragmentManager()
+				.findFragmentByTag(DRAWER_LIST_FRAGMENT_TAG);
+		if (drawerListFragment == null) {
+			return false;
+		}
+		try {
+			drawerListFragment.getListView().setItemChecked(position, true);
+			
+		} catch (IllegalStateException e) {
+			// this occurs when call sequence starts from onCreate()
+			Log.i(TAG, "Drawer listview is not yet ready.");
+		}
+		return true;
+	}
 
 	public boolean isTabletAndInLandscapeMode() {
 		return isTabletAndInLandscapeMode;
@@ -799,6 +853,8 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	private void inviteFriends() {
+		//Log.d(TAG, "inviteFriends()");
+		hasOtherActivityFinished = false;
 		String url = "https://play.google.com/store/apps/details?id="
 				+ getPackageName();
 		Intent intent = new Intent(android.content.Intent.ACTION_SEND);
@@ -806,7 +862,7 @@ public class MainActivity extends ActionBarActivity implements
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
 		intent.putExtra(Intent.EXTRA_TEXT, "Checkout eventseeker" + " " + url);
 		try {
-			startActivity(intent);
+			startActivityForResult(intent, REQ_CODE_INVITE_FRIENDS);
 
 		} catch (ActivityNotFoundException e) {
 			Toast.makeText(getApplicationContext(),
@@ -816,10 +872,11 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	private void rateApp() {
+		hasOtherActivityFinished = false;
 		Uri uri = Uri.parse("market://details?id=" + getPackageName());
 		Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
 		try {
-			startActivity(goToMarket);
+			startActivityForResult(goToMarket, REQ_CODE_RATE_APP);
 
 		} catch (ActivityNotFoundException e) {
 			Toast.makeText(getApplicationContext(),
@@ -912,8 +969,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	private void selectNonDrawerItem(Fragment replaceBy,
 			String replaceByFragmentTag, String newTitle, boolean addToBackStack) {
-		Log.d(TAG, "onDrawerItemSelected(), newTitle = " + newTitle
-				+ ", addToBackStack = " + addToBackStack);
+		Log.d(TAG, "onDrawerItemSelected(), newTitle = " + newTitle + ", addToBackStack = " + addToBackStack);
 		drawerItemSelectedPosition = AppConstants.INVALID_INDEX;
 		// revertCheckedDrawerItemStateIfAny();
 		setDrawerIndicatorEnabled(!addToBackStack);
