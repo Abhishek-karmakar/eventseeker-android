@@ -64,6 +64,7 @@ public class AppConstants {
 	public static final String FRAGMENT_TAG_TICKET_PROVIDER_DIALOG = "ticketProviderDialogFragment";
 	public static final String FRAGMENT_TAG_WEB_VIEW = "webViewFragment";
 	public static final String FRAGMENT_TAG_TWITTER_SYNCING = "twitterSyncingFragment";
+	public static final String FRAGMENT_TAG_GOOGLE_PLAY_MUSIC = "GooglePlayMusicFragment";
 	
 	public static final int INVALID_INDEX = -1;
 	public static final int INVALID_ID = -1;
@@ -74,6 +75,10 @@ public class AppConstants {
 	
 	public static final String TMP_SHARE_IMG_FOLDER = "/share_img";
 	public static final String TMP_SHARE_IMG_PREFIX = "img";
+	
+	public static final int REQ_CODE_INVITE_FRIENDS = 1001;
+	public static final int REQ_CODE_RATE_APP = 1002;
+	public static final int REQ_CODE_GOOGLE_ACCOUNT_CHOOSER = 1003;
 	
 	// List of additional write permissions being requested
 	public static final List<String> PERMISSIONS_FB_PUBLISH_EVT = Arrays.asList("publish_actions");

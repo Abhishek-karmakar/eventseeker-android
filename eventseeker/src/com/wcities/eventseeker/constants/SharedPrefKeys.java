@@ -8,6 +8,7 @@ public class SharedPrefKeys {
 	public static final String APP_VERSION_CODE = "appVersionCode";
 	public static final String GCM_REGISTRATION_EXPIRATION_TIME = "gcmRegistrationExpirationTime";
 
+	public static final String SYNC_COUNT_GOOGLE_PLAY_MUSIC = "syncCountGooglePlayMusic";
 	public static final String SYNC_COUNT_DEVICE_LIB = "syncCountDeviceLib";
 	public static final String SYNC_COUNT_TWITTER = "syncCountTwitter";
 	public static final String SYNC_COUNT_RDIO = "syncCountRdio";

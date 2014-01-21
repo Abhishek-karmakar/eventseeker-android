@@ -16,7 +16,6 @@ import org.xml.sax.SAXException;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -37,11 +36,12 @@ import com.wcities.eventseeker.ConnectAccountsFragment.ServiceAccount;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.SyncArtists;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.OnFragmentAliveListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.ViewUtil.AnimationUtil;
 
-public class PandoraFragment extends Fragment implements OnClickListener, OnFragmentAliveListener {
+public class PandoraFragment extends FragmentLoadableFromBackStack implements OnClickListener, OnFragmentAliveListener {
 
 	private static final String TAG = PandoraFragment.class.getName();
 	

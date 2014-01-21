@@ -1,11 +1,10 @@
 package com.wcities.eventseeker;
 
-import java.util.Iterator;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningTaskInfo;
+import android.accounts.AccountManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.ActivityNotFoundException;
@@ -13,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -23,6 +23,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -33,10 +34,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.android.gm.api.GoogleMusicApi;
+import com.android.gm.api.model.Song;
 import com.bosch.myspin.serversdk.MySpinException;
 import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.ford.syncV4.proxy.SyncProxyALM;
 import com.ford.syncV4.transport.TransportType;
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.UserRecoverableAuthException;
+import com.google.android.gms.common.AccountPicker;
 import com.wcities.eventseeker.ChangeLocationFragment.ChangeLocationFragmentListener;
 import com.wcities.eventseeker.ConnectAccountsFragment.ConnectAccountsFragmentListener;
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
@@ -44,7 +51,6 @@ import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.FbLogInFragment.FbLogInFragmentListener;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.applink.service.AppLinkService;
-import com.wcities.eventseeker.bosch.BoschMainActivity;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
@@ -81,9 +87,6 @@ public class MainActivity extends ActionBarActivity implements
 	private static final int INDEX_NAV_ITEM_EULA = INDEX_NAV_ITEM_ABOUT_US + 1;
 	private static final int INDEX_NAV_ITEM_REP_CODE = INDEX_NAV_ITEM_EULA + 1;
 	
-	private static final int REQ_CODE_INVITE_FRIENDS = 1001;
-	private static final int REQ_CODE_RATE_APP = 1002;
-
 	private static final String DRAWER_LIST_FRAGMENT_TAG = "drawerListFragment";
 
 	private static MainActivity instance = null;
@@ -476,13 +479,58 @@ public class MainActivity extends ActionBarActivity implements
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.d(TAG, "onActivityResult(), requestCode = " + requestCode);
-		if (requestCode == REQ_CODE_INVITE_FRIENDS || requestCode == REQ_CODE_RATE_APP) {
+		//Log.d(TAG, "onActivityResult(), requestCode = " + requestCode + ", resultCode = " + resultCode);
+		switch (requestCode) {
+		
+		case AppConstants.REQ_CODE_INVITE_FRIENDS:
+		case AppConstants.REQ_CODE_RATE_APP:
 			hasOtherActivityFinished = true;
+			break;
 			
-		} else {
+		/*case REQ_CODE_GOOGLE_ACCOUNT_CHOOSER:
+			if (resultCode == RESULT_OK) {
+				final String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+				AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
+
+					@Override
+					protected Void doInBackground(Void... params) {
+						try {
+				        	String authToken = GoogleAuthUtil.getToken(MainActivity.this, accountName, "sj");
+				            
+				            if (!TextUtils.isEmpty(authToken)) {
+				            	Bundle args = new Bundle();
+								args.putString(BundleKeys.AUTH_TOKEN, authToken);
+								GooglePlayMusicFragment googlePlayMusicFragment = new GooglePlayMusicFragment();
+								googlePlayMusicFragment.setArguments(args);
+								selectNonDrawerItem(googlePlayMusicFragment, AppConstants.FRAGMENT_TAG_GOOGLE_PLAY_MUSIC, 
+										getResources().getString(R.string.title_google_play), true);
+				            }
+				            
+				        } catch (UserRecoverableAuthException e) {
+				            startActivityForResult(e.getIntent(), REQ_CODE_GOOGLE_ACCOUNT_CHOOSER);
+				            e.printStackTrace();
+				            
+				        } catch (IOException e) {
+							e.printStackTrace();
+							
+						} catch (GoogleAuthException e) {
+							e.printStackTrace();
+						}
+						return null;
+					}
+				};
+				asyncTask.execute();
+				
+				
+			} else {
+				
+			}
+			break;*/
+
+		default:
 			// pass it to the fragments
 			super.onActivityResult(requestCode, resultCode, data);
+			break;
 		}
 	}
 
@@ -862,7 +910,7 @@ public class MainActivity extends ActionBarActivity implements
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
 		intent.putExtra(Intent.EXTRA_TEXT, "Checkout eventseeker" + " " + url);
 		try {
-			startActivityForResult(intent, REQ_CODE_INVITE_FRIENDS);
+			startActivityForResult(intent, AppConstants.REQ_CODE_INVITE_FRIENDS);
 
 		} catch (ActivityNotFoundException e) {
 			Toast.makeText(getApplicationContext(),
@@ -876,7 +924,7 @@ public class MainActivity extends ActionBarActivity implements
 		Uri uri = Uri.parse("market://details?id=" + getPackageName());
 		Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
 		try {
-			startActivityForResult(goToMarket, REQ_CODE_RATE_APP);
+			startActivityForResult(goToMarket, AppConstants.REQ_CODE_RATE_APP);
 
 		} catch (ActivityNotFoundException e) {
 			Toast.makeText(getApplicationContext(),
@@ -1118,6 +1166,21 @@ public class MainActivity extends ActionBarActivity implements
 	public void onServiceSelected(Service service, Bundle args, boolean addToBackStack) {
 		
 		switch (service) {
+		
+		case Facebook:
+			FacebookFragment facebookFragment = new FacebookFragment();
+			facebookFragment.setArguments(args);
+			selectNonDrawerItem(facebookFragment,
+					AppConstants.FRAGMENT_TAG_FACEBOOK, getResources()
+					.getString(R.string.title_facebook), addToBackStack);
+			break;
+			
+		case GooglePlay:
+			GooglePlayMusicFragment googlePlayMusicFragment = new GooglePlayMusicFragment();
+			googlePlayMusicFragment.setArguments(args);
+			selectNonDrawerItem(googlePlayMusicFragment, AppConstants.FRAGMENT_TAG_GOOGLE_PLAY_MUSIC, 
+					getResources().getString(R.string.title_google_play), addToBackStack);
+			break;
 
 		case DeviceLibrary:
 			DeviceLibraryFragment deviceLibraryFragment = new DeviceLibraryFragment();
@@ -1125,14 +1188,6 @@ public class MainActivity extends ActionBarActivity implements
 			selectNonDrawerItem(deviceLibraryFragment,
 					AppConstants.FRAGMENT_TAG_DEVICE_LIBRARY, getResources()
 							.getString(R.string.title_device_library), addToBackStack);
-			break;
-			
-		case Facebook:
-			FacebookFragment facebookFragment = new FacebookFragment();
-			facebookFragment.setArguments(args);
-			selectNonDrawerItem(facebookFragment,
-					AppConstants.FRAGMENT_TAG_FACEBOOK, getResources()
-					.getString(R.string.title_facebook), addToBackStack);
 			break;
 			
 		case Twitter:
@@ -1313,6 +1368,14 @@ public class MainActivity extends ActionBarActivity implements
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources()
 					.getString(R.string.title_pandora),
 					AppConstants.FRAGMENT_TAG_PANDORA);
+			
+		} else if (fragment instanceof TwitterSyncingFragment) {
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_twitter),
+					AppConstants.FRAGMENT_TAG_TWITTER_SYNCING);
+
+		} else if (fragment instanceof GooglePlayMusicFragment) {
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_google_play),
+					AppConstants.FRAGMENT_TAG_GOOGLE_PLAY_MUSIC);
 		}
 	}
 

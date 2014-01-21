@@ -216,8 +216,6 @@ public class DrawerListFragment extends ListFragment {
 					listItemViewHolder = (ListItemViewHolder) convertView.getTag();
 				}
 			
-				listItemViewHolder.imgIcon.setImageDrawable(drawerListItem.iconDrawable);
-				
 				if (sectionEndsOnIndices.contains(position)) {
 					listItemViewHolder.vDivider.setVisibility(View.GONE);
 					listItemViewHolder.vSectionDivider.setVisibility(View.VISIBLE);
@@ -230,11 +228,15 @@ public class DrawerListFragment extends ListFragment {
 				if (((ListView)parent).getCheckedItemPosition() == position) {
 					convertView.setBackgroundColor(mainActivity.get().getResources().getColor(R.color.font_blue));
 					listItemViewHolder.txtTitle.setTextColor(mainActivity.get().getResources().getColor(android.R.color.white));
+					listItemViewHolder.imgIcon.setSelected(true);
 					
 				} else {
 					convertView.setBackgroundResource(0);
 					listItemViewHolder.txtTitle.setTextColor(mainActivity.get().getResources().getColor(R.color.darker_gray));
+					listItemViewHolder.imgIcon.setSelected(false);
 				}
+				
+				listItemViewHolder.imgIcon.setImageDrawable(drawerListItem.iconDrawable);
 			}
 			listItemViewHolder.txtTitle.setText(drawerListItem.title);
 			

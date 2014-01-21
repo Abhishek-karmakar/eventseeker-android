@@ -49,6 +49,7 @@ public class EventSeekr extends Application {
 	private static final int NOT_INITIALIZED = -1;
 	public static final int UNSYNC_COUNT = -2;
 
+	private int syncCountGooglePlayMusic = NOT_INITIALIZED;
 	private int syncCountDeviceLib = NOT_INITIALIZED;
 	private int syncCountTwitter = NOT_INITIALIZED;
 	private int syncCountRdio = NOT_INITIALIZED;
@@ -319,6 +320,13 @@ public class EventSeekr extends Application {
 				AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
 
 		switch (service) {
+		
+		case GooglePlay:
+			if (syncCountGooglePlayMusic == NOT_INITIALIZED) {
+				syncCountGooglePlayMusic = pref.getInt(
+						SharedPrefKeys.SYNC_COUNT_GOOGLE_PLAY_MUSIC, UNSYNC_COUNT);
+			}
+			return syncCountGooglePlayMusic;
 
 		case DeviceLibrary:
 			if (syncCountDeviceLib == NOT_INITIALIZED) {
@@ -368,6 +376,11 @@ public class EventSeekr extends Application {
 		Editor editor = pref.edit();
 
 		switch (service) {
+		
+		case GooglePlay:
+			syncCountGooglePlayMusic = count;
+			editor.putInt(SharedPrefKeys.SYNC_COUNT_GOOGLE_PLAY_MUSIC, syncCountGooglePlayMusic);
+			break;
 
 		case DeviceLibrary:
 			syncCountDeviceLib = count;

@@ -53,6 +53,7 @@ public class BundleKeys {
 
 	public static final String SERVICE_ACCOUNTS = "serviceAccounts";
 	public static final String WCITIES_ID = "wcitiesId";
+	public static final String AUTH_TOKEN = "authToken";
 	
 	public static final String STR_CRASH_LOG = "crashLog";
 	
