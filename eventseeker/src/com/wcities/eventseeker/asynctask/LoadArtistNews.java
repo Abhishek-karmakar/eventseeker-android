@@ -82,6 +82,8 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 			e.printStackTrace();
 		}
 
+		// TODO: Remove following line
+		//tmpArtistNewsItems.clear();
 		return tmpArtistNewsItems;
 	}
 	

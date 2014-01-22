@@ -10,12 +10,15 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,10 +27,13 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.RecyclerListener;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
+import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
@@ -43,7 +49,7 @@ import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser.MyItemsList;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public abstract class FollowingParentFragment extends FragmentLoadableFromBackStack {
+public abstract class FollowingParentFragment extends FragmentLoadableFromBackStack implements OnClickListener {
 
 	private static final String TAG = FollowingParentFragment.class.getName();
 
@@ -65,7 +71,23 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 	private AbsListView absListView;
 
 	private View rltDummyLyt;
-
+	private ScrollView scrlVRootNoItemsFoundWithAction;
+	
+	/**
+	 * Using its instance variable since otherwise calling getResources() directly from fragment from 
+	 * callback methods is dangerous in a sense that it may throw java.lang.IllegalStateException: 
+	 * Fragment not attached to Activity, if user has already left this fragment & 
+	 * then changed the orientation.
+	 */
+	private Resources res;
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		if (!(activity instanceof DrawerListFragmentListener)) {
+            throw new ClassCastException(activity.toString() + " must implement DrawerListFragmentListener");
+        }
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -75,12 +97,15 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 		if (wcitiesId == null) {
 			wcitiesId = ((EventSeekr) FragmentUtil.getActivity(this).getApplication()).getWcitiesId();
 		}
+		res = getResources();
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_following, null);
 		rltDummyLyt = v.findViewById(R.id.rltDummyLyt);
+		scrlVRootNoItemsFoundWithAction = (ScrollView) v.findViewById(R.id.scrlVRootNoItemsFoundWithAction);
+		v.findViewById(R.id.btnAction).setOnClickListener(this);
 		return v;
 	}
 
@@ -156,6 +181,8 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 				e.printStackTrace();
 			}
 
+			// TODO: Remove following line
+			//tmpArtists.clear();
 			return tmpArtists;
 		}
 
@@ -343,15 +370,50 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 		super.onDestroyView();
 	}
 	
-	void showNoArtistFound() {
-		absListView.setVisibility(View.GONE);
-		rltDummyLyt.setVisibility(View.VISIBLE);
+	private void showNoArtistFound() {
+		/**
+		 * try-catch is used to handle case where even before we get call back to this function, user leaves 
+		 * this screen.
+		 */
+		try {
+			absListView.setVisibility(View.GONE);
+			
+		} catch (IllegalStateException e) {
+			Log.e(TAG, "" + e.getMessage());
+			e.printStackTrace();
+		}
+
 		if (wcitiesId == null) {
+			rltDummyLyt.setVisibility(View.VISIBLE);
 			TextView txtNoItemsFound = (TextView)rltDummyLyt.findViewById(R.id.txtNoItemsFound);
-			txtNoItemsFound.setText(getResources().getString(R.string.no_items_found_pls_login) + " the list of artists you are following.");
+			txtNoItemsFound.setText(res.getString(R.string.no_items_found_pls_login) + " the list of artists you are following.");
+			
+		} else {
+			scrlVRootNoItemsFoundWithAction.setVisibility(View.VISIBLE);
+			((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsHeading)).setText(
+					"Personalize Your Experience");
+			((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsMsg)).setText(
+					"Sync accounts or search for artists to start your personalized eventseeker experience.");
+			((Button)scrlVRootNoItemsFoundWithAction.findViewById(R.id.btnAction)).setText(
+					"Sync Accounts");
+			((ImageView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.imgNoItems)).setImageDrawable(
+					res.getDrawable(R.drawable.no_artists_following));
 		}
 	}
 
-	protected abstract AbsListView getScrollableView();
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		
+		case R.id.btnAction:
+			((DrawerListFragmentListener)FragmentUtil.getActivity(this)).onDrawerItemSelected(
+					MainActivity.INDEX_NAV_ITEM_CONNECT_ACCOUNTS);
+			break;
+
+		default:
+			break;
+		}
+	}
 	
+	protected abstract AbsListView getScrollableView();
 }

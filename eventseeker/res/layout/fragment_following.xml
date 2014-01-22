@@ -26,5 +26,8 @@
 		    android:padding="@dimen/txt_list_no_items_found_margin_list_no_items_found"/>
 	        
     </RelativeLayout>
+    
+    <include layout="@layout/include_no_items_found_with_action"
+        android:visibility="gone"/>
 	
 </RelativeLayout>

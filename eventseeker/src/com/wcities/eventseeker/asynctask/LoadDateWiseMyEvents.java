@@ -30,15 +30,21 @@ public class LoadDateWiseMyEvents extends AsyncTask<Void, Void, List<Event>> {
 	private DateWiseEventList eventList;
 	
 	private DateWiseMyEventListAdapter eventListAdapter;
+	private MyEventsLoadedListener myEventsLoadedListener;
+	
+	public interface MyEventsLoadedListener {
+		public abstract void onEventsLoaded();
+	}
 	
 	public LoadDateWiseMyEvents(DateWiseEventList eventList, DateWiseMyEventListAdapter eventListAdapter, String wcitiesId, 
-			Type loadType, double lat, double lon) {
+			Type loadType, double lat, double lon, MyEventsLoadedListener myEventsLoadedListener) {
 		this.eventList = eventList;
 		this.eventListAdapter = eventListAdapter;
 		this.wcitiesId = wcitiesId;
 		this.loadType = loadType;
 		this.lat = lat;
 		this.lon = lon;
+		this.myEventsLoadedListener = myEventsLoadedListener;
 	}
 	
 	@Override
@@ -76,6 +82,8 @@ public class LoadDateWiseMyEvents extends AsyncTask<Void, Void, List<Event>> {
 			e.printStackTrace();
 		}
 
+		// TODO: Remove following line
+		//tmpEvents.clear();
 		return tmpEvents;
 	}
 	
@@ -93,6 +101,10 @@ public class LoadDateWiseMyEvents extends AsyncTask<Void, Void, List<Event>> {
 		} else {
 			eventListAdapter.setMoreDataAvailable(false);
 			eventList.removeProgressBarIndicator(this);
+			// here 1 item is indicating no events message.
+			if (eventList.getCount() == 1) {
+				myEventsLoadedListener.onEventsLoaded();
+			}
 		}
 		eventListAdapter.notifyDataSetChanged();
 	}    	

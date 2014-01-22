@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rltLayoutRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/rlt_layout_root_pad_l_fragment_my_events_list"
+	android:paddingRight="@dimen/rlt_layout_root_pad_r_fragment_my_events_list" >
+    
+    <ListView android:id="@id/android:list"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:background="@drawable/story_space" />
+    
+    <include layout="@layout/include_no_items_found_with_action"
+        android:visibility="gone"/>
+
+</RelativeLayout>

@@ -9,6 +9,7 @@ import android.text.TextUtils;
 
 import com.android.gm.api.comm.GmHttpClient;
 import com.android.gm.api.comm.SimpleForm;
+import com.android.gm.api.exception.InvalidGooglePlayMusicAccountException;
 import com.android.gm.api.lib.RequestParams;
 import com.android.gm.api.model.AddPlaylistResponse;
 import com.android.gm.api.model.Playlist;
@@ -131,12 +132,14 @@ public class GoogleMusicApi
 		return new URI(jsonObject.optString("url", null));
 	}
 
-	public static final ArrayList<Song> getAllSongs(Context context) throws JSONException
+	public static final ArrayList<Song> getAllSongs(Context context) throws JSONException, 
+			InvalidGooglePlayMusicAccountException
 	{
 		return getSongs(context, "");
 	}
 
-	public static final ArrayList<Song> getSongs(Context context, String continuationToken) throws JSONException
+	public static final ArrayList<Song> getSongs(Context context, String continuationToken) throws 
+			JSONException, InvalidGooglePlayMusicAccountException
 	{
 
 		SimpleForm form = new SimpleForm();
@@ -144,6 +147,14 @@ public class GoogleMusicApi
 		form.close();
 
 		String response = mHttpClient.post(context, "https://play.google.com/music/services/loadalltracks?u=0&xt=" + getXtCookieValue(), new ByteArrayEntity(form.toString().getBytes()), form.getContentType());
+		if (response == null) {
+			/**
+			 * Google play music service is available in selected territories only. When we use any google 
+			 * account which is not registered for google play music on https://play.google.com/music/listen#/now,
+			 * it returns null response.
+			 */
+			throw new InvalidGooglePlayMusicAccountException();
+		}
 		
 		JSONObject jsonObject = new JSONObject(response);
 		Playlist playlist = new Playlist().fromJsonObject(jsonObject);

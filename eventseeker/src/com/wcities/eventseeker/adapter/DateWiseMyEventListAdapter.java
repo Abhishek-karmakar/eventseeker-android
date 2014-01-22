@@ -175,11 +175,11 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 						
 					} else {
 						// fallback condition
-						((TextView)convertView).setText("No Event Found.");
+						((TextView)convertView).setText("No Event found.");
 					}
 					
 				} else {
-					((TextView)convertView).setText("No Event Found.");
+					((TextView)convertView).setText("No Event found.");
 				}
 				convertView.setTag("");
 			} 

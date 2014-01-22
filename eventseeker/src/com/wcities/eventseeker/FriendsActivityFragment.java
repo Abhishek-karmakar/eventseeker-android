@@ -13,12 +13,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
@@ -32,10 +34,13 @@ import android.view.ViewGroup;
 import android.widget.AbsListView.RecyclerListener;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,6 +51,7 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.Session.StatusCallback;
 import com.facebook.SessionState;
+import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.Tracktype;
@@ -65,7 +71,8 @@ import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack implements StatusCallback {
+public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack implements StatusCallback, 
+		OnClickListener {
 	
 	private static final String TAG = FriendsActivityFragment.class.getName();
 	
@@ -99,6 +106,23 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	private boolean isTablet;
 	private boolean is7InchTabletInPortrait;
 	private View rltDummyLyt;
+	private ScrollView scrlVRootNoItemsFoundWithAction;
+	
+	/**
+	 * Using its instance variable since otherwise calling getResources() directly from fragment from 
+	 * callback methods is dangerous in a sense that it may throw java.lang.IllegalStateException: 
+	 * Fragment not attached to Activity, if user has already left this fragment & 
+	 * then changed the orientation.
+	 */
+	private Resources res;
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		if (!(activity instanceof DrawerListFragmentListener)) {
+            throw new ClassCastException(activity.toString() + " must implement DrawerListFragmentListener");
+        }
+	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -110,6 +134,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 		}
 		
 		isTablet = ((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).isTablet();
+		res = getResources();
 	}
 	
 	@Override
@@ -120,6 +145,8 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 		orientation = getResources().getConfiguration().orientation;
 		View v = inflater.inflate(R.layout.fragment_friends_activity_list, null);
 		rltDummyLyt = v.findViewById(R.id.rltDummyLyt);
+		scrlVRootNoItemsFoundWithAction = (ScrollView) v.findViewById(R.id.scrlVRootNoItemsFoundWithAction);
+		v.findViewById(R.id.btnAction).setOnClickListener(this);
 		return v;
 	}
 	
@@ -257,6 +284,8 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 				e.printStackTrace();
 			}
 
+			// TODO: Remove following line
+			//tmpFriendNewsItems.clear();
 			return tmpFriendNewsItems;
 		}
 		
@@ -287,18 +316,13 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 			} else {
 				isMoreDataAvailable = false;
 				friendNewsItems.remove(friendNewsItems.size() - 1);
-				if(friendNewsItems.isEmpty()) {
-					/*FriendNewsItem friendNewsItem = new FriendNewsItem();
-					friendNewsItem.setFriendId(AppConstants.INVALID_STR_ID);
-					friendNewsItems.add(friendNewsItem);*/
+				if (friendNewsItems.isEmpty()) {
 					showNoFriendsActivityFound();
 				}
 			}
 			
-			
 			friendActivityListAdapter.notifyDataSetChanged();
 		}
-
     }
 	
 	private class FriendActivityListAdapter extends BaseAdapter {
@@ -840,12 +864,47 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	}
 	
 	private void showNoFriendsActivityFound() {
-		rltDummyLyt.setVisibility(View.VISIBLE);
 		if (wcitiesId == null) {
+			rltDummyLyt.setVisibility(View.VISIBLE);
 			TextView txtNoItemsFound = (TextView)rltDummyLyt.findViewById(R.id.txtNoItemsFound);
-			txtNoItemsFound.setText(getResources().getString(R.string.no_items_found_pls_login) + " your friends activity.");
+			txtNoItemsFound.setText(res.getString(R.string.no_items_found_pls_login) + " your friends activity.");
+			
+		} else {
+			scrlVRootNoItemsFoundWithAction.setVisibility(View.VISIBLE);
+			((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsHeading)).setText(
+					"Invite Friends");
+			((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsMsg)).setText(
+					"Events are always better with friends. Invite them now to join eventseeker.");
+			((Button)scrlVRootNoItemsFoundWithAction.findViewById(R.id.btnAction)).setText(
+					"Invite Friends");
+			((ImageView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.imgNoItems)).setImageDrawable(
+					res.getDrawable(R.drawable.no_friends_activity));
 		}
-		getListView().setVisibility(View.GONE);
-	}    	
+		
+		/**
+		 * try-catch is used to handle case where even before we get call back to this function, user leaves 
+		 * this screen.
+		 */
+		try {
+			getListView().setVisibility(View.GONE);
+			
+		} catch (IllegalStateException e) {
+			Log.e(TAG, "" + e.getMessage());
+			e.printStackTrace();
+		}
+	}
 
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		
+		case R.id.btnAction:
+			((DrawerListFragmentListener)FragmentUtil.getActivity(this)).onDrawerItemSelected(
+					MainActivity.INDEX_NAV_ITEM_INVITE_FRIENDS);
+			break;
+
+		default:
+			break;
+		}
+	}    	
 }

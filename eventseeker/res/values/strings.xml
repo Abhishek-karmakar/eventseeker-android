@@ -3,9 +3,9 @@
 
     <string name="app_name">eventseeker</string>
     <!-- development keys -->
-    <!-- <string name="fb_app_id">687206491296790</string> -->
+    <string name="fb_app_id">687206491296790</string>
     <!-- production keys -->
-    <string name="fb_app_id">153033148171841</string>
+    <!-- <string name="fb_app_id">153033148171841</string> -->
     <string name="menu_search">Search</string>
     <string name="menu_change_location">Change Location</string>
     <string name="title_discover">Discover</string>
@@ -38,8 +38,8 @@
     <string name="title_web">Web</string>
     
     <string name="no_items_found_pls_login">Please login with facebook from \'Sync Accounts\' page to see</string>
-	<string name="pls_login_to_track_evt">To track this event you need to first login with facebook from \'Sync Accounts\' page.</string>
-
+    <string name="pls_login_to_track_evt">To track this event you need to first login with facebook from \'Sync Accounts\' page.</string>
+    
     <!-- Strings used for navigation drawer list -->
     <string name="navigation_drawer_section_browse">BROWSE</string>
     <string name="navigation_drawer_item_discover">Discover</string>

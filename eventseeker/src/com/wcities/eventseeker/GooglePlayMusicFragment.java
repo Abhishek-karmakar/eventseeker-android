@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.gm.api.GoogleMusicApi;
+import com.android.gm.api.exception.InvalidGooglePlayMusicAccountException;
 import com.android.gm.api.model.Song;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
@@ -133,6 +134,10 @@ public class GooglePlayMusicFragment extends FragmentLoadableFromBackStack imple
 	            
 	        } catch (JSONException e) {
 				e.printStackTrace();
+				
+			} catch (InvalidGooglePlayMusicAccountException e) {
+				e.printStackTrace();
+				return null;
 			}
 
 	        return artistNames;
