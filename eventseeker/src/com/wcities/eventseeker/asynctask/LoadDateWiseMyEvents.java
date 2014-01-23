@@ -82,8 +82,6 @@ public class LoadDateWiseMyEvents extends AsyncTask<Void, Void, List<Event>> {
 			e.printStackTrace();
 		}
 
-		// TODO: Remove following line
-		//tmpEvents.clear();
 		return tmpEvents;
 	}
 	

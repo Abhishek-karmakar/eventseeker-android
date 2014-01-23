@@ -2,9 +2,13 @@ package com.wcities.eventseeker;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
@@ -42,6 +46,7 @@ import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.core.Artist;
+import com.wcities.eventseeker.core.FollowingList;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
@@ -56,6 +61,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 	private static final int ARTISTS_LIMIT = 10;
 
 	private String wcitiesId;
+	private FollowingList cachedFollowingList;
 
 	private LoadArtists loadArtists;
 	protected ArtistListAdapter artistListAdapter;
@@ -64,6 +70,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 	private boolean isMoreDataAvailable = true;
 
 	private List<Artist> artistList;
+	private SortedSet<Integer> artistIds;
 	
 	private Map<Character, Integer> alphaNumIndexer;
 	private List<Character> indices;
@@ -96,6 +103,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 
 		if (wcitiesId == null) {
 			wcitiesId = ((EventSeekr) FragmentUtil.getActivity(this).getApplication()).getWcitiesId();
+			cachedFollowingList = ((EventSeekr) FragmentUtil.getActivity(this).getApplication()).getCachedFollowingList();
 		}
 		res = getResources();
 	}
@@ -119,6 +127,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 		if (artistList == null) {
 			artistList = new ArrayList<Artist>();
 			artistList.add(null);
+			artistIds = new TreeSet<Integer>();
 			
 			alphaNumIndexer = new HashMap<Character, Integer>();
 			indices = new ArrayList<Character>();
@@ -181,38 +190,22 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 				e.printStackTrace();
 			}
 
-			// TODO: Remove following line
-			//tmpArtists.clear();
 			return tmpArtists;
 		}
 
 		@Override
 		protected void onPostExecute(List<Artist> tmpArtists) {
-
 			if (!tmpArtists.isEmpty()) {
-				int prevArtistListSize = artistList.size();
-				artistList.addAll(artistList.size() - 1, tmpArtists);
-				artistsAlreadyRequested += tmpArtists.size();
+				handleLoadedArtists(tmpArtists);
 
 				if (tmpArtists.size() < ARTISTS_LIMIT) {
 					isMoreDataAvailable = false;
 					artistList.remove(artistList.size() - 1);
 				}
 				
-				for (int i = 0; i < tmpArtists.size(); i++) {
-					Artist artist = tmpArtists.get(i);
-					char key = artist.getName().charAt(0);
-					if (!indices.contains(key)) {
-						indices.add(key);
-						/**
-						 * subtract 1 from prevArtistListSize to compensate for progressbar null item 
-						 * counted in prevArtistListSize
-						 */
-						alphaNumIndexer.put(key, prevArtistListSize - 1 + i);
-					}
-				}
-
 			} else {
+				handleLoadedArtists(tmpArtists);
+				
 				isMoreDataAvailable = false;
 				artistList.remove(artistList.size() - 1);
 				if (artistList.isEmpty()) {
@@ -221,6 +214,44 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 			}
 			
 			artistListAdapter.notifyDataSetChanged();
+		}
+		
+		private void handleLoadedArtists(List<Artist> tmpArtists) {
+			int prevArtistListSize = artistList.size();
+
+			// Add cached followed artists if any
+			String fromInclusive = (artistList.get(0) == null) ? 
+					null : artistList.get(artistList.size() - 2).getName();
+			String toExclusive = (tmpArtists.size() < ARTISTS_LIMIT) ? 
+					null : tmpArtists.get(tmpArtists.size() - 1).getName();
+			Collection<Artist> mergedArtists = cachedFollowingList.addFollowedArtistsIfAny(tmpArtists, 
+					fromInclusive, toExclusive);
+			
+			artistList.addAll(artistList.size() - 1, mergedArtists);
+			artistsAlreadyRequested += tmpArtists.size();
+			
+			int i = 0;
+			for (Iterator<Artist> iterator = mergedArtists.iterator(); iterator.hasNext();) {
+				Artist artist = iterator.next();
+				if (!artistIds.contains(artist.getId())) {
+					artistIds.add(artist.getId());
+					
+				} else {
+					artistList.remove(artist);
+					Log.d(TAG, "remove artist - " + artist.getName());
+					continue;
+				}
+				char key = artist.getName().charAt(0);
+				if (!indices.contains(key)) {
+					indices.add(key);
+					/**
+					 * subtract 1 from prevArtistListSize to compensate for progressbar null item 
+					 * counted in prevArtistListSize
+					 */
+					alphaNumIndexer.put(key, prevArtistListSize - 1 + i);
+				}
+				i++;
+			}
 		}
 	}
 
@@ -247,7 +278,8 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			if (artistList.get(position) == null) {
+			final Artist artist = getItem(position);
+			if (artist == null) {
 				if (convertView == null || !convertView.getTag().equals(TAG_PROGRESS_INDICATOR)) {
 					if(((EventSeekr)FragmentUtil.getActivity(FollowingParentFragment.this)
 							.getApplicationContext()).isTablet()) {
@@ -274,7 +306,6 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 					convertView.setTag(TAG_CONTENT);
 				}
 
-				final Artist artist = getItem(position);
 				((TextView) convertView.findViewById(R.id.txtArtistName)).setText(artist.getName());
 
 				if (artist.isOntour()) {

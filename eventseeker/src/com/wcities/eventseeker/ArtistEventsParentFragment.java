@@ -116,31 +116,27 @@ public abstract class ArtistEventsParentFragment extends FbPublishEventListFragm
 		switch (v.getId()) {
 
 		case R.id.fragmentArtistDetailsFooter:
-
+			EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(this).getApplication();
 			if (txtFollow.getText().equals(FooterTxt.Follow.name())) {
 
-				artist.setAttending(Attending.Tracked);
+				artist.updateAttending(Attending.Tracked, eventSeekr);
 
 				updateFollowingFooter();
 
-				new UserTracker((EventSeekr) FragmentUtil.getActivity(this)
-						.getApplication(), UserTrackingItemType.artist,
-						artist.getId()).execute();
+				new UserTracker(eventSeekr, UserTrackingItemType.artist, artist.getId()).execute();
 
 			} else {
 
-				artist.setAttending(Attending.NotTracked);
+				artist.updateAttending(Attending.NotTracked, eventSeekr);
 
 				updateFollowingFooter();
 
-				new UserTracker((EventSeekr) FragmentUtil.getActivity(this)
-						.getApplication(), UserTrackingItemType.artist,
+				new UserTracker(eventSeekr, UserTrackingItemType.artist,
 						artist.getId(), Attending.NotTracked.getValue(),
 						UserTrackingType.Edit).execute();
 			}
 
-			((ArtistDetailsFragment) getParentFragment())
-					.onArtistFollowingUpdated();
+			((ArtistDetailsFragment) getParentFragment()).onArtistFollowingUpdated();
 
 			break;
 

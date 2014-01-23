@@ -12,7 +12,8 @@
         android:background="@drawable/story_space"
         android:horizontalSpacing="@dimen/grd_following_hor_ver_spacing_fragment_following_tab"
         android:numColumns="3"
-        android:verticalSpacing="@dimen/grd_following_hor_ver_spacing_fragment_following_tab" >
+        android:verticalSpacing="@dimen/grd_following_hor_ver_spacing_fragment_following_tab"
+        android:padding="@dimen/grd_following_pad_fragment_following_tab" >
     </GridView>
     
      <RelativeLayout android:id="@+id/rltDummyLyt" 

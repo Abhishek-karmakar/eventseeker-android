@@ -22,6 +22,7 @@ import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.SharedPrefKeys;
+import com.wcities.eventseeker.core.FollowingList;
 import com.wcities.eventseeker.exception.DefaultUncaughtExceptionHandler;
 import com.wcities.eventseeker.gcm.GcmUtil;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
@@ -57,7 +58,8 @@ public class EventSeekr extends Application {
 	private int syncCountPandora = NOT_INITIALIZED;
 
 	private List<EventSeekrListener> listeners;
-
+	
+	private FollowingList followingList;
 
 	public interface EventSeekrListener {
 		public void onSyncCountUpdated(Service service);
@@ -312,7 +314,13 @@ public class EventSeekr extends Application {
 		Editor editor = pref.edit();
 		editor.putBoolean(SharedPrefKeys.FIRST_TIME_LAUNCHED, firstTimeLaunch);
 		editor.commit();
-		
+	}
+	
+	public FollowingList getCachedFollowingList() {
+		if (followingList == null) {
+			followingList = new FollowingList();
+		}
+		return followingList;
 	}
 
 	public int getSyncCount(Service service) {

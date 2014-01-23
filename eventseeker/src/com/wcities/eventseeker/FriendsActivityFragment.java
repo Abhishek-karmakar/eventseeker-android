@@ -284,8 +284,6 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 				e.printStackTrace();
 			}
 
-			// TODO: Remove following line
-			//tmpFriendNewsItems.clear();
 			return tmpFriendNewsItems;
 		}
 		

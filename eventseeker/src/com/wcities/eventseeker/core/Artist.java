@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.cache.BitmapCacheable;
 import com.wcities.eventseeker.core.ArtistLink.LinkType;
 
@@ -147,6 +148,16 @@ public class Artist implements Serializable, BitmapCacheable {
 
 	public void setAttending(Attending attending) {
 		this.attending = attending;
+	}
+	
+	public void updateAttending(Attending attending, EventSeekr eventSeekr) {
+		this.attending = attending;
+		if (attending == Attending.Tracked) {
+			eventSeekr.getCachedFollowingList().followArtist(this);
+			
+		} else {
+			eventSeekr.getCachedFollowingList().unfollowArtist(this);
+		}
 	}
 
 	public String getArtistUrl() {

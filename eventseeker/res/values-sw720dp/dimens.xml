@@ -83,7 +83,6 @@
 
     <!-- fragment_following.xml -->
     <dimen name="grd_following_hor_ver_spacing_fragment_following_tab">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="grd_following_margin_fragment_following_tab">15dp</dimen>
     <dimen name="grd_following_pad_fragment_following_tab">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
 
     <!-- fragment_my_events_list_item.xml -->
@@ -360,5 +359,13 @@
     <dimen name="txt_connect_accounts_txt_size_fragment_connect_account">21sp</dimen>
     <dimen name="txt_connect_accounts_margin_t_b_fragment_connect_account">40dp</dimen>
     <dimen name="txt_connect_accounts_margin_l_r_fragment_connect_account">50dp</dimen>
+    
+    <!-- include_no_items_found_with_action.xml -->
+    <dimen name="rlt_layout_root_pad_l_include_no_items_found_with_action">90dp</dimen>
+    <dimen name="rlt_layout_root_pad_r_include_no_items_found_with_action">@dimen/rlt_layout_root_pad_l_include_no_items_found_with_action</dimen>
+    <dimen name="rlt_layout_root_pad_b_include_no_items_found_with_action">50dp</dimen>
+    <dimen name="all_component_margin_t_include_no_items_found_with_action">50dp</dimen>
+    <dimen name="txt_no_items_heading_txt_size_include_no_items_found_with_action">26sp</dimen>
+    <dimen name="txt_no_items_msg_txt_size_include_no_items_found_with_action">22sp</dimen>
     
 </resources>
