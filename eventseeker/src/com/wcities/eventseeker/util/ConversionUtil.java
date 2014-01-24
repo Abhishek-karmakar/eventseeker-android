@@ -103,6 +103,10 @@ public class ConversionUtil {
 		return df.format(calendar.getTime());
 	}
 	
+	/**
+	 * @param calendar
+	 * @return date in the form 2013-06-30 (yyyy-MM-dd).
+	 */
 	public static String getDay(Calendar calendar) {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		return df.format(calendar.getTime());

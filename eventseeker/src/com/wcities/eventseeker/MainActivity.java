@@ -128,7 +128,7 @@ public class MainActivity extends ActionBarActivity implements
 		
 		//Log.d(TAG, "b4 setContentView");
 		setContentView(R.layout.activity_main);
-
+		
 		/**
 		 * check whether the current device is Tablet and if it is in Landscape
 		 * mode

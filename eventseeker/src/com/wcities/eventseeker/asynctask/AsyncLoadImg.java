@@ -25,62 +25,6 @@ import com.wcities.eventseeker.widget.EventseekerWidget;
 
 public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 
-	/*private static final String TAG = "AsyncLoadImg";
-	
-	private ImageView imageView;
-	private BitmapCache bitmapCache;
-	private String key;
-	private AdapterView adapterView;
-	private int pos;
-	
-	*//**
-	 * @param imageView
-	 * @param key
-	 *//*
-	public AsyncLoadImg(ImageView imageView, String key) {
-		this.imageView = imageView;
-		this.key = key;
-		this.bitmapCache = BitmapCache.getInstance();
-	}
-
-	*//**
-	 * Use this constructor only for an adapterview
-	 * @param imageView
-	 * @param key
-	 * @param adapterView applicable only when it's called by an adapterview (for example listView)
-	 * @param pos item position for which this AsyncTask is going to load image. It's applicable only when called 
-	 * by an adapterview (for example listView)
-	 *//*
-	public AsyncLoadImg(ImageView imageView, String key, AdapterView adapterView, int pos) {
-		this.imageView = imageView;
-		this.key = key;
-		this.adapterView = adapterView;
-		this.pos = pos;
-		this.bitmapCache = BitmapCache.getInstance();
-	}
-	
-	@Override
-	protected Bitmap doInBackground(String... params) {
-		//Log.i(TAG, "url for img = " + params[0]);
-		Bitmap bitmap = BitmapUtil.getBitmap(params[0]);
-		bitmapCache.addBitmapToMemoryCache(key, bitmap);
-		return bitmap;
-	}
-	
-	@Override
-	protected void onPostExecute(Bitmap bitmap) {
-		if (bitmap != null) {
-			if (adapterView == null) {
-				imageView.setImageBitmap(bitmap);
-				
-			} else {
-				if (pos <= adapterView.getLastVisiblePosition() && pos >= adapterView.getFirstVisiblePosition()) {
-					imageView.setImageBitmap(bitmap);
-				}
-			}
-		}
-	}*/
-	
 	private static final String TAG = "AsyncLoadImg";
 
 	private static AsyncLoadImg asyncLoadImg;
@@ -204,6 +148,7 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 	}
 	
 	private void startExecution(ImgDetails imgDetails) {
+		//synchronized (AsyncLoadImg.class) {
 		synchronized (imgDetailsList) {
 			//Log.i(TAG, "asyncLoadImg.getStatus() = " + asyncLoadImg.getStatus());
 			if (asyncLoadImg.getStatus() == Status.PENDING) {
@@ -223,12 +168,6 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 			}
 		}
 	}
-
-	/*@Override
-	protected void onPreExecute() {
-		super.onPreExecute();
-		Log.i(TAG, "onPreExecute()");
-	}*/
 	
 	@Override
 	protected Void doInBackground(Void... params) {
@@ -238,6 +177,18 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 		while (!imgDetailsList.isEmpty()) {
 			//Log.i(TAG, "in while, next");
 			imgDetails = imgDetailsList.remove(0);
+			
+			/**
+			 * If imageview is not currently visible for an adapterview, then skip loading bitmap for such 
+			 * imageview
+			 */
+			/*if (imgDetails.adapterView != null && 
+					(imgDetails.pos < imgDetails.adapterView.getFirstVisiblePosition() || 
+					imgDetails.pos > imgDetails.adapterView.getLastVisiblePosition())) {
+				Log.i(TAG, "continue");
+				continue;
+			}*/
+			
 			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(imgDetails.key);
 			
 			if (bitmap == null) {
@@ -266,13 +217,40 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 			}
 			publishProgress(imgDetails);
 		}
-		//Log.i(TAG, "finished while");
+		
+		/**
+		 * Following call to publishProgress() is required to start a new asynctask in following case.
+		 * Say if new asynctask starts & it reaches this point out of while loop without calling
+		 * onProgressUpdate() even once due to invisibility of imageviews for which images are to be loaded.
+		 * [in code above where we have continue; statement].
+		 * Now in this case asynctask status doesn't change to finished (remains running forever) & 
+		 * hence startExecution() method cannot create new asynctask for loading new images.
+		 * To prevent this we have following call which in turn in starting only crates new asynctask to 
+		 * handle pending images to be loaded.
+		 */
+		//publishProgress();
+		
 		return null;
 	}
 	
 	@Override
 	protected void onProgressUpdate(ImgDetails... values) {
-		//Log.i(TAG, "onProgressUpdate()");
+		/*if (values.length == 0) {
+			synchronized (AsyncLoadImg.class) {
+				*//**
+				 * imgDetailsList size can be > 0 since priority of doInBackground() is less & hence after 
+				 * leaving while loop of doInBackground() it's possible that call to onProgressUpdate() is delayed
+				 * & during this time new images to be loaded are inserted into imgDetailsList.
+				 *//*
+				if (imgDetailsList.size() > 0) {
+					asyncLoadImg = new AsyncLoadImg();
+					asyncLoadImg.imgDetailsList = imgDetailsList;
+					AsyncTaskUtil.executeAsyncTask(asyncLoadImg, true);
+				}
+			}
+			return;
+		}*/
+		
 		ImgDetails imgDetails = values[0];
 		if (imgDetails.bitmap != null) {
 			//Log.i(TAG, "bitmap is not null");

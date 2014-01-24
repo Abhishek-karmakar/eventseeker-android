@@ -1,5 +1,7 @@
 package com.wcities.eventseeker;
 
+import java.util.Calendar;
+
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
+import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
@@ -57,8 +60,14 @@ public class SearchEventsFragment extends SearchEventsParentFragment implements 
 	@Override
 	public void loadItemsInBackground() {
 		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getActivity(this));
+		
+		Calendar c = Calendar.getInstance();
+		String startDate = ConversionUtil.getDay(c);
+		c.add(Calendar.YEAR, 1);
+		String endDate = ConversionUtil.getDay(c);
+		
 		loadEvents = new LoadDateWiseEvents(eventList, eventListAdapter, query,
-				latLon[0], latLon[1], MILES_LIMIT, null);
+				latLon[0], latLon[1], MILES_LIMIT, null, startDate, endDate);
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);
 		AsyncTaskUtil.executeAsyncTask(loadEvents, true);
 	}

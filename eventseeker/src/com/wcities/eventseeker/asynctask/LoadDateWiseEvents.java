@@ -49,10 +49,12 @@ public class LoadDateWiseEvents extends AsyncTask<Void, Void, List<Event>> {
 	}
 
 	public LoadDateWiseEvents(DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, String query, 
-			double lat, double lon, int miles, String wcitiesId) {
+			double lat, double lon, int miles, String wcitiesId, String startDate, String endDate) {
 		this(eventList, eventListAdapter, lat, lon, wcitiesId);
 		this.query = query;
 		this.miles = miles;
+		this.startDate = startDate;
+		this.endDate = endDate;
 	}
 	
 	public LoadDateWiseEvents(DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, double lat, 
@@ -74,6 +76,9 @@ public class LoadDateWiseEvents extends AsyncTask<Void, Void, List<Event>> {
 		eventApi.setAlreadyRequested(eventsAlreadyRequested);
 		eventApi.addMoreInfo(MoreInfo.fallbackimage);
 		eventApi.setUserId(wcitiesId);//it can be null also
+		eventApi.setStart(startDate);
+		eventApi.setEnd(endDate);
+
 		if (miles != 0) {
 			eventApi.setMiles(miles);
 		}
@@ -84,8 +89,6 @@ public class LoadDateWiseEvents extends AsyncTask<Void, Void, List<Event>> {
 				
 			} else {
 				// in case if this AsyncTask is called from DiscoverByCategoryFragment.
-				eventApi.setStart(startDate);
-				eventApi.setEnd(endDate);
 				eventApi.setCategory(categoryId);
 			}
 			

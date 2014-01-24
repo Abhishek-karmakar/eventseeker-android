@@ -260,6 +260,10 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
         		continue;
         	}
         	
+        	if (AppConstants.IS_FOR_VOLVO && service.equals(Service.GooglePlay)) {
+        		continue;
+        	}
+        	
 			ServiceAccount serviceAccount = new ServiceAccount();
 			serviceAccount.name = service.getStr();
 			serviceAccount.drawable = service.getDrwResId();
