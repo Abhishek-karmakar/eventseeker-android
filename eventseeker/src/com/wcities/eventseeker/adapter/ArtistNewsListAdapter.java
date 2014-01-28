@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,6 +37,7 @@ import com.wcities.eventseeker.util.ConversionUtil;
 
 public class ArtistNewsListAdapter extends BaseAdapter {
 	
+	private static final String TAG = ArtistNewsListAdapter.class.getSimpleName();
 	private static final String TAG_PROGRESS_INDICATOR = "progressIndicator";
 	private int IMG_MARGIN_B, pad;
 	

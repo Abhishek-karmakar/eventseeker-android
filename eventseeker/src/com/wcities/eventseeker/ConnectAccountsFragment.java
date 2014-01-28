@@ -8,11 +8,13 @@ import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.ConfigurationBuilder;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,20 +33,25 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.common.AccountPicker;
 import com.wcities.eventseeker.FbLogInFragment.FbLogInFragmentListener;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.app.EventSeekr.EventSeekrListener;
+import com.wcities.eventseeker.asynctask.GetAuthToken;
 import com.wcities.eventseeker.asynctask.LoadMyEventsCount;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
+import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.ViewUtil.AnimationUtil;
 
-public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack implements EventSeekrListener {
+public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack implements EventSeekrListener, 
+		AsyncTaskListener<Object> {
 	
     private static final String TAG = ConnectAccountsFragment.class.getName();
     
@@ -57,13 +64,14 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     	Title(0,"Title",R.drawable.placeholder),
     	Facebook(1,"Facebook",R.drawable.facebook_colored),
     	Blank(2,"Blank",R.drawable.placeholder),
-    	DeviceLibrary(3,"Device Library",R.drawable.devicelibrary),
-    	Twitter(4,"Twitter",R.drawable.twitter_colored),
+    	GooglePlay(3,"Google Play",R.drawable.google_play),
+    	DeviceLibrary(4,"Device Library",R.drawable.devicelibrary),
+    	Twitter(5,"Twitter",R.drawable.twitter_colored),
     	//Spotify,
-    	Rdio(5,"Rdio",R.drawable.rdio),
-    	Lastfm(6,"Last.fm",R.drawable.lastfm),
-    	Pandora(7,"Pandora",R.drawable.pandora),
-    	Button(8,"Button",R.drawable.placeholder);
+    	Rdio(6,"Rdio",R.drawable.rdio),
+    	Lastfm(7,"Last.fm",R.drawable.lastfm),
+    	Pandora(8,"Pandora",R.drawable.pandora),
+    	Button(9,"Button",R.drawable.placeholder);
     	
     	private int intId;
     	private String str;
@@ -208,10 +216,17 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		//Log.d(TAG, "onActivityResult()");
-		if (!fbLoggedIn) {
-			Session.getActiveSession().onActivityResult(FragmentUtil.getActivity(this), requestCode, resultCode, data);
+		//Log.d(TAG, "onActivityResult(), requestCode = " + requestCode + ", resultCode = " + resultCode);
+		if (requestCode == AppConstants.REQ_CODE_GOOGLE_ACCOUNT_CHOOSER && resultCode == Activity.RESULT_OK) {
+			String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+			new GetAuthToken(this, this).execute(accountName);
+			
+		} else {
+			super.onActivityResult(requestCode, resultCode, data);
+			//Log.d(TAG, "onActivityResult()");
+			if (!fbLoggedIn) {
+				Session.getActiveSession().onActivityResult(FragmentUtil.getActivity(this), requestCode, resultCode, data);
+			}
 		}
 	}
 	
@@ -242,6 +257,10 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
         	if((isFirstTimeLaunch && service.equals(Service.Facebook))
         			|| (isFirstTimeLaunch && service.equals(Service.Blank))
         			|| (!isFirstTimeLaunch && service.equals(Service.Title))) {
+        		continue;
+        	}
+        	
+        	if (AppConstants.IS_FOR_VOLVO && service.equals(Service.GooglePlay)) {
         		continue;
         	}
         	
@@ -279,7 +298,18 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     			public void onCompleted(GraphUser user, Response response) {
     				// If the response is successful
     	            if (session == Session.getActiveSession()) {
-    	                if (user != null) {
+    	            	/**
+    	            	 * 2nd condition !fbLoggedIn is put due to following reason: 
+    	            	 * Sometimes this updateView() method is called twice. 
+    	            	 * For e.g.: For device not having facebook app,
+    	            	 * 1) Login at least once in the app.
+    	            	 * 2) Log out from facebook.
+    	            	 * 3) Go to my events & select going/want to for any event which will in turn ask 
+    	            	 * for facebook login. Complete this process.
+    	            	 * 4) Go to Sync Accounts screen. Select Login with Facebook. It doesn't ask for 
+    	            	 * fb credentials since session is already open but this calls updateView() twice. 
+    	            	 */
+    	                if (user != null && !fbLoggedIn) {
     	                	//serviceAccounts.get(0).name = FB_LOGOUT;
     	                	fbLoggedIn = true;
     	                	listAdapter.notifyDataSetChanged();
@@ -403,6 +433,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 					holder.imgPlus.setVisibility(View.INVISIBLE);
 					holder.txtCount.setVisibility(View.INVISIBLE);
 					AnimationUtil.startRotationToView(holder.imgProgressBar, 0f, 360f, 0.5f, 0.5f, 1000);
+					
 				} else if (serviceAccount.count != EventSeekr.UNSYNC_COUNT) {
 					holder.txtCount.setText(serviceAccount.count + "");
 					holder.txtCount.setVisibility(View.VISIBLE);
@@ -414,36 +445,24 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 					holder.txtCount.setVisibility(View.INVISIBLE);
 					holder.imgProgressBar.setVisibility(View.INVISIBLE);
 					AnimationUtil.stopRotationToView(holder.imgProgressBar);
-					/*if (!fbLoggedIn) {
-						holder.imgPlus.setVisibility(View.INVISIBLE);
-						
-					} else {
-						holder.imgPlus.setVisibility(View.VISIBLE);
-					}*/
+					
 					if (serviceAccount.name.equals(Service.Facebook.getStr())) {
 						if (fbLoggedIn) {
 							holder.imgPlus.setVisibility(View.INVISIBLE);
+							
 						} else {
 							holder.imgPlus.setVisibility(View.VISIBLE);
 						}
+						
 					} else {
 						holder.imgPlus.setVisibility(View.VISIBLE);
 					}
 				}
 				
-				/*if (position == Service.Blank.ordinal()) {
-					holder.rltLayoutServiceDetails.setVisibility(View.INVISIBLE);
-				} else {
-					holder.rltLayoutServiceDetails.setVisibility(View.VISIBLE);
-				}*/
-				
 				convertView.setOnClickListener(new OnClickListener() {
 					
 					@Override
 					public void onClick(View v) {
-						//Log.d(TAG, "onClick()");
-						//onItemClick(position);
-						
 						onItemClick(serviceAccount);
 					}
 				});
@@ -478,7 +497,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			
 			EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(ConnectAccountsFragment.this).getApplication();
 			
-			if(service == Service.Title) {
+			if (service == Service.Title) {
 				return;
 			}
 			
@@ -510,6 +529,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				break;
 				
 			case Twitter:
+				Log.d(TAG, "twitter");
 				ConfigurationBuilder builder = new ConfigurationBuilder();
 	            builder.setOAuthConsumerKey(AppConstants.TWITTER_CONSUMER_KEY);
 	            builder.setOAuthConsumerSecret(AppConstants.TWITTER_CONSUMER_SECRET);
@@ -522,6 +542,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
                     @Override
                     public void run() {
                         try {
+                        	Log.d(TAG, "twitter run");
                             final RequestToken requestToken = twitter.getOAuthRequestToken(AppConstants.TWITTER_CALLBACK_URL);
                             
                             FragmentUtil.getActivity(ConnectAccountsFragment.this).runOnUiThread(new Runnable() {
@@ -543,6 +564,12 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
                 });
                 thread.start();
                 
+				break;
+				
+			case GooglePlay:
+				Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[] {GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE},
+				         true, null, null, null, null);
+				startActivityForResult(intent, AppConstants.REQ_CODE_GOOGLE_ACCOUNT_CHOOSER);
 				break;
 
 			default:
@@ -621,4 +648,33 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		});
 	}
 
+	@Override
+	public void onTaskCompleted(Object... params) {
+		//Log.d(TAG, "onTaskCompleted()");
+		if (params[0] instanceof String) {
+			//Log.d(TAG, "onTaskCompleted(), string");
+			String authToken = (String) params[0];
+			
+			if (authToken != null && !TextUtils.isEmpty(authToken)) {
+				Bundle args = new Bundle();
+				args.putString(BundleKeys.AUTH_TOKEN, authToken);
+				
+				for (ServiceAccount serviceAccount : serviceAccounts) {
+					if (serviceAccount != null && serviceAccount.name.equals(Service.GooglePlay.str)) { 
+						serviceAccount.isInProgress = true;
+						break;
+					}
+				}
+				
+				((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
+            			.onServiceSelected(Service.GooglePlay, args, true);
+			}
+			
+		} else if (params[0] instanceof Intent) {
+			//Log.d(TAG, "onTaskCompleted(), intent");
+			Intent intent = (Intent) params[0];
+			int requestCode = (Integer) params[1];
+            startActivityForResult(intent, requestCode);
+		}
+	}
 }

@@ -28,6 +28,7 @@
     <string name="title_eula">EULA</string>
     <string name="title_rep_code">Rep Code</string>
     <string name="title_search_results">Search Results</string>
+    <string name="title_google_play">Google Play</string>
     <string name="title_device_library">Device Library</string>
     <string name="title_facebook">Facebook</string>
     <string name="title_twitter">Twitter</string>
@@ -37,8 +38,8 @@
     <string name="title_web">Web</string>
     
     <string name="no_items_found_pls_login">Please login with facebook from \'Sync Accounts\' page to see</string>
-	<string name="pls_login_to_track_evt">To track this event you need to first login with facebook from \'Sync Accounts\' page.</string>
-
+    <string name="pls_login_to_track_evt">To track this event you need to first login with facebook from \'Sync Accounts\' page.</string>
+    
     <!-- Strings used for navigation drawer list -->
     <string name="navigation_drawer_section_browse">BROWSE</string>
     <string name="navigation_drawer_item_discover">Discover</string>

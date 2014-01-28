@@ -20,20 +20,20 @@
 	
     <array name="navigation_drawer_item_icons">
         <item>@null</item>
-	  	<item>@drawable/discover</item>
-	  	<item>@drawable/myevents</item>
-	  	<item>@drawable/favorites</item>
-	  	<item>@drawable/latestnews</item>
-	  	<item>@drawable/friendsactivity</item>
+	  	<item>@drawable/selector_discover</item>
+	  	<item>@drawable/selector_myevents</item>
+	  	<item>@drawable/selector_favorites</item>
+	  	<item>@drawable/selector_latestnews</item>
+	  	<item>@drawable/selector_friendsactivity</item>
 	  	<item>@null</item>
-        <item>@drawable/sync</item>
-	  	<item>@drawable/changelocation</item>
+        <item>@drawable/selector_sync</item>
+	  	<item>@drawable/selector_changelocation</item>
 	  	<item>@null</item>
-	  	<item>@drawable/invitefriends</item>
-        <item>@drawable/store</item>
-	  	<item>@drawable/info</item>
-	  	<item>@drawable/eula</item>
-	  	<item>@drawable/repcode</item>
+	  	<item>@drawable/selector_invitefriends</item>
+        <item>@drawable/selector_store</item>
+	  	<item>@drawable/selector_info</item>
+	  	<item>@drawable/selector_eula</item>
+	  	<item>@drawable/selector_repcode</item>
     </array>
     
     <string-array name="connect_accounts_item_titles">

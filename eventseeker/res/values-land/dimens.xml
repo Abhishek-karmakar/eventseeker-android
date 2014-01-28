@@ -120,4 +120,13 @@
     <!-- list_no_items_found.xml -->
     <dimen name="txt_list_no_items_found_pad_list_no_items_found">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="rlt_list_no_items_found_pad_list_no_items_found">0dp</dimen>
+    
+    <!-- include_no_items_found_with_action.xml -->
+    <dimen name="rlt_layout_root_pad_l_include_no_items_found_with_action">40dp</dimen>
+    <dimen name="rlt_layout_root_pad_r_include_no_items_found_with_action">@dimen/rlt_layout_root_pad_l_include_no_items_found_with_action</dimen>
+    
+    <!-- fragment_my_events_list.xml -->
+    <dimen name="rlt_layout_root_pad_l_fragment_my_events_list">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="rlt_layout_root_pad_r_fragment_my_events_list">@dimen/rlt_layout_root_pad_l_fragment_my_events_list</dimen>
+    
 </resources>

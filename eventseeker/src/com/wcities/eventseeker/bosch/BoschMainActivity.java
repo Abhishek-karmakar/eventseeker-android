@@ -169,6 +169,10 @@ public class BOSCHMainActivity extends ActionBarActivity implements GeoUtilListe
 		}
 	}
 	
+	/**
+	 * for updating the action bar title from within the Fragment(Just used in Bosch related fragments)
+	 * @param title
+	 */
 	public void updateBoschActionBarTitle(String title) {
 		updateTitle(title);
 	}

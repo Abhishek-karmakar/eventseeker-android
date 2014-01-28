@@ -2,20 +2,27 @@ package com.wcities.eventseeker;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,10 +31,13 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.RecyclerListener;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
+import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
@@ -36,6 +46,7 @@ import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.core.Artist;
+import com.wcities.eventseeker.core.FollowingList;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
@@ -43,13 +54,14 @@ import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser.MyItemsList;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public abstract class FollowingParentFragment extends FragmentLoadableFromBackStack {
+public abstract class FollowingParentFragment extends FragmentLoadableFromBackStack implements OnClickListener {
 
 	private static final String TAG = FollowingParentFragment.class.getName();
 
 	private static final int ARTISTS_LIMIT = 10;
 
 	private String wcitiesId;
+	private FollowingList cachedFollowingList;
 
 	private LoadArtists loadArtists;
 	protected ArtistListAdapter artistListAdapter;
@@ -58,6 +70,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 	private boolean isMoreDataAvailable = true;
 
 	private List<Artist> artistList;
+	private SortedSet<Integer> artistIds;
 	
 	private Map<Character, Integer> alphaNumIndexer;
 	private List<Character> indices;
@@ -65,7 +78,23 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 	private AbsListView absListView;
 
 	private View rltDummyLyt;
-
+	private ScrollView scrlVRootNoItemsFoundWithAction;
+	
+	/**
+	 * Using its instance variable since otherwise calling getResources() directly from fragment from 
+	 * callback methods is dangerous in a sense that it may throw java.lang.IllegalStateException: 
+	 * Fragment not attached to Activity, if user has already left this fragment & 
+	 * then changed the orientation.
+	 */
+	private Resources res;
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		if (!(activity instanceof DrawerListFragmentListener)) {
+            throw new ClassCastException(activity.toString() + " must implement DrawerListFragmentListener");
+        }
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -74,13 +103,17 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 
 		if (wcitiesId == null) {
 			wcitiesId = ((EventSeekr) FragmentUtil.getActivity(this).getApplication()).getWcitiesId();
+			cachedFollowingList = ((EventSeekr) FragmentUtil.getActivity(this).getApplication()).getCachedFollowingList();
 		}
+		res = getResources();
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_following, null);
 		rltDummyLyt = v.findViewById(R.id.rltDummyLyt);
+		scrlVRootNoItemsFoundWithAction = (ScrollView) v.findViewById(R.id.scrlVRootNoItemsFoundWithAction);
+		v.findViewById(R.id.btnAction).setOnClickListener(this);
 		return v;
 	}
 
@@ -94,6 +127,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 		if (artistList == null) {
 			artistList = new ArrayList<Artist>();
 			artistList.add(null);
+			artistIds = new TreeSet<Integer>();
 			
 			alphaNumIndexer = new HashMap<Character, Integer>();
 			indices = new ArrayList<Character>();
@@ -161,31 +195,17 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 
 		@Override
 		protected void onPostExecute(List<Artist> tmpArtists) {
-
 			if (!tmpArtists.isEmpty()) {
-				int prevArtistListSize = artistList.size();
-				artistList.addAll(artistList.size() - 1, tmpArtists);
-				artistsAlreadyRequested += tmpArtists.size();
+				handleLoadedArtists(tmpArtists);
 
 				if (tmpArtists.size() < ARTISTS_LIMIT) {
 					isMoreDataAvailable = false;
 					artistList.remove(artistList.size() - 1);
 				}
 				
-				for (int i = 0; i < tmpArtists.size(); i++) {
-					Artist artist = tmpArtists.get(i);
-					char key = artist.getName().charAt(0);
-					if (!indices.contains(key)) {
-						indices.add(key);
-						/**
-						 * subtract 1 from prevArtistListSize to compensate for progressbar null item 
-						 * counted in prevArtistListSize
-						 */
-						alphaNumIndexer.put(key, prevArtistListSize - 1 + i);
-					}
-				}
-
 			} else {
+				handleLoadedArtists(tmpArtists);
+				
 				isMoreDataAvailable = false;
 				artistList.remove(artistList.size() - 1);
 				if (artistList.isEmpty()) {
@@ -194,6 +214,44 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 			}
 			
 			artistListAdapter.notifyDataSetChanged();
+		}
+		
+		private void handleLoadedArtists(List<Artist> tmpArtists) {
+			int prevArtistListSize = artistList.size();
+
+			// Add cached followed artists if any
+			String fromInclusive = (artistList.get(0) == null) ? 
+					null : artistList.get(artistList.size() - 2).getName();
+			String toExclusive = (tmpArtists.size() < ARTISTS_LIMIT) ? 
+					null : tmpArtists.get(tmpArtists.size() - 1).getName();
+			Collection<Artist> mergedArtists = cachedFollowingList.addFollowedArtistsIfAny(tmpArtists, 
+					fromInclusive, toExclusive);
+			
+			artistList.addAll(artistList.size() - 1, mergedArtists);
+			artistsAlreadyRequested += tmpArtists.size();
+			
+			int i = 0;
+			for (Iterator<Artist> iterator = mergedArtists.iterator(); iterator.hasNext();) {
+				Artist artist = iterator.next();
+				if (!artistIds.contains(artist.getId())) {
+					artistIds.add(artist.getId());
+					
+				} else {
+					artistList.remove(artist);
+					Log.d(TAG, "remove artist - " + artist.getName());
+					continue;
+				}
+				char key = artist.getName().charAt(0);
+				if (!indices.contains(key)) {
+					indices.add(key);
+					/**
+					 * subtract 1 from prevArtistListSize to compensate for progressbar null item 
+					 * counted in prevArtistListSize
+					 */
+					alphaNumIndexer.put(key, prevArtistListSize - 1 + i);
+				}
+				i++;
+			}
 		}
 	}
 
@@ -220,7 +278,8 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			if (artistList.get(position) == null) {
+			final Artist artist = getItem(position);
+			if (artist == null) {
 				if (convertView == null || !convertView.getTag().equals(TAG_PROGRESS_INDICATOR)) {
 					if(((EventSeekr)FragmentUtil.getActivity(FollowingParentFragment.this)
 							.getApplicationContext()).isTablet()) {
@@ -247,7 +306,6 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 					convertView.setTag(TAG_CONTENT);
 				}
 
-				final Artist artist = getItem(position);
 				((TextView) convertView.findViewById(R.id.txtArtistName)).setText(artist.getName());
 
 				if (artist.isOntour()) {
@@ -343,15 +401,50 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 		super.onDestroyView();
 	}
 	
-	void showNoArtistFound() {
-		absListView.setVisibility(View.GONE);
-		rltDummyLyt.setVisibility(View.VISIBLE);
+	private void showNoArtistFound() {
+		/**
+		 * try-catch is used to handle case where even before we get call back to this function, user leaves 
+		 * this screen.
+		 */
+		try {
+			absListView.setVisibility(View.GONE);
+			
+		} catch (IllegalStateException e) {
+			Log.e(TAG, "" + e.getMessage());
+			e.printStackTrace();
+		}
+
 		if (wcitiesId == null) {
+			rltDummyLyt.setVisibility(View.VISIBLE);
 			TextView txtNoItemsFound = (TextView)rltDummyLyt.findViewById(R.id.txtNoItemsFound);
-			txtNoItemsFound.setText(getResources().getString(R.string.no_items_found_pls_login) + " the list of artists you are following.");
+			txtNoItemsFound.setText(res.getString(R.string.no_items_found_pls_login) + " the list of artists you are following.");
+			
+		} else {
+			scrlVRootNoItemsFoundWithAction.setVisibility(View.VISIBLE);
+			((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsHeading)).setText(
+					"Personalize Your Experience");
+			((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsMsg)).setText(
+					"Sync accounts or search for artists to start your personalized eventseeker experience.");
+			((Button)scrlVRootNoItemsFoundWithAction.findViewById(R.id.btnAction)).setText(
+					"Sync Accounts");
+			((ImageView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.imgNoItems)).setImageDrawable(
+					res.getDrawable(R.drawable.no_artists_following));
 		}
 	}
 
-	protected abstract AbsListView getScrollableView();
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		
+		case R.id.btnAction:
+			((DrawerListFragmentListener)FragmentUtil.getActivity(this)).onDrawerItemSelected(
+					MainActivity.INDEX_NAV_ITEM_CONNECT_ACCOUNTS);
+			break;
+
+		default:
+			break;
+		}
+	}
 	
+	protected abstract AbsListView getScrollableView();
 }

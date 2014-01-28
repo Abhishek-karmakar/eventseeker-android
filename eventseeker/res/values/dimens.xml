@@ -432,8 +432,22 @@
     <dimen name="txt_list_no_items_found_txt_size_list_no_items_found">16sp</dimen>
     <dimen name="txt_list_no_items_found_pad_list_no_items_found">0dp</dimen>
     <dimen name="rlt_list_no_items_found_pad_list_no_items_found">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <!-- starts for bosch -->
-    <!-- activity_bosch_main.xml -->
+    <!-- include_no_items_found_with_action.xml -->
+    <dimen name="rlt_layout_root_pad_l_include_no_items_found_with_action">20dp</dimen>
+    <dimen name="rlt_layout_root_pad_r_include_no_items_found_with_action">@dimen/rlt_layout_root_pad_l_include_no_items_found_with_action</dimen>
+    <dimen name="rlt_layout_root_pad_b_include_no_items_found_with_action">20dp</dimen>
+    <dimen name="all_component_margin_t_include_no_items_found_with_action">20dp</dimen>
+    <dimen name="txt_no_items_heading_txt_size_include_no_items_found_with_action">20sp</dimen>
+    <dimen name="txt_no_items_msg_txt_size_include_no_items_found_with_action">18sp</dimen>
+    <dimen name="btn_action_pad_l_include_no_items_found_with_action">15dp</dimen>
+    <dimen name="btn_action_pad_r_include_no_items_found_with_action">@dimen/btn_action_pad_l_include_no_items_found_with_action</dimen>
+    <!-- fragment_artists_news_list.xml -->
+    <dimen name="include_no_items_found_with_action_margin_fragment_artists_news_list">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <!-- fragment_my_events_list.xml -->
+    <dimen name="rlt_layout_root_pad_l_fragment_my_events_list">0dp</dimen>
+    <dimen name="rlt_layout_root_pad_r_fragment_my_events_list">@dimen/rlt_layout_root_pad_l_fragment_my_events_list</dimen>
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!-- activity_bosch_main.xml -->
     <dimen name="b_root_navigation_drawer_w_main">210dp</dimen>
     <!-- bosch_navigation_drawer_list_item.xml -->
     <dimen name="b_rlt_layout_content_pad_vert_navigation_drawer_list_item">12dp</dimen>
@@ -532,5 +546,5 @@
     <dimen name="rlt_root_lyt_pad_bosch_element_alert_dialog">30dp</dimen>
     <dimen name="txt_title_txt_size_bosch_element_alert_dialog">15sp</dimen>
     <!-- ends for bosch -->
-
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 </resources>

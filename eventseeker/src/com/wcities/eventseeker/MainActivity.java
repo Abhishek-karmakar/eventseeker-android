@@ -67,20 +67,17 @@ public class MainActivity extends ActionBarActivity implements
 
 	private static final int INDEX_NAV_ITEM_DISCOVER = DrawerListFragment.SECT_1_HEADER_POS + 1;
 	private static final int INDEX_NAV_ITEM_MY_EVENTS = INDEX_NAV_ITEM_DISCOVER + 1;
-	private static final int INDEX_NAV_ITEM_FOLLOWING = INDEX_NAV_ITEM_MY_EVENTS + 1;
+	protected static final int INDEX_NAV_ITEM_FOLLOWING = INDEX_NAV_ITEM_MY_EVENTS + 1;
 	private static final int INDEX_NAV_ITEM_ARTISTS_NEWS = INDEX_NAV_ITEM_FOLLOWING + 1;
 	private static final int INDEX_NAV_ITEM_FRIENDS_ACTIVITY = INDEX_NAV_ITEM_ARTISTS_NEWS + 1;
-	private static final int INDEX_NAV_ITEM_CONNECT_ACCOUNTS = DrawerListFragment.SECT_2_HEADER_POS + 1;
+	protected static final int INDEX_NAV_ITEM_CONNECT_ACCOUNTS = DrawerListFragment.SECT_2_HEADER_POS + 1;
 	private static final int INDEX_NAV_ITEM_CHANGE_LOCATION = INDEX_NAV_ITEM_CONNECT_ACCOUNTS + 1;
-	private static final int INDEX_NAV_ITEM_INVITE_FRIENDS = DrawerListFragment.SECT_3_HEADER_POS + 1;
+	protected static final int INDEX_NAV_ITEM_INVITE_FRIENDS = DrawerListFragment.SECT_3_HEADER_POS + 1;
 	private static final int INDEX_NAV_ITEM_RATE_APP = INDEX_NAV_ITEM_INVITE_FRIENDS + 1;
 	private static final int INDEX_NAV_ITEM_ABOUT_US = INDEX_NAV_ITEM_RATE_APP + 1;
 	private static final int INDEX_NAV_ITEM_EULA = INDEX_NAV_ITEM_ABOUT_US + 1;
 	private static final int INDEX_NAV_ITEM_REP_CODE = INDEX_NAV_ITEM_EULA + 1;
 	
-	private static final int REQ_CODE_INVITE_FRIENDS = 1001;
-	private static final int REQ_CODE_RATE_APP = 1002;
-
 	private static final String DRAWER_LIST_FRAGMENT_TAG = "drawerListFragment";
 
 	private static MainActivity instance = null;
@@ -478,13 +475,58 @@ public class MainActivity extends ActionBarActivity implements
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.d(TAG, "onActivityResult(), requestCode = " + requestCode);
-		if (requestCode == REQ_CODE_INVITE_FRIENDS || requestCode == REQ_CODE_RATE_APP) {
+		//Log.d(TAG, "onActivityResult(), requestCode = " + requestCode + ", resultCode = " + resultCode);
+		switch (requestCode) {
+		
+		case AppConstants.REQ_CODE_INVITE_FRIENDS:
+		case AppConstants.REQ_CODE_RATE_APP:
 			hasOtherActivityFinished = true;
+			break;
 			
-		} else {
+		/*case REQ_CODE_GOOGLE_ACCOUNT_CHOOSER:
+			if (resultCode == RESULT_OK) {
+				final String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+				AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
+
+					@Override
+					protected Void doInBackground(Void... params) {
+						try {
+				        	String authToken = GoogleAuthUtil.getToken(MainActivity.this, accountName, "sj");
+				            
+				            if (!TextUtils.isEmpty(authToken)) {
+				            	Bundle args = new Bundle();
+								args.putString(BundleKeys.AUTH_TOKEN, authToken);
+								GooglePlayMusicFragment googlePlayMusicFragment = new GooglePlayMusicFragment();
+								googlePlayMusicFragment.setArguments(args);
+								selectNonDrawerItem(googlePlayMusicFragment, AppConstants.FRAGMENT_TAG_GOOGLE_PLAY_MUSIC, 
+										getResources().getString(R.string.title_google_play), true);
+				            }
+				            
+				        } catch (UserRecoverableAuthException e) {
+				            startActivityForResult(e.getIntent(), REQ_CODE_GOOGLE_ACCOUNT_CHOOSER);
+				            e.printStackTrace();
+				            
+				        } catch (IOException e) {
+							e.printStackTrace();
+							
+						} catch (GoogleAuthException e) {
+							e.printStackTrace();
+						}
+						return null;
+					}
+				};
+				asyncTask.execute();
+				
+				
+			} else {
+				
+			}
+			break;*/
+
+		default:
 			// pass it to the fragments
 			super.onActivityResult(requestCode, resultCode, data);
+			break;
 		}
 	}
 
@@ -866,7 +908,7 @@ public class MainActivity extends ActionBarActivity implements
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
 		intent.putExtra(Intent.EXTRA_TEXT, "Checkout eventseeker" + " " + url);
 		try {
-			startActivityForResult(intent, REQ_CODE_INVITE_FRIENDS);
+			startActivityForResult(intent, AppConstants.REQ_CODE_INVITE_FRIENDS);
 
 		} catch (ActivityNotFoundException e) {
 			Toast.makeText(getApplicationContext(),
@@ -880,7 +922,7 @@ public class MainActivity extends ActionBarActivity implements
 		Uri uri = Uri.parse("market://details?id=" + getPackageName());
 		Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
 		try {
-			startActivityForResult(goToMarket, REQ_CODE_RATE_APP);
+			startActivityForResult(goToMarket, AppConstants.REQ_CODE_RATE_APP);
 
 		} catch (ActivityNotFoundException e) {
 			Toast.makeText(getApplicationContext(),
@@ -971,15 +1013,8 @@ public class MainActivity extends ActionBarActivity implements
 		// }
 	}
 	
-	/**
-	 * for updating the actionbar title from within the Fragment(Just used in Bosch related fragments)
-	 * @param title
-	 */
-	
-	
 	private void selectNonDrawerItem(Fragment replaceBy, String replaceByFragmentTag, String newTitle, 
 		boolean addToBackStack) {
-		
 		Log.d(TAG, "onDrawerItemSelected(), newTitle = " + newTitle + ", addToBackStack = " + addToBackStack);
 		
 		drawerItemSelectedPosition = AppConstants.INVALID_INDEX;
@@ -1048,8 +1083,7 @@ public class MainActivity extends ActionBarActivity implements
 		// process only if different selection is made, otherwise just close the
 		// drawer.
 		if (drawerItemSelectedPosition != pos) {
-			getSupportFragmentManager().popBackStack(null,
-					FragmentManager.POP_BACK_STACK_INCLUSIVE);
+			getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 			selectItem(pos);
 
 		} else {
@@ -1133,6 +1167,21 @@ public class MainActivity extends ActionBarActivity implements
 	public void onServiceSelected(Service service, Bundle args, boolean addToBackStack) {
 		
 		switch (service) {
+		
+		case Facebook:
+			FacebookFragment facebookFragment = new FacebookFragment();
+			facebookFragment.setArguments(args);
+			selectNonDrawerItem(facebookFragment,
+					AppConstants.FRAGMENT_TAG_FACEBOOK, getResources()
+					.getString(R.string.title_facebook), addToBackStack);
+			break;
+			
+		case GooglePlay:
+			GooglePlayMusicFragment googlePlayMusicFragment = new GooglePlayMusicFragment();
+			googlePlayMusicFragment.setArguments(args);
+			selectNonDrawerItem(googlePlayMusicFragment, AppConstants.FRAGMENT_TAG_GOOGLE_PLAY_MUSIC, 
+					getResources().getString(R.string.title_google_play), addToBackStack);
+			break;
 
 		case DeviceLibrary:
 			DeviceLibraryFragment deviceLibraryFragment = new DeviceLibraryFragment();
@@ -1140,14 +1189,6 @@ public class MainActivity extends ActionBarActivity implements
 			selectNonDrawerItem(deviceLibraryFragment,
 					AppConstants.FRAGMENT_TAG_DEVICE_LIBRARY, getResources()
 							.getString(R.string.title_device_library), addToBackStack);
-			break;
-			
-		case Facebook:
-			FacebookFragment facebookFragment = new FacebookFragment();
-			facebookFragment.setArguments(args);
-			selectNonDrawerItem(facebookFragment,
-					AppConstants.FRAGMENT_TAG_FACEBOOK, getResources()
-					.getString(R.string.title_facebook), addToBackStack);
 			break;
 			
 		case Twitter:
@@ -1329,6 +1370,14 @@ public class MainActivity extends ActionBarActivity implements
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources()
 					.getString(R.string.title_pandora),
 					AppConstants.FRAGMENT_TAG_PANDORA);
+			
+		} else if (fragment instanceof TwitterSyncingFragment) {
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_twitter),
+					AppConstants.FRAGMENT_TAG_TWITTER_SYNCING);
+
+		} else if (fragment instanceof GooglePlayMusicFragment) {
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_google_play),
+					AppConstants.FRAGMENT_TAG_GOOGLE_PLAY_MUSIC);
 		}
 	}
 

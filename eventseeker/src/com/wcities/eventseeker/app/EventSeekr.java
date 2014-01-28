@@ -22,6 +22,7 @@ import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.SharedPrefKeys;
+import com.wcities.eventseeker.core.FollowingList;
 import com.wcities.eventseeker.exception.DefaultUncaughtExceptionHandler;
 import com.wcities.eventseeker.gcm.GcmUtil;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
@@ -49,6 +50,7 @@ public class EventSeekr extends Application {
 	private static final int NOT_INITIALIZED = -1;
 	public static final int UNSYNC_COUNT = -2;
 
+	private int syncCountGooglePlayMusic = NOT_INITIALIZED;
 	private int syncCountDeviceLib = NOT_INITIALIZED;
 	private int syncCountTwitter = NOT_INITIALIZED;
 	private int syncCountRdio = NOT_INITIALIZED;
@@ -56,7 +58,8 @@ public class EventSeekr extends Application {
 	private int syncCountPandora = NOT_INITIALIZED;
 
 	private List<EventSeekrListener> listeners;
-
+	
+	private FollowingList followingList;
 
 	public interface EventSeekrListener {
 		public void onSyncCountUpdated(Service service);
@@ -311,7 +314,13 @@ public class EventSeekr extends Application {
 		Editor editor = pref.edit();
 		editor.putBoolean(SharedPrefKeys.FIRST_TIME_LAUNCHED, firstTimeLaunch);
 		editor.commit();
-		
+	}
+	
+	public FollowingList getCachedFollowingList() {
+		if (followingList == null) {
+			followingList = new FollowingList();
+		}
+		return followingList;
 	}
 
 	public int getSyncCount(Service service) {
@@ -319,6 +328,13 @@ public class EventSeekr extends Application {
 				AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
 
 		switch (service) {
+		
+		case GooglePlay:
+			if (syncCountGooglePlayMusic == NOT_INITIALIZED) {
+				syncCountGooglePlayMusic = pref.getInt(
+						SharedPrefKeys.SYNC_COUNT_GOOGLE_PLAY_MUSIC, UNSYNC_COUNT);
+			}
+			return syncCountGooglePlayMusic;
 
 		case DeviceLibrary:
 			if (syncCountDeviceLib == NOT_INITIALIZED) {
@@ -368,6 +384,11 @@ public class EventSeekr extends Application {
 		Editor editor = pref.edit();
 
 		switch (service) {
+		
+		case GooglePlay:
+			syncCountGooglePlayMusic = count;
+			editor.putInt(SharedPrefKeys.SYNC_COUNT_GOOGLE_PLAY_MUSIC, syncCountGooglePlayMusic);
+			break;
 
 		case DeviceLibrary:
 			syncCountDeviceLib = count;

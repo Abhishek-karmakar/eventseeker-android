@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrlVRootNoItemsFoundWithAction"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/story_space" >
+    
+    <RelativeLayout android:id="@+id/rltLayoutRootNoItemsFoundWithAction"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:paddingLeft="@dimen/rlt_layout_root_pad_l_include_no_items_found_with_action"
+	    android:paddingRight="@dimen/rlt_layout_root_pad_r_include_no_items_found_with_action"
+	    android:paddingBottom="@dimen/rlt_layout_root_pad_b_include_no_items_found_with_action" >
+    
+	    <TextView android:id="@+id/txtNoItemsHeading"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerHorizontal="true"
+	        android:text="Search Artists"
+	        android:textStyle="bold"
+	        android:layout_marginTop="@dimen/all_component_margin_t_include_no_items_found_with_action"
+	        android:textSize="@dimen/txt_no_items_heading_txt_size_include_no_items_found_with_action"
+	        android:textColor="@color/txt_no_items_heading_txt_color_include_no_items_found_with_action"
+	        android:gravity="center_horizontal" />
+	    
+	    <ImageView android:id="@+id/imgNoItems"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/txtNoItemsHeading"
+	        android:layout_marginTop="@dimen/all_component_margin_t_include_no_items_found_with_action"
+	        android:src="@drawable/no_artists_news"
+	        android:layout_centerHorizontal="true" />
+	    
+	    <TextView android:id="@+id/txtNoItemsMsg"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/imgNoItems"
+	        android:layout_marginTop="@dimen/all_component_margin_t_include_no_items_found_with_action"
+	        android:layout_centerHorizontal="true"
+	        android:text="Follow artists to receive real time updates."
+	        android:textSize="@dimen/txt_no_items_msg_txt_size_include_no_items_found_with_action"
+	        android:textColor="@color/txt_no_items_msg_txt_color_include_no_items_found_with_action"
+	        android:gravity="center_horizontal" />
+	    
+	    <Button android:id="@+id/btnAction"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/txtNoItemsMsg"
+	        android:layout_marginTop="@dimen/all_component_margin_t_include_no_items_found_with_action"
+	        android:paddingLeft="@dimen/btn_action_pad_l_include_no_items_found_with_action"
+	        android:paddingRight="@dimen/btn_action_pad_r_include_no_items_found_with_action"
+	        android:layout_centerHorizontal="true"
+	        android:background="@color/btn_fb_sign_up_bg"
+	        android:textColor="@android:color/white"
+	        android:textSize="@dimen/btn_continue_txt_size_fb_login"
+	        android:text="Search Artists" />
+	    
+	</RelativeLayout>
+
+</ScrollView>
