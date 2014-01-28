@@ -119,7 +119,7 @@
     <!-- fragment_discover_by_category_list_item_evt.xml -->
     <!--
     summation of img_event_ht_fragment_discover_by_category_list_item_evt + img_event_margin_t_fragment_discover_by_category_list_item_evt +
-    img_event_margin_b_fragment_discover_by_category_list_item_evt + divider_ht_fragment_discover_by_category_list_item_evt
+    img_event_margin_b_fragment_discover_by_category_list_item_evt + divider_ht_fragment_discover_by_category_list_item_evt
     -->
     <dimen name="rlt_layout_root_ht_fragment_discover_by_category_list_item_evt">82dp</dimen>
     <dimen name="img_event_w_fragment_discover_by_category_list_item_evt">112dp</dimen>
@@ -189,7 +189,7 @@
     <dimen name="txt_count_margin_r_navigation_drawer_list_item">10dp</dimen>
     <dimen name="txt_count_pad_l_navigation_drawer_list_item">5dp</dimen>
     <dimen name="txt_count_pad_r_navigation_drawer_list_item">@dimen/txt_count_pad_l_navigation_drawer_list_item</dimen>
-    <dimen name="txt_count_txt_size_navigation_drawer_list_item">@dimen/txt_title_txt_size_navigation_drawer_list_item</dimen>
+    <dimen name="txt_count_txt_size_navigation_drawer_list_item">@dimen/txt_title_txt_size_navigation_drawer_list_item</dimen>
     -->
     <dimen name="divider_ht_navigation_drawer_list_item">1dp</dimen>
     <dimen name="divider_margin_l_navigation_drawer_list_item">@dimen/txt_title_margin_l_navigation_drawer_list_item</dimen>
@@ -392,7 +392,7 @@
     <dimen name="min_ht_widget_info">234dp</dimen>
     <!--
     <dimen name="widget_margin_hor">20dp</dimen>
-    <dimen name="widget_margin_vert">4dp</dimen>
+    <dimen name="widget_margin_vert">4dp</dimen>
     -->
     <!-- widget_layout.xml -->
     <dimen name="rlt_layout_root_w_widget_layout">312dp</dimen>
@@ -432,10 +432,10 @@
     <dimen name="txt_list_no_items_found_txt_size_list_no_items_found">16sp</dimen>
     <dimen name="txt_list_no_items_found_pad_list_no_items_found">0dp</dimen>
     <dimen name="rlt_list_no_items_found_pad_list_no_items_found">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-	<!-- starts for bosch -->
-	<!-- activity_bosch_main.xml -->
+    <!-- starts for bosch -->
+    <!-- activity_bosch_main.xml -->
     <dimen name="b_root_navigation_drawer_w_main">210dp</dimen>
-	<!-- bosch_navigation_drawer_list_item.xml -->
+    <!-- bosch_navigation_drawer_list_item.xml -->
     <dimen name="b_rlt_layout_content_pad_vert_navigation_drawer_list_item">12dp</dimen>
     <dimen name="b_rlt_layout_content_margin_l_navigation_drawer_list_item">10dp</dimen>
     <dimen name="b_txt_title_margin_l_navigation_drawer_list_item">10dp</dimen>
@@ -453,15 +453,84 @@
     <!-- bosch_grid_category.xml -->
     <dimen name="b_txt_category_pad_vert_bosch_grid_category">2dp</dimen>
     <!-- bosch_fragment_discover_by_category_list_item_header.xml -->
-    <dimen name="b_txt_date_pad_bosch_fragment_discover_by_category_list_item_header">2dp</dimen>
+    <dimen name="b_txt_date_pad_bosch_fragment_discover_by_category_list_item_header">1dp</dimen>
+    <dimen name="b_txt_date_txt_size_bosch_fragment_discover_by_category_list_item_header">10sp</dimen>
     <!-- bosch_fragment_discover_by_category_list_item_evt.xml -->
     <dimen name="b_rlt_layout_root_pad_t_bosch_fragment_discover_by_category_list_item_evt">3dp</dimen>
-    <dimen name="b_img_event_w_bosch_fragment_discover_by_category_list_item_evt">80dp</dimen>
-    <dimen name="b_img_event_ht_bosch_fragment_discover_by_category_list_item_evt">60dp</dimen>
+    <dimen name="b_img_event_w_bosch_fragment_discover_by_category_list_item_evt">60dp</dimen>
+    <dimen name="b_img_event_ht_bosch_fragment_discover_by_category_list_item_evt">45dp</dimen>
+    <dimen name="b_lnr_lyt_details_ht_bosch_fragment_discover_by_category_list_item_evt">@dimen/b_img_event_ht_bosch_fragment_discover_by_category_list_item_evt</dimen>
     <dimen name="b_img_event_margin_l_bosch_fragment_discover_by_category_list_item_evt">5dp</dimen>
     <dimen name="b_lnr_layout_details_margin_l_bosch_fragment_discover_by_category_list_item_evt">15dp</dimen>
-    <dimen name="b_txt_title_txt_size_bosch_fragment_discover_by_category_list_item_evt">16sp</dimen>
+    <dimen name="b_txt_title_txt_size_bosch_fragment_discover_by_category_list_item_evt">12sp</dimen>
+    <dimen name="b_txt_evt_location_txt_size_bosch_fragment_discover_by_category_list_item_evt">10sp</dimen>
+    <dimen name="b_txt_evt_location_margin_l_fragment_discover_by_category_list_item_evt">5dp</dimen>
     <dimen name="b_divider_ht_bosch_fragment_discover_by_category_list_item_evt">1dp</dimen>
-    <dimen name="b_divider_margin_t_bosch_fragment_discover_by_category_list_item_evt">3dp</dimen>
+    <dimen name="b_divider_margin_t_b_bosch_fragment_discover_by_category_list_item_evt">3dp</dimen>
+    <!-- bosch_artists_list_item.xml -->
+    <dimen name="b_rlt_layout_root_pad_t_bosch_artists_list_item">@dimen/b_rlt_layout_root_pad_t_bosch_fragment_discover_by_category_list_item_evt</dimen>
+    <dimen name="b_img_event_w_bosch_artists_list_item">@dimen/b_img_event_w_bosch_fragment_discover_by_category_list_item_evt</dimen>
+    <dimen name="b_img_event_ht_bosch_artists_list_item">@dimen/b_img_event_ht_bosch_fragment_discover_by_category_list_item_evt</dimen>
+    <dimen name="b_txt_artist_name_ht_bosch_artists_list_item">@dimen/b_img_event_ht_bosch_artists_list_item</dimen>
+    <dimen name="b_img_event_margin_l_bosch_artists_list_item">@dimen/b_img_event_margin_l_bosch_fragment_discover_by_category_list_item_evt</dimen>
+    <dimen name="b_lnr_layout_details_margin_l_bosch_artists_list_item">@dimen/b_lnr_layout_details_margin_l_bosch_fragment_discover_by_category_list_item_evt</dimen>
+    <dimen name="b_txt_title_txt_size_bosch_artists_list_item">@dimen/b_txt_title_txt_size_bosch_fragment_discover_by_category_list_item_evt</dimen>
+    <dimen name="b_divider_ht_bosch_artists_list_item">@dimen/b_divider_ht_bosch_fragment_discover_by_category_list_item_evt</dimen>
+    <dimen name="b_divider_margin_t_b_bosch_artists_list_item">@dimen/b_divider_margin_t_b_bosch_fragment_discover_by_category_list_item_evt</dimen>
+    <!-- fragment_bosch_about_us -->
+    <dimen name="b_rlt_root_lyt_pad_fragment_bosch_about_us">20dp</dimen>
+    <dimen name="b_lnr_btn_about_us_margin_l_fragment_bosch_about_us">10dp</dimen>
+    <dimen name="b_txt_app_details_txt_size_fragment_bosch_about_us">12sp</dimen>
+    <dimen name="b_lnr_btn_about_us_txt_size_fragment_bosch_about_us">11sp</dimen>
+    <dimen name="b_btn_about_us_stroke_h_fragment_bosch_about_us">1dp</dimen>
+    <dimen name="b_btn_bg_radius_fragment_bosch_about_us">10dp</dimen>
+    <!-- fragment_bosch_change_city -->
+    <dimen name="b_lnr_search_lyt_h_fragment_bosch_change_city">45dp</dimen>
+    <dimen name="b_lnr_search_lyt_pad_fragment_bosch_change_city">10dp</dimen>
+    <dimen name="b_edt_search_city_bg_edge_radius_fragment_bosch_change_city">10dp</dimen>
+    <dimen name="b_edt_search_city_pad_l_r_fragment_bosch_change_city">10dp</dimen>
+    <dimen name="b_edt_search_city_stroke_h_fragment_bosch_change_city">2dp</dimen>
+    <dimen name="b_btn_margin_l_r_fragment_bosch_change_city">5dp</dimen>
+    <dimen name="b_btn_pad_l_r_fragment_bosch_change_city">10dp</dimen>
+    <dimen name="b_lst_cities_pad_fragment_bosch_change_city">2dp</dimen>
+    <dimen name="b_txt_size_fragment_bosch_change_city">11sp</dimen>
+    <!-- include_up_down_arrow_btn -->
+    <dimen name="b_rlt_up_down_arrow_btn_pad_include_up_down_arrow_btn">5dp</dimen>
+    <!-- bosch_fragment_change_city_list_item_city -->
+    <dimen name="b_txt_cities_margin_l_r_bosch_fragment_change_city_list_item_city">10dp</dimen>
+    <dimen name="b_txt_cities_drw_pad_bosch_fragment_change_city_list_item_city">@dimen/b_txt_cities_margin_l_r_bosch_fragment_change_city_list_item_city</dimen>
+    <!-- fragment_bosch_settings -->
+    <dimen name="b_v_divider_h_fragment_bosch_settings">1dp</dimen>
+    <dimen name="b_rlt_root_lyt_pad_fragment_bosch_settings">10dp</dimen>
+    <dimen name="b_btn_continue_txt_size_fragment_bosch_settings">@dimen/b_txt_size_fragment_bosch_change_city</dimen>
+    <dimen name="b_txt_account_results_pad_fragment_bosch_settings">1dp</dimen>
+    <dimen name="b_btn_txt_size_fragment_bosch_settings">12sp</dimen>
+    <dimen name="b_btn_drw_pad_fragment_bosch_settings">8dp</dimen>
+    <dimen name="b_lnr_account_margin_t_b_fragment_bosch_settings">10dp</dimen>
+    <dimen name="b_btn_logIn_margin_t_b_fragment_bosch_settings">10dp</dimen>
+    <!-- fragment_bosch_venue_info -->
+    <dimen name="b_txt_size_fragment_bosch_info">15sp</dimen>
+    <dimen name="b_rlt_root_lyt_fragment_bosch_info">10dp</dimen>
+    <dimen name="b_txt_views_margin_b_fragment_bosch_info">10dp</dimen>
+    <dimen name="b_txt_address_label_margin_b_fragment_bosch_info">10dp</dimen>
+    <!-- fragment_venue_details -->
+    <dimen name="b_rlt_root_layout_pad_fragment_bosch_all_details">10dp</dimen>
+    <dimen name="b_txt_venue_name_pad_fragment_bosch_all_details">3dp</dimen>
+    <dimen name="b_txt_distance_pad_l_r_fragment_bosch_all_details">5dp</dimen>
+    <dimen name="b_txt_distance_drw_pad_fragment_bosch_all_details">5dp</dimen>
+    <dimen name="b_txt_distance_pad_t_b_fragment_bosch_all_details">2dp</dimen>
+    <dimen name="b_txt_venue_name_size_fragment_bosch_all_details">13sp</dimen>
+    <dimen name="b_txt_date_size_fragment_bosch_all_details">10sp</dimen>
+    <dimen name="b_txt_distance_size_fragment_bosch_all_details">12sp</dimen>
+    <dimen name="b_v_dummy_outter_w_fragment_bosch_all_details">10dp</dimen>
+    <dimen name="b_v_dummy_inner_w_h_fragment_bosch_all_details">1dp</dimen>
+    <dimen name="b_btn_pad_fragment_bosch_all_details">6dp</dimen>
+    <dimen name="b_btn_drw_pad_fragment_bosch_all_details">0dp</dimen>
+    <dimen name="b_btn_txt_size_fragment_bosch_all_details">12sp</dimen>
+    <dimen name="b_btn_stroke_h_fragment_venue_details">3dp</dimen>
+     <!-- bosch_element_alert_dialog -->
+    <dimen name="rlt_root_lyt_pad_bosch_element_alert_dialog">30dp</dimen>
+    <dimen name="txt_title_txt_size_bosch_element_alert_dialog">15sp</dimen>
     <!-- ends for bosch -->
+
 </resources>

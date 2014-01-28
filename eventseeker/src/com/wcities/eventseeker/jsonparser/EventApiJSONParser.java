@@ -35,6 +35,7 @@ public class EventApiJSONParser {
 	private static final String KEY_NAME = "name";
 	private static final String KEY_IMAGE = "image";
 	private static final String KEY_IMAGE_ATTRIBUTION = "image_attribution";
+	private static final String KEY_DISTANCE = "distance";
 	private static final String KEY_HIGH_RES_PATH = "high_res_path";
 	private static final String KEY_LOW_RES_PATH = "low_res_path";
 	private static final String KEY_MOBI_RES_PATH = "mobi_res_path";
@@ -57,6 +58,7 @@ public class EventApiJSONParser {
 	private static final String KEY_VENUE_NAME = "venue_name";
 	private static final String KEY_ATTENDING = "attending";
 	private static final String KEY_ADDRESS = "address";
+	private static final String KEY_PHONE = "phone";
 	private static final String KEY_ADDRESS1 = "address1";
 	private static final String KEY_ADDRESS2 = "address2";
 	private static final String KEY_CITY = "city";
@@ -406,6 +408,21 @@ public class EventApiJSONParser {
 		if (jsonObject.has(KEY_ADDRESS)) {
 			venue.setAddress(getAddress(jsonObject.getJSONObject(KEY_ADDRESS)));
 		}
+		if (jsonObject.has(KEY_PHONE)) {
+			Object jPhone = jsonObject.get(KEY_PHONE);
+			if (jPhone instanceof JSONArray) {
+				//Log.d(TAG, "array");
+				String phone = ((JSONArray) jPhone).getString(0);
+				phone = ConversionUtil.removeNonNumericChars(phone);
+				venue.setPhone(phone);
+				
+			} else {
+				//Log.d(TAG, "not array");
+				String phone = (String) jPhone;
+				phone = ConversionUtil.removeNonNumericChars(phone);
+				venue.setPhone(phone);
+			}
+		}
 		return venue;
 	}
 
@@ -458,6 +475,10 @@ public class EventApiJSONParser {
 		}
 		if (jsonObject.has(KEY_IMAGE_ATTRIBUTION)) {
 			event.setImageAttribution(getImageAttribution(jsonObject.getJSONObject(KEY_IMAGE_ATTRIBUTION)));
+		}
+		
+		if (jsonObject.has(KEY_DISTANCE)) {
+			event.setDistance(jsonObject.getString(KEY_DISTANCE));
 		}
 		
 		if (jsonObject.has(KEY_SCHEDULE)) {

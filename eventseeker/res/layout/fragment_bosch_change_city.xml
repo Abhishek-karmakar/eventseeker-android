@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rltRootLyt"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white" >
+
+    <ProgressBar
+        android:id="@+id/prgSearchCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/lnrSearchLyt"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/b_lnr_search_lyt_h_fragment_bosch_change_city"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/b_lnr_search_lyt_pad_fragment_bosch_change_city"
+        android:paddingRight="@dimen/b_lnr_search_lyt_pad_fragment_bosch_change_city"
+        android:paddingTop="@dimen/b_lnr_search_lyt_pad_fragment_bosch_change_city" >
+
+        <EditText
+            android:id="@+id/edtSearchCity"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.6"
+            android:background="@drawable/bg_edt_search_city_fragment_change_city"
+            android:hint="Search"
+            android:paddingLeft="@dimen/b_edt_search_city_pad_l_r_fragment_bosch_change_city"
+            android:paddingRight="@dimen/b_edt_search_city_pad_l_r_fragment_bosch_change_city"
+            android:textColor="@color/eventseeker_bosch_theme_grey"
+            android:textSize="@dimen/b_txt_size_fragment_bosch_change_city" />
+
+        <Button
+            android:id="@+id/btnSearchCity"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/b_btn_margin_l_r_fragment_bosch_change_city"
+            android:layout_weight="0.2"
+            android:background="@drawable/slctr_bg_btn_blue_default_grey_pressed"
+            android:drawableLeft="@drawable/ic_search_small"
+            android:paddingLeft="@dimen/b_btn_pad_l_r_fragment_bosch_change_city"
+            android:paddingRight="@dimen/b_btn_pad_l_r_fragment_bosch_change_city"
+            android:text="Search"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/b_txt_size_fragment_bosch_change_city" />
+
+        <Button
+            android:id="@+id/btnNearbyCities"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/b_btn_margin_l_r_fragment_bosch_change_city"
+            android:layout_weight="0.2"
+            android:background="@drawable/slctr_bg_btn_blue_default_grey_pressed"
+            android:text="Nearby Cities"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/b_txt_size_fragment_bosch_change_city" />
+    </LinearLayout>
+
+    <include
+        android:id="@+id/rltUpDownArrows"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/lstCities"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/lstCities"
+        android:layout_below="@+id/lnrSearchLyt"
+        layout="@layout/bosch_include_scroll_btns"
+        android:paddingLeft="@dimen/b_rlt_up_down_arrow_btn_pad_include_up_down_arrow_btn" />
+
+    <ListView
+        android:id="@+id/lstCities"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/lnrSearchLyt"
+        android:layout_marginLeft="@dimen/b_lnr_search_lyt_pad_fragment_bosch_change_city"
+        android:layout_toLeftOf="@+id/rltUpDownArrows"
+        android:padding="@dimen/b_lst_cities_pad_fragment_bosch_change_city" >
+    </ListView>
+    <!-- android:background="@drawable/bg_action_bar_city_seeker" -->
+
+</RelativeLayout>

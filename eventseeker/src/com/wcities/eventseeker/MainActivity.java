@@ -41,7 +41,7 @@ import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.FbLogInFragment.FbLogInFragmentListener;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.applink.service.AppLinkService;
-import com.wcities.eventseeker.bosch.BoschMainActivity;
+import com.wcities.eventseeker.bosch.BOSCHMainActivity;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
@@ -77,11 +77,14 @@ public class MainActivity extends ActionBarActivity implements
 	private static final int INDEX_NAV_ITEM_ABOUT_US = INDEX_NAV_ITEM_RATE_APP + 1;
 	private static final int INDEX_NAV_ITEM_EULA = INDEX_NAV_ITEM_ABOUT_US + 1;
 	private static final int INDEX_NAV_ITEM_REP_CODE = INDEX_NAV_ITEM_EULA + 1;
+	
+	private static final int REQ_CODE_INVITE_FRIENDS = 1001;
+	private static final int REQ_CODE_RATE_APP = 1002;
 
 	private static final String DRAWER_LIST_FRAGMENT_TAG = "drawerListFragment";
 
 	private static MainActivity instance = null;
-	private boolean activityOnTop;
+	private boolean activityOnTop, hasOtherActivityFinished;
 
 	private DrawerLayout mDrawerLayout;
 	private LinearLayout lnrLayoutRootNavDrawer;
@@ -99,7 +102,8 @@ public class MainActivity extends ActionBarActivity implements
 	portrait mode
 	**/
 	private boolean isDrawerIndicatorEnabled;
-	private boolean isTablet; /** it will check whether current device is tablet and according to that we will 
+	private boolean isTablet;
+	/** it will check whether current device is tablet and according to that we will 
 	select same tab layout file for portrait and landscape mode**/
 	
 	public static MainActivity getInstance() {
@@ -109,26 +113,20 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//Log.d(TAG, "onCreate");
+		Log.d(TAG, "onCreate");
 		
+		setContentView(R.layout.activity_main);
+
 		try {
 			MySpinServerSDK.sharedInstance().registerApplication(getApplication());
-			
 		} catch (MySpinException e) {
 			e.printStackTrace();
 		}
 		
-		// TODO: remove negation from following if
-		/*if (MySpinServerSDK.sharedInstance().isConnected()) {
-			Log.d(TAG, "isConnected");
-			finish();
-			startActivity(new Intent(getApplicationContext(), BoschMainActivity.class));
-			return;
-		}*/
+		if (MySpinServerSDK.sharedInstance().isConnected()) {
+			startActivity(new Intent(this, BOSCHMainActivity.class));
+		}
 		
-		//Log.d(TAG, "b4 setContentView");
-		setContentView(R.layout.activity_main);
-
 		/**
 		 * check whether the current device is Tablet and if it is in Landscape
 		 * mode
@@ -138,6 +136,7 @@ public class MainActivity extends ActionBarActivity implements
 		isTabletAndInLandscapeMode = eventSeekr.isTabletAndInLandscapeMode();
 		isTablet = eventSeekr.isTablet();
 		
+		Log.d(TAG, "isTablet : " + isTablet); 
 		/**
 		 * if user moves away quickly to any other screen resulting in fragment
 		 * replacement & if we are adding this fragment into backstack, then
@@ -161,9 +160,12 @@ public class MainActivity extends ActionBarActivity implements
 			isDrawerIndicatorEnabled = savedInstanceState
 					.getBoolean(BundleKeys.IS_DRAWER_INDICATOR_ENABLED);
 		}
-
+		
 		lnrLayoutRootNavDrawer = (LinearLayout) findViewById(R.id.rootNavigationDrawer);
 
+		Log.d(TAG, "lnrLayoutRootNavDrawer : " + lnrLayoutRootNavDrawer);
+
+		Log.d(TAG, "isTabletAndInLandscapeMode : " + isTabletAndInLandscapeMode);
 		if (!isTabletAndInLandscapeMode) {
 
 			mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -231,6 +233,7 @@ public class MainActivity extends ActionBarActivity implements
 		
 		DrawerListFragment drawerListFragment = (DrawerListFragment) getSupportFragmentManager()
 				.findFragmentByTag(DRAWER_LIST_FRAGMENT_TAG);
+		Log.d(TAG, "drawerListFragment : " + drawerListFragment);
 		if (drawerListFragment == null) {
 			addDrawerListFragment();
 		}
@@ -293,6 +296,7 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onResume() {
 		super.onResume();
 		//Log.d(TAG, "onResume()");
+		
 		if (AppConstants.FORD_SYNC_APP) {
 			activityOnTop = true;
 			// check if lockscreen should be up
@@ -331,6 +335,7 @@ public class MainActivity extends ActionBarActivity implements
 				serviceInstance.setCurrentActivity(null);
 			}
 		}
+		Log.d(TAG, "View : " + findViewById(R.id.rootNavigationDrawer));
 		super.onDestroy();
 	}
 
@@ -344,6 +349,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+
 		getMenuInflater().inflate(R.menu.main, menu);
 
 		searchItem = menu.findItem(R.id.action_search);
@@ -368,6 +374,7 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		//Log.d(TAG, "onPrepareOptionsMenu(), currentContentFragmentTag = " + currentContentFragmentTag);
+		
 		boolean disableSearch = currentContentFragmentTag
 				.equals(AppConstants.FRAGMENT_TAG_CHANGE_LOCATION)
 				|| currentContentFragmentTag
@@ -386,6 +393,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
+		
 		//Log.d(TAG, "onOptionsItemSelected() itemId = " + item.getItemId());
         // Pass the event to ActionBarDrawerToggle, if it returns
         // true, then it has handled the app icon touch event
@@ -458,6 +466,7 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		// Log.d(TAG, "onSaveInstanceState()");
+	
 		outState.putString(BundleKeys.ACTION_BAR_TITLE, mTitle);
 		outState.putString(BundleKeys.CURRENT_CONTENT_FRAGMENT_TAG,
 				currentContentFragmentTag);
@@ -466,10 +475,23 @@ public class MainActivity extends ActionBarActivity implements
 		outState.putBoolean(BundleKeys.IS_DRAWER_INDICATOR_ENABLED,
 				isDrawerIndicatorEnabled);
 	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.d(TAG, "onActivityResult(), requestCode = " + requestCode);
+		if (requestCode == REQ_CODE_INVITE_FRIENDS || requestCode == REQ_CODE_RATE_APP) {
+			hasOtherActivityFinished = true;
+			
+		} else {
+			// pass it to the fragments
+			super.onActivityResult(requestCode, resultCode, data);
+		}
+	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// Log.d(TAG, "onKeyDown()");
+			
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			if (AppConstants.FRAGMENT_TAG_WEB_VIEW.equals(currentContentFragmentTag)) {
 				WebViewFragment webViewFragment = (WebViewFragment) getSupportFragmentManager()
@@ -618,8 +640,7 @@ public class MainActivity extends ActionBarActivity implements
 					serviceInstance.reset();
 
 				} else {
-					Log.e(TAG,
-							"endSyncProxyInstance. No reset required if transport is TCP");
+					Log.e(TAG, "endSyncProxyInstance. No reset required if transport is TCP");
 				}
 				// if proxy == null create proxy
 			} else {
@@ -629,6 +650,7 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	private void addDrawerListFragment() {
+		Log.d(TAG, "addDrawerListFragment");
 		FragmentTransaction fragmentTransaction = getSupportFragmentManager()
 				.beginTransaction();
 		DrawerListFragment drawerListFragment = new DrawerListFragment();
@@ -649,17 +671,36 @@ public class MainActivity extends ActionBarActivity implements
 
 	private void onFragmentResumed(int position, String title,
 			String fragmentTag) {
-		// Log.d(TAG, "onFragmentResumed() - " + fragmentTag);
+		Log.d(TAG, "onFragmentResumed() - " + fragmentTag);
 		drawerItemSelectedPosition = position;
 		if (drawerItemSelectedPosition != AppConstants.INVALID_INDEX) {
-				setDrawerIndicatorEnabled(true);
+			setDrawerIndicatorEnabled(true);
+			
+			/**
+			 * This check is included since otherwise this function gets called up even just before we start
+			 * invite friends activity as in following case:
+			 * Suppose user 
+			 * 1) browses discover -> featured event click -> event details screen.
+			 * 2) Opens side navigation by swiping from left to right
+			 * 3) Selects invite friends.
+			 * In this case as we clear backstack from onDrawerItemSelected() method, onFragmentResumed() is 
+			 * called up first for discover fragment followed by starting activity for inviting friends.
+			 * At this point we should not be marking discover item as checked on navigation drawer & 
+			 * hence the following condition is used. Only when other activity finishes we can allow fragments 
+			 * of MainActivity to mark corresponding items checked.
+			 * Above explanation applies to rate app activity as well similar to invite friends activity.
+			 */
+			if (hasOtherActivityFinished) {
+				hasOtherActivityFinished = false;
+				updateDrawerListCheckedItem(drawerItemSelectedPosition);
+			}
 		}
 		mTitle = title;
 		updateTitle();
 
 		currentContentFragmentTag = fragmentTag;
 	}
-
+	
 	private void onFragmentCalledFromOtherTaskResumed(int position,
 			String title, String fragmentTag) {
 		// Log.d(TAG, "onFragmentResumed() - " + fragmentTag);
@@ -687,17 +728,10 @@ public class MainActivity extends ActionBarActivity implements
 				getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
 
 			}
-			DrawerListFragment drawerListFragment = (DrawerListFragment) getSupportFragmentManager()
-					.findFragmentByTag(DRAWER_LIST_FRAGMENT_TAG);
-			if(drawerListFragment == null) {
+			
+			boolean isDrawerListFragmentFound = updateDrawerListCheckedItem(position);
+			if (!isDrawerListFragmentFound) {
 				return;
-			}
-			try {
-				drawerListFragment.getListView().setItemChecked(position, true);
-				
-			} catch (IllegalStateException e) {
-				// this occurs when call sequence starts from onCreate()
-				Log.i(TAG, "Drawer listview is not yet ready.");
 			}
 		//}
 
@@ -789,6 +823,30 @@ public class MainActivity extends ActionBarActivity implements
 	    	mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
 	    }
 	}
+	
+	/**
+	 * @param position
+	 * @return true if DrawerListFragment instance is existing (not null)
+	 */
+	private boolean updateDrawerListCheckedItem(int position) {
+		if (position == AppConstants.INVALID_INDEX) {
+			return false;
+		}
+		
+		DrawerListFragment drawerListFragment = (DrawerListFragment) getSupportFragmentManager()
+				.findFragmentByTag(DRAWER_LIST_FRAGMENT_TAG);
+		if (drawerListFragment == null) {
+			return false;
+		}
+		try {
+			drawerListFragment.getListView().setItemChecked(position, true);
+			
+		} catch (IllegalStateException e) {
+			// this occurs when call sequence starts from onCreate()
+			Log.i(TAG, "Drawer listview is not yet ready.");
+		}
+		return true;
+	}
 
 	public boolean isTabletAndInLandscapeMode() {
 		return isTabletAndInLandscapeMode;
@@ -799,6 +857,8 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	private void inviteFriends() {
+		//Log.d(TAG, "inviteFriends()");
+		hasOtherActivityFinished = false;
 		String url = "https://play.google.com/store/apps/details?id="
 				+ getPackageName();
 		Intent intent = new Intent(android.content.Intent.ACTION_SEND);
@@ -806,7 +866,7 @@ public class MainActivity extends ActionBarActivity implements
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
 		intent.putExtra(Intent.EXTRA_TEXT, "Checkout eventseeker" + " " + url);
 		try {
-			startActivity(intent);
+			startActivityForResult(intent, REQ_CODE_INVITE_FRIENDS);
 
 		} catch (ActivityNotFoundException e) {
 			Toast.makeText(getApplicationContext(),
@@ -816,10 +876,11 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	private void rateApp() {
+		hasOtherActivityFinished = false;
 		Uri uri = Uri.parse("market://details?id=" + getPackageName());
 		Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
 		try {
-			startActivity(goToMarket);
+			startActivityForResult(goToMarket, REQ_CODE_RATE_APP);
 
 		} catch (ActivityNotFoundException e) {
 			Toast.makeText(getApplicationContext(),
@@ -909,11 +970,18 @@ public class MainActivity extends ActionBarActivity implements
 		getSupportActionBar().setTitle(mTitle);
 		// }
 	}
-
-	private void selectNonDrawerItem(Fragment replaceBy,
-			String replaceByFragmentTag, String newTitle, boolean addToBackStack) {
-		Log.d(TAG, "onDrawerItemSelected(), newTitle = " + newTitle
-				+ ", addToBackStack = " + addToBackStack);
+	
+	/**
+	 * for updating the actionbar title from within the Fragment(Just used in Bosch related fragments)
+	 * @param title
+	 */
+	
+	
+	private void selectNonDrawerItem(Fragment replaceBy, String replaceByFragmentTag, String newTitle, 
+		boolean addToBackStack) {
+		
+		Log.d(TAG, "onDrawerItemSelected(), newTitle = " + newTitle + ", addToBackStack = " + addToBackStack);
+		
 		drawerItemSelectedPosition = AppConstants.INVALID_INDEX;
 		// revertCheckedDrawerItemStateIfAny();
 		setDrawerIndicatorEnabled(!addToBackStack);
@@ -931,6 +999,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public void replaceByFragment(String fragmentTag, Bundle args) {
+	
 		if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_DISCOVER_BY_CATEGORY)) {
 			int categoryPosition = args.getInt(BundleKeys.CATEGORY_POSITION);
 			List<Category> categories = (List<Category>) args.getSerializable(BundleKeys.CATEGORIES);
@@ -1005,6 +1074,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public void onArtistSelected(Artist artist) {
+
 		ArtistDetailsFragment artistDetailsFragment = new ArtistDetailsFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(BundleKeys.ARTIST, artist);
@@ -1027,6 +1097,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public void onEventSelected(Event event) {
+
 		EventDetailsFragment eventDetailsFragment = new EventDetailsFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(BundleKeys.EVENT, event);
@@ -1117,6 +1188,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public void onFragmentResumed(Fragment fragment) {
+
 		if (fragment instanceof DiscoverParentFragment) {
 			onFragmentResumed(INDEX_NAV_ITEM_DISCOVER, getResources()
 					.getString(R.string.title_discover),
@@ -1313,4 +1385,5 @@ public class MainActivity extends ActionBarActivity implements
 			mDrawerToggle.setDrawerIndicatorEnabled(enable);
 		}
 	}
+
 }

@@ -9,7 +9,7 @@
 	<LinearLayout android:id="@+id/lnrLayoutEvtListContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_toLeftOf="@id/rltLayoutScrollBtns"
+        android:layout_toLeftOf="@id/rltUpDownArrowBtn"
         android:orientation="vertical" />
 	
 </RelativeLayout>

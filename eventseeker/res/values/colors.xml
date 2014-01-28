@@ -64,6 +64,18 @@
 	<color name="b_bg_navigation_drawer">#666</color>
 	<color name="b_lnr_layout_btns_txt_color_fragment_plan_travel">#0088ff</color>
 	<color name="b_txt_date_bg_bosch_fragment_discover_by_category_list_item_header">#ccc</color>
+	
+	<color name="eventseeker_bosch_theme_grey">#666666</color>
+	<color name="eventseeker_bosch_theme_blue">#0099ff</color>
+	
+	<color name="btn_bg_border_fragment_bosch">#bebebe</color>
+	<color name="btn_bg_fragment_bosch_about_us">#e0e4e0</color>
+	
+	<color name="edt_search_bg_bosch_change_city_fragment">#f0f0f0</color>
+	
+	<color name="txt_signed_in_as_bg_fragment_preferences">#f0f0f0</color>
+	
+	<color name="v_divider_fragment_preferences">#9a9a9a</color>
 	<!-- ends for bosch -->
 	
 </resources>

@@ -3,12 +3,9 @@ package com.wcities.eventseeker.bosch;
 import java.util.Calendar;
 
 import android.os.Bundle;
-import android.os.Build.VERSION_CODES;
 import android.support.v4.app.ListFragment;
 import android.widget.BaseAdapter;
 
-import com.wcities.eventseeker.R;
-import com.wcities.eventseeker.adapter.DateWiseEventListAdapter;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
 import com.wcities.eventseeker.bosch.adapter.BoschDateWiseEventListAdapter;

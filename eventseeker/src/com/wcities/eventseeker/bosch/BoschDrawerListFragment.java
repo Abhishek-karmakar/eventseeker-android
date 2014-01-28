@@ -18,7 +18,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.wcities.eventseeker.DrawerListFragment;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.util.FragmentUtil;
 

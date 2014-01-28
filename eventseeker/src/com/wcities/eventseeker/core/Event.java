@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.wcities.eventseeker.cache.BitmapCacheable;
+import com.wcities.eventseeker.constants.AppConstants;
 
 public class Event implements Serializable, BitmapCacheable {
 	
@@ -49,6 +50,7 @@ public class Event implements Serializable, BitmapCacheable {
 	private String description;
 	private List<Friend> friends;
 	private String eventUrl;
+	private String distance = AppConstants.INVALID_DISTANCE;
 	private boolean hasArtists = true, isDeletedOrExpired = false;
 	
 	public Event(long id, String name) {
@@ -80,6 +82,14 @@ public class Event implements Serializable, BitmapCacheable {
 		this.imageUrl = imageUrl;
 	}
 	
+	public String getDistance() {
+		return distance;
+	}
+
+	public void setDistance(String distance) {
+		this.distance = distance;
+	}
+
 	public ImageAttribution getImageAttribution() {
 		return imageAttribution;
 	}

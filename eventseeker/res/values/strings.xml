@@ -3,9 +3,9 @@
 
     <string name="app_name">eventseeker</string>
     <!-- development keys -->
-    <!-- <string name="fb_app_id">687206491296790</string> -->
+    <string name="fb_app_id">687206491296790</string>
     <!-- production keys -->
-    <string name="fb_app_id">153033148171841</string>
+    <!-- <string name="fb_app_id">153033148171841</string> -->
     <string name="menu_search">Search</string>
     <string name="menu_change_location">Change Location</string>
     <string name="title_discover">Discover</string>
@@ -100,6 +100,11 @@
     <string name="bosch_navigation_drawer_item_about_us">About Us</string>
     
     <string name="title_plan_travel">eventseeker | Plan your travel</string>
+    <string name="title_artists">Artists</string>
+    <string name="title_featured">Featured</string>
+    
+    <!-- fragment_bosch_about_us -->
+    <string name="txt_app_details"><![CDATA[<b>App name :</b> eventseeker<br/><b>Description :</b> The eventseeker is the premier sources for event, artist and ticketing information available anywhere, gathered from worldwide ticketing partners, in-house research, and the insight of local contributors around the world.<br/><b>Mailing address :</b> Wcities.com, Inc. 512 2nd Street Second Floor, San Francisco, CA 94107, USA<br/><b>Tel :</b> 4154958090<br/><b>Fax : </b>4154958093]]></string>
   	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 </resources>

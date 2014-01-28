@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rltRootLyt"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="horizontal"
+    android:padding="@dimen/b_rlt_root_lyt_pad_fragment_bosch_about_us" >
+
+    <RelativeLayout
+        android:id="@+id/rltAboutUs"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5" >
+
+        <TextView
+            android:id="@+id/txtAppDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:textColor="@color/eventseeker_bosch_theme_grey"
+            android:textSize="@dimen/b_txt_app_details_txt_size_fragment_bosch_about_us" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/lnrBtnAboutUs"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/b_lnr_btn_about_us_margin_l_fragment_bosch_about_us"
+        android:layout_weight="0.5"
+        android:gravity="center_vertical"
+        android:orientation="vertical" >
+
+        <View
+            android:id="@+id/vDummy"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/btnTC"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_btn_fragment_about_us"
+            android:text="Terms of use"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/b_lnr_btn_about_us_txt_size_fragment_bosch_about_us" />
+
+        <View
+            android:id="@+id/vDummy"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5" />
+
+        <Button
+            android:id="@+id/btnPP"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_btn_fragment_about_us"
+            android:text="Privacy policy &amp; OSS Disclosures"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/b_lnr_btn_about_us_txt_size_fragment_bosch_about_us" />
+
+        <View
+            android:id="@+id/vDummy"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5" />
+
+        <Button
+            android:id="@+id/btnGL"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_btn_fragment_about_us"
+            android:text="Geo Location terms"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/b_lnr_btn_about_us_txt_size_fragment_bosch_about_us" />
+
+        <View
+            android:id="@+id/vDummy"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+</LinearLayout>

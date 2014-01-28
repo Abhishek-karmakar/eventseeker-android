@@ -43,13 +43,15 @@ public class PlanTravelFragment extends FragmentLoadableFromBackStack implements
 		
 		case R.id.imgDiscover:
 		case R.id.btnDiscover:
+			Log.d(TAG, "CLICKED ON DISCOVER TAG");
 			((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
-					BoschDiscoverFragment.class.getSimpleName(), null);
+				BoschDiscoverFragment.class.getSimpleName(), null);
 			break;
 			
 		case R.id.imgFeatured:
 		case R.id.btnFeatured:
-			
+			((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
+				BoschFeaturedEventsFragment.class.getSimpleName(), null);
 			break;
 			
 		case R.id.imgSetting:

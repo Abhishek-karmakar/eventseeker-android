@@ -1,19 +1,13 @@
 package com.wcities.eventseeker;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,9 +21,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.wcities.eventseeker.api.Api;
-import com.wcities.eventseeker.api.EventApi;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.asynctask.LoadFeaturedEvts;
+import com.wcities.eventseeker.asynctask.LoadFeaturedEvts.OnLoadFeaturedEventsListener;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Category;
@@ -37,12 +31,11 @@ import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.custom.view.ExpandableGridView;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
-import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public abstract class DiscoverParentFragment extends
-		FragmentLoadableFromBackStack {
+public abstract class DiscoverParentFragment extends FragmentLoadableFromBackStack implements
+	OnLoadFeaturedEventsListener {
 
 	public static final String TAG = DiscoverParentFragment.class.getName();
 
@@ -57,8 +50,6 @@ public abstract class DiscoverParentFragment extends
 	protected List<Event> featuredEvts;
 
 	protected double lat, lon;
-
-	protected static final int FEATURED_EVTS_LIMIT = 5;
 
 	private static final int DEFAULT_NUM_OF_COLUMNS_FOR_TABLET_IN_PORTRAIT_MODE = 3;
 
@@ -119,7 +110,7 @@ public abstract class DiscoverParentFragment extends
 		 */
 
 		if (featuredEvts.isEmpty()) {
-			loadFeaturedEvts = new LoadFeaturedEvts();
+			loadFeaturedEvts = new LoadFeaturedEvts(this, lat, lon);
 			loadFeaturedEvts.execute();
 		}
 
@@ -180,47 +171,20 @@ public abstract class DiscoverParentFragment extends
 					categoryNames[i]));
 		}
 	}
-
-	private class LoadFeaturedEvts extends AsyncTask<Void, Void, List<Event>> {
-		
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			featuredEventsLoaded = false;
-			progressBar.setVisibility(View.VISIBLE);
-		}
-
-		@Override
-		protected List<Event> doInBackground(Void... params) {
-			List<Event> events = new ArrayList<Event>();
-			EventApi eventApi = new EventApi(Api.OAUTH_TOKEN, lat, lon);
-			eventApi.setLimit(FEATURED_EVTS_LIMIT);
-			try {
-				JSONObject jsonObject = eventApi.getFeaturedEvents();
-				EventApiJSONParser jsonParser = new EventApiJSONParser();
-				events = jsonParser.getFeaturedEventList(jsonObject);
-
-			} catch (ClientProtocolException e) {
-				e.printStackTrace();
-
-			} catch (IOException e) {
-				e.printStackTrace();
-
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-
-			return events;
-		}
-
-		@Override
-		protected void onPostExecute(List<Event> result) {
-			featuredEvts = result;
-			//Log.i(TAG, "onPostExecute");
-			featuredEventsLoaded = true;
-			progressBar.setVisibility(View.GONE);
-			notifyDataSetChanged();
-		}
+	
+	@Override
+	public void onPreLoadingFeaturedEvents() {
+		featuredEventsLoaded = false;
+		progressBar.setVisibility(View.VISIBLE);
+	}
+	
+	@Override
+	public void onPostLoadingFeaturedEvents(List<Event> result) {
+		featuredEvts = result;
+		//Log.i(TAG, "onPostExecute");
+		featuredEventsLoaded = true;
+		progressBar.setVisibility(View.GONE);
+		notifyDataSetChanged();
 	}
 
 	private class EvtCategoriesListAdapter extends BaseAdapter {

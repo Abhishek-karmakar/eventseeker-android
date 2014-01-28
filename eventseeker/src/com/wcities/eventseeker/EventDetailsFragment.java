@@ -1,19 +1,13 @@
 package com.wcities.eventseeker;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -33,23 +27,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.wcities.eventseeker.adapter.SwipeTabsAdapter;
-import com.wcities.eventseeker.api.Api;
-import com.wcities.eventseeker.api.EventApi;
-import com.wcities.eventseeker.api.EventApi.IdType;
-import com.wcities.eventseeker.api.EventApi.MoreInfo;
-import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.asynctask.LoadEventDetails;
+import com.wcities.eventseeker.asynctask.LoadEventDetails.OnEventUpdatedListner;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
-import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FileUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
 
-public class EventDetailsFragment extends FragmentLoadableFromBackStack implements OnClickListener {
+public class EventDetailsFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
+OnEventUpdatedListner{
 
 	private static final String TAG = EventDetailsFragment.class.getName();
 
@@ -87,7 +78,7 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 			enableTabs = event.hasArtists();
 			//Log.d(TAG, "enableTabs = " + enableTabs);
 			
-			loadEventDetails = new LoadEventDetails();
+			loadEventDetails = new LoadEventDetails(this, this, event);
 			AsyncTaskUtil.executeAsyncTask(loadEventDetails, true);
 			
 			event.getFriends().clear();
@@ -219,51 +210,20 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 	    }
 	}
 	
-	private class LoadEventDetails extends AsyncTask<Void, Void, Void> {
+	@Override
+	public void onEventUpdated() {
+		//Log.d(TAG, "LoadEventDetails onPostExecute()");
+		updateShareIntent();
 		
-		@Override
-		protected Void doInBackground(Void... params) {
-			//Log.d(TAG, "LoadEventDetails doInBackground()");
-			EventApi eventApi = new EventApi(Api.OAUTH_TOKEN, event.getId(), IdType.EVENT);
-			
-			// null check is not required here, since if it's null, that's handled from eventApi
-			eventApi.setUserId(((EventSeekr)FragmentUtil.getActivity(EventDetailsFragment.this).getApplication()).getWcitiesId());
-			eventApi.setFriendsEnabled(true);
-			eventApi.addMoreInfo(MoreInfo.fallbackimage);
-			
-			try {
-				JSONObject jsonObject = eventApi.getEvents();
-				EventApiJSONParser jsonParser = new EventApiJSONParser();
-				jsonParser.fillEventDetails(event, jsonObject);
-				
-			} catch (ClientProtocolException e) {
-				e.printStackTrace();
-				
-			} catch (IOException e) {
-				e.printStackTrace();
-				
-			} catch (JSONException e) {
-				e.printStackTrace();
+		if (mTabsAdapter != null) {
+			List<Fragment> pageFragments = mTabsAdapter.getTabFragments();
+			for (Iterator<Fragment> iterator = pageFragments.iterator(); iterator.hasNext();) {
+				EventDetailsFragmentChildListener fragment = (EventDetailsFragmentChildListener) iterator.next();
+				fragment.onEventUpdatedByEventDetailsFragment();
 			}
-
-			return null;
 		}
-		
-		@Override
-		protected void onPostExecute(Void result) {
-			//Log.d(TAG, "LoadEventDetails onPostExecute()");
-			updateShareIntent();
-			
-			if (mTabsAdapter != null) {
-				List<Fragment> pageFragments = mTabsAdapter.getTabFragments();
-				for (Iterator<Fragment> iterator = pageFragments.iterator(); iterator.hasNext();) {
-					EventDetailsFragmentChildListener fragment = (EventDetailsFragmentChildListener) iterator.next();
-					fragment.onEventUpdatedByEventDetailsFragment();
-				}
-			}
-			//isEvtDeatilsLoaded = true;
-		}    	
-    }
+		//isEvtDeatilsLoaded = true;
+	}
 	
 	public void onEventAttendingUpdated() {
 		List<Fragment> pageFragments = mTabsAdapter.getTabFragments();
