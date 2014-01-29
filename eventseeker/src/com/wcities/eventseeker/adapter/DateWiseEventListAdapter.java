@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,6 +34,8 @@ import com.wcities.eventseeker.viewdata.DateWiseEventList.LIST_ITEM_TYPE;
 
 public class DateWiseEventListAdapter extends BaseAdapter implements DateWiseEventParentAdapterListener {
 
+	private static final String TAG = DateWiseEventListAdapter.class.getSimpleName();
+	
 	private Context mContext;
     private BitmapCache bitmapCache;
     private DateWiseEventList dateWiseEvtList;

@@ -3,6 +3,8 @@ package com.wcities.eventseeker.bosch;
 import java.io.IOException;
 import java.util.List;
 
+import android.app.ActivityManager;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -20,9 +22,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.wcities.eventseeker.ChangeLocationFragment;
 import com.wcities.eventseeker.DiscoverByCategoryFragment;
+import com.wcities.eventseeker.MainActivity;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.WebViewFragment;
 import com.wcities.eventseeker.bosch.BoschDrawerListFragment.BoschDrawerListFragmentListener;
@@ -54,6 +59,15 @@ public class BoschMainActivity extends ActionBarActivity implements BoschDrawerL
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_bosch_main);
+		
+		if (!MySpinServerSDK.sharedInstance().isConnected()) {
+			//Log.d(TAG, "bosch not Connected");
+			//Toast.makeText(this, "bosch not Connected", Toast.LENGTH_LONG).show();
+			finish();
+			 
+		} /*else {
+			Toast.makeText(this, "bosch is Connected", Toast.LENGTH_LONG).show();
+		}*/
 		
 		lnrLayoutRootNavDrawer = (LinearLayout) findViewById(R.id.rootNavigationDrawer);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
