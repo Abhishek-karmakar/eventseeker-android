@@ -120,7 +120,7 @@ public class BoschInfoFragment extends FragmentLoadableFromBackStack implements 
 			title = venue.getName();
 		}
 		
-		BOSCHMainActivity activity = (BOSCHMainActivity)FragmentUtil.getActivity(this);
+		BoschMainActivity activity = (BoschMainActivity)FragmentUtil.getActivity(this);
 		activity.onFragmentResumed(this, AppConstants.INVALID_INDEX, title);
 	}
 	

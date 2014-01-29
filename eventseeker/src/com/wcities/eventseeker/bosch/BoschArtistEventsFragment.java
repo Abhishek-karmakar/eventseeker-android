@@ -44,11 +44,6 @@ public class BoschArtistEventsFragment extends ListFragmentLoadableFromBackStack
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-<<<<<<< HEAD
-=======
-		((BoschMainActivity)FragmentUtil.getActivity(this)).updateBoschActionBarTitle(artist.getName());
-		
->>>>>>> e3b1c16eab66d9f93e532d1a1813b1ac3b884d41
 		if (dateWiseEvtList == null) {
 
 			dateWiseEvtList = new DateWiseEventList();
@@ -69,7 +64,7 @@ public class BoschArtistEventsFragment extends ListFragmentLoadableFromBackStack
 	@Override
 	public void onResume() {
 		super.onResume();
-		BOSCHMainActivity activity = (BOSCHMainActivity)FragmentUtil.getActivity(this);
+		BoschMainActivity activity = (BoschMainActivity)FragmentUtil.getActivity(this);
 		activity.onFragmentResumed(this, AppConstants.INVALID_INDEX, getResources().getString(R.string.title_events));
 	}
 	

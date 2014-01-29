@@ -75,7 +75,7 @@ public class BoschFeaturedEventsFragment extends ListFragmentLoadableFromBackSta
 	@Override
 	public void onResume() {
 		super.onResume();
-		((BOSCHMainActivity) FragmentUtil.getActivity(this)).onFragmentResumed(this, 
+		((BoschMainActivity) FragmentUtil.getActivity(this)).onFragmentResumed(this, 
 			AppConstants.INVALID_INDEX, getResources().getString(R.string.title_featured));
 	}
 	

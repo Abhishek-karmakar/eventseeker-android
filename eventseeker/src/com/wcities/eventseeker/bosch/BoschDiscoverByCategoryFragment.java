@@ -57,7 +57,7 @@ public class BoschDiscoverByCategoryFragment extends FragmentLoadableFromBackSta
 	@Override
 	public void onResume() {
 		super.onResume();
-		BOSCHMainActivity activity = (BOSCHMainActivity) FragmentUtil.getActivity(this);
+		BoschMainActivity activity = (BoschMainActivity) FragmentUtil.getActivity(this);
 		String title = activity.getCityName() + " - " + categoryName;
 		activity.onFragmentResumed(this, AppConstants.INVALID_INDEX, title);
 	}

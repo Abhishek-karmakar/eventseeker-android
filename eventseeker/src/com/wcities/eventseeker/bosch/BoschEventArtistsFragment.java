@@ -59,7 +59,7 @@ public class BoschEventArtistsFragment extends ListFragmentLoadableFromBackStack
 	@Override
 	public void onResume() {
 		super.onResume();
-		BOSCHMainActivity activity = (BOSCHMainActivity)FragmentUtil.getActivity(this);
+		BoschMainActivity activity = (BoschMainActivity)FragmentUtil.getActivity(this);
 		String title = activity.getResources().getString(R.string.title_artists);
 		activity.onFragmentResumed(this, AppConstants.INVALID_INDEX, title);
 	}

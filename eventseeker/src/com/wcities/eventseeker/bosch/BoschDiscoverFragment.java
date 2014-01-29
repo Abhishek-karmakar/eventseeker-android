@@ -62,7 +62,7 @@ public class BoschDiscoverFragment extends FragmentLoadableFromBackStack impleme
 	@Override
 	public void onResume() {
 		super.onResume();
-		BOSCHMainActivity activity = (BOSCHMainActivity) FragmentUtil.getActivity(this);
+		BoschMainActivity activity = (BoschMainActivity) FragmentUtil.getActivity(this);
 		String title = activity.getCityName();
 		if (title == null) {
 			title = "Discover";

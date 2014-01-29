@@ -41,8 +41,8 @@ public class PlanTravelFragment extends FragmentLoadableFromBackStack implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		BOSCHMainActivity activity = (BOSCHMainActivity)FragmentUtil.getActivity(this);
-		activity.onFragmentResumed(this, BOSCHMainActivity.INDEX_NAV_ITEM_HOME, 
+		BoschMainActivity activity = (BoschMainActivity)FragmentUtil.getActivity(this);
+		activity.onFragmentResumed(this, BoschMainActivity.INDEX_NAV_ITEM_HOME, 
 			getResources().getString(R.string.title_plan_travel));
 	}
 	

@@ -90,12 +90,12 @@ public class BoschChangeCityFragment extends FragmentLoadableFromBackStack imple
 	@Override
 	public void onResume() {
 		super.onResume();
-		setCityName(((BOSCHMainActivity) FragmentUtil.getActivity(this)).getCityName());
+		setCityName(((BoschMainActivity) FragmentUtil.getActivity(this)).getCityName());
 	}
 
 	private void setCityName(String cityName) {
-		BOSCHMainActivity activity = (BOSCHMainActivity) FragmentUtil.getActivity(this);
-		activity.onFragmentResumed(this, BOSCHMainActivity.INDEX_NAV_ITEM_CHANGE_CITY ,
+		BoschMainActivity activity = (BoschMainActivity) FragmentUtil.getActivity(this);
+		activity.onFragmentResumed(this, BoschMainActivity.INDEX_NAV_ITEM_CHANGE_CITY ,
 				cityName + " - Change City");		
 	}
 
