@@ -45,6 +45,7 @@ public class ArtistApiJSONParser {
 	private static final String KEY_EVENT_ID = "eventId";
 	private static final String KEY_TITLE = "title";
 	private static final String KEY_VENUE_ID = "venue_id";
+	private static final String KEY_VENUE_CITY = "venue_city";
 	private static final String KEY_VENUE_NAME = "venue_name";
 	private static final String KEY_VENUE_IMAGE = "venue_image";
 	private static final String KEY_IMAGEFILE = "imagefile";
@@ -285,6 +286,10 @@ public class ArtistApiJSONParser {
 		venue.setImagefile(jsonObject.getString(KEY_VENUE_IMAGE));
 		venue.setImageAttribution(getImageAttribution(jsonObject.getJSONObject(KEY_IMAGE_ATTRIBUTION)));
 
+		Address address = new Address();
+		address.setCity(ConversionUtil.parseHtmlString(jsonObject, KEY_VENUE_CITY));
+		venue.setAddress(address);
+		
 		String eventTime = "";
 		if (jsonObject.has(KEY_EVENT_TIME)) {
 			eventTime = jsonObject.getString(KEY_EVENT_TIME);
@@ -567,7 +572,7 @@ public class ArtistApiJSONParser {
 	
 	private Event getEvent(JSONObject jsonObject, SparseArray<Venue> venues) throws JSONException {
 		Event event = new Event(jsonObject.getInt(KEY_ID), ConversionUtil.parseHtmlString(jsonObject, KEY_NAME));
-		
+
 		event.setSchedule(getSchedule(jsonObject.getJSONObject(KEY_SCHEDULE), venues));
 		Event.Attending attending = jsonObject.has(KEY_ATTENDING) ? 
 				Event.Attending.getAttending(jsonObject.getInt(KEY_ATTENDING)) : Event.Attending.NOT_GOING;

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_pressed="true">
+        <shape 
+        	android:shape="rectangle">
+            <solid 
+                android:color="@android:color/white" />
+            <stroke 
+                android:width="@dimen/b_btn_stroke_h_fragment_venue_details"
+                android:color="@color/eventseeker_bosch_theme_blue" />
+        </shape>
+    </item>
+        
+    <item android:state_pressed="false" >
+        <shape 
+        	android:shape="rectangle">
+            <solid 
+                android:color="@color/eventseeker_bosch_theme_blue" />
+        </shape>
+    </item>
+
+</selector>

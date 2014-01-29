@@ -1,18 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rltLayoutScrollBtns"
+    android:id="@+id/rltUpDownArrowBtn"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:layout_alignParentRight="true" >
+    android:layout_height="wrap_content"
+    android:layout_alignParentRight="true"
+    android:background="@android:color/white"
+    android:padding="@dimen/b_rlt_up_down_arrow_btn_pad_include_up_down_arrow_btn" >
 
-    <Button android:id="@+id/btnUp"
+    <Button
+        android:id="@+id/btnUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/less" />
+        android:layout_alignParentTop="true"
+        android:background="@android:color/transparent"
+        android:drawableTop="@drawable/slctr_btn_up_arrow" />
 
-    <Button android:id="@+id/btnDown"
+    <Button
+        android:id="@+id/btnDown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/down" />
-    
+        android:background="@android:color/transparent"
+        android:drawableBottom="@drawable/slctr_btn_down_arrow" />
+
 </RelativeLayout>

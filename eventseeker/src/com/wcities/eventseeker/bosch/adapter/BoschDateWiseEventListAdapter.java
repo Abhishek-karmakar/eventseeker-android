@@ -1,6 +1,5 @@
 package com.wcities.eventseeker.bosch.adapter;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import android.content.Context;
@@ -27,7 +26,6 @@ import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
-import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.EventListItem;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.LIST_ITEM_TYPE;
@@ -35,6 +33,8 @@ import com.wcities.eventseeker.viewdata.DateWiseEventList.LIST_ITEM_TYPE;
 public class BoschDateWiseEventListAdapter extends BaseAdapter implements DateWiseEventParentAdapterListener {
 
 	private static final String DATE_FORMAT = "EEE, MMMM d";
+
+	private static final String TAG = BoschDateWiseEventListAdapter.class.getName();
 	
 	private Context mContext;
     private BitmapCache bitmapCache;
@@ -104,7 +104,7 @@ public class BoschDateWiseEventListAdapter extends BaseAdapter implements DateWi
 		} else if (getItemViewType(position) == LIST_ITEM_TYPE.CONTENT.ordinal()) {
 			if (convertView == null || convertView.getTag() != LIST_ITEM_TYPE.CONTENT) {
 				convertView = LayoutInflater.from(mContext).inflate(
-						R.layout.bosch_fragment_discover_by_category_list_item_evt, null);
+						R.layout.bosch_list_item_event, null);
 				convertView.setTag(LIST_ITEM_TYPE.CONTENT);
 			}
 			
@@ -114,10 +114,10 @@ public class BoschDateWiseEventListAdapter extends BaseAdapter implements DateWi
 			if (event.getSchedule() != null) {
 				Schedule schedule = event.getSchedule();
 				
-				if (schedule.getDates().get(0).isStartTimeAvailable()) {
+				/*if (schedule.getDates().get(0).isStartTimeAvailable()) {
 					title += " @ " + new SimpleDateFormat("ha").format(schedule.getDates().get(0)
 							.getStartDate()).toLowerCase();
-				}
+				}*/
 				((TextView)convertView.findViewById(R.id.txtEvtLocation)).setText(schedule.getVenue().getName() 
 						+ ", " + schedule.getVenue().getAddress().getCity());
 			}
@@ -141,7 +141,7 @@ public class BoschDateWiseEventListAdapter extends BaseAdapter implements DateWi
 				
 				@Override
 				public void onClick(View v) {
-					//((EventListener) mContext).onEventSelected(event);
+					((EventListener) mContext).onEventSelected(event);
 				}
 			});
 			

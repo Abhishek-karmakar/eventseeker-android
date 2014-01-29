@@ -1,19 +1,13 @@
 package com.wcities.eventseeker;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -32,22 +26,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.wcities.eventseeker.adapter.SwipeTabsAdapter;
-import com.wcities.eventseeker.api.Api;
-import com.wcities.eventseeker.api.ArtistApi;
-import com.wcities.eventseeker.api.ArtistApi.Method;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.asynctask.LoadArtistDetails;
+import com.wcities.eventseeker.asynctask.LoadArtistDetails.OnArtistUpdatedListener;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
-import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FileUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
 
-public class ArtistDetailsFragment extends FragmentLoadableFromBackStack implements OnClickListener {
+public class ArtistDetailsFragment extends FragmentLoadableFromBackStack implements OnClickListener,
+OnArtistUpdatedListener {
 
 	private static final String TAG = ArtistDetailsFragment.class.getName();
 
@@ -82,7 +75,7 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 		if (artist == null) {
 			artist = (Artist) getArguments().getSerializable(BundleKeys.ARTIST);
 
-			loadArtistDetails = new LoadArtistDetails();
+			loadArtistDetails = new LoadArtistDetails(artist, this, this);
 			AsyncTaskUtil.executeAsyncTask(loadArtistDetails, true);
 			
 			artist.getVideos().clear();
@@ -218,52 +211,17 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 	    }
 	}
 	
-	private class LoadArtistDetails extends AsyncTask<Void, Void, Void> {
-		
-		@Override
-		protected Void doInBackground(Void... params) {
-			ArtistApi artistApi = new ArtistApi(Api.OAUTH_TOKEN);
-			artistApi.setArtistId(artist.getId());
-			artistApi.setMethod(Method.artistDetail);
-			// null check is not required here, since if it's null, that's handled from eventApi
-			artistApi.setUserId(((EventSeekr)FragmentUtil.getActivity(ArtistDetailsFragment.this).getApplication()).getWcitiesId());
-			artistApi.setFriendsEnabled(true);
-			
-			try {
-				JSONObject jsonObject = artistApi.getArtists();
-				ArtistApiJSONParser jsonParser = new ArtistApiJSONParser();
-				jsonParser.fillArtistDetails(artist, jsonObject);
-				
-			} catch (ClientProtocolException e) {
-				e.printStackTrace();
-				
-			} catch (IOException e) {
-				e.printStackTrace();
-				
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
+	@Override
+	public void onArtistUpdated() {
 
-			return null;
-		}
-		
-		@Override
-		protected void onPostExecute(Void result) {
-			//Log.d(TAG, "LoadEventDetails onPostExecute()");
+		if (mTabsAdapter != null) {
+			updateShareIntent();
 			
-			if (mTabsAdapter != null) {
-				onArtistUpdated();
+			List<Fragment> pageFragments = mTabsAdapter.getTabFragments();
+			for (Iterator<Fragment> iterator = pageFragments.iterator(); iterator.hasNext();) {
+				ArtistDetailsFragmentListener fragment = (ArtistDetailsFragmentListener) iterator.next();
+				fragment.onArtistUpdatedByArtistDetailsFragment();
 			}
-		}    	
-    }
-	
-	private void onArtistUpdated() {
-		updateShareIntent();
-		
-		List<Fragment> pageFragments = mTabsAdapter.getTabFragments();
-		for (Iterator<Fragment> iterator = pageFragments.iterator(); iterator.hasNext();) {
-			ArtistDetailsFragmentListener fragment = (ArtistDetailsFragmentListener) iterator.next();
-			fragment.onArtistUpdatedByArtistDetailsFragment();
 		}
 	}
 	

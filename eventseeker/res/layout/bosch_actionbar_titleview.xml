@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/actionbarRootRltLayout"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:paddingLeft="@dimen/b_actionbar_root_rlt_layout_pad_hor_bosch_actionbar_titleview"
-	android:paddingRight="@dimen/b_actionbar_root_rlt_layout_pad_hor_bosch_actionbar_titleview" >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/b_actionbar_root_rlt_layout_pad_hor_bosch_actionbar_titleview"
+    android:paddingRight="@dimen/b_actionbar_root_rlt_layout_pad_hor_bosch_actionbar_titleview" >
 
-	<TextView android:id="@+id/txtActionBarTitle"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_centerInParent="true"
-		android:textStyle="bold"
-		android:textSize="@dimen/b_txt_actionbar_title_txt_size_bosch_actionbar_titleview" />
-	
+    <TextView
+        android:id="@+id/txtActionBarTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@color/eventseeker_bosch_theme_grey"
+        android:textSize="@dimen/b_txt_actionbar_title_txt_size_bosch_actionbar_titleview"
+        android:textStyle="bold" />
+
 </RelativeLayout>

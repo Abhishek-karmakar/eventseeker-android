@@ -52,7 +52,6 @@ public class EventInfoFragment extends FbPublishEventFragment implements OnClick
 		EventDetailsFragmentChildListener, AsyncLoadImageListener {
 	
 	private static final String TAG = EventInfoFragment.class.getName();
-	private static final int MAX_FB_CALL_COUNT_FOR_SAME_EVT = 20;
 
 	private static int MAX_FRIENDS_GRID = 3;
 	private static final int MAX_LINES_EVENT_DESC_PORTRAIT = 3;
@@ -758,7 +757,7 @@ public class EventInfoFragment extends FbPublishEventFragment implements OnClick
 		/**
 		 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
 		 */
-		if (fbCallCountForSameEvt < MAX_FB_CALL_COUNT_FOR_SAME_EVT) {
+		if (fbCallCountForSameEvt < AppConstants.MAX_FB_CALL_COUNT_FOR_SAME_EVT) {
 			FbUtil.call(session, state, exception, this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT, AppConstants.REQ_CODE_FB_PUBLISH_EVT, 
 					event);
 			

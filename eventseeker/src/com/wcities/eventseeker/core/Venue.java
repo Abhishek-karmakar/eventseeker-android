@@ -2,10 +2,14 @@ package com.wcities.eventseeker.core;
 
 import java.io.Serializable;
 
+import android.location.Location;
+import android.util.Log;
+
 import com.wcities.eventseeker.cache.BitmapCacheable;
 
 public class Venue implements Serializable, BitmapCacheable {
 	
+	private static final String TAG = Venue.class.getName();
 	private static final String DEFAULT_HIGH_RES_PATH = "http://c0056906.cdn2.cloudfiles.rackspacecloud.com/";
 	private static final String DEFAULT_LOW_RES_PATH = "http://c0056904.cdn2.cloudfiles.rackspacecloud.com/";
 	private static final String DEFAULT_MOBI_RES_PATH = "http://c416814.r14.cf2.rackcdn.com/";
@@ -148,4 +152,61 @@ public class Venue implements Serializable, BitmapCacheable {
 	public String getKey(ImgResolution imgResolution) {
 		return new StringBuilder(getClass().getName()).append("_").append(id).append("_").append(imgResolution).toString();
 	}
+	
+	public String getFormatedAddress() {
+		String adrs = "";
+		if (address != null) {
+			if (address.getAddress1() != null) {
+				adrs += address.getAddress1();
+			}
+			
+			if (address.getCity() != null) {
+				if (adrs.length() != 0) {
+					adrs += ", ";
+				}
+				adrs += address.getCity();
+			} 
+
+			//TODO: Right now we are not parsing the zip code for EventSeeker app, 
+			// if in future we start parsing zip code then uncomment the below lines
+			/*if (address.getZip() != null) {
+				if (adrs.length() != 0) {
+					adrs += ", ";
+				}
+				adrs += address.getZip();
+			}*/ 
+			
+			if (address.getCountry() != null) {
+				if (adrs.length() != 0) {
+					adrs += ", ";
+				}
+				adrs += address.getCountry().getName();
+			} 
+		}
+		return adrs;
+	}
+
+	/**
+	 * calculates the APPROXIMATE distance of venue location from the given GeoLocation Coordinates
+	 * @param lat
+	 * @param lon
+	 * @return
+	 */
+	public double getDistanceFrom(double lat, double lon) {
+		// 1 Meter = 0.000621371 Mile
+		double mileConversionFactor = 0.000621371;
+		
+		Location venueLocation = new Location("");
+		venueLocation.setLatitude(address.getLat());
+		venueLocation.setLongitude(address.getLon());
+
+		Location deviceLocation = new Location("");
+		deviceLocation.setLatitude(lat);
+		deviceLocation.setLongitude(lon);
+
+		float distanceInMeter = venueLocation.distanceTo(deviceLocation);
+		
+		return distanceInMeter * mileConversionFactor;
+	}
+	
 }
