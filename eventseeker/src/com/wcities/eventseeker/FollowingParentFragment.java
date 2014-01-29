@@ -278,6 +278,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
+			//Log.d(TAG, "pos = " + position);
 			final Artist artist = getItem(position);
 			if (artist == null) {
 				if (convertView == null || !convertView.getTag().equals(TAG_PROGRESS_INDICATOR)) {
@@ -318,9 +319,11 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 				String key = artist.getKey(ImgResolution.LOW);
 				Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 				if (bitmap != null) {
+					//Log.d(TAG, "bitmap != null");
 					((ImageView) convertView.findViewById(R.id.imgItem)).setImageBitmap(bitmap);
 
 				} else {
+					//Log.d(TAG, "bitmap = null");
 					ImageView imgArtist = (ImageView) convertView.findViewById(R.id.imgItem);
 					imgArtist.setImageBitmap(null);
 

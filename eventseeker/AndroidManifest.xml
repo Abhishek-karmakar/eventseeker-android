@@ -116,7 +116,7 @@
             android:name="usesMySPINServerSDK"
             android:value="true" />
 
-        <activity android:name="com.wcities.eventseeker.bosch.BOSCHMainActivity"
+        <activity android:name="com.wcities.eventseeker.bosch.BoschMainActivity"
             android:label="@string/title_activity_bosch_main" /> 
         <!-- Bosch registrations end -->
         

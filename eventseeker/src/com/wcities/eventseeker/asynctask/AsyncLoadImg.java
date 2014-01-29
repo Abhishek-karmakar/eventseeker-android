@@ -175,7 +175,6 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 		ImgDetails imgDetails;
 		
 		while (!imgDetailsList.isEmpty()) {
-			//Log.i(TAG, "in while, next");
 			imgDetails = imgDetailsList.remove(0);
 			
 			/**
@@ -185,7 +184,13 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 			/*if (imgDetails.adapterView != null && 
 					(imgDetails.pos < imgDetails.adapterView.getFirstVisiblePosition() || 
 					imgDetails.pos > imgDetails.adapterView.getLastVisiblePosition())) {
-				Log.i(TAG, "continue");
+				Log.i(TAG, "continue, fp = " + imgDetails.adapterView.getFirstVisiblePosition() + 
+						", lp = " + imgDetails.adapterView.getLastVisiblePosition());
+				continue;
+			}*/
+			/*if (imgDetails.adapterView != null && imgDetails.imageView != null 
+					&& !imgDetails.imageView.isShown()) {
+				Log.d(TAG, "continue");
 				continue;
 			}*/
 			
@@ -218,6 +223,7 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 			publishProgress(imgDetails);
 		}
 		
+		//Log.d(TAG, "end while");
 		/**
 		 * Following call to publishProgress() is required to start a new asynctask in following case.
 		 * Say if new asynctask starts & it reaches this point out of while loop without calling
@@ -242,7 +248,9 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 				 * leaving while loop of doInBackground() it's possible that call to onProgressUpdate() is delayed
 				 * & during this time new images to be loaded are inserted into imgDetailsList.
 				 *//*
+				Log.d(TAG, "onProgressUpdate() values.length == 0");
 				if (imgDetailsList.size() > 0) {
+					Log.d(TAG, "onProgressUpdate() new asynctask");
 					asyncLoadImg = new AsyncLoadImg();
 					asyncLoadImg.imgDetailsList = imgDetailsList;
 					AsyncTaskUtil.executeAsyncTask(asyncLoadImg, true);

@@ -135,6 +135,7 @@ public class GooglePlayMusicFragment extends FragmentLoadableFromBackStack imple
 				e.printStackTrace();
 				
 			} catch (InvalidGooglePlayMusicAccountException e) {
+				// custom exception defined in gmusic api by us.
 				e.printStackTrace();
 				return null;
 			}

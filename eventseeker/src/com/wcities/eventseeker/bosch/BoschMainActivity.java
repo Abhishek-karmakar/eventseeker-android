@@ -44,11 +44,11 @@ import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.GeoUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
 
-public class BOSCHMainActivity extends ActionBarActivity implements GeoUtilListener, ReplaceFragmentListener, 
+public class BoschMainActivity extends ActionBarActivity implements GeoUtilListener, ReplaceFragmentListener, 
 	EventListener, ArtistListener, VenueListener, FragmentLoadedFromBackstackListener, 
 	BoschDrawerListFragmentListener  {
 
-	private static final String TAG = BOSCHMainActivity.class.getName();
+	private static final String TAG = BoschMainActivity.class.getName();
 
 	protected static final int INDEX_NAV_ITEM_HOME = 0;
 	protected static final int INDEX_NAV_ITEM_CHANGE_CITY = 1;
@@ -65,7 +65,6 @@ public class BOSCHMainActivity extends ActionBarActivity implements GeoUtilListe
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// Log.d(TAG, "onCreate");
 		
 		if (!MySpinServerSDK.sharedInstance().isConnected()) {
 			finish();

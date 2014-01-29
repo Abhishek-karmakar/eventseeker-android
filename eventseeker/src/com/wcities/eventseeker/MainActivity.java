@@ -3,6 +3,7 @@ package com.wcities.eventseeker;
 import java.util.List;
 import java.util.Set;
 
+import android.app.ActivityManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.ActivityNotFoundException;
@@ -41,7 +42,7 @@ import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.FbLogInFragment.FbLogInFragmentListener;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.applink.service.AppLinkService;
-import com.wcities.eventseeker.bosch.BOSCHMainActivity;
+import com.wcities.eventseeker.bosch.BoschMainActivity;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
@@ -113,7 +114,7 @@ public class MainActivity extends ActionBarActivity implements
 		Log.d(TAG, "onCreate");
 		
 		setContentView(R.layout.activity_main);
-
+		
 		try {
 			MySpinServerSDK.sharedInstance().registerApplication(getApplication());
 		} catch (MySpinException e) {
@@ -121,7 +122,7 @@ public class MainActivity extends ActionBarActivity implements
 		}
 		
 		if (MySpinServerSDK.sharedInstance().isConnected()) {
-			startActivity(new Intent(this, BOSCHMainActivity.class));
+			startActivity(new Intent(getApplicationContext(), BoschMainActivity.class));
 		}
 		
 		/**
@@ -282,7 +283,7 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-		if (!isTabletAndInLandscapeMode) {
+		if (mDrawerToggle != null) {
 			// Sync the toggle state after onRestoreInstanceState has occurred.
 			mDrawerToggle.syncState();
 		}
@@ -370,8 +371,6 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		//Log.d(TAG, "onPrepareOptionsMenu(), currentContentFragmentTag = " + currentContentFragmentTag);
-		
 		boolean disableSearch = currentContentFragmentTag
 				.equals(AppConstants.FRAGMENT_TAG_CHANGE_LOCATION)
 				|| currentContentFragmentTag

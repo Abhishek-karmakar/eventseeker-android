@@ -112,9 +112,13 @@ AsyncLoadImageListener, OnArtistUpdatedListener {
 	public void onResume() {
 		super.onResume();
 		//set the above title on the action bar as screen title
+<<<<<<< HEAD
 		BOSCHMainActivity activity = (BOSCHMainActivity)FragmentUtil.getActivity(this);
 		activity.onFragmentResumed(this, AppConstants.INVALID_INDEX, artist.getName());
 		
+=======
+		((BoschMainActivity)FragmentUtil.getActivity(this)).updateBoschActionBarTitle(artist.getName());
+>>>>>>> e3b1c16eab66d9f93e532d1a1813b1ac3b884d41
 	}
 	
 	private void updateFollowBtn() {

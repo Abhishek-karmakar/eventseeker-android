@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -61,6 +62,7 @@ public class ArtistListAdapter<T> extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+		//Log.d(TAG, "pos = " + position);
 		if (artistList.get(position) == null) {
 			if (convertView == null || !convertView.getTag().equals(TAG_PROGRESS_INDICATOR)) {
 				convertView = LayoutInflater.from(mContext).inflate(R.layout.list_progress_bar, null);

@@ -134,6 +134,7 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+		//Log.d(TAG, "pos = " + position + ", item view type = " + getItemViewType(position));
 		if (getItemViewType(position) == LIST_ITEM_TYPE.PROGRESS.ordinal()) {
 
 			if (convertView == null	|| convertView.getTag() != LIST_ITEM_TYPE.PROGRESS) {
