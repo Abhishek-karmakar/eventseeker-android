@@ -11,11 +11,13 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
+import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschInfoFragment extends FragmentLoadableFromBackStack implements View.OnClickListener {
 
@@ -103,6 +105,23 @@ public class BoschInfoFragment extends FragmentLoadableFromBackStack implements 
 	
 		return view;
 	
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		
+		String title;
+		if (artist != null) {
+			title = artist.getName();
+		} else if (event != null) {
+			title = event.getName();
+		} else {
+			title = venue.getName();
+		}
+		
+		BOSCHMainActivity activity = (BOSCHMainActivity)FragmentUtil.getActivity(this);
+		activity.onFragmentResumed(this, AppConstants.INVALID_INDEX, title);
 	}
 	
 	@Override

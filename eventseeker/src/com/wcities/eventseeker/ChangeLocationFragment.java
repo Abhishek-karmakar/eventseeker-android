@@ -187,7 +187,7 @@ public class ChangeLocationFragment extends FragmentLoadableFromBackStack implem
 		lat = address.getLatitude();
 		lon = address.getLongitude();
 		
-    	DeviceUtil.updateLoatLon(lat, lon);
+    	DeviceUtil.updateLatLon(lat, lon);
 		
 		if (mMap != null) {
 			setMarker(lat, lon);

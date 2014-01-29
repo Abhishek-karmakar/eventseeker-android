@@ -3,6 +3,7 @@ package com.wcities.eventseeker.custom.fragment;
 import android.app.Activity;
 import android.support.v4.app.ListFragment;
 
+import com.wcities.eventseeker.MainActivity;
 import com.wcities.eventseeker.interfaces.ActivityImmediateFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -31,10 +32,16 @@ public class ListFragmentLoadableFromBackStack extends ListFragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		((FragmentLoadedFromBackstackListener) FragmentUtil.getActivity(this))
-				.onFragmentResumed(this);
+		
+		Activity activity = FragmentUtil.getActivity(this);
+		
+		if (activity instanceof FragmentLoadedFromBackstackListener) {
+			if (activity instanceof MainActivity) {
+				((FragmentLoadedFromBackstackListener)activity).onFragmentResumed(this);
+			}
+		}
 	}
-
+	
 	@Override
 	public void setActivityRef(Activity activity) {
 		activityRef = activity;
@@ -44,4 +51,5 @@ public class ListFragmentLoadableFromBackStack extends ListFragment implements
 	public Activity getActivityRef() {
 		return activityRef;
 	}
+	
 }

@@ -59,6 +59,17 @@ public class BoschDiscoverFragment extends FragmentLoadableFromBackStack impleme
 		return view;
 	}
 	
+	@Override
+	public void onResume() {
+		super.onResume();
+		BOSCHMainActivity activity = (BOSCHMainActivity) FragmentUtil.getActivity(this);
+		String title = activity.getCityName();
+		if (title == null) {
+			title = "Discover";
+		}
+		activity.onFragmentResumed(this, AppConstants.INVALID_INDEX, title);
+	}
+	
 	private void buildEvtCategories() {
 		evtCategories = new ArrayList<Category>();
 		int categoryIdStart = AppConstants.CATEGORY_ID_START;

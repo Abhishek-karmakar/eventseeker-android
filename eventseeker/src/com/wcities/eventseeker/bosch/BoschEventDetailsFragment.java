@@ -125,22 +125,10 @@ AsyncLoadImageListener, OnEventUpdatedListner {
 	@Override
 	public void onResume() {
 		super.onResume();
-
-		/*if (event.getSchedule() != null) {
-			
-			Schedule schedule = event.getSchedule(); */
-			String title = event.getName();
-			/*if (schedule.getDates().get(0).isStartTimeAvailable()) {
-				title += " @ " + new SimpleDateFormat("ha").format(schedule.getDates().get(0)
-						.getStartDate()).toLowerCase();
-			}*/		
-			//set the above title on the action bar as screen title
-			((BOSCHMainActivity)FragmentUtil.getActivity(this)).updateBoschActionBarTitle(title);
-		
-		/*}*/
-	
+		BOSCHMainActivity activity = (BOSCHMainActivity)FragmentUtil.getActivity(this);
+		activity.onFragmentResumed(this, AppConstants.INVALID_INDEX, event.getName());
 	}
-	
+
 	private void updateScreen() {
 
 		updateEventImg();

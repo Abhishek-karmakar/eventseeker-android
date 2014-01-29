@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.bosch.adapter.BoschDateWiseEventListAdapter;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
@@ -43,8 +44,6 @@ public class BoschArtistEventsFragment extends ListFragmentLoadableFromBackStack
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		((BOSCHMainActivity)FragmentUtil.getActivity(this)).updateBoschActionBarTitle(artist.getName());
-		
 		if (dateWiseEvtList == null) {
 
 			dateWiseEvtList = new DateWiseEventList();
@@ -59,6 +58,14 @@ public class BoschArtistEventsFragment extends ListFragmentLoadableFromBackStack
 		setListAdapter(adapter);
 
 		getListView().setDivider(null);
+	}
+
+	//Change title of the action bar and remove this temporary one
+	@Override
+	public void onResume() {
+		super.onResume();
+		BOSCHMainActivity activity = (BOSCHMainActivity)FragmentUtil.getActivity(this);
+		activity.onFragmentResumed(this, AppConstants.INVALID_INDEX, getResources().getString(R.string.title_events));
 	}
 	
 	@Override

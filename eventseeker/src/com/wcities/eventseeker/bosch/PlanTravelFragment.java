@@ -5,10 +5,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -37,6 +38,14 @@ public class PlanTravelFragment extends FragmentLoadableFromBackStack implements
 		return view;
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		BOSCHMainActivity activity = (BOSCHMainActivity)FragmentUtil.getActivity(this);
+		activity.onFragmentResumed(this, BOSCHMainActivity.INDEX_NAV_ITEM_HOME, 
+			getResources().getString(R.string.title_plan_travel));
+	}
+	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {

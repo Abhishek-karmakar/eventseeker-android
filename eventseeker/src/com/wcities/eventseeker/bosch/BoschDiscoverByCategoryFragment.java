@@ -9,10 +9,22 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.core.Category;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
+import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschDiscoverByCategoryFragment extends FragmentLoadableFromBackStack implements OnClickListener {
 
+	private String categoryName;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		categoryName = ((Category) getArguments().getSerializable(BundleKeys.CATEGORY)).getName();
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_bosch_discover_by_category, null);
@@ -41,8 +53,13 @@ public class BoschDiscoverByCategoryFragment extends FragmentLoadableFromBackSta
         fragmentTransaction.commit();
     }
 	
-	public static String prepareTitle(String cityName, String categoryName) {
-		return cityName + " - " + categoryName;
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		BOSCHMainActivity activity = (BOSCHMainActivity) FragmentUtil.getActivity(this);
+		String title = activity.getCityName() + " - " + categoryName;
+		activity.onFragmentResumed(this, AppConstants.INVALID_INDEX, title);
 	}
 	
 	@Override

@@ -3,11 +3,13 @@ package com.wcities.eventseeker.custom.fragment;
 import android.app.Activity;
 
 import com.wcities.eventseeker.FbPublishEventFragment;
+import com.wcities.eventseeker.MainActivity;
 import com.wcities.eventseeker.interfaces.ActivityImmediateFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public abstract class FbPublishEventLoadableFromBackStack extends FbPublishEventFragment implements ActivityImmediateFragmentLoadableFromBackStack {
+public abstract class FbPublishEventLoadableFromBackStack extends FbPublishEventFragment implements 
+ActivityImmediateFragmentLoadableFromBackStack {
 
 
 	private Activity activityRef;
@@ -20,11 +22,18 @@ public abstract class FbPublishEventLoadableFromBackStack extends FbPublishEvent
 		}
 		activityRef = activity;
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
-		((FragmentLoadedFromBackstackListener)FragmentUtil.getActivity(this)).onFragmentResumed(this);
+		
+		Activity activity = FragmentUtil.getActivity(this);
+		
+		if (activity instanceof FragmentLoadedFromBackstackListener) {
+			if (activity instanceof MainActivity) {
+				((FragmentLoadedFromBackstackListener)activity).onFragmentResumed(this);
+			}
+		}
 	}
 	
 	@Override
@@ -36,5 +45,5 @@ public abstract class FbPublishEventLoadableFromBackStack extends FbPublishEvent
 	public Activity getActivityRef() {
 		return activityRef;
 	}
-	
+
 }

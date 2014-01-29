@@ -1435,4 +1435,9 @@ public class MainActivity extends ActionBarActivity implements
 		}
 	}
 
+	@Override
+	public void onFragmentResumed(Fragment fragment, int drawerPosition, String actionBarTitle) {
+		//Added right now just for Bosch Main Activity
+	}
+
 }

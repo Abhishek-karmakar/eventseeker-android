@@ -14,6 +14,7 @@ import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.asynctask.LoadFeaturedEvts;
 import com.wcities.eventseeker.asynctask.LoadFeaturedEvts.OnLoadFeaturedEventsListener;
 import com.wcities.eventseeker.bosch.adapter.BoschEventListAdapter;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
@@ -70,6 +71,14 @@ public class BoschFeaturedEventsFragment extends ListFragmentLoadableFromBackSta
 		}
 		
 	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		((BOSCHMainActivity) FragmentUtil.getActivity(this)).onFragmentResumed(this, 
+			AppConstants.INVALID_INDEX, getResources().getString(R.string.title_featured));
+	}
+	
 	
 	@Override
 	public void onPreLoadingFeaturedEvents() {

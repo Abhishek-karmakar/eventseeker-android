@@ -508,6 +508,16 @@
     <dimen name="b_btn_pad_l_r_fragment_bosch_change_city">10dp</dimen>
     <dimen name="b_lst_cities_pad_fragment_bosch_change_city">2dp</dimen>
     <dimen name="b_txt_size_fragment_bosch_change_city">11sp</dimen>
+    <!-- fragment_bosch_change_city -->
+    <dimen name="b_lnr_search_lyt_h_fragment_change_city">50dp</dimen>
+    <dimen name="b_lnr_search_lyt_pad_fragment_change_city">10dp</dimen>
+    <dimen name="edt_search_city_bg_edge_radius_fragment_change_city">10dp</dimen>
+    <dimen name="b_edt_search_city_pad_l_r_fragment_change_city">10dp</dimen>
+    <dimen name="edt_search_city_stroke_h_fragment_change_city">2dp</dimen>
+    <dimen name="b_btn_margin_l_r_fragment_change_city">5dp</dimen>
+    <dimen name="b_btn_pad_l_r_fragment_change_city">10dp</dimen>
+    <dimen name="lst_cities_pad_fragment_change_city">2dp</dimen>
+    <dimen name="b_txt_size_fragment_change_city">11sp</dimen>
     <!-- include_up_down_arrow_btn -->
     <dimen name="b_rlt_up_down_arrow_btn_pad_include_up_down_arrow_btn">5dp</dimen>
     <!-- bosch_fragment_change_city_list_item_city -->
@@ -545,6 +555,9 @@
      <!-- bosch_element_alert_dialog -->
     <dimen name="rlt_root_lyt_pad_bosch_element_alert_dialog">30dp</dimen>
     <dimen name="txt_title_txt_size_bosch_element_alert_dialog">15sp</dimen>
+    <!-- item_lst_cities -->
+    <dimen name="txt_cities_margin_l_r_item_lst_cities">10dp</dimen>
+    <dimen name="txt_cities_drw_pad_item_lst_cities">@dimen/txt_cities_margin_l_r_item_lst_cities</dimen>
     <!-- ends for bosch -->
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 </resources>

@@ -33,7 +33,6 @@ import com.wcities.eventseeker.bosch.BoschDrawerListFragment.BoschDrawerListFrag
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
-import com.wcities.eventseeker.core.Category;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.interfaces.ArtistListener;
@@ -51,17 +50,18 @@ public class BOSCHMainActivity extends ActionBarActivity implements GeoUtilListe
 
 	private static final String TAG = BOSCHMainActivity.class.getName();
 
-	private static final int INDEX_NAV_ITEM_HOME = 0;
+	protected static final int INDEX_NAV_ITEM_HOME = 0;
+	protected static final int INDEX_NAV_ITEM_CHANGE_CITY = 1;
 
 	private LinearLayout lnrLayoutRootNavDrawer;
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
 
-	private String currentContentFragmentTag, mTitle, currentCityName, currentCategoryName;
+	private String currentContentFragmentTag, mTitle;
 	private int drawerItemSelectedPosition = AppConstants.INVALID_INDEX;
 
 	private TextView txtActionBarTitle;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -131,12 +131,13 @@ public class BOSCHMainActivity extends ActionBarActivity implements GeoUtilListe
 	/** Swaps fragments in the main content view */
 	private void selectItem(int position) {
 		// Log.d(TAG, "selectItem");
+		
 		drawerItemSelectedPosition = position;
 		setDrawerIndicatorEnabled(true);
 			
-		BoschDrawerListFragment boschDrawerListFragment = 
-				(BoschDrawerListFragment) getSupportFragmentManager()
-				.findFragmentByTag(BoschDrawerListFragment.class.getSimpleName());
+		BoschDrawerListFragment boschDrawerListFragment = (BoschDrawerListFragment) getSupportFragmentManager()
+			.findFragmentByTag(BoschDrawerListFragment.class.getSimpleName());
+		
 		if (boschDrawerListFragment == null) {
 			return;
 		}
@@ -145,8 +146,13 @@ public class BOSCHMainActivity extends ActionBarActivity implements GeoUtilListe
 	    
 		case INDEX_NAV_ITEM_HOME:
 			PlanTravelFragment planTravelFragment = new PlanTravelFragment();
-			replaceContentFrameByFragment(planTravelFragment, getResources().getString(
-					R.string.title_plan_travel), false);
+			replaceContentFrameByFragment(planTravelFragment, false);
+			break;
+			
+			//TODO:change title
+		case INDEX_NAV_ITEM_CHANGE_CITY:
+			BoschChangeCityFragment boschChangeCityFragment = new BoschChangeCityFragment();
+			replaceContentFrameByFragment(boschChangeCityFragment, false);
 			break;
 	    }
 	    
@@ -173,15 +179,9 @@ public class BOSCHMainActivity extends ActionBarActivity implements GeoUtilListe
 	 * for updating the action bar title from within the Fragment(Just used in Bosch related fragments)
 	 * @param title
 	 */
-	public void updateBoschActionBarTitle(String title) {
-		updateTitle(title);
-	}
 
-	public void replaceContentFrameByFragment(Fragment replaceBy, String newTitle, boolean addToBackStack) {
-		
+	public void replaceContentFrameByFragment(Fragment replaceBy, boolean addToBackStack) {
 		// Log.d(TAG, "replaceContentFrameByFragment");
-		
-		updateTitle(newTitle);
 		
 		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 		
@@ -209,13 +209,13 @@ public class BOSCHMainActivity extends ActionBarActivity implements GeoUtilListe
 		invalidateOptionsMenu();
 	}
 	
-	public void updateTitle(String newTitle) {
-		// Log.d(TAG, "updateTitle");
+	private void updateTitle(String newTitle) {
+
+		Log.d(TAG, "Title : " + newTitle);
 		if (newTitle != null) {
 			mTitle = newTitle;
 			txtActionBarTitle.setText(mTitle);
 		}
-		// Log.d(TAG, "updateTitle over");
 	}
 	
 	@Override
@@ -273,39 +273,30 @@ public class BOSCHMainActivity extends ActionBarActivity implements GeoUtilListe
 		}
 	}
     
-	private void selectNonDrawerItem(Fragment replaceBy, String newTitle, boolean addToBackStack) {
+	private void selectNonDrawerItem(Fragment replaceBy, boolean addToBackStack) {
 		// Log.d(TAG, "selectNonDrawerItem");
 		drawerItemSelectedPosition = AppConstants.INVALID_INDEX;
 		setDrawerIndicatorEnabled(!addToBackStack);
-		replaceContentFrameByFragment(replaceBy, newTitle, addToBackStack);
+		replaceContentFrameByFragment(replaceBy, addToBackStack);
 	}
 	
-	private void onFragmentResumed(int position, String title, String fragmentTag) {
-		// Log.d(TAG, "onFragmentResumed(int position, String title, String fragmentTag)");
-		drawerItemSelectedPosition = position;
-		if (drawerItemSelectedPosition != AppConstants.INVALID_INDEX) {
-			setDrawerIndicatorEnabled(true);
-		}
-		updateTitle(title);
-
-		currentContentFragmentTag = fragmentTag;
-		
-		// Log.d(TAG, "got the current tag as : " + fragmentTag);
-	}
-	
-	private String getCityName() {
-		// Log.d(TAG, "getCityName");
+	public String getCityName() {
+		Log.d(TAG, "getCityName");
 		String cityName = "";
 		double[] latLng = DeviceUtil.getLatLon(getApplicationContext());
 		List<Address> addresses = null;
         Geocoder geocoder = new Geocoder(this);
-		try {
+		
+        try {
 			addresses = geocoder.getFromLocation(latLng[0], latLng[1], 1);
 			
 			if (addresses != null && !addresses.isEmpty()) {
 				Address address = addresses.get(0);
-				//Log.i(TAG, "address=" + address);
-				cityName = address.getLocality();
+				Log.i(TAG, "address=" + address);
+				/*cityName = address.getSubAdminArea();
+				Log.d(TAG, "City=" + cityName);*/
+				cityName = address.getLocality();					
+				Log.d(TAG, "City=" + cityName);
 				
 			} else {
         		Log.w(TAG, "No relevant address found.");
@@ -336,89 +327,58 @@ public class BOSCHMainActivity extends ActionBarActivity implements GeoUtilListe
 		}
 	}
 
-	public void onFragmentResumed(Fragment fragment) {
-		
-		// Log.d(TAG, "onFragmentResumed(Fragment fragment) : " + fragment.getClass().getSimpleName());
-		
-		if (fragment instanceof PlanTravelFragment) {
-		
-			onFragmentResumed(INDEX_NAV_ITEM_HOME, getResources().getString(R.string.title_plan_travel),
-					fragment.getClass().getSimpleName());
-			
-		} else if (fragment instanceof BoschDiscoverFragment) {
-			
-			onFragmentResumed(AppConstants.INVALID_INDEX, currentCityName, fragment.getClass().getSimpleName());
-		
-		} else if (fragment instanceof BoschDiscoverByCategoryFragment) {
-		
-			onFragmentResumed(AppConstants.INVALID_INDEX, BoschDiscoverByCategoryFragment.prepareTitle(
-				currentCityName, currentCategoryName), fragment.getClass().getSimpleName());
 
-		} else if (fragment instanceof BoschEventArtistsFragment) {
-			
-			onFragmentResumed(AppConstants.INVALID_INDEX, 
-				getResources().getString(R.string.title_artists), fragment.getClass().getSimpleName());
-
-		} else if (fragment instanceof BoschFeaturedEventsFragment) {
-			
-			onFragmentResumed(AppConstants.INVALID_INDEX, 
-				getResources().getString(R.string.title_featured), fragment.getClass().getSimpleName());
-		
+	@Override
+	public void onFragmentResumed(Fragment fragment, int drawerPosition, String actionBarTitle) {
+		// Log.d(TAG, "onFragmentResumed(int position, String title, String fragmentTag)");
+		drawerItemSelectedPosition = drawerPosition;
+		if (drawerItemSelectedPosition != AppConstants.INVALID_INDEX) {
+			setDrawerIndicatorEnabled(true);
 		}
-		
-		// Log.d(TAG, "fragment has been set on the screen");
+		updateTitle(actionBarTitle);
+		// Log.d(TAG, "got the current tag as : " + fragmentTag);
+		currentContentFragmentTag = fragment.getClass().getSimpleName();
 	}
-
+	
 	@Override
 	public void replaceByFragment(String fragmentTag, Bundle args) {
 		
 		// Log.d(TAG, "replaceByFragment");
 		
+		Fragment fragment = null;
+		boolean addToBackStack = true;
+		
 		if (fragmentTag.equals(BoschDiscoverFragment.class.getSimpleName())) {
 		
-			currentCityName = getCityName();
-			
-			BoschDiscoverFragment boschDiscoverFragment = new BoschDiscoverFragment();
-			selectNonDrawerItem(boschDiscoverFragment, currentCityName, true);
+			fragment = new BoschDiscoverFragment();
 			
 		} else if (fragmentTag.equals(BoschDiscoverByCategoryFragment.class.getSimpleName())) {
 			
-			if (currentCityName == null) {
-				currentCityName = getCityName();
-			}
-			currentCategoryName = ((Category)args.getSerializable(BundleKeys.CATEGORY)).getName();
-			
-			BoschDiscoverByCategoryFragment boschDiscoverByCategoryFragment = new BoschDiscoverByCategoryFragment();
-			boschDiscoverByCategoryFragment.setArguments(args);
-			selectNonDrawerItem(boschDiscoverByCategoryFragment, BoschDiscoverByCategoryFragment.prepareTitle(
-					currentCityName, currentCategoryName), true);
+			fragment = new BoschDiscoverByCategoryFragment();
 		
 		} if (fragmentTag.equals(BoschInfoFragment.class.getSimpleName())) {
 
-			BoschInfoFragment boschInfoFragment = new BoschInfoFragment();
-			boschInfoFragment.setArguments(args);
-			selectNonDrawerItem(boschInfoFragment, null, true);
+			fragment = new BoschInfoFragment();
 			
 		} if (fragmentTag.equals(BoschEventArtistsFragment.class.getSimpleName())) {
 			
-			BoschEventArtistsFragment boschEventArtistsFragment = new BoschEventArtistsFragment();
-			boschEventArtistsFragment.setArguments(args);
-			selectNonDrawerItem(boschEventArtistsFragment, getResources().getString(R.string.title_artists), true);
+			fragment = new BoschEventArtistsFragment();
 
 		} if (fragmentTag.equals(BoschArtistEventsFragment.class.getSimpleName())) {
 			
-			BoschArtistEventsFragment boschArtistEventsFragment = new BoschArtistEventsFragment();
-			boschArtistEventsFragment.setArguments(args);
-			selectNonDrawerItem(boschArtistEventsFragment, getResources().getString(R.string.title_artists), true);
+			fragment = new BoschArtistEventsFragment();
 			
 		} if (fragmentTag.equals(BoschFeaturedEventsFragment.class.getSimpleName())) {
 			
-			BoschFeaturedEventsFragment boschFeaturedEventsFragment = new BoschFeaturedEventsFragment();
-			boschFeaturedEventsFragment.setArguments(args);
-			selectNonDrawerItem(boschFeaturedEventsFragment, getResources().getString(R.string.title_featured), 
-				true);
+			fragment = new BoschFeaturedEventsFragment();
 			
-		} 
+		}
+	
+		if(fragment != null) {
+			fragment.setArguments(args);
+			selectNonDrawerItem(fragment, addToBackStack);
+		}
+		
 	}
 
 	@Override
@@ -430,16 +390,14 @@ public class BOSCHMainActivity extends ActionBarActivity implements GeoUtilListe
 	@Override
 	public void onCitySearchCompleted(String city) {
 		// Log.d(TAG, "onCitySearchCompleted");
-		if (BoschDiscoverFragment.class.getSimpleName().equals(currentContentFragmentTag) && 
+		/*if (BoschDiscoverFragment.class.getSimpleName().equals(currentContentFragmentTag) && 
 				city != null && city.length() != 0) {
-			currentCityName = city;
-			updateTitle(city);
+			//currentCityName = city;
 			
 		} else if (BoschDiscoverByCategoryFragment.class.getSimpleName().equals(currentContentFragmentTag) && 
 				city != null && city.length() != 0) {
-			currentCityName = city;
-			updateTitle(BoschDiscoverByCategoryFragment.prepareTitle(currentCityName, currentCategoryName));
-		}
+			//currentCityName = city;
+		}*/
 	}
 
 	@Override
@@ -451,8 +409,7 @@ public class BOSCHMainActivity extends ActionBarActivity implements GeoUtilListe
 		BoschEventDetailsFragment boscheventDetailsFragment = new BoschEventDetailsFragment();
 		boscheventDetailsFragment.setArguments(args);
 		
-		selectNonDrawerItem(boscheventDetailsFragment, getResources().getString(R.string.title_event_details),
-			true);
+		selectNonDrawerItem(boscheventDetailsFragment, true);
 			
 	}
 
@@ -492,13 +449,17 @@ public class BOSCHMainActivity extends ActionBarActivity implements GeoUtilListe
 		BoschArtistDetailsFragment boschArtistDetailsFragment = new BoschArtistDetailsFragment();
 		boschArtistDetailsFragment.setArguments(args);
 		
-		selectNonDrawerItem(boschArtistDetailsFragment, getResources().getString(R.string.title_artist_details), 
-			true);
+		selectNonDrawerItem(boschArtistDetailsFragment, true);
 	}
 
 	@Override
 	public void onVenueSelected(Venue venue) {
 		
+	}
+
+	@Override
+	public void onFragmentResumed(Fragment fragment) {
+		//This will get deprecated
 	}
 
 }

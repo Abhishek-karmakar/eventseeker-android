@@ -84,7 +84,7 @@ public class DeviceUtil {
     	return latLon;
     }
 	
-	public static void updateLoatLon(double lat, double lon) {
+	public static void updateLatLon(double lat, double lon) {
 		AppConstants.lat = lat;
 		AppConstants.lon = lon;
 		retryGenerating = false;

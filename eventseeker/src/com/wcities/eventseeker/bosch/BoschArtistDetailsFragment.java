@@ -23,6 +23,7 @@ import com.wcities.eventseeker.asynctask.LoadArtistDetails.OnArtistUpdatedListen
 import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Artist.Attending;
@@ -111,7 +112,9 @@ AsyncLoadImageListener, OnArtistUpdatedListener {
 	public void onResume() {
 		super.onResume();
 		//set the above title on the action bar as screen title
-		((BOSCHMainActivity)FragmentUtil.getActivity(this)).updateBoschActionBarTitle(artist.getName());
+		BOSCHMainActivity activity = (BOSCHMainActivity)FragmentUtil.getActivity(this);
+		activity.onFragmentResumed(this, AppConstants.INVALID_INDEX, artist.getName());
+		
 	}
 	
 	private void updateFollowBtn() {
