@@ -46,7 +46,7 @@ import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackStack implements OnClickListener, 
-AsyncLoadImageListener, OnEventUpdatedListner, OnCarStationaryStatusChangedListener {
+		AsyncLoadImageListener, OnEventUpdatedListner, OnCarStationaryStatusChangedListener {
 
 	private static final String TAG = BoschEventDetailsFragment.class.getName();
 	
@@ -109,7 +109,6 @@ AsyncLoadImageListener, OnEventUpdatedListner, OnCarStationaryStatusChangedListe
 		btnFollow.setOnClickListener(this);
 
 		return view;
-	
 	}
 	
 	@Override
@@ -118,6 +117,7 @@ AsyncLoadImageListener, OnEventUpdatedListner, OnCarStationaryStatusChangedListe
 		
 		if (!isEventLoading) {
 			updateScreen();
+			
 		} else {
 			prgDetails.setVisibility(View.VISIBLE);
 			lnrContent.setVisibility(View.INVISIBLE);
@@ -126,10 +126,7 @@ AsyncLoadImageListener, OnEventUpdatedListner, OnCarStationaryStatusChangedListe
 
 	@Override
 	public void onResume() {
-		super.onResume();
-		
-		BoschMainActivity activity = (BoschMainActivity)FragmentUtil.getActivity(this);
-		activity.onFragmentResumed(this, AppConstants.INVALID_INDEX, event.getName());
+		super.onResume(AppConstants.INVALID_INDEX, event.getName());
 	}
 
 	private void updateScreen() {

@@ -117,7 +117,9 @@
             android:value="true" />
 
         <activity android:name="com.wcities.eventseeker.bosch.BoschMainActivity"
-            android:label="@string/title_activity_bosch_main" /> 
+            android:label="@string/title_activity_bosch_main"
+            android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <!-- Bosch registrations end -->
         
     </application>

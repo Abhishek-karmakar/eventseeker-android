@@ -4,13 +4,13 @@ import android.app.Activity;
 
 import com.wcities.eventseeker.FbPublishEventFragment;
 import com.wcities.eventseeker.MainActivity;
+import com.wcities.eventseeker.bosch.BoschMainActivity;
 import com.wcities.eventseeker.interfaces.ActivityImmediateFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public abstract class FbPublishEventLoadableFromBackStack extends FbPublishEventFragment implements 
-ActivityImmediateFragmentLoadableFromBackStack {
-
+		ActivityImmediateFragmentLoadableFromBackStack {
 
 	private Activity activityRef;
 
@@ -32,6 +32,25 @@ ActivityImmediateFragmentLoadableFromBackStack {
 		if (activity instanceof FragmentLoadedFromBackstackListener) {
 			if (activity instanceof MainActivity) {
 				((FragmentLoadedFromBackstackListener)activity).onFragmentResumed(this);
+				
+			} else if (activity instanceof BoschMainActivity) {
+				// it's handled from within child fragment, so nothing here
+			}
+		}
+	}
+	
+	public void onResume(int drawerPosition, String actionBarTitle) {
+		super.onResume();
+		
+		Activity activity = FragmentUtil.getActivity(this);
+		
+		if (activity instanceof FragmentLoadedFromBackstackListener) {
+			if (activity instanceof BoschMainActivity) {
+				((FragmentLoadedFromBackstackListener)activity).onFragmentResumed(this, drawerPosition, 
+						actionBarTitle);
+				
+			} else if (activity instanceof MainActivity) {
+				// not yet called for this case ever
 			}
 		}
 	}

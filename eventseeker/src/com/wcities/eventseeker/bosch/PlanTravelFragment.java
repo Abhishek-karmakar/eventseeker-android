@@ -9,10 +9,12 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.GeoUtil;
 
 public class PlanTravelFragment extends FragmentLoadableFromBackStack implements OnClickListener {
 	
@@ -40,10 +42,7 @@ public class PlanTravelFragment extends FragmentLoadableFromBackStack implements
 
 	@Override
 	public void onResume() {
-		super.onResume();
-		BoschMainActivity activity = (BoschMainActivity)FragmentUtil.getActivity(this);
-		activity.onFragmentResumed(this, BoschMainActivity.INDEX_NAV_ITEM_HOME, 
-			getResources().getString(R.string.title_plan_travel));
+		super.onResume(BoschMainActivity.INDEX_NAV_ITEM_HOME, getResources().getString(R.string.title_plan_travel));
 	}
 	
 	@Override
@@ -52,7 +51,6 @@ public class PlanTravelFragment extends FragmentLoadableFromBackStack implements
 		
 		//case R.id.imgDiscover:
 		case R.id.btnDiscover:
-			Log.d(TAG, "CLICKED ON DISCOVER TAG");
 			((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
 				BoschDiscoverFragment.class.getSimpleName(), null);
 			break;

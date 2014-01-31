@@ -1,14 +1,8 @@
 package com.wcities.eventseeker.bosch;
 
-import java.io.IOException;
-import java.util.List;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.pm.ActivityInfo;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -42,19 +36,17 @@ import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
-import com.wcities.eventseeker.util.DeviceUtil;
-import com.wcities.eventseeker.util.GeoUtil;
-import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
 
-public class BoschMainActivity extends ActionBarActivity implements GeoUtilListener, ReplaceFragmentListener, 
-	EventListener, ArtistListener, VenueListener, FragmentLoadedFromBackstackListener, 
-	BoschDrawerListFragmentListener  {
+public class BoschMainActivity extends ActionBarActivity implements ReplaceFragmentListener, 
+		EventListener, ArtistListener, VenueListener, FragmentLoadedFromBackstackListener, 
+		BoschDrawerListFragmentListener  {
 
 	private static final String TAG = BoschMainActivity.class.getName();
 
 	protected static final int INDEX_NAV_ITEM_HOME = 0;
 	protected static final int INDEX_NAV_ITEM_CHANGE_CITY = 1;
 	protected static final int INDEX_NAV_ITEM_SEARCH = 2;
+	protected static final int INDEX_NAV_ITEM_FAVORITES = 3;
 
 	private LinearLayout lnrLayoutRootNavDrawer;
 	private DrawerLayout mDrawerLayout;
@@ -77,10 +69,8 @@ public class BoschMainActivity extends ActionBarActivity implements GeoUtilListe
 
 		if (!MySpinServerSDK.sharedInstance().isConnected()) {
 			finish();
+			
 		} else {
-
-			setRequestedOrientation(getResources().getConfiguration().orientation);
-
 			setContentView(R.layout.activity_bosch_main);
 
 			lnrLayoutRootNavDrawer = (LinearLayout) findViewById(R.id.rootNavigationDrawerBosch);
@@ -107,18 +97,13 @@ public class BoschMainActivity extends ActionBarActivity implements GeoUtilListe
 			txtActionBarTitle = (TextView) findViewById(R.id.txtActionBarTitle);
 
 			BoschDrawerListFragment boschDrawerListFragment = (BoschDrawerListFragment) getSupportFragmentManager()
-				.findFragmentByTag(BoschDrawerListFragment.class.getSimpleName());
-			
+					.findFragmentByTag(BoschDrawerListFragment.class.getSimpleName());
 			if (boschDrawerListFragment == null) {
 				addDrawerListFragment();
 			}
-			
 			getSupportFragmentManager().executePendingTransactions();
-
-			// Log.d(TAG, "initial currentContentFragmentTag : " + currentContentFragmentTag);
-
+			
 			selectItem(INDEX_NAV_ITEM_HOME);
-
 		}		
 	}
 	
@@ -160,15 +145,9 @@ public class BoschMainActivity extends ActionBarActivity implements GeoUtilListe
 		mDrawerToggle.syncState();
 	}	
 	
-	@Override
-	protected void onDestroy() {
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
-		super.onDestroy();
-	}
-	
 	/** Swaps fragments in the main content view */
 	private void selectItem(int position) {
-		// Log.d(TAG, "selectItem");
+		//Log.d(TAG, "selectItem(), pos = " + position);
 		
 		drawerItemSelectedPosition = position;
 		setDrawerIndicatorEnabled(true);
@@ -187,7 +166,6 @@ public class BoschMainActivity extends ActionBarActivity implements GeoUtilListe
 			replaceContentFrameByFragment(planTravelFragment, false);
 			break;
 			
-			//TODO:change title
 		case INDEX_NAV_ITEM_CHANGE_CITY:
 			BoschChangeCityFragment boschChangeCityFragment = new BoschChangeCityFragment();
 			replaceContentFrameByFragment(boschChangeCityFragment, false);
@@ -198,6 +176,10 @@ public class BoschMainActivity extends ActionBarActivity implements GeoUtilListe
 			replaceContentFrameByFragment(boschSearchfragment, false);
 			break;
 			
+		case INDEX_NAV_ITEM_FAVORITES:
+			BoschFavoritesFragment boschFavoritesFragment = new BoschFavoritesFragment();
+			replaceContentFrameByFragment(boschFavoritesFragment, false);
+			break;
 	    }
 	    
     	mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
@@ -249,10 +231,8 @@ public class BoschMainActivity extends ActionBarActivity implements GeoUtilListe
 		invalidateOptionsMenu();
 	}
 	
-	private void updateTitle(String newTitle) {
-
-		Log.d(TAG, "Title : " + newTitle);
-		if (newTitle != null) {
+	public void updateTitleForFragment(String newTitle, String fragmentTag) {
+		if (newTitle != null && currentContentFragmentTag.equals(fragmentTag)) {
 			mTitle = newTitle;
 			txtActionBarTitle.setText(mTitle);
 		}
@@ -320,40 +300,6 @@ public class BoschMainActivity extends ActionBarActivity implements GeoUtilListe
 		replaceContentFrameByFragment(replaceBy, addToBackStack);
 	}
 	
-	public String getCityName() {
-		Log.d(TAG, "getCityName");
-		String cityName = "";
-		double[] latLng = DeviceUtil.getLatLon(getApplicationContext());
-		List<Address> addresses = null;
-        Geocoder geocoder = new Geocoder(this);
-		
-        try {
-			addresses = geocoder.getFromLocation(latLng[0], latLng[1], 1);
-			
-			if (addresses != null && !addresses.isEmpty()) {
-				Address address = addresses.get(0);
-				Log.i(TAG, "address=" + address);
-				/*cityName = address.getSubAdminArea();
-				Log.d(TAG, "City=" + cityName);*/
-				cityName = address.getLocality();					
-				Log.d(TAG, "City=" + cityName);
-				
-			} else {
-        		Log.w(TAG, "No relevant address found.");
-			}
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		// Alternative way to find lat-lon
-		if (addresses == null || addresses.isEmpty()) {
-			GeoUtil.getCityFromLocation(latLng[0], latLng[1], this);
-		}
-		
-		return cityName;
-	}
-	
 	@Override
 	public void onDrawerItemSelected(int pos) {
 		// Log.d(TAG, "onDrawerItemSelected");
@@ -375,9 +321,9 @@ public class BoschMainActivity extends ActionBarActivity implements GeoUtilListe
 		if (drawerItemSelectedPosition != AppConstants.INVALID_INDEX) {
 			setDrawerIndicatorEnabled(true);
 		}
-		updateTitle(actionBarTitle);
-		// Log.d(TAG, "got the current tag as : " + fragmentTag);
 		currentContentFragmentTag = fragment.getClass().getSimpleName();
+		updateTitleForFragment(actionBarTitle, currentContentFragmentTag);
+		// Log.d(TAG, "got the current tag as : " + fragmentTag);
 	}
 	
 	@Override
@@ -421,7 +367,7 @@ public class BoschMainActivity extends ActionBarActivity implements GeoUtilListe
 		
 	}
 
-	@Override
+	/*@Override
 	public void onAddressSearchCompleted(String strAddress) {}
 
 	@Override
@@ -430,15 +376,15 @@ public class BoschMainActivity extends ActionBarActivity implements GeoUtilListe
 	@Override
 	public void onCitySearchCompleted(String city) {
 		// Log.d(TAG, "onCitySearchCompleted");
-		/*if (BoschDiscoverFragment.class.getSimpleName().equals(currentContentFragmentTag) && 
+		if (BoschDiscoverFragment.class.getSimpleName().equals(currentContentFragmentTag) && 
 				city != null && city.length() != 0) {
 			//currentCityName = city;
 			
 		} else if (BoschDiscoverByCategoryFragment.class.getSimpleName().equals(currentContentFragmentTag) && 
 				city != null && city.length() != 0) {
 			//currentCityName = city;
-		}*/
-	}
+		}
+	}*/
 
 	public void showBoschDialog(String msg) {
 		View view = LayoutInflater.from(this).inflate(R.layout.bosch_element_alert_dialog, null);
@@ -520,5 +466,29 @@ public class BoschMainActivity extends ActionBarActivity implements GeoUtilListe
 	 */
 	public void unRegisterOnCarStationaryStatusChangedListener() {
 		this.onCarStationaryStatusChangedListener = null;
+	}
+	
+	@Override
+	public void onBackPressed() {
+		if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+			super.onBackPressed();
+			
+		} else {
+			/**
+			 * Here if we allow back press (super.onBackPressed();) then it can display unexpected result 
+			 * in following 2 cases:
+			 * 
+			 * 1 - If orientation is changed before pressing back button when starting screen of app's bosch 
+			 * version is visible, then pressing back button again displays the same screen rather than moving 
+			 * out of app. Because in back stack we have MainActivity which restarts due to orientation change & 
+			 * in turn restarting this BoschMainActivity as well.
+			 * 
+			 * 2 - Let's say user was browsing eventseeker app on android device & finally was looking at 
+			 * event details screen. After this he connected to bosch. So there are these android version app 
+			 * screens lying in the backstack. In this case pressing back button beyond the first screen 
+			 * of bosch version app, pops up those android version screens from back stack on bosch IVI system.
+			 */
+			moveTaskToBack(true);
+		}
 	}
 }

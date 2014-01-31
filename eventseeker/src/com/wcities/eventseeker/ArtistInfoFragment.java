@@ -732,13 +732,24 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 
 		updateVideosVisibility();
 
-		if(isTabletInPortraitMode) {
+		if (isTabletInPortraitMode) {
 			if (videoGalleryAdapter != null) {
 				videoGalleryAdapter.notifyDataSetChanged();
 			}	
+			
 		} else {
 			if (videoFragmentPagerAdapter != null) {
-				videoFragmentPagerAdapter.notifyDataSetChanged();
+				/**
+				 * sometimes it throws IllegalStateException if user moves out of screen/app
+				 * saying: java.lang.IllegalStateException: Fragment VideoFragment is not currently 
+				 * in the FragmentManager
+				 */
+				try {
+					videoFragmentPagerAdapter.notifyDataSetChanged();
+
+				} catch (IllegalStateException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		updateFriendsVisibility();

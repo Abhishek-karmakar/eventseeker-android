@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 
+import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
@@ -56,7 +57,9 @@ public class SwipeTabsAdapter extends FragmentPagerAdapter implements TabBar.Tab
 		}
 		notifyDataSetChanged();
 		
-		if (orientation == Configuration.ORIENTATION_PORTRAIT && tabBar.getNumberOfTabs() > 1) {
+		// For bosch we need tab backgrounds as in portrait orientation of pure android version 
+		if ((orientation == Configuration.ORIENTATION_PORTRAIT || MySpinServerSDK.sharedInstance().isConnected()) 
+				&& tabBar.getNumberOfTabs() > 1) {
 			updateTabsBgForPortrait();
 		}
 	}
@@ -71,7 +74,12 @@ public class SwipeTabsAdapter extends FragmentPagerAdapter implements TabBar.Tab
 			
 		case 3:
 			tabBar.getTab(0).setButtonBg(R.drawable.left_most_tab_indicator_holo);
-			tabBar.getTab(1).setButtonBg(R.drawable.tab_indicator_holo);
+			if (!MySpinServerSDK.sharedInstance().isConnected()) {
+				tabBar.getTab(1).setButtonBg(R.drawable.tab_indicator_holo);
+				
+			} else {
+				tabBar.getTab(1).setButtonBg(R.drawable.tab_indicator_holo_bosch);
+			}
 			tabBar.getTab(2).setButtonBg(R.drawable.right_most_tab_indicator_holo);
 			break;
 

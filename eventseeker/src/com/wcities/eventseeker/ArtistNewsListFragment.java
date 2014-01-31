@@ -161,22 +161,22 @@ public class ArtistNewsListFragment extends ListFragmentLoadableFromBackStack im
 	
 	@Override
 	public void onDestroyView() {
-		//Log.d(TAG, "onDestroyView()");
+		if (is7InchTabletInPortrait) {
+			firstVisibleNewsItemPosition = getListView().getFirstVisiblePosition();
+			
+		} else if (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) {
+			firstVisibleNewsItemPosition = getListView().getFirstVisiblePosition();
+			
+		} else {
+			firstVisibleNewsItemPosition = getListView().getFirstVisiblePosition() * 2;
+		}
+		
 		/**
 		 * We can not write following statement in onSaveInstanceState(), because 3 tabs are there on ArtistDetails screen & this
 		 * is 3rd tab. If user swipes back to first tab, then view gets destroyed by this method onDestroyView() of list of 3rd tab.
 		 * Then on orientation change onSaveInstanceState() will try to call getListView().getFirstVisiblePosition() throwing
 		 * IllegalStateException: Content view not yet created, because listview is already destroyed.
 		 */
-
-		if(is7InchTabletInPortrait) {
-			firstVisibleNewsItemPosition = getListView().getFirstVisiblePosition();
-		} else if (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) {
-			firstVisibleNewsItemPosition = getListView().getFirstVisiblePosition();			
-		} else {
-			firstVisibleNewsItemPosition = getListView().getFirstVisiblePosition() * 2;;
-		}
-			
 		for (int i = getListView().getFirstVisiblePosition(), j = 0; 
 				i <= getListView().getLastVisiblePosition(); i++, j++) {
 			freeUpBitmapMemory(getListView().getChildAt(j));

@@ -117,10 +117,7 @@ public class BoschArtistDetailsFragment extends FragmentLoadableFromBackStack im
 
 	@Override
 	public void onResume() {
-		super.onResume();
-		//set the above title on the action bar as screen title
-		BoschMainActivity activity = (BoschMainActivity)FragmentUtil.getActivity(this);
-		activity.onFragmentResumed(this, AppConstants.INVALID_INDEX, artist.getName());
+		super.onResume(AppConstants.INVALID_INDEX, artist.getName());
 	}
 	
 	private void updateFollowBtn() {

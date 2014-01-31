@@ -22,7 +22,7 @@ import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschFeaturedEventsFragment extends ListFragmentLoadableFromBackStack implements
-	OnLoadFeaturedEventsListener, OnClickListener {
+		OnLoadFeaturedEventsListener, OnClickListener {
 
 	private static final String TAG = BoschFeaturedEventsFragment.class.getName();
 	private ProgressBar prgbr;
@@ -71,9 +71,7 @@ public class BoschFeaturedEventsFragment extends ListFragmentLoadableFromBackSta
 	
 	@Override
 	public void onResume() {
-		super.onResume();
-		((BoschMainActivity) FragmentUtil.getActivity(this)).onFragmentResumed(this, 
-			AppConstants.INVALID_INDEX, getResources().getString(R.string.title_featured));
+		super.onResume(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_featured));
 	}
 	
 	

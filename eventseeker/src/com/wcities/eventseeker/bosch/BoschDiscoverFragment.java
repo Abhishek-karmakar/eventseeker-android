@@ -6,8 +6,10 @@ import java.util.List;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,16 +18,21 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Category;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.GeoUtil;
+import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
 
-public class BoschDiscoverFragment extends FragmentLoadableFromBackStack implements OnClickListener {
+public class BoschDiscoverFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
+		GeoUtilListener {
 	
 	private static final String TAG = BoschDiscoverFragment.class.getSimpleName();
 
@@ -61,13 +68,12 @@ public class BoschDiscoverFragment extends FragmentLoadableFromBackStack impleme
 	
 	@Override
 	public void onResume() {
-		super.onResume();
-		BoschMainActivity activity = (BoschMainActivity) FragmentUtil.getActivity(this);
-		String title = activity.getCityName();
-		if (title == null) {
-			title = "Discover";
-		}
-		activity.onFragmentResumed(this, AppConstants.INVALID_INDEX, title);
+		String cityName = GeoUtil.getCityName(this, (EventSeekr) FragmentUtil.getActivity(this).getApplication());
+		super.onResume(AppConstants.INVALID_INDEX, buildTitle(cityName));
+	}
+	
+	private String buildTitle(String cityName) {
+		return (cityName == null) ? "Discover" : cityName;
 	}
 	
 	private void buildEvtCategories() {
@@ -184,5 +190,23 @@ public class BoschDiscoverFragment extends FragmentLoadableFromBackStack impleme
 		default:
 			break;
 		}
+	}
+	
+	@Override
+	public void onAddressSearchCompleted(String strAddress) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onCitySearchCompleted(String city) {
+		if (city != null && city.length() != 0) {
+			((BoschMainActivity)FragmentUtil.getActivity(this)).updateTitleForFragment(buildTitle(city), 
+					getClass().getSimpleName());
+		}
+	}
+
+	@Override
+	public void onLatlngSearchCompleted(Address address) {
+		// TODO Auto-generated method stub
 	}
 }
