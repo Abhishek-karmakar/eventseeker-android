@@ -56,7 +56,7 @@ public class BoschChangeCityFragment extends FragmentLoadableFromBackStack imple
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.bosch_fragment_change_city, null);
+		View view = inflater.inflate(R.layout.fragment_bosch_change_city, null);
 
 		view.findViewById(R.id.btnSearchCity).setOnClickListener(this);
 		view.findViewById(R.id.btnNearbyCities).setOnClickListener(this);

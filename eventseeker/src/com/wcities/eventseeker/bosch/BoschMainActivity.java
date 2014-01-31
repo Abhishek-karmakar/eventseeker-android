@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -26,6 +27,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bosch.myspin.serversdk.IOnCarDataChangeListener;
 import com.bosch.myspin.serversdk.MySpinException;
 import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.wcities.eventseeker.R;
@@ -52,6 +54,7 @@ public class BoschMainActivity extends ActionBarActivity implements GeoUtilListe
 
 	protected static final int INDEX_NAV_ITEM_HOME = 0;
 	protected static final int INDEX_NAV_ITEM_CHANGE_CITY = 1;
+	protected static final int INDEX_NAV_ITEM_SEARCH = 2;
 
 	private LinearLayout lnrLayoutRootNavDrawer;
 	private DrawerLayout mDrawerLayout;
@@ -62,10 +65,16 @@ public class BoschMainActivity extends ActionBarActivity implements GeoUtilListe
 
 	private TextView txtActionBarTitle;
 
+	private OnCarStationaryStatusChangedListener onCarStationaryStatusChangedListener;
+	
+	public interface OnCarStationaryStatusChangedListener {
+		public void onCarStationaryStatusChanged(boolean isStationary);
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		if (!MySpinServerSDK.sharedInstance().isConnected()) {
 			finish();
 		} else {
@@ -112,6 +121,36 @@ public class BoschMainActivity extends ActionBarActivity implements GeoUtilListe
 
 		}		
 	}
+	
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		try {
+			
+			MySpinServerSDK.sharedInstance().registerCarDataChangedListener(new IOnCarDataChangeListener() {
+				
+				@Override
+				public void onLocationUpdate(Location arg0) {}
+				
+				@Override
+				public void onDayNightModeChanged(boolean arg0) {}
+				
+				@Override
+				public void onCarStationaryStatusChanged(boolean arg0) {
+					AppConstants.IS_CAR_STATIONARY = arg0;					
+					if(onCarStationaryStatusChangedListener != null) {
+						onCarStationaryStatusChangedListener.onCarStationaryStatusChanged(arg0);
+					}
+					Log.i(TAG, "IS_CAR_STATIONARY : " + AppConstants.IS_CAR_STATIONARY);
+				}
+				
+			});
+		} catch (MySpinException e) {
+			e.printStackTrace();
+		}
+	}
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
@@ -153,6 +192,12 @@ public class BoschMainActivity extends ActionBarActivity implements GeoUtilListe
 			BoschChangeCityFragment boschChangeCityFragment = new BoschChangeCityFragment();
 			replaceContentFrameByFragment(boschChangeCityFragment, false);
 			break;
+			
+		case INDEX_NAV_ITEM_SEARCH:
+			BoschSearchFragment boschSearchfragment = new BoschSearchFragment();
+			replaceContentFrameByFragment(boschSearchfragment, false);
+			break;
+			
 	    }
 	    
     	mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
@@ -180,8 +225,6 @@ public class BoschMainActivity extends ActionBarActivity implements GeoUtilListe
 	 */
 
 	public void replaceContentFrameByFragment(Fragment replaceBy, boolean addToBackStack) {
-		// Log.d(TAG, "replaceContentFrameByFragment");
-		
 		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 		
 		String fragmentTag = replaceBy.getClass().getSimpleName();
@@ -194,8 +237,6 @@ public class BoschMainActivity extends ActionBarActivity implements GeoUtilListe
 
 		currentContentFragmentTag = fragmentTag;
 
-		// Log.d(TAG, "got the current tag as : " + fragmentTag);
-		
 		/**
 		 * For fragments not having setHasOptionsMenu(true),
 		 * onPrepareOptionsMenu() is not called on adding/replacing such
@@ -341,35 +382,35 @@ public class BoschMainActivity extends ActionBarActivity implements GeoUtilListe
 	
 	@Override
 	public void replaceByFragment(String fragmentTag, Bundle args) {
-		
-		// Log.d(TAG, "replaceByFragment");
-		
 		Fragment fragment = null;
 		boolean addToBackStack = true;
 		
 		if (fragmentTag.equals(BoschDiscoverFragment.class.getSimpleName())) {
-		
 			fragment = new BoschDiscoverFragment();
-			
+
 		} else if (fragmentTag.equals(BoschDiscoverByCategoryFragment.class.getSimpleName())) {
-			
 			fragment = new BoschDiscoverByCategoryFragment();
 		
 		} if (fragmentTag.equals(BoschInfoFragment.class.getSimpleName())) {
-
 			fragment = new BoschInfoFragment();
-			
+		
 		} if (fragmentTag.equals(BoschEventArtistsFragment.class.getSimpleName())) {
-			
 			fragment = new BoschEventArtistsFragment();
-
+		
 		} if (fragmentTag.equals(BoschArtistEventsFragment.class.getSimpleName())) {
-			
 			fragment = new BoschArtistEventsFragment();
 			
 		} if (fragmentTag.equals(BoschFeaturedEventsFragment.class.getSimpleName())) {
-			
 			fragment = new BoschFeaturedEventsFragment();
+		
+		} if (fragmentTag.equals(BoschSearchResultFragment.class.getSimpleName())) {
+			fragment = new BoschSearchResultFragment();
+			
+		} if (fragmentTag.equals(BoschVenueEventsFragment.class.getSimpleName())) {
+			fragment = new BoschVenueEventsFragment();
+
+		} if (fragmentTag.equals(BoschNavigateFragment.class.getSimpleName())) {
+			fragment = new BoschNavigateFragment();
 			
 		}
 	
@@ -399,21 +440,7 @@ public class BoschMainActivity extends ActionBarActivity implements GeoUtilListe
 		}*/
 	}
 
-	@Override
-	public void onEventSelected(Event event) {
-		
-		Bundle args = new Bundle();
-		args.putSerializable(BundleKeys.EVENT, event);
-		
-		BoschEventDetailsFragment boscheventDetailsFragment = new BoschEventDetailsFragment();
-		boscheventDetailsFragment.setArguments(args);
-		
-		selectNonDrawerItem(boscheventDetailsFragment, true);
-			
-	}
-
 	public void showBoschDialog(String msg) {
-		
 		View view = LayoutInflater.from(this).inflate(R.layout.bosch_element_alert_dialog, null);
 		
 		((TextView)view.findViewById(R.id.txtTitle)).setText(msg);
@@ -436,12 +463,23 @@ public class BoschMainActivity extends ActionBarActivity implements GeoUtilListe
 		}	
 		
 		dialog.show();
+	}
+
+	@Override
+	public void onEventSelected(Event event) {
+		
+		Bundle args = new Bundle();
+		args.putSerializable(BundleKeys.EVENT, event);
+		
+		BoschEventDetailsFragment boscheventDetailsFragment = new BoschEventDetailsFragment();
+		boscheventDetailsFragment.setArguments(args);
+		
+		selectNonDrawerItem(boscheventDetailsFragment, true);
 		
 	}
 
 	@Override
 	public void onArtistSelected(Artist artist) {
-
 		Bundle args = new Bundle();
 		args.putSerializable(BundleKeys.ARTIST, artist);
 
@@ -453,7 +491,13 @@ public class BoschMainActivity extends ActionBarActivity implements GeoUtilListe
 
 	@Override
 	public void onVenueSelected(Venue venue) {
+		Bundle args = new Bundle();
+		args.putSerializable(BundleKeys.VENUE, venue);
 		
+		BoschVenueDetailsFragment boschVenueDetailsFragment = new BoschVenueDetailsFragment();
+		boschVenueDetailsFragment.setArguments(args);
+		
+		selectNonDrawerItem(boschVenueDetailsFragment, true);		
 	}
 
 	@Override
@@ -461,4 +505,20 @@ public class BoschMainActivity extends ActionBarActivity implements GeoUtilListe
 		//This will get deprecated
 	}
 
+	/**
+	* All the fragments that needs to be notified when the car's stationary status gets changed
+	* must register themselves with this method in their onStart() or onResume() method.
+	*/
+	public void registerOnCarStationaryStatusChangedListener(
+		OnCarStationaryStatusChangedListener onCarStationaryStatusChangedListener) {
+		this.onCarStationaryStatusChangedListener = onCarStationaryStatusChangedListener;
+	}
+	
+	/**
+	 * All the fragments that have registered themselves with registerOnCarStationaryStatusChangedListener
+	 * method in their onStart() or onResume() method must unregister themselves in their onStop() method.
+	 */
+	public void unRegisterOnCarStationaryStatusChangedListener() {
+		this.onCarStationaryStatusChangedListener = null;
+	}
 }

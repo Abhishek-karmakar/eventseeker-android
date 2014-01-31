@@ -5,29 +5,36 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.asynctask.LoadDateWiseVenueEventsList;
 import com.wcities.eventseeker.bosch.adapter.BoschDateWiseEventListAdapter;
-import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.core.Artist;
+import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
+import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
+import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
+import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
-public class BoschArtistEventsFragment extends ListFragmentLoadableFromBackStack implements OnClickListener {
+public class BoschVenueEventsFragment extends ListFragmentLoadableFromBackStack implements OnClickListener, 
+	LoadItemsInBackgroundListener{
 
-	private Artist artist;
-	private BoschDateWiseEventListAdapter adapter;
+	private static final String TAG = BoschVenueEventsFragment.class.getName();
+
+	private Venue venue;
+
 	private DateWiseEventList dateWiseEvtList;
-
+	private DateWiseEventParentAdapterListener adapter;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		if (artist == null) {
-			artist = (Artist) getArguments().getSerializable(BundleKeys.ARTIST);
-		}
+		venue = (Venue) getArguments().getSerializable(BundleKeys.VENUE);
 	}
 	
 	@Override
@@ -46,26 +53,28 @@ public class BoschArtistEventsFragment extends ListFragmentLoadableFromBackStack
 		
 		if (dateWiseEvtList == null) {
 			dateWiseEvtList = new DateWiseEventList();
-			dateWiseEvtList.addEventListItems(artist.getEvents(), null);
+			dateWiseEvtList.addDummyItem();
+			
+	        adapter = new BoschDateWiseEventListAdapter(
+	        	((BoschMainActivity) FragmentUtil.getActivity(this)), dateWiseEvtList, null, this);
 
-			adapter = new BoschDateWiseEventListAdapter(FragmentUtil.getActivity(this), dateWiseEvtList, null, null);
+	        loadItemsInBackground();			
 		} else {
 			adapter.updateContext(FragmentUtil.getActivity(this));
 		}
 
-		setListAdapter(adapter);
-
-		getListView().setDivider(null);
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		
-		BoschMainActivity activity = (BoschMainActivity)FragmentUtil.getActivity(this);
-		activity.onFragmentResumed(this, AppConstants.INVALID_INDEX, getResources().getString(R.string.title_events));
+		setListAdapter((BaseAdapter)adapter);
+        getListView().setDivider(null);
 	}
 	
+	@Override
+	public void loadItemsInBackground() {
+		LoadDateWiseVenueEventsList loadEvents = new LoadDateWiseVenueEventsList(dateWiseEvtList, adapter, 
+			((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).getWcitiesId(), venue.getId());
+        adapter.setLoadDateWiseEvents(loadEvents);
+        AsyncTaskUtil.executeAsyncTask(loadEvents, true);
+	}
+
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {

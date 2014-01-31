@@ -72,14 +72,14 @@ public class BoschDrawerListFragment extends ListFragment {
 		TypedArray drawerListItemIcons = getResources().obtainTypedArray(R.array.bosch_navigation_drawer_item_icons);
 		
         for (int i = 0; i < drawerListItemTitles.length; i++) {
-			DrawerListItem drawerListItem = new DrawerListItem(drawerListItemTitles[i], drawerListItemIcons.getDrawable(i));
+			DrawerListItem drawerListItem = new DrawerListItem(drawerListItemTitles[i],
+				drawerListItemIcons.getDrawable(i));
 			drawerListItems.add(drawerListItem);
 		}
         drawerListItemIcons.recycle();
 	}
 	
 	private static class DrawerListAdapter extends BaseAdapter {
-		
 		private WeakReference<Activity> mainActivity;
 	    private LayoutInflater mInflater;
 	    private List<DrawerListItem> drawerListItems;
@@ -135,7 +135,6 @@ public class BoschDrawerListFragment extends ListFragment {
 	}
 	
 	private static class DrawerListItem {
-		
 		private String title;
 		private Drawable iconDrawable;
 		

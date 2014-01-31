@@ -35,6 +35,7 @@ public class AppConstants {
 	public static final float NOT_ALLOWED_LAT = 91;
 	public static final float NOT_ALLOWED_LON = 181;
 	public static double lat = NOT_ALLOWED_LAT, lon = NOT_ALLOWED_LON;
+	public static boolean IS_CAR_STATIONARY = true;
 	
 	public static final String INVALID_DISTANCE = "0.0";
 	

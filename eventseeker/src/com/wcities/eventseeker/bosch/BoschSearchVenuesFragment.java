@@ -1,10 +1,9 @@
-package com.wcities.eventseeker;
+package com.wcities.eventseeker.bosch;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
@@ -18,26 +17,23 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.wcities.eventseeker.SearchFragment.SearchFragmentChildListener;
+import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.adapter.AbstractVenueListAdapter;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.asynctask.LoadVenues;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.core.Address;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class SearchVenuesFragment extends ListFragment implements SearchFragmentChildListener, 
-	LoadItemsInBackgroundListener {
-	
-	private static final String TAG = SearchVenuesFragment.class.getName();
-	
-	protected static final String VENUE_LIST_FRAGMENT_TAG = "venueListFragment";
+public class BoschSearchVenuesFragment extends ListFragment implements LoadItemsInBackgroundListener, 
+	OnClickListener {
+
+	private static final String TAG = BoschSearchVenuesFragment.class.getName();
 
 	private String query;
 
@@ -47,16 +43,19 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 	
 	private List<Venue> venueList;
 	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = super.onCreateView(inflater, container, savedInstanceState);
+		super.onCreateView(inflater, container, savedInstanceState);
+		
+		View view = inflater.inflate(R.layout.bosch_common_list_layout, null);
 
-		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			int pad = getResources().getDimensionPixelSize(R.dimen.tab_bar_margin_fragment_custom_tabs);
-			v.setPadding(pad, 0, pad, 0);
-		}
-		return v;
+		view.findViewById(R.id.btnUp).setOnClickListener(this);
+		view.findViewById(R.id.btnDown).setOnClickListener(this);
+
+		return view;
 	}
+	
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -89,24 +88,19 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 		venueListAdapter.setLoadVenues(loadVenues);
         AsyncTaskUtil.executeAsyncTask(loadVenues, true, query);
 	}
-	
-	private void refresh(String newQuery) {
-		//Log.i(TAG, "refresh()");
-		// if user selection has changed then only reset the list
-		if (query == null || !query.equals(newQuery)) {
-			query = newQuery;
-			venueListAdapter.setVenuesAlreadyRequested(0);
-			venueListAdapter.setMoreDataAvailable(true);
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		
+			case R.id.btnUp:
+				getListView().smoothScrollByOffset(-1);
+				break;
 			
-			if (loadVenues != null && loadVenues.getStatus() != Status.FINISHED) {
-				loadVenues.cancel(true);
-			}
-			
-			venueList.clear();
-			venueList.add(null);
-			venueListAdapter.notifyDataSetChanged();
-			
-			loadItemsInBackground();
+			case R.id.btnDown:
+				getListView().smoothScrollByOffset(1);
+				break;
+				
 		}
 	}
 	
@@ -119,7 +113,6 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 	    
 	    @Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-	    	
 			if (venueList.get(position) == null) {
 				if (convertView == null || !convertView.getTag().equals(TAG_PROGRESS_INDICATOR)) {
 					convertView = mInflater.inflate(R.layout.list_progress_bar, null);
@@ -142,30 +135,21 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 					return convertView;
 				
 				} else if (convertView == null || !convertView.getTag().equals(TAG_CONTENT)) {
-					convertView = mInflater.inflate(R.layout.fragment_discover_by_category_list_item_evt, null);
+					convertView = mInflater.inflate(R.layout.bosch_venue_list_item, null);
 					convertView.setTag(TAG_CONTENT);
-					convertView.findViewById(R.id.imgEvtTime).setVisibility(View.INVISIBLE);
-					convertView.findViewById(R.id.txtEvtTime).setVisibility(View.INVISIBLE);
-					convertView.findViewById(R.id.txtEvtTimeAMPM).setVisibility(View.INVISIBLE);
 				}
-				
-				((TextView)convertView.findViewById(R.id.txtEvtTitle)).setText(venue.getName());
-				
-				Address address = venue.getAddress();
-				((TextView)convertView.findViewById(R.id.txtEvtLocation)).setText(address.getCity() + ", " 
-						+ address.getCountry().getName());
+
+				((TextView) convertView.findViewById(R.id.txtVenueName)).setText(venue.getName());
 				
 				String key = venue.getKey(ImgResolution.LOW);
 				Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
-				
 				if (bitmap != null) {
-			        ((ImageView)convertView.findViewById(R.id.imgEvent)).setImageBitmap(bitmap);
-
-				} else {
-			    	ImageView imgVenue = (ImageView)convertView.findViewById(R.id.imgEvent); 
+			        ((ImageView)convertView.findViewById(R.id.imgVenue)).setImageBitmap(bitmap);
+			        
+			    } else {
+			    	ImageView imgVenue = ((ImageView)convertView.findViewById(R.id.imgVenue));
 			        imgVenue.setImageBitmap(null);
 			        
-			        //Log.i(TAG, "url = " + venue.getMobiResImgUrl());
 			        AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
 			        asyncLoadImg.loadImg(imgVenue, ImgResolution.LOW, adapterView, position, venue);
 			    }
@@ -181,10 +165,5 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 			
 			return convertView;
 		}
-	}
-
-	@Override
-	public void onQueryTextSubmit(String query) {
-		refresh(query);
 	}
 }
