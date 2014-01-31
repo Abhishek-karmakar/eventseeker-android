@@ -59,7 +59,6 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//Log.d(TAG, "onCreate()");
 		
 		if (!MySpinServerSDK.sharedInstance().isConnected()) {
 			finish();
@@ -126,7 +125,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	    switch (position) {
 	    
 		case INDEX_NAV_ITEM_HOME:
-			PlanTravelFragment planTravelFragment = new PlanTravelFragment();
+			BoschPlanTravelFragment planTravelFragment = new BoschPlanTravelFragment();
 			replaceContentFrameByFragment(planTravelFragment, false);
 			break;
 			
@@ -329,25 +328,6 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		}
 		
 	}
-
-	/*@Override
-	public void onAddressSearchCompleted(String strAddress) {}
-
-	@Override
-	public void onLatlngSearchCompleted(Address address) {}
-
-	@Override
-	public void onCitySearchCompleted(String city) {
-		// Log.d(TAG, "onCitySearchCompleted");
-		if (BoschDiscoverFragment.class.getSimpleName().equals(currentContentFragmentTag) && 
-				city != null && city.length() != 0) {
-			//currentCityName = city;
-			
-		} else if (BoschDiscoverByCategoryFragment.class.getSimpleName().equals(currentContentFragmentTag) && 
-				city != null && city.length() != 0) {
-			//currentCityName = city;
-		}
-	}*/
 
 	@Override
 	public void onEventSelected(Event event) {

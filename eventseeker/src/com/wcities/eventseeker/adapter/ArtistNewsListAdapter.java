@@ -38,7 +38,6 @@ import com.wcities.eventseeker.util.ConversionUtil;
 public class ArtistNewsListAdapter extends BaseAdapter {
 	
 	private static final String TAG = ArtistNewsListAdapter.class.getSimpleName();
-	private static final String TAG_PROGRESS_INDICATOR = "progressIndicator";
 	private int IMG_MARGIN_B, pad;
 	
 	private Context mContext;
@@ -115,7 +114,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 				((item instanceof List) && ((List<ArtistNewsListItem>)item).get(0) == null)) {
 			if (convertView == null || convertView.getTag() instanceof ArtistNewsItemViewHolder) {
 				convertView = mInflater.inflate(R.layout.list_progress_bar, null);
-				convertView.setTag(TAG_PROGRESS_INDICATOR);
+				convertView.setTag(AppConstants.TAG_PROGRESS_INDICATOR);
 				convertView.setBackgroundColor(mContext.getResources().getColor(R.color.root_lnr_layout_bg_artists_news_list_item));
 			}
 			

@@ -18,8 +18,8 @@ import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.adapter.DateWiseMyEventListAdapter;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.app.EventSeekr;
-import com.wcities.eventseeker.asynctask.LoadDateWiseMyEvents;
-import com.wcities.eventseeker.asynctask.LoadDateWiseMyEvents.MyEventsLoadedListener;
+import com.wcities.eventseeker.asynctask.LoadMyEvents;
+import com.wcities.eventseeker.asynctask.LoadMyEvents.MyEventsLoadedListener;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.interfaces.FbPublishListener;
@@ -38,7 +38,7 @@ public class MyEventsListFragment extends FbPublishEventListFragment implements 
 	private Type loadType;
 	private String wcitiesId;
 	
-	private LoadDateWiseMyEvents loadEvents;
+	private LoadMyEvents loadEvents;
 	private DateWiseMyEventListAdapter eventListAdapter;
 	private DateWiseEventList dateWiseEvtList;
 	
@@ -65,7 +65,6 @@ public class MyEventsListFragment extends FbPublishEventListFragment implements 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		//Log.d(TAG, "onActivityCreated()");
 		
 		if (dateWiseEvtList == null) {
 			Bundle args = getArguments();
@@ -100,7 +99,7 @@ public class MyEventsListFragment extends FbPublishEventListFragment implements 
 	@Override
 	public void loadItemsInBackground() {
 		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getActivity(this));
-		loadEvents = new LoadDateWiseMyEvents(dateWiseEvtList, eventListAdapter, wcitiesId, loadType, 
+		loadEvents = new LoadMyEvents(dateWiseEvtList, eventListAdapter, wcitiesId, loadType, 
 				latLon[0], latLon[1], this);
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);
         AsyncTaskUtil.executeAsyncTask(loadEvents, true);

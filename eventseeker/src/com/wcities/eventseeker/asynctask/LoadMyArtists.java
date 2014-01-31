@@ -134,7 +134,6 @@ public class LoadMyArtists extends AsyncTask<Void, Void, List<Artist>> {
 				
 			} else {
 				artistList.remove(artist);
-				//Log.d(TAG, "remove artist - " + artist.getName());
 				continue;
 			}
 			

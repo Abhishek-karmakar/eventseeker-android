@@ -6,7 +6,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,9 +29,6 @@ public class BoschArtistListAdapter<T> extends BaseAdapter implements ArtistAdap
 	
 	private static final String TAG = BoschArtistListAdapter.class.getSimpleName();
 
-	private static final String TAG_PROGRESS_INDICATOR = "progressIndicator";
-	public static final String TAG_CONTENT = "content";
-	
     private BitmapCache bitmapCache;
     private Context mContext;
     
@@ -60,9 +56,9 @@ public class BoschArtistListAdapter<T> extends BaseAdapter implements ArtistAdap
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (artistList.get(position) == null) {
-			if (convertView == null || !convertView.getTag().equals(TAG_PROGRESS_INDICATOR)) {
+			if (convertView == null || !convertView.getTag().equals(AppConstants.TAG_PROGRESS_INDICATOR)) {
 				convertView = LayoutInflater.from(mContext).inflate(R.layout.list_progress_bar, null);
-				convertView.setTag(TAG_PROGRESS_INDICATOR);
+				convertView.setTag(AppConstants.TAG_PROGRESS_INDICATOR);
 			}
 			
 			if ((loadArtists == null || loadArtists.getStatus() == Status.FINISHED) && isMoreDataAvailable) {
@@ -80,9 +76,9 @@ public class BoschArtistListAdapter<T> extends BaseAdapter implements ArtistAdap
 		
 				return convertView;
 			
-			} else if (convertView == null || !convertView.getTag().equals(TAG_CONTENT)) {
+			} else if (convertView == null || !convertView.getTag().equals(AppConstants.TAG_CONTENT)) {
 				convertView = LayoutInflater.from(mContext).inflate(R.layout.bosch_artists_list_item, null);
-				convertView.setTag(TAG_CONTENT);
+				convertView.setTag(AppConstants.TAG_CONTENT);
 			}
 			
 			((TextView)convertView.findViewById(R.id.txtArtistName)).setText(artist.getName());
