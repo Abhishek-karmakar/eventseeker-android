@@ -65,7 +65,7 @@
 	    <item name="android:textColor">@color/actionbar_title_color</item>
 	</style>
 	
-	<!-- Custom actionbar tabs style for landscape -->
+	<!-- Custom actionbar tabs style -->
 	<style name="CustomTabBar" parent="@android:style/Widget.Button">
         <item name="android:background">@drawable/tab_indicator_holo</item>
         <item name="android:textAppearance">@style/CustomTabBarTextAppearance</item>
@@ -75,22 +75,18 @@
         <item name="android:textStyle">normal</item>
     </style>
 	
-	<!-- ActionBar DropDown navigation style -->
-	<!-- <style name="Widget.EventSeekr.Spinner.DropDown.ActionBar" parent="Widget.Sherlock.Spinner.DropDown.ActionBar">
-	    Need to create 9 patch drawables as mentioned under bg_actionbar_dropdown_navigation_spinner.xml
-    	<item name="android:background">@drawable/bg_actionbar_dropdown_navigation_spinner</item>
-	</style> -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 	
-	<!-- ActionBar tabs text style -->
-	<!-- <style name="Widget.EventSeekr.ActionBar.TabText" parent="Widget.Sherlock.ActionBar.TabText" >
-    	<item name="android:textColor">@color/txt_same_as_action_bar</item>
-    	<item name="android:textSize">@dimen/action_bar_tab_txt_size</item>
-    	<item name="android:textStyle">normal</item>
-	</style> -->
-	
-	<!-- ActionBar tabbar style -->
-	<!-- <style name="Widget.EventSeekr.ActionBar.TabView" parent="Widget.Sherlock.ActionBar.TabView">
-        <item name="android:minHeight">@dimen/action_bar_ht</item>
-    </style> -->
+	<!-- Custom actionbar tabs style for bosch -->
+	<style name="CustomTabBarBosch" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/tab_indicator_holo_bosch</item>
+        <item name="android:textAppearance">@style/CustomTabBarTextAppearanceBosch</item>
+    </style>
+    
+	<style name="CustomTabBarTextAppearanceBosch" parent="@android:style/TextAppearance.Widget.TabWidget">
+        <item name="android:textStyle">normal</item>
+    </style>
+    
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 	
 </resources>

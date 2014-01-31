@@ -111,8 +111,7 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.d(TAG, "onCreate");
-		
+		//Log.d(TAG, "onCreate()");
 		setContentView(R.layout.activity_main);
 		
 		try {
@@ -134,7 +133,7 @@ public class MainActivity extends ActionBarActivity implements
 		isTabletAndInLandscapeMode = eventSeekr.isTabletAndInLandscapeMode();
 		isTablet = eventSeekr.isTablet();
 		
-		Log.d(TAG, "isTablet : " + isTablet); 
+		//Log.d(TAG, "isTablet : " + isTablet); 
 		/**
 		 * if user moves away quickly to any other screen resulting in fragment
 		 * replacement & if we are adding this fragment into backstack, then

@@ -45,7 +45,7 @@ import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackStack implements OnClickListener, 
-AsyncLoadImageListener, OnEventUpdatedListner {
+		AsyncLoadImageListener, OnEventUpdatedListner {
 
 	private static final String TAG = BoschEventDetailsFragment.class.getName();
 	
@@ -106,7 +106,6 @@ AsyncLoadImageListener, OnEventUpdatedListner {
 		btnFollow.setOnClickListener(this);
 
 		return view;
-	
 	}
 	
 	@Override
@@ -115,34 +114,27 @@ AsyncLoadImageListener, OnEventUpdatedListner {
 		
 		if (!isEventLoading) {
 			updateScreen();
+			
 		} else {
 			prgDetails.setVisibility(View.VISIBLE);
 			lnrContent.setVisibility(View.INVISIBLE);
 		}
-		
 	}
 
 	@Override
 	public void onResume() {
-		super.onResume();
-		
-		BoschMainActivity activity = (BoschMainActivity)FragmentUtil.getActivity(this);
-		activity.onFragmentResumed(this, AppConstants.INVALID_INDEX, event.getName());
-	
+		super.onResume(AppConstants.INVALID_INDEX, event.getName());
 	}
 
 	private void updateScreen() {
-
 		updateEventImg();
 		updateFollowBtn();
 		updateArtistsBtn();
 		updateDistance();
 		updateVenueNameAndDate();
-		
 	}
 
 	private void updateVenueNameAndDate() {
-		
 		if (event.getSchedule() != null) {
 
 			Schedule schedule = event.getSchedule();
@@ -159,9 +151,7 @@ AsyncLoadImageListener, OnEventUpdatedListner {
 			} else {
 				txtDate.setVisibility(View.GONE);
 			}
-
 		}
-		
 	}
 
 	private void updateDistance() {
@@ -296,7 +286,6 @@ AsyncLoadImageListener, OnEventUpdatedListner {
 		default:
 			break;
 		}
-		
 	}
 
 	@Override

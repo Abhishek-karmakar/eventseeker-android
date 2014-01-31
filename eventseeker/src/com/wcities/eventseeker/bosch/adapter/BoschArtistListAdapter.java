@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,15 +22,16 @@ import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
+import com.wcities.eventseeker.interfaces.ArtistAdapterListener;
 import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 
-public class BoschArtistListAdapter<T> extends BaseAdapter {
+public class BoschArtistListAdapter<T> extends BaseAdapter implements ArtistAdapterListener<T> {
 	
-	private static final String TAG = BoschArtistListAdapter.class.getName();
+	private static final String TAG = BoschArtistListAdapter.class.getSimpleName();
 
 	private static final String TAG_PROGRESS_INDICATOR = "progressIndicator";
-	private static final String TAG_CONTENT = "content";
+	public static final String TAG_CONTENT = "content";
 	
     private BitmapCache bitmapCache;
     private Context mContext;
@@ -50,14 +52,11 @@ public class BoschArtistListAdapter<T> extends BaseAdapter {
         this.mListener = listener;
     }
     
+    @Override
     public void updateContext(Context context) {
     	mContext = context;
 	}
     
-    public void setLoadArtists(AsyncTask<T, Void, List<Artist>> loadArtists) {
-		this.loadArtists = loadArtists;
-	}
-
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (artistList.get(position) == null) {
@@ -94,7 +93,6 @@ public class BoschArtistListAdapter<T> extends BaseAdapter {
 		        ((ImageView)convertView.findViewById(R.id.imgArtist)).setImageBitmap(bitmap);
 		        
 		    } else {
-		    	//Log.d(TAG, "bitmap is null, low res url = " + artist.getLowResImgUrl());
 		    	ImageView imgArtist = (ImageView)convertView.findViewById(R.id.imgArtist); 
 		        imgArtist.setImageBitmap(null);
 
@@ -130,15 +128,23 @@ public class BoschArtistListAdapter<T> extends BaseAdapter {
 		return artistList.size();
 	}
 	
+	@Override
 	public int getArtistsAlreadyRequested() {
 		return artistsAlreadyRequested;
 	}
 
+	@Override
 	public void setArtistsAlreadyRequested(int artistsAlreadyRequested) {
 		this.artistsAlreadyRequested = artistsAlreadyRequested;
 	}
 
+	@Override
 	public void setMoreDataAvailable(boolean isMoreDataAvailable) {
 		this.isMoreDataAvailable = isMoreDataAvailable;
+	}
+
+	@Override
+	public void setLoadArtists(AsyncTask<T, Void, List<Artist>> loadArtists) {
+		this.loadArtists = loadArtists;
 	}
 }

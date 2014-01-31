@@ -109,8 +109,6 @@ public class BoschInfoFragment extends FragmentLoadableFromBackStack implements 
 
 	@Override
 	public void onResume() {
-		super.onResume();
-		
 		String title;
 		if (artist != null) {
 			title = artist.getName();
@@ -120,8 +118,7 @@ public class BoschInfoFragment extends FragmentLoadableFromBackStack implements 
 			title = venue.getName();
 		}
 		
-		BoschMainActivity activity = (BoschMainActivity)FragmentUtil.getActivity(this);
-		activity.onFragmentResumed(this, AppConstants.INVALID_INDEX, title);
+		super.onResume(AppConstants.INVALID_INDEX, title);
 	}
 	
 	@Override

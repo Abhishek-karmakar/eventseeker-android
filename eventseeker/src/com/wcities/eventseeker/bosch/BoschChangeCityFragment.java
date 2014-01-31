@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.location.Address;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,17 +27,21 @@ import android.widget.Toast;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.CityApi;
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.core.CityPrefered;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
+import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.jsonparser.CityApiJSONParser;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.GeoUtil;
+import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
 
 public class BoschChangeCityFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
-	OnItemClickListener {
+		OnItemClickListener, GeoUtilListener {
 
-	private static final String TAG = BoschChangeCityFragment.class.getName();
+	private static final String TAG = BoschChangeCityFragment.class.getSimpleName();
 	
 	private EditText edtCity;
 	private View prgSearchCity;
@@ -44,7 +49,6 @@ public class BoschChangeCityFragment extends FragmentLoadableFromBackStack imple
 	private CitiesAdapter adapter;
 
 	private double latitiude, longitude;
-	private String cityName;
 
 	private ListView lstCity;
 
@@ -89,14 +93,12 @@ public class BoschChangeCityFragment extends FragmentLoadableFromBackStack imple
 	
 	@Override
 	public void onResume() {
-		super.onResume();
-		setCityName(((BoschMainActivity) FragmentUtil.getActivity(this)).getCityName());
+		String cityName = GeoUtil.getCityName(this, (EventSeekr) FragmentUtil.getActivity(this).getApplication());
+		super.onResume(BoschMainActivity.INDEX_NAV_ITEM_CHANGE_CITY, buildTitle(cityName));
 	}
 
-	private void setCityName(String cityName) {
-		BoschMainActivity activity = (BoschMainActivity) FragmentUtil.getActivity(this);
-		activity.onFragmentResumed(this, BoschMainActivity.INDEX_NAV_ITEM_CHANGE_CITY ,
-				cityName + " - Change City");		
+	private String buildTitle(String cityName) {
+		return (cityName == null || cityName.length() == 0) ? "Change City" : cityName + " - Change City";
 	}
 
 	@Override
@@ -106,8 +108,9 @@ public class BoschChangeCityFragment extends FragmentLoadableFromBackStack imple
 		latitiude = cityPrefered.getLatitude();
 		longitude = cityPrefered.getLongitude();
 		
-		cityName = cityPrefered.getCityName();
-		setCityName(cityName);
+		String cityName = cityPrefered.getCityName();
+		((BoschMainActivity)FragmentUtil.getActivity(this)).updateTitleForFragment(buildTitle(cityName), 
+				getClass().getSimpleName());
 		
 		DeviceUtil.updateLatLon(cityPrefered.getLatitude(), cityPrefered.getLongitude());
 		
@@ -292,6 +295,24 @@ public class BoschChangeCityFragment extends FragmentLoadableFromBackStack imple
 			this.lstCities = lstCities;
 		}
 
+	}
+
+	@Override
+	public void onAddressSearchCompleted(String strAddress) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onCitySearchCompleted(String city) {
+		if (city != null && city.length() != 0) {
+			((BoschMainActivity)FragmentUtil.getActivity(this)).updateTitleForFragment(buildTitle(city), 
+					getClass().getSimpleName());
+		}
+	}
+
+	@Override
+	public void onLatlngSearchCompleted(Address address) {
+		// TODO Auto-generated method stub
 	}
 
 }

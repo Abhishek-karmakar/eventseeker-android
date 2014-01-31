@@ -6,6 +6,7 @@ import java.util.List;
 import android.os.Bundle;
 
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.bosch.adapter.BoschArtistListAdapter;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -13,6 +14,7 @@ import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.GeoUtil;
 
 public class BoschEventArtistsFragment extends ListFragmentLoadableFromBackStack {
 
@@ -58,10 +60,7 @@ public class BoschEventArtistsFragment extends ListFragmentLoadableFromBackStack
 	
 	@Override
 	public void onResume() {
-		super.onResume();
-		BoschMainActivity activity = (BoschMainActivity)FragmentUtil.getActivity(this);
-		String title = activity.getResources().getString(R.string.title_artists);
-		activity.onFragmentResumed(this, AppConstants.INVALID_INDEX, title);
+		super.onResume(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_artists));
 	}
 	
 }
