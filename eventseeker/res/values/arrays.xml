@@ -72,11 +72,11 @@
 	</string-array>
 	
     <array name="bosch_navigation_drawer_item_icons">
-        <item>@drawable/discover</item>
-	  	<item>@drawable/changelocation</item>
-	  	<item>@drawable/search</item>
-	  	<item>@drawable/favorites</item>
-	  	<item>@drawable/info</item>
+        <item>@drawable/slctr_btn_side_nav_home</item>
+	  	<item>@drawable/slctr_btn_side_nav_change_city</item>
+	  	<item>@drawable/slctr_btn_side_nav_search</item>
+	  	<item>@drawable/slctr_btn_side_nav_favorites</item>
+	  	<item>@drawable/slctr_btn_side_nav_settings</item>
     </array>
     <!-- ends for bosch -->
     

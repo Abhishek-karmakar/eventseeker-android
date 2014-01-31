@@ -1,17 +1,10 @@
 package com.wcities.eventseeker;
 
-import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.content.res.Configuration;
-import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -22,15 +15,11 @@ import android.view.ViewGroup;
 
 import com.wcities.eventseeker.SearchFragment.SearchFragmentChildListener;
 import com.wcities.eventseeker.adapter.ArtistListAdapter;
-import com.wcities.eventseeker.api.Api;
-import com.wcities.eventseeker.api.ArtistApi;
-import com.wcities.eventseeker.api.ArtistApi.Method;
-import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.asynctask.LoadArtists;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
-import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
@@ -38,8 +27,6 @@ public class SearchArtistsFragment extends ListFragment implements SearchFragmen
 
 	private static final String TAG = SearchArtistsFragment.class.getName();
 
-	private static final int ARTISTS_LIMIT = 10;
-	
 	private String query;
 	private LoadArtists loadArtists;
 	private ArtistListAdapter<String> artistListAdapter;
@@ -117,68 +104,6 @@ public class SearchArtistsFragment extends ListFragment implements SearchFragmen
 			loadItemsInBackground();
 		}
 	}
-	
-	private static class LoadArtists extends AsyncTask<String, Void, List<Artist>> {
-		
-		private List<Artist> artistList;
-		private ArtistListAdapter<String> artistListAdapter;
-		
-		public LoadArtists(List<Artist> artistList, ArtistListAdapter<String> artistListAdapter) {
-			this.artistList = artistList;
-			this.artistListAdapter = artistListAdapter;
-		}
-
-		@Override
-		protected List<Artist> doInBackground(String... params) {
-			List<Artist> tmpArtists = new ArrayList<Artist>();
-			ArtistApi artistApi = new ArtistApi(Api.OAUTH_TOKEN);
-			artistApi.setLimit(ARTISTS_LIMIT);
-			artistApi.setAlreadyRequested(artistListAdapter.getArtistsAlreadyRequested());
-			artistApi.setMethod(Method.artistSearch);
-
-			try {
-				artistApi.setArtist(URLEncoder.encode(params[0], AppConstants.CHARSET_NAME));
-
-				JSONObject jsonObject = artistApi.getArtists();
-				ArtistApiJSONParser jsonParser = new ArtistApiJSONParser();
-				
-				tmpArtists = jsonParser.getArtistList(jsonObject);
-
-			} catch (ClientProtocolException e) {
-				e.printStackTrace();
-				
-			} catch (IOException e) {
-				e.printStackTrace();
-				
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-
-			return tmpArtists;
-		}
-		
-		@Override
-		protected void onPostExecute(List<Artist> tmpArtists) {
-			if (!tmpArtists.isEmpty()) {
-				artistList.addAll(artistList.size() - 1, tmpArtists);
-				artistListAdapter.setArtistsAlreadyRequested(artistListAdapter.getArtistsAlreadyRequested() 
-						+ tmpArtists.size());
-				
-				if (tmpArtists.size() < ARTISTS_LIMIT) {
-					artistListAdapter.setMoreDataAvailable(false);
-					artistList.remove(artistList.size() - 1);
-				}
-				
-			} else {
-				artistListAdapter.setMoreDataAvailable(false);
-				artistList.remove(artistList.size() - 1);
-				if(artistList.isEmpty()) {
-					artistList.add(new Artist(AppConstants.INVALID_ID, null));
-				}
-			}
-			artistListAdapter.notifyDataSetChanged();
-		}    	
-    }
 	
 	@Override
 	public void onQueryTextSubmit(String query) {

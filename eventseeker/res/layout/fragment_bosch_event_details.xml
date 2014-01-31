@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/b_rlt_root_layout_pad_fragment_bosch_all_details" >
-    
+
     <ProgressBar
         android:id="@+id/prgDetails"
         android:layout_width="wrap_content"
@@ -13,7 +13,7 @@
         android:layout_centerInParent="true"
         android:visibility="gone" />
 
-	<LinearLayout
+    <LinearLayout
         android:id="@+id/lnrContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -107,22 +107,22 @@
             android:orientation="vertical" >
 
             <LinearLayout
-                android:id="@+id/lnrBottomBtns"
+                android:id="@+id/lnrTopBtns"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="horizontal" >
 
                 <Button
-                    android:id="@+id/btnInfo"
+                    android:id="@+id/btnMap"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/bg_btn_fragment_bosch_all_details"
                     android:drawablePadding="@dimen/b_btn_drw_pad_fragment_bosch_all_details"
-                    android:drawableTop="@drawable/slctr_btn_info"
+                    android:drawableTop="@drawable/slctr_btn_map"
                     android:padding="@dimen/b_btn_pad_fragment_bosch_all_details"
-                    android:text="Info"
+                    android:text="Navigate"
                     android:textColor="@color/slctr_theme_blue_on_white_off"
                     android:textSize="@dimen/b_btn_txt_size_fragment_bosch_all_details" />
 
@@ -149,28 +149,11 @@
                 android:layout_height="@dimen/b_v_dummy_inner_w_h_fragment_bosch_all_details" />
 
             <LinearLayout
-                android:id="@+id/lnrTopBtns"
+                android:id="@+id/lnrBottomBtns"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="horizontal" >
-
-                <Button
-                    android:id="@+id/btnMap"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_btn_fragment_bosch_all_details"
-                    android:drawablePadding="@dimen/b_btn_drw_pad_fragment_bosch_all_details"
-                    android:drawableTop="@drawable/slctr_btn_map"
-                    android:padding="@dimen/b_btn_pad_fragment_bosch_all_details"
-                    android:text="Navigate"
-                    android:textColor="@color/slctr_theme_blue_on_white_off"
-                    android:textSize="@dimen/b_btn_txt_size_fragment_bosch_all_details" />
-
-                <View
-                    android:layout_width="@dimen/b_v_dummy_inner_w_h_fragment_bosch_all_details"
-                    android:layout_height="match_parent" />
 
                 <Button
                     android:id="@+id/btnCall"
@@ -184,6 +167,41 @@
                     android:text="Call"
                     android:textColor="@color/slctr_theme_blue_on_white_off"
                     android:textSize="@dimen/b_btn_txt_size_fragment_bosch_all_details" />
+
+                <View
+                    android:layout_width="@dimen/b_v_dummy_inner_w_h_fragment_bosch_all_details"
+                    android:layout_height="match_parent" />
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" >
+
+                    <Button
+                        android:id="@+id/btnArtists2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_btn_fragment_bosch_all_details"
+                        android:drawablePadding="@dimen/b_btn_drw_pad_fragment_bosch_all_details"
+                        android:drawableTop="@drawable/slctr_btn_artists"
+                        android:padding="@dimen/b_btn_pad_fragment_bosch_all_details"
+                        android:text="Artists"
+                        android:textColor="@color/slctr_theme_blue_on_white_off"
+                        android:textSize="@dimen/b_btn_txt_size_fragment_bosch_all_details" />
+
+                    <Button
+                        android:id="@+id/btnInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_btn_fragment_bosch_all_details"
+                        android:drawablePadding="@dimen/b_btn_drw_pad_fragment_bosch_all_details"
+                        android:drawableTop="@drawable/slctr_btn_info"
+                        android:padding="@dimen/b_btn_pad_fragment_bosch_all_details"
+                        android:text="Info"
+                        android:textColor="@color/slctr_theme_blue_on_white_off"
+                        android:textSize="@dimen/b_btn_txt_size_fragment_bosch_all_details"
+                        android:visibility="gone" />
+                </RelativeLayout>
             </LinearLayout>
 
             <View

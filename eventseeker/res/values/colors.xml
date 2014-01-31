@@ -65,7 +65,7 @@
 	
 	<!-- starts for bosch -->
 	<color name="b_bg_navigation_drawer">#666</color>
-	<color name="b_lnr_layout_btns_txt_color_fragment_plan_travel">#0088ff</color>
+	<!-- <color name="b_lnr_layout_btns_txt_color_fragment_plan_travel">#0088ff</color> -->
 	<color name="b_txt_date_bg_bosch_fragment_discover_by_category_list_item_header">#ccc</color>
 	
 	<color name="eventseeker_bosch_theme_grey">#666666</color>

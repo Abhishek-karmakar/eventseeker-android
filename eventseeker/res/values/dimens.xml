@@ -450,13 +450,17 @@
 	<!-- activity_bosch_main.xml -->
     <dimen name="b_root_navigation_drawer_w_main">210dp</dimen>
     <!-- bosch_navigation_drawer_list_item.xml -->
-    <dimen name="b_rlt_layout_content_pad_vert_navigation_drawer_list_item">12dp</dimen>
+	<!--<dimen name="b_rlt_layout_content_pad_vert_navigation_drawer_list_item">12dp</dimen>
     <dimen name="b_rlt_layout_content_margin_l_navigation_drawer_list_item">10dp</dimen>
     <dimen name="b_txt_title_margin_l_navigation_drawer_list_item">10dp</dimen>
     <dimen name="b_txt_title_txt_size_navigation_drawer_list_item">18sp</dimen>
     <dimen name="b_divider_ht_navigation_drawer_list_item">1dp</dimen>
     <dimen name="b_divider_margin_l_navigation_drawer_list_item">10dp</dimen>
-    <dimen name="b_divider_margin_r_navigation_drawer_list_item">5dp</dimen>
+    <dimen name="b_divider_margin_r_navigation_drawer_list_item">5dp</dimen> -->
+    <dimen name="b_rlt_root_lyt_h_bosch_navigation_drawer_list_item">45dp</dimen>
+    <dimen name="b_txt_screen_title_pad_bosch_navigation_drawer_list_item">5dp</dimen>
+    <dimen name="b_v_divider_h_bosch_navigation_drawer_list_item">1dp</dimen>
+    <dimen name="b_v_divider_margin_l_r_bosch_navigation_drawer_list_item">10dp</dimen>
     <!-- bosch_actionbar_titleview.xml -->
     <dimen name="b_actionbar_root_rlt_layout_pad_hor_bosch_actionbar_titleview">10dp</dimen>
     <dimen name="b_txt_actionbar_title_txt_size_bosch_actionbar_titleview">16sp</dimen>
@@ -509,14 +513,13 @@
     <dimen name="b_lst_cities_pad_fragment_bosch_change_city">2dp</dimen>
     <dimen name="b_txt_size_fragment_bosch_change_city">11sp</dimen>
     <!-- fragment_bosch_change_city -->
-    <dimen name="b_lnr_search_lyt_h_fragment_change_city">50dp</dimen>
+    <dimen name="b_lnr_search_lyt_h_fragment_change_city">45dp</dimen>
     <dimen name="b_lnr_search_lyt_pad_fragment_change_city">10dp</dimen>
     <dimen name="edt_search_city_bg_edge_radius_fragment_change_city">10dp</dimen>
     <dimen name="b_edt_search_city_pad_l_r_fragment_change_city">10dp</dimen>
-    <dimen name="edt_search_city_stroke_h_fragment_change_city">2dp</dimen>
-    <dimen name="b_btn_margin_l_r_fragment_change_city">5dp</dimen>
+	<dimen name="b_btn_margin_l_r_fragment_change_city">5dp</dimen>
     <dimen name="b_btn_pad_l_r_fragment_change_city">10dp</dimen>
-    <dimen name="lst_cities_pad_fragment_change_city">2dp</dimen>
+    <dimen name="b_lst_cities_pad_fragment_change_city">2dp</dimen>
     <dimen name="b_txt_size_fragment_change_city">11sp</dimen>
     <!-- include_up_down_arrow_btn -->
     <dimen name="b_rlt_up_down_arrow_btn_pad_include_up_down_arrow_btn">5dp</dimen>
@@ -553,11 +556,14 @@
     <dimen name="b_btn_txt_size_fragment_bosch_all_details">12sp</dimen>
     <dimen name="b_btn_stroke_h_fragment_venue_details">3dp</dimen>
      <!-- bosch_element_alert_dialog -->
-    <dimen name="rlt_root_lyt_pad_bosch_element_alert_dialog">30dp</dimen>
-    <dimen name="txt_title_txt_size_bosch_element_alert_dialog">15sp</dimen>
+    <dimen name="b_rlt_root_lyt_pad_bosch_element_alert_dialog">30dp</dimen>
+    <dimen name="b_txt_title_txt_size_bosch_element_alert_dialog">15sp</dimen>
     <!-- item_lst_cities -->
-    <dimen name="txt_cities_margin_l_r_item_lst_cities">10dp</dimen>
-    <dimen name="txt_cities_drw_pad_item_lst_cities">@dimen/txt_cities_margin_l_r_item_lst_cities</dimen>
+    <dimen name="b_txt_cities_margin_l_r_item_lst_cities">10dp</dimen>
+    <dimen name="b_txt_cities_drw_pad_item_lst_cities">@dimen/b_txt_cities_margin_l_r_item_lst_cities</dimen>
+    <!-- fragment_plan_travel -->
+    <dimen name="b_btn_drw_pad_fragment_plan_travel">10dp</dimen>
+    <dimen name="b_txt_cities_drw_pad_item_lst_cities">@dimen/b_txt_cities_margin_l_r_item_lst_cities</dimen>
     <!-- ends for bosch -->
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 </resources>

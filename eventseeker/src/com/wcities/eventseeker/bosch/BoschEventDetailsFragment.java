@@ -28,6 +28,7 @@ import com.wcities.eventseeker.asynctask.AsyncLoadImg.AsyncLoadImageListener;
 import com.wcities.eventseeker.asynctask.LoadEventDetails;
 import com.wcities.eventseeker.asynctask.LoadEventDetails.OnEventUpdatedListner;
 import com.wcities.eventseeker.asynctask.UserTracker;
+import com.wcities.eventseeker.bosch.BoschMainActivity.OnCarStationaryStatusChangedListener;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
@@ -45,7 +46,7 @@ import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackStack implements OnClickListener, 
-		AsyncLoadImageListener, OnEventUpdatedListner {
+		AsyncLoadImageListener, OnEventUpdatedListner, OnCarStationaryStatusChangedListener {
 
 	private static final String TAG = BoschEventDetailsFragment.class.getName();
 	
@@ -59,7 +60,7 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 
 	private TextView txtDate, txtVenueName, txtDistance;
 
-	private Button btnFollow, btnArtists, btnCall, btnInfo, btnMap;
+	private Button btnFollow, btnArtists, btnArtists2, btnCall, btnInfo, btnMap;
 
 	private boolean isEventLoading;
 
@@ -75,6 +76,7 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 			AsyncTaskUtil.executeAsyncTask(new LoadEventDetails(this, this, event), true);
 		}
 
+		((BoschMainActivity) FragmentUtil.getActivity(this)).registerOnCarStationaryStatusChangedListener(this);
 	}
 	
 	@Override
@@ -99,6 +101,7 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 		btnMap = (Button) view.findViewById(R.id.btnMap);
 		btnFollow = (Button) view.findViewById(R.id.btnFollow);
 		btnArtists = (Button) view.findViewById(R.id.btnArtists);
+		btnArtists2 = (Button) view.findViewById(R.id.btnArtists2);
 		
 		btnCall.setOnClickListener(this);
 		btnInfo.setOnClickListener(this);
@@ -129,25 +132,21 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 	private void updateScreen() {
 		updateEventImg();
 		updateFollowBtn();
-		updateArtistsBtn();
+		updateArtistsAndInfoBtn();
 		updateDistance();
 		updateVenueNameAndDate();
 	}
 
 	private void updateVenueNameAndDate() {
 		if (event.getSchedule() != null) {
-
 			Schedule schedule = event.getSchedule();
-
 			txtVenueName.setText(schedule.getVenue().getName() + ", " 
 				+ schedule.getVenue().getAddress().getCity());
 
 			if (schedule.getDates() != null && schedule.getDates().get(0) != null) {
-
 				Date date = schedule.getDates().get(0).getStartDate();
 				SimpleDateFormat sdf = new SimpleDateFormat("EEEE MMMM d, h:mm a");
 				txtDate.setText(sdf.format(date));
-
 			} else {
 				txtDate.setVisibility(View.GONE);
 			}
@@ -167,13 +166,39 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 		
 		txtDistance.setText(distance + " m");
 	}
-	private void updateArtistsBtn() {
-		if (event.hasArtists()) {
+	private void updateArtistsAndInfoBtn() {
+		/*if (event.hasArtists()) {
 			btnArtists.setVisibility(View.VISIBLE);
 			btnArtists.setOnClickListener(this);
+			btnArtists2.setVisibility(View.VISIBLE);
+			btnArtists2.setOnClickListener(this);
 		} else {
 			btnArtists.setVisibility(View.INVISIBLE);			
-		}
+			btnArtists2.setVisibility(View.INVISIBLE);			
+		}*/
+		if (AppConstants.IS_CAR_STATIONARY) {
+			btnInfo.setVisibility(View.VISIBLE);
+			btnInfo.setOnClickListener(this);
+			
+			if (event.hasArtists()) {
+				btnArtists.setVisibility(View.VISIBLE);
+				btnArtists.setOnClickListener(this);
+			} else {
+				btnArtists.setVisibility(View.INVISIBLE);
+			}
+			btnArtists2.setVisibility(View.INVISIBLE);
+		} else {
+			btnInfo.setVisibility(View.GONE);
+			
+			if (event.hasArtists()) {
+				btnArtists2.setVisibility(View.VISIBLE);
+				btnArtists2.setOnClickListener(this);
+			} else {
+				btnArtists2.setVisibility(View.INVISIBLE);				
+			}
+			
+			btnArtists.setVisibility(View.INVISIBLE);
+		}		
 	}
 
 	private void updateFollowBtn() {
@@ -181,22 +206,17 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 	}
 
 	private void updateEventImg() {
-
 		if (event.doesValidImgUrlExist()) {
-			
 			String key = event.getKey(ImgResolution.LOW);
 	        BitmapCache bitmapCache = BitmapCache.getInstance();
 			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 
 			if (bitmap != null) {
-		    
 				imgItem.setImageBitmap(bitmap);
 				imgItem.setVisibility(View.VISIBLE);
 				
 		        prgImg.setVisibility(View.GONE);
-		    
 			} else {
-		    
 				imgItem.setImageBitmap(null);
 				imgItem.setVisibility(View.INVISIBLE);
 				
@@ -204,20 +224,17 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 		        asyncLoadImg.loadImg(imgItem, ImgResolution.LOW, event, this);
 		        
 		        prgImg.setVisibility(View.VISIBLE);
-		    
 			}
 		}
 	}
 
 	@Override
 	public void onClick(View v) {
-		
 		Bundle args;
 		
 		switch (v.getId()) {
 
 			case R.id.btnCall:
-				
 				Venue venue = event.getSchedule().getVenue();
 				
 				if (venue.getPhone() != null) {
@@ -230,10 +247,8 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 				}
 				
 				break;
-			
 			//TODO: Show FBLogin dialog if user hasn't signed in with facebook.
 			case R.id.btnFollow :
-				
 				String wcitiesId = ((EventSeekr) FragmentUtil.getActivity(this).getApplication()).getWcitiesId();
 				
 				if (wcitiesId != null) {
@@ -260,31 +275,28 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 				}
 				
 				break;
-			
 			case R.id.btnInfo :
-				
 				args = new Bundle();
 				args.putSerializable(BundleKeys.EVENT, event);
 				((ReplaceFragmentListener)FragmentUtil.getActivity(this))
 					.replaceByFragment(BoschInfoFragment.class.getSimpleName(), args);
 				
 				break;
- 
 			case R.id.btnMap :
+				args = new Bundle();
+				args.putSerializable(BundleKeys.VENUE, event.getSchedule().getVenue());
+				((ReplaceFragmentListener)FragmentUtil.getActivity(this))
+				.replaceByFragment(BoschNavigateFragment.class.getSimpleName(), args);				
 				
 				break;
-
 			case R.id.btnArtists :
-				
+			case R.id.btnArtists2 :
 				args = new Bundle();
 				args.putSerializable(BundleKeys.EVENT, event);
 				((ReplaceFragmentListener)FragmentUtil.getActivity(this))
 					.replaceByFragment(BoschEventArtistsFragment.class.getSimpleName(), args);				
 				
 				break;
-
-		default:
-			break;
 		}
 	}
 
@@ -348,4 +360,15 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 
 	}
 
+	@Override
+	public void onCarStationaryStatusChanged(boolean isStationary) {
+		updateArtistsAndInfoBtn();
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		((BoschMainActivity) FragmentUtil.getActivity(this))
+			.unRegisterOnCarStationaryStatusChangedListener();
+	}
 }

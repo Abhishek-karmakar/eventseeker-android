@@ -6,13 +6,19 @@
     android:layout_height="match_parent"
     android:padding="@dimen/b_rlt_root_layout_pad_fragment_bosch_all_details" >
 
+    <ProgressBar
+        android:id="@+id/prgDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/lnrContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:orientation="horizontal"
-        android:visibility="visible" >
+        android:orientation="horizontal" >
 
         <RelativeLayout
             android:id="@+id/rltDetails"
@@ -28,13 +34,15 @@
                 android:contentDescription="image event"
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_launcher"
+                android:visibility="invisible"
                 app:compressAsPerWidth="true" />
 
             <ProgressBar
-                android:id="@+id/prgDetails"
+                android:id="@+id/prgImg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true" />
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/txtVenueName"
@@ -80,6 +88,48 @@
             android:orientation="vertical" >
 
             <LinearLayout
+                android:id="@+id/lnrTopBtns"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/btnEvents"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_btn_fragment_bosch_all_details"
+                    android:drawablePadding="@dimen/b_btn_drw_pad_fragment_bosch_all_details"
+                    android:drawableTop="@drawable/slctr_btn_events"
+                    android:padding="@dimen/b_btn_pad_fragment_bosch_all_details"
+                    android:text="Events"
+                    android:textColor="@color/slctr_theme_blue_on_white_off"
+                    android:textSize="@dimen/b_btn_txt_size_fragment_bosch_all_details" />
+
+                <View
+                    android:layout_width="@dimen/b_v_dummy_inner_w_h_fragment_bosch_all_details"
+                    android:layout_height="match_parent" />
+
+                <Button
+                    android:id="@+id/btnCall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_btn_fragment_bosch_all_details"
+                    android:drawablePadding="@dimen/b_btn_drw_pad_fragment_bosch_all_details"
+                    android:drawableTop="@drawable/slctr_btn_phone"
+                    android:padding="@dimen/b_btn_pad_fragment_bosch_all_details"
+                    android:text="Call"
+                    android:textColor="@color/slctr_theme_blue_on_white_off"
+                    android:textSize="@dimen/b_btn_txt_size_fragment_bosch_all_details" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/b_v_dummy_inner_w_h_fragment_bosch_all_details" />
+
+            <LinearLayout
                 android:id="@+id/lnrBottomBtns"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -96,48 +146,6 @@
                     android:drawableTop="@drawable/slctr_btn_info"
                     android:padding="@dimen/b_btn_pad_fragment_bosch_all_details"
                     android:text="Info"
-                    android:textColor="@color/slctr_theme_blue_on_white_off"
-                    android:textSize="@dimen/b_btn_txt_size_fragment_bosch_all_details" />
-
-                <View
-                    android:layout_width="@dimen/b_v_dummy_inner_w_h_fragment_bosch_all_details"
-                    android:layout_height="match_parent" />
-
-                <Button
-                    android:id="@+id/btnEvents"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_btn_fragment_bosch_all_details"
-                    android:drawablePadding="@dimen/b_btn_drw_pad_fragment_bosch_all_details"
-                    android:drawableTop="@drawable/slctr_btn_events"
-                    android:padding="@dimen/b_btn_pad_fragment_bosch_all_details"
-                    android:text="Events"
-                    android:textColor="@color/slctr_theme_blue_on_white_off"
-                    android:textSize="@dimen/b_btn_txt_size_fragment_bosch_all_details" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/b_v_dummy_inner_w_h_fragment_bosch_all_details" />
-
-            <LinearLayout
-                android:id="@+id/lnrTopBtns"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal" >
-
-                <Button
-                    android:id="@+id/btnCall"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_btn_fragment_bosch_all_details"
-                    android:drawablePadding="@dimen/b_btn_drw_pad_fragment_bosch_all_details"
-                    android:drawableTop="@drawable/slctr_btn_phone"
-                    android:padding="@dimen/b_btn_pad_fragment_bosch_all_details"
-                    android:text="Call"
                     android:textColor="@color/slctr_theme_blue_on_white_off"
                     android:textSize="@dimen/b_btn_txt_size_fragment_bosch_all_details" />
 

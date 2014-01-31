@@ -35,34 +35,37 @@ import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschArtistDetailsFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
-AsyncLoadImageListener, OnArtistUpdatedListener {
+	AsyncLoadImageListener, OnArtistUpdatedListener {
 
 	private static final String TAG = BoschArtistDetailsFragment.class.getName();
-	
-	private Artist artist;
+
 	private Button btnFollow, btnInfo, btnEvents;
+	
 	private ProgressBar prgImg, prgDetails;
+	
 	private ResizableImageView imgItem;
-	private boolean isLoadingArtistDetails;
+	
 	private TextView txtName;
+	
 	private View lnrContent;
+
+	private Artist artist;
+
+	private boolean isLoadingArtistDetails;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		if (artist == null) {
 			artist = (Artist) getArguments().getSerializable(BundleKeys.ARTIST);
 			isLoadingArtistDetails = true;
 			AsyncTaskUtil.executeAsyncTask(new LoadArtistDetails(artist, this, this), true);
 		}
-		
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-		
 		View view = inflater.inflate(R.layout.fragment_bosch_artist_details, null);
 
 		lnrContent = view.findViewById(R.id.lnrContent);
@@ -74,38 +77,42 @@ AsyncLoadImageListener, OnArtistUpdatedListener {
 		
 		txtName= (TextView) view.findViewById(R.id.txtName);
 
-		btnEvents = (Button) view.findViewById(R.id.btnEvents);
 		btnInfo = (Button) view.findViewById(R.id.btnInfo);
 		btnFollow = (Button) view.findViewById(R.id.btnFollow);
-			
+		btnEvents = (Button) view.findViewById(R.id.btnEvents);
+
 		btnFollow.setOnClickListener(this);
 		btnInfo.setOnClickListener(this);
-		btnEvents.setOnClickListener(this);
 
 		return view;
-		
 	}
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		
-		if(!isLoadingArtistDetails) {
-			updateScreen();		
-		} else {
+		if(isLoadingArtistDetails) {
 			prgDetails.setVisibility(View.VISIBLE);
 			lnrContent.setVisibility(View.INVISIBLE);
+		} else {
+			updateScreen();		
 		}
-		
 	}
 	
 	private void updateScreen() {
-
 		txtName.setText(artist.getName());
 		
 		updateArtistImg();
 		updateFollowBtn();
-				
+		updateEventsBtn();
+	}
+
+	private void updateEventsBtn() {
+		if(artist.getEvents().size() > 0) {
+			btnEvents.setOnClickListener(this);
+			btnEvents.setVisibility(View.VISIBLE);
+		} else {			
+			btnEvents.setVisibility(View.INVISIBLE);
+		}
 	}
 
 	@Override
@@ -217,7 +224,6 @@ AsyncLoadImageListener, OnArtistUpdatedListener {
 
 	@Override
 	public void onArtistUpdated() {
-		
 		try {
 			/**
 			 * added code in try catch as some times when device gets disconnected when execution is in 
@@ -225,18 +231,12 @@ AsyncLoadImageListener, OnArtistUpdatedListener {
 			 */
 			isLoadingArtistDetails = false;
 			
-			if (isAdded()) {
-			
+				updateScreen();
+
 				prgDetails.setVisibility(View.GONE);
 				lnrContent.setVisibility(View.VISIBLE);
-				updateScreen();
-	
-			}
-			
 		} catch (Exception e) {
 			Log.e(TAG, "Error : " + e.toString() + " in onArtistUpdated()");
 		}
-		
 	}
-
 }

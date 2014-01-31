@@ -31,11 +31,8 @@ public class BoschPlanTravelFragment extends FragmentLoadableFromBackStack imple
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_bosch_plan_travel, null);
-		view.findViewById(R.id.imgDiscover).setOnClickListener(this);
 		view.findViewById(R.id.btnDiscover).setOnClickListener(this);
-		view.findViewById(R.id.imgFeatured).setOnClickListener(this);
 		view.findViewById(R.id.btnFeatured).setOnClickListener(this);
-		view.findViewById(R.id.imgSetting).setOnClickListener(this);
 		view.findViewById(R.id.btnSetting).setOnClickListener(this);
 		return view;
 	}
@@ -49,19 +46,19 @@ public class BoschPlanTravelFragment extends FragmentLoadableFromBackStack imple
 	public void onClick(View v) {
 		switch (v.getId()) {
 		
-		case R.id.imgDiscover:
+		//case R.id.imgDiscover:
 		case R.id.btnDiscover:
 			((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
 				BoschDiscoverFragment.class.getSimpleName(), null);
 			break;
 			
-		case R.id.imgFeatured:
+		//case R.id.imgFeatured:
 		case R.id.btnFeatured:
 			((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
 				BoschFeaturedEventsFragment.class.getSimpleName(), null);
 			break;
 			
-		case R.id.imgSetting:
+		//case R.id.imgSetting:
 		case R.id.btnSetting:
 			
 			break;

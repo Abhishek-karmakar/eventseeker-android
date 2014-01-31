@@ -54,7 +54,7 @@ public class BoschDateWiseEventListFragment extends ListFragment implements Load
 			dateWiseEvtList.addDummyItem();
 
 			eventListAdapter = new BoschDateWiseEventListAdapter(FragmentUtil.getActivity(this), dateWiseEvtList, 
-					null, this);
+				null, this);
 
 			loadItemsInBackground();
 

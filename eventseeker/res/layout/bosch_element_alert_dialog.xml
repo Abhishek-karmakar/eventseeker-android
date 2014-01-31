@@ -4,7 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@android:color/black"
-    android:padding="@dimen/rlt_root_lyt_pad_bosch_element_alert_dialog" >
+    android:padding="@dimen/b_rlt_root_lyt_pad_bosch_element_alert_dialog" >
 
     <TextView
         android:id="@+id/txtTitle"
@@ -15,6 +15,6 @@
         android:gravity="center"
         android:singleLine="true"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/txt_title_txt_size_bosch_element_alert_dialog" />
+        android:textSize="@dimen/b_txt_title_txt_size_bosch_element_alert_dialog" />
 
 </RelativeLayout>

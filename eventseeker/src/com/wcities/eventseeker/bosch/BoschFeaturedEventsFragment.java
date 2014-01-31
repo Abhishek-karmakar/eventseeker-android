@@ -42,7 +42,6 @@ public class BoschFeaturedEventsFragment extends ListFragmentLoadableFromBackSta
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-
 		View view = inflater.inflate(R.layout.bosch_common_list_layout, null);
 
 		prgbr = (ProgressBar) view.findViewById(R.id.prgbr);
@@ -58,7 +57,6 @@ public class BoschFeaturedEventsFragment extends ListFragmentLoadableFromBackSta
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		
 		isUILoading = false;
 		
 		if (isLoadingFeaturedEvents) {
@@ -69,7 +67,6 @@ public class BoschFeaturedEventsFragment extends ListFragmentLoadableFromBackSta
 		} else if (adapter != null) {
 			initailizeAdapter();
 		}
-		
 	}
 	
 	@Override
@@ -85,7 +82,6 @@ public class BoschFeaturedEventsFragment extends ListFragmentLoadableFromBackSta
 
 	@Override
 	public void onPostLoadingFeaturedEvents(List<Event> result) {
-		
 		isLoadingFeaturedEvents = false;
 		
 		try {
@@ -94,34 +90,28 @@ public class BoschFeaturedEventsFragment extends ListFragmentLoadableFromBackSta
 			 * between of below 'if' block than app gets crash due to null pointer.
 			 */
 			if (!isUILoading) {
-				
 				prgbr.setVisibility(View.GONE);
 				rltContent.setVisibility(View.VISIBLE);		
 				
 				eventList = result;
 				
 				initailizeAdapter();
-				
 			}
 			
 		} catch (Exception e) {
 			Log.e(TAG, "Error : " + e.toString() + " in onPostLoadingFeaturedEvents()");
 		}
-
 	}
 
 	private void initailizeAdapter() {
-		
 		adapter = new BoschEventListAdapter(FragmentUtil.getActivity(this), eventList, this);
 		setListAdapter(adapter);
 
 		getListView().setDivider(null);
-		
 	}
 
 	@Override
 	public void onClick(View v) {
-
 		switch (v.getId()) {
 		
 			case R.id.btnUp:
@@ -133,7 +123,5 @@ public class BoschFeaturedEventsFragment extends ListFragmentLoadableFromBackSta
 				break;
 				
 		}
-		
 	}
-
 }

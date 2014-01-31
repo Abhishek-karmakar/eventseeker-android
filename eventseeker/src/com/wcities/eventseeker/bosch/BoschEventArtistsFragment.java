@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -16,7 +20,7 @@ import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GeoUtil;
 
-public class BoschEventArtistsFragment extends ListFragmentLoadableFromBackStack {
+public class BoschEventArtistsFragment extends ListFragmentLoadableFromBackStack implements OnClickListener {
 
 	private Event event;
 	private List<Artist> artistList;
@@ -28,6 +32,15 @@ public class BoschEventArtistsFragment extends ListFragmentLoadableFromBackStack
 		event = (Event) getArguments().getSerializable(BundleKeys.EVENT);
 	}
 	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.bosch_common_list_layout, null);
+		
+        view.findViewById(R.id.btnUp).setOnClickListener(this);
+		view.findViewById(R.id.btnDown).setOnClickListener(this);
+		
+		return view;
+	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -61,6 +74,23 @@ public class BoschEventArtistsFragment extends ListFragmentLoadableFromBackStack
 	@Override
 	public void onResume() {
 		super.onResume(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_artists));
+	}
+	
+	@Override
+	public void onClick(View v) {
+
+		switch (v.getId()) {
+		
+			case R.id.btnUp:
+				getListView().smoothScrollByOffset(-1);
+				break;
+			
+			case R.id.btnDown:
+				getListView().smoothScrollByOffset(1);
+				break;
+				
+		}
+		
 	}
 	
 }

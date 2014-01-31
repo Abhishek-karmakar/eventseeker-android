@@ -103,6 +103,8 @@
     <string name="title_plan_travel">eventseeker | Plan your travel</string>
     <string name="title_artists">Artists</string>
     <string name="title_featured">Featured</string>
+    <string name="title_search">Search</string>
+    <string name="title_search">Search Results</string>
     <string name="title_events">Events</string>
     
     <!-- fragment_bosch_about_us -->
