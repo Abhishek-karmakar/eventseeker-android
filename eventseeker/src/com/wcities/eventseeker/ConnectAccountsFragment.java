@@ -317,7 +317,10 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     	                	Bundle bundle = new Bundle();
     	                	bundle.putString(BundleKeys.WCITIES_ID, user.getId());
     	                	((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
-    	                	.onServiceSelected(Service.Facebook, bundle, true);
+    	                		.onServiceSelected(Service.Facebook, bundle, true);
+    	                	EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(ConnectAccountsFragment.this)
+	    	                	.getApplication();
+	    	                eventSeekr.updateFbUserName(user.getUsername());
     	                }
     	            }
     	            

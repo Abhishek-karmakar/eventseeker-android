@@ -26,7 +26,7 @@ public class BoschSearchFragment extends FragmentLoadableFromBackStack implement
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.bosch_fragment_search, null);
+		View view = inflater.inflate(R.layout.fragment_bosch_search, null);
 		
 		view.findViewById(R.id.btnSearch).setOnClickListener(this);
 		edtSearch = (EditText) view.findViewById(R.id.edtSearch);

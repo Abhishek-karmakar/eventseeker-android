@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg.AsyncLoadImageListener;
+import com.wcities.eventseeker.bosch.BoschMainActivity.OnCarStationaryStatusChangedListener;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
@@ -25,7 +26,7 @@ import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschVenueDetailsFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
-	AsyncLoadImageListener {
+	AsyncLoadImageListener, OnCarStationaryStatusChangedListener {
 
 	public static final String TAG = BoschVenueDetailsFragment.class.getName();
 	
@@ -46,6 +47,8 @@ public class BoschVenueDetailsFragment extends FragmentLoadableFromBackStack imp
 		super.onCreate(savedInstanceState);
 
 		venue = (Venue) getArguments().getSerializable(BundleKeys.VENUE);
+		
+		((BoschMainActivity) FragmentUtil.getActivity(this)).registerOnCarStationaryStatusChangedListener(this);
 	}
 
 	@Override
@@ -65,7 +68,8 @@ public class BoschVenueDetailsFragment extends FragmentLoadableFromBackStack imp
 		txtAddress = (TextView) view.findViewById(R.id.txtAddress);
 		//txtDistance = (TextView) view.findViewById(R.id.txtDistance);
 
-		(btnInfo = (Button) view.findViewById(R.id.btnInfo)).setOnClickListener(this);
+		(btnInfo = (Button) view.findViewById(R.id.btnInfo)).setOnClickListener(this);		
+		updateInfoBtn();
 		
 		view.findViewById(R.id.btnEvents).setOnClickListener(this);
 		view.findViewById(R.id.btnCall).setOnClickListener(this);
@@ -73,6 +77,14 @@ public class BoschVenueDetailsFragment extends FragmentLoadableFromBackStack imp
 		return view;
 	}
 	
+	private void updateInfoBtn() {
+		if (AppConstants.IS_CAR_STATIONARY) {
+			btnInfo.setVisibility(View.VISIBLE);		
+		} else {
+			btnInfo.setVisibility(View.INVISIBLE);
+		}
+	}
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -154,5 +166,16 @@ public class BoschVenueDetailsFragment extends FragmentLoadableFromBackStack imp
 	public void onImageCouldNotBeLoaded() {
 		prgImg.setVisibility(View.GONE);
 		// lnrContent.setVisibility(View.VISIBLE);
+	}
+
+	@Override
+	public void onCarStationaryStatusChanged(boolean isStationary) {
+		updateInfoBtn();
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		((BoschMainActivity) FragmentUtil.getActivity(this)).unRegisterOnCarStationaryStatusChangedListener();
 	}
 }

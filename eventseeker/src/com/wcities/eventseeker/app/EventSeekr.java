@@ -39,6 +39,7 @@ public class EventSeekr extends Application {
 	private boolean isInLandscapeMode;
 
 	private String fbUserId;
+	private String fbUserName;
 	private String wcitiesId;
 
 	private boolean firstTimeLaunch;
@@ -268,6 +269,32 @@ public class EventSeekr extends Application {
 				AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
 		Editor editor = pref.edit();
 		editor.remove(SharedPrefKeys.FACEBOOK_USER_ID);
+		editor.commit();
+	}
+	
+	public String getFbUserName() {
+		if (fbUserName == null) {
+			SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+			fbUserName = pref.getString(SharedPrefKeys.FACEBOOK_USER_NAME, null);
+		}
+		return fbUserName;
+	}
+	
+	public void updateFbUserName(String fbUserName) {
+		this.fbUserName = fbUserName;
+		
+		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+		Editor editor = pref.edit();
+		editor.putString(SharedPrefKeys.FACEBOOK_USER_NAME, fbUserName);
+		editor.commit();
+	}
+	
+	public void removeFbUserName() {
+		this.fbUserName = null;
+
+		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+		Editor editor = pref.edit();
+		editor.remove(SharedPrefKeys.FACEBOOK_USER_NAME);
 		editor.commit();
 	}
 

@@ -358,6 +358,9 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		} if (fragmentTag.equals(BoschNavigateFragment.class.getSimpleName())) {
 			fragment = new BoschNavigateFragment();
 			
+		} if (fragmentTag.equals(BoschSettingsFragment.class.getSimpleName())) {
+			fragment = new BoschSettingsFragment();
+			
 		}
 	
 		if(fragment != null) {
@@ -392,10 +395,8 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		((TextView)view.findViewById(R.id.txtTitle)).setText(msg);
 
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-		Dialog dialog = alertDialog
-				.setCustomTitle(view)
-				.setCancelable(false)
-				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+		Dialog dialog = alertDialog.setCustomTitle(view).setCancelable(false)
+			.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				dialog.dismiss();
 			}
@@ -406,7 +407,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		} catch (MySpinException e) {
 			Log.e(TAG, "Error : " + e.toString());
 			e.printStackTrace();
-		}	
+		}
 		
 		dialog.show();
 	}

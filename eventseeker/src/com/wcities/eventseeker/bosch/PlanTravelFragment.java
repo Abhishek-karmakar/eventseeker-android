@@ -2,19 +2,15 @@ package com.wcities.eventseeker.bosch;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import com.wcities.eventseeker.R;
-import com.wcities.eventseeker.app.EventSeekr;
-import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
-import com.wcities.eventseeker.util.GeoUtil;
 
 public class PlanTravelFragment extends FragmentLoadableFromBackStack implements OnClickListener {
 	
@@ -63,7 +59,8 @@ public class PlanTravelFragment extends FragmentLoadableFromBackStack implements
 			
 		//case R.id.imgSetting:
 		case R.id.btnSetting:
-			
+			((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
+				BoschSettingsFragment.class.getSimpleName(), null);			
 			break;
 
 		default:
