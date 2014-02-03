@@ -43,8 +43,6 @@ public class BoschInfoFragment extends FragmentLoadableFromBackStack implements 
 		} else if (getArguments().containsKey(BundleKeys.VENUE)) {
 			venue = (Venue) getArguments().getSerializable(BundleKeys.VENUE);
 		}
-		
-		((BoschMainActivity) FragmentUtil.getActivity(this)).registerOnCarStationaryStatusChangedListener(this);
 	}
 	
 	@Override
@@ -117,12 +115,6 @@ public class BoschInfoFragment extends FragmentLoadableFromBackStack implements 
 		}
 		
 		super.onResume(AppConstants.INVALID_INDEX, title);
-	}
-	
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		((BoschMainActivity) FragmentUtil.getActivity(this)).unRegisterOnCarStationaryStatusChangedListener();
 	}
 	
 	private void updateDescriptionLines() {

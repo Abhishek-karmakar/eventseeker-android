@@ -47,8 +47,6 @@ public class BoschVenueDetailsFragment extends FragmentLoadableFromBackStack imp
 		super.onCreate(savedInstanceState);
 
 		venue = (Venue) getArguments().getSerializable(BundleKeys.VENUE);
-		
-		((BoschMainActivity) FragmentUtil.getActivity(this)).registerOnCarStationaryStatusChangedListener(this);
 	}
 
 	@Override
@@ -173,9 +171,4 @@ public class BoschVenueDetailsFragment extends FragmentLoadableFromBackStack imp
 		updateInfoBtn();
 	}
 	
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		((BoschMainActivity) FragmentUtil.getActivity(this)).unRegisterOnCarStationaryStatusChangedListener();
-	}
 }

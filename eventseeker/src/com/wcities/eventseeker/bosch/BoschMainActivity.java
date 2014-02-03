@@ -57,9 +57,6 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 
 	private TextView txtActionBarTitle;
 
-	private OnCarStationaryStatusChangedListener onCarStationaryStatusChangedListener;
-	private OnDisplayModeChangedListener onDisplayModeChangedListener;
-	
 	public interface OnCarStationaryStatusChangedListener {
 		public void onCarStationaryStatusChanged(boolean isStationary);
 	}
@@ -127,18 +124,24 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 				@Override
 				public void onDayNightModeChanged(boolean isNightModeEnabled) {
 					AppConstants.IS_NIGHT_MODE_ENABLED = isNightModeEnabled;					
-					if (onDisplayModeChangedListener != null) {
-						onDisplayModeChangedListener.onDisplayModeChanged(isNightModeEnabled);
+
+					Fragment fragment = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
+					if (fragment instanceof OnDisplayModeChangedListener) {
+						((OnDisplayModeChangedListener) fragment).onDisplayModeChanged(isNightModeEnabled);
 					}
+					
 					Log.i(TAG, "IS_NIGHT_MODE_ENABLED : " + AppConstants.IS_NIGHT_MODE_ENABLED);					
 				}
 				
 				@Override
 				public void onCarStationaryStatusChanged(boolean isCarStationary) {
 					AppConstants.IS_CAR_STATIONARY = isCarStationary;					
-					if (onCarStationaryStatusChangedListener != null) {
-						onCarStationaryStatusChangedListener.onCarStationaryStatusChanged(isCarStationary);
+
+					Fragment fragment = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
+					if (fragment instanceof OnCarStationaryStatusChangedListener) {						
+						((OnCarStationaryStatusChangedListener) fragment).onCarStationaryStatusChanged(isCarStationary);
 					}
+					
 					Log.i(TAG, "IS_CAR_STATIONARY : " + AppConstants.IS_CAR_STATIONARY);
 				}
 				
@@ -442,23 +445,6 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	@Override
 	public void onFragmentResumed(Fragment fragment) {
 		//This will get deprecated
-	}
-
-	/**
-	* All the fragments that needs to be notified when the car's stationary status gets changed
-	* must register themselves with this method in their onStart() or onResume() method.
-	*/
-	public void registerOnCarStationaryStatusChangedListener(
-			OnCarStationaryStatusChangedListener onCarStationaryStatusChangedListener) {
-		this.onCarStationaryStatusChangedListener = onCarStationaryStatusChangedListener;
-	}
-	
-	/**
-	 * All the fragments that have registered themselves with registerOnCarStationaryStatusChangedListener
-	 * method in their onStart() or onResume() method must unregister themselves in their onStop() method.
-	 */
-	public void unRegisterOnCarStationaryStatusChangedListener() {
-		this.onCarStationaryStatusChangedListener = null;
 	}
 	
 	@Override

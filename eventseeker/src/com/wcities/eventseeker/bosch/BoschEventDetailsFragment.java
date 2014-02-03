@@ -75,8 +75,6 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 			isEventLoading = true;
 			AsyncTaskUtil.executeAsyncTask(new LoadEventDetails(this, this, event), true);
 		}
-
-		((BoschMainActivity) FragmentUtil.getActivity(this)).registerOnCarStationaryStatusChangedListener(this);
 	}
 	
 	@Override
@@ -355,9 +353,4 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 		updateArtistsAndInfoBtn();
 	}
 	
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		((BoschMainActivity) FragmentUtil.getActivity(this)).unRegisterOnCarStationaryStatusChangedListener();
-	}
 }

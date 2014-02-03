@@ -63,8 +63,6 @@ public class BoschArtistDetailsFragment extends FragmentLoadableFromBackStack im
 			isLoadingArtistDetails = true;
 			AsyncTaskUtil.executeAsyncTask(new LoadArtistDetails(artist, this, this), true);
 		}
-		
-		((BoschMainActivity) FragmentUtil.getActivity(this)).registerOnCarStationaryStatusChangedListener(this);
 	}
 	
 	@Override
@@ -258,9 +256,4 @@ public class BoschArtistDetailsFragment extends FragmentLoadableFromBackStack im
 		updateInfoBtn();
 	}
 
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		((BoschMainActivity) FragmentUtil.getActivity(this)).unRegisterOnCarStationaryStatusChangedListener();
-	}
 }
