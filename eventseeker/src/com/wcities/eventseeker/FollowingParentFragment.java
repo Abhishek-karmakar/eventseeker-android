@@ -19,7 +19,9 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.RecyclerListener;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -130,7 +132,14 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 			}
 		});
 		
-		absListView.setAdapter(myArtistListAdapter);
+		// this is because setAdapter method on 'absListView' is added from api level 11. 
+		// So, that 'absListView.setAdapter(myArtistListAdapter);' was throwing java.lang.NoSuchMethodError
+		if (absListView instanceof ListView) {
+			((ListView) absListView).setAdapter(myArtistListAdapter);
+		} else {			
+			((GridView) absListView).setAdapter(myArtistListAdapter);
+		}
+		
 		absListView.setScrollingCacheEnabled(false);
 		absListView.setFastScrollEnabled(true);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {

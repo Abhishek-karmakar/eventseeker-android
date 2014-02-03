@@ -30,8 +30,7 @@ import com.wcities.eventseeker.interfaces.VenueListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class BoschSearchVenuesFragment extends ListFragment implements LoadItemsInBackgroundListener, 
-	OnClickListener {
+public class BoschSearchVenuesFragment extends ListFragment implements LoadItemsInBackgroundListener, OnClickListener {
 
 	private static final String TAG = BoschSearchVenuesFragment.class.getName();
 
@@ -79,7 +78,6 @@ public class BoschSearchVenuesFragment extends ListFragment implements LoadItems
 
 		setListAdapter(venueListAdapter);
         getListView().setDivider(null);
-        getListView().setBackgroundResource(R.drawable.story_space);
 	}
 	
 	@Override

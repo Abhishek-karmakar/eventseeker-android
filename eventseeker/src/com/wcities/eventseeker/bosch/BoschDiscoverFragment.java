@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,10 +17,10 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Category;
@@ -31,8 +30,8 @@ import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GeoUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
 
-public class BoschDiscoverFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
-		GeoUtilListener {
+public class BoschDiscoverFragment extends FragmentLoadableFromBackStack implements OnClickListener, GeoUtilListener, 
+		OnDisplayModeChangedListener {
 	
 	private static final String TAG = BoschDiscoverFragment.class.getSimpleName();
 
@@ -206,5 +205,10 @@ public class BoschDiscoverFragment extends FragmentLoadableFromBackStack impleme
 	@Override
 	public void onLatlngSearchCompleted(Address address) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onDisplayModeChanged(boolean isNightModeEnabled) {
+		
 	}
 }

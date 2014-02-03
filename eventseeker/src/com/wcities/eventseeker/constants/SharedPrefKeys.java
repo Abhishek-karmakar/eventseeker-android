@@ -3,6 +3,7 @@ package com.wcities.eventseeker.constants;
 public class SharedPrefKeys {
 
 	public static final String FACEBOOK_USER_ID = "facebookUserId";
+	public static final String FACEBOOK_USER_NAME = "facebookUserName";
 	public static final String WCITIES_USER_ID = "wcitiesUserId";
 	public static final String GCM_REGISTRATION_ID = "gcmRegistrationId";
 	public static final String APP_VERSION_CODE = "appVersionCode";

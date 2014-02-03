@@ -20,6 +20,7 @@ import com.facebook.Settings;
 import com.facebook.model.GraphUser;
 import com.wcities.eventseeker.ConnectAccountsFragment.ConnectAccountsFragmentListener;
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.util.FbUtil;
@@ -177,6 +178,9 @@ public class FbLogInFragment extends Fragment {
 	    	                	bundle.putString(BundleKeys.WCITIES_ID, user.getId());
 	    	                	ConnectAccountsFragmentListener listener = (ConnectAccountsFragmentListener)FragmentUtil.getActivity(
 										FbLogInFragment.this);
+	    	                	EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(FbLogInFragment.this)
+	    	                		.getApplication();
+	    	                	eventSeekr.updateFbUserName(user.getUsername());
 	    	                	/**
 	    	                	 * While changing orientation quickly sometimes listener returned is null, 
 	    	                	 * hence the following check.

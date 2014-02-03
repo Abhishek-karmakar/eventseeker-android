@@ -4,6 +4,7 @@
     android:id="@+id/rltRootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:padding="@dimen/b_rlt_root_layout_pad_fragment_bosch_all_details" >
 
     <ProgressBar
@@ -78,23 +79,6 @@
                 android:orientation="horizontal" >
 
                 <Button
-                    android:id="@+id/btnInfo"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_btn_fragment_bosch_all_details"
-                    android:drawablePadding="@dimen/b_btn_drw_pad_fragment_bosch_all_details"
-                    android:drawableTop="@drawable/slctr_btn_info"
-                    android:padding="@dimen/b_btn_pad_fragment_bosch_all_details"
-                    android:text="Info"
-                    android:textColor="@color/slctr_theme_blue_on_white_off"
-                    android:textSize="@dimen/b_btn_txt_size_fragment_bosch_all_details" />
-
-                <View
-                    android:layout_width="@dimen/b_v_dummy_inner_w_h_fragment_bosch_all_details"
-                    android:layout_height="match_parent" />
-
-                <Button
                     android:id="@+id/btnFollow"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -104,6 +88,23 @@
                     android:drawableTop="@drawable/slctr_btn_follow"
                     android:padding="@dimen/b_btn_pad_fragment_bosch_all_details"
                     android:text="Follow"
+                    android:textColor="@color/slctr_theme_blue_on_white_off"
+                    android:textSize="@dimen/b_btn_txt_size_fragment_bosch_all_details" />
+
+                <View
+                    android:layout_width="@dimen/b_v_dummy_inner_w_h_fragment_bosch_all_details"
+                    android:layout_height="match_parent" />
+
+                <Button
+                    android:id="@+id/btnEvents"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_btn_fragment_bosch_all_details"
+                    android:drawablePadding="@dimen/b_btn_drw_pad_fragment_bosch_all_details"
+                    android:drawableTop="@drawable/slctr_btn_events"
+                    android:padding="@dimen/b_btn_pad_fragment_bosch_all_details"
+                    android:text="Events"
                     android:textColor="@color/slctr_theme_blue_on_white_off"
                     android:textSize="@dimen/b_btn_txt_size_fragment_bosch_all_details" />
             </LinearLayout>
@@ -120,15 +121,15 @@
                 android:orientation="horizontal" >
 
                 <Button
-                    android:id="@+id/btnEvents"
+                    android:id="@+id/btnInfo"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/bg_btn_fragment_bosch_all_details"
                     android:drawablePadding="@dimen/b_btn_drw_pad_fragment_bosch_all_details"
-                    android:drawableTop="@drawable/slctr_btn_events"
+                    android:drawableTop="@drawable/slctr_btn_info"
                     android:padding="@dimen/b_btn_pad_fragment_bosch_all_details"
-                    android:text="Events"
+                    android:text="Info"
                     android:textColor="@color/slctr_theme_blue_on_white_off"
                     android:textSize="@dimen/b_btn_txt_size_fragment_bosch_all_details" />
 

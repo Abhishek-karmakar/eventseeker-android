@@ -32,7 +32,7 @@ public class BoschSearchResultFragment extends FragmentLoadableFromBackStack imp
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View vTabBar = inflater.inflate(R.layout.fragment_custom_tabs, null);
+		View vTabBar = inflater.inflate(R.layout.fragment_bosch_custom_tabs, null);
 		
 		int orientation = getResources().getConfiguration().orientation;
 

@@ -49,6 +49,7 @@ public class FbUtil {
 	            session.closeAndClearTokenInformation();
 	            //clear your preferences if saved
 	            eventSeekr.removeFbUserId();
+	            eventSeekr.removeFbUserName();
 	        //}
 	        
 	    } else {
@@ -59,6 +60,7 @@ public class FbUtil {
 	        
 	        //clear your preferences if saved
 	        eventSeekr.removeFbUserId();
+	        eventSeekr.removeFbUserName();
 	    }
 	}
 	

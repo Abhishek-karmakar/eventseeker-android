@@ -107,6 +107,8 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 		btnInfo.setOnClickListener(this);
 		btnMap.setOnClickListener(this);
 		btnFollow.setOnClickListener(this);
+		btnArtists.setOnClickListener(this);
+		btnArtists2.setOnClickListener(this);
 
 		return view;
 	}
@@ -167,22 +169,11 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 	}
 	
 	private void updateArtistsAndInfoBtn() {
-		/*if (event.hasArtists()) {
-			btnArtists.setVisibility(View.VISIBLE);
-			btnArtists.setOnClickListener(this);
-			btnArtists2.setVisibility(View.VISIBLE);
-			btnArtists2.setOnClickListener(this);
-		} else {
-			btnArtists.setVisibility(View.INVISIBLE);			
-			btnArtists2.setVisibility(View.INVISIBLE);			
-		}*/
 		if (AppConstants.IS_CAR_STATIONARY) {
 			btnInfo.setVisibility(View.VISIBLE);
-			btnInfo.setOnClickListener(this);
 			
 			if (event.hasArtists()) {
 				btnArtists.setVisibility(View.VISIBLE);
-				btnArtists.setOnClickListener(this);
 			} else {
 				btnArtists.setVisibility(View.INVISIBLE);
 			}
@@ -192,7 +183,6 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 			
 			if (event.hasArtists()) {
 				btnArtists2.setVisibility(View.VISIBLE);
-				btnArtists2.setOnClickListener(this);
 			} else {
 				btnArtists2.setVisibility(View.INVISIBLE);				
 			}
@@ -368,7 +358,6 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		((BoschMainActivity) FragmentUtil.getActivity(this))
-			.unRegisterOnCarStationaryStatusChangedListener();
+		((BoschMainActivity) FragmentUtil.getActivity(this)).unRegisterOnCarStationaryStatusChangedListener();
 	}
 }

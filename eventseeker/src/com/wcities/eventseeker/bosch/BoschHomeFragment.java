@@ -65,7 +65,8 @@ public class BoschHomeFragment extends FragmentLoadableFromBackStack implements 
 			
 		//case R.id.imgSetting:
 		case R.id.btnSetting:
-			
+			((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
+				BoschSettingsFragment.class.getSimpleName(), null);			
 			break;
 
 		default:

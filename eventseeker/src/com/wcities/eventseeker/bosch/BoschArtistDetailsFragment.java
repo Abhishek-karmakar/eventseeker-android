@@ -21,6 +21,7 @@ import com.wcities.eventseeker.asynctask.AsyncLoadImg.AsyncLoadImageListener;
 import com.wcities.eventseeker.asynctask.LoadArtistDetails;
 import com.wcities.eventseeker.asynctask.LoadArtistDetails.OnArtistUpdatedListener;
 import com.wcities.eventseeker.asynctask.UserTracker;
+import com.wcities.eventseeker.bosch.BoschMainActivity.OnCarStationaryStatusChangedListener;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
@@ -35,7 +36,7 @@ import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschArtistDetailsFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
-	AsyncLoadImageListener, OnArtistUpdatedListener {
+	AsyncLoadImageListener, OnArtistUpdatedListener, OnCarStationaryStatusChangedListener {
 
 	private static final String TAG = BoschArtistDetailsFragment.class.getName();
 
@@ -56,11 +57,14 @@ public class BoschArtistDetailsFragment extends FragmentLoadableFromBackStack im
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		if (artist == null) {
 			artist = (Artist) getArguments().getSerializable(BundleKeys.ARTIST);
 			isLoadingArtistDetails = true;
 			AsyncTaskUtil.executeAsyncTask(new LoadArtistDetails(artist, this, this), true);
 		}
+		
+		((BoschMainActivity) FragmentUtil.getActivity(this)).registerOnCarStationaryStatusChangedListener(this);
 	}
 	
 	@Override
@@ -82,7 +86,8 @@ public class BoschArtistDetailsFragment extends FragmentLoadableFromBackStack im
 		btnEvents = (Button) view.findViewById(R.id.btnEvents);
 
 		btnFollow.setOnClickListener(this);
-		btnInfo.setOnClickListener(this);
+		btnEvents.setOnClickListener(this);
+		btnInfo.setOnClickListener(this);		
 
 		return view;
 	}
@@ -102,16 +107,24 @@ public class BoschArtistDetailsFragment extends FragmentLoadableFromBackStack im
 		txtName.setText(artist.getName());
 		
 		updateArtistImg();
+		updateInfoBtn();	
 		updateFollowBtn();
 		updateEventsBtn();
 	}
 
 	private void updateEventsBtn() {
 		if(artist.getEvents().size() > 0) {
-			btnEvents.setOnClickListener(this);
 			btnEvents.setVisibility(View.VISIBLE);
 		} else {			
 			btnEvents.setVisibility(View.INVISIBLE);
+		}
+	}
+	
+	private void updateInfoBtn() {
+		if (AppConstants.IS_CAR_STATIONARY) {
+			btnInfo.setVisibility(View.VISIBLE);		
+		} else {
+			btnInfo.setVisibility(View.INVISIBLE);
 		}
 	}
 
@@ -238,5 +251,16 @@ public class BoschArtistDetailsFragment extends FragmentLoadableFromBackStack im
 		} catch (Exception e) {
 			Log.e(TAG, "Error : " + e.toString() + " in onArtistUpdated()");
 		}
+	}
+	
+	@Override
+	public void onCarStationaryStatusChanged(boolean isStationary) {
+		updateInfoBtn();
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		((BoschMainActivity) FragmentUtil.getActivity(this)).unRegisterOnCarStationaryStatusChangedListener();
 	}
 }

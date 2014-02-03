@@ -1,0 +1,60 @@
+﻿Merge branch 'master' of https://github.com/wcities/eventseeker-android
+
+Conflicts:
+	eventseeker/src/com/wcities/eventseeker/bosch/BoschArtistEventsFragment.java
+	eventseeker/src/com/wcities/eventseeker/bosch/BoschEventDetailsFragment.java
+	eventseeker/src/com/wcities/eventseeker/bosch/BoschMainActivity.java
+#
+# It looks like you may be committing a merge.
+# If this is not correct, please remove the file
+#	.git/MERGE_HEAD
+# and try again.
+
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch and 'origin/master' have diverged,
+# and have 1 and 1 different commit each, respectively.
+#   (use "git pull" to merge the remote branch into yours)
+#
+# All conflicts fixed but you are still merging.
+#   (use "git commit" to conclude merge)
+#
+# Changes to be committed:
+#
+#	modified:   eventseeker/AndroidManifest.xml
+#	new file:   eventseeker/res/drawable/tab_indicator_holo_bosch.xml
+#	modified:   eventseeker/res/layout/activity_bosch_main.xml
+#	modified:   eventseeker/res/layout/bosch_common_list_layout.xml
+#	new file:   eventseeker/res/layout/fragment_bosch_custom_tabs.xml
+#	modified:   eventseeker/res/values/styles.xml
+#	modified:   eventseeker/src/com/wcities/eventseeker/ArtistInfoFragment.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/ArtistNewsListFragment.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/FollowingParentFragment.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/MainActivity.java
+#	new file:   eventseeker/src/com/wcities/eventseeker/adapter/MyArtistListAdapter.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/adapter/SwipeTabsAdapter.java
+#	new file:   eventseeker/src/com/wcities/eventseeker/asynctask/LoadMyArtists.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/BoschArtistDetailsFragment.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/BoschArtistEventsFragment.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/BoschChangeCityFragment.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/BoschDiscoverByCategoryFragment.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/BoschDiscoverFragment.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/BoschEventArtistsFragment.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/BoschEventDetailsFragment.java
+#	new file:   eventseeker/src/com/wcities/eventseeker/bosch/BoschFavoritesFragment.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/BoschFeaturedEventsFragment.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/BoschInfoFragment.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/BoschMainActivity.java
+#	new file:   eventseeker/src/com/wcities/eventseeker/bosch/BoschMyArtistsListFragment.java
+#	new file:   eventseeker/src/com/wcities/eventseeker/bosch/BoschMyEventsListFragment.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/PlanTravelFragment.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/adapter/BoschArtistListAdapter.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/custom/fragment/FbPublishEventLoadableFromBackStack.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/custom/fragment/FragmentLoadableFromBackStack.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/custom/fragment/ListFragmentLoadableFromBackStack.java
+#	new file:   eventseeker/src/com/wcities/eventseeker/interfaces/ArtistAdapterListener.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/util/GeoUtil.java
+# added search venue, venue details, venue event list and Map screen
+
