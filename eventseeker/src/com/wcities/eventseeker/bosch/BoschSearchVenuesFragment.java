@@ -100,7 +100,6 @@ public class BoschSearchVenuesFragment extends ListFragment implements LoadItems
 			case R.id.btnDown:
 				getListView().smoothScrollByOffset(1);
 				break;
-				
 		}
 	}
 	

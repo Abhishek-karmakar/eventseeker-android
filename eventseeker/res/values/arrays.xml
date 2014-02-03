@@ -62,13 +62,28 @@
 	  	<item>@drawable/placeholder</item>
     </array>
     
+    <string-array name="evt_category_titles">
+        <item>@string/evt_cat_concerts</item>
+        <item>@string/evt_cat_theater</item>
+	  	<item>@string/evt_cat_sports</item> 
+	  	<item>@string/evt_cat_arts_museums</item>
+	  	<item>@string/evt_cat_dance</item>
+	  	<item>@string/evt_cat_clubbing_nightlife</item>
+	  	<item>@string/evt_cat_educational</item>
+	  	<item>@string/evt_cat_festivals_fairs</item>
+	  	<item>@string/evt_cat_family</item>
+	  	<item>@string/evt_cat_community</item>
+		<item>@string/evt_cat_business_tech</item>
+	  	<item>@string/evt_cat_tours</item>
+	</string-array>
+    
     <!-- starts for bosch -->
     <string-array name="bosch_navigation_drawer_item_titles">
         <item>@string/bosch_navigation_drawer_item_home</item>
         <item>@string/bosch_navigation_drawer_item_change_city</item>
 	  	<item>@string/bosch_navigation_drawer_item_search</item>
 	  	<item>@string/bosch_navigation_drawer_item_favorites</item>
-	  	<item>@string/bosch_navigation_drawer_item_about_us</item>
+	  	<!-- <item>@string/bosch_navigation_drawer_item_about_us</item> -->
 	</string-array>
 	
     <array name="bosch_navigation_drawer_item_icons">
@@ -76,7 +91,7 @@
 	  	<item>@drawable/slctr_btn_side_nav_change_city</item>
 	  	<item>@drawable/slctr_btn_side_nav_search</item>
 	  	<item>@drawable/slctr_btn_side_nav_favorites</item>
-	  	<item>@drawable/slctr_btn_side_nav_settings</item>
+	  	<!-- <item>@drawable/slctr_btn_side_nav_settings</item> -->
     </array>
     <!-- ends for bosch -->
     

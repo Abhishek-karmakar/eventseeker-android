@@ -125,7 +125,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 				@Override
 				public void onCarStationaryStatusChanged(boolean arg0) {
 					AppConstants.IS_CAR_STATIONARY = arg0;					
-					if(onCarStationaryStatusChangedListener != null) {
+					if (onCarStationaryStatusChangedListener != null) {
 						onCarStationaryStatusChangedListener.onCarStationaryStatusChanged(arg0);
 					}
 					Log.i(TAG, "IS_CAR_STATIONARY : " + AppConstants.IS_CAR_STATIONARY);
@@ -437,7 +437,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	* must register themselves with this method in their onStart() or onResume() method.
 	*/
 	public void registerOnCarStationaryStatusChangedListener(
-		OnCarStationaryStatusChangedListener onCarStationaryStatusChangedListener) {
+			OnCarStationaryStatusChangedListener onCarStationaryStatusChangedListener) {
 		this.onCarStationaryStatusChangedListener = onCarStationaryStatusChangedListener;
 	}
 	

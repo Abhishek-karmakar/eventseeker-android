@@ -4,7 +4,9 @@ import java.util.Calendar;
 
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.widget.BaseAdapter;
+import android.widget.Toast;
 
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
