@@ -58,9 +58,14 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	private TextView txtActionBarTitle;
 
 	private OnCarStationaryStatusChangedListener onCarStationaryStatusChangedListener;
+	private OnDisplayModeChangedListener onDisplayModeChangedListener;
 	
 	public interface OnCarStationaryStatusChangedListener {
 		public void onCarStationaryStatusChanged(boolean isStationary);
+	}
+	
+	public interface OnDisplayModeChangedListener {
+		public void onDisplayModeChanged(boolean isNightModeEnabled);
 	}
 	
 	@Override
@@ -120,13 +125,19 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 				public void onLocationUpdate(Location arg0) {}
 				
 				@Override
-				public void onDayNightModeChanged(boolean arg0) {}
+				public void onDayNightModeChanged(boolean isNightModeEnabled) {
+					AppConstants.IS_NIGHT_MODE_ENABLED = isNightModeEnabled;					
+					if (onDisplayModeChangedListener != null) {
+						onDisplayModeChangedListener.onDisplayModeChanged(isNightModeEnabled);
+					}
+					Log.i(TAG, "IS_NIGHT_MODE_ENABLED : " + AppConstants.IS_NIGHT_MODE_ENABLED);					
+				}
 				
 				@Override
-				public void onCarStationaryStatusChanged(boolean arg0) {
-					AppConstants.IS_CAR_STATIONARY = arg0;					
+				public void onCarStationaryStatusChanged(boolean isCarStationary) {
+					AppConstants.IS_CAR_STATIONARY = isCarStationary;					
 					if (onCarStationaryStatusChangedListener != null) {
-						onCarStationaryStatusChangedListener.onCarStationaryStatusChanged(arg0);
+						onCarStationaryStatusChangedListener.onCarStationaryStatusChanged(isCarStationary);
 					}
 					Log.i(TAG, "IS_CAR_STATIONARY : " + AppConstants.IS_CAR_STATIONARY);
 				}
