@@ -15,9 +15,6 @@ import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 
 public abstract class AbstractVenueListAdapter extends BaseAdapter {
 	
-	protected static final String TAG_PROGRESS_INDICATOR = "progressIndicator";
-	protected static final String TAG_CONTENT = "content";
-	
 	protected List<Venue> venueList;
 	
     protected LayoutInflater mInflater;

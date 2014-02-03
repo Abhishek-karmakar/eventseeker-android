@@ -1,6 +1,5 @@
 package com.wcities.eventseeker.viewdata;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,7 +11,6 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;

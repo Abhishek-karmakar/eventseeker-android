@@ -79,9 +79,7 @@ public class BoschDiscoverFragment extends FragmentLoadableFromBackStack impleme
 	private void buildEvtCategories() {
 		evtCategories = new ArrayList<Category>();
 		int categoryIdStart = AppConstants.CATEGORY_ID_START;
-		String[] categoryNames = new String[] { "Concerts", "Theater", "Sport Events", "Arts & Museums", 
-				"Dance", "Clubbing & Nightlife", "Educational", "Festivals & Fairs", "Family", "Community", 
-				"Business & Tech", "Tours" };
+		String[] categoryNames = getResources().getStringArray(R.array.evt_category_titles);
 		for (int i = 0; i < AppConstants.TOTAL_CATEGORIES; i++) {
 			evtCategories.add(new Category(categoryIdStart + i, categoryNames[i]));
 		}

@@ -12,9 +12,9 @@ import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class PlanTravelFragment extends FragmentLoadableFromBackStack implements OnClickListener {
+public class BoschPlanTravelFragment extends FragmentLoadableFromBackStack implements OnClickListener {
 	
-	private static final String TAG = PlanTravelFragment.class.getSimpleName();
+	private static final String TAG = BoschPlanTravelFragment.class.getSimpleName();
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -26,12 +26,9 @@ public class PlanTravelFragment extends FragmentLoadableFromBackStack implements
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_plan_travel, null);
-		//view.findViewById(R.id.imgDiscover).setOnClickListener(this);
+		View view = inflater.inflate(R.layout.fragment_bosch_plan_travel, null);
 		view.findViewById(R.id.btnDiscover).setOnClickListener(this);
-		//view.findViewById(R.id.imgFeatured).setOnClickListener(this);
 		view.findViewById(R.id.btnFeatured).setOnClickListener(this);
-		//view.findViewById(R.id.imgSetting).setOnClickListener(this);
 		view.findViewById(R.id.btnSetting).setOnClickListener(this);
 		return view;
 	}

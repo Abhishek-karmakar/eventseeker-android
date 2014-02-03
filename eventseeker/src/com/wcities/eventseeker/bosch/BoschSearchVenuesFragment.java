@@ -98,7 +98,6 @@ public class BoschSearchVenuesFragment extends ListFragment implements LoadItems
 			case R.id.btnDown:
 				getListView().smoothScrollByOffset(1);
 				break;
-				
 		}
 	}
 	
@@ -112,9 +111,9 @@ public class BoschSearchVenuesFragment extends ListFragment implements LoadItems
 	    @Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (venueList.get(position) == null) {
-				if (convertView == null || !convertView.getTag().equals(TAG_PROGRESS_INDICATOR)) {
+				if (convertView == null || !convertView.getTag().equals(AppConstants.TAG_PROGRESS_INDICATOR)) {
 					convertView = mInflater.inflate(R.layout.list_progress_bar, null);
-					convertView.setTag(TAG_PROGRESS_INDICATOR);
+					convertView.setTag(AppConstants.TAG_PROGRESS_INDICATOR);
 				}
 				
 				if ((loadVenues == null || loadVenues.getStatus() == Status.FINISHED) && 
@@ -132,9 +131,9 @@ public class BoschSearchVenuesFragment extends ListFragment implements LoadItems
 					convertView.setTag("");
 					return convertView;
 				
-				} else if (convertView == null || !convertView.getTag().equals(TAG_CONTENT)) {
+				} else if (convertView == null || !convertView.getTag().equals(AppConstants.TAG_CONTENT)) {
 					convertView = mInflater.inflate(R.layout.bosch_venue_list_item, null);
-					convertView.setTag(TAG_CONTENT);
+					convertView.setTag(AppConstants.TAG_CONTENT);
 				}
 
 				((TextView) convertView.findViewById(R.id.txtVenueName)).setText(venue.getName());

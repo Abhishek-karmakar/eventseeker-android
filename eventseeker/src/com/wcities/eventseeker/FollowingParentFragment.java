@@ -30,6 +30,7 @@ import com.wcities.eventseeker.adapter.MyArtistListAdapter;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadMyArtists;
 import com.wcities.eventseeker.asynctask.LoadMyArtists.LoadMyArtistsListener;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.FollowingList;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
@@ -155,7 +156,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 	}
 	
 	protected void freeUpBitmapMemory(View view) {
-		if (view.getTag().equals(MyArtistListAdapter.TAG_CONTENT)) {
+		if (view.getTag().equals(AppConstants.TAG_CONTENT)) {
 			((ImageView) view.findViewById(R.id.imgItem)).setImageBitmap(null);
 		}
 	}

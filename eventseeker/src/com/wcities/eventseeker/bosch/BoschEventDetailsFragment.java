@@ -146,9 +146,10 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 				+ schedule.getVenue().getAddress().getCity());
 
 			if (schedule.getDates() != null && schedule.getDates().get(0) != null) {
-				Date date = schedule.getDates().get(0).getStartDate();
-				SimpleDateFormat sdf = new SimpleDateFormat("EEEE MMMM d, h:mm a");
-				txtDate.setText(sdf.format(date));
+				com.wcities.eventseeker.core.Date date = schedule.getDates().get(0);
+				SimpleDateFormat sdf = date.isStartTimeAvailable() ? new SimpleDateFormat("EEEE MMMM d, h:mm a") :
+					new SimpleDateFormat("EEEE MMMM d");
+				txtDate.setText(sdf.format(date.getStartDate()));
 			} else {
 				txtDate.setVisibility(View.GONE);
 			}
@@ -159,15 +160,14 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 		String distance = event.getDistance();
 		
 		if (distance.equals(AppConstants.INVALID_DISTANCE)) {
-			
 			double latLon[] = DeviceUtil.getLatLon(FragmentUtil.getActivity(this));
 			distance = event.getSchedule().getVenue().getDistanceFrom(latLon[0], latLon[1]) + "";
 			distance = String.format("%.2f", Double.parseDouble(distance));
-			
 		}
 		
 		txtDistance.setText(distance + " m");
 	}
+	
 	private void updateArtistsAndInfoBtn() {
 		if (AppConstants.IS_CAR_STATIONARY) {
 			btnInfo.setVisibility(View.VISIBLE);

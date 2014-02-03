@@ -29,6 +29,7 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -175,9 +176,6 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 
 		private WeakReference<DiscoverFragmentTab> discoverFragment;
 
-		private static final String TAG_PROGRESS_INDICATOR = "progressIndicator";
-		private static final String TAG_CONTENT = "content";
-
 		private LayoutInflater mInflater;
 		private BitmapCache bitmapCache;
 
@@ -217,16 +215,16 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 
 			if (event == null) {
 				//Log.d(TAG, "event is null");
-				if (convertView == null	|| !convertView.getTag().equals(TAG_PROGRESS_INDICATOR)) {
+				if (convertView == null	|| !convertView.getTag().equals(AppConstants.TAG_PROGRESS_INDICATOR)) {
 					convertView = mInflater.inflate(R.layout.list_progress_bar, null);
-					convertView.setTag(TAG_PROGRESS_INDICATOR);
+					convertView.setTag(AppConstants.TAG_PROGRESS_INDICATOR);
 				}
 
 			} else {
 				//Log.d(TAG, "event is not null");
-				if (convertView == null	|| !convertView.getTag().equals(TAG_CONTENT)) {
+				if (convertView == null	|| !convertView.getTag().equals(AppConstants.TAG_CONTENT)) {
 					convertView = mInflater.inflate(R.layout.discover_gallery_item, null);
-					convertView.setTag(TAG_CONTENT);
+					convertView.setTag(AppConstants.TAG_CONTENT);
 				}
 
 				ImageView imgFeaturedEvt = (ImageView) convertView.findViewById(R.id.imgFeaturedEvt);

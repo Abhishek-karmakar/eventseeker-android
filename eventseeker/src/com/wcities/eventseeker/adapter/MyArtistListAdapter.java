@@ -8,6 +8,7 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.interfaces.ArtistAdapterListener;
 import com.wcities.eventseeker.interfaces.ArtistListener;
@@ -29,9 +30,6 @@ import android.widget.TextView;
 
 // SectionIndexer is only required for 'FollowingFragment'.
 public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, ArtistAdapterListener<Void> {
-
-	private static final String TAG_PROGRESS_INDICATOR = "progressIndicator";
-	public static final String TAG_CONTENT = "content";
 
 	private Context mContext;
 	private BitmapCache bitmapCache;
@@ -96,13 +94,13 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 		//Log.d(TAG, "pos = " + position);
 		final Artist artist = getItem(position);
 		if (artist == null) {
-			if (convertView == null || !convertView.getTag().equals(TAG_PROGRESS_INDICATOR)) {
+			if (convertView == null || !convertView.getTag().equals(AppConstants.TAG_PROGRESS_INDICATOR)) {
 				if(isTablet) {
 					convertView = LayoutInflater.from(mContext).inflate(R.layout.grd_progress_bar, null);
 				} else {
 					convertView = LayoutInflater.from(mContext).inflate(R.layout.list_progress_bar, null);
 				}
-				convertView.setTag(TAG_PROGRESS_INDICATOR);
+				convertView.setTag(AppConstants.TAG_PROGRESS_INDICATOR);
 			}
 
 			if ((loadMyArtists == null || loadMyArtists.getStatus() == Status.FINISHED) && isMoreDataAvailable) {
@@ -111,13 +109,13 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 
 		} else {
 			
-			if (convertView == null || !convertView.getTag().equals(TAG_CONTENT)) {
+			if (convertView == null || !convertView.getTag().equals(AppConstants.TAG_CONTENT)) {
 				if (isTablet) {
 					convertView = LayoutInflater.from(mContext).inflate(R.layout.fragment_following_artists_list_item_tab, null);
 				} else {
 					convertView = LayoutInflater.from(mContext).inflate(R.layout.fragment_search_artists_list_item, null);
 				}
-				convertView.setTag(TAG_CONTENT);
+				convertView.setTag(AppConstants.TAG_CONTENT);
 			}
 
 			((TextView) convertView.findViewById(R.id.txtArtistName)).setText(artist.getName());

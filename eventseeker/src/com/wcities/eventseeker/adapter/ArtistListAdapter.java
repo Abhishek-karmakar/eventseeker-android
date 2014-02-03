@@ -30,9 +30,6 @@ public class ArtistListAdapter<T> extends BaseAdapter {
 	
 	private static final String TAG = ArtistListAdapter.class.getName();
 
-	private static final String TAG_PROGRESS_INDICATOR = "progressIndicator";
-	private static final String TAG_CONTENT = "content";
-	
     private BitmapCache bitmapCache;
     private Context mContext;
     
@@ -64,9 +61,9 @@ public class ArtistListAdapter<T> extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		//Log.d(TAG, "pos = " + position);
 		if (artistList.get(position) == null) {
-			if (convertView == null || !convertView.getTag().equals(TAG_PROGRESS_INDICATOR)) {
+			if (convertView == null || !convertView.getTag().equals(AppConstants.TAG_PROGRESS_INDICATOR)) {
 				convertView = LayoutInflater.from(mContext).inflate(R.layout.list_progress_bar, null);
-				convertView.setTag(TAG_PROGRESS_INDICATOR);
+				convertView.setTag(AppConstants.TAG_PROGRESS_INDICATOR);
 			}
 			
 			if ((loadArtists == null || loadArtists.getStatus() == Status.FINISHED) && 
@@ -85,9 +82,9 @@ public class ArtistListAdapter<T> extends BaseAdapter {
 		
 				return convertView;
 			
-			} else if (convertView == null || !convertView.getTag().equals(TAG_CONTENT)) {
+			} else if (convertView == null || !convertView.getTag().equals(AppConstants.TAG_CONTENT)) {
 				convertView = LayoutInflater.from(mContext).inflate(R.layout.fragment_search_artists_list_item, null);
-				convertView.setTag(TAG_CONTENT);
+				convertView.setTag(AppConstants.TAG_CONTENT);
 			}
 			
 			((TextView)convertView.findViewById(R.id.txtArtistName)).setText(artist.getName());

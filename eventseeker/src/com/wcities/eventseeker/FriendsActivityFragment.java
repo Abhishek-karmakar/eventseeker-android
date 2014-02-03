@@ -60,6 +60,7 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.FriendNewsItem;
@@ -325,8 +326,6 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	
 	private class FriendActivityListAdapter extends BaseAdapter {
 		
-		private static final String TAG_PROGRESS_INDICATOR = "progressIndicator";
-		
 	    private LayoutInflater mInflater;
 
 	    public FriendActivityListAdapter(Context context) {
@@ -344,7 +343,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 					((item instanceof List) && ((List<FriendNewsItem>)item).get(0) == null)) {
 				if (convertView == null || convertView.getTag() instanceof FriendNewsItemViewHolder) {
 					convertView = mInflater.inflate(R.layout.list_progress_bar, null);
-					convertView.setTag(TAG_PROGRESS_INDICATOR);
+					convertView.setTag(AppConstants.TAG_PROGRESS_INDICATOR);
 					convertView.setBackgroundColor(getResources().getColor(R.color.root_lnr_layout_bg_friends_activity_list_item));
 				}
 				

@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.os.Bundle;
+import android.text.TextUtils.TruncateAt;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.bosch.BoschMainActivity.OnCarStationaryStatusChangedListener;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
@@ -19,7 +21,8 @@ import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class BoschInfoFragment extends FragmentLoadableFromBackStack implements View.OnClickListener {
+public class BoschInfoFragment extends FragmentLoadableFromBackStack implements View.OnClickListener, 
+		OnCarStationaryStatusChangedListener {
 
 	private static final int SCROLL_Y_BY = 100;
 	private Artist artist;
@@ -27,6 +30,7 @@ public class BoschInfoFragment extends FragmentLoadableFromBackStack implements 
 	private Venue venue;
 	
 	private ScrollView scrlContent;
+	private TextView txtDescription;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,7 @@ public class BoschInfoFragment extends FragmentLoadableFromBackStack implements 
 			venue = (Venue) getArguments().getSerializable(BundleKeys.VENUE);
 		}
 		
+		((BoschMainActivity) FragmentUtil.getActivity(this)).registerOnCarStationaryStatusChangedListener(this);
 	}
 	
 	@Override
@@ -54,7 +59,7 @@ public class BoschInfoFragment extends FragmentLoadableFromBackStack implements 
 		view.findViewById(R.id.btnDown).setOnClickListener(this);
 				
 		String description = null, address = null;
-		Date date = null;
+		com.wcities.eventseeker.core.Date date = null;
 		
 		if (artist != null) {
 			
@@ -64,10 +69,8 @@ public class BoschInfoFragment extends FragmentLoadableFromBackStack implements 
 			description = artist.getDescription();
 		
 		} else {
-
 			if (event != null) {
-
-				date = event.getSchedule().getDates().get(0).getStartDate();
+				date = event.getSchedule().getDates().get(0);
 				address = event.getSchedule().getVenue().getFormatedAddress();
 				description = event.getDescription();
 
@@ -76,35 +79,30 @@ public class BoschInfoFragment extends FragmentLoadableFromBackStack implements 
 				}
 			
 			} else if (venue != null) {
-			
 				address = venue.getFormatedAddress();
 				description = venue.getLongDesc();
-			
 			}
-
 			((TextView) view.findViewById(R.id.txtAddress)).setText(address);
-			
 		}
 		
 		if (date == null) {
-			
 			((TextView) view.findViewById(R.id.txtDate)).setVisibility(View.GONE);
 		
 		} else {
-			
-			SimpleDateFormat sdf = new SimpleDateFormat("EEEE MMMM d, h:mm a");		
-			((TextView) view.findViewById(R.id.txtDate)).setText(sdf.format(date));
-		
+			SimpleDateFormat sdf = date.isStartTimeAvailable() ? new SimpleDateFormat("EEEE MMMM d, h:mm a") :
+				new SimpleDateFormat("EEEE MMMM d");
+			((TextView) view.findViewById(R.id.txtDate)).setText(sdf.format(date.getStartDate()));
 		}
 		
 		if (description == null) {
 			description = "Description Unavailable";
 		}
 		
-		((TextView) view.findViewById(R.id.txtDescription)).setText(description);
-	
+		txtDescription = (TextView) view.findViewById(R.id.txtDescription);
+		txtDescription.setText(description);
+		updateDescriptionLines();
+		
 		return view;
-	
 	}
 
 	@Override
@@ -122,6 +120,23 @@ public class BoschInfoFragment extends FragmentLoadableFromBackStack implements 
 	}
 	
 	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		((BoschMainActivity) FragmentUtil.getActivity(this)).unRegisterOnCarStationaryStatusChangedListener();
+	}
+	
+	private void updateDescriptionLines() {
+		if (AppConstants.IS_CAR_STATIONARY) {
+			txtDescription.setMaxLines(Integer.MAX_VALUE);
+			txtDescription.setEllipsize(null);
+
+		} else {
+			txtDescription.setMaxLines(2);
+			txtDescription.setEllipsize(TruncateAt.END);
+		}
+	}
+	
+	@Override
 	public void onClick(View v) {
 		
 		switch (v.getId()) {
@@ -136,6 +151,11 @@ public class BoschInfoFragment extends FragmentLoadableFromBackStack implements 
 		
 		}
 		
+	}
+
+	@Override
+	public void onCarStationaryStatusChanged(boolean isStationary) {
+		updateDescriptionLines();
 	}
 	
 }

@@ -66,7 +66,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
 		if (!MySpinServerSDK.sharedInstance().isConnected()) {
 			finish();
 			
@@ -125,7 +125,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 				@Override
 				public void onCarStationaryStatusChanged(boolean arg0) {
 					AppConstants.IS_CAR_STATIONARY = arg0;					
-					if(onCarStationaryStatusChangedListener != null) {
+					if (onCarStationaryStatusChangedListener != null) {
 						onCarStationaryStatusChangedListener.onCarStationaryStatusChanged(arg0);
 					}
 					Log.i(TAG, "IS_CAR_STATIONARY : " + AppConstants.IS_CAR_STATIONARY);
@@ -162,7 +162,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	    switch (position) {
 	    
 		case INDEX_NAV_ITEM_HOME:
-			PlanTravelFragment planTravelFragment = new PlanTravelFragment();
+			BoschPlanTravelFragment planTravelFragment = new BoschPlanTravelFragment();
 			replaceContentFrameByFragment(planTravelFragment, false);
 			break;
 			
@@ -370,25 +370,6 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		
 	}
 
-	/*@Override
-	public void onAddressSearchCompleted(String strAddress) {}
-
-	@Override
-	public void onLatlngSearchCompleted(Address address) {}
-
-	@Override
-	public void onCitySearchCompleted(String city) {
-		// Log.d(TAG, "onCitySearchCompleted");
-		if (BoschDiscoverFragment.class.getSimpleName().equals(currentContentFragmentTag) && 
-				city != null && city.length() != 0) {
-			//currentCityName = city;
-			
-		} else if (BoschDiscoverByCategoryFragment.class.getSimpleName().equals(currentContentFragmentTag) && 
-				city != null && city.length() != 0) {
-			//currentCityName = city;
-		}
-	}*/
-
 	public void showBoschDialog(String msg) {
 		View view = LayoutInflater.from(this).inflate(R.layout.bosch_element_alert_dialog, null);
 		
@@ -457,7 +438,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	* must register themselves with this method in their onStart() or onResume() method.
 	*/
 	public void registerOnCarStationaryStatusChangedListener(
-		OnCarStationaryStatusChangedListener onCarStationaryStatusChangedListener) {
+			OnCarStationaryStatusChangedListener onCarStationaryStatusChangedListener) {
 		this.onCarStationaryStatusChangedListener = onCarStationaryStatusChangedListener;
 	}
 	

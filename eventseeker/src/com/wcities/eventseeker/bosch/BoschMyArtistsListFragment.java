@@ -18,6 +18,7 @@ import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadMyArtists;
 import com.wcities.eventseeker.bosch.adapter.BoschArtistListAdapter;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.FollowingList;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
@@ -98,7 +99,7 @@ public class BoschMyArtistsListFragment extends ListFragment implements OnClickL
 	}
 	
 	protected void freeUpBitmapMemory(View view) {
-		if (view.getTag().equals(BoschArtistListAdapter.TAG_CONTENT)) {
+		if (view.getTag().equals(AppConstants.TAG_CONTENT)) {
 			((ImageView) view.findViewById(R.id.imgArtist)).setImageBitmap(null);
 		}
 	}

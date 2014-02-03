@@ -94,4 +94,7 @@ public class AppConstants {
 	 * This is the max limit for the looping
 	 */
 	public static final int MAX_FB_CALL_COUNT_FOR_SAME_EVT = 20;
+	
+	public static final String TAG_PROGRESS_INDICATOR = "progressIndicator";
+	public static final String TAG_CONTENT = "content";
 }
