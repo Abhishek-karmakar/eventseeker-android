@@ -162,7 +162,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	    switch (position) {
 	    
 		case INDEX_NAV_ITEM_HOME:
-			BoschPlanTravelFragment planTravelFragment = new BoschPlanTravelFragment();
+			BoschHomeFragment planTravelFragment = new BoschHomeFragment();
 			replaceContentFrameByFragment(planTravelFragment, false);
 			break;
 			
