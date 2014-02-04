@@ -16,7 +16,8 @@ import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GeoUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
 
-public class BoschHomeFragment extends FragmentLoadableFromBackStack implements OnClickListener, GeoUtilListener {
+public class BoschHomeFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
+		GeoUtilListener {
 	
 	private static final String TAG = BoschHomeFragment.class.getSimpleName();
 	
@@ -27,7 +28,7 @@ public class BoschHomeFragment extends FragmentLoadableFromBackStack implements 
 			throw new ClassCastException(activity.toString() + " must implement ReplaceFragmentListener");
 		}
 	}
-
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_bosch_home, null);
@@ -51,19 +52,16 @@ public class BoschHomeFragment extends FragmentLoadableFromBackStack implements 
 	public void onClick(View v) {
 		switch (v.getId()) {
 		
-		//case R.id.imgDiscover:
 		case R.id.btnDiscover:
 			((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
 				BoschDiscoverFragment.class.getSimpleName(), null);
 			break;
 			
-		//case R.id.imgFeatured:
 		case R.id.btnFeatured:
 			((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
 				BoschFeaturedEventsFragment.class.getSimpleName(), null);
 			break;
 			
-		//case R.id.imgSetting:
 		case R.id.btnSetting:
 			((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
 				BoschSettingsFragment.class.getSimpleName(), null);			

@@ -481,8 +481,8 @@
     <dimen name="b_lnr_lyt_details_ht_bosch_fragment_discover_by_category_list_item_evt">@dimen/b_img_event_ht_bosch_fragment_discover_by_category_list_item_evt</dimen>
     <dimen name="b_img_event_margin_l_bosch_fragment_discover_by_category_list_item_evt">5dp</dimen>
     <dimen name="b_lnr_layout_details_margin_l_bosch_fragment_discover_by_category_list_item_evt">15dp</dimen>
-    <dimen name="b_txt_title_txt_size_bosch_fragment_discover_by_category_list_item_evt">12sp</dimen>
-    <dimen name="b_txt_evt_location_txt_size_bosch_fragment_discover_by_category_list_item_evt">10sp</dimen>
+    <dimen name="b_txt_title_txt_size_bosch_fragment_discover_by_category_list_item_evt">14sp</dimen>
+    <dimen name="b_txt_evt_location_txt_size_bosch_fragment_discover_by_category_list_item_evt">12sp</dimen>
     <dimen name="b_txt_evt_location_margin_l_fragment_discover_by_category_list_item_evt">5dp</dimen>
     <dimen name="b_divider_ht_bosch_fragment_discover_by_category_list_item_evt">1dp</dimen>
     <dimen name="b_divider_margin_t_b_bosch_fragment_discover_by_category_list_item_evt">3dp</dimen>

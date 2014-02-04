@@ -4,12 +4,11 @@ import java.util.Calendar;
 
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.widget.BaseAdapter;
-import android.widget.Toast;
 
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
+import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
 import com.wcities.eventseeker.bosch.adapter.BoschDateWiseEventListAdapter;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Category;
@@ -21,7 +20,8 @@ import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
-public class BoschDateWiseEventListFragment extends ListFragment implements LoadItemsInBackgroundListener {
+public class BoschDateWiseEventListFragment extends ListFragment implements LoadItemsInBackgroundListener, 
+		OnDisplayModeChangedListener {
 
 	private LoadDateWiseEvents loadEvents;
 	private DateWiseEventList dateWiseEvtList;
@@ -65,7 +65,6 @@ public class BoschDateWiseEventListFragment extends ListFragment implements Load
 		}
 
 		setListAdapter(((BaseAdapter) eventListAdapter));
-
 		getListView().setDivider(null);
 	}
 	
@@ -83,5 +82,10 @@ public class BoschDateWiseEventListFragment extends ListFragment implements Load
 	
 	public void scrollDown() {
 		getListView().setSelection(getListView().getFirstVisiblePosition() + 1);
+	}
+
+	@Override
+	public void onDisplayModeChanged(boolean isNightModeEnabled) {
+		((BaseAdapter)eventListAdapter).notifyDataSetChanged();
 	}
 }

@@ -48,8 +48,7 @@
             android:maxLines="1"
             android:text="Location"
             android:textColor="@color/eventseeker_bosch_theme_grey"
-            android:textSize="@dimen/b_txt_evt_location_txt_size_bosch_fragment_discover_by_category_list_item_evt"
-            android:textStyle="bold" />
+            android:textSize="@dimen/b_txt_evt_location_txt_size_bosch_fragment_discover_by_category_list_item_evt" />
     </LinearLayout>
 
     <View

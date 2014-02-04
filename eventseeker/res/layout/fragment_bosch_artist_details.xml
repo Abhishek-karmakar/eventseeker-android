@@ -4,7 +4,6 @@
     android:id="@+id/rltRootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
     android:padding="@dimen/b_rlt_root_layout_pad_fragment_bosch_all_details" >
 
     <ProgressBar

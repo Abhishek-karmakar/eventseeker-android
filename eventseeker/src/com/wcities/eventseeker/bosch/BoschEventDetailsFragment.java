@@ -3,6 +3,7 @@ package com.wcities.eventseeker.bosch;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import android.R.color;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -14,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +31,7 @@ import com.wcities.eventseeker.asynctask.LoadEventDetails;
 import com.wcities.eventseeker.asynctask.LoadEventDetails.OnEventUpdatedListner;
 import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.bosch.BoschMainActivity.OnCarStationaryStatusChangedListener;
+import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
@@ -44,9 +47,11 @@ import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.ViewUtil;
 
 public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackStack implements OnClickListener, 
-		AsyncLoadImageListener, OnEventUpdatedListner, OnCarStationaryStatusChangedListener {
+		AsyncLoadImageListener, OnEventUpdatedListner, OnCarStationaryStatusChangedListener, 
+		OnDisplayModeChangedListener {
 
 	private static final String TAG = BoschEventDetailsFragment.class.getName();
 	
@@ -107,6 +112,8 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 		btnFollow.setOnClickListener(this);
 		btnArtists.setOnClickListener(this);
 		btnArtists2.setOnClickListener(this);
+		
+		updateColors();
 
 		return view;
 	}
@@ -147,7 +154,7 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 				com.wcities.eventseeker.core.Date date = schedule.getDates().get(0);
 				SimpleDateFormat sdf = date.isStartTimeAvailable() ? new SimpleDateFormat("EEEE MMMM d, h:mm a") :
 					new SimpleDateFormat("EEEE MMMM d");
-				txtDate.setText(sdf.format(date.getStartDate()));
+				txtDate.setText(sdf.format(date.getStartDate()).toUpperCase());
 			} else {
 				txtDate.setVisibility(View.GONE);
 			}
@@ -215,6 +222,14 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 			}
 		}
 	}
+	
+	private void updateColors() {
+		int bgColor = AppConstants.IS_NIGHT_MODE_ENABLED ? R.color.bg_black_transparent_strip_night_mode : 
+			R.color.bg_black_transparent_strip;
+		txtDate.setBackgroundColor(getResources().getColor(bgColor));
+		txtDistance.setBackgroundColor(getResources().getColor(bgColor));
+		txtVenueName.setBackgroundColor(getResources().getColor(bgColor));
+	}
 
 	@Override
 	public void onClick(View v) {
@@ -230,12 +245,12 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 					startActivity(Intent.createChooser(intent, "Call..."));
 					
 				} else {
-					Toast.makeText(FragmentUtil.getActivity(this), "Phone number is not available for this venue.", 
-						Toast.LENGTH_SHORT).show();
+					((BoschMainActivity)FragmentUtil.getActivity(this)).showBoschDialog(
+							"Phone number is not available for this venue.");
 				}
 				
 				break;
-			//TODO: Show FBLogin dialog if user hasn't signed in with facebook.
+			
 			case R.id.btnFollow :
 				String wcitiesId = ((EventSeekr) FragmentUtil.getActivity(this).getApplication()).getWcitiesId();
 				
@@ -258,8 +273,8 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 					}
 						
 				} else {
-					Toast.makeText(FragmentUtil.getActivity(this), 
-						getResources().getString(R.string.pls_login_to_track_evt), Toast.LENGTH_LONG).show();
+					((BoschMainActivity)FragmentUtil.getActivity(this)).showBoschDialog(getResources()
+							.getString(R.string.pls_login_to_track_evt));
 				}
 				
 				break;
@@ -295,9 +310,8 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 
 	@Override
 	public void onImageCouldNotBeLoaded() {
-		//TODO:TO show Error
 		prgImg.setVisibility(View.GONE);
-		Toast.makeText(FragmentUtil.getActivity(this), "No image found.", Toast.LENGTH_LONG).show();
+		((BoschMainActivity)FragmentUtil.getActivity(this)).showBoschDialog("No image found.");
 	}
 
 	@Override
@@ -352,5 +366,9 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 	public void onCarStationaryStatusChanged(boolean isStationary) {
 		updateArtistsAndInfoBtn();
 	}
-	
+
+	@Override
+	public void onDisplayModeChanged(boolean isNightModeEnabled) {
+		updateColors();
+	}
 }

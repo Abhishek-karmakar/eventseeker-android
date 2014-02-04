@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.view.LayoutInflater;
@@ -28,6 +29,7 @@ import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.EventListItem;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.LIST_ITEM_TYPE;
@@ -113,6 +115,7 @@ public class BoschDateWiseEventListAdapter extends BaseAdapter implements DateWi
 			final Event event = getItem(position).getEvent();
 			String title = event.getName();
 			
+			TextView txtEvtLocation = (TextView)convertView.findViewById(R.id.txtEvtLocation);
 			if (event.getSchedule() != null) {
 				Schedule schedule = event.getSchedule();
 				
@@ -120,9 +123,13 @@ public class BoschDateWiseEventListAdapter extends BaseAdapter implements DateWi
 					title += " @ " + new SimpleDateFormat("ha").format(schedule.getDates().get(0)
 							.getStartDate()).toLowerCase();
 				}*/
-				((TextView)convertView.findViewById(R.id.txtEvtLocation)).setText(schedule.getVenue().getName() 
+				txtEvtLocation.setText(schedule.getVenue().getName() 
 						+ ", " + schedule.getVenue().getAddress().getCity());
 			}
+			int leftDrawableId = AppConstants.IS_NIGHT_MODE_ENABLED ? R.drawable.ic_location_on 
+					: R.drawable.ic_location_off;
+			txtEvtLocation.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(
+					leftDrawableId), null, null, null);
 			((TextView)convertView.findViewById(R.id.txtTitle)).setText(title);
 			
 			BitmapCacheable bitmapCacheable = event.doesValidImgUrlExist() ? event : event.getSchedule().getVenue();  
@@ -153,9 +160,15 @@ public class BoschDateWiseEventListAdapter extends BaseAdapter implements DateWi
 						R.layout.bosch_fragment_discover_by_category_list_item_header, null);
 				convertView.setTag(LIST_ITEM_TYPE.HEADER);
 			}
-			((TextView)convertView.findViewById(R.id.txtDate)).setText(getItem(position).getDate());
+			TextView txtDate = (TextView)convertView.findViewById(R.id.txtDate);
+			txtDate.setText(getItem(position).getDate());
+			
+			int bgColor = AppConstants.IS_NIGHT_MODE_ENABLED ? com.wcities.eventseeker.R.color.b_txt_date_bg_bosch_fragment_discover_by_category_list_item_header_night_mode :
+				com.wcities.eventseeker.R.color.b_txt_date_bg_bosch_fragment_discover_by_category_list_item_header;
+			txtDate.setBackgroundColor(mContext.getResources().getColor(bgColor));
 		}
 		
+		ViewUtil.updateFontColor(mContext.getResources(), convertView);
 		return convertView;
 	}
 
@@ -183,5 +196,4 @@ public class BoschDateWiseEventListAdapter extends BaseAdapter implements DateWi
 	public void setMoreDataAvailable(boolean isMoreDataAvailable) {
 		this.isMoreDataAvailable = isMoreDataAvailable;
 	}
-
 }

@@ -1,5 +1,6 @@
 package com.wcities.eventseeker.bosch;
 
+import android.R.color;
 import android.location.Address;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Category;
@@ -20,7 +22,7 @@ import com.wcities.eventseeker.util.GeoUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
 
 public class BoschDiscoverByCategoryFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
-		GeoUtilListener {
+		GeoUtilListener, OnDisplayModeChangedListener {
 
 	private static final String TAG = BoschDiscoverByCategoryFragment.class.getSimpleName();
 	
@@ -59,7 +61,6 @@ public class BoschDiscoverByCategoryFragment extends FragmentLoadableFromBackSta
         		BoschDateWiseEventListFragment.class.getSimpleName());
         fragmentTransaction.commit();
     }
-	
 
 	@Override
 	public void onResume() {
@@ -109,5 +110,15 @@ public class BoschDiscoverByCategoryFragment extends FragmentLoadableFromBackSta
 	@Override
 	public void onLatlngSearchCompleted(Address address) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onDisplayModeChanged(boolean isNightModeEnabled) {
+		BoschDateWiseEventListFragment boschDateWiseEventListFragment = (BoschDateWiseEventListFragment) 
+        		getChildFragmentManager().findFragmentByTag(BoschDateWiseEventListFragment.class.getSimpleName());
+
+		if (boschDateWiseEventListFragment != null && boschDateWiseEventListFragment instanceof OnDisplayModeChangedListener) {
+			((OnDisplayModeChangedListener)boschDateWiseEventListFragment).onDisplayModeChanged(isNightModeEnabled);
+		}
 	}
 }

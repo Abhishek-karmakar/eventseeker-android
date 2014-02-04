@@ -183,9 +183,8 @@ public class BoschArtistDetailsFragment extends FragmentLoadableFromBackStack im
 					updateFollowBtn();
 					
 				} else {
-					//TODO: Show FB Login Dialog
-					Toast.makeText(FragmentUtil.getActivity(this), "First Login through the Facebook Account",
-						Toast.LENGTH_SHORT).show();
+					((BoschMainActivity)FragmentUtil.getActivity(this)).showBoschDialog(
+							"First Login through the Facebook Account.");
 				}
 				break;
 	
@@ -228,9 +227,8 @@ public class BoschArtistDetailsFragment extends FragmentLoadableFromBackStack im
 
 	@Override
 	public void onImageCouldNotBeLoaded() {
-		// TODO:TO show Error
 		prgImg.setVisibility(View.GONE);
-		Toast.makeText(FragmentUtil.getActivity(this), "No image found.", Toast.LENGTH_LONG).show();
+		((BoschMainActivity)FragmentUtil.getActivity(this)).showBoschDialog("No image found.");
 	}
 
 	@Override

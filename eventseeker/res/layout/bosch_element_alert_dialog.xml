@@ -13,7 +13,6 @@
         android:layout_centerInParent="true"
         android:ellipsize="end"
         android:gravity="center"
-        android:singleLine="true"
         android:textColor="@android:color/white"
         android:textSize="@dimen/b_txt_title_txt_size_bosch_element_alert_dialog" />
 

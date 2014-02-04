@@ -1,5 +1,6 @@
 package com.wcities.eventseeker.bosch;
 
+import android.R.color;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -18,8 +19,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bosch.myspin.serversdk.IOnCarDataChangeListener;
 import com.bosch.myspin.serversdk.MySpinException;
@@ -36,6 +39,7 @@ import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
+import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschMainActivity extends ActionBarActivity implements ReplaceFragmentListener, 
 		EventListener, ArtistListener, VenueListener, FragmentLoadedFromBackstackListener, 
@@ -56,6 +60,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	private int drawerItemSelectedPosition = AppConstants.INVALID_INDEX;
 
 	private TextView txtActionBarTitle;
+	private FrameLayout frmLayoutContentFrame;
 
 	public interface OnCarStationaryStatusChangedListener {
 		public void onCarStationaryStatusChanged(boolean isStationary);
@@ -105,10 +110,11 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			}
 			getSupportFragmentManager().executePendingTransactions();
 			
+			frmLayoutContentFrame = (FrameLayout) findViewById(R.id.content_frame);
 			selectItem(INDEX_NAV_ITEM_HOME);
+			updateColors();
 		}		
 	}
-	
 
 	@Override
 	protected void onResume() {
@@ -124,13 +130,15 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 				@Override
 				public void onDayNightModeChanged(boolean isNightModeEnabled) {
 					AppConstants.IS_NIGHT_MODE_ENABLED = isNightModeEnabled;					
-
+					updateColors();
+					
 					Fragment fragment = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
 					if (fragment instanceof OnDisplayModeChangedListener) {
 						((OnDisplayModeChangedListener) fragment).onDisplayModeChanged(isNightModeEnabled);
 					}
 					
-					Log.i(TAG, "IS_NIGHT_MODE_ENABLED : " + AppConstants.IS_NIGHT_MODE_ENABLED);					
+					Log.i(TAG, "IS_NIGHT_MODE_ENABLED : " + AppConstants.IS_NIGHT_MODE_ENABLED);	
+					//Toast.makeText(BoschMainActivity.this, "onDayNightModeChanged()", Toast.LENGTH_SHORT).show();
 				}
 				
 				@Override
@@ -158,6 +166,15 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		// Sync the toggle state after onRestoreInstanceState has occurred.
 		mDrawerToggle.syncState();
 	}	
+	
+	private void updateColors() {
+		if (AppConstants.IS_NIGHT_MODE_ENABLED) {
+			frmLayoutContentFrame.setBackgroundColor(getResources().getColor(color.black));
+			
+		} else {
+			frmLayoutContentFrame.setBackgroundColor(getResources().getColor(color.white));
+		}
+	}
 	
 	/** Swaps fragments in the main content view */
 	private void selectItem(int position) {
