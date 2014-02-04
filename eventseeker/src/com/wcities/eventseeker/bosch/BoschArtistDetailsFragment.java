@@ -22,6 +22,7 @@ import com.wcities.eventseeker.asynctask.LoadArtistDetails;
 import com.wcities.eventseeker.asynctask.LoadArtistDetails.OnArtistUpdatedListener;
 import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.bosch.BoschMainActivity.OnCarStationaryStatusChangedListener;
+import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
@@ -36,7 +37,8 @@ import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschArtistDetailsFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
-	AsyncLoadImageListener, OnArtistUpdatedListener, OnCarStationaryStatusChangedListener {
+		AsyncLoadImageListener, OnArtistUpdatedListener, OnCarStationaryStatusChangedListener, 
+		OnDisplayModeChangedListener {
 
 	private static final String TAG = BoschArtistDetailsFragment.class.getName();
 
@@ -77,7 +79,7 @@ public class BoschArtistDetailsFragment extends FragmentLoadableFromBackStack im
 
 		imgItem = (ResizableImageView) view.findViewById(R.id.imgItem);
 		
-		txtName= (TextView) view.findViewById(R.id.txtName);
+		txtName = (TextView) view.findViewById(R.id.txtName);
 
 		btnInfo = (Button) view.findViewById(R.id.btnInfo);
 		btnFollow = (Button) view.findViewById(R.id.btnFollow);
@@ -85,7 +87,9 @@ public class BoschArtistDetailsFragment extends FragmentLoadableFromBackStack im
 
 		btnFollow.setOnClickListener(this);
 		btnEvents.setOnClickListener(this);
-		btnInfo.setOnClickListener(this);		
+		btnInfo.setOnClickListener(this);	
+		
+		updateColors();
 
 		return view;
 	}
@@ -133,6 +137,12 @@ public class BoschArtistDetailsFragment extends FragmentLoadableFromBackStack im
 	
 	private void updateFollowBtn() {
 		btnFollow.setText((artist.getAttending() == Attending.NotTracked) ? "Follow" : "Following");
+	}
+	
+	private void updateColors() {
+		int bgColor = AppConstants.IS_NIGHT_MODE_ENABLED ? R.color.bg_black_transparent_strip_night_mode : 
+			R.color.bg_black_transparent_strip;
+		txtName.setBackgroundColor(getResources().getColor(bgColor));
 	}
 
 	@Override
@@ -254,4 +264,8 @@ public class BoschArtistDetailsFragment extends FragmentLoadableFromBackStack im
 		updateInfoBtn();
 	}
 
+	@Override
+	public void onDisplayModeChanged(boolean isNightModeEnabled) {
+		updateColors();
+	}
 }

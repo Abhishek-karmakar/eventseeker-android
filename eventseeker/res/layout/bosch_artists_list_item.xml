@@ -30,7 +30,7 @@
         android:textStyle="bold" />
 
     <View
-        android:id="@+id/divider"
+        android:id="@+id/listDivider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/b_divider_ht_bosch_artists_list_item"
         android:layout_below="@id/imgArtist"

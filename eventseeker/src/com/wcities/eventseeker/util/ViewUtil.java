@@ -1,6 +1,8 @@
 package com.wcities.eventseeker.util;
 
 import android.content.res.Resources;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -42,19 +44,31 @@ public class ViewUtil {
 		});
 	}*/
 
-	public static void updateFontColor(Resources res, View v) {
-		int txtColor = AppConstants.IS_NIGHT_MODE_ENABLED ? android.R.color.white : R.color.eventseeker_bosch_theme_grey;
+	public static void updateViewColor(Resources res, View v) {
+		int txtColor; 
+		int listDividerBgId;
+		if (AppConstants.IS_NIGHT_MODE_ENABLED) {
+			txtColor = android.R.color.white;
+			listDividerBgId = R.drawable.info_divider;
+			
+		} else {
+			txtColor = R.color.eventseeker_bosch_theme_grey;
+			listDividerBgId = android.R.color.black;
+		}
 		
 		try {
 			if (v instanceof ViewGroup) {
 				ViewGroup vg = (ViewGroup) v;
 				for (int i = 0; i < vg.getChildCount(); i++) {
 					View child = vg.getChildAt(i);
-					updateFontColor(res, child);
+					updateViewColor(res, child);
 				}
 
 			} else if (v instanceof TextView) {
 				((TextView) v).setTextColor(res.getColor(txtColor));
+				
+			} else if (v.getId() == R.id.listDivider) {
+				v.setBackgroundResource(listDividerBgId);
 			}
 
 		} catch (Exception e) {

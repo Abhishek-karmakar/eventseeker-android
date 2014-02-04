@@ -83,9 +83,11 @@ public class BoschDateWiseEventListFragment extends ListFragment implements Load
 	public void scrollDown() {
 		getListView().setSelection(getListView().getFirstVisiblePosition() + 1);
 	}
-
+	
 	@Override
 	public void onDisplayModeChanged(boolean isNightModeEnabled) {
-		((BaseAdapter)eventListAdapter).notifyDataSetChanged();
+		if (eventListAdapter != null) {
+			((BaseAdapter)eventListAdapter).notifyDataSetChanged();
+		}
 	}
 }

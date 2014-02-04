@@ -31,11 +31,11 @@ public class FeaturedEventsFragment extends Fragment {
     private BitmapCache bitmapCache;
     
 	public static final FeaturedEventsFragment newInstance(Event event) {
-		FeaturedEventsFragment discoverFragment = new FeaturedEventsFragment();
+		FeaturedEventsFragment featuredEventsFragment = new FeaturedEventsFragment();
 		Bundle bundle = new Bundle();
 		bundle.putSerializable(BundleKeys.EVENT, event);
-		discoverFragment.setArguments(bundle);
-		return discoverFragment;
+		featuredEventsFragment.setArguments(bundle);
+		return featuredEventsFragment;
 	}
 	
 	@Override

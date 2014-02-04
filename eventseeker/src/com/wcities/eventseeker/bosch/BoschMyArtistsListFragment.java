@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadMyArtists;
+import com.wcities.eventseeker.asynctask.LoadMyArtists.LoadMyArtistsListener;
 import com.wcities.eventseeker.bosch.adapter.BoschArtistListAdapter;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
@@ -26,7 +27,7 @@ import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschMyArtistsListFragment extends ListFragment implements OnClickListener, 
-		LoadItemsInBackgroundListener {
+		LoadItemsInBackgroundListener, LoadMyArtistsListener {
 
 	private String wcitiesId;
 	private FollowingList cachedFollowingList;
@@ -124,8 +125,13 @@ public class BoschMyArtistsListFragment extends ListFragment implements OnClickL
 	@Override
 	public void loadItemsInBackground() {
 		loadMyArtists = new LoadMyArtists(wcitiesId, artistList, boschArtistListAdapter, cachedFollowingList, 
-				artistIds, null, null, null);
+				artistIds, null, null, this);
 		boschArtistListAdapter.setLoadArtists(loadMyArtists);
 		AsyncTaskUtil.executeAsyncTask(loadMyArtists, true);
+	}
+
+	@Override
+	public void showNoArtistFound() {
+		artistList.add(new Artist(AppConstants.INVALID_ID, null));
 	}
 }

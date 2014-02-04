@@ -16,6 +16,7 @@ import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg.AsyncLoadImageListener;
 import com.wcities.eventseeker.bosch.BoschMainActivity.OnCarStationaryStatusChangedListener;
+import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
@@ -26,7 +27,7 @@ import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschVenueDetailsFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
-	AsyncLoadImageListener, OnCarStationaryStatusChangedListener {
+		AsyncLoadImageListener, OnCarStationaryStatusChangedListener, OnDisplayModeChangedListener {
 
 	public static final String TAG = BoschVenueDetailsFragment.class.getName();
 	
@@ -71,6 +72,8 @@ public class BoschVenueDetailsFragment extends FragmentLoadableFromBackStack imp
 		
 		view.findViewById(R.id.btnEvents).setOnClickListener(this);
 		view.findViewById(R.id.btnCall).setOnClickListener(this);
+		
+		updateColors();
 		
 		return view;
 	}
@@ -127,6 +130,13 @@ public class BoschVenueDetailsFragment extends FragmentLoadableFromBackStack imp
 		    }
 		}
 	}
+	
+	private void updateColors() {
+		int bgColor = AppConstants.IS_NIGHT_MODE_ENABLED ? R.color.bg_black_transparent_strip_night_mode : 
+				R.color.bg_black_transparent_strip;
+		txtAddress.setBackgroundColor(getResources().getColor(bgColor));
+		txtVenueName.setBackgroundColor(getResources().getColor(bgColor));
+	}
 
 	@Override
 	public void onClick(View v) {
@@ -171,4 +181,8 @@ public class BoschVenueDetailsFragment extends FragmentLoadableFromBackStack imp
 		updateInfoBtn();
 	}
 	
+	@Override
+	public void onDisplayModeChanged(boolean isNightModeEnabled) {
+		updateColors();
+	}
 }

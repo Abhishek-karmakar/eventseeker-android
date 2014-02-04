@@ -1,5 +1,6 @@
 package com.wcities.eventseeker.bosch;
 
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,11 +13,15 @@ import android.widget.TextView;
 
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.ViewUtil;
 
-public class BoschSettingsFragment extends FragmentLoadableFromBackStack implements OnClickListener {
+public class BoschSettingsFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
+		OnDisplayModeChangedListener {
 
 	public static final String LOGIN = "Log In", LOGOUT = "Log Out";
 
@@ -27,16 +32,26 @@ public class BoschSettingsFragment extends FragmentLoadableFromBackStack impleme
 	private Button btnLogIn;
 
 	private boolean isFbLoggedIn;
+	
+	private Resources res;
+	private View parentView;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		res = FragmentUtil.getActivity(this).getResources();
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_bosch_settings, null);
+		parentView = inflater.inflate(R.layout.fragment_bosch_settings, null);
 
-		txtAccountsResults = (TextView) view.findViewById(R.id.txtAccountsResults);
+		txtAccountsResults = (TextView) parentView.findViewById(R.id.txtAccountsResults);
 
-		(btnLogIn = (Button) view.findViewById(R.id.btnLogIn)).setOnClickListener(this);
+		(btnLogIn = (Button) parentView.findViewById(R.id.btnLogIn)).setOnClickListener(this);
 
-		return view;
+		updateColors();
+		return parentView;
 	}
 
 	@Override
@@ -78,6 +93,16 @@ public class BoschSettingsFragment extends FragmentLoadableFromBackStack impleme
 		}
 	}
 	
+	private void updateColors() {
+		ViewUtil.updateViewColor(res, parentView);
+		if (AppConstants.IS_NIGHT_MODE_ENABLED) {
+			txtAccountsResults.setBackgroundColor(res.getColor(R.color.txt_signed_in_as_bg_fragment_preferences_night_mode));
+			
+		} else {
+			txtAccountsResults.setBackgroundColor(res.getColor(R.color.txt_signed_in_as_bg_fragment_preferences));
+		}
+	}
+	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -99,4 +124,8 @@ public class BoschSettingsFragment extends FragmentLoadableFromBackStack impleme
 		}
 	}
 
+	@Override
+	public void onDisplayModeChanged(boolean isNightModeEnabled) {
+		updateColors();
+	}
 }

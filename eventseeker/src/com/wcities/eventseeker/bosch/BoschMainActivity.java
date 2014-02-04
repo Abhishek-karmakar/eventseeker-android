@@ -1,10 +1,8 @@
 package com.wcities.eventseeker.bosch;
 
-import android.R.color;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -23,7 +21,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bosch.myspin.serversdk.IOnCarDataChangeListener;
 import com.bosch.myspin.serversdk.MySpinException;
@@ -40,7 +37,6 @@ import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
-import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschMainActivity extends ActionBarActivity implements ReplaceFragmentListener, 
 		EventListener, ArtistListener, VenueListener, FragmentLoadedFromBackstackListener, 
@@ -142,7 +138,6 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 					
 					Log.i(TAG, "IS_NIGHT_MODE_ENABLED : " + AppConstants.IS_NIGHT_MODE_ENABLED);	
 					//Toast.makeText(BoschMainActivity.this, "onDayNightModeChanged()", Toast.LENGTH_SHORT).show();
-					updateColors();
 				}
 
 				@Override
@@ -172,6 +167,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 				getResources().getDrawable(R.drawable.bg_action_bar_night_mode));
 
 			txtActionBarTitle.setTextColor(getResources().getColor(android.R.color.white));
+			
 		} else {		
 			frmLayoutContentFrame.setBackgroundColor(getResources().getColor(android.R.color.white));
 			
@@ -181,6 +177,13 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			
 			txtActionBarTitle.setTextColor(getResources().getColor(R.color.eventseeker_bosch_theme_grey));
 		}
+		
+		/**
+		 * Following 2 statements are required due to ICS bug, which doesn't update actionbar background 
+		 * otherwise via setBackgroundDrawable() called above.
+		 */
+		getSupportActionBar().setTitle(".");
+		getSupportActionBar().setTitle("");
 	}
 
 	@Override
