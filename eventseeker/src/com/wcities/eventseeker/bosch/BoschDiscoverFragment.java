@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
-import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Category;
@@ -30,8 +29,7 @@ import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GeoUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
 
-public class BoschDiscoverFragment extends FragmentLoadableFromBackStack implements OnClickListener, GeoUtilListener, 
-		OnDisplayModeChangedListener {
+public class BoschDiscoverFragment extends FragmentLoadableFromBackStack implements OnClickListener, GeoUtilListener {
 	
 	private static final String TAG = BoschDiscoverFragment.class.getSimpleName();
 
@@ -39,7 +37,7 @@ public class BoschDiscoverFragment extends FragmentLoadableFromBackStack impleme
 	
 	private List<Category> evtCategories;
 	private EvtCategoriesGridAdapter evtCategoriesGridAdapter;
-	
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -53,7 +51,9 @@ public class BoschDiscoverFragment extends FragmentLoadableFromBackStack impleme
 		buildEvtCategories();
 		
 		View view = inflater.inflate(R.layout.fragment_bosch_discover, null);
+		
 		grdEvtCategories = (GridView) view.findViewById(R.id.grdEvtCategories);
+		
 		if (evtCategoriesGridAdapter == null) {
 			evtCategoriesGridAdapter = new EvtCategoriesGridAdapter();
 		}
@@ -190,9 +190,7 @@ public class BoschDiscoverFragment extends FragmentLoadableFromBackStack impleme
 	}
 	
 	@Override
-	public void onAddressSearchCompleted(String strAddress) {
-		// TODO Auto-generated method stub
-	}
+	public void onAddressSearchCompleted(String strAddress) {}
 
 	@Override
 	public void onCitySearchCompleted(String city) {
@@ -206,9 +204,5 @@ public class BoschDiscoverFragment extends FragmentLoadableFromBackStack impleme
 	public void onLatlngSearchCompleted(Address address) {
 		// TODO Auto-generated method stub
 	}
-
-	@Override
-	public void onDisplayModeChanged(boolean isNightModeEnabled) {
-		
-	}
+	
 }

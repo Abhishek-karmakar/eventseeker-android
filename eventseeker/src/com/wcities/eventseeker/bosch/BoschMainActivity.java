@@ -4,6 +4,7 @@ import android.R.color;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -84,7 +85,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 			mDrawerToggle = new ActionBarDrawerToggle(this, // host this
 					mDrawerLayout, // DrawerLayout object
-					R.drawable.sidenav, // nav drawer icon to replace 'Up' caret
+					R.drawable.ic_nav_drawer_off, // nav drawer icon to replace 'Up' caret
 					R.string.drawer_open, // "open drawer" description
 					R.string.drawer_close // "close drawer" description
 			);
@@ -98,6 +99,8 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			 * searchView in SearchFragment. So need to set any transparent icon
 			 * rather than null.
 			 */
+			
+			
 			getSupportActionBar().setIcon(R.drawable.placeholder);
 			getSupportActionBar().setCustomView(R.layout.bosch_actionbar_titleview);
 
@@ -139,8 +142,9 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 					
 					Log.i(TAG, "IS_NIGHT_MODE_ENABLED : " + AppConstants.IS_NIGHT_MODE_ENABLED);	
 					//Toast.makeText(BoschMainActivity.this, "onDayNightModeChanged()", Toast.LENGTH_SHORT).show();
+					updateColors();
 				}
-				
+
 				@Override
 				public void onCarStationaryStatusChanged(boolean isCarStationary) {
 					AppConstants.IS_CAR_STATIONARY = isCarStationary;					
@@ -158,6 +162,26 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			e.printStackTrace();
 		}
 	}
+	
+	private void updateColors() {
+		if (AppConstants.IS_NIGHT_MODE_ENABLED) {
+			frmLayoutContentFrame.setBackgroundColor(getResources().getColor(android.R.color.black));
+			
+			//getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xFF000000));
+			getSupportActionBar().setBackgroundDrawable(
+				getResources().getDrawable(R.drawable.bg_action_bar_night_mode));
+
+			txtActionBarTitle.setTextColor(getResources().getColor(android.R.color.white));
+		} else {		
+			frmLayoutContentFrame.setBackgroundColor(getResources().getColor(android.R.color.white));
+			
+			//getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xFFFFFFFF));
+			getSupportActionBar().setBackgroundDrawable(
+				getResources().getDrawable(R.drawable.bg_action_bar));
+			
+			txtActionBarTitle.setTextColor(getResources().getColor(R.color.eventseeker_bosch_theme_grey));
+		}
+	}
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
@@ -166,15 +190,6 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		// Sync the toggle state after onRestoreInstanceState has occurred.
 		mDrawerToggle.syncState();
 	}	
-	
-	private void updateColors() {
-		if (AppConstants.IS_NIGHT_MODE_ENABLED) {
-			frmLayoutContentFrame.setBackgroundColor(getResources().getColor(color.black));
-			
-		} else {
-			frmLayoutContentFrame.setBackgroundColor(getResources().getColor(color.white));
-		}
-	}
 	
 	/** Swaps fragments in the main content view */
 	private void selectItem(int position) {

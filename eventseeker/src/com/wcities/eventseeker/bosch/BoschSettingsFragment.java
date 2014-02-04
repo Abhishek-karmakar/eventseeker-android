@@ -91,7 +91,8 @@ public class BoschSettingsFragment extends FragmentLoadableFromBackStack impleme
 				setFBUserName();
 				updateLoginBtn();
 			} else {
-				((BoschMainActivity) FragmentUtil.getActivity(this)).showBoschDialog("Please log in through mobile app.");
+				((BoschMainActivity) FragmentUtil.getActivity(this))
+					.showBoschDialog(getResources().getString(R.string.pls_login_through_mobile_app));
 			}
 
 			break;

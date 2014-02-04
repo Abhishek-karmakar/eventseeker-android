@@ -1,10 +1,5 @@
 package com.wcities.eventseeker.util;
 
-import com.wcities.eventseeker.R;
-import com.wcities.eventseeker.constants.AppConstants;
-
-import android.R.color;
-import android.content.Context;
 import android.content.res.Resources;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +8,9 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.constants.AppConstants;
 
 public class ViewUtil {
 
@@ -43,9 +41,10 @@ public class ViewUtil {
 		    }
 		});
 	}*/
-	
+
 	public static void updateFontColor(Resources res, View v) {
 		int txtColor = AppConstants.IS_NIGHT_MODE_ENABLED ? android.R.color.white : R.color.eventseeker_bosch_theme_grey;
+		
 		try {
 			if (v instanceof ViewGroup) {
 				ViewGroup vg = (ViewGroup) v;
@@ -53,11 +52,11 @@ public class ViewUtil {
 					View child = vg.getChildAt(i);
 					updateFontColor(res, child);
 				}
-				
+
 			} else if (v instanceof TextView) {
 				((TextView) v).setTextColor(res.getColor(txtColor));
 			}
-			
+
 		} catch (Exception e) {
 		}
 	}

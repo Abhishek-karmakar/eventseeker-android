@@ -98,4 +98,7 @@ public class AppConstants {
 	
 	public static final String TAG_PROGRESS_INDICATOR = "progressIndicator";
 	public static final String TAG_CONTENT = "content";
+
+	public static final int SCROLL_Y_BY = 100;
+	
 }

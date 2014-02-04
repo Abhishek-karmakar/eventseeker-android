@@ -17,6 +17,7 @@ import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -82,6 +83,12 @@ public class BoschEventListAdapter extends BaseAdapter {
 		
 		vhEventList.txtTitle.setText(event.getName());
 		
+		if (AppConstants.IS_NIGHT_MODE_ENABLED) {
+			vhEventList.txtTitle.setTextColor(fragment.getResources().getColor(android.R.color.white));
+		} else {
+			vhEventList.txtTitle.setTextColor(fragment.getResources().getColor(R.color.eventseeker_bosch_theme_grey));
+		}
+		
 		convertView.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -99,7 +106,7 @@ public class BoschEventListAdapter extends BaseAdapter {
 	public int getCount() {
 		return events.size();
 	}
-
+	
 	private class VHEventList {
 		
 		public ImageView imgEvent;
