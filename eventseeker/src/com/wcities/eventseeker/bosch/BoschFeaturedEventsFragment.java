@@ -31,7 +31,7 @@ public class BoschFeaturedEventsFragment extends ListFragmentLoadableFromBackSta
 	private boolean isLoadingFeaturedEvents, isUILoading;
 	private BoschEventListAdapter adapter;
 	private List<Event> eventList;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -75,7 +75,6 @@ public class BoschFeaturedEventsFragment extends ListFragmentLoadableFromBackSta
 		super.onResume(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_featured));
 	}
 	
-	
 	@Override
 	public void onPreLoadingFeaturedEvents() {
 		isLoadingFeaturedEvents = true;
@@ -107,10 +106,10 @@ public class BoschFeaturedEventsFragment extends ListFragmentLoadableFromBackSta
 	private void initailizeAdapter() {
 		adapter = new BoschEventListAdapter(FragmentUtil.getActivity(this), eventList, this);
 		setListAdapter(adapter);
-
+		
 		getListView().setDivider(null);
 	}
-
+	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -122,7 +121,6 @@ public class BoschFeaturedEventsFragment extends ListFragmentLoadableFromBackSta
 			case R.id.btnDown:
 				getListView().smoothScrollByOffset(1);
 				break;
-				
 		}
 	}
 

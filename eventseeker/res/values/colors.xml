@@ -78,6 +78,7 @@
 	<color name="edt_search_bg_bosch_change_city_fragment">#f0f0f0</color>
 	
 	<color name="txt_signed_in_as_bg_fragment_preferences">#f0f0f0</color>
+	<color name="txt_signed_in_as_bg_fragment_preferences_night_mode">#666</color>
 	
 	<color name="v_divider_fragment_preferences">#9a9a9a</color>
 	<color name="bg_black_transparent_strip_night_mode">#c8222222</color>

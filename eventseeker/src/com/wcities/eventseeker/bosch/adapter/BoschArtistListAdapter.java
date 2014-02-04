@@ -74,40 +74,42 @@ public class BoschArtistListAdapter<T> extends BaseAdapter implements ArtistAdap
 				convertView = LayoutInflater.from(mContext).inflate(R.layout.list_no_items_found, null);
 				((TextView)convertView).setText("No Artist Found.");
 				convertView.setTag("");
-		
-				return convertView;
 			
-			} else if (convertView == null || !convertView.getTag().equals(AppConstants.TAG_CONTENT)) {
-				convertView = LayoutInflater.from(mContext).inflate(R.layout.bosch_artists_list_item, null);
-				convertView.setTag(AppConstants.TAG_CONTENT);
+			} else { 
+				if (convertView == null || !convertView.getTag().equals(AppConstants.TAG_CONTENT)) {
+					convertView = LayoutInflater.from(mContext).inflate(R.layout.bosch_artists_list_item, null);
+					convertView.setTag(AppConstants.TAG_CONTENT);
+				}
+			
+				((TextView)convertView.findViewById(R.id.txtArtistName)).setText(artist.getName());
+				
+				String key = artist.getKey(ImgResolution.LOW);
+				Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
+				if (bitmap != null) {
+			        ((ImageView)convertView.findViewById(R.id.imgArtist)).setImageBitmap(bitmap);
+			        
+			    } else {
+			    	ImageView imgArtist = (ImageView)convertView.findViewById(R.id.imgArtist); 
+			        imgArtist.setImageBitmap(null);
+	
+			        AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
+			        asyncLoadImg.loadImg(imgArtist, ImgResolution.LOW, 
+			        		(AdapterView) parent, position, artist);
+			    }
+				
+				convertView.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						((ArtistListener)mContext).onArtistSelected(artist);
+					}
+				});
 			}
 			
-			((TextView)convertView.findViewById(R.id.txtArtistName)).setText(artist.getName());
-			
-			String key = artist.getKey(ImgResolution.LOW);
-			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
-			if (bitmap != null) {
-		        ((ImageView)convertView.findViewById(R.id.imgArtist)).setImageBitmap(bitmap);
-		        
-		    } else {
-		    	ImageView imgArtist = (ImageView)convertView.findViewById(R.id.imgArtist); 
-		        imgArtist.setImageBitmap(null);
-
-		        AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-		        asyncLoadImg.loadImg(imgArtist, ImgResolution.LOW, 
-		        		(AdapterView) parent, position, artist);
-		    }
-			
-			convertView.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					((ArtistListener)mContext).onArtistSelected(artist);
-				}
-			});
+			ViewUtil.updateViewColor(mContext.getResources(), convertView);
 		}
 		
-		ViewUtil.updateFontColor(mContext.getResources(), convertView);
+		ViewUtil.updateViewColor(mContext.getResources(), convertView);
 		return convertView;
 	}
 

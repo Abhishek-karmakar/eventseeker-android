@@ -10,7 +10,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import com.wcities.eventseeker.R;
-import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
 import com.wcities.eventseeker.bosch.adapter.BoschArtistListAdapter;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -18,14 +18,14 @@ import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.FragmentUtil;
-import com.wcities.eventseeker.util.GeoUtil;
 
-public class BoschEventArtistsFragment extends ListFragmentLoadableFromBackStack implements OnClickListener {
+public class BoschEventArtistsFragment extends ListFragmentLoadableFromBackStack implements OnClickListener, 
+		OnDisplayModeChangedListener {
 
 	private Event event;
 	private List<Artist> artistList;
 	private BoschArtistListAdapter<Void> boschArtistListAdapter;
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -47,13 +47,12 @@ public class BoschEventArtistsFragment extends ListFragmentLoadableFromBackStack
 		super.onActivityCreated(savedInstanceState);
 		
 		if (artistList == null) {
-			
 			artistList = new ArrayList<Artist>();
 			artistList.addAll(event.getArtists());
 			
 			if (artistList.isEmpty()) {
-				// add dummy item to indicate loading progress
-				artistList.add(null);
+				// for no artist found message
+				artistList.add(new Artist(AppConstants.INVALID_ID, null)); 
 			}
 			
 			boschArtistListAdapter = new BoschArtistListAdapter<Void>(
@@ -61,14 +60,11 @@ public class BoschEventArtistsFragment extends ListFragmentLoadableFromBackStack
 			boschArtistListAdapter.setMoreDataAvailable(false);
 			
 		} else {
-			
 			boschArtistListAdapter.updateContext(FragmentUtil.getActivity(this));
-		
 		}
 		
 		setListAdapter(boschArtistListAdapter);
-        getListView().setDivider(null);
-        
+		getListView().setDivider(null);
 	}
 	
 	@Override
@@ -78,20 +74,23 @@ public class BoschEventArtistsFragment extends ListFragmentLoadableFromBackStack
 	
 	@Override
 	public void onClick(View v) {
-
 		switch (v.getId()) {
 		
-			case R.id.btnUp:
-				getListView().smoothScrollByOffset(-1);
-				break;
-			
-			case R.id.btnDown:
-				getListView().smoothScrollByOffset(1);
-				break;
-				
+		case R.id.btnUp:
+			getListView().smoothScrollByOffset(-1);
+			break;
+
+		case R.id.btnDown:
+			getListView().smoothScrollByOffset(1);
+			break;
 		}
-		
 	}
 	
+	@Override
+	public void onDisplayModeChanged(boolean isNightModeEnabled) {
+		if (boschArtistListAdapter != null) {
+			boschArtistListAdapter.notifyDataSetChanged();
+		}
+	}
 }
 

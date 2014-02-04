@@ -166,6 +166,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 				getResources().getDrawable(R.drawable.ic_action_bar_night_mode));
 
 			txtActionBarTitle.setTextColor(getResources().getColor(android.R.color.white));
+			
 		} else {		
 			frmLayoutContentFrame.setBackgroundColor(getResources().getColor(android.R.color.white));
 			
@@ -174,6 +175,13 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			
 			txtActionBarTitle.setTextColor(getResources().getColor(R.color.eventseeker_bosch_theme_grey));
 		}
+		
+		/**
+		 * Following 2 statements are required due to ICS bug, which doesn't update actionbar background 
+		 * otherwise via setBackgroundDrawable() called above.
+		 */
+		getSupportActionBar().setTitle(".");
+		getSupportActionBar().setTitle("");
 	}
 
 	@Override

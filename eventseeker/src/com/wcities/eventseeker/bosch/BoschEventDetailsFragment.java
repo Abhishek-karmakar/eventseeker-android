@@ -1,9 +1,7 @@
 package com.wcities.eventseeker.bosch;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
-import android.R.color;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -15,9 +13,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -47,7 +43,6 @@ import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
-import com.wcities.eventseeker.util.ViewUtil;
 
 public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackStack implements OnClickListener, 
 		AsyncLoadImageListener, OnEventUpdatedListner, OnCarStationaryStatusChangedListener, 

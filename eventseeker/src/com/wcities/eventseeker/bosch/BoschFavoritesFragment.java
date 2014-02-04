@@ -20,14 +20,13 @@ import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
-import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.BoschOnChildFragmentDisplayModeChangedListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GeoUtil;
-import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
+import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
 
 public class BoschFavoritesFragment extends FragmentLoadableFromBackStack implements GeoUtilListener, 
@@ -146,11 +145,6 @@ public class BoschFavoritesFragment extends FragmentLoadableFromBackStack implem
 	}
 
 	private void updateColors() {
-		if (AppConstants.IS_NIGHT_MODE_ENABLED) {
-			lnrTabBar.setBackgroundResource(R.drawable.tab_bar_rounded_corners_night_mode);
-		} else {
-			lnrTabBar.setBackgroundResource(R.drawable.tab_bar_rounded_corners);			
-		}
-		ViewUtil.updateFontColor(getResources(), lnrTabBar);
+		ViewUtil.updateViewColor(getResources(), lnrTabBar);
 	}
 }

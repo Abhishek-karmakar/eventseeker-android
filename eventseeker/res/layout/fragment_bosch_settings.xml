@@ -3,7 +3,6 @@
     android:id="@+id/rltRootLyt"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
     android:orientation="vertical"
     android:paddingLeft="@dimen/b_rlt_root_lyt_pad_fragment_bosch_settings"
     android:paddingRight="@dimen/b_rlt_root_lyt_pad_fragment_bosch_settings" >

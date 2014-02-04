@@ -163,7 +163,7 @@ public class BoschSearchVenuesFragment extends ListFragment implements LoadItems
 				});
 			}
 			
-			ViewUtil.updateFontColor(fragment.getResources(), convertView);
+			ViewUtil.updateViewColor(fragment.getResources(), convertView);
 			return convertView;
 		}
 	}

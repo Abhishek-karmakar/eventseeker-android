@@ -52,7 +52,7 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/divider"
+        android:id="@+id/listDivider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/b_divider_ht_bosch_fragment_discover_by_category_list_item_evt"
         android:layout_below="@id/imgEvent"

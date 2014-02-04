@@ -168,7 +168,7 @@ public class BoschDateWiseEventListAdapter extends BaseAdapter implements DateWi
 			txtDate.setBackgroundColor(mContext.getResources().getColor(bgColor));
 		}
 		
-		ViewUtil.updateFontColor(mContext.getResources(), convertView);
+		ViewUtil.updateViewColor(mContext.getResources(), convertView);
 		return convertView;
 	}
 

@@ -124,7 +124,7 @@ public class BoschLazyLoadingEventListAdapter extends BaseAdapter implements Dat
 			});
 		}
 		
-		ViewUtil.updateFontColor(mContext.getResources(), convertView);
+		ViewUtil.updateViewColor(mContext.getResources(), convertView);
 		return convertView;
 	}
 

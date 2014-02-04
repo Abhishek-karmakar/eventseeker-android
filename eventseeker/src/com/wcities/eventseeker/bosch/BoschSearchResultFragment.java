@@ -95,12 +95,7 @@ public class BoschSearchResultFragment extends FragmentLoadableFromBackStack imp
 	}
 	
 	private void updateColors() {
-		if (AppConstants.IS_NIGHT_MODE_ENABLED) {
-			lnrTabBar.setBackgroundResource(R.drawable.tab_bar_rounded_corners_night_mode);
-		} else {
-			lnrTabBar.setBackgroundResource(R.drawable.tab_bar_rounded_corners);			
-		}
-		ViewUtil.updateFontColor(getResources(), lnrTabBar);
+		ViewUtil.updateViewColor(getResources(), lnrTabBar);
 	}
 
 	@Override

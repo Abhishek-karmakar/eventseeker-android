@@ -42,27 +42,51 @@ public class ViewUtil {
 		});
 	}*/
 
-	public static void updateFontColor(Resources res, View v) {
-		int color = AppConstants.IS_NIGHT_MODE_ENABLED ? 
-			android.R.color.white : R.color.eventseeker_bosch_theme_grey;
-		
+	public static void updateViewColor(Resources res, View v) {
+		int txtColor; 
+		int listDividerBgId;
+		int tabDividerBgId;
+		int tabBtnTxtColor;
+		int lnrTabBarBg;
+
+		if (AppConstants.IS_NIGHT_MODE_ENABLED) {
+			txtColor = android.R.color.white;
+			listDividerBgId = R.drawable.info_divider;
+			tabBtnTxtColor = android.R.color.white;
+			tabDividerBgId = android.R.color.white;
+			lnrTabBarBg = R.drawable.tab_bar_rounded_corners_night_mode;
+		} else {
+			txtColor = R.color.eventseeker_bosch_theme_grey;
+			listDividerBgId = android.R.color.black;
+			tabBtnTxtColor = android.R.color.black;
+			tabDividerBgId = R.color.eventseeker_bosch_theme_grey;
+			lnrTabBarBg = R.drawable.tab_bar_rounded_corners;			
+		}
 		try {
 			if (v instanceof ViewGroup) {
 				ViewGroup vg = (ViewGroup) v;
+				
+				if (vg.getId() == R.id.tabBar) {
+					vg.setBackgroundResource(lnrTabBarBg);	
+				}
+				
 				for (int i = 0; i < vg.getChildCount(); i++) {
 					View child = vg.getChildAt(i);
-					updateFontColor(res, child);
+					updateViewColor(res, child);
 				}
 
+			} else if (v.getId() == R.id.btnTab1 || v.getId() == R.id.btnTab2 || v.getId() == R.id.btnTab3) {
+				((TextView) v).setTextColor(res.getColor(tabBtnTxtColor));
+				
 			} else if (v instanceof TextView) {
-				if (v.getId() == R.id.btnTab1 || v.getId() == R.id.btnTab2 || v.getId() == R.id.btnTab3) {		
-					color = AppConstants.IS_NIGHT_MODE_ENABLED ? 
-						android.R.color.white : android.R.color.black;
-				}							
-				((TextView) v).setTextColor(res.getColor(color));
+				((TextView) v).setTextColor(res.getColor(txtColor));
+
 			} else if (v.getId() == R.id.vDivider1 || v.getId() == R.id.vDivider2) {
-				v.setBackgroundColor(res.getColor(color));
+				v.setBackgroundColor(res.getColor(tabDividerBgId));
 			
+			} else if (v.getId() == R.id.listDivider) {
+				v.setBackgroundResource(listDividerBgId);
+
 			}
 
 		} catch (Exception e) {

@@ -1,6 +1,5 @@
 package com.wcities.eventseeker.bosch;
 
-import android.R.color;
 import android.location.Address;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
