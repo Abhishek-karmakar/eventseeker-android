@@ -25,12 +25,15 @@ import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Venue;
+import com.wcities.eventseeker.interfaces.BoschOnChildFragmentDisplayModeChangedListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.ViewUtil;
 
-public class BoschSearchVenuesFragment extends ListFragment implements LoadItemsInBackgroundListener, OnClickListener {
+public class BoschSearchVenuesFragment extends ListFragment implements LoadItemsInBackgroundListener, OnClickListener, 
+		BoschOnChildFragmentDisplayModeChangedListener {
 
 	private static final String TAG = BoschSearchVenuesFragment.class.getName();
 
@@ -160,7 +163,15 @@ public class BoschSearchVenuesFragment extends ListFragment implements LoadItems
 				});
 			}
 			
+			ViewUtil.updateFontColor(fragment.getResources(), convertView);
 			return convertView;
+		}
+	}
+
+	@Override
+	public void onChildFragmentDisplayModeChanged() {
+		if (venueListAdapter != null) {
+			venueListAdapter.notifyDataSetChanged();
 		}
 	}
 }

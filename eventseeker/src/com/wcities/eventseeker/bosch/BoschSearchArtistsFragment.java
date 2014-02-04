@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.asynctask.BoschLoadArtists;
@@ -18,12 +17,13 @@ import com.wcities.eventseeker.bosch.adapter.BoschArtistListAdapter;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.interfaces.ArtistListener;
+import com.wcities.eventseeker.interfaces.BoschOnChildFragmentDisplayModeChangedListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschSearchArtistsFragment extends ListFragment implements LoadItemsInBackgroundListener,
-	OnClickListener {
+	OnClickListener, BoschOnChildFragmentDisplayModeChangedListener {
 
 	private static final String TAG = BoschSearchArtistsFragment.class.getName();
 
@@ -97,6 +97,13 @@ public class BoschSearchArtistsFragment extends ListFragment implements LoadItem
 				getListView().smoothScrollByOffset(1);
 				break;
 				
+		}
+	}
+
+	@Override
+	public void onChildFragmentDisplayModeChanged() {
+		if (boschArtistListAdapter != null) {
+			boschArtistListAdapter.notifyDataSetChanged();
 		}
 	}
 }

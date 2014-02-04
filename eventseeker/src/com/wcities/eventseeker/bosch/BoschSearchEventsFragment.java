@@ -15,6 +15,7 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
 import com.wcities.eventseeker.bosch.adapter.BoschDateWiseEventListAdapter;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.interfaces.BoschOnChildFragmentDisplayModeChangedListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.ConversionUtil;
@@ -23,7 +24,7 @@ import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
 public class BoschSearchEventsFragment extends ListFragment implements LoadItemsInBackgroundListener,
-	OnClickListener {
+	OnClickListener, BoschOnChildFragmentDisplayModeChangedListener {
 
 	private static final String TAG = BoschSearchEventsFragment.class.getName();
 	
@@ -100,6 +101,13 @@ public class BoschSearchEventsFragment extends ListFragment implements LoadItems
 				getListView().smoothScrollByOffset(1);
 				break;
 				
+		}
+	}
+
+	@Override
+	public void onChildFragmentDisplayModeChanged() {
+		if (eventLstAdptr != null) {
+			eventLstAdptr.notifyDataSetChanged();
 		}
 	}
 }

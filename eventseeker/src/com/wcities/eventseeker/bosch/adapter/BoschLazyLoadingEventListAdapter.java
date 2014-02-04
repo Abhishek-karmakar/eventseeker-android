@@ -24,6 +24,7 @@ import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
+import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.LIST_ITEM_TYPE;
 
 public class BoschLazyLoadingEventListAdapter extends BaseAdapter implements DateWiseEventParentAdapterListener {
@@ -122,6 +123,8 @@ public class BoschLazyLoadingEventListAdapter extends BaseAdapter implements Dat
 				}
 			});
 		}
+		
+		ViewUtil.updateFontColor(mContext.getResources(), convertView);
 		return convertView;
 	}
 

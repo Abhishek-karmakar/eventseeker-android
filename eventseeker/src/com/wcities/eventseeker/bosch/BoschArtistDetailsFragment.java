@@ -143,7 +143,6 @@ public class BoschArtistDetailsFragment extends FragmentLoadableFromBackStack im
 		switch (v.getId()) {
 
 			case R.id.btnInfo:
-				
 				args = new Bundle();
 				args.putSerializable(BundleKeys.ARTIST, artist);
 				((ReplaceFragmentListener) FragmentUtil.getActivity(this))
@@ -151,7 +150,6 @@ public class BoschArtistDetailsFragment extends FragmentLoadableFromBackStack im
 				break;
 
 			case R.id.btnEvents:
-				
 				args = new Bundle();
 				args.putSerializable(BundleKeys.ARTIST, artist);
 				((ReplaceFragmentListener) FragmentUtil.getActivity(this))
@@ -159,27 +157,24 @@ public class BoschArtistDetailsFragment extends FragmentLoadableFromBackStack im
 				break;
 
 			case R.id.btnFollow:
-				
-				if (FbUtil.hasUserLoggedInBefore(FragmentUtil.getActivity(this))) {
-					
+				//if (FbUtil.hasUserLoggedInBefore(FragmentUtil.getActivity(this))) {
+				String wcitiesId = ((EventSeekr) FragmentUtil.getActivity(this).getApplication()).getWcitiesId();
+				if (wcitiesId != null) {					
 					Attending attending = artist.getAttending() == Attending.NotTracked ?
 						Attending.Tracked : Attending.NotTracked;
 					
 					if (attending == Attending.Tracked) {
-					
 						artist.setAttending(Attending.Tracked);
 							new UserTracker((EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
 								UserTrackingItemType.artist, artist.getId()).execute();
 
 					} else {
-					
 						artist.setAttending(Attending.NotTracked);
 							new UserTracker((EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
 									UserTrackingItemType.artist, artist.getId(), Attending.NotTracked.getValue(),
 									UserTrackingType.Edit).execute();
 					
 					}
-					
 					updateFollowBtn();
 					
 				} else {

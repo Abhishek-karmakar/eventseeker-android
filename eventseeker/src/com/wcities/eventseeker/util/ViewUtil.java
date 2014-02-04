@@ -43,7 +43,8 @@ public class ViewUtil {
 	}*/
 
 	public static void updateFontColor(Resources res, View v) {
-		int txtColor = AppConstants.IS_NIGHT_MODE_ENABLED ? android.R.color.white : R.color.eventseeker_bosch_theme_grey;
+		int color = AppConstants.IS_NIGHT_MODE_ENABLED ? 
+			android.R.color.white : R.color.eventseeker_bosch_theme_grey;
 		
 		try {
 			if (v instanceof ViewGroup) {
@@ -54,7 +55,14 @@ public class ViewUtil {
 				}
 
 			} else if (v instanceof TextView) {
-				((TextView) v).setTextColor(res.getColor(txtColor));
+				if (v.getId() == R.id.btnTab1 || v.getId() == R.id.btnTab2 || v.getId() == R.id.btnTab3) {		
+					color = AppConstants.IS_NIGHT_MODE_ENABLED ? 
+						android.R.color.white : android.R.color.black;
+				}							
+				((TextView) v).setTextColor(res.getColor(color));
+			} else if (v.getId() == R.id.vDivider1 || v.getId() == R.id.vDivider2) {
+				v.setBackgroundColor(res.getColor(color));
+			
 			}
 
 		} catch (Exception e) {

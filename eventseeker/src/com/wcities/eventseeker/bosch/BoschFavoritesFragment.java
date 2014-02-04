@@ -1,36 +1,48 @@
 package com.wcities.eventseeker.bosch;
 
+import java.util.Iterator;
+import java.util.List;
+
 import android.location.Address;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.adapter.SwipeTabsAdapter;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
+import com.wcities.eventseeker.interfaces.BoschOnChildFragmentDisplayModeChangedListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GeoUtil;
+import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
 import com.wcities.eventseeker.viewdata.TabBar;
 
 public class BoschFavoritesFragment extends FragmentLoadableFromBackStack implements GeoUtilListener, 
-		OnClickListener {
+		OnClickListener, OnDisplayModeChangedListener {
 	
 	private SwipeTabsAdapter mTabsAdapter;
 	private TabBar tabBar;
+	private LinearLayout lnrTabBar;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View vTabBar = inflater.inflate(R.layout.fragment_bosch_custom_tabs, null);
 		
+		lnrTabBar = (LinearLayout) vTabBar.findViewById(R.id.tabBar);
+
 		int orientation = getResources().getConfiguration().orientation;
 
 		ViewPager viewPager = (ViewPager) vTabBar.findViewById(R.id.tabContentFrame);
@@ -116,5 +128,29 @@ public class BoschFavoritesFragment extends FragmentLoadableFromBackStack implem
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public void onDisplayModeChanged(boolean isNightModeEnabled) {
+		updateColors();
+			
+		if (mTabsAdapter != null) {
+		List<Fragment> pageFragments = mTabsAdapter.getTabFragments();
+
+			for (Iterator<Fragment> iterator = pageFragments.iterator(); iterator.hasNext();) {
+				BoschOnChildFragmentDisplayModeChangedListener fragment = 
+					(BoschOnChildFragmentDisplayModeChangedListener) iterator.next();
+				fragment.onChildFragmentDisplayModeChanged();
+			}
+		}
+	}
+
+	private void updateColors() {
+		if (AppConstants.IS_NIGHT_MODE_ENABLED) {
+			lnrTabBar.setBackgroundResource(R.drawable.tab_bar_rounded_corners_night_mode);
+		} else {
+			lnrTabBar.setBackgroundResource(R.drawable.tab_bar_rounded_corners);			
+		}
+		ViewUtil.updateFontColor(getResources(), lnrTabBar);
 	}
 }

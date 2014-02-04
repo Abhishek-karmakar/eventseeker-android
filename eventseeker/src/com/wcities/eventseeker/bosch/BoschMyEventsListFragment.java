@@ -11,20 +11,20 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import com.wcities.eventseeker.R;
-import com.wcities.eventseeker.adapter.DateWiseMyEventListAdapter;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadMyEvents;
 import com.wcities.eventseeker.bosch.adapter.BoschLazyLoadingEventListAdapter;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.interfaces.BoschOnChildFragmentDisplayModeChangedListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
-import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
-public class BoschMyEventsListFragment extends ListFragment implements OnClickListener, LoadItemsInBackgroundListener {
+public class BoschMyEventsListFragment extends ListFragment implements OnClickListener, LoadItemsInBackgroundListener, 
+	BoschOnChildFragmentDisplayModeChangedListener {
 	
 	private String wcitiesId;
 	
@@ -105,5 +105,12 @@ public class BoschMyEventsListFragment extends ListFragment implements OnClickLi
 				latLon[1]);
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);
         AsyncTaskUtil.executeAsyncTask(loadEvents, true);
+	}
+
+	@Override
+	public void onChildFragmentDisplayModeChanged() {
+		if (eventListAdapter != null) {
+			eventListAdapter.notifyDataSetChanged();
+		}
 	}
 }

@@ -252,16 +252,9 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 				break;
 			
 			case R.id.btnFollow :
-				/**
-				 * previously it was like this but this leads to dynamically login the user when he clicks the 
-				 * 'Follow' button, if he has fb app and and he is logged in there.
-				 */
-				//String wcitiesId = ((EventSeekr) FragmentUtil.getActivity(this).getApplication()).getWcitiesId();
-				//if (wcitiesId != null) {
-				boolean  isFbLoggedIn = FbUtil.hasUserLoggedInBefore(
-					FragmentUtil.getActivity(this).getApplicationContext());
-				if (isFbLoggedIn) {
-					
+				String wcitiesId = ((EventSeekr) FragmentUtil.getActivity(this).getApplication()).getWcitiesId();
+				
+				if (wcitiesId != null) {				
 					Attending attending = event.getAttending() == Attending.GOING ? Attending.NOT_GOING 
 						: Attending.GOING;
 					if (attending == Attending.NOT_GOING) {

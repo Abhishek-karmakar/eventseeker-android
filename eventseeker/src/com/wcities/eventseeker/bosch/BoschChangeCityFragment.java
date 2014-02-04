@@ -8,6 +8,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,6 +25,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,9 +33,10 @@ import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.CityApi;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.CityPrefered;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
-import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.jsonparser.CityApiJSONParser;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
@@ -39,7 +45,7 @@ import com.wcities.eventseeker.util.GeoUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
 
 public class BoschChangeCityFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
-		OnItemClickListener, GeoUtilListener {
+		OnItemClickListener, GeoUtilListener, OnDisplayModeChangedListener {
 
 	private static final String TAG = BoschChangeCityFragment.class.getSimpleName();
 	
@@ -254,10 +260,12 @@ public class BoschChangeCityFragment extends FragmentLoadableFromBackStack imple
 		
 		private List<CityPrefered> lstCities;
 		private LayoutInflater inflater;
+		private Resources res;
 		
 		public CitiesAdapter(List<CityPrefered> lstCities, Context ctx) {
 			this.lstCities = lstCities;
 			inflater = LayoutInflater.from(ctx);
+			res = ctx.getResources();
 		}
 
 		@Override
@@ -280,10 +288,34 @@ public class BoschChangeCityFragment extends FragmentLoadableFromBackStack imple
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			
 			convertView = inflater.inflate(R.layout.bosch_list_item_cities, null);
 			
+			RelativeLayout rltRootLyt = (RelativeLayout) convertView.findViewById(R.id.rltRootLyt);
+			
 			TextView txtCity = (TextView) convertView.findViewById(R.id.txtCity);
+
+			int txtClrResId = -1;
+			Drawable txtDrwble;
+			if (AppConstants.IS_NIGHT_MODE_ENABLED) {
+				rltRootLyt.setBackgroundResource(
+						R.drawable.slctr_item_lst_cities_fragment_change_city_night_mod);
+				
+				txtClrResId = R.color.slctr_black_on_white_off;
+				txtDrwble = res.getDrawable(R.drawable.slctr_txt_city_fragment_change_city_night_mode);				
+			} else {
+				rltRootLyt.setBackgroundResource(R.drawable.slctr_item_lst_cities_fragment_change_city);				
+				
+				txtClrResId = R.color.slctr_white_on_black_off;
+				txtDrwble = res.getDrawable(R.drawable.slctr_txt_city_fragment_change_city);				
+			}
+			
+			txtCity.setCompoundDrawablesWithIntrinsicBounds(txtDrwble, null, null, null);
+			
+			try {
+				XmlResourceParser parser = res.getXml(txtClrResId);
+				ColorStateList colors = ColorStateList.createFromXml(res, parser);
+				txtCity.setTextColor(colors);
+			} catch (Exception e) {}
 
 			CityPrefered cityPrefered = lstCities.get(position);
 			txtCity.setText(cityPrefered.getCityName() + ", " + cityPrefered.getCountryName());
@@ -298,9 +330,7 @@ public class BoschChangeCityFragment extends FragmentLoadableFromBackStack imple
 	}
 
 	@Override
-	public void onAddressSearchCompleted(String strAddress) {
-		// TODO Auto-generated method stub
-	}
+	public void onAddressSearchCompleted(String strAddress) {}
 
 	@Override
 	public void onCitySearchCompleted(String city) {
@@ -311,8 +341,11 @@ public class BoschChangeCityFragment extends FragmentLoadableFromBackStack imple
 	}
 
 	@Override
-	public void onLatlngSearchCompleted(Address address) {
-		// TODO Auto-generated method stub
+	public void onLatlngSearchCompleted(Address address) {}
+
+	@Override
+	public void onDisplayModeChanged(boolean isNightModeEnabled) {
+		adapter.notifyDataSetChanged();
 	}
 
 }

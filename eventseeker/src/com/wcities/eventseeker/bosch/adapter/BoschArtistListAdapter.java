@@ -24,6 +24,7 @@ import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.interfaces.ArtistAdapterListener;
 import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
+import com.wcities.eventseeker.util.ViewUtil;
 
 public class BoschArtistListAdapter<T> extends BaseAdapter implements ArtistAdapterListener<T> {
 	
@@ -106,6 +107,7 @@ public class BoschArtistListAdapter<T> extends BaseAdapter implements ArtistAdap
 			});
 		}
 		
+		ViewUtil.updateFontColor(mContext.getResources(), convertView);
 		return convertView;
 	}
 
