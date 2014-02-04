@@ -237,10 +237,16 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 				break;
 			//TODO: Show FBLogin dialog if user hasn't signed in with facebook.
 			case R.id.btnFollow :
-				String wcitiesId = ((EventSeekr) FragmentUtil.getActivity(this).getApplication()).getWcitiesId();
-				
-				if (wcitiesId != null) {
-		
+				/**
+				 * previously it was like this but this leads to dynamically login the user when he clicks the 
+				 * 'Follow' button, if he has fb app and and he is logged in there.
+				 */
+				//String wcitiesId = ((EventSeekr) FragmentUtil.getActivity(this).getApplication()).getWcitiesId();
+				//if (wcitiesId != null) {
+				boolean  isFbLoggedIn = FbUtil.hasUserLoggedInBefore(
+					FragmentUtil.getActivity(this).getApplicationContext());
+				if (isFbLoggedIn) {
+					
 					Attending attending = event.getAttending() == Attending.GOING ? Attending.NOT_GOING 
 						: Attending.GOING;
 					if (attending == Attending.NOT_GOING) {

@@ -1,7 +1,6 @@
 package com.wcities.eventseeker.bosch;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import android.os.Bundle;
 import android.text.TextUtils.TruncateAt;
@@ -13,24 +12,26 @@ import android.widget.TextView;
 
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.bosch.BoschMainActivity.OnCarStationaryStatusChangedListener;
+import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
+import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
-import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschInfoFragment extends FragmentLoadableFromBackStack implements View.OnClickListener, 
-		OnCarStationaryStatusChangedListener {
+		OnCarStationaryStatusChangedListener, OnDisplayModeChangedListener {
 
-	private static final int SCROLL_Y_BY = 100;
 	private Artist artist;
 	private Event event;
 	private Venue venue;
 	
 	private ScrollView scrlContent;
 	private TextView txtDescription;
+	private TextView txtAddress;
+	private TextView txtDate;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -57,12 +58,16 @@ public class BoschInfoFragment extends FragmentLoadableFromBackStack implements 
 		view.findViewById(R.id.btnDown).setOnClickListener(this);
 				
 		String description = null, address = null;
-		com.wcities.eventseeker.core.Date date = null;
+		Date date = null;
+		
+		txtAddress = (TextView) view.findViewById(R.id.txtAddress);
+		txtDate = (TextView) view.findViewById(R.id.txtDate);
+		txtDescription = (TextView) view.findViewById(R.id.txtDescription);
 		
 		if (artist != null) {
 			
 			((TextView) view.findViewById(R.id.txtAddressLabel)).setVisibility(View.GONE);
-			((TextView) view.findViewById(R.id.txtAddress)).setVisibility(View.GONE);
+			txtAddress.setVisibility(View.GONE);
 			
 			description = artist.getDescription();
 		
@@ -80,11 +85,11 @@ public class BoschInfoFragment extends FragmentLoadableFromBackStack implements 
 				address = venue.getFormatedAddress();
 				description = venue.getLongDesc();
 			}
-			((TextView) view.findViewById(R.id.txtAddress)).setText(address);
+			txtAddress.setText(address);
 		}
 		
 		if (date == null) {
-			((TextView) view.findViewById(R.id.txtDate)).setVisibility(View.GONE);
+			txtDate.setVisibility(View.GONE);
 		
 		} else {
 			SimpleDateFormat sdf = date.isStartTimeAvailable() ? new SimpleDateFormat("EEEE MMMM d, h:mm a") :
@@ -96,9 +101,10 @@ public class BoschInfoFragment extends FragmentLoadableFromBackStack implements 
 			description = "Description Unavailable";
 		}
 		
-		txtDescription = (TextView) view.findViewById(R.id.txtDescription);
 		txtDescription.setText(description);
 		updateDescriptionLines();
+		
+		updateColors();
 		
 		return view;
 	}
@@ -134,11 +140,11 @@ public class BoschInfoFragment extends FragmentLoadableFromBackStack implements 
 		switch (v.getId()) {
 
 			case R.id.btnUp:
-				scrlContent.scrollBy(0, -1 * SCROLL_Y_BY);
+				scrlContent.scrollBy(0, -1 * AppConstants.SCROLL_Y_BY);
 				break;
 
 			case R.id.btnDown:
-				scrlContent.scrollBy(0, SCROLL_Y_BY);
+				scrlContent.scrollBy(0, AppConstants.SCROLL_Y_BY);
 				break;
 		
 		}
@@ -148,6 +154,28 @@ public class BoschInfoFragment extends FragmentLoadableFromBackStack implements 
 	@Override
 	public void onCarStationaryStatusChanged(boolean isStationary) {
 		updateDescriptionLines();
+	}
+
+	@Override
+	public void onDisplayModeChanged(boolean isNightModeEnabled) {
+		updateColors();
+	}
+
+	private void updateColors() {
+		setColor(txtAddress);
+		setColor(txtDate);
+		setColor(txtDescription);
+		//ViewUtil.updateFontColor(getResources(), )
+	}
+	
+	private void setColor(TextView txt) {
+		if (txt != null) {
+			if (AppConstants.IS_NIGHT_MODE_ENABLED) {
+				txt.setTextColor(getResources().getColor(android.R.color.white));			
+			} else {
+				txt.setTextColor(getResources().getColor(R.color.eventseeker_bosch_theme_grey));			
+			}
+		} 
 	}
 	
 }

@@ -3,6 +3,7 @@ package com.wcities.eventseeker.bosch;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -18,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -56,6 +58,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	private int drawerItemSelectedPosition = AppConstants.INVALID_INDEX;
 
 	private TextView txtActionBarTitle;
+	private FrameLayout frmLayoutContentFrame;
 
 	public interface OnCarStationaryStatusChangedListener {
 		public void onCarStationaryStatusChanged(boolean isStationary);
@@ -79,7 +82,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 			mDrawerToggle = new ActionBarDrawerToggle(this, // host this
 					mDrawerLayout, // DrawerLayout object
-					R.drawable.sidenav, // nav drawer icon to replace 'Up' caret
+					R.drawable.ic_nav_drawer_off, // nav drawer icon to replace 'Up' caret
 					R.string.drawer_open, // "open drawer" description
 					R.string.drawer_close // "close drawer" description
 			);
@@ -93,6 +96,8 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			 * searchView in SearchFragment. So need to set any transparent icon
 			 * rather than null.
 			 */
+			
+			
 			getSupportActionBar().setIcon(R.drawable.placeholder);
 			getSupportActionBar().setCustomView(R.layout.bosch_actionbar_titleview);
 
@@ -105,10 +110,11 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			}
 			getSupportFragmentManager().executePendingTransactions();
 			
+			frmLayoutContentFrame = (FrameLayout) findViewById(R.id.content_frame);
 			selectItem(INDEX_NAV_ITEM_HOME);
+			updateColors();
 		}		
 	}
-	
 
 	@Override
 	protected void onResume() {
@@ -130,9 +136,11 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 						((OnDisplayModeChangedListener) fragment).onDisplayModeChanged(isNightModeEnabled);
 					}
 					
+					updateColors();
+					
 					Log.i(TAG, "IS_NIGHT_MODE_ENABLED : " + AppConstants.IS_NIGHT_MODE_ENABLED);					
 				}
-				
+
 				@Override
 				public void onCarStationaryStatusChanged(boolean isCarStationary) {
 					AppConstants.IS_CAR_STATIONARY = isCarStationary;					
@@ -148,6 +156,26 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			});
 		} catch (MySpinException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private void updateColors() {
+		if (AppConstants.IS_NIGHT_MODE_ENABLED) {
+			frmLayoutContentFrame.setBackgroundColor(getResources().getColor(android.R.color.black));
+			
+			//getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xFF000000));
+			getSupportActionBar().setBackgroundDrawable(
+				getResources().getDrawable(R.drawable.bg_action_bar_night_mode));
+
+			txtActionBarTitle.setTextColor(getResources().getColor(android.R.color.white));
+		} else {		
+			frmLayoutContentFrame.setBackgroundColor(getResources().getColor(android.R.color.white));
+			
+			//getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xFFFFFFFF));
+			getSupportActionBar().setBackgroundDrawable(
+				getResources().getDrawable(R.drawable.bg_action_bar));
+			
+			txtActionBarTitle.setTextColor(getResources().getColor(R.color.eventseeker_bosch_theme_grey));
 		}
 	}
 

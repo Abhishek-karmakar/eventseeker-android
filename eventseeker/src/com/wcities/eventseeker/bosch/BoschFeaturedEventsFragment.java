@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.asynctask.LoadFeaturedEvts;
 import com.wcities.eventseeker.asynctask.LoadFeaturedEvts.OnLoadFeaturedEventsListener;
+import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
 import com.wcities.eventseeker.bosch.adapter.BoschEventListAdapter;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
@@ -22,7 +23,7 @@ import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschFeaturedEventsFragment extends ListFragmentLoadableFromBackStack implements
-		OnLoadFeaturedEventsListener, OnClickListener {
+		OnLoadFeaturedEventsListener, OnClickListener, OnDisplayModeChangedListener {
 
 	private static final String TAG = BoschFeaturedEventsFragment.class.getName();
 	private ProgressBar prgbr;
@@ -122,6 +123,13 @@ public class BoschFeaturedEventsFragment extends ListFragmentLoadableFromBackSta
 				getListView().smoothScrollByOffset(1);
 				break;
 				
+		}
+	}
+
+	@Override
+	public void onDisplayModeChanged(boolean isNightModeEnabled) {
+		if (adapter != null) {
+			adapter.notifyDataSetChanged();
 		}
 	}
 }
