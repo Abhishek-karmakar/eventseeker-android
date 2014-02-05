@@ -71,7 +71,7 @@ public class GeoUtil {
 				Log.d(TAG, "City=" + cityName);
 				
 			} else {
-        		Log.w(TAG, "No relevant address found.");
+        		Log.d(TAG, "No relevant address found.");
 			}
 			
 		} catch (IOException e) {
@@ -124,7 +124,7 @@ public class GeoUtil {
 								JSONArray jArrTypes = jObjAddressComponent.getJSONArray(KEY_TYPES);
 								
 								if (jArrTypes.length() > 0 && jArrTypes.getString(0).equals(VALUE_LOCALITY)) {
-									Log.d(TAG, "got city");
+									//Log.d(TAG, "got city");
 									return jObjAddressComponent.getString(KEY_LONG_NAME);
 								}
 							}

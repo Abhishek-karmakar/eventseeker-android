@@ -136,7 +136,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 						((OnDisplayModeChangedListener) fragment).onDisplayModeChanged(isNightModeEnabled);
 					}
 					
-					Log.i(TAG, "IS_NIGHT_MODE_ENABLED : " + AppConstants.IS_NIGHT_MODE_ENABLED);	
+					//Log.i(TAG, "IS_NIGHT_MODE_ENABLED : " + AppConstants.IS_NIGHT_MODE_ENABLED);	
 					//Toast.makeText(BoschMainActivity.this, "onDayNightModeChanged()", Toast.LENGTH_SHORT).show();
 				}
 
@@ -149,7 +149,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 						((OnCarStationaryStatusChangedListener) fragment).onCarStationaryStatusChanged(isCarStationary);
 					}
 					
-					Log.i(TAG, "IS_CAR_STATIONARY : " + AppConstants.IS_CAR_STATIONARY);
+					//Log.i(TAG, "IS_CAR_STATIONARY : " + AppConstants.IS_CAR_STATIONARY);
 				}
 				
 			});
@@ -162,7 +162,6 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		if (AppConstants.IS_NIGHT_MODE_ENABLED) {
 			frmLayoutContentFrame.setBackgroundColor(getResources().getColor(android.R.color.black));
 			
-			//getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xFF000000));
 			getSupportActionBar().setBackgroundDrawable(
 				getResources().getDrawable(R.drawable.bg_action_bar_night_mode));
 
@@ -171,7 +170,6 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		} else {		
 			frmLayoutContentFrame.setBackgroundColor(getResources().getColor(android.R.color.white));
 			
-			//getSupportActionBar().setBackgroundDrawable(new ColorDrawable(0xFFFFFFFF));
 			getSupportActionBar().setBackgroundDrawable(
 				getResources().getDrawable(R.drawable.bg_action_bar));
 			

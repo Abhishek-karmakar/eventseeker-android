@@ -3,7 +3,6 @@ package com.wcities.eventseeker;
 import java.util.List;
 import java.util.Set;
 
-import android.app.ActivityManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.ActivityNotFoundException;
@@ -159,9 +158,9 @@ public class MainActivity extends ActionBarActivity implements
 		
 		lnrLayoutRootNavDrawer = (LinearLayout) findViewById(R.id.rootNavigationDrawer);
 
-		Log.d(TAG, "lnrLayoutRootNavDrawer : " + lnrLayoutRootNavDrawer);
+		//Log.d(TAG, "lnrLayoutRootNavDrawer : " + lnrLayoutRootNavDrawer);
 
-		Log.d(TAG, "isTabletAndInLandscapeMode : " + isTabletAndInLandscapeMode);
+		//Log.d(TAG, "isTabletAndInLandscapeMode : " + isTabletAndInLandscapeMode);
 		if (!isTabletAndInLandscapeMode) {
 
 			mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -229,7 +228,7 @@ public class MainActivity extends ActionBarActivity implements
 		
 		DrawerListFragment drawerListFragment = (DrawerListFragment) getSupportFragmentManager()
 				.findFragmentByTag(DRAWER_LIST_FRAGMENT_TAG);
-		Log.d(TAG, "drawerListFragment : " + drawerListFragment);
+		//Log.d(TAG, "drawerListFragment : " + drawerListFragment);
 		if (drawerListFragment == null) {
 			addDrawerListFragment();
 		}
@@ -331,7 +330,7 @@ public class MainActivity extends ActionBarActivity implements
 				serviceInstance.setCurrentActivity(null);
 			}
 		}
-		Log.d(TAG, "View : " + findViewById(R.id.rootNavigationDrawer));
+		//Log.d(TAG, "View : " + findViewById(R.id.rootNavigationDrawer));
 		super.onDestroy();
 	}
 

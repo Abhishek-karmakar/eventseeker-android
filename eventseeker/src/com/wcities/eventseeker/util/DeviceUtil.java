@@ -41,29 +41,29 @@ public class DeviceUtil {
 	 * @return
 	 */
 	public static double[] getLatLon(Context context) {
-		Log.d(TAG, "getLatLon()");
+		//Log.d(TAG, "getLatLon()");
 		double[] latLon = new double[] {0, 0};
     	if (AppConstants.lat == AppConstants.NOT_ALLOWED_LAT || AppConstants.lon == AppConstants.NOT_ALLOWED_LON 
     			|| retryGenerating) {
-    		Log.d(TAG, "generate");
+    		//Log.d(TAG, "generate");
 	    	LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 	    	String locationProvider = locationManager.getBestProvider(new Criteria(), true);
 	    	if (locationProvider != null) {
-	    		Log.d(TAG, "locationProvider is not null");
+	    		//Log.d(TAG, "locationProvider is not null");
 		    	Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
 		    	
 		        if (lastKnownLocation != null) {
 		        	AppConstants.lat = latLon[0] = lastKnownLocation.getLatitude();
 		        	AppConstants.lon = latLon[1] = lastKnownLocation.getLongitude();
 		        	retryGenerating = false;
-		        	Log.d(TAG, "lastKnownLocation, lat = " + AppConstants.lat + ", lon = " + AppConstants.lon);
+		        	//Log.d(TAG, "lastKnownLocation, lat = " + AppConstants.lat + ", lon = " + AppConstants.lon);
 		    		
 		    	} else {
 		    		new FindLatLonFromApi().execute();
 		    	}
 		        
 	    	} else {
-	    		Log.d(TAG, "location provider is null");
+	    		//Log.d(TAG, "location provider is null");
 	    		new FindLatLonFromApi().execute();
 	    	}
 	        
