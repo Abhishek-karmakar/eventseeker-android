@@ -63,16 +63,6 @@
             android:text="FEATURED"
             android:textColor="@color/slctr_btn_theme_gray_on_blue_off" />
 
-        <Button
-            android:id="@+id/btnSetting"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:drawablePadding="@dimen/b_btn_drw_pad_fragment_plan_travel"
-            android:drawableTop="@drawable/slctr_btn_settings"
-            android:text="SETTING"
-            android:textColor="@color/slctr_btn_theme_gray_on_blue_off" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -34,7 +34,6 @@ public class BoschHomeFragment extends FragmentLoadableFromBackStack implements 
 		View view = inflater.inflate(R.layout.fragment_bosch_home, null);
 		view.findViewById(R.id.btnDiscover).setOnClickListener(this);
 		view.findViewById(R.id.btnFeatured).setOnClickListener(this);
-		view.findViewById(R.id.btnSetting).setOnClickListener(this);
 		return view;
 	}
 
@@ -60,11 +59,6 @@ public class BoschHomeFragment extends FragmentLoadableFromBackStack implements 
 		case R.id.btnFeatured:
 			((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
 				BoschFeaturedEventsFragment.class.getSimpleName(), null);
-			break;
-			
-		case R.id.btnSetting:
-			((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
-				BoschSettingsFragment.class.getSimpleName(), null);			
 			break;
 
 		default:

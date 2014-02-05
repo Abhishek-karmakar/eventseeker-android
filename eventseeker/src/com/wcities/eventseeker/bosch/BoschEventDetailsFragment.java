@@ -158,14 +158,12 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 
 	private void updateDistance() {
 		String distance = event.getDistance();
-		
 		if (distance.equals(AppConstants.INVALID_DISTANCE)) {
 			double latLon[] = DeviceUtil.getLatLon(FragmentUtil.getActivity(this));
 			distance = event.getSchedule().getVenue().getDistanceFrom(latLon[0], latLon[1]) + "";
-			distance = String.format("%.2f", Double.parseDouble(distance));
 		}
-		
-		txtDistance.setText(distance + " m");
+		distance = String.format("%.3f", Double.parseDouble(distance));
+		txtDistance.setText(distance + " mi");
 	}
 	
 	private void updateArtistsAndInfoBtn() {
