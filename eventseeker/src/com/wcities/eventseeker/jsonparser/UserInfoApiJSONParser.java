@@ -400,6 +400,9 @@ public class UserInfoApiJSONParser {
 	private Event getEvent(JSONObject jsonObject) throws JSONException {
 		Event event = new Event(jsonObject.getInt(KEY_ID), jsonObject.getString(KEY_NAME));
 		
+		boolean hasArtists = jsonObject.has(KEY_ARTIST) ? true : false;
+        event.setHasArtists(hasArtists);
+		
 		List<String> startDates = new ArrayList<String>();
 		String date = jsonObject.getString(KEY_EVENT_DATE);
 		startDates.add(date);

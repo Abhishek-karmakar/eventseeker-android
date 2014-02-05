@@ -109,6 +109,7 @@ public class BoschArtistListAdapter<T> extends BaseAdapter implements ArtistAdap
 			ViewUtil.updateViewColor(mContext.getResources(), convertView);
 		}
 		
+		ViewUtil.updateViewColor(mContext.getResources(), convertView);
 		return convertView;
 	}
 

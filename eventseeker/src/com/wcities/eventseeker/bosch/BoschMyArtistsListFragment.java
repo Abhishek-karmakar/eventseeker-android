@@ -22,12 +22,13 @@ import com.wcities.eventseeker.bosch.adapter.BoschArtistListAdapter;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.FollowingList;
+import com.wcities.eventseeker.interfaces.BoschOnChildFragmentDisplayModeChangedListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschMyArtistsListFragment extends ListFragment implements OnClickListener, 
-		LoadItemsInBackgroundListener, LoadMyArtistsListener {
+		LoadItemsInBackgroundListener, BoschOnChildFragmentDisplayModeChangedListener, LoadMyArtistsListener {
 
 	private String wcitiesId;
 	private FollowingList cachedFollowingList;
@@ -130,6 +131,13 @@ public class BoschMyArtistsListFragment extends ListFragment implements OnClickL
 		AsyncTaskUtil.executeAsyncTask(loadMyArtists, true);
 	}
 
+	@Override
+	public void onChildFragmentDisplayModeChanged() {
+		if (boschArtistListAdapter != null) {
+			boschArtistListAdapter.notifyDataSetChanged();
+		}
+	}
+	
 	@Override
 	public void showNoArtistFound() {
 		artistList.add(new Artist(AppConstants.INVALID_ID, null));

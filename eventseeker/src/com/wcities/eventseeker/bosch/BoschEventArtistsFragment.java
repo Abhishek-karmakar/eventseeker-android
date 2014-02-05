@@ -51,8 +51,8 @@ public class BoschEventArtistsFragment extends ListFragmentLoadableFromBackStack
 			artistList.addAll(event.getArtists());
 			
 			if (artistList.isEmpty()) {
-				// add dummy item to indicate loading progress
-				artistList.add(null);
+				// for no artist found message
+				artistList.add(new Artist(AppConstants.INVALID_ID, null)); 
 			}
 			
 			boschArtistListAdapter = new BoschArtistListAdapter<Void>(

@@ -163,7 +163,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			frmLayoutContentFrame.setBackgroundColor(getResources().getColor(android.R.color.black));
 			
 			getSupportActionBar().setBackgroundDrawable(
-				getResources().getDrawable(R.drawable.bg_action_bar_night_mode));
+				getResources().getDrawable(R.drawable.ic_action_bar_night_mode));
 
 			txtActionBarTitle.setTextColor(getResources().getColor(android.R.color.white));
 			
@@ -171,7 +171,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			frmLayoutContentFrame.setBackgroundColor(getResources().getColor(android.R.color.white));
 			
 			getSupportActionBar().setBackgroundDrawable(
-				getResources().getDrawable(R.drawable.bg_action_bar));
+				getResources().getDrawable(R.drawable.ic_action_bar));
 			
 			txtActionBarTitle.setTextColor(getResources().getColor(R.color.eventseeker_bosch_theme_grey));
 		}
@@ -315,7 +315,6 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		default:
 			return super.onOptionsItemSelected(item);
 		}
-
 	}
 
 	@Override

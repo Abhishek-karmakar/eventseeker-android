@@ -54,18 +54,18 @@ public class BoschSearchFragment extends FragmentLoadableFromBackStack implement
 		
 	private void onSearchClicked() {
 			
-			String query = edtSearch.getText().toString().trim();
-			query = query.replace("\\n", "");
+		String query = edtSearch.getText().toString().trim();
+		query = query.replace("\\n", "");
 			
-			if(query.equals("")) {
-				return;
-			}
+		if(query.equals("")) {
+			return;
+		}
 
-			Bundle args = new Bundle();
-			args.putString(BundleKeys.QUERY, query);
+		Bundle args = new Bundle();
+		args.putString(BundleKeys.QUERY, query);
 			
-			((BoschMainActivity) FragmentUtil.getActivity(this))
-				.replaceByFragment(BoschSearchResultFragment.class.getSimpleName(), args);
+		((BoschMainActivity) FragmentUtil.getActivity(this))
+			.replaceByFragment(BoschSearchResultFragment.class.getSimpleName(), args);
 
 	}
 
