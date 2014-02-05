@@ -64,6 +64,11 @@ public class BoschSettingsFragment extends FragmentLoadableFromBackStack impleme
 		updateLoginBtn();
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_settings));
+	}
+	
 	private void updateLoginBtn() {
 		Drawable drawable;
 		String msg;

@@ -26,7 +26,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.6"
-            android:background="@drawable/bg_edt_search_city_fragment_change_city"
+            android:background="@drawable/bg_edt_search"
             android:hint="Search"
             android:paddingLeft="@dimen/b_edt_search_city_pad_l_r_fragment_bosch_change_city"
             android:paddingRight="@dimen/b_edt_search_city_pad_l_r_fragment_bosch_change_city"

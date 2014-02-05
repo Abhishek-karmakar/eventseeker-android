@@ -2,6 +2,7 @@ package com.wcities.eventseeker.util;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -15,6 +16,7 @@ import android.location.Geocoder;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
@@ -56,7 +58,6 @@ public class GeoUtil {
 	}
 	
 	public static String getCityName(GeoUtilListener geoUtilListener, EventSeekr eventSeekr) {
-		//Log.d(TAG, "getCityName");
 		String cityName = "";
 		double[] latLng = DeviceUtil.getLatLon(eventSeekr);
 		List<Address> addresses = null;
@@ -64,14 +65,13 @@ public class GeoUtil {
 		
         try {
 			addresses = geocoder.getFromLocation(latLng[0], latLng[1], 1);
-			
+
 			if (addresses != null && !addresses.isEmpty()) {
 				Address address = addresses.get(0);
 				cityName = address.getLocality();					
-				Log.d(TAG, "City=" + cityName);
 				
 			} else {
-        		Log.w(TAG, "No relevant address found.");
+				Log.w(TAG, "No relevant address found.");
 			}
 			
 		} catch (IOException e) {
@@ -79,10 +79,10 @@ public class GeoUtil {
 		}
 		
 		// Alternative way to find lat-lon
-		if (addresses == null || addresses.isEmpty()) {
+		if (addresses == null || addresses.isEmpty() || cityName == null || cityName.equals("")) {
 			GeoUtil.getCityFromLocation(latLng[0], latLng[1], geoUtilListener);
 		}
-		
+		//Log.d(TAG, "City : " + cityName);
 		return cityName;
 	}
 	

@@ -158,6 +158,18 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		}
 	}
 	
+	@Override
+	protected void onDestroy() {
+		try {
+			// calling 'super.onDestroy()' in try catch as some times it gives no view found error while destroying
+			// and then the app gets crashed. So, the try catch catches the exception and helps to continue the 
+			// application without crashing.
+			super.onDestroy();
+		} catch (Exception e) {
+			Log.e(TAG, "Error Destroying Activity : " + e.toString());
+		}
+	}
+	
 	private void updateColors() {
 		if (AppConstants.IS_NIGHT_MODE_ENABLED) {
 			frmLayoutContentFrame.setBackgroundColor(getResources().getColor(android.R.color.black));

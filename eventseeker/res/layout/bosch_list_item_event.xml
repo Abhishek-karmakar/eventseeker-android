@@ -56,7 +56,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/b_divider_ht_bosch_fragment_discover_by_category_list_item_evt"
         android:layout_below="@id/imgEvent"
-        android:layout_marginBottom="@dimen/b_divider_margin_t_b_bosch_fragment_discover_by_category_list_item_evt"
         android:layout_marginTop="@dimen/b_divider_margin_t_b_bosch_fragment_discover_by_category_list_item_evt"
         android:background="@android:color/black" />
 

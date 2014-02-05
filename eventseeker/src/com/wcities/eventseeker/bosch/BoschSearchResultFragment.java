@@ -3,6 +3,7 @@ package com.wcities.eventseeker.bosch;
 import java.util.Iterator;
 import java.util.List;
 
+import android.location.Address;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -16,17 +17,20 @@ import android.widget.LinearLayout;
 
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.adapter.SwipeTabsAdapter;
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.BoschOnChildFragmentDisplayModeChangedListener;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.GeoUtil;
 import com.wcities.eventseeker.util.ViewUtil;
+import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
 import com.wcities.eventseeker.viewdata.TabBar;
 
 public class BoschSearchResultFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
-		OnDisplayModeChangedListener {
+		OnDisplayModeChangedListener, GeoUtilListener {
 
 	private static final String TAG = BoschSearchResultFragment.class.getName();
 
@@ -101,8 +105,14 @@ public class BoschSearchResultFragment extends FragmentLoadableFromBackStack imp
 	@Override
 	public void onResume() {
 		super.onResume();
-		((BoschMainActivity) FragmentUtil.getActivity(this)).onFragmentResumed(this, 
-			AppConstants.INVALID_INDEX, getResources().getString(R.string.title_search_results));
+		String cityName = GeoUtil.getCityName(this, (EventSeekr) FragmentUtil.getActivity(this).getApplication());
+
+		super.onResume(AppConstants.INVALID_INDEX, buildTitle(cityName));
+	}
+
+	private String buildTitle(String cityName) {
+		String title = "Displaying Results for '" + searchQuery + "'";
+		return (cityName == null || cityName.length() == 0) ? title : cityName + " - " + title;
 	}
 	
 	@Override
@@ -140,5 +150,19 @@ public class BoschSearchResultFragment extends FragmentLoadableFromBackStack imp
 			}
 		}
 	}
+
+	@Override
+	public void onAddressSearchCompleted(String strAddress) {}
+
+	@Override
+	public void onCitySearchCompleted(String city) {
+		if (city != null && city.length() != 0) {
+			((BoschMainActivity)FragmentUtil.getActivity(this)).updateTitleForFragment(buildTitle(city), 
+				getClass().getSimpleName());
+		}
+	}
+
+	@Override
+	public void onLatlngSearchCompleted(Address address) {}
 
 }

@@ -8,11 +8,14 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class BoschSearchFragment extends FragmentLoadableFromBackStack implements OnClickListener {
+public class BoschSearchFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
+		OnDisplayModeChangedListener {
 
 	private static final String TAG = BoschSearchFragment.class.getName();
 	
@@ -31,6 +34,7 @@ public class BoschSearchFragment extends FragmentLoadableFromBackStack implement
 		view.findViewById(R.id.btnSearch).setOnClickListener(this);
 		edtSearch = (EditText) view.findViewById(R.id.edtSearch);
 		
+		updateColors();
 		return view;
 	}
 	
@@ -69,4 +73,20 @@ public class BoschSearchFragment extends FragmentLoadableFromBackStack implement
 
 	}
 
+	@Override
+	public void onDisplayModeChanged(boolean isNightModeEnabled) {
+		updateColors();		
+	}
+
+	private void updateColors() {
+		if (AppConstants.IS_NIGHT_MODE_ENABLED) {
+			edtSearch.setBackgroundResource(R.drawable.bg_edt_search_night_mode);
+			edtSearch.setTextColor(getResources().getColor(android.R.color.white));
+			edtSearch.setHintTextColor(getResources().getColor(android.R.color.white));
+		} else {
+			edtSearch.setBackgroundResource(R.drawable.bg_edt_search);
+			edtSearch.setTextColor(getResources().getColor(R.color.eventseeker_bosch_theme_grey));			
+			edtSearch.setHintTextColor(getResources().getColor(R.color.eventseeker_bosch_theme_grey));			
+		}		
+	}
 }
