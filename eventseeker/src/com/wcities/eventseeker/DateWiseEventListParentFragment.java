@@ -45,7 +45,6 @@ public abstract class DateWiseEventListParentFragment extends FbPublishEventList
 		if (getParentFragment() == null) {
 			setRetainInstance(true);
 		}
-
 	}
 
 	@Override

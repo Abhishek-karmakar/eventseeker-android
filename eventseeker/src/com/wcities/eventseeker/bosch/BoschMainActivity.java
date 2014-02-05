@@ -137,7 +137,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 						((OnDisplayModeChangedListener) fragment).onDisplayModeChanged(isNightModeEnabled);
 					}
 					
-					Log.i(TAG, "IS_NIGHT_MODE_ENABLED : " + AppConstants.IS_NIGHT_MODE_ENABLED);	
+					//Log.i(TAG, "IS_NIGHT_MODE_ENABLED : " + AppConstants.IS_NIGHT_MODE_ENABLED);	
 					//Toast.makeText(BoschMainActivity.this, "onDayNightModeChanged()", Toast.LENGTH_SHORT).show();
 				}
 
@@ -150,7 +150,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 						((OnCarStationaryStatusChangedListener) fragment).onCarStationaryStatusChanged(isCarStationary);
 					}
 					
-					Log.i(TAG, "IS_CAR_STATIONARY : " + AppConstants.IS_CAR_STATIONARY);
+					//Log.i(TAG, "IS_CAR_STATIONARY : " + AppConstants.IS_CAR_STATIONARY);
 				}
 				
 			});

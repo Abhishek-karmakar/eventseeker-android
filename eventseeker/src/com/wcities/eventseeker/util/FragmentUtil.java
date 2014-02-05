@@ -60,16 +60,6 @@ public class FragmentUtil {
 					if (fragment instanceof ActivityImmediateFragmentLoadableFromBackStack) {
 						((ActivityImmediateFragmentLoadableFromBackStack)fragment).setActivityRef(activity);
 					}
-					/*if (fragment instanceof EventDetailsFragment) {
-						((EventDetailsFragment)fragment).setActivity(activity);
-						
-					} else if (fragment instanceof EventFeaturingFragment) {
-						((EventFeaturingFragment)fragment).setActivity(activity);
-						
-					} else if (fragment instanceof FeaturedEventsFragment) {
-						((FeaturedEventsFragment)fragment).setActivity(activity);
-					}
-					updateActivityReferenceInAllFragments(fragment.getChildFragmentManager(), activity);*/
 				}
 			}
 		}
