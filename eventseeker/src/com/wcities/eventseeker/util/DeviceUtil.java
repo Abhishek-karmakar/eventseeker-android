@@ -80,7 +80,6 @@ public class DeviceUtil {
 			latLon[1] = SAN_FRANCISCO_LON;
 			retryGenerating = true;
     	}
-    	
     	return latLon;
     }
 	
@@ -163,7 +162,9 @@ public class DeviceUtil {
 		@Override
 		protected Void doInBackground(Void... params) {
 			double[] latLon = new double[] {0, 0};
+			
 			IPToCityApi ipToCityApi = new IPToCityApi(Api.OAUTH_TOKEN);
+			
 			try {
 				JSONObject jsonObject = ipToCityApi.findLatLon();
 				IPToCityApiJSONParser jsonParser = new IPToCityApiJSONParser();
@@ -185,6 +186,7 @@ public class DeviceUtil {
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
+
 			return null;
 		}
 	}

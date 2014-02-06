@@ -26,6 +26,7 @@ import com.wcities.eventseeker.core.FollowingList;
 import com.wcities.eventseeker.exception.DefaultUncaughtExceptionHandler;
 import com.wcities.eventseeker.gcm.GcmUtil;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
+import com.wcities.eventseeker.interfaces.BoschAsyncTaskListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FileUtil;
@@ -59,11 +60,21 @@ public class EventSeekr extends Application {
 	private int syncCountPandora = NOT_INITIALIZED;
 
 	private List<EventSeekrListener> listeners;
+
+	private static BoschAsyncTaskListener boschAsyncTaskListener;
 	
 	private FollowingList followingList;
 
 	public interface EventSeekrListener {
 		public void onSyncCountUpdated(Service service);
+	}
+	
+	public static BoschAsyncTaskListener getBoschAsyncTaskListener() {
+		return boschAsyncTaskListener;
+	}
+
+	public static void setBoschAsyncTaskListener(BoschAsyncTaskListener boschAsyncTaskListener) {
+		EventSeekr.boschAsyncTaskListener = boschAsyncTaskListener;
 	}
 
 	@Override

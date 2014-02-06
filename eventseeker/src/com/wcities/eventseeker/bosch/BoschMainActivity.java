@@ -26,6 +26,7 @@ import com.bosch.myspin.serversdk.IOnCarDataChangeListener;
 import com.bosch.myspin.serversdk.MySpinException;
 import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.bosch.BoschDrawerListFragment.BoschDrawerListFragmentListener;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -78,6 +79,8 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		} else {
 			setContentView(R.layout.activity_bosch_main);
 
+			EventSeekr.setBoschAsyncTaskListener(this);
+			
 			lnrLayoutRootNavDrawer = (LinearLayout) findViewById(R.id.rootNavigationDrawerBosch);
 			mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 			mDrawerToggle = new ActionBarDrawerToggle(this, // host this
@@ -104,7 +107,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			txtActionBarTitle = (TextView) findViewById(R.id.txtActionBarTitle);
 
 			BoschDrawerListFragment boschDrawerListFragment = (BoschDrawerListFragment) getSupportFragmentManager()
-					.findFragmentByTag(BoschDrawerListFragment.class.getSimpleName());
+				.findFragmentByTag(BoschDrawerListFragment.class.getSimpleName());
 			if (boschDrawerListFragment == null) {
 				addDrawerListFragment();
 			}
@@ -138,7 +141,6 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 					}
 					
 					//Log.i(TAG, "IS_NIGHT_MODE_ENABLED : " + AppConstants.IS_NIGHT_MODE_ENABLED);	
-					//Toast.makeText(BoschMainActivity.this, "onDayNightModeChanged()", Toast.LENGTH_SHORT).show();
 				}
 
 				@Override
@@ -161,6 +163,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	
 	@Override
 	protected void onDestroy() {
+		EventSeekr.setBoschAsyncTaskListener(null);
 		try {
 			// calling 'super.onDestroy()' in try catch as some times it gives no view found error while destroying
 			// and then the app gets crashed. So, the try catch catches the exception and helps to continue the 
@@ -222,8 +225,8 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	    switch (position) {
 	    
 		case INDEX_NAV_ITEM_HOME:
-			BoschHomeFragment planTravelFragment = new BoschHomeFragment();
-			replaceContentFrameByFragment(planTravelFragment, false);
+			BoschHomeFragment boschHomeFragment = new BoschHomeFragment();
+			replaceContentFrameByFragment(boschHomeFragment, false);
 			break;
 			
 		case INDEX_NAV_ITEM_CHANGE_CITY:
@@ -515,6 +518,26 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 
 	@Override
 	public void onConnectionFailure() {
-		showBoschDialog("The Internet connection appears to be offline");
+		View view = LayoutInflater.from(this).inflate(R.layout.bosch_element_alert_dialog, null);
+		
+		((TextView)view.findViewById(R.id.txtTitle)).setText("The Internet connection appears to be offline");
+
+		AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+		Dialog dialog = alertDialog.setCustomTitle(view).setCancelable(false)
+			.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				onDrawerItemSelected(INDEX_NAV_ITEM_HOME);
+				dialog.dismiss();
+			}
+		}).create();
+
+		try {
+			MySpinServerSDK.sharedInstance().registerDialog(dialog);
+		} catch (MySpinException e) {
+			Log.e(TAG, "Error : " + e.toString());
+			e.printStackTrace();
+		}
+		
+		dialog.show();
 	}
 }

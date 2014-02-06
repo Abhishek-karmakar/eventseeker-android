@@ -57,33 +57,46 @@ public class GeoUtil {
 		new GetCityFromLatlng(lat, lon, listener).execute();
 	}
 	
-	public static String getCityName(GeoUtilListener geoUtilListener, EventSeekr eventSeekr) {
-		String cityName = "";
-		double[] latLng = DeviceUtil.getLatLon(eventSeekr);
-		List<Address> addresses = null;
-        Geocoder geocoder = new Geocoder(eventSeekr);
+	/**
+	 * will give the call back on Background thread. So, do the need full operation on UI thread if necesarry
+	 * @param geoUtilListener
+	 * @param eventSeekr
+	 */
+	public static void getCityName(final GeoUtilListener geoUtilListener, final EventSeekr eventSeekr) {
 		
-        try {
-			addresses = geocoder.getFromLocation(latLng[0], latLng[1], 1);
+		new Thread(new Runnable() {
 
-			if (addresses != null && !addresses.isEmpty()) {
-				Address address = addresses.get(0);
-				cityName = address.getLocality();					
+			@Override
+			public void run() {
+				String cityName = "";
 				
-			} else {
-        		Log.d(TAG, "No relevant address found.");
+				final double[] latLng = DeviceUtil.getLatLon(eventSeekr);
+
+				List<Address> addresses = null;
+				
+				Geocoder geocoder = new Geocoder(eventSeekr);
+				try {
+					addresses = geocoder.getFromLocation(latLng[0], latLng[1], 1);
+
+					if (addresses != null && !addresses.isEmpty()) {
+						Address address = addresses.get(0);
+						cityName = address.getLocality();
+						geoUtilListener.onCitySearchCompleted(cityName);
+						
+					} else {
+						Log.d(TAG, "No relevant address found.");
+					}
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				// Alternative way to find lat-lon
+				if (addresses == null || addresses.isEmpty() || cityName == null || cityName.equals("")) {
+					GeoUtil.getCityFromLocation(latLng[0], latLng[1], geoUtilListener);
+				}
 			}
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		// Alternative way to find lat-lon
-		if (addresses == null || addresses.isEmpty() || cityName == null || cityName.equals("")) {
-			GeoUtil.getCityFromLocation(latLng[0], latLng[1], geoUtilListener);
-		}
-		//Log.d(TAG, "City : " + cityName);
-		return cityName;
+		}).start();
 	}
 	
 	private static class GetCityFromLatlng extends AsyncTask<Void, Void, String> {

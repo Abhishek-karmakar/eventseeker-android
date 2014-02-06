@@ -58,6 +58,8 @@ public class BoschChangeCityFragment extends FragmentLoadableFromBackStack imple
 
 	private ListView lstCity;
 
+	private String cityName;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -99,12 +101,12 @@ public class BoschChangeCityFragment extends FragmentLoadableFromBackStack imple
 	}
 	
 	@Override
-	public void onResume() {
-		String cityName = GeoUtil.getCityName(this, (EventSeekr) FragmentUtil.getActivity(this).getApplication());
-		super.onResume(BoschMainActivity.INDEX_NAV_ITEM_CHANGE_CITY, buildTitle(cityName));
+ 	public void onResume() {
+		GeoUtil.getCityName(this, (EventSeekr) FragmentUtil.getActivity(this).getApplication());
+		super.onResume(BoschMainActivity.INDEX_NAV_ITEM_CHANGE_CITY, buildTitle());
 	}
 
-	private String buildTitle(String cityName) {
+	private String buildTitle() {
 		return (cityName == null || cityName.length() == 0) ? "Change City" : cityName + " - Change City";
 	}
 
@@ -115,8 +117,8 @@ public class BoschChangeCityFragment extends FragmentLoadableFromBackStack imple
 		latitiude = cityPrefered.getLatitude();
 		longitude = cityPrefered.getLongitude();
 		
-		String cityName = cityPrefered.getCityName();
-		((BoschMainActivity)FragmentUtil.getActivity(this)).updateTitleForFragment(buildTitle(cityName), 
+		cityName = cityPrefered.getCityName();
+		((BoschMainActivity)FragmentUtil.getActivity(this)).updateTitleForFragment(buildTitle(), 
 				getClass().getSimpleName());
 		
 		DeviceUtil.updateLatLon(cityPrefered.getLatitude(), cityPrefered.getLongitude());
@@ -334,11 +336,17 @@ public class BoschChangeCityFragment extends FragmentLoadableFromBackStack imple
 	public void onAddressSearchCompleted(String strAddress) {}
 
 	@Override
-	public void onCitySearchCompleted(String city) {
-		if (city != null && city.length() != 0) {
-			((BoschMainActivity)FragmentUtil.getActivity(this)).updateTitleForFragment(buildTitle(city), 
-					getClass().getSimpleName());
-		}
+	public void onCitySearchCompleted(final String city) {
+		FragmentUtil.getActivity(this).runOnUiThread(new Runnable() {
+			@Override
+			public void run() {				
+				if (city != null && city.length() != 0) {
+					cityName = city;
+					((BoschMainActivity)FragmentUtil.getActivity(BoschChangeCityFragment.this))
+						.updateTitleForFragment(buildTitle(), BoschChangeCityFragment.class.getSimpleName());
+				}
+			}
+		});
 	}
 
 	@Override
