@@ -72,7 +72,7 @@ public class BoschDiscoverFragment extends FragmentLoadableFromBackStack impleme
 	}
 	
 	private String buildTitle(String cityName) {
-		return (cityName == null) ? "Discover" : cityName;
+		return (cityName == null || cityName.length() == 0) ? "Discover" : cityName;
 	}
 	
 	private void buildEvtCategories() {

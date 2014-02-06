@@ -15,8 +15,6 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
@@ -36,15 +34,14 @@ import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.core.Venue;
-import com.wcities.eventseeker.custom.fragment.FbPublishEventLoadableFromBackStack;
+import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.custom.view.ResizableImageView;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
-import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackStack implements OnClickListener, 
+public class BoschEventDetailsFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
 		AsyncLoadImageListener, OnEventUpdatedListner, OnCarStationaryStatusChangedListener, 
 		OnDisplayModeChangedListener {
 
@@ -56,8 +53,6 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 	
 	private ProgressBar prgImg, prgDetails;
 	
-	private int fbCallCountForSameEvt;
-
 	private TextView txtDate, txtVenueName, txtDistance;
 
 	private Button btnFollow, btnArtists, btnArtists2, btnCall, btnInfo, btnMap;
@@ -260,10 +255,11 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 						updateFollowBtn();
 							
 					} else {
-						fbCallCountForSameEvt = 0;
-						event.setNewAttending(attending);
-						FbUtil.handlePublishEvent(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT, 
-							AppConstants.REQ_CODE_FB_PUBLISH_EVT, event);
+						event.setAttending(attending);
+						new UserTracker((EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
+			                	UserTrackingItemType.event, event.getId(), event.getAttending().getValue(), 
+			                	UserTrackingType.Add).execute();
+						updateFollowBtn();
 					}
 						
 				} else {
@@ -306,30 +302,6 @@ public class BoschEventDetailsFragment extends FbPublishEventLoadableFromBackSta
 	public void onImageCouldNotBeLoaded() {
 		prgImg.setVisibility(View.GONE);
 		((BoschMainActivity)FragmentUtil.getActivity(this)).showBoschDialog("No image found.");
-	}
-
-	@Override
-	public void call(Session session, SessionState state, Exception exception) {
-		
-		fbCallCountForSameEvt++;
-		/**
-		 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
-		 */
-		if (fbCallCountForSameEvt < AppConstants.MAX_FB_CALL_COUNT_FOR_SAME_EVT) {
-			
-			FbUtil.call(session, state, exception, this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT, 
-				AppConstants.REQ_CODE_FB_PUBLISH_EVT, event);
-			
-		} else {
-			fbCallCountForSameEvt = 0;
-			setPendingAnnounce(false);
-		}
-		
-	}
-
-	@Override
-	public void onPublishPermissionGranted() {
-		updateFollowBtn();
 	}
 
 	@Override
