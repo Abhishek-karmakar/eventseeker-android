@@ -266,7 +266,7 @@ public class BoschNavigateFragment extends FragmentLoadableFromBackStack impleme
 					mySpinMarkerOptions.position(new MySpinLatLng(currentLat, currentLon));
 					mySpinMarkerOptions.icon(bitmapDescriptor);
 					mMap.addMarker(mySpinMarkerOptions);
-			    	mMap.moveCamera(MySpinCameraUpdateFactory.zoomTo(9));
+					mMap.moveCamera(MySpinCameraUpdateFactory.zoomTo(9));
 			    }
 			}
 		}
