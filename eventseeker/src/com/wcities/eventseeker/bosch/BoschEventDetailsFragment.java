@@ -262,7 +262,7 @@ public class BoschEventDetailsFragment extends FragmentLoadableFromBackStack imp
 						
 				} else {
 					((BoschMainActivity)FragmentUtil.getActivity(this)).showBoschDialog(getResources()
-							.getString(R.string.pls_login_to_track_evt));
+							.getString(R.string.pls_login_through_mobile_app));
 				}
 				
 				break;

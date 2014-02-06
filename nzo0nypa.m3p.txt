@@ -1,0 +1,54 @@
+﻿Merge branch 'master' of https://github.com/wcities/eventseeker-android
+
+Conflicts:
+	eventseeker/src/com/wcities/eventseeker/bosch/BoschMyArtistsListFragment.java
+	eventseeker/src/com/wcities/eventseeker/util/ViewUtil.java
+#
+# It looks like you may be committing a merge.
+# If this is not correct, please remove the file
+#	.git/MERGE_HEAD
+# and try again.
+
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch and 'origin/master' have diverged,
+# and have 1 and 1 different commit each, respectively.
+#   (use "git pull" to merge the remote branch into yours)
+#
+# All conflicts fixed but you are still merging.
+#   (use "git commit" to conclude merge)
+#
+# Changes to be committed:
+#
+#	modified:   eventseeker/proguard-project.txt
+#	modified:   eventseeker/res/layout/bosch_artists_list_item.xml
+#	modified:   eventseeker/res/layout/bosch_list_item_event.xml
+#	modified:   eventseeker/res/layout/bosch_venue_list_item.xml
+#	modified:   eventseeker/res/layout/fragment_bosch_settings.xml
+#	modified:   eventseeker/res/layout/fragment_bosch_venue_details.xml
+#	modified:   eventseeker/res/values/colors.xml
+#	modified:   eventseeker/res/values/dimens.xml
+#	modified:   eventseeker/src/com/wcities/eventseeker/FeaturedEventsFragment.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/BoschArtistDetailsFragment.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/BoschDateWiseEventListFragment.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/BoschDiscoverByCategoryFragment.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/BoschEventArtistsFragment.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/BoschEventDetailsFragment.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/BoschFavoritesFragment.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/BoschFeaturedEventsFragment.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/BoschMainActivity.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/BoschMyArtistsListFragment.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/BoschSearchResultFragment.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/BoschSearchVenuesFragment.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/BoschSettingsFragment.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/BoschVenueDetailsFragment.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/adapter/BoschArtistListAdapter.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/adapter/BoschDateWiseEventListAdapter.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/adapter/BoschEventListAdapter.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/bosch/adapter/BoschLazyLoadingEventListAdapter.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/jsonparser/UserInfoApiJSONParser.java
+#	modified:   eventseeker/src/com/wcities/eventseeker/util/ViewUtil.java
+# commited night mode related changes
+
