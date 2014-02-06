@@ -353,7 +353,10 @@ public class MainActivity extends ActionBarActivity implements
 		searchView.setOnQueryTextListener(this);
 		
 		ImageView v = (ImageView) searchView.findViewById(R.id.search_button);
-		v.setImageResource(R.drawable.search);
+		// null check is for safety purpose
+		if (v != null) {
+			v.setImageResource(R.drawable.search);
+		}
 		
 		if (AppConstants.FRAGMENT_TAG_SEARCH.equals(currentContentFragmentTag)) {
 			/**
