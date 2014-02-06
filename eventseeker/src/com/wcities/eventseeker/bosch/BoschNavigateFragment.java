@@ -11,11 +11,9 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.bosch.myspin.serversdk.maps.MySpinBitmapDescriptor;
 import com.bosch.myspin.serversdk.maps.MySpinBitmapDescriptorFactory;
@@ -174,7 +172,7 @@ public class BoschNavigateFragment extends FragmentLoadableFromBackStack impleme
 		Geocoder geocoder = new Geocoder(FragmentUtil.getActivity(this));
 		List<Address> addresses = geocoder.getFromLocationName(strAddress, 1);
 		if (addresses != null && !addresses.isEmpty()) {
-			Log.d(TAG, "findLatLonFromAddress(str), addresses != null");
+			//Log.d(TAG, "findLatLonFromAddress(str), addresses != null");
 			
 			Address address = addresses.get(0);
 			venueLat = address.getLatitude();
@@ -230,8 +228,8 @@ public class BoschNavigateFragment extends FragmentLoadableFromBackStack impleme
 
 				Document doc = md.getDocument(fromPosition, toPosition, GMapV2Direction.MODE_DRIVING);
 				ArrayList<MySpinLatLng> directionPoint = md.getDirection(doc);
-				MySpinPolylineOptions polylineOptions = new MySpinPolylineOptions().width(2).color(Color.RED);
-
+				MySpinPolylineOptions polylineOptions = new MySpinPolylineOptions().width(2).color(Color.BLUE);
+				
 				for (int i = 0 ; i < directionPoint.size() ; i++) {          
 					polylineOptions.add(directionPoint.get(i));
 				}
@@ -248,10 +246,12 @@ public class BoschNavigateFragment extends FragmentLoadableFromBackStack impleme
 			    List<MySpinLatLng> points = polylineOptions.getPoints(); // route is instance of PolylineOptions 
 
 			    if (points.isEmpty()) {
-			    	Toast.makeText(FragmentUtil.getActivity(BoschNavigateFragment.this), 
-			    		"Could not find the driving direction for this venue.", Toast.LENGTH_LONG).show();
+			    	((BoschMainActivity)FragmentUtil.getActivity(BoschNavigateFragment.this)).showBoschDialog(
+			    			"Could not find the driving direction for this venue.");
+			    	
 			    } else {
 			    	mMap.moveCamera(MySpinCameraUpdateFactory.newLatLng(points.get(0)));
+			    	mMap.moveCamera(MySpinCameraUpdateFactory.zoomTo(12));
 			    	
 					MySpinBitmapDescriptor bitmapDescriptor = MySpinBitmapDescriptorFactory.fromResource("ic_des");
 					

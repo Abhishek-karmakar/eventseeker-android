@@ -43,6 +43,8 @@ public class BoschSearchResultFragment extends FragmentLoadableFromBackStack imp
 	private String searchQuery;
 	private TabBar tabBar;
 	private LinearLayout lnrTabBar;
+
+	private String cityName;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -105,12 +107,11 @@ public class BoschSearchResultFragment extends FragmentLoadableFromBackStack imp
 	@Override
 	public void onResume() {
 		super.onResume();
-		String cityName = GeoUtil.getCityName(this, (EventSeekr) FragmentUtil.getActivity(this).getApplication());
-
-		super.onResume(AppConstants.INVALID_INDEX, buildTitle(cityName));
+		GeoUtil.getCityName(this, (EventSeekr) FragmentUtil.getActivity(this).getApplication());
+		super.onResume(AppConstants.INVALID_INDEX, buildTitle());
 	}
 
-	private String buildTitle(String cityName) {
+	private String buildTitle() {
 		String title = "Displaying Results for '" + searchQuery + "'";
 		return (cityName == null || cityName.length() == 0) ? title : cityName + " - " + title;
 	}
@@ -155,11 +156,18 @@ public class BoschSearchResultFragment extends FragmentLoadableFromBackStack imp
 	public void onAddressSearchCompleted(String strAddress) {}
 
 	@Override
-	public void onCitySearchCompleted(String city) {
-		if (city != null && city.length() != 0) {
-			((BoschMainActivity)FragmentUtil.getActivity(this)).updateTitleForFragment(buildTitle(city), 
-				getClass().getSimpleName());
-		}
+	public void onCitySearchCompleted(final String city) {
+		FragmentUtil.getActivity(this).runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {				
+				if (city != null && city.length() != 0) {
+					cityName = city;
+					((BoschMainActivity)FragmentUtil.getActivity(BoschSearchResultFragment.this))
+						.updateTitleForFragment(buildTitle(), BoschSearchResultFragment.class.getSimpleName());
+				}
+			}
+		});
 	}
 
 	@Override

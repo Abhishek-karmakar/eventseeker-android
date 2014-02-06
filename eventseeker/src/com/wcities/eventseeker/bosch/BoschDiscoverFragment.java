@@ -38,6 +38,8 @@ public class BoschDiscoverFragment extends FragmentLoadableFromBackStack impleme
 	private List<Category> evtCategories;
 	private EvtCategoriesGridAdapter evtCategoriesGridAdapter;
 
+	private String cityName;
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -67,12 +69,12 @@ public class BoschDiscoverFragment extends FragmentLoadableFromBackStack impleme
 	
 	@Override
 	public void onResume() {
-		String cityName = GeoUtil.getCityName(this, (EventSeekr) FragmentUtil.getActivity(this).getApplication());
-		super.onResume(AppConstants.INVALID_INDEX, buildTitle(cityName));
+		GeoUtil.getCityName(this, (EventSeekr) FragmentUtil.getActivity(this).getApplication());
+		super.onResume(AppConstants.INVALID_INDEX, buildTitle());
 	}
 	
-	private String buildTitle(String cityName) {
-		return (cityName == null) ? "Discover" : cityName;
+	private String buildTitle() {
+		return (cityName == null || cityName.length() == 0) ? "Discover" : cityName;
 	}
 	
 	private void buildEvtCategories() {
@@ -193,11 +195,18 @@ public class BoschDiscoverFragment extends FragmentLoadableFromBackStack impleme
 	public void onAddressSearchCompleted(String strAddress) {}
 
 	@Override
-	public void onCitySearchCompleted(String city) {
-		if (city != null && city.length() != 0) {
-			((BoschMainActivity)FragmentUtil.getActivity(this)).updateTitleForFragment(buildTitle(city), 
-					getClass().getSimpleName());
-		}
+	public void onCitySearchCompleted(final String city) {
+		FragmentUtil.getActivity(this).runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {				
+				if (city != null && city.length() != 0) {
+					cityName = city;
+					((BoschMainActivity)FragmentUtil.getActivity(BoschDiscoverFragment.this))
+						.updateTitleForFragment(buildTitle(), BoschDiscoverFragment.class.getSimpleName());
+				}
+			}
+		});
 	}
 
 	@Override

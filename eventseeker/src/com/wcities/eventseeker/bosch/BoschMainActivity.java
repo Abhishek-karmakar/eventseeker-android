@@ -107,7 +107,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			txtActionBarTitle = (TextView) findViewById(R.id.txtActionBarTitle);
 
 			BoschDrawerListFragment boschDrawerListFragment = (BoschDrawerListFragment) getSupportFragmentManager()
-					.findFragmentByTag(BoschDrawerListFragment.class.getSimpleName());
+				.findFragmentByTag(BoschDrawerListFragment.class.getSimpleName());
 			if (boschDrawerListFragment == null) {
 				addDrawerListFragment();
 			}

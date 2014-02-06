@@ -35,6 +35,7 @@ public class BoschFavoritesFragment extends FragmentLoadableFromBackStack implem
 	private SwipeTabsAdapter mTabsAdapter;
 	private TabBar tabBar;
 	private LinearLayout lnrTabBar;
+	private String cityName;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -82,11 +83,11 @@ public class BoschFavoritesFragment extends FragmentLoadableFromBackStack implem
 
 	@Override
 	public void onResume() {
-		String cityName = GeoUtil.getCityName(this, (EventSeekr) FragmentUtil.getActivity(this).getApplication());
-		super.onResume(BoschMainActivity.INDEX_NAV_ITEM_FAVORITES, buildTitle(cityName));
+		GeoUtil.getCityName(this, (EventSeekr) FragmentUtil.getActivity(this).getApplication());
+		super.onResume(BoschMainActivity.INDEX_NAV_ITEM_FAVORITES, buildTitle());
 	}
 	
-	private String buildTitle(String cityName) {
+	private String buildTitle() {
 		return (cityName == null || cityName.length() == 0) ? "My Events" : cityName + " - My Events";
 	}
 
@@ -96,11 +97,18 @@ public class BoschFavoritesFragment extends FragmentLoadableFromBackStack implem
 	}
 
 	@Override
-	public void onCitySearchCompleted(String city) {
-		if (city != null && city.length() != 0) {
-			((BoschMainActivity)FragmentUtil.getActivity(this)).updateTitleForFragment(buildTitle(city), 
-					getClass().getSimpleName());
-		}
+	public void onCitySearchCompleted(final String city) {
+		FragmentUtil.getActivity(this).runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {		
+				cityName = city;
+				if (city != null && city.length() != 0) {
+					((BoschMainActivity)FragmentUtil.getActivity(BoschFavoritesFragment.this))
+						.updateTitleForFragment(buildTitle(), BoschFavoritesFragment.class.getSimpleName());
+				}								
+			}
+		});
 	}
 
 	@Override

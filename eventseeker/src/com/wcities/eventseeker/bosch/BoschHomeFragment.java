@@ -3,6 +3,7 @@ package com.wcities.eventseeker.bosch;
 import android.app.Activity;
 import android.location.Address;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,6 +21,7 @@ public class BoschHomeFragment extends FragmentLoadableFromBackStack implements 
 		GeoUtilListener {
 	
 	private static final String TAG = BoschHomeFragment.class.getSimpleName();
+	private String cityName;
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -39,11 +41,11 @@ public class BoschHomeFragment extends FragmentLoadableFromBackStack implements 
 
 	@Override
 	public void onResume() {
-		super.onResume(BoschMainActivity.INDEX_NAV_ITEM_HOME, buildTitle(GeoUtil.getCityName(this, 
-				(EventSeekr) FragmentUtil.getActivity(this).getApplication())));
+		GeoUtil.getCityName(this, (EventSeekr) FragmentUtil.getActivity(this).getApplication());
+		super.onResume(BoschMainActivity.INDEX_NAV_ITEM_HOME, buildTitle());
 	}
 	
-	private String buildTitle(String cityName) {
+	private String buildTitle() {
 		return (cityName == null || cityName.length() == 0) ? "What's up" : "What's up in " + cityName;
 	}
 	
@@ -72,11 +74,18 @@ public class BoschHomeFragment extends FragmentLoadableFromBackStack implements 
 	}
 
 	@Override
-	public void onCitySearchCompleted(String city) {
-		if (city != null && city.length() != 0) {
-			((BoschMainActivity)FragmentUtil.getActivity(this)).updateTitleForFragment(buildTitle(city), 
-					getClass().getSimpleName());
-		}
+	public void onCitySearchCompleted(final String city) {
+		FragmentUtil.getActivity(this).runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {				
+				if (city != null && city.length() != 0) {
+					cityName = city;
+					((BoschMainActivity)FragmentUtil.getActivity(BoschHomeFragment.this))
+						.updateTitleForFragment(buildTitle(), BoschHomeFragment.class.getSimpleName());
+				}
+			}
+		});
 	}
 
 	@Override

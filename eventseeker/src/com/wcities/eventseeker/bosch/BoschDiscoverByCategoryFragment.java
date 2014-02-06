@@ -27,6 +27,8 @@ public class BoschDiscoverByCategoryFragment extends FragmentLoadableFromBackSta
 	
 	private String categoryName;
 
+	private String cityName;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -63,11 +65,11 @@ public class BoschDiscoverByCategoryFragment extends FragmentLoadableFromBackSta
 
 	@Override
 	public void onResume() {
-		super.onResume(AppConstants.INVALID_INDEX, buildTitle(GeoUtil.getCityName(this, 
-				(EventSeekr) FragmentUtil.getActivity(this).getApplication())));
+		GeoUtil.getCityName(this, (EventSeekr) FragmentUtil.getActivity(this).getApplication());
+		super.onResume(AppConstants.INVALID_INDEX, buildTitle());
 	}
 	
-	private String buildTitle(String cityName) {
+	private String buildTitle() {
 		return (cityName == null || cityName.length() == 0) ? categoryName : cityName + " - " + categoryName;
 	}
 	
@@ -99,11 +101,18 @@ public class BoschDiscoverByCategoryFragment extends FragmentLoadableFromBackSta
 	}
 
 	@Override
-	public void onCitySearchCompleted(String city) {
-		if (city != null && city.length() != 0) {
-			((BoschMainActivity)FragmentUtil.getActivity(this)).updateTitleForFragment(buildTitle(city), 
-					getClass().getSimpleName());
-		}
+	public void onCitySearchCompleted(final String city) {
+		FragmentUtil.getActivity(this).runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {				
+				if (city != null && city.length() != 0) {
+					cityName = city;
+					((BoschMainActivity)FragmentUtil.getActivity(BoschDiscoverByCategoryFragment.this))
+						.updateTitleForFragment(buildTitle(), BoschDiscoverByCategoryFragment.class.getSimpleName());
+				}				
+			}
+		});
 	}
 
 	@Override
