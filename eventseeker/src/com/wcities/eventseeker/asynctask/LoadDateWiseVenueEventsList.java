@@ -23,6 +23,8 @@ import com.wcities.eventseeker.viewdata.DateWiseEventList;
 public class LoadDateWiseVenueEventsList extends AsyncTask<Void, Void, List<Event>> {
 	
 	private static final int EVENTS_LIMIT = 10;
+
+	private static final String TAG = LoadDateWiseVenueEventsList.class.getName();
 	
 	private DateWiseEventList eventList;
 	
@@ -31,6 +33,12 @@ public class LoadDateWiseVenueEventsList extends AsyncTask<Void, Void, List<Even
 	private DateWiseEventParentAdapterListener eventListAdapter;
 
 	private String wcitiesId;
+	
+	private EventExistListener listener;
+	
+	public interface EventExistListener {
+		public void hasEvents(boolean hasEvents);
+	}
 	
 	private LoadDateWiseVenueEventsList(DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, String wcitiesId) {
 		this.eventList = eventList;
@@ -42,11 +50,23 @@ public class LoadDateWiseVenueEventsList extends AsyncTask<Void, Void, List<Even
 		this(eventList, eventListAdapter, wcitiesId);
 		this.venueId = venueId;
 	}
+	
+	public LoadDateWiseVenueEventsList(DateWiseEventList eventList, 
+			DateWiseEventParentAdapterListener eventListAdapter, String wcitiesId, long venueId, 
+			EventExistListener listener) {
+		this(eventList, eventListAdapter, wcitiesId);
+		this.venueId = venueId;
+		this.listener = listener;
+	}
 
 	@Override
 	protected List<Event> doInBackground(Void... params) {
 		List<Event> tmpEvents = new ArrayList<Event>();
-		int eventsAlreadyRequested = eventListAdapter.getEventsAlreadyRequested();
+		
+		int eventsAlreadyRequested = 0;
+		if(eventListAdapter != null) {
+			eventsAlreadyRequested = eventListAdapter.getEventsAlreadyRequested();
+		}
 		
 		EventApi eventApi;
 		eventApi = new EventApi(Api.OAUTH_TOKEN, venueId, IdType.VENUE);
@@ -76,19 +96,29 @@ public class LoadDateWiseVenueEventsList extends AsyncTask<Void, Void, List<Even
 	
 	@Override
 	protected void onPostExecute(List<Event> tmpEvents) {
-		if (tmpEvents.size() > 0) {
-			eventList.addEventListItems(tmpEvents, this);
-			eventListAdapter.setEventsAlreadyRequested(eventListAdapter.getEventsAlreadyRequested() + tmpEvents.size());
+		/**
+		 *  This 'eventListAdapter != null' check is kept for the BoschVenueDetails screen. For this screen, 
+		 *  we just need to calculate the number of events. That's why the adapter will be sent null. 
+		 *  So, in that case just add all the temporary list items to the given list.
+		 */
+		if(eventListAdapter != null) {
+			if (tmpEvents.size() > 0) {
+				eventList.addEventListItems(tmpEvents, this);
+				eventListAdapter.setEventsAlreadyRequested(eventListAdapter.getEventsAlreadyRequested() + tmpEvents.size());
 			
-			if (tmpEvents.size() < EVENTS_LIMIT) {
+				if (tmpEvents.size() < EVENTS_LIMIT) {
+					eventListAdapter.setMoreDataAvailable(false);
+					eventList.removeProgressBarIndicator(this);
+				}
+			
+			} else {
 				eventListAdapter.setMoreDataAvailable(false);
 				eventList.removeProgressBarIndicator(this);
 			}
-			
-		} else {
-			eventListAdapter.setMoreDataAvailable(false);
-			eventList.removeProgressBarIndicator(this);
+			((BaseAdapter)eventListAdapter).notifyDataSetChanged();
+		
+		} else if (listener != null) {
+			listener.hasEvents(tmpEvents.size() > 0);
 		}
-		((BaseAdapter)eventListAdapter).notifyDataSetChanged();
 	}    	
 }

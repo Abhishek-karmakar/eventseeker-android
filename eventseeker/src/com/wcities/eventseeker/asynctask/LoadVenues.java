@@ -11,7 +11,6 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import com.wcities.eventseeker.adapter.AbstractVenueListAdapter;
 import com.wcities.eventseeker.api.Api;
@@ -56,7 +55,6 @@ public class LoadVenues extends AsyncTask<String, Void, List<Venue>> {
 			
 			JSONObject jsonObject = recordApi.getRecords();
 			RecordApiJSONParser jsonParser = new RecordApiJSONParser();
-			Log.d(TAG, jsonObject.toString());
 			tmpVenues = jsonParser.getVenueList(jsonObject);
 			
 		} catch (ClientProtocolException e) {

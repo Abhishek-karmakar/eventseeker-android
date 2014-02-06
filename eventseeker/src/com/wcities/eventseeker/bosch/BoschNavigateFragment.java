@@ -190,7 +190,7 @@ public class BoschNavigateFragment extends FragmentLoadableFromBackStack impleme
 		if (currentLat != AppConstants.NOT_ALLOWED_LAT && currentLon != AppConstants.NOT_ALLOWED_LON && 
 			venueLat != 0 && venueLon != 0 &&	mMap != null) {
 
-			MySpinBitmapDescriptor bitmapDescriptor = MySpinBitmapDescriptorFactory.fromResource("ic_destination");
+			/*MySpinBitmapDescriptor bitmapDescriptor = MySpinBitmapDescriptorFactory.fromResource("ic_destination");
 
 			MySpinMarkerOptions mySpinMarkerOptions = new MySpinMarkerOptions();
 			mySpinMarkerOptions.position(new MySpinLatLng(venueLat, venueLon));
@@ -202,7 +202,7 @@ public class BoschNavigateFragment extends FragmentLoadableFromBackStack impleme
 			mySpinMarkerOptions = new MySpinMarkerOptions();
 			mySpinMarkerOptions.position(new MySpinLatLng(currentLat, currentLon));
 			mySpinMarkerOptions.icon(bitmapDescriptor);
-			mMap.addMarker(mySpinMarkerOptions);
+			mMap.addMarker(mySpinMarkerOptions);*/
 
 			new GetDrivingDirection(currentLat, currentLon, venueLat, venueLon).execute();
 		}
@@ -252,6 +252,20 @@ public class BoschNavigateFragment extends FragmentLoadableFromBackStack impleme
 			    		"Could not find the driving direction for this venue.", Toast.LENGTH_LONG).show();
 			    } else {
 			    	mMap.moveCamera(MySpinCameraUpdateFactory.newLatLng(points.get(0)));
+			    	
+					MySpinBitmapDescriptor bitmapDescriptor = MySpinBitmapDescriptorFactory.fromResource("ic_des");
+					
+					MySpinMarkerOptions mySpinMarkerOptions = new MySpinMarkerOptions();
+					mySpinMarkerOptions.position(new MySpinLatLng(venueLat, venueLon));
+					mySpinMarkerOptions.icon(bitmapDescriptor);
+					mMap.addMarker(mySpinMarkerOptions);
+
+					bitmapDescriptor = MySpinBitmapDescriptorFactory.fromResource("ic_src");
+					
+					mySpinMarkerOptions = new MySpinMarkerOptions();
+					mySpinMarkerOptions.position(new MySpinLatLng(currentLat, currentLon));
+					mySpinMarkerOptions.icon(bitmapDescriptor);
+					mMap.addMarker(mySpinMarkerOptions);
 			    }
 			}
 		}
