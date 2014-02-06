@@ -33,6 +33,7 @@ import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.interfaces.ArtistListener;
+import com.wcities.eventseeker.interfaces.BoschAsyncTaskListener;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
@@ -40,7 +41,7 @@ import com.wcities.eventseeker.interfaces.VenueListener;
 
 public class BoschMainActivity extends ActionBarActivity implements ReplaceFragmentListener, 
 		EventListener, ArtistListener, VenueListener, FragmentLoadedFromBackstackListener, 
-		BoschDrawerListFragmentListener  {
+		BoschDrawerListFragmentListener, BoschAsyncTaskListener  {
 
 	private static final String TAG = BoschMainActivity.class.getName();
 
@@ -155,6 +156,18 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			});
 		} catch (MySpinException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	protected void onDestroy() {
+		try {
+			// calling 'super.onDestroy()' in try catch as some times it gives no view found error while destroying
+			// and then the app gets crashed. So, the try catch catches the exception and helps to continue the 
+			// application without crashing.
+			super.onDestroy();
+		} catch (Exception e) {
+			Log.e(TAG, "Error Destroying Activity : " + e.toString());
 		}
 	}
 	
@@ -404,9 +417,6 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		} if (fragmentTag.equals(BoschNavigateFragment.class.getSimpleName())) {
 			fragment = new BoschNavigateFragment();
 			
-		} if (fragmentTag.equals(BoschSettingsFragment.class.getSimpleName())) {
-			fragment = new BoschSettingsFragment();
-			
 		}
 	
 		if(fragment != null) {
@@ -501,5 +511,10 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			 */
 			moveTaskToBack(true);
 		}
+	}
+
+	@Override
+	public void onConnectionFailure() {
+		showBoschDialog("The Internet connection appears to be offline");
 	}
 }

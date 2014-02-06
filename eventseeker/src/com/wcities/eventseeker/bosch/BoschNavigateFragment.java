@@ -11,13 +11,12 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.bosch.myspin.serversdk.maps.MySpinCameraUpdate;
+import com.bosch.myspin.serversdk.maps.MySpinBitmapDescriptor;
+import com.bosch.myspin.serversdk.maps.MySpinBitmapDescriptorFactory;
 import com.bosch.myspin.serversdk.maps.MySpinCameraUpdateFactory;
 import com.bosch.myspin.serversdk.maps.MySpinLatLng;
 import com.bosch.myspin.serversdk.maps.MySpinMap;
@@ -26,6 +25,7 @@ import com.bosch.myspin.serversdk.maps.MySpinMapView.OnMapLeftListener;
 import com.bosch.myspin.serversdk.maps.MySpinMapView.OnMapLoadedListener;
 import com.bosch.myspin.serversdk.maps.MySpinMarkerOptions;
 import com.bosch.myspin.serversdk.maps.MySpinPolylineOptions;
+import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Venue;
@@ -94,6 +94,7 @@ public class BoschNavigateFragment extends FragmentLoadableFromBackStack impleme
 	public void onResume() {
 		super.onResume();
 		mMapView.onResume();
+		super.onResume(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_map));
 	}
 	
 	@Override
@@ -186,8 +187,19 @@ public class BoschNavigateFragment extends FragmentLoadableFromBackStack impleme
 	private void drawDrivingRoute() {
 		if (currentLat != AppConstants.NOT_ALLOWED_LAT && currentLon != AppConstants.NOT_ALLOWED_LON && 
 			venueLat != 0 && venueLon != 0 &&	mMap != null) {
+
+			MySpinBitmapDescriptor bitmapDescriptor = MySpinBitmapDescriptorFactory.fromResource("ic_destination");
+
 			MySpinMarkerOptions mySpinMarkerOptions = new MySpinMarkerOptions();
 			mySpinMarkerOptions.position(new MySpinLatLng(venueLat, venueLon));
+			mySpinMarkerOptions.icon(bitmapDescriptor);
+			mMap.addMarker(mySpinMarkerOptions);
+
+			bitmapDescriptor = MySpinBitmapDescriptorFactory.fromResource("ic_source");
+
+			mySpinMarkerOptions = new MySpinMarkerOptions();
+			mySpinMarkerOptions.position(new MySpinLatLng(currentLat, currentLon));
+			mySpinMarkerOptions.icon(bitmapDescriptor);
 			mMap.addMarker(mySpinMarkerOptions);
 
 			new GetDrivingDirection(currentLat, currentLon, venueLat, venueLon).execute();

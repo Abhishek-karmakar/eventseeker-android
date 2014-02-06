@@ -160,7 +160,7 @@ public class BoschDateWiseEventListAdapter extends BaseAdapter implements DateWi
 						R.layout.bosch_fragment_discover_by_category_list_item_header, null);
 				convertView.setTag(LIST_ITEM_TYPE.HEADER);
 			}
-			TextView txtDate = (TextView)convertView.findViewById(R.id.txtDate);
+			TextView txtDate = (TextView)convertView.findViewById(R.id.txtHeaderDate);
 			txtDate.setText(getItem(position).getDate());
 			
 			int bgColor = AppConstants.IS_NIGHT_MODE_ENABLED ? com.wcities.eventseeker.R.color.b_txt_date_bg_bosch_fragment_discover_by_category_list_item_header_night_mode :

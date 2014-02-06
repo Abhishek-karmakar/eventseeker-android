@@ -69,12 +69,10 @@
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/txtDate"
                 android:background="@color/bg_black_transparent_strip"
-                android:ellipsize="end"
                 android:gravity="left|center_vertical"
                 android:paddingLeft="@dimen/b_txt_venue_name_pad_fragment_bosch_all_details"
                 android:paddingRight="@dimen/b_txt_venue_name_pad_fragment_bosch_all_details"
                 android:paddingTop="@dimen/b_txt_venue_name_pad_fragment_bosch_all_details"
-                android:singleLine="true"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/b_txt_venue_name_size_fragment_bosch_all_details" />
 

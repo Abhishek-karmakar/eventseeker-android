@@ -11,6 +11,7 @@ import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadDateWiseVenueEventsList;
 import com.wcities.eventseeker.bosch.adapter.BoschDateWiseEventListAdapter;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
@@ -65,6 +66,11 @@ public class BoschVenueEventsFragment extends ListFragmentLoadableFromBackStack 
 
 		setListAdapter((BaseAdapter)adapter);
         getListView().setDivider(null);
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_events));
 	}
 	
 	@Override

@@ -82,6 +82,7 @@ public class BoschChangeCityFragment extends FragmentLoadableFromBackStack imple
 		lstCity = (ListView) view.findViewById(R.id.lstCities);
 		lstCity.setOnItemClickListener(this);
 		
+		updateColors();
 		return view;
 	}
 	
@@ -345,7 +346,20 @@ public class BoschChangeCityFragment extends FragmentLoadableFromBackStack imple
 
 	@Override
 	public void onDisplayModeChanged(boolean isNightModeEnabled) {
+		updateColors();
 		adapter.notifyDataSetChanged();
+	}
+
+	private void updateColors() {
+		if (AppConstants.IS_NIGHT_MODE_ENABLED) {
+			edtCity.setBackgroundResource(R.drawable.bg_edt_search_night_mode);
+			edtCity.setTextColor(getResources().getColor(android.R.color.white));
+			edtCity.setHintTextColor(getResources().getColor(android.R.color.white));
+		} else {
+			edtCity.setBackgroundResource(R.drawable.bg_edt_search);
+			edtCity.setTextColor(getResources().getColor(R.color.eventseeker_bosch_theme_grey));			
+			edtCity.setHintTextColor(getResources().getColor(R.color.eventseeker_bosch_theme_grey));			
+		}
 	}
 
 }

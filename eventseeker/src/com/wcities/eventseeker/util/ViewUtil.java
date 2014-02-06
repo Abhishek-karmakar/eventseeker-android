@@ -48,6 +48,7 @@ public class ViewUtil {
 		int tabDividerBgId;
 		int tabBtnTxtColor;
 		int lnrTabBarBg;
+		int txtHeaderColor;
 
 		if (AppConstants.IS_NIGHT_MODE_ENABLED) {
 			txtColor = android.R.color.white;
@@ -55,12 +56,14 @@ public class ViewUtil {
 			tabBtnTxtColor = android.R.color.white;
 			tabDividerBgId = android.R.color.white;
 			lnrTabBarBg = R.drawable.tab_bar_rounded_corners_night_mode;
+			txtHeaderColor = android.R.color.white;
 		} else {
 			txtColor = R.color.eventseeker_bosch_theme_grey;
 			listDividerBgId = android.R.color.black;
 			tabBtnTxtColor = android.R.color.black;
 			tabDividerBgId = R.color.eventseeker_bosch_theme_grey;
 			lnrTabBarBg = R.drawable.tab_bar_rounded_corners;			
+			txtHeaderColor = android.R.color.black;
 		}
 		try {
 			if (v instanceof ViewGroup) {
@@ -75,6 +78,9 @@ public class ViewUtil {
 					updateViewColor(res, child);
 				}
 
+			} else if (v.getId() == R.id.txtHeaderDate) {
+				((TextView) v).setTextColor(res.getColor(txtHeaderColor));				
+				
 			} else if (v.getId() == R.id.btnTab1 || v.getId() == R.id.btnTab2 || v.getId() == R.id.btnTab3) {
 				((TextView) v).setTextColor(res.getColor(tabBtnTxtColor));
 				
