@@ -252,6 +252,7 @@ public class BoschNavigateFragment extends FragmentLoadableFromBackStack impleme
 			    } else {
 			    	mMap.moveCamera(MySpinCameraUpdateFactory.newLatLng(points.get(0)));
 <<<<<<< HEAD
+<<<<<<< HEAD
 			    	mMap.moveCamera(MySpinCameraUpdateFactory.zoomTo(12));
 			    	
 					MySpinBitmapDescriptor bitmapDescriptor = MySpinBitmapDescriptorFactory.fromResource("ic_des");
@@ -267,6 +268,9 @@ public class BoschNavigateFragment extends FragmentLoadableFromBackStack impleme
 					mySpinMarkerOptions.position(new MySpinLatLng(currentLat, currentLon));
 					mySpinMarkerOptions.icon(bitmapDescriptor);
 					mMap.addMarker(mySpinMarkerOptions);
+=======
+			    	mMap.moveCamera(MySpinCameraUpdateFactory.zoomTo(9));
+>>>>>>> bc7e79614441f30f3aa7d9d280efa87a6a3aff6e
 =======
 			    	mMap.moveCamera(MySpinCameraUpdateFactory.zoomTo(9));
 >>>>>>> bc7e79614441f30f3aa7d9d280efa87a6a3aff6e
