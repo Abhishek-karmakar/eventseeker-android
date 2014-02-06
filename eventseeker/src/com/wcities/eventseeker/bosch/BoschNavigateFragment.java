@@ -228,7 +228,7 @@ public class BoschNavigateFragment extends FragmentLoadableFromBackStack impleme
 
 				Document doc = md.getDocument(fromPosition, toPosition, GMapV2Direction.MODE_DRIVING);
 				ArrayList<MySpinLatLng> directionPoint = md.getDirection(doc);
-				MySpinPolylineOptions polylineOptions = new MySpinPolylineOptions().width(2).color(Color.BLUE);
+				MySpinPolylineOptions polylineOptions = new MySpinPolylineOptions().width(2).color(Color.RED);
 				
 				for (int i = 0 ; i < directionPoint.size() ; i++) {          
 					polylineOptions.add(directionPoint.get(i));
@@ -253,18 +253,23 @@ public class BoschNavigateFragment extends FragmentLoadableFromBackStack impleme
 			    	mMap.moveCamera(MySpinCameraUpdateFactory.newLatLng(points.get(0)));
 			    	mMap.moveCamera(MySpinCameraUpdateFactory.zoomTo(12));
 			    	
-					MySpinBitmapDescriptor bitmapDescriptor = MySpinBitmapDescriptorFactory.fromResource("ic_des");
+			    	/**
+			    	 * The below lines are commented because in Galaxy S2 device it was not showing the following icons
+			    	 * as marker but it was showing the default markers. However the commented lines works for other 
+			    	 * devices like Galaxy S3.
+			    	 */
+					//MySpinBitmapDescriptor bitmapDescriptor = MySpinBitmapDescriptorFactory.fromResource("ic_des");
 					
 					MySpinMarkerOptions mySpinMarkerOptions = new MySpinMarkerOptions();
 					mySpinMarkerOptions.position(new MySpinLatLng(venueLat, venueLon));
-					mySpinMarkerOptions.icon(bitmapDescriptor);
+					//mySpinMarkerOptions.icon(bitmapDescriptor);
 					mMap.addMarker(mySpinMarkerOptions);
 
-					bitmapDescriptor = MySpinBitmapDescriptorFactory.fromResource("ic_src");
+					//bitmapDescriptor = MySpinBitmapDescriptorFactory.fromResource("ic_src");
 					
 					mySpinMarkerOptions = new MySpinMarkerOptions();
 					mySpinMarkerOptions.position(new MySpinLatLng(currentLat, currentLon));
-					mySpinMarkerOptions.icon(bitmapDescriptor);
+					//mySpinMarkerOptions.icon(bitmapDescriptor);
 					mMap.addMarker(mySpinMarkerOptions);
 			    }
 			}
