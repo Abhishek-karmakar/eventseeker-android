@@ -46,21 +46,33 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyC4DsIo1BknPFbcHZ5y89UygHgWxgUhFic" />
+        
+        <meta-data
+            android:name="com.bosch.myspin.serversdk.maps.API_KEY"
+            android:value="AIzaSyDhuqduP4vkcqEbDeX0nxuBE5HnvZTrt9w" />
 
         <!-- production keys -->
         <!-- <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDUaOHXTK9bv4-JhQ3h_1M0iew07JqTb9I" /> -->
+            android:value="AIzaSyDUaOHXTK9bv4-JhQ3h_1M0iew07JqTb9I" /> 
+            
+        <meta-data
+            android:name="com.bosch.myspin.serversdk.maps.API_KEY"
+            android:value="AIzaSyAZErX2felgR4jeE24G1lyDNzULGas7ZkY" /> -->
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/fb_app_id" />
+        
+        <meta-data
+		    android:name="com.google.android.gms.version"
+		    android:value="@integer/google_play_services_version" />
 
         <activity
             android:name="com.wcities.eventseeker.LockScreenActivity"
             android:label="Locked"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait" />
+        
         <activity
             android:name="com.wcities.eventseeker.exception.ReportActivity"
             android:label="Crash Reporting"
@@ -115,7 +127,7 @@
         <meta-data
             android:name="usesMySPINServerSDK"
             android:value="true" />
-
+        
         <activity android:name="com.wcities.eventseeker.bosch.BoschMainActivity"
             android:label="@string/title_activity_bosch_main"
             android:screenOrientation="landscape"
