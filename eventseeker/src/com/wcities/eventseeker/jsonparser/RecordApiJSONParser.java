@@ -95,13 +95,13 @@ public class RecordApiJSONParser {
 			if (jPhone instanceof JSONArray) {
 				//Log.d(TAG, "array");
 				String phone = ((JSONArray) jPhone).getString(0);
-				phone = ConversionUtil.removeNonNumericChars(phone);
+				phone = ConversionUtil.parseForPhone(phone);
 				venue.setPhone(phone);
 				
 			} else {
 				//Log.d(TAG, "not array");
 				String phone = (String) jPhone;
-				phone = ConversionUtil.removeNonNumericChars(phone);
+				phone = ConversionUtil.parseForPhone(phone);
 				venue.setPhone(phone);
 			}
 		}

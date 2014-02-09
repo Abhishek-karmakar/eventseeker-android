@@ -30,7 +30,7 @@
     	<item name="actionModeShareDrawable">@drawable/share</item>
     	
     	<item name="android:homeAsUpIndicator">@drawable/back_actionbar</item>
-    	<item name="homeAsUpIndicator">@drawable/previous</item>
+    	<item name="homeAsUpIndicator">@drawable/back_actionbar</item>
     	
     	<!-- <item name="android:actionDropDownStyle">@style/Widget.EventSeekr.Spinner.DropDown.ActionBar</item> -->
     	
