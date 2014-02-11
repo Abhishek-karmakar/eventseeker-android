@@ -207,7 +207,7 @@ public class ConversionUtil {
 		return Html.fromHtml(jsonObject.getString(key)).toString();
 	}
 	
-	public static String removeNonNumericChars(String src) {
-		return src.replaceAll("[^\\d.]", "");
+	public static String parseForPhone(String src) {
+		return src.replaceAll("[^\\d+]", "");
 	}
 }

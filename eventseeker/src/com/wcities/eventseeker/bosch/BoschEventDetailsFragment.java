@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
@@ -227,14 +228,13 @@ public class BoschEventDetailsFragment extends FragmentLoadableFromBackStack imp
 
 			case R.id.btnCall:
 				Venue venue = event.getSchedule().getVenue();
-				
-				if (venue.getPhone() != null) {
-					Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + venue.getPhone()));
-					startActivity(Intent.createChooser(intent, "Call..."));
+				if (venue.getPhone() != null && MySpinServerSDK.sharedInstance().hasPhoneCallCapability()) {
+					MySpinServerSDK.sharedInstance().initiatePhoneCall(venue.getName(), venue.getPhone());
 					
 				} else {
-					((BoschMainActivity)FragmentUtil.getActivity(this)).showBoschDialog(
-							"Phone number is not available for this venue.");
+					String msg = (venue.getPhone() == null) ? "Phone number is not available for this venue." : 
+						"Calling is not supported on this IVI System.";
+					((BoschMainActivity) FragmentUtil.getActivity(this)).showBoschDialog(msg);
 				}
 				
 				break;

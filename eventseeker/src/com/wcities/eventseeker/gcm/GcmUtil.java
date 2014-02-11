@@ -75,7 +75,13 @@ public class GcmUtil {
 	    // avoid a race condition if GCM sends a message
 	    int registeredVersion = eventSeekr.getAppVersionCode();
 	    int currentVersion = getAppVersion();
-	    if (registeredVersion != currentVersion || isRegistrationExpired()) {
+	    if (registeredVersion != currentVersion) {
+	    	Log.v(TAG, "App version changed or registration expired.");
+	    	eventSeekr.updateAppVersionCode(currentVersion);
+	        return "";
+	    }
+	    
+	    if (isRegistrationExpired()) {
 	        Log.v(TAG, "App version changed or registration expired.");
 	        return "";
 	    }

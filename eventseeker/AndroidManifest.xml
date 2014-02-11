@@ -49,7 +49,7 @@
         
         <meta-data
             android:name="com.bosch.myspin.serversdk.maps.API_KEY"
-            android:value="AIzaSyDhuqduP4vkcqEbDeX0nxuBE5HnvZTrt9w" />
+            android:value="AIzaSyDhuqduP4vkcqEbDeX0nxuBE5HnvZTrt9w" /> 
 
         <!-- production keys -->
         <!-- <meta-data
@@ -58,7 +58,7 @@
             
         <meta-data
             android:name="com.bosch.myspin.serversdk.maps.API_KEY"
-            android:value="AIzaSyAZErX2felgR4jeE24G1lyDNzULGas7ZkY" /> -->
+            android:value="AIzaSyBOTuIbME9QmZsfoBFFLa38zjTGJ-jWT-k" /> -->
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
