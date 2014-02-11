@@ -156,6 +156,12 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 				}
 				
 			});
+			
+			/**
+			 * calling 'updateColors' to set the apps UI in Day or Night mode.
+			 */
+			updateColors();
+			
 		} catch (MySpinException e) {
 			e.printStackTrace();
 		}
