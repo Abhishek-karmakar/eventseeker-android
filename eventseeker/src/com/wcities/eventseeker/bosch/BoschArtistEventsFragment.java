@@ -7,6 +7,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
 import com.wcities.eventseeker.bosch.adapter.BoschDateWiseEventListAdapter;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -15,7 +16,8 @@ import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
-public class BoschArtistEventsFragment extends ListFragmentLoadableFromBackStack implements OnClickListener {
+public class BoschArtistEventsFragment extends ListFragmentLoadableFromBackStack implements OnClickListener, 
+		OnDisplayModeChangedListener {
 
 	private Artist artist;
 	private BoschDateWiseEventListAdapter adapter;
@@ -75,6 +77,13 @@ public class BoschArtistEventsFragment extends ListFragmentLoadableFromBackStack
 				getListView().smoothScrollByOffset(1);
 				break;
 				
+		}
+	}
+	
+	@Override
+	public void onDisplayModeChanged(boolean isNightModeEnabled) {
+		if (adapter != null) {
+			adapter.notifyDataSetChanged();
 		}
 	}
 }
