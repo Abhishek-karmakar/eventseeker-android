@@ -1,6 +1,7 @@
 package com.wcities.eventseeker.bosch;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
@@ -15,7 +16,6 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -113,23 +113,24 @@ public class BoschChangeCityFragment extends FragmentLoadableFromBackStack imple
 	@Override
 	public void onItemClick(AdapterView<?> adpV, View v, int position, long arg) {
 		CityPrefered cityPrefered = (CityPrefered) adapter.getItem(position);
-		
-		latitiude = cityPrefered.getLatitude();
-		longitude = cityPrefered.getLongitude();
-		
-		cityName = cityPrefered.getCityName();
-		((BoschMainActivity)FragmentUtil.getActivity(this)).updateTitleForFragment(buildTitle(), 
-				getClass().getSimpleName());
-		
-		DeviceUtil.updateLatLon(cityPrefered.getLatitude(), cityPrefered.getLongitude());
-		
-		adapter.setData(null);
-		adapter.notifyDataSetChanged();
+
+		if (cityPrefered.getCityName() != null) {
+			latitiude = cityPrefered.getLatitude();
+			longitude = cityPrefered.getLongitude();
+			
+			cityName = cityPrefered.getCityName();
+			((BoschMainActivity)FragmentUtil.getActivity(this)).updateTitleForFragment(buildTitle(), 
+					getClass().getSimpleName());
+			
+			DeviceUtil.updateLatLon(cityPrefered.getLatitude(), cityPrefered.getLongitude());
+			
+			adapter.setData(null);
+			adapter.notifyDataSetChanged();
+		}
 	}
 	
 	@Override
 	public void onClick(View v) {
-		
 		
 		switch (v.getId()) {
 
@@ -240,22 +241,21 @@ public class BoschChangeCityFragment extends FragmentLoadableFromBackStack imple
 		@Override
 		protected void onPostExecute(List<CityPrefered> result) {
 			super.onPostExecute(result);
+			
+			prgSearchCity.setVisibility(View.GONE);
+			
+			if (result == null) {
+				CityPrefered cityPrefered = new CityPrefered(null, null, 
+						AppConstants.NOT_ALLOWED_LAT, AppConstants.NOT_ALLOWED_LON);
+				
+				result = new ArrayList<CityPrefered>();
+				result.add(cityPrefered);
 
-			try {
-				if (isAdded()) {
-					prgSearchCity.setVisibility(View.GONE);
-					
-					if (result != null) {
-						adapter.setData(result);
-						adapter.notifyDataSetChanged();
-					} else {
-						Toast.makeText(FragmentUtil.getActivity(BoschChangeCityFragment.this),
-							"Couldn't locate the City.", Toast.LENGTH_LONG).show();
-					}
-				}
-			} catch (Exception e) {
-				Log.e(TAG, "ERROR : " + e.toString());
+				Toast.makeText(FragmentUtil.getActivity(BoschChangeCityFragment.this)
+						, "Couldn't locate the City.", Toast.LENGTH_LONG).show();
 			}
+			adapter.setData(result);
+			adapter.notifyDataSetChanged();
 		}
 	}
 	
@@ -301,7 +301,7 @@ public class BoschChangeCityFragment extends FragmentLoadableFromBackStack imple
 			Drawable txtDrwble;
 			if (AppConstants.IS_NIGHT_MODE_ENABLED) {
 				rltRootLyt.setBackgroundResource(
-						R.drawable.slctr_item_lst_cities_fragment_change_city_night_mod);
+						R.drawable.slctr_item_lst_cities_fragment_change_city_night_mode);
 				
 				txtClrResId = R.color.slctr_black_on_white_off;
 				txtDrwble = res.getDrawable(R.drawable.slctr_txt_city_fragment_change_city_night_mode);				
@@ -321,8 +321,14 @@ public class BoschChangeCityFragment extends FragmentLoadableFromBackStack imple
 			} catch (Exception e) {}
 
 			CityPrefered cityPrefered = lstCities.get(position);
-			txtCity.setText(cityPrefered.getCityName() + ", " + cityPrefered.getCountryName());
+
+			if (cityPrefered.getCityName() == null) {
+				txtCity.setText("No City Found");
+				
+			} else {
+				txtCity.setText(cityPrefered.getCityName() + ", " + cityPrefered.getCountryName());
 			
+			}
 			return convertView;
 		}
 
