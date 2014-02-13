@@ -261,7 +261,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
     }
 	
 	private void updateGoogleButton(boolean isSignedIn) {
-		//Log.d(TAG, "updateGoogleButton(), isSignedIn = " + isSignedIn);
+		Log.d(TAG, "updateGoogleButton(), isSignedIn = " + isSignedIn);
 		isGPlusSigningIn = false;
 		txtGPlusSignInStatus.setVisibility(View.INVISIBLE);
 		imgGPlusSignIn.setVisibility(View.VISIBLE);
@@ -283,6 +283,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 		Log.d(TAG, "onConnected()");
         updateGoogleButton(true);
 
+        Log.d(TAG, "GPlusUserId : " + ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getGPlusUserId());
 		if (((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getGPlusUserId() == null) {
 	        
 	        Person currentPerson = mPlusClient.getCurrentPerson();
@@ -335,7 +336,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 		
 		case R.id.imgGPlusSignIn:
 			if (!mPlusClient.isConnected()) {
-				Log.d(TAG, "sign in");
+				//Log.d(TAG, "sign in");
                 int available = GooglePlayServicesUtil.isGooglePlayServicesAvailable(FragmentUtil.getActivity(this));
 				if (available != ConnectionResult.SUCCESS) {
 					GPlusUtil.showDialogForGPlayServiceUnavailability(available, this);
@@ -348,7 +349,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 				
 				if (mConnectionResult != null) {
 		            try {
-		            	Log.d(TAG, "startResolutionForResult()");
+		            	//Log.d(TAG, "startResolutionForResult()");
 		                mConnectionResult.startResolutionForResult(FragmentUtil.getActivity(this), AppConstants.REQ_CODE_GOOGLE_PLUS_RESOLVE_ERR);
 		                
 		            } catch (SendIntentException e) {

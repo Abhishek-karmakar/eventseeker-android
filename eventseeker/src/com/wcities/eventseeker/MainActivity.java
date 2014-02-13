@@ -258,7 +258,7 @@ public class MainActivity extends ActionBarActivity implements
 			} else {
 				GetStartedFragment getStartedFragment = new GetStartedFragment();
 				selectNonDrawerItem(getStartedFragment, AppConstants.FRAGMENT_TAG_GET_STARTED, getResources()
-								.getString(R.string.title_connect_accounts), false);
+								.getString(R.string.title_get_started), false);
 			}
 			
 		} else {
