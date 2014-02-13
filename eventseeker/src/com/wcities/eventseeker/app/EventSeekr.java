@@ -30,7 +30,9 @@ import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.BoschAsyncTaskListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.util.DeviceUtil;
+import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FileUtil;
+import com.wcities.eventseeker.util.GPlusUtil;
 
 public class EventSeekr extends Application {
 
@@ -273,6 +275,8 @@ public class EventSeekr extends Application {
 		editor.putString(SharedPrefKeys.FACEBOOK_USER_ID, fbUserId);
 		editor.commit();
 		
+		GPlusUtil.callGPlusLogout(null, this);
+		
 		new GetWcitiesId(listener, LoginType.facebook).execute();
 	}
 	
@@ -329,6 +333,8 @@ public class EventSeekr extends Application {
 		Editor editor = pref.edit();
 		editor.putString(SharedPrefKeys.GOOGLE_PLUS_USER_ID, gPlusUserId);
 		editor.commit();
+		
+		FbUtil.callFacebookLogout(this);
 		
 		new GetWcitiesId(listener, LoginType.googlePlus).execute();
 	}
