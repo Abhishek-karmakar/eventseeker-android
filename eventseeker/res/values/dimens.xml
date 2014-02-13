@@ -207,10 +207,12 @@
     <dimen name="divider_margin_t_fragment_discover_by_category_list_item_header">-1dp</dimen>
     <dimen name="divider_margin_l_fragment_discover_by_category_list_item_header">@dimen/divider_margin_l_fragment_discover_by_category_list_item_evt</dimen>
     <dimen name="divider_margin_r_fragment_discover_by_category_list_item_header">@dimen/divider_margin_r_fragment_discover_by_category_list_item_evt</dimen>
-    <!-- fragment_fb_login.xml -->
+    <!-- fragment_get_started.xml -->
+    <dimen name="rlt_lyt_root_pad_l_r_b_get_started">20dp</dimen>
     <dimen name="v_divider_ht_fb_login">1dp</dimen>
     <dimen name="btn_fb_sign_up_ht_fb_login">35dp</dimen>
-    <dimen name="btn_fb_sign_up_margin_t_fb_login">45dp</dimen>
+    <dimen name="all_components_margin_t_get_started">30dp</dimen>
+    <dimen name="txt_g_plus_sign_in_status_txt_size_get_started">18sp</dimen>
     <dimen name="btn_fb_sign_up_txt_size_fb_login">16sp</dimen>
     <dimen name="btn_fb_sign_up_pad_l_fb_login">10dp</dimen>
     <dimen name="btn_fb_sign_up_pad_r_fb_login">@dimen/btn_fb_sign_up_pad_l_fb_login</dimen>
@@ -226,6 +228,9 @@
     <dimen name="btn_continue_txt_size_fb_login">@dimen/btn_fb_sign_up_txt_size_fb_login</dimen>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="txt_why_login_txt_size_get_started">22sp</dimen>
+    <dimen name="txt_guide_txt_size_get_started">18sp</dimen>
+    <dimen name="btn_skip_w_get_started">120dp</dimen>
     <!-- artists_news_list_item.xml -->
     <dimen name="root_lnr_layout_pad_l_artists_news_list_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="root_lnr_layout_pad_r_artists_news_list_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
@@ -436,7 +441,7 @@
     <dimen name="rlt_layout_root_pad_l_include_no_items_found_with_action">20dp</dimen>
     <dimen name="rlt_layout_root_pad_r_include_no_items_found_with_action">@dimen/rlt_layout_root_pad_l_include_no_items_found_with_action</dimen>
     <dimen name="rlt_layout_root_pad_b_include_no_items_found_with_action">20dp</dimen>
-    <dimen name="all_component_margin_t_include_no_items_found_with_action">20dp</dimen>
+    <dimen name="all_components_margin_t_include_no_items_found_with_action">20dp</dimen>
     <dimen name="txt_no_items_heading_txt_size_include_no_items_found_with_action">20sp</dimen>
     <dimen name="txt_no_items_msg_txt_size_include_no_items_found_with_action">18sp</dimen>
     <dimen name="btn_action_pad_l_include_no_items_found_with_action">15dp</dimen>

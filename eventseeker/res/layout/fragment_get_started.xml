@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_gray"
+    android:padding="@dimen/rlt_layout_root_pad_fragment_connect_accounts_list" >
+
+    <RelativeLayout android:id="@+id/rltLytRoot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/story_space"
+        android:paddingLeft="@dimen/rlt_lyt_root_pad_l_r_b_get_started"
+        android:paddingRight="@dimen/rlt_lyt_root_pad_l_r_b_get_started"
+        android:paddingBottom="@dimen/rlt_lyt_root_pad_l_r_b_get_started" >
+        
+        <ImageView android:id="@+id/imgFbSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/all_components_margin_t_get_started"
+            android:src="@drawable/fb_login" />
+        
+        <RelativeLayout android:id="@+id/rltGPlus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imgFbSignUp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/all_components_margin_t_get_started" >
+            
+            <TextView android:id="@+id/txtGPlusSignInStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_centerInParent="true"
+                android:text="Signing in..."
+                android:textSize="@dimen/txt_g_plus_sign_in_status_txt_size_get_started" />
+            
+            <ImageView android:id="@+id/imgGPlusSignIn"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:src="@drawable/g_plus_sign_in" />
+            
+        </RelativeLayout>
+        
+        <TextView android:id="@+id/txtWhyLogin"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/rltGPlus"
+	        android:layout_marginTop="@dimen/all_components_margin_t_get_started"
+	        android:layout_centerHorizontal="true"
+	        android:text="Why Login?"
+	        android:textSize="@dimen/txt_why_login_txt_size_get_started"
+	        android:textColor="@color/txt_why_login_txt_color_fragment_get_started" />
+        
+        <TextView android:id="@+id/txtEvents"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/txtWhyLogin"
+	        android:layout_marginTop="@dimen/all_components_margin_t_get_started"
+	        android:layout_centerHorizontal="true"
+	        android:text="Get event recommendations based on your interests"
+	        android:textSize="@dimen/txt_guide_txt_size_get_started"
+	        android:textColor="@color/txt_guide_txt_color_fragment_get_started"
+	        android:gravity="center"
+	        android:drawableTop="@drawable/ticket_get_started" />
+        
+        <TextView android:id="@+id/txtFriends"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/txtEvents"
+	        android:layout_marginTop="@dimen/all_components_margin_t_get_started"
+	        android:layout_centerHorizontal="true"
+	        android:text="Stay connected with friends and know who to invite to events"
+	        android:textSize="@dimen/txt_guide_txt_size_get_started"
+	        android:textColor="@color/txt_guide_txt_color_fragment_get_started"
+	        android:gravity="center"
+	        android:drawableTop="@drawable/friends_get_started" />
+
+        <Button android:id="@+id/btnSkip"
+            android:layout_width="@dimen/btn_skip_w_get_started"
+            android:layout_height="@dimen/btn_continue_ht_fb_login"
+            android:layout_below="@id/txtFriends"
+            android:layout_marginTop="@dimen/all_components_margin_t_get_started"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/btn_continue_margin_b_fb_login"
+            android:background="@color/btn_fb_sign_up_bg"
+            android:text="Skip"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/btn_continue_txt_size_fb_login" />
+            
+        <!-- <com.google.android.gms.common.SignInButton android:id="@+id/gPlusSignIn"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_above="@id/btnContinue"
+		    android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/btn_fb_sign_up_margin_t_fb_login" /> -->
+        
+    </RelativeLayout>
+
+</ScrollView>

@@ -9,6 +9,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.media.JetPlayer.OnJetEventListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -38,7 +39,8 @@ import com.wcities.eventseeker.ChangeLocationFragment.ChangeLocationFragmentList
 import com.wcities.eventseeker.ConnectAccountsFragment.ConnectAccountsFragmentListener;
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
-import com.wcities.eventseeker.FbLogInFragment.FbLogInFragmentListener;
+import com.wcities.eventseeker.GetStartedFragment.GetStartedFragmentListener;
+import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.bosch.BoschMainActivity;
@@ -54,10 +56,11 @@ import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.interfaces.MapListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
+import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class MainActivity extends ActionBarActivity implements
-		DrawerListFragmentListener, FbLogInFragmentListener,
+		DrawerListFragmentListener, GetStartedFragmentListener,
 		ReplaceFragmentListener, EventListener, ArtistListener, VenueListener,
 		FragmentLoadedFromBackstackListener, MapListener,
 		ConnectAccountsFragmentListener, SearchView.OnQueryTextListener,
@@ -111,6 +114,8 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		//Log.d(TAG, "deviceId = " + DeviceUtil.getDeviceId((EventSeekr) getApplication()));
 		
 		try {
 			MySpinServerSDK.sharedInstance().registerApplication(getApplication());
@@ -251,11 +256,9 @@ public class MainActivity extends ActionBarActivity implements
 						.getSerializableExtra(BundleKeys.EVENT), false);
 
 			} else {
-				FbLogInFragment fbLogInFragment = new FbLogInFragment();
-				selectNonDrawerItem(fbLogInFragment,
-						AppConstants.FRAGMENT_TAG_FB_LOGIN, getResources()
-								.getString(R.string.title_connect_accounts),
-						false);
+				GetStartedFragment getStartedFragment = new GetStartedFragment();
+				selectNonDrawerItem(getStartedFragment, AppConstants.FRAGMENT_TAG_GET_STARTED, getResources()
+								.getString(R.string.title_connect_accounts), false);
 			}
 			
 		} else {
@@ -374,7 +377,7 @@ public class MainActivity extends ActionBarActivity implements
 		boolean disableSearch = currentContentFragmentTag
 				.equals(AppConstants.FRAGMENT_TAG_CHANGE_LOCATION)
 				|| currentContentFragmentTag
-						.equals(AppConstants.FRAGMENT_TAG_FB_LOGIN)
+						.equals(AppConstants.FRAGMENT_TAG_GET_STARTED)
 				|| currentContentFragmentTag
 						.equals(AppConstants.FRAGMENT_TAG_FULL_SCREEN_ADDRESS_MAP);
 		menu.findItem(R.id.action_search).setVisible(!disableSearch);
@@ -401,7 +404,7 @@ public class MainActivity extends ActionBarActivity implements
 
 		case android.R.id.home:
 			
-			if(AppConstants.FRAGMENT_TAG_FACEBOOK.equals(currentContentFragmentTag)) {
+			if(AppConstants.FRAGMENT_TAG_LOGIN_SYNCING.equals(currentContentFragmentTag)) {
 				return true;
 			} else if (!isTabletAndInLandscapeMode) {
 				if (mDrawerToggle.isDrawerIndicatorEnabled()) {
@@ -474,12 +477,26 @@ public class MainActivity extends ActionBarActivity implements
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		//Log.d(TAG, "onActivityResult(), requestCode = " + requestCode + ", resultCode = " + resultCode);
+		Log.d(TAG, "onActivityResult(), requestCode = " + requestCode + ", resultCode = " + resultCode);
 		switch (requestCode) {
 		
 		case AppConstants.REQ_CODE_INVITE_FRIENDS:
 		case AppConstants.REQ_CODE_RATE_APP:
 			hasOtherActivityFinished = true;
+			break;
+			
+		case AppConstants.REQ_CODE_GOOGLE_PLUS_RESOLVE_ERR:
+		case AppConstants.REQ_CODE_GET_GOOGLE_PLAY_SERVICES:
+			Fragment fragment = getSupportFragmentManager().findFragmentByTag(AppConstants.FRAGMENT_TAG_GET_STARTED);
+			if (fragment != null) {
+				fragment.onActivityResult(requestCode, resultCode, data);
+				
+			} else {
+				fragment = getSupportFragmentManager().findFragmentByTag(AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS);
+				if (fragment != null) {
+					fragment.onActivityResult(requestCode, resultCode, data);
+				}
+			}
 			break;
 			
 		/*case REQ_CODE_GOOGLE_ACCOUNT_CHOOSER:
@@ -544,7 +561,7 @@ public class MainActivity extends ActionBarActivity implements
 					return super.onKeyDown(keyCode, event);
 				}
 				
-			} else if (AppConstants.FRAGMENT_TAG_FACEBOOK.equals(currentContentFragmentTag)) {
+			} else if (AppConstants.FRAGMENT_TAG_LOGIN_SYNCING.equals(currentContentFragmentTag)) {
 				return true;
 				
 			} else {
@@ -1014,7 +1031,7 @@ public class MainActivity extends ActionBarActivity implements
 	
 	private void selectNonDrawerItem(Fragment replaceBy, String replaceByFragmentTag, String newTitle, 
 		boolean addToBackStack) {
-		Log.d(TAG, "onDrawerItemSelected(), newTitle = " + newTitle + ", addToBackStack = " + addToBackStack);
+		//Log.d(TAG, "onDrawerItemSelected(), newTitle = " + newTitle + ", addToBackStack = " + addToBackStack);
 		
 		drawerItemSelectedPosition = AppConstants.INVALID_INDEX;
 		// revertCheckedDrawerItemStateIfAny();
@@ -1022,7 +1039,7 @@ public class MainActivity extends ActionBarActivity implements
 		
 		if (isTabletAndInLandscapeMode) {
 			getSupportActionBar().setIcon(R.drawable.placeholder);			
-			if(addToBackStack) {
+			if (addToBackStack) {
 				getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_HOME_AS_UP);
 			}
 		}
@@ -1093,7 +1110,8 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	@Override
-	public void replaceFbLoginFragmentBy(String fragmentTag) {
+	public void replaceGetStartedFragmentBy(String fragmentTag) {
+		//Log.d(TAG, "replaceGetStartedFragmentBy(), tag = " + fragmentTag);
 		if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_MY_EVENTS)) {
 			selectItem(INDEX_NAV_ITEM_MY_EVENTS);
 			
@@ -1164,15 +1182,21 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public void onServiceSelected(Service service, Bundle args, boolean addToBackStack) {
-		
+		//Log.d(TAG, "onServiceSelected()");
 		switch (service) {
 		
 		case Facebook:
-			FacebookFragment facebookFragment = new FacebookFragment();
-			facebookFragment.setArguments(args);
-			selectNonDrawerItem(facebookFragment,
-					AppConstants.FRAGMENT_TAG_FACEBOOK, getResources()
+			LoginSyncingFragment loginSyncingFragment = new LoginSyncingFragment();
+			loginSyncingFragment.setArguments(args);
+			selectNonDrawerItem(loginSyncingFragment, AppConstants.FRAGMENT_TAG_LOGIN_SYNCING, getResources()
 					.getString(R.string.title_facebook), addToBackStack);
+			break;
+			
+		case GooglePlus:
+			loginSyncingFragment = new LoginSyncingFragment();
+			loginSyncingFragment.setArguments(args);
+			selectNonDrawerItem(loginSyncingFragment, AppConstants.FRAGMENT_TAG_LOGIN_SYNCING, getResources()
+					.getString(R.string.title_google_plus), addToBackStack);
 			break;
 			
 		case GooglePlay:
@@ -1345,10 +1369,10 @@ public class MainActivity extends ActionBarActivity implements
 					.getString(R.string.title_device_library),
 					AppConstants.FRAGMENT_TAG_DEVICE_LIBRARY);
 
-		} else if (fragment instanceof FacebookFragment) {
-			onFragmentResumed(AppConstants.INVALID_INDEX, getResources()
-					.getString(R.string.title_facebook),
-					AppConstants.FRAGMENT_TAG_FACEBOOK);
+		} else if (fragment instanceof LoginSyncingFragment) {
+			String title = (fragment.getArguments().getSerializable(BundleKeys.LOGIN_TYPE) == LoginType.facebook) ? 
+					getResources().getString(R.string.title_facebook) : getResources().getString(R.string.title_google_plus);
+			onFragmentResumed(AppConstants.INVALID_INDEX, title, AppConstants.FRAGMENT_TAG_LOGIN_SYNCING);
 
 		} else if (fragment instanceof TwitterFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources()

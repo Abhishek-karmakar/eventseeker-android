@@ -5,6 +5,8 @@ public class SharedPrefKeys {
 	public static final String FACEBOOK_USER_ID = "facebookUserId";
 	public static final String FACEBOOK_USER_NAME = "facebookUserName";
 	public static final String WCITIES_USER_ID = "wcitiesUserId";
+	public static final String GOOGLE_PLUS_USER_ID = "gPlusUserId";
+	public static final String GOOGLE_PLUS_USER_NAME = "gPlusUserName";
 	public static final String GCM_REGISTRATION_ID = "gcmRegistrationId";
 	public static final String APP_VERSION_CODE = "appVersionCode";
 	public static final String GCM_REGISTRATION_EXPIRATION_TIME = "gcmRegistrationExpirationTime";

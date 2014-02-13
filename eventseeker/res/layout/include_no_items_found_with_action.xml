@@ -18,7 +18,7 @@
 	        android:layout_centerHorizontal="true"
 	        android:text="Search Artists"
 	        android:textStyle="bold"
-	        android:layout_marginTop="@dimen/all_component_margin_t_include_no_items_found_with_action"
+	        android:layout_marginTop="@dimen/all_components_margin_t_include_no_items_found_with_action"
 	        android:textSize="@dimen/txt_no_items_heading_txt_size_include_no_items_found_with_action"
 	        android:textColor="@color/txt_no_items_heading_txt_color_include_no_items_found_with_action"
 	        android:gravity="center_horizontal" />
@@ -27,7 +27,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_below="@id/txtNoItemsHeading"
-	        android:layout_marginTop="@dimen/all_component_margin_t_include_no_items_found_with_action"
+	        android:layout_marginTop="@dimen/all_components_margin_t_include_no_items_found_with_action"
 	        android:src="@drawable/no_artists_news"
 	        android:layout_centerHorizontal="true" />
 	    
@@ -35,7 +35,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_below="@id/imgNoItems"
-	        android:layout_marginTop="@dimen/all_component_margin_t_include_no_items_found_with_action"
+	        android:layout_marginTop="@dimen/all_components_margin_t_include_no_items_found_with_action"
 	        android:layout_centerHorizontal="true"
 	        android:text="Follow artists to receive real time updates."
 	        android:textSize="@dimen/txt_no_items_msg_txt_size_include_no_items_found_with_action"
@@ -46,7 +46,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_below="@id/txtNoItemsMsg"
-	        android:layout_marginTop="@dimen/all_component_margin_t_include_no_items_found_with_action"
+	        android:layout_marginTop="@dimen/all_components_margin_t_include_no_items_found_with_action"
 	        android:paddingLeft="@dimen/btn_action_pad_l_include_no_items_found_with_action"
 	        android:paddingRight="@dimen/btn_action_pad_r_include_no_items_found_with_action"
 	        android:layout_centerHorizontal="true"

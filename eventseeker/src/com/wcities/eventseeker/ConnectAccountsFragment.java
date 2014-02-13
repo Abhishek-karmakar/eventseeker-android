@@ -12,8 +12,10 @@ import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender.SendIntentException;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,7 +37,15 @@ import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
-import com.wcities.eventseeker.FbLogInFragment.FbLogInFragmentListener;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.plus.PlusClient;
+import com.google.android.gms.plus.model.people.Person;
+import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
+import com.wcities.eventseeker.GetStartedFragment.GetStartedFragmentListener;
+import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.app.EventSeekr.EventSeekrListener;
 import com.wcities.eventseeker.asynctask.GetAuthToken;
@@ -47,30 +57,40 @@ import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.GPlusUtil;
 import com.wcities.eventseeker.util.ViewUtil.AnimationUtil;
 
 public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack implements EventSeekrListener, 
-		AsyncTaskListener<Object> {
+		AsyncTaskListener<Object>, ConnectionCallbacks, OnConnectionFailedListener, DialogBtnClickListener {
 	
     private static final String TAG = ConnectAccountsFragment.class.getName();
     
     private static final String FB_LOGIN = "Facebook Log In";
     private static final String FB_LOGOUT = "Facebook Log Out";
     
+    private static final String GOOGLE_SIGN_IN = "Google Sign In";
+    private static final String GOOGLE_SIGN_OUT = "Google Sign Out";
+    
+    private static final String TXT_BTN_CONTINUE = "Continue";
+    private static final String TXT_BTN_SKIP = "Skip";
+    
+	private static final String DIALOG_FRAGMENT_TAG_SKIP = "skipDialog";
+    
     private boolean isFirstTimeLaunch;
     
     public static enum Service {
     	Title(0,"Title",R.drawable.placeholder),
     	Facebook(1,"Facebook",R.drawable.facebook_colored),
-    	Blank(2,"Blank",R.drawable.placeholder),
-    	GooglePlay(3,"Google Play",R.drawable.google_play),
-    	DeviceLibrary(4,"Device Library",R.drawable.devicelibrary),
-    	Twitter(5,"Twitter",R.drawable.twitter_colored),
+    	GooglePlus(2,"Google Plus",R.drawable.g_plus_colored),
+    	Blank(3,"Blank",R.drawable.placeholder),
+    	GooglePlay(4,"Google Play",R.drawable.google_play),
+    	DeviceLibrary(5,"Device Library",R.drawable.devicelibrary),
+    	Twitter(6,"Twitter",R.drawable.twitter_colored),
     	//Spotify,
-    	Rdio(6,"Rdio",R.drawable.rdio),
-    	Lastfm(7,"Last.fm",R.drawable.lastfm),
-    	Pandora(8,"Pandora",R.drawable.pandora),
-    	Button(9,"Button",R.drawable.placeholder);
+    	Rdio(7,"Rdio",R.drawable.rdio),
+    	Lastfm(8,"Last.fm",R.drawable.lastfm),
+    	Pandora(9,"Pandora",R.drawable.pandora),
+    	Button(10,"Button",R.drawable.placeholder);
     	
     	private int intId;
     	private String str;
@@ -119,9 +139,12 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	private List<ServiceAccount> serviceAccounts;
 	private LoadMyEventsCount loadMyEventsCount;
 	
-	private boolean fbLoggedIn, isProgressVisible;
+	private boolean fbLoggedIn, gPlusSignedIn, isProgressVisible, isGPlusSigningIn;;
 	
 	private LinearLayout lnrLayoutProgress;
+	
+	private PlusClient mPlusClient;
+	private ConnectionResult mConnectionResult;
 
     private Session.StatusCallback statusCallback = new SessionStatusCallback();
     
@@ -150,6 +173,12 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		
 		isFirstTimeLaunch = eventSeekr.getFirstTimeLaunch();
 		eventSeekr.updateFirstTimeLaunch(false);
+		
+		mPlusClient = new PlusClient.Builder(FragmentUtil.getActivity(this), this, this)
+    	.setActions(AppConstants.GOOGLE_PLUS_ACTION)
+    	.setScopes(AppConstants.GOOGLE_PLUS_SCOPES)  // PLUS_LOGIN is recommended login scope for social features
+    	// .setScopes("profile")       // alternative basic login scope
+    	.build();
 	}
 	
 	@Override
@@ -189,6 +218,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
         if (!fbLoggedIn && Session.getActiveSession() != null) {
         	Session.getActiveSession().addCallback(statusCallback);
         }
+        mPlusClient.connect();
     }
 	
 	@Override
@@ -199,6 +229,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		if (!fbLoggedIn && Session.getActiveSession() != null) {
 			Session.getActiveSession().removeCallback(statusCallback);
 		}
+		mPlusClient.disconnect();
 	}
 	
 	@Override
@@ -220,7 +251,15 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
 			new GetAuthToken(this, this).execute(accountName);
 			
-		} else {
+		} else if (requestCode == AppConstants.REQ_CODE_GOOGLE_PLUS_RESOLVE_ERR || 
+        		requestCode == AppConstants.REQ_CODE_GET_GOOGLE_PLAY_SERVICES) {
+        	if (resultCode == Activity.RESULT_OK  && !mPlusClient.isConnected()
+                    && !mPlusClient.isConnecting()) {
+	            mConnectionResult = null;
+	            mPlusClient.connect();
+        	}
+            
+        } else {
 			super.onActivityResult(requestCode, resultCode, data);
 			//Log.d(TAG, "onActivityResult()");
 			if (!fbLoggedIn) {
@@ -253,8 +292,8 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
         		
         	Service service = connectAccountsItemTitles[i];
         		
-        	if((isFirstTimeLaunch && service.equals(Service.Facebook))
-        			|| (isFirstTimeLaunch && service.equals(Service.Blank))
+        	if ((isFirstTimeLaunch && (service.equals(Service.Facebook)
+        			|| service.equals(Service.Blank) || service.equals(Service.GooglePlus)))
         			|| (!isFirstTimeLaunch && service.equals(Service.Title))) {
         		continue;
         	}
@@ -274,9 +313,8 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
         // serviceAccounts.add(null);
         
         fbLoggedIn = FbUtil.hasUserLoggedInBefore(FragmentUtil.getActivity(this).getApplicationContext());
-        
+        gPlusSignedIn = GPlusUtil.hasUserLoggedInBefore(FragmentUtil.getActivity(this).getApplicationContext());
         //connectAccountsItemIcons.recycle();
-        
 	}
 	
 	private void showProgress() {
@@ -314,12 +352,11 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     	                	listAdapter.notifyDataSetChanged();
     	                	
     	                	Bundle bundle = new Bundle();
-    	                	bundle.putString(BundleKeys.WCITIES_ID, user.getId());
+    	                	bundle.putSerializable(BundleKeys.LOGIN_TYPE, LoginType.facebook);
+    	                	bundle.putString(BundleKeys.FB_USER_ID, user.getId());
+    	    	        	bundle.putString(BundleKeys.FB_USER_NAME, user.getUsername());
     	                	((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
     	                		.onServiceSelected(Service.Facebook, bundle, true);
-    	                	EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(ConnectAccountsFragment.this)
-	    	                	.getApplication();
-	    	                eventSeekr.updateFbUserName(user.getUsername());
     	                }
     	            }
     	            
@@ -354,43 +391,16 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				// it's for Continue button
 				convertView = mInflater.inflate(R.layout.connect_accounts_continue, null);
 				Button btnContinue = (Button) convertView.findViewById(R.id.btnContinue);
-				btnContinue.setOnClickListener(new View.OnClickListener() {
+				if (((EventSeekr)FragmentUtil.getActivity(ConnectAccountsFragment.this).getApplication())
+						.isAnyAccountSynced()) {
+					btnContinue.setText(TXT_BTN_CONTINUE);
 					
-					@Override
-					public void onClick(View v) {
-						String wcitiesId = ((EventSeekr)FragmentUtil.getActivity(ConnectAccountsFragment.this)
-								.getApplication()).getWcitiesId();
-						
-						if (wcitiesId != null) {
-							showProgress();
-							double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getActivity(ConnectAccountsFragment.this));
-
-							loadMyEventsCount = new LoadMyEventsCount(wcitiesId, latLon[0], latLon[1], new AsyncTaskListener<Integer>() {
-								
-								@Override
-								public void onTaskCompleted(Integer... params) {
-									Log.d(TAG, "params[0] = " + params[0]);
-									if (params[0] > 0) {
-										((FbLogInFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
-											.replaceFbLoginFragmentBy(AppConstants.FRAGMENT_TAG_MY_EVENTS);
-										
-									} else {
-										((FbLogInFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
-											.replaceFbLoginFragmentBy(AppConstants.FRAGMENT_TAG_DISCOVER);
-									}
-								}
-							});
-							loadMyEventsCount.execute();
-							
-						} else {
-							((FbLogInFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
-								.replaceFbLoginFragmentBy(AppConstants.FRAGMENT_TAG_DISCOVER);
-						}
-					}
-				});
+				} else {
+					btnContinue.setText(TXT_BTN_SKIP);
+				}
+				btnContinue.setOnClickListener(onBtnContinueClickListener);
 				
 			} else if(serviceAccount.name.equals(Service.Title.getStr())) {
-
 				convertView = mInflater.inflate(R.layout.connect_accounts_txt_list_item, null);
 				convertView.setTag("");
 				
@@ -420,12 +430,27 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				
 				holder.imgService.setImageResource(serviceAccount.drawable);
 				
-				if(!isFirstTimeLaunch && Service.Facebook.isOf(serviceAccount.name)) {
-					if(fbLoggedIn) {
-						holder.txtServiceName.setText(FB_LOGOUT);
-		        	} else {
-		        		holder.txtServiceName.setText(FB_LOGIN);
-		        	}
+				if (!isFirstTimeLaunch) { 
+					if (Service.Facebook.isOf(serviceAccount.name)) {
+						if (fbLoggedIn) {
+							holder.txtServiceName.setText(FB_LOGOUT);
+							
+			        	} else {
+			        		holder.txtServiceName.setText(FB_LOGIN);
+			        	}
+						
+					} else if (Service.GooglePlus.isOf(serviceAccount.name)) {
+						if (gPlusSignedIn) {
+							holder.txtServiceName.setText(GOOGLE_SIGN_OUT);
+							
+			        	} else {
+			        		holder.txtServiceName.setText(GOOGLE_SIGN_IN);
+			        	}
+						
+					} else {
+						holder.txtServiceName.setText(serviceAccount.name);
+					}
+					
 				} else {
 					holder.txtServiceName.setText(serviceAccount.name);
 				}
@@ -450,6 +475,14 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 					
 					if (serviceAccount.name.equals(Service.Facebook.getStr())) {
 						if (fbLoggedIn) {
+							holder.imgPlus.setVisibility(View.INVISIBLE);
+							
+						} else {
+							holder.imgPlus.setVisibility(View.VISIBLE);
+						}
+						
+					} else if (serviceAccount.name.equals(Service.GooglePlus.getStr())) {
+						if (gPlusSignedIn) {
 							holder.imgPlus.setVisibility(View.INVISIBLE);
 							
 						} else {
@@ -503,12 +536,11 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				return;
 			}
 			
-			if (service != Service.Facebook && service != Service.Blank 
+			if (service != Service.Facebook && service != Service.GooglePlus && service != Service.Blank 
 					&& eventSeekr.getWcitiesId() == null) {
-				
-				String text = (eventSeekr.getFbUserId() == null) ? 
-						"Please login with facebook before you sync accounts from other services" :
-							"Syncing facebook account...Please Wait...";
+				String text = (eventSeekr.getFbUserId() == null || eventSeekr.getGPlusUserId() == null) ? 
+						"Please login with facebook or google before you sync accounts from other services" :
+							"Syncing your account...Please Wait...";
 				Toast.makeText(eventSeekr, text, Toast.LENGTH_LONG).show();
 				return;
 			}
@@ -524,6 +556,39 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 					
 				} else {
 					FbUtil.onClickLogin(ConnectAccountsFragment.this, statusCallback);
+				}
+				break;
+				
+			case GooglePlus:
+				if (gPlusSignedIn) {
+					GPlusUtil.callGPlusLogout(mPlusClient, (EventSeekr)FragmentUtil.getActivity(ConnectAccountsFragment.this).getApplication());
+					gPlusSignedIn = false;
+					listAdapter.notifyDataSetChanged();
+					
+				} else {
+					if (!mPlusClient.isConnected()) {
+		                int available = GooglePlayServicesUtil.isGooglePlayServicesAvailable(
+		                		FragmentUtil.getActivity(ConnectAccountsFragment.this));
+						if (available != ConnectionResult.SUCCESS) {
+							GPlusUtil.showDialogForGPlayServiceUnavailability(available, ConnectAccountsFragment.this);
+		                    return;
+		                }
+						
+						isGPlusSigningIn = true;
+						
+						if (mConnectionResult != null) {
+				        	//Log.d(TAG, "mConnectionResult is not null");
+				            try {
+				                mConnectionResult.startResolutionForResult(FragmentUtil.getActivity(
+				                		ConnectAccountsFragment.this), AppConstants.REQ_CODE_GOOGLE_PLUS_RESOLVE_ERR);
+				                
+				            } catch (SendIntentException e) {
+				                // Try connecting again.
+				                mConnectionResult = null;
+				                mPlusClient.connect();
+				            }
+				        }
+					}
 				}
 				break;
 				
@@ -596,12 +661,73 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		public boolean isInProgress;
 	}
 	
+	private OnClickListener onBtnContinueClickListener = new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			if (((Button)v).getText().equals(TXT_BTN_CONTINUE)) {
+				onContinueClick();
+				
+			} else {
+				GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance("Are you sure ?", 
+						"Connecting accounts allows us to provide relevant alerts instantly.", "Cancel", "Skip");
+				generalDialogFragment.show(getChildFragmentManager(), DIALOG_FRAGMENT_TAG_SKIP);
+			}
+		}
+	};
+	
+	private void onContinueClick() {
+		String wcitiesId = ((EventSeekr)FragmentUtil.getActivity(ConnectAccountsFragment.this)
+				.getApplication()).getWcitiesId();
+		
+		if (wcitiesId != null) {
+			showProgress();
+			double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getActivity(ConnectAccountsFragment.this));
+
+			loadMyEventsCount = new LoadMyEventsCount(wcitiesId, latLon[0], latLon[1], new AsyncTaskListener<Integer>() {
+				
+				@Override
+				public void onTaskCompleted(Integer... params) {
+					Log.d(TAG, "params[0] = " + params[0]);
+					if (params[0] > 0) {
+						((GetStartedFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
+							.replaceGetStartedFragmentBy(AppConstants.FRAGMENT_TAG_MY_EVENTS);
+						
+					} else {
+						((GetStartedFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
+							.replaceGetStartedFragmentBy(AppConstants.FRAGMENT_TAG_DISCOVER);
+					}
+				}
+			});
+			loadMyEventsCount.execute();
+			
+		} else {
+			((GetStartedFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
+				.replaceGetStartedFragmentBy(AppConstants.FRAGMENT_TAG_DISCOVER);
+		}
+	}
+	
 	private class SessionStatusCallback implements Session.StatusCallback {
         @Override
         public void call(Session session, SessionState state, Exception exception) {
             updateView();
         }
     }
+	
+	@Override
+	public void doPositiveClick(String dialogTag) {
+		onContinueClick();
+	}
+
+	@Override
+	public void doNegativeClick(String dialogTag) {
+		if (dialogTag.equals(DIALOG_FRAGMENT_TAG_SKIP)) {
+			DialogFragment dialogFragment = (DialogFragment) getChildFragmentManager().findFragmentByTag(DIALOG_FRAGMENT_TAG_SKIP);
+			if (dialogFragment != null) {
+				dialogFragment.dismiss();
+			}
+		}
+	}
 
 	@Override
 	public void onSyncCountUpdated(final Service service) {
@@ -678,5 +804,43 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			int requestCode = (Integer) params[1];
             startActivityForResult(intent, requestCode);
 		}
+	}
+
+	@Override
+	public void onConnected(Bundle arg0) {
+		//Log.d(TAG, "onConnected(), signedIn = " + gPlusSignedIn);
+		if (!gPlusSignedIn) {
+			isGPlusSigningIn = false;
+			
+	        Person currentPerson = mPlusClient.getCurrentPerson();
+	        
+	        if (currentPerson != null) {
+	        	gPlusSignedIn = true;
+	        	listAdapter.notifyDataSetChanged();
+
+	            String personId = currentPerson.getId();
+	            Log.d(TAG, "id = " + personId);
+	            Bundle bundle = new Bundle();
+	            bundle.putSerializable(BundleKeys.LOGIN_TYPE, LoginType.googlePlus);
+	        	bundle.putString(BundleKeys.GOOGLE_PLUS_USER_ID, personId);
+	        	bundle.putString(BundleKeys.GOOGLE_PLUS_USER_NAME, currentPerson.getDisplayName());
+	        	((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
+        				.onServiceSelected(Service.GooglePlus, bundle, true);
+	        }
+		}
+	}
+
+	@Override
+	public void onDisconnected() {
+		//Log.d(TAG, "onDisconnected()");
+		isGPlusSigningIn = false;
+	}
+
+	@Override
+	public void onConnectionFailed(ConnectionResult result) {
+		//Log.d(TAG, "onConnectionFailed()");
+		// Save the result and resolve the connection failure upon a user click.
+		mConnectionResult = result;
+		isGPlusSigningIn = false;
 	}
 }

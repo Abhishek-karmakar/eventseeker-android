@@ -42,8 +42,13 @@ public class UserInfoApi extends Api {
 		event
 	}
 	
+	public static enum LoginType {
+		facebook,
+		googlePlus;
+	}
+	
 	// userId - generated & returned by server on signup call
-	private String fbUserId, deviceId, userId, gcmRegistrationId; 
+	private String fbUserId, gPlusUserId, deviceId, userId, gcmRegistrationId; 
 	private Tracktype tracktype;
 	
 	private int limit;
@@ -63,6 +68,14 @@ public class UserInfoApi extends Api {
 
 	public void setFbUserId(String fbUserId) {
 		this.fbUserId = fbUserId;
+	}
+
+	public String getgPlusUserId() {
+		return gPlusUserId;
+	}
+
+	public void setgPlusUserId(String gPlusUserId) {
+		this.gPlusUserId = gPlusUserId;
 	}
 
 	public Tracktype getTracktype() {
@@ -148,11 +161,20 @@ public class UserInfoApi extends Api {
 		return execute(RequestMethod.GET, null, null); 
 	}
 	
-	public JSONObject syncAccount(String repCode) throws ClientProtocolException, IOException, JSONException {
+	public JSONObject syncAccount(String repCode, LoginType loginType) throws ClientProtocolException, IOException, JSONException {
 		String METHOD = "myProfile.php?";
+		String loginId = null, userType = null;
+		if (loginType == LoginType.facebook) {
+			loginId = fbUserId;
+			userType = "fb";
+			
+		} else if (loginType == LoginType.googlePlus) {
+			loginId = gPlusUserId;
+			userType = "google";
+		}
 		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD).append("oauth_token=")
 				.append(getOauthToken()).append("&type=").append(Type.syncaccount.name()).append("&userId=")
-				.append(fbUserId).append("&userType=fb").append("&wcitiesId=").append(userId);
+				.append(loginId).append("&userType=").append(userType).append("&wcitiesId=").append(userId);
 		if (repCode != null) {
 			uriBuilder.append("&repCode=" + repCode);
 		}

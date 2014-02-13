@@ -36,7 +36,7 @@ public class FbUtil {
 	private static final String TAG = FbUtil.class.getName();
 
 	public static boolean hasUserLoggedInBefore(Context context) {
-		Log.d(TAG, "hasUserLoggedInBefore()");
+		//Log.d(TAG, "hasUserLoggedInBefore()");
 		SharedPreferences pref = context.getSharedPreferences(
                 AppConstants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 		return pref.contains(SharedPrefKeys.FACEBOOK_USER_ID);

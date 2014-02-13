@@ -52,11 +52,22 @@ public class BundleKeys {
 	public static final String OAUTH_VERIFIER = "oauthVerifier";
 
 	public static final String SERVICE_ACCOUNTS = "serviceAccounts";
-	public static final String WCITIES_ID = "wcitiesId";
+	public static final String FB_USER_ID = "fbUserId";
+	public static final String FB_USER_NAME = "fbUserName";
+	public static final String GOOGLE_PLUS_USER_ID = "gPlusUserId";
+	public static final String GOOGLE_PLUS_USER_NAME = "gPlusUserName";
 	public static final String AUTH_TOKEN = "authToken";
 
 	public static final String STR_CRASH_LOG = "crashLog";
 	
+	public static final String LOGIN_TYPE = "loginType";
+	
+	public static final String DIALOG_TITLE = "dialogTitle";
+	public static final String DIALOG_MSG = "dialogMsg";
+	public static final String BTN1_TXT = "btn1Txt";
+	public static final String BTN2_TXT = "btn2Txt";
+	public static final String DIALOG_TAG = "dialogTag";
+
 	/**-------------------- starts for bosch ---------------------------**/
 	
 	public static final String CATEGORY = "category";

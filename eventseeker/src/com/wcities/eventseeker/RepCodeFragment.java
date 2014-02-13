@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
+import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -70,7 +71,7 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 			try {
 				userInfoApi.setFbUserId(eventSeekr.getFbUserId());
 				userInfoApi.setUserId(eventSeekr.getWcitiesId());
-				JSONObject jsonObject = userInfoApi.syncAccount(repCode);
+				JSONObject jsonObject = userInfoApi.syncAccount(repCode, LoginType.facebook);
 				Log.d(TAG, "response = " + jsonObject);
 
 			} catch (ClientProtocolException e) {

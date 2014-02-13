@@ -364,7 +364,7 @@
     <dimen name="rlt_layout_root_pad_l_include_no_items_found_with_action">90dp</dimen>
     <dimen name="rlt_layout_root_pad_r_include_no_items_found_with_action">@dimen/rlt_layout_root_pad_l_include_no_items_found_with_action</dimen>
     <dimen name="rlt_layout_root_pad_b_include_no_items_found_with_action">50dp</dimen>
-    <dimen name="all_component_margin_t_include_no_items_found_with_action">50dp</dimen>
+    <dimen name="all_components_margin_t_include_no_items_found_with_action">50dp</dimen>
     <dimen name="txt_no_items_heading_txt_size_include_no_items_found_with_action">26sp</dimen>
     <dimen name="txt_no_items_msg_txt_size_include_no_items_found_with_action">22sp</dimen>
     

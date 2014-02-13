@@ -3,6 +3,8 @@ package com.wcities.eventseeker.constants;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.android.gms.common.Scopes;
+
 public class AppConstants {
 	
 	public static final boolean IS_RELEASE_MODE = false;
@@ -49,7 +51,7 @@ public class AppConstants {
 	public static final String FRAGMENT_TAG_SEARCH = "searchFragment";
 	public static final String FRAGMENT_TAG_DATE_WISE_EVENT_LIST = "dateWiseEventListFragment";
 	public static final String FRAGMENT_TAG_FOLLOWING = "followingFragment";
-	public static final String FRAGMENT_TAG_FB_LOGIN = "fbLoginFragment";
+	public static final String FRAGMENT_TAG_GET_STARTED = "getStartedFragment";
 	public static final String FRAGMENT_TAG_ARTISTS_NEWS_LIST = "artistsNewsFragment";
 	public static final String FRAGMENT_TAG_FRIEND_LIST = "friendListFragment";
 	public static final String FRAGMENT_TAG_MY_EVENTS = "myEventsFragment";
@@ -61,7 +63,7 @@ public class AppConstants {
 	public static final String FRAGMENT_TAG_ADDRESS_MAP = "addressMapFragment";
 	public static final String FRAGMENT_TAG_FULL_SCREEN_ADDRESS_MAP = "fullScreenAddressMapFragment";
 	public static final String FRAGMENT_TAG_DEVICE_LIBRARY = "deviceLibraryFragment";
-	public static final String FRAGMENT_TAG_FACEBOOK = "FacebookFragment";
+	public static final String FRAGMENT_TAG_LOGIN_SYNCING = "LoginSyncingFragment";
 	public static final String FRAGMENT_TAG_TWITTER = "twitterFragment";
 	public static final String FRAGMENT_TAG_RDIO = "rdioFragment";
 	public static final String FRAGMENT_TAG_LASTFM = "lastfmFragment";
@@ -89,7 +91,10 @@ public class AppConstants {
 	public static final List<String> PERMISSIONS_FB_PUBLISH_EVT = Arrays.asList("publish_actions");
 	// Request code for facebook reauthorization requests. 
 	public static final int REQ_CODE_FB_PUBLISH_EVT = 100; 
-
+	
+	public static final int REQ_CODE_GOOGLE_PLUS_RESOLVE_ERR = 9000;
+	public static final int REQ_CODE_GET_GOOGLE_PLAY_SERVICES = 9001;
+	
 	/**
 	 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
 	 * This is the max limit for the looping
@@ -101,4 +106,6 @@ public class AppConstants {
 
 	public static final int SCROLL_Y_BY = 100;
 	
+	public static final String[] GOOGLE_PLUS_ACTION = new String[] {"http://schemas.google.com/AddActivity"};
+	public static final String[] GOOGLE_PLUS_SCOPES = new String[] {Scopes.PLUS_LOGIN, "email"};
 }

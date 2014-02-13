@@ -14,7 +14,7 @@
         android:paddingRight="@dimen/txt_connect_accounts_margin_l_r_fragment_connect_account"
         android:paddingTop="@dimen/txt_connect_accounts_margin_t_b_fragment_connect_account"
         android:gravity="center"
-        android:text="Connect your accounts with eventseeker to follow your favorite artists and get updates on events"
+        android:text="Follow your favorite artists and get updates on events by syncing any of the following:"
         android:textColor="@color/txt_service_name_txt_color"
         android:textSize="@dimen/txt_connect_accounts_txt_size_fragment_connect_account"
         android:visibility="visible" />

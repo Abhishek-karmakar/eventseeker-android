@@ -20,6 +20,7 @@ import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
+import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.SharedPrefKeys;
 import com.wcities.eventseeker.core.FollowingList;
@@ -34,13 +35,13 @@ import com.wcities.eventseeker.util.FileUtil;
 public class EventSeekr extends Application {
 
 	private static final String TAG = EventSeekr.class.getName();
-
+	
 	private boolean isTablet;
 	private boolean is7InchTablet;
 	private boolean isInLandscapeMode;
 
-	private String fbUserId;
-	private String fbUserName;
+	private String fbUserId, gPlusUserId;
+	private String fbUserName, gPlusUserName;
 	private String wcitiesId;
 
 	private boolean firstTimeLaunch;
@@ -51,6 +52,8 @@ public class EventSeekr extends Application {
 
 	private static final int NOT_INITIALIZED = -1;
 	public static final int UNSYNC_COUNT = -2;
+	
+	private static final int ALL_UNSYNCED_COUNT = UNSYNC_COUNT * 6;
 
 	private int syncCountGooglePlayMusic = NOT_INITIALIZED;
 	private int syncCountDeviceLib = NOT_INITIALIZED;
@@ -270,9 +273,9 @@ public class EventSeekr extends Application {
 		editor.putString(SharedPrefKeys.FACEBOOK_USER_ID, fbUserId);
 		editor.commit();
 		
-		new GetWcitiesId(listener).execute();
+		new GetWcitiesId(listener, LoginType.facebook).execute();
 	}
-
+	
 	public void removeFbUserId() {
 		this.fbUserId = null;
 
@@ -308,6 +311,63 @@ public class EventSeekr extends Application {
 		editor.remove(SharedPrefKeys.FACEBOOK_USER_NAME);
 		editor.commit();
 	}
+	
+	public String getGPlusUserId() {
+		if (gPlusUserId == null) {
+			SharedPreferences pref = getSharedPreferences(
+					AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+			gPlusUserId = pref.getString(SharedPrefKeys.GOOGLE_PLUS_USER_ID, null);
+		}
+		return gPlusUserId;
+	}
+	
+	public void updateGPlusUserId(String gPlusUserId, AsyncTaskListener<Void> listener) {
+		this.gPlusUserId = gPlusUserId;
+
+		SharedPreferences pref = getSharedPreferences(
+				AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+		Editor editor = pref.edit();
+		editor.putString(SharedPrefKeys.GOOGLE_PLUS_USER_ID, gPlusUserId);
+		editor.commit();
+		
+		new GetWcitiesId(listener, LoginType.googlePlus).execute();
+	}
+	
+	public void removeGPlusUserId() {
+		this.gPlusUserId = null;
+
+		SharedPreferences pref = getSharedPreferences(
+				AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+		Editor editor = pref.edit();
+		editor.remove(SharedPrefKeys.GOOGLE_PLUS_USER_ID);
+		editor.commit();
+	}
+	
+	public String getGPlusUserName() {
+		if (gPlusUserName == null) {
+			SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+			gPlusUserName = pref.getString(SharedPrefKeys.GOOGLE_PLUS_USER_NAME, null);
+		}
+		return gPlusUserName;
+	}
+	
+	public void updateGPlusUserName(String gPlusUserName) {
+		this.gPlusUserName = gPlusUserName;
+		
+		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+		Editor editor = pref.edit();
+		editor.putString(SharedPrefKeys.GOOGLE_PLUS_USER_NAME, gPlusUserName);
+		editor.commit();
+	}
+	
+	public void removeGPlusUserName() {
+		this.gPlusUserName = null;
+
+		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+		Editor editor = pref.edit();
+		editor.remove(SharedPrefKeys.GOOGLE_PLUS_USER_NAME);
+		editor.commit();
+	}
 
 	public String getWcitiesId() {
 		if (wcitiesId == null) {
@@ -318,8 +378,13 @@ public class EventSeekr extends Application {
 
 		// generate wcitiesId if not found in shared preference & if fbUserId is
 		// existing
-		if (wcitiesId == null && getFbUserId() != null) {
-			new GetWcitiesId(null).execute();
+		if (wcitiesId == null) {
+			if (getFbUserId() != null) {
+				new GetWcitiesId(null, LoginType.facebook).execute();
+				
+			} else if (getGPlusUserId() != null) {
+				new GetWcitiesId(null, LoginType.googlePlus).execute();
+			}
 		}
 		return wcitiesId;
 	}
@@ -466,12 +531,23 @@ public class EventSeekr extends Application {
 		}
 	}
 	
+	/**
+	 * This function considers that all sync counts are already initialized.
+	 * @return
+	 */
+	public boolean isAnyAccountSynced() {
+		return ((syncCountGooglePlayMusic + syncCountDeviceLib + syncCountTwitter + syncCountRdio + 
+				syncCountLastfm + syncCountPandora) == ALL_UNSYNCED_COUNT) ? false : true;
+	}
+	
 	private class GetWcitiesId extends AsyncTask<Void, Void, String> {
 		
 		private AsyncTaskListener<Void> listener;
+		private LoginType loginType;
 		
-		public GetWcitiesId(AsyncTaskListener<Void> listener) {
+		public GetWcitiesId(AsyncTaskListener<Void> listener, LoginType loginType) {
 			this.listener = listener;
+			this.loginType = loginType;
 		}
 
 		@Override
@@ -484,9 +560,14 @@ public class EventSeekr extends Application {
 				UserInfoApiJSONParser jsonParser = new UserInfoApiJSONParser();
 				String userId = jsonParser.getUserId(jsonObject);
 
-				userInfoApi.setFbUserId(getFbUserId());
+				if (loginType == LoginType.facebook) {
+					userInfoApi.setFbUserId(getFbUserId());
+					
+				} else if (loginType == LoginType.googlePlus) {
+					userInfoApi.setgPlusUserId(getGPlusUserId());
+				}
 				userInfoApi.setUserId(userId);
-				jsonObject = userInfoApi.syncAccount(null);
+				jsonObject = userInfoApi.syncAccount(null, loginType);
 				wcitiesId = jsonParser.getWcitiesId(jsonObject);
 
 			} catch (ClientProtocolException e) {
