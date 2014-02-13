@@ -1,6 +1,7 @@
 package com.wcities.eventseeker;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
@@ -58,7 +59,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
     
     private PlusClient mPlusClient;
     private ConnectionResult mConnectionResult;
-    private boolean isGPlusSigningIn;
+    private boolean isGPlusSigningIn, isGPlusSignedIn;
     
 	// Container Activity must implement this interface
     public interface GetStartedFragmentListener {
@@ -102,7 +103,8 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 			
 			statusCallback = new SessionStatusCallback();
 			
-			if (!FbUtil.hasUserLoggedInBefore(FragmentUtil.getActivity(this).getApplicationContext())) {
+			Context appContext = FragmentUtil.getActivity(this).getApplicationContext();
+			if (!FbUtil.hasUserLoggedInBefore(appContext) && !GPlusUtil.hasUserLoggedInBefore(appContext)) {
 				Log.d(TAG, "not logged in");
 				Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
 				
@@ -139,6 +141,8 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 		imgGPlusSignIn = (ImageView) v.findViewById(R.id.imgGPlusSignIn);
 		imgGPlusSignIn.setOnClickListener(this);
 		txtGPlusSignInStatus = (TextView) v.findViewById(R.id.txtGPlusSignInStatus);
+		
+		setGooglePlusSigningInVisibility();
 		return v;
 	}
 	
@@ -150,17 +154,24 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
         if (Session.getActiveSession() != null) {
         	Session.getActiveSession().addCallback(statusCallback);
         }
-        mPlusClient.connect();
     }
 
     @Override
     public void onStop() {
+    	//Log.d(TAG, "onStop()");
         super.onStop();
         // In starting if user's credentials are available, then this active session will be null.
         if (Session.getActiveSession() != null) {
         	Session.getActiveSession().removeCallback(statusCallback);
         }
-        mPlusClient.disconnect();
+    }
+    
+    @Override
+    public void onDestroy() {
+    	super.onDestroy();
+    	if (mPlusClient.isConnected()) {
+			mPlusClient.disconnect();
+		}
     }
 
     @Override
@@ -171,9 +182,12 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
         		requestCode == AppConstants.REQ_CODE_GET_GOOGLE_PLAY_SERVICES) {
         	if (resultCode == Activity.RESULT_OK  && !mPlusClient.isConnected()
                     && !mPlusClient.isConnecting()) {
-        		Log.d(TAG, "connect");
-	            mConnectionResult = null;
-	            mPlusClient.connect();
+        		//Log.d(TAG, "connect");
+	            connectPlusClient();
+	            
+        	} else {
+        		isGPlusSignedIn = false;
+        		updateGoogleButton();
         	}
             
         } else {
@@ -186,6 +200,15 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
         super.onSaveInstanceState(outState);
         Session session = Session.getActiveSession();
         Session.saveSession(session, outState);
+    }
+    
+    private void connectPlusClient() {
+    	//Log.d(TAG, "connectPlusClient()");
+    	if (!mPlusClient.isConnected() && !mPlusClient.isConnecting()) {
+    		//Log.d(TAG, "try connecting");
+    		mConnectionResult = null;
+    		mPlusClient.connect();
+    	}
     }
     
 	private void updateView() {
@@ -245,13 +268,6 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
         }
     }
 	
-	/*private void startProgressDialog() {
-		// Progress bar to be displayed if the connection failure is not resolved.
-		mConnectionProgressDialog = new ProgressDialog(FragmentUtil.getActivity(this));
-		mConnectionProgressDialog.setMessage("Signing in...");
-		mConnectionProgressDialog.show();
-	}*/
-	
 	private class SessionStatusCallback implements Session.StatusCallback {
         @Override
         public void call(Session session, SessionState state, Exception exception) {
@@ -260,28 +276,30 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
         }
     }
 	
-	private void updateGoogleButton(boolean isSignedIn) {
-		//Log.d(TAG, "updateGoogleButton(), isSignedIn = " + isSignedIn);
-		isGPlusSigningIn = false;
-		txtGPlusSignInStatus.setVisibility(View.INVISIBLE);
-		imgGPlusSignIn.setVisibility(View.VISIBLE);
+	private void setGooglePlusSigningInVisibility() {
+		//Log.d(TAG, "updateGoogleButton(), isGPlusSigningIn = " + isGPlusSigningIn);
 		
-        if (!isSignedIn) {
-            if (mConnectionResult == null) {
-                // Disable the sign-in button until onConnectionFailed is called with result.
-            	imgGPlusSignIn.setVisibility(View.INVISIBLE);
-                
-            } else {
-                // Enable the sign-in button since a connection result is available.
-            	imgGPlusSignIn.setVisibility(View.VISIBLE);
-            }
-        }
+		if (isGPlusSigningIn) {
+			txtGPlusSignInStatus.setVisibility(View.VISIBLE);
+			imgGPlusSignIn.setVisibility(View.INVISIBLE);
+			
+		} else {
+            // Enable the sign-in button
+        	txtGPlusSignInStatus.setVisibility(View.INVISIBLE);
+        	imgGPlusSignIn.setVisibility(View.VISIBLE);
+		}
+	}
+	
+	private void updateGoogleButton() {
+		isGPlusSigningIn = false;
+		setGooglePlusSigningInVisibility();
     }
 	
 	@Override
 	public void onConnected(Bundle arg0) {
-		Log.d(TAG, "onConnected()");
-        updateGoogleButton(true);
+		//Log.d(TAG, "onConnected()");
+		isGPlusSignedIn = true;
+        updateGoogleButton();
 
 		if (((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getGPlusUserId() == null) {
 	        
@@ -290,8 +308,6 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 	        if (currentPerson != null) {
 	            String personId = currentPerson.getId();
 	            Log.d(TAG, "id = " + personId);
-	            /*((EventSeekr) (FragmentUtil.getActivity(this)).getApplicationContext()).updateGPlusUserId(
-	            		personId, null);*/
 	            Bundle bundle = new Bundle();
 	            bundle.putSerializable(BundleKeys.LOGIN_TYPE, LoginType.googlePlus);
 	        	bundle.putString(BundleKeys.GOOGLE_PLUS_USER_ID, personId);
@@ -317,16 +333,30 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 
 	@Override
 	public void onDisconnected() {
-		Log.d(TAG, "disconnected");
-		updateGoogleButton(false);
+		//Log.d(TAG, "disconnected");
+		isGPlusSignedIn = false;
+		updateGoogleButton();
 	}
 
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
-		Log.d(TAG, "onConnectionFailed()");
+		//Log.d(TAG, "onConnectionFailed()");
 		// Save the result and resolve the connection failure upon a user click.
 		mConnectionResult = result;
-		updateGoogleButton(false);
+		if (mConnectionResult.hasResolution()) {
+            try {
+				mConnectionResult.startResolutionForResult(FragmentUtil.getActivity(this), AppConstants.REQ_CODE_GOOGLE_PLUS_RESOLVE_ERR);
+				
+			} catch (SendIntentException e) {
+				e.printStackTrace();
+				// Try connecting again.
+                connectPlusClient();
+			}
+			
+		} else {
+			isGPlusSignedIn = false;
+			updateGoogleButton();
+		}
 	}
 
 	@Override
@@ -335,7 +365,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 		
 		case R.id.imgGPlusSignIn:
 			if (!mPlusClient.isConnected()) {
-				Log.d(TAG, "sign in");
+				//Log.d(TAG, "sign in");
                 int available = GooglePlayServicesUtil.isGooglePlayServicesAvailable(FragmentUtil.getActivity(this));
 				if (available != ConnectionResult.SUCCESS) {
 					GPlusUtil.showDialogForGPlayServiceUnavailability(available, this);
@@ -343,19 +373,20 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
                 }
 				
 				isGPlusSigningIn = true;
-				txtGPlusSignInStatus.setVisibility(View.VISIBLE);
-				imgGPlusSignIn.setVisibility(View.INVISIBLE);
+				setGooglePlusSigningInVisibility();
 				
 				if (mConnectionResult != null) {
 		            try {
-		            	Log.d(TAG, "startResolutionForResult()");
+		            	//Log.d(TAG, "startResolutionForResult()");
 		                mConnectionResult.startResolutionForResult(FragmentUtil.getActivity(this), AppConstants.REQ_CODE_GOOGLE_PLUS_RESOLVE_ERR);
 		                
 		            } catch (SendIntentException e) {
 		                // Try connecting again.
-		                mConnectionResult = null;
-		                mPlusClient.connect();
+		                connectPlusClient();
 		            }
+		            
+		        } else {
+		        	connectPlusClient();
 		        }
 			}
 			break;

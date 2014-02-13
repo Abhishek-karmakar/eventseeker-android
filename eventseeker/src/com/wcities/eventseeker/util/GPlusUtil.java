@@ -23,13 +23,13 @@ public class GPlusUtil {
 	}
 	
 	public static void callGPlusLogout(PlusClient plusClient, EventSeekr eventSeekr) {
-		if (plusClient.isConnected()) {
+		if (plusClient != null && plusClient.isConnected()) {
 			plusClient.clearDefaultAccount();
 			plusClient.disconnect();
 			plusClient.connect();
-			eventSeekr.removeGPlusUserId();
-	        eventSeekr.removeGPlusUserName();
 		}
+		eventSeekr.removeGPlusUserId();
+        eventSeekr.removeGPlusUserName();
 	}
 	
 	public static void showDialogForGPlayServiceUnavailability(int available, Fragment fragment) {

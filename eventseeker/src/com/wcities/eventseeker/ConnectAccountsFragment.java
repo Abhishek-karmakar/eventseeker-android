@@ -139,7 +139,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	private List<ServiceAccount> serviceAccounts;
 	private LoadMyEventsCount loadMyEventsCount;
 	
-	private boolean fbLoggedIn, gPlusSignedIn, isProgressVisible, isGPlusSigningIn;;
+	private boolean fbLoggedIn, gPlusSignedIn, isProgressVisible;
 	
 	private LinearLayout lnrLayoutProgress;
 	
@@ -218,8 +218,19 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
         if (!fbLoggedIn && Session.getActiveSession() != null) {
         	Session.getActiveSession().addCallback(statusCallback);
         }
-        mPlusClient.connect();
     }
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		/**
+		 * update both values here since if user logs into 2nd account (out of facebook & google plus), then 
+		 * we need to logout him from 1st account & hence update lgged in status for both the accounts & display them 
+		 * accordingly.
+		 */
+		fbLoggedIn = FbUtil.hasUserLoggedInBefore(FragmentUtil.getActivity(this).getApplicationContext());
+        gPlusSignedIn = GPlusUtil.hasUserLoggedInBefore(FragmentUtil.getActivity(this).getApplicationContext());
+	}
 	
 	@Override
 	public void onStop() {
@@ -229,7 +240,6 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		if (!fbLoggedIn && Session.getActiveSession() != null) {
 			Session.getActiveSession().removeCallback(statusCallback);
 		}
-		mPlusClient.disconnect();
 	}
 	
 	@Override
@@ -242,6 +252,9 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			Session.getActiveSession().removeCallback(statusCallback);
 		}
 		((EventSeekr)FragmentUtil.getActivity(this).getApplication()).unregisterListener(this);
+		if (mPlusClient.isConnected()) {
+			mPlusClient.disconnect();
+		}
 	}
 	
 	@Override
@@ -255,8 +268,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
         		requestCode == AppConstants.REQ_CODE_GET_GOOGLE_PLAY_SERVICES) {
         	if (resultCode == Activity.RESULT_OK  && !mPlusClient.isConnected()
                     && !mPlusClient.isConnecting()) {
-	            mConnectionResult = null;
-	            mPlusClient.connect();
+	            connectPlusClient();
         	}
             
         } else {
@@ -366,6 +378,15 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     			}
     	    });
         }
+    }
+	
+	private void connectPlusClient() {
+    	//Log.d(TAG, "connectPlusClient()");
+    	if (!mPlusClient.isConnected() && !mPlusClient.isConnecting()) {
+    		//Log.d(TAG, "try connecting");
+    		mConnectionResult = null;
+    		mPlusClient.connect();
+    	}
     }
 	
 	private class AccountsListAdapter extends BaseAdapter {
@@ -555,6 +576,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 					listAdapter.notifyDataSetChanged();
 					
 				} else {
+					//isGPlusSignInClicked = false;
 					FbUtil.onClickLogin(ConnectAccountsFragment.this, statusCallback);
 				}
 				break;
@@ -566,29 +588,31 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 					listAdapter.notifyDataSetChanged();
 					
 				} else {
-					if (!mPlusClient.isConnected()) {
-		                int available = GooglePlayServicesUtil.isGooglePlayServicesAvailable(
-		                		FragmentUtil.getActivity(ConnectAccountsFragment.this));
-						if (available != ConnectionResult.SUCCESS) {
-							GPlusUtil.showDialogForGPlayServiceUnavailability(available, ConnectAccountsFragment.this);
-		                    return;
-		                }
-						
-						isGPlusSigningIn = true;
-						
-						if (mConnectionResult != null) {
-				        	//Log.d(TAG, "mConnectionResult is not null");
-				            try {
-				                mConnectionResult.startResolutionForResult(FragmentUtil.getActivity(
-				                		ConnectAccountsFragment.this), AppConstants.REQ_CODE_GOOGLE_PLUS_RESOLVE_ERR);
-				                
-				            } catch (SendIntentException e) {
-				                // Try connecting again.
-				                mConnectionResult = null;
-				                mPlusClient.connect();
-				            }
-				        }
-					}
+					//isGPlusSignInClicked = true;
+					
+	                int available = GooglePlayServicesUtil.isGooglePlayServicesAvailable(
+	                		FragmentUtil.getActivity(ConnectAccountsFragment.this));
+					if (available != ConnectionResult.SUCCESS) {
+						GPlusUtil.showDialogForGPlayServiceUnavailability(available, ConnectAccountsFragment.this);
+	                    return;
+	                }
+					
+					//Log.d(TAG, "mConnectionResult = " + mConnectionResult);
+					// if previously onConnectionFailed() has returned some result, resolve it
+					if (mConnectionResult != null) {
+			        	//Log.d(TAG, "mConnectionResult is not null");
+			            try {
+			                mConnectionResult.startResolutionForResult(FragmentUtil.getActivity(
+			                		ConnectAccountsFragment.this), AppConstants.REQ_CODE_GOOGLE_PLUS_RESOLVE_ERR);
+			                
+			            } catch (SendIntentException e) {
+			                // Try connecting again.
+			                connectPlusClient();
+			            }
+			            
+			        } else {
+			        	connectPlusClient();
+			        }
 				}
 				break;
 				
@@ -758,21 +782,6 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 					listAdapter.notifyDataSetChanged();
 				}
 			}
-			/*@Override
-			public void run() {
-				Log.d(TAG, "run");
-				Log.d(TAG, "service.ordinal() : " + service.ordinal());
-				if (serviceAccounts != null && serviceAccounts.size() > service.ordinal()) {
-					Log.d(TAG, "serviceAccounts != null ");
-					serviceAccounts.get(service.ordinal()).count = ((EventSeekr)FragmentUtil.getActivity(ConnectAccountsFragment.this).getApplication())
-							.getSyncCount(service);
-					serviceAccounts.get(service.ordinal()).isInProgress = false;
-				}
-				if (listAdapter != null) {
-					Log.d(TAG, "listAdapter != null ");
-					listAdapter.notifyDataSetChanged();
-				}
-			}*/		
 		});
 	}
 
@@ -809,8 +818,15 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	@Override
 	public void onConnected(Bundle arg0) {
 		//Log.d(TAG, "onConnected(), signedIn = " + gPlusSignedIn);
+		/**
+		 * 2nd condition on isGPlusSignInClicked flag is used to prevent automatic logging in via google plus.
+		 * e.g. User is logged in with google plus. Selects facebook login & completes the procedure.
+		 * It results into automatic logout from google plus, but from onStart() of this fragment plusClient
+		 * again connects calling this onConnected() resulting into google plus sign in & facebook logged out 
+		 * in the end (which is reverse of what user had intended to)
+		 */
 		if (!gPlusSignedIn) {
-			isGPlusSigningIn = false;
+			//isGPlusSigningIn = false;
 			
 	        Person currentPerson = mPlusClient.getCurrentPerson();
 	        
@@ -833,7 +849,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	@Override
 	public void onDisconnected() {
 		//Log.d(TAG, "onDisconnected()");
-		isGPlusSigningIn = false;
+		//isGPlusSigningIn = false;
 	}
 
 	@Override
@@ -841,6 +857,16 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		//Log.d(TAG, "onConnectionFailed()");
 		// Save the result and resolve the connection failure upon a user click.
 		mConnectionResult = result;
-		isGPlusSigningIn = false;
+		//isGPlusSigningIn = false;
+		if (mConnectionResult.hasResolution()) {
+            try {
+				mConnectionResult.startResolutionForResult(FragmentUtil.getActivity(this), AppConstants.REQ_CODE_GOOGLE_PLUS_RESOLVE_ERR);
+				
+			} catch (SendIntentException e) {
+				e.printStackTrace();
+				// Try connecting again.
+                connectPlusClient();
+			}
+		}
 	}
 }
