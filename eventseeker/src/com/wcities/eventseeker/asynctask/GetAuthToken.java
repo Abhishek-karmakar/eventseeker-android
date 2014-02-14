@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
@@ -35,7 +34,7 @@ public class GetAuthToken extends AsyncTask<String, Void, String> {
             
         } catch (UserRecoverableAuthException e) {
         	//Log.d(TAG, "UserRecoverableAuthException");
-        	asyncTaskListener.onTaskCompleted(e.getIntent(), AppConstants.REQ_CODE_GOOGLE_ACCOUNT_CHOOSER);
+        	asyncTaskListener.onTaskCompleted(e.getIntent(), AppConstants.REQ_CODE_GOOGLE_ACCOUNT_CHOOSER_FOR_GOOGLE_MUSIC);
             e.printStackTrace();
             
         } catch (IOException e) {

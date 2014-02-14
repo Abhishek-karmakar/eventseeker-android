@@ -27,7 +27,9 @@ import android.widget.Toast;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
+import com.wcities.eventseeker.EventInfoFragment;
 import com.wcities.eventseeker.MyEventsListFragment;
+import com.wcities.eventseeker.PublishEventListFragment;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
@@ -45,11 +47,12 @@ import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.EventListener;
-import com.wcities.eventseeker.interfaces.FbPublishListener;
+import com.wcities.eventseeker.interfaces.PublishListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FbUtil;
+import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.EventListItem;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.LIST_ITEM_TYPE;
@@ -72,7 +75,7 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 	private String wcitiesId;
 	
 	// vars for fb event publish
-	private FbPublishListener fbPublishListener;
+	private PublishListener fbPublishListener;
 	private int fbCallCountForSameEvt = 0;
 	
 	private Event eventPendingPublish;
@@ -80,7 +83,7 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 	
 	public DateWiseMyEventListAdapter(Context context, DateWiseEventList dateWiseEvtList,
 			AsyncTask<Void, Void, List<Event>> loadDateWiseEvents, LoadItemsInBackgroundListener mListener, 
-			FbPublishListener fbPublishListener) {
+			PublishListener fbPublishListener) {
 		
 		mContext = context;
 		bitmapCache = BitmapCache.getInstance();
@@ -384,18 +387,34 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 					event.getId(), event.getAttending().getValue(), UserTrackingType.Add).execute();
 			
 		} else {
+			EventSeekr eventSeekr = (EventSeekr) mContext.getApplicationContext();
+
 			/**
 			 * call to updateAttendingChkBoxes() to negate the click event for now on checkbox, 
 			 * since it's handled after checking fb publish permission
 			 */
 			updateAttendingChkBoxes(event, chkBoxGoing, chkBoxWantToGo);
-			event.setNewAttending(attending);
-			eventPendingPublish = event;
-			eventPendingPublishChkBoxGoing = chkBoxGoing;
-			eventPendingPublishChkBoxWantToGo = chkBoxWantToGo;
-			fbCallCountForSameEvt = 0;
-			FbUtil.handlePublishEvent(fbPublishListener, (Fragment) mListener, AppConstants.PERMISSIONS_FB_PUBLISH_EVT, 
-					AppConstants.REQ_CODE_FB_PUBLISH_EVT, event);
+			
+			if (eventSeekr.getFbUserId() != null) {
+				event.setNewAttending(attending);
+				eventPendingPublish = event;
+				eventPendingPublishChkBoxGoing = chkBoxGoing;
+				eventPendingPublishChkBoxWantToGo = chkBoxWantToGo;
+				fbCallCountForSameEvt = 0;
+				FbUtil.handlePublishEvent(fbPublishListener, (Fragment) mListener, AppConstants.PERMISSIONS_FB_PUBLISH_EVT, 
+						AppConstants.REQ_CODE_FB_PUBLISH_EVT, event);
+				
+			} else if (eventSeekr.getGPlusUserId() != null) {
+				event.setNewAttending(attending);
+				eventPendingPublish = event;
+				eventPendingPublishChkBoxGoing = chkBoxGoing;
+				eventPendingPublishChkBoxWantToGo = chkBoxWantToGo;
+				((PublishEventListFragment)mListener).setEvent(eventPendingPublish);
+				((PublishEventListFragment)mListener).handlePublishEvent();
+				
+			} else {
+				FragmentUtil.showLoginNeededForTrackingEventDialog(((Fragment)mListener).getChildFragmentManager());
+			}
 		}
 	}
 	

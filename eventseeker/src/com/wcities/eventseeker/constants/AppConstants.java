@@ -73,6 +73,8 @@ public class AppConstants {
 	public static final String FRAGMENT_TAG_TWITTER_SYNCING = "twitterSyncingFragment";
 	public static final String FRAGMENT_TAG_GOOGLE_PLAY_MUSIC = "GooglePlayMusicFragment";
 	
+	public static final String DIALOG_FRAGMENT_TAG_LOGIN_TO_TRACK_EVENT = "loginToTrackEventDialog";
+	
 	public static final int INVALID_INDEX = -1;
 	public static final int INVALID_ID = -1;
 	public static final String INVALID_STR_ID = "-1";
@@ -85,16 +87,18 @@ public class AppConstants {
 	
 	public static final int REQ_CODE_INVITE_FRIENDS = 1001;
 	public static final int REQ_CODE_RATE_APP = 1002;
-	public static final int REQ_CODE_GOOGLE_ACCOUNT_CHOOSER = 1003;
+	public static final int REQ_CODE_GOOGLE_ACCOUNT_CHOOSER_FOR_GOOGLE_MUSIC = 1003;
 	
 	// List of additional write permissions being requested
 	public static final List<String> PERMISSIONS_FB_PUBLISH_EVT = Arrays.asList("publish_actions");
 	// Request code for facebook reauthorization requests. 
-	public static final int REQ_CODE_FB_PUBLISH_EVT = 100; 
+	public static final int REQ_CODE_FB_PUBLISH_EVT = 100;
+	public static final int REQ_CODE_GOOGLE_PLUS_PUBLISH_EVT = 200;
 	
 	public static final int REQ_CODE_GOOGLE_PLUS_RESOLVE_ERR = 9000;
 	public static final int REQ_CODE_GET_GOOGLE_PLAY_SERVICES = 9001;
-	
+	public static final int REQ_CODE_GOOGLE_AUTH_CODE_FOR_SERVER_ACCESS = 9002;
+
 	/**
 	 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
 	 * This is the max limit for the looping
@@ -107,5 +111,10 @@ public class AppConstants {
 	public static final int SCROLL_Y_BY = 100;
 	
 	public static final String[] GOOGLE_PLUS_ACTION = new String[] {"http://schemas.google.com/AddActivity"};
-	public static final String[] GOOGLE_PLUS_SCOPES = new String[] {Scopes.PLUS_LOGIN, "email"};
+	//public static final String[] GOOGLE_PLUS_SCOPES = new String[] {Scopes.PLUS_LOGIN, "email"};
+	public static final String[] GOOGLE_PLUS_SCOPES = new String[] {"https://www.googleapis.com/auth/userinfo.email", 
+		Scopes.PLUS_LOGIN, Scopes.PLUS_PROFILE, "https://www.googleapis.com/auth/userinfo.profile"};
+	
+	public static final String GOOGLE_PLUS_SCOPES_FOR_SERVER_ACCESS = "https://www.googleapis.com/auth/userinfo.email"  
+		+ " " + Scopes.PLUS_LOGIN + " " + Scopes.PLUS_PROFILE + " " + "https://www.googleapis.com/auth/userinfo.profile";
 }

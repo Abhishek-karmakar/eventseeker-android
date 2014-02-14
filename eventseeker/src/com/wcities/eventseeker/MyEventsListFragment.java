@@ -22,7 +22,7 @@ import com.wcities.eventseeker.asynctask.LoadMyEvents;
 import com.wcities.eventseeker.asynctask.LoadMyEvents.MyEventsLoadedListener;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.interfaces.FbPublishListener;
+import com.wcities.eventseeker.interfaces.PublishListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
@@ -30,8 +30,8 @@ import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.LIST_ITEM_TYPE;
 
-public class MyEventsListFragment extends FbPublishEventListFragment implements LoadItemsInBackgroundListener, 
-		FbPublishListener, MyEventsLoadedListener, OnClickListener {
+public class MyEventsListFragment extends PublishEventListFragment implements LoadItemsInBackgroundListener, 
+		PublishListener, MyEventsLoadedListener, OnClickListener {
 	
 	private static final String TAG = MyEventsListFragment.class.getSimpleName();
 	

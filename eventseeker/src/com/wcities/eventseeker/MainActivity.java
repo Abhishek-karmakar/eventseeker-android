@@ -58,6 +58,7 @@ import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.GPlusUtil;
 
 public class MainActivity extends ActionBarActivity implements
 		DrawerListFragmentListener, GetStartedFragmentListener,
@@ -487,15 +488,10 @@ public class MainActivity extends ActionBarActivity implements
 			
 		case AppConstants.REQ_CODE_GOOGLE_PLUS_RESOLVE_ERR:
 		case AppConstants.REQ_CODE_GET_GOOGLE_PLAY_SERVICES:
-			Fragment fragment = getSupportFragmentManager().findFragmentByTag(AppConstants.FRAGMENT_TAG_GET_STARTED);
+			//Log.d(TAG, "current frag tag = " + currentContentFragmentTag);
+			Fragment fragment = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
 			if (fragment != null) {
 				fragment.onActivityResult(requestCode, resultCode, data);
-				
-			} else {
-				fragment = getSupportFragmentManager().findFragmentByTag(AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS);
-				if (fragment != null) {
-					fragment.onActivityResult(requestCode, resultCode, data);
-				}
 			}
 			break;
 			
@@ -540,8 +536,22 @@ public class MainActivity extends ActionBarActivity implements
 			break;*/
 
 		default:
-			// pass it to the fragments
-			super.onActivityResult(requestCode, resultCode, data);
+			if (GPlusUtil.isGPlusPublishPending) {
+				/**
+				 * This check is required to direct onActivityResult() calls from MainActivity & handle it at right 
+				 * place, because google plus share intent doesn't return right request code in onActivityResult() 
+				 * method.
+				 */
+				Log.d(TAG, "current frag tag = " + currentContentFragmentTag);
+				fragment = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
+				if (fragment != null) {
+					fragment.onActivityResult(requestCode, resultCode, data);
+				}
+				
+			} else {
+				// pass it to the fragments
+				super.onActivityResult(requestCode, resultCode, data);
+			}
 			break;
 		}
 	}

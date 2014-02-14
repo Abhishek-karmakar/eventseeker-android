@@ -28,7 +28,7 @@ import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.LIST_ITEM_TYPE;
 
-public abstract class ArtistEventsParentFragment extends FbPublishEventListFragment implements OnClickListener, 
+public abstract class ArtistEventsParentFragment extends PublishEventListFragment implements OnClickListener, 
 		ArtistDetailsFragmentListener, LoadItemsInBackgroundListener {
 
 	private static final String TAG = ArtistEventsParentFragment.class.getName();

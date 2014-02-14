@@ -16,7 +16,7 @@ import com.wcities.eventseeker.adapter.DateWiseMyEventListAdapter;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
 import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.interfaces.FbPublishListener;
+import com.wcities.eventseeker.interfaces.PublishListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.ConversionUtil;
@@ -25,7 +25,7 @@ import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
 public class SearchEventsFragmentTab extends SearchEventsParentFragment implements 
-		SearchFragmentChildListener, LoadItemsInBackgroundListener, FbPublishListener {
+		SearchFragmentChildListener, LoadItemsInBackgroundListener, PublishListener {
 
 	private static final String TAG = SearchEventsFragmentTab.class.getName();
 

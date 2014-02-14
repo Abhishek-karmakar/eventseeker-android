@@ -1,5 +1,7 @@
 package com.wcities.eventseeker;
 
+import java.io.IOException;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +9,7 @@ import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,8 +26,12 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.Settings;
 import com.facebook.model.GraphUser;
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.plus.PlusClient;
@@ -59,7 +66,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
     
     private PlusClient mPlusClient;
     private ConnectionResult mConnectionResult;
-    private boolean isGPlusSigningIn, isGPlusSignedIn;
+    private boolean isGPlusSigningIn;
     
 	// Container Activity must implement this interface
     public interface GetStartedFragmentListener {
@@ -80,11 +87,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
     	super.onCreate(savedInstanceState);
     	setRetainInstance(true);
     	
-    	mPlusClient = new PlusClient.Builder(FragmentUtil.getActivity(this), this, this)
-        	.setActions(AppConstants.GOOGLE_PLUS_ACTION)
-        	.setScopes(AppConstants.GOOGLE_PLUS_SCOPES)  // PLUS_LOGIN is recommended login scope for social features
-        	// .setScopes("profile")       // alternative basic login scope
-        	.build();
+    	mPlusClient = GPlusUtil.createPlusClientInstance(this, this, this);
     }
     
 	@Override
@@ -186,7 +189,6 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 	            connectPlusClient();
 	            
         	} else {
-        		isGPlusSignedIn = false;
         		updateGoogleButton();
         	}
             
@@ -298,10 +300,37 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 	@Override
 	public void onConnected(Bundle arg0) {
 		//Log.d(TAG, "onConnected()");
-		isGPlusSignedIn = true;
         updateGoogleButton();
 
 		if (((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getGPlusUserId() == null) {
+			
+			/*new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					String accessToken = null;
+					try {
+					  accessToken = GoogleAuthUtil.getToken(FragmentUtil.getActivity(GetStartedFragment.this), mPlusClient.getAccountName(),
+					      "oauth2:" + "https://www.googleapis.com/auth/userinfo.email " +
+							Scopes.PLUS_LOGIN + " " + Scopes.PLUS_PROFILE + " " + "https://www.googleapis.com/auth/userinfo.profile");
+					  Log.d(TAG, "accesstoken = " + accessToken);
+					} catch (IOException transientEx) {
+					  // network or server error, the call is expected to succeed if you try again later.
+					  // Don't attempt to call again immediately - the request is likely to
+					  // fail, you'll hit quotas or back-off.
+					  return;
+					} catch (UserRecoverableAuthException e) {
+					  // Recover
+					  accessToken = null;
+					} catch (GoogleAuthException authEx) {
+					  // Failure. The call is not expected to ever succeed so it should not be
+					  // retried.
+					  return;
+					} catch (Exception e) {
+					  throw new RuntimeException(e);
+					}
+				}
+			}).start();*/
 	        
 	        Person currentPerson = mPlusClient.getCurrentPerson();
 	        
@@ -334,7 +363,6 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 	@Override
 	public void onDisconnected() {
 		//Log.d(TAG, "disconnected");
-		isGPlusSignedIn = false;
 		updateGoogleButton();
 	}
 
@@ -354,7 +382,6 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 			}
 			
 		} else {
-			isGPlusSignedIn = false;
 			updateGoogleButton();
 		}
 	}

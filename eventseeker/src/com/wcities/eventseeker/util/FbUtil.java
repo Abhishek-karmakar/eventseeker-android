@@ -29,7 +29,7 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.SharedPrefKeys;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
-import com.wcities.eventseeker.interfaces.FbPublishListener;
+import com.wcities.eventseeker.interfaces.PublishListener;
 
 public class FbUtil {
 
@@ -89,7 +89,7 @@ public class FbUtil {
 	    request.executeAsync();
 	} 
 	
-	public static void handlePublishEvent(FbPublishListener fbPublishListener, Fragment fragment, 
+	public static void handlePublishEvent(PublishListener fbPublishListener, Fragment fragment, 
 			List<String> permissions, int requestCode, Event event) {
 		Log.d(TAG, "handlePublish()");
 		if (canPublishNow(fbPublishListener, fragment, permissions, requestCode)) {
@@ -99,7 +99,7 @@ public class FbUtil {
 		}
 	}
 	
-	private static boolean canPublishNow(FbPublishListener fbPublishListener, Fragment fragment, 
+	private static boolean canPublishNow(PublishListener fbPublishListener, Fragment fragment, 
 			List<String> permissions, int requestCode) {
 		fbPublishListener.setPendingAnnounce(false);
 	    Session session = Session.getActiveSession();
@@ -140,7 +140,7 @@ public class FbUtil {
     }
 	
 	private static void requestPublishPermissions(Session session, List<String> permissions, int requestCode, 
-			Fragment fragmentToHandleActivityResult, FbPublishListener fbPublishListener) {
+			Fragment fragmentToHandleActivityResult, PublishListener fbPublishListener) {
 		Log.d(TAG, "requestPublishPermissions()");
         Session.NewPermissionsRequest reauthRequest = new Session.NewPermissionsRequest(fragmentToHandleActivityResult, 
         		permissions).setRequestCode(requestCode);
@@ -160,7 +160,7 @@ public class FbUtil {
 	}
 	
 	public static void call(Session session, SessionState state, Exception exception, 
-			FbPublishListener fbPublishListener, Fragment fragment, 
+			PublishListener fbPublishListener, Fragment fragment, 
 			List<String> permissions, int requestCode, Event event) {
 		Log.d(TAG, "call(): state = " + state);
 		if (session != null && session.isOpened()) {
@@ -181,7 +181,7 @@ public class FbUtil {
 	    }
 	}
 	
-	private static void sessionOpened(FbPublishListener fbPublishListener, Fragment fragment, 
+	private static void sessionOpened(PublishListener fbPublishListener, Fragment fragment, 
 			List<String> permissions, int requestCode, Event event) {
 		Log.d(TAG, "sessionOpened()");
 		// Check if a publish action is in progress
@@ -195,7 +195,7 @@ public class FbUtil {
 	/**
 	 * Called when additional permission request is completed successfully.
 	 */
-	private static void tokenUpdated(FbPublishListener fbPublishListener, Fragment fragment, 
+	private static void tokenUpdated(PublishListener fbPublishListener, Fragment fragment, 
 			List<String> permissions, int requestCode, Event event) {
 		Log.d(TAG, "tokenUpdated()");
 	    // Check if a publish action is in progress

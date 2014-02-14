@@ -19,7 +19,7 @@ import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.ViewUtil.AnimationUtil;
 
-public class LoginSyncingFragment extends FragmentLoadableFromBackStack implements OnFragmentAliveListener, AsyncTaskListener<Void> {
+public class LoginSyncingFragment extends FragmentLoadableFromBackStack implements OnFragmentAliveListener, AsyncTaskListener<Object> {
 
 	private static final String TAG = LoginSyncingFragment.class.getName();
 
@@ -94,7 +94,7 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 	}
 
 	@Override
-	public void onTaskCompleted(Void... params) {
+	public void onTaskCompleted(Object... params) {
 		if (isAlive()) {
 			if (((ActionBarActivity)FragmentUtil.getActivity(this)).getSupportFragmentManager()
 					.getBackStackEntryCount() > 0) {

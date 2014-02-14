@@ -9,10 +9,10 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.wcities.eventseeker.adapter.DateWiseMyEventListAdapter;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
-import com.wcities.eventseeker.interfaces.FbPublishListener;
+import com.wcities.eventseeker.interfaces.PublishListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class VenueEventsListFragmentTab extends VenueEventsParentListFragment implements FbPublishListener {
+public class VenueEventsListFragmentTab extends VenueEventsParentListFragment implements PublishListener {
 
 	private static final String TAG = VenueEventsListFragment.class.getName();
 

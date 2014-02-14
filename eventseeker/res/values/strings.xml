@@ -46,7 +46,7 @@
     <string name="title_web">Web</string>
     
     <string name="no_items_found_pls_login">Please login with facebook from \'Sync Accounts\' page to see</string>
-    <string name="pls_login_to_track_evt">To track this event you need to first login with facebook from \'Sync Accounts\' page.</string>
+    <string name="pls_login_to_track_evt">To track this event you need to first login with facebook or google from \'Sync Accounts\' page.</string>
     <string name="pls_login_through_mobile_app">Please log in through mobile app.</string>
     
     <!-- Strings used for navigation drawer list -->

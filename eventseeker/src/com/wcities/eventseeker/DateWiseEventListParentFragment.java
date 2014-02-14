@@ -17,7 +17,7 @@ import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
-public abstract class DateWiseEventListParentFragment extends FbPublishEventListFragment 
+public abstract class DateWiseEventListParentFragment extends PublishEventListFragment 
 		implements LoadItemsInBackgroundListener {
 
 	private static final String TAG = DateWiseEventListParentFragment.class.getName();

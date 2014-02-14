@@ -3,6 +3,8 @@ package com.wcities.eventseeker;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -48,7 +50,7 @@ import com.wcities.eventseeker.interfaces.VenueListener;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class EventInfoFragment extends FbPublishEventFragment implements OnClickListener, 
+public class EventInfoFragment extends PublishEventFragment implements OnClickListener, 
 		EventDetailsFragmentChildListener, AsyncLoadImageListener {
 	
 	private static final String TAG = EventInfoFragment.class.getName();
@@ -57,7 +59,6 @@ public class EventInfoFragment extends FbPublishEventFragment implements OnClick
 	private static final int MAX_LINES_EVENT_DESC_PORTRAIT = 3;
 	private static final int MAX_LINES_EVENT_DESC_LANDSCAPE = 5;
 	
-	private Event event;
 	private boolean isEvtDescExpanded, isFriendsGridExpanded;
 	private int orientation;
 	private boolean allDetailsLoaded, isImgLoaded;
@@ -376,6 +377,7 @@ public class EventInfoFragment extends FbPublishEventFragment implements OnClick
 	}
 	
 	private void updateAttendingChkBoxes() {
+		//Log.d(TAG, "updateAttendingChkBoxes()");
 		switch (event.getAttending()) {
 
 		case GOING:
@@ -614,6 +616,43 @@ public class EventInfoFragment extends FbPublishEventFragment implements OnClick
 		}
     }
 	
+	private void onChkBoxClicked(CheckBox chkBox, Attending newAttending) {
+		if (wcitiesId != null) {
+			EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(EventInfoFragment.this).getApplication();
+			/**
+			 * call to updateAttendingChkBoxes() to negate the click event for now on checkbox, 
+			 * since it's handled after checking fb publish permission
+			 */
+			//Log.d(TAG, "call updateAttendingChkBoxes");
+			updateAttendingChkBoxes();
+			if (newAttending == Attending.NOT_GOING) {
+				event.setAttending(newAttending);
+				new UserTracker(eventSeekr, UserTrackingItemType.event, event.getId(), event.getAttending().getValue(), 
+                		UserTrackingType.Add).execute();
+    			((EventDetailsFragment) getParentFragment()).onEventAttendingUpdated();
+				
+			} else {
+				if (eventSeekr.getFbUserId() != null) {
+					fbCallCountForSameEvt = 0;
+					event.setNewAttending(newAttending);
+					FbUtil.handlePublishEvent(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT, AppConstants.REQ_CODE_FB_PUBLISH_EVT, event);
+					
+				} else if (eventSeekr.getGPlusUserId() != null) {
+					event.setNewAttending(newAttending);
+					handlePublishEvent();
+					
+				} else {
+					FragmentUtil.showLoginNeededForTrackingEventDialog(getChildFragmentManager());
+				}
+			}
+			
+		} else {
+			chkBox.setChecked(false);
+			Toast.makeText(FragmentUtil.getActivity(this), getResources().getString(R.string.pls_login_to_track_evt), 
+					Toast.LENGTH_LONG).show();
+		}
+	}
+	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -640,59 +679,13 @@ public class EventInfoFragment extends FbPublishEventFragment implements OnClick
 			break;
 			
 		case R.id.chkBoxGoing:
-			if (wcitiesId != null) {
-				/**
-				 * call to updateAttendingChkBoxes() to negate the click event for now on checkbox, 
-				 * since it's handled after checking fb publish permission
-				 */
-				updateAttendingChkBoxes();
-				Attending attending = event.getAttending() == Attending.GOING ? Attending.NOT_GOING : Attending.GOING;
-				if (attending == Attending.NOT_GOING) {
-					event.setAttending(attending);
-					new UserTracker((EventSeekr) FragmentUtil.getActivity(EventInfoFragment.this).getApplication(), 
-	                		UserTrackingItemType.event, event.getId(), event.getAttending().getValue(), 
-	                		UserTrackingType.Add).execute();
-	    			((EventDetailsFragment) getParentFragment()).onEventAttendingUpdated();
-					
-				} else {
-					fbCallCountForSameEvt = 0;
-					event.setNewAttending(attending);
-					FbUtil.handlePublishEvent(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT, AppConstants.REQ_CODE_FB_PUBLISH_EVT, event);
-				}
-				
-			} else {
-				chkBoxGoing.setChecked(false);
-				Toast.makeText(FragmentUtil.getActivity(this), getResources().getString(R.string.pls_login_to_track_evt), 
-						Toast.LENGTH_LONG).show();
-			}
+			Attending newAttending = event.getAttending() == Attending.GOING ? Attending.NOT_GOING : Attending.GOING;
+			onChkBoxClicked(chkBoxGoing, newAttending);
 			break;
 			
 		case R.id.chkBoxWantToGo:
-			if (wcitiesId != null) {
-				/**
-				 * call to updateAttendingChkBoxes() to negate the click event for now on checkbox, 
-				 * since it's handled after checking fb publish permission
-				 */
-				updateAttendingChkBoxes();
-				Attending attending = event.getAttending() == Attending.WANTS_TO_GO ? Attending.NOT_GOING : Attending.WANTS_TO_GO;
-				if (attending == Attending.NOT_GOING) {
-					event.setAttending(attending);
-					new UserTracker((EventSeekr) FragmentUtil.getActivity(EventInfoFragment.this).getApplication(), 
-	                		UserTrackingItemType.event, event.getId(), event.getAttending().getValue(), 
-	                		UserTrackingType.Add).execute();
-	    			((EventDetailsFragment) getParentFragment()).onEventAttendingUpdated();
-					
-				} else {
-					fbCallCountForSameEvt = 0;
-					event.setNewAttending(attending);
-					FbUtil.handlePublishEvent(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT, AppConstants.REQ_CODE_FB_PUBLISH_EVT, event);
-				}
-				
-			} else {
-				chkBoxWantToGo.setChecked(false);
-				Toast.makeText(FragmentUtil.getActivity(this), getResources().getString(R.string.pls_login_to_track_evt), 
-						Toast.LENGTH_LONG).show();
-			}
+			newAttending = event.getAttending() == Attending.WANTS_TO_GO ? Attending.NOT_GOING : Attending.WANTS_TO_GO;
+			onChkBoxClicked(chkBoxWantToGo, newAttending);
 			break;
 			
 		case R.id.txtAddress:
@@ -769,6 +762,7 @@ public class EventInfoFragment extends FbPublishEventFragment implements OnClick
 
 	@Override
 	public void onPublishPermissionGranted() {
+		//Log.d(TAG, "onPublishPermissionGranted()");
 		((EventDetailsFragment)getParentFragment()).onEventAttendingUpdated();
 	}
 }

@@ -266,7 +266,7 @@ public class EventSeekr extends Application {
 		return fbUserId;
 	}
 
-	public void updateFbUserId(String fbUserId, AsyncTaskListener<Void> listener) {
+	public void updateFbUserId(String fbUserId, AsyncTaskListener<Object> listener) {
 		this.fbUserId = fbUserId;
 
 		SharedPreferences pref = getSharedPreferences(
@@ -325,7 +325,7 @@ public class EventSeekr extends Application {
 		return gPlusUserId;
 	}
 	
-	public void updateGPlusUserId(String gPlusUserId, AsyncTaskListener<Void> listener) {
+	public void updateGPlusUserId(String gPlusUserId, AsyncTaskListener<Object> listener) {
 		this.gPlusUserId = gPlusUserId;
 
 		SharedPreferences pref = getSharedPreferences(
@@ -548,10 +548,10 @@ public class EventSeekr extends Application {
 	
 	private class GetWcitiesId extends AsyncTask<Void, Void, String> {
 		
-		private AsyncTaskListener<Void> listener;
+		private AsyncTaskListener<Object> listener;
 		private LoginType loginType;
 		
-		public GetWcitiesId(AsyncTaskListener<Void> listener, LoginType loginType) {
+		public GetWcitiesId(AsyncTaskListener<Object> listener, LoginType loginType) {
 			this.listener = listener;
 			this.loginType = loginType;
 		}

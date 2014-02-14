@@ -19,7 +19,7 @@ import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
-public abstract class VenueEventsParentListFragment extends FbPublishEventListFragment implements 
+public abstract class VenueEventsParentListFragment extends PublishEventListFragment implements 
 		LoadItemsInBackgroundListener {
 	
 	private static final String TAG = VenueEventsParentListFragment.class.getName();

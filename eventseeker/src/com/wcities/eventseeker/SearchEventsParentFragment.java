@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
-public abstract class SearchEventsParentFragment extends FbPublishEventListFragment {
+public abstract class SearchEventsParentFragment extends PublishEventListFragment {
 
 	private static final String TAG = SearchEventsParentFragment.class.getName();
 

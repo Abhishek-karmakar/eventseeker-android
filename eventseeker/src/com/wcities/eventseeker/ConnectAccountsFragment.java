@@ -174,11 +174,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		isFirstTimeLaunch = eventSeekr.getFirstTimeLaunch();
 		eventSeekr.updateFirstTimeLaunch(false);
 		
-		mPlusClient = new PlusClient.Builder(FragmentUtil.getActivity(this), this, this)
-    	.setActions(AppConstants.GOOGLE_PLUS_ACTION)
-    	.setScopes(AppConstants.GOOGLE_PLUS_SCOPES)  // PLUS_LOGIN is recommended login scope for social features
-    	// .setScopes("profile")       // alternative basic login scope
-    	.build();
+		mPlusClient = GPlusUtil.createPlusClientInstance(this, this, this);
 	}
 	
 	@Override
@@ -260,7 +256,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		//Log.d(TAG, "onActivityResult(), requestCode = " + requestCode + ", resultCode = " + resultCode);
-		if (requestCode == AppConstants.REQ_CODE_GOOGLE_ACCOUNT_CHOOSER && resultCode == Activity.RESULT_OK) {
+		if (requestCode == AppConstants.REQ_CODE_GOOGLE_ACCOUNT_CHOOSER_FOR_GOOGLE_MUSIC && resultCode == Activity.RESULT_OK) {
 			String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
 			new GetAuthToken(this, this).execute(accountName);
 			
@@ -582,6 +578,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				break;
 				
 			case GooglePlus:
+				//Log.d(TAG, "onClick() - google plus, gPlusSignedIn = " + gPlusSignedIn);
 				if (gPlusSignedIn) {
 					GPlusUtil.callGPlusLogout(mPlusClient, (EventSeekr)FragmentUtil.getActivity(ConnectAccountsFragment.this).getApplication());
 					gPlusSignedIn = false;
@@ -660,7 +657,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			case GooglePlay:
 				Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[] {GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE},
 				         true, null, null, null, null);
-				startActivityForResult(intent, AppConstants.REQ_CODE_GOOGLE_ACCOUNT_CHOOSER);
+				startActivityForResult(intent, AppConstants.REQ_CODE_GOOGLE_ACCOUNT_CHOOSER_FOR_GOOGLE_MUSIC);
 				break;
 
 			default:
@@ -817,14 +814,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 
 	@Override
 	public void onConnected(Bundle arg0) {
-		//Log.d(TAG, "onConnected(), signedIn = " + gPlusSignedIn);
-		/**
-		 * 2nd condition on isGPlusSignInClicked flag is used to prevent automatic logging in via google plus.
-		 * e.g. User is logged in with google plus. Selects facebook login & completes the procedure.
-		 * It results into automatic logout from google plus, but from onStart() of this fragment plusClient
-		 * again connects calling this onConnected() resulting into google plus sign in & facebook logged out 
-		 * in the end (which is reverse of what user had intended to)
-		 */
+		Log.d(TAG, "onConnected(), signedIn = " + gPlusSignedIn);
 		if (!gPlusSignedIn) {
 			//isGPlusSigningIn = false;
 			
@@ -848,13 +838,13 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 
 	@Override
 	public void onDisconnected() {
-		//Log.d(TAG, "onDisconnected()");
+		Log.d(TAG, "onDisconnected()");
 		//isGPlusSigningIn = false;
 	}
 
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
-		//Log.d(TAG, "onConnectionFailed()");
+		Log.d(TAG, "onConnectionFailed()");
 		// Save the result and resolve the connection failure upon a user click.
 		mConnectionResult = result;
 		//isGPlusSigningIn = false;

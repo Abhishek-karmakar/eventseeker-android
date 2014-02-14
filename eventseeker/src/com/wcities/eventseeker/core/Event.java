@@ -145,6 +145,10 @@ public class Event implements Serializable, BitmapCacheable {
 		}
 	}
 
+	public Attending getNewAttending() {
+		return newAttending;
+	}
+
 	public void setNewAttending(Attending newAttending) {
 		this.newAttending = newAttending;
 	}
