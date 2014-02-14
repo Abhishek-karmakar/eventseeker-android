@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.IPToCityApi;
@@ -37,8 +38,8 @@ public class DeviceUtil {
 
 	private static LocationManager locationManager;
 	
-	private static final long MIN_TIME_BW_UPDATES = 0;
-	private static final float MIN_DISTANCE_CHANGE_FOR_UPDATES = 0;
+	private static final long MIN_TIME_BW_UPDATES = 1000 * 60; // 1 minutes
+	private static final float MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 1 meters
 
 	/**
 	 * Generates new values for first time if never generated until now after app start, otherwise 
@@ -47,21 +48,23 @@ public class DeviceUtil {
 	 * @return
 	 */
 	public static double[] getLatLon(Context context) {
-		//// Log.d(TAG, "getLatLon");
+		//Log.d(TAG, "getLatLon");
 		double[] latLon = new double[] {0, 0};
 		
     	if (AppConstants.lat == AppConstants.NOT_ALLOWED_LAT || AppConstants.lon == AppConstants.NOT_ALLOWED_LON 
     			|| retryGenerating) {
-    		//// Log.d(TAG, "generate");
+    		//Log.d(TAG, "generate");
     		LocationManager locationManager = getLocationManagerInstance(context);
 	    	
+    		//DeviceLocationListener.initialize(context);
+    		
     		// getting GPS status
             boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
             // getting network status
             boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
-            // Log.d(TAG, "isGPSEnabled : " + isGPSEnabled); 
-            // Log.d(TAG, "isNetworkEnabled : " + isNetworkEnabled); 
+           //Log.d(TAG, "isGPSEnabled : " + isGPSEnabled); 
+           //Log.d(TAG, "isNetworkEnabled : " + isNetworkEnabled); 
 
             if (!isGPSEnabled && !isNetworkEnabled) {
                 // no gps or network provider is enabled then
@@ -70,18 +73,37 @@ public class DeviceUtil {
             } else {
             	Location lastKnownLocation = null;
             	
-            	if (isNetworkEnabled) {
+            	if (isGPSEnabled) {
+                 	//First get the location from GPS Provider
+ 					locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES,
+ 							MIN_DISTANCE_CHANGE_FOR_UPDATES, DeviceLocationListener.getInstance());
+
+ 					if (locationManager != null) {
+ 						lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+ 						//Log.d(TAG, "GPS_PROVIDER: " + lastKnownLocation); 
+
+ 						if (lastKnownLocation != null) {
+ 							//Log.d(TAG, "GPS_PROVIDER: " + lastKnownLocation.getLatitude() + ", " 
+ 							//		+ lastKnownLocation.getLongitude());
+ 		      	        	
+                         	AppConstants.lat = latLon[0] = lastKnownLocation.getLatitude();
+         		        	AppConstants.lon = latLon[1] = lastKnownLocation.getLongitude();
+         		        	retryGenerating = false;
+ 						} 
+ 					}
+                } 
+            	
+            	if (isNetworkEnabled && lastKnownLocation == null) {
                 	//get location from Network Provider
-					locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 
-	                   		MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, 
-	                   		DeviceLocationListener.getInstance());
+					locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, 
+							MIN_DISTANCE_CHANGE_FOR_UPDATES, DeviceLocationListener.getInstance());
 	
 	                if (locationManager != null) {
 	                	lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-	                	// Log.d(TAG, "NETWORK_PROVIDER: " + lastKnownLocation); 
+	                	//Log.d(TAG, "NETWORK_PROVIDER: " + lastKnownLocation); 
 	                        
 	                	if (lastKnownLocation != null) {
-	                		// Log.d(TAG, "NETWORK_PROVIDER: " + lastKnownLocation.getLatitude() + ", " 
+	                		//Log.d(TAG, "NETWORK_PROVIDER: " + lastKnownLocation.getLatitude() + ", " 
 	                		//		+ lastKnownLocation.getLongitude());
 	            	        	
 	                        AppConstants.lat = latLon[0] = lastKnownLocation.getLatitude();
@@ -90,27 +112,7 @@ public class DeviceUtil {
 	                    }
 	                }
 	                
-				} 
-            	
-            	if (isGPSEnabled && lastKnownLocation == null) {
-                 	//First get the location from GPS Provider
- 					locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES,
- 							MIN_DISTANCE_CHANGE_FOR_UPDATES, DeviceLocationListener.getInstance());
-
- 					if (locationManager != null) {
- 						lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
- 						// Log.d(TAG, "GPS_PROVIDER: " + lastKnownLocation); 
-
- 						if (lastKnownLocation != null) {
- 							// Log.d(TAG, "GPS_PROVIDER: " + lastKnownLocation.getLatitude() + ", " 
- 							//		+ lastKnownLocation.getLongitude());
- 		      	        	
-                         	AppConstants.lat = latLon[0] = lastKnownLocation.getLatitude();
-         		        	AppConstants.lon = latLon[1] = lastKnownLocation.getLongitude();
-         		        	retryGenerating = false;
- 						} 
- 					}
-                }
+				}
             	
             	if (lastKnownLocation == null) {
 					new FindLatLonFromApi().execute();
@@ -125,7 +127,7 @@ public class DeviceUtil {
     	/*latLon[0] = AppConstants.lat = 19.1871777;
 		latLon[1] = AppConstants.lon = 72.8339689;*/
     	if (latLon[0] == 0 && latLon[1] == 0) {
-    		// Log.d(TAG, "latlon is 0");
+    		//Log.d(TAG, "latlon is 0");
 	    	latLon[0] = SAN_FRANCISCO_LAT;
 			latLon[1] = SAN_FRANCISCO_LON;
 			retryGenerating = true;
@@ -145,17 +147,22 @@ public class DeviceUtil {
 	 * will disable all the location updates.
 	 */
 	public static void removeDeviceLocationListener() {
+		Log.i(TAG, "DeviceLocationListener is has been removed");
 		if (locationManager != null) {
 			locationManager.removeUpdates(DeviceLocationListener.getInstance());
-			Log.i(TAG, "DeviceLocationListener is has been removed");
 		}
 	}
 
 	private static class DeviceLocationListener implements LocationListener {
 
 		private static DeviceLocationListener deviceLocationListener;
+		//private static Context context;
 		
 		private DeviceLocationListener() {}
+		
+		/*private static void initialize(Context context) {
+			DeviceLocationListener.context = context;
+		}*/
 		
 		public static DeviceLocationListener getInstance() {
 			if (deviceLocationListener == null) {
@@ -169,17 +176,19 @@ public class DeviceUtil {
         	AppConstants.lon = location.getLongitude();
         	retryGenerating = false;
         	
-			// Log.i(TAG, "Current Location Changed to " + location.getLatitude() + ", " + location.getLongitude());
+			Log.i(TAG, "Current Location Changed to " + location.getLatitude() + ", " + location.getLongitude());
+			//Toast.makeText(context, "Current Location Changed to " + location.getLatitude() + ", " 
+			//		+ location.getLongitude(), Toast.LENGTH_LONG).show();
 		}
 
 		public void onStatusChanged(String s, int i, Bundle b) {}
 
 		public void onProviderDisabled(String s) {
-			Log.i(TAG, s + " Provider has been Disabled");
+			//Log.i(TAG, s + " Provider has been Disabled");
 		}
 
 		public void onProviderEnabled(String s) {
-			Log.i(TAG, s + " Provider has been Enabled");
+			//Log.i(TAG, s + " Provider has been Enabled");
 		}
 		
 	}
@@ -276,7 +285,7 @@ public class DeviceUtil {
 		        	retryGenerating = false;
 				}
 	        	
-	        	// Log.d(TAG, "lat = " + AppConstants.lat + ", lon = " + AppConstants.lon);
+	        	//Log.d(TAG, "lat = " + AppConstants.lat + ", lon = " + AppConstants.lon);
 				
 			} catch (ClientProtocolException e) {
 				e.printStackTrace();
