@@ -9,7 +9,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.media.JetPlayer.OnJetEventListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -56,7 +55,6 @@ import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.interfaces.MapListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
-import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class MainActivity extends ActionBarActivity implements
@@ -218,7 +216,7 @@ public class MainActivity extends ActionBarActivity implements
 				displayOptions = ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME
 						| ActionBar.DISPLAY_HOME_AS_UP;
 			} else {
-				displayOptions = ActionBar.DISPLAY_SHOW_TITLE;	
+				displayOptions = ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME;	
 			}
 			
 			getSupportActionBar().setDisplayOptions(displayOptions);
@@ -229,7 +227,7 @@ public class MainActivity extends ActionBarActivity implements
 		 * searchView in SearchFragment. So need to set any transparent icon
 		 * rather than null.
 		 */
-		getSupportActionBar().setIcon(R.drawable.placeholder);
+		//getSupportActionBar().setIcon(R.drawable.placeholder);
 		
 		DrawerListFragment drawerListFragment = (DrawerListFragment) getSupportFragmentManager()
 				.findFragmentByTag(DRAWER_LIST_FRAGMENT_TAG);
@@ -440,7 +438,8 @@ public class MainActivity extends ActionBarActivity implements
 						 * e.g. - Launch --> Discover --> Event Details --> home as up. In this case tabs & back should 
 						 * disappear from actionbar.
 						 */
-						getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM);
+						getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE 
+								| ActionBar.DISPLAY_SHOW_CUSTOM  | ActionBar.DISPLAY_SHOW_HOME);
 					}
 				}
 			}
@@ -575,7 +574,8 @@ public class MainActivity extends ActionBarActivity implements
 					 * e.g. - Launch --> Discover --> Event Details --> hardware back. In this case tabs & 
 					 * back should disappear from actionbar.
 					 */
-					getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM);
+					getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME
+							| ActionBar.DISPLAY_SHOW_CUSTOM);
 				}
 				return super.onKeyDown(keyCode, event);
 			}
@@ -782,8 +782,8 @@ public class MainActivity extends ActionBarActivity implements
 				
 			if(isTabletAndInLandscapeMode){
 				
-				getSupportActionBar().setIcon(R.drawable.placeholder);
-				getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
+				//getSupportActionBar().setIcon(R.drawable.placeholder);
+				getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME);
 
 			}
 			
@@ -1038,9 +1038,10 @@ public class MainActivity extends ActionBarActivity implements
 		setDrawerIndicatorEnabled(!addToBackStack);
 		
 		if (isTabletAndInLandscapeMode) {
-			getSupportActionBar().setIcon(R.drawable.placeholder);			
+			//getSupportActionBar().setIcon(R.drawable.placeholder);			
 			if (addToBackStack) {
-				getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_HOME_AS_UP);
+				getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME
+						| ActionBar.DISPLAY_HOME_AS_UP);
 			}
 		}
 		// getSupportActionBar().setDisplayHomeAsUpEnabled(addToBackStack);
@@ -1462,5 +1463,17 @@ public class MainActivity extends ActionBarActivity implements
 	public void onFragmentResumed(Fragment fragment, int drawerPosition, String actionBarTitle) {
 		//Added right now just for Bosch Main Activity
 	}
-
+	
+	@Override
+	public void onBackPressed() {
+		/**
+		 * this added as after the Syncing screen when the onbackpressed occurs, on Connect account screen back arrow
+		 * is retained in tablet landscape mode. So, to resolve the issue below statements are added.
+		 */
+		if (isTabletAndInLandscapeMode && currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_LOGIN_SYNCING)) {
+			getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME);
+		}
+		super.onBackPressed();
+	}
+	
 }

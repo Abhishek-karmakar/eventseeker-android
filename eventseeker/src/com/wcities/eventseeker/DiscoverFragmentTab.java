@@ -167,9 +167,9 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 		txtCityName.setText(cityName);
 		actionBar.setCustomView(vActionBar, params);
 		
-		if (((EventSeekr)actionBarActivity.getApplicationContext()).isTabletAndInLandscapeMode()) {
+		/*if (((EventSeekr)actionBarActivity.getApplicationContext()).isTabletAndInLandscapeMode()) {
 			actionBar.setIcon(R.drawable.placeholder);
-		}
+		}*/
 	}
 	
 	private static class FeaturedEventsEcoGalleryAdapter extends BaseAdapter {
