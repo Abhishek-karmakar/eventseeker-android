@@ -55,6 +55,7 @@ import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.interfaces.MapListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
+import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class MainActivity extends ActionBarActivity implements
@@ -331,6 +332,7 @@ public class MainActivity extends ActionBarActivity implements
 				serviceInstance.setCurrentActivity(null);
 			}
 		}
+		DeviceUtil.removeDeviceLocationListener();
 		//Log.d(TAG, "View : " + findViewById(R.id.rootNavigationDrawer));
 		super.onDestroy();
 	}

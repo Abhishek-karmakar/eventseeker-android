@@ -122,6 +122,7 @@ public class BoschChangeCityFragment extends FragmentLoadableFromBackStack imple
 			((BoschMainActivity)FragmentUtil.getActivity(this)).updateTitleForFragment(buildTitle(), 
 					getClass().getSimpleName());
 			
+			DeviceUtil.removeDeviceLocationListener();
 			DeviceUtil.updateLatLon(cityPrefered.getLatitude(), cityPrefered.getLongitude());
 			
 			adapter.setData(null);

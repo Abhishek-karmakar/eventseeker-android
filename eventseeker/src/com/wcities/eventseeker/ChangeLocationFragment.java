@@ -202,6 +202,7 @@ public class ChangeLocationFragment extends FragmentLoadableFromBackStack implem
 		try {
 			addresses = geocoder.getFromLocationName(query, 1);
 			if (addresses != null && !addresses.isEmpty()) {
+				DeviceUtil.removeDeviceLocationListener();
 				Address address = addresses.get(0);
 				onAddressUpdated(address);
 			}
