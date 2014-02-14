@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
@@ -63,6 +64,7 @@ public class GPlusUtil {
 		}
 		eventSeekr.removeGPlusUserId();
         eventSeekr.removeGPlusUserName();
+        eventSeekr.removeGPlusAccountName();
 	}
 	
 	public static void showDialogForGPlayServiceUnavailability(int available, Fragment fragment) {
@@ -117,34 +119,42 @@ public class GPlusUtil {
 		fragment.startActivityForResult(shareIntent, AppConstants.REQ_CODE_GOOGLE_PLUS_PUBLISH_EVT);
 	}
 	
-	private String getAccessToken(EventSeekr eventSeekr, String accountName, AsyncTaskListener listener) {
-		String scopes = "oauth2:api_scope:" + AppConstants.GOOGLE_PLUS_SCOPES_FOR_SERVER_ACCESS;
+	public static String getAccessToken(EventSeekr eventSeekr, String accountName) {
+		String scopes = "oauth2:" + AppConstants.GOOGLE_PLUS_SCOPES_FOR_SERVER_ACCESS;
 		String code = null;
 		try {
 			code = GoogleAuthUtil.getToken(eventSeekr, accountName, scopes, null);
 
 		} catch (IOException transientEx) {
+			Log.e(TAG, "IOException");
 			// network or server error, the call is expected to succeed if you try again later.
 			// Don't attempt to call again immediately - the request is likely to
 			// fail, you'll hit quotas or back-off.
 			return null;
 		  
 		} catch (UserRecoverableAuthException e) {
+			Log.e(TAG, "UserRecoverableAuthException");
 			// Requesting an authorization code will always throw
 			// UserRecoverableAuthException on the first call to GoogleAuthUtil.getToken
 			// because the user must consent to offline access to their data.  After
 			// consent is granted control is returned to your activity in onActivityResult
 			// and the second call to GoogleAuthUtil.getToken will succeed.
-			listener.onTaskCompleted(e.getIntent(), AppConstants.REQ_CODE_GOOGLE_AUTH_CODE_FOR_SERVER_ACCESS);
+			
+			/**
+			 * This should not occur because we ask for this permission first time itself while 
+			 * logging in with google.
+			 */
 			//fragment.startActivityForResult(e.getIntent(), AppConstants.REQ_CODE_GOOGLE_AUTH_CODE_FOR_SERVER_ACCESS);
 			return null;
 		  
 		} catch (GoogleAuthException authEx) {
+			Log.e(TAG, "GoogleAuthException");
 			// Failure. The call is not expected to ever succeed so it should not be
 			// retried.
 			return null;
 		  
 		} catch (Exception e) {
+			Log.d(TAG, "Exception");
 			throw new RuntimeException(e);
 		}
 		return code;

@@ -305,34 +305,6 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
         Log.d(TAG, "GPlusUserId : " + ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getGPlusUserId());
 		if (((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getGPlusUserId() == null) {
 			
-			/*new Thread(new Runnable() {
-				
-				@Override
-				public void run() {
-					String accessToken = null;
-					try {
-					  accessToken = GoogleAuthUtil.getToken(FragmentUtil.getActivity(GetStartedFragment.this), mPlusClient.getAccountName(),
-					      "oauth2:" + "https://www.googleapis.com/auth/userinfo.email " +
-							Scopes.PLUS_LOGIN + " " + Scopes.PLUS_PROFILE + " " + "https://www.googleapis.com/auth/userinfo.profile");
-					  Log.d(TAG, "accesstoken = " + accessToken);
-					} catch (IOException transientEx) {
-					  // network or server error, the call is expected to succeed if you try again later.
-					  // Don't attempt to call again immediately - the request is likely to
-					  // fail, you'll hit quotas or back-off.
-					  return;
-					} catch (UserRecoverableAuthException e) {
-					  // Recover
-					  accessToken = null;
-					} catch (GoogleAuthException authEx) {
-					  // Failure. The call is not expected to ever succeed so it should not be
-					  // retried.
-					  return;
-					} catch (Exception e) {
-					  throw new RuntimeException(e);
-					}
-				}
-			}).start();*/
-	        
 	        Person currentPerson = mPlusClient.getCurrentPerson();
 	        
 	        if (currentPerson != null) {
@@ -342,6 +314,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 	            bundle.putSerializable(BundleKeys.LOGIN_TYPE, LoginType.googlePlus);
 	        	bundle.putString(BundleKeys.GOOGLE_PLUS_USER_ID, personId);
 	        	bundle.putString(BundleKeys.GOOGLE_PLUS_USER_NAME, currentPerson.getDisplayName());
+	        	bundle.putString(BundleKeys.GOOGLE_PLUS_ACCOUNT_NAME, mPlusClient.getAccountName());
 	        	
 	        	ConnectAccountsFragmentListener listener = (ConnectAccountsFragmentListener)FragmentUtil.getActivity(
 						GetStartedFragment.this);

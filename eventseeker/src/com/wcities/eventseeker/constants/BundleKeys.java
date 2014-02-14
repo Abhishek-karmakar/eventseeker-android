@@ -56,6 +56,7 @@ public class BundleKeys {
 	public static final String FB_USER_NAME = "fbUserName";
 	public static final String GOOGLE_PLUS_USER_ID = "gPlusUserId";
 	public static final String GOOGLE_PLUS_USER_NAME = "gPlusUserName";
+	public static final String GOOGLE_PLUS_ACCOUNT_NAME = "gPlusAccountName";
 	public static final String AUTH_TOKEN = "authToken";
 
 	public static final String STR_CRASH_LOG = "crashLog";

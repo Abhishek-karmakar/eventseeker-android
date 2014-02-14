@@ -22,6 +22,7 @@ public class UserInfoApi extends Api {
 		myartists,
 		signup,
 		syncaccount,
+		syncfriends,
 		recommendedevent,
 		registerDevice;
 	};
@@ -45,6 +46,11 @@ public class UserInfoApi extends Api {
 	public static enum LoginType {
 		facebook,
 		googlePlus;
+	}
+	
+	public static enum UserType {
+		fb,
+		google;
 	}
 	
 	// userId - generated & returned by server on signup call
@@ -166,11 +172,11 @@ public class UserInfoApi extends Api {
 		String loginId = null, userType = null;
 		if (loginType == LoginType.facebook) {
 			loginId = fbUserId;
-			userType = "fb";
+			userType = UserType.fb.name();
 			
 		} else if (loginType == LoginType.googlePlus) {
 			loginId = gPlusUserId;
-			userType = "google";
+			userType = UserType.google.name();
 		}
 		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD).append("oauth_token=")
 				.append(getOauthToken()).append("&type=").append(Type.syncaccount.name()).append("&userId=")
@@ -178,6 +184,26 @@ public class UserInfoApi extends Api {
 		if (repCode != null) {
 			uriBuilder.append("&repCode=" + repCode);
 		}
+		
+		setUri(uriBuilder.toString());
+		Log.i(TAG, "uri=" + getUri());
+		return execute(RequestMethod.GET, null, null); 
+	}
+	
+	public JSONObject syncFriends(LoginType loginType, String accessToken) throws ClientProtocolException, IOException, JSONException {
+		String METHOD = "myProfile.php?";
+		String loginId = null, userType = null;
+		if (loginType == LoginType.facebook) {
+			loginId = fbUserId;
+			userType = UserType.fb.name();
+			
+		} else if (loginType == LoginType.googlePlus) {
+			loginId = gPlusUserId;
+			userType = UserType.google.name();
+		}
+		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD).append("oauth_token=")
+				.append(getOauthToken()).append("&type=").append(Type.syncfriends.name()).append("&userId=")
+				.append(loginId).append("&userType=").append(userType).append("&access_token=").append(accessToken);
 		
 		setUri(uriBuilder.toString());
 		Log.i(TAG, "uri=" + getUri());

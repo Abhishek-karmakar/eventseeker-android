@@ -15,7 +15,9 @@ import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
+import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.Api;
@@ -277,7 +279,7 @@ public class EventSeekr extends Application {
 		
 		GPlusUtil.callGPlusLogout(null, this);
 		
-		new GetWcitiesId(listener, LoginType.facebook).execute();
+		new GetWcitiesId(listener, LoginType.facebook, null).execute();
 	}
 	
 	public void removeFbUserId() {
@@ -325,7 +327,7 @@ public class EventSeekr extends Application {
 		return gPlusUserId;
 	}
 	
-	public void updateGPlusUserId(String gPlusUserId, AsyncTaskListener<Object> listener) {
+	public void updateGPlusUserId(String gPlusUserId, String accountName, AsyncTaskListener<Object> listener) {
 		this.gPlusUserId = gPlusUserId;
 
 		SharedPreferences pref = getSharedPreferences(
@@ -336,7 +338,9 @@ public class EventSeekr extends Application {
 		
 		FbUtil.callFacebookLogout(this);
 		
-		new GetWcitiesId(listener, LoginType.googlePlus).execute();
+		updateGPlusAccountName(accountName);
+		
+		new GetWcitiesId(listener, LoginType.googlePlus, accountName).execute();
 	}
 	
 	public void removeGPlusUserId() {
@@ -374,22 +378,39 @@ public class EventSeekr extends Application {
 		editor.remove(SharedPrefKeys.GOOGLE_PLUS_USER_NAME);
 		editor.commit();
 	}
+	
+	public String getGPlusAccountName() {
+		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+		return pref.getString(SharedPrefKeys.GOOGLE_PLUS_ACCOUNT_NAME, null);
+	}
+	
+	public void updateGPlusAccountName(String gPlusAccountName) {
+		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+		Editor editor = pref.edit();
+		editor.putString(SharedPrefKeys.GOOGLE_PLUS_ACCOUNT_NAME, gPlusAccountName);
+		editor.commit();
+	}
+	
+	public void removeGPlusAccountName() {
+		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+		Editor editor = pref.edit();
+		editor.remove(SharedPrefKeys.GOOGLE_PLUS_ACCOUNT_NAME);
+		editor.commit();
+	}
 
 	public String getWcitiesId() {
 		if (wcitiesId == null) {
-			SharedPreferences pref = getSharedPreferences(
-					AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+			SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
 			wcitiesId = pref.getString(SharedPrefKeys.WCITIES_USER_ID, null);
 		}
 
-		// generate wcitiesId if not found in shared preference & if fbUserId is
-		// existing
+		// generate wcitiesId if not found in shared preference & if fbUserId or gPlusUserId is existing
 		if (wcitiesId == null) {
 			if (getFbUserId() != null) {
-				new GetWcitiesId(null, LoginType.facebook).execute();
+				new GetWcitiesId(null, LoginType.facebook, null).execute();
 				
 			} else if (getGPlusUserId() != null) {
-				new GetWcitiesId(null, LoginType.googlePlus).execute();
+				new GetWcitiesId(null, LoginType.googlePlus, getGPlusAccountName()).execute();
 			}
 		}
 		return wcitiesId;
@@ -550,10 +571,12 @@ public class EventSeekr extends Application {
 		
 		private AsyncTaskListener<Object> listener;
 		private LoginType loginType;
+		private String accountName;
 		
-		public GetWcitiesId(AsyncTaskListener<Object> listener, LoginType loginType) {
+		public GetWcitiesId(AsyncTaskListener<Object> listener, LoginType loginType, String accountName) {
 			this.listener = listener;
 			this.loginType = loginType;
+			this.accountName = accountName;
 		}
 
 		@Override
@@ -575,7 +598,27 @@ public class EventSeekr extends Application {
 				userInfoApi.setUserId(userId);
 				jsonObject = userInfoApi.syncAccount(null, loginType);
 				wcitiesId = jsonParser.getWcitiesId(jsonObject);
-
+				
+				if (loginType == LoginType.googlePlus) {
+					String accessToken = GPlusUtil.getAccessToken(EventSeekr.this, accountName);
+					Log.d(TAG, "accessToken = " + accessToken);
+					
+					if (accessToken == null) {
+						/**
+						 * Return null from here so that it will try to update both wcitiesId & accesstoken 
+						 * next time getWcitiesId() function is called up.
+						 */
+						return null;
+						
+					} else {
+						jsonObject = userInfoApi.syncFriends(loginType, accessToken);
+						return wcitiesId;
+					}
+					
+				} else if (loginType == LoginType.facebook) {
+					return wcitiesId;
+				}
+				
 			} catch (ClientProtocolException e) {
 				e.printStackTrace();
 
@@ -584,8 +627,8 @@ public class EventSeekr extends Application {
 
 			} catch (JSONException e) {
 				e.printStackTrace();
-			}
-			return wcitiesId;
+			} 
+			return null;
 		}
 		
 		@Override

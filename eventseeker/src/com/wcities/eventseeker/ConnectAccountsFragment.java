@@ -830,6 +830,8 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	            bundle.putSerializable(BundleKeys.LOGIN_TYPE, LoginType.googlePlus);
 	        	bundle.putString(BundleKeys.GOOGLE_PLUS_USER_ID, personId);
 	        	bundle.putString(BundleKeys.GOOGLE_PLUS_USER_NAME, currentPerson.getDisplayName());
+	        	bundle.putString(BundleKeys.GOOGLE_PLUS_ACCOUNT_NAME, mPlusClient.getAccountName());
+	        	
 	        	((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
         				.onServiceSelected(Service.GooglePlus, bundle, true);
 	        }

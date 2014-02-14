@@ -2,7 +2,6 @@ package com.wcities.eventseeker.util;
 
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -16,7 +15,6 @@ import android.location.Geocoder;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;

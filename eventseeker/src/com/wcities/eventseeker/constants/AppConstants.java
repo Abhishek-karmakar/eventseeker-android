@@ -111,7 +111,6 @@ public class AppConstants {
 	public static final int SCROLL_Y_BY = 100;
 	
 	public static final String[] GOOGLE_PLUS_ACTION = new String[] {"http://schemas.google.com/AddActivity"};
-	//public static final String[] GOOGLE_PLUS_SCOPES = new String[] {Scopes.PLUS_LOGIN, "email"};
 	public static final String[] GOOGLE_PLUS_SCOPES = new String[] {"https://www.googleapis.com/auth/userinfo.email", 
 		Scopes.PLUS_LOGIN, Scopes.PLUS_PROFILE, "https://www.googleapis.com/auth/userinfo.profile"};
 	

@@ -1,5 +1,6 @@
 package com.wcities.eventseeker;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
@@ -19,7 +20,8 @@ import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.ViewUtil.AnimationUtil;
 
-public class LoginSyncingFragment extends FragmentLoadableFromBackStack implements OnFragmentAliveListener, AsyncTaskListener<Object> {
+public class LoginSyncingFragment extends FragmentLoadableFromBackStack implements OnFragmentAliveListener, 
+		AsyncTaskListener<Object> {
 
 	private static final String TAG = LoginSyncingFragment.class.getName();
 
@@ -47,7 +49,8 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 		} else {
 			eventSeekr.updateGPlusUserName(args.getString(BundleKeys.GOOGLE_PLUS_USER_NAME));
 			((EventSeekr) (FragmentUtil.getActivity(LoginSyncingFragment.this)).getApplicationContext())
-					.updateGPlusUserId(args.getString(BundleKeys.GOOGLE_PLUS_USER_ID), this);
+					.updateGPlusUserId(args.getString(BundleKeys.GOOGLE_PLUS_USER_ID), 
+							args.getString(BundleKeys.GOOGLE_PLUS_ACCOUNT_NAME), this);
 		}
 	}
 
@@ -92,7 +95,7 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 		super.onDestroy();
 		isAlive = false;
 	}
-
+	
 	@Override
 	public void onTaskCompleted(Object... params) {
 		if (isAlive()) {
@@ -108,5 +111,4 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 			}
 		}
 	}
-	
 }
