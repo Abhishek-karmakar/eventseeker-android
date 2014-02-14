@@ -3,11 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dark_gray"
+    android:fillViewport="true"
     android:padding="@dimen/rlt_layout_root_pad_fragment_connect_accounts_list" >
 
     <RelativeLayout android:id="@+id/rltLytRoot"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@drawable/story_space"
         android:paddingLeft="@dimen/rlt_lyt_root_pad_l_r_b_get_started"
         android:paddingRight="@dimen/rlt_lyt_root_pad_l_r_b_get_started"
@@ -75,18 +76,6 @@
 	        android:textColor="@color/txt_guide_txt_color_fragment_get_started"
 	        android:gravity="center"
 	        android:drawableTop="@drawable/friends_get_started" />
-
-        <Button android:id="@+id/btnSkip"
-            android:layout_width="@dimen/btn_skip_w_get_started"
-            android:layout_height="@dimen/btn_continue_ht_fb_login"
-            android:layout_below="@id/txtFriends"
-            android:layout_marginTop="@dimen/all_components_margin_t_get_started"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/btn_continue_margin_b_fb_login"
-            android:background="@color/btn_fb_sign_up_bg"
-            android:text="Skip"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/btn_continue_txt_size_fb_login" />
             
         <!-- <com.google.android.gms.common.SignInButton android:id="@+id/gPlusSignIn"
 		    android:layout_width="wrap_content"
@@ -94,6 +83,18 @@
 		    android:layout_above="@id/btnContinue"
 		    android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/btn_fb_sign_up_margin_t_fb_login" /> -->
+
+        <Button
+            android:id="@+id/btnSkip"
+            android:layout_width="@dimen/btn_skip_w_get_started"
+            android:layout_height="@dimen/btn_continue_ht_fb_login"
+            android:layout_below="@+id/txtFriends"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="65dp"
+            android:background="@color/btn_fb_sign_up_bg"
+            android:text="Skip"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/btn_continue_txt_size_fb_login" />
         
     </RelativeLayout>
 

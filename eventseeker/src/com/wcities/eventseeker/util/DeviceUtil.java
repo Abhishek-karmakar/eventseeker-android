@@ -10,10 +10,11 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -34,6 +35,11 @@ public class DeviceUtil {
 	
 	private static boolean retryGenerating;
 
+	private static LocationManager locationManager;
+	
+	private static final long MIN_TIME_BW_UPDATES = 0;
+	private static final float MIN_DISTANCE_CHANGE_FOR_UPDATES = 0;
+
 	/**
 	 * Generates new values for first time if never generated until now after app start, otherwise 
 	 * returns existing latitude, longitude values.
@@ -41,32 +47,76 @@ public class DeviceUtil {
 	 * @return
 	 */
 	public static double[] getLatLon(Context context) {
-		//Log.d(TAG, "getLatLon()");
+		//// Log.d(TAG, "getLatLon");
 		double[] latLon = new double[] {0, 0};
+		
     	if (AppConstants.lat == AppConstants.NOT_ALLOWED_LAT || AppConstants.lon == AppConstants.NOT_ALLOWED_LON 
     			|| retryGenerating) {
-    		//Log.d(TAG, "generate");
-	    	LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-	    	String locationProvider = locationManager.getBestProvider(new Criteria(), true);
-	    	if (locationProvider != null) {
-	    		//Log.d(TAG, "locationProvider is not null");
-		    	Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-		    	
-		        if (lastKnownLocation != null) {
-		        	AppConstants.lat = latLon[0] = lastKnownLocation.getLatitude();
-		        	AppConstants.lon = latLon[1] = lastKnownLocation.getLongitude();
-		        	retryGenerating = false;
-		        	//Log.d(TAG, "lastKnownLocation, lat = " + AppConstants.lat + ", lon = " + AppConstants.lon);
-		    		
-		    	} else {
-		    		new FindLatLonFromApi().execute();
-		    	}
-		        
-	    	} else {
-	    		//Log.d(TAG, "location provider is null");
-	    		new FindLatLonFromApi().execute();
-	    	}
-	        
+    		//// Log.d(TAG, "generate");
+    		LocationManager locationManager = getLocationManagerInstance(context);
+	    	
+    		// getting GPS status
+            boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            // getting network status
+            boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+            // Log.d(TAG, "isGPSEnabled : " + isGPSEnabled); 
+            // Log.d(TAG, "isNetworkEnabled : " + isNetworkEnabled); 
+
+            if (!isGPSEnabled && !isNetworkEnabled) {
+                // no gps or network provider is enabled then
+				new FindLatLonFromApi().execute();
+				
+            } else {
+            	Location lastKnownLocation = null;
+            	
+            	if (isNetworkEnabled) {
+                	//get location from Network Provider
+					locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 
+	                   		MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, 
+	                   		DeviceLocationListener.getInstance());
+	
+	                if (locationManager != null) {
+	                	lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+	                	// Log.d(TAG, "NETWORK_PROVIDER: " + lastKnownLocation); 
+	                        
+	                	if (lastKnownLocation != null) {
+	                		// Log.d(TAG, "NETWORK_PROVIDER: " + lastKnownLocation.getLatitude() + ", " 
+	                		//		+ lastKnownLocation.getLongitude());
+	            	        	
+	                        AppConstants.lat = latLon[0] = lastKnownLocation.getLatitude();
+	        		        AppConstants.lon = latLon[1] = lastKnownLocation.getLongitude();
+	        		        retryGenerating = false;
+	                    }
+	                }
+	                
+				} 
+            	
+            	if (isGPSEnabled && lastKnownLocation == null) {
+                 	//First get the location from GPS Provider
+ 					locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES,
+ 							MIN_DISTANCE_CHANGE_FOR_UPDATES, DeviceLocationListener.getInstance());
+
+ 					if (locationManager != null) {
+ 						lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+ 						// Log.d(TAG, "GPS_PROVIDER: " + lastKnownLocation); 
+
+ 						if (lastKnownLocation != null) {
+ 							// Log.d(TAG, "GPS_PROVIDER: " + lastKnownLocation.getLatitude() + ", " 
+ 							//		+ lastKnownLocation.getLongitude());
+ 		      	        	
+                         	AppConstants.lat = latLon[0] = lastKnownLocation.getLatitude();
+         		        	AppConstants.lon = latLon[1] = lastKnownLocation.getLongitude();
+         		        	retryGenerating = false;
+ 						} 
+ 					}
+                }
+            	
+            	if (lastKnownLocation == null) {
+					new FindLatLonFromApi().execute();
+				}
+            }
+			
     	} else {
     		latLon[0] = AppConstants.lat;
     		latLon[1] = AppConstants.lon;
@@ -75,13 +125,64 @@ public class DeviceUtil {
     	/*latLon[0] = AppConstants.lat = 19.1871777;
 		latLon[1] = AppConstants.lon = 72.8339689;*/
     	if (latLon[0] == 0 && latLon[1] == 0) {
-    		Log.d(TAG, "latlon is 0");
+    		// Log.d(TAG, "latlon is 0");
 	    	latLon[0] = SAN_FRANCISCO_LAT;
 			latLon[1] = SAN_FRANCISCO_LON;
 			retryGenerating = true;
     	}
     	return latLon;
     }
+		
+	private static LocationManager getLocationManagerInstance(Context context) {
+		if (locationManager == null) {
+			locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+		}
+		return locationManager;
+	}
+	
+	/**
+	 * This will remove the DeviceLocationListener instance from the DeviceUtil's Location Manager instance and 
+	 * will disable all the location updates.
+	 */
+	public static void removeDeviceLocationListener() {
+		if (locationManager != null) {
+			locationManager.removeUpdates(DeviceLocationListener.getInstance());
+			Log.i(TAG, "DeviceLocationListener is has been removed");
+		}
+	}
+
+	private static class DeviceLocationListener implements LocationListener {
+
+		private static DeviceLocationListener deviceLocationListener;
+		
+		private DeviceLocationListener() {}
+		
+		public static DeviceLocationListener getInstance() {
+			if (deviceLocationListener == null) {
+				deviceLocationListener = new DeviceLocationListener();
+			}
+			return deviceLocationListener;
+		}
+		
+		public void onLocationChanged(Location location) {
+        	AppConstants.lat = location.getLatitude();
+        	AppConstants.lon = location.getLongitude();
+        	retryGenerating = false;
+        	
+			// Log.i(TAG, "Current Location Changed to " + location.getLatitude() + ", " + location.getLongitude());
+		}
+
+		public void onStatusChanged(String s, int i, Bundle b) {}
+
+		public void onProviderDisabled(String s) {
+			Log.i(TAG, s + " Provider has been Disabled");
+		}
+
+		public void onProviderEnabled(String s) {
+			Log.i(TAG, s + " Provider has been Enabled");
+		}
+		
+	}
 	
 	public static void updateLatLon(double lat, double lon) {
 		AppConstants.lat = lat;
@@ -175,7 +276,7 @@ public class DeviceUtil {
 		        	retryGenerating = false;
 				}
 	        	
-	        	Log.d(TAG, "lat = " + AppConstants.lat + ", lon = " + AppConstants.lon);
+	        	// Log.d(TAG, "lat = " + AppConstants.lat + ", lon = " + AppConstants.lon);
 				
 			} catch (ClientProtocolException e) {
 				e.printStackTrace();

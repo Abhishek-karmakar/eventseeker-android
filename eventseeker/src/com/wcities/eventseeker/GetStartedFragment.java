@@ -302,6 +302,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 		//Log.d(TAG, "onConnected()");
         updateGoogleButton();
 
+        Log.d(TAG, "GPlusUserId : " + ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getGPlusUserId());
 		if (((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getGPlusUserId() == null) {
 			
 			/*new Thread(new Runnable() {

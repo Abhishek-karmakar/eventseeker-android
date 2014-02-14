@@ -153,23 +153,25 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 				    }
 				});
 				params = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
-				params.gravity = Gravity.RIGHT;
+				//params.gravity = Gravity.RIGHT;
+				params.gravity = Gravity.CENTER;
 				
 			} else {
 				int actionItemsWidth = getResources().getDisplayMetrics().widthPixels - txtCityNameWInLandscape;
 				int customViewWidth = getResources().getDisplayMetrics().widthPixels - 
 						getResources().getDimensionPixelSize(R.dimen.root_navigation_drawer_w_main) - 2 * actionItemsWidth;
 				params = new ActionBar.LayoutParams(customViewWidth, ActionBar.LayoutParams.MATCH_PARENT);
-				params.gravity = Gravity.RIGHT;
+				//params.gravity = Gravity.RIGHT;
+				params.gravity = Gravity.CENTER;
 			}
 		}
 		
 		txtCityName.setText(cityName);
 		actionBar.setCustomView(vActionBar, params);
 		
-		if (((EventSeekr)actionBarActivity.getApplicationContext()).isTabletAndInLandscapeMode()) {
+		/*if (((EventSeekr)actionBarActivity.getApplicationContext()).isTabletAndInLandscapeMode()) {
 			actionBar.setIcon(R.drawable.placeholder);
-		}
+		}*/
 	}
 	
 	private static class FeaturedEventsEcoGalleryAdapter extends BaseAdapter {

@@ -19,8 +19,8 @@
             android:id="@id/android:list"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/list_margin_t_b_fragment_connect_account"
-            android:layout_marginTop="@dimen/list_margin_t_b_fragment_connect_account"
+            android:layout_marginBottom="@dimen/list_margin_t_b_fragment_connect_account_and_get_started"
+            android:layout_marginTop="@dimen/list_margin_t_b_fragment_connect_account_and_get_started"
             android:layout_weight="3.5"
             android:background="@drawable/story_space" />
 

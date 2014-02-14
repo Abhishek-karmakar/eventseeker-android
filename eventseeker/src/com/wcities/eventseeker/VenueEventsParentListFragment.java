@@ -44,8 +44,7 @@ public abstract class VenueEventsParentListFragment extends PublishEventListFrag
 		LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		lp.addRule(RelativeLayout.ABOVE, R.id.lnrLayoutBtns);
 		
-		if (orientation == Configuration.ORIENTATION_LANDSCAPE 
-				|| ((MainActivity)FragmentUtil.getActivity(this)).isTablet()) {
+		if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
 			lp.leftMargin = lp.rightMargin = getResources().getDimensionPixelSize(R.dimen.tab_bar_margin_fragment_custom_tabs);
 		}
 		
