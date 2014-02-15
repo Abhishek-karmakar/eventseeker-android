@@ -616,6 +616,7 @@ public class EventSeekr extends Application {
 					}
 					
 				} else if (loginType == LoginType.facebook) {
+					jsonObject = userInfoApi.syncFriends(loginType, null);
 					return wcitiesId;
 				}
 				
