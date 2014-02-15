@@ -202,12 +202,12 @@ public class UserInfoApi extends Api {
 			userType = UserType.google.name();
 		}
 		
-		StringBuilder uriBuilder = new StringBuilder("http://108.166.108.227/SocialApi/user/myProfile-gp.php?").append("oauth_token=")
-				.append(getOauthToken()).append("&type=").append(Type.syncfriends.name()).append("&userId=")
-				.append(loginId).append("&userType=").append(userType);
-		/*StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD).append("oauth_token=")
+		/*StringBuilder uriBuilder = new StringBuilder("http://108.166.108.227/SocialApi/user/myProfile-gp.php?").append("oauth_token=")
 				.append(getOauthToken()).append("&type=").append(Type.syncfriends.name()).append("&userId=")
 				.append(loginId).append("&userType=").append(userType);*/
+		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD).append("oauth_token=")
+				.append(getOauthToken()).append("&type=").append(Type.syncfriends.name()).append("&userId=")
+				.append(loginId).append("&userType=").append(userType);
 		if (accessToken != null) {
 			uriBuilder = uriBuilder.append("&access_token=").append(accessToken);
 		}
@@ -281,18 +281,19 @@ public class UserInfoApi extends Api {
 	public JSONObject getMyProfileInfoFor(Type type) throws ClientProtocolException, IOException, JSONException {
 		String METHOD = "myProfile.php?";
 		StringBuilder uriBuilder;
-		if (type == Type.friendsfeed) {
+		/*if (type == Type.friendsfeed) {
 			uriBuilder = new StringBuilder("http://108.166.108.227/SocialApi/user/myProfile-gp.php?").append("oauth_token=")
 					.append(getOauthToken()).append("&type=").append(type.name()).append("&userId=").append(userId)
 					.append("&userType=wcities");
-		} else {
+		} else {*/
 			uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD).append("oauth_token=")
 					.append(getOauthToken()).append("&type=").append(type.name()).append("&userId=").append(userId)
 					.append("&userType=wcities");
-		}
+		//}
 		
 		if (type == Type.friendsfeed) { 
 			uriBuilder.append("&multiple_account=enable");
+			
 			if (tracktype != null) {
 				uriBuilder.append("&tracktype=").append(tracktype.name()).append("&removeTracking=enable");
 			}

@@ -451,6 +451,11 @@
     <!-- fragment_my_events_list.xml -->
     <dimen name="rlt_layout_root_pad_l_fragment_my_events_list">0dp</dimen>
     <dimen name="rlt_layout_root_pad_r_fragment_my_events_list">@dimen/rlt_layout_root_pad_l_fragment_my_events_list</dimen>
+    <!-- include_fragment_friends_activity_item_track_btns.xml -->
+    <dimen name="lnr_layout_btns_margin_t_include_fragment_friends_activity_item_track_btns">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="lnr_layout_btns_txt_size_include_fragment_friends_activity_item_track_btns">12sp</dimen>
+    <dimen name="divider_lnr_layout_btns_w_include_fragment_friends_activity_item_track_btns">1dp</dimen>
+    <dimen name="divider_lnr_layout_btns_ht_include_fragment_friends_activity_item_track_btns">25dp</dimen>
 	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 	<!-- activity_bosch_main.xml -->
     <dimen name="b_root_navigation_drawer_w_main">210dp</dimen>

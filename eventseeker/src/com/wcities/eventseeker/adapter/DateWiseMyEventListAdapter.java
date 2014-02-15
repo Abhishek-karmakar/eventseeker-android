@@ -391,7 +391,7 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 
 			/**
 			 * call to updateAttendingChkBoxes() to negate the click event for now on checkbox, 
-			 * since it's handled after checking fb publish permission
+			 * since it's handled after checking fb/google publish permission
 			 */
 			updateAttendingChkBoxes(event, chkBoxGoing, chkBoxWantToGo);
 			

@@ -601,7 +601,7 @@ public class EventSeekr extends Application {
 				
 				if (loginType == LoginType.googlePlus) {
 					String accessToken = GPlusUtil.getAccessToken(EventSeekr.this, accountName);
-					Log.d(TAG, "accessToken = " + accessToken);
+					//Log.d(TAG, "accessToken = " + accessToken);
 					
 					if (accessToken == null) {
 						/**
@@ -611,7 +611,7 @@ public class EventSeekr extends Application {
 						return null;
 						
 					} else {
-						jsonObject = userInfoApi.syncFriends(loginType, accessToken);
+						userInfoApi.syncFriends(loginType, accessToken);
 						return wcitiesId;
 					}
 					

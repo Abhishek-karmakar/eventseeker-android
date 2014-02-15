@@ -22,6 +22,7 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.core.FriendNewsItem;
 import com.wcities.eventseeker.interfaces.PublishListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GPlusUtil;
@@ -32,6 +33,8 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 	private static final String TAG = PublishEventListFragment.class.getSimpleName();
 	
 	protected Event event;
+	protected FriendNewsItem friendNewsItem;
+	
 	// Flag to represent if we are waiting for extended permissions
 	private boolean pendingAnnounce = false;
 	
@@ -84,7 +87,12 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 	        } else if (GPlusUtil.isGPlusPublishPending) {
 	        	GPlusUtil.isGPlusPublishPending = false;
 	        	if (resultCode == Activity.RESULT_OK) {
-	        		event.updateAttendingToNewAttending();
+	        		if (event != null) {
+	        			event.updateAttendingToNewAttending();
+	        			
+	        		} else {
+	        			friendNewsItem.updateUserAttendingToNewUserAttending();
+	        		}
 	    			onPublishPermissionGranted();
 	        		trackEvent();
 	        	}
@@ -114,9 +122,23 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 		this.event = event;
 	}
 
+	public void setFriendNewsItem(FriendNewsItem friendNewsItem) {
+		this.friendNewsItem = friendNewsItem;
+	}
+
 	protected void trackEvent() {
+		long id;
+		int attending;
+		if (event != null) {
+			id = event.getId();
+			attending = event.getAttending().getValue();
+			
+		} else {
+			id = friendNewsItem.getTrackId();
+			attending = friendNewsItem.getUserAttending().getValue();
+		}
 		new UserTracker((EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
-        		UserTrackingItemType.event, event.getId(), event.getAttending().getValue(), null, 
+        		UserTrackingItemType.event, id, attending, null, 
         		UserTrackingType.Add).execute();
 	}
 	
@@ -129,7 +151,12 @@ public abstract class PublishEventListFragment extends ListFragment implements P
         }
 		
 		if (mPlusClient.isConnected()) {
-			GPlusUtil.publishEvent(event, this);
+			if (event != null) {
+				GPlusUtil.publishEvent(event, this);
+				
+			} else {
+				GPlusUtil.publishFriendNewsItem(friendNewsItem, this);
+			}
 			
 		} else {
 			pendingAnnounce = true;
@@ -189,7 +216,12 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 	@Override
 	public void onConnected(Bundle arg0) {
 		if (pendingAnnounce) {
-			GPlusUtil.publishEvent(event, this);
+			if (event != null) {
+				GPlusUtil.publishEvent(event, this);
+				
+			} else {
+				GPlusUtil.publishFriendNewsItem(friendNewsItem, this);
+			}
 		}
 	}
 	

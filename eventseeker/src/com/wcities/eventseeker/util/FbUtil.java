@@ -29,6 +29,7 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.SharedPrefKeys;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
+import com.wcities.eventseeker.core.FriendNewsItem;
 import com.wcities.eventseeker.interfaces.PublishListener;
 
 public class FbUtil {
@@ -87,7 +88,17 @@ public class FbUtil {
 	    // new callback to handle the response.
 	    Request request = Request.newMeRequest(session, graphUserCallback);
 	    request.executeAsync();
-	} 
+	}
+	
+	public static void handlePublishFriendNewsItem(PublishListener fbPublishListener, Fragment fragment, 
+			List<String> permissions, int requestCode, FriendNewsItem friendNewsItem) {
+		Log.d(TAG, "handlePublish()");
+		if (canPublishNow(fbPublishListener, fragment, permissions, requestCode)) {
+			friendNewsItem.updateUserAttendingToNewUserAttending();
+			fbPublishListener.onPublishPermissionGranted();
+			publishFriendNewsItem(friendNewsItem, fragment);
+		}
+	}
 	
 	public static void handlePublishEvent(PublishListener fbPublishListener, Fragment fragment, 
 			List<String> permissions, int requestCode, Event event) {
@@ -181,6 +192,28 @@ public class FbUtil {
 	    }
 	}
 	
+	public static void call(Session session, SessionState state, Exception exception, 
+			PublishListener fbPublishListener, Fragment fragment, 
+			List<String> permissions, int requestCode, FriendNewsItem friendNewsItem) {
+		Log.d(TAG, "call(): state = " + state);
+		if (session != null && session.isOpened()) {
+	    	if (state.equals(SessionState.OPENED)) {
+	    		//Log.d(TAG, "OPENED");
+	    		// Session opened 
+	            // so try publishing once more.
+	    		sessionOpened(fbPublishListener, fragment, permissions, 
+		    			requestCode, friendNewsItem);
+	    		
+	    	} else if (state.equals(SessionState.OPENED_TOKEN_UPDATED)) {
+	    		//Log.d(TAG, "OPENED_TOKEN_UPDATED");
+	            // Session updated with new permissions
+	            // so try publishing once more.
+	            tokenUpdated(fbPublishListener, fragment, permissions, 
+		    			requestCode, friendNewsItem);
+	        }
+	    }
+	}
+	
 	private static void sessionOpened(PublishListener fbPublishListener, Fragment fragment, 
 			List<String> permissions, int requestCode, Event event) {
 		Log.d(TAG, "sessionOpened()");
@@ -189,6 +222,17 @@ public class FbUtil {
 	    if (fbPublishListener.isPendingAnnounce()) {
 	        // Publish the action
 	    	handlePublishEvent(fbPublishListener, fragment, permissions, requestCode, event);
+	    }
+	}
+	
+	private static void sessionOpened(PublishListener fbPublishListener, Fragment fragment, 
+			List<String> permissions, int requestCode, FriendNewsItem friendNewsItem) {
+		Log.d(TAG, "sessionOpened()");
+		// Check if a publish action is in progress
+	    // awaiting a successful reauthorization
+	    if (fbPublishListener.isPendingAnnounce()) {
+	        // Publish the action
+	    	handlePublishFriendNewsItem(fbPublishListener, fragment, permissions, requestCode, friendNewsItem);
 	    }
 	}
 	
@@ -206,6 +250,25 @@ public class FbUtil {
 	    		// Publish the action
 	    		handlePublishEvent(fbPublishListener, fragment, permissions, requestCode, 
 		    			event);
+	    		
+	    	} else {
+	    		// user has denied the permission
+	    		fbPublishListener.setPendingAnnounce(false);
+	    	}
+	    }
+	}
+	
+	private static void tokenUpdated(PublishListener fbPublishListener, Fragment fragment, 
+			List<String> permissions, int requestCode, FriendNewsItem friendNewsItem) {
+		Log.d(TAG, "tokenUpdated()");
+	    // Check if a publish action is in progress
+	    // awaiting a successful reauthorization
+	    if (fbPublishListener.isPendingAnnounce()) {
+	        
+	    	if (hasPublishPermission(permissions)) {
+	    		// Publish the action
+	    		handlePublishFriendNewsItem(fbPublishListener, fragment, permissions, requestCode, 
+		    			friendNewsItem);
 	    		
 	    	} else {
 	    		// user has denied the permission
@@ -278,6 +341,73 @@ public class FbUtil {
                 new UserTracker((EventSeekr) FragmentUtil.getActivity(fragment).getApplication(), 
                 		UserTrackingItemType.event, event.getId(), event.getAttending().getValue(), postId, 
                 		UserTrackingType.Add).execute();
+            }
+        };
+
+        Request request = new Request(session, "me/feed", postParams, HttpMethod.POST, callback);
+        RequestAsyncTask task = new RequestAsyncTask(request);
+        task.execute();
+	}
+	
+	private static void publishFriendNewsItem(final FriendNewsItem item, final Fragment fragment) {
+	    Session session = Session.getActiveSession();
+
+        Bundle postParams = new Bundle();
+        String name = "I am going to an event ";
+        if (item.getUserAttending() == Attending.WANTS_TO_GO) {
+        	name = "I want to go to an event ";
+        }
+        name += "'" + item.getTrackName() + "' on eventseeker";
+        postParams.putString("name", name);
+        String caption = "";
+    	if (item.getVenueName() != null) {
+    		caption += "at " + item.getVenueName();
+    	}
+    	if (item.getStartTime() != null) {
+    		caption += " on " + new SimpleDateFormat("EEEE, MMM d").format(item.getStartTime().getStartDate());
+    	}
+        postParams.putString("caption", caption);
+        String description = " ";
+        postParams.putString("description", description);
+        
+        String link = "http://eventseeker.com/event/" + item.getTrackId();
+        postParams.putString("link", link);
+
+        if (item.doesValidImgUrlExist()) {
+        	String imgUrl = item.getHighResImgUrl();
+        	if (imgUrl == null) {
+        		imgUrl = item.getLowResImgUrl();
+        	}
+        	if (imgUrl == null) {
+        		imgUrl = item.getMobiResImgUrl();
+        	}
+            postParams.putString("picture", imgUrl);
+        }
+
+        Request.Callback callback = new Request.Callback() {
+        	
+            public void onCompleted(Response response) {
+            	Log.d(TAG, "response = " + response.toString());
+            	String postId = null;
+
+                GraphObject graphObject = response.getGraphObject();
+                if (graphObject != null) {
+                	JSONObject graphResponse = graphObject.getInnerJSONObject();
+                    try {
+                        postId = graphResponse.getString("id");
+                        postId = postId.split("_")[1];
+                        
+                    } catch (JSONException e) {
+                        Log.i(TAG, "JSON error "+ e.getMessage());
+                    }
+                    
+                } else {
+                	Log.d(TAG, "graphObj = null");
+                }
+                
+                new UserTracker((EventSeekr) FragmentUtil.getActivity(fragment).getApplication(), 
+                		UserTrackingItemType.event, item.getTrackId(), item.getUserAttending().getValue(), 
+                		postId, UserTrackingType.Add).execute();
             }
         };
 

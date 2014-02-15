@@ -12,6 +12,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.R.color;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -26,6 +27,7 @@ import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +37,7 @@ import android.widget.AbsListView.RecyclerListener;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -51,29 +54,39 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.Session.StatusCallback;
 import com.facebook.SessionState;
+import com.google.android.gms.internal.fb;
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.Tracktype;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
+import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
+import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
+import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Date;
+import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.FriendNewsItem;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
+import com.wcities.eventseeker.custom.fragment.PublishEventListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.custom.view.ResizableImageView;
 import com.wcities.eventseeker.interfaces.EventListener;
+import com.wcities.eventseeker.interfaces.PublishListener;
+import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.ConversionUtil;
+import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack implements StatusCallback, 
-		OnClickListener {
+public class FriendsActivityFragment extends PublishEventListFragmentLoadableFromBackStack implements 
+		StatusCallback, OnClickListener, PublishListener {
 	
 	private static final String TAG = FriendsActivityFragment.class.getName();
 	
@@ -87,7 +100,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	// Request code for facebook reauthorization requests. 
 	private static final int FACEBOOK_REAUTH_ACTIVITY_CODE = 100; 
 	// Flag to represent if we are waiting for extended permissions
-	private boolean pendingAnnounce = false;
+	private boolean pendingLikeOrComment = false;
 	// Strings required to build like request graph path 
 	private String fbPostId;
 	// indicates which type of request is pending to be executed
@@ -249,11 +262,17 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.d(TAG, "onActivityResult(), requestCode = " + requestCode);
-		Session session = Session.getActiveSession();
-        if (session != null) {
-        	Log.d(TAG, "session!=null");
-            session.onActivityResult(FragmentUtil.getActivity(this), requestCode, resultCode, data);
-        }
+		if (isPendingAnnounce()) {
+			super.onActivityResult(requestCode, resultCode, data);
+			
+		} else {
+			// for like/comment functionality
+			Session session = Session.getActiveSession();
+	        if (session != null) {
+	        	//Log.d(TAG, "session!=null");
+	            session.onActivityResult(FragmentUtil.getActivity(this), requestCode, resultCode, data);
+	        }
+		}
 	}
 	
 	private class LoadFriendsNews extends AsyncTask<Void, Void, List<FriendNewsItem>> {
@@ -326,10 +345,18 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	
 	private class FriendActivityListAdapter extends BaseAdapter {
 		
+		private static final int MAX_FB_CALL_COUNT_FOR_SAME_EVT = 20;
+		
 	    private LayoutInflater mInflater;
+	    private EventSeekr eventSeekr;
+	    
+	    private FriendNewsItem newsItemPendingPublish;
+		private CheckBox newsItemPendingPublishChkBoxGoing, newsItemPendingPublishChkBoxWantToGo;
+		private int fbCallCountForSameEvt = 0;
 
 	    public FriendActivityListAdapter(Context context) {
 	        mInflater = LayoutInflater.from(context);
+	        eventSeekr = (EventSeekr)context.getApplicationContext();
 	    }
 	    
 	    public void setmInflater(Context context) {
@@ -378,6 +405,11 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 					holder.lnrLayoutBtnComment = (LinearLayout) rltLayoutNewsItemContainer.findViewById(R.id.lnrLayoutBtnComment);
 					holder.txtEvtTime = (TextView) rltLayoutNewsItemContainer.findViewById(R.id.txtEvtTime);
 					holder.txtVenueTitle = (TextView) rltLayoutNewsItemContainer.findViewById(R.id.txtVenueTitle);
+					holder.lnrLytTrackBtns = (LinearLayout) rltLayoutNewsItemContainer.findViewById(R.id.lnrLayoutTrackBtns);
+					holder.btnBuyTickets = (Button) rltLayoutNewsItemContainer.findViewById(R.id.btnBuyTickets);
+					holder.lnrLayoutTickets = (LinearLayout) rltLayoutNewsItemContainer.findViewById(R.id.lnrLayoutTickets);
+					holder.chkBoxGoing = (CheckBox) rltLayoutNewsItemContainer.findViewById(R.id.chkBoxGoing);
+					holder.chkBoxWantToGo = (CheckBox) rltLayoutNewsItemContainer.findViewById(R.id.chkBoxWantToGo);
 					
 					RelativeLayout rltLayoutNewsItem2Container = holder.rltLayoutNewsItem2Container 
 							= (RelativeLayout) convertView.findViewById(R.id.rltLayoutNewsItemContainer2);
@@ -389,6 +421,11 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 					holder.lnrLayoutBtnComment2 = (LinearLayout) rltLayoutNewsItem2Container.findViewById(R.id.lnrLayoutBtnComment);
 					holder.txtEvtTime2 = (TextView) rltLayoutNewsItem2Container.findViewById(R.id.txtEvtTime);
 					holder.txtVenueTitle2 = (TextView) rltLayoutNewsItem2Container.findViewById(R.id.txtVenueTitle);
+					holder.lnrLytTrackBtns2 = (LinearLayout) rltLayoutNewsItem2Container.findViewById(R.id.lnrLayoutTrackBtns);
+					holder.btnBuyTickets2 = (Button) rltLayoutNewsItem2Container.findViewById(R.id.btnBuyTickets);
+					holder.lnrLayoutTickets2 = (LinearLayout) rltLayoutNewsItem2Container.findViewById(R.id.lnrLayoutTickets);
+					holder.chkBoxGoing2 = (CheckBox) rltLayoutNewsItem2Container.findViewById(R.id.chkBoxGoing);
+					holder.chkBoxWantToGo2 = (CheckBox) rltLayoutNewsItem2Container.findViewById(R.id.chkBoxWantToGo);
 					holder.progressBar2 = (ProgressBar) rltLayoutNewsItem2Container.findViewById(R.id.progressBar);
 					
 					convertView.setTag(holder);
@@ -440,11 +477,17 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 			private ResizableImageView imgEvt;
 			private TextView txtTitle, txtEvtTime, txtVenueTitle;
 			private LinearLayout lnrLayoutBtns, lnrLayoutBtnLike, lnrLayoutBtnComment;
+			private LinearLayout lnrLytTrackBtns, lnrLayoutTickets;
+			private Button btnBuyTickets;
+			private CheckBox chkBoxGoing, chkBoxWantToGo;
 			
 			private RelativeLayout rltLayoutNewsItem2Container, lnrLayoutEvtInfo2;
 			private ResizableImageView imgEvt2;
 			private TextView txtTitle2, txtEvtTime2, txtVenueTitle2;
 			private LinearLayout lnrLayoutBtns2, lnrLayoutBtnLike2, lnrLayoutBtnComment2;
+			private LinearLayout lnrLytTrackBtns2, lnrLayoutTickets2;
+			private Button btnBuyTickets2;
+			private CheckBox chkBoxGoing2, chkBoxWantToGo2;
 			private ProgressBar progressBar2;
 			
 			private void setContent(Object listItem, ViewGroup parent, int pos) {
@@ -536,6 +579,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 				}
 				
 				if (item.getFbPostId() != null) {
+					lnrLytTrackBtns.setVisibility(View.INVISIBLE);
 					lnrLayoutBtns.setVisibility(View.VISIBLE);
 					rltLayoutNewsItemContainer.setPadding(0, 0, 0, 0);
 					
@@ -561,11 +605,10 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 					});
 					
 				} else {
-					lnrLayoutBtns.setVisibility(View.GONE);
-					rltLayoutNewsItemContainer.setPadding(0, 0, 0, 
-							getResources().getDimensionPixelSize(R.dimen.tab_bar_margin_fragment_custom_tabs));
-					//lnrLayoutBtnLike.setOnClickListener(null);
-					//lnrLayoutBtnComment.setOnClickListener(null);
+					lnrLayoutBtns.setVisibility(View.INVISIBLE);
+					lnrLytTrackBtns.setVisibility(View.VISIBLE);
+					setBuyTickets(item, btnBuyTickets, lnrLayoutTickets);
+					setChkBoxes(item, chkBoxGoing, chkBoxWantToGo);
 				}
 				rltLayoutNewsItemContainer.setOnClickListener(new OnClickListener() {
 					
@@ -617,6 +660,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 				}
 				
 				if (item.getFbPostId() != null) {
+					lnrLytTrackBtns2.setVisibility(View.INVISIBLE);
 					lnrLayoutBtns2.setVisibility(View.VISIBLE);
 					rltLayoutNewsItem2Container.setPadding(0, 0, 0, 0);
 					
@@ -642,11 +686,10 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 					});
 					
 				} else {
-					lnrLayoutBtns2.setVisibility(View.GONE);
-					rltLayoutNewsItem2Container.setPadding(0, 0, 0, 
-							getResources().getDimensionPixelSize(R.dimen.tab_bar_margin_fragment_custom_tabs));
-					//lnrLayoutBtnLike2.setOnClickListener(null);
-					//lnrLayoutBtnComment2.setOnClickListener(null);
+					lnrLayoutBtns2.setVisibility(View.INVISIBLE);
+					lnrLytTrackBtns2.setVisibility(View.VISIBLE);
+					setBuyTickets(item, btnBuyTickets2, lnrLayoutTickets2);
+					setChkBoxes(item, chkBoxGoing2, chkBoxWantToGo2);
 				}
 				rltLayoutNewsItem2Container.setOnClickListener(new OnClickListener() {
 					
@@ -656,7 +699,165 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 					}
 				});
 			}
+			
+			private void setBuyTickets(final FriendNewsItem item, Button btnBuyTickets, LinearLayout lnrLayoutTickets) {
+				
+				if (item.getBookingUrl() != null) {
+					lnrLayoutTickets.setEnabled(true);
+
+					btnBuyTickets.setTextColor(res.getColor(color.black));
+					btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(res.getDrawable(
+							R.drawable.tickets_grey), null, null, null);
+
+				} else {
+					lnrLayoutTickets.setEnabled(false);
+
+					btnBuyTickets.setTextColor(res.getColor(R.color.btn_buy_tickets_disabled_txt_color));
+					btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(res.getDrawable(
+							R.drawable.tickets_disabled), null, null, null);
+				}
+				
+				lnrLayoutTickets.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View arg0) {
+						if (item.getBookingUrl() != null) {
+							Bundle args = new Bundle();
+							args.putString(BundleKeys.URL, item.getBookingUrl());
+							onBuyTicketClicked(args);
+						}
+					}
+				});
+			}
+			
+			private void setChkBoxes(final FriendNewsItem item, final CheckBox chkBoxGoing, final CheckBox chkBoxWantToGo) {
+				updateAttendingChkBoxes(item, chkBoxGoing, chkBoxWantToGo);
+				
+				OnClickListener goingClickListener = new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						onChkBoxClick(item, chkBoxGoing, chkBoxWantToGo, true);
+					}
+				};
+				OnClickListener wantToClickListener = new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						onChkBoxClick(item, chkBoxGoing, chkBoxWantToGo, false);
+					}
+				};
+				
+				chkBoxGoing.setOnClickListener(goingClickListener);
+				chkBoxWantToGo.setOnClickListener(wantToClickListener);
+				
+				/**
+				 * If user clicks on going or wantToGo & changes orientation instantly before call to 
+				 * onPublishPermissionGranted(), then we need to update both checkboxes with right 
+				 * checkbox pointers in new orientation
+				 */
+				if (newsItemPendingPublish == item) {
+					newsItemPendingPublishChkBoxGoing = chkBoxGoing;
+					newsItemPendingPublishChkBoxWantToGo = chkBoxWantToGo;
+				}
+			}
+			
+			private void onChkBoxClick(FriendNewsItem item, CheckBox chkBoxGoing, CheckBox chkBoxWantToGo, 
+					boolean isGoingClicked) {
+				Attending userAttending;
+				if (isGoingClicked) {
+					userAttending = item.getUserAttending() == Attending.GOING ? Attending.NOT_GOING : Attending.GOING;
+					
+				} else {
+					userAttending = item.getUserAttending() == Attending.WANTS_TO_GO ? Attending.NOT_GOING : Attending.WANTS_TO_GO;
+				}
+				
+				if (userAttending == Attending.NOT_GOING) {
+					item.setUserAttending(userAttending);
+					updateAttendingChkBoxes(item, chkBoxGoing, chkBoxWantToGo);
+					new UserTracker(eventSeekr, UserTrackingItemType.event, item.getTrackId(), 
+							item.getUserAttending().getValue(), UserTrackingType.Add).execute();
+					
+				} else {
+					/**
+					 * call to updateAttendingChkBoxes() to negate the click event for now on checkbox, 
+					 * since it's handled after checking fb/google publish permission
+					 */
+					updateAttendingChkBoxes(item, chkBoxGoing, chkBoxWantToGo);
+					
+					if (eventSeekr.getFbUserId() != null) {
+						item.setNewUserAttending(userAttending);
+						newsItemPendingPublish = item;
+						newsItemPendingPublishChkBoxGoing = chkBoxGoing;
+						newsItemPendingPublishChkBoxWantToGo = chkBoxWantToGo;
+						fbCallCountForSameEvt = 0;
+						FbUtil.handlePublishFriendNewsItem(FriendsActivityFragment.this, FriendsActivityFragment.this, 
+								AppConstants.PERMISSIONS_FB_PUBLISH_EVT, AppConstants.REQ_CODE_FB_PUBLISH_EVT, item);
+						
+					} else if (eventSeekr.getGPlusUserId() != null) {
+						item.setNewUserAttending(userAttending);
+						newsItemPendingPublish = item;
+						newsItemPendingPublishChkBoxGoing = chkBoxGoing;
+						newsItemPendingPublishChkBoxWantToGo = chkBoxWantToGo;
+						((PublishEventListFragment)FriendsActivityFragment.this).setFriendNewsItem(newsItemPendingPublish);
+						((PublishEventListFragment)FriendsActivityFragment.this).handlePublishEvent();
+						
+					} else {
+						FragmentUtil.showLoginNeededForTrackingEventDialog(FriendsActivityFragment.this
+								.getChildFragmentManager());
+					}
+				}
+			}
 		}
+		
+		private void updateAttendingChkBoxes(FriendNewsItem item, CheckBox chkBoxGoing, CheckBox chkBoxWantToGo) {
+			switch (item.getUserAttending()) {
+
+			case GOING:
+				chkBoxGoing.setChecked(true);
+				chkBoxWantToGo.setChecked(false);
+				break;
+
+			case WANTS_TO_GO:
+				chkBoxGoing.setChecked(false);
+				chkBoxWantToGo.setChecked(true);
+				break;
+
+			case NOT_GOING:
+				chkBoxGoing.setChecked(false);
+				chkBoxWantToGo.setChecked(false);
+				break;
+
+			default:
+				break;
+			}
+		}
+		
+		public void call(Session session, SessionState state, Exception exception) {
+			Log.d(TAG, "call()");
+			fbCallCountForSameEvt++;
+			/**
+			 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
+			 */
+			if (fbCallCountForSameEvt < MAX_FB_CALL_COUNT_FOR_SAME_EVT) {
+				FbUtil.call(session, state, exception, FriendsActivityFragment.this, FriendsActivityFragment.this, 
+						AppConstants.PERMISSIONS_FB_PUBLISH_EVT, AppConstants.REQ_CODE_FB_PUBLISH_EVT, 
+						newsItemPendingPublish);
+				
+			} else {
+				fbCallCountForSameEvt = 0;
+				FriendsActivityFragment.this.setPendingAnnounce(false);
+			}
+		}
+		
+		public void onPublishPermissionGranted() {
+			updateAttendingChkBoxes(newsItemPendingPublish, newsItemPendingPublishChkBoxGoing, newsItemPendingPublishChkBoxWantToGo);
+		}
+	}
+	
+	private void onBuyTicketClicked(Bundle args) {
+		((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
+				AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
 	}
 	
 	private static class AddCommentDialogFragment extends DialogFragment {
@@ -682,7 +883,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	                .setPositiveButton("Add",
 	                    new DialogInterface.OnClickListener() {
 	                        public void onClick(DialogInterface dialog, int whichButton) {
-	                            ((FriendsActivityFragment)getParentFragment()).doPositiveClick(
+	                            ((FriendsActivityFragment)getParentFragment()).doPositiveClickToAddComment(
 	                            		input.getText().toString());
 	                        }
 	                    }
@@ -708,7 +909,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	}
 	
 	private boolean canPublishNow() {
-		pendingAnnounce = false;
+		pendingLikeOrComment = false;
 	    Session session = Session.getActiveSession();
 
 	    if (session == null) {
@@ -720,14 +921,14 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	    Log.d(TAG, "active session, state=" + session.getState().name());
 	    if (!session.isOpened()) {
 	    	Log.d(TAG, "session is not opened");
-	    	pendingAnnounce = true; // Mark that we are currently waiting for opening of session
+	    	pendingLikeOrComment = true; // Mark that we are currently waiting for opening of session
     		Session.openActiveSession(FragmentUtil.getActivity(this), this, true, this);
     		return false;
 	    }
 
 	    if (!hasPublishPermission()) {
 	    	Log.d(TAG, "publish permission is not there");
-	        pendingAnnounce = true; // Mark that we are currently waiting for confirmation of publish permissions
+	    	pendingLikeOrComment = true; // Mark that we are currently waiting for confirmation of publish permissions
 	        session.addCallback(this); 
 	        requestPublishPermissions(session, PERMISSIONS, FACEBOOK_REAUTH_ACTIVITY_CODE);
 	        return false;
@@ -800,7 +1001,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	    newFragment.show(getChildFragmentManager(), "dialog");
 	}
 
-	private void doPositiveClick(String comment) {
+	private void doPositiveClickToAddComment(String comment) {
 	    // Do stuff here.
 	    postCommentRequest(comment);
 	}
@@ -812,7 +1013,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 		Log.d(TAG, "tokenUpdated()");
 	    // Check if a publish action is in progress
 	    // awaiting a successful reauthorization
-	    if (pendingAnnounce) {
+	    if (pendingLikeOrComment) {
 	        
 	    	if (hasPublishPermission()) {
 	    		// Publish the action
@@ -820,7 +1021,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	    		
 	    	} else {
 	    		// user has denied the permission
-	    		pendingAnnounce = false;
+	    		pendingLikeOrComment = false;
 	    	}
 	    }
 	}
@@ -829,7 +1030,7 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 		Log.d(TAG, "sessionOpened()");
 		// Check if a publish action is in progress
 	    // awaiting a successful reauthorization
-	    if (pendingAnnounce) {
+	    if (pendingLikeOrComment) {
 	        // Publish the action
 	    	handlePublish();
 	    }
@@ -857,7 +1058,12 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 	@Override
 	public void call(Session session, SessionState state, Exception exception) {
 		Log.d(TAG, "call()");
-		onSessionStateChange(session, state, exception);
+		if (pendingLikeOrComment) {
+			onSessionStateChange(session, state, exception);
+			
+		} else {
+			friendActivityListAdapter.call(session, state, exception);
+		}
 	}
 	
 	private void showNoFriendsActivityFound() {
@@ -903,5 +1109,10 @@ public class FriendsActivityFragment extends ListFragmentLoadableFromBackStack i
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public void onPublishPermissionGranted() {
+		friendActivityListAdapter.onPublishPermissionGranted();
 	}    	
 }

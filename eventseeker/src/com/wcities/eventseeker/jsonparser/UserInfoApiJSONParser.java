@@ -49,6 +49,7 @@ public class UserInfoApiJSONParser {
 	private static final String KEY_FB_POSTID = "fb_postid";
 	private static final String KEY_TRACK_NAME = "trackName";
 	private static final String KEY_ATTENDING = "attending";
+	private static final String KEY_USER_ATTENDING = "user_attending";
 	private static final String KEY_VENUE_ID = "venue_id";
 	private static final String KEY_MEDIA = "media";
 	private static final String KEY_HIGH_RES_PATH = "high_res_path";
@@ -172,6 +173,15 @@ public class UserInfoApiJSONParser {
 		}
 		friendNewsItem.setTrackName(jsonObject.getString(KEY_TRACK_NAME));
 		friendNewsItem.setAttending(Attending.getAttending(jsonObject.getInt(KEY_ATTENDING)));
+		
+		Attending userAttending = Attending.NOT_GOING;
+		if (jsonObject.has(KEY_USER_ATTENDING)) {
+			userAttending = Attending.getAttending(jsonObject.getInt(KEY_USER_ATTENDING));
+		}
+		friendNewsItem.setUserAttending(userAttending);
+		if (jsonObject.has(KEY_BOOKING_URL)) {
+			friendNewsItem.setBookingUrl(jsonObject.getString(KEY_BOOKING_URL));
+		}
 		if (jsonObject.has(KEY_VENUE_ID)) {
 			friendNewsItem.setVenueId(jsonObject.getInt(KEY_VENUE_ID));
 		}

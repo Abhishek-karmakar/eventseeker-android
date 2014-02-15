@@ -16,6 +16,8 @@ public class FriendNewsItem implements BitmapCacheable {
 	private String venueName;
 	private Date startTime;
 	private String fbPostId;
+	private Attending userAttending, newUserAttending;
+	private String bookingUrl;
 	
 	public String getFriendId() {
 		return friendId;
@@ -105,6 +107,37 @@ public class FriendNewsItem implements BitmapCacheable {
 		this.fbPostId = fbPostId;
 	}
 	
+	public Attending getUserAttending() {
+		return userAttending;
+	}
+
+	public void setUserAttending(Attending userAttending) {
+		this.userAttending = userAttending;
+	}
+
+	public Attending getNewUserAttending() {
+		return newUserAttending;
+	}
+
+	public void setNewUserAttending(Attending newUserAttending) {
+		this.newUserAttending = newUserAttending;
+	}
+	
+	public void updateUserAttendingToNewUserAttending() {
+		if (newUserAttending != null) {
+			userAttending = newUserAttending;
+			newUserAttending = null;
+		}
+	}
+
+	public String getBookingUrl() {
+		return bookingUrl;
+	}
+
+	public void setBookingUrl(String bookingUrl) {
+		this.bookingUrl = bookingUrl;
+	}
+
 	public Event toEvent() {
 		Event event = new Event(trackId, trackName);
 		
@@ -118,9 +151,18 @@ public class FriendNewsItem implements BitmapCacheable {
 		schedule.addDate(startTime);
 		event.setSchedule(schedule);
 		
-		event.setAttending(attending);
+		event.setAttending(userAttending);
 		
 		return event;
+	}
+	
+	public boolean doesValidImgUrlExist() {
+		if (getLowResImgUrl() != null || getMobiResImgUrl() != null || getHighResImgUrl() != null) {
+			return true;
+			
+		} else {
+			return false;
+		}
 	}
 
 	@Override

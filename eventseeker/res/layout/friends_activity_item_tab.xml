@@ -127,5 +127,14 @@
                 android:textSize="@dimen/btn_txt_size_friends_activity_item" />
         </LinearLayout>
     </LinearLayout>
+    
+    <include layout="@layout/include_fragment_friends_activity_item_track_btns"
+		android:id="@+id/lnrLayoutTrackBtns"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/lnr_layout_btns_ht_friends_activity_item"
+        android:layout_alignTop="@id/lnrLayoutBtns"
+        android:layout_alignLeft="@id/lnrLayoutBtns"
+        android:layout_alignRight="@id/lnrLayoutBtns"
+        android:layout_alignBottom="@id/lnrLayoutBtns" />
 
 </RelativeLayout>

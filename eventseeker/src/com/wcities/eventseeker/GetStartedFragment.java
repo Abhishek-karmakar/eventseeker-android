@@ -306,7 +306,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 		if (((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getGPlusUserId() == null) {
 			
 	        Person currentPerson = mPlusClient.getCurrentPerson();
-	        Log.d(TAG, "currentPerson = " + currentPerson);
+	        //Log.d(TAG, "currentPerson = " + currentPerson);
 	        if (currentPerson != null) {
 	            String personId = currentPerson.getId();
 	            Log.d(TAG, "id = " + personId);

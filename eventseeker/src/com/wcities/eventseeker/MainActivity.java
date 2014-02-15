@@ -229,7 +229,7 @@ public class MainActivity extends ActionBarActivity implements
 		 * searchView in SearchFragment. So need to set any transparent icon
 		 * rather than null.
 		 */
-		//getSupportActionBar().setIcon(R.drawable.placeholder);
+		getSupportActionBar().setIcon(R.drawable.ic_actionbar_app_icon);
 		
 		DrawerListFragment drawerListFragment = (DrawerListFragment) getSupportFragmentManager()
 				.findFragmentByTag(DRAWER_LIST_FRAGMENT_TAG);
@@ -794,7 +794,7 @@ public class MainActivity extends ActionBarActivity implements
 				
 			if(isTabletAndInLandscapeMode){
 				
-				//getSupportActionBar().setIcon(R.drawable.placeholder);
+				getSupportActionBar().setIcon(R.drawable.ic_actionbar_app_icon);
 				getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME);
 
 			}
@@ -1050,7 +1050,7 @@ public class MainActivity extends ActionBarActivity implements
 		setDrawerIndicatorEnabled(!addToBackStack);
 		
 		if (isTabletAndInLandscapeMode) {
-			//getSupportActionBar().setIcon(R.drawable.placeholder);			
+			getSupportActionBar().setIcon(R.drawable.ic_actionbar_app_icon);			
 			if (addToBackStack) {
 				getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME
 						| ActionBar.DISPLAY_HOME_AS_UP);

@@ -27,6 +27,7 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.SharedPrefKeys;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
+import com.wcities.eventseeker.core.FriendNewsItem;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 
 public class GPlusUtil {
@@ -82,7 +83,7 @@ public class GPlusUtil {
 	}
 	
 	public static void publishEvent(Event event, Fragment fragment) {
-		Log.d(TAG, "publishEvent()");
+		//Log.d(TAG, "publishEvent()");
 		isGPlusPublishPending = true;
 		
 		String text = "I am going to an event ";
@@ -108,6 +109,40 @@ public class GPlusUtil {
         if (link == null) {
         	link = "http://eventseeker.com/event/" + event.getId();
 	    }
+        
+		// Launch the Google+ share dialog with attribution to your app.
+		Intent shareIntent = new PlusShare.Builder(FragmentUtil.getActivity(fragment))
+          	.setType("text/plain")
+          	.setText(text)
+          	.setContentUrl(Uri.parse(link))
+          	.getIntent();
+
+		fragment.startActivityForResult(shareIntent, AppConstants.REQ_CODE_GOOGLE_PLUS_PUBLISH_EVT);
+	}
+	
+	public static void publishFriendNewsItem(FriendNewsItem item, Fragment fragment) {
+		//Log.d(TAG, "publishFriendNewsItem()");
+		isGPlusPublishPending = true;
+		
+		String text = "I am going to an event ";
+		/**
+		 * Using getNewAttending() instead of getAttending() since we update right value on event only 
+		 * after successfully sharing on google+
+		 */
+        if (item.getNewUserAttending() == Attending.WANTS_TO_GO) {
+        	text = "I want to go to an event ";
+        }
+        text += "'" + item.getTrackName() + "' on eventseeker";
+        
+        if (item.getVenueName() != null) {
+        	text += " at " + item.getVenueName();
+    	}
+    	if (item.getStartTime() != null) {
+    		text += " on " + new SimpleDateFormat("EEEE, MMM d").format(item.getStartTime().getStartDate());
+    	}
+        text += ".";
+        
+        String link = "http://eventseeker.com/event/" + item.getTrackId();
         
 		// Launch the Google+ share dialog with attribution to your app.
 		Intent shareIntent = new PlusShare.Builder(FragmentUtil.getActivity(fragment))
