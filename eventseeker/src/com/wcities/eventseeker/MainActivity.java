@@ -274,17 +274,15 @@ public class MainActivity extends ActionBarActivity implements
 		 * Due to myspin bug sometimes it doesn't detect connected state instantly. To compensate for this 
 		 * we run a delayed task to recheck on connected state & refresh UI.
 		 */
-		if (!MySpinServerSDK.sharedInstance().isConnected()) {
-			new Handler().postDelayed(new Runnable() {
-				
-				@Override
-				public void run() {
-					if (MySpinServerSDK.sharedInstance().isConnected()) {
-						startBoschMainActivity();
-					}
+		new Handler().postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				if (MySpinServerSDK.sharedInstance().isConnected()) {
+					startBoschMainActivity();
 				}
-			}, 300);
-		}
+			}
+		}, 300);
 	}
 
 	@Override
