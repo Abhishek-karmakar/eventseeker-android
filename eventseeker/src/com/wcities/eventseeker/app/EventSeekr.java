@@ -29,7 +29,7 @@ import com.wcities.eventseeker.core.FollowingList;
 import com.wcities.eventseeker.exception.DefaultUncaughtExceptionHandler;
 import com.wcities.eventseeker.gcm.GcmUtil;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
-import com.wcities.eventseeker.interfaces.BoschAsyncTaskListener;
+import com.wcities.eventseeker.interfaces.ConnectionFailureListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FbUtil;
@@ -68,7 +68,7 @@ public class EventSeekr extends Application {
 
 	private List<EventSeekrListener> listeners;
 
-	private static BoschAsyncTaskListener boschAsyncTaskListener;
+	private static ConnectionFailureListener connectionFailureListener;
 	
 	private FollowingList followingList;
 
@@ -76,12 +76,12 @@ public class EventSeekr extends Application {
 		public void onSyncCountUpdated(Service service);
 	}
 	
-	public static BoschAsyncTaskListener getBoschAsyncTaskListener() {
-		return boschAsyncTaskListener;
+	public static ConnectionFailureListener getConnectionFailureListener() {
+		return connectionFailureListener;
 	}
 
-	public static void setBoschAsyncTaskListener(BoschAsyncTaskListener boschAsyncTaskListener) {
-		EventSeekr.boschAsyncTaskListener = boschAsyncTaskListener;
+	public static void setConnectionFailureListener(ConnectionFailureListener connectionFailureListener) {
+		EventSeekr.connectionFailureListener = connectionFailureListener;
 	}
 
 	@Override

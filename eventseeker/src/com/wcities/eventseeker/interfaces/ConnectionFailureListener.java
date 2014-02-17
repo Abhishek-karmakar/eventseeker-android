@@ -1,6 +1,6 @@
 
 package com.wcities.eventseeker.interfaces;
 
-public interface BoschAsyncTaskListener {
+public interface ConnectionFailureListener {
 	public void onConnectionFailure();
 }

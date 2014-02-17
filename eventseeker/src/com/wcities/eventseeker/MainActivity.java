@@ -3,15 +3,19 @@ package com.wcities.eventseeker;
 import java.util.List;
 import java.util.Set;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -22,12 +26,14 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bosch.myspin.serversdk.MySpinException;
@@ -38,6 +44,7 @@ import com.wcities.eventseeker.ChangeLocationFragment.ChangeLocationFragmentList
 import com.wcities.eventseeker.ConnectAccountsFragment.ConnectAccountsFragmentListener;
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
+import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.GetStartedFragment.GetStartedFragmentListener;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -50,6 +57,7 @@ import com.wcities.eventseeker.core.Category;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.interfaces.ArtistListener;
+import com.wcities.eventseeker.interfaces.ConnectionFailureListener;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.interfaces.MapListener;
@@ -64,7 +72,7 @@ public class MainActivity extends ActionBarActivity implements
 		ReplaceFragmentListener, EventListener, ArtistListener, VenueListener,
 		FragmentLoadedFromBackstackListener, MapListener,
 		ConnectAccountsFragmentListener, SearchView.OnQueryTextListener,
-		ChangeLocationFragmentListener {
+		ChangeLocationFragmentListener, ConnectionFailureListener, DialogBtnClickListener {
 
 	private static final String TAG = MainActivity.class.getName();
 
@@ -82,6 +90,8 @@ public class MainActivity extends ActionBarActivity implements
 	private static final int INDEX_NAV_ITEM_REP_CODE = INDEX_NAV_ITEM_EULA + 1;
 	
 	private static final String DRAWER_LIST_FRAGMENT_TAG = "drawerListFragment";
+
+	private static final String DIALOG_FRAGMENT_TAG_CONNECTION_LOST = "ConnectionLost";
 
 	private static MainActivity instance = null;
 	private boolean activityOnTop, hasOtherActivityFinished;
@@ -114,7 +124,8 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
+		EventSeekr.setConnectionFailureListener(this);
 		//Log.d(TAG, "deviceId = " + DeviceUtil.getDeviceId((EventSeekr) getApplication()));
 		
 		try {
@@ -333,6 +344,8 @@ public class MainActivity extends ActionBarActivity implements
 				serviceInstance.setCurrentActivity(null);
 			}
 		}
+
+		EventSeekr.setConnectionFailureListener(null);
 		DeviceUtil.removeDeviceLocationListener();
 		//Log.d(TAG, "View : " + findViewById(R.id.rootNavigationDrawer));
 		super.onDestroy();
@@ -1486,6 +1499,29 @@ public class MainActivity extends ActionBarActivity implements
 			getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME);
 		}
 		super.onBackPressed();
+	}
+
+	@Override
+	public void onConnectionFailure() {
+		GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(this, "No Internet",
+				getResources().getString(R.string.connection_lost), null, "ok");
+		generalDialogFragment.show(getSupportFragmentManager(), DIALOG_FRAGMENT_TAG_CONNECTION_LOST);		
+		
+	}
+
+	@Override
+	public void doPositiveClick(String dialogTag) {
+		if (dialogTag.equals(DIALOG_FRAGMENT_TAG_CONNECTION_LOST)) {
+			DialogFragment dialogFragment = (DialogFragment) getSupportFragmentManager()
+					.findFragmentByTag(DIALOG_FRAGMENT_TAG_CONNECTION_LOST);
+			if (dialogFragment != null) {
+				dialogFragment.dismiss();
+			}
+		}
+	}
+
+	@Override
+	public void doNegativeClick(String dialogTag) {
 	}
 	
 }

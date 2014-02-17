@@ -1,11 +1,11 @@
 package com.wcities.eventseeker.util;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
 
 import com.wcities.eventseeker.app.EventSeekr;
-import com.wcities.eventseeker.bosch.BoschMainActivity;
-import com.wcities.eventseeker.interfaces.BoschAsyncTaskListener;
+import com.wcities.eventseeker.interfaces.ConnectionFailureListener;
 
 public class AsyncTaskUtil {
 
@@ -14,10 +14,10 @@ public class AsyncTaskUtil {
 	public static <Params, T extends AsyncTask<Params, ?, ?>> void executeAsyncTask(T asyncTask, 
 			boolean runParallel, Params... params) {
 		
-		BoschAsyncTaskListener boschAsyncTaskListener = EventSeekr.getBoschAsyncTaskListener();
-		if (boschAsyncTaskListener != null) {
-			if (!NetworkUtil.getConnectivityStatus((BoschMainActivity) boschAsyncTaskListener)) {
-				boschAsyncTaskListener.onConnectionFailure();
+		ConnectionFailureListener connectionFailureListener = EventSeekr.getConnectionFailureListener();
+		if (connectionFailureListener != null) {
+			if (!NetworkUtil.getConnectivityStatus((Context) connectionFailureListener)) {
+				connectionFailureListener.onConnectionFailure();
 				return;
 			}
 		}

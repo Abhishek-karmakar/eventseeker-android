@@ -54,10 +54,12 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
+import com.wcities.eventseeker.interfaces.ConnectionFailureListener;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GPlusUtil;
+import com.wcities.eventseeker.util.NetworkUtil;
 import com.wcities.eventseeker.util.ViewUtil.AnimationUtil;
 
 public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack implements EventSeekrListener, 
@@ -373,7 +375,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     	            }
     			}
     	    });
-        }
+        } 
     }
 	
 	private void connectPlusClient() {
@@ -573,6 +575,12 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 					
 				} else {
 					//isGPlusSignInClicked = false;
+					ConnectionFailureListener connectionFailureListener = 
+    						((ConnectionFailureListener) FragmentUtil.getActivity(ConnectAccountsFragment.this));
+    				if (!NetworkUtil.getConnectivityStatus((Context) connectionFailureListener)) {
+    					connectionFailureListener.onConnectionFailure();
+    					return;
+    				}
 					FbUtil.onClickLogin(ConnectAccountsFragment.this, statusCallback);
 				}
 				break;

@@ -3,6 +3,7 @@ package com.wcities.eventseeker.bosch;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -19,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -34,7 +36,7 @@ import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.interfaces.ArtistListener;
-import com.wcities.eventseeker.interfaces.BoschAsyncTaskListener;
+import com.wcities.eventseeker.interfaces.ConnectionFailureListener;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
@@ -42,7 +44,7 @@ import com.wcities.eventseeker.interfaces.VenueListener;
 
 public class BoschMainActivity extends ActionBarActivity implements ReplaceFragmentListener, 
 		EventListener, ArtistListener, VenueListener, FragmentLoadedFromBackstackListener, 
-		BoschDrawerListFragmentListener, BoschAsyncTaskListener  {
+		BoschDrawerListFragmentListener, ConnectionFailureListener  {
 
 	private static final String TAG = BoschMainActivity.class.getName();
 
@@ -79,7 +81,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		} else {
 			setContentView(R.layout.activity_bosch_main);
 
-			EventSeekr.setBoschAsyncTaskListener(this);
+			EventSeekr.setConnectionFailureListener(this);
 			
 			lnrLayoutRootNavDrawer = (LinearLayout) findViewById(R.id.rootNavigationDrawerBosch);
 			mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -100,12 +102,11 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			 * rather than null.
 			 */
 			
-			
 			getSupportActionBar().setIcon(R.drawable.placeholder);
 			getSupportActionBar().setCustomView(R.layout.bosch_actionbar_titleview);
 
 			txtActionBarTitle = (TextView) findViewById(R.id.txtActionBarTitle);
-
+			
 			BoschDrawerListFragment boschDrawerListFragment = (BoschDrawerListFragment) getSupportFragmentManager()
 				.findFragmentByTag(BoschDrawerListFragment.class.getSimpleName());
 			if (boschDrawerListFragment == null) {
@@ -169,7 +170,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	
 	@Override
 	protected void onDestroy() {
-		EventSeekr.setBoschAsyncTaskListener(null);
+		EventSeekr.setConnectionFailureListener(null);
 		try {
 			// calling 'super.onDestroy()' in try catch as some times it gives no view found error while destroying
 			// and then the app gets crashed. So, the try catch catches the exception and helps to continue the 
@@ -526,7 +527,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	public void onConnectionFailure() {
 		View view = LayoutInflater.from(this).inflate(R.layout.bosch_element_alert_dialog, null);
 		
-		((TextView)view.findViewById(R.id.txtTitle)).setText("The Internet connection appears to be offline");
+		((TextView)view.findViewById(R.id.txtTitle)).setText(getResources().getString(R.string.connection_lost));
 
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 		Dialog dialog = alertDialog.setCustomTitle(view).setCancelable(false)
