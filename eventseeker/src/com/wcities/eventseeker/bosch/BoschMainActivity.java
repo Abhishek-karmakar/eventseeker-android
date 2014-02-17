@@ -3,7 +3,7 @@ package com.wcities.eventseeker.bosch;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.res.Resources;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -20,13 +20,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bosch.myspin.serversdk.IOnCarDataChangeListener;
 import com.bosch.myspin.serversdk.MySpinException;
 import com.bosch.myspin.serversdk.MySpinServerSDK;
+import com.wcities.eventseeker.MainActivity;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.bosch.BoschDrawerListFragment.BoschDrawerListFragmentListener;
@@ -76,48 +76,55 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		super.onCreate(savedInstanceState);
 		
 		if (!MySpinServerSDK.sharedInstance().isConnected()) {
-			finish();
-			
-		} else {
-			setContentView(R.layout.activity_bosch_main);
+			Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+			startActivity(intent);
+		}
+		
+		setContentView(R.layout.activity_bosch_main);
 
-			EventSeekr.setConnectionFailureListener(this);
+		EventSeekr.setConnectionFailureListener(this);
 			
-			lnrLayoutRootNavDrawer = (LinearLayout) findViewById(R.id.rootNavigationDrawerBosch);
-			mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-			mDrawerToggle = new ActionBarDrawerToggle(this, // host this
-					mDrawerLayout, // DrawerLayout object
-					R.drawable.ic_nav_drawer_off, // nav drawer icon to replace 'Up' caret
-					R.string.drawer_open, // "open drawer" description
-					R.string.drawer_close // "close drawer" description
-			);
+		lnrLayoutRootNavDrawer = (LinearLayout) findViewById(R.id.rootNavigationDrawerBosch);
+		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		mDrawerToggle = new ActionBarDrawerToggle(this, // host this
+				mDrawerLayout, // DrawerLayout object
+				R.drawable.ic_nav_drawer_off, // nav drawer icon to replace 'Up' caret
+				R.string.drawer_open, // "open drawer" description
+				R.string.drawer_close // "close drawer" description
+		);
 
-			mDrawerLayout.setDrawerListener(mDrawerToggle);
+		mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-			getSupportActionBar().setDisplayOptions( ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME
-				| ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_CUSTOM);
-			/**
-			 * setIcon null throws NullPointerException while expanding
-			 * searchView in SearchFragment. So need to set any transparent icon
-			 * rather than null.
-			 */
-			
-			getSupportActionBar().setIcon(R.drawable.placeholder);
-			getSupportActionBar().setCustomView(R.layout.bosch_actionbar_titleview);
+		getSupportActionBar().setDisplayOptions( ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME
+			| ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_CUSTOM);
+		/**
+		 * setIcon null throws NullPointerException while expanding
+		 * searchView in SearchFragment. So need to set any transparent icon
+		 * rather than null.
+		 */
+		
+		getSupportActionBar().setIcon(R.drawable.placeholder);
+		getSupportActionBar().setCustomView(R.layout.bosch_actionbar_titleview);
+		if (savedInstanceState != null) {
+			currentContentFragmentTag = savedInstanceState.getString(BundleKeys.CURRENT_CONTENT_FRAGMENT_TAG);
+		}
 
-			txtActionBarTitle = (TextView) findViewById(R.id.txtActionBarTitle);
-			
-			BoschDrawerListFragment boschDrawerListFragment = (BoschDrawerListFragment) getSupportFragmentManager()
-				.findFragmentByTag(BoschDrawerListFragment.class.getSimpleName());
-			if (boschDrawerListFragment == null) {
-				addDrawerListFragment();
-			}
-			getSupportFragmentManager().executePendingTransactions();
-			
-			frmLayoutContentFrame = (FrameLayout) findViewById(R.id.content_frame);
+		txtActionBarTitle = (TextView) findViewById(R.id.txtActionBarTitle);
+		
+		BoschDrawerListFragment boschDrawerListFragment = (BoschDrawerListFragment) getSupportFragmentManager()
+			.findFragmentByTag(BoschDrawerListFragment.class.getSimpleName());
+		if (boschDrawerListFragment == null) {
+			addDrawerListFragment();
+		}
+		getSupportFragmentManager().executePendingTransactions();
+		
+		frmLayoutContentFrame = (FrameLayout) findViewById(R.id.content_frame);
+		
+		if (currentContentFragmentTag == null) {
 			selectItem(INDEX_NAV_ITEM_HOME);
-			updateColors();
-		}		
+		}
+		updateColors();
 	}
 
 	@Override
@@ -169,6 +176,12 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	}
 	
 	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putString(BundleKeys.CURRENT_CONTENT_FRAGMENT_TAG, currentContentFragmentTag);
+	}
+	
+	@Override
 	protected void onDestroy() {
 		EventSeekr.setConnectionFailureListener(null);
 		try {
@@ -176,6 +189,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			// and then the app gets crashed. So, the try catch catches the exception and helps to continue the 
 			// application without crashing.
 			super.onDestroy();
+			
 		} catch (Exception e) {
 			Log.e(TAG, "Error Destroying Activity : " + e.toString());
 		}
@@ -212,7 +226,9 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		super.onPostCreate(savedInstanceState);
 		// Log.d(TAG, "onPostCreate");
 		// Sync the toggle state after onRestoreInstanceState has occurred.
-		mDrawerToggle.syncState();
+		if (mDrawerToggle != null) {
+			mDrawerToggle.syncState();
+		}
 	}	
 	
 	/** Swaps fragments in the main content view */
@@ -322,7 +338,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		switch (item.getItemId()) {
 
 		case android.R.id.home:
-			if (mDrawerToggle.isDrawerIndicatorEnabled()) {
+			if (mDrawerToggle != null && mDrawerToggle.isDrawerIndicatorEnabled()) {
 				if (mDrawerLayout.isDrawerOpen(lnrLayoutRootNavDrawer)) {
 					mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
 
@@ -344,7 +360,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// Log.d(TAG, "onKeyDown");
 		if (keyCode == KeyEvent.KEYCODE_MENU) {
-			if (mDrawerToggle.isDrawerIndicatorEnabled()) {
+			if (mDrawerToggle != null && mDrawerToggle.isDrawerIndicatorEnabled()) {
 				if (mDrawerLayout.isDrawerOpen(lnrLayoutRootNavDrawer)) {
 					mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
 
@@ -389,6 +405,9 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		drawerItemSelectedPosition = drawerPosition;
 		if (drawerItemSelectedPosition != AppConstants.INVALID_INDEX) {
 			setDrawerIndicatorEnabled(true);
+			
+		} else {
+			setDrawerIndicatorEnabled(false);
 		}
 		currentContentFragmentTag = fragment.getClass().getSimpleName();
 		updateTitleForFragment(actionBarTitle, currentContentFragmentTag);

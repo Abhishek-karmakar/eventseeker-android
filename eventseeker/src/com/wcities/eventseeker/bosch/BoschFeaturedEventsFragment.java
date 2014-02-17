@@ -12,7 +12,6 @@ import android.widget.ProgressBar;
 
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.asynctask.LoadFeaturedEvts;
-import com.wcities.eventseeker.asynctask.LoadFeaturedEvts.OnLoadFeaturedEventsListener;
 import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
 import com.wcities.eventseeker.bosch.adapter.BoschEventListAdapter;
 import com.wcities.eventseeker.constants.AppConstants;
@@ -23,22 +22,14 @@ import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschFeaturedEventsFragment extends ListFragmentLoadableFromBackStack implements
-		OnLoadFeaturedEventsListener, OnClickListener, OnDisplayModeChangedListener {
+		OnClickListener, OnDisplayModeChangedListener {
 
 	private static final String TAG = BoschFeaturedEventsFragment.class.getName();
 	private ProgressBar prgbr;
 	private View rltContent;
-	private boolean isLoadingFeaturedEvents, isUILoading;
+	private boolean isLoadingFeaturedEvents;
 	private BoschEventListAdapter adapter;
 	private List<Event> eventList;
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		double latlon[] = DeviceUtil.getLatLon(FragmentUtil.getActivity(this));
-		AsyncTaskUtil.executeAsyncTask(new LoadFeaturedEvts(this, latlon[0], latlon[1]), true);		
-		isUILoading = true;
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,16 +49,33 @@ public class BoschFeaturedEventsFragment extends ListFragmentLoadableFromBackSta
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		isUILoading = false;
 		
-		if (isLoadingFeaturedEvents) {
+		double latlon[] = DeviceUtil.getLatLon(FragmentUtil.getActivity(this));
+		AsyncTaskUtil.executeAsyncTask(new LoadFeaturedEvts(latlon[0], latlon[1]) {
 			
-			prgbr.setVisibility(View.VISIBLE);
-			rltContent.setVisibility(View.INVISIBLE);		
+			@Override
+			protected void onPostExecute(List<Event> result) {
+				super.onPostExecute(result);
+				try {
+					/**
+					 * added code in try catch as some times when device gets disconnected when execution is in 
+					 * between of below 'if' block than app gets crash due to null pointer.
+					 */
+					prgbr.setVisibility(View.GONE);
+					rltContent.setVisibility(View.VISIBLE);		
+					
+					eventList = result;
+					
+					initailizeAdapter();
+					
+				} catch (Exception e) {
+					Log.e(TAG, "Error : " + e.toString() + " in onPostLoadingFeaturedEvents()");
+				}
+			}
+		}, true);
 		
-		} else if (adapter != null) {
-			initailizeAdapter();
-		}
+		prgbr.setVisibility(View.VISIBLE);
+		rltContent.setVisibility(View.INVISIBLE);		
 	}
 	
 	@Override
@@ -75,34 +83,6 @@ public class BoschFeaturedEventsFragment extends ListFragmentLoadableFromBackSta
 		super.onResume(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_featured));
 	}
 	
-	@Override
-	public void onPreLoadingFeaturedEvents() {
-		isLoadingFeaturedEvents = true;
-	}
-
-	@Override
-	public void onPostLoadingFeaturedEvents(List<Event> result) {
-		isLoadingFeaturedEvents = false;
-		
-		try {
-			/**
-			 * added code in try catch as some times when device gets disconnected when execution is in 
-			 * between of below 'if' block than app gets crash due to null pointer.
-			 */
-			if (!isUILoading) {
-				prgbr.setVisibility(View.GONE);
-				rltContent.setVisibility(View.VISIBLE);		
-				
-				eventList = result;
-				
-				initailizeAdapter();
-			}
-			
-		} catch (Exception e) {
-			Log.e(TAG, "Error : " + e.toString() + " in onPostLoadingFeaturedEvents()");
-		}
-	}
-
 	private void initailizeAdapter() {
 		adapter = new BoschEventListAdapter(FragmentUtil.getActivity(this), eventList, this);
 		setListAdapter(adapter);
