@@ -43,9 +43,11 @@ import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.interfaces.ConnectionFailureListener;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GPlusUtil;
+import com.wcities.eventseeker.util.NetworkUtil;
 
 public class GetStartedFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener, 
 		OnClickListener, DialogBtnClickListener {
@@ -264,6 +266,12 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
     			
     			@Override
     			public void onClick(View v) {
+    				ConnectionFailureListener connectionFailureListener = 
+    						((ConnectionFailureListener) FragmentUtil.getActivity(GetStartedFragment.this));
+    				if (!NetworkUtil.getConnectivityStatus((Context) connectionFailureListener)) {
+    					connectionFailureListener.onConnectionFailure();
+    					return;
+    				}
     				FbUtil.onClickLogin(GetStartedFragment.this, statusCallback);
     			}
     		});
