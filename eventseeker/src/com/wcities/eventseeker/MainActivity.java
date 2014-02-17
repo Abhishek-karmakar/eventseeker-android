@@ -3,6 +3,7 @@ package com.wcities.eventseeker;
 import java.util.List;
 import java.util.Set;
 
+import android.app.ActivityManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.ActivityNotFoundException;
@@ -11,6 +12,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -115,8 +117,6 @@ public class MainActivity extends ActionBarActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		//Log.d(TAG, "deviceId = " + DeviceUtil.getDeviceId((EventSeekr) getApplication()));
-		
 		try {
 			MySpinServerSDK.sharedInstance().registerApplication(getApplication());
 		} catch (MySpinException e) {
@@ -124,7 +124,7 @@ public class MainActivity extends ActionBarActivity implements
 		}
 		
 		if (MySpinServerSDK.sharedInstance().isConnected()) {
-			startActivity(new Intent(getApplicationContext(), BoschMainActivity.class));
+			startBoschMainActivity();
 		}
 		
 		/**
@@ -151,7 +151,6 @@ public class MainActivity extends ActionBarActivity implements
 
 		isDrawerIndicatorEnabled = true;
 		if (savedInstanceState != null) {
-
 			mTitle = savedInstanceState.getString(BundleKeys.ACTION_BAR_TITLE);
 			currentContentFragmentTag = savedInstanceState
 					.getString(BundleKeys.CURRENT_CONTENT_FRAGMENT_TAG);
@@ -270,6 +269,22 @@ public class MainActivity extends ActionBarActivity implements
 			startSyncProxyService();
 		}
 		//Log.d(TAG, "onCreate done");
+		
+		/**
+		 * Due to myspin bug sometimes it doesn't detect connected state instantly. To compensate for this 
+		 * we run a delayed task to recheck on connected state & refresh UI.
+		 */
+		if (!MySpinServerSDK.sharedInstance().isConnected()) {
+			new Handler().postDelayed(new Runnable() {
+				
+				@Override
+				public void run() {
+					if (MySpinServerSDK.sharedInstance().isConnected()) {
+						startBoschMainActivity();
+					}
+				}
+			}, 300);
+		}
 	}
 
 	@Override
@@ -615,6 +630,12 @@ public class MainActivity extends ActionBarActivity implements
 		} else {
 			return super.onKeyDown(keyCode, event);
 		}
+	}
+	
+	private void startBoschMainActivity() {
+		Intent intent = new Intent(getApplicationContext(), BoschMainActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+		startActivity(intent);
 	}
 	
 	public boolean isActivityonTop() {
@@ -1485,7 +1506,22 @@ public class MainActivity extends ActionBarActivity implements
 		if (isTabletAndInLandscapeMode && currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_LOGIN_SYNCING)) {
 			getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME);
 		}
-		super.onBackPressed();
+		
+		if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+			super.onBackPressed();
+			
+		} else {
+			/**
+			 * Here if we allow back press (super.onBackPressed();) then it can display unexpected result 
+			 * in following case:
+			 * 
+			 * Let's say user was browsing eventseeker app on bosch connected mode & finally was looking at 
+			 * event details screen. After this he disconnnects from bosch. So there are these bosch version app 
+			 * screens lying in the backstack. In this case pressing back button beyond the first screen 
+			 * of android version app, pops up those bosch version screens from back stack on android device.
+			 */
+			moveTaskToBack(true);
+		}
 	}
 	
 }

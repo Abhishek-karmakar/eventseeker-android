@@ -23,7 +23,6 @@ import android.widget.TextView;
 
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadFeaturedEvts;
-import com.wcities.eventseeker.asynctask.LoadFeaturedEvts.OnLoadFeaturedEventsListener;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Category;
@@ -34,8 +33,7 @@ import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public abstract class DiscoverParentFragment extends FragmentLoadableFromBackStack implements
-	OnLoadFeaturedEventsListener {
+public abstract class DiscoverParentFragment extends FragmentLoadableFromBackStack {
 
 	public static final String TAG = DiscoverParentFragment.class.getName();
 
@@ -110,7 +108,24 @@ public abstract class DiscoverParentFragment extends FragmentLoadableFromBackSta
 		 */
 
 		if (featuredEvts.isEmpty()) {
-			loadFeaturedEvts = new LoadFeaturedEvts(this, lat, lon);
+			loadFeaturedEvts = new LoadFeaturedEvts(lat, lon) {
+				
+				@Override
+				protected void onPreExecute() {
+					super.onPreExecute();
+					featuredEventsLoaded = false;
+					progressBar.setVisibility(View.VISIBLE);
+				}
+				
+				@Override
+				protected void onPostExecute(List<Event> result) {
+					super.onPostExecute(result);
+					featuredEvts = result;
+					featuredEventsLoaded = true;
+					progressBar.setVisibility(View.GONE);
+					notifyDataSetChanged();
+				}
+			};
 			loadFeaturedEvts.execute();
 		}
 
@@ -169,21 +184,6 @@ public abstract class DiscoverParentFragment extends FragmentLoadableFromBackSta
 		}
 	}
 	
-	@Override
-	public void onPreLoadingFeaturedEvents() {
-		featuredEventsLoaded = false;
-		progressBar.setVisibility(View.VISIBLE);
-	}
-	
-	@Override
-	public void onPostLoadingFeaturedEvents(List<Event> result) {
-		featuredEvts = result;
-		//Log.i(TAG, "onPostExecute");
-		featuredEventsLoaded = true;
-		progressBar.setVisibility(View.GONE);
-		notifyDataSetChanged();
-	}
-
 	private class EvtCategoriesListAdapter extends BaseAdapter {
 
 		private final HashMap<Integer, Integer> categoryImgs = new HashMap<Integer, Integer>() {

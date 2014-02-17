@@ -19,26 +19,13 @@ public class LoadFeaturedEvts extends AsyncTask<Void, Void, List<Event>> {
 	
 	private static final int FEATURED_EVTS_LIMIT = 5;
 
-	private OnLoadFeaturedEventsListener listener;
 	private double lat, lon;
 	
-	public interface OnLoadFeaturedEventsListener {
-		public void onPreLoadingFeaturedEvents();
-		public void onPostLoadingFeaturedEvents(List<Event> result);
-	}
-	
-	public LoadFeaturedEvts(OnLoadFeaturedEventsListener listener, double lat, double lon) {
-		this.listener = listener;
+	public LoadFeaturedEvts(double lat, double lon) {
 		this.lat = lat;
 		this.lon = lon;
 	}
 	
-	@Override
-	protected void onPreExecute() {
-		super.onPreExecute();
-		listener.onPreLoadingFeaturedEvents();
-	}
-
 	@Override
 	protected List<Event> doInBackground(Void... params) {
 		List<Event> events = new ArrayList<Event>();
@@ -60,10 +47,5 @@ public class LoadFeaturedEvts extends AsyncTask<Void, Void, List<Event>> {
 		}
 
 		return events;
-	}
-
-	@Override
-	protected void onPostExecute(List<Event> result) {
-		listener.onPostLoadingFeaturedEvents(result);
 	}
 }

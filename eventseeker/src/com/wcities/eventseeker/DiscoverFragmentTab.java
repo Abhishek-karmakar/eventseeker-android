@@ -148,6 +148,7 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 				    @Override
 				    public void onGlobalLayout() {
 			    		txtCityNameWInLandscape = txtCityName.getWidth();
+			    		//Log.d(TAG, "txtCityNameWInLandscape = " + txtCityNameWInLandscape);
 						txtCityName.getViewTreeObserver().removeGlobalOnLayoutListener(this);	
 			    		createCustomActionBar();
 				    }
