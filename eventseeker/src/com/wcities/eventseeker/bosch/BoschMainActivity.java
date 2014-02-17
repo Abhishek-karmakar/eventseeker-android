@@ -358,24 +358,10 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// Log.d(TAG, "onKeyDown");
-		if (keyCode == KeyEvent.KEYCODE_MENU) {
-			if (mDrawerToggle != null && mDrawerToggle.isDrawerIndicatorEnabled()) {
-				if (mDrawerLayout.isDrawerOpen(lnrLayoutRootNavDrawer)) {
-					mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
-
-				} else {
-					mDrawerLayout.openDrawer(lnrLayoutRootNavDrawer);
-				}
-				return true;
-
-			} else {
-				return super.onKeyDown(keyCode, event);
-			}
-
-		} else {
-			return super.onKeyDown(keyCode, event);
-		}
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+	        return true;
+	    }		
+		return super.onKeyDown(keyCode, event);
 	}
     
 	private void selectNonDrawerItem(Fragment replaceBy, boolean addToBackStack) {
@@ -566,4 +552,5 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		
 		dialog.show();
 	}
+	
 }
