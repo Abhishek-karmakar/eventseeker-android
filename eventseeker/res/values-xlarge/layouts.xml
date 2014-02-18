@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <item name="fragment_about" type="layout">@layout/fragment_about_us_tab</item>
+    <item name="fragment_about_us" type="layout">@layout/fragment_about_us_tab</item>
     <item name="fragment_following" type="layout">@layout/fragment_following_tab</item>
     <item name="fragment_discover" type="layout">@layout/fragment_discover_tab</item>
     <item name="grid_category" type="layout">@layout/grid_category_tab</item>

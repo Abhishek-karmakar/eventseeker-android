@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">eventseeker</string>
+    <string name="app_version">Version 1.0</string>
     
     <!-- development keys -->
     <string name="fb_app_id">687206491296790</string>

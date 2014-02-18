@@ -80,6 +80,7 @@ public class GeoUtil {
 						Address address = addresses.get(0);
 						cityName = address.getLocality();
 						geoUtilListener.onCitySearchCompleted(cityName);
+						EventSeekr.setCityName(cityName);
 						
 					} else {
 						Log.d(TAG, "No relevant address found.");
@@ -152,6 +153,7 @@ public class GeoUtil {
 		@Override
 		protected void onPostExecute(String result) {
 			listener.onCitySearchCompleted(result);
+			EventSeekr.setCityName(result);
 		}
 	}
 	
