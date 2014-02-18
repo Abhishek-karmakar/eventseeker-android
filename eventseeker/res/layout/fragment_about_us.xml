@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rltLayoutRoot"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrlLayoutRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dark_gray"
+    android:fillViewport="true"
     android:padding="@dimen/rlt_layout_root_pad_fragment_about_us" >
 
     <RelativeLayout
@@ -40,7 +41,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/txtSlogan"
-            android:layout_above="@+id/lnr_layout_icons"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="@dimen/txt_desc_margin_l_fragment_about_us"
             android:layout_marginRight="@dimen/txt_desc_margin_r_fragment_about_us"
@@ -53,7 +53,8 @@
             android:id="@+id/lnr_layout_icons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_below="@+id/txtDesc"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/lnr_layout_icons_margin_t_fragment_about_us"
             android:orientation="horizontal" >
 
@@ -92,24 +93,35 @@
                 android:src="@drawable/web" />
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/imgWcities"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lnr_layout_icons"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/img_wcities_margin_t_fragment_about_us"
+            android:src="@drawable/wcities" />
+
         <TextView
             android:id="@+id/txtPoweredBy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/imgWcities"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/txt_powered_by_margin_b_fragment_about_us"
             android:layout_marginTop="@dimen/txt_powered_by_margin_t_fragment_about_us"
             android:text="Powered By Wcities"
             android:textSize="@dimen/txt_powered_by_txt_size_fragment_about_us" />
 
-        <ImageView
-            android:id="@+id/imgWcities"
+        <TextView
+            android:id="@+id/txtVersion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@id/txtPoweredBy"
+            android:layout_below="@+id/txtPoweredBy"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/wcities" />
+            android:paddingBottom="@dimen/txt_version_margin_b_fragment_about_us"
+            android:text="@string/app_version"
+            android:textSize="@dimen/txt_powered_by_txt_size_fragment_about_us" />
     </RelativeLayout>
 
-</RelativeLayout>
+</ScrollView>

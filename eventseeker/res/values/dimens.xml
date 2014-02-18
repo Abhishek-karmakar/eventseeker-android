@@ -351,10 +351,12 @@
     <dimen name="txt_desc_margin_l_fragment_about_us">15dp</dimen>
     <dimen name="txt_desc_margin_r_fragment_about_us">@dimen/txt_desc_margin_l_fragment_about_us</dimen>
     <dimen name="txt_desc_txt_size_fragment_about_us">14sp</dimen>
-    <dimen name="lnr_layout_icons_margin_t_fragment_about_us">30dp</dimen>
+    <dimen name="lnr_layout_icons_margin_t_fragment_about_us">50dp</dimen>
     <dimen name="img_icons_margin_r_fragment_about_us">10dp</dimen>
     <dimen name="txt_powered_by_margin_t_fragment_about_us">5dp</dimen>
+    <dimen name="img_wcities_margin_t_fragment_about_us">70dp</dimen>
     <dimen name="txt_powered_by_margin_b_fragment_about_us">10dp</dimen>
+    <dimen name="txt_version_margin_b_fragment_about_us">20dp</dimen>
     <dimen name="txt_powered_by_txt_size_fragment_about_us">12sp</dimen>
     <!-- fragment_change_location.xml -->
     <dimen name="lnr_layout_root_pad_fragment_change_location">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>

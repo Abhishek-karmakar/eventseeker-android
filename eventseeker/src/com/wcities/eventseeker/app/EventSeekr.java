@@ -15,9 +15,7 @@ import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.util.DisplayMetrics;
-import android.util.Log;
 
-import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.Api;
@@ -72,6 +70,8 @@ public class EventSeekr extends Application {
 	
 	private FollowingList followingList;
 
+	private static String cityName;
+	
 	public interface EventSeekrListener {
 		public void onSyncCountUpdated(Service service);
 	}
@@ -82,6 +82,14 @@ public class EventSeekr extends Application {
 
 	public static void setConnectionFailureListener(ConnectionFailureListener connectionFailureListener) {
 		EventSeekr.connectionFailureListener = connectionFailureListener;
+	}
+
+	public static String getCityName() {
+		return cityName;
+	}
+
+	public static void setCityName(String cityName) {
+		EventSeekr.cityName = cityName;
 	}
 
 	@Override

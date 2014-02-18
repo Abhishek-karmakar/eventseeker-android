@@ -3,7 +3,6 @@ package com.wcities.eventseeker.bosch;
 import android.app.Activity;
 import android.location.Address;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -41,7 +40,10 @@ public class BoschHomeFragment extends FragmentLoadableFromBackStack implements 
 
 	@Override
 	public void onResume() {
-		GeoUtil.getCityName(this, (EventSeekr) FragmentUtil.getActivity(this).getApplication());
+		cityName = EventSeekr.getCityName();
+		if (cityName == null) {
+			GeoUtil.getCityName(this, (EventSeekr) FragmentUtil.getActivity(this).getApplication());
+		}
 		super.onResume(BoschMainActivity.INDEX_NAV_ITEM_HOME, buildTitle());
 	}
 	

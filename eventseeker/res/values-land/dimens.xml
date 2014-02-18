@@ -91,7 +91,7 @@
     <dimen name="btn_drawable_pad_friends_activity_item">5dp</dimen>
 
     <!-- fragment_about_us.xml -->
-    <dimen name="txt_app_name_margin_t_fragment_about_us">2dp</dimen>
+    <!-- <dimen name="txt_app_name_margin_t_fragment_about_us">2dp</dimen>
     <dimen name="txt_app_name_txt_size_fragment_about_us">30sp</dimen>
     <dimen name="txt_app_slogan_margin_t_fragment_about_us">-2dp</dimen>
     <dimen name="txt_app_slogan_txt_size_fragment_about_us">16sp</dimen>
@@ -102,7 +102,7 @@
     <dimen name="lnr_layout_icons_margin_t_fragment_about_us">5dp</dimen>
     <dimen name="txt_powered_by_margin_t_fragment_about_us">2dp</dimen>
     <dimen name="txt_powered_by_margin_b_fragment_about_us">4dp</dimen>
-    <dimen name="txt_powered_by_txt_size_fragment_about_us">10sp</dimen>
+    <dimen name="txt_powered_by_txt_size_fragment_about_us">10sp</dimen> -->
 
     <!-- fragment_rep_code.xml -->
     <dimen name="img_rep_code_margin_t_fragment_rep_code">20dp</dimen>
