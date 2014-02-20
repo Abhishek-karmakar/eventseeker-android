@@ -32,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.bosch.myspin.serversdk.IPhoneCallStateListener;
 import com.bosch.myspin.serversdk.MySpinException;
 import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.ford.syncV4.proxy.SyncProxyALM;
@@ -45,6 +46,7 @@ import com.wcities.eventseeker.GetStartedFragment.GetStartedFragmentListener;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.applink.service.AppLinkService;
+import com.wcities.eventseeker.bosch.BoschEventDetailsFragment;
 import com.wcities.eventseeker.bosch.BoschMainActivity;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -115,7 +117,7 @@ public class MainActivity extends ActionBarActivity implements
 	public static MainActivity getInstance() {
 		return instance;
 	}
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
