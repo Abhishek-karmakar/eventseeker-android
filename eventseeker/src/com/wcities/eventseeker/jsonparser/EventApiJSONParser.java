@@ -119,7 +119,7 @@ public class EventApiJSONParser {
 			}
 			
 			if (jObjEvent.has(KEY_DESC)) {
-				event.setDescription(ConversionUtil.removeBuggyTextsFromDesc(ConversionUtil.parseHtmlString(jObjEvent, KEY_DESC)));
+				event.setDescription(ConversionUtil.removeBuggyTextsFromDesc(ConversionUtil.decodeHtmlEntities(jObjEvent, KEY_DESC)));
 			}
 			
 			JSONObject jObjSchedule = jObjEvent.getJSONObject(KEY_SCHEDULE); 
@@ -235,18 +235,18 @@ public class EventApiJSONParser {
 	private Friend getFriend(JSONObject jsonObject) throws JSONException {
 		Friend friend = new Friend();
 		friend.setId(jsonObject.getString(KEY_ID));
-		friend.setName(ConversionUtil.parseHtmlString(jsonObject, KEY_NAME));
+		friend.setName(ConversionUtil.decodeHtmlEntities(jsonObject, KEY_NAME));
 		friend.setImgUrl(jsonObject.getString(KEY_IMAGE));
 		return friend;
 	}
 	
 	private Address getAddress(JSONObject jObjAddress) throws JSONException {
 		Address address = new Address();
-		address.setAddress1(ConversionUtil.parseHtmlString(jObjAddress, KEY_ADDRESS1));
+		address.setAddress1(ConversionUtil.decodeHtmlEntities(jObjAddress, KEY_ADDRESS1));
 		if (jObjAddress.has(KEY_ADDRESS2)) {
-			address.setAddress2(ConversionUtil.parseHtmlString(jObjAddress, KEY_ADDRESS2));
+			address.setAddress2(ConversionUtil.decodeHtmlEntities(jObjAddress, KEY_ADDRESS2));
 		}
-		address.setCity(ConversionUtil.parseHtmlString(jObjAddress, KEY_CITY));
+		address.setCity(ConversionUtil.decodeHtmlEntities(jObjAddress, KEY_CITY));
 		address.setCountry(getCountry(jObjAddress.getJSONObject(KEY_COUNTRY)));
 		if (jObjAddress.has(KEY_LATITUDE)) {
 			String strLat = jObjAddress.getString(KEY_LATITUDE);
@@ -263,7 +263,7 @@ public class EventApiJSONParser {
 	
 	private Country getCountry(JSONObject jsonObject) throws JSONException {
 		Country country = new Country();
-		country.setName(ConversionUtil.parseHtmlString(jsonObject, KEY_NAME));
+		country.setName(ConversionUtil.decodeHtmlEntities(jsonObject, KEY_NAME));
 		return country;
 	}
 	
@@ -307,7 +307,7 @@ public class EventApiJSONParser {
 		BookingInfo bookingInfo = new BookingInfo();
 		bookingInfo.setBookingUrl(jObjBookinglink.getString(KEY_BOOKING_URL));
 		if (jObjBookinglink.has(KEY_PROVIDER)) {
-			bookingInfo.setProvider(ConversionUtil.parseHtmlString(jObjBookinglink, KEY_PROVIDER));
+			bookingInfo.setProvider(ConversionUtil.decodeHtmlEntities(jObjBookinglink, KEY_PROVIDER));
 		}
 		if (jObjBookinglink.has(KEY_PRICE)) {
 			JSONObject jObjPrice = jObjBookinglink.getJSONObject(KEY_PRICE);
@@ -319,7 +319,7 @@ public class EventApiJSONParser {
 	}
 	
 	private Artist getArtist(JSONObject jsonObject) throws JSONException {
-		Artist artist = new Artist(jsonObject.getInt(KEY_ARTIST_ID), ConversionUtil.parseHtmlString(jsonObject, KEY_ARTIST_NAME));
+		Artist artist = new Artist(jsonObject.getInt(KEY_ARTIST_ID), ConversionUtil.decodeHtmlEntities(jsonObject, KEY_ARTIST_NAME));
 		if (jsonObject.has(KEY_ARTIST_IMAGE)) {
 			JSONObject jObjArtistImage = jsonObject.getJSONObject(KEY_ARTIST_IMAGE);
 			
@@ -404,7 +404,7 @@ public class EventApiJSONParser {
 	
 	private Venue getVenue(JSONObject jsonObject) throws JSONException {
 		Venue venue = new Venue(jsonObject.getInt(KEY_ID));
-		venue.setName(ConversionUtil.parseHtmlString(jsonObject, KEY_NAME));
+		venue.setName(ConversionUtil.decodeHtmlEntities(jsonObject, KEY_NAME));
 		if (jsonObject.has(KEY_ADDRESS)) {
 			venue.setAddress(getAddress(jsonObject.getJSONObject(KEY_ADDRESS)));
 		}
@@ -456,19 +456,19 @@ public class EventApiJSONParser {
 	}
 	
 	private Event getEvent(JSONObject jsonObject, SparseArray<Venue> venues) throws JSONException {
-		Event event = new Event(jsonObject.getInt(KEY_ID), ConversionUtil.parseHtmlString(jsonObject, KEY_NAME));
+		Event event = new Event(jsonObject.getInt(KEY_ID), ConversionUtil.decodeHtmlEntities(jsonObject, KEY_NAME));
 		boolean hasArtists = jsonObject.has(KEY_ARTIST) ? true : false;
 		event.setHasArtists(hasArtists);
 		
 		if (jsonObject.has(KEY_DESC)) {
-			event.setDescription(ConversionUtil.removeBuggyTextsFromDesc(ConversionUtil.parseHtmlString(
+			event.setDescription(ConversionUtil.removeBuggyTextsFromDesc(ConversionUtil.decodeHtmlEntities(
 					jsonObject, KEY_DESC)));
 		}
 		if (jsonObject.has(KEY_CITY_ID)) {
 			event.setCityId(jsonObject.getInt(KEY_CITY_ID));
 		}
 		if (jsonObject.has(KEY_CITY_NAME)) {
-			event.setCityName(ConversionUtil.parseHtmlString(jsonObject, KEY_CITY_NAME));
+			event.setCityName(ConversionUtil.decodeHtmlEntities(jsonObject, KEY_CITY_NAME));
 		}
 		if (jsonObject.has(KEY_IMAGE)) {
 			event.setImageUrl(jsonObject.getString(KEY_IMAGE));
@@ -494,7 +494,7 @@ public class EventApiJSONParser {
 				eventTime = jsonObject.getString(KEY_EVENT_TIME);
 			}
 			int venueId = jsonObject.getInt(KEY_VENUE_ID);
-			String venueName = ConversionUtil.parseHtmlString(jsonObject, KEY_VENUE_NAME);
+			String venueName = ConversionUtil.decodeHtmlEntities(jsonObject, KEY_VENUE_NAME);
 			event.setSchedule(buildSchedule(startDates, eventTime, venueId, venueName, null));
 			
 			Venue venue = event.getSchedule().getVenue();

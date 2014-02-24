@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.util.Log;
 
 import com.facebook.HttpMethod;
@@ -298,7 +299,7 @@ public class FbUtil {
             postParams.putString("caption", caption);
         }
         String description = event.getDescription() == null ? " " : event.getDescription();
-        postParams.putString("description", description);
+        postParams.putString("description", Html.fromHtml(description).toString());
         
         String link = event.getEventUrl();
         if (link == null) {

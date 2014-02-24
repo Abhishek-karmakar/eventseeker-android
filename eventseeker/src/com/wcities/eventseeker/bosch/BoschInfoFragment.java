@@ -3,6 +3,7 @@ package com.wcities.eventseeker.bosch;
 import java.text.SimpleDateFormat;
 
 import android.os.Bundle;
+import android.text.Html;
 import android.text.TextUtils.TruncateAt;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -101,7 +102,7 @@ public class BoschInfoFragment extends FragmentLoadableFromBackStack implements 
 			description = "Description Unavailable";
 		}
 		
-		txtDescription.setText(description);
+		txtDescription.setText(Html.fromHtml(description));
 		updateDescriptionLines();
 		
 		updateColors();

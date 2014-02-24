@@ -74,10 +74,10 @@ public class RecordApiJSONParser {
 	private Venue getVenue(JSONObject jsonObject, Venue venue) throws JSONException {
 		if (venue == null) {
 			venue = new Venue(jsonObject.getInt(KEY_ID));
-			venue.setName(ConversionUtil.parseHtmlString(jsonObject, KEY_NAME));
+			venue.setName(ConversionUtil.decodeHtmlEntities(jsonObject, KEY_NAME));
 		}
 		if (jsonObject.has(KEY_LONG_DESC)) {
-			venue.setLongDesc(ConversionUtil.removeBuggyTextsFromDesc(ConversionUtil.parseHtmlString(
+			venue.setLongDesc(ConversionUtil.removeBuggyTextsFromDesc(ConversionUtil.decodeHtmlEntities(
 					jsonObject, KEY_LONG_DESC)));
 		}
 		
@@ -118,11 +118,11 @@ public class RecordApiJSONParser {
 	
 	private Address getAddress(JSONObject jsonObject) throws JSONException {
 		Address address = new Address();
-		address.setAddress1(ConversionUtil.parseHtmlString(jsonObject, KEY_ADDRESS1));
+		address.setAddress1(ConversionUtil.decodeHtmlEntities(jsonObject, KEY_ADDRESS1));
 		if (jsonObject.has(KEY_ADDRESS2)) {
-			address.setAddress2(ConversionUtil.parseHtmlString(jsonObject, KEY_ADDRESS2));
+			address.setAddress2(ConversionUtil.decodeHtmlEntities(jsonObject, KEY_ADDRESS2));
 		}
-		address.setCity(ConversionUtil.parseHtmlString(jsonObject, KEY_CITY));
+		address.setCity(ConversionUtil.decodeHtmlEntities(jsonObject, KEY_CITY));
 		address.setCountry(getCountry(jsonObject.getJSONObject(KEY_COUNTRY)));
 		if (jsonObject.has(KEY_LATITUDE)) {
 			String strLat = jsonObject.getString(KEY_LATITUDE);
@@ -139,7 +139,7 @@ public class RecordApiJSONParser {
 	
 	private Country getCountry(JSONObject jsonObject) throws JSONException {
 		Country country = new Country();
-		country.setName(ConversionUtil.parseHtmlString(jsonObject, KEY_NAME));
+		country.setName(ConversionUtil.decodeHtmlEntities(jsonObject, KEY_NAME));
 		return country;
 	}
 }

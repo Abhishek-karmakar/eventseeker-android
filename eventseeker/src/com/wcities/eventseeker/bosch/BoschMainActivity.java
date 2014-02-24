@@ -71,7 +71,8 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		
 		@Override
 		public void onPhoneCallStateChanged(int arg0) {
-			Log.d(TAG, "onPhoneCallStateChanged() - arg0 = " + arg0);
+			//Toast.makeText(BoschMainActivity.this, "onPhoneCallStateChanged() - arg0 = " + arg0, Toast.LENGTH_LONG).show();
+			//Log.d(TAG, "onPhoneCallStateChanged() - arg0 = " + arg0);
 			if (arg0 == IPhoneCallStateListener.PHONECALLSTATE_REJECTED || 
 					arg0 == IPhoneCallStateListener.PHONECALLSTATE_ENDED) {
 				selfStart();
@@ -484,9 +485,11 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	}
 	
 	private void selfStart() {
-		Intent intent = new Intent(getApplicationContext(), BoschMainActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-		startActivity(intent);
+		if (MySpinServerSDK.sharedInstance().isConnected()) {
+			Intent intent = new Intent(getApplicationContext(), BoschMainActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+			startActivity(intent);
+		}
 	}
 
 	@Override

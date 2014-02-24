@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Html;
 import android.text.TextUtils.TruncateAt;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -307,7 +308,7 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 		rltLayoutEvtDesc.setVisibility(View.VISIBLE);
 		imgDown.setOnClickListener(this);
 
-		txtEvtDesc.setText(event.getDescription());
+		txtEvtDesc.setText(Html.fromHtml(event.getDescription()));
 
 		if (isEvtDescExpanded) {
 			expandEvtDesc();
