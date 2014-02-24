@@ -285,6 +285,7 @@ public class EventSeekr extends Application {
 		editor.putString(SharedPrefKeys.FACEBOOK_USER_ID, fbUserId);
 		editor.commit();
 		
+		//For safety purpose
 		GPlusUtil.callGPlusLogout(null, this);
 		
 		new GetWcitiesId(listener, LoginType.facebook, null).execute();
@@ -344,6 +345,7 @@ public class EventSeekr extends Application {
 		editor.putString(SharedPrefKeys.GOOGLE_PLUS_USER_ID, gPlusUserId);
 		editor.commit();
 		
+		//For safety purpose
 		FbUtil.callFacebookLogout(this);
 		
 		updateGPlusAccountName(accountName);

@@ -1,10 +1,15 @@
 package com.wcities.eventseeker;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -14,10 +19,19 @@ import com.wcities.eventseeker.util.FragmentUtil;
 
 public class AboutUsFragment extends FragmentLoadableFromBackStack implements OnClickListener {
 
+	private String version;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
+		try {
+			PackageManager manager = FragmentUtil.getActivity(this).getPackageManager();
+			PackageInfo info = manager.getPackageInfo(FragmentUtil.getActivity(this).getPackageName(), 0);
+			version = info.versionName;
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
@@ -29,6 +43,7 @@ public class AboutUsFragment extends FragmentLoadableFromBackStack implements On
 		view.findViewById(R.id.imgTwitter).setOnClickListener(this);
 		view.findViewById(R.id.imgBlog).setOnClickListener(this);
 		view.findViewById(R.id.imgWeb).setOnClickListener(this);
+		((TextView) view.findViewById(R.id.txtVersion)).setText("Version " + version);
 		return view;
 	}
 

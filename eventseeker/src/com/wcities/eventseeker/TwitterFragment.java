@@ -3,6 +3,7 @@ package com.wcities.eventseeker;
 import twitter4j.Twitter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,8 +41,8 @@ public class TwitterFragment extends FragmentLoadableFromBackStack {
 		webView.setWebViewClient(new WebViewClient() {
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
-				if (url.contains(AppConstants.TWITTER_CALLBACK_URL)) {
-					//Log.d(TAG, "url = " + url);
+				if (url.contains(AppConstants.TWITTER_CALLBACK_URL) && url.contains("oauth_token")) {
+					Log.d(TAG, "url = " + url);
 					ServiceAccount serviceAccount = (ServiceAccount) getArguments().getSerializable(
 							BundleKeys.SERVICE_ACCOUNTS);
 					serviceAccount.isInProgress = true;
@@ -52,6 +53,7 @@ public class TwitterFragment extends FragmentLoadableFromBackStack {
 					args.putString(BundleKeys.OAUTH_VERIFIER, oauthVerifier);
 					args.putSerializable(BundleKeys.TWITTER, twitter);
 					
+					Log.d(TAG, "Syncying : oauthVerifier : " + oauthVerifier + ", twitter : " + twitter);
 					((ReplaceFragmentListener)FragmentUtil.getActivity(TwitterFragment.this))
 						.replaceByFragment(AppConstants.FRAGMENT_TAG_TWITTER_SYNCING, args);
 					
@@ -60,7 +62,7 @@ public class TwitterFragment extends FragmentLoadableFromBackStack {
 				
 				EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(TwitterFragment.this).getApplicationContext();
 				eventSeekr.setSyncCount(Service.Twitter, EventSeekr.UNSYNC_COUNT);
-
+				FragmentUtil.getActivity(TwitterFragment.this).onBackPressed();
 				return false;
 			}
 		});

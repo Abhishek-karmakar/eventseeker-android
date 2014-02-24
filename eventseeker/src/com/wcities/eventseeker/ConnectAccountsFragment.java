@@ -13,6 +13,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
+import android.content.res.Resources;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -77,8 +78,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     private static final String TXT_BTN_SKIP = "Skip";
     
 	private static final String DIALOG_FRAGMENT_TAG_SKIP = "skipDialog";
-    
-    private boolean isFirstTimeLaunch;
+	private static final String DIALOG_ALREADY_LOGGED_IN_WITH_OTHER_ACCOUNT = "alreadyLoggedInWithOtherAccount";
     
     public static enum Service {
     	Title(0,"Title",R.drawable.placeholder),
@@ -141,7 +141,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	private List<ServiceAccount> serviceAccounts;
 	private LoadMyEventsCount loadMyEventsCount;
 	
-	private boolean fbLoggedIn, gPlusSignedIn, isProgressVisible;
+	private boolean fbLoggedIn, gPlusSignedIn, isProgressVisible, isFirstTimeLaunch;
 	
 	private LinearLayout lnrLayoutProgress;
 	
@@ -149,6 +149,8 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	private ConnectionResult mConnectionResult;
 
     private Session.StatusCallback statusCallback = new SessionStatusCallback();
+
+	private Resources res;
     
     public interface ConnectAccountsFragmentListener {
     	public void onServiceSelected(Service service, Bundle args, boolean addToBackStack);
@@ -177,6 +179,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		eventSeekr.updateFirstTimeLaunch(false);
 		
 		mPlusClient = GPlusUtil.createPlusClientInstance(this, this, this);
+		res = getResources();
 	}
 	
 	@Override
@@ -336,9 +339,9 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	private void updateView() {
 		//Log.d(TAG, "updateView()");
         final Session session = Session.getActiveSession();
-        Log.d(TAG, "session state = " + session.getState().name());
+        //Log.d(TAG, "session state = " + session.getState().name());
         if (session.isOpened()) {
-        	Log.d(TAG, "session is opened");
+        	//Log.d(TAG, "session is opened");
         	FbUtil.makeMeRequest(session, new Request.GraphUserCallback() {
 
     			@Override
@@ -380,8 +383,10 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	
 	private void connectPlusClient() {
     	//Log.d(TAG, "connectPlusClient()");
+    	//Log.d(TAG, "mPlusClient.isConnected() : " + mPlusClient.isConnected());
+    	//Log.d(TAG, "mPlusClient.isConnecting() : " + mPlusClient.isConnecting());
     	if (!mPlusClient.isConnected() && !mPlusClient.isConnecting()) {
-    		//Log.d(TAG, "try connecting");
+    		Log.d(TAG, "try connecting");
     		mConnectionResult = null;
     		mPlusClient.connect();
     	}
@@ -567,6 +572,15 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			switch (service) {
 			
 			case Facebook:
+				if (gPlusSignedIn) {
+					GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
+							res.getString(R.string.are_you_sure),
+							res.getString(R.string.already_signed_in_with_google_account),
+							"Cancel", "Ok");
+					generalDialogFragment.show(getChildFragmentManager(), DIALOG_ALREADY_LOGGED_IN_WITH_OTHER_ACCOUNT);
+					return;
+				}
+				
 				if (fbLoggedIn) {
 					FbUtil.callFacebookLogout((EventSeekr)FragmentUtil.getActivity(ConnectAccountsFragment.this).getApplication());
 					//serviceAccounts.get(0).name = FB_LOGIN;
@@ -575,18 +589,21 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 					
 				} else {
 					//isGPlusSignInClicked = false;
-					ConnectionFailureListener connectionFailureListener = 
-    						((ConnectionFailureListener) FragmentUtil.getActivity(ConnectAccountsFragment.this));
-    				if (!NetworkUtil.getConnectivityStatus((Context) connectionFailureListener)) {
-    					connectionFailureListener.onConnectionFailure();
-    					return;
-    				}
-					FbUtil.onClickLogin(ConnectAccountsFragment.this, statusCallback);
+					signInWithFacebook();
 				}
 				break;
 				
 			case GooglePlus:
 				//Log.d(TAG, "onClick() - google plus, gPlusSignedIn = " + gPlusSignedIn);
+				if (fbLoggedIn) {
+					GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
+							res.getString(R.string.are_you_sure),
+							res.getString(R.string.already_signed_in_with_facebook_account),
+							"Cancel", "Ok");
+					generalDialogFragment.show(getChildFragmentManager(), DIALOG_ALREADY_LOGGED_IN_WITH_OTHER_ACCOUNT);
+					return;
+				}
+				
 				if (gPlusSignedIn) {
 					GPlusUtil.callGPlusLogout(mPlusClient, (EventSeekr)FragmentUtil.getActivity(ConnectAccountsFragment.this).getApplication());
 					gPlusSignedIn = false;
@@ -594,30 +611,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 					
 				} else {
 					//isGPlusSignInClicked = true;
-					
-	                int available = GooglePlayServicesUtil.isGooglePlayServicesAvailable(
-	                		FragmentUtil.getActivity(ConnectAccountsFragment.this));
-					if (available != ConnectionResult.SUCCESS) {
-						GPlusUtil.showDialogForGPlayServiceUnavailability(available, ConnectAccountsFragment.this);
-	                    return;
-	                }
-					
-					//Log.d(TAG, "mConnectionResult = " + mConnectionResult);
-					// if previously onConnectionFailed() has returned some result, resolve it
-					if (mConnectionResult != null) {
-			        	//Log.d(TAG, "mConnectionResult is not null");
-			            try {
-			                mConnectionResult.startResolutionForResult(FragmentUtil.getActivity(
-			                		ConnectAccountsFragment.this), AppConstants.REQ_CODE_GOOGLE_PLUS_RESOLVE_ERR);
-			                
-			            } catch (SendIntentException e) {
-			                // Try connecting again.
-			                connectPlusClient();
-			            }
-			            
-			        } else {
-			        	connectPlusClient();
-			        }
+	              signInWithGoogle();
 				}
 				break;
 				
@@ -625,7 +619,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				break;
 				
 			case Twitter:
-				Log.d(TAG, "twitter");
+				//Log.d(TAG, "twitter");
 				ConfigurationBuilder builder = new ConfigurationBuilder();
 	            builder.setOAuthConsumerKey(AppConstants.TWITTER_CONSUMER_KEY);
 	            builder.setOAuthConsumerSecret(AppConstants.TWITTER_CONSUMER_SECRET);
@@ -638,7 +632,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
                     @Override
                     public void run() {
                         try {
-                        	Log.d(TAG, "twitter run");
+                        	//Log.d(TAG, "twitter run");
                             final RequestToken requestToken = twitter.getOAuthRequestToken(AppConstants.TWITTER_CALLBACK_URL);
                             
                             FragmentUtil.getActivity(ConnectAccountsFragment.this).runOnUiThread(new Runnable() {
@@ -676,6 +670,44 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			}
 		}
 		
+		private void signInWithFacebook() {
+			ConnectionFailureListener connectionFailureListener = 
+					((ConnectionFailureListener) FragmentUtil.getActivity(ConnectAccountsFragment.this));
+			if (!NetworkUtil.getConnectivityStatus((Context) connectionFailureListener)) {
+				connectionFailureListener.onConnectionFailure();
+				return;
+			}
+			FbUtil.onClickLogin(ConnectAccountsFragment.this, statusCallback);			
+		}
+
+		protected void signInWithGoogle() {
+			int available = GooglePlayServicesUtil.isGooglePlayServicesAvailable(
+					FragmentUtil.getActivity(ConnectAccountsFragment.this));
+			Log.d(TAG, "available : " + available);
+			if (available != ConnectionResult.SUCCESS) {
+				GPlusUtil.showDialogForGPlayServiceUnavailability(available, ConnectAccountsFragment.this);
+              return;
+			}
+			
+			Log.d(TAG, "mConnectionResult : " + mConnectionResult);
+			//Log.d(TAG, "mConnectionResult = " + mConnectionResult);
+			// if previously onConnectionFailed() has returned some result, resolve it
+			if (mConnectionResult != null) {
+	        	//Log.d(TAG, "mConnectionResult is not null");
+	            try {
+	                mConnectionResult.startResolutionForResult(FragmentUtil.getActivity(
+	                		ConnectAccountsFragment.this), AppConstants.REQ_CODE_GOOGLE_PLUS_RESOLVE_ERR);
+	                
+	            } catch (SendIntentException e) {
+	                // Try connecting again.
+	                connectPlusClient();
+	            }
+	            
+	        } else {
+	        	connectPlusClient();
+	        }			
+		}
+
 		private class AccountViewHolder {
 			private RelativeLayout rltLayoutServiceDetails;
 			private ImageView imgService, imgPlus, imgProgressBar;
@@ -704,7 +736,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			}
 		}
 	};
-	
+
 	private void onContinueClick() {
 		String wcitiesId = ((EventSeekr)FragmentUtil.getActivity(ConnectAccountsFragment.this)
 				.getApplication()).getWcitiesId();
@@ -745,7 +777,18 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	
 	@Override
 	public void doPositiveClick(String dialogTag) {
-		onContinueClick();
+		if (dialogTag.equals(DIALOG_ALREADY_LOGGED_IN_WITH_OTHER_ACCOUNT)) {
+			if (fbLoggedIn) {
+				FbUtil.callFacebookLogout(((EventSeekr) FragmentUtil.getActivity(this).getApplication()));
+				listAdapter.signInWithGoogle();
+			} else {
+				GPlusUtil.callGPlusLogout(mPlusClient, ((EventSeekr) FragmentUtil.getActivity(this).getApplication()));
+				listAdapter.signInWithFacebook();				
+			}
+		}
+		if (dialogTag.equals(DIALOG_FRAGMENT_TAG_SKIP)) {
+			onContinueClick();
+		}
 	}
 
 	@Override
@@ -766,7 +809,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			@Override
 			public void run() {
 				
-				Log.d(TAG, "run");
+				//Log.d(TAG, "run");
 				
 				if (serviceAccounts != null) {
 				
@@ -822,7 +865,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 
 	@Override
 	public void onConnected(Bundle arg0) {
-		Log.d(TAG, "onConnected(), signedIn = " + gPlusSignedIn);
+		//Log.d(TAG, "onConnected(), signedIn = " + gPlusSignedIn);
 		if (!gPlusSignedIn) {
 			//isGPlusSigningIn = false;
 			
@@ -833,7 +876,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	        	listAdapter.notifyDataSetChanged();
 
 	            String personId = currentPerson.getId();
-	            Log.d(TAG, "id = " + personId);
+	            //Log.d(TAG, "id = " + personId);
 	            Bundle bundle = new Bundle();
 	            bundle.putSerializable(BundleKeys.LOGIN_TYPE, LoginType.googlePlus);
 	        	bundle.putString(BundleKeys.GOOGLE_PLUS_USER_ID, personId);

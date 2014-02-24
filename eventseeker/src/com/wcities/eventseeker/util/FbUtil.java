@@ -282,9 +282,13 @@ public class FbUtil {
 	    Session session = Session.getActiveSession();
 
         Bundle postParams = new Bundle();
-        String name = "I am going to an event ";
+        String userName = ((EventSeekr) FragmentUtil.getActivity(fragment).getApplication()).getFbUserName();
+        if (userName == null) {
+        	return;
+        }
+        String name = userName + " is going to an event ";
         if (event.getAttending() == Attending.WANTS_TO_GO) {
-        	name = "I want to go to an event ";
+        	name = userName + " wants to go to an event ";
         }
         name += "'" + event.getName() + "' on eventseeker";
         postParams.putString("name", name);
@@ -354,9 +358,13 @@ public class FbUtil {
 	    Session session = Session.getActiveSession();
 
         Bundle postParams = new Bundle();
-        String name = "I am going to an event ";
+        String userName = ((EventSeekr) FragmentUtil.getActivity(fragment).getApplication()).getFbUserName();
+        if (userName == null) {
+        	return;
+        }
+        String name = userName + " is going to an event ";
         if (item.getUserAttending() == Attending.WANTS_TO_GO) {
-        	name = "I want to go to an event ";
+        	name = userName + " wants to go to an event ";
         }
         name += "'" + item.getTrackName() + "' on eventseeker";
         postParams.putString("name", name);
