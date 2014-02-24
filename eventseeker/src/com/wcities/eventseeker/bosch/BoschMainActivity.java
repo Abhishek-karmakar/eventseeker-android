@@ -2,6 +2,7 @@ package com.wcities.eventseeker.bosch;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
@@ -22,8 +23,10 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bosch.myspin.serversdk.IOnCarDataChangeListener;
+import com.bosch.myspin.serversdk.IPhoneCallStateListener;
 import com.bosch.myspin.serversdk.MySpinException;
 import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.wcities.eventseeker.MainActivity;
@@ -41,6 +44,7 @@ import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
+import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschMainActivity extends ActionBarActivity implements ReplaceFragmentListener, 
 		EventListener, ArtistListener, VenueListener, FragmentLoadedFromBackstackListener, 
@@ -62,6 +66,18 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 
 	private TextView txtActionBarTitle;
 	private FrameLayout frmLayoutContentFrame;
+	
+	private IPhoneCallStateListener iPhoneCallStateListener = new IPhoneCallStateListener() {
+		
+		@Override
+		public void onPhoneCallStateChanged(int arg0) {
+			Log.d(TAG, "onPhoneCallStateChanged() - arg0 = " + arg0);
+			if (arg0 == IPhoneCallStateListener.PHONECALLSTATE_REJECTED || 
+					arg0 == IPhoneCallStateListener.PHONECALLSTATE_ENDED) {
+				selfStart();
+			}
+		}
+	};
 
 	public interface OnCarStationaryStatusChangedListener {
 		public void onCarStationaryStatusChanged(boolean isStationary);
@@ -82,6 +98,8 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		}
 		
 		setContentView(R.layout.activity_bosch_main);
+		
+		MySpinServerSDK.sharedInstance().registerForPhoneCallStateEvents(iPhoneCallStateListener);
 
 		EventSeekr.setConnectionFailureListener(this);
 			
@@ -184,6 +202,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	@Override
 	protected void onDestroy() {
 		EventSeekr.setConnectionFailureListener(null);
+		MySpinServerSDK.sharedInstance().unregisterForPhoneCallStateEvents();
 		try {
 			// calling 'super.onDestroy()' in try catch as some times it gives no view found error while destroying
 			// and then the app gets crashed. So, the try catch catches the exception and helps to continue the 
@@ -462,6 +481,12 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		}
 		
 		dialog.show();
+	}
+	
+	private void selfStart() {
+		Intent intent = new Intent(getApplicationContext(), BoschMainActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+		startActivity(intent);
 	}
 
 	@Override

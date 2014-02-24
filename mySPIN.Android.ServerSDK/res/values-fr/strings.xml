@@ -1,0 +1,14 @@
+<resources>    
+
+	<!-- Keyboard -->
+    <string name="keyboard_space">Espace</string>
+    <string name="keyboard_done">OK</string>
+    <string name="keyboard_go">OK</string>
+    <string name="keyboard_next">Suivant</string>
+    <string name="keyboard_prev">Préc</string>
+    <string name="keyboard_search">Rechercher</string>
+    <string name="keyboard_ok">OK</string>
+    <string name="keyboard_abc">ABC</string>
+    <string name="connected_screen_status_text">Connecté avec votre véhicule</string>
+
+</resources>

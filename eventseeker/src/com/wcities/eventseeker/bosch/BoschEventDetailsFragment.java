@@ -2,6 +2,8 @@ package com.wcities.eventseeker.bosch;
 
 import java.text.SimpleDateFormat;
 
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -14,9 +16,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bosch.myspin.serversdk.IPhoneCallStateListener;
 import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.VenueInfoFragment;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -61,7 +66,7 @@ public class BoschEventDetailsFragment extends FragmentLoadableFromBackStack imp
 	private boolean isEventLoading;
 
 	private View lnrContent;
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -105,7 +110,7 @@ public class BoschEventDetailsFragment extends FragmentLoadableFromBackStack imp
 		btnArtists2.setOnClickListener(this);
 		
 		updateColors();
-
+		
 		return view;
 	}
 	
@@ -126,7 +131,7 @@ public class BoschEventDetailsFragment extends FragmentLoadableFromBackStack imp
 	public void onResume() {
 		super.onResume(AppConstants.INVALID_INDEX, event.getName());
 	}
-
+	
 	private void updateScreen() {
 		updateEventImg();
 		updateFollowBtn();
@@ -219,7 +224,7 @@ public class BoschEventDetailsFragment extends FragmentLoadableFromBackStack imp
 		txtDistance.setBackgroundColor(getResources().getColor(bgColor));
 		txtVenueName.setBackgroundColor(getResources().getColor(bgColor));
 	}
-
+	
 	@Override
 	public void onClick(View v) {
 		Bundle args;

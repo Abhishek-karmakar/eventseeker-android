@@ -28,6 +28,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bosch.myspin.serversdk.IPhoneCallStateListener;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.RecordApi;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
@@ -63,7 +64,7 @@ public class VenueInfoFragment extends Fragment implements OnClickListener, Asyn
 	private boolean isTablet;
 
 	private TextView txtVenueAddress;
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

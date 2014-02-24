@@ -68,8 +68,8 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	
     private static final String TAG = ConnectAccountsFragment.class.getName();
     
-    private static final String FB_LOGIN = "Facebook Log In";
-    private static final String FB_LOGOUT = "Facebook Log Out";
+    private static final String FB_SIGN_IN = "Facebook Sign In";
+    private static final String FB_SIGN_OUT = "Facebook Sign Out";
     
     private static final String GOOGLE_SIGN_IN = "Google Sign In";
     private static final String GOOGLE_SIGN_OUT = "Google Sign Out";
@@ -457,10 +457,10 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				if (!isFirstTimeLaunch) { 
 					if (Service.Facebook.isOf(serviceAccount.name)) {
 						if (fbLoggedIn) {
-							holder.txtServiceName.setText(FB_LOGOUT);
+							holder.txtServiceName.setText(FB_SIGN_OUT);
 							
 			        	} else {
-			        		holder.txtServiceName.setText(FB_LOGIN);
+			        		holder.txtServiceName.setText(FB_SIGN_IN);
 			        	}
 						
 					} else if (Service.GooglePlus.isOf(serviceAccount.name)) {
