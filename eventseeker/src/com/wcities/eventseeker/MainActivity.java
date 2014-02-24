@@ -1113,7 +1113,21 @@ public class MainActivity extends ActionBarActivity implements
 		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_TWITTER_SYNCING)) {
 			//Log.d(TAG, "FRAGMENT_TAG_TWITTER_SYNCING");
 			if (currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_TWITTER)) {
-				onBackPressed();
+				try {
+					/**
+					 * added this try catch as the app was crashing when user presses the twitter button to sync and
+					 * after that if he immediately presses home then after around 2-3 sec, app was crashing with
+					 * following error : java.lang.IllegalStateException: Can not perform this action after 
+					 * onSaveInstanceState
+					 */
+					onBackPressed();
+				} catch (Exception e) {
+					Log.e(TAG, "ERROR: " + e.toString());
+					/**
+					 * return from here otherwise app will again crash at below lines.
+					 */
+					return;
+				}
 			}
 			TwitterSyncingFragment twitterSyncingFragment = new TwitterSyncingFragment();
 			twitterSyncingFragment.setArguments(args);
@@ -1527,7 +1541,7 @@ public class MainActivity extends ActionBarActivity implements
 			 * screens lying in the backstack. In this case pressing back button beyond the first screen 
 			 * of android version app, pops up those bosch version screens from back stack on android device.
 			 */
-			moveTaskToBack(true);
+				moveTaskToBack(true);
 		}
 	}
 

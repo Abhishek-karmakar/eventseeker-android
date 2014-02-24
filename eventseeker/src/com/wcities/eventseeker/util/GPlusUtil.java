@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
@@ -28,7 +27,6 @@ import com.wcities.eventseeker.constants.SharedPrefKeys;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.FriendNewsItem;
-import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 
 public class GPlusUtil {
 
@@ -85,14 +83,17 @@ public class GPlusUtil {
 	public static void publishEvent(Event event, Fragment fragment) {
 		//Log.d(TAG, "publishEvent()");
 		isGPlusPublishPending = true;
-		
-		String text = "I am going to an event ";
+		String userName = ((EventSeekr) FragmentUtil.getActivity(fragment).getApplication()).getGPlusUserName();
+        if (userName == null) {
+        	return;
+        }
+		String text = userName + " is going to an event ";
 		/**
 		 * Using getNewAttending() instead of getAttending() since we update right value on event only 
 		 * after successfully sharing on google+
 		 */
         if (event.getNewAttending() == Attending.WANTS_TO_GO) {
-        	text = "I want to go to an event ";
+        	text = userName + " wants to go to an event ";
         }
         text += "'" + event.getName() + "' on eventseeker";
         if (event.getSchedule() != null) {
@@ -123,14 +124,17 @@ public class GPlusUtil {
 	public static void publishFriendNewsItem(FriendNewsItem item, Fragment fragment) {
 		//Log.d(TAG, "publishFriendNewsItem()");
 		isGPlusPublishPending = true;
-		
-		String text = "I am going to an event ";
+		String userName = ((EventSeekr) FragmentUtil.getActivity(fragment).getApplication()).getGPlusUserName();
+        if (userName == null) {
+        	return;
+        }
+		String text = userName + " is going to an event ";
 		/**
 		 * Using getNewAttending() instead of getAttending() since we update right value on event only 
 		 * after successfully sharing on google+
 		 */
         if (item.getNewUserAttending() == Attending.WANTS_TO_GO) {
-        	text = "I want to go to an event ";
+        	text = userName + " wants to go to an event ";
         }
         text += "'" + item.getTrackName() + "' on eventseeker";
         
