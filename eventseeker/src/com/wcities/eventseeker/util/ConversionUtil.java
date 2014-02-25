@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import android.content.res.Resources;
 import android.text.Html;
+import android.util.Log;
 
 public class ConversionUtil {
 	
@@ -203,8 +204,8 @@ public class ConversionUtil {
 		return dest;
 	}
 	
-	public static String parseHtmlString(JSONObject jsonObject, String key) throws JSONException {
-		return Html.fromHtml(jsonObject.getString(key)).toString();
+	public static String decodeHtmlEntities(JSONObject jsonObject, String key) throws JSONException {
+		return jsonObject.getString(key).replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">");
 	}
 	
 	public static String parseForPhone(String src) {

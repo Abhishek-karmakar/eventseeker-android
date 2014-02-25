@@ -12,6 +12,7 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -32,7 +33,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.bosch.myspin.serversdk.IPhoneCallStateListener;
 import com.bosch.myspin.serversdk.MySpinException;
 import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.ford.syncV4.proxy.SyncProxyALM;
@@ -46,7 +46,6 @@ import com.wcities.eventseeker.GetStartedFragment.GetStartedFragmentListener;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.applink.service.AppLinkService;
-import com.wcities.eventseeker.bosch.BoschEventDetailsFragment;
 import com.wcities.eventseeker.bosch.BoschMainActivity;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -90,6 +89,7 @@ public class MainActivity extends ActionBarActivity implements
 	private static final String DRAWER_LIST_FRAGMENT_TAG = "drawerListFragment";
 
 	private static final String DIALOG_FRAGMENT_TAG_CONNECTION_LOST = "ConnectionLost";
+	private static final int MIN_MILLIS_TO_CHK_BOSCH_CONNECTION = 500;
 
 	private static MainActivity instance = null;
 	private boolean activityOnTop, hasOtherActivityFinished;
@@ -114,6 +114,10 @@ public class MainActivity extends ActionBarActivity implements
 	/** it will check whether current device is tablet and according to that we will 
 	select same tab layout file for portrait and landscape mode**/
 	
+	private long timeIntervalInMillisToCheckForBoschConnection = MIN_MILLIS_TO_CHK_BOSCH_CONNECTION;
+	private Runnable periodicCheckForBoschConnection;
+	private Handler handler;
+	
 	public static MainActivity getInstance() {
 		return instance;
 	}
@@ -135,6 +139,8 @@ public class MainActivity extends ActionBarActivity implements
 		if (MySpinServerSDK.sharedInstance().isConnected()) {
 			startBoschMainActivity();
 		}
+		
+		Log.d(TAG, "onCreate() isConnected = " + MySpinServerSDK.sharedInstance().isConnected());
 		
 		/**
 		 * check whether the current device is Tablet and if it is in Landscape
@@ -278,20 +284,39 @@ public class MainActivity extends ActionBarActivity implements
 			startSyncProxyService();
 		}
 		//Log.d(TAG, "onCreate done");
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		Log.d(TAG, "onStart()");
 		
 		/**
 		 * Due to myspin bug sometimes it doesn't detect connected state instantly. To compensate for this 
 		 * we run a delayed task to recheck on connected state & refresh UI.
 		 */
-		new Handler().postDelayed(new Runnable() {
+		HandlerThread hThread = new HandlerThread("HandlerThread");
+		hThread.start();
+		
+		handler = new Handler(hThread.getLooper());
+		timeIntervalInMillisToCheckForBoschConnection = MIN_MILLIS_TO_CHK_BOSCH_CONNECTION;
+		periodicCheckForBoschConnection = new Runnable() {
 			
 			@Override
 			public void run() {
+				Log.d(TAG, "Periodic chk, isConnected = " + MySpinServerSDK.sharedInstance().isConnected());
 				if (MySpinServerSDK.sharedInstance().isConnected()) {
 					startBoschMainActivity();
+					
+				} else {
+					timeIntervalInMillisToCheckForBoschConnection = (timeIntervalInMillisToCheckForBoschConnection*2 > 10*60*1000) ? 
+							MIN_MILLIS_TO_CHK_BOSCH_CONNECTION : timeIntervalInMillisToCheckForBoschConnection*2;
+					handler.postDelayed(this, timeIntervalInMillisToCheckForBoschConnection);
 				}
 			}
-		}, 300);
+		};
+		
+		handler.postDelayed(periodicCheckForBoschConnection, timeIntervalInMillisToCheckForBoschConnection);
 	}
 
 	@Override
@@ -341,6 +366,13 @@ public class MainActivity extends ActionBarActivity implements
 			activityOnTop = false;
 		}
 		super.onPause();
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		Log.d(TAG, "onStop()");
+		handler.removeCallbacks(periodicCheckForBoschConnection);
 	}
 
 	@Override

@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Html;
 import android.text.TextUtils.TruncateAt;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -203,7 +204,7 @@ public class VenueInfoFragment extends Fragment implements OnClickListener, Asyn
 			rltLayoutDesc.setVisibility(View.VISIBLE);
 			imgDown.setOnClickListener(this);
 
-			txtDesc.setText(venue.getLongDesc());
+			txtDesc.setText(Html.fromHtml(venue.getLongDesc()));
 
 			if (isVenueDescExpanded) {
 				expandDesc();

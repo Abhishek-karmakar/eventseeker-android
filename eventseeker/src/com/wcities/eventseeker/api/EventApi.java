@@ -242,7 +242,7 @@ public class EventApi extends Api {
 	public JSONObject getEvents() throws ClientProtocolException, IOException, JSONException {
 		String METHOD = "getEvents.php?";
 		String uri = COMMON_URL + API + METHOD + "oauth_token=" + getOauthToken();
-		
+			
 		if (id != NOT_INITIALIZED) {
 			uri = uri + "&id=" + id;
 		}

@@ -14,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.Html;
 import android.text.TextUtils.TruncateAt;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -383,7 +384,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 		rltLayoutArtistDesc.setVisibility(View.VISIBLE);
 		imgDown.setOnClickListener(this);
 
-		txtArtistDesc.setText(artist.getDescription());
+		txtArtistDesc.setText(Html.fromHtml(artist.getDescription()));
 
 		if (isArtistDescExpanded) {
 			expandEvtDesc();
@@ -401,7 +402,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 			lnrVideos.setVisibility(View.VISIBLE);
 		}
 		rltLayoutArtistDesc.setVisibility(View.VISIBLE);
-		txtArtistDesc.setText(artist.getDescription());
+		txtArtistDesc.setText(Html.fromHtml(artist.getDescription()));
 		expandEvtDesc();
 	}
 

@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -12,6 +13,8 @@ import com.wcities.eventseeker.util.FragmentUtil;
 public class GeneralDialogFragment extends DialogFragment {
 	
 	private static DialogBtnClickListener dialogBtnClickListener;
+	
+	private static boolean isAlreadyShown;
 	
 	public static GeneralDialogFragment newInstance(String title, String msg, String btn1Txt, String btn2Txt) {
 		GeneralDialogFragment frag = new GeneralDialogFragment();
@@ -51,6 +54,7 @@ public class GeneralDialogFragment extends DialogFragment {
         builder.setTitle(title).setMessage(msg)
         .setNegativeButton(args.getString(BundleKeys.BTN1_TXT), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
+            	isAlreadyShown = false;
                 ((DialogBtnClickListener) getParentFragment()).doNegativeClick(dialogTag);
             }
         });
@@ -58,6 +62,7 @@ public class GeneralDialogFragment extends DialogFragment {
         if (args.containsKey(BundleKeys.BTN2_TXT)) {
         	builder.setPositiveButton(args.getString(BundleKeys.BTN2_TXT), new DialogInterface.OnClickListener() {
 	            public void onClick(DialogInterface dialog, int whichButton) {
+	            	isAlreadyShown = false;
 	            	if (getParentFragment() == null) {
 	            		dialogBtnClickListener.doPositiveClick(dialogTag);
 	            	} else {
@@ -81,6 +86,14 @@ public class GeneralDialogFragment extends DialogFragment {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+	}
+	
+	@Override
+	public void show(FragmentManager manager, String tag) {
+		if (!isAlreadyShown) {
+			super.show(manager, tag);
+			isAlreadyShown = true;
+		}
 	}
 	
 	public interface DialogBtnClickListener {
