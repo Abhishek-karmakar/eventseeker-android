@@ -104,7 +104,7 @@ public class BoschChangeCityFragment extends FragmentLoadableFromBackStack imple
  	public void onResume() {
 		cityName = EventSeekr.getCityName();
 		if (cityName == null) {
-			GeoUtil.getCityName(this, (EventSeekr) FragmentUtil.getActivity(this).getApplication());
+			GeoUtil.getCityName(this, FragmentUtil.getActivity(this));
 		}
 		super.onResume(BoschMainActivity.INDEX_NAV_ITEM_CHANGE_CITY, buildTitle());
 	}
@@ -125,6 +125,7 @@ public class BoschChangeCityFragment extends FragmentLoadableFromBackStack imple
 			((BoschMainActivity)FragmentUtil.getActivity(this)).updateTitleForFragment(buildTitle(), 
 					getClass().getSimpleName());
 			
+			DeviceUtil.setCitySet(true);
 			EventSeekr.setCityName(cityName);
 			
 			DeviceUtil.removeDeviceLocationListener();

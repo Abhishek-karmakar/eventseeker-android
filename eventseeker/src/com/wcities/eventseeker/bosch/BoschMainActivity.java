@@ -44,6 +44,7 @@ import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
+import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschMainActivity extends ActionBarActivity implements ReplaceFragmentListener, 
@@ -553,6 +554,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			 * of bosch version app, pops up those android version screens from back stack on bosch IVI system.
 			 */
 			moveTaskToBack(true);
+			DeviceUtil.removeDeviceLocationListener();
 		}
 	}
 

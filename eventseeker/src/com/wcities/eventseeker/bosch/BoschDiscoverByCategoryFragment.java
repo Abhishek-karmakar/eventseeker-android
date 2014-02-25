@@ -67,7 +67,7 @@ public class BoschDiscoverByCategoryFragment extends FragmentLoadableFromBackSta
 	public void onResume() {
 		cityName = EventSeekr.getCityName();
 		if (cityName == null) {
-			GeoUtil.getCityName(this, (EventSeekr) FragmentUtil.getActivity(this).getApplication());
+			GeoUtil.getCityName(this, FragmentUtil.getActivity(this));
 		}
 		super.onResume(AppConstants.INVALID_INDEX, buildTitle());
 	}

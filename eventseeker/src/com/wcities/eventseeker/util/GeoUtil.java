@@ -10,6 +10,7 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.http.AndroidHttpClient;
@@ -60,7 +61,7 @@ public class GeoUtil {
 	 * @param geoUtilListener
 	 * @param eventSeekr
 	 */
-	public static void getCityName(final GeoUtilListener geoUtilListener, final EventSeekr eventSeekr) {
+	public static void getCityName(final GeoUtilListener geoUtilListener, final Context activityContext) {
 		
 		new Thread(new Runnable() {
 
@@ -68,11 +69,11 @@ public class GeoUtil {
 			public void run() {
 				String cityName = "";
 				
-				final double[] latLng = DeviceUtil.getLatLon(eventSeekr);
+				final double[] latLng = DeviceUtil.getLatLon(activityContext);
 
 				List<Address> addresses = null;
 				
-				Geocoder geocoder = new Geocoder(eventSeekr);
+				Geocoder geocoder = new Geocoder(activityContext);
 				try {
 					addresses = geocoder.getFromLocation(latLng[0], latLng[1], 1);
 
