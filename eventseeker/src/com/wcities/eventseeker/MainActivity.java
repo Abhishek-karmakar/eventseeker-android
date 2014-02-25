@@ -1494,7 +1494,7 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	public void hideSoftKeypad() {
-		Log.d(TAG, "hideSoftKeypad()");
+		//Log.d(TAG, "hideSoftKeypad()");
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(searchView.getApplicationWindowToken(), 0);
 	}

@@ -42,7 +42,7 @@ public class TwitterFragment extends FragmentLoadableFromBackStack {
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 				if (url.contains(AppConstants.TWITTER_CALLBACK_URL) && url.contains("oauth_token")) {
-					Log.d(TAG, "url = " + url);
+					//Log.d(TAG, "url = " + url);
 					ServiceAccount serviceAccount = (ServiceAccount) getArguments().getSerializable(
 							BundleKeys.SERVICE_ACCOUNTS);
 					serviceAccount.isInProgress = true;
@@ -53,7 +53,7 @@ public class TwitterFragment extends FragmentLoadableFromBackStack {
 					args.putString(BundleKeys.OAUTH_VERIFIER, oauthVerifier);
 					args.putSerializable(BundleKeys.TWITTER, twitter);
 					
-					Log.d(TAG, "Syncying : oauthVerifier : " + oauthVerifier + ", twitter : " + twitter);
+					//Log.d(TAG, "Syncying : oauthVerifier : " + oauthVerifier + ", twitter : " + twitter);
 					((ReplaceFragmentListener)FragmentUtil.getActivity(TwitterFragment.this))
 						.replaceByFragment(AppConstants.FRAGMENT_TAG_TWITTER_SYNCING, args);
 					
