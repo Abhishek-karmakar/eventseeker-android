@@ -27,6 +27,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.DeviceUtil;
@@ -202,7 +203,9 @@ public class ChangeLocationFragment extends FragmentLoadableFromBackStack implem
 		try {
 			addresses = geocoder.getFromLocationName(query, 1);
 			if (addresses != null && !addresses.isEmpty()) {
+				DeviceUtil.setCitySet(true);
 				DeviceUtil.removeDeviceLocationListener();
+				
 				Address address = addresses.get(0);
 				onAddressUpdated(address);
 			}

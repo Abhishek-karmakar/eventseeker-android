@@ -1575,7 +1575,8 @@ public class MainActivity extends ActionBarActivity implements
 			 * screens lying in the backstack. In this case pressing back button beyond the first screen 
 			 * of android version app, pops up those bosch version screens from back stack on android device.
 			 */
-				moveTaskToBack(true);
+			moveTaskToBack(true);
+			DeviceUtil.removeDeviceLocationListener();
 		}
 	}
 

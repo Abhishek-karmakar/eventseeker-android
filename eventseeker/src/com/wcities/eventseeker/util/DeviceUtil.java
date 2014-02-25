@@ -2,12 +2,14 @@ package com.wcities.eventseeker.util;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.UUID;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
@@ -35,11 +37,13 @@ public class DeviceUtil {
 	private static final double SAN_FRANCISCO_LON = -122.4194155;
 	
 	private static boolean retryGenerating;
+	private static boolean isCitySet;
+	private static long lastLatLngSetTime;
 
 	private static LocationManager locationManager;
 	
-	private static final long MIN_TIME_BW_UPDATES = 1000 * 60; // 1 minutes
-	private static final float MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 1 meters
+	private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 60; // 1 hour
+	private static final float MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
 
 	/**
 	 * Generates new values for first time if never generated until now after app start, otherwise 
@@ -47,22 +51,20 @@ public class DeviceUtil {
 	 * @param context
 	 * @return
 	 */
-	public static double[] getLatLon(Context context) {
+	public static double[] getLatLon(final Context activityContext) {
 		//Log.d(TAG, "getLatLon");
 		double[] latLon = new double[] {0, 0};
 		
+		final LocationManager locationManager = getLocationManagerInstance(activityContext.getApplicationContext());
+
+		// getting GPS status
+        boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        // getting network status
+        boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        
     	if (AppConstants.lat == AppConstants.NOT_ALLOWED_LAT || AppConstants.lon == AppConstants.NOT_ALLOWED_LON 
     			|| retryGenerating) {
     		//Log.d(TAG, "generate");
-    		LocationManager locationManager = getLocationManagerInstance(context);
-	    	
-    		//DeviceLocationListener.initialize(context);
-    		
-    		// getting GPS status
-            boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-            // getting network status
-            boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-
            //Log.d(TAG, "isGPSEnabled : " + isGPSEnabled); 
            //Log.d(TAG, "isNetworkEnabled : " + isNetworkEnabled); 
 
@@ -75,8 +77,7 @@ public class DeviceUtil {
             	
             	if (isGPSEnabled) {
                  	//First get the location from GPS Provider
- 					locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES,
- 							MIN_DISTANCE_CHANGE_FOR_UPDATES, DeviceLocationListener.getInstance());
+            		requestLocationUpdatesOnUiThread(activityContext, locationManager, LocationManager.GPS_PROVIDER);
 
  					if (locationManager != null) {
  						lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -86,17 +87,16 @@ public class DeviceUtil {
  							//Log.d(TAG, "GPS_PROVIDER: " + lastKnownLocation.getLatitude() + ", " 
  							//		+ lastKnownLocation.getLongitude());
  		      	        	
-                         	AppConstants.lat = latLon[0] = lastKnownLocation.getLatitude();
-         		        	AppConstants.lon = latLon[1] = lastKnownLocation.getLongitude();
-         		        	retryGenerating = false;
+                         	latLon[0] = lastKnownLocation.getLatitude();
+         		        	latLon[1] = lastKnownLocation.getLongitude();
+         		        	updateLatLon(latLon[0], latLon[1]);
  						} 
  					}
                 } 
             	
             	if (isNetworkEnabled && lastKnownLocation == null) {
                 	//get location from Network Provider
-					locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, 
-							MIN_DISTANCE_CHANGE_FOR_UPDATES, DeviceLocationListener.getInstance());
+            		requestLocationUpdatesOnUiThread(activityContext, locationManager, LocationManager.NETWORK_PROVIDER);
 	
 	                if (locationManager != null) {
 	                	lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
@@ -105,13 +105,11 @@ public class DeviceUtil {
 	                	if (lastKnownLocation != null) {
 	                		//Log.d(TAG, "NETWORK_PROVIDER: " + lastKnownLocation.getLatitude() + ", " 
 	                		//		+ lastKnownLocation.getLongitude());
-	            	        	
-	                        AppConstants.lat = latLon[0] = lastKnownLocation.getLatitude();
-	        		        AppConstants.lon = latLon[1] = lastKnownLocation.getLongitude();
-	        		        retryGenerating = false;
+	                        latLon[0] = lastKnownLocation.getLatitude();
+	        		        latLon[1] = lastKnownLocation.getLongitude();
+	        		        updateLatLon(latLon[0], latLon[1]);
 	                    }
 	                }
-	                
 				}
             	
             	if (lastKnownLocation == null) {
@@ -122,6 +120,25 @@ public class DeviceUtil {
     	} else {
     		latLon[0] = AppConstants.lat;
     		latLon[1] = AppConstants.lon;
+    		
+    		/**
+    		 * If user has not set any city & time elapsed from last location update is more than MIN_TIME_BW_UPDATES, 
+    		 * then again start listening for updates.
+    		 * 
+    		 * Without this code we won't get any updated location in following situation:
+    		 * If user leaves app by pressing back button, we unregister location update listeners while finishing 
+    		 * MainActivity. Now if we have already got some valid values for lat & lon in AppConstants.lat & 
+    		 * AppConstants.lon, then unless app process restarts we won't be able to register location listener from 
+    		 * above if condition.
+    		 */
+    		if (!isCitySet && lastLatLngSetTime + MIN_TIME_BW_UPDATES < new Date().getTime()) {
+    			if (isGPSEnabled) {
+            		requestLocationUpdatesOnUiThread(activityContext, locationManager, LocationManager.GPS_PROVIDER);
+ 					
+    			} else if (isNetworkEnabled) {
+            		requestLocationUpdatesOnUiThread(activityContext, locationManager, LocationManager.NETWORK_PROVIDER);
+    			}
+    		}
     	}
     	
     	/*latLon[0] = AppConstants.lat = 19.1871777;
@@ -134,6 +151,20 @@ public class DeviceUtil {
     	}
     	return latLon;
     }
+	
+	private static void requestLocationUpdatesOnUiThread(Context activityContext, 
+			final LocationManager locationManager, final String provider) {
+		if (activityContext instanceof Activity) {
+			((Activity)activityContext).runOnUiThread(new Runnable() {
+				
+				@Override
+				public void run() {
+					locationManager.requestLocationUpdates(provider, MIN_TIME_BW_UPDATES, 
+							MIN_DISTANCE_CHANGE_FOR_UPDATES, DeviceLocationListener.getInstance());
+				}
+			});
+		}
+	}
 		
 	private static LocationManager getLocationManagerInstance(Context context) {
 		if (locationManager == null) {
@@ -147,7 +178,7 @@ public class DeviceUtil {
 	 * will disable all the location updates.
 	 */
 	public static void removeDeviceLocationListener() {
-		Log.i(TAG, "DeviceLocationListener is has been removed");
+		//Log.i(TAG, "DeviceLocationListener is has been removed");
 		if (locationManager != null) {
 			locationManager.removeUpdates(DeviceLocationListener.getInstance());
 		}
@@ -156,13 +187,8 @@ public class DeviceUtil {
 	private static class DeviceLocationListener implements LocationListener {
 
 		private static DeviceLocationListener deviceLocationListener;
-		//private static Context context;
 		
 		private DeviceLocationListener() {}
-		
-		/*private static void initialize(Context context) {
-			DeviceLocationListener.context = context;
-		}*/
 		
 		public static DeviceLocationListener getInstance() {
 			if (deviceLocationListener == null) {
@@ -172,10 +198,7 @@ public class DeviceUtil {
 		}
 		
 		public void onLocationChanged(Location location) {
-        	AppConstants.lat = location.getLatitude();
-        	AppConstants.lon = location.getLongitude();
-        	retryGenerating = false;
-        	
+        	updateLatLon(location.getLatitude(), location.getLongitude());
 			Log.i(TAG, "Current Location Changed to " + location.getLatitude() + ", " + location.getLongitude());
 			//Toast.makeText(context, "Current Location Changed to " + location.getLatitude() + ", " 
 			//		+ location.getLongitude(), Toast.LENGTH_LONG).show();
@@ -193,10 +216,15 @@ public class DeviceUtil {
 		
 	}
 	
+	public static void setCitySet(boolean isCitySet) {
+		DeviceUtil.isCitySet = isCitySet;
+	}
+
 	public static void updateLatLon(double lat, double lon) {
 		AppConstants.lat = lat;
 		AppConstants.lon = lon;
 		retryGenerating = false;
+		lastLatLngSetTime = new Date().getTime();
 	}
 	
 	/**
@@ -280,9 +308,7 @@ public class DeviceUtil {
 				IPToCityApiJSONParser jsonParser = new IPToCityApiJSONParser();
 				latLon = jsonParser.getLatlon(jsonObject);
 				if (latLon[0] != 0 || latLon[1] != 0) {
-					AppConstants.lat = latLon[0];
-		        	AppConstants.lon = latLon[1];
-		        	retryGenerating = false;
+					updateLatLon(latLon[0], latLon[1]);
 				}
 	        	
 	        	//Log.d(TAG, "lat = " + AppConstants.lat + ", lon = " + AppConstants.lon);
