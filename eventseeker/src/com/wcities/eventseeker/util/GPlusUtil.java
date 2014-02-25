@@ -87,15 +87,15 @@ public class GPlusUtil {
         if (userName == null) {
         	return;
         }
-		String text = userName + " is going to an event ";
+		String text = userName + " is going to ";
 		/**
 		 * Using getNewAttending() instead of getAttending() since we update right value on event only 
 		 * after successfully sharing on google+
 		 */
         if (event.getNewAttending() == Attending.WANTS_TO_GO) {
-        	text = userName + " wants to go to an event ";
+        	text = userName + " wants to go to ";
         }
-        text += "'" + event.getName() + "' on eventseeker";
+        text += event.getName();
         if (event.getSchedule() != null) {
         	if (event.getSchedule().getVenue().getAddress() != null) {
         		text += " at " + event.getSchedule().getVenue().getAddress().getCity();
@@ -128,15 +128,15 @@ public class GPlusUtil {
         if (userName == null) {
         	return;
         }
-		String text = userName + " is going to an event ";
+		String text = userName + " is going to ";
 		/**
 		 * Using getNewAttending() instead of getAttending() since we update right value on event only 
 		 * after successfully sharing on google+
 		 */
         if (item.getNewUserAttending() == Attending.WANTS_TO_GO) {
-        	text = userName + " wants to go to an event ";
+        	text = userName + " wants to go to ";
         }
-        text += "'" + item.getTrackName() + "' on eventseeker";
+        text += item.getTrackName();
         
         if (item.getVenueName() != null) {
         	text += " at " + item.getVenueName();

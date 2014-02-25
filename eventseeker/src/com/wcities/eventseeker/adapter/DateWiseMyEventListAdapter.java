@@ -215,9 +215,12 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 						convertView.findViewById(R.id.imgEvtTime).setVisibility(View.INVISIBLE);
 					}
 				}
-
+				String cityName = ""; 
+				if (event.getCityName() != null) {
+					cityName = ", " + event.getCityName();
+				}
 				TextView txtEvtLocation = (TextView) convertView.findViewById(R.id.txtEvtLocation);
-				txtEvtLocation.setText(schedule.getVenue().getName());
+				txtEvtLocation.setText(schedule.getVenue().getName() + cityName);
 			}
 
 			ImageView imgEvent = (ImageView) convertView.findViewById(R.id.imgEvent);

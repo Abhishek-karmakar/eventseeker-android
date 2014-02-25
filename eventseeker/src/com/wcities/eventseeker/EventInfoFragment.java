@@ -746,7 +746,7 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 
 	@Override
 	public void call(Session session, SessionState state, Exception exception) {
-		//Log.d(TAG, "call()");
+		//Log.i(TAG, "call()");
 		fbCallCountForSameEvt++;
 		/**
 		 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.

@@ -40,6 +40,8 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 	
 	protected PlusClient mPlusClient;
 	protected ConnectionResult mConnectionResult;
+
+	private boolean isPublishPermissionDisplayed;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -243,4 +245,13 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 			}
 		}
 	}
+
+	public boolean isPublishPermissionDisplayed() {
+		return isPublishPermissionDisplayed;
+	}
+	
+	public void setPublishPermissionDisplayed(boolean isPublishPermissionDisplayed) {
+		this.isPublishPermissionDisplayed = isPublishPermissionDisplayed;
+	}
+	
 }

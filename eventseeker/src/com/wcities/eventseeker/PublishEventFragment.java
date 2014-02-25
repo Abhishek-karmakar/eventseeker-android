@@ -30,13 +30,15 @@ public abstract class PublishEventFragment extends Fragment implements PublishLi
 		ConnectionCallbacks, OnConnectionFailedListener, DialogBtnClickListener {
 	
 	private static final String TAG = PublishEventFragment.class.getSimpleName();
-	
+
 	protected Event event;
 	// Flag to represent if we are waiting for extended permissions
 	private boolean pendingAnnounce = false;
 	
 	protected PlusClient mPlusClient;
 	protected ConnectionResult mConnectionResult;
+
+	private boolean isPublishPermissionDisplayed;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -210,4 +212,13 @@ public abstract class PublishEventFragment extends Fragment implements PublishLi
 			}
 		}
 	}
+	
+	public boolean isPublishPermissionDisplayed() {
+		return isPublishPermissionDisplayed;
+	}
+	
+	public void setPublishPermissionDisplayed(boolean isPublishPermissionDisplayed) {
+		this.isPublishPermissionDisplayed = isPublishPermissionDisplayed;
+	}
+	
 }

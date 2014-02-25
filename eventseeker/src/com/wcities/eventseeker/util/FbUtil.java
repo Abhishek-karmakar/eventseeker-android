@@ -1,6 +1,8 @@
 package com.wcities.eventseeker.util;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import org.json.JSONException;
@@ -10,18 +12,20 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Html;
 import android.util.Log;
 
+import com.facebook.FacebookRequestError;
 import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.Request.GraphUserCallback;
 import com.facebook.RequestAsyncTask;
+import com.facebook.RequestBatch;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.Session.StatusCallback;
 import com.facebook.SessionState;
 import com.facebook.model.GraphObject;
+import com.facebook.model.OpenGraphAction;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -36,6 +40,7 @@ import com.wcities.eventseeker.interfaces.PublishListener;
 public class FbUtil {
 
 	private static final String TAG = FbUtil.class.getName();
+	private static final List<String> PERMISSIONS = Arrays.asList("publish_actions");
 
 	public static boolean hasUserLoggedInBefore(Context context) {
 		//Log.d(TAG, "hasUserLoggedInBefore()");
@@ -132,15 +137,20 @@ public class FbUtil {
 	    }
 
 	    if (!hasPublishPermission(permissions)) {
-	    	//Log.d(TAG, "publish permission is not there");
-	    	fbPublishListener.setPendingAnnounce(true); // Mark that we are currently waiting for confirmation of publish permissions
-	        session.addCallback(fbPublishListener); 
-	        // we get top level parent fragment here since onActivityResult() is not called in nested fragments.
-	        Fragment fragmentToHandleActivityResult = FragmentUtil.getTopLevelParentFragment(fragment);
-	        requestPublishPermissions(session, permissions, requestCode, fragmentToHandleActivityResult, 
-	        		fbPublishListener);
+	    	if (!fbPublishListener.isPublishPermissionDisplayed()) {
+		    	//Log.d(TAG, "publish permission is not there");
+		    	fbPublishListener.setPendingAnnounce(true); // Mark that we are currently waiting for confirmation of publish permissions
+		        session.addCallback(fbPublishListener); 
+		        // we get top level parent fragment here since onActivityResult() is not called in nested fragments.
+		        Fragment fragmentToHandleActivityResult = FragmentUtil.getTopLevelParentFragment(fragment);
+		        requestPublishPermissions(session, permissions, requestCode, fragmentToHandleActivityResult, 
+		        		fbPublishListener);
+		        fbPublishListener.setPublishPermissionDisplayed(true);
+	    	} else {
+	    		fbPublishListener.setPublishPermissionDisplayed(false);							
+			}
 	        return false;
-	    }
+	    } 
 	    
 	    return true;
 	}
@@ -279,120 +289,80 @@ public class FbUtil {
 	}
 	
 	private static void publishEvent(final Event event, final Fragment fragment) {
-	    Session session = Session.getActiveSession();
+		
+		RequestBatch requestBatch = new RequestBatch();
 
-        Bundle postParams = new Bundle();
-        String userName = ((EventSeekr) FragmentUtil.getActivity(fragment).getApplication()).getFbUserName();
-        if (userName == null) {
-        	return;
-        }
-        String name = userName + " is going to an event ";
-        if (event.getAttending() == Attending.WANTS_TO_GO) {
-        	name = userName + " wants to go to an event ";
-        }
-        name += "'" + event.getName() + "' on eventseeker";
-        postParams.putString("name", name);
-        String caption = "";
-        if (event.getSchedule() != null) {
-        	if (event.getSchedule().getVenue().getAddress() != null) {
-        		caption += "at " + event.getSchedule().getVenue().getAddress().getCity();
-        	}
-        	if (event.getSchedule().getDates().size() > 0) {
-        		caption += " on " + new SimpleDateFormat("EEEE, MMM d").format(event.getSchedule().getDates().get(0).getStartDate());
-        	}
-            postParams.putString("caption", caption);
-        }
-        String description = event.getDescription() == null ? " " : event.getDescription();
-        postParams.putString("description", Html.fromHtml(description).toString());
-        
-        String link = event.getEventUrl();
+		String link = event.getEventUrl();
         if (link == null) {
         	link = "http://eventseeker.com/event/" + event.getId();
 	    }
-        postParams.putString("link", link);
 
-        if (event.doesValidImgUrlExist()) {
-        	String imgUrl = event.getHighResImgUrl();
-        	if (imgUrl == null) {
-        		imgUrl = event.getLowResImgUrl();
-        	}
-        	if (imgUrl == null) {
-        		imgUrl = event.getMobiResImgUrl();
-        	}
-            postParams.putString("picture", imgUrl);
-        }
+		String attendingAction = AppConstants.ACTION_GOING_TO;
+		if (event.getAttending() == Attending.WANTS_TO_GO) {
+			attendingAction = AppConstants.ACTION_WANTS_TO_GO_TO;
+		}
+        
+		OpenGraphAction post = OpenGraphAction.Factory.createForPost(attendingAction);
+        post.setProperty("event", link);
 
-        Request.Callback callback = new Request.Callback() {
-        	
+        Request.Callback actionCallback = new Request.Callback() {
+
+            @Override
             public void onCompleted(Response response) {
-            	Log.d(TAG, "response = " + response.toString());
-            	String postId = null;
-
-                GraphObject graphObject = response.getGraphObject();
-                if (graphObject != null) {
-                	JSONObject graphResponse = graphObject.getInnerJSONObject();
-                    try {
-                        postId = graphResponse.getString("id");
-                        postId = postId.split("_")[1];
-                        
-                    } catch (JSONException e) {
-                        Log.i(TAG, "JSON error "+ e.getMessage());
-                    }
-                    
-                } else {
-                	Log.d(TAG, "graphObj = null");
+                // Log any response error
+            	Log.i(TAG, "RESPONSE : " + response.toString());
+                FacebookRequestError error = response.getError();
+                if (error != null) {
+                    Log.i(TAG, error.getErrorMessage());
                 }
-                
-                new UserTracker((EventSeekr) FragmentUtil.getActivity(fragment).getApplication(), 
-                		UserTrackingItemType.event, event.getId(), event.getAttending().getValue(), postId, 
-                		UserTrackingType.Add).execute();
+                String postId = null;
+
+                   GraphObject graphObject = response.getGraphObject();
+                   if (graphObject != null) {
+                    JSONObject graphResponse = graphObject.getInnerJSONObject();
+                       try {
+                           postId = graphResponse.getString("id");
+                           //postId = postId.split("_")[1];
+                           
+                       } catch (JSONException e) {
+                           Log.i(TAG, "JSON error "+ e.getMessage());
+                       }
+                       
+                   } else {
+                    Log.d(TAG, "graphObj = null");
+                   }
+                   
+                   new UserTracker((EventSeekr) FragmentUtil.getActivity(fragment).getApplication(),
+                    UserTrackingItemType.event, event.getId(), event.getAttending().getValue(), postId,
+                    UserTrackingType.Add).execute();
             }
         };
 
-        Request request = new Request(session, "me/feed", postParams, HttpMethod.POST, callback);
-        RequestAsyncTask task = new RequestAsyncTask(request);
-        task.execute();
+        // Create the request for object creation
+        Request actionRequest = Request.newPostOpenGraphActionRequest(Session.getActiveSession(),
+                post, actionCallback);
+	    actionRequest.setBatchEntryName("objectCreate");
+	    // Add the request to the batch
+	    requestBatch.add(actionRequest);
+	    // Execute the batch request
+	    requestBatch.executeAsync();
+       
 	}
-	
+
 	private static void publishFriendNewsItem(final FriendNewsItem item, final Fragment fragment) {
-	    Session session = Session.getActiveSession();
+		
+		RequestBatch requestBatch = new RequestBatch();
 
-        Bundle postParams = new Bundle();
-        String userName = ((EventSeekr) FragmentUtil.getActivity(fragment).getApplication()).getFbUserName();
-        if (userName == null) {
-        	return;
-        }
-        String name = userName + " is going to an event ";
-        if (item.getUserAttending() == Attending.WANTS_TO_GO) {
-        	name = userName + " wants to go to an event ";
-        }
-        name += "'" + item.getTrackName() + "' on eventseeker";
-        postParams.putString("name", name);
-        String caption = "";
-    	if (item.getVenueName() != null) {
-    		caption += "at " + item.getVenueName();
-    	}
-    	if (item.getStartTime() != null) {
-    		caption += " on " + new SimpleDateFormat("EEEE, MMM d").format(item.getStartTime().getStartDate());
-    	}
-        postParams.putString("caption", caption);
-        String description = " ";
-        postParams.putString("description", description);
+		String link = "http://eventseeker.com/event/" + item.getTrackId();
+
+		String attendingAction = AppConstants.ACTION_GOING_TO;
+		if (item.getUserAttending() == Attending.WANTS_TO_GO) {
+			attendingAction = AppConstants.ACTION_WANTS_TO_GO_TO;
+		}
         
-        String link = "http://eventseeker.com/event/" + item.getTrackId();
-        postParams.putString("link", link);
-
-        if (item.doesValidImgUrlExist()) {
-        	String imgUrl = item.getHighResImgUrl();
-        	if (imgUrl == null) {
-        		imgUrl = item.getLowResImgUrl();
-        	}
-        	if (imgUrl == null) {
-        		imgUrl = item.getMobiResImgUrl();
-        	}
-            postParams.putString("picture", imgUrl);
-        }
-
+		OpenGraphAction post = OpenGraphAction.Factory.createForPost(attendingAction);
+        post.setProperty("event", link);
+        
         Request.Callback callback = new Request.Callback() {
         	
             public void onCompleted(Response response) {
@@ -404,7 +374,7 @@ public class FbUtil {
                 	JSONObject graphResponse = graphObject.getInnerJSONObject();
                     try {
                         postId = graphResponse.getString("id");
-                        postId = postId.split("_")[1];
+                        //postId = postId.split("_")[1];
                         
                     } catch (JSONException e) {
                         Log.i(TAG, "JSON error "+ e.getMessage());
@@ -420,8 +390,15 @@ public class FbUtil {
             }
         };
 
-        Request request = new Request(session, "me/feed", postParams, HttpMethod.POST, callback);
-        RequestAsyncTask task = new RequestAsyncTask(request);
-        task.execute();
+        // Create the request for object creation
+        Request actionRequest = Request.newPostOpenGraphActionRequest(Session.getActiveSession(),
+                post, callback);
+	    actionRequest.setBatchEntryName("objectCreate");
+	    // Add the request to the batch
+	    requestBatch.add(actionRequest);
+	    // Execute the batch request
+	    requestBatch.executeAsync();
+       
 	}
+	
 }

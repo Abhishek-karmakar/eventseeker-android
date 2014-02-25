@@ -7,7 +7,7 @@ import com.google.android.gms.common.Scopes;
 
 public class AppConstants {
 	
-	public static final boolean IS_RELEASE_MODE = false;
+	public static final boolean IS_RELEASE_MODE = true;
 	public static final boolean IS_FOR_VOLVO = false;
 	public static final boolean CRASH_REPORTING_ENABLED = false;
 	public static final boolean STRICT_MODE_ENABLED = false;
@@ -116,4 +116,7 @@ public class AppConstants {
 	
 	public static final String GOOGLE_PLUS_SCOPES_FOR_SERVER_ACCESS = "https://www.googleapis.com/auth/userinfo.email"  
 		+ " " + Scopes.PLUS_LOGIN + " " + Scopes.PLUS_PROFILE + " " + "https://www.googleapis.com/auth/userinfo.profile";
+	
+	public static final String ACTION_GOING_TO = "eventseeker:going_to";
+	public static final String ACTION_WANTS_TO_GO_TO = "eventseeker:wants_to_go_to";
 }
