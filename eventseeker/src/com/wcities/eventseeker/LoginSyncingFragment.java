@@ -98,7 +98,7 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 	
 	@Override
 	public void onTaskCompleted(Object... params) {
-		Log.d(TAG, "onTaskCompleted");
+		//Log.d(TAG, "onTaskCompleted");
 		if (isAlive()) {
 			if (((ActionBarActivity)FragmentUtil.getActivity(this)).getSupportFragmentManager()
 					.getBackStackEntryCount() > 0) {
