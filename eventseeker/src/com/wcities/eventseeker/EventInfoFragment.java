@@ -45,6 +45,7 @@ import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Friend;
 import com.wcities.eventseeker.core.Schedule;
+import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.custom.view.ExpandableGridView;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
@@ -223,13 +224,16 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 				updateBtnBuyTicketsEnabled(false);
 			} 
 			
-			if (isTablet) {
-				txtAddress.setText(updateAddressTxt(event.getSchedule().getVenue().getAddress()));
-			} else {
-				txtAddress.setText(event.getSchedule().getVenue().getName());
-			}			
-			txtAddress.setOnClickListener(this);
-
+			Venue venue = schedule.getVenue();
+			if (venue != null) {
+				if (isTablet) {
+					txtAddress.setText(updateAddressTxt(venue.getAddress()));
+				} else {
+					txtAddress.setText(venue.getName());
+				}			
+				txtAddress.setOnClickListener(this);
+			}
+			
 			AddressMapFragment fragment = (AddressMapFragment) getChildFragmentManager().findFragmentByTag(
 					AppConstants.FRAGMENT_TAG_ADDRESS_MAP);
 	        if (fragment == null) {
@@ -655,7 +659,7 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 			
 		} else {
 			chkBox.setChecked(false);
-			Toast.makeText(FragmentUtil.getActivity(this), getResources().getString(R.string.pls_login_to_track_evt), 
+			Toast.makeText(FragmentUtil.getActivity(this), res.getString(R.string.pls_login_to_track_evt), 
 					Toast.LENGTH_LONG).show();
 		}
 	}
