@@ -127,8 +127,7 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 		if(isTablet) {
 			
 			txtVenue = (TextView)v.findViewById(R.id.txtVenue);
-			txtVenue.setText(event.getSchedule().getVenue().getName());
-			txtVenue.setOnClickListener(this);
+			updateEventVenue();
 		}
 		
 		lnrLayoutTickets = v.findViewById(R.id.lnrLayoutTickets);
@@ -189,6 +188,13 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 		return v;
 	}
 	
+	private void updateEventVenue() {
+		if (event.getSchedule() != null && event.getSchedule().getVenue() != null) {
+			txtVenue.setText(event.getSchedule().getVenue().getName());
+			txtVenue.setOnClickListener(this);
+		}
+	}
+
 	private void updateEventScheduleVisibility() {
 		Schedule schedule = event.getSchedule();
 		if (isImgLoaded && allDetailsLoaded && schedule != null) {
@@ -710,6 +716,9 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 		updateDescVisibility();
 		updateEventScheduleVisibility();
 		updateAddress();
+		if (isTablet) {
+			updateEventVenue();
+		}
 		
 		updateFriendsVisibility();
 		friendsGridAdapter.notifyDataSetChanged();
