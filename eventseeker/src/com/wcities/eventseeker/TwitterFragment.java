@@ -41,29 +41,45 @@ public class TwitterFragment extends FragmentLoadableFromBackStack {
 		webView.setWebViewClient(new WebViewClient() {
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
-				if (url.contains(AppConstants.TWITTER_CALLBACK_URL) && url.contains("oauth_token")) {
-					//Log.d(TAG, "url = " + url);
-					ServiceAccount serviceAccount = (ServiceAccount) getArguments().getSerializable(
-							BundleKeys.SERVICE_ACCOUNTS);
-					serviceAccount.isInProgress = true;
+				//Log.d(TAG, "twitter url1 = " + url);
+				if (url.contains(AppConstants.TWITTER_CALLBACK_URL)) {
+					if (url.contains("oauth_token")) {
+						//Log.d(TAG, "twitter url2 = " + url);
+						ServiceAccount serviceAccount = (ServiceAccount) getArguments().getSerializable(
+								BundleKeys.SERVICE_ACCOUNTS);
+						serviceAccount.isInProgress = true;
+						
+						Uri uri = Uri.parse(url);
+						String oauthVerifier = uri.getQueryParameter("oauth_verifier");
+						Bundle args = new Bundle();
+						args.putString(BundleKeys.OAUTH_VERIFIER, oauthVerifier);
+						args.putSerializable(BundleKeys.TWITTER, twitter);
+						
+						//Log.d(TAG, "twitter Syncying : oauthVerifier : " + oauthVerifier + ", twitter : " + twitter);
+						((ReplaceFragmentListener)FragmentUtil.getActivity(TwitterFragment.this))
+							.replaceByFragment(AppConstants.FRAGMENT_TAG_TWITTER_SYNCING, args);
+						
+						return true;
+						
+					} else {
+						//Log.d(TAG, "twitter else");
+						EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(TwitterFragment.this).getApplicationContext();
+						eventSeekr.setSyncCount(Service.Twitter, EventSeekr.UNSYNC_COUNT);
+						FragmentUtil.getActivity(TwitterFragment.this).onBackPressed();
+						return false;
+					}
 					
-					Uri uri = Uri.parse(url);
-					final String oauthVerifier = uri.getQueryParameter("oauth_verifier");
-					Bundle args = new Bundle();
-					args.putString(BundleKeys.OAUTH_VERIFIER, oauthVerifier);
-					args.putSerializable(BundleKeys.TWITTER, twitter);
-					
-					//Log.d(TAG, "Syncying : oauthVerifier : " + oauthVerifier + ", twitter : " + twitter);
-					((ReplaceFragmentListener)FragmentUtil.getActivity(TwitterFragment.this))
-						.replaceByFragment(AppConstants.FRAGMENT_TAG_TWITTER_SYNCING, args);
-					
-					return true;
+				} else {
+					/**
+					 * when twitter sign in page appears in production build, url contains only oauth_token 
+					 * & not the AppConstants.TWITTER_CALLBACK_URL; whereas for development build we don't get 
+					 * this call back for sign in page.
+					 */
+					//Log.d(TAG, "twitter last else");
+					EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(TwitterFragment.this).getApplicationContext();
+					eventSeekr.setSyncCount(Service.Twitter, EventSeekr.UNSYNC_COUNT);
+					return false;
 				}
-				
-				EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(TwitterFragment.this).getApplicationContext();
-				eventSeekr.setSyncCount(Service.Twitter, EventSeekr.UNSYNC_COUNT);
-				FragmentUtil.getActivity(TwitterFragment.this).onBackPressed();
-				return false;
 			}
 		});
 		webView.loadUrl(url);
