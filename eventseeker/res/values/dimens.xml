@@ -121,7 +121,7 @@
     summation of img_event_ht_fragment_discover_by_category_list_item_evt + img_event_margin_t_fragment_discover_by_category_list_item_evt +
     img_event_margin_b_fragment_discover_by_category_list_item_evt + divider_ht_fragment_discover_by_category_list_item_evt
     -->
-    <dimen name="rlt_layout_root_ht_fragment_discover_by_category_list_item_evt">82dp</dimen>
+    <dimen name="rlt_layout_root_ht_fragment_discover_by_category_list_item_evt">90dp</dimen>
     <dimen name="img_event_w_fragment_discover_by_category_list_item_evt">112dp</dimen>
     <dimen name="img_event_ht_fragment_discover_by_category_list_item_evt">84dp</dimen>
     <dimen name="img_event_margin_t_fragment_discover_by_category_list_item_evt">8dp</dimen>
