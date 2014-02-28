@@ -12,6 +12,6 @@ public interface PublishListener extends StatusCallback {
 	 * and if he is trying to cancel the permission dialog
 	 * @return
 	 */
-	public boolean isPublishPermissionDisplayed();
-	public void setPublishPermissionDisplayed(boolean isPublishPermissionDisplayed);
+	public boolean isPermissionDisplayed();
+	public void setPermissionDisplayed(boolean isPermissionDisplayed);
 }

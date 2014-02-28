@@ -29,8 +29,8 @@ public class UpdateAppUtil {
 	}
 	
 	private static void updatesForV4(EventSeekr eventSeekr) {
-		eventSeekr.removeFbUserInfo();
-		eventSeekr.removeGPlusUserInfo();
+		FbUtil.callFacebookLogout(eventSeekr);
+		GPlusUtil.callGPlusLogout(null, eventSeekr);
 		eventSeekr.removeWcitiesId();
 	}
 }

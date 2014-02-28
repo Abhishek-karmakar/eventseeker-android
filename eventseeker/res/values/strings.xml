@@ -4,14 +4,14 @@
     <string name="app_name">eventseeker</string>
     
     <!-- development keys -->
-    <string name="fb_app_id">687206491296790</string>
+    <!-- <string name="fb_app_id">687206491296790</string>
     <string name="map_v2_android_key">AIzaSyC4DsIo1BknPFbcHZ5y89UygHgWxgUhFic</string>
-    <string name="map_v3_browser_key">AIzaSyDhuqduP4vkcqEbDeX0nxuBE5HnvZTrt9w</string>
+    <string name="map_v3_browser_key">AIzaSyDhuqduP4vkcqEbDeX0nxuBE5HnvZTrt9w</string> -->
     
     <!-- production keys -->
-    <!-- <string name="fb_app_id">153033148171841</string>
+    <string name="fb_app_id">153033148171841</string>
     <string name="map_v2_android_key">AIzaSyDUaOHXTK9bv4-JhQ3h_1M0iew07JqTb9I</string>
-    <string name="map_v3_browser_key">AIzaSyBOTuIbME9QmZsfoBFFLa38zjTGJ-jWT-k</string> -->
+    <string name="map_v3_browser_key">AIzaSyBOTuIbME9QmZsfoBFFLa38zjTGJ-jWT-k</string>
     
     <string name="menu_search">Search</string>
     <string name="menu_change_location">Change Location</string>

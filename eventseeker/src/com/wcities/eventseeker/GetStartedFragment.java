@@ -1,7 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.io.IOException;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +7,6 @@ import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,12 +23,8 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.Settings;
 import com.facebook.model.GraphUser;
-import com.google.android.gms.auth.GoogleAuthException;
-import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.plus.PlusClient;
@@ -54,11 +47,6 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 	
 	private static final String TAG = GetStartedFragment.class.getName();
 	
-	// List of additional write permissions being requested
-	//private static final List<String> PERMISSIONS = Arrays.asList("publish_actions", "publish_stream");
-	// Request code for facebook reauthorization requests.
-	//private static final int FACEBOOK_REAUTH_ACTIVITY_CODE = 100;
-	
 	private static final String DIALOG_FRAGMENT_TAG_SKIP = "skipDialog";
 	
 	private Button btnSkip;
@@ -69,6 +57,8 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
     private PlusClient mPlusClient;
     private ConnectionResult mConnectionResult;
     private boolean isGPlusSigningIn;
+    
+	private boolean isPermissionDisplayed;
     
 	// Container Activity must implement this interface
     public interface GetStartedFragmentListener {
@@ -125,7 +115,8 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 		            Session.setActiveSession(session);
 		            if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
 		            	Log.d(TAG, "CREATED_TOKEN_LOADED");
-		                session.openForRead(new Session.OpenRequest(this).setCallback(statusCallback));
+		                session.openForRead(new Session.OpenRequest(this).setPermissions(
+		                		AppConstants.PERMISSIONS_FB_LOGIN).setCallback(statusCallback));
 		            	//session.closeAndClearTokenInformation();
 		            }
 		        }
@@ -216,10 +207,10 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
     }
     
 	private void updateView() {
-		Log.d(TAG, "updateView()");
+		//Log.d(TAG, "updateView()");
         final Session session = Session.getActiveSession();
         if (session.isOpened()) {
-        	Log.d(TAG, "session is opened");
+        	//Log.d(TAG, "session is opened");
         	/*if (!hasPublishPermission()) {
         		*//**
         		 * request for publish permissions now only so that in future user don't need to 
@@ -228,6 +219,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 				requestPublishPermissions(session, PERMISSIONS, 0);
 				
         	} else {*/
+        	if (FbUtil.hasPermission(AppConstants.PERMISSIONS_FB_LOGIN)) {
 	        	FbUtil.makeMeRequest(session, new Request.GraphUserCallback() {
 	
 	    			@Override
@@ -240,8 +232,12 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 	    	                	bundle.putSerializable(BundleKeys.LOGIN_TYPE, LoginType.facebook);
 	    	                	bundle.putString(BundleKeys.FB_USER_ID, user.getId());
 	    	                	bundle.putString(BundleKeys.FB_USER_NAME, user.getUsername());
-	    	                	// this email property requires "email" permission while opening session
-	    	                	bundle.putString(BundleKeys.FB_EMAIL_ID, user.getProperty("email").toString());
+	    	                	/**
+	    	                	 * this email property requires "email" permission while opening session.
+	    	                	 * Email comes null if user has not verified his primary emailId on fb account
+	    	                	 */
+	    	                	String email = (user.getProperty("email") == null) ? "" : user.getProperty("email").toString();
+	    	                	bundle.putString(BundleKeys.FB_EMAIL_ID, email);
 	    	                	ConnectAccountsFragmentListener listener = (ConnectAccountsFragmentListener)FragmentUtil.getActivity(
 										GetStartedFragment.this);
 	    	                	/**
@@ -259,24 +255,35 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 	    	            }
 	    			}
 	    	    });
-        	//}
+	        	
+        	} else {
+        		if (!isPermissionDisplayed) {
+	        		//Log.d(TAG, "request email permission");
+	        		FbUtil.requestEmailPermission(session, AppConstants.PERMISSIONS_FB_LOGIN, 
+	        				AppConstants.REQ_CODE_FB_LOGIN_EMAIL, this);
+	        		isPermissionDisplayed = true;
+	        		
+        		} else {
+        			//Log.d(TAG, "permission is already displayed");
+        			isPermissionDisplayed = false;
+        		}
+        	}
         	
-        } else {
-        	Log.i(TAG, "session is not opened");
-        	imgFbSignUp.setOnClickListener(new View.OnClickListener() {
-    			
-    			@Override
-    			public void onClick(View v) {
-    				ConnectionFailureListener connectionFailureListener = 
-    						((ConnectionFailureListener) FragmentUtil.getActivity(GetStartedFragment.this));
-    				if (!NetworkUtil.getConnectivityStatus((Context) connectionFailureListener)) {
-    					connectionFailureListener.onConnectionFailure();
-    					return;
-    				}
-    				FbUtil.onClickLogin(GetStartedFragment.this, statusCallback);
-    			}
-    		});
-        }
+        } 
+        
+    	imgFbSignUp.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				ConnectionFailureListener connectionFailureListener = 
+						((ConnectionFailureListener) FragmentUtil.getActivity(GetStartedFragment.this));
+				if (!NetworkUtil.getConnectivityStatus((Context) connectionFailureListener)) {
+					connectionFailureListener.onConnectionFailure();
+					return;
+				}
+				FbUtil.onClickLogin(GetStartedFragment.this, statusCallback);
+			}
+		});
     }
 	
 	private class SessionStatusCallback implements Session.StatusCallback {

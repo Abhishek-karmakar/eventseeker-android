@@ -35,6 +35,7 @@ import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
+import com.facebook.Session.StatusCallback;
 import com.facebook.model.GraphUser;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
@@ -148,9 +149,10 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	private PlusClient mPlusClient;
 	private ConnectionResult mConnectionResult;
 
-    private Session.StatusCallback statusCallback = new SessionStatusCallback();
-
 	private Resources res;
+	private boolean isPermissionDisplayed;
+	
+	private StatusCallback statusCallback = new SessionStatusCallback();
     
     public interface ConnectAccountsFragmentListener {
     	public void onServiceSelected(Service service, Bundle args, boolean addToBackStack);
@@ -347,43 +349,61 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
         //Log.d(TAG, "session state = " + session.getState().name());
         if (session.isOpened()) {
         	//Log.d(TAG, "session is opened");
-        	FbUtil.makeMeRequest(session, new Request.GraphUserCallback() {
-
-    			@Override
-    			public void onCompleted(GraphUser user, Response response) {
-    				// If the response is successful
-    	            if (session == Session.getActiveSession()) {
-    	            	/**
-    	            	 * 2nd condition !fbLoggedIn is put due to following reason: 
-    	            	 * Sometimes this updateView() method is called twice. 
-    	            	 * For e.g.: For device not having facebook app,
-    	            	 * 1) Login at least once in the app.
-    	            	 * 2) Log out from facebook.
-    	            	 * 3) Go to my events & select going/want to for any event which will in turn ask 
-    	            	 * for facebook login. Complete this process.
-    	            	 * 4) Go to Sync Accounts screen. Select Login with Facebook. It doesn't ask for 
-    	            	 * fb credentials since session is already open but this calls updateView() twice. 
-    	            	 */
-    	                if (user != null && !fbLoggedIn) {
-    	                	//serviceAccounts.get(0).name = FB_LOGOUT;
-    	                	fbLoggedIn = true;
-    	                	listAdapter.notifyDataSetChanged();
-    	                	
-    	                	Bundle bundle = new Bundle();
-    	                	bundle.putSerializable(BundleKeys.LOGIN_TYPE, LoginType.facebook);
-    	                	bundle.putString(BundleKeys.FB_USER_ID, user.getId());
-    	    	        	bundle.putString(BundleKeys.FB_USER_NAME, user.getUsername());
-    	    	        	bundle.putString(BundleKeys.FB_EMAIL_ID, user.getProperty("email").toString());
-    	                	((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
-    	                		.onServiceSelected(Service.Facebook, bundle, true);
-    	                }
-    	            }
-    	            
-    	            if (response.getError() != null) {
-    	                // Handle errors, will do so later.
-    	            }
-    			}
-    	    });
+        	if (FbUtil.hasPermission(AppConstants.PERMISSIONS_FB_LOGIN)) {
+	        	FbUtil.makeMeRequest(session, new Request.GraphUserCallback() {
+	
+	    			@Override
+	    			public void onCompleted(GraphUser user, Response response) {
+	    				// If the response is successful
+	    	            if (session == Session.getActiveSession()) {
+	    	            	/**
+	    	            	 * 2nd condition !fbLoggedIn is put due to following reason: 
+	    	            	 * Sometimes this updateView() method is called twice. 
+	    	            	 * For e.g.: For device not having facebook app,
+	    	            	 * 1) Login at least once in the app.
+	    	            	 * 2) Log out from facebook.
+	    	            	 * 3) Go to my events & select going/want to for any event which will in turn ask 
+	    	            	 * for facebook login. Complete this process.
+	    	            	 * 4) Go to Sync Accounts screen. Select Login with Facebook. It doesn't ask for 
+	    	            	 * fb credentials since session is already open but this calls updateView() twice. 
+	    	            	 */
+	    	                if (user != null && !fbLoggedIn) {
+	    	                	//serviceAccounts.get(0).name = FB_LOGOUT;
+	    	                	fbLoggedIn = true;
+	    	                	listAdapter.notifyDataSetChanged();
+	    	                	
+	    	                	Bundle bundle = new Bundle();
+	    	                	bundle.putSerializable(BundleKeys.LOGIN_TYPE, LoginType.facebook);
+	    	                	bundle.putString(BundleKeys.FB_USER_ID, user.getId());
+	    	    	        	bundle.putString(BundleKeys.FB_USER_NAME, user.getUsername());
+	    	    	        	/**
+	    	                	 * this email property requires "email" permission while opening session.
+	    	                	 * Email comes null if user has not verified his primary emailId on fb account
+	    	                	 */
+	    	                	String email = (user.getProperty("email") == null) ? "" : user.getProperty("email").toString();
+	    	                	bundle.putString(BundleKeys.FB_EMAIL_ID, email);
+	    	                	((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
+	    	                		.onServiceSelected(Service.Facebook, bundle, true);
+	    	                }
+	    	            }
+	    	            
+	    	            if (response.getError() != null) {
+	    	                // Handle errors, will do so later.
+	    	            }
+	    			}
+	    	    });
+	        	
+        	} else {
+        		if (!isPermissionDisplayed) {
+	        		Log.d(TAG, "request email permission");
+	        		FbUtil.requestEmailPermission(session, AppConstants.PERMISSIONS_FB_LOGIN, 
+	        				AppConstants.REQ_CODE_FB_LOGIN_EMAIL, this);
+	        		isPermissionDisplayed = true;
+	        		
+        		} else {
+        			isPermissionDisplayed = false;
+        		}
+        	}
         } 
     }
 	
@@ -774,13 +794,6 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		}
 	}
 	
-	private class SessionStatusCallback implements Session.StatusCallback {
-        @Override
-        public void call(Session session, SessionState state, Exception exception) {
-            updateView();
-        }
-    }
-	
 	@Override
 	public void doPositiveClick(String dialogTag) {
 		if (dialogTag.equals(DIALOG_ALREADY_LOGGED_IN_WITH_OTHER_ACCOUNT)) {
@@ -918,4 +931,13 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			}
 		}
 	}
+	
+	private class SessionStatusCallback implements Session.StatusCallback {
+        @Override
+        public void call(Session session, SessionState state, Exception exception) {
+        	Log.d(TAG, "call() - state = " + state.name());
+            updateView();
+        }
+    }
+	
 }

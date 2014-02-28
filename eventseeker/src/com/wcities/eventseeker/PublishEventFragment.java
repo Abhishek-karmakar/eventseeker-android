@@ -213,11 +213,11 @@ public abstract class PublishEventFragment extends Fragment implements PublishLi
 		}
 	}
 	
-	public boolean isPublishPermissionDisplayed() {
+	public boolean isPermissionDisplayed() {
 		return isPublishPermissionDisplayed;
 	}
 	
-	public void setPublishPermissionDisplayed(boolean isPublishPermissionDisplayed) {
+	public void setPermissionDisplayed(boolean isPublishPermissionDisplayed) {
 		this.isPublishPermissionDisplayed = isPublishPermissionDisplayed;
 	}
 	

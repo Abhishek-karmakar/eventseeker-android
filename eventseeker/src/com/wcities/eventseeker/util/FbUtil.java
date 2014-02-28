@@ -1,5 +1,6 @@
 package com.wcities.eventseeker.util;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.json.JSONException;
@@ -128,8 +129,8 @@ public class FbUtil {
     		return false;
 	    }
 
-	    if (!hasPublishPermission(permissions)) {
-	    	if (!fbPublishListener.isPublishPermissionDisplayed()) {
+	    if (!hasPermission(permissions)) {
+	    	if (!fbPublishListener.isPermissionDisplayed()) {
 		    	//Log.d(TAG, "publish permission is not there");
 		    	fbPublishListener.setPendingAnnounce(true); // Mark that we are currently waiting for confirmation of publish permissions
 		        session.addCallback(fbPublishListener); 
@@ -137,9 +138,9 @@ public class FbUtil {
 		        Fragment fragmentToHandleActivityResult = FragmentUtil.getTopLevelParentFragment(fragment);
 		        requestPublishPermissions(session, permissions, requestCode, fragmentToHandleActivityResult, 
 		        		fbPublishListener);
-		        fbPublishListener.setPublishPermissionDisplayed(true);
+		        fbPublishListener.setPermissionDisplayed(true);
 	    	} else {
-	    		fbPublishListener.setPublishPermissionDisplayed(false);							
+	    		fbPublishListener.setPermissionDisplayed(false);							
 			}
 	        return false;
 	    } 
@@ -147,11 +148,30 @@ public class FbUtil {
 	    return true;
 	}
 	
-	public static boolean hasPublishPermission(List<String> permissions) {
-		Log.d(TAG, "hasPublishPermission()");
+	public static boolean hasPermission(List<String> permissions) {
+		//Log.d(TAG, "hasPermission()");
         Session session = Session.getActiveSession();
         return session != null && session.getPermissions().containsAll(permissions);
     }
+	
+	public static void requestEmailPermission(Session session, List<String> permissions, int requestCode, 
+			Fragment fragmentToHandleActivityResult) {
+		Log.d(TAG, "requestEmailPermission()");
+        Session.NewPermissionsRequest reauthRequest = new Session.NewPermissionsRequest(fragmentToHandleActivityResult, 
+        		permissions).setRequestCode(requestCode);
+        try {
+        	session.requestNewReadPermissions(reauthRequest);
+        	
+        } catch (UnsupportedOperationException e) {
+        	/**
+        	 * To handle,
+        	 * java.lang.UnsupportedOperationException: Session: an attempt was made to request new 
+        	 * permissions for a session that has a pending request.
+        	 */
+        	Log.e(TAG, "UnsupportedOperationException");
+        	e.printStackTrace();
+        }
+	}
 	
 	private static void requestPublishPermissions(Session session, List<String> permissions, int requestCode, 
 			Fragment fragmentToHandleActivityResult, PublishListener fbPublishListener) {
@@ -249,7 +269,7 @@ public class FbUtil {
 	    // awaiting a successful reauthorization
 	    if (fbPublishListener.isPendingAnnounce()) {
 	        
-	    	if (hasPublishPermission(permissions)) {
+	    	if (hasPermission(permissions)) {
 	    		// Publish the action
 	    		handlePublishEvent(fbPublishListener, fragment, permissions, requestCode, 
 		    			event);
@@ -268,7 +288,7 @@ public class FbUtil {
 	    // awaiting a successful reauthorization
 	    if (fbPublishListener.isPendingAnnounce()) {
 	        
-	    	if (hasPublishPermission(permissions)) {
+	    	if (hasPermission(permissions)) {
 	    		// Publish the action
 	    		handlePublishFriendNewsItem(fbPublishListener, fragment, permissions, requestCode, 
 		    			friendNewsItem);

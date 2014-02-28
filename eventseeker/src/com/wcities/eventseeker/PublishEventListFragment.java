@@ -246,11 +246,11 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 		}
 	}
 
-	public boolean isPublishPermissionDisplayed() {
+	public boolean isPermissionDisplayed() {
 		return isPublishPermissionDisplayed;
 	}
 	
-	public void setPublishPermissionDisplayed(boolean isPublishPermissionDisplayed) {
+	public void setPermissionDisplayed(boolean isPublishPermissionDisplayed) {
 		this.isPublishPermissionDisplayed = isPublishPermissionDisplayed;
 	}
 	
