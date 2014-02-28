@@ -49,12 +49,14 @@ public class EventFeaturingFragment extends PublishEventListFragment implements 
 	private TextView txtBuyTickets;
 	private boolean isTablet;
 	private int fbCallCountForSameEvt = 0;
+	private Resources res;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		event = (Event) getArguments().getSerializable(BundleKeys.EVENT);
 		isTablet = ((MainActivity)FragmentUtil.getActivity(this)).isTablet();
+		res = getResources(); 
 	}
 	
 	@Override
@@ -107,7 +109,7 @@ public class EventFeaturingFragment extends PublishEventListFragment implements 
 	
 	private void updateBtnBuyTicketsEnabled(boolean enabled) {
 		lnrLayoutTickets.setEnabled(enabled);
-		Resources res = getResources(); 
+
 		if (enabled) {
 			if (isTablet) {
 				txtBuyTickets.setTextColor(res.getColor(android.R.color.white));
