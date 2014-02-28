@@ -311,7 +311,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
         		continue;
         	}
         	
-        	if (AppConstants.IS_FOR_VOLVO && service.equals(Service.GooglePlay)) {
+        	if (AppConstants.REMOVE_GOOGLE_PLAY_SYNC && service.equals(Service.GooglePlay)) {
         		continue;
         	}
         	
