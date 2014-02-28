@@ -536,7 +536,15 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	@Override
 	public void onBackPressed() {
 		if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-			super.onBackPressed();
+			try {
+				/**
+				 * try catch is added to handle the IllegalStateException
+				 */
+				super.onBackPressed();
+				
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			}
 			
 		} else {
 			/**
