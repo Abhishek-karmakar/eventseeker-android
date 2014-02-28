@@ -304,21 +304,26 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
         for (int i = 0; i < connectAccountsItemTitles.length; i++) {
         		
         	Service service = connectAccountsItemTitles[i];
-        		
+
         	if ((isFirstTimeLaunch && (service.equals(Service.Facebook)
         			|| service.equals(Service.Blank) || service.equals(Service.GooglePlus)))
         			|| (!isFirstTimeLaunch && service.equals(Service.Title))) {
         		continue;
         	}
-        	
+        		
+        	/**
+        	 * the following two lines are written above the 'if' condition of Google Play Music Service
+        	 * because irrespective of we are using or not the Google Play Music Service we have to 
+        	 * initialize it as UNSYNC, so that we can get proper value of isAnyServiceSynced when we call 
+        	 * isAnyAccountSynced() method to show 'skip' or 'continue' button
+        	 */
+        	ServiceAccount serviceAccount = new ServiceAccount();
+        	serviceAccount.count = eventSeekr.getSyncCount(service);
         	if (AppConstants.REMOVE_GOOGLE_PLAY_SYNC && service.equals(Service.GooglePlay)) {
         		continue;
         	}
-        	
-			ServiceAccount serviceAccount = new ServiceAccount();
 			serviceAccount.name = service.getStr();
 			serviceAccount.drawable = service.getDrwResId();
-			serviceAccount.count = eventSeekr.getSyncCount(service);
 			serviceAccounts.add(serviceAccount);
 		}
         

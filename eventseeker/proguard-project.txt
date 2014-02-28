@@ -58,3 +58,5 @@
     public static final ** CREATOR;
 }
 
+# This will prevent Application class from getting obfuscated
+-keep public class * extends android.app.Application

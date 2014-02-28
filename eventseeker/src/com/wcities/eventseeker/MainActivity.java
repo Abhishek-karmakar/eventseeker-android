@@ -118,6 +118,8 @@ public class MainActivity extends ActionBarActivity implements
 	private long timeIntervalInMillisToCheckForBoschConnection = MIN_MILLIS_TO_CHK_BOSCH_CONNECTION;
 	private Runnable periodicCheckForBoschConnection;
 	private Handler handler;
+
+	private boolean isCalledFromTwitterSection;
 	
 	public static MainActivity getInstance() {
 		return instance;
@@ -1157,9 +1159,10 @@ public class MainActivity extends ActionBarActivity implements
 					 * following error : java.lang.IllegalStateException: Can not perform this action after 
 					 * onSaveInstanceState
 					 */
+					isCalledFromTwitterSection = true;
 					onBackPressed();
-				} catch (Exception e) {
-					Log.e(TAG, "ERROR: " + e.toString());
+				} catch (IllegalStateException e) {
+					e.printStackTrace();
 					/**
 					 * return from here otherwise app will again crash at below lines.
 					 */
@@ -1556,7 +1559,7 @@ public class MainActivity extends ActionBarActivity implements
 	}
 	
 	@Override
-	public void onBackPressed() {
+	public void onBackPressed() throws IllegalStateException {
 		/**
 		 * this added as after the Syncing screen when the onbackpressed occurs, on Connect account screen back arrow
 		 * is retained in tablet landscape mode. So, to resolve the issue below statements are added.
@@ -1566,7 +1569,22 @@ public class MainActivity extends ActionBarActivity implements
 		}
 		
 		if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-			super.onBackPressed();
+			try {
+				/**
+				 * This try catch will handle IllegalStateException which may occur if onBackPressed() on Super
+				 * has been called after the onSaveInstanceState().
+				 */
+				super.onBackPressed();
+				
+			} catch (IllegalStateException e) {
+				if (isCalledFromTwitterSection) {
+					isCalledFromTwitterSection = false;
+					throw e;
+					
+				} else {
+					e.printStackTrace();					
+				}
+			}
 			
 		} else {
 			/**
