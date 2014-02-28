@@ -1,8 +1,5 @@
 package com.wcities.eventseeker.util;
 
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import org.json.JSONException;
@@ -10,15 +7,12 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.facebook.FacebookRequestError;
-import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.Request.GraphUserCallback;
-import com.facebook.RequestAsyncTask;
 import com.facebook.RequestBatch;
 import com.facebook.Response;
 import com.facebook.Session;
@@ -40,7 +34,6 @@ import com.wcities.eventseeker.interfaces.PublishListener;
 public class FbUtil {
 
 	private static final String TAG = FbUtil.class.getName();
-	private static final List<String> PERMISSIONS = Arrays.asList("publish_actions");
 
 	public static boolean hasUserLoggedInBefore(Context context) {
 		//Log.d(TAG, "hasUserLoggedInBefore()");
@@ -55,8 +48,7 @@ public class FbUtil {
 	        //if (!session.isClosed()) {
 	            session.closeAndClearTokenInformation();
 	            //clear your preferences if saved
-	            eventSeekr.removeFbUserId();
-	            eventSeekr.removeFbUserName();
+	            eventSeekr.removeFbUserInfo();
 	        //}
 	        
 	    } else {
@@ -66,8 +58,7 @@ public class FbUtil {
 	        session.closeAndClearTokenInformation();
 	        
 	        //clear your preferences if saved
-	        eventSeekr.removeFbUserId();
-	        eventSeekr.removeFbUserName();
+	        eventSeekr.removeFbUserInfo();
 	    }
 	}
 	
@@ -81,7 +72,8 @@ public class FbUtil {
         }
         if (!session.isOpened() && !session.isClosed()) {
         	//Log.d(TAG, "openForRead");
-            session.openForRead(new Session.OpenRequest(fragment).setCallback(statusCallback));
+            session.openForRead(new Session.OpenRequest(fragment).setPermissions(AppConstants.PERMISSIONS_FB_LOGIN)
+            		.setCallback(statusCallback));
             
         } else {
         	//Log.d(TAG, "openActiveSession");
@@ -310,7 +302,7 @@ public class FbUtil {
             @Override
             public void onCompleted(Response response) {
                 // Log any response error
-            	Log.i(TAG, "RESPONSE : " + response.toString());
+            	//Log.i(TAG, "RESPONSE : " + response.toString());
                 FacebookRequestError error = response.getError();
                 if (error != null) {
                     Log.i(TAG, error.getErrorMessage());

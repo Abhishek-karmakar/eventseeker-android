@@ -33,6 +33,7 @@ import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FileUtil;
 import com.wcities.eventseeker.util.GPlusUtil;
+import com.wcities.eventseeker.util.UpdateAppUtil;
 
 public class EventSeekr extends Application {
 
@@ -44,6 +45,7 @@ public class EventSeekr extends Application {
 
 	private String fbUserId, gPlusUserId;
 	private String fbUserName, gPlusUserName;
+	private String fbEmailId, gPlusEmailId;
 	private String wcitiesId;
 
 	private boolean firstTimeLaunch;
@@ -96,14 +98,9 @@ public class EventSeekr extends Application {
 	public void onCreate() {
 		// StrictMode testing
 		if (AppConstants.STRICT_MODE_ENABLED) {
-	         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-	                 .detectAll()
-	                 .penaltyLog()
+	         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog()
 	                 .build());
-	         StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-	                 .detectAll()
-	                 .penaltyLog()
-	                 .build());
+	         StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll().penaltyLog().build());
 	    }
 		
 		super.onCreate();
@@ -244,6 +241,18 @@ public class EventSeekr extends Application {
 		editor.putInt(SharedPrefKeys.APP_VERSION_CODE, appVersionCode);
 		editor.commit();
 	}
+	
+	public int getAppVersionCodeForUpgrades() {
+		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+		return pref.getInt(SharedPrefKeys.APP_VERSION_CODE_FOR_UPGRADES, 0);
+	}
+
+	public void updateAppVersionCodeForUpgrades(int appVersionCodeForUpgrades) {
+		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+		Editor editor = pref.edit();
+		editor.putInt(SharedPrefKeys.APP_VERSION_CODE_FOR_UPGRADES, appVersionCodeForUpgrades);
+		editor.commit();
+	}
 
 	public long getGcmRegistrationExpirationTime() {
 		if (gcmRegistrationExpirationTime == 0) {
@@ -269,36 +278,10 @@ public class EventSeekr extends Application {
 
 	public String getFbUserId() {
 		if (fbUserId == null) {
-			SharedPreferences pref = getSharedPreferences(
-					AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+			SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
 			fbUserId = pref.getString(SharedPrefKeys.FACEBOOK_USER_ID, null);
 		}
 		return fbUserId;
-	}
-
-	public void updateFbUserId(String fbUserId, AsyncTaskListener<Object> listener) {
-		this.fbUserId = fbUserId;
-
-		SharedPreferences pref = getSharedPreferences(
-				AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-		Editor editor = pref.edit();
-		editor.putString(SharedPrefKeys.FACEBOOK_USER_ID, fbUserId);
-		editor.commit();
-		
-		//For safety purpose
-		GPlusUtil.callGPlusLogout(null, this);
-		
-		new GetWcitiesId(listener, LoginType.facebook, null).execute();
-	}
-	
-	public void removeFbUserId() {
-		this.fbUserId = null;
-
-		SharedPreferences pref = getSharedPreferences(
-				AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-		Editor editor = pref.edit();
-		editor.remove(SharedPrefKeys.FACEBOOK_USER_ID);
-		editor.commit();
 	}
 	
 	public String getFbUserName() {
@@ -309,21 +292,43 @@ public class EventSeekr extends Application {
 		return fbUserName;
 	}
 	
-	public void updateFbUserName(String fbUserName) {
+	public String getFbEmailId() {
+		if (fbEmailId == null) {
+			SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+			fbEmailId = pref.getString(SharedPrefKeys.FACEBOOK_EMAIL_ID, null);
+		}
+		return fbEmailId;
+	}
+
+	public void updateFbUserInfo(String fbUserId, String fbUserName, String fbEmailId, 
+			AsyncTaskListener<Object> listener) {
+		this.fbUserId = fbUserId;
 		this.fbUserName = fbUserName;
+		this.fbEmailId = fbEmailId;
 		
 		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
 		Editor editor = pref.edit();
+		editor.putString(SharedPrefKeys.FACEBOOK_USER_ID, fbUserId);
 		editor.putString(SharedPrefKeys.FACEBOOK_USER_NAME, fbUserName);
+		editor.putString(SharedPrefKeys.FACEBOOK_EMAIL_ID, fbEmailId);
 		editor.commit();
+		
+		//For safety purpose
+		GPlusUtil.callGPlusLogout(null, this);
+		
+		new GetWcitiesId(listener, LoginType.facebook, null).execute();
 	}
 	
-	public void removeFbUserName() {
+	public void removeFbUserInfo() {
+		this.fbUserId = null;
 		this.fbUserName = null;
-
+		this.fbEmailId = null;
+		
 		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
 		Editor editor = pref.edit();
+		editor.remove(SharedPrefKeys.FACEBOOK_USER_ID);
 		editor.remove(SharedPrefKeys.FACEBOOK_USER_NAME);
+		editor.remove(SharedPrefKeys.FACEBOOK_EMAIL_ID);
 		editor.commit();
 	}
 	
@@ -336,33 +341,6 @@ public class EventSeekr extends Application {
 		return gPlusUserId;
 	}
 	
-	public void updateGPlusUserId(String gPlusUserId, String accountName, AsyncTaskListener<Object> listener) {
-		this.gPlusUserId = gPlusUserId;
-
-		SharedPreferences pref = getSharedPreferences(
-				AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-		Editor editor = pref.edit();
-		editor.putString(SharedPrefKeys.GOOGLE_PLUS_USER_ID, gPlusUserId);
-		editor.commit();
-		
-		//For safety purpose
-		FbUtil.callFacebookLogout(this);
-		
-		updateGPlusAccountName(accountName);
-		
-		new GetWcitiesId(listener, LoginType.googlePlus, accountName).execute();
-	}
-	
-	public void removeGPlusUserId() {
-		this.gPlusUserId = null;
-
-		SharedPreferences pref = getSharedPreferences(
-				AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-		Editor editor = pref.edit();
-		editor.remove(SharedPrefKeys.GOOGLE_PLUS_USER_ID);
-		editor.commit();
-	}
-	
 	public String getGPlusUserName() {
 		if (gPlusUserName == null) {
 			SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
@@ -371,43 +349,46 @@ public class EventSeekr extends Application {
 		return gPlusUserName;
 	}
 	
-	public void updateGPlusUserName(String gPlusUserName) {
+	public String getGPlusEmailId() {
+		if (gPlusEmailId == null) {
+			SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+			gPlusEmailId = pref.getString(SharedPrefKeys.GOOGLE_PLUS_EMAIL_ID, null);
+		}
+		return gPlusEmailId;
+	}
+	
+	public void updateGPlusUserInfo(String gPlusUserId, String gPlusUserName, String gPlusEmailId, 
+			AsyncTaskListener<Object> listener) {
+		this.gPlusUserId = gPlusUserId;
 		this.gPlusUserName = gPlusUserName;
-		
+		this.gPlusEmailId = gPlusEmailId;
+
 		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
 		Editor editor = pref.edit();
+		editor.putString(SharedPrefKeys.GOOGLE_PLUS_USER_ID, gPlusUserId);
 		editor.putString(SharedPrefKeys.GOOGLE_PLUS_USER_NAME, gPlusUserName);
+		editor.putString(SharedPrefKeys.GOOGLE_PLUS_EMAIL_ID, gPlusEmailId);
 		editor.commit();
+		
+		//For safety purpose
+		FbUtil.callFacebookLogout(this);
+		
+		new GetWcitiesId(listener, LoginType.googlePlus, gPlusEmailId).execute();
 	}
 	
-	public void removeGPlusUserName() {
+	public void removeGPlusUserInfo() {
+		this.gPlusUserId = null;
 		this.gPlusUserName = null;
+		this.gPlusEmailId = null;
 
 		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
 		Editor editor = pref.edit();
+		editor.remove(SharedPrefKeys.GOOGLE_PLUS_USER_ID);
 		editor.remove(SharedPrefKeys.GOOGLE_PLUS_USER_NAME);
+		editor.remove(SharedPrefKeys.GOOGLE_PLUS_EMAIL_ID);
 		editor.commit();
 	}
 	
-	public String getGPlusAccountName() {
-		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-		return pref.getString(SharedPrefKeys.GOOGLE_PLUS_ACCOUNT_NAME, null);
-	}
-	
-	public void updateGPlusAccountName(String gPlusAccountName) {
-		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-		Editor editor = pref.edit();
-		editor.putString(SharedPrefKeys.GOOGLE_PLUS_ACCOUNT_NAME, gPlusAccountName);
-		editor.commit();
-	}
-	
-	public void removeGPlusAccountName() {
-		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-		Editor editor = pref.edit();
-		editor.remove(SharedPrefKeys.GOOGLE_PLUS_ACCOUNT_NAME);
-		editor.commit();
-	}
-
 	public String getWcitiesId() {
 		if (wcitiesId == null) {
 			SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
@@ -420,7 +401,7 @@ public class EventSeekr extends Application {
 				new GetWcitiesId(null, LoginType.facebook, null).execute();
 				
 			} else if (getGPlusUserId() != null) {
-				new GetWcitiesId(null, LoginType.googlePlus, getGPlusAccountName()).execute();
+				new GetWcitiesId(null, LoginType.googlePlus, getGPlusEmailId()).execute();
 			}
 		}
 		return wcitiesId;
@@ -436,6 +417,15 @@ public class EventSeekr extends Application {
 		editor.commit();
 
 		new GcmUtil(this).registerGCMInBackground();
+	}
+	
+	public void removeWcitiesId() {
+		this.wcitiesId = null;
+
+		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+		Editor editor = pref.edit();
+		editor.remove(SharedPrefKeys.WCITIES_USER_ID);
+		editor.commit();
 	}
 	
 	public boolean getFirstTimeLaunch() {
@@ -601,9 +591,11 @@ public class EventSeekr extends Application {
 
 				if (loginType == LoginType.facebook) {
 					userInfoApi.setFbUserId(getFbUserId());
+					userInfoApi.setFbEmailId(getFbEmailId());
 					
 				} else if (loginType == LoginType.googlePlus) {
-					userInfoApi.setgPlusUserId(getGPlusUserId());
+					userInfoApi.setGPlusUserId(getGPlusUserId());
+					userInfoApi.setGPlusEmailId(getGPlusEmailId());
 				}
 				userInfoApi.setUserId(userId);
 				jsonObject = userInfoApi.syncAccount(null, loginType);

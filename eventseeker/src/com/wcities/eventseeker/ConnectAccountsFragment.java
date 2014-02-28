@@ -368,6 +368,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     	                	bundle.putSerializable(BundleKeys.LOGIN_TYPE, LoginType.facebook);
     	                	bundle.putString(BundleKeys.FB_USER_ID, user.getId());
     	    	        	bundle.putString(BundleKeys.FB_USER_NAME, user.getUsername());
+    	    	        	bundle.putString(BundleKeys.FB_EMAIL_ID, user.getProperty("email").toString());
     	                	((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
     	                		.onServiceSelected(Service.Facebook, bundle, true);
     	                }
@@ -881,7 +882,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	            bundle.putSerializable(BundleKeys.LOGIN_TYPE, LoginType.googlePlus);
 	        	bundle.putString(BundleKeys.GOOGLE_PLUS_USER_ID, personId);
 	        	bundle.putString(BundleKeys.GOOGLE_PLUS_USER_NAME, currentPerson.getDisplayName());
-	        	bundle.putString(BundleKeys.GOOGLE_PLUS_ACCOUNT_NAME, mPlusClient.getAccountName());
+	        	bundle.putString(BundleKeys.GOOGLE_PLUS_EMAIL_ID, mPlusClient.getAccountName());
 	        	
 	        	((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
         				.onServiceSelected(Service.GooglePlus, bundle, true);

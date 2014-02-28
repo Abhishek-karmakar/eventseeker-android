@@ -55,6 +55,7 @@ public class UserInfoApi extends Api {
 	
 	// userId - generated & returned by server on signup call
 	private String fbUserId, gPlusUserId, deviceId, userId, gcmRegistrationId; 
+	private String fbEmailId, gPlusEmailId;
 	private Tracktype tracktype;
 	
 	private int limit;
@@ -76,12 +77,28 @@ public class UserInfoApi extends Api {
 		this.fbUserId = fbUserId;
 	}
 
-	public String getgPlusUserId() {
+	public String getFbEmailId() {
+		return fbEmailId;
+	}
+
+	public void setFbEmailId(String fbEmailId) {
+		this.fbEmailId = fbEmailId;
+	}
+
+	public String getGPlusUserId() {
 		return gPlusUserId;
 	}
 
-	public void setgPlusUserId(String gPlusUserId) {
+	public void setGPlusUserId(String gPlusUserId) {
 		this.gPlusUserId = gPlusUserId;
+	}
+
+	public String getGPlusEmailId() {
+		return gPlusEmailId;
+	}
+
+	public void setGPlusEmailId(String gPlusEmailId) {
+		this.gPlusEmailId = gPlusEmailId;
 	}
 
 	public Tracktype getTracktype() {
@@ -169,18 +186,20 @@ public class UserInfoApi extends Api {
 	
 	public JSONObject syncAccount(String repCode, LoginType loginType) throws ClientProtocolException, IOException, JSONException {
 		String METHOD = "myProfile.php?";
-		String loginId = null, userType = null;
+		String loginId = null, userType = null, email = null;
 		if (loginType == LoginType.facebook) {
 			loginId = fbUserId;
+			email = fbEmailId;
 			userType = UserType.fb.name();
 			
 		} else if (loginType == LoginType.googlePlus) {
 			loginId = gPlusUserId;
+			email = gPlusEmailId;
 			userType = UserType.google.name();
 		}
 		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD).append("oauth_token=")
 				.append(getOauthToken()).append("&type=").append(Type.syncaccount.name()).append("&userId=")
-				.append(loginId).append("&userType=").append(userType).append("&wcitiesId=").append(userId);
+				.append(loginId).append("&email=").append(email).append("&userType=").append(userType).append("&wcitiesId=").append(userId);
 		if (repCode != null) {
 			uriBuilder.append("&repCode=" + repCode);
 		}

@@ -42,15 +42,13 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 		loginType = (LoginType) args.getSerializable(BundleKeys.LOGIN_TYPE);
 		
 		if (loginType == LoginType.facebook) {
-        	eventSeekr.updateFbUserName(args.getString(BundleKeys.FB_USER_NAME));
-			((EventSeekr) (FragmentUtil.getActivity(LoginSyncingFragment.this)).getApplicationContext())
-					.updateFbUserId(args.getString(BundleKeys.FB_USER_ID), this);
+        	eventSeekr.updateFbUserInfo(args.getString(BundleKeys.FB_USER_ID), args.getString(BundleKeys.FB_USER_NAME), 
+        			args.getString(BundleKeys.FB_EMAIL_ID), this);
 			
 		} else {
-			eventSeekr.updateGPlusUserName(args.getString(BundleKeys.GOOGLE_PLUS_USER_NAME));
-			((EventSeekr) (FragmentUtil.getActivity(LoginSyncingFragment.this)).getApplicationContext())
-					.updateGPlusUserId(args.getString(BundleKeys.GOOGLE_PLUS_USER_ID), 
-							args.getString(BundleKeys.GOOGLE_PLUS_ACCOUNT_NAME), this);
+			eventSeekr.updateGPlusUserInfo(args.getString(BundleKeys.GOOGLE_PLUS_USER_ID), 
+					args.getString(BundleKeys.GOOGLE_PLUS_USER_NAME), args.getString(BundleKeys.GOOGLE_PLUS_EMAIL_ID), 
+					this);
 		}
 	}
 

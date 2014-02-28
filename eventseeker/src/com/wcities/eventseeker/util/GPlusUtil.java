@@ -61,9 +61,7 @@ public class GPlusUtil {
 			plusClient.disconnect();
 			//plusClient.connect();
 		}
-		eventSeekr.removeGPlusUserId();
-        eventSeekr.removeGPlusUserName();
-        eventSeekr.removeGPlusAccountName();
+		eventSeekr.removeGPlusUserInfo();
 	}
 	
 	public static void showDialogForGPlayServiceUnavailability(int available, Fragment fragment) {

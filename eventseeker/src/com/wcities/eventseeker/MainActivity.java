@@ -63,6 +63,7 @@ import com.wcities.eventseeker.interfaces.VenueListener;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GPlusUtil;
+import com.wcities.eventseeker.util.UpdateAppUtil;
 
 public class MainActivity extends ActionBarActivity implements
 		DrawerListFragmentListener, GetStartedFragmentListener,
@@ -126,6 +127,8 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		UpdateAppUtil.updateCheckes((EventSeekr) getApplication());
 
 		EventSeekr.setConnectionFailureListener(this);
 		//Log.d(TAG, "deviceId = " + DeviceUtil.getDeviceId((EventSeekr) getApplication()));

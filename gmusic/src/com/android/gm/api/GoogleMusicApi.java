@@ -189,7 +189,8 @@ public class GoogleMusicApi
 		 */
 		String response = mHttpClient.post(context, "https://play.google.com/music/services/streamingloadalltracks?u=0&xt="
 						+ getXtCookieValue(), new ByteArrayEntity(form.toString().getBytes()), form.getContentType());
-		//Log.d(TAG, "response = " + response);
+		//Log.d(TAG, "response length = " + response.length());
+		//Log.d(TAG, "response = " + response.substring(response.length() - 1500));
 
 		if (response == null) {
 			/**
@@ -202,23 +203,24 @@ public class GoogleMusicApi
 		}
 		
 		List<String> artistNames = new ArrayList<String>();
-		//List<String> tokens = new ArrayList<String>();
 
+		// these start & end tokens are encountered for each set of 1000 songs, hence we have while loop below.
 		String startToken = "['slat_process']("; 
 		String endToken = ");"; //"\\\nwindow.parent['slat_progress']";
 		int startIndex = response.indexOf(startToken);
-		if (startIndex >= 0) {
+		while (startIndex >= 0) {
 			//Log.d(TAG, "startIndex >= 0");
 			// if response has any artists
 			startIndex += startToken.length();
 			
 			int endIndex = response.indexOf(endToken, startIndex);
 			//Log.d(TAG, "startindex = " + startIndex + ", endIndex = " + endIndex);
-			
+			//Log.d(TAG, "response substring length = " + response.substring(startIndex, endIndex).length());
 			JSONArray jsonArray = new JSONArray(response.substring(startIndex, endIndex));
 			parseArtistNames(jsonArray, artistNames);
 			
-			//artistNames.addAll(getArtistNames(context, tokens.get(tokens.size() - 1)));
+			response = response.substring(endIndex);
+			startIndex = response.indexOf(startToken);
 		}
 		
 		return artistNames;
@@ -239,9 +241,6 @@ public class GoogleMusicApi
 					count++;
 
 					if (count < 6) {
-						/*if (count == 1) {
-							tokens.add((String) ob);
-						}*/
 						continue;
 						
 					} else if (count == 6) {

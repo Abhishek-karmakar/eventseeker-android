@@ -67,11 +67,19 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 		@Override
 		protected String doInBackground(Void... params) {
 			String wcitiesId = null;
+			LoginType loginType = null;
 			UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
 			try {
-				userInfoApi.setFbUserId(eventSeekr.getFbUserId());
+				if (eventSeekr.getFbUserId() != null) {
+					loginType = LoginType.facebook;
+					userInfoApi.setFbUserId(eventSeekr.getFbUserId());
+					
+				} else if (eventSeekr.getGPlusUserId() != null) {
+					loginType = LoginType.googlePlus;
+					userInfoApi.setGPlusUserId(eventSeekr.getGPlusUserId());
+				}
 				userInfoApi.setUserId(eventSeekr.getWcitiesId());
-				JSONObject jsonObject = userInfoApi.syncAccount(repCode, LoginType.facebook);
+				JSONObject jsonObject = userInfoApi.syncAccount(repCode, loginType);
 				Log.d(TAG, "response = " + jsonObject);
 
 			} catch (ClientProtocolException e) {

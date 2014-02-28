@@ -240,7 +240,8 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 	    	                	bundle.putSerializable(BundleKeys.LOGIN_TYPE, LoginType.facebook);
 	    	                	bundle.putString(BundleKeys.FB_USER_ID, user.getId());
 	    	                	bundle.putString(BundleKeys.FB_USER_NAME, user.getUsername());
-
+	    	                	// this email property requires "email" permission while opening session
+	    	                	bundle.putString(BundleKeys.FB_EMAIL_ID, user.getProperty("email").toString());
 	    	                	ConnectAccountsFragmentListener listener = (ConnectAccountsFragmentListener)FragmentUtil.getActivity(
 										GetStartedFragment.this);
 	    	                	/**
@@ -310,19 +311,19 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 		//Log.d(TAG, "onConnected()");
         updateGoogleButton();
 
-        Log.d(TAG, "GPlusUserId : " + ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getGPlusUserId());
+        //Log.d(TAG, "GPlusUserId : " + ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getGPlusUserId());
 		if (((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getGPlusUserId() == null) {
 			
 	        Person currentPerson = mPlusClient.getCurrentPerson();
 	        //Log.d(TAG, "currentPerson = " + currentPerson);
 	        if (currentPerson != null) {
 	            String personId = currentPerson.getId();
-	            Log.d(TAG, "id = " + personId);
+	            //Log.d(TAG, "id = " + personId + ", accountName = " + mPlusClient.getAccountName());
 	            Bundle bundle = new Bundle();
 	            bundle.putSerializable(BundleKeys.LOGIN_TYPE, LoginType.googlePlus);
 	        	bundle.putString(BundleKeys.GOOGLE_PLUS_USER_ID, personId);
 	        	bundle.putString(BundleKeys.GOOGLE_PLUS_USER_NAME, currentPerson.getDisplayName());
-	        	bundle.putString(BundleKeys.GOOGLE_PLUS_ACCOUNT_NAME, mPlusClient.getAccountName());
+	        	bundle.putString(BundleKeys.GOOGLE_PLUS_EMAIL_ID, mPlusClient.getAccountName());
 	        	
 	        	ConnectAccountsFragmentListener listener = (ConnectAccountsFragmentListener)FragmentUtil.getActivity(
 						GetStartedFragment.this);
