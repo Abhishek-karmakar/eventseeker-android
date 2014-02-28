@@ -3,9 +3,11 @@ package com.android.gm.api;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.android.gm.api.comm.GmHttpClient;
 import com.android.gm.api.comm.SimpleForm;
@@ -22,6 +24,7 @@ import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.ByteArrayEntity;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -145,8 +148,8 @@ public class GoogleMusicApi
 		SimpleForm form = new SimpleForm();
 		form.addField("json", "{\"continuationToken\":\"" + continuationToken + "\"}");
 		form.close();
-
 		String response = mHttpClient.post(context, "https://play.google.com/music/services/loadalltracks?u=0&xt=" + getXtCookieValue(), new ByteArrayEntity(form.toString().getBytes()), form.getContentType());
+
 		if (response == null) {
 			/**
 			 * Google play music service is available in selected territories only. When we use any google 
@@ -166,6 +169,94 @@ public class GoogleMusicApi
 			chunkedSongList.addAll(getSongs(context, playlist.getContinuationToken()));
 
 		return chunkedSongList;
+	}
+	
+	public static final List<String> getAllArtistsNames(Context context) throws JSONException, InvalidGooglePlayMusicAccountException, 
+			Exception {
+		return getArtistNames(context, "");
+	}
+	
+	private static final List<String> getArtistNames(Context context, String continuationToken) throws JSONException,
+			InvalidGooglePlayMusicAccountException, Exception {
+		SimpleForm form = new SimpleForm();
+		form.addField("json", "{\"continuationToken\":\"" + continuationToken + "\"}");
+		form.addField("format", "jsarray");
+		form.close();
+		//Log.d(TAG, "form = " + form.toString());
+		
+		/**
+		 * Sample response: "<html><head></head><body><script>window.parent['slat_progress'](0.02);</script><script type='text/javascript'>window.parent['slat_process']([[[\"6ab2602d-b738-3fd4-891d-088573bb3206\",\"Mirrors\",\"//lh3.googleusercontent.com/6WWVst0780Lu5wG8kj1elfYwtpP4Oms5ptlgn3fzuD1FMGIPTAMwOIREE36KMBuZhFXGXtjh0Hs\",\"Justin Timberlake\",\"The 20/20 Experience\",\"Justin Timberlake\",],[\"e1e026ac-a7e9-3afb-a1af-87a8ad1c8786\",\"Tom Ford\",\"//lh5.googleusercontent.com/QlPIvhBUoCogdtePPgfmGZEdTH3c5PMlWby6ygS3K3BcKR7s2GYbUDZbIO9R0G6FRwIqxLJhvh0\",\"JAY Z\",\"Magna Carta... Holy Grail\",\"JAY Z\",],[\"c06058a6-951d-30bf-98d8-0c280aba0629\",\"Get Lucky\",\"//lh5.googleusercontent.com/BmUW_yAT4c7rAKftbu-R4SJMXFp8xtGAqVzV47S431IRyQBhIUBgYMdW50iWsEykoipb3iwK6A\",\"Daft Punk feat. Pharrell Williams and Nile Rodgers\",\"Random Access Memories\",\"Daft Punk\",]],1393501644111000]);window.parent['slat_progress'](1.0);</script><script type='text/javascript'>window.parent['slat_dispatch'](false);</script></body></html>";
+		 */
+		String response = mHttpClient.post(context, "https://play.google.com/music/services/streamingloadalltracks?u=0&xt="
+						+ getXtCookieValue(), new ByteArrayEntity(form.toString().getBytes()), form.getContentType());
+		//Log.d(TAG, "response = " + response);
+
+		if (response == null) {
+			/**
+			 * Google play music service is available in selected territories
+			 * only. When we use any google account which is not registered for
+			 * google play music on https://play.google.com/music/listen#/now,
+			 * it returns null response.
+			 */
+			throw new InvalidGooglePlayMusicAccountException();
+		}
+		
+		List<String> artistNames = new ArrayList<String>();
+		//List<String> tokens = new ArrayList<String>();
+
+		String startToken = "['slat_process']("; 
+		String endToken = ");"; //"\\\nwindow.parent['slat_progress']";
+		int startIndex = response.indexOf(startToken);
+		if (startIndex >= 0) {
+			//Log.d(TAG, "startIndex >= 0");
+			// if response has any artists
+			startIndex += startToken.length();
+			
+			int endIndex = response.indexOf(endToken, startIndex);
+			//Log.d(TAG, "startindex = " + startIndex + ", endIndex = " + endIndex);
+			
+			JSONArray jsonArray = new JSONArray(response.substring(startIndex, endIndex));
+			parseArtistNames(jsonArray, artistNames);
+			
+			//artistNames.addAll(getArtistNames(context, tokens.get(tokens.size() - 1)));
+		}
+		
+		return artistNames;
+	}
+	
+	private static void parseArtistNames(JSONArray jsonArray, List<String> artistNames) {
+		int count = 0;
+		//Log.d(TAG, "parseArtistNames(), length = " + jsonArray.length());
+		for (int i = 0; i < jsonArray.length(); i++) {
+			try {
+				Object ob = jsonArray.get(i);
+				
+				if (ob instanceof JSONArray) {
+					parseArtistNames((JSONArray) ob, artistNames);
+					
+				} else if (ob instanceof String) {
+					// Artist name comes at 6th index
+					count++;
+
+					if (count < 6) {
+						/*if (count == 1) {
+							tokens.add((String) ob);
+						}*/
+						continue;
+						
+					} else if (count == 6) {
+						//Log.d(TAG, "artist name = " + ob);
+						if (!artistNames.contains(ob)) {
+							artistNames.add((String) ob);
+						}
+						break;
+					}
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private static final String getPlaylistHelper(Context context, String playlistId) throws JSONException

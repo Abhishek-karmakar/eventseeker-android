@@ -72,6 +72,7 @@ public class GeneralDialogFragment extends DialogFragment {
 	        });
         }
         Dialog dialog = builder.create();
+        setCancelable(false);
 		return dialog;
 	}
 	

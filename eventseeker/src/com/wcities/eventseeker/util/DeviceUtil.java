@@ -17,6 +17,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -52,7 +53,7 @@ public class DeviceUtil {
 	 * @return
 	 */
 	public static double[] getLatLon(final Context activityContext) {
-		//Log.d(TAG, "getLatLon");
+		//Log.d(TAG, "getLatLon, Looper.myLooper() == Looper.getMainLooper(): " + (Looper.myLooper() == Looper.getMainLooper()));
 		double[] latLon = new double[] {0, 0};
 		
 		final LocationManager locationManager = getLocationManagerInstance(activityContext.getApplicationContext());
@@ -64,9 +65,8 @@ public class DeviceUtil {
         
     	if (AppConstants.lat == AppConstants.NOT_ALLOWED_LAT || AppConstants.lon == AppConstants.NOT_ALLOWED_LON 
     			|| retryGenerating) {
-    		//Log.d(TAG, "generate");
-           //Log.d(TAG, "isGPSEnabled : " + isGPSEnabled); 
-           //Log.d(TAG, "isNetworkEnabled : " + isNetworkEnabled); 
+    		//Log.d(TAG, "isGPSEnabled : " + isGPSEnabled); 
+    		//Log.d(TAG, "isNetworkEnabled : " + isNetworkEnabled); 
 
             if (!isGPSEnabled && !isNetworkEnabled) {
                 // no gps or network provider is enabled then
@@ -154,7 +154,13 @@ public class DeviceUtil {
 	
 	private static void requestLocationUpdatesOnUiThread(Context activityContext, 
 			final LocationManager locationManager, final String provider) {
-		if (activityContext instanceof Activity) {
+		//Log.d(TAG, "requestLocationUpdatesOnUiThread(), provider = " + provider);
+		if (Looper.myLooper() == Looper.getMainLooper()) {
+			// if it's UI thread
+			locationManager.requestLocationUpdates(provider, MIN_TIME_BW_UPDATES, 
+					MIN_DISTANCE_CHANGE_FOR_UPDATES, DeviceLocationListener.getInstance());
+			
+		} else if (activityContext instanceof Activity) {
 			((Activity)activityContext).runOnUiThread(new Runnable() {
 				
 				@Override
@@ -163,7 +169,7 @@ public class DeviceUtil {
 							MIN_DISTANCE_CHANGE_FOR_UPDATES, DeviceLocationListener.getInstance());
 				}
 			});
-		}
+		} 
 	}
 		
 	private static LocationManager getLocationManagerInstance(Context context) {

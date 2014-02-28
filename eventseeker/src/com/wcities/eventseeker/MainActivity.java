@@ -140,7 +140,7 @@ public class MainActivity extends ActionBarActivity implements
 			startBoschMainActivity();
 		}
 		
-		Log.d(TAG, "onCreate() isConnected = " + MySpinServerSDK.sharedInstance().isConnected());
+		//Log.d(TAG, "onCreate() isConnected = " + MySpinServerSDK.sharedInstance().isConnected());
 		
 		/**
 		 * check whether the current device is Tablet and if it is in Landscape
@@ -217,7 +217,7 @@ public class MainActivity extends ActionBarActivity implements
 			};
 
 			setDrawerIndicatorEnabled(isDrawerIndicatorEnabled);
-			Log.i(TAG, "isDrawerIndicatorEnabled : " + isDrawerIndicatorEnabled);
+			//Log.i(TAG, "isDrawerIndicatorEnabled : " + isDrawerIndicatorEnabled);
 			// Set the drawer toggle as the DrawerListener
 			mDrawerLayout.setDrawerListener(mDrawerToggle);
 			
@@ -289,7 +289,7 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	protected void onStart() {
 		super.onStart();
-		Log.d(TAG, "onStart()");
+		//Log.d(TAG, "onStart()");
 		
 		/**
 		 * Due to myspin bug sometimes it doesn't detect connected state instantly. To compensate for this 
@@ -304,7 +304,7 @@ public class MainActivity extends ActionBarActivity implements
 			
 			@Override
 			public void run() {
-				Log.d(TAG, "Periodic chk, isConnected = " + MySpinServerSDK.sharedInstance().isConnected());
+				//Log.d(TAG, "Periodic chk, isConnected = " + MySpinServerSDK.sharedInstance().isConnected());
 				if (MySpinServerSDK.sharedInstance().isConnected()) {
 					startBoschMainActivity();
 					
@@ -371,7 +371,7 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	protected void onStop() {
 		super.onStop();
-		Log.d(TAG, "onStop()");
+		//Log.d(TAG, "onStop()");
 		handler.removeCallbacks(periodicCheckForBoschConnection);
 	}
 

@@ -9,6 +9,7 @@ import org.json.JSONException;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -121,15 +122,17 @@ public class GooglePlayMusicFragment extends FragmentLoadableFromBackStack imple
                     return null;
                 }
 	            
-	            List<Song> songs = GoogleMusicApi.getAllSongs(FragmentUtil.getActivity(fragment));
+	            //List<Song> songs = GoogleMusicApi.getAllSongs(FragmentUtil.getActivity(fragment));
+                artistNames = GoogleMusicApi.getAllArtistsNames(FragmentUtil.getActivity(fragment));
+                
 	            //Log.d(TAG, "songs list size = " + songs.size());
-	            for (Iterator<Song> iterator = songs.iterator(); iterator.hasNext();) {
+	            /*for (Iterator<Song> iterator = artistNames.iterator(); iterator.hasNext();) {
 					Song song = iterator.next();
 					if (!artistNames.contains(song.getArtist())) {
 						artistNames.add(song.getArtist());
 						//Log.d(TAG, "artist norm = " + song.getArtistNorm() + ", artist = " + song.getArtist());
 					}
-				}
+				}*/
 	            
 	        } catch (JSONException e) {
 				e.printStackTrace();
@@ -138,6 +141,11 @@ public class GooglePlayMusicFragment extends FragmentLoadableFromBackStack imple
 				// custom exception defined in gmusic api by us.
 				e.printStackTrace();
 				return null;
+				
+			} catch (Exception e) {
+				// Unable to parse the response
+				Log.e(TAG, "Unable to parse the response from google play music");
+				e.printStackTrace();
 			}
 
 	        return artistNames;
