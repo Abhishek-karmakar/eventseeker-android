@@ -1,6 +1,7 @@
 package com.wcities.eventseeker;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,16 +9,23 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.ParseException;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,10 +37,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-import android.widget.Toast;
 
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.ConnectAccountsFragment.ServiceAccount;
+import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.SyncArtists;
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -41,9 +49,11 @@ import com.wcities.eventseeker.interfaces.OnFragmentAliveListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.ViewUtil.AnimationUtil;
 
-public class PandoraFragment extends FragmentLoadableFromBackStack implements OnClickListener, OnFragmentAliveListener {
+public class PandoraFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
+		OnFragmentAliveListener, DialogBtnClickListener {
 
 	private static final String TAG = PandoraFragment.class.getName();
+	private static final String DIALOG_FRAGMENT_TAG_ERROR = "Error";
 	
 	//private ProgressBar progressBar;
     private ImageView imgProgressBar, imgAccount;
@@ -152,6 +162,9 @@ public class PandoraFragment extends FragmentLoadableFromBackStack implements On
 	}
 	
 	private class NetworkTask extends AsyncTask<String, Void, List<String>> {
+		private boolean doesErrorExist;
+		private String errorMsg;
+		private String errorCode;
 		
 		private EventSeekr eventSeekr;
 		
@@ -163,14 +176,27 @@ public class PandoraFragment extends FragmentLoadableFromBackStack implements On
 		
 		@Override
 		protected List<String> doInBackground(String... params) {
-			String link = params[0];
+			String url = params[0];
 			
 			List<String> artistNames = new ArrayList<String>();
 			try {
+				
+				/*
+				 * We aren't using this method for parsing as if certain error occurs,
+				 * like if user has enabled the privacy settings then the parsing method
+				 * directly throws FileNotFoundException and doc obj doesn't get initialize.
+				 * So, instead of this we are using an alternative approach
+				 * 
 				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 				DocumentBuilder db = dbf.newDocumentBuilder();
-				Document doc = db.parse(link);
-				doc.normalize();
+				doc = db.parse(link);
+				doc.normalize();*/
+				
+				String xml = getXmlFromUrl(url);
+				Document doc = getDocumentFromXml(xml);		
+				if (checkForErrorInDoc(doc)) {
+					return null;
+				}
 				
 				NodeList nodesList = doc.getElementsByTagName("pandora:artist");
 				Log.d(TAG, "nodesList size = " + nodesList.getLength());
@@ -189,6 +215,8 @@ public class PandoraFragment extends FragmentLoadableFromBackStack implements On
 				
 			} catch (SAXException e) {
 				e.printStackTrace();
+				doesErrorExist = true;
+				errorMsg = e.getMessage();
 				
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -196,19 +224,56 @@ public class PandoraFragment extends FragmentLoadableFromBackStack implements On
 			return null;
 		}
 		
+		public String getXmlFromUrl(String url) throws ParseException, IOException {
+            DefaultHttpClient httpClient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost(url);
+            HttpResponse httpResponse = httpClient.execute(httpPost);
+            HttpEntity httpEntity = httpResponse.getEntity();
+
+	        return EntityUtils.toString(httpEntity);
+	    }
+		
+		public Document getDocumentFromXml(String xml) throws ParserConfigurationException, SAXException, IOException{
+			InputSource is = new InputSource();
+			is.setCharacterStream(new StringReader(xml));
+
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            return db.parse(is);
+	    }
+		
+		public boolean checkForErrorInDoc(Document doc) {
+			/*NodeList nodeList = doc.getElementsByTagName("h2");
+        	Node item = nodeList.item(0); 
+        	errorCode = item.getTextContent();
+        	Log.d(TAG, errorCode);*/
+        	
+        	NodeList nodeList = doc.getElementsByTagName("pre");
+        	if (nodeList.getLength() > 0) {
+	        	Node item = nodeList.item(0); 
+	        	errorMsg = item.getTextContent();
+	        	Log.d(TAG, errorMsg);
+	        	
+	        	doesErrorExist = true;
+				return doesErrorExist;
+        	}
+	        	
+	        doesErrorExist = false;
+			return doesErrorExist;
+	    }
+		
 		@Override
 		protected void onPostExecute(List<String> artistNames) {
 			if (artistNames == null) {
 				isLoading = false;
 				updateVisibility();
-				
-				Toast toast = Toast.makeText(eventSeekr,
-						"User name could not be found", Toast.LENGTH_SHORT);
-				if(toast != null) {
-					toast.setGravity(Gravity.CENTER, 0, -100);
-					toast.show();
-				}
 
+				if (doesErrorExist) {
+					GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
+							"Error", errorMsg, "Ok", null);
+					generalDialogFragment.show(getChildFragmentManager(), DIALOG_FRAGMENT_TAG_ERROR);
+				}
+				
 				eventSeekr.setSyncCount(Service.Pandora, EventSeekr.UNSYNC_COUNT);
 			} else {
 				apiCallFinished(artistNames, eventSeekr);
@@ -254,5 +319,15 @@ public class PandoraFragment extends FragmentLoadableFromBackStack implements On
 	public boolean isAlive() {
 		return isAlive;
 	}
-	
+
+	@Override
+	public void doPositiveClick(String dialogTag) {}
+
+	@Override
+	public void doNegativeClick(String dialogTag) {
+		DialogFragment dialogFragment = (DialogFragment) getChildFragmentManager().findFragmentByTag(DIALOG_FRAGMENT_TAG_ERROR);
+		if (dialogFragment != null) {
+			dialogFragment.dismiss();
+		}
+	}
 }

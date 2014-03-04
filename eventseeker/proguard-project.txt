@@ -58,5 +58,6 @@
     public static final ** CREATOR;
 }
 
-# This will prevent Application class from getting obfuscated
+# This will prevent Application class from getting obfuscated other some app crashes with
+# ClassNotFoundException
 -keep public class * extends android.app.Application

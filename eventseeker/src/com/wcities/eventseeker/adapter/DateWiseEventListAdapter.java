@@ -128,19 +128,31 @@ public class DateWiseEventListAdapter extends BaseAdapter implements DateWiseEve
 				((TextView)convertView.findViewById(R.id.txtEvtLocation)).setText(schedule.getVenue().getName());
 			}
 			
-			BitmapCacheable bitmapCacheable = event.doesValidImgUrlExist() ? event : event.getSchedule().getVenue();  
+			BitmapCacheable bitmapCacheable = null;
+			/**
+			 * added this try catch as if event will not have valid url and schedule object then
+			 * the below line may cause NullPointerException. So, added the try-catch and added the
+			 * null check for bitmapCacheable on following statements.
+			 */
+			try {
+				bitmapCacheable = event.doesValidImgUrlExist() ? event : event.getSchedule().getVenue();
+			} catch (NullPointerException e) {
+				e.printStackTrace();
+			}
 			
-			String key = bitmapCacheable.getKey(ImgResolution.LOW);
-			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
-			if (bitmap != null) {
-		        ((ImageView)convertView.findViewById(R.id.imgEvent)).setImageBitmap(bitmap);
-		        
-		    } else {
-		    	((ImageView)convertView.findViewById(R.id.imgEvent)).setImageBitmap(null);
-		    	AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-		        asyncLoadImg.loadImg((ImageView) convertView.findViewById(R.id.imgEvent), 
-		        		ImgResolution.LOW, (AdapterView) parent, position, bitmapCacheable);
-		    }
+			if (bitmapCacheable != null) {
+				String key = bitmapCacheable.getKey(ImgResolution.LOW);
+				Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
+				if (bitmap != null) {
+			        ((ImageView)convertView.findViewById(R.id.imgEvent)).setImageBitmap(bitmap);
+			        
+			    } else {
+			    	((ImageView)convertView.findViewById(R.id.imgEvent)).setImageBitmap(null);
+			    	AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
+			        asyncLoadImg.loadImg((ImageView) convertView.findViewById(R.id.imgEvent), 
+			        		ImgResolution.LOW, (AdapterView) parent, position, bitmapCacheable);
+			    }
+			}
 			
 			convertView.setOnClickListener(new OnClickListener() {
 				

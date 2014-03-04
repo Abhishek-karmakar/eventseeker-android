@@ -1,8 +1,13 @@
 package com.wcities.eventseeker;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
@@ -14,6 +19,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -34,8 +40,8 @@ import android.widget.Toast;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
-import com.facebook.SessionState;
 import com.facebook.Session.StatusCallback;
+import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
@@ -47,6 +53,8 @@ import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.model.people.Person;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.GetStartedFragment.GetStartedFragmentListener;
+import com.wcities.eventseeker.api.Api;
+import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.app.EventSeekr.EventSeekrListener;
@@ -57,6 +65,8 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.ConnectionFailureListener;
+import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
+import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -80,29 +90,33 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     
 	private static final String DIALOG_FRAGMENT_TAG_SKIP = "skipDialog";
 	private static final String DIALOG_ALREADY_LOGGED_IN_WITH_OTHER_ACCOUNT = "alreadyLoggedInWithOtherAccount";
-    
+
+	private List<Service> listAvailableServices;
+	
     public static enum Service {
-    	Title(0,"Title",R.drawable.placeholder),
-    	Facebook(1,"Facebook",R.drawable.facebook_colored),
-    	GooglePlus(2,"Google Plus",R.drawable.g_plus_colored),
-    	Blank(3,"Blank",R.drawable.placeholder),
-    	GooglePlay(4,"Google Play",R.drawable.google_play),
-    	DeviceLibrary(5,"Device Library",R.drawable.devicelibrary),
-    	Twitter(6,"Twitter",R.drawable.twitter_colored),
+    	Title(0,"Title",R.drawable.placeholder, false),
+    	Facebook(1,"Facebook",R.drawable.facebook_colored, false),
+    	GooglePlus(2,"Google Plus",R.drawable.g_plus_colored, false),
+    	Blank(3,"Blank",R.drawable.placeholder, false),
+    	GooglePlay(4,"Google Play",R.drawable.google_play, true),
+    	DeviceLibrary(5,"Device Library",R.drawable.devicelibrary, true),
+    	Twitter(6,"Twitter",R.drawable.twitter_colored, true),
     	//Spotify,
-    	Rdio(7,"Rdio",R.drawable.rdio),
-    	Lastfm(8,"Last.fm",R.drawable.lastfm),
-    	Pandora(9,"Pandora",R.drawable.pandora),
-    	Button(10,"Button",R.drawable.placeholder);
+    	Rdio(7,"Rdio",R.drawable.rdio, true),
+    	Lastfm(8,"Last.fm",R.drawable.lastfm, true),
+    	Pandora(9,"Pandora",R.drawable.pandora, true),
+    	Button(10,"Button",R.drawable.placeholder, false);
     	
     	private int intId;
     	private String str;
     	private int drwResId;
+    	private boolean isService;
     	
-    	private Service(int intId, String str, int drwResId) {
+    	private Service(int intId, String str, int drwResId, boolean isService) {
     		this.intId = intId;
     		this.str = str;
     		this.drwResId = drwResId;
+    		this.isService = isService;
 		}
     	
     	public int getDrwResId() {
@@ -136,6 +150,9 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     		return -1;
     	}
     	
+    	public boolean isService() {
+			return isService;
+		}
     }
     
 	private AccountsListAdapter listAdapter;
@@ -200,7 +217,8 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			
 			listAdapter = new AccountsListAdapter(FragmentUtil.getActivity(this));
 			
-			loadServiceAccountItems();
+			loadAvailableService();
+			//loadServiceAccountItems();
 			
 		} else {
 			listAdapter.setmInflater(FragmentUtil.getActivity(this));
@@ -292,6 +310,54 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		}
 	}
 	
+	private void loadAvailableService() {
+		LoadAvailableService loadAvailableService = new LoadAvailableService() {
+			
+			@Override
+			protected void onPreExecute() {
+				super.onPreExecute();
+				showProgress();
+			}
+			
+			@Override
+			protected void onPostExecute(List<Service> result) {
+				super.onPostExecute(result);
+
+				if (isAdded()) {
+					listAvailableServices = result;
+					loadServiceAccountItems();
+					listAdapter.notifyDataSetChanged();
+					
+					dismissProgress();
+				}
+			}
+		};
+		AsyncTaskUtil.executeAsyncTask(loadAvailableService, true);
+	}
+	
+	private class LoadAvailableService extends AsyncTask<Void, Void, List<Service>> {
+
+		@Override
+		protected List<Service> doInBackground(Void... params) {
+			List<Service> list = new ArrayList<ConnectAccountsFragment.Service>();
+			try {
+				UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
+				JSONObject jsonObject = userInfoApi.getAvailableSyncServices();
+				
+				UserInfoApiJSONParser userInfoApiJSONParser = new UserInfoApiJSONParser();
+				list = userInfoApiJSONParser.getAvailableSyncServiceList(jsonObject);
+				
+			} catch (ClientProtocolException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			return list;
+		}
+	}
+	
 	private void loadServiceAccountItems() {
 		EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(this).getApplication();
 		//String[] connectAccountsItemTitles = getResources().getStringArray(R.array.connect_accounts_item_titles);
@@ -321,7 +387,8 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
         	 */
         	ServiceAccount serviceAccount = new ServiceAccount();
         	serviceAccount.count = eventSeekr.getSyncCount(service);
-        	if (AppConstants.REMOVE_GOOGLE_PLAY_SYNC && service.equals(Service.GooglePlay)) {
+        	if (/*AppConstants.REMOVE_GOOGLE_PLAY_SYNC && service.equals(Service.GooglePlay)*/
+        			service.isService() && !listAvailableServices.contains(service)) {
         		continue;
         	}
 			serviceAccount.name = service.getStr();
@@ -342,6 +409,12 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     	lnrLayoutProgress.setVisibility(View.VISIBLE);
 		isProgressVisible = true;
     }
+	
+	private void dismissProgress() {
+		getListView().setVisibility(View.VISIBLE);
+		lnrLayoutProgress.setVisibility(View.GONE);
+		isProgressVisible = false;
+	}
 	
 	private void updateView() {
 		//Log.d(TAG, "updateView()");

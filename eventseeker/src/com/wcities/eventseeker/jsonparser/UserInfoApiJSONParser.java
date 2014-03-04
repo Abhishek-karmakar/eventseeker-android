@@ -10,6 +10,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
+import com.wcities.eventseeker.ConnectAccountsFragment;
+import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.ArtistNewsItem;
 import com.wcities.eventseeker.core.ArtistNewsItem.PostType;
@@ -89,6 +93,14 @@ public class UserInfoApiJSONParser {
 	
 	private static final String KEY_LINKS = "links";
 	private static final String KEY_TRACKBACK_URL = "trackback_url";
+
+	private static final String KEY_SYNC_SERVICE = "syncService";
+	private static final String KEY_SERVICE_GOOGLE_PLAY = "1";
+	private static final String KEY_SERVICE_DEVICE_LIBRARY = "2";
+	private static final String KEY_SERVICE_TWITTER = "3";
+	private static final String KEY_SERVICE_RDIO = "4";
+	private static final String KEY_SERVICE_LAST_FM = "5";
+	private static final String KEY_SERVICE_PANDORA = "6";
 
 	public String getUserId(JSONObject jsonObject) throws JSONException {
 		JSONObject jObjSignup = jsonObject.getJSONObject(KEY_SIGN_UP);
@@ -521,6 +533,36 @@ public class UserInfoApiJSONParser {
 		imageAttribution.setMobiResPath(jsonObject.getString(KEY_MOBI_RES_PATH));
 		return imageAttribution;
 	}
+	
+	public List<Service> getAvailableSyncServiceList(JSONObject jsonObject) throws JSONException {
+		List<Service> list = new ArrayList<ConnectAccountsFragment.Service>();
+		
+		if (jsonObject.has(KEY_SYNC_SERVICE)) {
+			JSONObject jsonSyncService = jsonObject.getJSONObject(KEY_SYNC_SERVICE);
+			
+			if (jsonSyncService.has(KEY_SERVICE_GOOGLE_PLAY)) {
+				list.add(Service.GooglePlay);
+			}
+			if (jsonSyncService.has(KEY_SERVICE_DEVICE_LIBRARY)) {
+				list.add(Service.DeviceLibrary);
+			}
+			if (jsonSyncService.has(KEY_SERVICE_TWITTER)) {
+				list.add(Service.Twitter);
+			}
+			if (jsonSyncService.has(KEY_SERVICE_RDIO)) {
+				list.add(Service.Rdio);
+			}
+			if (jsonSyncService.has(KEY_SERVICE_LAST_FM)) {
+				list.add(Service.Lastfm);
+			}
+			if (jsonSyncService.has(KEY_SERVICE_PANDORA)) {
+				list.add(Service.Pandora);
+			}
+		}
+
+		return 	list;
+	}
+	
 	
 	private Schedule buildSchedule(List<String> startDates, String time, Venue venue) {
 		Schedule schedule = new Schedule();

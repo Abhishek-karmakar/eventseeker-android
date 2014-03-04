@@ -112,13 +112,19 @@ public class ChangeLocationFragment extends FragmentLoadableFromBackStack implem
     }
     
     private void setMarker(double lat, double lon) {
-    	mMap.clear();
-    	
-    	LatLng latLng = new LatLng(lat, lon);
-    	mMap.addMarker(new MarkerOptions().position(latLng).title(strAddress));
-    	
-    	mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-    	mMap.animateCamera(CameraUpdateFactory.zoomTo(8), 2000, null);
+    	/**
+    	 * 'mMap != null' check is added below as the map can be null if the 
+    	 * lat-long is coming from onAddressSearchCompleted
+    	 */
+    	if (mMap != null) {
+	    	mMap.clear();
+	    	
+	    	LatLng latLng = new LatLng(lat, lon);
+	    	mMap.addMarker(new MarkerOptions().position(latLng).title(strAddress));
+	    	
+	    	mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+	    	mMap.animateCamera(CameraUpdateFactory.zoomTo(8), 2000, null);
+    	}
     }
     
     private boolean setUpMapIfNeeded() {
@@ -190,9 +196,7 @@ public class ChangeLocationFragment extends FragmentLoadableFromBackStack implem
 		
     	DeviceUtil.updateLatLon(lat, lon);
 		
-		if (mMap != null) {
-			setMarker(lat, lon);
-		}
+		setMarker(lat, lon);
     }
 
 	@Override
