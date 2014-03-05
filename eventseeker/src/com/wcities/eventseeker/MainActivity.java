@@ -1604,7 +1604,7 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	public void onConnectionFailure() {
 		GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(this, "No Internet",
-				getResources().getString(R.string.connection_lost), null, "ok");
+				getResources().getString(R.string.connection_lost), null, "Ok");
 		generalDialogFragment.show(getSupportFragmentManager(), DIALOG_FRAGMENT_TAG_CONNECTION_LOST);		
 		
 	}
