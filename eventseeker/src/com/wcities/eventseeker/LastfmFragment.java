@@ -1,5 +1,6 @@
 package com.wcities.eventseeker;
 
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -136,17 +137,39 @@ public class LastfmFragment extends FragmentLoadableFromBackStack implements OnC
 			@Override
 			public void run() {
 				final List<String> artistNames = new ArrayList<String>();
-				Collection<Artist> lastFmArtists = User.getTopArtists(userId, AppConstants.LASTFM_API_KEY);
-				
-				Result result = Caller.getInstance().getLastResult();
-				if (!result.isSuccessful()) {
+				Collection<Artist> lastFmArtists = null;
+				Result result = null;
+				try {
+					lastFmArtists = User.getTopArtists(userId, AppConstants.LASTFM_API_KEY);
+					result = Caller.getInstance().getLastResult();
+				} catch (Exception e) {
+					/**
+					 * If Initially the error was due to User not found and then after internet failure occurs.
+					 * Then also 'Result' object was giving 'User not found error'. So, manually checking the cause of issue
+					 * and set the Result object as null.
+					 */
+					if (e instanceof UnknownHostException) {
+						result = null;
+					}
+					e.printStackTrace();
+				}
+
+				if (result == null || !result.isSuccessful()) {
 					isLoading = false;
+					final Result rslt = result;
+
 					FragmentUtil.getActivity(LastfmFragment.this).runOnUiThread(new Runnable() {
 						
 						@Override
 						public void run() {
+							String msg = "The Internet connection appears to be offline.";
+							if (rslt != null) {
+								Log.e("MSG", "" + rslt.getErrorMessage());
+								msg = "User name could not be found";
+							}
+
 							updateVisibility();
-							Toast toast = Toast.makeText(FragmentUtil.getActivity(LastfmFragment.this), "User name could not be found", Toast.LENGTH_SHORT);
+							Toast toast = Toast.makeText(FragmentUtil.getActivity(LastfmFragment.this), msg, Toast.LENGTH_SHORT);
 							if(toast != null) {
 								toast.setGravity(Gravity.CENTER, 0, -100);
 								toast.show();
@@ -156,11 +179,8 @@ public class LastfmFragment extends FragmentLoadableFromBackStack implements OnC
 							eventSeekr.setSyncCount(Service.Lastfm, EventSeekr.UNSYNC_COUNT);
 						}
 					});
-					
-					Log.e("MSG", "" + result.getErrorMessage());
 					return;
 				}
-					
 				for (Artist obj: lastFmArtists) {
 					//Log.d(TAG, "name = " + obj.getName());
 					artistNames.add(obj.getName());

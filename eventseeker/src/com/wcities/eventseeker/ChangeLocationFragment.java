@@ -113,8 +113,8 @@ public class ChangeLocationFragment extends FragmentLoadableFromBackStack implem
     
     private void setMarker(double lat, double lon) {
     	/**
-    	 * 'mMap != null' check is added below as the map can be null if the 
-    	 * lat-long is coming from onAddressSearchCompleted
+    	 * 'mMap != null' check is added below as sometime the map comes out to be null
+    	 *  if call is made from onAddressSearchCompleted
     	 */
     	if (mMap != null) {
 	    	mMap.clear();

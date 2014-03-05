@@ -387,8 +387,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
         	 */
         	ServiceAccount serviceAccount = new ServiceAccount();
         	serviceAccount.count = eventSeekr.getSyncCount(service);
-        	if (/*AppConstants.REMOVE_GOOGLE_PLAY_SYNC && service.equals(Service.GooglePlay)*/
-        			service.isService() && !listAvailableServices.contains(service)) {
+        	if (service.isService() && !listAvailableServices.contains(service)) {
         		continue;
         	}
 			serviceAccount.name = service.getStr();
