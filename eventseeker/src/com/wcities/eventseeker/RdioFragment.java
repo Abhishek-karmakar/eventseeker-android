@@ -267,7 +267,7 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 					
 					EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(RdioFragment.this).getApplicationContext();
 					eventSeekr.setSyncCount(Service.Rdio, EventSeekr.UNSYNC_COUNT);
-					Log.e(TAG, "Failed to handle JSONObject: ", e);
+					Log.e(TAG, "Failed to handle JSONObject: " + e.toString());
 				}
 			}
 

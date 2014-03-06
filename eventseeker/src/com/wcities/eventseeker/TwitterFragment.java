@@ -3,8 +3,8 @@ package com.wcities.eventseeker;
 import twitter4j.Twitter;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
@@ -83,6 +83,23 @@ public class TwitterFragment extends FragmentLoadableFromBackStack {
 			}
 		});
 		webView.loadUrl(url);
+		/**
+		 * The below onTouch listener has been added as in Samsung Galaxy S(Android 2.3.3) device,
+		 * the Soft Keyboard wasn't appearing when pressed on EditText inside WebView 
+		 */
+		webView.setOnTouchListener(new View.OnTouchListener() {
+		    public boolean onTouch(View v, MotionEvent event) {
+		        switch (event.getAction()) {
+		            case MotionEvent.ACTION_DOWN:
+		            case MotionEvent.ACTION_UP:
+		                if (!v.hasFocus()) {
+		                    v.requestFocus();
+		                }
+		                break;
+		        }
+		        return false;
+		    }
+		});  
 		
 		return v;
 	}
