@@ -53,7 +53,7 @@ public class DeviceUtil {
 	 * @return
 	 */
 	public static double[] getLatLon(final Context activityContext) {
-		//Log.d(TAG, "getLatLon, Looper.myLooper() == Looper.getMainLooper(): " + (Looper.myLooper() == Looper.getMainLooper()));
+		//Log.d(TAG, "getLatLon()");
 		double[] latLon = new double[] {0, 0};
 		
 		final LocationManager locationManager = getLocationManagerInstance(activityContext.getApplicationContext());
@@ -77,15 +77,14 @@ public class DeviceUtil {
             	
             	if (isGPSEnabled) {
                  	//First get the location from GPS Provider
-            		requestLocationUpdatesOnUiThread(activityContext, locationManager, LocationManager.GPS_PROVIDER);
+            		//requestLocationUpdatesOnUiThread(activityContext, locationManager, LocationManager.GPS_PROVIDER);
 
  					if (locationManager != null) {
  						lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
  						//Log.d(TAG, "GPS_PROVIDER: " + lastKnownLocation); 
 
  						if (lastKnownLocation != null) {
- 							//Log.d(TAG, "GPS_PROVIDER: " + lastKnownLocation.getLatitude() + ", " 
- 							//		+ lastKnownLocation.getLongitude());
+ 							//Log.d(TAG, "GPS_PROVIDER: " + lastKnownLocation.getLatitude() + ", " + lastKnownLocation.getLongitude());
  		      	        	
                          	latLon[0] = lastKnownLocation.getLatitude();
          		        	latLon[1] = lastKnownLocation.getLongitude();
@@ -96,15 +95,14 @@ public class DeviceUtil {
             	
             	if (isNetworkEnabled && lastKnownLocation == null) {
                 	//get location from Network Provider
-            		requestLocationUpdatesOnUiThread(activityContext, locationManager, LocationManager.NETWORK_PROVIDER);
+            		//requestLocationUpdatesOnUiThread(activityContext, locationManager, LocationManager.NETWORK_PROVIDER);
 	
 	                if (locationManager != null) {
 	                	lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 	                	//Log.d(TAG, "NETWORK_PROVIDER: " + lastKnownLocation); 
 	                        
 	                	if (lastKnownLocation != null) {
-	                		//Log.d(TAG, "NETWORK_PROVIDER: " + lastKnownLocation.getLatitude() + ", " 
-	                		//		+ lastKnownLocation.getLongitude());
+	                		//Log.d(TAG, "NETWORK_PROVIDER: " + lastKnownLocation.getLatitude() + ", " + lastKnownLocation.getLongitude());
 	                        latLon[0] = lastKnownLocation.getLatitude();
 	        		        latLon[1] = lastKnownLocation.getLongitude();
 	        		        updateLatLon(latLon[0], latLon[1]);
@@ -131,24 +129,23 @@ public class DeviceUtil {
     		 * AppConstants.lon, then unless app process restarts we won't be able to register location listener from 
     		 * above if condition.
     		 */
-    		if (!isCitySet && lastLatLngSetTime + MIN_TIME_BW_UPDATES < new Date().getTime()) {
+    		/*if (!isCitySet && lastLatLngSetTime + MIN_TIME_BW_UPDATES < new Date().getTime()) {
     			if (isGPSEnabled) {
             		requestLocationUpdatesOnUiThread(activityContext, locationManager, LocationManager.GPS_PROVIDER);
  					
     			} else if (isNetworkEnabled) {
             		requestLocationUpdatesOnUiThread(activityContext, locationManager, LocationManager.NETWORK_PROVIDER);
     			}
-    		}
+    		}*/
     	}
-    	
-    	/*latLon[0] = AppConstants.lat = 19.1871777;
-		latLon[1] = AppConstants.lon = 72.8339689;*/
+
     	if (latLon[0] == 0 && latLon[1] == 0) {
     		//Log.d(TAG, "latlon is 0");
 	    	latLon[0] = SAN_FRANCISCO_LAT;
 			latLon[1] = SAN_FRANCISCO_LON;
 			retryGenerating = true;
     	}
+    	
     	return latLon;
     }
 	
@@ -188,6 +185,30 @@ public class DeviceUtil {
 		if (locationManager != null) {
 			locationManager.removeUpdates(DeviceLocationListener.getInstance());
 		}
+	}
+	
+	public static void registerLocationListener(Context context) {
+		if (isCitySet) {
+			return;
+		}
+		LocationManager locationManager = getLocationManagerInstance(context.getApplicationContext());
+
+		// getting GPS status
+        boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        // getting network status
+        boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        
+        if (isGPSEnabled) {
+        	requestLocationUpdatesOnUiThread(context, locationManager, LocationManager.GPS_PROVIDER);
+        }
+        
+        if (isNetworkEnabled) {
+        	requestLocationUpdatesOnUiThread(context, locationManager, LocationManager.NETWORK_PROVIDER);
+        }
+	}
+
+	public static void unregisterLocationListener() {
+		removeDeviceLocationListener();
 	}
 
 	private static class DeviceLocationListener implements LocationListener {
