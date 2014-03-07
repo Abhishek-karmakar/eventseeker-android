@@ -307,6 +307,8 @@ public class MainActivity extends ActionBarActivity implements
 		super.onStart();
 		//Log.d(TAG, "onStart()");
 		
+		DeviceUtil.registerLocationListener(this);
+		
 		/**
 		 * Due to myspin bug sometimes it doesn't detect connected state instantly. To compensate for this 
 		 * we run a delayed task to recheck on connected state & refresh UI.
@@ -388,6 +390,7 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onStop() {
 		super.onStop();
 		//Log.d(TAG, "onStop()");
+		DeviceUtil.unregisterLocationListener();
 		handler.removeCallbacks(periodicCheckForBoschConnection);
 	}
 
