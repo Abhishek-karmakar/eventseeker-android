@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/txt_app_name_margin_t_fragment_about_us"
-            android:text="eventseeker"
+            android:text="@string/eventseeker"
             android:textColor="@color/font_blue"
             android:textSize="@dimen/txt_app_name_txt_size_fragment_about_us"
             android:textStyle="bold" />
@@ -31,7 +31,7 @@
             android:layout_below="@id/txtAppName"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/txt_app_slogan_margin_t_fragment_about_us"
-            android:text="Seek. Share. Live."
+            android:text="@string/seek_share_live"
             android:textColor="@color/font_blue"
             android:textSize="@dimen/txt_app_slogan_txt_size_fragment_about_us"
             android:textStyle="bold" />

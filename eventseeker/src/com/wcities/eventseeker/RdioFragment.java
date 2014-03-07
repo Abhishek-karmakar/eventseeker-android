@@ -271,13 +271,17 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 				}
 			}
 
+			/**
+			 * The 'onApiFailure' method will be called when user wouldn't be able to connect to the rdio server
+			 * and that might be because of internet connection issue.
+			 */
 			@Override
 			public void onApiFailure(String methodName, Exception e) {
 				//Log.d(TAG, "onApiFailure");
 				isLoading = false;
 				updateVisibility();
 				
-				Toast toast = Toast.makeText(FragmentUtil.getActivity(RdioFragment.this), "User name could not be found", 
+				Toast toast = Toast.makeText(FragmentUtil.getActivity(RdioFragment.this), "The Internet connection appears to be offline.", 
 						Toast.LENGTH_SHORT);
 				if(toast != null) {
 					toast.setGravity(Gravity.CENTER, 0, -100);

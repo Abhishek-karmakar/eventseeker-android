@@ -4,19 +4,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.util.DisplayMetrics;
 
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
+import com.wcities.eventseeker.LanguageFragment.Locales;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
@@ -71,6 +75,8 @@ public class EventSeekr extends Application {
 	private static ConnectionFailureListener connectionFailureListener;
 	
 	private FollowingList followingList;
+
+	private Locales defaultLocale;
 
 	private static String cityName;
 	
@@ -451,6 +457,38 @@ public class EventSeekr extends Application {
 			followingList = new FollowingList();
 		}
 		return followingList;
+	}
+	
+	public void updateLocale(Locales locale) {
+		this.defaultLocale = locale;
+
+		SharedPreferences pref = getSharedPreferences(
+				AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+		Editor editor = pref.edit();
+		editor.putString(SharedPrefKeys.DEFAULT_LOCALE_CODE, locale.getLocaleCode());
+		editor.commit();
+		
+		setDefaultLocale();
+	}
+	
+	public void setDefaultLocale() {
+		Locale locale = new Locale(getLocale().getLocaleCode());
+		Locale.setDefault(locale);
+
+		Configuration appConfig = new Configuration();
+		appConfig.locale = locale;
+
+		getResources().updateConfiguration(appConfig, getResources().getDisplayMetrics());
+	}		
+
+	public Locales getLocale() {
+		if (defaultLocale == null) {
+			SharedPreferences pref = getSharedPreferences(
+					AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+			String localeCode = pref.getString(SharedPrefKeys.DEFAULT_LOCALE_CODE, Locales.ENGLISH.getLocaleCode());
+			defaultLocale = Locales.getLocaleByLocaleCode(localeCode);
+		}
+		return defaultLocale;
 	}
 
 	public int getSyncCount(Service service) {

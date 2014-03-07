@@ -33,7 +33,7 @@ public class DrawerListFragment extends ListFragment {
 	
 	public static final int SECT_1_HEADER_POS = 0;
 	public static final int SECT_2_HEADER_POS = 6;
-	public static final int SECT_3_HEADER_POS = 9;
+	public static final int SECT_3_HEADER_POS = 10;
 	
     private List<Integer> sectionHeaderIndices = new ArrayList<Integer>(Arrays.asList(SECT_1_HEADER_POS, SECT_2_HEADER_POS, SECT_3_HEADER_POS));
 	
@@ -100,6 +100,13 @@ public class DrawerListFragment extends ListFragment {
 			drawerListItems.add(drawerListItem);
 		}
         drawerListItemIcons.recycle();
+	}
+	
+	public void refreshDrawerList() {
+		drawerListItems = new ArrayList<DrawerListItem>();
+		loadDrawerListItems();
+		drawerListAdapter.setData(drawerListItems);
+		drawerListAdapter.notifyDataSetChanged();
 	}
 	
 	/*public void setMyEventsCount(int count) {
@@ -173,6 +180,10 @@ public class DrawerListFragment extends ListFragment {
 		@Override
 		public int getCount() {
 			return drawerListItems.size();
+		}
+		
+		public void setData(List<DrawerListItem> drawerListItems) {
+			this.drawerListItems = drawerListItems;
 		}
 
 		@Override

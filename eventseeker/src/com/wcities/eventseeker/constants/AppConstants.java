@@ -7,7 +7,7 @@ import com.google.android.gms.common.Scopes;
 
 public class AppConstants {
 	
-	public static final boolean IS_RELEASE_MODE = true;
+	public static final boolean IS_RELEASE_MODE = false;
 	public static final boolean CRASH_REPORTING_ENABLED = false;
 	public static final boolean STRICT_MODE_ENABLED = false;
 	public static final boolean DEBUG = false;
@@ -43,6 +43,7 @@ public class AppConstants {
 	
 	public static final String FRAGMENT_TAG_DISCOVER = "discoverFragment";
 	public static final String FRAGMENT_TAG_CHANGE_LOCATION = "changeLocationFragment";
+	public static final String FRAGMENT_TAG_LANGUAGE = "language";
 	public static final String FRAGMENT_TAG_DISCOVER_BY_CATEGORY = "discoverByCategoryFragment";
 	public static final String FRAGMENT_TAG_EVENT_DETAILS = "eventDetailsFragment";
 	public static final String FRAGMENT_TAG_ARTIST_DETAILS = "artistDetailsFragment";
