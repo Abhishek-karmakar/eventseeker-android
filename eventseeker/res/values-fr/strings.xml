@@ -2,46 +2,46 @@
 <resources>
 
     <!-- Languages -->
-    <string name="lang_english">FR English</string>
-    <string name="lang_french">FR French</string>
-    <string name="lang_german">FR German</string>
-    <string name="lang_italian">FR Italian</string>
-    <string name="lang_spanish">FR Spanish</string>
-    <string name="lang_portuguese">FR Portuguese</string>
+    <string name="lang_english">Anglais</string>
+    <string name="lang_french">Français</string>
+    <string name="lang_german">Allemand</string>
+    <string name="lang_italian">Italien</string>
+    <string name="lang_spanish">Espagnol</string>
+    <string name="lang_portuguese">Portugais</string>
     
     <string name="menu_search">Search</string>
     <string name="menu_change_location">Change Location</string>
     <string name="title_discover">Découvertes</string>
-    <string name="title_change_location">FR Change Location</string>
-    <string name="title_language">FR Language</string>
+    <string name="title_change_location">Change Location</string>
+    <string name="title_language">Langue</string>
     <string name="menu_settings">Settings</string>
-    <string name="title_activity_discover_by_category">FR Discover</string>
+    <string name="title_activity_discover_by_category">Discover</string>
     <string name="menu_calendar">Calendar</string>
     <string name="title_activity_search">SearchActivity</string>
     <string name="artist_on_tour">" On Tour "</string>
-    <string name="title_event_details">FR Event Details</string>
-    <string name="title_artist_details">FR Artist Details</string>
-    <string name="title_venue_details">FR Venue Details</string>
+    <string name="title_event_details">Event Details</string>
+    <string name="title_artist_details">Artist Details</string>
+    <string name="title_venue_details">Venue Details</string>
     <string name="title_activity_venue_details">My Venues</string>
-    <string name="title_following">FR Following</string>
-    <string name="title_my_events">FR My Events</string>
-    <string name="title_artists_news">FR Artist News</string>
-    <string name="title_friends_activity">FR Friends Activity</string>
-    <string name="title_connect_accounts">FR Connect Accounts</string>
-    <string name="title_get_started">FR Get Started</string>
-    <string name="title_about_us">FR About Us</string>
-    <string name="title_eula">FR EULA</string>
-    <string name="title_rep_code">FR Rep Code</string>
-    <string name="title_search_results">FR Search Results</string>
-    <string name="title_google_play">FR Google Play</string>
-    <string name="title_device_library">FR Device Library</string>
-    <string name="title_facebook">FR Facebook</string>
-    <string name="title_google_plus">FR Google Plus</string>
-    <string name="title_twitter">FR Twitter</string>
-    <string name="title_rdio">FR Rdio</string>
-    <string name="title_lastfm">FR last.fm</string>
-    <string name="title_pandora">FR Pandora</string>
-    <string name="title_web">FR Web</string>
+    <string name="title_following">Suivant</string>
+    <string name="title_my_events">My Events</string>
+    <string name="title_artists_news">Nouvelles de l\'artiste</string>
+    <string name="title_friends_activity">Friends Activity</string>
+    <string name="title_connect_accounts">Connect Accounts</string>
+    <string name="title_get_started">Get Started</string>
+    <string name="title_about_us">A propos de nous</string>
+    <string name="title_eula">EULA</string>
+    <string name="title_rep_code">Rep Code</string>
+    <string name="title_search_results">Search Results</string>
+    <string name="title_google_play">Google Play</string>
+    <string name="title_device_library">@string/device_lib</string>
+    <string name="title_facebook">Facebook</string>
+    <string name="title_google_plus">Google Plus</string>
+    <string name="title_twitter">Twitter</string>
+    <string name="title_rdio">Rdio</string>
+    <string name="title_lastfm">last.fm</string>
+    <string name="title_pandora">Pandora</string>
+    <string name="title_web">Web</string>
     
     <string name="no_items_found_pls_login">Please login with facebook or google from \'Sync Accounts\' page to see</string>
     <string name="pls_login_to_track_evt">To track this event you need to first login with facebook or google from \'Sync Accounts\' page.</string>
@@ -49,22 +49,22 @@
     <string name="connection_lost">The Internet connection appears to be offline.</string>
     
     <!-- Strings used for navigation drawer list -->
-    <string name="navigation_drawer_section_browse">BROWSE</string>
-    <string name="navigation_drawer_item_discover">FR Discover</string>
-    <string name="navigation_drawer_item_my_events">FR My Events</string>
-    <string name="navigation_drawer_item_artists_news">FR Artist News</string>
-    <string name="navigation_drawer_item_friends_activity">FR Friends Activity</string>
-    <string name="navigation_drawer_item_following">FR Following</string>
-    <string name="navigation_drawer_section_settings">SETTINGS</string>
-    <string name="navigation_drawer_item_sync_accounts">FR Sync Accounts</string>
-    <string name="navigation_drawer_item_change_location">FR Change Location</string>
-    <string name="navigation_drawer_item_language">FR Language</string>
-    <string name="navigation_drawer_section_about">ABOUT</string>
-    <string name="navigation_drawer_item_invite_friends">FR Invite Friends</string>
-    <string name="navigation_drawer_item_rate_app">FR Rate App</string>
-    <string name="navigation_drawer_item_about">FR About</string>
-    <string name="navigation_drawer_item_eula">FR EULA</string>
-    <string name="navigation_drawer_item_enter_rep_code">FR Enter Rep Code</string>
+    <string name="navigation_drawer_section_browse">Naviguer</string>
+    <string name="navigation_drawer_item_discover">Discover</string>
+    <string name="navigation_drawer_item_my_events">My Events</string>
+    <string name="navigation_drawer_item_artists_news">Nouvelles de l\'artiste</string>
+    <string name="navigation_drawer_item_friends_activity">Friends Activity</string>
+    <string name="navigation_drawer_item_following">Suivant</string>
+    <string name="navigation_drawer_section_settings">Règlages</string>
+    <string name="navigation_drawer_item_sync_accounts">Synchroniser vos comptes</string>
+    <string name="navigation_drawer_item_change_location">Changer le lieu</string>
+    <string name="navigation_drawer_item_language">Langue</string>
+    <string name="navigation_drawer_section_about">A Propos</string>
+    <string name="navigation_drawer_item_invite_friends">Inviter vos amis</string>
+    <string name="navigation_drawer_item_rate_app">Évaluer l\'application</string>
+    <string name="navigation_drawer_item_about">A Propos</string>
+    <string name="navigation_drawer_item_eula">EULA</string>
+    <string name="navigation_drawer_item_enter_rep_code">Entrez l\'identifiant de votre ambassadeur</string>
     
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
@@ -117,6 +117,33 @@
     <string name="are_you_sure">Are you sure ?</string>
     <string name="already_signed_in_with_google_account">You are already signed in with Google account. Would you like to sign out from Google and sign in with Facebook account?</string>
     <string name="already_signed_in_with_facebook_account">You are already signed in with Facebook account. Would you like to sign out from Facebook and sign in with Google account?</string>
+    
+    <!-- About us -->
+    <string name="seek_share_live">Cherche. Partage. Vis.</string>
+    <string name="eventseeker_desc">eventseeker rend la découverte d\'artistes et d\'évènements facile et sociale. Nous vous donnons les outils pour ne plus jamais manquer le moindre évènement.</string>
+    <string name="powered_by">Réalisé par Wcities</string>
+        
+    <!-- Following/Follow Footer Text -->
+    <string name="footer_following">Suivre</string>
+    <string name="footer_follow">Suivre</string>
+          
+    <!-- Artists Details -->
+    <string name="info">INFO</string>
+    <string name="events">Evènements</string>
+    <string name="news">Nouvelles</string>
+    <string name="videos">Vidéos</string>
+    <string name="friends_who_like">Amis qui aiment</string>
+    
+    <!-- Artists News -->
+    <string name="posted_a_picture">a publié une photo</string>
+    <string name="shared_a_link">a publié un lien</string>
+    <string name="posted_a_video">a publié un vidéo nouvel</string>
+    <string name="posted_a_status">posted a status</string>
+    <string name="follow_artists_for_updates">Suivez les artistes pour recevoir les dernières nouvelles en temps réel</string>
+    <string name="search_artists">Recherche d\'artistes</string>
+        
+   	<!-- Connect Accounts -->
+    <string name="device_lib">Bibliothèque d\'appareil</string>
     
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>

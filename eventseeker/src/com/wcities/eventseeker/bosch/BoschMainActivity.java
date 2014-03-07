@@ -2,7 +2,6 @@ package com.wcities.eventseeker.bosch;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
@@ -23,7 +22,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bosch.myspin.serversdk.IOnCarDataChangeListener;
 import com.bosch.myspin.serversdk.IPhoneCallStateListener;
@@ -45,7 +43,6 @@ import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
 import com.wcities.eventseeker.util.DeviceUtil;
-import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschMainActivity extends ActionBarActivity implements ReplaceFragmentListener, 
 		EventListener, ArtistListener, VenueListener, FragmentLoadedFromBackstackListener, 
@@ -193,6 +190,20 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		} catch (MySpinException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		DeviceUtil.registerLocationListener(this);
+		EventSeekr.setConnectionFailureListener(this);
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		DeviceUtil.unregisterLocationListener();
+		EventSeekr.setConnectionFailureListener(null);
 	}
 	
 	@Override
@@ -562,7 +573,6 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			 * of bosch version app, pops up those android version screens from back stack on bosch IVI system.
 			 */
 			moveTaskToBack(true);
-			DeviceUtil.removeDeviceLocationListener();
 		}
 	}
 

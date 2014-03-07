@@ -10,7 +10,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:textSize="@dimen/txt_title_txt_size_artist_news_item"
-		android:text="posted a new photo"
+		android:text="@string/posted_a_picture"
 		android:layout_marginLeft="@dimen/txt_margin_l_artist_news_item"
 		android:layout_marginRight="@dimen/txt_margin_r_artist_news_item"
 		android:textColor="@android:color/black" />

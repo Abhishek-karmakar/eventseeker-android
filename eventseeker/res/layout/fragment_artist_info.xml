@@ -56,7 +56,7 @@
 				    <TextView android:id="@+id/txtVideos"
 						android:layout_width="match_parent"
 				     	android:layout_height="wrap_content"
-				     	android:text="Videos"
+				     	android:text="@string/videos"
 				     	android:layout_marginBottom="@dimen/txt_videos_margin_b_fragment_artist_info"
 				     	android:textSize="@dimen/txt_videos_txt_size_fragment_artist_info" />
 				    

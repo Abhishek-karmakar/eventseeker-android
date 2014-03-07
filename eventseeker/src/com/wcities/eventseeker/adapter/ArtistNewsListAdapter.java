@@ -6,11 +6,11 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -54,16 +54,18 @@ public class ArtistNewsListAdapter extends BaseAdapter {
     private int itemsAlreadyRequested;
     private List<ArtistNewsListItem> batchLoaded;
     
+    private Resources res;
+    
     public ArtistNewsListAdapter(Context context, AsyncTask<Void, Void, List<ArtistNewsItem>> loadArtistNews, 
-    		LoadItemsInBackgroundListener listener, List<ArtistNewsListItem> artistsNewsListItems, 
-    		int width) {
+    		LoadItemsInBackgroundListener listener, List<ArtistNewsListItem> artistsNewsListItems, int width) {
     	mContext = context;
         this.loadArtistNews = loadArtistNews;
         mListener = listener;
         this.artistsNewsListItems = artistsNewsListItems;
         this.imgWidth = width;
         this.batchLoaded = new ArrayList<ArtistNewsListItem>();
-
+        res = context.getResources();
+        
         mInflater = LayoutInflater.from(context);
         IMG_MARGIN_B = mContext.getResources().getDimensionPixelSize(R.dimen.img_photo_margin_b_artist_news_item);
 		pad = mContext.getResources().getDimensionPixelSize(R.dimen.tab_bar_margin_fragment_custom_tabs);
@@ -135,7 +137,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 					((TextView)convertView).setText(mContext.getResources().getString(R.string.no_items_found_pls_login) + " artist news.");
 					
 				} else {
-					((TextView)convertView).setText("No Artist News Found.");
+					((TextView)convertView).setText(R.string.no_artist_news_found);
 				}
 				
 				return convertView;
@@ -293,7 +295,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 				txtLinkTitle.setVisibility(View.GONE);
 				imgLink.setVisibility(View.GONE);
 				
-				title += " posted a status";
+				title += " " + res.getString(R.string.posted_a_status);
 				break;
 				
 			case link:
@@ -301,7 +303,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 				imgVideo.setVisibility(View.GONE);
 				txtLinkTitle.setVisibility(View.VISIBLE);
 				
-				title += " shared a link";
+				title += " " + res.getString(R.string.shared_a_link);
 				txtLinkTitle.setText(item.getPostTitle());
 				
 				if (item.getMobiResImgUrl() != null) {
@@ -319,7 +321,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 				txtLinkTitle.setVisibility(View.GONE);
 				imgLink.setVisibility(View.GONE);
 				
-				title += " posted a new photo";
+				title += " " + res.getString(R.string.posted_a_picture);
 				updateImageView(artistsNewsListItem, imgPhoto, parent, pos);
 				break;
 				
@@ -330,7 +332,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 				txtLinkTitle.setVisibility(View.GONE);
 				imgLink.setVisibility(View.GONE);
 				
-				title += " posted a video";
+				title += " " + res.getString(R.string.posted_a_video);
 				updateImageView(artistsNewsListItem, imgPhoto, parent, pos);
 				break;
 
@@ -365,7 +367,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 				txtLinkTitle2.setVisibility(View.GONE);
 				imgLink2.setVisibility(View.GONE);
 				
-				title += " posted a status";
+				title += " " + res.getString(R.string.posted_a_status);
 				break;
 				
 			case link:
@@ -373,7 +375,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 				imgVideo2.setVisibility(View.GONE);
 				txtLinkTitle2.setVisibility(View.VISIBLE);
 				
-				title += " shared a link";
+				title += " " + res.getString(R.string.shared_a_link);
 				txtLinkTitle2.setText(item.getPostTitle());
 				
 				if (item.getMobiResImgUrl() != null) {
@@ -391,7 +393,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 				txtLinkTitle2.setVisibility(View.GONE);
 				imgLink2.setVisibility(View.GONE);
 				
-				title += " posted a new photo";
+				title += " " + res.getString(R.string.posted_a_picture);
 				updateImageView(artistsNewsListItem, imgPhoto2, parent, pos);
 				break;
 				
@@ -402,7 +404,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 				txtLinkTitle2.setVisibility(View.GONE);
 				imgLink2.setVisibility(View.GONE);
 				
-				title += " posted a video";
+				title += " " + res.getString(R.string.posted_a_video);
 				updateImageView(artistsNewsListItem, imgPhoto2, parent, pos);
 				break;
 
@@ -442,8 +444,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 		    } else {
 				imageView.setImageBitmap(null);
 		        AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-		        asyncLoadImg.loadImg(imageView, ImgResolution.DEFAULT, (AdapterView) parent, 
-		        		pos, item);
+		        asyncLoadImg.loadImg(imageView, ImgResolution.DEFAULT, (AdapterView) parent, pos, item);
 		    }
 		}
 		

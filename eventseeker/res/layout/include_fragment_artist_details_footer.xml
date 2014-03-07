@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="Follow"
+        android:text="@string/footer_follow"
         android:textColor="@android:color/white"
         android:textSize="@dimen/txt_follow_txt_size_include_fragment_artist_details_footer" />
     

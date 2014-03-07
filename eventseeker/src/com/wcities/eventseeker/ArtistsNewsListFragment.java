@@ -129,7 +129,6 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 		super.onActivityCreated(savedInstanceState);
 		
 		if (artistsNewsListItems == null) {
-
 			artistsNewsListItems = new ArrayList<ArtistNewsListItem>();
 			artistNewsListAdapter = new ArtistNewsListAdapter(FragmentUtil.getActivity(this), null, 
 					this, artistsNewsListItems, imgWidth);
@@ -261,11 +260,11 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	private void setNoItemsLayout() {
 		scrlVRootNoItemsFoundWithAction.setVisibility(View.VISIBLE);
 		((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsHeading)).setText(
-				"Search Artists");
+				R.string.search_artists);
 		((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsMsg)).setText(
-				"Follow artists to receive real time updates.");
+				R.string.follow_artists_for_updates);
 		((Button)scrlVRootNoItemsFoundWithAction.findViewById(R.id.btnAction)).setText(
-				"Search Artists");
+				R.string.search_artists);
 		((ImageView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.imgNoItems)).setImageDrawable(
 				res.getDrawable(R.drawable.no_artists_news));
 	}

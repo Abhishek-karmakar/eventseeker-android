@@ -21,7 +21,6 @@ import android.os.Looper;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.IPToCityApi;
@@ -180,7 +179,7 @@ public class DeviceUtil {
 	 * This will remove the DeviceLocationListener instance from the DeviceUtil's Location Manager instance and 
 	 * will disable all the location updates.
 	 */
-	public static void removeDeviceLocationListener() {
+	public static void unregisterLocationListener() {
 		//Log.i(TAG, "DeviceLocationListener is has been removed");
 		if (locationManager != null) {
 			locationManager.removeUpdates(DeviceLocationListener.getInstance());
@@ -205,10 +204,6 @@ public class DeviceUtil {
         if (isNetworkEnabled) {
         	requestLocationUpdatesOnUiThread(context, locationManager, LocationManager.NETWORK_PROVIDER);
         }
-	}
-
-	public static void unregisterLocationListener() {
-		removeDeviceLocationListener();
 	}
 
 	private static class DeviceLocationListener implements LocationListener {

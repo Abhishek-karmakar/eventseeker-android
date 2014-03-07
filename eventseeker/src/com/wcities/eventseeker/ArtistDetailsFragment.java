@@ -40,7 +40,7 @@ import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
 
 public class ArtistDetailsFragment extends FragmentLoadableFromBackStack implements OnClickListener,
-OnArtistUpdatedListener {
+		OnArtistUpdatedListener {
 
 	private static final String TAG = ArtistDetailsFragment.class.getName();
 
@@ -49,8 +49,18 @@ OnArtistUpdatedListener {
 	private static final String FRAGMENT_TAG_NEWS = "news";
 	
 	protected static enum FooterTxt {
-		Follow,
-		Following;
+		Follow(R.string.footer_follow),
+		Following(R.string.footer_following);
+		
+		private int id;
+		
+		private FooterTxt(int id) {
+			this.id = id;
+		}
+		
+		public String getStringForm(Fragment fragment) {
+			return FragmentUtil.getActivity(fragment).getResources().getString(id);
+		}
 	}
 	
 	private SwipeTabsAdapter mTabsAdapter;
@@ -112,19 +122,18 @@ OnArtistUpdatedListener {
 		}
 		
 		Button btnArtists = (Button) vTabBar.findViewById(R.id.btnTab1);
-		btnArtists.setText("INFO");
+		btnArtists.setText(R.string.info);
 		btnArtists.setOnClickListener(this);
 		
 		Button btnEvents = (Button) vTabBar.findViewById(R.id.btnTab2);
-		btnEvents.setText("EVENTS");
+		btnEvents.setText(R.string.events);
 		btnEvents.setOnClickListener(this);
 		
 		Button btnVenues = (Button) vTabBar.findViewById(R.id.btnTab3);
-		btnVenues.setText("NEWS");
+		btnVenues.setText(R.string.news);
 		btnVenues.setOnClickListener(this);
 		
-		TabBar.Tab tabInfo = new TabBar.Tab(btnArtists, FRAGMENT_TAG_INFO, ArtistInfoFragment.class, 
-				getArguments());
+		TabBar.Tab tabInfo = new TabBar.Tab(btnArtists, FRAGMENT_TAG_INFO, ArtistInfoFragment.class, getArguments());
 		mTabsAdapter.addTab(tabInfo, oldAdapter);
 
 		TabBar.Tab tabEvents;
