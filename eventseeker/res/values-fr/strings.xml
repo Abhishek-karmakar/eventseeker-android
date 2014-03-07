@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">eventseeker</string>
-    
-    <!-- development keys -->
-    <string name="fb_app_id">687206491296790</string>
-    <string name="map_v2_android_key">AIzaSyC4DsIo1BknPFbcHZ5y89UygHgWxgUhFic</string>
-    <string name="map_v3_browser_key">AIzaSyDhuqduP4vkcqEbDeX0nxuBE5HnvZTrt9w</string>
-    
-    <!-- production keys -->
-   	<!-- <string name="fb_app_id">153033148171841</string>
-    <string name="map_v2_android_key">AIzaSyDUaOHXTK9bv4-JhQ3h_1M0iew07JqTb9I</string>
-    <string name="map_v3_browser_key">AIzaSyBOTuIbME9QmZsfoBFFLa38zjTGJ-jWT-k</string> -->
-    
     <!-- Languages -->
     <string name="lang_english">FR English</string>
     <string name="lang_french">FR French</string>
@@ -23,7 +11,7 @@
     
     <string name="menu_search">Search</string>
     <string name="menu_change_location">Change Location</string>
-    <string name="title_discover">FR Discover</string>
+    <string name="title_discover">Découvertes</string>
     <string name="title_change_location">FR Change Location</string>
     <string name="title_language">FR Language</string>
     <string name="menu_settings">Settings</string>
@@ -112,17 +100,17 @@
     
     <!-- Strings used for event category titles -->
     <string name="evt_cat_concerts">Concerts</string>
-    <string name="evt_cat_theater">Theater</string>
+    <string name="evt_cat_theater">Théâtre</string>
     <string name="evt_cat_sports">Sports</string>
-    <string name="evt_cat_arts_museums">Arts &amp; Museums</string>
-    <string name="evt_cat_dance">Dance</string>
-    <string name="evt_cat_clubbing_nightlife">Clubbing &amp; Nightlife</string>
-    <string name="evt_cat_educational">Educational</string>
-    <string name="evt_cat_festivals_fairs">Festivals &amp; Fairs</string>
-    <string name="evt_cat_family">Family</string>
-    <string name="evt_cat_community">Community</string>
-    <string name="evt_cat_business_tech">Business &amp; Tech</string>
-    <string name="evt_cat_tours">Tours</string>
+    <string name="evt_cat_arts_museums">Arts et Musées</string>
+    <string name="evt_cat_dance">Danse</string>
+    <string name="evt_cat_clubbing_nightlife">Vie Nocturne</string>
+    <string name="evt_cat_educational">Éducatif</string>
+    <string name="evt_cat_festivals_fairs">Festivals</string>
+    <string name="evt_cat_family">Famille</string>
+    <string name="evt_cat_community">Communauté</string>
+    <string name="evt_cat_business_tech">Entreprise et Technologie</string>
+    <string name="evt_cat_tours">Tournées</string>
     
     <string name="plus_generic_error">Sign in with Google is not available.</string>
 
