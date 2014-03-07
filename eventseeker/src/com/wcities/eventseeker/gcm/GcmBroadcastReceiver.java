@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.util.NotificationUtil;
 
@@ -25,7 +26,7 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
         } else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType)) {
         	Log.e(TAG, "Deleted messages on server: " + intent.getExtras().toString());
             
-        } else {
+        } else if (((EventSeekr)context.getApplicationContext()).getWcitiesId() != null) {
             handleMessage(context, intent);
         }
         setResultCode(Activity.RESULT_OK);
