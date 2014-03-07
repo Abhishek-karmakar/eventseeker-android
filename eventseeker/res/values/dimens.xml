@@ -458,6 +458,9 @@
     <dimen name="lnr_layout_btns_txt_size_include_fragment_friends_activity_item_track_btns">12sp</dimen>
     <dimen name="divider_lnr_layout_btns_w_include_fragment_friends_activity_item_track_btns">1dp</dimen>
     <dimen name="divider_lnr_layout_btns_ht_include_fragment_friends_activity_item_track_btns">25dp</dimen>
+    <!-- list_item_language -->
+    <dimen name="common_margin_padding_list_item_language">10dp</dimen>
+    <dimen name="txt_language_txt_size_list_item_language">16sp</dimen>
 	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 	<!-- activity_bosch_main.xml -->
     <dimen name="b_root_navigation_drawer_w_main">210dp</dimen>

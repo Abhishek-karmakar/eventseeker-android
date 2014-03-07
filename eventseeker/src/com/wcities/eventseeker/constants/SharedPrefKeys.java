@@ -21,7 +21,10 @@ public class SharedPrefKeys {
 	public static final String SYNC_COUNT_RDIO = "syncCountRdio";
 	public static final String SYNC_COUNT_LASTFM = "syncCountLastfm";
 	public static final String SYNC_COUNT_PANDORA = "syncCountPandora";
+	
 	public static final String FIRST_TIME_LAUNCHED = "firstTimeLaunched";
+	
+	public static final String DEFAULT_LOCALE_CODE = "defaultLocaleCode";
 	
 	public static final String DEVICE_ID = "deviceId";
 }

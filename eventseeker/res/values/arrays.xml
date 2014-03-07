@@ -10,6 +10,7 @@
 	  	<item>@string/navigation_drawer_section_settings</item>
 	  	<item>@string/navigation_drawer_item_sync_accounts</item>
 	  	<item>@string/navigation_drawer_item_change_location</item>
+	  	<item>@string/navigation_drawer_item_language</item>
 	  	<item>@string/navigation_drawer_section_about</item>
 	  	<item>@string/navigation_drawer_item_invite_friends</item>
 		<item>@string/navigation_drawer_item_rate_app</item>
@@ -28,6 +29,7 @@
 	  	<item>@null</item>
         <item>@drawable/selector_sync</item>
 	  	<item>@drawable/selector_changelocation</item>
+	  	<item>@drawable/selector_language</item>
 	  	<item>@null</item>
 	  	<item>@drawable/selector_invitefriends</item>
         <item>@drawable/selector_store</item>

@@ -58,6 +58,7 @@ import com.wcities.eventseeker.interfaces.ConnectionFailureListener;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.interfaces.MapListener;
+import com.wcities.eventseeker.interfaces.OnLocaleChangedListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
 import com.wcities.eventseeker.util.DeviceUtil;
@@ -66,7 +67,7 @@ import com.wcities.eventseeker.util.GPlusUtil;
 import com.wcities.eventseeker.util.UpdateAppUtil;
 
 public class MainActivity extends ActionBarActivity implements
-		DrawerListFragmentListener, GetStartedFragmentListener,
+		DrawerListFragmentListener, GetStartedFragmentListener, OnLocaleChangedListener,
 		ReplaceFragmentListener, EventListener, ArtistListener, VenueListener,
 		FragmentLoadedFromBackstackListener, MapListener,
 		ConnectAccountsFragmentListener, SearchView.OnQueryTextListener,
@@ -81,6 +82,7 @@ public class MainActivity extends ActionBarActivity implements
 	private static final int INDEX_NAV_ITEM_FRIENDS_ACTIVITY = INDEX_NAV_ITEM_ARTISTS_NEWS + 1;
 	protected static final int INDEX_NAV_ITEM_CONNECT_ACCOUNTS = DrawerListFragment.SECT_2_HEADER_POS + 1;
 	private static final int INDEX_NAV_ITEM_CHANGE_LOCATION = INDEX_NAV_ITEM_CONNECT_ACCOUNTS + 1;
+	private static final int INDEX_NAV_ITEM_LANGUAGE = INDEX_NAV_ITEM_CHANGE_LOCATION + 1;
 	protected static final int INDEX_NAV_ITEM_INVITE_FRIENDS = DrawerListFragment.SECT_3_HEADER_POS + 1;
 	private static final int INDEX_NAV_ITEM_RATE_APP = INDEX_NAV_ITEM_INVITE_FRIENDS + 1;
 	private static final int INDEX_NAV_ITEM_ABOUT_US = INDEX_NAV_ITEM_RATE_APP + 1;
@@ -129,6 +131,15 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		/**
+		 * Locale changes are Activity specific i.e. after the Activity gets destroyed, the Locale changes
+		 * associated with that activity will also get destroyed. So, if Activity was destroyed due to
+		 * configuration changes(like orientation change) then the Newer Activity will initialize itself with
+		 * the Device specific Locale. So, each and every time when activity gets initialized it should
+		 * also initialize its Locale from SharedPref.
+		 */
+		((EventSeekr) getApplication()).setDefaultLocale();
 		
 		UpdateAppUtil.updateCheckes((EventSeekr) getApplication());
 
@@ -296,6 +307,8 @@ public class MainActivity extends ActionBarActivity implements
 		super.onStart();
 		//Log.d(TAG, "onStart()");
 		
+		DeviceUtil.registerLocationListener(this);
+		
 		/**
 		 * Due to myspin bug sometimes it doesn't detect connected state instantly. To compensate for this 
 		 * we run a delayed task to recheck on connected state & refresh UI.
@@ -377,6 +390,7 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onStop() {
 		super.onStop();
 		//Log.d(TAG, "onStop()");
+		DeviceUtil.unregisterLocationListener();
 		handler.removeCallbacks(periodicCheckForBoschConnection);
 	}
 
@@ -924,6 +938,12 @@ public class MainActivity extends ActionBarActivity implements
 			ChangeLocationFragment changeLocationFragment = new ChangeLocationFragment();
 			replaceContentFrameByFragment(changeLocationFragment, AppConstants.FRAGMENT_TAG_CHANGE_LOCATION, 
 					getResources().getString(R.string.title_change_location), false);
+			break;
+
+		case INDEX_NAV_ITEM_LANGUAGE:
+			LanguageFragment languageFragment = new LanguageFragment();
+			replaceContentFrameByFragment(languageFragment, AppConstants.FRAGMENT_TAG_LANGUAGE, 
+					getResources().getString(R.string.title_language), false);
 			break;
 			
 		case INDEX_NAV_ITEM_INVITE_FRIENDS:
@@ -1623,5 +1643,15 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	public void doNegativeClick(String dialogTag) {
 	}
-	
+
+	@Override
+	public void onLocaleChanged() {
+		DrawerListFragment drawerListFragment = (DrawerListFragment) getSupportFragmentManager()
+				.findFragmentByTag(DRAWER_LIST_FRAGMENT_TAG);
+		if (drawerListFragment != null) {
+			drawerListFragment.refreshDrawerList();
+		}
+		
+		//TODO: refresh current fragments title
+	}
 }
