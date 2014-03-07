@@ -49,12 +49,12 @@ public class ArtistEventsFragment extends ArtistEventsParentFragment {
 
 				case Tracked:
 					imgFollow.setImageDrawable(getResources().getDrawable(R.drawable.following));
-					txtFollow.setText(FooterTxt.Following.name());
+					txtFollow.setText(FooterTxt.Following.getStringForm(this));
 					break;
 	
 				case NotTracked:
 					imgFollow.setImageDrawable(getResources().getDrawable(R.drawable.follow));
-					txtFollow.setText(FooterTxt.Follow.name());
+					txtFollow.setText(FooterTxt.Follow.getStringForm(this));
 					break;
 	
 				default:

@@ -37,7 +37,7 @@
 	        android:layout_below="@id/imgNoItems"
 	        android:layout_marginTop="@dimen/all_components_margin_t_include_no_items_found_with_action"
 	        android:layout_centerHorizontal="true"
-	        android:text="Follow artists to receive real time updates."
+	        android:text="@string/follow_artists_for_updates"
 	        android:textSize="@dimen/txt_no_items_msg_txt_size_include_no_items_found_with_action"
 	        android:textColor="@color/txt_no_items_msg_txt_color_include_no_items_found_with_action"
 	        android:gravity="center_horizontal" />

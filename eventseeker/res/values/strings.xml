@@ -46,7 +46,7 @@
     <string name="title_rep_code">Rep Code</string>
     <string name="title_search_results">Search Results</string>
     <string name="title_google_play">Google Play</string>
-    <string name="title_device_library">Device Library</string>
+    <string name="title_device_library">@string/device_lib</string>
     <string name="title_facebook">Facebook</string>
     <string name="title_google_plus">Google Plus</string>
     <string name="title_twitter">Twitter</string>
@@ -95,7 +95,7 @@
     <string name="connect_accounts_item_title">Title</string>
     <string name="connect_accounts_item_facebook">Facebook</string>
     <string name="connect_accounts_item_blank">Blank</string>
-    <string name="connect_accounts_item_device_library">Device Library</string>
+    <string name="connect_accounts_item_device_library">@string/device_lib</string>
     <string name="connect_accounts_item_twitter">Twitter</string>
     <string name="connect_accounts_item_spotify">Spotify</string>
     <string name="connect_accounts_item_rdio">Rdio</string>
@@ -131,8 +131,33 @@
     <string name="already_signed_in_with_facebook_account">You are already signed in with Facebook account. Would you like to sign out from Facebook and sign in with Google account?</string>
     
     <!-- About us -->
-    <string name="eventseeker">eventseeker</string>
     <string name="seek_share_live">Seek. Share. Live.</string>
+    <string name="eventseeker_desc">eventseeker makes artist and event discovery easy and social. We give you the tools you need so you\&apos;ll never miss an event again.</string>
+    <string name="powered_by">Powered By Wcities</string>
+    <string name="eventseeker">eventseeker</string>
+    
+    <!-- Following/Follow Footer Text -->
+    <string name="footer_following">Following</string>
+    <string name="footer_follow">Follow</string>
+    
+    <!-- Artists Details -->
+    <string name="info">INFO</string>
+    <string name="events">EVENTS</string>
+    <string name="news">NEWS</string>
+    <string name="videos">Videos</string>
+    <string name="friends_who_like">Friends Who Like</string>
+    <string name="no_artist_news_found">No Artist News Found.</string>
+    
+   	<!-- Artists News -->
+    <string name="posted_a_picture">posted a new photo</string>
+    <string name="shared_a_link">shared a link</string>
+    <string name="posted_a_video">posted a video</string>
+    <string name="posted_a_status">posted a status</string>
+    <string name="follow_artists_for_updates">Follow artists to receive real time updates.</string>
+    <string name="search_artists">Search Artists</string>
+    
+   	<!-- Connect Accounts -->
+    <string name="device_lib">Device Library</string>
     
     
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->

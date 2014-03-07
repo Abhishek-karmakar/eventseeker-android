@@ -60,6 +60,7 @@ public class Artist implements Serializable, BitmapCacheable {
 		friends = new ArrayList<Friend>();
 		videos = new ArrayList<Video>();
 		listArtistLink = new ArrayList<ArtistLink>();
+		attending = Attending.NotTracked;
 	}
 
 	public int getId() {

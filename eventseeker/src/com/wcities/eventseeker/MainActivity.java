@@ -143,7 +143,6 @@ public class MainActivity extends ActionBarActivity implements
 		
 		UpdateAppUtil.updateCheckes((EventSeekr) getApplication());
 
-		EventSeekr.setConnectionFailureListener(this);
 		//Log.d(TAG, "deviceId = " + DeviceUtil.getDeviceId((EventSeekr) getApplication()));
 		
 		try {
@@ -307,8 +306,8 @@ public class MainActivity extends ActionBarActivity implements
 		super.onStart();
 		//Log.d(TAG, "onStart()");
 		
+		EventSeekr.setConnectionFailureListener(this);
 		DeviceUtil.registerLocationListener(this);
-		
 		/**
 		 * Due to myspin bug sometimes it doesn't detect connected state instantly. To compensate for this 
 		 * we run a delayed task to recheck on connected state & refresh UI.
@@ -390,6 +389,8 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onStop() {
 		super.onStop();
 		//Log.d(TAG, "onStop()");
+
+		EventSeekr.setConnectionFailureListener(null);
 		DeviceUtil.unregisterLocationListener();
 		handler.removeCallbacks(periodicCheckForBoschConnection);
 	}
@@ -407,8 +408,6 @@ public class MainActivity extends ActionBarActivity implements
 			}
 		}
 
-		EventSeekr.setConnectionFailureListener(null);
-		DeviceUtil.removeDeviceLocationListener();
 		//Log.d(TAG, "View : " + findViewById(R.id.rootNavigationDrawer));
 		super.onDestroy();
 	}
@@ -1402,6 +1401,11 @@ public class MainActivity extends ActionBarActivity implements
 			onFragmentResumed(INDEX_NAV_ITEM_CHANGE_LOCATION, getResources()
 					.getString(R.string.title_change_location),
 					AppConstants.FRAGMENT_TAG_CHANGE_LOCATION);
+			
+		} else if (fragment instanceof LanguageFragment) {
+			onFragmentResumed(INDEX_NAV_ITEM_LANGUAGE, getResources()
+					.getString(R.string.title_language),
+					AppConstants.FRAGMENT_TAG_LANGUAGE);
 
 		} else if (fragment instanceof AboutUsFragment) {
 			onFragmentResumed(INDEX_NAV_ITEM_ABOUT_US, getResources()
@@ -1617,7 +1621,6 @@ public class MainActivity extends ActionBarActivity implements
 			 * of android version app, pops up those bosch version screens from back stack on android device.
 			 */
 			moveTaskToBack(true);
-			DeviceUtil.removeDeviceLocationListener();
 		}
 	}
 
@@ -1641,8 +1644,7 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	@Override
-	public void doNegativeClick(String dialogTag) {
-	}
+	public void doNegativeClick(String dialogTag) {}
 
 	@Override
 	public void onLocaleChanged() {
@@ -1651,7 +1653,12 @@ public class MainActivity extends ActionBarActivity implements
 		if (drawerListFragment != null) {
 			drawerListFragment.refreshDrawerList();
 		}
-		
-		//TODO: refresh current fragments title
+		/**
+		 * refresh the current screen's title only if it is Language fragment.
+		 */
+		if (currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_LANGUAGE)) {
+			mTitle = getResources().getString(R.string.title_language);
+			updateTitle();
+		}
 	}
 }

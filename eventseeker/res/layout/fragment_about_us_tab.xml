@@ -30,7 +30,7 @@
             android:layout_below="@id/txtAppName"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/txt_app_slogan_margin_t_fragment_about_us"
-            android:text="seek_share_live"
+            android:text="@string/seek_share_live"
             android:textColor="@color/font_blue"
             android:textSize="@dimen/txt_app_slogan_txt_size_fragment_about_us"
             android:textStyle="bold" />
@@ -45,7 +45,7 @@
             android:layout_marginRight="@dimen/txt_desc_margin_r_fragment_about_us"
             android:layout_marginTop="@dimen/txt_desc_margin_t_fragment_about_us"
             android:gravity="center_horizontal"
-            android:text="eventseeker makes artist and event discovery easy and social. We give you the tools you need so you&apos;ll never miss an event again."
+            android:text="@string/eventseeker_desc"
             android:textSize="@dimen/txt_desc_txt_size_fragment_about_us" />
 
         <LinearLayout
@@ -107,7 +107,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/txt_powered_by_margin_b_fragment_about_us"
             android:layout_marginTop="@dimen/txt_powered_by_margin_t_fragment_about_us"
-            android:text="Powered By Wcities"
+            android:text="@string/powered_by"
             android:textSize="@dimen/txt_powered_by_txt_size_fragment_about_us" />
 
         <TextView

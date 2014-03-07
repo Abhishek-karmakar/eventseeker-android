@@ -86,12 +86,12 @@ public class ArtistNewsFragment extends Fragment implements ArtistDetailsFragmen
 
 			case Tracked:
 				imgFollow.setImageDrawable(getResources().getDrawable(R.drawable.following));
-				txtFollow.setText(FooterTxt.Following.name());
+				txtFollow.setText(FooterTxt.Following.getStringForm(this));
 				break;
 
 			case NotTracked:
 				imgFollow.setImageDrawable(getResources().getDrawable(R.drawable.follow));
-				txtFollow.setText(FooterTxt.Follow.name());
+				txtFollow.setText(FooterTxt.Follow.getStringForm(this));
 				break;
 
 			default:
@@ -106,7 +106,8 @@ public class ArtistNewsFragment extends Fragment implements ArtistDetailsFragmen
 		
 		case R.id.fragmentArtistDetailsFooter:
 			EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(this).getApplication();
-			if (txtFollow.getText().equals(FooterTxt.Follow.name())) {
+			if (/*txtFollow.getText().equals(FooterTxt.Follow.getStringForm(this))*/
+					artist.getAttending() == Attending.NotTracked) {
 				artist.updateAttending(Attending.Tracked, eventSeekr);
 				updateFollowingFooter();
 				new UserTracker(eventSeekr, UserTrackingItemType.artist, artist.getId()).execute();

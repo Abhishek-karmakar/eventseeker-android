@@ -244,14 +244,13 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 			switch (artist.getAttending()) {
 
 			case Tracked:
-				imgFollow.setImageDrawable(res
-						.getDrawable(R.drawable.following));
-				txtFollow.setText(FooterTxt.Following.name());
+				imgFollow.setImageDrawable(res.getDrawable(R.drawable.following));
+				txtFollow.setText(FooterTxt.Following.getStringForm(this));
 				break;
 
 			case NotTracked:
 				imgFollow.setImageDrawable(res.getDrawable(R.drawable.follow));
-				txtFollow.setText(FooterTxt.Follow.name());
+				txtFollow.setText(FooterTxt.Follow.getStringForm(this));
 				break;
 
 			default:
@@ -684,7 +683,8 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 
 		case R.id.fragmentArtistDetailsFooter:
 			EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(this).getApplication();
-			if (txtFollow.getText().equals(FooterTxt.Follow.name())) {
+			if (/*txtFollow.getText().equals(FooterTxt.Follow.getStringForm(this))*/
+					artist.getAttending() == Attending.NotTracked) {
 				artist.updateAttending(Attending.Tracked, eventSeekr);
 				updateFollowingFooter();
 				new UserTracker(eventSeekr, UserTrackingItemType.artist, artist.getId()).execute();
@@ -692,8 +692,8 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 			} else {
 				artist.updateAttending(Attending.NotTracked, eventSeekr);
 				updateFollowingFooter();
-				new UserTracker(eventSeekr, UserTrackingItemType.artist,
-						artist.getId(), Attending.NotTracked.getValue(), UserTrackingType.Edit).execute();
+				new UserTracker(eventSeekr, UserTrackingItemType.artist, artist.getId(), 
+						Attending.NotTracked.getValue(), UserTrackingType.Edit).execute();
 			}
 			((ArtistDetailsFragment) getParentFragment()).onArtistFollowingUpdated();
 			break;

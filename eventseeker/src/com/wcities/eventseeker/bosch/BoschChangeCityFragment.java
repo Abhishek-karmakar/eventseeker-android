@@ -128,7 +128,7 @@ public class BoschChangeCityFragment extends FragmentLoadableFromBackStack imple
 			DeviceUtil.setCitySet(true);
 			EventSeekr.setCityName(cityName);
 			
-			DeviceUtil.removeDeviceLocationListener();
+			DeviceUtil.unregisterLocationListener();
 			DeviceUtil.updateLatLon(cityPrefered.getLatitude(), cityPrefered.getLongitude());
 			
 			adapter.setData(null);
