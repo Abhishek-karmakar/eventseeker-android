@@ -114,10 +114,12 @@ public class AppConstants {
 	
 	public static final String[] GOOGLE_PLUS_ACTION = new String[] {"http://schemas.google.com/AddActivity"};
 	public static final String[] GOOGLE_PLUS_SCOPES = new String[] {"https://www.googleapis.com/auth/userinfo.email", 
-		Scopes.PLUS_LOGIN, Scopes.PLUS_PROFILE, "https://www.googleapis.com/auth/userinfo.profile"};
+		Scopes.PLUS_LOGIN, Scopes.PLUS_PROFILE, "https://www.googleapis.com/auth/userinfo.profile", 
+		"https://www.googleapis.com/auth/plus.profile.emails.read"};
 	
 	public static final String GOOGLE_PLUS_SCOPES_FOR_SERVER_ACCESS = "https://www.googleapis.com/auth/userinfo.email"  
-		+ " " + Scopes.PLUS_LOGIN + " " + Scopes.PLUS_PROFILE + " " + "https://www.googleapis.com/auth/userinfo.profile";
+		+ " " + Scopes.PLUS_LOGIN + " " + Scopes.PLUS_PROFILE + " " + "https://www.googleapis.com/auth/userinfo.profile" 
+		+ " " + "https://www.googleapis.com/auth/plus.profile.emails.read";
 	
 	public static final String ACTION_GOING_TO = "eventseeker:going_to";
 	public static final String ACTION_WANTS_TO_GO_TO = "eventseeker:wants_to_go_to";
