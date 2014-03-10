@@ -55,6 +55,8 @@
     <string name="title_pandora">Pandora</string>
     <string name="title_web">Web</string>
     
+    <string name="event_featuring">FEATURING</string>
+    
     <string name="no_items_found_pls_login">Please login with facebook or google from \'Sync Accounts\' page to see</string>
     <string name="pls_login_to_track_evt">To track this event you need to first login with facebook or google from \'Sync Accounts\' page.</string>
     <string name="pls_login_through_mobile_app">Please log in through mobile app.</string>
@@ -139,6 +141,8 @@
     <!-- Following/Follow Footer Text -->
     <string name="footer_following">Following</string>
     <string name="footer_follow">Follow</string>
+    <string name="personalize_your_experience">Personalize your experience</string>
+    <string name="sync_accounts_or_search_for_artists">Sync accounts or search for artists to start your personalized eventseeker experience.</string>
     
     <!-- Artists Details -->
     <string name="info">INFO</string>
@@ -159,6 +163,10 @@
    	<!-- Connect Accounts -->
     <string name="device_lib">Device Library</string>
     
+    <!-- Friends Activity -->
+    <string name="is_going_to">%1$s is going to %2$s</string>
+    <string name="wants_to_go_to">%1$s wants to go to %2$s</string>
+    <string name="comment">Comment</string>
     
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>

@@ -105,7 +105,7 @@
             <Button android:id="@+id/btnComment" 
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:text="Comment"
+		        android:text="@string/comment"
 	        	android:drawableLeft="@drawable/comment"
 		        android:background="@color/transparent"
 		        android:drawablePadding="@dimen/btn_drawable_pad_friends_activity_item"

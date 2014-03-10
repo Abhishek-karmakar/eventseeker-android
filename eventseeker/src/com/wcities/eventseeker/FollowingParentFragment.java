@@ -194,11 +194,11 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 		} else {
 			scrlVRootNoItemsFoundWithAction.setVisibility(View.VISIBLE);
 			((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsHeading)).setText(
-					"Personalize Your Experience");
+					res.getString(R.string.personalize_your_experience));
 			((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsMsg)).setText(
-					"Sync accounts or search for artists to start your personalized eventseeker experience.");
+					res.getString(R.string.sync_accounts_or_search_for_artists));
 			((Button)scrlVRootNoItemsFoundWithAction.findViewById(R.id.btnAction)).setText(
-					"Sync Accounts");
+					res.getString(R.string.navigation_drawer_item_sync_accounts));
 			((ImageView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.imgNoItems)).setImageDrawable(
 					res.getDrawable(R.drawable.no_artists_following));
 		}

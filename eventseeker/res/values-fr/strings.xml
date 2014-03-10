@@ -19,7 +19,7 @@
     <string name="menu_calendar">Calendar</string>
     <string name="title_activity_search">SearchActivity</string>
     <string name="artist_on_tour">" On Tour "</string>
-    <string name="title_event_details">Event Details</string>
+    <string name="title_event_details">Détails de l’événement</string>
     <string name="title_artist_details">Artist Details</string>
     <string name="title_venue_details">Venue Details</string>
     <string name="title_activity_venue_details">My Venues</string>
@@ -42,6 +42,8 @@
     <string name="title_lastfm">last.fm</string>
     <string name="title_pandora">Pandora</string>
     <string name="title_web">Web</string>
+    
+    <string name="event_featuring">AVEC</string>
     
     <string name="no_items_found_pls_login">Please login with facebook or google from \'Sync Accounts\' page to see</string>
     <string name="pls_login_to_track_evt">To track this event you need to first login with facebook or google from \'Sync Accounts\' page.</string>
@@ -92,7 +94,7 @@
     <string name="connect_accounts_item_button">Button</string>
 
     <!-- include_friends.xml -->
-    <string name="txt_view_all">View All</string>
+    <string name="txt_view_all">Voir tous</string>
     <string name="txt_view_less">View Less</string>
 
     <!-- fragment_device_library.xml -->
@@ -126,7 +128,9 @@
     <!-- Following/Follow Footer Text -->
     <string name="footer_following">Suivre</string>
     <string name="footer_follow">Suivre</string>
-          
+    <string name="personalize_your_experience">Personnaliser votre expérience</string>
+    <string name="sync_accounts_or_search_for_artists">Synchroniser vos comptes ou rechercher des artistes pour démarrer votre expérience personnalisée avec eventseeker.</string>
+    
     <!-- Artists Details -->
     <string name="info">INFO</string>
     <string name="events">Evènements</string>
@@ -144,6 +148,11 @@
         
    	<!-- Connect Accounts -->
     <string name="device_lib">Bibliothèque d\'appareil</string>
+    
+    <!-- Friends Activity -->
+    <string name="is_going_to">%1$s se rend à %2$s</string>
+    <string name="wants_to_go_to">%1$s veut aller à %2$s</string>
+    <string name="comment">Commentaire</string>
     
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>
