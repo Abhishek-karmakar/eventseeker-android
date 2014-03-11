@@ -4,11 +4,13 @@ import java.util.Iterator;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import com.wcities.eventseeker.GeneralDialogFragment;
+import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.interfaces.ActivityImmediateFragmentLoadableFromBackStack;
 
@@ -72,10 +74,10 @@ public class FragmentUtil {
 		}
 	}
 	
-	public static void showLoginNeededForTrackingEventDialog(FragmentManager fm) {
+	public static void showLoginNeededForTrackingEventDialog(FragmentManager fm, Context context) {
 		GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance("Go to login?", 
 				"To track this event you need to first login with facebook or google from 'Sync Accounts' page.", 
-				"Cancel", "Yes");
+				context.getResources().getString(R.string.cancel), "Yes");
 		generalDialogFragment.show(fm, AppConstants.DIALOG_FRAGMENT_TAG_LOGIN_TO_TRACK_EVENT);
 	}
 }

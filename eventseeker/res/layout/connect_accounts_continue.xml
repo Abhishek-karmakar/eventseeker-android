@@ -13,6 +13,6 @@
         android:background="@color/btn_fb_sign_up_bg"
         android:textColor="@android:color/white"
         android:textSize="@dimen/btn_continue_txt_size_fb_login"
-        android:text="Continue" />
+        android:text="@string/btn_continue" />
 
 </LinearLayout>

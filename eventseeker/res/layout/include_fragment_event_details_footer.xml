@@ -17,7 +17,7 @@
     	<CheckBox android:id="@+id/chkBoxGoing"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="Going"
+			android:text="@string/going_lower"
 			android:textSize="@dimen/lnr_layout_btns_txt_size_include_fragment_event_details_footer"
 			android:textColor="@android:color/white"
 			android:button="@drawable/checkbox_button" />
@@ -39,7 +39,7 @@
 	    <CheckBox android:id="@+id/chkBoxWantToGo"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:text="Want To"
+	        android:text="@string/want_to_lower"
 	        android:textSize="@dimen/lnr_layout_btns_txt_size_include_fragment_event_details_footer"
 	        android:textColor="@android:color/white"
 	        android:button="@drawable/checkbox_button" />
@@ -64,7 +64,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:background="@color/transparent"
-	        android:text="Tickets"
+	        android:text="@string/tickets_lower"
 	        android:textSize="@dimen/lnr_layout_btns_txt_size_include_fragment_event_details_footer"
 	        android:textColor="@android:color/white"
 	        android:drawableLeft="@drawable/tickets"

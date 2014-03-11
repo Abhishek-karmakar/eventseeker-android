@@ -177,7 +177,8 @@
    	
    	<!-- Event Details -->
     <string name="featuring">Featuring</string>
-   	
+   	<string name="cancel">Abbrechen</string>
+   		
    	<!-- Venue Details -->
     <string name="phone">Telefon</string>
    	<string name="drive">Fahren</string>
@@ -187,6 +188,17 @@
     <string name="wants_to_go_to">%1$s möchte zu %2$s gehen</string>
     <string name="comment">Kommentar</string>
     
+   	<!-- My Events -->
+    <string name="no_events_in_your_area">Zur Zeit gibt es keine Veranstaltungen in deiner Gegend. Folgen Sie mehr Künstlern um die Personalisierung Ihres Veranstaltungskalenders zu starten.</string>
+
+    <!-- Common GOING, WANT TO & TICKETS -->
+    <string name="going">Ich gehe hin</string>
+    <string name="want_to">Möchte zu</string>
+    <string name="tickets">Karten</string>
+	<string name="going_lower">@string/going</string>
+    <string name="want_to_lower">@string/want_to</string>
+    <string name="tickets_lower">@string/tickets</string>
+ 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>
     
@@ -200,7 +212,6 @@
     <string name="title_artists">Artists</string>
     <string name="title_featured">Featured</string>
     <string name="title_search">Search</string>
-    <string name="title_search_results">Search Results</string>
     <string name="title_map">eventseeker | Navigate</string>
     <string name="title_settings">eventseeker | Settings</string>
     <string name="title_events">Events</string>

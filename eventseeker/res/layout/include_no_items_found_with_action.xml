@@ -16,7 +16,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_centerHorizontal="true"
-	        android:text="Search Artists"
+	        android:text="@string/search_artists"
 	        android:textStyle="bold"
 	        android:layout_marginTop="@dimen/all_components_margin_t_include_no_items_found_with_action"
 	        android:textSize="@dimen/txt_no_items_heading_txt_size_include_no_items_found_with_action"
@@ -53,7 +53,7 @@
 	        android:background="@color/btn_fb_sign_up_bg"
 	        android:textColor="@android:color/white"
 	        android:textSize="@dimen/btn_continue_txt_size_fb_login"
-	        android:text="Search Artists" />
+	        android:text="@string/search_artists" />
 	    
 	</RelativeLayout>
 

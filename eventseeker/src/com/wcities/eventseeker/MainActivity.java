@@ -1531,7 +1531,6 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public boolean onQueryTextChange(String arg0) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -1660,5 +1659,9 @@ public class MainActivity extends ActionBarActivity implements
 			mTitle = getResources().getString(R.string.title_language);
 			updateTitle();
 		}
+		/**
+		 * 	refresh the SearchView	
+		 */
+		searchView.setQueryHint(getResources().getString(R.string.menu_search));
 	}
 }
