@@ -174,7 +174,7 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 		rltSyncAccount.setVisibility(visibilityLoading);
 		if(isLoading) {
 			AnimationUtil.startRotationToView(imgProgressBar, 0f, 360f, 0.5f, 0.5f, 1000);
-			txtLoading.setText("Syncing Rdio");
+			txtLoading.setText(R.string.syncing_rdio);
 			imgAccount.setImageResource(R.drawable.rdio_big);
 		} else {
 			AnimationUtil.stopRotationToView(imgProgressBar);

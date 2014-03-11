@@ -21,32 +21,29 @@
     <string name="lang_spanish">Spanisch</string>
     <string name="lang_portuguese">Portugiesisch</string>
     
-    <string name="menu_search">Search</string>
-    <string name="menu_change_location">Change Location</string>
-    <string name="title_discover">Discover</string>
-    <string name="title_change_location">Change Location</string>
+    <string name="menu_search">Suchen</string>
+    <string name="menu_change_location">Ort ändern</string>
+    <string name="title_discover">Entdecken</string>
+    <string name="title_change_location">Ort ändern</string>
     <string name="title_language">Sprache</string>
-    <string name="menu_settings">Settings</string>
-    <string name="title_activity_discover_by_category">Discover</string>
+    <string name="menu_settings">Einstellungen</string>
     <string name="menu_calendar">Calendar</string>
-    <string name="title_activity_search">SearchActivity</string>
-    <string name="artist_on_tour">" On Tour "</string>
-    <string name="title_event_details">Event Details</string>
+    <string name="artist_on_tour">" Auf Tour "</string>
+    <string name="title_event_details">Veranstaltungsdetails</string>
     <string name="title_artist_details">Artist Details</string>
     <string name="title_venue_details">Venue Details</string>
-    <string name="title_activity_venue_details">My Venues</string>
     <string name="title_following">Folgen</string>
-    <string name="title_my_events">My Events</string>
+    <string name="title_my_events">Meine Veranstaltungen</string>
     <string name="title_artists_news">Künstler Neuigkeiten</string>
-    <string name="title_friends_activity">Friends Activity</string>
+    <string name="title_friends_activity">Aktivität von Freunden</string>
     <string name="title_connect_accounts">Connect Accounts</string>
-    <string name="title_get_started">Get Started</string>
+    <string name="title_get_started">Starten</string>
     <string name="title_about_us">Über uns</string>
     <string name="title_eula">EULA</string>
     <string name="title_rep_code">Rep Code</string>
-    <string name="title_search_results">Search Results</string>
+    <string name="title_search_results">Suche Ergebnisse</string>
     <string name="title_google_play">Google Play</string>
-    <string name="title_device_library">@string/device_lib</string>
+    <string name="title_device_library">@string/service_device_library</string>
     <string name="title_facebook">Facebook</string>
     <string name="title_google_plus">Google Plus</string>
     <string name="title_twitter">Twitter</string>
@@ -62,25 +59,25 @@
     
     <!-- Strings used for navigation drawer list -->
     <string name="navigation_drawer_section_browse">Stöbern</string>
-    <string name="navigation_drawer_item_discover">Discover</string>
-    <string name="navigation_drawer_item_my_events">My Events</string>
-    <string name="navigation_drawer_item_artists_news">Künstler Neuigkeiten</string>
-    <string name="navigation_drawer_item_friends_activity">Friends Activity</string>
-    <string name="navigation_drawer_item_following">Folgen</string>
+    <string name="navigation_drawer_item_discover">@string/title_discover</string>
+    <string name="navigation_drawer_item_my_events">@string/title_my_events</string>
+    <string name="navigation_drawer_item_artists_news">@string/title_artists_news</string>
+    <string name="navigation_drawer_item_friends_activity">@string/title_friends_activity</string>
+    <string name="navigation_drawer_item_following">@string/title_following</string>
     <string name="navigation_drawer_section_settings">Einstellungen</string>
     <string name="navigation_drawer_item_sync_accounts">Accounts synchronisieren</string>
-    <string name="navigation_drawer_item_change_location">Ort ändern</string>
-    <string name="navigation_drawer_item_language">Sprache</string>
+    <string name="navigation_drawer_item_change_location">@string/title_change_location</string>
+    <string name="navigation_drawer_item_language">@string/title_language</string>
     <string name="navigation_drawer_section_about">Über</string>
     <string name="navigation_drawer_item_invite_friends">Freunde einladen</string>
     <string name="navigation_drawer_item_rate_app">App bewerten</string>
     <string name="navigation_drawer_item_about">Über</string>
-    <string name="navigation_drawer_item_eula">EULA</string>
+    <string name="navigation_drawer_item_eula">@string/title_eula</string>
     <string name="navigation_drawer_item_enter_rep_code">Rep Code eingeben</string>
     
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">@string/menu_settings</string>
 
     <!-- activity_artist_details -->
     <string name="txt_friends_section_title_txt_activity_artist_details">Friends liking this artist</string>
@@ -95,7 +92,7 @@
     <string name="connect_accounts_item_title">Title</string>
     <string name="connect_accounts_item_facebook">Facebook</string>
     <string name="connect_accounts_item_blank">Blank</string>
-    <string name="connect_accounts_item_device_library">@string/device_lib</string>
+    <string name="connect_accounts_item_device_library">@string/service_device_library</string>
     <string name="connect_accounts_item_twitter">Twitter</string>
     <string name="connect_accounts_item_spotify">Spotify</string>
     <string name="connect_accounts_item_rdio">Rdio</string>
@@ -111,18 +108,18 @@
     <string name="txt_service_desc_txt_fragment_device_library">Would you like the application to search your music library for artists that you can then follow? The artists will be placed under the \"Following\" section.</string>
     
     <!-- Strings used for event category titles -->
-    <string name="evt_cat_concerts">Concerts</string>
+    <string name="evt_cat_concerts">Konzerte</string>
     <string name="evt_cat_theater">Theater</string>
-    <string name="evt_cat_sports">Sports</string>
-    <string name="evt_cat_arts_museums">Arts &amp; Museums</string>
-    <string name="evt_cat_dance">Dance</string>
-    <string name="evt_cat_clubbing_nightlife">Clubbing &amp; Nightlife</string>
-    <string name="evt_cat_educational">Educational</string>
+    <string name="evt_cat_sports">Sport</string>
+    <string name="evt_cat_arts_museums">Kunst &amp; Museen</string>
+    <string name="evt_cat_dance">Tanz</string>
+    <string name="evt_cat_clubbing_nightlife">Nachtleben</string>
+    <string name="evt_cat_educational">Lehrreiches</string>
     <string name="evt_cat_festivals_fairs">Festivals &amp; Fairs</string>
-    <string name="evt_cat_family">Family</string>
-    <string name="evt_cat_community">Community</string>
+    <string name="evt_cat_family">Familie</string>
+    <string name="evt_cat_community">Gesellschaft</string>
     <string name="evt_cat_business_tech">Business &amp; Tech</string>
-    <string name="evt_cat_tours">Tours</string>
+    <string name="evt_cat_tours">Touren</string>
     
     <string name="plus_generic_error">Sign in with Google is not available.</string>
 
@@ -154,9 +151,47 @@
     <string name="follow_artists_for_updates">Künstler folgen für Echtzeit-Updates</string>
     <string name="search_artists">Künstler suchen</string>
         
-   	<!-- Connect Accounts -->
-    <string name="device_lib">Geräte-Auflistung</string>
+   	<!-- Connect Accounts Services -->
+    <string name="service_google_play" >Google Play</string>
+    <string name="service_device_library">Geräte-Auflistung</string>
+    <string name="service_twitter" >Twitter</string>
+    <string name="service_rdio" >Rdio</string>
+    <string name="service_last_fm" >Last.fm</string>
+    <string name="service_pandora" >Pandora</string>
+    <string name="service_facebook" >Facebook</string>
+    <string name="service_google_plus" >Google Plus</string>
+    <string name="service_title" >Title</string>
+    <string name="service_blank" >Blank</string>
+    <string name="service_button" >Button</string>
     
+   	<!-- Connect Accounts -->
+    <string name="fb_login">Facebook anmelden</string>
+    <string name="fb_logout">Facebook abmelden</string>
+    <string name="btn_continue">Weiter</string>
+    <string name="syncing_fb">Facebook synchronisieren</string>
+	<string name="syncing_google_plus">Google Plus synchronisieren</string>
+	<string name="syncing_google_play">Google Play synchronisieren</string>
+	<string name="syncing_device_lib">Device Library synchronisieren</string>
+	<string name="syncing_twitter">Twitter synchronisieren</string>
+	<string name="syncing_rdio">Rdio synchronisieren</string>
+	<string name="syncing_last_fm">Last.fm synchronisieren</string>
+	<string name="syncing_pandora">Pandora synchronisieren</string>
+   	
+   	<!-- My Events -->
+    <string name="following">Folgen</string>
+    <string name="recommended">Vorschäge</string>
+   	
+   	<!-- Search Results -->
+    <string name="artists">Künstler</string>
+    <string name="venues">Veranstaltungsorte</string>
+   	
+   	<!-- Event Details -->
+    <string name="featuring">Featuring</string>
+   	
+   	<!-- Venue Details -->
+    <string name="phone">Telefon</string>
+   	<string name="drive">Fahren</string>
+   	
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>
     

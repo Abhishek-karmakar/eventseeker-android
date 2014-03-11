@@ -114,7 +114,7 @@ public class LastfmFragment extends FragmentLoadableFromBackStack implements OnC
 		rltSyncAccount.setVisibility(visibilityLoading);
 		if(isLoading) {
 			AnimationUtil.startRotationToView(imgProgressBar, 0f, 360f, 0.5f, 0.5f, 1000);
-			txtLoading.setText("Syncing Last.fm");
+			txtLoading.setText(R.string.syncing_last_fm);
 			imgAccount.setImageResource(R.drawable.lastfm_big);
 		} else {
 			AnimationUtil.stopRotationToView(imgProgressBar);

@@ -120,7 +120,7 @@ OnEventUpdatedListner{
 		}
 		
 		Button btnInfo = (Button) vTabBar.findViewById(R.id.btnTab1);
-		btnInfo.setText("INFO");
+		btnInfo.setText(R.string.info);
 		btnInfo.setOnClickListener(this);
 		
 		TabBar.Tab tabInfo = new TabBar.Tab(btnInfo, FRAGMENT_TAG_INFO, EventInfoFragment.class, getArguments());
@@ -128,7 +128,7 @@ OnEventUpdatedListner{
 		
 		if (enableTabs) {
 			Button btnFeaturing = (Button) vTabBar.findViewById(R.id.btnTab2);
-			btnFeaturing.setText("FEATURING");
+			btnFeaturing.setText(R.string.featuring);
 			btnFeaturing.setOnClickListener(this);
 			
 			TabBar.Tab tabFeaturing = new TabBar.Tab(btnFeaturing, FRAGMENT_TAG_FEATURING, 

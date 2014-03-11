@@ -130,7 +130,7 @@ public class TwitterSyncingFragment extends FragmentLoadableFromBackStack implem
 
 	private void updateVisibility() {
 		AnimationUtil.startRotationToView(imgProgressBar, 0f, 360f, 0.5f, 0.5f, 1000);
-		txtLoading.setText("Syncing Twitter");
+		txtLoading.setText(R.string.syncing_twitter);
 		imgAccount.setImageResource(R.drawable.twitter_big);
 	}
 

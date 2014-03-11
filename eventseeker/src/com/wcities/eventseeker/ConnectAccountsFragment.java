@@ -23,6 +23,7 @@ import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -79,42 +80,44 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	
     private static final String TAG = ConnectAccountsFragment.class.getName();
     
-    private static final String FB_SIGN_IN = "Facebook Sign In";
-    private static final String FB_SIGN_OUT = "Facebook Sign Out";
+    private String FB_SIGN_IN;
+    private String FB_SIGN_OUT;
     
     private static final String GOOGLE_SIGN_IN = "Google Sign In";
     private static final String GOOGLE_SIGN_OUT = "Google Sign Out";
     
-    private static final String TXT_BTN_CONTINUE = "Continue";
     private static final String TXT_BTN_SKIP = "Skip";
+    private String TXT_BTN_CONTINUE;
     
 	private static final String DIALOG_FRAGMENT_TAG_SKIP = "skipDialog";
 	private static final String DIALOG_ALREADY_LOGGED_IN_WITH_OTHER_ACCOUNT = "alreadyLoggedInWithOtherAccount";
 
+	protected static final String TXT_BTN_CANCEL = "Cancel";
+
 	private List<Service> listAvailableServices;
 	
     public static enum Service {
-    	Title(0,"Title",R.drawable.placeholder, false),
-    	Facebook(1,"Facebook",R.drawable.facebook_colored, false),
-    	GooglePlus(2,"Google Plus",R.drawable.g_plus_colored, false),
-    	Blank(3,"Blank",R.drawable.placeholder, false),
-    	GooglePlay(4,"Google Play",R.drawable.google_play, true),
-    	DeviceLibrary(5,"Device Library",R.drawable.devicelibrary, true),
-    	Twitter(6,"Twitter",R.drawable.twitter_colored, true),
+    	Title(0, R.string.service_title, R.drawable.placeholder, false),
+    	Facebook(1, R.string.service_facebook, R.drawable.facebook_colored, false),
+    	GooglePlus(2, R.string.service_google_plus, R.drawable.g_plus_colored, false),
+    	Blank(3, R.string.service_blank, R.drawable.placeholder, false),
+    	GooglePlay(4, R.string.service_google_play, R.drawable.google_play, true),
+    	DeviceLibrary(5, R.string.service_device_library, R.drawable.devicelibrary, true),
+    	Twitter(6, R.string.service_twitter, R.drawable.twitter_colored, true),
     	//Spotify,
-    	Rdio(7,"Rdio",R.drawable.rdio, true),
-    	Lastfm(8,"Last.fm",R.drawable.lastfm, true),
-    	Pandora(9,"Pandora",R.drawable.pandora, true),
-    	Button(10,"Button",R.drawable.placeholder, false);
+    	Rdio(7, R.string.service_rdio, R.drawable.rdio, true),
+    	Lastfm(8, R.string.service_last_fm, R.drawable.lastfm, true),
+    	Pandora(9, R.string.service_pandora, R.drawable.pandora, true),
+    	Button(10, R.string.service_button, R.drawable.placeholder, false);
     	
     	private int intId;
-    	private String str;
+    	private int strResId;
     	private int drwResId;
     	private boolean isService;
     	
-    	private Service(int intId, String str, int drwResId, boolean isService) {
+    	private Service(int intId, int strResId, int drwResId, boolean isService) {
     		this.intId = intId;
-    		this.str = str;
+    		this.strResId = strResId;
     		this.drwResId = drwResId;
     		this.isService = isService;
 		}
@@ -123,27 +126,31 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			return drwResId;
 		}
     	
-    	public String getStr() {
-			return str;
+    	public String getStr(Fragment fragment) {
+			return fragment.getResources().getString(strResId);
 		}
     	
     	public int getIntId() {
 			return intId;
 		}
     	
-    	public boolean equals(Service s) {
-    		return str.equals(s.getStr());
+    	public boolean equals(Service s, Fragment fragment) {
+    		return getStringFromResId(strResId, fragment).equals(s.getStr(fragment));
 		}
     	
-    	public boolean isOf(String s) {
-    		return str.equals(s);
+    	public boolean isOf(String s, Fragment fragment) {
+    		return getStringFromResId(strResId, fragment).equals(s);
     	}
     	
-    	public static int getValueOf(String s) {
+    	private String getStringFromResId(int strResId, Fragment fragment) {
+			return fragment.getResources().getString(strResId);
+		}
+    	
+    	public static int getValueOf(String s, Fragment fragment) {
     		Service[] services = Service.values();
     		for (int i = 0; i < services.length; i++) {
     			Service service = services[i];
-    			if(service.isOf(s)) {
+    			if(service.isOf(s, fragment)) {
 					return service.getIntId();
 				}
 			}
@@ -199,6 +206,10 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		
 		mPlusClient = GPlusUtil.createPlusClientInstance(this, this, this);
 		res = getResources();
+		
+		FB_SIGN_IN = res.getString(R.string.fb_login);
+		FB_SIGN_OUT = res.getString(R.string.fb_logout);
+		TXT_BTN_CONTINUE = res.getString(R.string.btn_continue);
 	}
 	
 	@Override
@@ -373,9 +384,9 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
         		
         	Service service = connectAccountsItemTitles[i];
 
-        	if ((isFirstTimeLaunch && (service.equals(Service.Facebook)
-        			|| service.equals(Service.Blank) || service.equals(Service.GooglePlus)))
-        			|| (!isFirstTimeLaunch && service.equals(Service.Title))) {
+        	if ((isFirstTimeLaunch && (service.equals(Service.Facebook, this)
+        			|| service.equals(Service.Blank, this) || service.equals(Service.GooglePlus, this)))
+        			|| (!isFirstTimeLaunch && service.equals(Service.Title, this))) {
         		continue;
         	}
         		
@@ -390,7 +401,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
         	if (service.isService() && !listAvailableServices.contains(service)) {
         		continue;
         	}
-			serviceAccount.name = service.getStr();
+			serviceAccount.name = service.getStr(this);
 			serviceAccount.drawable = service.getDrwResId();
 			serviceAccounts.add(serviceAccount);
 		}
@@ -508,7 +519,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			
 			final ServiceAccount serviceAccount = getItem(position);
 			
-			if (serviceAccount.name.equals(Service.Button.getStr())) {
+			if (serviceAccount.name.equals(Service.Button.getStr(ConnectAccountsFragment.this))) {
 				
 				// it's for Continue button
 				convertView = mInflater.inflate(R.layout.connect_accounts_continue, null);
@@ -522,11 +533,11 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				}
 				btnContinue.setOnClickListener(onBtnContinueClickListener);
 				
-			} else if(serviceAccount.name.equals(Service.Title.getStr())) {
+			} else if(serviceAccount.name.equals(Service.Title.getStr(ConnectAccountsFragment.this))) {
 				convertView = mInflater.inflate(R.layout.connect_accounts_txt_list_item, null);
 				convertView.setTag("");
 				
-			} else if(serviceAccount.name.equals(Service.Blank.getStr())) {
+			} else if(serviceAccount.name.equals(Service.Blank.getStr(ConnectAccountsFragment.this))) {
 				
 				convertView = mInflater.inflate(R.layout.connect_accounts_list_item, null);
 				convertView.findViewById(R.id.rltLayoutServiceDetails).setVisibility(View.INVISIBLE);
@@ -553,7 +564,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				holder.imgService.setImageResource(serviceAccount.drawable);
 				
 				if (!isFirstTimeLaunch) { 
-					if (Service.Facebook.isOf(serviceAccount.name)) {
+					if (Service.Facebook.isOf(serviceAccount.name, ConnectAccountsFragment.this)) {
 						if (fbLoggedIn) {
 							holder.txtServiceName.setText(FB_SIGN_OUT);
 							
@@ -561,7 +572,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			        		holder.txtServiceName.setText(FB_SIGN_IN);
 			        	}
 						
-					} else if (Service.GooglePlus.isOf(serviceAccount.name)) {
+					} else if (Service.GooglePlus.isOf(serviceAccount.name, ConnectAccountsFragment.this)) {
 						if (gPlusSignedIn) {
 							holder.txtServiceName.setText(GOOGLE_SIGN_OUT);
 							
@@ -595,7 +606,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 					holder.imgProgressBar.setVisibility(View.INVISIBLE);
 					AnimationUtil.stopRotationToView(holder.imgProgressBar);
 					
-					if (serviceAccount.name.equals(Service.Facebook.getStr())) {
+					if (serviceAccount.name.equals(Service.Facebook.getStr(ConnectAccountsFragment.this))) {
 						if (fbLoggedIn) {
 							holder.imgPlus.setVisibility(View.INVISIBLE);
 							
@@ -603,7 +614,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 							holder.imgPlus.setVisibility(View.VISIBLE);
 						}
 						
-					} else if (serviceAccount.name.equals(Service.GooglePlus.getStr())) {
+					} else if (serviceAccount.name.equals(Service.GooglePlus.getStr(ConnectAccountsFragment.this))) {
 						if (gPlusSignedIn) {
 							holder.imgPlus.setVisibility(View.INVISIBLE);
 							
@@ -647,7 +658,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		private void onItemClick(final ServiceAccount serviceAccount) {
 			
 			//Log.d(TAG, "Service name = " + serviceAccount.name);
-			int serviceId = Service.getValueOf(serviceAccount.name);
+			int serviceId = Service.getValueOf(serviceAccount.name, ConnectAccountsFragment.this);
 			//Log.d(TAG, "onItemClick(), serviceId = " + serviceId);
 			
 			final Service service = Service.values()[serviceId];
@@ -674,7 +685,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 					GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
 							res.getString(R.string.are_you_sure),
 							res.getString(R.string.already_signed_in_with_google_account),
-							"Cancel", "Ok");
+							TXT_BTN_CANCEL, "Ok");
 					generalDialogFragment.show(getChildFragmentManager(), DIALOG_ALREADY_LOGGED_IN_WITH_OTHER_ACCOUNT);
 					return;
 				}
@@ -697,7 +708,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 					GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
 							res.getString(R.string.are_you_sure),
 							res.getString(R.string.already_signed_in_with_facebook_account),
-							"Cancel", "Ok");
+							TXT_BTN_CANCEL, "Ok");
 					generalDialogFragment.show(getChildFragmentManager(), DIALOG_ALREADY_LOGGED_IN_WITH_OTHER_ACCOUNT);
 					return;
 				}
@@ -829,7 +840,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				
 			} else {
 				GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance("Are you sure ?", 
-						"Connecting accounts allows us to provide relevant alerts instantly.", "Cancel", "Skip");
+						"Connecting accounts allows us to provide relevant alerts instantly.", TXT_BTN_CANCEL, TXT_BTN_SKIP);
 				generalDialogFragment.show(getChildFragmentManager(), DIALOG_FRAGMENT_TAG_SKIP);
 			}
 		}
@@ -906,7 +917,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				
 					for (ServiceAccount serviceAccount : serviceAccounts) {
 						
-						if(serviceAccount != null && service.isOf(serviceAccount.name)) { 
+						if(serviceAccount != null && service.isOf(serviceAccount.name, ConnectAccountsFragment.this)) { 
 							serviceAccount.isInProgress = false;
 							serviceAccount.count = 
 								((EventSeekr)FragmentUtil.getActivity(ConnectAccountsFragment.this).getApplication())
@@ -936,7 +947,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				args.putString(BundleKeys.AUTH_TOKEN, authToken);
 				
 				for (ServiceAccount serviceAccount : serviceAccounts) {
-					if (serviceAccount != null && serviceAccount.name.equals(Service.GooglePlay.str)) { 
+					if (serviceAccount != null && serviceAccount.name.equals(Service.GooglePlay.getStr(this))) { 
 						serviceAccount.isInProgress = true;
 						break;
 					}
