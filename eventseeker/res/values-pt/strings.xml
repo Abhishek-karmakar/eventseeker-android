@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">eventseeker</string>
-    
-    <!-- development keys -->
-    <string name="fb_app_id">687206491296790</string>
-    <string name="map_v2_android_key">AIzaSyC4DsIo1BknPFbcHZ5y89UygHgWxgUhFic</string>
-    <string name="map_v3_browser_key">AIzaSyDhuqduP4vkcqEbDeX0nxuBE5HnvZTrt9w</string>
-    
-    <!-- production keys -->
-   	<!-- <string name="fb_app_id">153033148171841</string>
-    <string name="map_v2_android_key">AIzaSyDUaOHXTK9bv4-JhQ3h_1M0iew07JqTb9I</string>
-    <string name="map_v3_browser_key">AIzaSyBOTuIbME9QmZsfoBFFLa38zjTGJ-jWT-k</string> -->
-    
     <!-- Languages -->
     <string name="lang_english">Inglês</string>
     <string name="lang_french">Francês</string>
@@ -101,7 +89,7 @@
     <string name="connect_accounts_item_button">Button</string>
 
     <!-- include_friends.xml -->
-    <string name="txt_view_all">View All</string>
+    <string name="txt_view_all">Ver todos</string>
     <string name="txt_view_less">View Less</string>
 
     <!-- fragment_device_library.xml -->
@@ -135,7 +123,9 @@
     <!-- Following/Follow Footer Text -->
     <string name="footer_following">Seguindo</string>
     <string name="footer_follow">Seguir</string>
-          
+    <string name="personalize_your_experience">Personalizzare sua esperienza</string>
+    <string name="sync_accounts_or_search_for_artists">Sincronizar contas ou procura os artistas para personalizar sua experiencia eventseeker.</string>
+    
     <!-- Artists Details -->
     <string name="info">INFO</string>
     <string name="events">Eventos</string>
@@ -192,6 +182,11 @@
     <string name="phone">Telefono</string>
    	<string name="drive">Conduzir</string>
    	
+    <!-- Friends Activity -->
+    <string name="is_going_to">%1$s vai ao %2$s</string>
+    <string name="wants_to_go_to">%1$s quer ir ao %2$s</string>
+    <string name="comment">Comentário</string>
+    
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>
     

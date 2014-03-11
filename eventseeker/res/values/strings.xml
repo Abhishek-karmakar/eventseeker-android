@@ -136,6 +136,8 @@
     <!-- Following/Follow Footer Text -->
     <string name="footer_following">Following</string>
     <string name="footer_follow">Follow</string>
+    <string name="personalize_your_experience">Personalize your experience</string>
+    <string name="sync_accounts_or_search_for_artists">Sync accounts or search for artists to start your personalized eventseeker experience.</string>
     
     <!-- Artists Details -->
     <string name="info">INFO</string>
@@ -193,7 +195,12 @@
    	<!-- Venue Details -->
     <string name="phone">Phone</string>
     <string name="drive">Drive</string>
-   	
+    
+    <!-- Friends Activity -->
+    <string name="is_going_to">%1$s is going to %2$s</string>
+    <string name="wants_to_go_to">%1$s wants to go to %2$s</string>
+    <string name="comment">Comment</string>
+    
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>
     

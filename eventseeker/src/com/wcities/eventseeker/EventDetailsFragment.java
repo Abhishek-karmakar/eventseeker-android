@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask.Status;
@@ -58,6 +59,8 @@ OnEventUpdatedListner{
 	private ShareActionProvider mShareActionProvider;
 	private View vTabBar;
 	
+	private Resources res;
+	
     public interface EventDetailsFragmentChildListener {
         public void onEventUpdatedByEventDetailsFragment();
         public void onEventAttendingUpdated();
@@ -70,6 +73,8 @@ OnEventUpdatedListner{
 		
 		setRetainInstance(true);
 		setHasOptionsMenu(true);
+		
+		res = FragmentUtil.getResources(this);
 		
 		if (event == null) {
 			//Log.d(TAG, "event = null");
@@ -186,7 +191,7 @@ OnEventUpdatedListner{
 	    if (mShareActionProvider != null && event != null) {
 	    	Intent shareIntent = new Intent(Intent.ACTION_SEND);
 		    shareIntent.setType("image/*");
-		    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Event Details");
+		    shareIntent.putExtra(Intent.EXTRA_SUBJECT, res.getString(R.string.title_event_details));
 		    String message = "Checkout " + event.getName();
 		    if (event.getSchedule() != null) {
 		    	message += " @ " + event.getSchedule().getVenue().getName();

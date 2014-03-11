@@ -148,7 +148,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 		}
 		
 		isTablet = ((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).isTablet();
-		res = getResources();
+		res = FragmentUtil.getResources(this);
 	}
 	
 	@Override
@@ -541,11 +541,11 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 			private void setNewsItemContent(final FriendNewsItem item, ViewGroup parent, int pos) {
 				switch (item.getAttending()) {
 				case GOING:
-					txtTitle.setText(item.getFriendName() + " is going to " + item.getTrackName());
+					txtTitle.setText(res.getString(R.string.is_going_to, item.getFriendName(), item.getTrackName()));
 					break;
 					
 				case WANTS_TO_GO:
-					txtTitle.setText(item.getFriendName() + " wants to go to " + item.getTrackName());
+					txtTitle.setText(res.getString(R.string.wants_to_go_to, item.getFriendName(), item.getTrackName()));
 					break;
 
 				default:
@@ -622,11 +622,11 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 			private void setNewsItem2Content(final FriendNewsItem item, ViewGroup parent, int pos) {
 				switch (item.getAttending()) {
 				case GOING:
-					txtTitle2.setText(item.getFriendName() + " is going to " + item.getTrackName());
+					txtTitle2.setText(res.getString(R.string.is_going_to, item.getFriendName(), item.getTrackName()));
 					break;
 					
 				case WANTS_TO_GO:
-					txtTitle2.setText(item.getFriendName() + " wants to go to " + item.getTrackName());
+					txtTitle2.setText(res.getString(R.string.wants_to_go_to, item.getFriendName(), item.getTrackName()));
 					break;
 
 				default:

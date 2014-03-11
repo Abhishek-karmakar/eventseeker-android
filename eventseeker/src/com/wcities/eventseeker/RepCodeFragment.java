@@ -8,7 +8,6 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,12 +15,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
+import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class RepCodeFragment extends FragmentLoadableFromBackStack implements OnClickListener {
@@ -49,12 +50,12 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 		edtRepCode = (EditText) v.findViewById(R.id.edtRepCode);
 		progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
 		
-		setVisibility(false);
+		setVisibility();
 		
 		return v;
 	}
 	
-	private class SubmitRepCode extends AsyncTask<Void, Void, String> {
+	private class SubmitRepCode extends AsyncTask<Void, Void, Boolean> {
 		
 		private EventSeekr eventSeekr;
 		private String repCode;
@@ -65,22 +66,26 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 		}
 
 		@Override
-		protected String doInBackground(Void... params) {
-			String wcitiesId = null;
+		protected Boolean doInBackground(Void... params) {
+			boolean isRepCodeSubmitted = false;
 			LoginType loginType = null;
 			UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
 			try {
 				if (eventSeekr.getFbUserId() != null) {
 					loginType = LoginType.facebook;
 					userInfoApi.setFbUserId(eventSeekr.getFbUserId());
+					userInfoApi.setFbEmailId(eventSeekr.getFbEmailId());
 					
 				} else if (eventSeekr.getGPlusUserId() != null) {
 					loginType = LoginType.googlePlus;
 					userInfoApi.setGPlusUserId(eventSeekr.getGPlusUserId());
+					userInfoApi.setGPlusEmailId(eventSeekr.getGPlusEmailId());
 				}
 				userInfoApi.setUserId(eventSeekr.getWcitiesId());
 				JSONObject jsonObject = userInfoApi.syncAccount(repCode, loginType);
-				Log.d(TAG, "response = " + jsonObject);
+				//Log.d(TAG, "response = " + jsonObject);
+				UserInfoApiJSONParser userInfoApiJSONParser = new UserInfoApiJSONParser();
+				isRepCodeSubmitted = userInfoApiJSONParser.isRepCodeSubmitted(jsonObject);
 
 			} catch (ClientProtocolException e) {
 				e.printStackTrace();
@@ -91,18 +96,20 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			return wcitiesId;
+			return isRepCodeSubmitted;
 		}
 		
 		@Override
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
+			String msg = (result == true) ? "Submitted successfully!" : "Invalid Rep Code!";
+			Toast.makeText(FragmentUtil.getActivity(RepCodeFragment.this), msg, Toast.LENGTH_SHORT).show();
 			isSubmitting = false;
-			setVisibility(true);
+			setVisibility();
 		}
 	}
 	
-	private void setVisibility(boolean clearInput) {
+	private void setVisibility() {
 		if (isSubmitting) {
 			btnSubmit.setVisibility(View.INVISIBLE);
 			progressBar.setVisibility(View.VISIBLE);
@@ -110,9 +117,6 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 		} else {
 			btnSubmit.setVisibility(View.VISIBLE);
 			progressBar.setVisibility(View.INVISIBLE);
-			if (clearInput) {
-				edtRepCode.setText("");
-			}
 		}
 	}
 
@@ -125,7 +129,7 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 			String repCode = edtRepCode.getText().toString();
 			if (eventSeekr.getWcitiesId() != null && repCode != null && repCode.length() > 0) {
 				isSubmitting = true;
-				setVisibility(false);
+				setVisibility();
 				new SubmitRepCode(eventSeekr, repCode).execute();
 			}
 			break;

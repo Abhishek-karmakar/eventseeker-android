@@ -76,6 +76,7 @@ public class UserInfoApiJSONParser {
 	private static final String KEY_USER_ID = "userId";
 	private static final String KEY_SYNCACCOUNT = "syncaccount";
 	private static final String KEY_WCITIES_ID = "wcities_id";
+	private static final String KEY_REP_CODE = "repCode";
 
 	private static final String KEY_ARTIST_ID = "artist_id";
 	private static final String KEY_ARTIST_NAME = "artist_name";
@@ -112,6 +113,18 @@ public class UserInfoApiJSONParser {
 		JSONObject jObjSyncaccount = jsonObject.getJSONObject(KEY_SYNCACCOUNT);
 		String wcitiesId = jObjSyncaccount.getString(KEY_WCITIES_ID);
 		return wcitiesId;
+	}
+	
+	public boolean isRepCodeSubmitted(JSONObject jsonObject) throws JSONException {
+		boolean isRepCodeSubmitted = false;
+		JSONObject jObjSyncaccount = jsonObject.getJSONObject(KEY_SYNCACCOUNT);
+		if (jObjSyncaccount.has(KEY_REP_CODE)) {
+			String repCode = jObjSyncaccount.getString(KEY_REP_CODE);
+			if ("1".equals(repCode)) {
+				isRepCodeSubmitted = true;
+			}
+		}
+		return isRepCodeSubmitted;
 	}
 	
 	public MyItemsList<Artist> getArtistList(JSONObject jsonObject) {

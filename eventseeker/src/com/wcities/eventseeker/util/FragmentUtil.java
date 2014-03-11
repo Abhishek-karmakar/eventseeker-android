@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
@@ -41,6 +42,10 @@ public class FragmentUtil {
 		} else {
 			return fragment.getActivity();
 		}
+	}
+	
+	public static Resources getResources(Fragment fragment) {
+		return getActivity(fragment).getResources();
 	}
 	
 	public static Fragment getTopLevelParentFragment(Fragment fragment) {
