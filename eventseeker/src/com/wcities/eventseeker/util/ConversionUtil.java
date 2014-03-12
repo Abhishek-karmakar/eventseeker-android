@@ -10,6 +10,9 @@ import java.util.GregorianCalendar;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.wcities.eventseeker.R;
+
+import android.content.Context;
 import android.content.res.Resources;
 import android.text.Html;
 import android.util.Log;
@@ -157,6 +160,51 @@ public class ConversionUtil {
 		} else {
 			long years = timeDiffInSeconds / SECONDS_PER_YEAR;
 			strTimeDiff = (years > 1) ? years + " years ago" : years + " year ago";
+		}
+		return strTimeDiff;
+	}
+
+	/**
+	 * @param date
+	 * @return time difference in the form "<number> seconds/minutes/hours/days/weeks/months/years ago"
+	 */
+	public static String getTimeDiffFromCurrentTime(Date date, Resources res) {
+		String strTimeDiff = null;
+		long timeDiffInSeconds = (System.currentTimeMillis() - date.getTime()) / 1000;
+		
+		if (timeDiffInSeconds < SECONDS_PER_MINUTE) {
+			strTimeDiff = (timeDiffInSeconds > 1) ? String.format(res.getString(R.string.sec_gt_one), timeDiffInSeconds)
+				: res.getString(R.string.sec_not_gt_one);
+			
+		} else if (timeDiffInSeconds < SECONDS_PER_HOUR) {
+			long mins = timeDiffInSeconds / SECONDS_PER_MINUTE;
+			strTimeDiff = (mins > 1) ? String.format(res.getString(R.string.min_gt_one), mins)
+				: res.getString(R.string.min_not_gt_one);
+			
+		} else if (timeDiffInSeconds < SECONDS_PER_DAY) {
+			long hours = timeDiffInSeconds / SECONDS_PER_HOUR;
+			strTimeDiff = (hours > 1) ? String.format(res.getString(R.string.hr_gt_one), hours)
+				: res.getString(R.string.hr_not_gt_one);
+			
+		} else if (timeDiffInSeconds < SECONDS_PER_WEEK) {
+			long days = timeDiffInSeconds / SECONDS_PER_DAY;
+			strTimeDiff = (days > 1) ? String.format(res.getString(R.string.day_gt_one), days)
+				: res.getString(R.string.day_not_gt_one);
+			
+		} else if (timeDiffInSeconds < SECONDS_PER_MONTH) {
+			long weeks = timeDiffInSeconds / SECONDS_PER_WEEK;
+			strTimeDiff = (weeks > 1) ? String.format(res.getString(R.string.week_gt_one), weeks)
+				: res.getString(R.string.week_not_gt_one);
+			
+		} else if (timeDiffInSeconds < SECONDS_PER_YEAR) {
+			long months = timeDiffInSeconds / SECONDS_PER_MONTH;
+			strTimeDiff = (months > 1) ? String.format(res.getString(R.string.mon_gt_one), months)
+				: res.getString(R.string.mon_not_gt_one);
+			
+		} else {
+			long years = timeDiffInSeconds / SECONDS_PER_YEAR;
+			strTimeDiff = (years > 1) ? String.format(res.getString(R.string.yr_gt_one), years)
+				: res.getString(R.string.yr_not_gt_one);
 		}
 		return strTimeDiff;
 	}

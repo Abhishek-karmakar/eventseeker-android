@@ -213,6 +213,23 @@
     <string name="want_to_lower">Want To</string>
     <string name="tickets_lower">Tickets</string>
 
+    <!-- Time difference strings -->
+    <string name="sec_gt_one">%1$d seconds ago</string>
+    <string name="min_gt_one">%1$d minutes ago</string>
+    <string name="hr_gt_one">%1$d hours ago</string>
+    <string name="day_gt_one">%1$d days ago</string>
+    <string name="week_gt_one">%1$d weeks ago</string>
+    <string name="mon_gt_one">%1$d months ago</string>
+    <string name="yr_gt_one">%1$d years ago</string>
+
+    <string name="sec_not_gt_one">1 second ago</string>
+    <string name="min_not_gt_one">1 minute ago</string>
+    <string name="hr_not_gt_one">1 hour ago</string>
+    <string name="day_not_gt_one">1 day ago</string>
+    <string name="week_not_gt_one">1 week ago</string>
+    <string name="mon_not_gt_one">1 month ago</string>
+    <string name="yr_not_gt_one">1 year ago</string>
+
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>
     

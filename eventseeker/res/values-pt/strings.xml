@@ -199,6 +199,23 @@
     <string name="want_to_lower">@string/want_to</string>
     <string name="tickets_lower">@string/tickets</string>
     
+    <!-- Time difference strings -->
+    <string name="sec_gt_one">%1$d seconds ago</string>
+    <string name="min_gt_one">Faz %1$d minutos</string>
+    <string name="hr_gt_one">Já faz %1$d horas</string>
+    <string name="day_gt_one">Já faz %1$d dias</string>
+    <string name="week_gt_one">%1$d weeks ago</string>
+    <string name="mon_gt_one">%1$d months ago</string>
+    <string name="yr_gt_one">%1$d years ago</string>
+
+    <string name="sec_not_gt_one">1 second ago</string>
+    <string name="min_not_gt_one">Já faz um minuto</string>
+    <string name="hr_not_gt_one">Faz uma hora</string>
+    <string name="day_not_gt_one">Faz um dia</string>
+    <string name="week_not_gt_one">1 week ago</string>
+    <string name="mon_not_gt_one">1 month ago</string>
+    <string name="yr_not_gt_one">1 year ago</string>
+    
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>
     
