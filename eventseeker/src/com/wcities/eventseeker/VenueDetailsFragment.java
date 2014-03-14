@@ -86,11 +86,11 @@ public class VenueDetailsFragment extends FragmentLoadableFromBackStack implemen
 		}
 		
 		Button btnArtists = (Button) vTabBar.findViewById(R.id.btnTab1);
-		btnArtists.setText("INFO");
+		btnArtists.setText(R.string.info);
 		btnArtists.setOnClickListener(this);
 		
 		Button btnEvents = (Button) vTabBar.findViewById(R.id.btnTab2);
-		btnEvents.setText("EVENTS");
+		btnEvents.setText(R.string.events);
 		btnEvents.setOnClickListener(this);
 		
 		vTabBar.findViewById(R.id.btnTab3).setVisibility(View.GONE);

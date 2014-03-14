@@ -120,7 +120,7 @@
                                     android:layout_height="match_parent"
                                     android:button="@drawable/checkbox_button_checked_blue_unchecked_grey"
                                     android:drawablePadding="@dimen/chk_box_drawable_pad_include_fragment_event_details_footer"
-                                    android:text="Going"
+                                    android:text="@string/going_lower"
                                     android:textColor="@color/txt_color_include_fragment_event_details_footer_tab"
                                     android:textSize="@dimen/lnr_layout_btns_txt_size_include_fragment_event_details_footer" />
                             </LinearLayout>
@@ -138,7 +138,7 @@
                                     android:layout_height="match_parent"
                                     android:button="@drawable/checkbox_button_checked_blue_unchecked_grey"
                                     android:drawablePadding="@dimen/chk_box_drawable_pad_include_fragment_event_details_footer"
-                                    android:text="Want To"
+                                    android:text="@string/want_to_lower"
                                     android:textColor="@color/txt_color_include_fragment_event_details_footer_tab"
                                     android:textSize="@dimen/lnr_layout_btns_txt_size_include_fragment_event_details_footer" />
                             </LinearLayout>
@@ -167,7 +167,7 @@
                                 android:layout_centerInParent="true"
                                 android:clickable="false"
                                 android:gravity="center"
-                                android:text="Tickets"
+                                android:text="@string/tickets_lower"
                                 android:textColor="@android:color/white"
                                 android:textSize="@dimen/lnr_layout_btns_txt_size_include_fragment_event_details_footer" />
                         </RelativeLayout>

@@ -38,7 +38,7 @@
                 <TextView android:id="@+id/txtGoing"
 	                android:layout_width="@dimen/chk_box_txt_w_fragment_my_events_list_item"
 	                android:layout_height="wrap_content"
-	                android:text="GOING"
+	                android:text="@string/going"
 	                android:textSize="@dimen/lnr_layout_btns_txt_size_include_fragment_my_events_list_item_footer"
 	                android:layout_alignParentRight="true"
 	                android:layout_centerVertical="true" />
@@ -83,7 +83,7 @@
             <TextView android:id="@+id/txtWantTo"
                 android:layout_width="@dimen/chk_box_txt_w_fragment_my_events_list_item"
                 android:layout_height="wrap_content"
-                android:text="WANT TO"
+                android:text="@string/want_to"
                 android:textSize="@dimen/lnr_layout_btns_txt_size_include_fragment_my_events_list_item_footer"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true" />
@@ -145,7 +145,7 @@
 	                <TextView android:id="@+id/btnBuyTickets"
 	                    android:layout_width="@dimen/chk_box_txt_w_fragment_my_events_list_item"
 	                    android:layout_height="wrap_content"
-	                    android:text="TICKETS"
+	                    android:text="@string/tickets"
 	                    android:textColor="@android:color/black"
 	                    android:textSize="@dimen/lnr_layout_btns_txt_size_include_fragment_my_events_list_item_footer" />
 	                

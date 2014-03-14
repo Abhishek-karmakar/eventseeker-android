@@ -188,7 +188,7 @@ public class EventFeaturingFragment extends PublishEventListFragment implements 
 					handlePublishEvent();
 					
 				} else {
-					FragmentUtil.showLoginNeededForTrackingEventDialog(getChildFragmentManager());
+					FragmentUtil.showLoginNeededForTrackingEventDialog(getChildFragmentManager(), FragmentUtil.getActivity(this));
 				}
 			}
 			

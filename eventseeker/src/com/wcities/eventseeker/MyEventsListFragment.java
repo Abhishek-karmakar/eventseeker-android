@@ -126,11 +126,11 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 				&& wcitiesId != null) {
 			scrlVRootNoItemsFoundWithAction.setVisibility(View.VISIBLE);
 			((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsHeading)).setText(
-					"Search Artists");
+					R.string.search_artists);
 			((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsMsg)).setText(
-					"No events currently in your area. Follow more artists to start your personalized event calendar.");
+					R.string.no_events_in_your_area);
 			((Button)scrlVRootNoItemsFoundWithAction.findViewById(R.id.btnAction)).setText(
-					"Search Artists");
+					R.string.search_artists);
 			((ImageView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.imgNoItems)).setImageDrawable(
 					res.getDrawable(R.drawable.no_my_events));
 			/**

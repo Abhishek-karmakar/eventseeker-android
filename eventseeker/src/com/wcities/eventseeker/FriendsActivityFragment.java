@@ -804,7 +804,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 						
 					} else {
 						FragmentUtil.showLoginNeededForTrackingEventDialog(FriendsActivityFragment.this
-								.getChildFragmentManager());
+								.getChildFragmentManager(),  FragmentUtil.getActivity(FriendsActivityFragment.this));
 					}
 				}
 			}
@@ -888,7 +888,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	                        }
 	                    }
 	                )
-	                .setNegativeButton("Cancel", null)
+	                .setNegativeButton(R.string.cancel, null)
 	                .create();
 	    }
 	    

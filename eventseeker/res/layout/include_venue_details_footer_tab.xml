@@ -20,7 +20,7 @@
             android:drawableLeft="@drawable/phone"
             android:drawablePadding="@dimen/btn_drawable_pad_include_venue_details_footer"
             android:gravity="center"
-            android:text="Phone"
+            android:text="@string/phone"
             android:textColor="@color/txt_color_include_fragment_vaenu_details_footer_tab"
             android:textSize="@dimen/btn_lyt_txt_size_include_venue_details_footer" />
     </RelativeLayout>
@@ -74,7 +74,7 @@
             android:drawableLeft="@drawable/car"
             android:drawablePadding="@dimen/btn_drawable_pad_include_venue_details_footer"
             android:gravity="center"
-            android:text="Drive"
+            android:text="@string/drive"
             android:textColor="@color/txt_color_include_fragment_vaenu_details_footer_tab"
             android:textSize="@dimen/btn_lyt_txt_size_include_venue_details_footer" />
     </RelativeLayout>

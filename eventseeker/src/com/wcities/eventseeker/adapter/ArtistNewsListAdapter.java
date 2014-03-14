@@ -285,7 +285,8 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 		private void setNewsItemContent(ArtistNewsListItem artistsNewsListItem, ViewGroup parent, int pos) {
 			final ArtistNewsItem item = artistsNewsListItem.getItem();
 			String title = item.getArtistName();
-			String time = ConversionUtil.getTimeDiffFromCurrentTime(item.getTimestamp());
+			//String time = ConversionUtil.getTimeDiffFromCurrentTime(item.getTimestamp());
+			String time = ConversionUtil.getTimeDiffFromCurrentTime(item.getTimestamp(), res);
 			
 			switch (item.getPostType()) {
 			
@@ -357,7 +358,8 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 		private void setNewsItem2Content(ArtistNewsListItem artistsNewsListItem, ViewGroup parent, int pos) {
 			final ArtistNewsItem item = artistsNewsListItem.getItem();
 			String title = item.getArtistName();
-			String time = ConversionUtil.getTimeDiffFromCurrentTime(item.getTimestamp());
+			//String time = ConversionUtil.getTimeDiffFromCurrentTime(item.getTimestamp());
+			String time = ConversionUtil.getTimeDiffFromCurrentTime(item.getTimestamp(), res);
 			
 			switch (item.getPostType()) {
 			

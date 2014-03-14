@@ -87,7 +87,7 @@ public class DeviceLibraryFragment extends FragmentLoadableFromBackStack impleme
 		
 		if (isLoading) {
 			AnimationUtil.startRotationToView(imgProgressBar, 0f, 360f, 0.5f, 0.5f, 1000);
-			txtLoading.setText("Syncing Device Library");
+			txtLoading.setText(R.string.syncing_device_lib);
 			imgAccount.setImageResource(R.drawable.devicelibrary_big);
 		} else {
 			AnimationUtil.stopRotationToView(imgProgressBar);			

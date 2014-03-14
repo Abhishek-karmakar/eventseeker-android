@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -59,6 +60,8 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
     private boolean isGPlusSigningIn;
     
 	private boolean isPermissionDisplayed;
+
+	private Resources res;
     
 	// Container Activity must implement this interface
     public interface GetStartedFragmentListener {
@@ -80,6 +83,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
     	setRetainInstance(true);
     	
     	mPlusClient = GPlusUtil.createPlusClientInstance(this, this, this);
+    	res = getResources();
     }
     
 	@Override
@@ -410,7 +414,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 			
 		case R.id.btnSkip:
 			GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance("Are you sure ?", 
-					"Signing in allows for a better experience.", "Cancel", "Skip");
+					"Signing in allows for a better experience.", res.getString(R.string.cancel), "Skip");
 			generalDialogFragment.show(getChildFragmentManager(), DIALOG_FRAGMENT_TAG_SKIP);
 			break;
 

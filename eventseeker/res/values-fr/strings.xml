@@ -9,32 +9,29 @@
     <string name="lang_spanish">Espagnol</string>
     <string name="lang_portuguese">Portugais</string>
     
-    <string name="menu_search">Search</string>
-    <string name="menu_change_location">Change Location</string>
+    <string name="menu_search">Rechercher</string>
+    <string name="menu_change_location">Changer le lieu</string>
     <string name="title_discover">Découvertes</string>
-    <string name="title_change_location">Change Location</string>
+    <string name="title_change_location">Changer le lieu</string>
     <string name="title_language">Langue</string>
-    <string name="menu_settings">Settings</string>
-    <string name="title_activity_discover_by_category">Discover</string>
+    <string name="menu_settings">Règlages</string>
     <string name="menu_calendar">Calendar</string>
-    <string name="title_activity_search">SearchActivity</string>
-    <string name="artist_on_tour">" On Tour "</string>
+    <string name="artist_on_tour">" En tournée "</string>
     <string name="title_event_details">Détails de l’événement</string>
-    <string name="title_artist_details">Artist Details</string>
+    <string name="title_artist_details">Description de l\'artiste</string>
     <string name="title_venue_details">Venue Details</string>
-    <string name="title_activity_venue_details">My Venues</string>
     <string name="title_following">Suivant</string>
-    <string name="title_my_events">My Events</string>
+    <string name="title_my_events">Mes évènements</string>
     <string name="title_artists_news">Nouvelles de l\'artiste</string>
-    <string name="title_friends_activity">Friends Activity</string>
-    <string name="title_connect_accounts">Connect Accounts</string>
-    <string name="title_get_started">Get Started</string>
+    <string name="title_friends_activity">Activités des amis</string>
+    <string name="title_connect_accounts">Synchroniser les comptes</string>
+    <string name="title_get_started">Démarrez</string>
     <string name="title_about_us">A propos de nous</string>
     <string name="title_eula">EULA</string>
     <string name="title_rep_code">Rep Code</string>
-    <string name="title_search_results">Search Results</string>
+    <string name="title_search_results">Résultats de la recherche</string>
     <string name="title_google_play">Google Play</string>
-    <string name="title_device_library">@string/device_lib</string>
+    <string name="title_device_library">@string/service_device_library</string>
     <string name="title_facebook">Facebook</string>
     <string name="title_google_plus">Google Plus</string>
     <string name="title_twitter">Twitter</string>
@@ -43,8 +40,6 @@
     <string name="title_pandora">Pandora</string>
     <string name="title_web">Web</string>
     
-    <string name="event_featuring">AVEC</string>
-    
     <string name="no_items_found_pls_login">Please login with facebook or google from \'Sync Accounts\' page to see</string>
     <string name="pls_login_to_track_evt">To track this event you need to first login with facebook or google from \'Sync Accounts\' page.</string>
     <string name="pls_login_through_mobile_app">Please log in through mobile app.</string>
@@ -52,25 +47,25 @@
     
     <!-- Strings used for navigation drawer list -->
     <string name="navigation_drawer_section_browse">Naviguer</string>
-    <string name="navigation_drawer_item_discover">Discover</string>
-    <string name="navigation_drawer_item_my_events">My Events</string>
-    <string name="navigation_drawer_item_artists_news">Nouvelles de l\'artiste</string>
-    <string name="navigation_drawer_item_friends_activity">Friends Activity</string>
-    <string name="navigation_drawer_item_following">Suivant</string>
+    <string name="navigation_drawer_item_discover">@string/title_discover</string>
+    <string name="navigation_drawer_item_my_events">@string/title_my_events</string>
+    <string name="navigation_drawer_item_artists_news">@string/title_artists_news</string>
+    <string name="navigation_drawer_item_friends_activity">@string/title_friends_activity</string>
+    <string name="navigation_drawer_item_following">@string/title_following</string>
     <string name="navigation_drawer_section_settings">Règlages</string>
     <string name="navigation_drawer_item_sync_accounts">Synchroniser vos comptes</string>
-    <string name="navigation_drawer_item_change_location">Changer le lieu</string>
-    <string name="navigation_drawer_item_language">Langue</string>
+    <string name="navigation_drawer_item_change_location">@string/title_change_location</string>
+    <string name="navigation_drawer_item_language">@string/title_language</string>
     <string name="navigation_drawer_section_about">A Propos</string>
     <string name="navigation_drawer_item_invite_friends">Inviter vos amis</string>
     <string name="navigation_drawer_item_rate_app">Évaluer l\'application</string>
     <string name="navigation_drawer_item_about">A Propos</string>
-    <string name="navigation_drawer_item_eula">EULA</string>
+    <string name="navigation_drawer_item_eula">@string/title_eula</string>
     <string name="navigation_drawer_item_enter_rep_code">Entrez l\'identifiant de votre ambassadeur</string>
     
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">@string/menu_settings</string>
 
     <!-- activity_artist_details -->
     <string name="txt_friends_section_title_txt_activity_artist_details">Friends liking this artist</string>
@@ -85,7 +80,7 @@
     <string name="connect_accounts_item_title">Title</string>
     <string name="connect_accounts_item_facebook">Facebook</string>
     <string name="connect_accounts_item_blank">Blank</string>
-    <string name="connect_accounts_item_device_library">Device Library</string>
+    <string name="connect_accounts_item_device_library">@string/service_device_library</string>
     <string name="connect_accounts_item_twitter">Twitter</string>
     <string name="connect_accounts_item_spotify">Spotify</string>
     <string name="connect_accounts_item_rdio">Rdio</string>
@@ -146,9 +141,48 @@
     <string name="follow_artists_for_updates">Suivez les artistes pour recevoir les dernières nouvelles en temps réel</string>
     <string name="search_artists">Recherche d\'artistes</string>
         
-   	<!-- Connect Accounts -->
-    <string name="device_lib">Bibliothèque d\'appareil</string>
+   	<!-- Connect Accounts Services -->
+    <string name="service_google_play" >Google Play</string>
+    <string name="service_device_library">Bibliothèque d\'appareil</string>
+    <string name="service_twitter" >Twitter</string>
+    <string name="service_rdio" >Rdio</string>
+    <string name="service_last_fm" >Last.fm</string>
+    <string name="service_pandora" >Pandora</string>
+    <string name="service_facebook" >Facebook</string>
+    <string name="service_google_plus" >Google Plus</string>
+    <string name="service_title" >Title</string>
+    <string name="service_blank" >Blank</string>
+    <string name="service_button" >Button</string>
     
+   	<!-- Connect Accounts -->
+    <string name="fb_login">Accès Facebook</string>
+    <string name="fb_logout">Se déconnecter de Facebook</string>
+    <string name="btn_continue">Continuer</string>
+    <string name="syncing_fb">Synchroniser Facebook</string>
+	<string name="syncing_google_plus">Synchroniser Google Plus</string>
+	<string name="syncing_google_play">Synchroniser Google Play</string>
+	<string name="syncing_device_lib">Synchroniser Device Library</string>
+	<string name="syncing_twitter">Synchroniser Twitter</string>
+	<string name="syncing_rdio">Synchroniser Rdio</string>
+	<string name="syncing_last_fm">Synchroniser Last.fm</string>
+	<string name="syncing_pandora">Synchroniser Pandora</string>
+	
+   	<!-- My Events -->
+    <string name="following">Suivant</string>
+    <string name="recommended">Recommandé</string>
+   	
+   	<!-- Search Results -->
+    <string name="artists">Artistes</string>
+    <string name="venues">Lieux</string>
+   	
+   	<!-- Event Details -->
+    <string name="featuring">Avec</string>
+   	<string name="cancel">Annuler</string>
+   		
+   	<!-- Venue Details -->
+    <string name="phone">Téléphone</string>
+   	<string name="drive">Conduire</string>
+   	
     <!-- Friends Activity -->
     <string name="is_going_to">%1$s se rend à %2$s</string>
     <string name="wants_to_go_to">%1$s veut aller à %2$s</string>
@@ -156,6 +190,34 @@
     <string name="comment">Commentaire</string>
     <string name="events_are_better_with_friends">Les événements sont toujours meilleur avec vos amis ! Invitez-les à rejoindre eventseeker.</string>
     <string name="invite_friends">Inviter des amis</string>
+    
+   	<!-- My Events -->
+    <string name="no_events_in_your_area">Il n\'y a aucun événement dans votre région. Suivez davantage d\'artistes pour créer votre agenda personnalisé.</string>
+
+    <!-- Common GOING, WANT TO & TICKETS -->
+    <string name="going">Aller</string>
+    <string name="want_to">Vouloir</string>
+    <string name="tickets">Billets</string>
+	<string name="going_lower">@string/going</string>
+    <string name="want_to_lower">@string/want_to</string>
+    <string name="tickets_lower">@string/tickets</string>
+ 
+    <!-- Time difference strings -->
+    <string name="sec_gt_one">%1$d seconds ago</string>
+    <string name="min_gt_one">Il y a %1$d minutes</string>
+    <string name="hr_gt_one">Il y a %1$d heures</string>
+    <string name="day_gt_one">Il y a %1$d jours</string>
+    <string name="week_gt_one">%1$d weeks ago</string>
+    <string name="mon_gt_one">%1$d months ago</string>
+    <string name="yr_gt_one">%1$d years ago</string>
+
+    <string name="sec_not_gt_one">1 second ago</string>
+    <string name="min_not_gt_one">Il y a une minute</string>
+    <string name="hr_not_gt_one">Il y a une heure</string>
+    <string name="day_not_gt_one">Il y a un jour</string>
+    <string name="week_not_gt_one">1 week ago</string>
+    <string name="mon_not_gt_one">1 month ago</string>
+    <string name="yr_not_gt_one">1 year ago</string>
     
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>
@@ -170,7 +232,6 @@
     <string name="title_artists">Artists</string>
     <string name="title_featured">Featured</string>
     <string name="title_search">Search</string>
-    <string name="title_search_results">Search Results</string>
     <string name="title_map">eventseeker | Navigate</string>
     <string name="title_settings">eventseeker | Settings</string>
     <string name="title_events">Events</string>

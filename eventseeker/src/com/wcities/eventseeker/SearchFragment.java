@@ -75,15 +75,15 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 		}
 		
 		Button btnArtists = (Button) vTabBar.findViewById(R.id.btnTab1);
-		btnArtists.setText("ARTISTS");
+		btnArtists.setText(R.string.artists);
 		btnArtists.setOnClickListener(this);
 		
 		Button btnEvents = (Button) vTabBar.findViewById(R.id.btnTab2);
-		btnEvents.setText("EVENTS");
+		btnEvents.setText(R.string.events);
 		btnEvents.setOnClickListener(this);
 		
 		Button btnVenues = (Button) vTabBar.findViewById(R.id.btnTab3);
-		btnVenues.setText("VENUES");
+		btnVenues.setText(R.string.venues);
 		btnVenues.setOnClickListener(this);
 		
 		Bundle args;

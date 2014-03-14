@@ -61,7 +61,7 @@ public class GooglePlayMusicFragment extends FragmentLoadableFromBackStack imple
 		imgProgressBar = (ImageView) v.findViewById(R.id.progressBar);
 		((ImageView) v.findViewById(R.id.imgAccount)).setImageResource(R.drawable.google_play_big);
 		
-		((TextView)v.findViewById(R.id.txtLoading)).setText("Syncing Google Play");
+		((TextView)v.findViewById(R.id.txtLoading)).setText(R.string.syncing_google_play);
 		v.findViewById(R.id.btnConnectOtherAccuonts).setOnClickListener(this);
 		
 		AnimationUtil.startRotationToView(imgProgressBar, 0f, 360f, 0.5f, 0.5f, 1000);

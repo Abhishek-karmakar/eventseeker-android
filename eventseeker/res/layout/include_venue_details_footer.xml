@@ -13,7 +13,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:background="@drawable/bg_btn"
-        android:text="Phone"
+        android:text="@string/phone"
         android:textSize="@dimen/lnr_layout_btns_txt_size_include_fragment_event_details_footer"
         android:textColor="@android:color/white" />
 	
@@ -45,7 +45,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:background="@drawable/bg_btn"
-        android:text="Drive"
+        android:text="@string/drive"
         android:textSize="@dimen/lnr_layout_btns_txt_size_include_fragment_event_details_footer"
         android:textColor="@android:color/white" />
     

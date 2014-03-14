@@ -141,7 +141,7 @@ public class PandoraFragment extends FragmentLoadableFromBackStack implements On
 		rltSyncAccount.setVisibility(visibilityLoading);
 		if(isLoading) {
 			AnimationUtil.startRotationToView(imgProgressBar, 0f, 360f, 0.5f, 0.5f, 1000);
-			txtLoading.setText("Syncing Pandora");
+			txtLoading.setText(R.string.syncing_pandora);
 			imgAccount.setImageResource(R.drawable.pandora_big);
 		} else {
 			AnimationUtil.stopRotationToView(imgProgressBar);

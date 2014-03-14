@@ -62,12 +62,12 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 		imgProgressBar = (ImageView) v.findViewById(R.id.progressBar);
 		if (loginType == LoginType.facebook) {
 			((ImageView) v.findViewById(R.id.imgAccount)).setImageResource(R.drawable.facebook_colored_big);
-			((TextView)v.findViewById(R.id.txtLoading)).setText("Syncing Facebook");
+			((TextView)v.findViewById(R.id.txtLoading)).setText(R.string.syncing_fb);
 			
 		} else {
 			// It's for google plus
 			((ImageView) v.findViewById(R.id.imgAccount)).setImageResource(R.drawable.g_plus_colored_big);
-			((TextView)v.findViewById(R.id.txtLoading)).setText("Syncing Google Plus");
+			((TextView)v.findViewById(R.id.txtLoading)).setText(R.string.syncing_google_plus);
 		}
 		
 		v.findViewById(R.id.btnConnectOtherAccuonts).setVisibility(View.GONE);

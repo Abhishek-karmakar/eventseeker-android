@@ -65,11 +65,11 @@ public class MyEventsFragment extends FragmentLoadableFromBackStack implements O
 		}
 		
 		Button btnFollowing = (Button) vTabBar.findViewById(R.id.btnTab1);
-		btnFollowing.setText("FOLLOWING");
+		btnFollowing.setText(R.string.following);
 		btnFollowing.setOnClickListener(this);
 		
 		Button btnRecommended = (Button) vTabBar.findViewById(R.id.btnTab2);
-		btnRecommended.setText("RECOMMENDED");
+		btnRecommended.setText(R.string.recommended);
 		btnRecommended.setOnClickListener(this);
 		
 		vTabBar.findViewById(R.id.btnTab3).setVisibility(View.GONE);

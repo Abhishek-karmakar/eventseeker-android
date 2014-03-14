@@ -27,7 +27,6 @@ import android.widget.Toast;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
-import com.wcities.eventseeker.EventInfoFragment;
 import com.wcities.eventseeker.MyEventsListFragment;
 import com.wcities.eventseeker.PublishEventListFragment;
 import com.wcities.eventseeker.R;
@@ -47,8 +46,8 @@ import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.EventListener;
-import com.wcities.eventseeker.interfaces.PublishListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
+import com.wcities.eventseeker.interfaces.PublishListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FbUtil;
@@ -354,15 +353,12 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 			});
 
 		} else if (getItemViewType(position) == LIST_ITEM_TYPE.HEADER.ordinal()) {
-			if (convertView == null
-					|| convertView.getTag() != LIST_ITEM_TYPE.HEADER) {
+			if (convertView == null || convertView.getTag() != LIST_ITEM_TYPE.HEADER) {
 				convertView = LayoutInflater.from(mContext).inflate(
-								R.layout.fragment_discover_by_category_list_item_header,
-								null);
+						R.layout.fragment_discover_by_category_list_item_header, null);
 				convertView.setTag(LIST_ITEM_TYPE.HEADER);
 			}
-			((TextView) convertView.findViewById(R.id.txtDate))
-					.setText(getItem(position).getDate());
+			((TextView) convertView.findViewById(R.id.txtDate)).setText(getItem(position).getDate());
 			int visibility = (position == 0) ? View.INVISIBLE : View.VISIBLE;
 			View view = convertView.findViewById(R.id.divider1);
 			view.setVisibility(visibility);
@@ -416,13 +412,12 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 				((PublishEventListFragment)mListener).handlePublishEvent();
 				
 			} else {
-				FragmentUtil.showLoginNeededForTrackingEventDialog(((Fragment)mListener).getChildFragmentManager());
+				FragmentUtil.showLoginNeededForTrackingEventDialog(((Fragment)mListener).getChildFragmentManager(), mContext);
 			}
 		}
 	}
 	
-	private void updateAttendingChkBoxes(Event event, CheckBox chkBoxGoing,
-			CheckBox chkBoxWantToGo) {
+	private void updateAttendingChkBoxes(Event event, CheckBox chkBoxGoing, CheckBox chkBoxWantToGo) {
 		switch (event.getAttending()) {
 
 		case GOING:
