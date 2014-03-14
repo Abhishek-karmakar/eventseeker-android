@@ -11,14 +11,14 @@ public class AsyncTaskUtil {
 
 	private static final String TAG = AsyncTaskUtil.class.getName();
 
-	public static <Params, T extends AsyncTask<Params, ?, ?>> void executeAsyncTask(T asyncTask, 
+	public static <Params, T extends AsyncTask<Params, ?, ?>> boolean executeAsyncTask(T asyncTask, 
 			boolean runParallel, Params... params) {
 		
 		ConnectionFailureListener connectionFailureListener = EventSeekr.getConnectionFailureListener();
 		if (connectionFailureListener != null) {
 			if (!NetworkUtil.getConnectivityStatus((Context) connectionFailureListener)) {
 				connectionFailureListener.onConnectionFailure();
-				return;
+				return false;
 			}
 		}
 		
@@ -28,5 +28,6 @@ public class AsyncTaskUtil {
 		} else {
 			asyncTask.execute(params);
 		}
+		return true;
 	}
 }

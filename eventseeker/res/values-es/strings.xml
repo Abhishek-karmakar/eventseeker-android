@@ -152,7 +152,10 @@
     <!-- Friends Activity -->
     <string name="is_going_to">%1$s va al %2$s</string>
     <string name="wants_to_go_to">%1$s quiere ir al %2$s</string>
+    <string name="like">Gustar</string>
     <string name="comment">Comentario</string>
+    <string name="events_are_better_with_friends">Los eventos siempre están mejores con amigos. Invítalos a eventseeker.</string>
+    <string name="invite_friends">Invitar amigos</string>
     
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>

@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,9 +21,11 @@ import android.widget.Toast;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
+import com.wcities.eventseeker.api.UserInfoApi.RepCodeResponse;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
+import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class RepCodeFragment extends FragmentLoadableFromBackStack implements OnClickListener {
@@ -55,7 +58,7 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 		return v;
 	}
 	
-	private class SubmitRepCode extends AsyncTask<Void, Void, Boolean> {
+	private class SubmitRepCode extends AsyncTask<Void, Void, Integer> {
 		
 		private EventSeekr eventSeekr;
 		private String repCode;
@@ -66,8 +69,8 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 		}
 
 		@Override
-		protected Boolean doInBackground(Void... params) {
-			boolean isRepCodeSubmitted = false;
+		protected Integer doInBackground(Void... params) {
+			int repCodeResponse = RepCodeResponse.UNKNOWN_ERROR.getRepCode();
 			LoginType loginType = null;
 			UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
 			try {
@@ -85,7 +88,7 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 				JSONObject jsonObject = userInfoApi.syncAccount(repCode, loginType);
 				//Log.d(TAG, "response = " + jsonObject);
 				UserInfoApiJSONParser userInfoApiJSONParser = new UserInfoApiJSONParser();
-				isRepCodeSubmitted = userInfoApiJSONParser.isRepCodeSubmitted(jsonObject);
+				repCodeResponse = userInfoApiJSONParser.getRepCodeResponse(jsonObject);
 
 			} catch (ClientProtocolException e) {
 				e.printStackTrace();
@@ -96,14 +99,15 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			return isRepCodeSubmitted;
+			return repCodeResponse;
 		}
 		
 		@Override
-		protected void onPostExecute(Boolean result) {
+		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
-			String msg = (result == true) ? "Submitted successfully!" : "Invalid Rep Code!";
-			Toast.makeText(FragmentUtil.getActivity(RepCodeFragment.this), msg, Toast.LENGTH_SHORT).show();
+			RepCodeResponse repCodeResponse = RepCodeResponse.getRepCodeResponse(result);
+			Toast.makeText(FragmentUtil.getActivity(RepCodeFragment.this), repCodeResponse.getMsg(), 
+					Toast.LENGTH_SHORT).show();
 			isSubmitting = false;
 			setVisibility();
 		}
@@ -126,11 +130,23 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 		
 		case R.id.btnSubmit:
 			EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(this).getApplication();
+			if (eventSeekr.getWcitiesId() == null) {
+				Toast.makeText(FragmentUtil.getActivity(this), "Please login with facebook or google from \'Sync Accounts\' page.", Toast.LENGTH_SHORT).show();
+				return;
+			}
+			
 			String repCode = edtRepCode.getText().toString();
-			if (eventSeekr.getWcitiesId() != null && repCode != null && repCode.length() > 0) {
-				isSubmitting = true;
-				setVisibility();
-				new SubmitRepCode(eventSeekr, repCode).execute();
+			if (repCode == null || repCode.length() == 0) {
+				Toast.makeText(FragmentUtil.getActivity(this), "Please enter a valid rep code.", Toast.LENGTH_SHORT).show();
+				return;
+			}
+			
+			if (repCode != null && repCode.length() > 0) {
+				boolean isStarted = AsyncTaskUtil.executeAsyncTask(new SubmitRepCode(eventSeekr, repCode), true);
+				if (isStarted) {
+					isSubmitting = true;
+					setVisibility();
+				}
 			}
 			break;
 

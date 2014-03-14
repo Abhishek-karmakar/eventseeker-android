@@ -81,7 +81,7 @@
             <Button android:id="@+id/btnLike" 
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:text="Like"
+		        android:text="@string/like"
 		        android:drawableLeft="@drawable/like"
 		        android:background="@color/transparent"
 		        android:drawablePadding="@dimen/btn_drawable_pad_friends_activity_item"

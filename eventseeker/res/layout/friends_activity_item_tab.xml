@@ -96,7 +96,7 @@
                 android:drawableLeft="@drawable/like"
                 android:drawablePadding="@dimen/btn_drawable_pad_friends_activity_item"
                 android:layout_gravity="center_vertical"
-                android:text="Like"
+                android:text="@string/like"
                 android:textSize="@dimen/btn_txt_size_friends_activity_item" />
         </LinearLayout>
 
@@ -123,7 +123,7 @@
                 android:drawableLeft="@drawable/comment"
                 android:drawablePadding="@dimen/btn_drawable_pad_friends_activity_item"
                 android:layout_gravity="center_vertical"
-                android:text="Comment"
+                android:text="@string/comment"
                 android:textSize="@dimen/btn_txt_size_friends_activity_item" />
         </LinearLayout>
     </LinearLayout>

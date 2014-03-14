@@ -4,7 +4,10 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -17,6 +20,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
+import android.support.v7.widget.ShareActionProvider.OnShareTargetSelectedListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,6 +32,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.wcities.eventseeker.adapter.SwipeTabsAdapter;
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadEventDetails;
 import com.wcities.eventseeker.asynctask.LoadEventDetails.OnEventUpdatedListner;
 import com.wcities.eventseeker.cache.BitmapCache;
@@ -151,8 +156,19 @@ OnEventUpdatedListner{
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
+		//Log.d(TAG, "onDestroyView()");
 		ActionBar actionBar = ((ActionBarActivity)FragmentUtil.getActivity(this)).getSupportActionBar();
 		actionBar.setCustomView(null);
+		
+		/**
+		 * set null listener, otherwise even for artist/venue details screen when selecting 
+		 * "add to calendar" option it calls this listener's onShareTargetSelected() method which in turn 
+		 * sets eventToAddToCalendar on EventSeekr class. This results in sharing event wrongly from 
+		 * artist/venue details screen.
+		 */
+		if (mShareActionProvider != null) {
+			mShareActionProvider.setOnShareTargetSelectedListener(null);
+		}
 	}
 	
 	@Override
@@ -188,6 +204,7 @@ OnEventUpdatedListner{
 	}
 	
 	private void updateShareIntent() {
+		//Log.d(TAG, "updateShareIntent()");
 	    if (mShareActionProvider != null && event != null) {
 	    	Intent shareIntent = new Intent(Intent.ACTION_SEND);
 		    shareIntent.setType("image/*");
@@ -212,12 +229,27 @@ OnEventUpdatedListner{
 			}
 		    
 	        mShareActionProvider.setShareIntent(shareIntent);
+	        
+			final EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(this).getApplication();
+	        mShareActionProvider.setOnShareTargetSelectedListener(new OnShareTargetSelectedListener() {
+				
+				@Override
+				public boolean onShareTargetSelected(ShareActionProvider source, Intent intent) {
+					String shareTarget = intent.getComponent().getPackageName();
+					if (eventSeekr.getPackageName().equals(shareTarget)) {
+						//Log.d(TAG, "shareTarget = " + shareTarget);
+						// required to handle "add to calendar" action
+						eventSeekr.setEventToAddToCalendar(event);
+					}
+					return false;
+				}
+			});
 	    }
 	}
 	
 	@Override
 	public void onEventUpdated() {
-		//Log.d(TAG, "LoadEventDetails onPostExecute()");
+		//Log.d(TAG, "onEventUpdated()");
 		updateShareIntent();
 		
 		if (mTabsAdapter != null) {

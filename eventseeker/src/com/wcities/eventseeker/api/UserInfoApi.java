@@ -53,6 +53,40 @@ public class UserInfoApi extends Api {
 		google;
 	}
 	
+	public static enum RepCodeResponse {
+		OTHER_ACCOUNT_ALREADY_SYNCED(0, "Some other account is already synced with this device."),
+		SUCCESSFULLY_SUBMITTED(1, "Successfully submitted!"),
+		DATABASE_INSERTION_ERROR(-1, "Error occurred while processing this rep code."),
+		INVALID_REP_CODE(2, "Invalid Rep Code!"),
+		UNKNOWN_ERROR(-2, "Could not complete the request. Please retry.");
+		
+		private int repCode;
+		private String msg;
+		
+		private RepCodeResponse(int repCode, String msg) {
+			this.repCode = repCode;
+			this.msg = msg;
+		}
+
+		public int getRepCode() {
+			return repCode;
+		}
+
+		public String getMsg() {
+			return msg;
+		}
+		
+		public static RepCodeResponse getRepCodeResponse(int repCode) {
+			RepCodeResponse[] repCodeResponses = RepCodeResponse.values();
+			for (int i = 0; i < repCodeResponses.length; i++) {
+				if (repCode == repCodeResponses[i].getRepCode()) {
+					return repCodeResponses[i];
+				}
+			}
+			return UNKNOWN_ERROR;
+		}
+	}
+	
 	// userId - generated & returned by server on signup call
 	private String fbUserId, gPlusUserId, deviceId, userId, gcmRegistrationId; 
 	private String fbEmailId, gPlusEmailId;

@@ -18,6 +18,7 @@ import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.LanguageFragment.Locales;
@@ -27,6 +28,7 @@ import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.SharedPrefKeys;
+import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.FollowingList;
 import com.wcities.eventseeker.exception.DefaultUncaughtExceptionHandler;
 import com.wcities.eventseeker.gcm.GcmUtil;
@@ -79,6 +81,8 @@ public class EventSeekr extends Application {
 	private Locales defaultLocale;
 
 	private static String cityName;
+	
+	private Event eventToAddToCalendar;
 	
 	public interface EventSeekrListener {
 		public void onSyncCountUpdated(Service service);
@@ -605,6 +609,14 @@ public class EventSeekr extends Application {
 				syncCountLastfm + syncCountPandora) == ALL_UNSYNCED_COUNT) ? false : true;
 	}
 	
+	public Event getEventToAddToCalendar() {
+		return eventToAddToCalendar;
+	}
+
+	public void setEventToAddToCalendar(Event eventToAddToCalendar) {
+		this.eventToAddToCalendar = eventToAddToCalendar;
+	}
+
 	private class GetWcitiesId extends AsyncTask<Void, Void, String> {
 		
 		private AsyncTaskListener<Object> listener;

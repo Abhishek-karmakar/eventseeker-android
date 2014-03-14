@@ -14,6 +14,7 @@ import android.util.Log;
 
 import com.wcities.eventseeker.ConnectAccountsFragment;
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
+import com.wcities.eventseeker.api.UserInfoApi.RepCodeResponse;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.ArtistNewsItem;
 import com.wcities.eventseeker.core.ArtistNewsItem.PostType;
@@ -115,16 +116,14 @@ public class UserInfoApiJSONParser {
 		return wcitiesId;
 	}
 	
-	public boolean isRepCodeSubmitted(JSONObject jsonObject) throws JSONException {
-		boolean isRepCodeSubmitted = false;
+	public int getRepCodeResponse(JSONObject jsonObject) throws JSONException {
+		int repCodeResponse = RepCodeResponse.UNKNOWN_ERROR.getRepCode();
 		JSONObject jObjSyncaccount = jsonObject.getJSONObject(KEY_SYNCACCOUNT);
 		if (jObjSyncaccount.has(KEY_REP_CODE)) {
 			String repCode = jObjSyncaccount.getString(KEY_REP_CODE);
-			if ("1".equals(repCode)) {
-				isRepCodeSubmitted = true;
-			}
+			repCodeResponse = Integer.parseInt(repCode);
 		}
-		return isRepCodeSubmitted;
+		return repCodeResponse;
 	}
 	
 	public MyItemsList<Artist> getArtistList(JSONObject jsonObject) {

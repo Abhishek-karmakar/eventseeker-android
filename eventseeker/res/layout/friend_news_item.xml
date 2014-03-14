@@ -27,7 +27,7 @@
         android:layout_below="@id/imgPhoto"
         android:layout_alignParentRight="true"
         android:layout_marginRight="@dimen/btn_margin_r_friend_news_item"
-        android:text="Comment"
+        android:text="@string/comment"
         android:drawableLeft="@android:drawable/sym_action_chat" />
     
     <Button android:id="@+id/btnLike" 
@@ -36,7 +36,7 @@
         android:layout_below="@id/imgPhoto"
         android:layout_toLeftOf="@id/btnComment"
         android:layout_marginRight="@dimen/btn_margin_r_friend_news_item"
-        android:text="Like"
+        android:text="@string/like"
         android:drawableLeft="@android:drawable/btn_star" />
     
     <TableLayout android:id="@+id/tblLayoutEvtDetails"

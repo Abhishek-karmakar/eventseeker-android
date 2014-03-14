@@ -952,10 +952,10 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	private boolean hasPublishPermission() {
 		Log.d(TAG, "hasPublishPermission()");
         Session session = Session.getActiveSession();
-        List<String> permissions = session.getPermissions();
+        /*List<String> permissions = session.getPermissions();
         for (Iterator<String> iterator = permissions.iterator(); iterator.hasNext();) {
 			Log.d(TAG, iterator.next());
-		}
+		}*/
         return session != null && session.getPermissions().containsAll(PERMISSIONS);
     }
 	
@@ -1075,11 +1075,11 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 		} else {
 			scrlVRootNoItemsFoundWithAction.setVisibility(View.VISIBLE);
 			((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsHeading)).setText(
-					"Invite Friends");
+					res.getString(R.string.invite_friends));
 			((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsMsg)).setText(
-					"Events are always better with friends. Invite them now to join eventseeker.");
+					res.getString(R.string.events_are_better_with_friends));
 			((Button)scrlVRootNoItemsFoundWithAction.findViewById(R.id.btnAction)).setText(
-					"Invite Friends");
+					res.getString(R.string.invite_friends));
 			((ImageView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.imgNoItems)).setImageDrawable(
 					res.getDrawable(R.drawable.no_friends_activity));
 		}
