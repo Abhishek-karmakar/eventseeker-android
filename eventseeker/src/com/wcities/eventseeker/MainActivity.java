@@ -1,5 +1,7 @@
 package com.wcities.eventseeker;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Set;
 
@@ -1287,11 +1289,27 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public void onMapClicked(Bundle args) {
-		FullScreenAddressMapFragment fragment = new FullScreenAddressMapFragment();
-		fragment.setArguments(args);
-		selectNonDrawerItem(fragment,
-				AppConstants.FRAGMENT_TAG_FULL_SCREEN_ADDRESS_MAP,
-				args.getString(BundleKeys.VENUE_NAME), true);
+		String uri;
+		try {
+			uri = "geo:"+ args.getDouble(BundleKeys.LAT) + "," + args.getDouble(BundleKeys.LON) + "?q=" 
+					+ URLEncoder.encode(args.getString(BundleKeys.VENUE_NAME), AppConstants.CHARSET_NAME);
+			startActivity(new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri)));
+
+		} catch (UnsupportedEncodingException e) {
+			// venue name could not be encoded, hence instead search on lat-lon.
+			e.printStackTrace();
+			uri = "geo:"+ args.getDouble(BundleKeys.LAT) + "," + args.getDouble(BundleKeys.LON) + "?q=" 
+					+ args.getDouble(BundleKeys.LAT) + "," + args.getDouble(BundleKeys.LON);
+			startActivity(new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri)));
+			
+		} catch (ActivityNotFoundException e) {
+			// if user has uninstalled the google maps app
+			e.printStackTrace();
+			FullScreenAddressMapFragment fragment = new FullScreenAddressMapFragment();
+			fragment.setArguments(args);
+			selectNonDrawerItem(fragment, AppConstants.FRAGMENT_TAG_FULL_SCREEN_ADDRESS_MAP,
+					args.getString(BundleKeys.VENUE_NAME), true);
+		}
 	}
 
 	@Override
