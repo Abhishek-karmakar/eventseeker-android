@@ -125,7 +125,8 @@ public class DateWiseEventListAdapter extends BaseAdapter implements DateWiseEve
 					((TextView)convertView.findViewById(R.id.txtEvtTimeAMPM)).setText("");
 					convertView.findViewById(R.id.imgEvtTime).setVisibility(View.INVISIBLE);
 				}
-				((TextView)convertView.findViewById(R.id.txtEvtLocation)).setText(schedule.getVenue().getName());
+				String venueName = (schedule.getVenue() != null) ? schedule.getVenue().getName() : "";
+				((TextView)convertView.findViewById(R.id.txtEvtLocation)).setText(venueName);
 			}
 			
 			BitmapCacheable bitmapCacheable = null;

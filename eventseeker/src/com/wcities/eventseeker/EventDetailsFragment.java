@@ -210,7 +210,7 @@ OnEventUpdatedListner{
 		    shareIntent.setType("image/*");
 		    shareIntent.putExtra(Intent.EXTRA_SUBJECT, res.getString(R.string.title_event_details));
 		    String message = "Checkout " + event.getName();
-		    if (event.getSchedule() != null) {
+		    if (event.getSchedule() != null && event.getSchedule().getVenue() != null) {
 		    	message += " @ " + event.getSchedule().getVenue().getName();
 		    }
 		    if (event.getEventUrl() != null) {

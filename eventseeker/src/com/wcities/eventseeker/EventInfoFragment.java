@@ -535,7 +535,7 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 	}
 	
 	private void updateAddress() {
-		if (event.getSchedule() == null) {
+		if (event.getSchedule() == null || event.getSchedule().getVenue() == null) {
 			return;
 		}
 		

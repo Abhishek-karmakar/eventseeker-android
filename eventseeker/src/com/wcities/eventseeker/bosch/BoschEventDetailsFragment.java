@@ -233,7 +233,7 @@ public class BoschEventDetailsFragment extends FragmentLoadableFromBackStack imp
 
 			case R.id.btnCall:
 				Venue venue = event.getSchedule().getVenue();
-				if (venue.getPhone() != null && MySpinServerSDK.sharedInstance().hasPhoneCallCapability()) {
+				if (venue != null && venue.getPhone() != null && MySpinServerSDK.sharedInstance().hasPhoneCallCapability()) {
 					MySpinServerSDK.sharedInstance().initiatePhoneCall(venue.getName(), venue.getPhone());
 					
 				} else {
