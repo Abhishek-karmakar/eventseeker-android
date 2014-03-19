@@ -13,6 +13,9 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
+import com.wcities.eventseeker.LanguageFragment.Locales;
 import com.wcities.eventseeker.constants.AppConstants;
 
 public abstract class Api {
@@ -44,6 +47,8 @@ public abstract class Api {
 		};
 	};
 
+	private static String localeCode = Locales.ENGLISH.getLocaleCode();
+	
 	private String uri;
 	private String oauthToken;
 
@@ -67,6 +72,17 @@ public abstract class Api {
 		this.uri = uri;
 	}
 	
+	private void addLocale() {
+		if (uri != null) {
+			uri = uri + "&lang=" + localeCode;
+			Log.d(TAG, "URI:" + uri);
+		}
+	}
+	
+	public static void updateLocaleCode(String newLocaleCode) {
+		localeCode = newLocaleCode;
+	}
+	
 	protected JSONObject execute(RequestMethod requestMethod, ContentType contentType, byte[] data) throws ClientProtocolException, IOException, JSONException {
 		/*JSONObject jsonObject = null;
 		HttpClient httpClient = new DefaultHttpClient();
@@ -79,6 +95,11 @@ public abstract class Api {
 		jsonObject = new JSONObject(text);
 		httpClient.getConnectionManager().shutdown();
 		return jsonObject;*/
+		/**
+		 * For multi-Language support in api calls we are adding 'iso2' parameter
+		 * using setLocale method.
+		 */
+		addLocale();
 		
 		JSONObject jsonObject;
 		URL url = new URL(uri);

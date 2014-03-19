@@ -483,6 +483,12 @@ public class EventSeekr extends Application {
 		appConfig.locale = locale;
 
 		getResources().updateConfiguration(appConfig, getResources().getDisplayMetrics());
+		
+		/**
+		 * update Locale in Api class for api-calls
+		 */
+		Api.updateLocaleCode(getLocale().getLocaleCode());
+		
 	}		
 
 	public Locales getLocale() {
