@@ -98,7 +98,7 @@ public class InfoApi extends Api {
 			uri.concat("&info_for=" + infoFor);
 		}
 		setUri(uri);
-		Log.i(TAG, "uri="+uri);
+		addLangParam = true;
 		return execute(RequestMethod.GET, null, null);
 	}
 	

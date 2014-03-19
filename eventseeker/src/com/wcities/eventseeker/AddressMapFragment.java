@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.w3c.dom.Document;
 
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
@@ -48,10 +49,14 @@ public class AddressMapFragment extends SupportMapFragment implements GeoUtilLis
 	private GoogleMap mMap;
 	private boolean drawDrivingDirection;
 	private String venueName;
+
+	private Resources res;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		res = getResources();
 		
 		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getActivity(this));
 		currentLat = latLon[0];
@@ -253,6 +258,7 @@ public class AddressMapFragment extends SupportMapFragment implements GeoUtilLis
 	
 	private class GetDrivingDirection extends AsyncTask<Void, Void, PolylineOptions> {
 		
+
 		@Override
 		protected PolylineOptions doInBackground(Void... params) {
 			LatLng fromPosition = new LatLng(currentLat, currentLon);
@@ -280,7 +286,8 @@ public class AddressMapFragment extends SupportMapFragment implements GeoUtilLis
 		    List<LatLng> points = polylineOptions.getPoints(); // route is instance of PolylineOptions 
 
 		    if (points.isEmpty()) {
-		    	Toast.makeText(FragmentUtil.getActivity(AddressMapFragment.this), "Could not find the driving direction for this venue.", Toast.LENGTH_LONG).show();
+		    	Toast.makeText(FragmentUtil.getActivity(AddressMapFragment.this), 
+		    		res.getString(R.string.couldnt_find_drive_location), Toast.LENGTH_LONG).show();
 		    	
 		    } else {
 			    LatLngBounds.Builder bc = new LatLngBounds.Builder();

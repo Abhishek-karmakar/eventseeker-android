@@ -22,7 +22,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 		
 		// Create a new instance of DatePickerDialog and return it
 		DatePickerDialog datePickerDialog = new DatePickerDialog(FragmentUtil.getActivity(this), this, year, month, day); 
-		datePickerDialog.setTitle("Set Event Start Date");
+		datePickerDialog.setTitle(getResources().getString(R.string.set_start_date));
 		return datePickerDialog;
 	}
 

@@ -3,6 +3,7 @@ package com.wcities.eventseeker;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.wcities.eventseeker.util.FragmentUtil;
 public class AboutUsFragment extends FragmentLoadableFromBackStack implements OnClickListener {
 
 	private String version;
+	private Resources res;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,7 @@ public class AboutUsFragment extends FragmentLoadableFromBackStack implements On
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 		}
+		res = getResources();
 	}
 	
 	@Override
@@ -43,7 +46,7 @@ public class AboutUsFragment extends FragmentLoadableFromBackStack implements On
 		view.findViewById(R.id.imgTwitter).setOnClickListener(this);
 		view.findViewById(R.id.imgBlog).setOnClickListener(this);
 		view.findViewById(R.id.imgWeb).setOnClickListener(this);
-		((TextView) view.findViewById(R.id.txtVersion)).setText("Version " + version);
+		((TextView) view.findViewById(R.id.txtVersion)).setText(res.getString(R.string.version) + " " + version);
 		return view;
 	}
 

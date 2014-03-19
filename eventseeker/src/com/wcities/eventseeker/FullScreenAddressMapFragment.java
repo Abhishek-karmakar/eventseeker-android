@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.w3c.dom.Document;
 
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
@@ -44,10 +45,14 @@ public class FullScreenAddressMapFragment extends FragmentLoadableFromBackStack 
 	private String strAddress = "";
 	
 	private double lat, lon, currentLat, currentLon;
+
+	public Resources res;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		res = getResources();
 		
 		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getActivity(this));
 		currentLat = latLon[0];
@@ -184,7 +189,8 @@ public class FullScreenAddressMapFragment extends FragmentLoadableFromBackStack 
 		    List<LatLng> points = polylineOptions.getPoints(); // route is instance of PolylineOptions 
 
 		    if (points.isEmpty()) {
-		    	Toast.makeText(FragmentUtil.getActivity(FullScreenAddressMapFragment.this), "Could not find the driving direction for this venue.", Toast.LENGTH_LONG).show();
+		    	Toast.makeText(FragmentUtil.getActivity(FullScreenAddressMapFragment.this), 
+		    			res.getString(R.string.couldnt_find_drive_location), Toast.LENGTH_LONG).show();
 		    	
 		    } else {
 			    LatLngBounds.Builder bc = new LatLngBounds.Builder();
@@ -193,7 +199,7 @@ public class FullScreenAddressMapFragment extends FragmentLoadableFromBackStack 
 			        bc.include(item);
 			    }
 	
-			    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bc.build(), ConversionUtil.toPx(getResources(), 50)));
+			    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bc.build(), ConversionUtil.toPx(res, 50)));
 		    }
 		}
 	}

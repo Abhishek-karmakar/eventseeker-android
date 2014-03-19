@@ -41,9 +41,13 @@
     <string name="title_web">Web</string>
     
     <string name="no_items_found_pls_login">Please login with facebook or google from \'Sync Accounts\' page to see</string>
+	<string name="pls_login_to_see_all_events_you_are_following">Connectez-vous sur Facebook ou Google sur la page Synchroniser Les Comptes pour afficher tous les événements que vous suivez.</string>
+    <string name="pls_login_to_see_to_see_recommended_events">Connectez-vous sur Facebook ou Google sur la page Synchroniser Les Comptes pour afficher les événements suggérés pour vous</string>    
     <string name="pls_login_to_track_evt">To track this event you need to first login with facebook or google from \'Sync Accounts\' page.</string>
     <string name="pls_login_through_mobile_app">Please log in through mobile app.</string>
-    <string name="connection_lost">The Internet connection appears to be offline.</string>
+    <string name="pls_login_to_see_friends_activity">Connectez-vous sur Facebook ou Google de la page Synchroniser Les Compters pour afficher votre activité d\'amis</string>
+    <string name="connection_lost">Vous êtes hors connexion.</string>
+	<string name="first_login_to_track_events">Pour suivre cet événement, vous devez vous connecter sur Facebook ou Google de la page "Synchroniser les Comptes"</string>
     
     <!-- Strings used for navigation drawer list -->
     <string name="navigation_drawer_section_browse">Naviguer</string>
@@ -57,7 +61,7 @@
     <string name="navigation_drawer_item_change_location">@string/title_change_location</string>
     <string name="navigation_drawer_item_language">@string/title_language</string>
     <string name="navigation_drawer_section_about">A Propos</string>
-    <string name="navigation_drawer_item_invite_friends">Inviter vos amis</string>
+    <string name="navigation_drawer_item_invite_friends">Inviter des Amis</string>
     <string name="navigation_drawer_item_rate_app">Évaluer l\'application</string>
     <string name="navigation_drawer_item_about">A Propos</string>
     <string name="navigation_drawer_item_eula">@string/title_eula</string>
@@ -88,9 +92,18 @@
     <string name="connect_accounts_item_pandora">Pandora</string>
     <string name="connect_accounts_item_button">Button</string>
 
+    <string name="google_sign_in">Connexion Google Plus</string>
+    <string name="google_sign_out">Déconnexion Google Plus</string>
+    
+    <string name="pls_login">Connectez-vous sur Facebook ou Google avant de synchroniser vos comptes</string>    
+    <string name="syncing_your_acc">En train de synchroniser votre compte...Veuillez patienter...</string>    
+    <string name="are_you_sure">Etes-vous sûr?</string>    
+    <string name="connecting_account_allow_us">La connexion nous permet de vous offir des alertes pertinentes et instantanées.</string>    
+    <string name="follow_your_favorite_Artists">Suivez vos artistes préférés et recevez des nouvelles sur des événements en synchronisant les comptes suivants:</string>    
+    
     <!-- include_friends.xml -->
-    <string name="txt_view_all">Voir tous</string>
-    <string name="txt_view_less">View Less</string>
+    <string name="txt_view_all">Afficher Tous</string>
+    <string name="txt_view_less">Afficher Moins</string>
 
     <!-- fragment_device_library.xml -->
     <string name="txt_service_desc_txt_fragment_device_library">Would you like the application to search your music library for artists that you can then follow? The artists will be placed under the \"Following\" section.</string>
@@ -127,17 +140,21 @@
     <string name="sync_accounts_or_search_for_artists">Synchroniser vos comptes ou rechercher des artistes pour démarrer votre expérience personnalisée avec eventseeker.</string>
     
     <!-- Artists Details -->
-    <string name="info">INFO</string>
+    <string name="info">Infos</string>
     <string name="events">Evènements</string>
     <string name="news">Nouvelles</string>
     <string name="videos">Vidéos</string>
     <string name="friends_who_like">Amis qui aiment</string>
-    
+    <string name="no_artist_news_found">No Artist News Found.</string>
+    <string name="facebook_link_unavailable">Un lien Facebook n\'est pas disponible pour cet artiste</string>
+    <string name="twitter_link_unavailable">Un lien Twitter n\'est pas disponible pour cet artiste</string>
+    <string name="web_link_unavailable">Un lien Internaute n\'est pas disponible pour cet artiste</string>
+     
     <!-- Artists News -->
     <string name="posted_a_picture">a publié une photo</string>
     <string name="shared_a_link">a publié un lien</string>
     <string name="posted_a_video">a publié un vidéo nouvel</string>
-    <string name="posted_a_status">posted a status</string>
+    <string name="posted_a_status">a partagé un statut</string>
     <string name="follow_artists_for_updates">Suivez les artistes pour recevoir les dernières nouvelles en temps réel</string>
     <string name="search_artists">Recherche d\'artistes</string>
         
@@ -178,7 +195,8 @@
    	<!-- Event Details -->
     <string name="featuring">Avec</string>
    	<string name="cancel">Annuler</string>
-   		
+	<string name="time">Temps</string>
+   			
    	<!-- Venue Details -->
     <string name="phone">Téléphone</string>
    	<string name="drive">Conduire</string>
@@ -190,10 +208,24 @@
     <string name="comment">Commentaire</string>
     <string name="events_are_better_with_friends">Les événements sont toujours meilleur avec vos amis ! Invitez-les à rejoindre eventseeker.</string>
     <string name="invite_friends">Inviter des amis</string>
+    <string name="add_comment">Ajouter un commentaire</string>
+    <string name="add">Ajouter</string>
+    <string name="sending_like_request">Demande "J'aime" Envoyée</string>
+    <string name="posting_comment">En train de poster votre commentaire.</string>
     
    	<!-- My Events -->
     <string name="no_events_in_your_area">Il n\'y a aucun événement dans votre région. Suivez davantage d\'artistes pour créer votre agenda personnalisé.</string>
 
+    <!-- About Us -->
+    <string name="version">Version</string>
+    
+    <!-- Navigate -->
+    <string name="couldnt_find_drive_location">Impossible de trouver l\'itineraire pour ce lieu</string>	
+    
+    <!-- Discover -->
+    <string name="set_start_date">Configurez la date de début de l\'événement</string>	
+    <string name="loading">Chargement en cours...</string>	
+ 
     <!-- Common GOING, WANT TO & TICKETS -->
     <string name="going">Aller</string>
     <string name="want_to">Vouloir</string>
@@ -218,7 +250,10 @@
     <string name="week_not_gt_one">1 week ago</string>
     <string name="mon_not_gt_one">1 month ago</string>
     <string name="yr_not_gt_one">1 year ago</string>
-    
+       
+    <!-- Common -->
+    <string name="no_event_found">Aucun événement trouvé</string>
+ 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>
     

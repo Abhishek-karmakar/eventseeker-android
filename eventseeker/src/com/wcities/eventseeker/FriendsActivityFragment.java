@@ -878,9 +878,9 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	    	input.setLayoutParams(lp);
 	    	
 	        return new AlertDialog.Builder(FragmentUtil.getActivity(this))
-	                .setTitle("Add Comment")
+	                .setTitle(getResources().getString(R.string.add_comment))
 	                .setView(input)
-	                .setPositiveButton("Add",
+	                .setPositiveButton(getResources().getString(R.string.add),
 	                    new DialogInterface.OnClickListener() {
 	                        public void onClick(DialogInterface dialog, int whichButton) {
 	                            ((FriendsActivityFragment)getParentFragment()).doPositiveClickToAddComment(
@@ -969,7 +969,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	
 	private void postLikeRequest() {
 		//Log.d(TAG, "postLikeRequest()");
-		Toast.makeText(FragmentUtil.getActivity(this), "Sending like request...", Toast.LENGTH_SHORT).show();
+		Toast.makeText(FragmentUtil.getActivity(this), R.string.sending_like_request, Toast.LENGTH_SHORT).show();
 		Request likeRequest = Request.newPostRequest(Session.getActiveSession(), fbPostId + "/likes", null, new Request.Callback() {
 
 			         @Override
@@ -982,7 +982,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	
 	private void postCommentRequest(String comment) {
 		//Log.d(TAG, "postCommentRequest()");
-		Toast.makeText(FragmentUtil.getActivity(this), "Posting comment...", Toast.LENGTH_SHORT).show();
+		Toast.makeText(FragmentUtil.getActivity(this), R.string.posting_comment, Toast.LENGTH_SHORT).show();
 		Bundle parameters = new Bundle();
 		parameters.putString("message", comment);
 		Request commentRequest = new Request(Session.getActiveSession(), fbPostId + "/comments", 
@@ -1070,7 +1070,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 		if (wcitiesId == null) {
 			rltDummyLyt.setVisibility(View.VISIBLE);
 			TextView txtNoItemsFound = (TextView)rltDummyLyt.findViewById(R.id.txtNoItemsFound);
-			txtNoItemsFound.setText(res.getString(R.string.no_items_found_pls_login) + " your friends activity.");
+			txtNoItemsFound.setText(res.getString(R.string.pls_login_to_see_friends_activity));
 			
 		} else {
 			scrlVRootNoItemsFoundWithAction.setVisibility(View.VISIBLE);

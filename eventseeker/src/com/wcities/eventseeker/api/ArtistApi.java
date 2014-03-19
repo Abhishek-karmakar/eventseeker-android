@@ -230,7 +230,8 @@ public class ArtistApi extends Api {
 			}
 		}
 		setUri(uri);
-		Log.d(TAG, "uri="+uri);
+		addLangParam = true;
+		
 		return execute(RequestMethod.GET, null, null);
 	}
 	
@@ -250,10 +251,10 @@ public class ArtistApi extends Api {
 				uri = uri + "&friends=enable";
 			}
 		}
-		uri += "&response_type=json&lang=eng&strip_html=description&limit=42";
+		uri += "&response_type=json&strip_html=description&limit=42";
 		setUri(uri);
-
-		Log.d(TAG, "uri="+uri);
+		addLangParam = true;
+		
 		String postParams = "artist=" + URLEncoder.encode(buildSearchArtistsJSON(artistNames, startIndex, maxEndIndex), AppConstants.CHARSET_NAME);
 		//Log.d(TAG, "postParams="+URLEncoder.encode(buildSearchArtistsJSON(artistNames, startIndex, endIndex), AppConstants.CHARSET_NAME));
 		return execute(RequestMethod.POST, ContentType.MIME_APPLICATION_X_WWW_FORM_URLENCODED, postParams.getBytes());

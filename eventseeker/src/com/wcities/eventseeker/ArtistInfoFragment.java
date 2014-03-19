@@ -704,15 +704,15 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 			break;
 
 		case R.id.imgFacebook:
-			openURL(artist.getArtistLinkByType(LinkType.FACEBOOK), "facebook");
+			openURL(artist.getArtistLinkByType(LinkType.FACEBOOK), R.string.facebook_link_unavailable);
 			break;
 
 		case R.id.imgTwitter:
-			openURL(artist.getArtistLinkByType(LinkType.TWITTER), "twitter");
+			openURL(artist.getArtistLinkByType(LinkType.TWITTER), R.string.twitter_link_unavailable);
 			break;
 
 		case R.id.imgWeb:
-			openURL(artist.getArtistLinkByType(LinkType.WEBSITE), "web");
+			openURL(artist.getArtistLinkByType(LinkType.WEBSITE), R.string.web_link_unavailable);
 			break;
 
 		default:
@@ -789,7 +789,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 		updateScreen();
 	}
 	
-	private void openURL(String url, String appendErrorStr) {
+	private void openURL(String url, int errorStr) {
 		if(url != null) {
 			Bundle args = new Bundle();
 			args.putString(BundleKeys.URL, url);
@@ -797,8 +797,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 					.replaceByFragment(AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
 			
 		} else {
-			Toast.makeText(FragmentUtil.getActivity(this), appendErrorStr + " link is not available for this artist.", 
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(FragmentUtil.getActivity(this), errorStr, Toast.LENGTH_SHORT).show();
 		}
 	}
 

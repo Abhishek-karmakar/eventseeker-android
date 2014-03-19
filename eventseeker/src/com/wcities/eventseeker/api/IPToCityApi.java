@@ -22,7 +22,7 @@ public class IPToCityApi extends Api {
 		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD).append("oauth_token=").append(getOauthToken());
 		
 		setUri(uriBuilder.toString());
-		Log.d(TAG, "uri=" + getUri());
+		addLangParam = true;
 		return execute(RequestMethod.GET, null, null);
 	}
 }

@@ -41,9 +41,13 @@
     <string name="title_web">Web</string>
     
     <string name="no_items_found_pls_login">Please login with facebook or google from \'Sync Accounts\' page to see</string>
+	<string name="pls_login_to_see_all_events_you_are_following">Si prega, accedi con facebook o google dalla pagina “Sincronizza account” per mostrare tutti gli eventi che segui.</string>
+    <string name="pls_login_to_see_to_see_recommended_events">Si prega, accedi con facebook o google dalla pagina “Sincronizza account” per mostrare eventi raccomandati per te</string>
     <string name="pls_login_to_track_evt">To track this event you need to first login with facebook or google from \'Sync Accounts\' page.</string>
     <string name="pls_login_through_mobile_app">Please log in through mobile app.</string>
-    <string name="connection_lost">The Internet connection appears to be offline.</string>
+    <string name="pls_login_to_see_friends_activity">"Si prega, accedi con facebook o google dalla pagina “Sincronizza account” per mostrare l'attività dei tuoi amici</string>
+    <string name="connection_lost">La connessione Internet è offline.e</string>
+    <string name="first_login_to_track_events">Per seguire questo evento, si prega, connetti su Facebook o Google dalla pagina “Sincronizza i tuoi account”</string>
     
     <!-- Strings used for navigation drawer list -->
     <string name="navigation_drawer_section_browse">Sfogliare</string>
@@ -88,9 +92,18 @@
     <string name="connect_accounts_item_pandora">Pandora</string>
     <string name="connect_accounts_item_button">Button</string>
 
+    <string name="google_sign_in">Conessione Google Plus</string>
+    <string name="google_sign_out">Disconnessione Google Plus</string>
+    
+    <string name="pls_login">Si prega, accedi con facebook o google prima di sincronizzare i tuoi account da altri servizi</string>    
+    <string name="syncing_your_acc">Sincronizzando il tuo account... Attendere prego...</string>    
+    <string name="are_you_sure">Sei sicuro?</string>
+    <string name="connecting_account_allow_us">La connessione ci permette di offrire notizie rilevanti istantaneamente</string>    
+    <string name="follow_your_favorite_Artists">Per seguire i tuoi artisti preferiti e ricevere notizie su eventi, sincronizza i seguenti account.</string>    
+    
     <!-- include_friends.xml -->
-    <string name="txt_view_all">View All</string>
-    <string name="txt_view_less">View Less</string>
+    <string name="txt_view_all">Mostra tutto</string>
+    <string name="txt_view_less">Mostra meno</string>
 
     <!-- fragment_device_library.xml -->
     <string name="txt_service_desc_txt_fragment_device_library">Would you like the application to search your music library for artists that you can then follow? The artists will be placed under the \"Following\" section.</string>
@@ -127,17 +140,21 @@
     <string name="sync_accounts_or_search_for_artists">Sincronizzare conti o cerchi gli artisti per cominciare sua esperienza di eventseeker personalizzata.</string>
     
     <!-- Artists Details -->
-    <string name="info">INFO</string>
+    <string name="info">Info</string>
     <string name="events">Eventi</string>
     <string name="news">Notizie</string>
     <string name="videos">Video</string>
     <string name="friends_who_like">A chi piace</string>
-    
+    <string name="no_artist_news_found">No Artist News Found.</string>
+    <string name="facebook_link_unavailable">Un link Facebook non è disponibile per questo artista.</string>
+    <string name="twitter_link_unavailable">Un link Twitter non è disponibile per questo artista.</string>
+    <string name="web_link_unavailable">Un link Web non è disponibile per questo artista.</string>
+ 
     <!-- Artists News -->
     <string name="posted_a_picture">impostava una foto</string>
     <string name="shared_a_link">impostava un collegamento</string>
     <string name="posted_a_video">impostava un video nuovo</string>
-    <string name="posted_a_status">posted a status</string>
+    <string name="posted_a_status">ha impostato un status</string>
     <string name="follow_artists_for_updates">Segue gli artisti per ricevere le ultime notizie in tempo reale</string>
     <string name="search_artists">Cerca artisti</string>
            
@@ -178,7 +195,8 @@
    	<!-- Event Details -->
     <string name="featuring">Presentando</string>
     <string name="cancel">Anulla</string>
-   		
+	<string name="time">Tempo</string>
+    		
    	<!-- Venue Details -->
     <string name="phone">Telefono</string>
    	<string name="drive">Indicazioni stradali</string>
@@ -190,10 +208,24 @@
     <string name="comment">Commentario</string>
     <string name="events_are_better_with_friends">Eventi sono più divertenti con amici. Invitali a eventseeker.</string>
     <string name="invite_friends">Invitare amici</string>
+    <string name="add_comment">Commenta</string>
+    <string name="add">Aggiungi</string>
+    <string name="sending_like_request">Inviando richiesta "mi piace"</string>
+    <string name="posting_comment">Impostando commento</string>
     
    	<!-- My Events -->
     <string name="no_events_in_your_area">Non ci sono eventi in questo periodo in sua regione. Segue più artisti per cominciare suo calendario di eventi personalizzati.</string>
 
+    <!-- About Us -->
+    <string name="version">Versione</string>
+    
+    <!-- Navigate -->
+    <string name="couldnt_find_drive_location">Impossibile trovare indicazioni stradale per questo luogo.</string>	
+    
+    <!-- Discover -->
+    <string name="set_start_date">Assegni la data d’inizio</string>	
+    <string name="loading">Caricamento in corso...</string>	
+ 
     <!-- Common GOING, WANT TO & TICKETS -->
     <string name="going">Vado</string>
     <string name="want_to">Voglio andare</string>
@@ -218,7 +250,10 @@
     <string name="week_not_gt_one">1 week ago</string>
     <string name="mon_not_gt_one">1 month ago</string>
     <string name="yr_not_gt_one">1 year ago</string>
-    
+          
+    <!-- Common -->
+    <string name="no_event_found">Nessun evento trovato</string>
+ 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>
     

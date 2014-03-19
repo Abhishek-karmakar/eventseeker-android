@@ -171,18 +171,18 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 						((EventSeekr)mContext.getApplicationContext()).getWcitiesId() == null) {
 					Type loadType = ((MyEventsListFragment)mListener).getLoadType();
 					if (loadType == Type.myevents) {
-						((TextView)convertView).setText(mContext.getResources().getString(R.string.no_items_found_pls_login) + " all the events you are following.");
+						((TextView)convertView).setText(mContext.getResources().getString(R.string.pls_login_to_see_all_events_you_are_following));
 						
 					} else if (loadType == Type.recommendedevent) {
-						((TextView)convertView).setText(mContext.getResources().getString(R.string.no_items_found_pls_login) + " recommended events for you.");
+						((TextView)convertView).setText(mContext.getResources().getString(R.string.pls_login_to_see_to_see_recommended_events));
 						
 					} else {
 						// fallback condition
-						((TextView)convertView).setText("No Event found.");
+						((TextView)convertView).setText(mContext.getResources().getString(R.string.no_event_found));
 					}
 					
 				} else {
-					((TextView)convertView).setText("No Event found.");
+					((TextView)convertView).setText(mContext.getResources().getString(R.string.no_event_found));
 				}
 				convertView.setTag("");
 			} 
