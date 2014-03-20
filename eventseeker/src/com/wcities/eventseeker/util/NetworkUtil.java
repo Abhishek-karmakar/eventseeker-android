@@ -1,5 +1,7 @@
 package com.wcities.eventseeker.util;
 
+import com.wcities.eventseeker.constants.AppConstants;
+
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -8,7 +10,10 @@ import android.os.Build;
 public class NetworkUtil {
 	  
 	public static boolean getConnectivityStatus(Context context) {
-	
+		if (!AppConstants.CHECK_CONNECTIVITY_STATUS) {
+			return true;
+		}
+		
 		ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 	 
 		NetworkInfo activeNetwork = cm.getActiveNetworkInfo();	        
