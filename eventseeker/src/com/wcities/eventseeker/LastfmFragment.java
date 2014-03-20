@@ -162,10 +162,10 @@ public class LastfmFragment extends FragmentLoadableFromBackStack implements OnC
 						
 						@Override
 						public void run() {
-							String msg = "The Internet connection appears to be offline.";
+							int msg = R.string.connection_lost;
 							if (rslt != null) {
 								Log.e("MSG", "" + rslt.getErrorMessage());
-								msg = "User name could not be found";
+								msg = R.string.user_name_could_not_be_found;
 							}
 
 							updateVisibility();

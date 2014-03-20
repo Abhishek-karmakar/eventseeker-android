@@ -20,7 +20,7 @@
 	    <TextView android:id="@+id/txtNoItemsFound"
 		    android:layout_width="match_parent"
 		    android:layout_height="match_parent"
-		    android:text="No Artist Found."
+		    android:text="@string/no_artist_found"
 		    android:gravity="top|center_horizontal" 
 		    android:textSize="@dimen/txt_list_no_items_found_txt_size_list_no_items_found"
 		    android:padding="@dimen/txt_list_no_items_found_margin_list_no_items_found"/>

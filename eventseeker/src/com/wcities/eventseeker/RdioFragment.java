@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -71,6 +72,8 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 	
 	private static Rdio rdio;
 	
+	private Resources res;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -111,7 +114,9 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 
             // Initialize our API object
             rdio = new Rdio(AppConstants.RDIO_KEY, AppConstants.RDIO_SECRET, accessToken, accessTokenSecret,
-					FragmentUtil.getActivity(this), this);      
+					FragmentUtil.getActivity(this), this);     
+            
+            res = getResources();
 		}
 	}
 	
@@ -204,7 +209,7 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 					if (result == null) {
 						isLoading = false;
 						updateVisibility();
-						throw new Exception("User name could not be found.");
+						throw new Exception(res.getString(R.string.user_name_could_not_be_found));
 					}
 					
 					JSONObject userInfo = result.getJSONObject("result");
@@ -258,8 +263,8 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 					updateVisibility();
 					//Log.d(TAG, "3");
 
-					Toast toast = Toast.makeText(FragmentUtil.getActivity(RdioFragment.this), "User name could not be found", 
-							Toast.LENGTH_SHORT);
+					Toast toast = Toast.makeText(FragmentUtil.getActivity(RdioFragment.this), 
+							R.string.user_name_could_not_be_found, Toast.LENGTH_SHORT);
 					if(toast != null) {
 						toast.setGravity(Gravity.CENTER, 0, -100);
 						toast.show();
@@ -281,7 +286,7 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 				isLoading = false;
 				updateVisibility();
 				
-				Toast toast = Toast.makeText(FragmentUtil.getActivity(RdioFragment.this), "The Internet connection appears to be offline.", 
+				Toast toast = Toast.makeText(FragmentUtil.getActivity(RdioFragment.this), R.string.connection_lost, 
 						Toast.LENGTH_SHORT);
 				if(toast != null) {
 					toast.setGravity(Gravity.CENTER, 0, -100);

@@ -160,8 +160,7 @@ public class GooglePlayMusicFragment extends FragmentLoadableFromBackStack imple
 				
 			} else {
 				Toast.makeText(FragmentUtil.getActivity(fragment).getApplication(), 
-                		"Could not login to google play music account. Please make sure you are using right "
-                		+ "google play music account.", Toast.LENGTH_LONG).show();
+                		R.string.couldnt_login_to_google_play_music, Toast.LENGTH_LONG).show();
 				((EventSeekr)FragmentUtil.getActivity(fragment).getApplication()).setSyncCount(
 						Service.GooglePlay, EventSeekr.UNSYNC_COUNT);
 				FragmentUtil.getActivity(fragment).onBackPressed();

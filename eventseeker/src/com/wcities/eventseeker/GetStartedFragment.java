@@ -413,8 +413,9 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 			break;
 			
 		case R.id.btnSkip:
-			GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance("Are you sure ?", 
-					"Signing in allows for a better experience.", res.getString(R.string.cancel), "Skip");
+			GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
+					res.getString(R.string.are_you_sure), res.getString(R.string.signin_for_better_experience), 
+					res.getString(R.string.cancel), res.getString(R.string.skip));
 			generalDialogFragment.show(getChildFragmentManager(), DIALOG_FRAGMENT_TAG_SKIP);
 			break;
 

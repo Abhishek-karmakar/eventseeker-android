@@ -77,7 +77,7 @@ public class FragmentUtil {
 	public static void showLoginNeededForTrackingEventDialog(FragmentManager fm, Context context) {
 		Resources res = context.getResources();
 		GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance("Go to login?", 
-				res.getString(R.string.first_login_to_track_events), 
+				res.getString(R.string.pls_login_to_track_evt), 
 				res.getString(R.string.cancel), "Yes");
 		generalDialogFragment.show(fm, AppConstants.DIALOG_FRAGMENT_TAG_LOGIN_TO_TRACK_EVENT);
 	}

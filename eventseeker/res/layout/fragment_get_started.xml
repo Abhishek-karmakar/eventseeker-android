@@ -49,7 +49,7 @@
 	        android:layout_below="@id/rltGPlus"
 	        android:layout_marginTop="@dimen/all_components_margin_t_get_started"
 	        android:layout_centerHorizontal="true"
-	        android:text="Why Login?"
+	        android:text="@string/why_login"
 	        android:textSize="@dimen/txt_why_login_txt_size_get_started"
 	        android:textColor="@color/txt_why_login_txt_color_fragment_get_started" />
         
@@ -59,7 +59,7 @@
 	        android:layout_below="@id/txtWhyLogin"
 	        android:layout_marginTop="@dimen/all_components_margin_t_get_started"
 	        android:layout_centerHorizontal="true"
-	        android:text="Get event recommendations based on your interests"
+	        android:text="@string/get_event_recommendations"
 	        android:textSize="@dimen/txt_guide_txt_size_get_started"
 	        android:textColor="@color/txt_guide_txt_color_fragment_get_started"
 	        android:gravity="center"
@@ -71,7 +71,7 @@
 	        android:layout_below="@id/txtEvents"
 	        android:layout_marginTop="@dimen/all_components_margin_t_get_started"
 	        android:layout_centerHorizontal="true"
-	        android:text="Stay connected with friends and know who to invite to events"
+	        android:text="@string/stay_connected_with_friends"
 	        android:textSize="@dimen/txt_guide_txt_size_get_started"
 	        android:textColor="@color/txt_guide_txt_color_fragment_get_started"
 	        android:gravity="center"
@@ -92,7 +92,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="65dp"
             android:background="@color/btn_fb_sign_up_bg"
-            android:text="Skip"
+            android:text="@string/skip"
             android:textColor="@android:color/white"
             android:textSize="@dimen/btn_continue_txt_size_fb_login" />
         
