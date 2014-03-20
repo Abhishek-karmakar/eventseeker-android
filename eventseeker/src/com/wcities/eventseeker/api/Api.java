@@ -49,6 +49,11 @@ public abstract class Api {
 
 	private static String localeCode = Locales.ENGLISH.getLocaleCode();
 	
+	/**
+	 * needs to be set true in the current api-call request, if it supports lang parameter.
+	 */
+	protected boolean addLangParam;
+	
 	private String uri;
 	private String oauthToken;
 
@@ -72,10 +77,10 @@ public abstract class Api {
 		this.uri = uri;
 	}
 	
-	private void addLocale() {
-		if (uri != null) {
+	private void addLangParam() {
+		if (uri != null && addLangParam) {
 			uri = uri + "&lang=" + localeCode;
-			Log.d(TAG, "URI:" + uri);
+			Log.d(TAG, "uri="+uri);
 		}
 	}
 	
@@ -99,7 +104,7 @@ public abstract class Api {
 		 * For multi-Language support in api calls we are adding 'iso2' parameter
 		 * using setLocale method.
 		 */
-		addLocale();
+		addLangParam();
 		
 		JSONObject jsonObject;
 		URL url = new URL(uri);

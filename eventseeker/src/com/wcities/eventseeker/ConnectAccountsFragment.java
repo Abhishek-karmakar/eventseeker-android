@@ -82,9 +82,8 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     
     private String FB_SIGN_IN;
     private String FB_SIGN_OUT;
-    
-    private static final String GOOGLE_SIGN_IN = "Google Sign In";
-    private static final String GOOGLE_SIGN_OUT = "Google Sign Out";
+    private String GOOGLE_SIGN_IN;
+    private String GOOGLE_SIGN_OUT;
     
     private static final String TXT_BTN_SKIP = "Skip";
     private String TXT_BTN_CONTINUE;
@@ -209,6 +208,8 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		
 		FB_SIGN_IN = res.getString(R.string.fb_login);
 		FB_SIGN_OUT = res.getString(R.string.fb_logout);
+		GOOGLE_SIGN_IN = res.getString(R.string.google_sign_in);
+		GOOGLE_SIGN_OUT = res.getString(R.string.google_sign_out);
 		TXT_BTN_CONTINUE = res.getString(R.string.btn_continue);
 	}
 	
@@ -672,8 +673,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			if (service != Service.Facebook && service != Service.GooglePlus && service != Service.Blank 
 					&& eventSeekr.getWcitiesId() == null) {
 				String text = (eventSeekr.getFbUserId() == null || eventSeekr.getGPlusUserId() == null) ? 
-						"Please login with facebook or google before you sync accounts from other services" :
-							"Syncing your account...Please Wait...";
+						res.getString(R.string.pls_login) : res.getString(R.string.syncing_your_acc);
 				Toast.makeText(eventSeekr, text, Toast.LENGTH_LONG).show();
 				return;
 			}
@@ -839,8 +839,9 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				onContinueClick();
 				
 			} else {
-				GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance("Are you sure ?", 
-						"Connecting accounts allows us to provide relevant alerts instantly.", TXT_BTN_CANCEL, TXT_BTN_SKIP);
+				GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
+						res.getString(R.string.are_you_sure), res.getString(R.string.connecting_account_allow_us), 
+						TXT_BTN_CANCEL, TXT_BTN_SKIP);
 				generalDialogFragment.show(getChildFragmentManager(), DIALOG_FRAGMENT_TAG_SKIP);
 			}
 		}

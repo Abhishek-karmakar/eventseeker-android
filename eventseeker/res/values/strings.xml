@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">eventseeker</string>
-    
+
     <!-- development keys -->
     <!-- <string name="fb_app_id">687206491296790</string>
     <string name="map_v2_android_key">AIzaSyC4DsIo1BknPFbcHZ5y89UygHgWxgUhFic</string>
@@ -20,7 +20,6 @@
     <string name="lang_italian">Italian</string>
     <string name="lang_spanish">Spanish</string>
     <string name="lang_portuguese">Portuguese</string>
-    
     <string name="menu_search">Search</string>
     <string name="menu_change_location">Change Location</string>
     <string name="title_discover">Discover</string>
@@ -51,12 +50,15 @@
     <string name="title_lastfm">last.fm</string>
     <string name="title_pandora">Pandora</string>
     <string name="title_web">Web</string>
-    
     <string name="no_items_found_pls_login">Please login with facebook or google from \'Sync Accounts\' page to see</string>
+    <string name="pls_login_to_see_all_events_you_are_following">Please login with facebook or google from \'Sync Accounts\' page to see all the events you are following.</string>
+    <string name="pls_login_to_see_to_see_recommended_events">Please login with facebook or google from \'Sync Accounts\' page to see recommended events for you.</string>
     <string name="pls_login_to_track_evt">To track this event you need to first login with facebook or google from \'Sync Accounts\' page.</string>
     <string name="pls_login_through_mobile_app">Please log in through mobile app.</string>
+    <string name="pls_login_to_see_friends_activity">Please login with facebook or google from \'Sync Accounts\' page to see  your friends activity.</string>
     <string name="connection_lost">The Internet connection appears to be offline.</string>
-    
+    <string name="first_login_to_track_events">To track this event you need to first login with facebook or google from \'Sync Accounts\' page.</string>
+
     <!-- Strings used for navigation drawer list -->
     <string name="navigation_drawer_section_browse">BROWSE</string>
     <string name="navigation_drawer_item_discover">@string/title_discover</string>
@@ -74,7 +76,6 @@
     <string name="navigation_drawer_item_about">About</string>
     <string name="navigation_drawer_item_eula">@string/title_eula</string>
     <string name="navigation_drawer_item_enter_rep_code">Enter Rep Code</string>
-    
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="action_settings">@string/menu_settings</string>
@@ -99,14 +100,23 @@
     <string name="connect_accounts_item_lastfm">Last.fm</string>
     <string name="connect_accounts_item_pandora">Pandora</string>
     <string name="connect_accounts_item_button">Button</string>
-
+    
+    <string name="google_sign_in">Google Sign In</string>
+    <string name="google_sign_out">Google Sign Out</string>
+    
+    <string name="pls_login">Please login with facebook or google before you sync accounts from other services</string>    
+    <string name="syncing_your_acc">Syncing your account...Please Wait...</string>    
+    <string name="are_you_sure">Are you sure ?</string>    
+    <string name="connecting_account_allow_us">Connecting accounts allows us to provide relevant alerts instantly.</string>    
+    <string name="follow_your_favorite_Artists">Follow your favorite artists and get updates on events by syncing any of the following.</string>    
+    
     <!-- include_friends.xml -->
     <string name="txt_view_all">View All</string>
     <string name="txt_view_less">View Less</string>
 
     <!-- fragment_device_library.xml -->
     <string name="txt_service_desc_txt_fragment_device_library">Would you like the application to search your music library for artists that you can then follow? The artists will be placed under the \"Following\" section.</string>
-    
+
     <!-- Strings used for event category titles -->
     <string name="evt_cat_concerts">Concerts</string>
     <string name="evt_cat_theater">Theater</string>
@@ -120,25 +130,23 @@
     <string name="evt_cat_community">Community</string>
     <string name="evt_cat_business_tech">Business &amp; Tech</string>
     <string name="evt_cat_tours">Tours</string>
-    
     <string name="plus_generic_error">Sign in with Google is not available.</string>
-
     <string name="are_you_sure">Are you sure ?</string>
     <string name="already_signed_in_with_google_account">You are already signed in with Google account. Would you like to sign out from Google and sign in with Facebook account?</string>
     <string name="already_signed_in_with_facebook_account">You are already signed in with Facebook account. Would you like to sign out from Facebook and sign in with Google account?</string>
-    
+
     <!-- About us -->
     <string name="seek_share_live">Seek. Share. Live.</string>
     <string name="eventseeker_desc">eventseeker makes artist and event discovery easy and social. We give you the tools you need so you\&apos;ll never miss an event again.</string>
     <string name="powered_by">Powered By Wcities</string>
     <string name="eventseeker">eventseeker</string>
-    
+
     <!-- Following/Follow Footer Text -->
     <string name="footer_following">Following</string>
     <string name="footer_follow">Follow</string>
     <string name="personalize_your_experience">Personalize your experience</string>
     <string name="sync_accounts_or_search_for_artists">Sync accounts or search for artists to start your personalized eventseeker experience.</string>
-    
+
     <!-- Artists Details -->
     <string name="info">INFO</string>
     <string name="events">EVENTS</string>
@@ -146,16 +154,19 @@
     <string name="videos">Videos</string>
     <string name="friends_who_like">Friends Who Like</string>
     <string name="no_artist_news_found">No Artist News Found.</string>
-    
-   	<!-- Artists News -->
+    <string name="facebook_link_unavailable"></string>
+    <string name="twitter_link_unavailable"></string>
+    <string name="web_link_unavailable"></string>
+ 
+    <!-- Artists News -->
     <string name="posted_a_picture">posted a new photo</string>
     <string name="shared_a_link">shared a link</string>
     <string name="posted_a_video">posted a video</string>
     <string name="posted_a_status">posted a status</string>
     <string name="follow_artists_for_updates">Follow artists to receive real time updates.</string>
     <string name="search_artists">Search Artists</string>
-    
-   	<!-- Connect Accounts Services -->
+
+    <!-- Connect Accounts Services -->
     <string name="service_google_play">Google Play</string>
     <string name="service_device_library">Device Library</string>
     <string name="service_twitter">Twitter</string>
@@ -167,36 +178,37 @@
     <string name="service_title">Title</string>
     <string name="service_blank">Blank</string>
     <string name="service_button">Button</string>
-        
-   	<!-- Connect Accounts -->
+
+    <!-- Connect Accounts -->
     <string name="fb_login">Facebook Sign In</string>
     <string name="fb_logout">Facebook Sign Out</string>
     <string name="btn_continue">Continue</string>
-	<string name="syncing_fb">Syncing Facebook</string>
-	<string name="syncing_google_plus">Syncing Google Plus</string>
-	<string name="syncing_google_play">Syncing Google Play</string>
-	<string name="syncing_device_lib">Syncing Device Library</string>
-	<string name="syncing_twitter">Syncing Twitter</string>
-	<string name="syncing_rdio">Syncing Rdio</string>
-	<string name="syncing_last_fm">Syncing Last.fm</string>
-	<string name="syncing_pandora">Syncing Pandora</string>
-	
-   	<!-- My Events -->
+    <string name="syncing_fb">Syncing Facebook</string>
+    <string name="syncing_google_plus">Syncing Google Plus</string>
+    <string name="syncing_google_play">Syncing Google Play</string>
+    <string name="syncing_device_lib">Syncing Device Library</string>
+    <string name="syncing_twitter">Syncing Twitter</string>
+    <string name="syncing_rdio">Syncing Rdio</string>
+    <string name="syncing_last_fm">Syncing Last.fm</string>
+    <string name="syncing_pandora">Syncing Pandora</string>
+
+    <!-- My Events -->
     <string name="following">FOLLOWING</string>
     <string name="recommended">RECOMMENDED</string>
-   	
-   	<!-- Search Results -->
+
+    <!-- Search Results -->
     <string name="artists">ARTISTS</string>
     <string name="venues">VENUES</string>
-	
-   	<!-- Event Details -->
+
+    <!-- Event Details -->
     <string name="featuring">FEATURING</string>
     <string name="cancel">Cancel</string>
-	
-   	<!-- Venue Details -->
+    <string name="time">Time</string>
+
+    <!-- Venue Details -->
     <string name="phone">Phone</string>
     <string name="drive">Drive</string>
-    
+
     <!-- Friends Activity -->
     <string name="is_going_to">%1$s is going to %2$s</string>
     <string name="wants_to_go_to">%1$s wants to go to %2$s</string>
@@ -204,10 +216,24 @@
     <string name="comment">Comment</string>
     <string name="events_are_better_with_friends">Events are always better with friends. Invite them to join eventseeker.</string>
     <string name="invite_friends">Invite Friends</string>
+    <string name="add_comment">Add Comment</string>
+    <string name="add">Add</string>
+    <string name="sending_like_request">Sending like request...</string>
+    <string name="posting_comment">Colocando un comentario...</string>
 
-   	<!-- My Events -->
+    <!-- My Events -->
     <string name="no_events_in_your_area">No events currently in your area. Follow more artists to start your personalized event calendar.</string>
 
+    <!-- About Us -->
+    <string name="version">Version</string>
+
+    <!-- Navigate -->
+    <string name="couldnt_find_drive_location">Could not find the driving direction for this venue.</string>	
+
+    <!-- Discover -->
+    <string name="set_start_date">Set Event Start Date</string>	
+    <string name="loading">Loading...</string>
+ 
     <!-- Common GOING, WANT TO & TICKETS -->
     <string name="going">GOING</string>
     <string name="want_to">WANT TO</string>
@@ -224,7 +250,6 @@
     <string name="week_gt_one">%1$d weeks ago</string>
     <string name="mon_gt_one">%1$d months ago</string>
     <string name="yr_gt_one">%1$d years ago</string>
-
     <string name="sec_not_gt_one">1 second ago</string>
     <string name="min_not_gt_one">1 minute ago</string>
     <string name="hr_not_gt_one">1 hour ago</string>
@@ -233,25 +258,28 @@
     <string name="mon_not_gt_one">1 month ago</string>
     <string name="yr_not_gt_one">1 year ago</string>
 
+    <!-- Common -->
+    <string name="no_event_found">No Event Found.</string>
+ 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>
-    
+
     <!-- Strings used for navigation drawer list -->
     <string name="bosch_navigation_drawer_item_home">Home</string>
     <string name="bosch_navigation_drawer_item_change_city">Change City</string>
     <string name="bosch_navigation_drawer_item_search">Search</string>
     <string name="bosch_navigation_drawer_item_favorites">Favorites</string>
     <!-- <string name="bosch_navigation_drawer_item_about_us">About Us</string> -->
-    
+
     <string name="title_artists">Artists</string>
     <string name="title_featured">Featured</string>
     <string name="title_search">Search</string>
     <string name="title_map">eventseeker | Navigate</string>
     <string name="title_settings">eventseeker | Settings</string>
     <string name="title_events">Events</string>
-    
+
     <!-- fragment_bosch_about_us -->
     <string name="txt_app_details"><![CDATA[<b>App name :</b> eventseeker<br/><b>Description :</b> The eventseeker is the premier sources for event, artist and ticketing information available anywhere, gathered from worldwide ticketing partners, in-house research, and the insight of local contributors around the world.<br/><b>Mailing address :</b> Wcities.com, Inc. 512 2nd Street Second Floor, San Francisco, CA 94107, USA<br/><b>Tel :</b> 4154958090<br/><b>Fax : </b>4154958093]]></string>
-  	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 </resources>

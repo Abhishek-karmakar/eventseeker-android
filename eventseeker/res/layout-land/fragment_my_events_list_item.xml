@@ -163,7 +163,7 @@
 	                <TextView android:id="@+id/txtEvtTime"
 	                    android:layout_width="wrap_content"
 	                    android:layout_height="wrap_content"
-	                    android:text="Time"
+	                    android:text="@string/time"
 	                    android:textColor="@color/light_txt_txt_color_fragment_my_events_list_item"
 	                    android:textSize="@dimen/txt_evt_location_txt_size_fragment_my_events_list_item" />
 	

@@ -115,7 +115,7 @@ public class RecordApi extends Api {
 		uriBuilder.append("&moreInfo=fallbackimage&strip_html=name,description");
 		
 		setUri(uriBuilder.toString());
-		Log.d(TAG, "uri=" + getUri());
+		addLangParam = true;
 		return execute(RequestMethod.GET, null, null);
 	}
 }

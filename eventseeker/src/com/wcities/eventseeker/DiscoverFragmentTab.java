@@ -41,7 +41,7 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 	private EcoGallery ecoGallery;
 	private FeaturedEventsEcoGalleryAdapter featuredEventsEcoGalleryAdapter;
 
-	private String cityName = "Loading...";
+	private String cityName;
 	private TextView txtCityName;
 	private int txtCityNameWInLandscape;
 	
@@ -53,6 +53,7 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		cityName = getResources().getString(R.string.loading);
 	}
 
 	@Override

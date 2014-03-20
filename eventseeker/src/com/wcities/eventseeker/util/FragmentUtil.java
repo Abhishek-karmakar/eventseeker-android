@@ -75,9 +75,10 @@ public class FragmentUtil {
 	}
 	
 	public static void showLoginNeededForTrackingEventDialog(FragmentManager fm, Context context) {
+		Resources res = context.getResources();
 		GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance("Go to login?", 
-				"To track this event you need to first login with facebook or google from 'Sync Accounts' page.", 
-				context.getResources().getString(R.string.cancel), "Yes");
+				res.getString(R.string.first_login_to_track_events), 
+				res.getString(R.string.cancel), "Yes");
 		generalDialogFragment.show(fm, AppConstants.DIALOG_FRAGMENT_TAG_LOGIN_TO_TRACK_EVENT);
 	}
 }

@@ -319,7 +319,7 @@ public class EventApi extends Api {
 		
 		uri += "&link=enable&strip_html=name,description";
 		setUri(uri.toString());
-		Log.d(TAG, "uri=" + uri.toString());
+		addLangParam = true;
 		return execute(RequestMethod.GET, null, null);
 	}
 }
