@@ -6,7 +6,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -77,7 +76,7 @@ public class ArtistListAdapter<T> extends BaseAdapter {
 			
 			if (artist.getId() == AppConstants.INVALID_ID) {
 				convertView = LayoutInflater.from(mContext).inflate(R.layout.list_no_items_found, null);
-				((TextView)convertView).setText("No Artist Found.");
+				((TextView)convertView).setText(R.string.no_artist_found);
 				convertView.setTag("");
 		
 				return convertView;

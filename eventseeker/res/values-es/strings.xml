@@ -43,11 +43,11 @@
     <string name="no_items_found_pls_login">Please login with facebook or google from \'Sync Accounts\' page to see</string>
     <string name="pls_login_to_see_all_events_you_are_following">Por favor entrar a Facebook o Google desde la página \'Sincronizar Cuentas\' para ver todos los eventos que estás siguiendo.</string>
     <string name="pls_login_to_see_to_see_recommended_events">Por favor entrar a Facebook o Google desde la página \'Sincronizar Cuentas\' para ver los eventos recomendados a ti.</string>
-    <string name="pls_login_to_track_evt">To track this event you need to first login with facebook or google from \'Sync Accounts\' page.</string>
+    <string name="pls_login_to_track_evt">Para seguir este evento hay que entrar a Facebook o Google desde la página \'Sincronizar Cuentas\'.</string>
     <string name="pls_login_through_mobile_app">Please log in through mobile app.</string>
     <string name="pls_login_to_see_friends_activity">Por favor entrar a Facebook o Google desde la página \'Sincronizar Cuentas\' para ver la actividad de sus amigos. </string>
+	<string name="pls_login_to_see_artist_news">Por favor entrar a Facebook o Google desde la página \'Sincronizar Cuentas\' para ver las noticias de artista.</string>
     <string name="connection_lost">La conexión Internet no está en línea.</string>
-    <string name="first_login_to_track_events">Para seguir este evento hay que entrar a Facebook o Google desde la página \'Sincronizar Cuentas\'.</string>
     
     <!-- Strings used for navigation drawer list -->
     <string name="navigation_drawer_section_browse">Navegar</string>
@@ -107,7 +107,8 @@
 
     <!-- fragment_device_library.xml -->
     <string name="txt_service_desc_txt_fragment_device_library">Would you like the application to search your music library for artists that you can then follow? The artists will be placed under the \"Following\" section.</string>
-    
+    <string name="retrieve_artists">Recuperar los artistas</string>
+ 
     <!-- Strings used for event category titles -->
     <string name="evt_cat_concerts">Conciertos</string>
     <string name="evt_cat_theater">Teatro</string>
@@ -149,6 +150,9 @@
     <string name="facebook_link_unavailable">No hay un enlace Facebook disponible para este artista.</string>
     <string name="twitter_link_unavailable">No hay un enlace Twitter disponible para este artista.</string>
     <string name="web_link_unavailable">No hay un enlace Web disponible para este artista.</string>
+ 
+    <!-- Artists Adapter -->
+    <string name="no_artist_found">No encontró un artista</string>
  
     <!-- Artists News -->
     <string name="posted_a_picture">publicó un foto</string>
@@ -212,7 +216,8 @@
     <string name="add">Agregar</string>
     <string name="sending_like_request">Enviando una solicitud \'me gusta\'...</string>
     <string name="posting_comment">Colocando un comentario...</string>
-    
+ 	<string name="no_friends_activity_found">No encontró la actividad de los amigos</string>
+ 
    	<!-- My Events -->
     <string name="no_events_in_your_area">No hay eventos actualmente en su región. Sigue más artistas para empezar su agenda de eventos personalizada.</string>
 
@@ -225,6 +230,24 @@
     <!-- Discover -->
     <string name="set_start_date">Configurar la fecha de iniciar el evento</string>	
     <string name="loading">Cargando...</string>	
+ 
+    <!-- Get Started -->
+    <string name="skip">Ignorar</string>
+ 	<string name="signin_for_better_experience">Se permite una experiencia mejor al conectarse.</string>
+    <string name="couldnt_login_to_google_play_music">No podría conectar a la cuenta Google Play Music. Por favor averigüe que estás usando la cuenta verdadera de Google Play.</string>
+    <string name="why_login">¿Por que inicie la sesión?</string>
+    <string name="get_event_recommendations">Obtenga las recomendaciones del evento basadas en sus intereses</string>
+    <string name="stay_connected_with_friends">Quédate conectado a sus amigos y conoce quien va invitar a los eventos</string>
+ 
+    <!-- Last Fm -->
+    <string name="user_name_could_not_be_found">El nombre de usuario no podría ser encontrado</string>
+
+    <!-- MainAcitivity -->
+    <string name="error_this_action_couldnt_be_completed_at_this_time">Error, esta acción no puede ser completada en este momento.</string>
+ 
+    <!-- VenueDetails -->
+    <string name="phone_number_not_available">El número de teléfono no está disponible por este lugar.</string>
+    <string name="web_address_isnt_available">La dirección Web no está disponible por este lugar.</string>
  
     <!-- Common GOING, WANT TO & TICKETS -->
     <string name="going">Irse</string>

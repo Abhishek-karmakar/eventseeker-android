@@ -55,9 +55,9 @@
     <string name="pls_login_to_see_to_see_recommended_events">Please login with facebook or google from \'Sync Accounts\' page to see recommended events for you.</string>
     <string name="pls_login_to_track_evt">To track this event you need to first login with facebook or google from \'Sync Accounts\' page.</string>
     <string name="pls_login_through_mobile_app">Please log in through mobile app.</string>
-    <string name="pls_login_to_see_friends_activity">Please login with facebook or google from \'Sync Accounts\' page to see  your friends activity.</string>
+    <string name="pls_login_to_see_friends_activity">Please login with facebook or google from \'Sync Accounts\' page to see your friends activity.</string>
+    <string name="pls_login_to_see_artist_news">Please login with facebook or google from \'Sync Accounts\' page to see artist news.</string>
     <string name="connection_lost">The Internet connection appears to be offline.</string>
-    <string name="first_login_to_track_events">To track this event you need to first login with facebook or google from \'Sync Accounts\' page.</string>
 
     <!-- Strings used for navigation drawer list -->
     <string name="navigation_drawer_section_browse">BROWSE</string>
@@ -116,7 +116,8 @@
 
     <!-- fragment_device_library.xml -->
     <string name="txt_service_desc_txt_fragment_device_library">Would you like the application to search your music library for artists that you can then follow? The artists will be placed under the \"Following\" section.</string>
-
+    <string name="retrieve_artists">Retrieve Artists</string>
+ 
     <!-- Strings used for event category titles -->
     <string name="evt_cat_concerts">Concerts</string>
     <string name="evt_cat_theater">Theater</string>
@@ -157,6 +158,9 @@
     <string name="facebook_link_unavailable"></string>
     <string name="twitter_link_unavailable"></string>
     <string name="web_link_unavailable"></string>
+
+    <!-- Artists Adapter -->
+    <string name="no_artist_found">No Artist Found.</string>
  
     <!-- Artists News -->
     <string name="posted_a_picture">posted a new photo</string>
@@ -220,7 +224,8 @@
     <string name="add">Add</string>
     <string name="sending_like_request">Sending like request...</string>
     <string name="posting_comment">Colocando un comentario...</string>
-
+    <string name="no_friends_activity_found">No Friends Activity Found.</string>
+ 
     <!-- My Events -->
     <string name="no_events_in_your_area">No events currently in your area. Follow more artists to start your personalized event calendar.</string>
 
@@ -233,6 +238,24 @@
     <!-- Discover -->
     <string name="set_start_date">Set Event Start Date</string>	
     <string name="loading">Loading...</string>
+
+    <!-- Get Started -->
+    <string name="skip">Skip</string>
+    <string name="signin_for_better_experience">Signing in allows for a better experience.</string>
+    <string name="couldnt_login_to_google_play_music">Could not login to google play music account. Please make sure you are using right google play music account.</string>
+    <string name="why_login">Why Login?</string>
+    <string name="get_event_recommendations">Get event recommendations based on your interests</string>
+    <string name="stay_connected_with_friends">Stay connected with friends and know who to invite to events</string>
+
+    <!-- Last Fm -->
+    <string name="user_name_could_not_be_found">User name could not be found</string>
+
+    <!-- MainAcitivity -->
+    <string name="error_this_action_couldnt_be_completed_at_this_time">Error, this action cannot be completed at this time.</string>
+
+    <!-- VenueDetails -->
+    <string name="phone_number_not_available">Phone number is not available for this venue.</string>
+    <string name="web_address_isnt_available">Web address is not available for this venue.</string>
  
     <!-- Common GOING, WANT TO & TICKETS -->
     <string name="going">GOING</string>

@@ -134,7 +134,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 				convertView.setTag("");
 		
 				if (((EventSeekr)mContext.getApplicationContext()).getWcitiesId() == null) {
-					((TextView)convertView).setText(mContext.getResources().getString(R.string.no_items_found_pls_login) + " artist news.");
+					((TextView)convertView).setText(mContext.getResources().getString(R.string.pls_login_to_see_artist_news));
 					
 				} else {
 					((TextView)convertView).setText(R.string.no_artist_news_found);

@@ -93,7 +93,7 @@ public class VenueEventsFragment extends Fragment implements OnClickListener {
 				startActivity(Intent.createChooser(intent, "Call..."));
 				
 			} else {
-				Toast.makeText(FragmentUtil.getActivity(this), "Phone number is not available for this venue.", 
+				Toast.makeText(FragmentUtil.getActivity(this), R.string.phone_number_not_available, 
 						Toast.LENGTH_SHORT).show();
 			}
 			break;

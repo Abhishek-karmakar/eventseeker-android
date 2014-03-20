@@ -1042,7 +1042,7 @@ public class MainActivity extends ActionBarActivity implements
 
 		} catch (ActivityNotFoundException e) {
 			Toast.makeText(getApplicationContext(),
-					"Error, this action cannot be completed at this time.",
+					R.string.error_this_action_couldnt_be_completed_at_this_time,
 					Toast.LENGTH_SHORT).show();
 		}
 	}
