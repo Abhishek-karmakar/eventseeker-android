@@ -39,7 +39,7 @@
     <string name="title_get_started">Get Started</string>
     <string name="title_about_us">About Us</string>
     <string name="title_eula">EULA</string>
-    <string name="title_rep_code">Rep Code</string>
+    <string name="title_rep_code">@string/rep_code</string>
     <string name="title_search_results">Search Results</string>
     <string name="title_google_play">Google Play</string>
     <string name="title_device_library">@string/service_device_library</string>
@@ -225,6 +225,15 @@
     <string name="sending_like_request">Sending like request...</string>
     <string name="posting_comment">Colocando un comentario...</string>
     <string name="no_friends_activity_found">No Friends Activity Found.</string>
+    
+    <!-- RepCodeFragment -->
+    <string name="submit">Submit</string>
+    <string name="rep_code">Rep Code</string>
+    <string name="rep_code_response_other_account_already_synced">Some other account is already synced with this device.</string>
+ 	<string name="rep_code_response_successfully_submitted">Successfully submitted!</string>
+ 	<string name="rep_code_response_database_insertion_error">Error occurred while processing this rep code.</string>
+ 	<string name="rep_code_response_invalid_rep_code">Invalid Rep Code!</string>
+ 	<string name="rep_code_response_unknown_error">Could not complete the request. Please retry.</string>
  
     <!-- My Events -->
     <string name="no_events_in_your_area">No events currently in your area. Follow more artists to start your personalized event calendar.</string>
@@ -256,6 +265,12 @@
     <!-- VenueDetails -->
     <string name="phone_number_not_available">Phone number is not available for this venue.</string>
     <string name="web_address_isnt_available">Web address is not available for this venue.</string>
+    
+    <!-- include_sync_account.xml -->
+ 	<string name="connect_other_accounts">Connect Other Accounts</string>
+ 	
+ 	<!-- EventseekerWidgetProvider -->
+ 	<string name="loading_events">Loading Events...</string>
  
     <!-- Common GOING, WANT TO & TICKETS -->
     <string name="going">GOING</string>

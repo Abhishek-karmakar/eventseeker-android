@@ -35,12 +35,12 @@ public class EventseekerWidgetProvider extends AppWidgetProvider {
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
 			int[] appWidgetIds) {
-		Log.d(TAG, "onUpdate()");
+		//Log.d(TAG, "onUpdate()");
 		EventseekerWidgetList eventseekerWidgetList = EventseekerWidgetList.getInstance();
 		for (int widgetId : appWidgetIds) {
-			Log.d(TAG, "widgetId = " + widgetId);
+			//Log.d(TAG, "widgetId = " + widgetId);
 			if (!eventseekerWidgetList.contains(widgetId)) {
-				Log.d(TAG, "add widget into eventseekerWidgetList = " + eventseekerWidgetList);
+				//Log.d(TAG, "add widget into eventseekerWidgetList = " + eventseekerWidgetList);
 				eventseekerWidgetList.addWidget(new EventseekerWidget(widgetId));
 			}
 		}
@@ -61,12 +61,12 @@ public class EventseekerWidgetProvider extends AppWidgetProvider {
 		//Log.d(TAG, "onReceive() action = " + action);
 		
 		if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-			Log.d(TAG, "CONNECTIVITY_ACTION");
+			//Log.d(TAG, "CONNECTIVITY_ACTION");
 			ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		    NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
 		    
 		    if (activeNetInfo != null & EventseekerWidgetList.getInstance().getEvents().isEmpty()) {
-		    	Log.d(TAG, "activeNetInfo != null");
+		    	//Log.d(TAG, "activeNetInfo != null");
 		    	callOnUpdate(context);
 		    }
 			
@@ -92,7 +92,7 @@ public class EventseekerWidgetProvider extends AppWidgetProvider {
 			EventseekerWidgetList eventseekerWidgetList = EventseekerWidgetList.getInstance();
 			EventseekerWidget widget = eventseekerWidgetList.getWidget(widgetId);
 			if (widget == null) {
-				Log.d(TAG, "widget == null for eventseekerWidgetList = " + eventseekerWidgetList);
+				//Log.d(TAG, "widget == null for eventseekerWidgetList = " + eventseekerWidgetList);
 				callOnUpdate(context);
 				
 			} else {
@@ -160,7 +160,7 @@ public class EventseekerWidgetProvider extends AppWidgetProvider {
 	}
 	
 	private void callOnUpdate(Context context) {
-		Log.d(TAG, "callOnUpdate()");
+		//Log.d(TAG, "callOnUpdate()");
 		Intent updateIntent = buildUpdateIntent(context);
 		context.sendBroadcast(updateIntent);
 	}
@@ -171,7 +171,7 @@ public class EventseekerWidgetProvider extends AppWidgetProvider {
 		int[] widgetIds = widgetManager.getAppWidgetIds(widgetComponent);
 		
 		RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_loading);
-		remoteViews.setTextViewText(R.id.btnLoading, "Loading Events...");  
+		remoteViews.setTextViewText(R.id.btnLoading, context.getResources().getString(R.string.loading_events));  
 		widgetManager.updateAppWidget(widgetIds, remoteViews);
 		
 		Intent updateIntent = new Intent();
@@ -182,7 +182,7 @@ public class EventseekerWidgetProvider extends AppWidgetProvider {
 	}
 	
 	private void loadEvents(Context context) {
-		Log.d(TAG, "loadEvents()");
+		//Log.d(TAG, "loadEvents()");
 		Intent intent = new Intent(context.getApplicationContext(), EventseekerWidgetService.class); 
 		intent.putExtra(BundleKeys.LOAD_TYPE, LoadType.LOAD_EVENTS);
         context.startService(intent);

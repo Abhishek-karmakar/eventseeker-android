@@ -229,7 +229,12 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			
 			listAdapter = new AccountsListAdapter(FragmentUtil.getActivity(this));
 			
-			loadAvailableService();
+			if (((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId(this) != null) {
+				loadAvailableService();
+				
+			} else {
+				showProgress();
+			}
 			//loadServiceAccountItems();
 			
 		} else {
@@ -939,7 +944,10 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	@Override
 	public void onTaskCompleted(Object... params) {
 		//Log.d(TAG, "onTaskCompleted()");
-		if (params[0] instanceof String) {
+		if (params.length == 0) {
+			loadAvailableService();
+			
+		} else if (params[0] instanceof String) {
 			//Log.d(TAG, "onTaskCompleted(), string");
 			String authToken = (String) params[0];
 			

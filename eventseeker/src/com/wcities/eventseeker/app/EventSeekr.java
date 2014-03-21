@@ -33,6 +33,7 @@ import com.wcities.eventseeker.gcm.GcmUtil;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.ConnectionFailureListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
+import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FileUtil;
@@ -122,7 +123,7 @@ public class EventSeekr extends Application {
 			Thread.setDefaultUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(this));
 		}
 		
-		new GcmUtil(EventSeekr.this).registerGCMInBackground();
+		new GcmUtil(EventSeekr.this).registerGCMInBackground(false);
 		DeviceUtil.getLatLon(this);
 
 		isTablet = getResources().getBoolean(R.bool.is_tablet);
@@ -413,6 +414,20 @@ public class EventSeekr extends Application {
 		}
 		return wcitiesId;
 	}
+	
+	public String getWcitiesId(AsyncTaskListener<Object> listener) {
+		if (wcitiesId == null) {
+			SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+			wcitiesId = pref.getString(SharedPrefKeys.WCITIES_USER_ID, null);
+		}
+
+		// generate wcitiesId if not found in shared preference
+		if (wcitiesId == null) {
+			GetWcitiesId getWcitiesId = new GetWcitiesId(listener);
+			AsyncTaskUtil.executeAsyncTask(getWcitiesId, true);
+		}
+		return wcitiesId;
+	}
 
 	private void updateWcitiesId(String wcitiesId) {
 		this.wcitiesId = wcitiesId;
@@ -423,7 +438,7 @@ public class EventSeekr extends Application {
 		editor.putString(SharedPrefKeys.WCITIES_USER_ID, wcitiesId);
 		editor.commit();
 
-		new GcmUtil(this).registerGCMInBackground();
+		new GcmUtil(this).registerGCMInBackground(true);
 	}
 	
 	public void removeWcitiesId() {
@@ -626,6 +641,10 @@ public class EventSeekr extends Application {
 		private LoginType loginType;
 		private String accountName;
 		
+		public GetWcitiesId(AsyncTaskListener<Object> listener) {
+			this.listener = listener;
+		}
+
 		public GetWcitiesId(AsyncTaskListener<Object> listener, LoginType loginType, String accountName) {
 			this.listener = listener;
 			this.loginType = loginType;
@@ -642,7 +661,10 @@ public class EventSeekr extends Application {
 				UserInfoApiJSONParser jsonParser = new UserInfoApiJSONParser();
 				String userId = jsonParser.getUserId(jsonObject);
 
-				if (loginType == LoginType.facebook) {
+				if (loginType == null) {
+					return userId;
+					
+				} else if (loginType == LoginType.facebook) {
 					userInfoApi.setFbUserId(getFbUserId());
 					userInfoApi.setFbEmailId(getFbEmailId());
 					

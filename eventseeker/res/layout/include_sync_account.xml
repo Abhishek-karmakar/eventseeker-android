@@ -56,7 +56,7 @@
         android:background="@color/btn_fb_sign_up_bg"
         android:paddingLeft="@dimen/btn_connect_other_account_pad_l_r_fragment_sync_account"
         android:paddingRight="@dimen/btn_connect_other_account_pad_l_r_fragment_sync_account"
-        android:text="Connect Other Accounts"
+        android:text="@string/connect_other_accounts"
         android:textColor="@android:color/white"
         android:textSize="@dimen/btn_connect_accounts_txt_size_fragment_sync_account" />
 

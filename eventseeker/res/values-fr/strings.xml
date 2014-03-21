@@ -28,7 +28,7 @@
     <string name="title_get_started">Démarrez</string>
     <string name="title_about_us">A propos de nous</string>
     <string name="title_eula">EULA</string>
-    <string name="title_rep_code">Rep Code</string>
+    <string name="title_rep_code">@string/rep_code</string>
     <string name="title_search_results">Résultats de la recherche</string>
     <string name="title_google_play">Google Play</string>
     <string name="title_device_library">@string/service_device_library</string>
@@ -115,9 +115,9 @@
     <string name="evt_cat_sports">Sports</string>
     <string name="evt_cat_arts_museums">Arts et Musées</string>
     <string name="evt_cat_dance">Danse</string>
-    <string name="evt_cat_clubbing_nightlife">Vie Nocturne</string>
+    <string name="evt_cat_clubbing_nightlife">Boîtes de Nuit &amp; Vie Nocturne</string>
     <string name="evt_cat_educational">Éducatif</string>
-    <string name="evt_cat_festivals_fairs">Festivals</string>
+    <string name="evt_cat_festivals_fairs">Festivals et Foires</string>
     <string name="evt_cat_family">Famille</string>
     <string name="evt_cat_community">Communauté</string>
     <string name="evt_cat_business_tech">Entreprise et Technologie</string>
@@ -217,6 +217,15 @@
     <string name="sending_like_request">Demande "J'aime" Envoyée</string>
     <string name="posting_comment">En train de poster votre commentaire.</string>
  	<string name="no_friends_activity_found">Aucune activité à afficher</string>
+ 	
+ 	<!-- RepCodeFragment -->
+ 	<string name="submit">Soumettre</string>
+ 	<string name="rep_code">Code Rep</string>
+ 	<string name="rep_code_response_other_account_already_synced">Un autre compte est déjà synchronisé sur cet appareil.</string>
+ 	<string name="rep_code_response_successfully_submitted">Soumis avec succès!</string>
+ 	<string name="rep_code_response_database_insertion_error">Une erreur est survenue lors du traitement de ce code rep.</string>
+ 	<string name="rep_code_response_invalid_rep_code">Code Rep Non Valide!</string>
+ 	<string name="rep_code_response_unknown_error">Impossible de traiter votre demande. Veuillez réessayer.</string>
  
    	<!-- My Events -->
     <string name="no_events_in_your_area">Il n\'y a aucun événement dans votre région. Suivez davantage d\'artistes pour créer votre agenda personnalisé.</string>
@@ -249,6 +258,12 @@
     <string name="phone_number_not_available">Un numéro de téléphone n\'est pas disponible pour ce lieu.</string>
     <string name="web_address_isnt_available">Un lien n\'est pas disponible pour ce lieu.</string>
  
+    <!-- include_sync_account.xml -->
+ 	<string name="connect_other_accounts">Connecter Autres Comptes</string>
+ 	
+ 	<!-- EventseekerWidgetProvider -->
+ 	<string name="loading_events">Chargement en cours...</string>
+ 	
     <!-- Common GOING, WANT TO & TICKETS -->
     <string name="going">Aller</string>
     <string name="want_to">Vouloir</string>

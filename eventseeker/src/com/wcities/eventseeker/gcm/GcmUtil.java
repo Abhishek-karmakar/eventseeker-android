@@ -32,7 +32,7 @@ public class GcmUtil {
 		this.eventSeekr = eventSeekr;
 	}
 
-	public void registerGCMInBackground() {
+	public void registerGCMInBackground(final boolean forceNewRegistration) {
     	Log.d(TAG, "registerGCMInBackground()");
 
 		new AsyncTask<Void, Void, Void>() {
@@ -46,7 +46,7 @@ public class GcmUtil {
 	        		String regId = getRegistrationId();
 		    		//Log.d(TAG, "regId = " + regId);
 		    		
-		            if (regId.length() == 0) {
+		            if (regId.length() == 0 || forceNewRegistration) {
 		                register();
 		            }
 	        	}

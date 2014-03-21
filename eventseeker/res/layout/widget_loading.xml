@@ -7,7 +7,7 @@
     <Button android:id="@+id/btnLoading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Loading Events..."
+        android:text="@string/loading_events"
         android:textColor="@android:color/black"
         android:background="@drawable/story_space" />
 

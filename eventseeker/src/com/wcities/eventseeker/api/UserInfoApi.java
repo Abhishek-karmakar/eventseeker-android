@@ -6,8 +6,10 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.res.Resources;
 import android.util.Log;
 
+import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.constants.AppConstants;
 
 public class UserInfoApi extends Api {
@@ -54,26 +56,26 @@ public class UserInfoApi extends Api {
 	}
 	
 	public static enum RepCodeResponse {
-		OTHER_ACCOUNT_ALREADY_SYNCED(0, "Some other account is already synced with this device."),
-		SUCCESSFULLY_SUBMITTED(1, "Successfully submitted!"),
-		DATABASE_INSERTION_ERROR(-1, "Error occurred while processing this rep code."),
-		INVALID_REP_CODE(2, "Invalid Rep Code!"),
-		UNKNOWN_ERROR(-2, "Could not complete the request. Please retry.");
+		OTHER_ACCOUNT_ALREADY_SYNCED(0, R.string.rep_code_response_other_account_already_synced),
+		SUCCESSFULLY_SUBMITTED(1, R.string.rep_code_response_successfully_submitted),
+		DATABASE_INSERTION_ERROR(-1, R.string.rep_code_response_database_insertion_error),
+		INVALID_REP_CODE(2, R.string.rep_code_response_invalid_rep_code),
+		UNKNOWN_ERROR(-2, R.string.rep_code_response_unknown_error);
 		
 		private int repCode;
-		private String msg;
+		private int msgId;
 		
-		private RepCodeResponse(int repCode, String msg) {
+		private RepCodeResponse(int repCode, int msgId) {
 			this.repCode = repCode;
-			this.msg = msg;
+			this.msgId = msgId;
 		}
 
 		public int getRepCode() {
 			return repCode;
 		}
 
-		public String getMsg() {
-			return msg;
+		public String getMsg(Resources res) {
+			return res.getString(msgId);
 		}
 		
 		public static RepCodeResponse getRepCodeResponse(int repCode) {

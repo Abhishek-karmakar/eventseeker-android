@@ -6,9 +6,9 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -106,8 +106,8 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
 			RepCodeResponse repCodeResponse = RepCodeResponse.getRepCodeResponse(result);
-			Toast.makeText(FragmentUtil.getActivity(RepCodeFragment.this), repCodeResponse.getMsg(), 
-					Toast.LENGTH_SHORT).show();
+			Activity activity = FragmentUtil.getActivity(RepCodeFragment.this);
+			Toast.makeText(activity, repCodeResponse.getMsg(activity.getResources()), Toast.LENGTH_SHORT).show();
 			isSubmitting = false;
 			setVisibility();
 		}
