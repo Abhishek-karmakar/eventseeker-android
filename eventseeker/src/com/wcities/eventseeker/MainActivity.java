@@ -137,9 +137,9 @@ public class MainActivity extends ActionBarActivity implements
 		/**
 		 * Locale changes are Activity specific i.e. after the Activity gets destroyed, the Locale changes
 		 * associated with that activity will also get destroyed. So, if Activity was destroyed due to
-		 * configuration changes(like orientation change) then the Newer Activity will initialize itself with
-		 * the Device specific Locale. So, each and every time when activity gets initialized it should
-		 * also initialize its Locale from SharedPref.
+		 * configuration changes(like orientation change) then the Newer Activity will initialise itself with
+		 * the Device specific Locale. So, each and every time when activity gets initialised it should
+		 * also initialise its Locale from SharedPref.
 		 */
 		((EventSeekr) getApplication()).setDefaultLocale();
 		
