@@ -131,13 +131,13 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 		case R.id.btnSubmit:
 			EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(this).getApplication();
 			if (eventSeekr.getWcitiesId() == null) {
-				Toast.makeText(FragmentUtil.getActivity(this), "Please login with facebook or google from \'Sync Accounts\' page.", Toast.LENGTH_SHORT).show();
+				Toast.makeText(FragmentUtil.getActivity(this), R.string.pls_login, Toast.LENGTH_SHORT).show();
 				return;
 			}
 			
 			String repCode = edtRepCode.getText().toString();
 			if (repCode == null || repCode.length() == 0) {
-				Toast.makeText(FragmentUtil.getActivity(this), "Please enter a valid rep code.", Toast.LENGTH_SHORT).show();
+				Toast.makeText(FragmentUtil.getActivity(this), R.string.rep_code_enter_a_valid_repcode, Toast.LENGTH_SHORT).show();
 				return;
 			}
 			

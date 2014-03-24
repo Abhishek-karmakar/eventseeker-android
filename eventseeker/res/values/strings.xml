@@ -57,8 +57,17 @@
     <string name="pls_login_through_mobile_app">Please log in through mobile app.</string>
     <string name="pls_login_to_see_friends_activity">Please login with facebook or google from \'Sync Accounts\' page to see your friends activity.</string>
     <string name="pls_login_to_see_artist_news">Please login with facebook or google from \'Sync Accounts\' page to see artist news.</string>
+    <string name="pls_login">Please login with facebook or google from \'Sync Accounts\' page.</string>
     <string name="connection_lost">The Internet connection appears to be offline.</string>
-
+    <string name="no_internet_connectivity">No Internet Connectivity</string>
+    <string name="yes">Yes</string>
+    <string name="got_to_login">Go to login?</string>
+    <string name="add_to_calender">Add to calendar</string>
+    <string name="select_calender">Select calendar</string>
+    <string name="event_added_to_calender_successfully">Event added to calendar successfully!</string>
+    <string name="event_not_found">Event not found to add to the calendar.</string>
+    <string name="can_not_add_event_to_calender">Cannot add this event to calendar due to unknown schedule.</string>
+	
     <!-- Strings used for navigation drawer list -->
     <string name="navigation_drawer_section_browse">BROWSE</string>
     <string name="navigation_drawer_item_discover">@string/title_discover</string>
@@ -234,6 +243,7 @@
  	<string name="rep_code_response_database_insertion_error">Error occurred while processing this rep code.</string>
  	<string name="rep_code_response_invalid_rep_code">Invalid Rep Code!</string>
  	<string name="rep_code_response_unknown_error">Could not complete the request. Please retry.</string>
+ 	<string name="rep_code_enter_a_valid_repcode">Please enter a valid rep code.</string>
  
     <!-- My Events -->
     <string name="no_events_in_your_area">No events currently in your area. Follow more artists to start your personalized event calendar.</string>
@@ -298,6 +308,9 @@
 
     <!-- Common -->
     <string name="no_event_found">No Event Found.</string>
+
+    <!-- RdioFragment -->
+    <string name="user_name_or_email">User Name or Email</string>
  
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>
