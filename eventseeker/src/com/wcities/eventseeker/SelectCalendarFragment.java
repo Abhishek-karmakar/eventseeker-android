@@ -13,6 +13,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,12 +33,14 @@ public class SelectCalendarFragment extends DialogFragment {
 	private static final int DEFAULT_START_HRS = 9;
 	
 	private Event event;
+
+	private Resources res;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
-		
+		res = getResources();
 		if (event == null) {
 			event = (Event) getArguments().getSerializable(BundleKeys.EVENT);
 		}
@@ -58,7 +61,7 @@ public class SelectCalendarFragment extends DialogFragment {
 			public void onClick(DialogInterface dialog, int which) {
 				String msg;
 				if (event.getSchedule() == null || event.getSchedule().getDates().size() == 0) {
-					msg = "Cannot add this event to calendar due to unknown schedule.";
+					msg = res.getString(R.string.can_not_add_event_to_calender);
 					
 				} else {
 					ContentValues values = new ContentValues();
@@ -103,7 +106,7 @@ public class SelectCalendarFragment extends DialogFragment {
 				Toast.makeText(FragmentUtil.getActivity(SelectCalendarFragment.this), msg, Toast.LENGTH_LONG).show();
 				FragmentUtil.getActivity(SelectCalendarFragment.this).finish();
 			}
-		}, CALENDARS_COLUMN_NAME).setTitle("Select calendar")
+		}, CALENDARS_COLUMN_NAME).setTitle(res.getString(R.string.select_calender))
 		.setNegativeButton("Cancel", new OnClickListener() {
 			
 			@Override

@@ -48,7 +48,15 @@
     <string name="pls_login_to_see_friends_activity">Se faz favor, login no Facebook o Google da página \'Sincronizar Contas\' para ver as atividades dos amigos.</string>
     <string name="pls_login_to_see_artist_news">Se faz favor, login no Facebook ou Google da página \'Sincronizar Contas\' para ver as notícias de artista.</string>
     <string name="connection_lost">A ligação de Internet aparece fora de linha.</string>
-    
+    <string name="no_internet_connectivity">Internet desligado</string>
+    <string name="yes">sim</string>
+    <string name="got_to_login">Ir ao login?</string>
+	<string name="add_to_calender">Adicionar ao calendário</string>
+	<string name="select_calender">Escolher o calendário</string>
+	<string name="event_added_to_calender_successfully">Evento adicionado ao calendário</string>
+	<string name="event_not_found">Não se tem o evento para adicionar ao calendário.</string>
+	<string name="can_not_add_event_to_calender">Este evento não se pode adicionar ao calendário devido a programação desconhecida.</string>
+	
     <!-- Strings used for navigation drawer list -->
     <string name="navigation_drawer_section_browse">Navegar</string>
     <string name="navigation_drawer_item_discover">@string/title_discover</string>

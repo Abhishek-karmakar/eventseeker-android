@@ -32,7 +32,7 @@ public class CalendarActivity extends ActionBarActivity {
 		    	selectCalendarFragment.show(getSupportFragmentManager(), SelectCalendarFragment.class.getSimpleName());
 		    	
 		    } else {
-		    	Toast.makeText(this, "Event not found to add to the calendar.", Toast.LENGTH_LONG).show();
+		    	Toast.makeText(this, R.string.event_not_found, Toast.LENGTH_LONG).show();
 		    	finish();
 		    }
 	    }

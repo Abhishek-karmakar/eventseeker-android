@@ -48,7 +48,9 @@
     <string name="pls_login_to_see_friends_activity">Bitte melden Sie sich mit Facebook oder Google über die "Accounts synchronisieren"-Seite an, um die Aktivitäten von Freunden zu sehen. </string>
 	<string name="pls_login_to_see_artist_news">Bitte melden Sie sich mit Facebook oder Google über die "Accounts synchronisieren"-Seite an, um die Neuigkeiten des Künstlers zu sehen.</string>
     <string name="connection_lost">Die Internetverbindung scheint offline zu sein.</string>
-    
+    <string name="yes">Ja</string>
+    <string name="got_to_login">Zur Anmeldung gehen?</string>
+			
     <!-- Strings used for navigation drawer list -->
     <string name="navigation_drawer_section_browse">Stöbern</string>
     <string name="navigation_drawer_item_discover">@string/title_discover</string>

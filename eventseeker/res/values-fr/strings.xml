@@ -48,7 +48,10 @@
     <string name="pls_login_to_see_friends_activity">Connectez-vous sur Facebook ou Google de la page Synchroniser Les Compters pour afficher votre activité d\'amis</string>
 	<string name="pls_login_to_see_artist_news">Connectez-vous sur Facebook ou Google de la page Synchroniser Les Comptes pour afficher les nouveautés d\'artistes.</string>
     <string name="connection_lost">Vous êtes hors connexion.</string>
-    
+    <string name="yes">oui</string>
+    <string name="got_to_login">Afficher la page de connéxion?</string>
+	<string name="add_to_calender">Ajouter</string>
+			
     <!-- Strings used for navigation drawer list -->
     <string name="navigation_drawer_section_browse">Naviguer</string>
     <string name="navigation_drawer_item_discover">@string/title_discover</string>

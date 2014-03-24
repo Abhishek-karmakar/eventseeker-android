@@ -43,7 +43,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         
         <activity android:name="com.wcities.eventseeker.CalendarActivity"
-            android:label="Add to calendar"
+            android:label="@string/add_to_calender"
             android:icon="@drawable/calendar"
             android:exported="false">
 		    <intent-filter>
