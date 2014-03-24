@@ -103,7 +103,8 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 			statusCallback = new SessionStatusCallback();
 			
 			Context appContext = FragmentUtil.getActivity(this).getApplicationContext();
-			if (!FbUtil.hasUserLoggedInBefore(appContext) && !GPlusUtil.hasUserLoggedInBefore(appContext)) {
+			if (((EventSeekr)appContext).getWcitiesId() == null) {
+			//if (!FbUtil.hasUserLoggedInBefore(appContext) && !GPlusUtil.hasUserLoggedInBefore(appContext)) {
 				Log.d(TAG, "not logged in");
 				Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
 				
