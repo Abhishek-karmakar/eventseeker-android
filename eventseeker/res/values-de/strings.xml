@@ -73,11 +73,6 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="action_settings">@string/menu_settings</string>
 
-    <!-- activity_artist_details -->
-    <string name="txt_friends_section_title_txt_activity_artist_details">Friends liking this artist</string>
-    <string name="btn_more_txt_more_activity_artist_details">More</string>
-    <string name="btn_more_txt_less_activity_artist_details">Less</string>
-
     <!-- ConnectAccountsFragment -->
     <!--
     Any value chandges in ConnectAccountsFragment's below strings should also needs to be updated in 
@@ -127,10 +122,6 @@
     
     <string name="plus_generic_error">Sign in with Google is not available.</string>
 
-    <string name="are_you_sure">Are you sure ?</string>
-    <string name="already_signed_in_with_google_account">You are already signed in with Google account. Would you like to sign out from Google and sign in with Facebook account?</string>
-    <string name="already_signed_in_with_facebook_account">You are already signed in with Facebook account. Would you like to sign out from Facebook and sign in with Google account?</string>
-    
     <!-- About us -->
     <string name="seek_share_live">Suchen. Teilen. Leben</string>
     <string name="eventseeker_desc">eventseeker macht das Entdecken von Künstlern und Veranstaltungen einfach und gesellig. Wir geben Ihnen das Mittel um nie wieder eine Veranstaltung zu verpassen.</string>

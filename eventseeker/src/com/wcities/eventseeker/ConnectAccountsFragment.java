@@ -689,7 +689,11 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				if (gPlusSignedIn) {
 					GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
 							res.getString(R.string.are_you_sure),
-							res.getString(R.string.already_signed_in_with_google_account),
+							/*res.getString(R.string.already_signed_in_with_google_account),*/
+							/**
+							 * replace this string in above string id
+							 */
+							"You are already signed in with Google account. Would you like to sign out from Google and sign in with Facebook account?",
 							TXT_BTN_CANCEL, "Ok");
 					generalDialogFragment.show(getChildFragmentManager(), DIALOG_ALREADY_LOGGED_IN_WITH_OTHER_ACCOUNT);
 					return;
@@ -712,7 +716,11 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				if (fbLoggedIn) {
 					GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
 							res.getString(R.string.are_you_sure),
-							res.getString(R.string.already_signed_in_with_facebook_account),
+							/*res.getString(R.string.already_signed_in_with_facebook_account),*/
+							/**
+							 * replace this string in above string id
+							 */
+							"You are already signed in with Facebook account. Would you like to sign out from Facebook and sign in with Google account?",
 							TXT_BTN_CANCEL, "Ok");
 					generalDialogFragment.show(getChildFragmentManager(), DIALOG_ALREADY_LOGGED_IN_WITH_OTHER_ACCOUNT);
 					return;
