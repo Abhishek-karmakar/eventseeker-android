@@ -79,11 +79,6 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="action_settings">@string/menu_settings</string>
 
-    <!-- activity_artist_details -->
-    <string name="txt_friends_section_title_txt_activity_artist_details">Friends liking this artist</string>
-    <string name="btn_more_txt_more_activity_artist_details">More</string>
-    <string name="btn_more_txt_less_activity_artist_details">Less</string>
-
     <!-- ConnectAccountsFragment -->
     <!--
     Any value chandges in ConnectAccountsFragment's below strings should also needs to be updated in 
