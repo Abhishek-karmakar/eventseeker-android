@@ -50,7 +50,7 @@
     <string name="connection_lost">La conexión Internet no está en línea.</string>
     <string name="no_internet_connectivity">Internet desconectado</string>
     <string name="yes">sí</string>
-    <string name="got_to_login">¿Iniciar la sesión?</string>
+    <string name="go_to_login">¿Iniciar la sesión?</string>
 	<string name="add_to_calender">Añadir a la agenda</string>
 	<string name="select_calender">Elegir la agenda</string>
 	<string name="event_added_to_calender_successfully">Evento añadido a la agenda exitosamente</string>
@@ -103,7 +103,7 @@
     <string name="google_sign_in">Inicie Google Plus</string>
     <string name="google_sign_out">Desconectarse de Google Plus</string>
     
-    <string name="pls_login">Por favor inicie Facebook o Google antes de sincronizar las cuentas de otros servicios</string>    
+    <string name="pls_login">Por favor inicie Facebook o Google antes de sincronizar las cuentas de otros servicios.</string>    
     <string name="syncing_your_acc">Sincronizando su cuenta... Espere por favor...</string>    
     <string name="are_you_sure">¿Estás seguro?</string>    
     <string name="connecting_account_allow_us">La conexión de las cuentas nos deja proporcionar las alertas relevantes de forma instantánea.</string>    

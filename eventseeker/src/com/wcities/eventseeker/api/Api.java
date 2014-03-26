@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import android.util.Log;
 
 import com.wcities.eventseeker.LanguageFragment.Locales;
+import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.constants.AppConstants;
 
 public abstract class Api {
@@ -127,9 +128,14 @@ public abstract class Api {
 			wr.flush();
 			wr.close();
 		}
-		
+		/*if (uri.contains(Type.myevents.name())) {
+			Log.d(TAG, "b4 load time = " + (System.currentTimeMillis() / 1000));
+		}*/
 		try {
 			InputStream in = new BufferedInputStream(conn.getInputStream());
+			/*if (uri.contains(Type.myevents.name())) {
+				Log.d(TAG, "after load time = " + (System.currentTimeMillis() / 1000));
+			}*/
 			String result = readStream(in);
 			jsonObject = new JSONObject(result);
 			return jsonObject;

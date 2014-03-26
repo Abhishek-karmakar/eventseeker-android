@@ -148,6 +148,20 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 	}
 	
 	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		
+		/**
+		 * Even without signing in generate WCitesId  
+		 * 
+		 * Writing this in onActivityCreated() & not in onCreate() because it's possible to have very fast 
+		 * net generating wcitiesId before code reaches onCreateView() which in turn navigate directly to 
+		 * discover screen rather than displaying this get started screen.
+		 */
+        ((EventSeekr) FragmentUtil.getActivity(this).getApplication()).getWcitiesId(null);
+	}
+	
+	@Override
     public void onStart() {
 		//Log.d(TAG, "onStart()");
         super.onStart();

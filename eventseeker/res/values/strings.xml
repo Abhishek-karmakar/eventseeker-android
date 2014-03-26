@@ -57,11 +57,11 @@
     <string name="pls_login_through_mobile_app">Please log in through mobile app.</string>
     <string name="pls_login_to_see_friends_activity">Please login with facebook or google from \'Sync Accounts\' page to see your friends activity.</string>
     <string name="pls_login_to_see_artist_news">Please login with facebook or google from \'Sync Accounts\' page to see artist news.</string>
-    <string name="pls_login">Please login with facebook or google from \'Sync Accounts\' page.</string>
+    <string name="pls_login_to_submit_repcode">Please login with facebook or google from \'Sync Accounts\' page.</string>
     <string name="connection_lost">The Internet connection appears to be offline.</string>
     <string name="no_internet_connectivity">No Internet Connectivity</string>
     <string name="yes">Yes</string>
-    <string name="got_to_login">Go to login?</string>
+    <string name="go_to_login">Go to login?</string>
     <string name="add_to_calender">Add to calendar</string>
     <string name="select_calender">Select calendar</string>
     <string name="event_added_to_calender_successfully">Event added to calendar successfully!</string>
@@ -113,7 +113,7 @@
     <string name="google_sign_in">Google Sign In</string>
     <string name="google_sign_out">Google Sign Out</string>
     
-    <string name="pls_login">Please login with facebook or google before you sync accounts from other services</string>    
+    <string name="pls_login">Please login with facebook or google before you sync accounts from other services.</string>    
     <string name="syncing_your_acc">Syncing your account...Please Wait...</string>    
     <string name="are_you_sure">Are you sure ?</string>    
     <string name="connecting_account_allow_us">Connecting accounts allows us to provide relevant alerts instantly.</string>    
@@ -164,9 +164,9 @@
     <string name="videos">Videos</string>
     <string name="friends_who_like">Friends Who Like</string>
     <string name="no_artist_news_found">No Artist News Found.</string>
-    <string name="facebook_link_unavailable"></string>
-    <string name="twitter_link_unavailable"></string>
-    <string name="web_link_unavailable"></string>
+    <string name="facebook_link_unavailable">Facebook link is not available for this artist.</string>
+    <string name="twitter_link_unavailable">Twitter link is not available for this artist.</string>
+    <string name="web_link_unavailable">Web link is not available for this artist.</string>
 
     <!-- Artists Adapter -->
     <string name="no_artist_found">No Artist Found.</string>

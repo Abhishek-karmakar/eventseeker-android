@@ -9,6 +9,8 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,17 +20,20 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
+import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.api.UserInfoApi.RepCodeResponse;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class RepCodeFragment extends FragmentLoadableFromBackStack implements OnClickListener {
+public class RepCodeFragment extends FragmentLoadableFromBackStack implements OnClickListener, DialogBtnClickListener {
 	
 	private static final String TAG = RepCodeFragment.class.getName();
 	
@@ -130,8 +135,8 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 		
 		case R.id.btnSubmit:
 			EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(this).getApplication();
-			if (eventSeekr.getWcitiesId() == null) {
-				Toast.makeText(FragmentUtil.getActivity(this), R.string.pls_login, Toast.LENGTH_SHORT).show();
+			if (eventSeekr.getWcitiesId() == null || (eventSeekr.getFbUserId() == null && eventSeekr.getGPlusUserId() == null)) {
+				FragmentUtil.showLoginNeededForRepCodeSubmission(getChildFragmentManager(), FragmentUtil.getActivity(this));
 				return;
 			}
 			
@@ -152,6 +157,25 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 
 		default:
 			break;
+		}
+	}
+
+	@Override
+	public void doPositiveClick(String dialogTag) {
+		if (dialogTag.equals(AppConstants.DIALOG_FRAGMENT_TAG_LOGIN_TO_SUBMIT_REP_CODE)) {
+			((DrawerListFragmentListener)FragmentUtil.getActivity(this)).onDrawerItemSelected(
+					MainActivity.INDEX_NAV_ITEM_CONNECT_ACCOUNTS);
+		}
+	}
+	
+	@Override
+	public void doNegativeClick(String dialogTag) {
+		if (dialogTag.equals(AppConstants.DIALOG_FRAGMENT_TAG_LOGIN_TO_SUBMIT_REP_CODE)) {
+			DialogFragment dialogFragment = (DialogFragment) getChildFragmentManager().findFragmentByTag(
+					AppConstants.DIALOG_FRAGMENT_TAG_LOGIN_TO_SUBMIT_REP_CODE);
+			if (dialogFragment != null) {
+				dialogFragment.dismiss();
+			}
 		}
 	}
 }

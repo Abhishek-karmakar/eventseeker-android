@@ -49,7 +49,7 @@
 	<string name="pls_login_to_see_artist_news">Bitte melden Sie sich mit Facebook oder Google über die "Accounts synchronisieren"-Seite an, um die Neuigkeiten des Künstlers zu sehen.</string>
     <string name="connection_lost">Die Internetverbindung scheint offline zu sein.</string>
     <string name="yes">Ja</string>
-    <string name="got_to_login">Zur Anmeldung gehen?</string>
+    <string name="go_to_login">Zur Anmeldung gehen?</string>
 			
     <!-- Strings used for navigation drawer list -->
     <string name="navigation_drawer_section_browse">Stöbern</string>
@@ -97,7 +97,7 @@
     <string name="google_sign_in">Google Plus anmelden</string>
     <string name="google_sign_out">Google Plus abmelden</string>
     
-    <string name="pls_login">Bitte melden Sie sich mit Facebook oder Google an, bevor Sie andere Accounts synchronisieren</string>    
+    <string name="pls_login">Bitte melden Sie sich mit Facebook oder Google an, bevor Sie andere Accounts synchronisieren.</string>    
     <string name="syncing_your_acc">Accounts werden synchronisiert... Bitte warten Sie...</string>    
     <string name="are_you_sure">Sind Sie sicher?</string>    
     <string name="connecting_account_allow_us">Verbinden von Accounts hilft bei der Bereitstellung von direkten, relevanten Benachrichtigungen.</string>    

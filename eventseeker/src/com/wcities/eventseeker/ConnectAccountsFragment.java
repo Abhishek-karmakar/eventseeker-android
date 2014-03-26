@@ -229,12 +229,14 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			
 			listAdapter = new AccountsListAdapter(FragmentUtil.getActivity(this));
 			
-			if (((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId(this) != null) {
+			// following if condition in turn starts asynctask to generate wcitiesId if found null
+			/*if (((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId(this) != null) {
 				loadAvailableService();
 				
 			} else {
 				showProgress();
-			}
+			}*/
+			loadAvailableService();
 			//loadServiceAccountItems();
 			
 		} else {
@@ -677,7 +679,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			
 			if (service != Service.Facebook && service != Service.GooglePlus && service != Service.Blank 
 					&& eventSeekr.getWcitiesId() == null) {
-				String text = (eventSeekr.getFbUserId() == null || eventSeekr.getGPlusUserId() == null) ? 
+				String text = (eventSeekr.getFbUserId() == null && eventSeekr.getGPlusUserId() == null) ? 
 						res.getString(R.string.pls_login) : res.getString(R.string.syncing_your_acc);
 				Toast.makeText(eventSeekr, text, Toast.LENGTH_LONG).show();
 				return;

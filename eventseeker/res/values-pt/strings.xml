@@ -50,7 +50,7 @@
     <string name="connection_lost">A ligação de Internet aparece fora de linha.</string>
     <string name="no_internet_connectivity">Internet desligado</string>
     <string name="yes">sim</string>
-    <string name="got_to_login">Ir ao login?</string>
+    <string name="go_to_login">Ir ao login?</string>
 	<string name="add_to_calender">Adicionar ao calendário</string>
 	<string name="select_calender">Escolher o calendário</string>
 	<string name="event_added_to_calender_successfully">Evento adicionado ao calendário</string>
@@ -103,7 +103,7 @@
     <string name="google_sign_in">Login no Google Plus</string>
     <string name="google_sign_out">Finalizar a sessão Google Plus </string>
     
-    <string name="pls_login">Se faz favor, login no Facebook ou Google antes de sincronizar as contas doutros serviços</string>    
+    <string name="pls_login">Se faz favor, login no Facebook ou Google antes de sincronizar as contas doutros serviços.</string>    
     <string name="syncing_your_acc">Sincronizando sua conta...Se faz favor, aguarde...</string>
     <string name="are_you_sure">Tem certeza?</string> 
     <string name="connecting_account_allow_us">A ligação das contas nós deixa a fornecer as alertas relevantes instantaneamente.</string>    

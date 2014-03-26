@@ -49,7 +49,7 @@
 	<string name="pls_login_to_see_artist_news">Connectez-vous sur Facebook ou Google de la page Synchroniser Les Comptes pour afficher les nouveautés d\'artistes.</string>
     <string name="connection_lost">Vous êtes hors connexion.</string>
     <string name="yes">oui</string>
-    <string name="got_to_login">Afficher la page de connéxion?</string>
+    <string name="go_to_login">Afficher la page de connéxion?</string>
 	<string name="add_to_calender">Ajouter</string>
 			
     <!-- Strings used for navigation drawer list -->
@@ -98,7 +98,7 @@
     <string name="google_sign_in">Connexion Google Plus</string>
     <string name="google_sign_out">Déconnexion Google Plus</string>
     
-    <string name="pls_login">Connectez-vous sur Facebook ou Google avant de synchroniser vos comptes</string>    
+    <string name="pls_login">Connectez-vous sur Facebook ou Google avant de synchroniser vos comptes.</string>    
     <string name="syncing_your_acc">En train de synchroniser votre compte...Veuillez patienter...</string>    
     <string name="are_you_sure">Etes-vous sûr?</string>    
     <string name="connecting_account_allow_us">La connexion nous permet de vous offir des alertes pertinentes et instantanées.</string>    
