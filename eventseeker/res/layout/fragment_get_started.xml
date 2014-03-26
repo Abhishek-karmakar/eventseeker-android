@@ -90,7 +90,7 @@
             android:layout_height="@dimen/btn_continue_ht_fb_login"
             android:layout_below="@+id/txtFriends"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="65dp"
+            android:layout_marginTop="40dp"
             android:background="@color/btn_fb_sign_up_bg"
             android:text="@string/skip"
             android:textColor="@android:color/white"
