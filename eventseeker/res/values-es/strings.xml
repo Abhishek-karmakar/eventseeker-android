@@ -40,7 +40,7 @@
     <string name="title_pandora">Pandora</string>
     <string name="title_web">Web</string>
     
-    <string name="no_items_found_pls_login">Please login with facebook or google from \'Sync Accounts\' page to see</string>
+    <string name="no_items_found_pls_login">Please login with Facebook or Google from \'Sync Accounts\' page to see</string>
     <string name="pls_login_to_see_all_events_you_are_following">Por favor entrar a Facebook o Google desde la página \'Sincronizar Cuentas\' para ver todos los eventos que estás siguiendo.</string>
     <string name="pls_login_to_see_to_see_recommended_events">Por favor entrar a Facebook o Google desde la página \'Sincronizar Cuentas\' para ver los eventos recomendados a ti.</string>
     <string name="pls_login_to_track_evt">Para seguir este evento hay que entrar a Facebook o Google desde la página \'Sincronizar Cuentas\'.</string>

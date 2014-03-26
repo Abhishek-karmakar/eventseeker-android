@@ -929,6 +929,7 @@ public class MainActivity extends ActionBarActivity implements
 			replaceContentFrameByFragment(friendsActivityFragment, AppConstants.FRAGMENT_TAG_FRIENDS_ACTIVITY, getResources()
 							.getString(R.string.title_friends_activity), false);
 			break;
+			
 		case INDEX_NAV_ITEM_CONNECT_ACCOUNTS:
 	    	ConnectAccountsFragment connectAccountsFragment = new ConnectAccountsFragment();
 	    	replaceContentFrameByFragment(connectAccountsFragment, AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS, 

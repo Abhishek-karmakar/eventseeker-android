@@ -163,6 +163,8 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 	@Override
 	public void doPositiveClick(String dialogTag) {
 		if (dialogTag.equals(AppConstants.DIALOG_FRAGMENT_TAG_LOGIN_TO_SUBMIT_REP_CODE)) {
+			// set firstTimeLaunch=false so as to keep facebook & google sign in rows visible.
+			((EventSeekr)FragmentUtil.getActivity(this).getApplication()).updateFirstTimeLaunch(false);
 			((DrawerListFragmentListener)FragmentUtil.getActivity(this)).onDrawerItemSelected(
 					MainActivity.INDEX_NAV_ITEM_CONNECT_ACCOUNTS);
 		}

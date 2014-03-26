@@ -50,14 +50,14 @@
     <string name="title_lastfm">last.fm</string>
     <string name="title_pandora">Pandora</string>
     <string name="title_web">Web</string>
-    <string name="no_items_found_pls_login">Please login with facebook or google from \'Sync Accounts\' page to see</string>
-    <string name="pls_login_to_see_all_events_you_are_following">Please login with facebook or google from \'Sync Accounts\' page to see all the events you are following.</string>
-    <string name="pls_login_to_see_to_see_recommended_events">Please login with facebook or google from \'Sync Accounts\' page to see recommended events for you.</string>
-    <string name="pls_login_to_track_evt">To track this event you need to first login with facebook or google from \'Sync Accounts\' page.</string>
+    <string name="no_items_found_pls_login">Please login with Facebook or Google from \'Sync Accounts\' page to see</string>
+    <string name="pls_login_to_see_all_events_you_are_following">Please login with Facebook or Google from \'Sync Accounts\' page to see all the events you are following.</string>
+    <string name="pls_login_to_see_to_see_recommended_events">Please login with Facebook or Google from \'Sync Accounts\' page to see recommended events for you.</string>
+    <string name="pls_login_to_track_evt">To track this event you need to first login with Facebook or Google from \'Sync Accounts\' page.</string>
     <string name="pls_login_through_mobile_app">Please log in through mobile app.</string>
-    <string name="pls_login_to_see_friends_activity">Please login with facebook or google from \'Sync Accounts\' page to see your friends activity.</string>
-    <string name="pls_login_to_see_artist_news">Please login with facebook or google from \'Sync Accounts\' page to see artist news.</string>
-    <string name="pls_login_to_submit_repcode">Please login with facebook or google from \'Sync Accounts\' page.</string>
+    <string name="pls_login_to_see_friends_activity">Please login with Facebook or Google from \'Sync Accounts\' page to see your friends activity.</string>
+    <string name="pls_login_to_see_artist_news">Please login with Facebook or Google from \'Sync Accounts\' page to see artist news.</string>
+    <string name="pls_login_to_submit_repcode">Please login with Facebook or Google from \'Sync Accounts\' page.</string>
     <string name="connection_lost">The Internet connection appears to be offline.</string>
     <string name="no_internet_connectivity">No Internet Connectivity</string>
     <string name="yes">Yes</string>
@@ -113,7 +113,7 @@
     <string name="google_sign_in">Google Sign In</string>
     <string name="google_sign_out">Google Sign Out</string>
     
-    <string name="pls_login">Please login with facebook or google before you sync accounts from other services.</string>    
+    <string name="pls_login">Please login with Facebook or Google before you sync accounts from other services.</string>    
     <string name="syncing_your_acc">Syncing your account...Please Wait...</string>    
     <string name="are_you_sure">Are you sure ?</string>    
     <string name="connecting_account_allow_us">Connecting accounts allows us to provide relevant alerts instantly.</string>    

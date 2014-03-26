@@ -40,14 +40,14 @@
     <string name="title_pandora">Pandora</string>
     <string name="title_web">Web</string>
     
-    <string name="no_items_found_pls_login">Please login with facebook or google from \'Sync Accounts\' page to see</string>
-	<string name="pls_login_to_see_all_events_you_are_following">Si prega, accedi con facebook o google dalla pagina “Sincronizza account” per mostrare tutti gli eventi che segui.</string>
-    <string name="pls_login_to_see_to_see_recommended_events">Si prega, accedi con facebook o google dalla pagina “Sincronizza account” per mostrare eventi raccomandati per te.</string>
+    <string name="no_items_found_pls_login">Please login with Facebook or Google from \'Sync Accounts\' page to see</string>
+	<string name="pls_login_to_see_all_events_you_are_following">Si prega, accedi con Facebook o Google dalla pagina “Sincronizza account” per mostrare tutti gli eventi che segui.</string>
+    <string name="pls_login_to_see_to_see_recommended_events">Si prega, accedi con Facebook o Google dalla pagina “Sincronizza account” per mostrare eventi raccomandati per te.</string>
     <string name="pls_login_to_track_evt">Per seguire questo evento, si prega, connetti su Facebook o Google dalla pagina “Sincronizza i tuoi account”.</string>
     <string name="pls_login_through_mobile_app">Please log in through mobile app.</string>
-    <string name="pls_login_to_see_friends_activity">Si prega, accedi con facebook o google dalla pagina “Sincronizza account” per mostrare l\'attività dei tuoi amici.</string>
-	<string name="pls_login_to_see_artist_news">Si prega di accedere con facebook o google dalla pagina “Sincronizza i tuoi account” per vedere notizie d’artisti.</string>
-    <string name="pls_login_to_submit_repcode">Si prega, accedi con facebook o google dalla pagina “Sincronizzazione”.</string>
+    <string name="pls_login_to_see_friends_activity">Si prega, accedi con Facebook o Google dalla pagina “Sincronizza account” per mostrare l\'attività dei tuoi amici.</string>
+	<string name="pls_login_to_see_artist_news">Si prega di accedere con Facebook o Google dalla pagina “Sincronizza i tuoi account” per vedere notizie d’artisti.</string>
+    <string name="pls_login_to_submit_repcode">Si prega, accedi con Facebook o Google dalla pagina “Sincronizzazione”.</string>
     <string name="connection_lost">La connessione Internet è offline.e</string>
     <string name="no_internet_connectivity">Internet è disconnesso</string>
     <string name="yes">si</string>
@@ -103,7 +103,7 @@
     <string name="google_sign_in">Conessione Google Plus</string>
     <string name="google_sign_out">Disconnessione Google Plus</string>
     
-    <string name="pls_login">Si prega, accedi con facebook o google prima di sincronizzare i tuoi account da altri servizi.</string>    
+    <string name="pls_login">Si prega, accedi con Facebook o Google prima di sincronizzare i tuoi account da altri servizi.</string>    
     <string name="syncing_your_acc">Sincronizzando il tuo account... Attendere prego...</string>    
     <string name="are_you_sure">Sei sicuro?</string>
     <string name="connecting_account_allow_us">La connessione ci permette di offrire notizie rilevanti istantaneamente</string>    
