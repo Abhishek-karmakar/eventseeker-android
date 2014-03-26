@@ -127,9 +127,6 @@
     <string name="evt_cat_tours">Escursioni</string>
     
     <string name="plus_generic_error">Sign in with Google is not available.</string>
-
-    <string name="already_signed_in_with_google_account">You are already signed in with Google account. Would you like to sign out from Google and sign in with Facebook account?</string>
-    <string name="already_signed_in_with_facebook_account">You are already signed in with Facebook account. Would you like to sign out from Facebook and sign in with Google account?</string>
     
     <!-- About us -->
     <string name="seek_share_live">Cerchi. Condividi. Vivi.</string>
