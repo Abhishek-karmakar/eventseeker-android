@@ -1,9 +1,12 @@
 package com.wcities.eventseeker.bosch;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,6 +33,7 @@ import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
+import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschVenueDetailsFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
@@ -43,7 +47,7 @@ public class BoschVenueDetailsFragment extends FragmentLoadableFromBackStack imp
 
 	private Button btnInfo, btnEvents;
 	
-	private TextView txtVenueName, txtAddress;
+	private TextView txtVenueName, txtAddress, txtActionBarTitle;
 	// private TextView txtDistance;
 	
 	private ImageView imgVenue;
@@ -52,11 +56,14 @@ public class BoschVenueDetailsFragment extends FragmentLoadableFromBackStack imp
 	
 	boolean isLoadingEvents;
 
+	private Resources res;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		venue = (Venue) getArguments().getSerializable(BundleKeys.VENUE);
+		
+		res = FragmentUtil.getResources(this);
 	}
 
 	@Override
@@ -84,6 +91,12 @@ public class BoschVenueDetailsFragment extends FragmentLoadableFromBackStack imp
 		view.findViewById(R.id.btnCall).setOnClickListener(this);
 		
 		updateColors();
+		
+		txtActionBarTitle = (TextView) ((ActionBarActivity)FragmentUtil.getActivity(this)).getSupportActionBar()
+				.getCustomView().findViewById(R.id.txtActionBarTitle);
+		txtActionBarTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(
+				R.dimen.b_txt_actionbar_title_txt_size_bosch_actionbar_titleview) - ConversionUtil.toPx(res, 
+						AppConstants.REDUCE_TITLE_TXT_SIZE_BY_SP_FOR_BOSCH_DETAIL_SCREENS));
 		
 		return view;
 	}
@@ -137,6 +150,13 @@ public class BoschVenueDetailsFragment extends FragmentLoadableFromBackStack imp
 		super.onResume();
 		((BoschMainActivity) FragmentUtil.getActivity(this))
 			.onFragmentResumed(this, AppConstants.INVALID_INDEX, venue.getName());
+	}
+	
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		txtActionBarTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(
+				R.dimen.b_txt_actionbar_title_txt_size_bosch_actionbar_titleview));
 	}
 	
 	private void updateVenueImg() {

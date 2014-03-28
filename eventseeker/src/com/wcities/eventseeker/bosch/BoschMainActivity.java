@@ -2,8 +2,10 @@ package com.wcities.eventseeker.bosch;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -19,9 +21,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bosch.myspin.serversdk.IOnCarDataChangeListener;
 import com.bosch.myspin.serversdk.IPhoneCallStateListener;
@@ -43,6 +48,7 @@ import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
 import com.wcities.eventseeker.util.DeviceUtil;
+import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschMainActivity extends ActionBarActivity implements ReplaceFragmentListener, 
 		EventListener, ArtistListener, VenueListener, FragmentLoadedFromBackstackListener, 
@@ -123,6 +129,28 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		
 		getSupportActionBar().setIcon(R.drawable.placeholder);
 		getSupportActionBar().setCustomView(R.layout.bosch_actionbar_titleview);
+		
+		/*mDrawerLayout.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+			@Override
+			public void onGlobalLayout() {
+				int rootHt = mDrawerLayout.getRootView().getHeight();
+				int ht = mDrawerLayout.getHeight();
+				Toast.makeText(BoschMainActivity.this, "rootHt = " + rootHt + ", ht = " + ht, Toast.LENGTH_SHORT).show();
+				Rect r = new Rect();
+				mDrawerLayout.getWindowVisibleDisplayFrame(r);
+				Toast.makeText(BoschMainActivity.this, "r.btm = " + r.bottom + ", r.top = " + r.top, Toast.LENGTH_SHORT).show();
+				if ((mDrawerLayout.getRootView().getHeight() - mDrawerLayout.getHeight()) > mDrawerLayout.getRootView().getHeight() / 3) {
+
+					// keyboard is open
+
+				} else {
+
+					// keyboard is closed
+
+				}
+			}
+		});*/
+		
 		if (savedInstanceState != null) {
 			currentContentFragmentTag = savedInstanceState.getString(BundleKeys.CURRENT_CONTENT_FRAGMENT_TAG);
 		}
@@ -367,6 +395,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	public boolean onOptionsItemSelected(MenuItem item) {
         // Handle your other action bar items...
 		// Log.d(TAG, "onOptionsItemSelected");
+		//Toast.makeText(this, "onOptionsItemSelected()", Toast.LENGTH_SHORT).show();
 		switch (item.getItemId()) {
 
 		case android.R.id.home:
@@ -390,6 +419,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		//Toast.makeText(this, "onKeyDown() - keycode = " + keyCode, Toast.LENGTH_SHORT).show();
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 	        return true;
 	    }		

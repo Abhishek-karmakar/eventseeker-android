@@ -24,7 +24,8 @@
             android:paddingLeft="@dimen/b_edt_search_city_pad_l_r_fragment_change_city"
             android:paddingRight="@dimen/b_edt_search_city_pad_l_r_fragment_change_city"
             android:textColor="@color/eventseeker_bosch_theme_grey"
-            android:textSize="@dimen/b_txt_size_fragment_change_city" />
+            android:textSize="@dimen/b_txt_size_fragment_change_city"
+            android:imeOptions="actionSearch" />
 
         <Button
             android:id="@+id/btnSearch"

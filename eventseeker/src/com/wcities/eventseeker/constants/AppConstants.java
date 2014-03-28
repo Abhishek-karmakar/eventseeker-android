@@ -125,4 +125,10 @@ public class AppConstants {
 	
 	public static final String ACTION_GOING_TO = "eventseeker:going_to";
 	public static final String ACTION_WANTS_TO_GO_TO = "eventseeker:wants_to_go_to";
+	
+	/************************   starts for bosch   *******************************/
+	
+	public static final int REDUCE_TITLE_TXT_SIZE_BY_SP_FOR_BOSCH_DETAIL_SCREENS = 2;
+	
+	/************************    ends for bosch    *******************************/
 }

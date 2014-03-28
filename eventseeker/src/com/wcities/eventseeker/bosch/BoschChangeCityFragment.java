@@ -16,9 +16,11 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -74,6 +76,17 @@ public class BoschChangeCityFragment extends FragmentLoadableFromBackStack imple
 		view.findViewById(R.id.btnNearbyCities).setOnClickListener(this);
 
 		edtCity = (EditText) view.findViewById(R.id.edtSearchCity);
+		edtCity.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+					onSearchClicked();
+		            return true;
+		        }
+				return false;
+			}
+		});
 
 		prgSearchCity = view.findViewById(R.id.prgSearchCity);
 		prgSearchCity.setVisibility(View.GONE);

@@ -5,10 +5,13 @@ import java.text.SimpleDateFormat;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -44,6 +47,7 @@ import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.custom.view.ResizableImageView;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
+import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
@@ -59,13 +63,14 @@ public class BoschEventDetailsFragment extends FragmentLoadableFromBackStack imp
 	
 	private ProgressBar prgImg, prgDetails;
 	
-	private TextView txtDate, txtVenueName, txtDistance;
+	private TextView txtDate, txtVenueName, txtDistance, txtActionBarTitle;
 
 	private Button btnFollow, btnArtists, btnArtists2, btnCall, btnInfo, btnMap;
 
 	private boolean isEventLoading;
 
 	private View lnrContent;
+	private Resources res;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -76,6 +81,8 @@ public class BoschEventDetailsFragment extends FragmentLoadableFromBackStack imp
 			isEventLoading = true;
 			AsyncTaskUtil.executeAsyncTask(new LoadEventDetails(this, this, event), true);
 		}
+		
+		res = FragmentUtil.getResources(this);
 	}
 	
 	@Override
@@ -111,6 +118,12 @@ public class BoschEventDetailsFragment extends FragmentLoadableFromBackStack imp
 		
 		updateColors();
 		
+		txtActionBarTitle = (TextView) ((ActionBarActivity)FragmentUtil.getActivity(this)).getSupportActionBar()
+				.getCustomView().findViewById(R.id.txtActionBarTitle);
+		txtActionBarTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(
+				R.dimen.b_txt_actionbar_title_txt_size_bosch_actionbar_titleview) - ConversionUtil.toPx(res, 
+						AppConstants.REDUCE_TITLE_TXT_SIZE_BY_SP_FOR_BOSCH_DETAIL_SCREENS));
+		
 		return view;
 	}
 	
@@ -130,6 +143,13 @@ public class BoschEventDetailsFragment extends FragmentLoadableFromBackStack imp
 	@Override
 	public void onResume() {
 		super.onResume(AppConstants.INVALID_INDEX, event.getName());
+	}
+	
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		txtActionBarTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(
+				R.dimen.b_txt_actionbar_title_txt_size_bosch_actionbar_titleview));
 	}
 	
 	private void updateScreen() {
