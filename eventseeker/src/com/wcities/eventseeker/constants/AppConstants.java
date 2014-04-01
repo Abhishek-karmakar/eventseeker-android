@@ -76,6 +76,7 @@ public class AppConstants {
 	
 	public static final String DIALOG_FRAGMENT_TAG_LOGIN_TO_TRACK_EVENT = "loginToTrackEventDialog";
 	public static final String DIALOG_FRAGMENT_TAG_LOGIN_TO_SUBMIT_REP_CODE = "loginToSubmitRepCodeDialog";
+	public static final String DIALOG_FRAGMENT_TAG_SUBMIT_REP_CODE_RESPONSE = "submitRepCodeResponseDialog";
 	
 	public static final int INVALID_INDEX = -1;
 	public static final int INVALID_ID = -1;

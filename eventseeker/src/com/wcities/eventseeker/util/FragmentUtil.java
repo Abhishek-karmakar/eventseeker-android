@@ -81,12 +81,4 @@ public class FragmentUtil {
 				res.getString(R.string.cancel), res.getString(R.string.yes));
 		generalDialogFragment.show(fm, AppConstants.DIALOG_FRAGMENT_TAG_LOGIN_TO_TRACK_EVENT);
 	}
-	
-	public static void showLoginNeededForRepCodeSubmission(FragmentManager fm, Context context) {
-		Resources res = context.getResources();
-		GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
-				res.getString(R.string.go_to_login), res.getString(R.string.pls_login_to_submit_repcode), 
-				res.getString(R.string.cancel), res.getString(R.string.yes));
-		generalDialogFragment.show(fm, AppConstants.DIALOG_FRAGMENT_TAG_LOGIN_TO_SUBMIT_REP_CODE);
-	}
 }

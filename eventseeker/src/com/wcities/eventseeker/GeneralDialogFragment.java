@@ -22,7 +22,9 @@ public class GeneralDialogFragment extends DialogFragment {
         args.putString(BundleKeys.DIALOG_TITLE, title);
         args.putString(BundleKeys.DIALOG_MSG, msg);
         args.putString(BundleKeys.BTN1_TXT, btn1Txt);
-        args.putString(BundleKeys.BTN2_TXT, btn2Txt);
+        if (btn2Txt != null) {
+        	args.putString(BundleKeys.BTN2_TXT, btn2Txt);
+        }
         frag.setArguments(args);
         return frag;
     }

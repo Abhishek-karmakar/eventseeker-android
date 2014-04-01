@@ -239,6 +239,8 @@
  	<string name="rep_code_response_invalid_rep_code">Invalid Rep Code!</string>
  	<string name="rep_code_response_unknown_error">Could not complete the request. Please retry.</string>
  	<string name="rep_code_enter_a_valid_repcode">Please enter a valid rep code.</string>
+ 	<string name="rep_code_submission">Rep Code Submission</string>
+ 	<string name="ok">Ok</string>
  
     <!-- My Events -->
     <string name="no_events_in_your_area">No events currently in your area. Follow more artists to start your personalized event calendar.</string>

@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -111,8 +112,11 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
 			RepCodeResponse repCodeResponse = RepCodeResponse.getRepCodeResponse(result);
-			Activity activity = FragmentUtil.getActivity(RepCodeFragment.this);
-			Toast.makeText(activity, repCodeResponse.getMsg(activity.getResources()), Toast.LENGTH_SHORT).show();
+			Resources res = eventSeekr.getResources();
+			GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
+					res.getString(R.string.rep_code_submission), repCodeResponse.getMsg(res), 
+					res.getString(R.string.ok), null);
+			generalDialogFragment.show(getChildFragmentManager(), AppConstants.DIALOG_FRAGMENT_TAG_SUBMIT_REP_CODE_RESPONSE);
 			isSubmitting = false;
 			setVisibility();
 		}
@@ -136,7 +140,11 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 		case R.id.btnSubmit:
 			EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(this).getApplication();
 			if (eventSeekr.getWcitiesId() == null || (eventSeekr.getFbUserId() == null && eventSeekr.getGPlusUserId() == null)) {
-				FragmentUtil.showLoginNeededForRepCodeSubmission(getChildFragmentManager(), FragmentUtil.getActivity(this));
+				Resources res = FragmentUtil.getResources(this);
+				GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
+						res.getString(R.string.go_to_login), res.getString(R.string.pls_login_to_submit_repcode), 
+						res.getString(R.string.cancel), res.getString(R.string.yes));
+				generalDialogFragment.show(getChildFragmentManager(), AppConstants.DIALOG_FRAGMENT_TAG_LOGIN_TO_SUBMIT_REP_CODE);
 				return;
 			}
 			
@@ -172,9 +180,10 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 	
 	@Override
 	public void doNegativeClick(String dialogTag) {
-		if (dialogTag.equals(AppConstants.DIALOG_FRAGMENT_TAG_LOGIN_TO_SUBMIT_REP_CODE)) {
+		if (dialogTag.equals(AppConstants.DIALOG_FRAGMENT_TAG_LOGIN_TO_SUBMIT_REP_CODE) || 
+				dialogTag.equals(AppConstants.DIALOG_FRAGMENT_TAG_SUBMIT_REP_CODE_RESPONSE)) {
 			DialogFragment dialogFragment = (DialogFragment) getChildFragmentManager().findFragmentByTag(
-					AppConstants.DIALOG_FRAGMENT_TAG_LOGIN_TO_SUBMIT_REP_CODE);
+					dialogTag);
 			if (dialogFragment != null) {
 				dialogFragment.dismiss();
 			}
