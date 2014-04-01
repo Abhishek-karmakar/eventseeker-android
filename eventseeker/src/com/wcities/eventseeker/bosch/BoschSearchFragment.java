@@ -15,13 +15,14 @@ import android.widget.Toast;
 
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
+import com.wcities.eventseeker.bosch.interfaces.BoschEditTextListener;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschSearchFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
-		OnDisplayModeChangedListener {
+		OnDisplayModeChangedListener, BoschEditTextListener {
 
 	private static final String TAG = BoschSearchFragment.class.getName();
 	
@@ -55,12 +56,6 @@ public class BoschSearchFragment extends FragmentLoadableFromBackStack implement
 		return view;
 	}
 	
-	/*@Override
-	public void onPause() {
-		super.onPause();
-		Toast.makeText(FragmentUtil.getActivity(this), "onPause()", Toast.LENGTH_SHORT).show();
-	}*/
-	
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -68,16 +63,6 @@ public class BoschSearchFragment extends FragmentLoadableFromBackStack implement
 			BoschMainActivity.INDEX_NAV_ITEM_SEARCH, getResources().getString(R.string.title_search));
 	}
 	
-	/*@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
-		Toast.makeText(FragmentUtil.getActivity(this), "onConfigurationChanged()", Toast.LENGTH_SHORT).show();
-	}
-	
-	protected boolean isEdtSearchFocused() {
-		return edtSearch.isFocused();
-	}*/
-
 	@Override
 	public void onClick(View v) {
 		
@@ -121,5 +106,10 @@ public class BoschSearchFragment extends FragmentLoadableFromBackStack implement
 			edtSearch.setTextColor(getResources().getColor(R.color.eventseeker_bosch_theme_grey));			
 			edtSearch.setHintTextColor(getResources().getColor(R.color.eventseeker_bosch_theme_grey));			
 		}		
+	}
+
+	@Override
+	public EditText getEditText() {
+		return edtSearch;
 	}
 }

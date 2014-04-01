@@ -36,6 +36,7 @@ import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.CityApi;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
+import com.wcities.eventseeker.bosch.interfaces.BoschEditTextListener;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.CityPrefered;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
@@ -47,7 +48,7 @@ import com.wcities.eventseeker.util.GeoUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
 
 public class BoschChangeCityFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
-		OnItemClickListener, GeoUtilListener, OnDisplayModeChangedListener {
+		OnItemClickListener, GeoUtilListener, OnDisplayModeChangedListener, BoschEditTextListener {
 
 	private static final String TAG = BoschChangeCityFragment.class.getSimpleName();
 	
@@ -394,6 +395,11 @@ public class BoschChangeCityFragment extends FragmentLoadableFromBackStack imple
 			edtCity.setTextColor(getResources().getColor(R.color.eventseeker_bosch_theme_grey));			
 			edtCity.setHintTextColor(getResources().getColor(R.color.eventseeker_bosch_theme_grey));			
 		}
+	}
+
+	@Override
+	public EditText getEditText() {
+		return edtCity;
 	}
 
 }

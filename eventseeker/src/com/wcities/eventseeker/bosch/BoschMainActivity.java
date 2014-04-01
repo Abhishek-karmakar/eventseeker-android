@@ -36,6 +36,7 @@ import com.wcities.eventseeker.MainActivity;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.bosch.BoschDrawerListFragment.BoschDrawerListFragmentListener;
+import com.wcities.eventseeker.bosch.interfaces.BoschEditTextListener;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
@@ -129,27 +130,6 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		
 		getSupportActionBar().setIcon(R.drawable.placeholder);
 		getSupportActionBar().setCustomView(R.layout.bosch_actionbar_titleview);
-		
-		/*mDrawerLayout.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-			@Override
-			public void onGlobalLayout() {
-				int rootHt = mDrawerLayout.getRootView().getHeight();
-				int ht = mDrawerLayout.getHeight();
-				Toast.makeText(BoschMainActivity.this, "rootHt = " + rootHt + ", ht = " + ht, Toast.LENGTH_SHORT).show();
-				Rect r = new Rect();
-				mDrawerLayout.getWindowVisibleDisplayFrame(r);
-				Toast.makeText(BoschMainActivity.this, "r.btm = " + r.bottom + ", r.top = " + r.top, Toast.LENGTH_SHORT).show();
-				if ((mDrawerLayout.getRootView().getHeight() - mDrawerLayout.getHeight()) > mDrawerLayout.getRootView().getHeight() / 3) {
-
-					// keyboard is open
-
-				} else {
-
-					// keyboard is closed
-
-				}
-			}
-		});*/
 		
 		if (savedInstanceState != null) {
 			currentContentFragmentTag = savedInstanceState.getString(BundleKeys.CURRENT_CONTENT_FRAGMENT_TAG);
@@ -404,6 +384,13 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 					mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
 
 				} else {
+					if (currentContentFragmentTag != null) {
+						Fragment fragment = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
+						if (fragment instanceof BoschEditTextListener && 
+								((BoschEditTextListener)fragment).getEditText() != null) {
+							((BoschEditTextListener)fragment).getEditText().clearFocus();
+						}
+					}
 					mDrawerLayout.openDrawer(lnrLayoutRootNavDrawer);
 				}
 
