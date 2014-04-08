@@ -174,7 +174,7 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 			// set firstTimeLaunch=false so as to keep facebook & google sign in rows visible.
 			((EventSeekr)FragmentUtil.getActivity(this).getApplication()).updateFirstTimeLaunch(false);
 			((DrawerListFragmentListener)FragmentUtil.getActivity(this)).onDrawerItemSelected(
-					MainActivity.INDEX_NAV_ITEM_CONNECT_ACCOUNTS);
+					MainActivity.INDEX_NAV_ITEM_CONNECT_ACCOUNTS, null);
 		}
 	}
 	

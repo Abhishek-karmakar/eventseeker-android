@@ -11,6 +11,7 @@ import android.util.Log;
 import com.facebook.Session;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.plus.PlusClient;
@@ -38,7 +39,7 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 	// Flag to represent if we are waiting for extended permissions
 	private boolean pendingAnnounce = false;
 	
-	protected PlusClient mPlusClient;
+	protected GoogleApiClient mGoogleApiClient;
 	protected ConnectionResult mConnectionResult;
 
 	private boolean isPublishPermissionDisplayed;
@@ -46,7 +47,7 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-    	mPlusClient = GPlusUtil.createPlusClientInstance(this, this, this);
+    	mGoogleApiClient = GPlusUtil.createPlusClientInstance(this, this, this);
 	}
 	
 	@Override
@@ -70,8 +71,8 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		if (mPlusClient.isConnected()) {
-			mPlusClient.disconnect();
+		if (mGoogleApiClient.isConnected()) {
+			mGoogleApiClient.disconnect();
 		}
 	}
 	
@@ -81,8 +82,8 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 		if (pendingAnnounce) {
 			if (requestCode == AppConstants.REQ_CODE_GOOGLE_PLUS_RESOLVE_ERR || 
 	        		requestCode == AppConstants.REQ_CODE_GET_GOOGLE_PLAY_SERVICES) {
-	        	if (resultCode == Activity.RESULT_OK  && !mPlusClient.isConnected()
-	                    && !mPlusClient.isConnecting()) {
+	        	if (resultCode == Activity.RESULT_OK  && !mGoogleApiClient.isConnected()
+	                    && !mGoogleApiClient.isConnecting()) {
 		            connectPlusClient();
 	        	}
 	            
@@ -152,7 +153,7 @@ public abstract class PublishEventListFragment extends ListFragment implements P
             return;
         }
 		
-		if (mPlusClient.isConnected()) {
+		if (mGoogleApiClient.isConnected()) {
 			if (event != null) {
 				GPlusUtil.publishEvent(event, this);
 				
@@ -182,16 +183,16 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 	
 	private void connectPlusClient() {
     	Log.d(TAG, "connectPlusClient()");
-    	if (!mPlusClient.isConnected() && !mPlusClient.isConnecting()) {
+    	if (!mGoogleApiClient.isConnected() && !mGoogleApiClient.isConnecting()) {
     		Log.d(TAG, "try connecting");
     		mConnectionResult = null;
-    		mPlusClient.connect();
+    		mGoogleApiClient.connect();
     	}
     }
 	
 	@Override
-	public void onDisconnected() {
-		//Log.d(TAG, "onDisconnected()");
+	public void onConnectionSuspended(int cause) {
+		//Log.d(TAG, "onConnectionSuspended()");
 		pendingAnnounce = false;
 	}
 	
@@ -233,7 +234,7 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 			// set firstTimeLaunch=false so as to keep facebook & google sign in rows visible.
 			((EventSeekr)FragmentUtil.getActivity(this).getApplication()).updateFirstTimeLaunch(false);
 			((DrawerListFragmentListener)FragmentUtil.getActivity(this)).onDrawerItemSelected(
-					MainActivity.INDEX_NAV_ITEM_CONNECT_ACCOUNTS);
+					MainActivity.INDEX_NAV_ITEM_CONNECT_ACCOUNTS, null);
 		}
 	}
 	

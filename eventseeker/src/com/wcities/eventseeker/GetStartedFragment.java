@@ -26,8 +26,10 @@ import com.facebook.Settings;
 import com.facebook.model.GraphUser;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.model.people.Person;
 import com.wcities.eventseeker.ConnectAccountsFragment.ConnectAccountsFragmentListener;
@@ -55,7 +57,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
     private Session.StatusCallback statusCallback;
     private TextView txtGPlusSignInStatus;
     
-    private PlusClient mPlusClient;
+    private GoogleApiClient mGoogleApiClient;
     private ConnectionResult mConnectionResult;
     private boolean isGPlusSigningIn;
     
@@ -82,7 +84,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
     	super.onCreate(savedInstanceState);
     	setRetainInstance(true);
     	
-    	mPlusClient = GPlusUtil.createPlusClientInstance(this, this, this);
+    	mGoogleApiClient = GPlusUtil.createPlusClientInstance(this, this, this);
     	res = getResources();
     }
     
@@ -184,8 +186,8 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
     @Override
     public void onDestroy() {
     	super.onDestroy();
-    	if (mPlusClient.isConnected()) {
-			mPlusClient.disconnect();
+    	if (mGoogleApiClient.isConnected()) {
+			mGoogleApiClient.disconnect();
 		}
     }
 
@@ -195,8 +197,8 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 		Log.d(TAG, "onActivityResult(), requestCode = " + requestCode + ", resultCode = " + resultCode);
         if (requestCode == AppConstants.REQ_CODE_GOOGLE_PLUS_RESOLVE_ERR || 
         		requestCode == AppConstants.REQ_CODE_GET_GOOGLE_PLAY_SERVICES) {
-        	if (resultCode == Activity.RESULT_OK  && !mPlusClient.isConnected()
-                    && !mPlusClient.isConnecting()) {
+        	if (resultCode == Activity.RESULT_OK  && !mGoogleApiClient.isConnected()
+                    && !mGoogleApiClient.isConnecting()) {
         		//Log.d(TAG, "connect");
 	            connectPlusClient();
 	            
@@ -218,10 +220,10 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
     
     private void connectPlusClient() {
     	//Log.d(TAG, "connectPlusClient()");
-    	if (!mPlusClient.isConnected() && !mPlusClient.isConnecting()) {
+    	if (!mGoogleApiClient.isConnected() && !mGoogleApiClient.isConnecting()) {
     		//Log.d(TAG, "try connecting");
     		mConnectionResult = null;
-    		mPlusClient.connect();
+    		mGoogleApiClient.connect();
     	}
     }
     
@@ -340,7 +342,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
         //Log.d(TAG, "GPlusUserId : " + ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getGPlusUserId());
 		if (((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getGPlusUserId() == null) {
 			
-	        Person currentPerson = mPlusClient.getCurrentPerson();
+	        Person currentPerson = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
 	        //Log.d(TAG, "currentPerson = " + currentPerson);
 	        if (currentPerson != null) {
 	            String personId = currentPerson.getId();
@@ -349,7 +351,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 	            bundle.putSerializable(BundleKeys.LOGIN_TYPE, LoginType.googlePlus);
 	        	bundle.putString(BundleKeys.GOOGLE_PLUS_USER_ID, personId);
 	        	bundle.putString(BundleKeys.GOOGLE_PLUS_USER_NAME, currentPerson.getDisplayName());
-	        	bundle.putString(BundleKeys.GOOGLE_PLUS_EMAIL_ID, mPlusClient.getAccountName());
+	        	bundle.putString(BundleKeys.GOOGLE_PLUS_EMAIL_ID, Plus.AccountApi.getAccountName(mGoogleApiClient));
 	        	
 	        	ConnectAccountsFragmentListener listener = (ConnectAccountsFragmentListener)FragmentUtil.getActivity(
 						GetStartedFragment.this);
@@ -370,8 +372,8 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 	}
 
 	@Override
-	public void onDisconnected() {
-		//Log.d(TAG, "disconnected");
+	public void onConnectionSuspended(int cause) {
+		//Log.d(TAG, "onConnectionSuspended");
 		updateGoogleButton();
 	}
 
@@ -400,7 +402,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 		switch (v.getId()) {
 		
 		case R.id.imgGPlusSignIn:
-			if (!mPlusClient.isConnected()) {
+			if (!mGoogleApiClient.isConnected()) {
 				//Log.d(TAG, "sign in");
                 int available = GooglePlayServicesUtil.isGooglePlayServicesAvailable(FragmentUtil.getActivity(this));
 				if (available != ConnectionResult.SUCCESS) {

@@ -7,6 +7,7 @@ public class BundleKeys {
 	
 	public static final String FEATURED_EVTS = "featuredEvts";
 	public static final String EVENT = "event";
+	public static final String NOTIFICATION_TYPE = "notificationType";
 	
 	public static final String ARTIST = "artist";
 	
@@ -46,6 +47,7 @@ public class BundleKeys {
 	public static final String WIDGET_UPDATE_TYPE = "widgetUpdateType";
 	public static final String WIDGET_ID = "widgetId";
 	public static final String IS_CALLED_FROM_OTHER_TASK = "isCalledFromOtherTask";
+	public static final String SELECT_RECOMMENDED_EVENTS = "selectRecommendedEvents";
 	
 	public static final String TWITTER = "twitter";
 	public static final String URL = "url";

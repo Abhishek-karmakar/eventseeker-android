@@ -39,7 +39,7 @@ public class DrawerListFragment extends ListFragment {
 	
 	public interface DrawerListFragmentListener {
 		public void onDrawerListFragmentViewCreated();
-		public void onDrawerItemSelected(int pos);
+		public void onDrawerItemSelected(int pos, Bundle args);
 	}
 	
 	@Override
@@ -83,7 +83,7 @@ public class DrawerListFragment extends ListFragment {
 			public void onItemClick(AdapterView parent, View view, int position, long id) {
 				//Log.d(TAG, "onItemClick(), pos = " + position);
 				if (!sectionHeaderIndices.contains(position)) {
-					mListener.onDrawerItemSelected(position);
+					mListener.onDrawerItemSelected(position, null);
 				}
 	        }
 		});

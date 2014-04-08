@@ -16,8 +16,12 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusShare;
 import com.wcities.eventseeker.R;
@@ -46,19 +50,28 @@ public class GPlusUtil {
 		return pref.contains(SharedPrefKeys.GOOGLE_PLUS_USER_ID);
 	}
 	
-	public static PlusClient createPlusClientInstance(Fragment fragment, ConnectionCallbacks 
+	public static GoogleApiClient createPlusClientInstance(Fragment fragment, ConnectionCallbacks 
 			connectionCallbacks, OnConnectionFailedListener onConnectionFailedListener) {
-		return new PlusClient.Builder(FragmentUtil.getActivity(fragment), connectionCallbacks, onConnectionFailedListener)
+		/*return new PlusClient.Builder(FragmentUtil.getActivity(fragment), connectionCallbacks, onConnectionFailedListener)
 	    	.setActions(AppConstants.GOOGLE_PLUS_ACTION)
 	    	.setScopes(AppConstants.GOOGLE_PLUS_SCOPES)  // PLUS_LOGIN is recommended login scope for social features
 	    	// .setScopes("profile")       // alternative basic login scope
-	    	.build();
+	    	.build();*/
+		return new GoogleApiClient.Builder(FragmentUtil.getActivity(fragment), 
+				connectionCallbacks, onConnectionFailedListener)
+			.addApi(Plus.API, null)
+			.addScope(new Scope(Scopes.PLUS_LOGIN))  // PLUS_LOGIN is recommended login scope for social features)
+			.addScope(new Scope(Scopes.PLUS_ME))
+			.addScope(new Scope(AppConstants.SCOPE_URI_USERINFO_EMAIL))
+			.addScope(new Scope(AppConstants.SCOPE_URI_USERINFO_PROFILE))
+			.addScope(new Scope(AppConstants.SCOPE_URI_PLUS_PROFILE_EMAILS_READ))
+			.build();
 	}
 	
-	public static void callGPlusLogout(PlusClient plusClient, EventSeekr eventSeekr) {
-		if (plusClient != null && plusClient.isConnected()) {
-			plusClient.clearDefaultAccount();
-			plusClient.disconnect();
+	public static void callGPlusLogout(GoogleApiClient googleApiClient, EventSeekr eventSeekr) {
+		if (googleApiClient != null && googleApiClient.isConnected()) {
+			Plus.AccountApi.clearDefaultAccount(googleApiClient);
+			googleApiClient.disconnect();
 			//plusClient.connect();
 		}
 		eventSeekr.removeGPlusUserInfo();
