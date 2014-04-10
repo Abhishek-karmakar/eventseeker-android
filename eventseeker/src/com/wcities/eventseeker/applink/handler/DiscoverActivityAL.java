@@ -50,6 +50,7 @@ import com.ford.syncV4.proxy.rpc.enums.InteractionMode;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.EventApi;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.applink.interfaces.ESIProxyListener;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Event;
@@ -57,7 +58,7 @@ import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 
-public class DiscoverActivityAL implements IProxyListenerALM {
+public class DiscoverActivityAL implements ESIProxyListener {
 
 	private static final String TAG = DiscoverActivityAL.class.getName();
 

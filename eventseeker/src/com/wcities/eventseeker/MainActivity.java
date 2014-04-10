@@ -133,7 +133,7 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		/**
 		 * Locale changes are Activity specific i.e. after the Activity gets destroyed, the Locale changes
 		 * associated with that activity will also get destroyed. So, if Activity was destroyed due to
@@ -1683,5 +1683,13 @@ public class MainActivity extends ActionBarActivity implements
 		 * 	refresh the SearchView	
 		 */
 		searchView.setQueryHint(getResources().getString(R.string.menu_search));
+	}
+
+	/**
+	 * TODO: used by ProxyService only, remove if not needed
+	 */
+	public void onProxyClosed() {
+		// TODO Auto-generated method stub
+		
 	}
 }
