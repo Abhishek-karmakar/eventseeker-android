@@ -54,6 +54,7 @@ import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.applink.handler.MainActivityAL.CmdId;
+import com.wcities.eventseeker.applink.interfaces.ESIProxyListener;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Event;
@@ -62,7 +63,7 @@ import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser.MyItemsList;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 
-public class MyEventsActivityAL implements IProxyListenerALM {
+public class MyEventsActivityAL implements ESIProxyListener {
 	
 	private static final String TAG = MyEventsActivityAL.class.getName();
 

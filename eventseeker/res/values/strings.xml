@@ -330,4 +330,38 @@
     <string name="txt_app_details"><![CDATA[<b>App name :</b> eventseeker<br/><b>Description :</b> The eventseeker is the premier sources for event, artist and ticketing information available anywhere, gathered from worldwide ticketing partners, in-house research, and the insight of local contributors around the world.<br/><b>Mailing address :</b> Wcities.com, Inc. 512 2nd Street Second Floor, San Francisco, CA 94107, USA<br/><b>Tel :</b> 4154958090<br/><b>Fax : </b>4154958093]]></string>
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for Ford ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+	<!-- MainActivityAL -->
+    <string name="al_command_my_events">My Events</string>
+    <string name="al_command_discover">Discover</string>
+    <string name="al_command_search">Search</string>
+    
+    <string name="main_al_welcome_to">Welcome to</string>
+    <string name="main_al_eventseeker">Eventseeker!</string>
+        
+	<!-- DiscoverActivityAL -->
+    <string name="discover_al_discover_categories">Okay, would you like concerts, clubs, sports, theater or, festivals</string>
+    
+    <string name="discover_al_discover">Discover</string>
+    
+    <string name="discover_al_concerts">Concerts</string>
+    <string name="discover_al_clubs">Clubs</string>
+    <string name="discover_al_sports">Sports</string>
+    <string name="discover_al_theater">Theater</string>
+    <string name="discover_al_festivals">Festivals</string>
+    <string name="discover_al_time_out">time out</string>
+    
+    <string name="al_command_next">Next</string>
+    <string name="al_command_back">Back</string>
+    <string name="al_command_details">Details</string>
+    <string name="al_command_play">Play</string>
+    <string name="al_command_call_venue">Call Venue</string>
+    <string name="al_command_follow">Follow</string>
+
+    <!-- Events -->
+    <string name="event_no_evts_avail">There are no events available.</string>
+    <string name="plz_press_nxt_or_bck">, Please press the voice button and say next or back.</string>
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for Ford ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
 </resources>

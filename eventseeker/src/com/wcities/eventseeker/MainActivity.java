@@ -1744,4 +1744,12 @@ public class MainActivity extends ActionBarActivity implements
 		 */
 		searchView.setQueryHint(getResources().getString(R.string.menu_search));
 	}
+
+	/**
+	 * TODO: used by ProxyService only, remove if not needed
+	 */
+	public void onProxyClosed() {
+		// TODO Auto-generated method stub
+		
+	}
 }
