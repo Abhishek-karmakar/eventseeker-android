@@ -39,6 +39,8 @@ import com.bosch.myspin.serversdk.MySpinException;
 import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.ford.syncV4.proxy.SyncProxyALM;
 import com.ford.syncV4.transport.TransportType;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.wcities.eventseeker.ChangeLocationFragment.ChangeLocationFragmentListener;
 import com.wcities.eventseeker.ConnectAccountsFragment.ConnectAccountsFragmentListener;
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
@@ -47,6 +49,7 @@ import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.GetStartedFragment.GetStartedFragmentListener;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.app.EventSeekr.TrackerName;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.bosch.BoschMainActivity;
 import com.wcities.eventseeker.constants.AppConstants;
@@ -55,6 +58,7 @@ import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Category;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Venue;
+import com.wcities.eventseeker.gcm.GcmBroadcastReceiver.NotificationType;
 import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.interfaces.ConnectionFailureListener;
 import com.wcities.eventseeker.interfaces.EventListener;
@@ -77,15 +81,15 @@ public class MainActivity extends ActionBarActivity implements
 
 	private static final String TAG = MainActivity.class.getName();
 
-	private static final int INDEX_NAV_ITEM_DISCOVER = DrawerListFragment.SECT_1_HEADER_POS + 1;
-	private static final int INDEX_NAV_ITEM_MY_EVENTS = INDEX_NAV_ITEM_DISCOVER + 1;
-	protected static final int INDEX_NAV_ITEM_FOLLOWING = INDEX_NAV_ITEM_MY_EVENTS + 1;
-	private static final int INDEX_NAV_ITEM_ARTISTS_NEWS = INDEX_NAV_ITEM_FOLLOWING + 1;
-	private static final int INDEX_NAV_ITEM_FRIENDS_ACTIVITY = INDEX_NAV_ITEM_ARTISTS_NEWS + 1;
-	protected static final int INDEX_NAV_ITEM_CONNECT_ACCOUNTS = DrawerListFragment.SECT_2_HEADER_POS + 1;
+	public static final int INDEX_NAV_ITEM_DISCOVER = DrawerListFragment.SECT_1_HEADER_POS + 1;
+	public static final int INDEX_NAV_ITEM_MY_EVENTS = INDEX_NAV_ITEM_DISCOVER + 1;
+	public static final int INDEX_NAV_ITEM_FOLLOWING = INDEX_NAV_ITEM_MY_EVENTS + 1;
+	public static final int INDEX_NAV_ITEM_ARTISTS_NEWS = INDEX_NAV_ITEM_FOLLOWING + 1;
+	public static final int INDEX_NAV_ITEM_FRIENDS_ACTIVITY = INDEX_NAV_ITEM_ARTISTS_NEWS + 1;
+	public static final int INDEX_NAV_ITEM_CONNECT_ACCOUNTS = DrawerListFragment.SECT_2_HEADER_POS + 1;
 	private static final int INDEX_NAV_ITEM_CHANGE_LOCATION = INDEX_NAV_ITEM_CONNECT_ACCOUNTS + 1;
 	private static final int INDEX_NAV_ITEM_LANGUAGE = INDEX_NAV_ITEM_CHANGE_LOCATION + 1;
-	protected static final int INDEX_NAV_ITEM_INVITE_FRIENDS = DrawerListFragment.SECT_3_HEADER_POS + 1;
+	public static final int INDEX_NAV_ITEM_INVITE_FRIENDS = DrawerListFragment.SECT_3_HEADER_POS + 1;
 	private static final int INDEX_NAV_ITEM_RATE_APP = INDEX_NAV_ITEM_INVITE_FRIENDS + 1;
 	private static final int INDEX_NAV_ITEM_ABOUT_US = INDEX_NAV_ITEM_RATE_APP + 1;
 	private static final int INDEX_NAV_ITEM_EULA = INDEX_NAV_ITEM_ABOUT_US + 1;
@@ -133,7 +137,8 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		//Log.d(TAG, "onCreate()");
+		
 		/**
 		 * Locale changes are Activity specific i.e. after the Activity gets destroyed, the Locale changes
 		 * associated with that activity will also get destroyed. So, if Activity was destroyed due to
@@ -186,6 +191,8 @@ public class MainActivity extends ActionBarActivity implements
 			mTitle = savedInstanceState.getString(BundleKeys.ACTION_BAR_TITLE);
 			currentContentFragmentTag = savedInstanceState
 					.getString(BundleKeys.CURRENT_CONTENT_FRAGMENT_TAG);
+			//Log.d(TAG, "savedInstanceState != null, currentContentFragmentTag = " + currentContentFragmentTag);
+
 			drawerItemSelectedPosition = savedInstanceState
 					.getInt(BundleKeys.DRAWER_ITEM_SELECTED_POSITION);
 			isDrawerIndicatorEnabled = savedInstanceState
@@ -283,8 +290,14 @@ public class MainActivity extends ActionBarActivity implements
 			 * clicked.
 			 */
 			if (getIntent().hasExtra(BundleKeys.EVENT)) {
-				onEventSelectedFromOtherTask((Event) getIntent()
-						.getSerializableExtra(BundleKeys.EVENT), false);
+				// this can be from notification click or widget click
+				onEventSelectedFromOtherTask((Event) getIntent().getSerializableExtra(BundleKeys.EVENT), false);
+				
+			} else if (getIntent().hasExtra(BundleKeys.ARTIST)) {
+				onArtistSelectedFromOtherTask((Artist) getIntent().getSerializableExtra(BundleKeys.ARTIST), false);
+				
+			} else if (getIntent().hasExtra(BundleKeys.NOTIFICATION_TYPE)) {
+				onNotificationClicked((NotificationType) getIntent().getSerializableExtra(BundleKeys.NOTIFICATION_TYPE));
 
 			} else {
 				GetStartedFragment getStartedFragment = new GetStartedFragment();
@@ -341,8 +354,15 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
+		//Log.d(TAG, "onNewIntent()");
 		if (intent.hasExtra(BundleKeys.EVENT)) {
 			onEventSelectedFromOtherTask((Event) intent.getSerializableExtra(BundleKeys.EVENT), true);
+			
+		} else if (intent.hasExtra(BundleKeys.ARTIST)) {
+			onArtistSelectedFromOtherTask((Artist) intent.getSerializableExtra(BundleKeys.ARTIST), true);
+			
+		} else if (intent.hasExtra(BundleKeys.NOTIFICATION_TYPE)) {
+			onNotificationClicked((NotificationType) intent.getSerializableExtra(BundleKeys.NOTIFICATION_TYPE));
 		}
 	}
 	
@@ -480,9 +500,20 @@ public class MainActivity extends ActionBarActivity implements
 		switch (item.getItemId()) {
 
 		case android.R.id.home:
-			
-			if(AppConstants.FRAGMENT_TAG_LOGIN_SYNCING.equals(currentContentFragmentTag)) {
+			// Get tracker.
+	        /*Tracker t = ((EventSeekr) getApplication()).getTracker(TrackerName.APP_TRACKER);
+
+	        // Set screen name.
+	        // Where path is a String representing the screen name.
+	        t.setScreenName("Navigation Drawer");
+
+	        // Send a screen view.
+	        t.send(new HitBuilders.AppViewBuilder().build());
+	        Log.d(TAG, "Tracker view sent");*/
+	        
+			if (AppConstants.FRAGMENT_TAG_LOGIN_SYNCING.equals(currentContentFragmentTag)) {
 				return true;
+				
 			} else if (!isTabletAndInLandscapeMode) {
 				if (mDrawerToggle.isDrawerIndicatorEnabled()) {
 					if (mDrawerLayout.isDrawerOpen(lnrLayoutRootNavDrawer)) {
@@ -542,7 +573,7 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		// Log.d(TAG, "onSaveInstanceState()");
+		//Log.d(TAG, "onSaveInstanceState()");
 	
 		outState.putString(BundleKeys.ACTION_BAR_TITLE, mTitle);
 		outState.putString(BundleKeys.CURRENT_CONTENT_FRAGMENT_TAG,
@@ -802,7 +833,7 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	private void addDrawerListFragment() {
-		Log.d(TAG, "addDrawerListFragment");
+		//Log.d(TAG, "addDrawerListFragment");
 		FragmentTransaction fragmentTransaction = getSupportFragmentManager()
 				.beginTransaction();
 		DrawerListFragment drawerListFragment = new DrawerListFragment();
@@ -823,7 +854,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	private void onFragmentResumed(int position, String title,
 			String fragmentTag) {
-		Log.d(TAG, "onFragmentResumed() - " + fragmentTag);
+		//Log.d(TAG, "onFragmentResumed() - " + fragmentTag);
 		drawerItemSelectedPosition = position;
 		if (drawerItemSelectedPosition != AppConstants.INVALID_INDEX) {
 			setDrawerIndicatorEnabled(true);
@@ -867,8 +898,8 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	/** Swaps fragments in the main content view */
-	private void selectItem(int position) {
-		Log.d(TAG, "selectItem() + pos : " + position);
+	private void selectItem(int position, Bundle args) {
+		//Log.d(TAG, "selectItem() + pos : " + position);
 		//if (position != INDEX_NAV_ITEM_LATEST_NEWS) {
 			drawerItemSelectedPosition = position;
 				
@@ -902,6 +933,9 @@ public class MainActivity extends ActionBarActivity implements
 
 		case INDEX_NAV_ITEM_MY_EVENTS:
 			MyEventsFragment fragment = new MyEventsFragment();
+			if (args != null) {
+				fragment.setArguments(args);
+			}
 			replaceContentFrameByFragment(fragment, AppConstants.FRAGMENT_TAG_MY_EVENTS, getResources()
 							.getString(R.string.title_my_events), false);
 			break;
@@ -1169,7 +1203,7 @@ public class MainActivity extends ActionBarActivity implements
 					getResources().getString(R.string.title_web), true);
 			
 		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS)) {
-			selectItem(INDEX_NAV_ITEM_CONNECT_ACCOUNTS);
+			selectItem(INDEX_NAV_ITEM_CONNECT_ACCOUNTS, null);
 			
 		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_TWITTER_SYNCING)) {
 			//Log.d(TAG, "FRAGMENT_TAG_TWITTER_SYNCING");
@@ -1211,13 +1245,17 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	@Override
-	public void onDrawerItemSelected(int pos) {
-		// Log.d(TAG, "onDrawerItemSelected(), pos = " + pos);
-		// process only if different selection is made, otherwise just close the
-		// drawer.
-		if (drawerItemSelectedPosition != pos) {
+	public void onDrawerItemSelected(int pos, Bundle args) {
+		//Log.d(TAG, "onDrawerItemSelected(), pos = " + pos);
+		/**
+		 * process only if 
+		 * 1) different selection is made or 
+		 * 2) recommended tab is supposed to be selected by default;
+		 * otherwise just close the drawer
+		 */
+		if (drawerItemSelectedPosition != pos || (args != null && args.containsKey(BundleKeys.SELECT_RECOMMENDED_EVENTS))) {
 			getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-			selectItem(pos);
+			selectItem(pos, args);
 
 		} else {
 			if (!isTabletAndInLandscapeMode) {
@@ -1230,19 +1268,18 @@ public class MainActivity extends ActionBarActivity implements
 	public void replaceGetStartedFragmentBy(String fragmentTag) {
 		//Log.d(TAG, "replaceGetStartedFragmentBy(), tag = " + fragmentTag);
 		if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_MY_EVENTS)) {
-			selectItem(INDEX_NAV_ITEM_MY_EVENTS);
+			selectItem(INDEX_NAV_ITEM_MY_EVENTS, null);
 			
 		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_DISCOVER)) {
-			selectItem(INDEX_NAV_ITEM_DISCOVER);
+			selectItem(INDEX_NAV_ITEM_DISCOVER, null);
 
 		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS)) {
-			selectItem(INDEX_NAV_ITEM_CONNECT_ACCOUNTS);
+			selectItem(INDEX_NAV_ITEM_CONNECT_ACCOUNTS, null);
 		}
 	}
 
 	@Override
 	public void onArtistSelected(Artist artist) {
-
 		ArtistDetailsFragment artistDetailsFragment = new ArtistDetailsFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(BundleKeys.ARTIST, artist);
@@ -1250,6 +1287,18 @@ public class MainActivity extends ActionBarActivity implements
 		selectNonDrawerItem(artistDetailsFragment,
 				AppConstants.FRAGMENT_TAG_ARTIST_DETAILS, getResources()
 						.getString(R.string.title_artist_details), true);
+	}
+	
+	public void onArtistSelectedFromOtherTask(Artist artist, boolean addToBackStack) {
+		ArtistDetailsFragment artistDetailsFragment = new ArtistDetailsFragment();
+		Bundle args = new Bundle();
+		args.putSerializable(BundleKeys.ARTIST, artist);
+		// this is required to handle drawer indicator when this fragment is
+		// resumed
+		args.putBoolean(BundleKeys.IS_CALLED_FROM_OTHER_TASK, true);
+		artistDetailsFragment.setArguments(args);
+		selectNonDrawerItem(artistDetailsFragment, AppConstants.FRAGMENT_TAG_ARTIST_DETAILS, getResources()
+						.getString(R.string.title_artist_details), addToBackStack);
 	}
 
 	@Override
@@ -1265,7 +1314,6 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public void onEventSelected(Event event) {
-
 		EventDetailsFragment eventDetailsFragment = new EventDetailsFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(BundleKeys.EVENT, event);
@@ -1286,6 +1334,21 @@ public class MainActivity extends ActionBarActivity implements
 		selectNonDrawerItem(eventDetailsFragment,
 				AppConstants.FRAGMENT_TAG_EVENT_DETAILS, getResources()
 						.getString(R.string.title_event_details), addToBackStack);
+	}
+	
+	/**
+	 * Handles navigation to drawerList Items only
+	 * @param notificationType
+	 */
+	public void onNotificationClicked(NotificationType notificationType) {
+		if (notificationType.getNavDrawerIndex() != AppConstants.INVALID_INDEX) {
+			Bundle args = null;
+			if (notificationType == NotificationType.RECOMMENDED_EVENTS) {
+				args = new Bundle();
+				args.putBoolean(BundleKeys.SELECT_RECOMMENDED_EVENTS, true);
+			}
+			onDrawerItemSelected(notificationType.getNavDrawerIndex(), args);
+		}
 	}
 
 	@Override
@@ -1479,10 +1542,8 @@ public class MainActivity extends ActionBarActivity implements
 					AppConstants.FRAGMENT_TAG_DISCOVER_BY_CATEGORY);
 
 		} else if (fragment instanceof EventDetailsFragment) {
-			if (fragment.getArguments().containsKey(
-					BundleKeys.IS_CALLED_FROM_OTHER_TASK)) {
-				onFragmentCalledFromOtherTaskResumed(
-						AppConstants.INVALID_INDEX,
+			if (fragment.getArguments().containsKey(BundleKeys.IS_CALLED_FROM_OTHER_TASK)) {
+				onFragmentCalledFromOtherTaskResumed(AppConstants.INVALID_INDEX,
 						getResources().getString(R.string.title_event_details),
 						AppConstants.FRAGMENT_TAG_EVENT_DETAILS);
 
@@ -1493,9 +1554,16 @@ public class MainActivity extends ActionBarActivity implements
 			}
 
 		} else if (fragment instanceof ArtistDetailsFragment) {
-			onFragmentResumed(AppConstants.INVALID_INDEX, getResources()
-					.getString(R.string.title_artist_details),
-					AppConstants.FRAGMENT_TAG_ARTIST_DETAILS);
+			if (fragment.getArguments().containsKey(BundleKeys.IS_CALLED_FROM_OTHER_TASK)) {
+				onFragmentCalledFromOtherTaskResumed(AppConstants.INVALID_INDEX,
+						getResources().getString(R.string.title_artist_details),
+						AppConstants.FRAGMENT_TAG_ARTIST_DETAILS);
+
+			} else {
+				onFragmentResumed(AppConstants.INVALID_INDEX, getResources()
+						.getString(R.string.title_artist_details),
+						AppConstants.FRAGMENT_TAG_ARTIST_DETAILS);
+			}
 
 		} else if (fragment instanceof VenueDetailsFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources()
@@ -1585,7 +1653,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public void onLocationChanged() {
-		onDrawerItemSelected(INDEX_NAV_ITEM_DISCOVER);
+		onDrawerItemSelected(INDEX_NAV_ITEM_DISCOVER, null);
 	}
 
 	private void setDrawerIndicatorEnabled(boolean enable) {
@@ -1611,6 +1679,7 @@ public class MainActivity extends ActionBarActivity implements
 		}
 		
 		if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+			//Log.d(TAG, "super.onBackPressed()");
 			try {
 				/**
 				 * This try catch will handle IllegalStateException which may occur if onBackPressed() on Super
@@ -1629,6 +1698,7 @@ public class MainActivity extends ActionBarActivity implements
 			}
 			
 		} else {
+			//Log.d(TAG, "moveTaskToBack()");
 			/**
 			 * Here if we allow back press (super.onBackPressed();) then it can display unexpected result 
 			 * in following case:

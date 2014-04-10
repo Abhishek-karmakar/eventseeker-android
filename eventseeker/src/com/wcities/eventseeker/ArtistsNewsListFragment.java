@@ -275,7 +275,7 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 		
 		case R.id.btnAction:
 			((DrawerListFragmentListener)FragmentUtil.getActivity(this)).onDrawerItemSelected(
-					MainActivity.INDEX_NAV_ITEM_FOLLOWING);
+					MainActivity.INDEX_NAV_ITEM_FOLLOWING, null);
 			break;
 
 		default:

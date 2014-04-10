@@ -20,6 +20,7 @@ import com.wcities.eventseeker.api.ArtistApi;
 import com.wcities.eventseeker.api.ArtistApi.Method;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
+import com.wcities.eventseeker.gcm.GcmBroadcastReceiver.NotificationType;
 import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
@@ -28,7 +29,6 @@ import com.wcities.eventseeker.util.NotificationUtil;
 public class MusicNotificationReceiver extends BroadcastReceiver {
 
 	private static final String TAG = MusicNotificationReceiver.class.getName();
-	private static final int NOTIFICATION_ID = 1;
 	private static final String XTRA_PLAYING = "playing";
 	
 	private static String strArtist;
@@ -113,7 +113,8 @@ public class MusicNotificationReceiver extends BroadcastReceiver {
 		protected void onPostExecute(Artist artist) {
 			if (artist != null && !artist.getEvents().isEmpty()) {
 				String message = artist.getName() + " is performing for an event " + artist.getEvents().get(0).getName();
-				NotificationUtil.addNotification(context, artist.getEvents().get(0), message, NOTIFICATION_ID);
+				NotificationUtil.addNotification(context, message, AppConstants.MUSIC_NOTIFICATION_ID, 
+						NotificationType.EVENT_DETAILS, artist.getEvents().get(0));
 			}
 		}    	
     }

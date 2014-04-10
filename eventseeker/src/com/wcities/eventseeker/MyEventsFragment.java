@@ -91,6 +91,14 @@ public class MyEventsFragment extends FragmentLoadableFromBackStack implements O
 	}
 	
 	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		if (getArguments() != null && getArguments().containsKey(BundleKeys.SELECT_RECOMMENDED_EVENTS)) {
+			tabBar.select(tabBar.getTabByTag(FRAGMENT_TAG_RECOMMENDED));
+		}
+	}
+	
+	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
 		ActionBar actionBar = ((ActionBarActivity)FragmentUtil.getActivity(this)).getSupportActionBar();

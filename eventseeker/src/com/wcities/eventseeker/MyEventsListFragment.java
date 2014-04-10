@@ -153,7 +153,7 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 		
 		case R.id.btnAction:
 			((DrawerListFragmentListener)FragmentUtil.getActivity(this)).onDrawerItemSelected(
-					MainActivity.INDEX_NAV_ITEM_FOLLOWING);
+					MainActivity.INDEX_NAV_ITEM_FOLLOWING, null);
 			break;
 
 		default:

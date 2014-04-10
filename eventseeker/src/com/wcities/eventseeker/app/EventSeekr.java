@@ -2,6 +2,7 @@ package com.wcities.eventseeker.app;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -18,6 +19,9 @@ import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.util.DisplayMetrics;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Logger.LogLevel;
+import com.google.android.gms.analytics.Tracker;
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.LanguageFragment.Locales;
 import com.wcities.eventseeker.R;
@@ -42,6 +46,19 @@ import com.wcities.eventseeker.util.GPlusUtil;
 public class EventSeekr extends Application {
 
 	private static final String TAG = EventSeekr.class.getName();
+	
+	/**
+	 * Enum used to identify the tracker that needs to be used for tracking.
+	 *
+	 * A single tracker is usually enough for most purposes. In case you do need multiple trackers,
+	 * storing them all in Application object helps ensure that they are created only once per
+	 * application instance.
+	 */
+	public enum TrackerName {
+	    APP_TRACKER; // Tracker used only in this app.
+	}
+	
+	private static final String ANALYTICS_PROPERTY_ID = "UA-25668630-2";
 	
 	private boolean isTablet;
 	private boolean is7InchTablet;
@@ -81,6 +98,10 @@ public class EventSeekr extends Application {
 	private static String cityName;
 	
 	private Event eventToAddToCalendar;
+	
+	private HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
+	
+	private int uniqueGcmNotificationId = AppConstants.UNIQUE_GCM_NOTIFICATION_ID_START;
 	
 	public interface EventSeekrListener {
 		public void onSyncCountUpdated(Service service);
@@ -130,6 +151,12 @@ public class EventSeekr extends Application {
 		is7InchTablet = getResources().getBoolean(R.bool.is_7_inch_tablet);
 		//Log.d(TAG, "isTablet = " + isTablet);
 		FileUtil.deleteShareImgCacheInBackground(this);
+		
+		// When dry run is set, hits will not be dispatched, but will still be logged as
+		// though they were dispatched.
+		GoogleAnalytics.getInstance(this).setDryRun(true);
+		// Set the log level to verbose.
+		GoogleAnalytics.getInstance(this).getLogger().setLogLevel(LogLevel.VERBOSE);
 	}
 	
 	private void initConfigParams() {
@@ -633,6 +660,19 @@ public class EventSeekr extends Application {
 
 	public void setEventToAddToCalendar(Event eventToAddToCalendar) {
 		this.eventToAddToCalendar = eventToAddToCalendar;
+	}
+	
+	public int getUniqueGcmNotificationId() {
+		return ++uniqueGcmNotificationId;
+	}
+
+	public synchronized Tracker getTracker(TrackerName trackerId) {
+		if (!mTrackers.containsKey(trackerId)) {
+			GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+			Tracker t = analytics.newTracker(ANALYTICS_PROPERTY_ID);
+			mTrackers.put(trackerId, t);
+		}
+		return mTrackers.get(trackerId);
 	}
 
 	private class GetWcitiesId extends AsyncTask<Void, Void, String> {

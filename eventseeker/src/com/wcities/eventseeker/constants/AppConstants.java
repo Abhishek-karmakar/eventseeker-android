@@ -95,6 +95,9 @@ public class AppConstants {
 	public static final int REQ_CODE_RATE_APP = 1002;
 	public static final int REQ_CODE_GOOGLE_ACCOUNT_CHOOSER_FOR_GOOGLE_MUSIC = 1003;
 	
+	public static final int MUSIC_NOTIFICATION_ID = 1;
+	public static final int UNIQUE_GCM_NOTIFICATION_ID_START = 100;
+	
 	public static final List<String> PERMISSIONS_FB_LOGIN = Arrays.asList("email");
 	// List of additional write permissions being requested
 	public static final List<String> PERMISSIONS_FB_PUBLISH_EVT = Arrays.asList("publish_actions");
@@ -118,14 +121,13 @@ public class AppConstants {
 
 	public static final int SCROLL_Y_BY = 100;
 	
-	public static final String[] GOOGLE_PLUS_ACTION = new String[] {"http://schemas.google.com/AddActivity"};
-	public static final String[] GOOGLE_PLUS_SCOPES = new String[] {"https://www.googleapis.com/auth/userinfo.email", 
-		Scopes.PLUS_LOGIN, Scopes.PLUS_PROFILE, "https://www.googleapis.com/auth/userinfo.profile", 
-		"https://www.googleapis.com/auth/plus.profile.emails.read"};
+	public static final String SCOPE_URI_USERINFO_EMAIL = "https://www.googleapis.com/auth/userinfo.email";
+	public static final String SCOPE_URI_USERINFO_PROFILE = "https://www.googleapis.com/auth/userinfo.profile";
+	public static final String SCOPE_URI_PLUS_PROFILE_EMAILS_READ = "https://www.googleapis.com/auth/plus.profile.emails.read";
 	
-	public static final String GOOGLE_PLUS_SCOPES_FOR_SERVER_ACCESS = "https://www.googleapis.com/auth/userinfo.email"  
-		+ " " + Scopes.PLUS_LOGIN + " " + Scopes.PLUS_PROFILE + " " + "https://www.googleapis.com/auth/userinfo.profile" 
-		+ " " + "https://www.googleapis.com/auth/plus.profile.emails.read";
+	public static final String GOOGLE_PLUS_SCOPES_FOR_SERVER_ACCESS = SCOPE_URI_USERINFO_EMAIL  
+		+ " " + Scopes.PLUS_LOGIN + " " + Scopes.PLUS_ME + " " + SCOPE_URI_USERINFO_PROFILE 
+		+ " " + SCOPE_URI_PLUS_PROFILE_EMAILS_READ;
 	
 	public static final String ACTION_GOING_TO = "eventseeker:going_to";
 	public static final String ACTION_WANTS_TO_GO_TO = "eventseeker:wants_to_go_to";
