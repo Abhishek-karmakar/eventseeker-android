@@ -13,12 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.viewpagerindicator.CirclePageIndicator;
-import com.wcities.eventseeker.app.EventSeekr;
-import com.wcities.eventseeker.app.EventSeekr.TrackerName;
-import com.wcities.eventseeker.util.FragmentUtil;
 
 public class DiscoverFragment extends DiscoverParentFragment implements
 		OnPageChangeListener {
@@ -33,22 +28,6 @@ public class DiscoverFragment extends DiscoverParentFragment implements
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-	}
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		// Get tracker.
-        /*Tracker t = ((EventSeekr) FragmentUtil.getActivity(this).getApplication()).getTracker(
-            TrackerName.APP_TRACKER);
-
-        // Set screen name.
-        // Where path is a String representing the screen name.
-        t.setScreenName("Discover");
-
-        // Send a screen view.
-        t.send(new HitBuilders.AppViewBuilder().build());*/
 	}
 
 	@Override

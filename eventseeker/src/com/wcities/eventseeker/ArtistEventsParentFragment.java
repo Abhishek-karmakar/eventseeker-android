@@ -12,7 +12,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.wcities.eventseeker.ArtistDetailsFragment.ArtistDetailsFragmentListener;
-import com.wcities.eventseeker.ArtistDetailsFragment.FooterTxt;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -21,6 +20,7 @@ import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Artist.Attending;
+import com.wcities.eventseeker.custom.fragment.PublishEventListFragment;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
@@ -148,7 +148,6 @@ public abstract class ArtistEventsParentFragment extends PublishEventListFragmen
 	public void onArtistFollowingUpdated() {
 		updateFollowingFooter();
 	}
-
 
 	@Override
 	public void loadItemsInBackground() {

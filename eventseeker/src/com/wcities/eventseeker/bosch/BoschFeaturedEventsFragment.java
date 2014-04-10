@@ -14,14 +14,14 @@ import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.asynctask.LoadFeaturedEvts;
 import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
 import com.wcities.eventseeker.bosch.adapter.BoschEventListAdapter;
+import com.wcities.eventseeker.bosch.custom.fragment.BoschListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
-import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class BoschFeaturedEventsFragment extends ListFragmentLoadableFromBackStack implements
+public class BoschFeaturedEventsFragment extends BoschListFragmentLoadableFromBackStack implements
 		OnClickListener, OnDisplayModeChangedListener {
 
 	private static final String TAG = BoschFeaturedEventsFragment.class.getName();

@@ -2,12 +2,8 @@ package com.wcities.eventseeker.bosch;
 
 import java.text.SimpleDateFormat;
 
-import android.content.ActivityNotFoundException;
-import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -19,12 +15,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bosch.myspin.serversdk.IPhoneCallStateListener;
 import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.wcities.eventseeker.R;
-import com.wcities.eventseeker.VenueInfoFragment;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -35,6 +28,7 @@ import com.wcities.eventseeker.asynctask.LoadEventDetails.OnEventUpdatedListner;
 import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.bosch.BoschMainActivity.OnCarStationaryStatusChangedListener;
 import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
+import com.wcities.eventseeker.bosch.custom.fragment.BoschFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
@@ -43,7 +37,6 @@ import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.core.Venue;
-import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.custom.view.ResizableImageView;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
@@ -51,7 +44,7 @@ import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class BoschEventDetailsFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
+public class BoschEventDetailsFragment extends BoschFragmentLoadableFromBackStack implements OnClickListener, 
 		AsyncLoadImageListener, OnEventUpdatedListner, OnCarStationaryStatusChangedListener, 
 		OnDisplayModeChangedListener {
 

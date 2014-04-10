@@ -1,16 +1,18 @@
 package com.wcities.eventseeker.custom.fragment;
 
 import android.app.Activity;
+import android.os.Bundle;
 
 import com.wcities.eventseeker.MainActivity;
-import com.wcities.eventseeker.PublishEventListFragment;
+import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
+import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
 import com.wcities.eventseeker.bosch.BoschMainActivity;
 import com.wcities.eventseeker.interfaces.ActivityImmediateFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public abstract class PublishEventListFragmentLoadableFromBackStack extends PublishEventListFragment implements 
-		ActivityImmediateFragmentLoadableFromBackStack {
+		ActivityImmediateFragmentLoadableFromBackStack, IGoogleAnalyticsTracker {
 
 	private Activity activityRef;
 
@@ -22,6 +24,12 @@ public abstract class PublishEventListFragmentLoadableFromBackStack extends Publ
 					+ " must implement FragmentLoadedFromBackstackListener");
 		}
 		activityRef = activity;
+	}
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		GoogleAnalyticsTracker.getInstance().sendScreenView(FragmentUtil.getApplication(this), getScreenName());
 	}
 
 	@Override

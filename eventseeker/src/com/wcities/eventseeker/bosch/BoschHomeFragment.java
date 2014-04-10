@@ -10,13 +10,13 @@ import android.view.ViewGroup;
 
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
-import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
+import com.wcities.eventseeker.bosch.custom.fragment.BoschFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GeoUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
 
-public class BoschHomeFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
+public class BoschHomeFragment extends BoschFragmentLoadableFromBackStack implements OnClickListener, 
 		GeoUtilListener {
 	
 	private static final String TAG = BoschHomeFragment.class.getSimpleName();

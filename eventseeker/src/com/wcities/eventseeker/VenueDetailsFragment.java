@@ -15,6 +15,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
+import android.support.v7.widget.ShareActionProvider.OnShareTargetSelectedListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.wcities.eventseeker.adapter.SwipeTabsAdapter;
+import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -159,6 +161,17 @@ public class VenueDetailsFragment extends FragmentLoadableFromBackStack implemen
 			}
 		    
 	        mShareActionProvider.setShareIntent(shareIntent);
+	        
+	        mShareActionProvider.setOnShareTargetSelectedListener(new OnShareTargetSelectedListener() {
+				
+				@Override
+				public boolean onShareTargetSelected(ShareActionProvider source, Intent intent) {
+					String shareTarget = intent.getComponent().getPackageName();
+					GoogleAnalyticsTracker.getInstance().sendShareEvent(FragmentUtil.getApplication(VenueDetailsFragment.this), 
+							getScreenName(), shareTarget, "Venue");
+					return false;
+				}
+			});
 	    }
 	}
 	
@@ -187,5 +200,10 @@ public class VenueDetailsFragment extends FragmentLoadableFromBackStack implemen
 				((VenueInfoFragment)fragment).onDriveClicked();
 			}
 		}
+	}
+
+	@Override
+	public String getScreenName() {
+		return "Venue Detail Screen";
 	}
 }

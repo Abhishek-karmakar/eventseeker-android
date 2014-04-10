@@ -225,4 +225,9 @@ public class FullScreenAddressMapFragment extends FragmentLoadableFromBackStack 
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public String getScreenName() {
+		return "Venue Map Screen";
+	}
 }

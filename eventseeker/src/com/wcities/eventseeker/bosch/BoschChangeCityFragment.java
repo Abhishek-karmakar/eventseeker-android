@@ -20,8 +20,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -36,10 +36,10 @@ import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.CityApi;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
+import com.wcities.eventseeker.bosch.custom.fragment.BoschFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.bosch.interfaces.BoschEditTextListener;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.CityPrefered;
-import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.jsonparser.CityApiJSONParser;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
@@ -47,7 +47,7 @@ import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GeoUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
 
-public class BoschChangeCityFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
+public class BoschChangeCityFragment extends BoschFragmentLoadableFromBackStack implements OnClickListener, 
 		OnItemClickListener, GeoUtilListener, OnDisplayModeChangedListener, BoschEditTextListener {
 
 	private static final String TAG = BoschChangeCityFragment.class.getSimpleName();

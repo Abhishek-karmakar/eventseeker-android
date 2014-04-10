@@ -110,4 +110,9 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 			}
 		}
 	}
+
+	@Override
+	public String getScreenName() {
+		return null;
+	}
 }

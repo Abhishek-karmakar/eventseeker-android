@@ -11,17 +11,17 @@ import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadDateWiseVenueEventsList;
 import com.wcities.eventseeker.bosch.adapter.BoschDateWiseEventListAdapter;
+import com.wcities.eventseeker.bosch.custom.fragment.BoschListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Venue;
-import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
-public class BoschVenueEventsFragment extends ListFragmentLoadableFromBackStack implements OnClickListener, 
+public class BoschVenueEventsFragment extends BoschListFragmentLoadableFromBackStack implements OnClickListener, 
 	LoadItemsInBackgroundListener{
 
 	private static final String TAG = BoschVenueEventsFragment.class.getName();

@@ -28,8 +28,9 @@ import android.widget.Toast;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.wcities.eventseeker.MyEventsListFragment;
-import com.wcities.eventseeker.PublishEventListFragment;
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
+import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
@@ -44,6 +45,7 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
+import com.wcities.eventseeker.custom.fragment.PublishEventListFragment;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
@@ -71,7 +73,7 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 	private int orientation;
 	private LayoutParams lpImgEvtPort;
 	private boolean isTablet;
-	private String wcitiesId;
+	private String wcitiesId, googleAnalyticsScreenName;
 	
 	// vars for fb event publish
 	private PublishListener fbPublishListener;
@@ -82,7 +84,7 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 	
 	public DateWiseMyEventListAdapter(Context context, DateWiseEventList dateWiseEvtList,
 			AsyncTask<Void, Void, List<Event>> loadDateWiseEvents, LoadItemsInBackgroundListener mListener, 
-			PublishListener fbPublishListener) {
+			PublishListener fbPublishListener, String googleAnalyticsScreenName) {
 		
 		mContext = context;
 		bitmapCache = BitmapCache.getInstance();
@@ -106,6 +108,7 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 		
 		this.fbPublishListener = fbPublishListener;
 		wcitiesId = ((EventSeekr)mContext.getApplicationContext()).getWcitiesId();
+		this.googleAnalyticsScreenName = googleAnalyticsScreenName;
 	}
 
 	@Override
@@ -300,6 +303,8 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 						args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
 						((ReplaceFragmentListener)mContext).replaceByFragment(
 								AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
+						GoogleAnalyticsTracker.getInstance().sendEvent((EventSeekr)mContext.getApplicationContext(), 
+								googleAnalyticsScreenName, GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON);
 					}
 				}
 			});

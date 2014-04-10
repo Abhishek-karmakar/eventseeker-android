@@ -15,8 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bosch.myspin.serversdk.maps.MySpinBitmapDescriptor;
-import com.bosch.myspin.serversdk.maps.MySpinBitmapDescriptorFactory;
 import com.bosch.myspin.serversdk.maps.MySpinCameraUpdateFactory;
 import com.bosch.myspin.serversdk.maps.MySpinLatLng;
 import com.bosch.myspin.serversdk.maps.MySpinMap;
@@ -26,10 +24,10 @@ import com.bosch.myspin.serversdk.maps.MySpinMapView.OnMapLoadedListener;
 import com.bosch.myspin.serversdk.maps.MySpinMarkerOptions;
 import com.bosch.myspin.serversdk.maps.MySpinPolylineOptions;
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.bosch.custom.fragment.BoschFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Venue;
-import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.map.GMapV2Direction;
 import com.wcities.eventseeker.map.MySpinGMapV3Direction;
 import com.wcities.eventseeker.util.DeviceUtil;
@@ -37,7 +35,7 @@ import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GeoUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
 
-public class BoschNavigateFragment extends FragmentLoadableFromBackStack implements OnMapLoadedListener, 
+public class BoschNavigateFragment extends BoschFragmentLoadableFromBackStack implements OnMapLoadedListener, 
 	OnMapLeftListener, GeoUtilListener {
 
 	private static final String TAG = BoschNavigateFragment.class.getName();

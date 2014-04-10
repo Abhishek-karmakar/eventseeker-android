@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
+import com.wcities.eventseeker.custom.fragment.PublishEventListFragment;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
 public abstract class SearchEventsParentFragment extends PublishEventListFragment {

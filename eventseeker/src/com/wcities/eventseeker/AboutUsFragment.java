@@ -81,4 +81,8 @@ public class AboutUsFragment extends FragmentLoadableFromBackStack implements On
 		}
 	}
 
+	@Override
+	public String getScreenName() {
+		return "About Screen";
+	}
 }

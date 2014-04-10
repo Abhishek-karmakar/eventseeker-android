@@ -30,11 +30,11 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.model.people.Person;
 import com.wcities.eventseeker.ConnectAccountsFragment.ConnectAccountsFragmentListener;
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
+import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
@@ -108,6 +108,8 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 			if (((EventSeekr)appContext).getWcitiesId() == null) {
 			//if (!FbUtil.hasUserLoggedInBefore(appContext) && !GPlusUtil.hasUserLoggedInBefore(appContext)) {
 				Log.d(TAG, "not logged in");
+		    	GoogleAnalyticsTracker.getInstance().sendScreenView(FragmentUtil.getApplication(this), "First Start Screen");
+
 				Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
 				
 				Session session = Session.getActiveSession();

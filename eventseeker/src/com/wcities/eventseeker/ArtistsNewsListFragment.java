@@ -282,4 +282,9 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 			break;
 		}
 	}
+
+	@Override
+	public String getScreenName() {
+		return "Artist News Screen";
+	}
 }

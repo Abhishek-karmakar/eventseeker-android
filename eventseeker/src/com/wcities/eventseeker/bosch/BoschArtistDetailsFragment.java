@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
@@ -26,21 +25,20 @@ import com.wcities.eventseeker.asynctask.LoadArtistDetails.OnArtistUpdatedListen
 import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.bosch.BoschMainActivity.OnCarStationaryStatusChangedListener;
 import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
+import com.wcities.eventseeker.bosch.custom.fragment.BoschFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Artist.Attending;
-import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.custom.view.ResizableImageView;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.ConversionUtil;
-import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class BoschArtistDetailsFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
+public class BoschArtistDetailsFragment extends BoschFragmentLoadableFromBackStack implements OnClickListener, 
 		AsyncLoadImageListener, OnArtistUpdatedListener, OnCarStationaryStatusChangedListener, 
 		OnDisplayModeChangedListener {
 

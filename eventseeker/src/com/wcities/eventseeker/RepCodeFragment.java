@@ -189,4 +189,9 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 			}
 		}
 	}
+
+	@Override
+	public String getScreenName() {
+		return "Rep Code Screen";
+	}
 }

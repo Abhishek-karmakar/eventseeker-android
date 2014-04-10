@@ -51,9 +51,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.internal.is;
 import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.model.people.Person;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.GetStartedFragment.GetStartedFragmentListener;
@@ -196,14 +194,19 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		/**
+		 * need to get isFirstTimeLaunch value before calling super.onCreate() since we need it to 
+		 * decide on screenName to be sent to google analytics 
+		 */
+		EventSeekr eventSeekr = ((EventSeekr)FragmentUtil.getActivity(this).getApplication());
+		isFirstTimeLaunch = eventSeekr.getFirstTimeLaunch();
+		
 		super.onCreate(savedInstanceState);
 		//Log.d(TAG, "onCreate()");
 		setRetainInstance(true);
 		
-		EventSeekr eventSeekr = ((EventSeekr)FragmentUtil.getActivity(this).getApplication());
 		eventSeekr.registerListener(this);
 		
-		isFirstTimeLaunch = eventSeekr.getFirstTimeLaunch();
 		eventSeekr.updateFirstTimeLaunch(false);
 		
 		mGoogleApiClient = GPlusUtil.createPlusClientInstance(this, this, this);
@@ -1061,5 +1064,10 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	@Override
 	public void onConnectionSuspended(int cause) {
 		Log.d(TAG, "onConnectionSuspended()");
+	}
+
+	@Override
+	public String getScreenName() {
+		return isFirstTimeLaunch ? "Account Connect Screen" : "Settings Screen";
 	}
 }

@@ -159,4 +159,9 @@ public class TwitterSyncingFragment extends FragmentLoadableFromBackStack implem
 	public boolean isAlive() {
 		return isAlive;
 	}
+
+	@Override
+	public String getScreenName() {
+		return null;
+	}
 }
