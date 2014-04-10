@@ -83,7 +83,9 @@ public class GoogleAnalyticsTracker {
 	
 	public void sendShareEvent(EventSeekr eventSeekr, String screenName, String shareTarget, String shareItemName) {
 		if (eventSeekr.getPackageName().equals(shareTarget)) {
-			sendEvent(eventSeekr, screenName, "Add " + shareItemName + " To Calendar");
+			if ("Event".equals(shareItemName)) {
+				sendEvent(eventSeekr, screenName, "Add " + shareItemName + " To Calendar");
+			}
 			
 		} else if (shareTarget.contains("com.facebook")) {
 			sendEvent(eventSeekr, screenName, "Facebook " + shareItemName + " Share Button");
@@ -111,6 +113,9 @@ public class GoogleAnalyticsTracker {
 			
 		} else if (shareTarget.contains("com.skype")) {
 			sendEvent(eventSeekr, screenName, "Share " + shareItemName + " Using Skype");
+			
+		} else if (shareTarget.contains("com.whatsapp")) {
+			sendEvent(eventSeekr, screenName, "Share " + shareItemName + " Using WhatsApp");
 		}
 	}
 }
