@@ -183,6 +183,7 @@
     <dimen name="lnr_layout_btm_margin_r_fragment_event_info">@dimen/lnr_layout_btm_margin_l_fragment_event_info</dimen>
     <dimen name="rlt_layout_img_evt_margin_r_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="grd_v_friends_col_w_fragment_event_info">120dp</dimen>
+    <dimen name="img_evt_ht_fragment_event_info">270dp</dimen>
     <dimen name="img_evt_margin_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="rlt_layout_img_evt_margin_fragment_event_info">@dimen/img_evt_margin_fragment_event_info</dimen>
     <dimen name="rlt_layout_item_desc_min_ht_fragment_event_info">200dp</dimen>

@@ -64,11 +64,11 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 	
 	private boolean isEvtDescExpanded, isFriendsGridExpanded;
 	private int orientation;
-	private boolean allDetailsLoaded, isImgLoaded;
+	private boolean allDetailsLoaded;
 	private String wcitiesId;
 
 	private Resources res;
-	private ProgressBar progressBar, progressBar2;
+	private ProgressBar progressBar2;
 	private ImageView imgEvt;
 	private ExpandableGridView grdVFriends;
 	private TextView txtViewAll;
@@ -112,7 +112,6 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 		
 		View v = inflater.inflate(R.layout.fragment_event_info, null);
 		
-		progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
 		rltLayoutLoadedContent = (RelativeLayout) v.findViewById(R.id.rltLayoutLoadedContent);
 		if (orientation == Configuration.ORIENTATION_PORTRAIT) {
 			progressBar2 = (ProgressBar) v.findViewById(R.id.progressBar2);
@@ -199,7 +198,7 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 
 	private void updateEventScheduleVisibility() {
 		Schedule schedule = event.getSchedule();
-		if (isImgLoaded && allDetailsLoaded && schedule != null) {
+		if (allDetailsLoaded && schedule != null) {
 			rltLayoutAddress.setVisibility(View.VISIBLE);
 			
 			if (schedule.getDates().size() > 0) {
@@ -282,36 +281,27 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 			if (bitmap != null) {
 		        imgEvt.setImageBitmap(bitmap);
-		        isImgLoaded = true;
 		        
 		    } else {
 		    	imgEvt.setImageBitmap(null);
 		    	AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
 		        asyncLoadImg.loadImg(imgEvt, ImgResolution.LOW, event, this);
-		        isImgLoaded = false;
 		    }
 		}
 		updateProgressBarVisibility();
 	}
 	
 	private void updateProgressBarVisibility() {
-		if (isImgLoaded) {
-			rltLayoutLoadedContent.setVisibility(View.VISIBLE);
-			progressBar.setVisibility(View.GONE);
-			
-			if (progressBar2 != null) {
-				if (allDetailsLoaded) {
-					progressBar2.setVisibility(View.GONE);
-					
-				} else {
-					progressBar2.setVisibility(View.VISIBLE);
-				}
+		rltLayoutLoadedContent.setVisibility(View.VISIBLE);
+		//progressBar.setVisibility(View.GONE);
+		
+		if (progressBar2 != null) {
+			if (allDetailsLoaded) {
+				progressBar2.setVisibility(View.GONE);
+				
+			} else {
+				progressBar2.setVisibility(View.VISIBLE);
 			}
-			
-		} else {
-			rltLayoutLoadedContent.setVisibility(View.GONE);
-			int progressbarVisibility = event.isDeletedOrExpired() ? View.GONE : View.VISIBLE;
-			progressBar.setVisibility(progressbarVisibility);
 		}
 	}
 	
@@ -332,24 +322,23 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 	private void updateDescVisibility() {
 
 		if (isTablet) {
-
 			if (event.getDescription() == null) {
 				rltLayoutEvtDesc.setVisibility(View.GONE);
+				
 			} else {
 				makeDescVisible();
 			}
 
 		} else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-
-			if (!isImgLoaded || !allDetailsLoaded || event.getDescription() == null) {
+			if (!allDetailsLoaded || event.getDescription() == null) {
 				rltLayoutEvtDesc.setVisibility(View.GONE);
+				
 			} else {
 				makeDescVisible();
 			}
 
 		} else {
 			if (event.getDescription() == null) {
-				
 				/**
 				 * For landscape orientation, since friends section height
 				 * depends on description section height or minHeight, we don't
@@ -416,7 +405,6 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 			rltLayoutFriends.setVisibility(View.GONE);
 
 		} else if (isTablet) {
-
 			/*if (event.getFriends().isEmpty()) {
 				rltLayoutFriends.setVisibility(View.GONE);
 			} else {
@@ -425,6 +413,7 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 			
 			if (event.getFriends().isEmpty()) {
 				rltLayoutFriends.setVisibility(View.GONE);
+				
 			} else {
 				rltLayoutFriends.setVisibility(View.VISIBLE);
 
@@ -439,9 +428,7 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 			}
 
 		} else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-
-			if (!isImgLoaded || !allDetailsLoaded || event.getFriends().isEmpty()) {
-
+			if (!allDetailsLoaded || event.getFriends().isEmpty()) {
 				rltLayoutFriends.setVisibility(View.GONE);
 
 			} else {
@@ -459,7 +446,6 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 
 		} else {
 			if (event.getFriends().isEmpty()) {
-
 				// Remove entire bottom part since neither description nor
 				// friends are available
 				if (event.getDescription() == null) {
@@ -751,13 +737,11 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 	@Override
 	public void onImageLoaded() {
 		Log.d(TAG, "onImageLoaded()");
-		isImgLoaded = true;
 		updateScreen();
 	}
 
 	@Override
 	public void onImageCouldNotBeLoaded() {
-		isImgLoaded = true;
 		updateScreen();
 	}
 

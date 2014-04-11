@@ -352,7 +352,6 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		//Log.d(TAG, "onNewIntent()");
 		if (intent.hasExtra(BundleKeys.EVENT)) {
 			onEventSelectedFromOtherTask((Event) intent.getSerializableExtra(BundleKeys.EVENT), true);
 			

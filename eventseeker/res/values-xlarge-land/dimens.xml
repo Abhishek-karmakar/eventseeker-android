@@ -20,7 +20,8 @@
     <dimen name="lnr_event_desc_and_map_margin_l_r_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="lnr_layout_btm_margin_l_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="lnr_layout_btm_margin_r_fragment_event_info">@dimen/lnr_layout_btm_margin_l_fragment_event_info</dimen>
-
+	<dimen name="img_evt_ht_fragment_event_info">240dp</dimen>
+    
     <!-- fragment_artist_info.xml -->
     <dimen name="lnr_layout_top_margin_l_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="lnr_layout_top_margin_r_fragment_event_info">@dimen/lnr_layout_top_margin_l_fragment_event_info</dimen>
