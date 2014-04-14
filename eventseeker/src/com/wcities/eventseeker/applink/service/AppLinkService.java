@@ -55,8 +55,13 @@ import com.wcities.eventseeker.LockScreenActivity;
 import com.wcities.eventseeker.MainActivity;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.applink.handler.DiscoverAL;
 import com.wcities.eventseeker.applink.handler.MainAL;
-import com.wcities.eventseeker.applink.interfaces.ESIProxyListener;
+import com.wcities.eventseeker.applink.handler.MyEventsAL;
+import com.wcities.eventseeker.applink.handler.SearchAL;
+import com.wcities.eventseeker.applink.interfaces.ESIProxyALM;
+import com.wcities.eventseeker.applink.util.ALUtil;
+import com.wcities.eventseeker.applink.util.CommandsUtil.Commands;
 import com.wcities.eventseeker.constants.AppConstants;
 
 public class AppLinkService extends Service implements IProxyListenerALM {
@@ -82,7 +87,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	private boolean driverDistractionNotif = false;
 	//variable to contain the current state of the lockscreen
 	private boolean lockscreenUP = false;
-	private ESIProxyListener esIProxyListener;
+	private ESIProxyALM esIProxyListener;
 	private boolean isHMIStatusNone;
 	
 	public static AppLinkService getInstance() {
@@ -101,11 +106,11 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 		this.currentUIActivity = currentActivity;
 	}
 	
-	public ESIProxyListener getESIProxyListener() {
+	public ESIProxyALM getESIProxyListener() {
 		return esIProxyListener;
 	}
 
-	public void setESIProxyListener(ESIProxyListener esIProxyListener) {
+	public void setESIProxyListener(ESIProxyALM esIProxyListener) {
 		this.esIProxyListener = esIProxyListener;
 	}
 
@@ -178,6 +183,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	
 	public void onDestroy() {
 		Log.d(TAG, "onDestroy()");
+		//unSubscribeButtons();
 		disposeSyncProxy();
 		clearLockScreen();
 		instance = null;
@@ -229,22 +235,21 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	   }
    }
    
-   public void show(String mainText1, String mainText2, TextAlignment alignment) {
+   /*public void show(String mainText1, String mainText2, TextAlignment alignment) {
 		try {
 			proxy.show(mainText1, mainText2, alignment, autoIncCorrId++);
 
 		} catch (SyncException e) {
 			DebugTool.logError("Failed to send Show", e);
 		}
-   }
+   }*/
    
-   public void showWelcomeMsg() {
-	   Resources res = MainActivity.getInstance().getResources();
+   /*public void showWelcomeMsg() {
 		//String welcomeMsg1 = "Inside", welcomeMsg2 = "eventseekr!";
-	   	String welcomeMsg1 = res.getString(R.string.main_al_welcome_to), 
-	   	welcomeMsg2 = res.getString(R.string.main_al_eventseeker);
+	   	String welcomeMsg1 = AppLinkService.getStringFromRes(R.string.main_al_welcome_to), 
+	   	welcomeMsg2 = AppLinkService.getStringFromRes(R.string.main_al_eventseeker);
 		show(welcomeMsg1, welcomeMsg2, TextAlignment.CENTERED);
-	}
+	}*/
    
    public void onOnHMIStatus(OnHMIStatus notification) {
 
@@ -288,17 +293,25 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 				/**
 				 * Subscribe for the buttons
 				 */
-				subButtons();
+				subscribeButtons();
 				// setup app on SYNC
 				// send welcome message if applicable
 				esIProxyListener = MainAL.getInstance((EventSeekr) getApplication());
 				//esIProxyListener.onOnHMIStatus(notification);
-				esIProxyListener.initiateInterAction();
+				esIProxyListener.onCreateInstance();
 				
 			} else if (isHMIStatusNone) {
 				// In case if user had exited app & revisits the app, display welcome msg. No need to add commands again.
 				isHMIStatusNone = false;
-				showWelcomeMsg();
+				//showWelcomeMsg();
+				/**
+				 * showing welcome message from here is commented as in between of the app also when this event
+				 * gets fired it removes the current text from screen and prints welcome message. This issue was
+				 * happening on Discover screen when first 10 events gets loaded and system shows the info of
+				 * first event on screen and currently speaking for the first event and then suddenly welcome 
+				 * message gets appear.
+				 */
+				//ALUtil.displayMessage(R.string.main_al_welcome_to, R.string.main_al_eventseeker);
 			}
 			break;
 			
@@ -377,13 +390,11 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 
 	public boolean getLockScreenStatus() {return lockscreenUP;}
 	
-	public void subButtons() {
+	public void subscribeButtons() {
 		try {
 	        proxy.subscribeButton(ButtonName.OK, autoIncCorrId++);
 	        proxy.subscribeButton(ButtonName.SEEKLEFT, autoIncCorrId++);
 			proxy.subscribeButton(ButtonName.SEEKRIGHT, autoIncCorrId++);
-			proxy.subscribeButton(ButtonName.TUNEUP, autoIncCorrId++);
-			proxy.subscribeButton(ButtonName.TUNEDOWN, autoIncCorrId++);
 			proxy.subscribeButton(ButtonName.PRESET_0, autoIncCorrId++);
 			proxy.subscribeButton(ButtonName.PRESET_1, autoIncCorrId++);
 			proxy.subscribeButton(ButtonName.PRESET_2, autoIncCorrId++);
@@ -396,6 +407,24 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 			proxy.subscribeButton(ButtonName.PRESET_9, autoIncCorrId++);
 		} catch (SyncException e) {}
 	}
+	
+	/*public void unSubscribeButtons() {
+		try {
+			proxy.unsubscribeButton(ButtonName.OK, autoIncCorrId++);
+			proxy.unsubscribeButton(ButtonName.SEEKLEFT, autoIncCorrId++);
+			proxy.unsubscribeButton(ButtonName.SEEKRIGHT, autoIncCorrId++);
+			proxy.unsubscribeButton(ButtonName.PRESET_0, autoIncCorrId++);
+			proxy.unsubscribeButton(ButtonName.PRESET_1, autoIncCorrId++);
+			proxy.unsubscribeButton(ButtonName.PRESET_2, autoIncCorrId++);
+			proxy.unsubscribeButton(ButtonName.PRESET_3, autoIncCorrId++);
+			proxy.unsubscribeButton(ButtonName.PRESET_4, autoIncCorrId++);
+			proxy.unsubscribeButton(ButtonName.PRESET_5, autoIncCorrId++);
+			proxy.unsubscribeButton(ButtonName.PRESET_6, autoIncCorrId++);
+			proxy.unsubscribeButton(ButtonName.PRESET_7, autoIncCorrId++);
+			proxy.unsubscribeButton(ButtonName.PRESET_8, autoIncCorrId++);
+			proxy.unsubscribeButton(ButtonName.PRESET_9, autoIncCorrId++);
+		} catch (SyncException e) {}
+	}*/
 
 	public void onOnDriverDistraction(OnDriverDistraction notification) {
 		driverDistractionNotif = true;
@@ -411,18 +440,12 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	}
 
 	public void onOnCommand(OnCommand notification) {
-		Log.d(TAG, "onOnCommand");
+		//Log.d(TAG, "onOnCommand");
 		/*
 		 * notification obj structure :
 		 * {"notification": {"name": "OnCommand", "parameters": {"cmdID": "3", "triggerSource": "MENU"}}}
 		 */
-		Log.d(TAG, "notification.getCmdID() 1 : " + notification.getParameters("cmdID"));
-		int cmdId = ((Integer) notification.getParameters("cmdID")).intValue();
-		Log.d(TAG, "notification.getCmdID() 2 : " + cmdId);
-		if (cmdId >= CMD_ID_AL) {
-			Log.d(TAG, "cmdId >= CMD_ID_AL");
-			esIProxyListener = MainAL.getInstance((EventSeekr) getApplication());
-		}
+		//int cmdId = Integer.parseInt(notification.getParameters("cmdID").toString());
 		esIProxyListener.onOnCommand(notification);
 	}
 
@@ -442,6 +465,36 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	
 	public void onOnButtonPress(OnButtonPress notification) {
 		esIProxyListener.onOnButtonPress(notification);
+	}
+	
+	/**
+	 * must be called when Discver, My Events and search commands are invoked
+	 * cmd - non null value
+	 * @param cmd
+	 */
+	public void initiateESIProxyListener(Commands cmd) {
+		if (esIProxyListener != null) {
+			esIProxyListener.onStopInstance();
+		}
+		
+		switch (cmd) {
+			case DISCOVER:
+				Log.d(TAG, "DISCOVER");
+				esIProxyListener =  DiscoverAL.getInstance((EventSeekr) getApplication());
+				break;
+			case MY_EVENTS:
+				Log.d(TAG, "MY EVENTS");
+				esIProxyListener =  MyEventsAL.getInstance((EventSeekr) getApplication());
+				break;
+			case SEARCH:
+				Log.d(TAG, "SEARCH");
+				esIProxyListener =  SearchAL.getInstance((EventSeekr) getApplication());
+				break;
+		}
+		if (esIProxyListener == null) {
+			return;
+		}
+		esIProxyListener.onStartInstance();
 	}
 
 	public void onError(String info, Exception e) {}

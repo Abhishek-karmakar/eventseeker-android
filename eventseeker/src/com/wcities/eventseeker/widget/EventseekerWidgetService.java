@@ -9,7 +9,6 @@ import org.json.JSONObject;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.util.Log;
 
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.EventApi;
@@ -20,9 +19,9 @@ import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.core.ItemsList;
 import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
-import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser.MyItemsList;
 import com.wcities.eventseeker.util.DeviceUtil;
 
 public class EventseekerWidgetService extends IntentService {
@@ -70,7 +69,7 @@ public class EventseekerWidgetService extends IntentService {
 			JSONObject jsonObject = userInfoApi.getMyProfileInfoFor(Type.myevents);
 			UserInfoApiJSONParser jsonParser = new UserInfoApiJSONParser();
 			
-			MyItemsList<Event> myEventsList = jsonParser.getEventList(jsonObject);
+			ItemsList<Event> myEventsList = jsonParser.getEventList(jsonObject);
 			tmpEvents = myEventsList.getItems();
 			
 			if (tmpEvents.isEmpty()) {

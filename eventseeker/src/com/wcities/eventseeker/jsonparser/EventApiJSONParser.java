@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import android.util.SparseArray;
 
 import com.wcities.eventseeker.api.Api;
+import com.wcities.eventseeker.applink.handler.DiscoverAL.GetEventsFrom;
 import com.wcities.eventseeker.core.Address;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.BookingInfo;
@@ -21,6 +22,7 @@ import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Friend;
 import com.wcities.eventseeker.core.ImageAttribution;
+import com.wcities.eventseeker.core.ItemsList;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.util.ConversionUtil;
@@ -46,6 +48,7 @@ public class EventApiJSONParser {
 	private static final String KEY_LATITUDE = "latitude";
 	private static final String KEY_LONGITUDE = "longitude";
 
+	private static final String KEY_TOTAL = "total";
 	private static final String KEY_CITYEVENT = "cityevent";
 	private static final String KEY_EVENT = "event";
 	private static final String KEY_SCHEDULE = "schedule";
@@ -380,6 +383,34 @@ public class EventApiJSONParser {
 		}
 		
 		return events;
+	}
+	
+	public ItemsList<Event> getEventItemList(JSONObject jsonObject, GetEventsFrom from) {
+
+		ItemsList<Event> itemsList = new ItemsList<Event>();
+		
+		try {
+			if (from == GetEventsFrom.FEATURED_EVENTS) {
+				JSONObject jObjFeaturedEvents = jsonObject.getJSONObject(KEY_FEATURED_EVENT);
+				itemsList.setTotalCount(jObjFeaturedEvents.getInt(KEY_TOTAL));
+				itemsList.setItems(getFeaturedEventList(jsonObject));
+				
+			} else {
+				JSONObject jObjCityevent = jsonObject.getJSONObject(KEY_CITYEVENT);
+							
+				if (jObjCityevent.has(KEY_EVENTS)) {
+					JSONObject jsonEvents = jObjCityevent.getJSONObject(KEY_EVENTS);
+					itemsList.setTotalCount(jsonEvents.getInt(KEY_TOTAL));
+					itemsList.setItems(getEventList(jsonObject));
+				
+				}
+			} 
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		return itemsList;
 	}
 	
 	private SparseArray<Venue> getVenues(JSONObject jObjCityevent) throws JSONException {

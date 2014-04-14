@@ -8,10 +8,13 @@ import com.ford.syncV4.exception.SyncException;
 import com.ford.syncV4.proxy.rpc.AddCommand;
 import com.ford.syncV4.proxy.rpc.Choice;
 import com.ford.syncV4.proxy.rpc.CreateInteractionChoiceSet;
+import com.ford.syncV4.proxy.rpc.DeleteCommand;
+import com.ford.syncV4.proxy.rpc.DeleteInteractionChoiceSet;
 import com.ford.syncV4.proxy.rpc.PerformInteraction;
 import com.ford.syncV4.proxy.rpc.Speak;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
 import com.ford.syncV4.proxy.rpc.enums.InteractionMode;
+import com.ford.syncV4.proxy.rpc.enums.TextAlignment;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.constants.AppConstants;
 
@@ -34,6 +37,19 @@ public class ALUtil {
 			e.printStackTrace();
 		}
 	}
+
+	public static void deleteCommand(int cmdID) {
+		AppLinkService appLinkService = AppLinkService.getInstance();
+
+		DeleteCommand msg = new DeleteCommand();
+		msg.setCorrelationID(appLinkService.autoIncCorrId++);
+		msg.setCmdID(cmdID);
+		try {
+			appLinkService.getProxy().sendRPCRequest(msg);
+		} catch (SyncException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public static Choice createChoice(int choiceID, String menuName, Vector<String> vrCommands) {
 		Choice choice = new Choice();
@@ -47,13 +63,13 @@ public class ALUtil {
 		return choice;
 	}
 
-	public static void createInteractionChoiceSet(Vector<Choice> commands, int choiceSetId) {
-		Log.d(TAG, "Discover Choice id : " + choiceSetId);
-		if (!commands.isEmpty()) {
+	public static void createInteractionChoiceSet(Vector<Choice> choices, int choiceSetId) {
+		Log.d(TAG, "ChoiceSetid : " + choiceSetId);
+		if (!choices.isEmpty()) {
 			CreateInteractionChoiceSet msg = new CreateInteractionChoiceSet();
 			msg.setCorrelationID(AppLinkService.getInstance().autoIncCorrId++);
 			msg.setInteractionChoiceSetID(choiceSetId);
-			msg.setChoiceSet(commands);
+			msg.setChoiceSet(choices);
 			
 			try {
 				AppLinkService.getInstance().getProxy().sendRPCRequest(msg);
@@ -61,6 +77,20 @@ public class ALUtil {
 			} catch (SyncException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	public static void deleteInteractionChoiceSet(int choiceSetId) {
+		Log.d(TAG, "ChoiceSetid : " + choiceSetId);
+		DeleteInteractionChoiceSet msg = new DeleteInteractionChoiceSet();
+		msg.setCorrelationID(AppLinkService.getInstance().autoIncCorrId++);
+		msg.setInteractionChoiceSetID(choiceSetId);
+		
+		try {
+			AppLinkService.getInstance().getProxy().sendRPCRequest(msg);
+			
+		} catch (SyncException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -96,5 +126,27 @@ public class ALUtil {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void displayMessage(int resIdText1, int resIdText2) {
+		displayMessage(AppLinkService.getStringFromRes(resIdText1), AppLinkService.getStringFromRes(resIdText2));
+	}
+	
+	public static void displayMessage(String text1, String text2) {
+		Log.d(TAG,"text1 : " + text1 + " text2 : " + text2);
+		try {
+			if (text1 == null) {
+				text1 = "";
+			}
+			if (text2 == null) {
+				text2 = "";
+			}
+			AppLinkService.getInstance().getProxy()
+				.show(text1, text2, TextAlignment.LEFT_ALIGNED, AppLinkService.getInstance().autoIncCorrId++);
+
+		} catch (SyncException e) {
+			e.printStackTrace();
+			Log.d(TAG,"Failed to send Show");
+		}
+   }
 	
 }

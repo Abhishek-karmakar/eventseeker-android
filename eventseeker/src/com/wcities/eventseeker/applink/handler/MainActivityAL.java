@@ -33,8 +33,10 @@ import com.ford.syncV4.proxy.rpc.ShowResponse;
 import com.ford.syncV4.proxy.rpc.SpeakResponse;
 import com.ford.syncV4.proxy.rpc.SubscribeButtonResponse;
 import com.ford.syncV4.proxy.rpc.UnsubscribeButtonResponse;
+import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.applink.service.AppLinkService;
+import com.wcities.eventseeker.applink.util.ALUtil;
 
 public class MainActivityAL implements IProxyListenerALM {
 	
@@ -198,7 +200,7 @@ public class MainActivityAL implements IProxyListenerALM {
 
 	@Override
 	public void onOnCommand(OnCommand notification) {
-		CmdId cmdId = CmdId.getCmdId(notification.getCmdID());
+	/*	CmdId cmdId = CmdId.getCmdId(notification.getCmdID());
 		Log.i(TAG, "onOnCommand(), cmdID = " + notification.getCmdID());
 		switch (cmdId) {
 		
@@ -206,19 +208,19 @@ public class MainActivityAL implements IProxyListenerALM {
 			Log.i(TAG, "My Events");
 			MyEventsActivityAL myEventsActivityAL = MyEventsActivityAL.getInstance(context);
 			AppLinkService.getInstance().setESIProxyListener(myEventsActivityAL);
-			myEventsActivityAL.initiateInterAction();
+			myEventsActivityAL.onCreateInstance();
 			break;
 		
 		case DISCOVER:
 			Log.i(TAG, "DISCOVER");
 			DiscoverActivityAL discoverActivityAL = DiscoverActivityAL.getInstance(context);
 			AppLinkService.getInstance().setESIProxyListener(discoverActivityAL);
-			discoverActivityAL.initiateInterAction();
+			discoverActivityAL.onCreateInstance();
 			break;
 
 		default:
 			break;
-		}
+		}*/
 	}
 	
 	@Override
@@ -236,7 +238,8 @@ public class MainActivityAL implements IProxyListenerALM {
 				welcomeMsg2 = "in using facebook";
 			}*/
 			
-			AppLinkService.getInstance().showWelcomeMsg();
+			//AppLinkService.getInstance().showWelcomeMsg();
+			ALUtil.displayMessage(R.string.main_al_welcome_to, R.string.main_al_eventseeker);
 			addCommands();
 			break;
 

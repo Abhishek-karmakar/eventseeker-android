@@ -16,8 +16,8 @@ import org.json.JSONObject;
 import android.util.Log;
 
 import com.ford.syncV4.exception.SyncException;
+import com.ford.syncV4.proxy.IProxyListener;
 import com.ford.syncV4.proxy.TTSChunkFactory;
-import com.ford.syncV4.proxy.interfaces.IProxyListenerALM;
 import com.ford.syncV4.proxy.rpc.AddCommandResponse;
 import com.ford.syncV4.proxy.rpc.AddSubMenuResponse;
 import com.ford.syncV4.proxy.rpc.AlertResponse;
@@ -29,6 +29,7 @@ import com.ford.syncV4.proxy.rpc.DeleteInteractionChoiceSetResponse;
 import com.ford.syncV4.proxy.rpc.DeleteSubMenuResponse;
 import com.ford.syncV4.proxy.rpc.EncodedSyncPDataResponse;
 import com.ford.syncV4.proxy.rpc.GenericResponse;
+import com.ford.syncV4.proxy.rpc.OnAppInterfaceUnregistered;
 import com.ford.syncV4.proxy.rpc.OnButtonEvent;
 import com.ford.syncV4.proxy.rpc.OnButtonPress;
 import com.ford.syncV4.proxy.rpc.OnCommand;
@@ -39,6 +40,7 @@ import com.ford.syncV4.proxy.rpc.OnPermissionsChange;
 import com.ford.syncV4.proxy.rpc.OnTBTClientState;
 import com.ford.syncV4.proxy.rpc.PerformInteraction;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
+import com.ford.syncV4.proxy.rpc.RegisterAppInterfaceResponse;
 import com.ford.syncV4.proxy.rpc.ResetGlobalPropertiesResponse;
 import com.ford.syncV4.proxy.rpc.SetGlobalPropertiesResponse;
 import com.ford.syncV4.proxy.rpc.SetMediaClockTimerResponse;
@@ -47,6 +49,7 @@ import com.ford.syncV4.proxy.rpc.Speak;
 import com.ford.syncV4.proxy.rpc.SpeakResponse;
 import com.ford.syncV4.proxy.rpc.SubscribeButtonResponse;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
+import com.ford.syncV4.proxy.rpc.UnregisterAppInterfaceResponse;
 import com.ford.syncV4.proxy.rpc.UnsubscribeButtonResponse;
 import com.ford.syncV4.proxy.rpc.enums.InteractionMode;
 import com.wcities.eventseeker.api.Api;
@@ -54,16 +57,15 @@ import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.applink.handler.MainActivityAL.CmdId;
-import com.wcities.eventseeker.applink.interfaces.ESIProxyListener;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.core.ItemsList;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
-import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser.MyItemsList;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 
-public class MyEventsActivityAL implements ESIProxyListener {
+public class MyEventsActivityAL implements IProxyListener {
 	
 	private static final String TAG = MyEventsActivityAL.class.getName();
 
@@ -243,7 +245,7 @@ public class MyEventsActivityAL implements ESIProxyListener {
 		currentEvtList = new ArrayList<Event>();
 	}
 	
-	public void initiateInterAction() {
+	public void onCreateInstance() {
 		Log.i(TAG, "initiateInterAction()");
 		initializeInteractionChoiceSets();
 		speakStage = new Init();
@@ -403,7 +405,7 @@ public class MyEventsActivityAL implements ESIProxyListener {
 			JSONObject jsonObject = userInfoApi.getMyProfileInfoFor(Type.myevents);
 			UserInfoApiJSONParser jsonParser = new UserInfoApiJSONParser();
 			
-			MyItemsList<Event> myEventsList = jsonParser.getEventList(jsonObject);
+			ItemsList<Event> myEventsList = jsonParser.getEventList(jsonObject);
 			tmpEvents = myEventsList.getItems();
 			
 		} catch (ClientProtocolException e) {
@@ -1126,5 +1128,30 @@ public class MyEventsActivityAL implements ESIProxyListener {
 	public void onOnTBTClientState(OnTBTClientState arg0) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void onOnAppInterfaceUnregistered(OnAppInterfaceUnregistered arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onProxyOpened() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onRegisterAppInterfaceResponse(RegisterAppInterfaceResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onUnregisterAppInterfaceResponse(
+			UnregisterAppInterfaceResponse arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }

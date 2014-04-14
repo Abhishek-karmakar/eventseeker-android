@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import android.util.Log;
 
 import com.ford.syncV4.exception.SyncException;
+import com.ford.syncV4.proxy.IProxyListener;
 import com.ford.syncV4.proxy.TTSChunkFactory;
 import com.ford.syncV4.proxy.interfaces.IProxyListenerALM;
 import com.ford.syncV4.proxy.rpc.AddCommandResponse;
@@ -27,6 +28,7 @@ import com.ford.syncV4.proxy.rpc.DeleteInteractionChoiceSetResponse;
 import com.ford.syncV4.proxy.rpc.DeleteSubMenuResponse;
 import com.ford.syncV4.proxy.rpc.EncodedSyncPDataResponse;
 import com.ford.syncV4.proxy.rpc.GenericResponse;
+import com.ford.syncV4.proxy.rpc.OnAppInterfaceUnregistered;
 import com.ford.syncV4.proxy.rpc.OnButtonEvent;
 import com.ford.syncV4.proxy.rpc.OnButtonPress;
 import com.ford.syncV4.proxy.rpc.OnCommand;
@@ -37,6 +39,7 @@ import com.ford.syncV4.proxy.rpc.OnPermissionsChange;
 import com.ford.syncV4.proxy.rpc.OnTBTClientState;
 import com.ford.syncV4.proxy.rpc.PerformInteraction;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
+import com.ford.syncV4.proxy.rpc.RegisterAppInterfaceResponse;
 import com.ford.syncV4.proxy.rpc.ResetGlobalPropertiesResponse;
 import com.ford.syncV4.proxy.rpc.SetGlobalPropertiesResponse;
 import com.ford.syncV4.proxy.rpc.SetMediaClockTimerResponse;
@@ -45,12 +48,13 @@ import com.ford.syncV4.proxy.rpc.Speak;
 import com.ford.syncV4.proxy.rpc.SpeakResponse;
 import com.ford.syncV4.proxy.rpc.SubscribeButtonResponse;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
+import com.ford.syncV4.proxy.rpc.UnregisterAppInterfaceResponse;
 import com.ford.syncV4.proxy.rpc.UnsubscribeButtonResponse;
 import com.ford.syncV4.proxy.rpc.enums.InteractionMode;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.EventApi;
 import com.wcities.eventseeker.app.EventSeekr;
-import com.wcities.eventseeker.applink.interfaces.ESIProxyListener;
+import com.wcities.eventseeker.applink.interfaces.ESIProxyALM;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Event;
@@ -58,7 +62,7 @@ import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 
-public class DiscoverActivityAL implements ESIProxyListener {
+public class DiscoverActivityAL implements IProxyListener {
 
 	private static final String TAG = DiscoverActivityAL.class.getName();
 
@@ -196,7 +200,7 @@ public class DiscoverActivityAL implements ESIProxyListener {
 		}
 	}
 	
-	public void initiateInterAction() {
+	public void onCreateInstance() {
 		Log.i(TAG, "initiateInterAction()");
 		initializeInteractionChoiceSets();
 		performInteraction(ChoiceSetId.Discover);
@@ -942,6 +946,31 @@ public class DiscoverActivityAL implements ESIProxyListener {
 
 	@Override
 	public void onOnTBTClientState(OnTBTClientState arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onOnAppInterfaceUnregistered(OnAppInterfaceUnregistered arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onProxyOpened() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onRegisterAppInterfaceResponse(RegisterAppInterfaceResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onUnregisterAppInterfaceResponse(
+			UnregisterAppInterfaceResponse arg0) {
 		// TODO Auto-generated method stub
 		
 	}

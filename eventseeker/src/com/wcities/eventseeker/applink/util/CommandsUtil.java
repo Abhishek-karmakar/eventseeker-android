@@ -3,17 +3,9 @@ package com.wcities.eventseeker.applink.util;
 import java.util.Arrays;
 import java.util.Vector;
 
-import android.util.Log;
-
 import com.ford.syncV4.proxy.rpc.enums.ButtonName;
 import com.wcities.eventseeker.R;
-import com.wcities.eventseeker.app.EventSeekr;
-import com.wcities.eventseeker.applink.handler.DiscoverAL;
-import com.wcities.eventseeker.applink.handler.MyEventsAL;
-import com.wcities.eventseeker.applink.handler.SearchAL;
-import com.wcities.eventseeker.applink.interfaces.ESIProxyListener;
 import com.wcities.eventseeker.applink.service.AppLinkService;
-import com.wcities.eventseeker.applink.util.CommandsUtil.Commands;
 
 public class CommandsUtil {
 
@@ -54,10 +46,13 @@ public class CommandsUtil {
 				return MY_EVENTS;
 			case PRESET_2 : 
 				return SEARCH;
+			case SEEKRIGHT : 
 			case PRESET_3 : 
 				return NEXT;
+			case SEEKLEFT : 
 			case PRESET_4 : 
 				return BACK;
+			case OK : 
 			case PRESET_5 : 
 				return DETAILS;
 			case PRESET_6 : 
@@ -115,19 +110,25 @@ public class CommandsUtil {
 	}
 
 	public static void addCommands(Vector<Commands> reqCommands) {
-		Commands[] allCmds = Commands.values();
+		/*Commands[] allCmds = Commands.values();
 		for (Commands cmd : allCmds) {
 			if (reqCommands.contains(cmd)) {
 				ALUtil.addCommand(new Vector<String>(Arrays.asList(new String[] {cmd.toString()})), cmd.getCmdId());
 			}
+		}*/
+		for (Commands cmd : reqCommands) {
+			ALUtil.addCommand(new Vector<String>(Arrays.asList(new String[] {cmd.toString()})), cmd.getCmdId());
 		}
 	}
 	
 	public static void deleteCommands(Vector<Commands> delCommands) {
 		//TODO: add functionality to delete the commands
+		for (Commands cmd : delCommands) {
+			ALUtil.deleteCommand(cmd.getCmdId());
+		}
 	}
 	
-	public static void performOperationForCommand(Commands cmd) {
+	/*public static void performOperationForCommand(Commands cmd) {
 		if (cmd == null) {
 			return;
 		}
@@ -156,32 +157,6 @@ public class CommandsUtil {
 				break;
 			
 		}
-	}
-	
-	private static void initiateESIProxyListener(Commands cmd) {
-		ESIProxyListener esiProxyListener = null;
-		AppLinkService proxyService = AppLinkService.getInstance();
-		switch (cmd) {
-		case DISCOVER:
-			Log.d(TAG, "DISCOVER");
-			esiProxyListener =  DiscoverAL.getInstance((EventSeekr) proxyService.getApplication());
-			break;
-		case MY_EVENTS:
-			Log.d(TAG, "My Events");
-			esiProxyListener =  MyEventsAL.getInstance((EventSeekr) proxyService.getApplication());
-			break;
-		case SEARCH:
-			Log.d(TAG, "SEARCH");
-			esiProxyListener =  SearchAL.getInstance((EventSeekr) proxyService.getApplication());
-			break;
-		}
-		
-		if (esiProxyListener == null) {
-			return;
-		}
-		
-		proxyService.setESIProxyListener(esiProxyListener);
-		esiProxyListener.initiateInterAction();
-	}
+	}*/
 	
 }

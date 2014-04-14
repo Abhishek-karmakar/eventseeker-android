@@ -235,6 +235,48 @@ public class EventApi extends Api {
 		}
 		
 		setUri(uri);
+		addLangParam = true;
+		Log.i(TAG, "uri="+uri);
+		return execute(RequestMethod.GET, null, null);
+	}
+
+	public JSONObject getFeaturedEventsForFord() throws ClientProtocolException, IOException, JSONException {
+		String METHOD = "getFeaturedEvents.php?";
+		String uri = COMMON_URL + "featured_event/" + METHOD + "oauth_token=" + getOauthToken() + 
+				"&type=featured";
+		
+		if (lat != AppConstants.NOT_ALLOWED_LAT && lon != AppConstants.NOT_ALLOWED_LON) {
+			uri = uri.concat("&lat=" + lat + "&lon=" + lon);
+		}
+		
+		if (miles != NOT_INITIALIZED) {
+			uri = uri.concat("&miles=" + miles);
+		}
+		
+		if (limit != NOT_INITIALIZED) {
+			uri = uri + "&limit=" + alreadyRequested + "," + limit;
+		}
+		
+		if (category != NOT_INITIALIZED) {
+			uri = uri + "&cat=" + category;
+		}
+		
+		if (subcategory != NOT_INITIALIZED) {
+			uri = uri + "&subcat=" + subcategory;
+		}
+		
+		if (start != null) {
+			uri = uri + "&start=" + start;
+		}
+		
+		if (end != null) {
+			uri = uri + "&end=" + end;
+		}
+
+		uri += "&moreInfo=booking";
+		
+		setUri(uri);
+		addLangParam = true;
 		Log.i(TAG, "uri="+uri);
 		return execute(RequestMethod.GET, null, null);
 	}

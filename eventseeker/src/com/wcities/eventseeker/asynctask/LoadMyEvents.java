@@ -9,19 +9,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.BaseAdapter;
 
-import com.wcities.eventseeker.adapter.DateWiseMyEventListAdapter;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.constants.AppConstants;
-import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.core.ItemsList;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
-import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser.MyItemsList;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
 public class LoadMyEvents extends AsyncTask<Void, Void, List<Event>> {
@@ -83,7 +80,7 @@ public class LoadMyEvents extends AsyncTask<Void, Void, List<Event>> {
 			UserInfoApiJSONParser jsonParser = new UserInfoApiJSONParser();
 			
 			if (loadType == Type.myevents) {
-				MyItemsList<Event> myEventsList = jsonParser.getEventList(jsonObject);
+				ItemsList<Event> myEventsList = jsonParser.getEventList(jsonObject);
 				tmpEvents = myEventsList.getItems();
 				
 			} else {

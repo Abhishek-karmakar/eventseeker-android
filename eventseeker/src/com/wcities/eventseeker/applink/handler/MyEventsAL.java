@@ -1,39 +1,28 @@
 package com.wcities.eventseeker.applink.handler;
 
+import java.io.IOException;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.util.Log;
 
-import com.ford.syncV4.proxy.rpc.AddCommandResponse;
-import com.ford.syncV4.proxy.rpc.AddSubMenuResponse;
-import com.ford.syncV4.proxy.rpc.AlertResponse;
-import com.ford.syncV4.proxy.rpc.CreateInteractionChoiceSetResponse;
-import com.ford.syncV4.proxy.rpc.DeleteCommandResponse;
-import com.ford.syncV4.proxy.rpc.DeleteInteractionChoiceSetResponse;
-import com.ford.syncV4.proxy.rpc.DeleteSubMenuResponse;
-import com.ford.syncV4.proxy.rpc.EncodedSyncPDataResponse;
-import com.ford.syncV4.proxy.rpc.GenericResponse;
-import com.ford.syncV4.proxy.rpc.OnButtonEvent;
-import com.ford.syncV4.proxy.rpc.OnButtonPress;
-import com.ford.syncV4.proxy.rpc.OnCommand;
-import com.ford.syncV4.proxy.rpc.OnDriverDistraction;
-import com.ford.syncV4.proxy.rpc.OnEncodedSyncPData;
-import com.ford.syncV4.proxy.rpc.OnHMIStatus;
-import com.ford.syncV4.proxy.rpc.OnPermissionsChange;
-import com.ford.syncV4.proxy.rpc.OnTBTClientState;
-import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
-import com.ford.syncV4.proxy.rpc.ResetGlobalPropertiesResponse;
-import com.ford.syncV4.proxy.rpc.SetGlobalPropertiesResponse;
-import com.ford.syncV4.proxy.rpc.SetMediaClockTimerResponse;
-import com.ford.syncV4.proxy.rpc.ShowResponse;
-import com.ford.syncV4.proxy.rpc.SpeakResponse;
-import com.ford.syncV4.proxy.rpc.SubscribeButtonResponse;
-import com.ford.syncV4.proxy.rpc.UnsubscribeButtonResponse;
+import com.wcities.eventseeker.api.Api;
+import com.wcities.eventseeker.api.UserInfoApi;
+import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.app.EventSeekr;
-import com.wcities.eventseeker.applink.interfaces.ESIProxyListener;
+import com.wcities.eventseeker.applink.interfaces.ESIProxyALM;
+import com.wcities.eventseeker.applink.util.CommandsUtil;
+import com.wcities.eventseeker.applink.util.CommandsUtil.Commands;
 import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 
-public class MyEventsAL implements ESIProxyListener {
+public class MyEventsAL extends ESIProxyALM {
 
 	private static final String TAG = MyEventsAL.class.getName();
 	private static final int EVENTS_LIMIT = 10;
@@ -51,153 +40,166 @@ public class MyEventsAL implements ESIProxyListener {
 		this.context = context;
 	}
 
-	public static ESIProxyListener getInstance(EventSeekr context) {
+	public static ESIProxyALM getInstance(EventSeekr context) {
 		if (instance == null) {
-			Log.d(TAG, "instance is null");
 			instance = new MyEventsAL(context);
+			instance.onCreateInstance();
 		}
-		Log.d(TAG, "return instance");
 		return instance;
+	}
+
+	@Override
+	public void onCreateInstance() {
+		Log.d(TAG, "onCreateInstance()");
 	}
 	
 	@Override
-	public void onAddCommandResponse(AddCommandResponse arg0) {
-		
+	public void onStartInstance() {
+		Log.d(TAG, "onStartInstance()");
+		addCommands();
+	}
+	
+	@Override
+	public void onStopInstance() {
+		Log.d(TAG, "onStopInstance()");	
+		/*ALUtil.deleteInteractionChoiceSet(CHOICE_SET_ID_DISCOVER);
+		Vector<Commands> delCmds = new Vector<Commands>();
+		delCmds.add(Commands.DISCOVER);
+		delCmds.add(Commands.MY_EVENTS);
+		delCmds.add(Commands.SEARCH);
+		delCmds.add(Commands.NEXT);
+		delCmds.add(Commands.BACK);
+		delCmds.add(Commands.DETAILS);
+		delCmds.add(Commands.PLAY);
+		delCmds.add(Commands.CALL_VENUE);
+		CommandsUtil.deleteCommands(delCmds);*/
 	}
 
-	@Override
-	public void onAddSubMenuResponse(AddSubMenuResponse arg0) {
-		
+	private void addCommands() {
+		Vector<Commands> reqCmds = new Vector<Commands>();
+		reqCmds.add(Commands.DISCOVER);
+		reqCmds.add(Commands.MY_EVENTS);
+		reqCmds.add(Commands.SEARCH);
+		reqCmds.add(Commands.NEXT);
+		reqCmds.add(Commands.BACK);
+		reqCmds.add(Commands.DETAILS);
+		reqCmds.add(Commands.PLAY);
+		reqCmds.add(Commands.CALL_VENUE);
+		CommandsUtil.addCommands(reqCmds);
 	}
 
-	@Override
-	public void onAlertResponse(AlertResponse arg0) {
-		
-	}
+	/*private void loadMyEvents() {
+		Log.i(TAG, "loadMyEvents(), eventsAlreadyRequested = " + eventsAlreadyRequested);
+		List<Event> tmpEvents = null;
 
-	@Override
-	public void onCreateInteractionChoiceSetResponse(CreateInteractionChoiceSetResponse arg0) {
-		
-	}
+		UserInfoApi userInfoApi = buildUserInfoApi();
 
-	@Override
-	public void onDeleteCommandResponse(DeleteCommandResponse arg0) {
+		try {
+			// Here getMyProfileInfoFor() returns time sorted event list in ascending order.
+			JSONObject jsonObject = userInfoApi.getMyProfileInfoFor(Type.myevents);
+			UserInfoApiJSONParser jsonParser = new UserInfoApiJSONParser();
+			
+			ItemsList<Event> myEventsList = jsonParser.getEventList(jsonObject);
+			tmpEvents = myEventsList.getItems();
+			
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 		
-	}
-
-	@Override
-	public void onDeleteInteractionChoiceSetResponse(DeleteInteractionChoiceSetResponse arg0) {
-		
-	}
-
-	@Override
-	public void onDeleteSubMenuResponse(DeleteSubMenuResponse arg0) {
-		
-	}
-
-	@Override
-	public void onEncodedSyncPDataResponse(EncodedSyncPDataResponse arg0) {
-		
-	}
-
-	@Override
-	public void onError(String arg0, Exception arg1) {
-		
-	}
-
-	@Override
-	public void onGenericResponse(GenericResponse arg0) {
-		
-	}
-
-	@Override
-	public void onOnButtonEvent(OnButtonEvent arg0) {
-		
-	}
-
-	@Override
-	public void onOnButtonPress(OnButtonPress arg0) {
-		
-	}
-
-	@Override
-	public void onOnCommand(OnCommand arg0) {
-		
-	}
-
-	@Override
-	public void onOnHMIStatus(OnHMIStatus arg0) {
+		if (tmpEvents != null && !tmpEvents.isEmpty()) {
+			Date startDate = whenChoiceId.getStartDate();
+			Date endDate = whenChoiceId.getEndDate();
+			int noOfEventsAdded = filterAndAddMyEvents(tmpEvents, startDate, endDate);
+			Log.i(TAG, "noOfEventsAdded = " + noOfEventsAdded);
+			eventsAlreadyRequested += tmpEvents.size();
+			
+			*//**
+			 * since getMyProfileInfoFor() returns time sorted event list in ascending order, we can use second condition
+			 * here to prevent redundant api calls based on last fetched event time.
+			 *//*
+			if (tmpEvents.size() < EVENTS_LIMIT || 
+					tmpEvents.get(tmpEvents.size() - 1).getSchedule().getDates().get(0).getStartDate().compareTo(endDate) > 0) {
+				Log.i(TAG, "set isMoreDataAvailable = false, tmpEvents.size() = " + tmpEvents.size());
+				isMoreDataAvailable = false;
 				
-	}
+			} else if (noOfEventsAdded == 0) {
+				Log.i(TAG, "no event found on filtering the result, so recursively load More Events");
+				loadMyEvents();
+			}
+			
+		} else {
+			isMoreDataAvailable = false;
+		}
+	}*/
+	
+	private void loadRecommendedEvents() {
+		Log.i(TAG, "loadRecommendedEvents(), eventsAlreadyRequested = " + eventsAlreadyRequested);
+		List<Event> tmpEvents = null;
+		/*lat = 37.7771199960262;
+		lon = -122.419640002772;*/
+		UserInfoApi userInfoApi = buildUserInfoApi();
 
-	@Override
-	public void onOnPermissionsChange(OnPermissionsChange arg0) {
+		try {
+			JSONObject jsonObject = userInfoApi.getMyProfileInfoFor(Type.recommendedevent);
+			UserInfoApiJSONParser jsonParser = new UserInfoApiJSONParser();
+			
+			tmpEvents = jsonParser.getRecommendedEventList(jsonObject);
+			
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 		
+		if (tmpEvents != null && !tmpEvents.isEmpty()) {
+			currentEvtList.addAll(tmpEvents);
+			eventsAlreadyRequested += tmpEvents.size();
+			
+			if (tmpEvents.size() < EVENTS_LIMIT) {
+				Log.i(TAG, "set isMoreDataAvailable = false, tmpEvents.size() = " + tmpEvents.size());
+				isMoreDataAvailable = false;
+			} 
+			
+		} else {
+			isMoreDataAvailable = false;
+		}
 	}
-
-	@Override
-	public void onPerformInteractionResponse(PerformInteractionResponse arg0) {
+	
+	private int filterAndAddMyEvents(List<Event> tmpEvents, Date startDate, Date endDate) {
+		int noOfEventsAdded = 0;
 		
+		for (Iterator<Event> iterator = tmpEvents.iterator(); iterator.hasNext();) {
+			Event event = iterator.next();
+			Date evtDate = event.getSchedule().getDates().get(0).getStartDate();
+			Log.i(TAG, "evtDate = " + evtDate.toString());
+			if (evtDate.compareTo(startDate) < 0 || evtDate.compareTo(endDate) > 0) {
+				Log.i(TAG, "filter out");
+				continue;
+			}
+			currentEvtList.add(event);
+			noOfEventsAdded++;
+		}
+		return noOfEventsAdded;
 	}
-
-	@Override
-	public void onProxyClosed(String arg0, Exception arg1) {
-		
-	}
-
-	@Override
-	public void onResetGlobalPropertiesResponse(ResetGlobalPropertiesResponse arg0) {
-		
-	}
-
-	@Override
-	public void onSetGlobalPropertiesResponse(SetGlobalPropertiesResponse arg0) {
-		
-	}
-
-	@Override
-	public void onSetMediaClockTimerResponse(SetMediaClockTimerResponse arg0) {
-		
-	}
-
-	@Override
-	public void onShowResponse(ShowResponse arg0) {
-		
-	}
-
-	@Override
-	public void onSpeakResponse(SpeakResponse arg0) {
-		
-	}
-
-	@Override
-	public void onSubscribeButtonResponse(SubscribeButtonResponse arg0) {
-		
-	}
-
-	@Override
-	public void onUnsubscribeButtonResponse(UnsubscribeButtonResponse arg0) {
-		
-	}
-
-	@Override
-	public void onOnDriverDistraction(OnDriverDistraction arg0) {
-		
-	}
-
-	@Override
-	public void onOnEncodedSyncPData(OnEncodedSyncPData arg0) {
-		
-	}
-
-	@Override
-	public void onOnTBTClientState(OnTBTClientState arg0) {
-		
-	}
-
-	@Override
-	public void initiateInterAction() {
-		
+	
+	private UserInfoApi buildUserInfoApi() {
+		UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
+		userInfoApi.setLimit(EVENTS_LIMIT);
+		userInfoApi.setAlreadyRequested(eventsAlreadyRequested);
+		userInfoApi.setUserId(context.getWcitiesId());
+		userInfoApi.setLat(lat);
+		userInfoApi.setLon(lon);
+		return userInfoApi;
 	}
 	
 }

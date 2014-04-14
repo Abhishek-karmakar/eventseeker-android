@@ -13,7 +13,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.BaseAdapter;
 
 import com.wcities.eventseeker.api.Api;
@@ -21,9 +20,9 @@ import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.FollowingList;
+import com.wcities.eventseeker.core.ItemsList;
 import com.wcities.eventseeker.interfaces.ArtistAdapterListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
-import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser.MyItemsList;
 
 public class LoadMyArtists extends AsyncTask<Void, Void, List<Artist>> {
 
@@ -72,7 +71,7 @@ public class LoadMyArtists extends AsyncTask<Void, Void, List<Artist>> {
 		try {
 			JSONObject jsonObject = userInfoApi.getMyProfileInfoFor(Type.myartists);
 			UserInfoApiJSONParser jsonParser = new UserInfoApiJSONParser();
-			MyItemsList<Artist> myArtistsList = jsonParser.getArtistList(jsonObject);
+			ItemsList<Artist> myArtistsList = jsonParser.getArtistList(jsonObject);
 			tmpArtists = myArtistsList.getItems();
 
 		} catch (ClientProtocolException e) {
