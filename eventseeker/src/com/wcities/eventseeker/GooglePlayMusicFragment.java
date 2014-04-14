@@ -167,4 +167,9 @@ public class GooglePlayMusicFragment extends FragmentLoadableFromBackStack imple
 			}
 	    }
 	}
+
+	@Override
+	public String getScreenName() {
+		return "Google Play Sync Screen";
+	}
 }

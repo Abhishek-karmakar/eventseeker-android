@@ -75,7 +75,6 @@ public class PandoraFragment extends FragmentLoadableFromBackStack implements On
 		setRetainInstance(true);
 		serviceAccount = (ServiceAccount) getArguments().getSerializable(BundleKeys.SERVICE_ACCOUNTS);
 		isAlive = true;
-		
 	}
 	
 	@Override
@@ -329,5 +328,10 @@ public class PandoraFragment extends FragmentLoadableFromBackStack implements On
 		if (dialogFragment != null) {
 			dialogFragment.dismiss();
 		}
+	}
+
+	@Override
+	public String getScreenName() {
+		return "Pandora Sync Screen";
 	}
 }

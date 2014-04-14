@@ -16,6 +16,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
+import android.support.v7.widget.ShareActionProvider.OnShareTargetSelectedListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.wcities.eventseeker.adapter.SwipeTabsAdapter;
+import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadArtistDetails;
 import com.wcities.eventseeker.asynctask.LoadArtistDetails.OnArtistUpdatedListener;
@@ -217,6 +219,17 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 			}
 		    
 	        mShareActionProvider.setShareIntent(shareIntent);
+	        
+	        mShareActionProvider.setOnShareTargetSelectedListener(new OnShareTargetSelectedListener() {
+				
+				@Override
+				public boolean onShareTargetSelected(ShareActionProvider source, Intent intent) {
+					String shareTarget = intent.getComponent().getPackageName();
+					GoogleAnalyticsTracker.getInstance().sendShareEvent(FragmentUtil.getApplication(ArtistDetailsFragment.this), 
+							getScreenName(), shareTarget, "Artist");
+					return false;
+				}
+			});
 	    }
 	}
 	
@@ -261,5 +274,10 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public String getScreenName() {
+		return "Artist Detail Screen";
 	}
 }

@@ -103,5 +103,10 @@ public class TwitterFragment extends FragmentLoadableFromBackStack {
 		
 		return v;
 	}
+
+	@Override
+	public String getScreenName() {
+		return "Twitter Sync Screen";
+	}
 }
 

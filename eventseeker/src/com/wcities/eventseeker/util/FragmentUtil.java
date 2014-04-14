@@ -11,6 +11,8 @@ import android.support.v4.app.FragmentManager;
 
 import com.wcities.eventseeker.GeneralDialogFragment;
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.interfaces.ActivityImmediateFragmentLoadableFromBackStack;
 
@@ -50,6 +52,10 @@ public class FragmentUtil {
 		return getActivity(fragment).getResources();
 	}
 	
+	public static EventSeekr getApplication(Fragment fragment) {
+		return (EventSeekr) getActivity(fragment).getApplication();
+	}
+	
 	public static Fragment getTopLevelParentFragment(Fragment fragment) {
 		while (fragment.getParentFragment() != null) {
 			fragment = fragment.getParentFragment();
@@ -80,5 +86,16 @@ public class FragmentUtil {
 				res.getString(R.string.go_to_login), res.getString(R.string.pls_login_to_track_evt), 
 				res.getString(R.string.cancel), res.getString(R.string.yes));
 		generalDialogFragment.show(fm, AppConstants.DIALOG_FRAGMENT_TAG_LOGIN_TO_TRACK_EVENT);
+	}
+	
+	public static String getScreenName(Fragment fragment) {
+		while ((fragment != null && !(fragment instanceof IGoogleAnalyticsTracker))) {
+			fragment = fragment.getParentFragment();
+		}
+		
+		if (fragment != null && fragment instanceof IGoogleAnalyticsTracker) {
+			return ((IGoogleAnalyticsTracker)fragment).getScreenName();
+		}
+		return null;
 	}
 }

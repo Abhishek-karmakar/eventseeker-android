@@ -22,8 +22,9 @@ import com.wcities.eventseeker.asynctask.LoadMyEvents;
 import com.wcities.eventseeker.asynctask.LoadMyEvents.MyEventsLoadedListener;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.interfaces.PublishListener;
+import com.wcities.eventseeker.custom.fragment.PublishEventListFragment;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
+import com.wcities.eventseeker.interfaces.PublishListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -74,7 +75,7 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 			dateWiseEvtList.addDummyItem();
 			
 	        eventListAdapter = new DateWiseMyEventListAdapter(FragmentUtil.getActivity(this),  
-	        		dateWiseEvtList, null, this, this);
+	        		dateWiseEvtList, null, this, this, FragmentUtil.getScreenName(this));
 
 			loadItemsInBackground();
 			

@@ -1,12 +1,9 @@
-package com.wcities.eventseeker.custom.fragment;
+package com.wcities.eventseeker.bosch.custom.fragment;
 
 import android.app.Activity;
-import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 
 import com.wcities.eventseeker.MainActivity;
-import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
-import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
 import com.wcities.eventseeker.bosch.BoschMainActivity;
 import com.wcities.eventseeker.interfaces.ActivityImmediateFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
@@ -18,8 +15,8 @@ import com.wcities.eventseeker.util.FragmentUtil;
  * 
  * @author win6
  */
-public abstract class ListFragmentLoadableFromBackStack extends ListFragment implements
-		ActivityImmediateFragmentLoadableFromBackStack, IGoogleAnalyticsTracker {
+public abstract class BoschListFragmentLoadableFromBackStack extends ListFragment implements
+		ActivityImmediateFragmentLoadableFromBackStack {
 
 	private Activity activityRef;
 
@@ -33,12 +30,6 @@ public abstract class ListFragmentLoadableFromBackStack extends ListFragment imp
 		activityRef = activity;
 	}
 	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		GoogleAnalyticsTracker.getInstance().sendScreenView(FragmentUtil.getApplication(this), getScreenName());
-	}
-
 	@Override
 	public void onResume() {
 		super.onResume();

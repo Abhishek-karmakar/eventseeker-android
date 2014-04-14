@@ -239,4 +239,9 @@ public class LastfmFragment extends FragmentLoadableFromBackStack implements OnC
 	public boolean isAlive() {
 		return isAlive;
 	}
+
+	@Override
+	public String getScreenName() {
+		return "LastFM Sync Screen";
+	}
 }

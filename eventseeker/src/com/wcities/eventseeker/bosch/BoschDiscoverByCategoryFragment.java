@@ -12,15 +12,15 @@ import android.view.ViewGroup;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
+import com.wcities.eventseeker.bosch.custom.fragment.BoschFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Category;
-import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GeoUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
 
-public class BoschDiscoverByCategoryFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
+public class BoschDiscoverByCategoryFragment extends BoschFragmentLoadableFromBackStack implements OnClickListener, 
 		GeoUtilListener, OnDisplayModeChangedListener {
 
 	private static final String TAG = BoschDiscoverByCategoryFragment.class.getSimpleName();

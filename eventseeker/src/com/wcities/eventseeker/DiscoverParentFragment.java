@@ -66,7 +66,7 @@ public abstract class DiscoverParentFragment extends FragmentLoadableFromBackSta
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// Log.i(TAG, "onCreate");
+		//Log.d(TAG, "onCreate");
 		setHasOptionsMenu(true);
 		setRetainInstance(true);
 	}
@@ -270,4 +270,8 @@ public abstract class DiscoverParentFragment extends FragmentLoadableFromBackSta
 
 	protected abstract void notifyDataSetChanged();
 
+	@Override
+	public String getScreenName() {
+		return "Discover Screen";
+	}
 }

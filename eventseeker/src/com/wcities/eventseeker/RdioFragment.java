@@ -368,4 +368,8 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 		return isAlive;
 	}
 
+	@Override
+	public String getScreenName() {
+		return "Rdio Sycn Screen";
+	}
 }

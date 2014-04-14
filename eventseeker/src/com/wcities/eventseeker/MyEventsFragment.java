@@ -17,13 +17,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.wcities.eventseeker.adapter.SwipeTabsAdapter;
+import com.wcities.eventseeker.adapter.SwipeTabsAdapter.SwipeTabsAdapterListener;
+import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
 
-public class MyEventsFragment extends FragmentLoadableFromBackStack implements OnClickListener {
+public class MyEventsFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
+		SwipeTabsAdapterListener {
 
 	private static final String TAG = MyEventsFragment.class.getName();
 
@@ -32,6 +35,8 @@ public class MyEventsFragment extends FragmentLoadableFromBackStack implements O
 	
 	private SwipeTabsAdapter mTabsAdapter;
 	private TabBar tabBar;
+	
+	private int lastGaEventSentForPos;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -49,7 +54,7 @@ public class MyEventsFragment extends FragmentLoadableFromBackStack implements O
 		ViewPager viewPager = (ViewPager) v.findViewById(R.id.tabContentFrame);
 		SwipeTabsAdapter oldAdapter = mTabsAdapter;
 		tabBar = new TabBar(getChildFragmentManager());
-		mTabsAdapter = new SwipeTabsAdapter(this, viewPager, tabBar, orientation);
+		mTabsAdapter = new SwipeTabsAdapter(this, viewPager, tabBar, orientation, this);
 		
 		View vTabBar;
 		
@@ -129,6 +134,25 @@ public class MyEventsFragment extends FragmentLoadableFromBackStack implements O
 			
 		default:
 			break;
+		}
+	}
+
+	@Override
+	public String getScreenName() {
+		return "My Events Screen";
+	}
+
+	@Override
+	public void onSwipeTabSelected(int position) {
+		/**
+		 * Following condition is required to prevent multiple event sending for same tab selection 
+		 * in case if just orientation is changed when any tab other than first (index=0) is selected.
+		 */
+		if (position != lastGaEventSentForPos) {
+			String label = (position == 0) ? "My Events Tab" : "Recommended Events Tab";
+			GoogleAnalyticsTracker.getInstance().sendEvent(FragmentUtil.getApplication(this), getScreenName(), 
+					label);
+			lastGaEventSentForPos = position;
 		}
 	}
 }

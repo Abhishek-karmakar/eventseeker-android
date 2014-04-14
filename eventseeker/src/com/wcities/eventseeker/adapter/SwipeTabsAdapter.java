@@ -19,13 +19,19 @@ import com.wcities.eventseeker.viewdata.TabBar.Tab;
 public class SwipeTabsAdapter extends FragmentPagerAdapter implements TabBar.Tab.TabListener, 
 		ViewPager.OnPageChangeListener {
 
-	private static final String TAG = SwipeTabsAdapter.class.getName();
+	private static final String TAG = SwipeTabsAdapter.class.getSimpleName();
 	
 	private Fragment fragment;
 	private final ViewPager mViewPager;
 	private TabBar tabBar;
 	private List<Fragment> tabFragments;
 	private int orientation;
+	
+	private SwipeTabsAdapterListener mListener;
+	
+	public interface SwipeTabsAdapterListener {
+		public void onSwipeTabSelected(int position);
+	}
 
 	public SwipeTabsAdapter(Fragment fragment, ViewPager pager, TabBar tabBar, int orientation) {
 		super(fragment.getChildFragmentManager());
@@ -36,6 +42,12 @@ public class SwipeTabsAdapter extends FragmentPagerAdapter implements TabBar.Tab
 		mViewPager.setAdapter(this);
 		mViewPager.setOnPageChangeListener(this);
 		this.orientation = orientation;
+	}
+	
+	public SwipeTabsAdapter(Fragment fragment, ViewPager pager, TabBar tabBar, int orientation, 
+			SwipeTabsAdapterListener listener) {
+		this(fragment, pager, tabBar, orientation);
+		mListener = listener;
 	}
 
 	public void addTab(Tab tab, SwipeTabsAdapter oldAdapterToRetainState) {
@@ -96,7 +108,7 @@ public class SwipeTabsAdapter extends FragmentPagerAdapter implements TabBar.Tab
 
 	@Override
 	public Fragment getItem(int position) {
-		Log.d(TAG, "getItem(), position = " + position);
+		//Log.d(TAG, "getItem(), position = " + position);
 		Tab tab = tabBar.getTab(position);
 		Fragment tabFragment = Fragment.instantiate(FragmentUtil.getActivity(fragment), tab.getClss().getName(), 
 				tab.getArgs());
@@ -120,7 +132,11 @@ public class SwipeTabsAdapter extends FragmentPagerAdapter implements TabBar.Tab
 
 	@Override
 	public void onPageSelected(int position) {
+		//Log.d(TAG, "onPageSelected(), pos = " + position);
 		tabBar.select(position);
+		if (mListener != null) {
+			mListener.onSwipeTabSelected(position);
+		}
 	}
 
 	@Override

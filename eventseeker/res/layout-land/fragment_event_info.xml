@@ -5,12 +5,6 @@
     android:layout_height="match_parent"
     android:background="@color/dark_gray" >
     
-    <ProgressBar android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone" />
-    
     <RelativeLayout android:id="@+id/rltLayoutLoadedContent"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent" >
@@ -45,11 +39,17 @@
 			            android:background="@android:color/white"
 			            android:layout_weight="1"
 			            android:layout_marginRight="@dimen/rlt_layout_img_evt_margin_r_fragment_event_info" >
+			            
+		                <ProgressBar android:id="@+id/progressBar"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_centerInParent="true" />
 			        
-				        <com.wcities.eventseeker.custom.view.ResizableImageView android:id="@+id/imgEvt"
+				        <ImageView android:id="@+id/imgEvt"
 					        android:layout_width="match_parent"
-					        android:layout_height="wrap_content"
-					        android:contentDescription="event image" />
+					        android:layout_height="@dimen/img_evt_ht_fragment_event_info"
+					        android:contentDescription="event image"
+					        android:scaleType="fitXY" />
 				        
 				        <RelativeLayout android:id="@+id/lnrLayoutEvtInfo"
 				            android:layout_width="match_parent"

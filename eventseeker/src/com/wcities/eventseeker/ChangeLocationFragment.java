@@ -266,4 +266,9 @@ public class ChangeLocationFragment extends FragmentLoadableFromBackStack implem
 	public boolean onMenuItemActionExpand(MenuItem arg0) {
 		return true;
 	}
+
+	@Override
+	public String getScreenName() {
+		return "Select Location Screen";
+	}
 }

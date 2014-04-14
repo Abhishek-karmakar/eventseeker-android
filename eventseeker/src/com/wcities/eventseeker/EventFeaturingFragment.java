@@ -20,6 +20,8 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.wcities.eventseeker.EventDetailsFragment.EventDetailsFragmentChildListener;
 import com.wcities.eventseeker.adapter.ArtistListAdapter;
+import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
+import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -30,6 +32,7 @@ import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
+import com.wcities.eventseeker.custom.fragment.PublishEventListFragment;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -208,6 +211,9 @@ public class EventFeaturingFragment extends PublishEventListFragment implements 
 			args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
 			((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
 					AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
+			GoogleAnalyticsTracker.getInstance().sendEvent(FragmentUtil.getApplication(this), 
+					((IGoogleAnalyticsTracker)getParentFragment()).getScreenName(), 
+					GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON);
 			break;
 			
 		case R.id.chkBoxGoing:

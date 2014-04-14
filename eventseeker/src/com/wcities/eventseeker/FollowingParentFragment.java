@@ -220,5 +220,10 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 		}
 	}
 	
+	@Override
+	public String getScreenName() {
+		return "Following Screen";
+	}
+	
 	protected abstract AbsListView getScrollableView();
 }

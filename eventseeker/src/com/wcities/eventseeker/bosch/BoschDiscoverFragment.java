@@ -20,16 +20,16 @@ import android.widget.TextView;
 
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.bosch.custom.fragment.BoschFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Category;
-import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GeoUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
 
-public class BoschDiscoverFragment extends FragmentLoadableFromBackStack implements OnClickListener, GeoUtilListener {
+public class BoschDiscoverFragment extends BoschFragmentLoadableFromBackStack implements OnClickListener, GeoUtilListener {
 	
 	private static final String TAG = BoschDiscoverFragment.class.getSimpleName();
 

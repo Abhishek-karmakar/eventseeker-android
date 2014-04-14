@@ -177,4 +177,9 @@ public class LanguageFragment extends ListFragmentLoadableFromBackStack {
 			private ImageView imgSelected;
 		}
 	}
+
+	@Override
+	public String getScreenName() {
+		return "Language Screen";
+	}
 }

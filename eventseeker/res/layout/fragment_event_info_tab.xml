@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootRltLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dark_gray" >
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone" />
 
     <RelativeLayout
         android:id="@+id/rltLayoutLoadedContent"
@@ -38,18 +30,25 @@
                     android:background="@drawable/story_space"
                     android:baselineAligned="false"
                     android:orientation="horizontal" >
-
-                    <com.wcities.eventseeker.custom.view.ResizableImageView
-                        android:id="@+id/imgEvt"
+                    
+                    <RelativeLayout android:id="@+id/rltLytImgEvt"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_margin="@dimen/img_evt_margin_fragment_event_info"
                         android:layout_weight="1"
-                        android:contentDescription="event image"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/ic_launcher"
-                        app:compressAsPerWidth="true" />
+                       	android:padding="@dimen/img_evt_margin_fragment_event_info" >
+
+	                    <ImageView android:id="@+id/imgEvt"
+	                        android:layout_width="match_parent"
+	                        android:layout_height="@dimen/img_evt_ht_fragment_event_info"
+	                        android:contentDescription="event image"
+	                        android:scaleType="fitXY" />
+	                    
+	                    <ProgressBar android:id="@+id/progressBar"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_centerInParent="true" />
+                    
+                    </RelativeLayout>
 
                     <LinearLayout
                         android:id="@+id/rltLayoutEvtInfo"

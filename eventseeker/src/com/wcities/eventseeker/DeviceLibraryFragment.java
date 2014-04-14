@@ -199,5 +199,10 @@ public class DeviceLibraryFragment extends FragmentLoadableFromBackStack impleme
 	public boolean isAlive() {
 		return isAlive;
 	}
+
+	@Override
+	public String getScreenName() {
+		return "Scan Library Screen";
+	}
 	
 }

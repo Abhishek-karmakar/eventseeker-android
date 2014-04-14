@@ -39,8 +39,6 @@ import com.bosch.myspin.serversdk.MySpinException;
 import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.ford.syncV4.proxy.SyncProxyALM;
 import com.ford.syncV4.transport.TransportType;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.wcities.eventseeker.ChangeLocationFragment.ChangeLocationFragmentListener;
 import com.wcities.eventseeker.ConnectAccountsFragment.ConnectAccountsFragmentListener;
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
@@ -49,7 +47,6 @@ import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.GetStartedFragment.GetStartedFragmentListener;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.app.EventSeekr;
-import com.wcities.eventseeker.app.EventSeekr.TrackerName;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.bosch.BoschMainActivity;
 import com.wcities.eventseeker.constants.AppConstants;
@@ -88,7 +85,8 @@ public class MainActivity extends ActionBarActivity implements
 	public static final int INDEX_NAV_ITEM_FRIENDS_ACTIVITY = INDEX_NAV_ITEM_ARTISTS_NEWS + 1;
 	public static final int INDEX_NAV_ITEM_CONNECT_ACCOUNTS = DrawerListFragment.SECT_2_HEADER_POS + 1;
 	private static final int INDEX_NAV_ITEM_CHANGE_LOCATION = INDEX_NAV_ITEM_CONNECT_ACCOUNTS + 1;
-	private static final int INDEX_NAV_ITEM_LANGUAGE = INDEX_NAV_ITEM_CHANGE_LOCATION + 1;
+	// TODO: uncomment following for enabling language
+	//private static final int INDEX_NAV_ITEM_LANGUAGE = INDEX_NAV_ITEM_CHANGE_LOCATION + 1;
 	public static final int INDEX_NAV_ITEM_INVITE_FRIENDS = DrawerListFragment.SECT_3_HEADER_POS + 1;
 	private static final int INDEX_NAV_ITEM_RATE_APP = INDEX_NAV_ITEM_INVITE_FRIENDS + 1;
 	private static final int INDEX_NAV_ITEM_ABOUT_US = INDEX_NAV_ITEM_RATE_APP + 1;
@@ -354,7 +352,6 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		//Log.d(TAG, "onNewIntent()");
 		if (intent.hasExtra(BundleKeys.EVENT)) {
 			onEventSelectedFromOtherTask((Event) intent.getSerializableExtra(BundleKeys.EVENT), true);
 			
@@ -500,17 +497,6 @@ public class MainActivity extends ActionBarActivity implements
 		switch (item.getItemId()) {
 
 		case android.R.id.home:
-			// Get tracker.
-	        /*Tracker t = ((EventSeekr) getApplication()).getTracker(TrackerName.APP_TRACKER);
-
-	        // Set screen name.
-	        // Where path is a String representing the screen name.
-	        t.setScreenName("Navigation Drawer");
-
-	        // Send a screen view.
-	        t.send(new HitBuilders.AppViewBuilder().build());
-	        Log.d(TAG, "Tracker view sent");*/
-	        
 			if (AppConstants.FRAGMENT_TAG_LOGIN_SYNCING.equals(currentContentFragmentTag)) {
 				return true;
 				
@@ -976,11 +962,12 @@ public class MainActivity extends ActionBarActivity implements
 					getResources().getString(R.string.title_change_location), false);
 			break;
 
-		case INDEX_NAV_ITEM_LANGUAGE:
+		// TODO: uncomment following for enabling language
+		/*case INDEX_NAV_ITEM_LANGUAGE:
 			LanguageFragment languageFragment = new LanguageFragment();
 			replaceContentFrameByFragment(languageFragment, AppConstants.FRAGMENT_TAG_LANGUAGE, 
 					getResources().getString(R.string.title_language), false);
-			break;
+			break;*/
 			
 		case INDEX_NAV_ITEM_INVITE_FRIENDS:
 			inviteFriends();
@@ -1484,12 +1471,14 @@ public class MainActivity extends ActionBarActivity implements
 					.getString(R.string.title_change_location),
 					AppConstants.FRAGMENT_TAG_CHANGE_LOCATION);
 			
-		} else if (fragment instanceof LanguageFragment) {
+		} 
+		// TODO: uncomment following for enabling language
+		/*else if (fragment instanceof LanguageFragment) {
 			onFragmentResumed(INDEX_NAV_ITEM_LANGUAGE, getResources()
 					.getString(R.string.title_language),
 					AppConstants.FRAGMENT_TAG_LANGUAGE);
 
-		} else if (fragment instanceof AboutUsFragment) {
+		}*/ else if (fragment instanceof AboutUsFragment) {
 			onFragmentResumed(INDEX_NAV_ITEM_ABOUT_US, getResources()
 					.getString(R.string.title_about_us),
 					AppConstants.FRAGMENT_TAG_ABOUT_US);

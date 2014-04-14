@@ -9,13 +9,15 @@ public class AppConstants {
 	
 	public static final boolean IS_RELEASE_MODE = false;
 	public static final boolean CHECK_CONNECTIVITY_STATUS = true;
-	public static final boolean CRASH_REPORTING_ENABLED = false;
-	public static final boolean STRICT_MODE_ENABLED = false;
+	public static final boolean SEND_GOOGLE_ANALYTICS = false;
 	/**
 	 * 'DEBUG' and 'FORD_SYNC_APP' variable is only for ford implementation
 	 */
-	public static final boolean DEBUG = true;
-	public static final boolean FORD_SYNC_APP = true;
+	public static final boolean DEBUG = false;
+	public static final boolean FORD_SYNC_APP = false;
+	
+	public static final boolean CRASH_REPORTING_ENABLED = false;
+	public static final boolean STRICT_MODE_ENABLED = false;
 	
 	public static final int TCP_PORT = 50007;
 	public static final String TCP_IP_ADDRESS = "192.168.1.173";

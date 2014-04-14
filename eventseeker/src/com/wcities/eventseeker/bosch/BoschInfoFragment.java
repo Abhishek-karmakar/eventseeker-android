@@ -14,15 +14,15 @@ import android.widget.TextView;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.bosch.BoschMainActivity.OnCarStationaryStatusChangedListener;
 import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
+import com.wcities.eventseeker.bosch.custom.fragment.BoschFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Venue;
-import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 
-public class BoschInfoFragment extends FragmentLoadableFromBackStack implements View.OnClickListener, 
+public class BoschInfoFragment extends BoschFragmentLoadableFromBackStack implements View.OnClickListener, 
 		OnCarStationaryStatusChangedListener, OnDisplayModeChangedListener {
 
 	private Artist artist;

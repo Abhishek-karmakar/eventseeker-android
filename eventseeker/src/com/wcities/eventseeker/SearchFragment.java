@@ -194,4 +194,9 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 			break;
 		}
 	}
+
+	@Override
+	public String getScreenName() {
+		return "Search Screen";
+	}
 }

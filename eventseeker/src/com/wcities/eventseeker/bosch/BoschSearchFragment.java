@@ -1,27 +1,24 @@
 package com.wcities.eventseeker.bosch;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
+import com.wcities.eventseeker.bosch.custom.fragment.BoschFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.bosch.interfaces.BoschEditTextListener;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class BoschSearchFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
+public class BoschSearchFragment extends BoschFragmentLoadableFromBackStack implements OnClickListener, 
 		OnDisplayModeChangedListener, BoschEditTextListener {
 
 	private static final String TAG = BoschSearchFragment.class.getName();

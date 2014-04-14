@@ -4,10 +4,7 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -32,6 +29,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.wcities.eventseeker.adapter.SwipeTabsAdapter;
+import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadEventDetails;
 import com.wcities.eventseeker.asynctask.LoadEventDetails.OnEventUpdatedListner;
@@ -46,7 +44,7 @@ import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
 
 public class EventDetailsFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
-OnEventUpdatedListner{
+		OnEventUpdatedListner{
 
 	private static final String TAG = EventDetailsFragment.class.getName();
 
@@ -236,11 +234,15 @@ OnEventUpdatedListner{
 				@Override
 				public boolean onShareTargetSelected(ShareActionProvider source, Intent intent) {
 					String shareTarget = intent.getComponent().getPackageName();
+					//Log.d(TAG, "shareTarget = " + shareTarget);
 					if (eventSeekr.getPackageName().equals(shareTarget)) {
 						//Log.d(TAG, "shareTarget = " + shareTarget);
 						// required to handle "add to calendar" action
 						eventSeekr.setEventToAddToCalendar(event);
 					}
+					
+					GoogleAnalyticsTracker.getInstance().sendShareEvent(eventSeekr, getScreenName(), 
+							shareTarget, "Event");
 					return false;
 				}
 			});
@@ -285,5 +287,10 @@ OnEventUpdatedListner{
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public String getScreenName() {
+		return "Event Detail Screen";
 	}
 }

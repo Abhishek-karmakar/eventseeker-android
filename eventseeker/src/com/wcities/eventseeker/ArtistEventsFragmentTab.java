@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.wcities.eventseeker.adapter.DateWiseMyEventListAdapter;
+import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 
@@ -37,8 +38,8 @@ public class ArtistEventsFragmentTab extends ArtistEventsParentFragment {
 
 	@Override
 	protected DateWiseEventParentAdapterListener getAdapterInstance() {
-		return new DateWiseMyEventListAdapter(FragmentUtil.getActivity(this),  
-        		dateWiseEventList, null, this, this);
+		return new DateWiseMyEventListAdapter(FragmentUtil.getActivity(this), dateWiseEventList, null, 
+				this, this, FragmentUtil.getScreenName(this));
 	}
 	
 	@Override

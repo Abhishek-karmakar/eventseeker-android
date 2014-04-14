@@ -53,6 +53,7 @@
     <dimen name="rlt_layout_evt_desc_margin_r_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="grd_v_friends_col_w_fragment_event_info">60dp</dimen>
     <dimen name="img_down_margin_b_fragment_event_info">@dimen/img_down_margin_r_fragment_evt_info</dimen>
+    <dimen name="img_evt_ht_fragment_event_info">190dp</dimen>
 
     <!-- fragment_event_featuring.xml -->
     <dimen name="lnr_layout_artist_list_margin_l_fragment_event_featuring">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>

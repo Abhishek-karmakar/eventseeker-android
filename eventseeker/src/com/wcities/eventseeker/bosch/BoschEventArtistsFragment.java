@@ -12,14 +12,14 @@ import android.view.ViewGroup;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
 import com.wcities.eventseeker.bosch.adapter.BoschArtistListAdapter;
+import com.wcities.eventseeker.bosch.custom.fragment.BoschListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Event;
-import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class BoschEventArtistsFragment extends ListFragmentLoadableFromBackStack implements OnClickListener, 
+public class BoschEventArtistsFragment extends BoschListFragmentLoadableFromBackStack implements OnClickListener, 
 		OnDisplayModeChangedListener {
 
 	private Event event;

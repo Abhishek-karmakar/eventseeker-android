@@ -1,11 +1,11 @@
-package com.wcities.eventseeker;
+package com.wcities.eventseeker.custom.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.facebook.Session;
@@ -14,28 +14,25 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.plus.PlusClient;
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
+import com.wcities.eventseeker.MainActivity;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
-import com.wcities.eventseeker.core.FriendNewsItem;
 import com.wcities.eventseeker.interfaces.PublishListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GPlusUtil;
 
-public abstract class PublishEventListFragment extends ListFragment implements PublishListener, 
+public abstract class PublishEventFragment extends Fragment implements PublishListener, 
 		ConnectionCallbacks, OnConnectionFailedListener, DialogBtnClickListener {
 	
-	private static final String TAG = PublishEventListFragment.class.getSimpleName();
-	
+	private static final String TAG = PublishEventFragment.class.getSimpleName();
+
 	protected Event event;
-	protected FriendNewsItem friendNewsItem;
-	
 	// Flag to represent if we are waiting for extended permissions
 	private boolean pendingAnnounce = false;
 	
@@ -52,6 +49,7 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 	
 	@Override
 	public void onStart() {
+		//Log.d(TAG, "onStart()");
 		Session session = Session.getActiveSession();
 		if (session != null) {
 			session.addCallback(this);
@@ -61,6 +59,7 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 	
 	@Override
 	public void onStop() {
+		//Log.d(TAG, "onStop()");
 		Session session = Session.getActiveSession();
 		if (session != null) {
 			session.removeCallback(this);
@@ -90,21 +89,17 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 	        } else if (GPlusUtil.isGPlusPublishPending) {
 	        	GPlusUtil.isGPlusPublishPending = false;
 	        	if (resultCode == Activity.RESULT_OK) {
-	        		if (event != null) {
-	        			event.updateAttendingToNewAttending();
-	        			
-	        		} else {
-	        			friendNewsItem.updateUserAttendingToNewUserAttending();
-	        		}
+	        		event.updateAttendingToNewAttending();
 	    			onPublishPermissionGranted();
 	        		trackEvent();
 	        	}
 	        	
 	        } else {
+	        	//Log.d(TAG, "handle fb");
 	    		// don't compare request code here, since it normally returns 64206 (hardcoded value) for openActiveSession() request
 				Session session = Session.getActiveSession();
 		        if (session != null) {
-		        	Log.d(TAG, "session!=null");
+		        	//Log.d(TAG, "session!=null");
 		            session.onActivityResult(FragmentUtil.getActivity(this), requestCode, resultCode, data);
 		        }
 	        }
@@ -121,32 +116,14 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 		return pendingAnnounce;
 	}
 	
-	public void setEvent(Event event) {
-		this.event = event;
-	}
-
-	public void setFriendNewsItem(FriendNewsItem friendNewsItem) {
-		this.friendNewsItem = friendNewsItem;
-	}
-
 	protected void trackEvent() {
-		long id;
-		int attending;
-		if (event != null) {
-			id = event.getId();
-			attending = event.getAttending().getValue();
-			
-		} else {
-			id = friendNewsItem.getTrackId();
-			attending = friendNewsItem.getUserAttending().getValue();
-		}
 		new UserTracker((EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
-        		UserTrackingItemType.event, id, attending, null, 
+        		UserTrackingItemType.event, event.getId(), event.getAttending().getValue(), null, 
         		UserTrackingType.Add).execute();
 	}
 	
-	public void handlePublishEvent() {
-		Log.d(TAG, "handlePublish()");
+	protected void handlePublishEvent() {
+		//Log.d(TAG, "handlePublish()");
 		int available = GooglePlayServicesUtil.isGooglePlayServicesAvailable(FragmentUtil.getActivity(this));
 		if (available != ConnectionResult.SUCCESS) {
 			GPlusUtil.showDialogForGPlayServiceUnavailability(available, this);
@@ -154,12 +131,7 @@ public abstract class PublishEventListFragment extends ListFragment implements P
         }
 		
 		if (mGoogleApiClient.isConnected()) {
-			if (event != null) {
-				GPlusUtil.publishEvent(event, this);
-				
-			} else {
-				GPlusUtil.publishFriendNewsItem(friendNewsItem, this);
-			}
+			GPlusUtil.publishEvent(event, this);
 			
 		} else {
 			pendingAnnounce = true;
@@ -182,9 +154,9 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 	}
 	
 	private void connectPlusClient() {
-    	Log.d(TAG, "connectPlusClient()");
+    	//Log.d(TAG, "connectPlusClient()");
     	if (!mGoogleApiClient.isConnected() && !mGoogleApiClient.isConnecting()) {
-    		Log.d(TAG, "try connecting");
+    		//Log.d(TAG, "try connecting");
     		mConnectionResult = null;
     		mGoogleApiClient.connect();
     	}
@@ -219,12 +191,7 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 	@Override
 	public void onConnected(Bundle arg0) {
 		if (pendingAnnounce) {
-			if (event != null) {
-				GPlusUtil.publishEvent(event, this);
-				
-			} else {
-				GPlusUtil.publishFriendNewsItem(friendNewsItem, this);
-			}
+			GPlusUtil.publishEvent(event, this);
 		}
 	}
 	
@@ -248,7 +215,7 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 			}
 		}
 	}
-
+	
 	public boolean isPermissionDisplayed() {
 		return isPublishPermissionDisplayed;
 	}

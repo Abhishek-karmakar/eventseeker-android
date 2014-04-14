@@ -128,4 +128,9 @@ public class DiscoverByCategoryFragment extends FragmentLoadableFromBackStack im
 		
 		dateWiseEventListFragment.resetWith(startDate, endDate);
 	}
+	
+	@Override
+	public String getScreenName() {
+		return "Discover Category Screen";
+	}
 }

@@ -100,4 +100,9 @@ public class WebViewFragment extends FragmentLoadableFromBackStack {
 		}
 		return false;
 	}
+
+	@Override
+	public String getScreenName() {
+		return "Website Browser Screen";
+	}
 }

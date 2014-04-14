@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,12 +24,11 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.ArtistNewsItem;
-import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class ArtistNewsListFragment extends ListFragmentLoadableFromBackStack implements LoadItemsInBackgroundListener, OnNewsLoadedListener {
+public class ArtistNewsListFragment extends ListFragment implements LoadItemsInBackgroundListener, OnNewsLoadedListener {
 	
 	protected static final String TAG = ArtistNewsListFragment.class.getName();
 
