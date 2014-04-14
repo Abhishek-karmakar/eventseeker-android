@@ -10,8 +10,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 import com.wcities.eventseeker.ConnectAccountsFragment;
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.api.UserInfoApi.RepCodeResponse;
@@ -23,6 +21,7 @@ import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.FriendNewsItem;
 import com.wcities.eventseeker.core.ImageAttribution;
+import com.wcities.eventseeker.core.ItemsList;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.core.Video;
@@ -126,14 +125,16 @@ public class UserInfoApiJSONParser {
 		return repCodeResponse;
 	}
 	
-	public MyItemsList<Artist> getArtistList(JSONObject jsonObject) {
-		MyItemsList<Artist> myArtistsList = new MyItemsList<Artist>();
+	public ItemsList<Artist> getArtistList(JSONObject jsonObject) {
+		ItemsList<Artist> myArtistsList = new ItemsList<Artist>();
 		List<Artist> artists = new ArrayList<Artist>();
-		myArtistsList.items = artists;
+		//myArtistsList.items = artists;
+		myArtistsList.setItems(artists);
 		
 		try {
 			JSONObject jObjTracked = jsonObject.getJSONObject(KEY_TRACKED);
-			myArtistsList.totalCount = jObjTracked.getInt(KEY_TOTAL);
+			//myArtistsList.totalCount = jObjTracked.getInt(KEY_TOTAL);
+			myArtistsList.setTotalCount(jObjTracked.getInt(KEY_TOTAL));
 			
 			if (jObjTracked.has(KEY_TRACK_INFO)) {
 				Object jTrackedInfo = jObjTracked.get(KEY_TRACK_INFO);
@@ -384,14 +385,16 @@ public class UserInfoApiJSONParser {
 		return recommendedEvtList;
 	} 
 	
-	public MyItemsList<Event> getEventList(JSONObject jsonObject) {
-		MyItemsList<Event> myEventsList = new MyItemsList<Event>();
+	public ItemsList<Event> getEventList(JSONObject jsonObject) {
+		ItemsList<Event> myEventsList = new ItemsList<Event>();
 		List<Event> events = new ArrayList<Event>();
-		myEventsList.items = events;
+		//myEventsList.items = events;
+		myEventsList.setItems(events);
 		
 		try {
 			JSONObject jObjTracked = jsonObject.getJSONObject(KEY_TRACKED);
-			myEventsList.totalCount = jObjTracked.getInt(KEY_TOTAL);
+			//myEventsList.totalCount = jObjTracked.getInt(KEY_TOTAL);
+			myEventsList.setTotalCount(jObjTracked.getInt(KEY_TOTAL));
 			
 			if (jObjTracked.has(KEY_TRACK_INFO)) {
 				Object jTrackedInfo = jObjTracked.get(KEY_TRACK_INFO);
@@ -607,7 +610,7 @@ public class UserInfoApiJSONParser {
 		return schedule;
 	}
 	
-	public class MyItemsList<T> {
+	/*public class ItemsList<T> {
 		
 		private int totalCount;
 		private List<T> items;
@@ -619,5 +622,5 @@ public class UserInfoApiJSONParser {
 		public List<T> getItems() {
 			return items;
 		}
-	}
+	}*/
 }
