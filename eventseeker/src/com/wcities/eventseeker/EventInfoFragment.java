@@ -64,11 +64,11 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 	
 	private boolean isEvtDescExpanded, isFriendsGridExpanded;
 	private int orientation;
-	private boolean allDetailsLoaded;
+	private boolean allDetailsLoaded, isImgLoaded;
 	private String wcitiesId;
 
 	private Resources res;
-	private ProgressBar progressBar2;
+	private ProgressBar progressBar, progressBar2;
 	private ImageView imgEvt;
 	private ExpandableGridView grdVFriends;
 	private TextView txtViewAll;
@@ -113,6 +113,7 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 		View v = inflater.inflate(R.layout.fragment_event_info, null);
 		
 		rltLayoutLoadedContent = (RelativeLayout) v.findViewById(R.id.rltLayoutLoadedContent);
+		progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
 		if (orientation == Configuration.ORIENTATION_PORTRAIT) {
 			progressBar2 = (ProgressBar) v.findViewById(R.id.progressBar2);
 		}
@@ -281,19 +282,21 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 			if (bitmap != null) {
 		        imgEvt.setImageBitmap(bitmap);
+		        isImgLoaded = true;
 		        
 		    } else {
 		    	imgEvt.setImageBitmap(null);
 		    	AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
 		        asyncLoadImg.loadImg(imgEvt, ImgResolution.LOW, event, this);
+		        isImgLoaded = false;
 		    }
 		}
 		updateProgressBarVisibility();
 	}
 	
 	private void updateProgressBarVisibility() {
-		rltLayoutLoadedContent.setVisibility(View.VISIBLE);
-		//progressBar.setVisibility(View.GONE);
+		int progressBarVisibility = isImgLoaded ? View.GONE : View.VISIBLE;
+		progressBar.setVisibility(progressBarVisibility);
 		
 		if (progressBar2 != null) {
 			if (allDetailsLoaded) {
@@ -736,12 +739,14 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 
 	@Override
 	public void onImageLoaded() {
-		Log.d(TAG, "onImageLoaded()");
+		//Log.d(TAG, "onImageLoaded()");
+		isImgLoaded = true;
 		updateScreen();
 	}
 
 	@Override
 	public void onImageCouldNotBeLoaded() {
+		isImgLoaded = true;
 		updateScreen();
 	}
 

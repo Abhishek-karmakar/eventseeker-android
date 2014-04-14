@@ -30,15 +30,25 @@
                     android:background="@drawable/story_space"
                     android:baselineAligned="false"
                     android:orientation="horizontal" >
-
-                    <ImageView android:id="@+id/imgEvt"
+                    
+                    <RelativeLayout android:id="@+id/rltLytImgEvt"
                         android:layout_width="0dp"
-                        android:layout_height="@dimen/img_evt_ht_fragment_event_info"
-                        android:layout_gravity="center_vertical"
-                        android:layout_margin="@dimen/img_evt_margin_fragment_event_info"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:contentDescription="event image"
-                        android:scaleType="fitXY" />
+                        android:layout_margin="@dimen/img_evt_margin_fragment_event_info" >
+
+	                    <ImageView android:id="@+id/imgEvt"
+	                        android:layout_width="match_parent"
+	                        android:layout_height="@dimen/img_evt_ht_fragment_event_info"
+	                        android:contentDescription="event image"
+	                        android:scaleType="fitXY" />
+	                    
+	                    <ProgressBar android:id="@+id/progressBar"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_centerInParent="true" />
+                    
+                    </RelativeLayout>
 
                     <LinearLayout
                         android:id="@+id/rltLayoutEvtInfo"

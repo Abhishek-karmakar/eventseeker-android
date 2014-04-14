@@ -39,6 +39,11 @@
 			            android:background="@android:color/white"
 			            android:layout_weight="1"
 			            android:layout_marginRight="@dimen/rlt_layout_img_evt_margin_r_fragment_event_info" >
+			            
+		                <ProgressBar android:id="@+id/progressBar"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_centerInParent="true" />
 			        
 				        <ImageView android:id="@+id/imgEvt"
 					        android:layout_width="match_parent"
