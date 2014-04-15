@@ -117,12 +117,12 @@ public class CommandsUtil {
 			}
 		}*/
 		for (Commands cmd : reqCommands) {
+			//Log.d(TAG, "onOnCommand add command cmd.getCmdId() = " + cmd.getCmdId());
 			ALUtil.addCommand(new Vector<String>(Arrays.asList(new String[] {cmd.toString()})), cmd.getCmdId());
 		}
 	}
 	
 	public static void deleteCommands(Vector<Commands> delCommands) {
-		//TODO: add functionality to delete the commands
 		for (Commands cmd : delCommands) {
 			ALUtil.deleteCommand(cmd.getCmdId());
 		}

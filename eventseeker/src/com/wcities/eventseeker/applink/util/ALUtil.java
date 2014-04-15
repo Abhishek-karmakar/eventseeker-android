@@ -10,6 +10,7 @@ import com.ford.syncV4.proxy.rpc.Choice;
 import com.ford.syncV4.proxy.rpc.CreateInteractionChoiceSet;
 import com.ford.syncV4.proxy.rpc.DeleteCommand;
 import com.ford.syncV4.proxy.rpc.DeleteInteractionChoiceSet;
+import com.ford.syncV4.proxy.rpc.MenuParams;
 import com.ford.syncV4.proxy.rpc.PerformInteraction;
 import com.ford.syncV4.proxy.rpc.Speak;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
@@ -30,6 +31,12 @@ public class ALUtil {
 		msg.setCorrelationID(appLinkService.autoIncCorrId++);
 		msg.setVrCommands(vrCommands);
 		msg.setCmdID(cmdID);
+		
+		MenuParams menuParams = new MenuParams();
+		menuParams.setMenuName(vrCommands.get(0));
+		menuParams.setPosition(cmdID - 1);
+		msg.setMenuParams(menuParams);
+		
 		try {
 			appLinkService.getProxy().sendRPCRequest(msg);
 			
@@ -39,7 +46,7 @@ public class ALUtil {
 	}
 
 	public static void deleteCommand(int cmdID) {
-		AppLinkService appLinkService = AppLinkService.getInstance();
+		/*AppLinkService appLinkService = AppLinkService.getInstance();
 
 		DeleteCommand msg = new DeleteCommand();
 		msg.setCorrelationID(appLinkService.autoIncCorrId++);
@@ -48,7 +55,7 @@ public class ALUtil {
 			appLinkService.getProxy().sendRPCRequest(msg);
 		} catch (SyncException e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
 	
 	public static Choice createChoice(int choiceID, String menuName, Vector<String> vrCommands) {

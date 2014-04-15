@@ -43,12 +43,12 @@ public class MainAL extends ESIProxyALM {
 
 	@Override
 	public void onOnCommand(OnCommand notification) {
-		//Log.d(TAG, "onOnCommand");
 		/************************************************
 		 * NOTE:notification.getCmdID() is not working. *
 		 * So, we have used the alternative for the same*
 		 ************************************************/
 		int cmdId = Integer.parseInt(notification.getParameters("cmdID").toString());
+		//Log.d(TAG, "onOnCommand, cmdId = " + cmdId);
 		Commands cmd = Commands.getCommandById(/*notification.getCmdID()*/cmdId);
 		performOperationForCommand(cmd);
 	}
