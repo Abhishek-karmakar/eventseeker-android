@@ -20,7 +20,7 @@ public class AppConstants {
 	public static final boolean STRICT_MODE_ENABLED = false;
 	
 	public static final int TCP_PORT = 50007;
-	public static final String TCP_IP_ADDRESS = "192.168.1.173";
+	public static final String TCP_IP_ADDRESS = "192.168.1.66"; //"192.168.1.173";
 	
 	public static String TWITTER_CONSUMER_KEY;
 	public static String TWITTER_CONSUMER_SECRET;
