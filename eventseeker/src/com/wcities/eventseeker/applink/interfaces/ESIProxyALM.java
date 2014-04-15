@@ -30,7 +30,6 @@ import com.wcities.eventseeker.app.EventSeekr;
 
 public abstract class ESIProxyALM implements IProxyListenerALM {
 	
-	public abstract void onCreateInstance();
 	public abstract void onStartInstance();
 	public abstract void onStopInstance();	
 	

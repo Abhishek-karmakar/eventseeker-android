@@ -26,6 +26,8 @@ public abstract class Api {
 	// provided by Samir after attaching italic tags with description
 	public static final String OAUTH_TOKEN = "a82d32bd99044507417055f66c1a614c"; 
 											//"5c63440e7db1ad33c3898cdac3405b1e";
+	public static final String FORD_OAUTH_TOKEN = "5c63440e7db1ad33c3898cdac3405b1e";
+	
 	protected static final String COMMON_URL = "http://dev.wcities.com/V3/";
 	
 	protected static final float NOT_INITIALIZED = 0;

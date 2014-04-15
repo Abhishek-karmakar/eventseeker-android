@@ -25,7 +25,6 @@ public class MainAL extends ESIProxyALM {
 	public static MainAL getInstance(EventSeekr context) {
 		if (instance == null) {
 			instance = new MainAL(context);
-			instance.onCreateInstance();
 		}
 		return instance;
 	}
@@ -55,14 +54,9 @@ public class MainAL extends ESIProxyALM {
 	}
 	
 	@Override
-	public void onCreateInstance() {
+	public void onStartInstance() {
 		ALUtil.displayMessage(R.string.main_al_welcome_to, R.string.main_al_eventseeker);
 		addCommands();
-	}
-	
-	@Override
-	public void onStartInstance() {
-		
 	}
 	
 	@Override

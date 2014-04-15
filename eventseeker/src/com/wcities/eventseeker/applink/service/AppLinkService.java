@@ -87,7 +87,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	private boolean driverDistractionNotif = false;
 	//variable to contain the current state of the lockscreen
 	private boolean lockscreenUP = false;
-	private ESIProxyALM esIProxyListener;
+	private ESIProxyALM esIProxyALM;
 	private boolean isHMIStatusNone;
 	
 	public static AppLinkService getInstance() {
@@ -107,11 +107,11 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	}
 	
 	public ESIProxyALM getESIProxyListener() {
-		return esIProxyListener;
+		return esIProxyALM;
 	}
 
 	public void setESIProxyListener(ESIProxyALM esIProxyListener) {
-		this.esIProxyListener = esIProxyListener;
+		this.esIProxyALM = esIProxyListener;
 	}
 
 	public static String getStringFromRes(int resId) {
@@ -296,9 +296,10 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 				subscribeButtons();
 				// setup app on SYNC
 				// send welcome message if applicable
-				esIProxyListener = MainAL.getInstance((EventSeekr) getApplication());
-				//esIProxyListener.onOnHMIStatus(notification);
-				esIProxyListener.onCreateInstance();
+				esIProxyALM = MainAL.getInstance((EventSeekr) getApplication());
+				//esIProxyALM.onOnHMIStatus(notification);
+				//esIProxyALM.onCreateInstance();
+				esIProxyALM.onStartInstance();
 				
 			} else if (isHMIStatusNone) {
 				// In case if user had exited app & revisits the app, display welcome msg. No need to add commands again.
@@ -338,7 +339,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 			 * This is called in 2 cases:
 			 * 1) just after registration of app with SYNC - As soon as user selects our app, we will get notification
 			 * for HMI_FULL after which only we can initiate making calls. This will be fulfilled by corresponding 
-			 * HMI_FULL case under if block with condition notification.getFirstRun(). So esIProxyListener initialization
+			 * HMI_FULL case under if block with condition notification.getFirstRun(). So esIProxyALM initialization
 			 * here is redundant.
 			 * 2) on exit - The application will be returned to NONE when the user selects "Exit <app_name>" 
 			 * via the menu or PTT VR command. The user has opted out of using the application at this point 
@@ -347,14 +348,15 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 			 * available if the user again selects the application from the Mobile Applications menu.
 			 * 
 			 * This initialization is especially required to handle 2nd case, because otherwise if user has moved 
-			 * in the flow after say discover command, then value of esIProxyListener = DiscoverAL. Now user exits
+			 * in the flow after say discover command, then value of esIProxyALM = DiscoverAL. Now user exits
 			 * the app followed by reselecting app after some time. As mentioned above under case 2), all 
 			 * components & registrations are persisted but app will start from first screen asking to choose 
 			 * one of the commands from Discover, My Events, etc. Its callback onOnCommand() will then call same 
-			 * method on esIProxyListener which should be initial AL, i.e., MainAL & not DiscoverAL.
+			 * method on esIProxyALM which should be initial AL, i.e., MainAL & not DiscoverAL.
 			 * That's why this resetting is done here on exit.
 			 */
-			esIProxyListener = MainAL.getInstance((EventSeekr) getApplication());
+			esIProxyALM = MainAL.getInstance((EventSeekr) getApplication());
+			esIProxyALM.onStartInstance();
 			break;
 			
 		default:
@@ -446,7 +448,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 		 * {"notification": {"name": "OnCommand", "parameters": {"cmdID": "3", "triggerSource": "MENU"}}}
 		 */
 		//int cmdId = Integer.parseInt(notification.getParameters("cmdID").toString());
-		esIProxyListener.onOnCommand(notification);
+		esIProxyALM.onOnCommand(notification);
 	}
 
 	public void onCreateInteractionChoiceSetResponse(CreateInteractionChoiceSetResponse response) {
@@ -456,15 +458,15 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 
 	public void onPerformInteractionResponse(PerformInteractionResponse response) {
 		Log.d(TAG, "onPerformInteractionResponse()");
-		esIProxyListener.onPerformInteractionResponse(response);
+		esIProxyALM.onPerformInteractionResponse(response);
 	}
 
 	public void onSpeakResponse(SpeakResponse response) {
-		esIProxyListener.onSpeakResponse(response);
+		esIProxyALM.onSpeakResponse(response);
 	}
 	
 	public void onOnButtonPress(OnButtonPress notification) {
-		esIProxyListener.onOnButtonPress(notification);
+		esIProxyALM.onOnButtonPress(notification);
 	}
 	
 	/**
@@ -473,28 +475,28 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	 * @param cmd
 	 */
 	public void initiateESIProxyListener(Commands cmd) {
-		if (esIProxyListener != null) {
-			esIProxyListener.onStopInstance();
+		if (esIProxyALM != null) {
+			esIProxyALM.onStopInstance();
 		}
 		
 		switch (cmd) {
 			case DISCOVER:
 				Log.d(TAG, "DISCOVER");
-				esIProxyListener =  DiscoverAL.getInstance((EventSeekr) getApplication());
+				esIProxyALM =  DiscoverAL.getInstance((EventSeekr) getApplication());
 				break;
 			case MY_EVENTS:
 				Log.d(TAG, "MY EVENTS");
-				esIProxyListener =  MyEventsAL.getInstance((EventSeekr) getApplication());
+				esIProxyALM =  MyEventsAL.getInstance((EventSeekr) getApplication());
 				break;
 			case SEARCH:
 				Log.d(TAG, "SEARCH");
-				esIProxyListener =  SearchAL.getInstance((EventSeekr) getApplication());
+				esIProxyALM =  SearchAL.getInstance((EventSeekr) getApplication());
 				break;
 		}
-		if (esIProxyListener == null) {
+		if (esIProxyALM == null) {
 			return;
 		}
-		esIProxyListener.onStartInstance();
+		esIProxyALM.onStartInstance();
 	}
 
 	public void onError(String info, Exception e) {}

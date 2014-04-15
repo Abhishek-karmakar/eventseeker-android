@@ -43,14 +43,8 @@ public class MyEventsAL extends ESIProxyALM {
 	public static ESIProxyALM getInstance(EventSeekr context) {
 		if (instance == null) {
 			instance = new MyEventsAL(context);
-			instance.onCreateInstance();
 		}
 		return instance;
-	}
-
-	@Override
-	public void onCreateInstance() {
-		Log.d(TAG, "onCreateInstance()");
 	}
 	
 	@Override

@@ -507,37 +507,21 @@ public class EventApiJSONParser {
 		if (jsonObject.has(KEY_IMAGE_ATTRIBUTION)) {
 			event.setImageAttribution(getImageAttribution(jsonObject.getJSONObject(KEY_IMAGE_ATTRIBUTION)));
 		}
-		
 		if (jsonObject.has(KEY_DISTANCE)) {
 			event.setDistance(jsonObject.getString(KEY_DISTANCE));
-		}
-		
-		if (jsonObject.has(KEY_SCHEDULE)) {
-			event.setSchedule(getSchedule(jsonObject.getJSONObject(KEY_SCHEDULE), venues));
+		}	
+		if (jsonObject.has(KEY_SCHEDULE) && jsonObject.has(KEY_DATE)) {
+			/**
+			 * This case is for Featured Events in Ford
+			 */
+			buildSchedule(jsonObject, event);
+			//fillBookingInfo(event.getSchedule(), jObjSchedule)
+			
+		} else if (jsonObject.has(KEY_SCHEDULE)) {
+			event.setSchedule(getSchedule(jsonObject.getJSONObject(KEY_SCHEDULE), venues));	
 			
 		} else if (jsonObject.has(KEY_DATE)) {
-			List<String> startDates = new ArrayList<String>();
-			String date = jsonObject.getString(KEY_DATE);
-			startDates.add(date);
-
-			String eventTime = "";
-			if (jsonObject.has(KEY_EVENT_TIME)) {
-				eventTime = jsonObject.getString(KEY_EVENT_TIME);
-			}
-			int venueId = jsonObject.getInt(KEY_VENUE_ID);
-			String venueName = ConversionUtil.decodeHtmlEntities(jsonObject, KEY_VENUE_NAME);
-			event.setSchedule(buildSchedule(startDates, eventTime, venueId, venueName, null));
-			
-			Venue venue = event.getSchedule().getVenue();
-			if (jsonObject.has(KEY_LATITUDE)) {
-				Address address = venue.getAddress();
-				if (address == null) {
-					address = new Address();
-					venue.setAddress(address);
-				}
-				address.setLat(jsonObject.getDouble(KEY_LATITUDE));
-				address.setLon(jsonObject.getDouble(KEY_LONGITUDE));
-			}
+			buildSchedule(jsonObject, event);
 		}
 		
 		if (jsonObject.has(KEY_ARTIST)) {
@@ -560,7 +544,53 @@ public class EventApiJSONParser {
 		
 		return event;
 	}
+
+	private void buildSchedule(JSONObject jsonObject, Event event) {
+		try {
+			List<String> startDates = new ArrayList<String>();
+			String date = jsonObject.getString(KEY_DATE);
+			startDates.add(date);
 	
+			String eventTime = "";
+			if (jsonObject.has(KEY_EVENT_TIME)) {
+				eventTime = jsonObject.getString(KEY_EVENT_TIME);
+			}
+			int venueId = jsonObject.getInt(KEY_VENUE_ID);
+			String venueName = ConversionUtil.decodeHtmlEntities(jsonObject, KEY_VENUE_NAME);
+			event.setSchedule(buildSchedule(startDates, eventTime, venueId, venueName, null));
+			
+			Venue venue = event.getSchedule().getVenue();
+			if (jsonObject.has(KEY_LATITUDE)) {
+				Address address = venue.getAddress();
+				if (address == null) {
+					address = new Address();
+					venue.setAddress(address);
+				}
+				address.setLat(jsonObject.getDouble(KEY_LATITUDE));
+				address.setLon(jsonObject.getDouble(KEY_LONGITUDE));
+	
+			}
+				
+			if (jsonObject.has(KEY_COUNTRY)) {
+				Country country = new Country();
+				country.setName(jsonObject.getString(KEY_COUNTRY));
+					
+				if (venue.getAddress() == null) {
+					Address address = new Address();
+					address.setCountry(country);
+					venue.setAddress(address);
+					
+				} else {
+					venue.getAddress().setCountry(country);
+					
+				}
+			}		
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	private ImageAttribution getImageAttribution(JSONObject jsonObject) throws JSONException {
 		ImageAttribution imageAttribution = new ImageAttribution();
 		imageAttribution.setHighResPath(jsonObject.getString(KEY_HIGH_RES_PATH));
@@ -577,7 +607,7 @@ public class EventApiJSONParser {
 
 		List<String> dates = getDates(jsonObject.get(KEY_DATES));
 		int venueId = jsonObject.getInt(KEY_VENUE_ID);
-		
+
 		Schedule schedule = buildSchedule(dates, eventTime, venueId, null, venues);
 		
 		if (jsonObject.has(KEY_BOOKINGINFO)) {

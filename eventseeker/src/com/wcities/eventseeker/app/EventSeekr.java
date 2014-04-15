@@ -57,6 +57,11 @@ public class EventSeekr extends Application {
 	private String wcitiesId;
 
 	private boolean firstTimeLaunch;
+	/**
+	 * This variable is to determine whether the current Event is First Event.
+	 * After app is (re)initialized.
+	 */
+	private boolean isFirstEventForFordEventAL = true;
 
 	private String gcmRegistrationId;
 	private int appVersionCode;

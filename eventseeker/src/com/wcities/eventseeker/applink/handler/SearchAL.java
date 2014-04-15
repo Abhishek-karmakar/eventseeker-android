@@ -16,14 +16,8 @@ public class SearchAL extends ESIProxyALM {
 	public static ESIProxyALM getInstance(EventSeekr context) {
 		if (instance == null) {
 			instance = new SearchAL(context);
-			instance.onCreateInstance();
 		}
 		return instance;
-	}
-	
-	@Override
-	public void onCreateInstance() {
-		
 	}
 	
 	@Override

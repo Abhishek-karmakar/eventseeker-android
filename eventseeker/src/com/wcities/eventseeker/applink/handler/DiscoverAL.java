@@ -117,14 +117,8 @@ public class DiscoverAL extends ESIProxyALM {
 	public static ESIProxyALM getInstance(EventSeekr context) {
 		if (instance == null) {
 			instance = new DiscoverAL(context);
-			instance.onCreateInstance();
 		}
 		return instance;
-	}
-
-	@Override
-	public void onCreateInstance() {
-		Log.d(TAG, "onCreateInstance()");
 	}
 	
 	@Override
@@ -256,10 +250,6 @@ public class DiscoverAL extends ESIProxyALM {
 		 * first event and then append the 'plz press next or back' and then throughout the
 		 * current session it shouldn't append the second line.
 		 */
-		/**
-		 * TODO: Current speech text is the not being used in IOS. So, it needs to be removed 
-		 * and integrate the new one.
-		 */
 		Event event = discoverByCategoryEvtList.get(currentEvtPos);
 
 		String simple = "Okay, " + event.getName();
@@ -296,39 +286,26 @@ public class DiscoverAL extends ESIProxyALM {
 		java.util.Date dt = date.getStartDate();
 		SimpleDateFormat format = new SimpleDateFormat("dd MMM");
 		dateTime += format.format(dt);
-		Log.d(TAG, "" + dateTime);
 		
 		if (date.isStartTimeAvailable()) {
 			format = new SimpleDateFormat("HH");
-			Log.d(TAG, "" + format.format(dt));
 			
 			dateTime += ", " + format.format(dt);
 			
 			format = new SimpleDateFormat("m");
-			Log.d(TAG, "" + format.format(dt));
 			
 			String min = format.format(dt);
-			//TODO:remove below line
-			min = "5";
 			if (min.length() > 1) {
 				dateTime += " " + min;		
 			} else {
-				Log.d(TAG, "else");
 				if (min.equals("0")) {
-					Log.d(TAG, "0");
 					dateTime += " hundred";	
 				} else {
-					Log.d(TAG, "!0");
-					Log.d(TAG, "venue.getAddress() : " + venue.getAddress());
-					Log.d(TAG, "venue.getAddress().getCountry() : " + venue.getAddress().getCountry());
-					Log.d(TAG, "venue.getAddress().getCountry().getName() : " + venue.getAddress().getCountry().getName());
 					if (venue.getAddress().getCountry().getName().equals(COUNTRY_NAME)) {
-						Log.d(TAG, "USA");
 						//if country is USA then " 0 " must be spelled as " Oh "
 						dateTime += " Oh " + min;						
 						
 					} else {
-						Log.d(TAG, "!USA");
 						dateTime += " 0 " + min;						
 						
 					}
@@ -341,6 +318,38 @@ public class DiscoverAL extends ESIProxyALM {
 		return dateTime;
 	}
 
+	private void speakDetailsOfCurrentEvent() {
+		/**
+		 * TODO: Current speech text is the not being used in IOS. So, it needs to be removed 
+		 * and integrate the new one.
+		 */
+		Event event = discoverByCategoryEvtList.get(currentEvtPos);
+		
+		String simple = "Okay, " + event.getName();
+		
+		if (event.getSchedule() != null) {
+			Venue venue = event.getSchedule().getVenue();
+			if (venue != null) {
+				String venueName = venue.getName();
+				if (venueName != null) {
+					simple += ", at " + venueName;			
+				}
+				
+				List<Date> dates = event.getSchedule().getDates();
+				if (dates != null && !dates.isEmpty()) {
+					//simple += ", on " + ConversionUtil.getDateTime(dates.get(0));
+					simple += ", on " + getFormattedDateTime(dates.get(0), venue);
+				}
+			}
+		}
+		
+		Log.i(TAG, "simple = " + simple);
+		
+		Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
+		ALUtil.speakText(ttsChunks);				
+	}
+
+	
 	private void loadEvents(int categoryId) {
 		/**
 		 * http://dev.wcities.com/V3/event_api/getEvents.php?oauth_token=5c63440e7db1ad33c3898cdac3405b1e
@@ -354,7 +363,7 @@ public class DiscoverAL extends ESIProxyALM {
 		
 		List<Event> tmpEvents = null;
 
-		EventApi eventApi = new EventApi(Api.OAUTH_TOKEN, lat, lon);
+		EventApi eventApi = new EventApi(Api.FORD_OAUTH_TOKEN, lat, lon);
 		eventApi.setStart(getStartDate());
 		eventApi.setEnd(getEndDate());
 		eventApi.setMiles(MILES_LIMIT);
@@ -409,7 +418,7 @@ public class DiscoverAL extends ESIProxyALM {
 		
 		List<Event> tmpEvents = null;
 		
-		EventApi eventApi = new EventApi(Api.OAUTH_TOKEN, lat, lon);
+		EventApi eventApi = new EventApi(Api.FORD_OAUTH_TOKEN, lat, lon);
 		eventApi.setCategory(categoryId);
 		eventApi.setStart(getStartDate());
 		eventApi.setEnd(getEndDate());
@@ -585,6 +594,11 @@ public class DiscoverAL extends ESIProxyALM {
 			speakCurrentEvent();
 			
 		} else {
+			//TODO:show some message when no events are available
+			//TODO:ALUtil.displayMessage(R.string.main_al_welcome_to, R.string.main_al_eventseeker);
+			if (discoverByCategoryEvtList.size() == 0) {
+				ALUtil.displayMessage(R.string.main_al_welcome_to, R.string.main_al_eventseeker);
+			}
 			speakNoEventsAvailable();
 		}		
 	}

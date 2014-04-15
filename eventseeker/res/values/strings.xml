@@ -343,7 +343,7 @@
 	<!-- DiscoverActivityAL -->
     <string name="discover_al_discover_categories">Okay, would you like concerts, clubs, sports, theater or, festivals</string>
     
-    <string name="discover_al_discover">Discover</string>
+    <string name="discover_al_discover">Say Category</string>
     
     <string name="discover_al_concerts">Concerts</string>
     <string name="discover_al_clubs">Clubs</string>
