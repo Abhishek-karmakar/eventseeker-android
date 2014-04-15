@@ -515,7 +515,7 @@ public class EventApiJSONParser {
 			 * This case is for Featured Events in Ford
 			 */
 			buildSchedule(jsonObject, event);
-			//fillBookingInfo(event.getSchedule(), jObjSchedule)
+			fillBookingInfo(event.getSchedule(), jsonObject.getJSONObject(KEY_SCHEDULE));
 			
 		} else if (jsonObject.has(KEY_SCHEDULE)) {
 			event.setSchedule(getSchedule(jsonObject.getJSONObject(KEY_SCHEDULE), venues));	

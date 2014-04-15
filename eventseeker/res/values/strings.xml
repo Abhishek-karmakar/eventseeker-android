@@ -363,6 +363,7 @@
     <string name="event_no_evts_avail">There are no events available.</string>
     <string name="plz_press_nxt_or_bck">, Please press the voice button and say next or back.</string>
     <string name="loading">Loading...</string>
+    <string name="detail_not_available">Detail description not available</string>
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for Ford ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 </resources>

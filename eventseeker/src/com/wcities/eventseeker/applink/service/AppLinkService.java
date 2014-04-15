@@ -114,10 +114,6 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 		this.esIProxyALM = esIProxyListener;
 	}
 
-	public static String getStringFromRes(int resId) {
-		return instance.getResources().getString(resId);
-	}
-	
 	public void onCreate() {
 		super.onCreate();
 		Log.d(TAG, "onCreate()");

@@ -128,7 +128,8 @@ public class ALUtil {
 	}
 	
 	public static void displayMessage(int resIdText1, int resIdText2) {
-		displayMessage(AppLinkService.getStringFromRes(resIdText1), AppLinkService.getStringFromRes(resIdText2));
+		displayMessage(AppLinkService.getInstance().getResources().getString(resIdText1), 
+				AppLinkService.getInstance().getResources().getString(resIdText2));
 	}
 	
 	public static void displayMessage(String text1, String text2) {

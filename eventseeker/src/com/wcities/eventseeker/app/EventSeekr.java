@@ -2,7 +2,6 @@ package com.wcities.eventseeker.app;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -21,7 +20,6 @@ import android.util.DisplayMetrics;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Logger.LogLevel;
-import com.google.android.gms.analytics.Tracker;
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.LanguageFragment.Locales;
 import com.wcities.eventseeker.R;
@@ -61,7 +59,8 @@ public class EventSeekr extends Application {
 	 * This variable is to determine whether the current Event is First Event.
 	 * After app is (re)initialized.
 	 */
-	private boolean isFirstEventForFordEventAL = true;
+	private boolean isFirstEventTitleForFordEventAL = true;
+	private boolean isFirstEventDetailsForFordEventAL = true;
 
 	private String gcmRegistrationId;
 	private int appVersionCode;
@@ -113,6 +112,22 @@ public class EventSeekr extends Application {
 		EventSeekr.cityName = cityName;
 	}
 
+	public boolean isFirstEventTitleForFordEventAL() {
+		return isFirstEventTitleForFordEventAL;
+	}
+
+	public void setFirstEventTitleForFordEventAL(boolean isFirstEventTitleForFordEventAL) {
+		this.isFirstEventTitleForFordEventAL = isFirstEventTitleForFordEventAL;
+	}
+
+	public boolean isFirstEventDetailsForFordEventAL() {
+		return isFirstEventDetailsForFordEventAL;
+	}
+
+	public void setFirstEventDetailsForFordEventAL(boolean isFirstEventDetailsForFordEventAL) {
+		this.isFirstEventDetailsForFordEventAL = isFirstEventDetailsForFordEventAL;
+	}
+	
 	@Override
 	public void onCreate() {
 		// StrictMode testing
