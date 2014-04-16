@@ -23,6 +23,7 @@ import com.ford.syncV4.proxy.rpc.enums.ButtonName;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.EventApi;
+import com.wcities.eventseeker.api.EventApi.MoreInfo;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.applink.interfaces.ESIProxyALM;
 import com.wcities.eventseeker.applink.service.AppLinkService;
@@ -203,13 +204,12 @@ public class DiscoverAL extends ESIProxyALM {
 		 * then show these events to user and if not, only then load events from 'getEvents' API call.
 		 */
 		loadFeaturedEvents(selectedCategoryId);
-		if (discoverByCategoryEvtList.size() <= 0) {
+		if (discoverByCategoryEvtList.isEmpty()) {
 			loadEvents(selectedCategoryId);
-			
 		}
 
 		//show Welcome message when no events are available
-		if (discoverByCategoryEvtList.size() == 0) {
+		if (discoverByCategoryEvtList.isEmpty()) {
 			ALUtil.displayMessage(R.string.main_al_welcome_to, R.string.main_al_eventseeker);
 		}
 		onNextCommand();
@@ -235,6 +235,8 @@ public class DiscoverAL extends ESIProxyALM {
 		eventApi.setLimit(EVENTS_LIMIT);
 		eventApi.setCategory(categoryId);
 		eventApi.setAlreadyRequested(eventsAlreadyRequested);
+		eventApi.addMoreInfo(MoreInfo.booking);
+		eventApi.addMoreInfo(MoreInfo.multiplebooking);
 
 		whichCall = GetEventsFrom.EVENTS;
 		
@@ -242,7 +244,6 @@ public class DiscoverAL extends ESIProxyALM {
 			JSONObject jsonObject = eventApi.getEvents();
 			EventApiJSONParser jsonParser = new EventApiJSONParser();
 			
-			//tmpEvents = jsonParser.getEventList(jsonObject);
 			ItemsList<Event> eventsList = jsonParser.getEventItemList(jsonObject, whichCall);
 			tmpEvents = eventsList.getItems();
 			totalNoOfEvents = eventsList.getTotalCount();
@@ -297,7 +298,6 @@ public class DiscoverAL extends ESIProxyALM {
 			JSONObject jsonObject = eventApi.getFeaturedEventsForFord();
 			EventApiJSONParser jsonParser = new EventApiJSONParser();
 			
-			//tmpEvents = jsonParser.getEventList(jsonObject);
 			ItemsList<Event> eventsList = jsonParser.getEventItemList(jsonObject, whichCall);
 			tmpEvents = eventsList.getItems();
 			totalNoOfEvents = eventsList.getTotalCount();
@@ -341,7 +341,7 @@ public class DiscoverAL extends ESIProxyALM {
     	double[] latLon = DeviceUtil.getLatLon(context);
     	lat = latLon[0];
     	lon = latLon[1];
-    	Log.i(TAG, "lat = " + lat + ", lon = " + lon);
+    	//Log.d(TAG, "lat = " + lat + ", lon = " + lon);
     }
 	
 	private boolean hasNextEvents() {
@@ -399,7 +399,7 @@ public class DiscoverAL extends ESIProxyALM {
 		 ************************************************/
 		int cmdId = Integer.parseInt(notification.getParameters("cmdID").toString());
 		//Log.d(TAG, "onOnCommand, cmdId = " + cmdId);
-		Commands cmd = Commands.getCommandById(/*notification.getCmdID()*/cmdId);
+		Commands cmd = Commands.getCommandById(cmdId);
 		resetIfNeeded(cmd);
 		performOperationForCommand(cmd);
 	}

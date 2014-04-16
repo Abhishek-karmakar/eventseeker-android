@@ -392,6 +392,9 @@ public class EventApiJSONParser {
 		try {
 			if (from == GetEventsFrom.FEATURED_EVENTS) {
 				JSONObject jObjFeaturedEvents = jsonObject.getJSONObject(KEY_FEATURED_EVENT);
+				if (!jObjFeaturedEvents.has(KEY_TOTAL)) {
+					return itemsList;
+				}
 				itemsList.setTotalCount(jObjFeaturedEvents.getInt(KEY_TOTAL));
 				itemsList.setItems(getFeaturedEventList(jsonObject));
 				
@@ -400,6 +403,9 @@ public class EventApiJSONParser {
 							
 				if (jObjCityevent.has(KEY_EVENTS)) {
 					JSONObject jsonEvents = jObjCityevent.getJSONObject(KEY_EVENTS);
+					if (!jsonEvents.has(KEY_TOTAL)) {
+						return itemsList;
+					}
 					itemsList.setTotalCount(jsonEvents.getInt(KEY_TOTAL));
 					itemsList.setItems(getEventList(jsonObject));
 				
