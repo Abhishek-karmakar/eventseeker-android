@@ -158,14 +158,16 @@ public class MyEventsAL extends ESIProxyALM {
 	private void handleNext() {
 		currentEvtPos++;
 		Event event = currentEvtList.get(currentEvtPos);
-		EventALUtil.displayCurrentEvent(event, currentEvtPos, totalNoOfEvents);
+		// TODO: Need to pass EventList to following method call
+		//EventALUtil.displayCurrentEvent(event, currentEvtPos, totalNoOfEvents);
 		EventALUtil.speakEventTitle(event, mEventSeekr);
 	}
 	
 	private void handleBack() {
 		currentEvtPos--;
 		Event event = currentEvtList.get(currentEvtPos);
-		EventALUtil.displayCurrentEvent(event, currentEvtPos, totalNoOfEvents);
+		// TODO: Need to pass EventList to following method call
+		//EventALUtil.displayCurrentEvent(event, currentEvtPos, totalNoOfEvents);
 		EventALUtil.speakEventTitle(event, mEventSeekr);
 	}
 	
