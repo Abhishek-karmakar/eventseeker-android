@@ -402,7 +402,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 			EventALUtil.speakEventTitle(eventList.getCurrentEvent(), context);
 			
 		} else {
-			EventALUtil.speakNoEventsAvailable();
+			EventALUtil.speak(R.string.event_no_evts_avail);
 		}		
 	}
 
@@ -412,7 +412,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 			EventALUtil.speakEventTitle(eventList.getCurrentEvent(), context);
 			
 		} else {
-			EventALUtil.speakNoEventsAvailable();
+			EventALUtil.speak(R.string.event_no_evts_avail);
 		}		
 	}
 
