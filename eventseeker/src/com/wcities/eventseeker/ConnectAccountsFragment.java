@@ -884,12 +884,11 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	};
 
 	private void onContinueClick() {
-		String wcitiesId = ((EventSeekr)FragmentUtil.getActivity(ConnectAccountsFragment.this)
-				.getApplication()).getWcitiesId();
+		String wcitiesId = ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId();
 		
 		if (wcitiesId != null) {
 			showProgress();
-			double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getActivity(ConnectAccountsFragment.this));
+			double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 
 			loadMyEventsCount = new LoadMyEventsCount(wcitiesId, latLon[0], latLon[1], new AsyncTaskListener<Integer>() {
 				

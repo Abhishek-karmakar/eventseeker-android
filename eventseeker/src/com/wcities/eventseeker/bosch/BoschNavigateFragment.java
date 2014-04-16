@@ -56,7 +56,7 @@ public class BoschNavigateFragment extends BoschFragmentLoadableFromBackStack im
 		venueLat = venue.getAddress().getLat();
 		venueLon = venue.getAddress().getLon();
 	
-		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getActivity(this));
+		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 		currentLat = latLon[0];
 		currentLon = latLon[1];
 		

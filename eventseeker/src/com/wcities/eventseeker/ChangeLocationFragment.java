@@ -66,7 +66,7 @@ public class ChangeLocationFragment extends FragmentLoadableFromBackStack implem
 		setHasOptionsMenu(true);
 		setRetainInstance(true);
 		
-		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getActivity(this));
+		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 		lat = latLon[0];
 		lon = latLon[1];
 	}

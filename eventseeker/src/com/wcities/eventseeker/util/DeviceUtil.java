@@ -51,11 +51,11 @@ public class DeviceUtil {
 	 * @param context
 	 * @return
 	 */
-	public static double[] getLatLon(final Context activityContext) {
+	public static double[] getLatLon(EventSeekr eventSeekr) {
 		//Log.d(TAG, "getLatLon()");
 		double[] latLon = new double[] {0, 0};
 		
-		final LocationManager locationManager = getLocationManagerInstance(activityContext.getApplicationContext());
+		final LocationManager locationManager = getLocationManagerInstance(eventSeekr);
 
 		// getting GPS status
         boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -168,9 +168,9 @@ public class DeviceUtil {
 		} 
 	}
 		
-	private static LocationManager getLocationManagerInstance(Context context) {
+	private static LocationManager getLocationManagerInstance(EventSeekr eventSeekr) {
 		if (locationManager == null) {
-			locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+			locationManager = (LocationManager) eventSeekr.getSystemService(Context.LOCATION_SERVICE);
 		}
 		return locationManager;
 	}
@@ -190,7 +190,7 @@ public class DeviceUtil {
 		if (isCitySet) {
 			return;
 		}
-		LocationManager locationManager = getLocationManagerInstance(context.getApplicationContext());
+		LocationManager locationManager = getLocationManagerInstance((EventSeekr) context.getApplicationContext());
 
 		// getting GPS status
         boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);

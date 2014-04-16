@@ -17,7 +17,6 @@ import com.ford.syncV4.proxy.rpc.OnDriverDistraction;
 import com.ford.syncV4.proxy.rpc.OnEncodedSyncPData;
 import com.ford.syncV4.proxy.rpc.OnHMIStatus;
 import com.ford.syncV4.proxy.rpc.OnPermissionsChange;
-import com.ford.syncV4.proxy.rpc.OnTBTClientState;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
 import com.ford.syncV4.proxy.rpc.ResetGlobalPropertiesResponse;
 import com.ford.syncV4.proxy.rpc.SetGlobalPropertiesResponse;
@@ -26,12 +25,10 @@ import com.ford.syncV4.proxy.rpc.ShowResponse;
 import com.ford.syncV4.proxy.rpc.SpeakResponse;
 import com.ford.syncV4.proxy.rpc.SubscribeButtonResponse;
 import com.ford.syncV4.proxy.rpc.UnsubscribeButtonResponse;
-import com.wcities.eventseeker.app.EventSeekr;
 
 public abstract class ESIProxyALM implements IProxyListenerALM {
 	
 	public abstract void onStartInstance();
-	public abstract void onStopInstance();	
 	
 	@Override
 	public void onOnButtonPress(OnButtonPress arg0) {}
@@ -63,9 +60,6 @@ public abstract class ESIProxyALM implements IProxyListenerALM {
 	@Override
 	public void onDeleteSubMenuResponse(DeleteSubMenuResponse arg0) {}
 
-	@Override
-	public void onEncodedSyncPDataResponse(EncodedSyncPDataResponse arg0) {}
-	
 	@Override
 	public void onError(String arg0, Exception arg1) {}
 
@@ -107,11 +101,4 @@ public abstract class ESIProxyALM implements IProxyListenerALM {
 	
 	@Override
 	public void onOnDriverDistraction(OnDriverDistraction arg0) {}
-	
-	@Override
-	public void onOnEncodedSyncPData(OnEncodedSyncPData arg0) {}
-	
-	@Override
-	public void onOnTBTClientState(OnTBTClientState arg0) {}
-	
 }

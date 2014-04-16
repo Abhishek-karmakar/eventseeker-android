@@ -69,7 +69,7 @@ public class GeoUtil {
 			public void run() {
 				String cityName = "";
 				
-				final double[] latLng = DeviceUtil.getLatLon(activityContext);
+				final double[] latLng = DeviceUtil.getLatLon((EventSeekr) activityContext.getApplicationContext());
 
 				List<Address> addresses = null;
 				

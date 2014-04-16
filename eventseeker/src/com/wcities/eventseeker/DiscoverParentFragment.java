@@ -169,7 +169,7 @@ public abstract class DiscoverParentFragment extends FragmentLoadableFromBackSta
 	}
 
 	private void generateLatLon() {
-		double[] latLon = DeviceUtil.getLatLon((Activity) mListener);
+		double[] latLon = DeviceUtil.getLatLon((EventSeekr) ((Activity) mListener).getApplication());
 		lat = latLon[0];
 		lon = latLon[1];
 	}

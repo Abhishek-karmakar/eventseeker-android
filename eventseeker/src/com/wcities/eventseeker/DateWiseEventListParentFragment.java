@@ -62,7 +62,7 @@ public abstract class DateWiseEventListParentFragment extends PublishEventListFr
 			}
 
 			double[] latLon = DeviceUtil.getLatLon(FragmentUtil
-					.getActivity(this));
+					.getApplication(this));
 			lat = latLon[0];
 			lon = latLon[1];
 

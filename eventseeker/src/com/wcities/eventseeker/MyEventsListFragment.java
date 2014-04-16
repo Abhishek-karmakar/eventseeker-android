@@ -99,7 +99,7 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 	
 	@Override
 	public void loadItemsInBackground() {
-		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getActivity(this));
+		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 		loadEvents = new LoadMyEvents(dateWiseEvtList, eventListAdapter, wcitiesId, loadType, 
 				latLon[0], latLon[1], this);
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);

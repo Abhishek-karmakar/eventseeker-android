@@ -79,14 +79,16 @@ public class LoadMyEvents extends AsyncTask<Void, Void, List<Event>> {
 			JSONObject jsonObject = userInfoApi.getMyProfileInfoFor(loadType);
 			UserInfoApiJSONParser jsonParser = new UserInfoApiJSONParser();
 			
+			ItemsList<Event> myEventsList;
 			if (loadType == Type.myevents) {
-				ItemsList<Event> myEventsList = jsonParser.getEventList(jsonObject);
-				tmpEvents = myEventsList.getItems();
+				myEventsList = jsonParser.getEventList(jsonObject);
 				
 			} else {
 				// loadType = Type.recommendedevent
-				tmpEvents = jsonParser.getRecommendedEventList(jsonObject);
+				myEventsList = jsonParser.getRecommendedEventList(jsonObject);
 			}
+
+			tmpEvents = myEventsList.getItems();
 
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();

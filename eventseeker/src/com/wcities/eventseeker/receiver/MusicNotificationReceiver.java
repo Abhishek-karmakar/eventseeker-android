@@ -18,6 +18,7 @@ import android.util.Log;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.ArtistApi;
 import com.wcities.eventseeker.api.ArtistApi.Method;
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.gcm.GcmBroadcastReceiver.NotificationType;
@@ -83,7 +84,7 @@ public class MusicNotificationReceiver extends BroadcastReceiver {
 				String endDate = ConversionUtil.getDay(year, month, day);
 				artistApi.setEndDate(endDate);
 				
-				double[] latLng = DeviceUtil.getLatLon(context);
+				double[] latLng = DeviceUtil.getLatLon((EventSeekr) context.getApplicationContext());
 				artistApi.setLat(latLng[0]);
 				artistApi.setLon(latLng[1]);
 				

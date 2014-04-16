@@ -13,7 +13,7 @@ public class AppConstants {
 	/**
 	 * 'DEBUG' and 'FORD_SYNC_APP' variable is only for ford implementation
 	 */
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
 	public static final boolean FORD_SYNC_APP = true;
 	
 	public static final boolean CRASH_REPORTING_ENABLED = false;
@@ -142,6 +142,7 @@ public class AppConstants {
 	
 	/************************   starts for Ford   *******************************/
 
+	public static final String FORD_APP_ID = "3260118906";
 	public static final int CHOICE_CATEGORIES_DISCOVER_AL = 1000;
 	public static final int INTERACTION_TIME_OUT_AL = 5000;
 	

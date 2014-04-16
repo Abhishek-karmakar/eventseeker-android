@@ -332,6 +332,9 @@
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for Ford ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
+	<!-- general -->
+	<string name="time_out">time out</string>
+
 	<!-- MainActivityAL -->
     <string name="al_command_my_events">My Events</string>
     <string name="al_command_discover">Discover</string>
@@ -350,7 +353,6 @@
     <string name="discover_al_sports">Sports</string>
     <string name="discover_al_theater">Theater</string>
     <string name="discover_al_festivals">Festivals</string>
-    <string name="discover_al_time_out">time out</string>
     
     <string name="al_command_next">Next</string>
     <string name="al_command_back">Back</string>
@@ -363,6 +365,14 @@
     <string name="event_no_evts_avail">There are no events available.</string>
     <string name="plz_press_nxt_or_bck">, Please press the voice button and say next or back.</string>
     <string name="loading">Loading...</string>
+    
+    <!-- MyEventsAL -->
+    <string name="my_events_al_yes">Yes</string>
+    <string name="my_events_al_no">No</string>
+    <string name="my_events_al_no_evts_avail_make_suggestions">There are no events available, shall I make suggestions?</string>
+    <string name="my_events_al_suggestions">Want Suggestions?</string>
+    <string name="my_events_how_can_i_help">How can I help?</string>
+    
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for Ford ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 </resources>

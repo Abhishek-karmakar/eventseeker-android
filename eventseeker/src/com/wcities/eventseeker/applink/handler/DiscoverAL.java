@@ -16,11 +16,30 @@ import org.json.JSONObject;
 import android.util.Log;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
+import com.ford.syncV4.proxy.rpc.ChangeRegistrationResponse;
 import com.ford.syncV4.proxy.rpc.Choice;
+import com.ford.syncV4.proxy.rpc.DeleteFileResponse;
+import com.ford.syncV4.proxy.rpc.DialNumberResponse;
+import com.ford.syncV4.proxy.rpc.EndAudioPassThruResponse;
+import com.ford.syncV4.proxy.rpc.GetDTCsResponse;
+import com.ford.syncV4.proxy.rpc.GetVehicleDataResponse;
+import com.ford.syncV4.proxy.rpc.ListFilesResponse;
+import com.ford.syncV4.proxy.rpc.OnAudioPassThru;
 import com.ford.syncV4.proxy.rpc.OnButtonPress;
 import com.ford.syncV4.proxy.rpc.OnCommand;
+import com.ford.syncV4.proxy.rpc.OnLanguageChange;
+import com.ford.syncV4.proxy.rpc.OnVehicleData;
+import com.ford.syncV4.proxy.rpc.PerformAudioPassThruResponse;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
+import com.ford.syncV4.proxy.rpc.PutFileResponse;
+import com.ford.syncV4.proxy.rpc.ReadDIDResponse;
+import com.ford.syncV4.proxy.rpc.ScrollableMessageResponse;
+import com.ford.syncV4.proxy.rpc.SetAppIconResponse;
+import com.ford.syncV4.proxy.rpc.SetDisplayLayoutResponse;
+import com.ford.syncV4.proxy.rpc.SliderResponse;
+import com.ford.syncV4.proxy.rpc.SubscribeVehicleDataResponse;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
+import com.ford.syncV4.proxy.rpc.UnsubscribeVehicleDataResponse;
 import com.ford.syncV4.proxy.rpc.enums.ButtonName;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.Api;
@@ -129,22 +148,6 @@ public class DiscoverAL extends ESIProxyALM {
 		addCommands();
 	}
 	
-	@Override
-	public void onStopInstance() {
-		Log.d(TAG, "onStopInstance()");	
-		/*ALUtil.deleteInteractionChoiceSet(CHOICE_SET_ID_DISCOVER);
-		Vector<Commands> delCmds = new Vector<Commands>();
-		delCmds.add(Commands.DISCOVER);
-		delCmds.add(Commands.MY_EVENTS);
-		delCmds.add(Commands.SEARCH);
-		delCmds.add(Commands.NEXT);
-		delCmds.add(Commands.BACK);
-		delCmds.add(Commands.DETAILS);
-		delCmds.add(Commands.PLAY);
-		delCmds.add(Commands.CALL_VENUE);
-		CommandsUtil.deleteCommands(delCmds);*/
-	}
-
 	private void addCommands() {
 		Vector<Commands> reqCmds = new Vector<Commands>();
 		reqCmds.add(Commands.DISCOVER);
@@ -199,7 +202,7 @@ public class DiscoverAL extends ESIProxyALM {
 		
 		Vector<TTSChunk> initChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
 		Vector<TTSChunk> timeoutChunks = TTSChunkFactory.createSimpleTTSChunks(
-				AppLinkService.getStringFromRes(R.string.discover_al_time_out));
+				AppLinkService.getStringFromRes(R.string.time_out));
 		
 		ALUtil.performInteractionChoiceSet(initChunks, initialText, interactionChoiceSetIDList, timeoutChunks);
 	}
@@ -221,9 +224,8 @@ public class DiscoverAL extends ESIProxyALM {
 		 * then show these events to user and if not, only then load events from 'getEvents' API call.
 		 */
 		loadFeaturedEvents(selectedCategoryId);
-		if (discoverByCategoryEvtList.size() <= 0) {
+		if (discoverByCategoryEvtList.isEmpty()) {
 			loadEvents(selectedCategoryId);
-			
 		}
 
 		onNextCommand();
@@ -237,10 +239,6 @@ public class DiscoverAL extends ESIProxyALM {
 	
 	private void displayCurrentEvent() {
 		Event event = discoverByCategoryEvtList.get(currentEvtPos);
-		/**
-		 * TODO: actually total count will be the one from api response. currently using the total events
-		 * in the list. So, parse the value for total events from response and show it over here.
-		 */
 		ALUtil.displayMessage(event.getName(), (currentEvtPos + 1) + "/" + totalNoOfEvents);
 	}
 
@@ -532,7 +530,7 @@ public class DiscoverAL extends ESIProxyALM {
 		 ************************************************/
 		int cmdId = Integer.parseInt(notification.getParameters("cmdID").toString());
 		//Log.d(TAG, "onOnCommand, cmdId = " + cmdId);
-		Commands cmd = Commands.getCommandById(/*notification.getCmdID()*/cmdId);
+		Commands cmd = Commands.getCommandById(cmdId);
 		resetIfNeeded(cmd);
 		performOperationForCommand(cmd);
 	}
@@ -555,7 +553,7 @@ public class DiscoverAL extends ESIProxyALM {
 		isMoreDataAvailable = true;		
 	}
 
-	public void performOperationForCommand(Commands cmd) {
+	private void performOperationForCommand(Commands cmd) {
 		if (cmd == null) {
 			return;
 		}
@@ -611,6 +609,121 @@ public class DiscoverAL extends ESIProxyALM {
 		} else {
 			speakNoEventsAvailable();
 		}		
+	}
+
+	@Override
+	public void onChangeRegistrationResponse(ChangeRegistrationResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onDeleteFileResponse(DeleteFileResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onDialNumberResponse(DialNumberResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onEndAudioPassThruResponse(EndAudioPassThruResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onGetDTCsResponse(GetDTCsResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onGetVehicleDataResponse(GetVehicleDataResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onListFilesResponse(ListFilesResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onOnAudioPassThru(OnAudioPassThru arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onOnLanguageChange(OnLanguageChange arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onOnVehicleData(OnVehicleData arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPerformAudioPassThruResponse(PerformAudioPassThruResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPutFileResponse(PutFileResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onReadDIDResponse(ReadDIDResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onScrollableMessageResponse(ScrollableMessageResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onSetAppIconResponse(SetAppIconResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onSetDisplayLayoutResponse(SetDisplayLayoutResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onSliderResponse(SliderResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onSubscribeVehicleDataResponse(SubscribeVehicleDataResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onUnsubscribeVehicleDataResponse(
+			UnsubscribeVehicleDataResponse arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
