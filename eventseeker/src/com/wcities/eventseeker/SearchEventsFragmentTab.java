@@ -62,7 +62,7 @@ public class SearchEventsFragmentTab extends SearchEventsParentFragment implemen
 	
 	@Override
 	public void loadItemsInBackground() {
-		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getActivity(this));
+		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 		
 		Calendar c = Calendar.getInstance();
 		String startDate = ConversionUtil.getDay(c);

@@ -60,7 +60,7 @@ public class EventseekerWidgetService extends IntentService {
 		UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
 		userInfoApi.setLimit(EVENTS_LIMIT);
 		userInfoApi.setUserId(((EventSeekr)getApplication()).getWcitiesId());
-		double[] latLng = DeviceUtil.getLatLon(EventseekerWidgetService.this);
+		double[] latLng = DeviceUtil.getLatLon((EventSeekr) EventseekerWidgetService.this.getApplicationContext());
 		userInfoApi.setLat(latLng[0]);
 		userInfoApi.setLon(latLng[1]);
 		
@@ -78,7 +78,8 @@ public class EventseekerWidgetService extends IntentService {
 				jsonObject = userInfoApi.getMyProfileInfoFor(Type.recommendedevent);
 				jsonParser = new UserInfoApiJSONParser();
 				
-				tmpEvents = jsonParser.getRecommendedEventList(jsonObject);
+				myEventsList = jsonParser.getRecommendedEventList(jsonObject);
+				tmpEvents = myEventsList.getItems();
 			}
 			
 			if (tmpEvents.isEmpty()) {

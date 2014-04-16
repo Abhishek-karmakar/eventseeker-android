@@ -58,7 +58,7 @@ public class AddressMapFragment extends SupportMapFragment implements GeoUtilLis
 
 		res = getResources();
 		
-		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getActivity(this));
+		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 		currentLat = latLon[0];
 		currentLon = latLon[1];
 		

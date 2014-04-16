@@ -43,7 +43,7 @@ public class BoschDateWiseEventListFragment extends ListFragment implements Load
 				selectedCategory = (Category) bundle.get(BundleKeys.CATEGORY);
 			}
 
-			double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getActivity(this));
+			double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 			lat = latLon[0];
 			lon = latLon[1];
 

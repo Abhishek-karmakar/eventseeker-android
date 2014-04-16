@@ -108,7 +108,7 @@ public class BoschChangeCityFragment extends BoschFragmentLoadableFromBackStack 
 		
 		lstCity.setAdapter(adapter);
 		
-		double[] latlon = DeviceUtil.getLatLon(FragmentUtil.getActivity(this));
+		double[] latlon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 		
 		latitiude = latlon[0];
 		longitude = latlon[1];

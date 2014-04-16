@@ -100,7 +100,7 @@ public class BoschMyEventsListFragment extends ListFragment implements OnClickLi
 
 	@Override
 	public void loadItemsInBackground() {
-		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getActivity(this));
+		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 		loadEvents = new LoadMyEvents(eventList, eventListAdapter, wcitiesId, loadType, latLon[0], 
 				latLon[1]);
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);

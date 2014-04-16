@@ -10,6 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import com.wcities.eventseeker.ConnectAccountsFragment;
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.api.UserInfoApi.RepCodeResponse;
@@ -360,22 +362,31 @@ public class UserInfoApiJSONParser {
 		return artistNewsItem;
 	}
 	
-	public List<Event> getRecommendedEventList(JSONObject jsonObject) {
-		List<Event> recommendedEvtList = new ArrayList<Event>();
+	public ItemsList<Event> getRecommendedEventList(JSONObject jsonObject) {
+		ItemsList<Event> recommendedEvtList = new ItemsList<Event>();
+		List<Event> events = new ArrayList<Event>();
+		recommendedEvtList.setItems(events);
 		
 		try {
-			Object jEventInfo = jsonObject.getJSONObject(KEY_RECOMMENDED_EVENT).get(KEY_EVENT_INFO);
+			JSONObject jObjRecommendedEvent = jsonObject.getJSONObject(KEY_RECOMMENDED_EVENT);
+			if (jObjRecommendedEvent.has(KEY_TOTAL)) {
+				recommendedEvtList.setTotalCount(jObjRecommendedEvent.getInt(KEY_TOTAL));
+			}
 			
-			if (jEventInfo instanceof JSONArray) {
-				JSONArray jEventInfos = (JSONArray) jEventInfo;
-				for (int i = 0; i < jEventInfos.length(); i++) {
-					Event event = getEvent(jEventInfos.getJSONObject(i));
-					recommendedEvtList.add(event);
-				}
+			if (jObjRecommendedEvent.has(KEY_EVENT_INFO)) {
+				Object jEventInfo = jObjRecommendedEvent.get(KEY_EVENT_INFO);
 				
-			} else {
-				Event event = getEvent((JSONObject) jEventInfo);
-				recommendedEvtList.add(event);
+				if (jEventInfo instanceof JSONArray) {
+					JSONArray jEventInfos = (JSONArray) jEventInfo;
+					for (int i = 0; i < jEventInfos.length(); i++) {
+						Event event = getEvent(jEventInfos.getJSONObject(i));
+						events.add(event);
+					}
+					
+				} else {
+					Event event = getEvent((JSONObject) jEventInfo);
+					events.add(event);
+				}
 			}
 			
 		} catch (JSONException e) {
@@ -388,13 +399,13 @@ public class UserInfoApiJSONParser {
 	public ItemsList<Event> getEventList(JSONObject jsonObject) {
 		ItemsList<Event> myEventsList = new ItemsList<Event>();
 		List<Event> events = new ArrayList<Event>();
-		//myEventsList.items = events;
 		myEventsList.setItems(events);
 		
 		try {
 			JSONObject jObjTracked = jsonObject.getJSONObject(KEY_TRACKED);
-			//myEventsList.totalCount = jObjTracked.getInt(KEY_TOTAL);
-			myEventsList.setTotalCount(jObjTracked.getInt(KEY_TOTAL));
+			if (jObjTracked.has(KEY_TOTAL)) {
+				myEventsList.setTotalCount(jObjTracked.getInt(KEY_TOTAL));
+			}
 			
 			if (jObjTracked.has(KEY_TRACK_INFO)) {
 				Object jTrackedInfo = jObjTracked.get(KEY_TRACK_INFO);
@@ -413,6 +424,7 @@ public class UserInfoApiJSONParser {
 			}
 			
 		} catch (JSONException e) {
+			Log.e(TAG, "load JSONException, " + e.getMessage());
 			e.printStackTrace();
 		}
 		

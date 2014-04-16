@@ -8,10 +8,10 @@ import com.ford.syncV4.exception.SyncException;
 import com.ford.syncV4.proxy.rpc.AddCommand;
 import com.ford.syncV4.proxy.rpc.Choice;
 import com.ford.syncV4.proxy.rpc.CreateInteractionChoiceSet;
-import com.ford.syncV4.proxy.rpc.DeleteCommand;
 import com.ford.syncV4.proxy.rpc.DeleteInteractionChoiceSet;
 import com.ford.syncV4.proxy.rpc.MenuParams;
 import com.ford.syncV4.proxy.rpc.PerformInteraction;
+import com.ford.syncV4.proxy.rpc.SoftButton;
 import com.ford.syncV4.proxy.rpc.Speak;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
 import com.ford.syncV4.proxy.rpc.enums.InteractionMode;
@@ -34,7 +34,7 @@ public class ALUtil {
 		
 		MenuParams menuParams = new MenuParams();
 		menuParams.setMenuName(vrCommands.get(0));
-		menuParams.setPosition(cmdID - 1);
+		menuParams.setPosition(0);
 		msg.setMenuParams(menuParams);
 		
 		try {
@@ -45,19 +45,6 @@ public class ALUtil {
 		}
 	}
 
-	public static void deleteCommand(int cmdID) {
-		/*AppLinkService appLinkService = AppLinkService.getInstance();
-
-		DeleteCommand msg = new DeleteCommand();
-		msg.setCorrelationID(appLinkService.autoIncCorrId++);
-		msg.setCmdID(cmdID);
-		try {
-			appLinkService.getProxy().sendRPCRequest(msg);
-		} catch (SyncException e) {
-			e.printStackTrace();
-		}*/
-	}
-	
 	public static Choice createChoice(int choiceID, String menuName, Vector<String> vrCommands) {
 		Choice choice = new Choice();
 		choice.setChoiceID(choiceID);
@@ -136,10 +123,14 @@ public class ALUtil {
 	
 	public static void displayMessage(int resIdText1, int resIdText2) {
 		displayMessage(AppLinkService.getInstance().getResources().getString(resIdText1), 
-				AppLinkService.getInstance().getResources().getString(resIdText2));
+				AppLinkService.getInstance().getResources().getString(resIdText2), null);
 	}
 	
 	public static void displayMessage(String text1, String text2) {
+		displayMessage(text1, text2, null);
+    }
+	
+	public static void displayMessage(String text1, String text2, Vector<SoftButton> softButtons) {
 		Log.d(TAG,"text1 : " + text1 + " text2 : " + text2);
 		try {
 			if (text1 == null) {
@@ -148,13 +139,12 @@ public class ALUtil {
 			if (text2 == null) {
 				text2 = "";
 			}
-			AppLinkService.getInstance().getProxy()
-				.show(text1, text2, TextAlignment.LEFT_ALIGNED, AppLinkService.getInstance().autoIncCorrId++);
+			AppLinkService.getInstance().getProxy().show(text1, text2, "", "", null, softButtons, null, 
+					TextAlignment.LEFT_ALIGNED, AppLinkService.getInstance().autoIncCorrId++);
 
 		} catch (SyncException e) {
 			e.printStackTrace();
 			Log.d(TAG,"Failed to send Show");
 		}
    }
-	
 }

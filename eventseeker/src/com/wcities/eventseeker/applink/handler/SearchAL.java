@@ -6,7 +6,9 @@ import java.util.Vector;
 import android.util.Log;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
+import com.ford.syncV4.proxy.rpc.ChangeRegistrationResponse;
 import com.ford.syncV4.proxy.rpc.Choice;
+import com.ford.syncV4.proxy.rpc.DeleteFileResponse;
 import com.ford.syncV4.proxy.rpc.OnButtonPress;
 import com.ford.syncV4.proxy.rpc.OnCommand;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
@@ -15,7 +17,6 @@ import com.ford.syncV4.proxy.rpc.enums.ButtonName;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.applink.datastructure.EventList;
-import com.wcities.eventseeker.applink.interfaces.ESIProxyALM;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.applink.util.ALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil;
@@ -115,7 +116,7 @@ public class SearchAL extends ESIProxyALM {
 		
 		Vector<TTSChunk> initChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
 		Vector<TTSChunk> timeoutChunks = TTSChunkFactory.createSimpleTTSChunks(
-				context.getResources().getString(R.string.discover_al_time_out));
+				context.getResources().getString(R.string.time_out));
 		
 		ALUtil.performInteractionChoiceSet(initChunks, initialText, interactionChoiceSetIDList, timeoutChunks);
 	}
@@ -177,6 +178,17 @@ public class SearchAL extends ESIProxyALM {
 		Commands cmd = Commands.getCommandById(cmdId);
 		resetIfNeeded(cmd);
 		performOperationForCommand(cmd);
+	}
+
+	@Override
+	public void onChangeRegistrationResponse(ChangeRegistrationResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onDeleteFileResponse(DeleteFileResponse arg0) {
+		// TODO Auto-generated method stub
 	}
 	
 	@SuppressWarnings("unused")
@@ -245,11 +257,6 @@ public class SearchAL extends ESIProxyALM {
 		} else {
 			EventALUtil.speakNoEventsAvailable();
 		}		
-	}
-
-	@Override
-	public void onStopInstance() {
-		
 	}
 
 }

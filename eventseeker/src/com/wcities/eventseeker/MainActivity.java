@@ -752,7 +752,7 @@ public class MainActivity extends ActionBarActivity implements
 			if (mBtAdapter != null) {
 				// Log.i(TAG, "mBtAdapter is not null");
 				if ((mBtAdapter.isEnabled() && mBtAdapter.getBondedDevices()
-						.isEmpty() != true)) {
+						.isEmpty() == false)) {
 					Log.i(TAG, "pairedDevices");
 					// Get a set of currently paired devices
 					Set<BluetoothDevice> pairedDevices = mBtAdapter
@@ -764,7 +764,7 @@ public class MainActivity extends ActionBarActivity implements
 						for (BluetoothDevice device : pairedDevices) {
 							// Log.i(TAG, "device.getName() = " +
 							// device.getName());
-							if (device.getName().trim().equals("SYNC")) {
+							if (device.getName().toString().contains("SYNC")) {
 								// Log.i(TAG, "found SYNC");
 								isSYNCpaired = true;
 								break;
@@ -783,12 +783,18 @@ public class MainActivity extends ActionBarActivity implements
 							startService(startIntent);
 
 						} else {
-							// if the service is already running and proxy is
-							// up,
-							// set this as current UI activity
-							AppLinkService.getInstance().setCurrentActivity(
-									this);
-							// Log.i(TAG, " proxyAlive == true success");
+							//if the service is already running and proxy is up, set this as current UI activity
+    		        		AppLinkService serviceInstance = AppLinkService.getInstance();
+    		        		serviceInstance.setCurrentActivity(this);
+    		        		SyncProxyALM proxyInstance = serviceInstance.getProxy();
+    		        		if(proxyInstance != null) {
+    		        			serviceInstance.reset();
+    		        			
+    		        		} else {
+    		        			Log.i("TAG", "proxy is null");	
+    		        			serviceInstance.startProxy();
+    		        		}    		        		
+    		        		Log.i("TAG", " proxyAlive == true success");
 						}
 					}
 				}

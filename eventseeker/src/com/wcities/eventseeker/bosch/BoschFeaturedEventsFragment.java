@@ -50,7 +50,7 @@ public class BoschFeaturedEventsFragment extends BoschListFragmentLoadableFromBa
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
-		double latlon[] = DeviceUtil.getLatLon(FragmentUtil.getActivity(this));
+		double latlon[] = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 		AsyncTaskUtil.executeAsyncTask(new LoadFeaturedEvts(latlon[0], latlon[1]) {
 			
 			@Override

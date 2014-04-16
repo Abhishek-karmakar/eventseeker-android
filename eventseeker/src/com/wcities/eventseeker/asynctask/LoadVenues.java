@@ -43,7 +43,7 @@ public class LoadVenues extends AsyncTask<String, Void, List<Venue>> {
 	
 	@Override
 	protected List<Venue> doInBackground(String... params) {
-		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getActivity(fragment));
+		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(fragment));
 		RecordApi recordApi = new RecordApi(Api.OAUTH_TOKEN, latLon[0], latLon[1]);
 		recordApi.setLimit(VENUES_LIMIT);
 		recordApi.setAlreadyRequested(venueListAdapter.getVenuesAlreadyRequested());

@@ -11,7 +11,6 @@ import java.util.Vector;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -22,45 +21,60 @@ import com.ford.syncV4.proxy.interfaces.IProxyListenerALM;
 import com.ford.syncV4.proxy.rpc.AddCommandResponse;
 import com.ford.syncV4.proxy.rpc.AddSubMenuResponse;
 import com.ford.syncV4.proxy.rpc.AlertResponse;
+import com.ford.syncV4.proxy.rpc.ChangeRegistrationResponse;
 import com.ford.syncV4.proxy.rpc.CreateInteractionChoiceSetResponse;
 import com.ford.syncV4.proxy.rpc.DeleteCommandResponse;
+import com.ford.syncV4.proxy.rpc.DeleteFileResponse;
 import com.ford.syncV4.proxy.rpc.DeleteInteractionChoiceSetResponse;
 import com.ford.syncV4.proxy.rpc.DeleteSubMenuResponse;
+import com.ford.syncV4.proxy.rpc.DialNumberResponse;
 import com.ford.syncV4.proxy.rpc.EncodedSyncPDataResponse;
+import com.ford.syncV4.proxy.rpc.EndAudioPassThruResponse;
 import com.ford.syncV4.proxy.rpc.GenericResponse;
+import com.ford.syncV4.proxy.rpc.GetDTCsResponse;
+import com.ford.syncV4.proxy.rpc.GetVehicleDataResponse;
+import com.ford.syncV4.proxy.rpc.ListFilesResponse;
+import com.ford.syncV4.proxy.rpc.OnAudioPassThru;
 import com.ford.syncV4.proxy.rpc.OnButtonEvent;
 import com.ford.syncV4.proxy.rpc.OnButtonPress;
 import com.ford.syncV4.proxy.rpc.OnCommand;
 import com.ford.syncV4.proxy.rpc.OnDriverDistraction;
 import com.ford.syncV4.proxy.rpc.OnEncodedSyncPData;
 import com.ford.syncV4.proxy.rpc.OnHMIStatus;
+import com.ford.syncV4.proxy.rpc.OnLanguageChange;
 import com.ford.syncV4.proxy.rpc.OnPermissionsChange;
-import com.ford.syncV4.proxy.rpc.OnTBTClientState;
+import com.ford.syncV4.proxy.rpc.OnVehicleData;
+import com.ford.syncV4.proxy.rpc.PerformAudioPassThruResponse;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
+import com.ford.syncV4.proxy.rpc.PutFileResponse;
+import com.ford.syncV4.proxy.rpc.ReadDIDResponse;
 import com.ford.syncV4.proxy.rpc.ResetGlobalPropertiesResponse;
+import com.ford.syncV4.proxy.rpc.ScrollableMessageResponse;
+import com.ford.syncV4.proxy.rpc.SetAppIconResponse;
+import com.ford.syncV4.proxy.rpc.SetDisplayLayoutResponse;
 import com.ford.syncV4.proxy.rpc.SetGlobalPropertiesResponse;
 import com.ford.syncV4.proxy.rpc.SetMediaClockTimerResponse;
 import com.ford.syncV4.proxy.rpc.ShowResponse;
+import com.ford.syncV4.proxy.rpc.SliderResponse;
 import com.ford.syncV4.proxy.rpc.SpeakResponse;
 import com.ford.syncV4.proxy.rpc.SubscribeButtonResponse;
+import com.ford.syncV4.proxy.rpc.SubscribeVehicleDataResponse;
 import com.ford.syncV4.proxy.rpc.SyncMsgVersion;
 import com.ford.syncV4.proxy.rpc.UnsubscribeButtonResponse;
+import com.ford.syncV4.proxy.rpc.UnsubscribeVehicleDataResponse;
 import com.ford.syncV4.proxy.rpc.enums.ButtonName;
 import com.ford.syncV4.proxy.rpc.enums.DriverDistractionState;
 import com.ford.syncV4.proxy.rpc.enums.Language;
-import com.ford.syncV4.proxy.rpc.enums.TextAlignment;
 import com.ford.syncV4.transport.TCPTransportConfig;
-import com.ford.syncV4.util.DebugTool;
 import com.wcities.eventseeker.LockScreenActivity;
 import com.wcities.eventseeker.MainActivity;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.applink.handler.DiscoverAL;
+import com.wcities.eventseeker.applink.handler.ESIProxyALM;
 import com.wcities.eventseeker.applink.handler.MainAL;
 import com.wcities.eventseeker.applink.handler.MyEventsAL;
 import com.wcities.eventseeker.applink.handler.SearchAL;
-import com.wcities.eventseeker.applink.interfaces.ESIProxyALM;
-import com.wcities.eventseeker.applink.util.ALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil.Commands;
 import com.wcities.eventseeker.constants.AppConstants;
 
@@ -153,17 +167,18 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 			try {
 				if (AppConstants.DEBUG) {
 					//Log.d(TAG, "startProxy with TCP");
-					proxy = new SyncProxyALM(this, getResources().getString(R.string.app_name), true,
-							new TCPTransportConfig(AppConstants.TCP_PORT, AppConstants.TCP_IP_ADDRESS, true));
+					proxy = new SyncProxyALM(this, getResources().getString(R.string.app_name), true, 
+							AppConstants.FORD_APP_ID, new TCPTransportConfig(AppConstants.TCP_PORT, 
+									AppConstants.TCP_IP_ADDRESS, true));
 					
 				} else {
 					SyncMsgVersion syncMsgVersion = new SyncMsgVersion();
 					syncMsgVersion.setMajorVersion(1);
 					syncMsgVersion.setMinorVersion(1);
 					proxy = new SyncProxyALM(this, getResources().getString(R.string.app_name), null, 
-							new Vector<String>(Arrays.asList(new String[] {
-									getResources().getString(R.string.app_name)/*"eventseeker"*/})), true, 
-							syncMsgVersion, Language.EN_US, null);
+							new Vector<String>(Arrays.asList(new String[] {getResources().getString(
+							R.string.app_name)})), true, syncMsgVersion, Language.EN_US, Language.EN_US, 
+							AppConstants.FORD_APP_ID, null);
 					Log.d(TAG, "startProxy() registration done");
 				}
 				
@@ -393,6 +408,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	        proxy.subscribeButton(ButtonName.OK, autoIncCorrId++);
 	        proxy.subscribeButton(ButtonName.SEEKLEFT, autoIncCorrId++);
 			proxy.subscribeButton(ButtonName.SEEKRIGHT, autoIncCorrId++);
+			// TODO: Remove following subscriptions
 			proxy.subscribeButton(ButtonName.PRESET_0, autoIncCorrId++);
 			proxy.subscribeButton(ButtonName.PRESET_1, autoIncCorrId++);
 			proxy.subscribeButton(ButtonName.PRESET_2, autoIncCorrId++);
@@ -471,10 +487,6 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	 * @param cmd
 	 */
 	public void initiateESIProxyListener(Commands cmd) {
-		if (esIProxyALM != null) {
-			esIProxyALM.onStopInstance();
-		}
-		
 		switch (cmd) {
 			case DISCOVER:
 				Log.d(TAG, "DISCOVER");
@@ -531,10 +543,123 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	
 	public void onOnEncodedSyncPData(OnEncodedSyncPData notification) {}
 	
-	public void onOnTBTClientState(OnTBTClientState notification) {}
-	
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
+	}
+
+	@Override
+	public void onChangeRegistrationResponse(ChangeRegistrationResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onDeleteFileResponse(DeleteFileResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onDialNumberResponse(DialNumberResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onEndAudioPassThruResponse(EndAudioPassThruResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onGetDTCsResponse(GetDTCsResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onGetVehicleDataResponse(GetVehicleDataResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onListFilesResponse(ListFilesResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onOnAudioPassThru(OnAudioPassThru arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onOnLanguageChange(OnLanguageChange arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onOnVehicleData(OnVehicleData arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPerformAudioPassThruResponse(PerformAudioPassThruResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPutFileResponse(PutFileResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onReadDIDResponse(ReadDIDResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onScrollableMessageResponse(ScrollableMessageResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onSetAppIconResponse(SetAppIconResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onSetDisplayLayoutResponse(SetDisplayLayoutResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onSliderResponse(SliderResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onSubscribeVehicleDataResponse(SubscribeVehicleDataResponse arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onUnsubscribeVehicleDataResponse(
+			UnsubscribeVehicleDataResponse arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }

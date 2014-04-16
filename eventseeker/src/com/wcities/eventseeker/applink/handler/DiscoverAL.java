@@ -13,11 +13,30 @@ import org.json.JSONObject;
 import android.util.Log;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
+import com.ford.syncV4.proxy.rpc.ChangeRegistrationResponse;
 import com.ford.syncV4.proxy.rpc.Choice;
+import com.ford.syncV4.proxy.rpc.DeleteFileResponse;
+import com.ford.syncV4.proxy.rpc.DialNumberResponse;
+import com.ford.syncV4.proxy.rpc.EndAudioPassThruResponse;
+import com.ford.syncV4.proxy.rpc.GetDTCsResponse;
+import com.ford.syncV4.proxy.rpc.GetVehicleDataResponse;
+import com.ford.syncV4.proxy.rpc.ListFilesResponse;
+import com.ford.syncV4.proxy.rpc.OnAudioPassThru;
 import com.ford.syncV4.proxy.rpc.OnButtonPress;
 import com.ford.syncV4.proxy.rpc.OnCommand;
+import com.ford.syncV4.proxy.rpc.OnLanguageChange;
+import com.ford.syncV4.proxy.rpc.OnVehicleData;
+import com.ford.syncV4.proxy.rpc.PerformAudioPassThruResponse;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
+import com.ford.syncV4.proxy.rpc.PutFileResponse;
+import com.ford.syncV4.proxy.rpc.ReadDIDResponse;
+import com.ford.syncV4.proxy.rpc.ScrollableMessageResponse;
+import com.ford.syncV4.proxy.rpc.SetAppIconResponse;
+import com.ford.syncV4.proxy.rpc.SetDisplayLayoutResponse;
+import com.ford.syncV4.proxy.rpc.SliderResponse;
+import com.ford.syncV4.proxy.rpc.SubscribeVehicleDataResponse;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
+import com.ford.syncV4.proxy.rpc.UnsubscribeVehicleDataResponse;
 import com.ford.syncV4.proxy.rpc.enums.ButtonName;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.Api;
@@ -26,7 +45,6 @@ import com.wcities.eventseeker.api.EventApi.MoreInfo;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.applink.datastructure.EventList;
 import com.wcities.eventseeker.applink.datastructure.EventList.LoadEventsListener;
-import com.wcities.eventseeker.applink.interfaces.ESIProxyALM;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.applink.util.ALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil;
@@ -119,22 +137,6 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		addCommands();
 	}
 	
-	@Override
-	public void onStopInstance() {
-		Log.d(TAG, "onStopInstance()");	
-		/*ALUtil.deleteInteractionChoiceSet(CHOICE_SET_ID_DISCOVER);
-		Vector<Commands> delCmds = new Vector<Commands>();
-		delCmds.add(Commands.DISCOVER);
-		delCmds.add(Commands.MY_EVENTS);
-		delCmds.add(Commands.SEARCH);
-		delCmds.add(Commands.NEXT);
-		delCmds.add(Commands.BACK);
-		delCmds.add(Commands.DETAILS);
-		delCmds.add(Commands.PLAY);
-		delCmds.add(Commands.CALL_VENUE);
-		CommandsUtil.deleteCommands(delCmds);*/
-	}
-
 	private void addCommands() {
 		Vector<Commands> requiredCmds = new Vector<Commands>();
 		requiredCmds.add(Commands.DISCOVER);
@@ -180,7 +182,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		
 		Vector<TTSChunk> initChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
 		Vector<TTSChunk> timeoutChunks = TTSChunkFactory.createSimpleTTSChunks(
-				context.getResources().getString(R.string.discover_al_time_out));
+				context.getResources().getString(R.string.time_out));
 		
 		ALUtil.performInteractionChoiceSet(initChunks, initialText, interactionChoiceSetIDList, timeoutChunks);
 	}
@@ -212,7 +214,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		}
 		onNextCommand();
 	}
-
+	
 	private void loadEvents(int categoryId) {
 		/**
 		 * http://dev.wcities.com/V3/event_api/getEvents.php?oauth_token=5c63440e7db1ad33c3898cdac3405b1e

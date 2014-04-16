@@ -54,7 +54,7 @@ public class FullScreenAddressMapFragment extends FragmentLoadableFromBackStack 
 		
 		res = getResources();
 		
-		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getActivity(this));
+		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 		currentLat = latLon[0];
 		currentLon = latLon[1];
 		

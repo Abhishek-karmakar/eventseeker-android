@@ -335,6 +335,7 @@
 	<!-- Common Messages -->
     <string name="msg_welcome_to">Welcome to</string>
     <string name="msg_eventseeker">Eventseeker!</string>
+    <string name="time_out">time out</string>
     
 	<!-- Commands -->
     <string name="al_command_next">Next</string>
@@ -359,7 +360,6 @@
     <string name="discover_al_sports">Sports</string>
     <string name="discover_al_theater">Theater</string>
     <string name="discover_al_festivals">Festivals</string>
-    <string name="discover_al_time_out">time out</string>
 
     <!-- SearchAL -->
     <string name="search_events_or_artists">Okay, would you like to search for artist, or event</string>
@@ -372,6 +372,14 @@
     <string name="plz_press_nxt_or_bck">, Please press the voice button and say next or back.</string>
     <string name="loading">Loading...</string>
     <string name="detail_not_available">Detail description not available</string>
+
+    <!-- MyEventsAL -->
+    <string name="my_events_al_yes">Yes</string>
+    <string name="my_events_al_no">No</string>
+    <string name="my_events_al_no_evts_avail_make_suggestions">There are no events available, shall I make suggestions?</string>
+    <string name="my_events_al_suggestions">Want Suggestions?</string>
+    <string name="my_events_how_can_i_help">How can I help?</string>
+    
     <!-- <string name=""></string> -->
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for Ford ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 

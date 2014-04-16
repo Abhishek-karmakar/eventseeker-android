@@ -116,12 +116,6 @@ public class CommandsUtil {
 		}
 	}
 	
-	public static void deleteCommands(Vector<Commands> delCommands) {
-		for (Commands cmd : delCommands) {
-			ALUtil.deleteCommand(cmd.getCmdId());
-		}
-	}
-	
 	/*public static void performOperationForCommand(Commands cmd) {
 		if (cmd == null) {
 			return;
