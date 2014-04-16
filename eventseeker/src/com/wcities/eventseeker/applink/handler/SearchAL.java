@@ -6,9 +6,7 @@ import java.util.Vector;
 import android.util.Log;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
-import com.ford.syncV4.proxy.rpc.ChangeRegistrationResponse;
 import com.ford.syncV4.proxy.rpc.Choice;
-import com.ford.syncV4.proxy.rpc.DeleteFileResponse;
 import com.ford.syncV4.proxy.rpc.OnButtonPress;
 import com.ford.syncV4.proxy.rpc.OnCommand;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
@@ -143,7 +141,7 @@ public class SearchAL extends ESIProxyALM {
 		Log.i(TAG, "onPerformInteractionResponse(), response.getChoiceID() = " + response.getChoiceID());
 		
 		if (SearchCategories.getSearchChoiceId(response.getChoiceID()) == null) {
-			//TODO: when Choice Id is invalid that is null	
+			//TODO: when Choice Id is invalid that is null
 			Log.i(TAG, "SearchCategories.getSearchChoiceId(response.getChoiceID()) == null");
 		}
 		
@@ -155,7 +153,7 @@ public class SearchAL extends ESIProxyALM {
 		if (eventList.isEmpty()) {
 			ALUtil.displayMessage(R.string.msg_welcome_to, R.string.msg_eventseeker);
 		}
-		//onNextCommand();
+		//EventALUtil.onNextCommand(eventList, context);
 	}
 
 	@Override
@@ -163,7 +161,6 @@ public class SearchAL extends ESIProxyALM {
 		Log.d(TAG, "onOnButtonPress");
 		ButtonName btnName = notification.getButtonName();
 		Commands cmd = Commands.getCommandByButtonName(btnName);
-		resetIfNeeded(cmd);
 		performOperationForCommand(cmd);
 	}
 	
@@ -176,19 +173,7 @@ public class SearchAL extends ESIProxyALM {
 		int cmdId = Integer.parseInt(notification.getParameters("cmdID").toString());
 		//Log.d(TAG, "onOnCommand, cmdId = " + cmdId);
 		Commands cmd = Commands.getCommandById(cmdId);
-		resetIfNeeded(cmd);
 		performOperationForCommand(cmd);
-	}
-
-	@Override
-	public void onChangeRegistrationResponse(ChangeRegistrationResponse arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onDeleteFileResponse(DeleteFileResponse arg0) {
-		// TODO Auto-generated method stub
 	}
 	
 	@SuppressWarnings("unused")
@@ -197,7 +182,8 @@ public class SearchAL extends ESIProxyALM {
 		if (cmd == null) {
 			return;
 		}
-
+		reset(cmd);
+		
 		switch (cmd) {
 			case DISCOVER:
 			case MY_EVENTS:
@@ -205,10 +191,10 @@ public class SearchAL extends ESIProxyALM {
 				AppLinkService.getInstance().initiateESIProxyListener(cmd);
 				break;
 			case NEXT:
-				onNextCommand();
+				EventALUtil.onNextCommand(eventList, context);
 				break;
 			case BACK:
-				onBackCommand();
+				EventALUtil.onBackCommand(eventList, context);
 				break;
 			case DETAILS:
 				EventALUtil.speakDetailsOfEvent(eventList.getCurrentEvent(), context);
@@ -231,32 +217,9 @@ public class SearchAL extends ESIProxyALM {
 	 * Discover screen only.
 	 * @param cmd
 	 */
-	private void resetIfNeeded(Commands cmd) {
-		if (cmd != Commands.SEARCH) {
-			return;
-		}
+	private void reset(Commands cmd) {
 		eventList.resetEventList();
 		selectedCategoryId = 0;
-	}
-
-	private void onNextCommand() {
-		if (eventList.moveToNextEvent()) {
-			EventALUtil.displayCurrentEvent(eventList);
-			EventALUtil.speakEventTitle(eventList.getCurrentEvent(), context);
-			
-		} else {
-			EventALUtil.speakNoEventsAvailable();
-		}		
-	}
-
-	private void onBackCommand() {
-		if (eventList.moveToPreviousEvent()) {
-			EventALUtil.displayCurrentEvent(eventList);
-			EventALUtil.speakEventTitle(eventList.getCurrentEvent(), context);
-			
-		} else {
-			EventALUtil.speakNoEventsAvailable();
-		}		
 	}
 
 }

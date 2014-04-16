@@ -199,5 +199,25 @@ public class EventALUtil {
 		}
 		return dateTime;
 	}
+	
+	public static void onNextCommand(EventList eventList, EventSeekr context) {
+		if (eventList.moveToNextEvent()) {
+			EventALUtil.displayCurrentEvent(eventList);
+			EventALUtil.speakEventTitle(eventList.getCurrentEvent(), context);
+			
+		} else {
+			EventALUtil.speakNoEventsAvailable();
+		}		
+	}
+
+	public static void onBackCommand(EventList eventList,EventSeekr context) {
+		if (eventList.moveToPreviousEvent()) {
+			EventALUtil.displayCurrentEvent(eventList);
+			EventALUtil.speakEventTitle(eventList.getCurrentEvent(), context);
+			
+		} else {
+			EventALUtil.speakNoEventsAvailable();
+		}		
+	}
 
 }

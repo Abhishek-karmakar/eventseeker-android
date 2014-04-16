@@ -13,30 +13,11 @@ import org.json.JSONObject;
 import android.util.Log;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
-import com.ford.syncV4.proxy.rpc.ChangeRegistrationResponse;
 import com.ford.syncV4.proxy.rpc.Choice;
-import com.ford.syncV4.proxy.rpc.DeleteFileResponse;
-import com.ford.syncV4.proxy.rpc.DialNumberResponse;
-import com.ford.syncV4.proxy.rpc.EndAudioPassThruResponse;
-import com.ford.syncV4.proxy.rpc.GetDTCsResponse;
-import com.ford.syncV4.proxy.rpc.GetVehicleDataResponse;
-import com.ford.syncV4.proxy.rpc.ListFilesResponse;
-import com.ford.syncV4.proxy.rpc.OnAudioPassThru;
 import com.ford.syncV4.proxy.rpc.OnButtonPress;
 import com.ford.syncV4.proxy.rpc.OnCommand;
-import com.ford.syncV4.proxy.rpc.OnLanguageChange;
-import com.ford.syncV4.proxy.rpc.OnVehicleData;
-import com.ford.syncV4.proxy.rpc.PerformAudioPassThruResponse;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
-import com.ford.syncV4.proxy.rpc.PutFileResponse;
-import com.ford.syncV4.proxy.rpc.ReadDIDResponse;
-import com.ford.syncV4.proxy.rpc.ScrollableMessageResponse;
-import com.ford.syncV4.proxy.rpc.SetAppIconResponse;
-import com.ford.syncV4.proxy.rpc.SetDisplayLayoutResponse;
-import com.ford.syncV4.proxy.rpc.SliderResponse;
-import com.ford.syncV4.proxy.rpc.SubscribeVehicleDataResponse;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
-import com.ford.syncV4.proxy.rpc.UnsubscribeVehicleDataResponse;
 import com.ford.syncV4.proxy.rpc.enums.ButtonName;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.Api;
@@ -62,15 +43,8 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 	private static final int CHOICE_CATEGORIES_DISCOVER_AL = 1000;
 	private static final int EVENTS_LIMIT = 10;
 	private static final int MILES_LIMIT = 25;
-
-	private static DiscoverAL instance;
-
-	private EventSeekr context;
-	private EventList eventList;
-	private double lat, lon;
-	private int selectedCategoryId;
 	private static final int CHOICE_SET_ID_DISCOVER = 0;
-	
+
 	public static enum GetEventsFrom {
 		EVENTS,
 		FEATURED_EVENTS;
@@ -114,6 +88,13 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		}
 		
 	}
+
+	private static DiscoverAL instance;
+
+	private EventSeekr context;
+	private EventList eventList;
+	private double lat, lon;
+	private int selectedCategoryId;
 	
 	public DiscoverAL(EventSeekr context) {
 		this.context = context;
@@ -212,7 +193,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		if (eventList.isEmpty()) {
 			ALUtil.displayMessage(R.string.msg_welcome_to, R.string.msg_eventseeker);
 		}
-		onNextCommand();
+		EventALUtil.onNextCommand(eventList, context);
 	}
 	
 	private void loadEvents(int categoryId) {
@@ -333,7 +314,6 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		Log.d(TAG, "onOnButtonPress");
 		ButtonName btnName = notification.getButtonName();
 		Commands cmd = Commands.getCommandByButtonName(btnName);
-		resetIfNeeded(cmd);
 		performOperationForCommand(cmd);
 	}
 	
@@ -346,7 +326,6 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		int cmdId = Integer.parseInt(notification.getParameters("cmdID").toString());
 		//Log.d(TAG, "onOnCommand, cmdId = " + cmdId);
 		Commands cmd = Commands.getCommandById(cmdId);
-		resetIfNeeded(cmd);
 		performOperationForCommand(cmd);
 	}
 	
@@ -355,10 +334,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 	 * Discover screen only.
 	 * @param cmd
 	 */
-	private void resetIfNeeded(Commands cmd) {
-		if (cmd != Commands.DISCOVER) {
-			return;
-		}
+	private void reset(Commands cmd) {
 		selectedCategoryId = 0;
 		eventList.resetEventList();
 	}
@@ -369,7 +345,8 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		if (cmd == null) {
 			return;
 		}
-
+		reset(cmd);
+		
 		switch (cmd) {
 			case DISCOVER:
 			case MY_EVENTS:
@@ -377,10 +354,10 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 				AppLinkService.getInstance().initiateESIProxyListener(cmd);
 				break;
 			case NEXT:
-				onNextCommand();
+				EventALUtil.onNextCommand(eventList, context);
 				break;
 			case BACK:
-				onBackCommand();
+				EventALUtil.onBackCommand(eventList, context);
 				break;
 			case DETAILS:
 				EventALUtil.speakDetailsOfEvent(eventList.getCurrentEvent(), context);
@@ -394,26 +371,6 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 				break;
 			
 		}
-	}
-	
-	private void onNextCommand() {
-		if (eventList.moveToNextEvent()) {
-			EventALUtil.displayCurrentEvent(eventList);
-			EventALUtil.speakEventTitle(eventList.getCurrentEvent(), context);
-			
-		} else {
-			EventALUtil.speakNoEventsAvailable();
-		}		
-	}
-
-	private void onBackCommand() {
-		if (eventList.moveToPreviousEvent()) {
-			EventALUtil.displayCurrentEvent(eventList);
-			EventALUtil.speakEventTitle(eventList.getCurrentEvent(), context);
-			
-		} else {
-			EventALUtil.speakNoEventsAvailable();
-		}		
 	}
 
 	@Override
