@@ -147,8 +147,8 @@ public class EventALUtil {
 		return "";
 	}
 	
-	public static void speakNoEventsAvailable() {
-		String simple = AppLinkService.getInstance().getResources().getString(R.string.event_no_evts_avail);
+	public static void speak(int strResId) {
+		String simple = AppLinkService.getInstance().getResources().getString(strResId);
 		Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
 		ALUtil.speakText(ttsChunks);		
 	}
@@ -158,7 +158,7 @@ public class EventALUtil {
 				(eventList.getCurrentEventPosition() + 1) + "/" + eventList.getTotalNoOfEvents());
 	}
 	
-	public static String getFormattedDateTime(Date date, Venue venue) {
+	private static String getFormattedDateTime(Date date, Venue venue) {
 		if (date == null) {
 			return null;			
 		}
@@ -206,7 +206,8 @@ public class EventALUtil {
 			EventALUtil.speakEventTitle(eventList.getCurrentEvent(), context);
 			
 		} else {
-			EventALUtil.speakNoEventsAvailable();
+			EventALUtil.speak(R.string.event_no_evts_avail);
+
 		}		
 	}
 
@@ -216,7 +217,8 @@ public class EventALUtil {
 			EventALUtil.speakEventTitle(eventList.getCurrentEvent(), context);
 			
 		} else {
-			EventALUtil.speakNoEventsAvailable();
+			EventALUtil.speak(R.string.event_no_evts_avail);
+
 		}		
 	}
 

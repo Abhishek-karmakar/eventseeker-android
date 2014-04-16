@@ -47,6 +47,7 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.applink.util.ALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil;
+import com.wcities.eventseeker.applink.util.EventALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil.Commands;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
@@ -156,97 +157,16 @@ public class MyEventsAL extends ESIProxyALM {
 	
 	private void handleNext() {
 		currentEvtPos++;
-		displayCurrentEvent();
-		speakCurrentEvent();
+		Event event = currentEvtList.get(currentEvtPos);
+		EventALUtil.displayCurrentEvent(event, currentEvtPos, totalNoOfEvents);
+		EventALUtil.speakEventTitle(event, mEventSeekr);
 	}
 	
 	private void handleBack() {
 		currentEvtPos--;
-		displayCurrentEvent();
-		speakCurrentEvent();
-	}
-	
-	private void displayCurrentEvent() {
 		Event event = currentEvtList.get(currentEvtPos);
-		/**
-		 * TODO: actually total count will be the one from api response. currently using the total events
-		 * in the list. So, parse the value for total events from response and show it over here.
-		 */
-		ALUtil.displayMessage(event.getName(), (currentEvtPos + 1) + "/" + totalNoOfEvents);
-	}
-
-	private void speakCurrentEvent() {
-		/**
-		 * TODO: after launching the app, each and every time system should speak about the 
-		 * first event and then append the 'plz press next or back' and then throughout the
-		 * current session it shouldn't append the second line.
-		 */
-		Event event = currentEvtList.get(currentEvtPos);
-
-		String simple = "Okay, " + event.getName();
-		
-		if (event.getSchedule() != null) {
-			Venue venue = event.getSchedule().getVenue();
-			if (venue != null) {
-				String venueName = venue.getName();
-				if (venueName != null) {
-					simple += ", at " + venueName;			
-				}
-				
-				List<Date> dates = event.getSchedule().getDates();
-				if (dates != null && !dates.isEmpty()) {
-					//simple += ", on " + ConversionUtil.getDateTime(dates.get(0));
-					simple += ", on " + getFormattedDateTime(dates.get(0), venue);
-				}
-			}
-		}
-		
-		Log.i(TAG, "simple = " + simple);
-		
-		Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
-		ALUtil.speakText(ttsChunks);				
-	}
-	
-	public String getFormattedDateTime(Date date, Venue venue) {
-		if (date == null) {
-			return null;			
-		}
-		
-		String dateTime = "";
-		
-		java.util.Date dt = date.getStartDate();
-		SimpleDateFormat format = new SimpleDateFormat("dd MMM");
-		dateTime += format.format(dt);
-		
-		if (date.isStartTimeAvailable()) {
-			format = new SimpleDateFormat("HH");
-			
-			dateTime += ", " + format.format(dt);
-			
-			format = new SimpleDateFormat("m");
-			
-			String min = format.format(dt);
-			if (min.length() > 1) {
-				dateTime += " " + min;		
-			} else {
-				if (min.equals("0")) {
-					dateTime += " hundred";	
-				} else {
-					if (venue.getAddress().getCountry().getName().equals(COUNTRY_NAME)) {
-						//if country is USA then " 0 " must be spelled as " Oh "
-						dateTime += " Oh " + min;						
-						
-					} else {
-						dateTime += " 0 " + min;						
-						
-					}
-				}
-			}
-			
-			dateTime += " hours";
-			Log.d(TAG, "dateTime : " + dateTime);
-		}
-		return dateTime;
+		EventALUtil.displayCurrentEvent(event, currentEvtPos, totalNoOfEvents);
+		EventALUtil.speakEventTitle(event, mEventSeekr);
 	}
 	
 	private void generateLatLon() {
@@ -257,14 +177,14 @@ public class MyEventsAL extends ESIProxyALM {
 	
 	private void addCommands() {
 		Vector<Commands> reqCmds = new Vector<Commands>();
-		reqCmds.add(Commands.DISCOVER);
-		reqCmds.add(Commands.MY_EVENTS);
-		reqCmds.add(Commands.SEARCH);
-		reqCmds.add(Commands.NEXT);
-		reqCmds.add(Commands.BACK);
-		reqCmds.add(Commands.DETAILS);
-		reqCmds.add(Commands.PLAY);
 		reqCmds.add(Commands.CALL_VENUE);
+		reqCmds.add(Commands.PLAY);
+		reqCmds.add(Commands.DETAILS);
+		reqCmds.add(Commands.BACK);
+		reqCmds.add(Commands.NEXT);
+		reqCmds.add(Commands.SEARCH);
+		reqCmds.add(Commands.MY_EVENTS);
+		reqCmds.add(Commands.DISCOVER);
 		CommandsUtil.addCommands(reqCmds);	
 	}
 	
@@ -359,16 +279,13 @@ public class MyEventsAL extends ESIProxyALM {
 			break;
 			
 		case DETAILS:
-			//TODO:
+			EventALUtil.speakDetailsOfEvent(currentEvtList.get(currentEvtPos), mEventSeekr);
 			break;
 			
 		case PLAY:
 			break;
 			
 		case CALL_VENUE:
-			break;
-			
-		case FOLLOW:
 			break;
 			
 		default:
@@ -389,12 +306,6 @@ public class MyEventsAL extends ESIProxyALM {
 			eventsAlreadyRequested = 0;
 			isMoreDataAvailable = true;	
 		}
-	}
-	
-	private void speak(int strResId) {
-		String simple = mEventSeekr.getResources().getString(strResId);
-		Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
-		ALUtil.speakText(ttsChunks);		
 	}
 	
 	private boolean hasMoreEvents() {
@@ -431,7 +342,7 @@ public class MyEventsAL extends ESIProxyALM {
 			handleNext();
 			
 		} else {
-			speak(R.string.event_no_evts_avail);
+			EventALUtil.speak(R.string.event_no_evts_avail);
 		}		
 	}
 
@@ -440,7 +351,7 @@ public class MyEventsAL extends ESIProxyALM {
 			handleBack();
 			
 		} else {
-			speak(R.string.event_no_evts_avail);
+			EventALUtil.speak(R.string.event_no_evts_avail);
 		}		
 	}
 	
@@ -465,14 +376,14 @@ public class MyEventsAL extends ESIProxyALM {
 
 			if (currentEvtList.isEmpty()) {
 				ALUtil.displayMessage(R.string.msg_welcome_to, R.string.msg_eventseeker);
-				speak(R.string.event_no_evts_avail);
+				EventALUtil.speak(R.string.event_no_evts_avail);
 				
 			} else {
 				handleNext();
 			}
 			
 		} else if (response.getChoiceID() == SuggestionReply.No.id) {
-			speak(R.string.my_events_how_can_i_help);
+			EventALUtil.speak(R.string.my_events_how_can_i_help);
 		}
 	}
 
