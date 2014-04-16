@@ -75,31 +75,31 @@ public class CommandsUtil {
 			String str = null;
 			switch (this) {
 			case DISCOVER:
-				str = AppLinkService.getStringFromRes(R.string.al_command_discover);
+				str = AppLinkService.getInstance().getResources().getString(R.string.al_command_discover);
 				break;
 			case MY_EVENTS:
-				str = AppLinkService.getStringFromRes(R.string.al_command_my_events);
+				str = AppLinkService.getInstance().getResources().getString(R.string.al_command_my_events);
 				break;
 			case SEARCH:
-				str = AppLinkService.getStringFromRes(R.string.al_command_search);
+				str = AppLinkService.getInstance().getResources().getString(R.string.al_command_search);
 				break;
 			case NEXT:
-				str = AppLinkService.getStringFromRes(R.string.al_command_next);
+				str = AppLinkService.getInstance().getResources().getString(R.string.al_command_next);
 				break;
 			case BACK:
-				str = AppLinkService.getStringFromRes(R.string.al_command_back);
+				str = AppLinkService.getInstance().getResources().getString(R.string.al_command_back);
 				break;
 			case DETAILS:
-				str = AppLinkService.getStringFromRes(R.string.al_command_details);
+				str = AppLinkService.getInstance().getResources().getString(R.string.al_command_details);
 				break;
 			case PLAY:
-				str = AppLinkService.getStringFromRes(R.string.al_command_play);
+				str = AppLinkService.getInstance().getResources().getString(R.string.al_command_play);
 				break;
 			case CALL_VENUE:
-				str = AppLinkService.getStringFromRes(R.string.al_command_call_venue);
+				str = AppLinkService.getInstance().getResources().getString(R.string.al_command_call_venue);
 				break;
 			case FOLLOW:
-				str = AppLinkService.getStringFromRes(R.string.al_command_follow);
+				str = AppLinkService.getInstance().getResources().getString(R.string.al_command_follow);
 				break;
 			default:
 				break;
@@ -110,12 +110,6 @@ public class CommandsUtil {
 	}
 
 	public static void addCommands(Vector<Commands> reqCommands) {
-		/*Commands[] allCmds = Commands.values();
-		for (Commands cmd : allCmds) {
-			if (reqCommands.contains(cmd)) {
-				ALUtil.addCommand(new Vector<String>(Arrays.asList(new String[] {cmd.toString()})), cmd.getCmdId());
-			}
-		}*/
 		for (Commands cmd : reqCommands) {
 			//Log.d(TAG, "onOnCommand add command cmd.getCmdId() = " + cmd.getCmdId());
 			ALUtil.addCommand(new Vector<String>(Arrays.asList(new String[] {cmd.toString()})), cmd.getCmdId());

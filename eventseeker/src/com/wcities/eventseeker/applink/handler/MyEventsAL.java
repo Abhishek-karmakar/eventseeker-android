@@ -150,7 +150,7 @@ public class MyEventsAL extends ESIProxyALM {
 		
 		Vector<TTSChunk> initChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
 		Vector<TTSChunk> timeoutChunks = TTSChunkFactory.createSimpleTTSChunks(
-				AppLinkService.getStringFromRes(R.string.time_out));
+				mEventSeekr.getResources().getString(R.string.time_out));
 		
 		ALUtil.performInteractionChoiceSet(initChunks, initialText, interactionChoiceSetIDList, timeoutChunks);
 	}
@@ -465,7 +465,7 @@ public class MyEventsAL extends ESIProxyALM {
 			loadEvents(Type.recommendedevent);
 
 			if (currentEvtList.isEmpty()) {
-				ALUtil.displayMessage(R.string.main_al_welcome_to, R.string.main_al_eventseeker);
+				ALUtil.displayMessage(R.string.msg_welcome_to, R.string.msg_eventseeker);
 				speak(R.string.event_no_evts_avail);
 				
 			} else {

@@ -1,11 +1,9 @@
 package com.wcities.eventseeker.applink.handler;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Vector;
 
@@ -44,17 +42,16 @@ import com.ford.syncV4.proxy.rpc.enums.ButtonName;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.EventApi;
+import com.wcities.eventseeker.api.EventApi.MoreInfo;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.applink.interfaces.ESIProxyALM;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.applink.util.ALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil.Commands;
-import com.wcities.eventseeker.constants.AppConstants;
-import com.wcities.eventseeker.core.Date;
+import com.wcities.eventseeker.applink.util.EventALUtil;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.ItemsList;
-import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
@@ -62,9 +59,9 @@ import com.wcities.eventseeker.util.DeviceUtil;
 public class DiscoverAL extends ESIProxyALM {
 
 	private static final String TAG = DiscoverAL.class.getName();
+	private static final int CHOICE_CATEGORIES_DISCOVER_AL = 1000;
 	private static final int EVENTS_LIMIT = 10;
 	private static final int MILES_LIMIT = 25;
-	private static final String COUNTRY_NAME = "United States";
 
 	private static DiscoverAL instance;
 
@@ -76,7 +73,7 @@ public class DiscoverAL extends ESIProxyALM {
 	private int selectedCategoryId;
 	private int totalNoOfEvents;
 	private boolean isMoreDataAvailable = true;
-	private static int CHOICE_SET_ID_DISCOVER = 0;
+	private static final int CHOICE_SET_ID_DISCOVER = 0;
 	private GetEventsFrom whichCall;
 	
 	public static enum GetEventsFrom {
@@ -85,23 +82,18 @@ public class DiscoverAL extends ESIProxyALM {
 	}
 	
 	private static enum Discover {
-		Concerts(AppConstants.CHOICE_CATEGORIES_DISCOVER_AL, AppConstants.CATEGORY_ID_START, 
-				R.string.discover_al_concerts),
-		Clubs(AppConstants.CHOICE_CATEGORIES_DISCOVER_AL + 1, AppConstants.CATEGORY_ID_START + 5, 
-				R.string.discover_al_clubs),
-		Sports(AppConstants.CHOICE_CATEGORIES_DISCOVER_AL + 2, AppConstants.CATEGORY_ID_START + 2, 
-				R.string.discover_al_sports),
-		Theater(AppConstants.CHOICE_CATEGORIES_DISCOVER_AL + 3, AppConstants.CATEGORY_ID_START + 1,
-				R.string.discover_al_theater),
-		Festivals(AppConstants.CHOICE_CATEGORIES_DISCOVER_AL + 4, AppConstants.CATEGORY_ID_START + 7, 
-				R.string.discover_al_festivals);
+		Concerts(CHOICE_CATEGORIES_DISCOVER_AL, 900, R.string.discover_al_concerts),
+		Clubs(CHOICE_CATEGORIES_DISCOVER_AL + 1, 905, R.string.discover_al_clubs),
+		Sports(CHOICE_CATEGORIES_DISCOVER_AL + 2, 902, R.string.discover_al_sports),
+		Theater(CHOICE_CATEGORIES_DISCOVER_AL + 3, 901, R.string.discover_al_theater),
+		Festivals(CHOICE_CATEGORIES_DISCOVER_AL + 4, 907, R.string.discover_al_festivals);
 		
-		private int id, categoryId, name;
+		private int id, categoryId, nameResId;
 		
-		private Discover(int value, int categoryId, int name) {
+		private Discover(int value, int categoryId, int nameResId) {
 			this.id = value;
 			this.categoryId = categoryId;
-			this.name = name;
+			this.nameResId = nameResId;
 		}
 
 		public static Discover getDiscoverChoiceId(int discoverId) {
@@ -115,7 +107,7 @@ public class DiscoverAL extends ESIProxyALM {
 		}
 		
 		public String getName() {
-			return AppLinkService.getStringFromRes(name);
+			return AppLinkService.getInstance().getResources().getString(nameResId);
 		}
 		
 		public int getId() {
@@ -149,16 +141,16 @@ public class DiscoverAL extends ESIProxyALM {
 	}
 	
 	private void addCommands() {
-		Vector<Commands> reqCmds = new Vector<Commands>();
-		reqCmds.add(Commands.DISCOVER);
-		reqCmds.add(Commands.MY_EVENTS);
-		reqCmds.add(Commands.SEARCH);
-		reqCmds.add(Commands.NEXT);
-		reqCmds.add(Commands.BACK);
-		reqCmds.add(Commands.DETAILS);
-		reqCmds.add(Commands.PLAY);
-		reqCmds.add(Commands.CALL_VENUE);
-		CommandsUtil.addCommands(reqCmds);
+		Vector<Commands> requiredCmds = new Vector<Commands>();
+		requiredCmds.add(Commands.DISCOVER);
+		requiredCmds.add(Commands.MY_EVENTS);
+		requiredCmds.add(Commands.SEARCH);
+		requiredCmds.add(Commands.NEXT);
+		requiredCmds.add(Commands.BACK);
+		requiredCmds.add(Commands.DETAILS);
+		requiredCmds.add(Commands.PLAY);
+		requiredCmds.add(Commands.CALL_VENUE);
+		CommandsUtil.addCommands(requiredCmds);
 	}
 
 	private void initializeInteractionChoiceSets() {
@@ -171,38 +163,29 @@ public class DiscoverAL extends ESIProxyALM {
 			Discover category = categories[i];
 			
 			Log.d(TAG, "Category id : " + category.getId());
-			Log.d(TAG, "Category name : " + category.getName());
+			Log.d(TAG, "Category nameResId : " + category.getName());
 			
 			Choice choice = ALUtil.createChoice(category.getId(), category.getName(), 
 					new Vector<String>(Arrays.asList(new String[] {category.getName()})));
 			choices.add(choice);
 		}
 
-		/**
-		 * TODO:If needed, add ++ before CHOICE_SET_ID_DISCOVER for incrementing it
-		 * CHOICE_SET_ID_DISCOVER must always be unique. So, each time when screen gets
-		 * reloaded then it must be incremented.
-		 */
-		ALUtil.createInteractionChoiceSet(choices, CHOICE_SET_ID_DISCOVER/*ChoiceSetId.Discover.ordinal()*/);
+		ALUtil.createInteractionChoiceSet(choices, CHOICE_SET_ID_DISCOVER);
 	}
 	
 	private void performInteraction() {
 		Log.d(TAG, "performInteraction()");
-		Log.d(TAG, "Discover ordinal : " + CHOICE_SET_ID_DISCOVER/*ChoiceSetId.Discover.ordinal()*/);
+		Log.d(TAG, "Discover ordinal : " + CHOICE_SET_ID_DISCOVER);
 		
 		Vector<Integer> interactionChoiceSetIDList = new Vector<Integer>();
-		interactionChoiceSetIDList.add(CHOICE_SET_ID_DISCOVER/*ChoiceSetId.Discover.ordinal()*/);
+		interactionChoiceSetIDList.add(CHOICE_SET_ID_DISCOVER);
 		
 		String simple = AppLinkService.getInstance().getString(R.string.discover_al_discover_categories);
-		/**
-		 * TODO: After testing it on TDK, check if initialText is the Title of the ChoiceSet then
-		 * change it to "Say Category" as in IOS.
-		 */
-		String initialText = AppLinkService.getStringFromRes(R.string.discover_al_discover);//ChoiceSetId.Discover.getName();		
+		String initialText = context.getResources().getString(R.string.discover_al_discover);		
 		
 		Vector<TTSChunk> initChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
 		Vector<TTSChunk> timeoutChunks = TTSChunkFactory.createSimpleTTSChunks(
-				AppLinkService.getStringFromRes(R.string.time_out));
+				context.getResources().getString(R.string.time_out));
 		
 		ALUtil.performInteractionChoiceSet(initChunks, initialText, interactionChoiceSetIDList, timeoutChunks);
 	}
@@ -220,7 +203,7 @@ public class DiscoverAL extends ESIProxyALM {
 		
 		selectedCategoryId = Discover.getDiscoverChoiceId(response.getChoiceID()).getCategoryId();
 		/**
-		 * Accordig to current implementation, 1st make Featured events call and if events are available,
+		 * According to current implementation, 1st make Featured events call and if events are available,
 		 * then show these events to user and if not, only then load events from 'getEvents' API call.
 		 */
 		loadFeaturedEvents(selectedCategoryId);
@@ -228,136 +211,23 @@ public class DiscoverAL extends ESIProxyALM {
 			loadEvents(selectedCategoryId);
 		}
 
+		//show Welcome message when no events are available
+		if (discoverByCategoryEvtList.isEmpty()) {
+			ALUtil.displayMessage(R.string.msg_welcome_to, R.string.msg_eventseeker);
+		}
 		onNextCommand();
 	}
-	
-	private void speakNoEventsAvailable() {
-		String simple = AppLinkService.getStringFromRes(R.string.event_no_evts_avail);
-		Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
-		ALUtil.speakText(ttsChunks);		
-	}
-	
-	private void displayCurrentEvent() {
-		Event event = discoverByCategoryEvtList.get(currentEvtPos);
-		ALUtil.displayMessage(event.getName(), (currentEvtPos + 1) + "/" + totalNoOfEvents);
-	}
-
-	private void speakCurrentEvent() {
-		/**
-		 * TODO: after launching the app, each and every time system should speak about the 
-		 * first event and then append the 'plz press next or back' and then throughout the
-		 * current session it shouldn't append the second line.
-		 */
-		Event event = discoverByCategoryEvtList.get(currentEvtPos);
-
-		String simple = "Okay, " + event.getName();
-		
-		if (event.getSchedule() != null) {
-			Venue venue = event.getSchedule().getVenue();
-			if (venue != null) {
-				String venueName = venue.getName();
-				if (venueName != null) {
-					simple += ", at " + venueName;			
-				}
-				
-				List<Date> dates = event.getSchedule().getDates();
-				if (dates != null && !dates.isEmpty()) {
-					//simple += ", on " + ConversionUtil.getDateTime(dates.get(0));
-					simple += ", on " + getFormattedDateTime(dates.get(0), venue);
-				}
-			}
-		}
-		
-		Log.i(TAG, "simple = " + simple);
-		
-		Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
-		ALUtil.speakText(ttsChunks);				
-	}
-	
-	public String getFormattedDateTime(Date date, Venue venue) {
-		if (date == null) {
-			return null;			
-		}
-		
-		String dateTime = "";
-		
-		java.util.Date dt = date.getStartDate();
-		SimpleDateFormat format = new SimpleDateFormat("dd MMM");
-		dateTime += format.format(dt);
-		
-		if (date.isStartTimeAvailable()) {
-			format = new SimpleDateFormat("HH");
-			
-			dateTime += ", " + format.format(dt);
-			
-			format = new SimpleDateFormat("m");
-			
-			String min = format.format(dt);
-			if (min.length() > 1) {
-				dateTime += " " + min;		
-			} else {
-				if (min.equals("0")) {
-					dateTime += " hundred";	
-				} else {
-					if (venue.getAddress().getCountry().getName().equals(COUNTRY_NAME)) {
-						//if country is USA then " 0 " must be spelled as " Oh "
-						dateTime += " Oh " + min;						
-						
-					} else {
-						dateTime += " 0 " + min;						
-						
-					}
-				}
-			}
-			
-			dateTime += " hours";
-			Log.d(TAG, "dateTime : " + dateTime);
-		}
-		return dateTime;
-	}
-
-	private void speakDetailsOfCurrentEvent() {
-		/**
-		 * TODO: Current speech text is the not being used in IOS. So, it needs to be removed 
-		 * and integrate the new one.
-		 */
-		Event event = discoverByCategoryEvtList.get(currentEvtPos);
-		
-		String simple = "Okay, " + event.getName();
-		
-		if (event.getSchedule() != null) {
-			Venue venue = event.getSchedule().getVenue();
-			if (venue != null) {
-				String venueName = venue.getName();
-				if (venueName != null) {
-					simple += ", at " + venueName;			
-				}
-				
-				List<Date> dates = event.getSchedule().getDates();
-				if (dates != null && !dates.isEmpty()) {
-					//simple += ", on " + ConversionUtil.getDateTime(dates.get(0));
-					simple += ", on " + getFormattedDateTime(dates.get(0), venue);
-				}
-			}
-		}
-		
-		Log.i(TAG, "simple = " + simple);
-		
-		Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
-		ALUtil.speakText(ttsChunks);				
-	}
-
 	
 	private void loadEvents(int categoryId) {
 		/**
 		 * http://dev.wcities.com/V3/event_api/getEvents.php?oauth_token=5c63440e7db1ad33c3898cdac3405b1e
 		 * &lat=37.783300&lon=-122.416700&start=2014-04-14&end=2014-04-21&cat=900&subcat=&response_type=json
-		 * &limit=0,10&moreInfo=artistdesc&strip_html=name,description&lang=en&miles=25
+		 * &limit=0,10&moreInfo=artistdesc&strip_html=nameResId,description&lang=en&miles=25
 		 */
 		/**
 		 * First show the loading message
 		 */
-		ALUtil.displayMessage(AppLinkService.getStringFromRes(R.string.loading), "");
+		ALUtil.displayMessage(context.getResources().getString(R.string.loading), "");
 		
 		List<Event> tmpEvents = null;
 
@@ -368,6 +238,8 @@ public class DiscoverAL extends ESIProxyALM {
 		eventApi.setLimit(EVENTS_LIMIT);
 		eventApi.setCategory(categoryId);
 		eventApi.setAlreadyRequested(eventsAlreadyRequested);
+		eventApi.addMoreInfo(MoreInfo.booking);
+		eventApi.addMoreInfo(MoreInfo.multiplebooking);
 
 		whichCall = GetEventsFrom.EVENTS;
 		
@@ -375,7 +247,6 @@ public class DiscoverAL extends ESIProxyALM {
 			JSONObject jsonObject = eventApi.getEvents();
 			EventApiJSONParser jsonParser = new EventApiJSONParser();
 			
-			//tmpEvents = jsonParser.getEventList(jsonObject);
 			ItemsList<Event> eventsList = jsonParser.getEventItemList(jsonObject, whichCall);
 			tmpEvents = eventsList.getItems();
 			totalNoOfEvents = eventsList.getTotalCount();
@@ -412,7 +283,7 @@ public class DiscoverAL extends ESIProxyALM {
 		/**
 		 * First show the loading message
 		 */
-		ALUtil.displayMessage(AppLinkService.getStringFromRes(R.string.loading), "");
+		ALUtil.displayMessage(context.getResources().getString(R.string.loading), "");
 		
 		List<Event> tmpEvents = null;
 		
@@ -430,7 +301,6 @@ public class DiscoverAL extends ESIProxyALM {
 			JSONObject jsonObject = eventApi.getFeaturedEventsForFord();
 			EventApiJSONParser jsonParser = new EventApiJSONParser();
 			
-			//tmpEvents = jsonParser.getEventList(jsonObject);
 			ItemsList<Event> eventsList = jsonParser.getEventItemList(jsonObject, whichCall);
 			tmpEvents = eventsList.getItems();
 			totalNoOfEvents = eventsList.getTotalCount();
@@ -457,6 +327,7 @@ public class DiscoverAL extends ESIProxyALM {
 			isMoreDataAvailable = false;
 		}
 	}
+
 	
 	private String getStartDate() {
 		Calendar c = Calendar.getInstance();
@@ -468,12 +339,12 @@ public class DiscoverAL extends ESIProxyALM {
 		c.add(Calendar.DATE, 7);
 		return ConversionUtil.getDay(c);
 	}
-
+	
 	private void generateLatLon() {
     	double[] latLon = DeviceUtil.getLatLon(context);
     	lat = latLon[0];
     	lon = latLon[1];
-    	Log.i(TAG, "lat = " + lat + ", lon = " + lon);
+    	//Log.d(TAG, "lat = " + lat + ", lon = " + lon);
     }
 	
 	private boolean hasNextEvents() {
@@ -516,6 +387,7 @@ public class DiscoverAL extends ESIProxyALM {
 
 	@Override
 	public void onOnButtonPress(OnButtonPress notification) {
+		Log.d(TAG, "onOnButtonPress");
 		ButtonName btnName = notification.getButtonName();
 		Commands cmd = Commands.getCommandByButtonName(btnName);
 		resetIfNeeded(cmd);
@@ -544,7 +416,7 @@ public class DiscoverAL extends ESIProxyALM {
 		if (cmd != Commands.DISCOVER) {
 			return;
 		}
-		discoverByCategoryEvtList.clear();	
+		discoverByCategoryEvtList.clear();
 		lat = 0;
 		lon = 0;
 		currentEvtPos = -1;
@@ -553,7 +425,9 @@ public class DiscoverAL extends ESIProxyALM {
 		isMoreDataAvailable = true;		
 	}
 
-	private void performOperationForCommand(Commands cmd) {
+	@SuppressWarnings("unused")
+	public void performOperationForCommand(Commands cmd) {
+		Log.d(TAG, "performOperationForCommand : " + cmd.name());
 		if (cmd == null) {
 			return;
 		}
@@ -571,7 +445,7 @@ public class DiscoverAL extends ESIProxyALM {
 				onBackCommand();
 				break;
 			case DETAILS:
-				//TODO:
+				EventALUtil.speakDetailsOfEvent(discoverByCategoryEvtList.get(currentEvtPos), context);
 				break;
 			case PLAY:
 				break;
@@ -588,26 +462,23 @@ public class DiscoverAL extends ESIProxyALM {
 	
 	private void onNextCommand() {
 		if (hasNextEvents()) {
-			displayCurrentEvent();
-			speakCurrentEvent();
+			Event event = discoverByCategoryEvtList.get(currentEvtPos);
+			EventALUtil.displayCurrentEvent(event, currentEvtPos, totalNoOfEvents);
+			EventALUtil.speakEventTitle(event, context);
 			
 		} else {
-			//TODO:show some message when no events are available
-			//TODO:ALUtil.displayMessage(R.string.main_al_welcome_to, R.string.main_al_eventseeker);
-			if (discoverByCategoryEvtList.size() == 0) {
-				ALUtil.displayMessage(R.string.main_al_welcome_to, R.string.main_al_eventseeker);
-			}
-			speakNoEventsAvailable();
+			EventALUtil.speakNoEventsAvailable();
 		}		
 	}
 
 	private void onBackCommand() {
 		if (hasPreviousEvents()) {
-			displayCurrentEvent();
-			speakCurrentEvent();
+			Event event = discoverByCategoryEvtList.get(currentEvtPos);
+			EventALUtil.displayCurrentEvent(event, currentEvtPos, totalNoOfEvents);
+			EventALUtil.speakEventTitle(event, context);
 			
 		} else {
-			speakNoEventsAvailable();
+			EventALUtil.speakNoEventsAvailable();
 		}		
 	}
 

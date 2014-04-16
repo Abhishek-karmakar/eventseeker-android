@@ -143,7 +143,6 @@ public class AppConstants {
 	/************************   starts for Ford   *******************************/
 
 	public static final String FORD_APP_ID = "3260118906";
-	public static final int CHOICE_CATEGORIES_DISCOVER_AL = 1000;
 	public static final int INTERACTION_TIME_OUT_AL = 5000;
 	
 	/************************    ends for Ford    *******************************/

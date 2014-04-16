@@ -20,7 +20,9 @@ public class EventApi extends Api {
 	private static final String API = "event_api/";
 	
 	public static enum MoreInfo {
-		fallbackimage
+		fallbackimage,
+		booking,
+		multiplebooking;
 	};
 	
 	public static enum IdType {
@@ -273,7 +275,7 @@ public class EventApi extends Api {
 			uri = uri + "&end=" + end;
 		}
 
-		uri += "&moreInfo=booking";
+		uri += "&moreInfo=" + MoreInfo.booking.name() + "," + MoreInfo.multiplebooking.name();
 		
 		setUri(uri);
 		addLangParam = true;

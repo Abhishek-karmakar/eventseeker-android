@@ -392,6 +392,9 @@ public class EventApiJSONParser {
 		try {
 			if (from == GetEventsFrom.FEATURED_EVENTS) {
 				JSONObject jObjFeaturedEvents = jsonObject.getJSONObject(KEY_FEATURED_EVENT);
+				if (!jObjFeaturedEvents.has(KEY_TOTAL)) {
+					return itemsList;
+				}
 				itemsList.setTotalCount(jObjFeaturedEvents.getInt(KEY_TOTAL));
 				itemsList.setItems(getFeaturedEventList(jsonObject));
 				
@@ -400,6 +403,9 @@ public class EventApiJSONParser {
 							
 				if (jObjCityevent.has(KEY_EVENTS)) {
 					JSONObject jsonEvents = jObjCityevent.getJSONObject(KEY_EVENTS);
+					if (!jsonEvents.has(KEY_TOTAL)) {
+						return itemsList;
+					}
 					itemsList.setTotalCount(jsonEvents.getInt(KEY_TOTAL));
 					itemsList.setItems(getEventList(jsonObject));
 				
@@ -515,7 +521,7 @@ public class EventApiJSONParser {
 			 * This case is for Featured Events in Ford
 			 */
 			buildSchedule(jsonObject, event);
-			//fillBookingInfo(event.getSchedule(), jObjSchedule)
+			fillBookingInfo(event.getSchedule(), jsonObject.getJSONObject(KEY_SCHEDULE));
 			
 		} else if (jsonObject.has(KEY_SCHEDULE)) {
 			event.setSchedule(getSchedule(jsonObject.getJSONObject(KEY_SCHEDULE), venues));	

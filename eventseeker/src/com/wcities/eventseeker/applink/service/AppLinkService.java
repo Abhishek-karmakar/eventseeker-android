@@ -128,10 +128,6 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 		this.esIProxyALM = esIProxyListener;
 	}
 
-	public static String getStringFromRes(int resId) {
-		return instance.getResources().getString(resId);
-	}
-	
 	public void onCreate() {
 		super.onCreate();
 		Log.d(TAG, "onCreate()");
@@ -261,8 +257,8 @@ public class AppLinkService extends Service implements IProxyListenerALM {
    
    /*public void showWelcomeMsg() {
 		//String welcomeMsg1 = "Inside", welcomeMsg2 = "eventseekr!";
-	   	String welcomeMsg1 = AppLinkService.getStringFromRes(R.string.main_al_welcome_to), 
-	   	welcomeMsg2 = AppLinkService.getStringFromRes(R.string.main_al_eventseeker);
+	   	String welcomeMsg1 = AppLinkService.getStringFromRes(R.string.msg_welcome_to), 
+	   	welcomeMsg2 = AppLinkService.getStringFromRes(R.string.msg_eventseeker);
 		show(welcomeMsg1, welcomeMsg2, TextAlignment.CENTERED);
 	}*/
    
@@ -327,7 +323,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 				 * first event on screen and currently speaking for the first event and then suddenly welcome 
 				 * message gets appear.
 				 */
-				//ALUtil.displayMessage(R.string.main_al_welcome_to, R.string.main_al_eventseeker);
+				//ALUtil.displayMessage(R.string.msg_welcome_to, R.string.msg_eventseeker);
 			}
 			break;
 			
