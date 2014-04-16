@@ -138,16 +138,16 @@ public class DiscoverAL extends ESIProxyALM {
 	}
 
 	private void addCommands() {
-		Vector<Commands> reqCmds = new Vector<Commands>();
-		reqCmds.add(Commands.DISCOVER);
-		reqCmds.add(Commands.MY_EVENTS);
-		reqCmds.add(Commands.SEARCH);
-		reqCmds.add(Commands.NEXT);
-		reqCmds.add(Commands.BACK);
-		reqCmds.add(Commands.DETAILS);
-		reqCmds.add(Commands.PLAY);
-		reqCmds.add(Commands.CALL_VENUE);
-		CommandsUtil.addCommands(reqCmds);
+		Vector<Commands> requiredCmds = new Vector<Commands>();
+		requiredCmds.add(Commands.DISCOVER);
+		requiredCmds.add(Commands.MY_EVENTS);
+		requiredCmds.add(Commands.SEARCH);
+		requiredCmds.add(Commands.NEXT);
+		requiredCmds.add(Commands.BACK);
+		requiredCmds.add(Commands.DETAILS);
+		requiredCmds.add(Commands.PLAY);
+		requiredCmds.add(Commands.CALL_VENUE);
+		CommandsUtil.addCommands(requiredCmds);
 	}
 
 	private void initializeInteractionChoiceSets() {
@@ -210,7 +210,7 @@ public class DiscoverAL extends ESIProxyALM {
 
 		//show Welcome message when no events are available
 		if (discoverByCategoryEvtList.isEmpty()) {
-			ALUtil.displayMessage(R.string.main_al_welcome_to, R.string.main_al_eventseeker);
+			ALUtil.displayMessage(R.string.msg_welcome_to, R.string.msg_eventseeker);
 		}
 		onNextCommand();
 	}

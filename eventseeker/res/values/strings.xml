@@ -331,14 +331,23 @@
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for Ford ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    
+	<!-- Common Messages -->
+    <string name="msg_welcome_to">Welcome to</string>
+    <string name="msg_eventseeker">Eventseeker!</string>
+    
+	<!-- Commands -->
+    <string name="al_command_next">Next</string>
+    <string name="al_command_back">Back</string>
+    <string name="al_command_details">Details</string>
+    <string name="al_command_play">Play</string>
+    <string name="al_command_call_venue">Call Venue</string>
+    <string name="al_command_follow">Follow</string>
 
 	<!-- MainActivityAL -->
     <string name="al_command_my_events">My Events</string>
     <string name="al_command_discover">Discover</string>
     <string name="al_command_search">Search</string>
-    
-    <string name="main_al_welcome_to">Welcome to</string>
-    <string name="main_al_eventseeker">Eventseeker!</string>
         
 	<!-- DiscoverActivityAL -->
     <string name="discover_al_discover_categories">Okay, would you like concerts, clubs, sports, theater or, festivals</string>
@@ -351,19 +360,19 @@
     <string name="discover_al_theater">Theater</string>
     <string name="discover_al_festivals">Festivals</string>
     <string name="discover_al_time_out">time out</string>
-    
-    <string name="al_command_next">Next</string>
-    <string name="al_command_back">Back</string>
-    <string name="al_command_details">Details</string>
-    <string name="al_command_play">Play</string>
-    <string name="al_command_call_venue">Call Venue</string>
-    <string name="al_command_follow">Follow</string>
+
+    <!-- SearchAL -->
+    <string name="search_events_or_artists">Okay, would you like to search for artist, or event</string>
+    <string name="search_for">Search For</string>
+    <string name="search_event">Event</string>
+    <string name="search_artist">Artist</string>
 
     <!-- Events -->
     <string name="event_no_evts_avail">There are no events available.</string>
     <string name="plz_press_nxt_or_bck">, Please press the voice button and say next or back.</string>
     <string name="loading">Loading...</string>
     <string name="detail_not_available">Detail description not available</string>
+    <!-- <string name=""></string> -->
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for Ford ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 </resources>

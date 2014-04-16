@@ -239,7 +239,7 @@ public class MainActivityAL implements IProxyListenerALM {
 			}*/
 			
 			//AppLinkService.getInstance().showWelcomeMsg();
-			ALUtil.displayMessage(R.string.main_al_welcome_to, R.string.main_al_eventseeker);
+			ALUtil.displayMessage(R.string.msg_welcome_to, R.string.msg_eventseeker);
 			addCommands();
 			break;
 
