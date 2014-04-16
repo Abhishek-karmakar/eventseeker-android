@@ -1,7 +1,6 @@
 package com.wcities.eventseeker.applink.handler;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Vector;
 
 import android.util.Log;
@@ -15,18 +14,19 @@ import com.ford.syncV4.proxy.rpc.TTSChunk;
 import com.ford.syncV4.proxy.rpc.enums.ButtonName;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.applink.datastructure.EventList;
 import com.wcities.eventseeker.applink.interfaces.ESIProxyALM;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.applink.util.ALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil;
-import com.wcities.eventseeker.applink.util.EventALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil.Commands;
-import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.applink.util.EventALUtil;
 
 public class SearchAL extends ESIProxyALM {
 
 	private static final String TAG = SearchAL.class.getName();
 	private static final int CHOICE_SET_ID_SEARCH = 3;
+	private static final int EVENTS_LIMIT = 10;
 	
 	public static enum SearchCategories {
 		SEARCH_EVENTS(R.string.search_event),
@@ -54,15 +54,17 @@ public class SearchAL extends ESIProxyALM {
 	private static SearchAL instance;
 	
 	private EventSeekr context;
-	private List<Event> searchEvtList;
+	private EventList eventList;
 	private int selectedCategoryId;
-	private int currentEvtPos;
-	private int eventsAlreadyRequested;
-	private int totalNoOfEvents;
-	private boolean isMoreDataAvailable = true;
 	
 	public SearchAL(EventSeekr context) {
 		this.context = context;
+		eventList = new EventList();
+		eventList.setEventsLimit(EVENTS_LIMIT);
+		/**
+		 * No need to add the LoadListener as for Ford there will be at the max 10 Searched events.
+		 * eventList.setLoadEventsListener(this);
+		 */
 	}
 
 	public static ESIProxyALM getInstance(EventSeekr context) {
@@ -145,14 +147,11 @@ public class SearchAL extends ESIProxyALM {
 		}
 		
 		selectedCategoryId = SearchCategories.getSearchChoiceId(response.getChoiceID()).ordinal();
-		/**
-		 * According to current implementation, 1st make Featured events call and if events are available,
-		 * then show these events to user and if not, only then load events from 'getEvents' API call.
-		 */
+
 		loadSearchEvents(selectedCategoryId);
 
 		//show Welcome message when no events are available
-		if (searchEvtList.isEmpty()) {
+		if (eventList.isEmpty()) {
 			ALUtil.displayMessage(R.string.msg_welcome_to, R.string.msg_eventseeker);
 		}
 		//onNextCommand();
@@ -194,13 +193,13 @@ public class SearchAL extends ESIProxyALM {
 				AppLinkService.getInstance().initiateESIProxyListener(cmd);
 				break;
 			case NEXT:
-				//onNextCommand();
+				onNextCommand();
 				break;
 			case BACK:
-				//onBackCommand();
+				onBackCommand();
 				break;
 			case DETAILS:
-				EventALUtil.speakDetailsOfEvent(searchEvtList.get(currentEvtPos), context);
+				EventALUtil.speakDetailsOfEvent(eventList.getCurrentEvent(), context);
 				break;
 			case PLAY:
 				break;
@@ -224,18 +223,14 @@ public class SearchAL extends ESIProxyALM {
 		if (cmd != Commands.SEARCH) {
 			return;
 		}
-		searchEvtList.clear();
-		currentEvtPos = -1;
-		eventsAlreadyRequested = 0;
+		eventList.resetEventList();
 		selectedCategoryId = 0;
-		isMoreDataAvailable = true;		
 	}
 
 	private void onNextCommand() {
-		if (hasNextEvents()) {
-			Event event = searchEvtList.get(currentEvtPos);
-			EventALUtil.displayCurrentEvent(event, currentEvtPos, totalNoOfEvents);
-			EventALUtil.speakEventTitle(event, context);
+		if (eventList.moveToNextEvent()) {
+			EventALUtil.displayCurrentEvent(eventList);
+			EventALUtil.speakEventTitle(eventList.getCurrentEvent(), context);
 			
 		} else {
 			EventALUtil.speakNoEventsAvailable();
@@ -243,44 +238,13 @@ public class SearchAL extends ESIProxyALM {
 	}
 
 	private void onBackCommand() {
-		if (hasPreviousEvents()) {
-			Event event = searchEvtList.get(currentEvtPos);
-			EventALUtil.displayCurrentEvent(event, currentEvtPos, totalNoOfEvents);
-			EventALUtil.speakEventTitle(event, context);
+		if (eventList.moveToPreviousEvent()) {
+			EventALUtil.displayCurrentEvent(eventList);
+			EventALUtil.speakEventTitle(eventList.getCurrentEvent(), context);
 			
 		} else {
 			EventALUtil.speakNoEventsAvailable();
 		}		
-	}
-
-
-	private boolean hasNextEvents() {
-		if (currentEvtPos + 1 < searchEvtList.size()) {
-			++currentEvtPos;
-			return true;
-			
-		} else if (isMoreDataAvailable) {
-			if (currentEvtPos + 1 < searchEvtList.size()) {
-				++currentEvtPos;
-				return true;
-				
-			} else {
-				return false;
-			}
-			
-		} else {
-			return false;
-		}
-	}
-	
-	private boolean hasPreviousEvents() {
-		if (currentEvtPos - 1 >= 0) {
-			--currentEvtPos;
-			return true;
-			
-		} else {
-			return false;
-		}
 	}
 
 	@Override

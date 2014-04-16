@@ -1,7 +1,6 @@
 package com.wcities.eventseeker.applink.handler;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -25,6 +24,8 @@ import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.EventApi;
 import com.wcities.eventseeker.api.EventApi.MoreInfo;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.applink.datastructure.EventList;
+import com.wcities.eventseeker.applink.datastructure.EventList.LoadEventsListener;
 import com.wcities.eventseeker.applink.interfaces.ESIProxyALM;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.applink.util.ALUtil;
@@ -37,7 +38,7 @@ import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 
-public class DiscoverAL extends ESIProxyALM {
+public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 
 	private static final String TAG = DiscoverAL.class.getName();
 	private static final int CHOICE_CATEGORIES_DISCOVER_AL = 1000;
@@ -47,15 +48,10 @@ public class DiscoverAL extends ESIProxyALM {
 	private static DiscoverAL instance;
 
 	private EventSeekr context;
-	private List<Event> discoverByCategoryEvtList;	
+	private EventList eventList;
 	private double lat, lon;
-	private int currentEvtPos = -1;
-	private int eventsAlreadyRequested;
 	private int selectedCategoryId;
-	private int totalNoOfEvents;
-	private boolean isMoreDataAvailable = true;
 	private static final int CHOICE_SET_ID_DISCOVER = 0;
-	private GetEventsFrom whichCall;
 	
 	public static enum GetEventsFrom {
 		EVENTS,
@@ -103,7 +99,9 @@ public class DiscoverAL extends ESIProxyALM {
 	
 	public DiscoverAL(EventSeekr context) {
 		this.context = context;
-		discoverByCategoryEvtList = new ArrayList<Event>();
+		eventList = new EventList();
+		eventList.setEventsLimit(EVENTS_LIMIT);
+		eventList.setLoadEventsListener(this);		
 	}
 
 	public static ESIProxyALM getInstance(EventSeekr context) {
@@ -204,12 +202,12 @@ public class DiscoverAL extends ESIProxyALM {
 		 * then show these events to user and if not, only then load events from 'getEvents' API call.
 		 */
 		loadFeaturedEvents(selectedCategoryId);
-		if (discoverByCategoryEvtList.isEmpty()) {
+		if (eventList.isEmpty()) {
 			loadEvents(selectedCategoryId);
 		}
 
 		//show Welcome message when no events are available
-		if (discoverByCategoryEvtList.isEmpty()) {
+		if (eventList.isEmpty()) {
 			ALUtil.displayMessage(R.string.msg_welcome_to, R.string.msg_eventseeker);
 		}
 		onNextCommand();
@@ -227,6 +225,8 @@ public class DiscoverAL extends ESIProxyALM {
 		ALUtil.displayMessage(context.getResources().getString(R.string.loading), "");
 		
 		List<Event> tmpEvents = null;
+		int eventsAlreadyRequested = eventList.getEventsAlreadyRequested();
+		int totalNoOfEvents = 0;
 
 		EventApi eventApi = new EventApi(Api.FORD_OAUTH_TOKEN, lat, lon);
 		eventApi.setStart(getStartDate());
@@ -237,14 +237,12 @@ public class DiscoverAL extends ESIProxyALM {
 		eventApi.setAlreadyRequested(eventsAlreadyRequested);
 		eventApi.addMoreInfo(MoreInfo.booking);
 		eventApi.addMoreInfo(MoreInfo.multiplebooking);
-
-		whichCall = GetEventsFrom.EVENTS;
 		
 		try {
 			JSONObject jsonObject = eventApi.getEvents();
 			EventApiJSONParser jsonParser = new EventApiJSONParser();
 			
-			ItemsList<Event> eventsList = jsonParser.getEventItemList(jsonObject, whichCall);
+			ItemsList<Event> eventsList = jsonParser.getEventItemList(jsonObject, GetEventsFrom.EVENTS);
 			tmpEvents = eventsList.getItems();
 			totalNoOfEvents = eventsList.getTotalCount();
 			
@@ -257,18 +255,10 @@ public class DiscoverAL extends ESIProxyALM {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		
-		if (tmpEvents != null && !tmpEvents.isEmpty()) {
-			discoverByCategoryEvtList.addAll(tmpEvents);
-			eventsAlreadyRequested += tmpEvents.size();
-			
-			if (tmpEvents.size() < EVENTS_LIMIT) {
-				isMoreDataAvailable = false;
-			}
-			
-		} else {
-			isMoreDataAvailable = false;
-		}
+
+		eventList.setRequestCode(GetEventsFrom.EVENTS);
+		eventList.addAll(tmpEvents);
+		eventList.setTotalNoOfEvents(totalNoOfEvents);
 	}
 	
 	private void loadFeaturedEvents(int categoryId) {
@@ -283,6 +273,8 @@ public class DiscoverAL extends ESIProxyALM {
 		ALUtil.displayMessage(context.getResources().getString(R.string.loading), "");
 		
 		List<Event> tmpEvents = null;
+		int eventsAlreadyRequested = eventList.getEventsAlreadyRequested();
+		int totalNoOfEvents = 0;
 		
 		EventApi eventApi = new EventApi(Api.FORD_OAUTH_TOKEN, lat, lon);
 		eventApi.setCategory(categoryId);
@@ -292,13 +284,11 @@ public class DiscoverAL extends ESIProxyALM {
 		eventApi.setLimit(EVENTS_LIMIT);
 		eventApi.setAlreadyRequested(eventsAlreadyRequested);
 		
-		whichCall = GetEventsFrom.FEATURED_EVENTS;
-		
 		try {
 			JSONObject jsonObject = eventApi.getFeaturedEventsForFord();
 			EventApiJSONParser jsonParser = new EventApiJSONParser();
 			
-			ItemsList<Event> eventsList = jsonParser.getEventItemList(jsonObject, whichCall);
+			ItemsList<Event> eventsList = jsonParser.getEventItemList(jsonObject, GetEventsFrom.FEATURED_EVENTS);
 			tmpEvents = eventsList.getItems();
 			totalNoOfEvents = eventsList.getTotalCount();
 			
@@ -311,18 +301,10 @@ public class DiscoverAL extends ESIProxyALM {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		
-		if (tmpEvents != null && !tmpEvents.isEmpty()) {
-			discoverByCategoryEvtList.addAll(tmpEvents);
-			eventsAlreadyRequested += tmpEvents.size();
-			
-			if (tmpEvents.size() < EVENTS_LIMIT) {
-				isMoreDataAvailable = false;
-			}
-			
-		} else {
-			isMoreDataAvailable = false;
-		}
+
+		eventList.setRequestCode(GetEventsFrom.FEATURED_EVENTS);
+		eventList.addAll(tmpEvents);
+		eventList.setTotalNoOfEvents(totalNoOfEvents);
 	}
 
 	
@@ -343,44 +325,6 @@ public class DiscoverAL extends ESIProxyALM {
     	lon = latLon[1];
     	//Log.d(TAG, "lat = " + lat + ", lon = " + lon);
     }
-	
-	private boolean hasNextEvents() {
-		if (currentEvtPos + 1 < discoverByCategoryEvtList.size()) {
-			++currentEvtPos;
-			return true;
-			
-		} else if (isMoreDataAvailable) {
-			switch (whichCall) {
-			case FEATURED_EVENTS:
-				loadFeaturedEvents(selectedCategoryId);
-				break;
-			case EVENTS:
-				loadEvents(selectedCategoryId);
-				break;
-			}
-			
-			if (currentEvtPos + 1 < discoverByCategoryEvtList.size()) {
-				++currentEvtPos;
-				return true;
-				
-			} else {
-				return false;
-			}
-			
-		} else {
-			return false;
-		}
-	}
-	
-	private boolean hasPreviousEvents() {
-		if (currentEvtPos - 1 >= 0) {
-			--currentEvtPos;
-			return true;
-			
-		} else {
-			return false;
-		}
-	}
 
 	@Override
 	public void onOnButtonPress(OnButtonPress notification) {
@@ -413,13 +357,8 @@ public class DiscoverAL extends ESIProxyALM {
 		if (cmd != Commands.DISCOVER) {
 			return;
 		}
-		discoverByCategoryEvtList.clear();
-		lat = 0;
-		lon = 0;
-		currentEvtPos = -1;
-		eventsAlreadyRequested = 0;
 		selectedCategoryId = 0;
-		isMoreDataAvailable = true;		
+		eventList.resetEventList();
 	}
 
 	@SuppressWarnings("unused")
@@ -442,13 +381,11 @@ public class DiscoverAL extends ESIProxyALM {
 				onBackCommand();
 				break;
 			case DETAILS:
-				EventALUtil.speakDetailsOfEvent(discoverByCategoryEvtList.get(currentEvtPos), context);
+				EventALUtil.speakDetailsOfEvent(eventList.getCurrentEvent(), context);
 				break;
 			case PLAY:
 				break;
 			case CALL_VENUE:
-				break;
-			case FOLLOW:
 				break;
 			default:
 				Log.d(TAG, cmd + " is an Invalid Command");
@@ -458,10 +395,9 @@ public class DiscoverAL extends ESIProxyALM {
 	}
 	
 	private void onNextCommand() {
-		if (hasNextEvents()) {
-			Event event = discoverByCategoryEvtList.get(currentEvtPos);
-			EventALUtil.displayCurrentEvent(event, currentEvtPos, totalNoOfEvents);
-			EventALUtil.speakEventTitle(event, context);
+		if (eventList.moveToNextEvent()) {
+			EventALUtil.displayCurrentEvent(eventList);
+			EventALUtil.speakEventTitle(eventList.getCurrentEvent(), context);
 			
 		} else {
 			EventALUtil.speakNoEventsAvailable();
@@ -469,14 +405,26 @@ public class DiscoverAL extends ESIProxyALM {
 	}
 
 	private void onBackCommand() {
-		if (hasPreviousEvents()) {
-			Event event = discoverByCategoryEvtList.get(currentEvtPos);
-			EventALUtil.displayCurrentEvent(event, currentEvtPos, totalNoOfEvents);
-			EventALUtil.speakEventTitle(event, context);
+		if (eventList.moveToPreviousEvent()) {
+			EventALUtil.displayCurrentEvent(eventList);
+			EventALUtil.speakEventTitle(eventList.getCurrentEvent(), context);
 			
 		} else {
 			EventALUtil.speakNoEventsAvailable();
 		}		
+	}
+
+	@Override
+	public void loadEvents() {
+		GetEventsFrom which = (GetEventsFrom) eventList.getRequestCode();
+		switch (which) {
+		case EVENTS:
+			loadEvents(selectedCategoryId);
+			break;
+		case FEATURED_EVENTS:
+			loadFeaturedEvents(selectedCategoryId);
+			break;
+		}
 	}
 
 }

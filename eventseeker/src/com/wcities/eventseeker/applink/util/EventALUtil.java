@@ -10,6 +10,7 @@ import com.ford.syncV4.proxy.TTSChunkFactory;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.applink.datastructure.EventList;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.BookingInfo;
@@ -28,7 +29,6 @@ public class EventALUtil {
 		 * event's title and then append the 'plz press next or back' and then throughout 
 		 * the current session it shouldn't append the second line.
 		 */
-		//Event event = discoverByCategoryEvtList.get(currentEvtPos);
 
 		String simple = "Okay, " + event.getName();
 		
@@ -42,7 +42,6 @@ public class EventALUtil {
 				
 				List<Date> dates = event.getSchedule().getDates();
 				if (dates != null && !dates.isEmpty()) {
-					//simple += ", on " + ConversionUtil.getDateTime(dates.get(0));
 					simple += ", on " + EventALUtil.getFormattedDateTime(dates.get(0), venue);
 				}
 			}
@@ -67,8 +66,6 @@ public class EventALUtil {
 		 */
 		String simple = "";
 
-		//Event event = discoverByCategoryEvtList.get(currentEvtPos);
-		
 		if (event.hasArtists()) {
 			List<Artist> artists = event.getArtists();
 			String verb = " is ";
@@ -89,8 +86,10 @@ public class EventALUtil {
 			List<BookingInfo> bookingInfoList = event.getSchedule().getBookingInfos();
 			if (bookingInfoList.size() > 0) {
 				float minPrice = Float.MAX_VALUE, maxPrice = 0;
+				String currency = "";
 				for (BookingInfo bookingInfo : bookingInfoList) {
 					if (bookingInfo.getPrice() != 0) {
+						currency = getCurrency(bookingInfo);
 						maxPrice = (bookingInfo.getPrice() > maxPrice) ? bookingInfo.getPrice() : maxPrice;
 						minPrice = (bookingInfo.getPrice() < minPrice) ? bookingInfo.getPrice() : minPrice;
 					}
@@ -98,16 +97,11 @@ public class EventALUtil {
 				
 				if (maxPrice != 0) {
 					if (maxPrice == minPrice) {
-						simple += ", price would be " + maxPrice + " " + getCurrency(bookingInfoList) + ".";
+						simple += ", price would be " + maxPrice + " " + currency + ".";
 						
 					} else {
-						/**
-						 * TODO: After the multiple booking url and price info starts coming in response 
-						 * from server, check the scenario where more than 1 price info is available for
-						 * the event, then it should speak the below statement appended in 'simple'. 
-						 */
 						simple += ", price range would be approximately between "
-								+ minPrice + ", and " + maxPrice + " " + getCurrency(bookingInfoList) + ".";
+								+ minPrice + ", and " + maxPrice + " " + currency + ".";
 						
 					}
 				}
@@ -131,8 +125,9 @@ public class EventALUtil {
 		ALUtil.speakText(ttsChunks);				
 	}
 	
-	private static String getCurrency(List<BookingInfo> bookingInfoList) {
-		String currency = bookingInfoList.get(0).getCurrency();
+	private static String getCurrency(BookingInfo bookingInfo) {
+		String currency = bookingInfo.getCurrency();
+		Log.d(TAG, "CURRENCY : " + currency);
 		if (currency == null) {
 			return "";
 		}
@@ -158,9 +153,9 @@ public class EventALUtil {
 		ALUtil.speakText(ttsChunks);		
 	}
 	
-	public static void displayCurrentEvent(Event event, int currentEvtPos, int totalNoOfEvents) {
-		//Event event = discoverByCategoryEvtList.get(currentEvtPos);
-		ALUtil.displayMessage(event.getName(), (currentEvtPos + 1) + "/" + totalNoOfEvents);
+	public static void displayCurrentEvent(EventList eventList) {
+		ALUtil.displayMessage(eventList.getCurrentEvent().getName(), 
+				(eventList.getCurrentEventPosition() + 1) + "/" + eventList.getTotalNoOfEvents());
 	}
 	
 	public static String getFormattedDateTime(Date date, Venue venue) {
