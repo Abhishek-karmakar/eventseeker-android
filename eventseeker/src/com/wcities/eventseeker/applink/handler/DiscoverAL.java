@@ -126,7 +126,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		requiredCmds.add(Commands.NEXT);
 		requiredCmds.add(Commands.BACK);
 		requiredCmds.add(Commands.DETAILS);
-		requiredCmds.add(Commands.PLAY);
+		//requiredCmds.add(Commands.PLAY);
 		requiredCmds.add(Commands.CALL_VENUE);
 		CommandsUtil.addCommands(requiredCmds);
 	}
@@ -362,8 +362,8 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 			case DETAILS:
 				EventALUtil.speakDetailsOfEvent(eventList.getCurrentEvent(), context);
 				break;
-			case PLAY:
-				break;
+			/*case PLAY:
+				break;*/
 			case CALL_VENUE:
 				break;
 			default:

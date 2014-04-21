@@ -63,6 +63,7 @@ public class UserInfoApiJSONParser {
 	private static final String KEY_MOBI_RES_PATH = "mobi_res_path";
 	private static final String KEY_IMAGE = "image";
 	private static final String KEY_VENUE_NAME = "venue_name";
+	private static final String KEY_PHONE = "phone";
 	private static final String KEY_EVENT_DATE = "event_date";
 	private static final String KEY_EVENT_TIME = "event_time";
 
@@ -462,7 +463,22 @@ public class UserInfoApiJSONParser {
 		}
 		
 		Venue venue = new Venue(jsonObject.getInt(KEY_VENUE_ID));
-		venue.setName(jsonObject.getString(KEY_VENUE_NAME));
+		venue.setName(ConversionUtil.decodeHtmlEntities(jsonObject, KEY_VENUE_NAME));
+		if (jsonObject.has(KEY_PHONE)) {
+			Object jPhone = jsonObject.get(KEY_PHONE);
+			if (jPhone instanceof JSONArray) {
+				//Log.d(TAG, "array");
+				String phone = ((JSONArray) jPhone).getString(0);
+				phone = ConversionUtil.parseForPhone(phone);
+				venue.setPhone(phone);
+				
+			} else {
+				//Log.d(TAG, "not array");
+				String phone = (String) jPhone;
+				phone = ConversionUtil.parseForPhone(phone);
+				venue.setPhone(phone);
+			}
+		}
 		event.setSchedule(buildSchedule(startDates, eventTime, venue));
 		
 		if (jsonObject.has(KEY_PRICE)) {

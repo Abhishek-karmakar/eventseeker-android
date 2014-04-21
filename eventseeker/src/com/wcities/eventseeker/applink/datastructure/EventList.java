@@ -10,6 +10,7 @@ import com.wcities.eventseeker.core.Event;
 public class EventList {
 
 	private static final String TAG = EventList.class.getName();
+	private static final int DEFAULT_EVT_LIMIT = 10;
 
 	private List<Event> eventList;
 	private LoadEventsListener loadEventsListener;
@@ -18,7 +19,7 @@ public class EventList {
 	private int currentEvtPos = -1;
 	private int eventsAlreadyRequested;
 	private int totalNoOfEvents;
-	private int eventsLimit = 10;
+	private int eventsLimit = DEFAULT_EVT_LIMIT;
 
 	private boolean isMoreDataAvailable = true;
 
@@ -78,10 +79,6 @@ public class EventList {
 		return eventsAlreadyRequested;
 	}
 
-	public void setEventsAlreadyRequested(int eventsAlreadyRequested) {
-		this.eventsAlreadyRequested = eventsAlreadyRequested;
-	}
-
 	public int getTotalNoOfEvents() {
 		return totalNoOfEvents;
 	}
@@ -103,7 +100,12 @@ public class EventList {
 	}
 	
 	public Event getCurrentEvent() {
-		return eventList.get(currentEvtPos);
+		if (currentEvtPos >= 0) {
+			return eventList.get(currentEvtPos);
+			
+		} else {
+			return null;
+		}
 	}
 	
 	public void getSize() {
@@ -117,7 +119,7 @@ public class EventList {
 		currentEvtPos = -1;
 		eventsAlreadyRequested = 0;
 		totalNoOfEvents = 0;
-		eventsLimit = 10;
+		eventsLimit = DEFAULT_EVT_LIMIT;
 
 		isMoreDataAvailable = true;
 		

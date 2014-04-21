@@ -336,6 +336,7 @@
     <string name="msg_welcome_to">Welcome to</string>
     <string name="msg_eventseeker">Eventseeker!</string>
     <string name="time_out">time out</string>
+    <string name="ford_phone_no_is_unavailable">Sorry, phone number is unavailable</string>
     
 	<!-- Commands -->
     <string name="al_command_next">Next</string>

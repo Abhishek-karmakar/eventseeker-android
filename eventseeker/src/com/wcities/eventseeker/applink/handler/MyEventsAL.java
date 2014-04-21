@@ -11,7 +11,10 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
 import com.ford.syncV4.proxy.rpc.ChangeRegistrationResponse;
@@ -23,6 +26,7 @@ import com.ford.syncV4.proxy.rpc.GetDTCsResponse;
 import com.ford.syncV4.proxy.rpc.GetVehicleDataResponse;
 import com.ford.syncV4.proxy.rpc.ListFilesResponse;
 import com.ford.syncV4.proxy.rpc.OnAudioPassThru;
+import com.ford.syncV4.proxy.rpc.OnButtonEvent;
 import com.ford.syncV4.proxy.rpc.OnCommand;
 import com.ford.syncV4.proxy.rpc.OnLanguageChange;
 import com.ford.syncV4.proxy.rpc.OnVehicleData;
@@ -38,12 +42,17 @@ import com.ford.syncV4.proxy.rpc.SoftButton;
 import com.ford.syncV4.proxy.rpc.SubscribeVehicleDataResponse;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
 import com.ford.syncV4.proxy.rpc.UnsubscribeVehicleDataResponse;
+import com.ford.syncV4.proxy.rpc.enums.ButtonEventMode;
+import com.ford.syncV4.proxy.rpc.enums.ButtonName;
 import com.ford.syncV4.proxy.rpc.enums.SystemAction;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.applink.datastructure.EventList;
+import com.wcities.eventseeker.applink.datastructure.EventList.LoadEventsListener;
+import com.wcities.eventseeker.applink.handler.DiscoverAL.GetEventsFrom;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.applink.util.ALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil;
@@ -55,8 +64,9 @@ import com.wcities.eventseeker.core.ItemsList;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.util.DeviceUtil;
+import com.wcities.eventseeker.util.FragmentUtil;
 
-public class MyEventsAL extends ESIProxyALM {
+public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 
 	private static final String TAG = MyEventsAL.class.getName();
 	private static final int EVENTS_LIMIT = 10;
@@ -67,11 +77,8 @@ public class MyEventsAL extends ESIProxyALM {
 	private static MyEventsAL instance;
 
 	private EventSeekr mEventSeekr;
-	private List<Event> currentEvtList;
-	private int currentEvtPos = -1;
-	private int eventsAlreadyRequested, totalNoOfEvents;
+	private EventList eventList;
 	private double lat, lon;
-	private boolean isMoreDataAvailable = true;
 	private Type type;
 	
 	private static enum SuggestionReply {
@@ -96,7 +103,9 @@ public class MyEventsAL extends ESIProxyALM {
 	
 	public MyEventsAL(EventSeekr mEventSeekr) {
 		this.mEventSeekr = mEventSeekr;
-		currentEvtList = new ArrayList<Event>();
+		eventList = new EventList();
+		eventList.setEventsLimit(EVENTS_LIMIT);
+		eventList.setLoadEventsListener(this);
 	}
 
 	public static ESIProxyALM getInstance(EventSeekr context) {
@@ -109,13 +118,16 @@ public class MyEventsAL extends ESIProxyALM {
 	@Override
 	public void onStartInstance() {
 		//Log.d(TAG, "onStartInstance()");
+		if (eventList != null) {
+			eventList.resetEventList();
+		}
 		addCommands();
 		addSoftButtons();
 		
 		generateLatLon();
 		loadEvents(Type.myevents);
 		
-		if (currentEvtList.isEmpty()) {
+		if (eventList.isEmpty()) {
 			onNoMyEventsFound();
 			
 		} else {
@@ -156,19 +168,11 @@ public class MyEventsAL extends ESIProxyALM {
 	}
 	
 	private void handleNext() {
-		currentEvtPos++;
-		Event event = currentEvtList.get(currentEvtPos);
-		// TODO: Need to pass EventList to following method call
-		//EventALUtil.displayCurrentEvent(event, currentEvtPos, totalNoOfEvents);
-		EventALUtil.speakEventTitle(event, mEventSeekr);
+		EventALUtil.onNextCommand(eventList, mEventSeekr);
 	}
 	
 	private void handleBack() {
-		currentEvtPos--;
-		Event event = currentEvtList.get(currentEvtPos);
-		// TODO: Need to pass EventList to following method call
-		//EventALUtil.displayCurrentEvent(event, currentEvtPos, totalNoOfEvents);
-		EventALUtil.speakEventTitle(event, mEventSeekr);
+		EventALUtil.onBackCommand(eventList, mEventSeekr);
 	}
 	
 	private void generateLatLon() {
@@ -180,7 +184,7 @@ public class MyEventsAL extends ESIProxyALM {
 	private void addCommands() {
 		Vector<Commands> reqCmds = new Vector<Commands>();
 		reqCmds.add(Commands.CALL_VENUE);
-		reqCmds.add(Commands.PLAY);
+		//reqCmds.add(Commands.PLAY);
 		reqCmds.add(Commands.DETAILS);
 		reqCmds.add(Commands.BACK);
 		reqCmds.add(Commands.NEXT);
@@ -193,10 +197,10 @@ public class MyEventsAL extends ESIProxyALM {
 	private void addSoftButtons() {
 		Vector<SoftButton> softBtns = new Vector<SoftButton>();
 		
-		SoftButton softBtnPlay = new SoftButton();
+		/*SoftButton softBtnPlay = new SoftButton();
 		softBtnPlay.setSoftButtonID(Commands.PLAY.getCmdId());
 		softBtnPlay.setText(Commands.PLAY.toString());
-		softBtns.add(softBtnPlay);
+		softBtns.add(softBtnPlay);*/
 		
 		SoftButton softBtnCallVenue = new SoftButton();
 		softBtnCallVenue.setSoftButtonID(Commands.CALL_VENUE.getCmdId());
@@ -208,6 +212,7 @@ public class MyEventsAL extends ESIProxyALM {
 
 	private void loadEvents(Type type) {
 		List<Event> tmpEvents = null;
+		int totalNoOfEvents = 0;
 
 		UserInfoApi userInfoApi = buildUserInfoApi();
 		ItemsList<Event> myEventsList = null;
@@ -223,6 +228,7 @@ public class MyEventsAL extends ESIProxyALM {
 				myEventsList = jsonParser.getRecommendedEventList(jsonObject);
 			}
 			tmpEvents = myEventsList.getItems();
+			totalNoOfEvents = myEventsList.getTotalCount();
 			Log.d(TAG, "load count = " + tmpEvents.size());
 			
 		} catch (ClientProtocolException e) {
@@ -235,24 +241,15 @@ public class MyEventsAL extends ESIProxyALM {
 			e.printStackTrace();
 		}
 		
-		if (tmpEvents != null && !tmpEvents.isEmpty()) {
-			totalNoOfEvents = myEventsList.getTotalCount();
-			currentEvtList.addAll(tmpEvents);
-			eventsAlreadyRequested += tmpEvents.size();
-			
-			if (tmpEvents.size() < EVENTS_LIMIT) {
-				isMoreDataAvailable = false;
-			}
-			
-		} else {
-			isMoreDataAvailable = false;
-		}
+		eventList.setRequestCode(type);
+		eventList.addAll(tmpEvents);
+		eventList.setTotalNoOfEvents(totalNoOfEvents);
 	}
 	
 	private UserInfoApi buildUserInfoApi() {
 		UserInfoApi userInfoApi = new UserInfoApi(Api.FORD_OAUTH_TOKEN);
 		userInfoApi.setLimit(EVENTS_LIMIT);
-		userInfoApi.setAlreadyRequested(eventsAlreadyRequested);
+		userInfoApi.setAlreadyRequested(eventList.getEventsAlreadyRequested());
 		userInfoApi.setUserId(mEventSeekr.getWcitiesId());
 		userInfoApi.setLat(lat);
 		userInfoApi.setLon(lon);
@@ -273,21 +270,22 @@ public class MyEventsAL extends ESIProxyALM {
 			break;
 			
 		case NEXT:
-			onNextCommand();
+			handleNext();
 			break;
 			
 		case BACK:
-			onBackCommand();
+			handleBack();
 			break;
 			
 		case DETAILS:
-			EventALUtil.speakDetailsOfEvent(currentEvtList.get(currentEvtPos), mEventSeekr);
+			EventALUtil.speakDetailsOfEvent(eventList.getCurrentEvent(), mEventSeekr);
 			break;
 			
-		case PLAY:
-			break;
+		/*case PLAY:
+			break;*/
 			
 		case CALL_VENUE:
+			EventALUtil.callVenue(eventList);
 			break;
 			
 		default:
@@ -303,58 +301,8 @@ public class MyEventsAL extends ESIProxyALM {
 	 */
 	private void resetIfNeeded(Commands cmd) {
 		if (cmd == Commands.MY_EVENTS) {
-			currentEvtList.clear();	
-			currentEvtPos = -1;
-			eventsAlreadyRequested = 0;
-			isMoreDataAvailable = true;	
+			eventList.resetEventList();	
 		}
-	}
-	
-	private boolean hasMoreEvents() {
-		if (currentEvtPos + 1 < currentEvtList.size()) {
-			return true;
-			
-		} else if (isMoreDataAvailable) {
-			
-			loadEvents(type);
-			
-			if (currentEvtPos + 1 < currentEvtList.size()) {
-				return true;
-				
-			} else {
-				return false;
-			}
-			
-		} else {
-			return false;
-		}
-	}
-	
-	private boolean hasPreviousEvents() {
-		if (currentEvtPos - 1 >= 0) {
-			return true;
-			
-		} else {
-			return false;
-		}
-	}
-	
-	private void onNextCommand() {
-		if (hasMoreEvents()) {
-			handleNext();
-			
-		} else {
-			EventALUtil.speak(R.string.event_no_evts_avail);
-		}		
-	}
-
-	private void onBackCommand() {
-		if (hasPreviousEvents()) {
-			handleBack();
-			
-		} else {
-			EventALUtil.speak(R.string.event_no_evts_avail);
-		}		
 	}
 	
 	@Override
@@ -370,13 +318,21 @@ public class MyEventsAL extends ESIProxyALM {
 	}
 	
 	@Override
+	public void onOnButtonEvent(OnButtonEvent notification) {
+		if (notification.getButtonName() == ButtonName.CUSTOM_BUTTON && notification.getCustomButtonID() == 
+				Commands.CALL_VENUE.getCmdId() && notification.getButtonEventMode() == ButtonEventMode.BUTTONUP) {
+			EventALUtil.callVenue(eventList);
+		}
+	}
+	
+	@Override
 	public void onPerformInteractionResponse(PerformInteractionResponse response) {
 		super.onPerformInteractionResponse(response);
 		
 		if (response.getChoiceID() == SuggestionReply.Yes.id) {
 			loadEvents(Type.recommendedevent);
 
-			if (currentEvtList.isEmpty()) {
+			if (eventList.isEmpty()) {
 				ALUtil.displayMessage(R.string.msg_welcome_to, R.string.msg_eventseeker);
 				EventALUtil.speak(R.string.event_no_evts_avail);
 				
@@ -390,117 +346,7 @@ public class MyEventsAL extends ESIProxyALM {
 	}
 
 	@Override
-	public void onChangeRegistrationResponse(ChangeRegistrationResponse arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onDeleteFileResponse(DeleteFileResponse arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onDialNumberResponse(DialNumberResponse arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onEndAudioPassThruResponse(EndAudioPassThruResponse arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onGetDTCsResponse(GetDTCsResponse arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onGetVehicleDataResponse(GetVehicleDataResponse arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onListFilesResponse(ListFilesResponse arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onOnAudioPassThru(OnAudioPassThru arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onOnLanguageChange(OnLanguageChange arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onOnVehicleData(OnVehicleData arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onPerformAudioPassThruResponse(PerformAudioPassThruResponse arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onPutFileResponse(PutFileResponse arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onReadDIDResponse(ReadDIDResponse arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onScrollableMessageResponse(ScrollableMessageResponse arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onSetAppIconResponse(SetAppIconResponse arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onSetDisplayLayoutResponse(SetDisplayLayoutResponse arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onSliderResponse(SliderResponse arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onSubscribeVehicleDataResponse(SubscribeVehicleDataResponse arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onUnsubscribeVehicleDataResponse(
-			UnsubscribeVehicleDataResponse arg0) {
-		// TODO Auto-generated method stub
-		
+	public void loadEvents() {
+		loadEvents(type);
 	}
 }

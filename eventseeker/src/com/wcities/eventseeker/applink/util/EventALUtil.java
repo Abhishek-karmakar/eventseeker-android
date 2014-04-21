@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Vector;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
@@ -207,7 +209,6 @@ public class EventALUtil {
 			
 		} else {
 			EventALUtil.speak(R.string.event_no_evts_avail);
-
 		}		
 	}
 
@@ -218,8 +219,21 @@ public class EventALUtil {
 			
 		} else {
 			EventALUtil.speak(R.string.event_no_evts_avail);
-
 		}		
 	}
 
+	public static void callVenue(EventList eventList) {
+		Event event = eventList.getCurrentEvent();
+		if (event != null) {
+			Venue venue = event.getSchedule().getVenue();
+			if (venue != null && venue.getPhone() != null) {
+				Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + venue.getPhone()));
+				AppLinkService.getInstance().getCurrentActivity().startActivity(Intent.createChooser(
+						intent, "Call..."));
+				
+			} else {
+				speak(R.string.ford_phone_no_is_unavailable);
+			}
+		}
+	}
 }

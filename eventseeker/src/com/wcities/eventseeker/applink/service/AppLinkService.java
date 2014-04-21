@@ -263,7 +263,6 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	}*/
    
    public void onOnHMIStatus(OnHMIStatus notification) {
-
 		switch (notification.getSystemContext()) {
 		case SYSCTXT_MAIN:
 			break;
@@ -533,7 +532,9 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	
 	public void onShowResponse(ShowResponse response) {}
 	
-	public void onOnButtonEvent(OnButtonEvent notification) {}
+	public void onOnButtonEvent(OnButtonEvent notification) {
+		esIProxyALM.onOnButtonEvent(notification);
+	}
 	
 	public void onSubscribeButtonResponse(SubscribeButtonResponse response) {}
 	

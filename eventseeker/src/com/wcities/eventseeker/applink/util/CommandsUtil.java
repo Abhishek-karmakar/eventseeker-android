@@ -18,9 +18,9 @@ public class CommandsUtil {
 		NEXT(AppLinkService.CMD_ID_AL + 3),
 		BACK(AppLinkService.CMD_ID_AL + 4),
 		DETAILS(AppLinkService.CMD_ID_AL + 5),
-		PLAY(AppLinkService.CMD_ID_AL + 6),
-		CALL_VENUE(AppLinkService.CMD_ID_AL + 7),
-		FOLLOW(AppLinkService.CMD_ID_AL + 8);
+		//PLAY(AppLinkService.CMD_ID_AL + 6),
+		CALL_VENUE(AppLinkService.CMD_ID_AL + 6),
+		FOLLOW(AppLinkService.CMD_ID_AL + 7);
 
 		private int cmdId;
 		
@@ -55,8 +55,8 @@ public class CommandsUtil {
 			case OK : 
 			case PRESET_5 : 
 				return DETAILS;
-			case PRESET_6 : 
-				return PLAY;
+			/*case PRESET_6 : 
+				return PLAY;*/
 			case PRESET_7 : 
 				return CALL_VENUE;
 			case PRESET_8 : 
@@ -92,9 +92,9 @@ public class CommandsUtil {
 			case DETAILS:
 				str = AppLinkService.getInstance().getResources().getString(R.string.al_command_details);
 				break;
-			case PLAY:
+			/*case PLAY:
 				str = AppLinkService.getInstance().getResources().getString(R.string.al_command_play);
-				break;
+				break;*/
 			case CALL_VENUE:
 				str = AppLinkService.getInstance().getResources().getString(R.string.al_command_call_venue);
 				break;

@@ -79,9 +79,9 @@ public class MainAL extends ESIProxyALM {
 	
 	private void addCommands() {
 		Vector<Commands> reqCmds = new Vector<Commands>();
-		reqCmds.add(Commands.DISCOVER);
-		reqCmds.add(Commands.MY_EVENTS);
 		reqCmds.add(Commands.SEARCH);
+		reqCmds.add(Commands.MY_EVENTS);
+		reqCmds.add(Commands.DISCOVER);
 		CommandsUtil.addCommands(reqCmds);
 	}
 	
