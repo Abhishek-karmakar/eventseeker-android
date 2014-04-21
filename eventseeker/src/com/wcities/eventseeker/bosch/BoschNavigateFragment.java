@@ -56,7 +56,7 @@ public class BoschNavigateFragment extends BoschFragmentLoadableFromBackStack im
 		venueLat = venue.getAddress().getLat();
 		venueLon = venue.getAddress().getLon();
 	
-		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
+		double[] latLon = DeviceUtil.getCurrentLatLon(FragmentUtil.getApplication(this));
 		currentLat = latLon[0];
 		currentLon = latLon[1];
 		
@@ -184,7 +184,7 @@ public class BoschNavigateFragment extends BoschFragmentLoadableFromBackStack im
 
 	private void drawDrivingRoute() {
 		if (currentLat != AppConstants.NOT_ALLOWED_LAT && currentLon != AppConstants.NOT_ALLOWED_LON && 
-			venueLat != 0 && venueLon != 0 &&	mMap != null) {
+			venueLat != 0 && venueLon != 0 && mMap != null) {
 
 			/*MySpinBitmapDescriptor bitmapDescriptor = MySpinBitmapDescriptorFactory.fromResource("ic_destination");
 

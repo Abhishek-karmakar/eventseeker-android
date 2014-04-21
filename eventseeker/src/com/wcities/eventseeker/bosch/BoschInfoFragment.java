@@ -130,7 +130,7 @@ public class BoschInfoFragment extends BoschFragmentLoadableFromBackStack implem
 			txtDescription.setEllipsize(null);
 
 		} else {
-			txtDescription.setMaxLines(2);
+			txtDescription.setMaxLines(1);
 			txtDescription.setEllipsize(TruncateAt.END);
 		}
 	}

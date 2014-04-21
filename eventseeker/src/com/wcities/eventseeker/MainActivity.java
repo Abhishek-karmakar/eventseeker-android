@@ -410,7 +410,7 @@ public class MainActivity extends ActionBarActivity implements
 		//Log.d(TAG, "onStop()");
 
 		EventSeekr.setConnectionFailureListener(null);
-		DeviceUtil.unregisterLocationListener();
+		DeviceUtil.unregisterLocationListener((EventSeekr) getApplication());
 		handler.removeCallbacks(periodicCheckForBoschConnection);
 	}
 

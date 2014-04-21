@@ -14,7 +14,7 @@ public class AppConstants {
 	 * 'DEBUG' and 'FORD_SYNC_APP' variable is only for ford implementation
 	 */
 	public static final boolean DEBUG = false;
-	public static final boolean FORD_SYNC_APP = true;
+	public static final boolean FORD_SYNC_APP = false;
 	
 	public static final boolean CRASH_REPORTING_ENABLED = false;
 	public static final boolean STRICT_MODE_ENABLED = false;
@@ -44,8 +44,6 @@ public class AppConstants {
 	public static double lat = NOT_ALLOWED_LAT, lon = NOT_ALLOWED_LON;
 	public static boolean IS_CAR_STATIONARY = true;
 	public static boolean IS_NIGHT_MODE_ENABLED;
-	
-	public static final String INVALID_DISTANCE = "0.0";
 	
 	public static final String FRAGMENT_TAG_DISCOVER = "discoverFragment";
 	public static final String FRAGMENT_TAG_CHANGE_LOCATION = "changeLocationFragment";

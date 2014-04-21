@@ -210,7 +210,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	@Override
 	protected void onStop() {
 		super.onStop();
-		DeviceUtil.unregisterLocationListener();
+		DeviceUtil.unregisterLocationListener((EventSeekr) getApplication());
 		EventSeekr.setConnectionFailureListener(null);
 	}
 	

@@ -513,9 +513,6 @@ public class EventApiJSONParser {
 		if (jsonObject.has(KEY_IMAGE_ATTRIBUTION)) {
 			event.setImageAttribution(getImageAttribution(jsonObject.getJSONObject(KEY_IMAGE_ATTRIBUTION)));
 		}
-		if (jsonObject.has(KEY_DISTANCE)) {
-			event.setDistance(jsonObject.getString(KEY_DISTANCE));
-		}	
 		if (jsonObject.has(KEY_SCHEDULE) && jsonObject.has(KEY_DATE)) {
 			/**
 			 * This case is for Featured Events in Ford

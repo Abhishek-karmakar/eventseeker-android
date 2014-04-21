@@ -92,6 +92,8 @@ public class EventSeekr extends Application {
 	
 	private int uniqueGcmNotificationId = AppConstants.UNIQUE_GCM_NOTIFICATION_ID_START;
 	
+	private double curLat = AppConstants.NOT_ALLOWED_LAT, curLon = AppConstants.NOT_ALLOWED_LON;
+	
 	public interface EventSeekrListener {
 		public void onSyncCountUpdated(Service service);
 	}
@@ -671,6 +673,22 @@ public class EventSeekr extends Application {
 	
 	public int getUniqueGcmNotificationId() {
 		return ++uniqueGcmNotificationId;
+	}
+	
+	public double getCurLat() {
+		return curLat;
+	}
+
+	public void setCurLat(double curLat) {
+		this.curLat = curLat;
+	}
+
+	public double getCurLon() {
+		return curLon;
+	}
+
+	public void setCurLon(double curLon) {
+		this.curLon = curLon;
 	}
 
 	private class GetWcitiesId extends AsyncTask<Void, Void, String> {

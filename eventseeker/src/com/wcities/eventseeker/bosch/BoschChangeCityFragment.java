@@ -139,10 +139,7 @@ public class BoschChangeCityFragment extends BoschFragmentLoadableFromBackStack 
 			((BoschMainActivity)FragmentUtil.getActivity(this)).updateTitleForFragment(buildTitle(), 
 					getClass().getSimpleName());
 			
-			DeviceUtil.setCitySet(true);
 			EventSeekr.setCityName(cityName);
-			
-			DeviceUtil.unregisterLocationListener();
 			DeviceUtil.updateLatLon(cityPrefered.getLatitude(), cityPrefered.getLongitude());
 			
 			adapter.setData(null);

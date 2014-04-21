@@ -37,7 +37,6 @@ public class DeviceUtil {
 	private static final double SAN_FRANCISCO_LON = -122.4194155;
 	
 	private static boolean retryGenerating;
-	private static boolean isCitySet;
 	private static long lastLatLngSetTime;
 
 	private static LocationManager locationManager;
@@ -69,7 +68,7 @@ public class DeviceUtil {
 
             if (!isGPSEnabled && !isNetworkEnabled) {
                 // no gps or network provider is enabled then
-				new FindLatLonFromApi().execute();
+				new FindLatLonFromApi(eventSeekr).execute();
 				
             } else {
             	Location lastKnownLocation = null;
@@ -84,10 +83,10 @@ public class DeviceUtil {
 
  						if (lastKnownLocation != null) {
  							//Log.d(TAG, "GPS_PROVIDER: " + lastKnownLocation.getLatitude() + ", " + lastKnownLocation.getLongitude());
- 		      	        	
                          	latLon[0] = lastKnownLocation.getLatitude();
          		        	latLon[1] = lastKnownLocation.getLongitude();
          		        	updateLatLon(latLon[0], latLon[1]);
+         		        	updateCurLatLon(eventSeekr, latLon[0], latLon[1]);
  						} 
  					}
                 } 
@@ -105,12 +104,13 @@ public class DeviceUtil {
 	                        latLon[0] = lastKnownLocation.getLatitude();
 	        		        latLon[1] = lastKnownLocation.getLongitude();
 	        		        updateLatLon(latLon[0], latLon[1]);
+	        		        updateCurLatLon(eventSeekr, latLon[0], latLon[1]);
 	                    }
 	                }
 				}
             	
             	if (lastKnownLocation == null) {
-					new FindLatLonFromApi().execute();
+					new FindLatLonFromApi(eventSeekr).execute();
 				}
             }
 			
@@ -148,13 +148,81 @@ public class DeviceUtil {
     	return latLon;
     }
 	
-	private static void requestLocationUpdatesOnUiThread(Context activityContext, 
+	public static double[] getCurrentLatLon(EventSeekr eventSeekr) {
+		//Log.d(TAG, "getLatLon()");
+		double[] latLon = new double[] {0, 0};
+		
+		final LocationManager locationManager = getLocationManagerInstance(eventSeekr);
+
+		// getting GPS status
+        boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        // getting network status
+        boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        
+    	if (eventSeekr.getCurLat() == AppConstants.NOT_ALLOWED_LAT || eventSeekr.getCurLon() == 
+    			AppConstants.NOT_ALLOWED_LON) {
+
+            if (!isGPSEnabled && !isNetworkEnabled) {
+                // no gps or network provider is enabled then
+				new FindLatLonFromApi(eventSeekr).execute();
+				
+            } else {
+            	Location lastKnownLocation = null;
+            	
+            	if (isGPSEnabled) {
+                 	//First get the location from GPS Provider
+
+ 					if (locationManager != null) {
+ 						lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+ 						if (lastKnownLocation != null) {
+                         	latLon[0] = lastKnownLocation.getLatitude();
+         		        	latLon[1] = lastKnownLocation.getLongitude();
+         		        	updateCurLatLon(eventSeekr, latLon[0], latLon[1]);
+ 						} 
+ 					}
+                } 
+            	
+            	if (isNetworkEnabled && lastKnownLocation == null) {
+                	//get location from Network Provider
+	
+	                if (locationManager != null) {
+	                	lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+	                        
+	                	if (lastKnownLocation != null) {
+	                        latLon[0] = lastKnownLocation.getLatitude();
+	        		        latLon[1] = lastKnownLocation.getLongitude();
+	        		        updateCurLatLon(eventSeekr, latLon[0], latLon[1]);
+	                    }
+	                }
+				}
+            	
+            	if (lastKnownLocation == null) {
+					new FindLatLonFromApi(eventSeekr).execute();
+				}
+            }
+			
+    	} else {
+    		latLon[0] = eventSeekr.getCurLat();
+    		latLon[1] = eventSeekr.getCurLon();
+    	}
+
+    	if (latLon[0] == 0 && latLon[1] == 0) {
+	    	latLon[0] = SAN_FRANCISCO_LAT;
+			latLon[1] = SAN_FRANCISCO_LON;
+    	}
+    	
+    	return latLon;
+    }
+	
+	private static void requestLocationUpdatesOnUiThread(final Context activityContext, 
 			final LocationManager locationManager, final String provider) {
 		//Log.d(TAG, "requestLocationUpdatesOnUiThread(), provider = " + provider);
 		if (Looper.myLooper() == Looper.getMainLooper()) {
 			// if it's UI thread
 			locationManager.requestLocationUpdates(provider, MIN_TIME_BW_UPDATES, 
-					MIN_DISTANCE_CHANGE_FOR_UPDATES, DeviceLocationListener.getInstance());
+					MIN_DISTANCE_CHANGE_FOR_UPDATES, DeviceLocationListener.getInstance(
+							(EventSeekr) activityContext.getApplicationContext()));
 			
 		} else if (activityContext instanceof Activity) {
 			((Activity)activityContext).runOnUiThread(new Runnable() {
@@ -162,7 +230,8 @@ public class DeviceUtil {
 				@Override
 				public void run() {
 					locationManager.requestLocationUpdates(provider, MIN_TIME_BW_UPDATES, 
-							MIN_DISTANCE_CHANGE_FOR_UPDATES, DeviceLocationListener.getInstance());
+							MIN_DISTANCE_CHANGE_FOR_UPDATES, DeviceLocationListener.getInstance(
+									(EventSeekr) activityContext.getApplicationContext()));
 				}
 			});
 		} 
@@ -179,17 +248,14 @@ public class DeviceUtil {
 	 * This will remove the DeviceLocationListener instance from the DeviceUtil's Location Manager instance and 
 	 * will disable all the location updates.
 	 */
-	public static void unregisterLocationListener() {
+	public static void unregisterLocationListener(EventSeekr eventSeekr) {
 		//Log.i(TAG, "DeviceLocationListener is has been removed");
 		if (locationManager != null) {
-			locationManager.removeUpdates(DeviceLocationListener.getInstance());
+			locationManager.removeUpdates(DeviceLocationListener.getInstance(eventSeekr));
 		}
 	}
 	
 	public static void registerLocationListener(Context context) {
-		if (isCitySet) {
-			return;
-		}
 		LocationManager locationManager = getLocationManagerInstance((EventSeekr) context.getApplicationContext());
 
 		// getting GPS status
@@ -209,18 +275,24 @@ public class DeviceUtil {
 	private static class DeviceLocationListener implements LocationListener {
 
 		private static DeviceLocationListener deviceLocationListener;
+		private EventSeekr eventSeekr;
 		
-		private DeviceLocationListener() {}
-		
-		public static DeviceLocationListener getInstance() {
+		public DeviceLocationListener(EventSeekr eventSeekr) {
+			this.eventSeekr = eventSeekr;
+		}
+
+		public static DeviceLocationListener getInstance(EventSeekr eventSeekr) {
 			if (deviceLocationListener == null) {
-				deviceLocationListener = new DeviceLocationListener();
+				deviceLocationListener = new DeviceLocationListener(eventSeekr);
 			}
 			return deviceLocationListener;
 		}
 		
 		public void onLocationChanged(Location location) {
-        	updateLatLon(location.getLatitude(), location.getLongitude());
+			if (retryGenerating) {
+				updateLatLon(location.getLatitude(), location.getLongitude());
+			}
+        	updateCurLatLon(eventSeekr, location.getLatitude(), location.getLongitude());
 			Log.i(TAG, "Current Location Changed to " + location.getLatitude() + ", " + location.getLongitude());
 			//Toast.makeText(context, "Current Location Changed to " + location.getLatitude() + ", " 
 			//		+ location.getLongitude(), Toast.LENGTH_LONG).show();
@@ -238,15 +310,16 @@ public class DeviceUtil {
 		
 	}
 	
-	public static void setCitySet(boolean isCitySet) {
-		DeviceUtil.isCitySet = isCitySet;
-	}
-
 	public static void updateLatLon(double lat, double lon) {
 		AppConstants.lat = lat;
 		AppConstants.lon = lon;
 		retryGenerating = false;
 		lastLatLngSetTime = new Date().getTime();
+	}
+	
+	public static void updateCurLatLon(EventSeekr eventSeekr, double curLat, double curLon) {
+		eventSeekr.setCurLat(curLat);
+		eventSeekr.setCurLon(curLon);
 	}
 	
 	/**
@@ -318,6 +391,12 @@ public class DeviceUtil {
 	}
 	
 	private static class FindLatLonFromApi extends AsyncTask<Void, Void, Void> {
+		
+		private EventSeekr eventSeekr;
+
+		public FindLatLonFromApi(EventSeekr eventSeekr) {
+			this.eventSeekr = eventSeekr;
+		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
@@ -330,7 +409,10 @@ public class DeviceUtil {
 				IPToCityApiJSONParser jsonParser = new IPToCityApiJSONParser();
 				latLon = jsonParser.getLatlon(jsonObject);
 				if (latLon[0] != 0 || latLon[1] != 0) {
-					updateLatLon(latLon[0], latLon[1]);
+					if (retryGenerating) {
+						updateLatLon(latLon[0], latLon[1]);
+					}
+					updateCurLatLon(eventSeekr, latLon[0], latLon[1]);
 				}
 	        	
 	        	//Log.d(TAG, "lat = " + AppConstants.lat + ", lon = " + AppConstants.lon);
