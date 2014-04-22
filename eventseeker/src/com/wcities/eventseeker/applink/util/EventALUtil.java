@@ -23,7 +23,7 @@ import com.wcities.eventseeker.core.Venue;
 public class EventALUtil {
 	
 	private static final String COUNTRY_NAME = "United States";
-	private static final String TAG = EventALUtil.class.getName();
+	private static final String TAG = EventALUtil.class.getSimpleName();
 	
 	public static void speakEventTitle(Event event, EventSeekr app) {
 		/**

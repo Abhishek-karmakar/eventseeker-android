@@ -3,15 +3,19 @@ package com.wcities.eventseeker.applink.util;
 import java.util.Arrays;
 import java.util.Vector;
 
+import com.ford.syncV4.proxy.rpc.SoftButton;
 import com.ford.syncV4.proxy.rpc.enums.ButtonName;
+import com.ford.syncV4.proxy.rpc.enums.SoftButtonType;
+import com.ford.syncV4.proxy.rpc.enums.SystemAction;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.applink.service.AppLinkService;
+import com.wcities.eventseeker.constants.AppConstants;
 
 public class CommandsUtil {
 
-	private static final String TAG = CommandsUtil.class.getName();
+	private static final String TAG = CommandsUtil.class.getSimpleName();
 	
-	public static enum Commands {
+	public static enum Command {
 		DISCOVER(AppLinkService.CMD_ID_AL),
 		MY_EVENTS(AppLinkService.CMD_ID_AL + 1),
 		SEARCH(AppLinkService.CMD_ID_AL + 2),
@@ -24,13 +28,13 @@ public class CommandsUtil {
 
 		private int cmdId;
 		
-		private Commands(int cId) {
+		private Command(int cId) {
 			this.cmdId = cId;
 		}
 		
-		public static Commands getCommandById(int cmdId) {
-			Commands[] cmds = Commands.values();
-			for (Commands cmd : cmds) {
+		public static Command getCommandById(int cmdId) {
+			Command[] cmds = Command.values();
+			for (Command cmd : cmds) {
 				if (cmd.getCmdId() == cmdId) {
 					return cmd;
 				}
@@ -38,7 +42,7 @@ public class CommandsUtil {
 			return null;
 		}
 		
-		public static Commands getCommandByButtonName(ButtonName btnName) {
+		public static Command getCommandByButtonName(ButtonName btnName) {
 			switch (btnName) {
 			case PRESET_0 : 
 				return DISCOVER;
@@ -107,10 +111,31 @@ public class CommandsUtil {
 			return str;
 		}
 		
+		public SoftButton buildSoftBtn() {
+			SoftButton softBtn = new SoftButton();
+			softBtn.setSoftButtonID(cmdId);
+			softBtn.setText(toString());
+			softBtn.setIsHighlighted(false);
+			softBtn.setSystemAction(SystemAction.DEFAULT_ACTION);
+			softBtn.setType(SoftButtonType.SBT_TEXT);
+			return softBtn;
+		}
 	}
 
-	public static void addCommands(Vector<Commands> reqCommands) {
-		for (Commands cmd : reqCommands) {
+	public static void addCommands(Vector<Command> reqCommands) {
+		/**
+		 * Deleting all existing commands is required to have all the new commands placed in required 
+		 * order while running it on real SYNC. To run it on simulator we have to comment this for loop, 
+		 * otherwise simulator crashes on pressing any command.
+		 */
+		if (!AppConstants.DEBUG) {
+			for (int i = 0; i < Command.values().length; i++) {
+				Command command = Command.values()[i];
+				ALUtil.deleteCommand(command.getCmdId());
+			}
+		}
+		
+		for (Command cmd : reqCommands) {
 			//Log.d(TAG, "onOnCommand add command cmd.getCmdId() = " + cmd.getCmdId());
 			ALUtil.addCommand(new Vector<String>(Arrays.asList(new String[] {cmd.toString()})), cmd.getCmdId());
 		}

@@ -75,12 +75,12 @@ import com.wcities.eventseeker.applink.handler.ESIProxyALM;
 import com.wcities.eventseeker.applink.handler.MainAL;
 import com.wcities.eventseeker.applink.handler.MyEventsAL;
 import com.wcities.eventseeker.applink.handler.SearchAL;
-import com.wcities.eventseeker.applink.util.CommandsUtil.Commands;
+import com.wcities.eventseeker.applink.util.CommandsUtil.Command;
 import com.wcities.eventseeker.constants.AppConstants;
 
 public class AppLinkService extends Service implements IProxyListenerALM {
 
-	private static final String TAG = AppLinkService.class.getName();
+	private static final String TAG = AppLinkService.class.getSimpleName();
 	
 	public static final int CMD_ID_AL = 1;
 	public static final int SPEAK_CHAR_LIMIT = 499;
@@ -453,7 +453,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	}
 
 	public void onOnCommand(OnCommand notification) {
-		//Log.d(TAG, "onOnCommand");
+		Log.d(TAG, "onOnCommand");
 		/*
 		 * notification obj structure :
 		 * {"notification": {"name": "OnCommand", "parameters": {"cmdID": "3", "triggerSource": "MENU"}}}
@@ -477,7 +477,15 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	}
 	
 	public void onOnButtonPress(OnButtonPress notification) {
-		esIProxyALM.onOnButtonPress(notification);
+		ButtonName btnName = notification.getButtonName();
+		Command cmd = null;
+		if (btnName == ButtonName.CUSTOM_BUTTON) {
+			cmd = Command.getCommandById(notification.getCustomButtonName());
+			
+		} else {
+			cmd = Command.getCommandByButtonName(btnName);
+		}
+		esIProxyALM.performOperationForCommand(cmd);
 	}
 	
 	/**
@@ -485,7 +493,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	 * cmd - non null value
 	 * @param cmd
 	 */
-	public void initiateESIProxyListener(Commands cmd) {
+	public void initiateESIProxyListener(Command cmd) {
 		switch (cmd) {
 			case DISCOVER:
 				Log.d(TAG, "DISCOVER");
@@ -532,9 +540,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	
 	public void onShowResponse(ShowResponse response) {}
 	
-	public void onOnButtonEvent(OnButtonEvent notification) {
-		esIProxyALM.onOnButtonEvent(notification);
-	}
+	public void onOnButtonEvent(OnButtonEvent notification) {}
 	
 	public void onSubscribeButtonResponse(SubscribeButtonResponse response) {}
 	

@@ -42,10 +42,12 @@ import com.ford.syncV4.proxy.rpc.SubscribeButtonResponse;
 import com.ford.syncV4.proxy.rpc.SubscribeVehicleDataResponse;
 import com.ford.syncV4.proxy.rpc.UnsubscribeButtonResponse;
 import com.ford.syncV4.proxy.rpc.UnsubscribeVehicleDataResponse;
+import com.wcities.eventseeker.applink.util.CommandsUtil.Command;
 
 public abstract class ESIProxyALM implements IProxyListenerALM {
 	
 	public abstract void onStartInstance();
+	public abstract void performOperationForCommand(Command cmd);
 	
 	@Override
 	public void onOnButtonPress(OnButtonPress arg0) {}
