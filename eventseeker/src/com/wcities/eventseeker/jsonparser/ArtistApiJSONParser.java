@@ -23,6 +23,7 @@ import com.wcities.eventseeker.core.Country;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Friend;
 import com.wcities.eventseeker.core.ImageAttribution;
+import com.wcities.eventseeker.core.ItemsList;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.core.Video;
@@ -462,6 +463,25 @@ public class ArtistApiJSONParser {
 		}
 
 		return total;
+	}
+	
+	/**
+	 * For Ford
+	 * @param jsonObject
+	 * @return
+	 */
+	public ItemsList<Artist> getArtistItemList(JSONObject jsonObject) {
+		ItemsList<Artist> item = new ItemsList<Artist>();
+		try {
+			JSONObject jObjArtistSearch = jsonObject.getJSONObject(KEY_ARTIST_SEARCH);
+			int total = jObjArtistSearch.getInt(KEY_TOTAL);
+			item.setTotalCount(total);
+			item.setItems(getArtistList(jsonObject));
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return item;
 	}
 	
 	public List<Artist> getArtistList(JSONObject jsonObject) {

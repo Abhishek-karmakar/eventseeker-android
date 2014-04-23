@@ -25,6 +25,7 @@ import com.wcities.eventseeker.api.EventApi;
 import com.wcities.eventseeker.api.EventApi.MoreInfo;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.applink.datastructure.EventList;
+import com.wcities.eventseeker.applink.datastructure.EventList.GetEventsFrom;
 import com.wcities.eventseeker.applink.datastructure.EventList.LoadEventsListener;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.applink.util.ALUtil;
@@ -44,11 +45,6 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 	private static final int EVENTS_LIMIT = 10;
 	private static final int MILES_LIMIT = 25;
 	private static final int CHOICE_SET_ID_DISCOVER = 0;
-
-	public static enum GetEventsFrom {
-		EVENTS,
-		FEATURED_EVENTS;
-	}
 	
 	private static enum Discover {
 		Concerts(CHOICE_CATEGORIES_DISCOVER_AL, 900, R.string.discover_al_concerts),
@@ -334,23 +330,23 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 	 * Discover screen only.
 	 * @param cmd
 	 */
-	private void reset(Commands cmd) {
+	private void reset() {
 		selectedCategoryId = 0;
 		eventList.resetEventList();
 	}
 
 	@SuppressWarnings("unused")
 	public void performOperationForCommand(Commands cmd) {
-		Log.d(TAG, "performOperationForCommand : " + cmd.name());
 		if (cmd == null) {
 			return;
 		}
-		reset(cmd);
+		Log.d(TAG, "performOperationForCommand : " + cmd.name());
 		
 		switch (cmd) {
 			case DISCOVER:
 			case MY_EVENTS:
 			case SEARCH:
+				reset();
 				AppLinkService.getInstance().initiateESIProxyListener(cmd);
 				break;
 			case NEXT:
@@ -365,6 +361,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 			/*case PLAY:
 				break;*/
 			case CALL_VENUE:
+				EventALUtil.callVenue(eventList);
 				break;
 			default:
 				Log.d(TAG, cmd + " is an Invalid Command");

@@ -5,6 +5,7 @@ import java.util.Vector;
 import android.util.Log;
 
 import com.ford.syncV4.exception.SyncException;
+import com.ford.syncV4.proxy.TTSChunkFactory;
 import com.ford.syncV4.proxy.rpc.AddCommand;
 import com.ford.syncV4.proxy.rpc.Choice;
 import com.ford.syncV4.proxy.rpc.CreateInteractionChoiceSet;
@@ -108,6 +109,12 @@ public class ALUtil {
 		}
 	}
 
+	public static void speak(int strResId) {
+		String simple = AppLinkService.getInstance().getResources().getString(strResId);
+		Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
+		speakText(ttsChunks);		
+	}
+	
 	public static void speakText(Vector<TTSChunk> ttsChunks) {
 		Speak msg = new Speak();
 		msg.setCorrelationID(AppLinkService.getInstance().autoIncCorrId++);

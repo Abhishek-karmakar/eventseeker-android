@@ -54,7 +54,7 @@ public class EventALUtil {
 			app.setFirstEventTitleForFordEventAL(false);
 		}
 		
-		Log.i(TAG, "simple = " + simple);
+		Log.d(TAG, "simple = " + simple);
 		Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
 		ALUtil.speakText(ttsChunks);				
 	}
@@ -197,8 +197,8 @@ public class EventALUtil {
 			}
 			
 			dateTime += " hours";
-			Log.d(TAG, "dateTime : " + dateTime);
 		}
+		Log.d(TAG, "dateTime : " + dateTime);
 		return dateTime;
 	}
 	

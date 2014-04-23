@@ -11,6 +11,12 @@ public class EventList {
 
 	private static final String TAG = EventList.class.getName();
 	private static final int DEFAULT_EVT_LIMIT = 10;
+	
+	public static enum GetEventsFrom {
+		EVENTS,
+		FEATURED_EVENTS,
+		SEARCH_EVENTS;
+	}
 
 	private List<Event> eventList;
 	private LoadEventsListener loadEventsListener;
@@ -22,7 +28,7 @@ public class EventList {
 	private int eventsLimit = DEFAULT_EVT_LIMIT;
 
 	private boolean isMoreDataAvailable = true;
-
+	
 	public interface LoadEventsListener {
 		public void loadEvents();
 	}
@@ -71,10 +77,6 @@ public class EventList {
 		return currentEvtPos;
 	}
 
-	public void setCurrentEvtPos(int currentEvtPos) {
-		this.currentEvtPos = currentEvtPos;
-	}
-
 	public int getEventsAlreadyRequested() {
 		return eventsAlreadyRequested;
 	}
@@ -108,8 +110,8 @@ public class EventList {
 		}
 	}
 	
-	public void getSize() {
-		this.eventList.size();
+	public int size() {
+		return eventList.size();
 	}
 	
 	public void resetEventList() {
@@ -127,25 +129,31 @@ public class EventList {
 		requestCode = null;
 	}
 	
-	public boolean hasNextEvents() {
+	public boolean hasNextEvent() {
+		Log.d(TAG, "hasNextEvents");
 		if (currentEvtPos + 1 < eventList.size()) {
+			Log.d(TAG, "hasNextEvents true");
 			return true;
 			
 		} else if (isMoreDataAvailable && loadEventsListener != null) {
+			Log.d(TAG, "Loading new events...");
 			loadEventsListener.loadEvents();
 			if (currentEvtPos + 1 < eventList.size()) {
+				Log.d(TAG, "hasNextEvents true");
 				return true;
 				
 			} else {
+				Log.d(TAG, "hasNextEvents false");
 				return false;
 			}
 			
 		} else {
+			Log.d(TAG, "hasNextEvents false");
 			return false;
 		}
 	}
 	
-	public boolean hasPreviousEvents() {
+	public boolean hasPreviousEvent() {
 		if (currentEvtPos - 1 > -1) {
 			return true;
 			
@@ -155,15 +163,18 @@ public class EventList {
 	}
 
 	public boolean moveToNextEvent() {
-		if(hasNextEvents()) {
+		Log.d(TAG, "moveToNextEvent");
+		if(hasNextEvent()) {
 			currentEvtPos++;
+			Log.d(TAG, "moveToNextEvent true");
 			return true;
 		}
+		Log.d(TAG, "moveToNextEvent false");
 		return false;
 	}
 	
 	public boolean moveToPreviousEvent() {
-		if(hasPreviousEvents()) {
+		if(hasPreviousEvent()) {
 			currentEvtPos--;
 			return true;
 		}

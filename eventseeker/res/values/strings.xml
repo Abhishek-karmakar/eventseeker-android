@@ -367,6 +367,10 @@
     <string name="search_for">Search For</string>
     <string name="search_event">Event</string>
     <string name="search_artist">Artist</string>
+    <string name="say_event_name">Say event name</string>
+    <string name="say_artist_name">Say artist name</string>
+    <string name="no_artists_avail">There are no artists available.</string>
+    <string name="already_followed">Already Followed.</string>
 
     <!-- Events -->
     <string name="event_no_evts_avail">There are no events available.</string>
