@@ -70,7 +70,7 @@ public class EventALUtil {
 
 		if (event.hasArtists()) {
 			List<Artist> artists = event.getArtists();
-			String verb = " is ";
+			int appendResId = R.string.is_performing_for_this_event;
 			
 			simple += artists.get(0).getName();
 			for (int i = 1; i < artists.size() - 1; i++) {
@@ -78,10 +78,10 @@ public class EventALUtil {
 				simple += ", " + artist.getName();
 			}
 			if (artists.size() > 1) {
-				simple += " and, " + artists.get(artists.size() - 1).getName();
-				verb = " are ";
+				simple += " " + app.getResources().getString(R.string.and) + ", " + artists.get(artists.size() - 1).getName();
+				appendResId = R.string.are_performing_for_this_event;
 			}
-			simple += verb + "performing for this event";
+			simple += " " + app.getResources().getString(appendResId);
 		}
 
 		if (event.getSchedule() != null) {
@@ -99,12 +99,12 @@ public class EventALUtil {
 				
 				if (maxPrice != 0) {
 					if (maxPrice == minPrice) {
-						simple += ", price would be " + maxPrice + " " + currency + ".";
+						simple += app.getResources().getString(R.string.price_would_be) + " " + maxPrice + 
+								" " + currency + ".";
 						
 					} else {
-						simple += ", price range would be approximately between "
-								+ minPrice + ", and " + maxPrice + " " + currency + ".";
-						
+						simple += app.getResources().getString(R.string.price_range_would_be) + " "
+								+ minPrice + ", " + app.getResources().getString(R.string.and) + " " + maxPrice + " " + currency + ".";
 					}
 				}
 				
@@ -204,21 +204,21 @@ public class EventALUtil {
 	
 	public static void onNextCommand(EventList eventList, EventSeekr context) {
 		if (eventList.moveToNextEvent()) {
-			EventALUtil.displayCurrentEvent(eventList);
-			EventALUtil.speakEventTitle(eventList.getCurrentEvent(), context);
+			displayCurrentEvent(eventList);
+			speakEventTitle(eventList.getCurrentEvent(), context);
 			
 		} else {
-			EventALUtil.speak(R.string.event_no_evts_avail);
+			speak(R.string.event_no_evts_avail);
 		}		
 	}
 
 	public static void onBackCommand(EventList eventList,EventSeekr context) {
 		if (eventList.moveToPreviousEvent()) {
-			EventALUtil.displayCurrentEvent(eventList);
-			EventALUtil.speakEventTitle(eventList.getCurrentEvent(), context);
+			displayCurrentEvent(eventList);
+			speakEventTitle(eventList.getCurrentEvent(), context);
 			
 		} else {
-			EventALUtil.speak(R.string.event_no_evts_avail);
+			speak(R.string.event_no_evts_avail);
 		}		
 	}
 

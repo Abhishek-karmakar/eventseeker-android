@@ -1,8 +1,6 @@
 package com.wcities.eventseeker.applink.handler;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
@@ -11,43 +9,14 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
-import com.ford.syncV4.proxy.rpc.ChangeRegistrationResponse;
 import com.ford.syncV4.proxy.rpc.Choice;
-import com.ford.syncV4.proxy.rpc.DeleteCommandResponse;
-import com.ford.syncV4.proxy.rpc.DeleteFileResponse;
-import com.ford.syncV4.proxy.rpc.DialNumberResponse;
-import com.ford.syncV4.proxy.rpc.EndAudioPassThruResponse;
-import com.ford.syncV4.proxy.rpc.GetDTCsResponse;
-import com.ford.syncV4.proxy.rpc.GetVehicleDataResponse;
-import com.ford.syncV4.proxy.rpc.ListFilesResponse;
-import com.ford.syncV4.proxy.rpc.OnAudioPassThru;
-import com.ford.syncV4.proxy.rpc.OnButtonEvent;
-import com.ford.syncV4.proxy.rpc.OnButtonPress;
 import com.ford.syncV4.proxy.rpc.OnCommand;
-import com.ford.syncV4.proxy.rpc.OnLanguageChange;
-import com.ford.syncV4.proxy.rpc.OnVehicleData;
-import com.ford.syncV4.proxy.rpc.PerformAudioPassThruResponse;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
-import com.ford.syncV4.proxy.rpc.PutFileResponse;
-import com.ford.syncV4.proxy.rpc.ReadDIDResponse;
-import com.ford.syncV4.proxy.rpc.ScrollableMessageResponse;
-import com.ford.syncV4.proxy.rpc.SetAppIconResponse;
-import com.ford.syncV4.proxy.rpc.SetDisplayLayoutResponse;
-import com.ford.syncV4.proxy.rpc.SliderResponse;
 import com.ford.syncV4.proxy.rpc.SoftButton;
-import com.ford.syncV4.proxy.rpc.SubscribeVehicleDataResponse;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
-import com.ford.syncV4.proxy.rpc.UnsubscribeVehicleDataResponse;
-import com.ford.syncV4.proxy.rpc.enums.ButtonEventMode;
-import com.ford.syncV4.proxy.rpc.enums.ButtonName;
-import com.ford.syncV4.proxy.rpc.enums.SoftButtonType;
-import com.ford.syncV4.proxy.rpc.enums.SystemAction;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
@@ -55,19 +24,15 @@ import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.applink.datastructure.EventList;
 import com.wcities.eventseeker.applink.datastructure.EventList.LoadEventsListener;
-import com.wcities.eventseeker.applink.handler.DiscoverAL.GetEventsFrom;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.applink.util.ALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil;
-import com.wcities.eventseeker.applink.util.EventALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil.Command;
-import com.wcities.eventseeker.core.Date;
+import com.wcities.eventseeker.applink.util.EventALUtil;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.ItemsList;
-import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.util.DeviceUtil;
-import com.wcities.eventseeker.util.FragmentUtil;
 
 public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 
@@ -249,6 +214,7 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 		userInfoApi.setUserId(mEventSeekr.getWcitiesId());
 		userInfoApi.setLat(lat);
 		userInfoApi.setLon(lon);
+		userInfoApi.setAddFordLangParam(true);
 		return userInfoApi;
 	}
 	

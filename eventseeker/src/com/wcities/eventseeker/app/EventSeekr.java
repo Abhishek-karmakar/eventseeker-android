@@ -84,7 +84,7 @@ public class EventSeekr extends Application {
 	
 	private FollowingList followingList;
 
-	private Locales defaultLocale;
+	private Locales defaultLocale, fordDefaultLocale;
 
 	private static String cityName;
 	
@@ -536,7 +536,6 @@ public class EventSeekr extends Application {
 		 * update Locale in Api class for api-calls
 		 */
 		Api.updateLocaleCode(getLocale().getLocaleCode());
-		
 	}		
 
 	public Locales getLocale() {
@@ -547,6 +546,33 @@ public class EventSeekr extends Application {
 			defaultLocale = Locales.getLocaleByLocaleCode(localeCode);
 		}
 		return defaultLocale;
+	}
+	
+	public void updateFordLocale(Locales locale) {
+		this.fordDefaultLocale = locale;
+		setFordDefaultLocale();
+	}
+	
+	public void setFordDefaultLocale() {
+		Locale locale = new Locale(getFordLocale().getLocaleCode(), getFordLocale().getCountryCode());
+		Locale.setDefault(locale);
+
+		Configuration appConfig = new Configuration();
+		appConfig.locale = locale;
+
+		getResources().updateConfiguration(appConfig, getResources().getDisplayMetrics());
+		
+		/**
+		 * update Locale in Api class for api-calls
+		 */
+		Api.updateFordLocaleCode(getFordLocale().getLocaleCode());
+	}		
+
+	public Locales getFordLocale() {
+		if (fordDefaultLocale == null) {
+			fordDefaultLocale = Locales.ENGLISH_UNITED_STATES;
+		}
+		return fordDefaultLocale;
 	}
 
 	public int getSyncCount(Service service) {

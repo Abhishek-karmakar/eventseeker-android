@@ -229,6 +229,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		eventApi.setAlreadyRequested(eventsAlreadyRequested);
 		eventApi.addMoreInfo(MoreInfo.booking);
 		eventApi.addMoreInfo(MoreInfo.multiplebooking);
+		eventApi.setAddFordLangParam(true);
 		
 		try {
 			JSONObject jsonObject = eventApi.getEvents();
@@ -275,6 +276,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		eventApi.setMiles(MILES_LIMIT);
 		eventApi.setLimit(EVENTS_LIMIT);
 		eventApi.setAlreadyRequested(eventsAlreadyRequested);
+		eventApi.setAddFordLangParam(true);
 		
 		try {
 			JSONObject jsonObject = eventApi.getFeaturedEventsForFord();

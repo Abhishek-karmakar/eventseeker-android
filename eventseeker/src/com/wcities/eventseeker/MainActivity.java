@@ -390,6 +390,14 @@ public class MainActivity extends ActionBarActivity implements
 						i.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
 						startActivity(i);
 					}
+					
+				} else {
+					/**
+					 * This is required because if user is connected to ford & then goes to change language 
+					 * from sync tdk, then lock screen is destroyed showing actual app screen on device.
+					 * In this case locale should be set for the device (not what is there on TDK).
+					 */
+					((EventSeekr) getApplication()).setDefaultLocale();
 				}
 			}
 		}

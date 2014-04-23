@@ -352,10 +352,8 @@
     <string name="al_command_search">Search</string>
         
 	<!-- DiscoverActivityAL -->
-    <string name="discover_al_discover_categories">Okay, would you like concerts, clubs, sports, theater or, festivals</string>
-    
+    <string name="discover_al_discover_categories">Okay, would you like concerts, clubs, sports, theater or, festivals?</string>
     <string name="discover_al_discover">Say Category</string>
-    
     <string name="discover_al_concerts">Concerts</string>
     <string name="discover_al_clubs">Clubs</string>
     <string name="discover_al_sports">Sports</string>
@@ -363,16 +361,23 @@
     <string name="discover_al_festivals">Festivals</string>
 
     <!-- SearchAL -->
-    <string name="search_events_or_artists">Okay, would you like to search for artist, or event</string>
+    <string name="search_events_or_artists">Okay, would you like to search for artist, or event?</string>
     <string name="search_for">Search For</string>
     <string name="search_event">Event</string>
     <string name="search_artist">Artist</string>
+    <string name="say_event_name">Say event name</string>
+    <string name="say_artist_name">Say artist name</string>
 
     <!-- Events -->
     <string name="event_no_evts_avail">There are no events available.</string>
     <string name="plz_press_nxt_or_bck">, Please press the voice button and say next or back.</string>
     <string name="loading">Loading...</string>
     <string name="detail_not_available">Detail description not available</string>
+    <string name="is_performing_for_this_event">is performing for this event</string>
+    <string name="are_performing_for_this_event">are performing for this event</string>
+    <string name="price_would_be">, price would be</string>
+    <string name="price_range_would_be">, price range would be approximately between</string>
+    <string name="and">and</string>
 
     <!-- MyEventsAL -->
     <string name="my_events_al_yes">Yes</string>

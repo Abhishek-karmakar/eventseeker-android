@@ -13,6 +13,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.ford.syncV4.exception.SyncException;
 import com.ford.syncV4.exception.SyncExceptionCause;
@@ -66,6 +67,7 @@ import com.ford.syncV4.proxy.rpc.enums.ButtonName;
 import com.ford.syncV4.proxy.rpc.enums.DriverDistractionState;
 import com.ford.syncV4.proxy.rpc.enums.Language;
 import com.ford.syncV4.transport.TCPTransportConfig;
+import com.wcities.eventseeker.LanguageFragment.Locales;
 import com.wcities.eventseeker.LockScreenActivity;
 import com.wcities.eventseeker.MainActivity;
 import com.wcities.eventseeker.R;
@@ -77,6 +79,7 @@ import com.wcities.eventseeker.applink.handler.MyEventsAL;
 import com.wcities.eventseeker.applink.handler.SearchAL;
 import com.wcities.eventseeker.applink.util.CommandsUtil.Command;
 import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.util.FragmentUtil;
 
 public class AppLinkService extends Service implements IProxyListenerALM {
 
@@ -172,12 +175,13 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 									AppConstants.TCP_IP_ADDRESS, true));
 					
 				} else {
+					Language language = ((EventSeekr)getApplication()).getFordLocale().getFordLanguage();
 					SyncMsgVersion syncMsgVersion = new SyncMsgVersion();
 					syncMsgVersion.setMajorVersion(1);
 					syncMsgVersion.setMinorVersion(1);
 					proxy = new SyncProxyALM(this, getResources().getString(R.string.app_name), null, 
 							new Vector<String>(Arrays.asList(new String[] {getResources().getString(
-							R.string.app_name)})), true, syncMsgVersion, Language.EN_US, Language.EN_US, 
+							R.string.app_name)})), true, syncMsgVersion, language, language, 
 							AppConstants.FORD_APP_ID, null);
 					Log.d(TAG, "startProxy() registration done");
 				}
@@ -290,9 +294,13 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 		
 		case HMI_FULL:			
 			Log.d(TAG, "onOnHMIStatus(), HMI_FULL, driverDistractionNotif = " + driverDistractionNotif);
-			if (driverDistractionNotif == false) {
-				showLockScreen();
-			}
+			/**
+			 * Commented driverDistractionNotif check because it doesn't open lock screen when user 
+			 * goes to change language in between from sync tdk & then returns back to app
+			 */
+			//if (driverDistractionNotif == false) {
+			showLockScreen();
+			//}
 			
 			if (notification.getFirstRun()) {
 				
@@ -557,7 +565,6 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 
 	@Override
 	public void onChangeRegistrationResponse(ChangeRegistrationResponse arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -604,9 +611,20 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	}
 
 	@Override
-	public void onOnLanguageChange(OnLanguageChange arg0) {
-		// TODO Auto-generated method stub
+	public void onOnLanguageChange(final OnLanguageChange arg0) {
+		Log.d(TAG, "onOnLanguageChange to " + arg0.getLanguage().name() + ", " + 
+				arg0.getHmiDisplayLanguage().name());
+		/*currentUIActivity.runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				Toast.makeText(currentUIActivity, "onOnLanguageChange to " + arg0.getLanguage().name() + ", " + 
+						arg0.getHmiDisplayLanguage().name(), Toast.LENGTH_LONG).show();
+			}
+		});*/
 		
+		Language language = arg0.getLanguage();
+		((EventSeekr) getApplication()).updateFordLocale(Locales.getFordLocaleByLanguage(language));
 	}
 
 	@Override

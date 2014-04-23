@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import android.content.Context;
+import android.net.rtp.RtpStream;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.ford.syncV4.proxy.rpc.enums.Language;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.OnLocaleChangedListener;
@@ -32,15 +34,35 @@ public class LanguageFragment extends ListFragmentLoadableFromBackStack {
 		GERMAN("de", R.string.lang_german),
 		ITALIAN("it", R.string.lang_italian),
 		SPANISH("es", R.string.lang_spanish),
-		PORTUGUESE("pt", R.string.lang_portuguese);
+		PORTUGUESE("pt", R.string.lang_portuguese),
+		
+		ENGLISH_AUSTRALIA("en", "AU", Language.EN_AU),
+		ENGLISH_UNITED_KINGDOM("en", "GB", Language.EN_GB),
+		ENGLISH_UNITED_STATES("en", "US", Language.EN_US),
+		FRENCH_CANADA("fr", "CA", Language.FR_CA),
+		FRENCH_FRANCE("fr", "FR", Language.FR_FR),
+		GERMAN_GERMANY("de", "DE", Language.DE_DE),
+		ITALIAN_ITALY("it", "IT", Language.IT_IT),
+		SPANISH_SPAIN("es", "ES", Language.ES_ES),
+		SPANISH_MEXICO("es", "MX", Language.ES_MX),
+		PORTUGUESE_BRAZIL("pt", "BR", Language.PT_BR),
+		PORTUGUESE_PORTUGAL("pt", "PT", Language.PT_PT);
 		
 		private Locales(String localeCode, int localeLanguage) {
 			this.localeCode = localeCode;
 			this.localeLanguage = localeLanguage;
 		}
 		
+		private Locales(String localeCode, String countryCode, Language fordLanguage) {
+			this.localeCode = localeCode;
+			this.countryCode = countryCode;
+			this.fordLanguage = fordLanguage;
+		}
+		
 		private String localeCode;
 		private int localeLanguage;
+		private String countryCode;
+		private Language fordLanguage;
 		
 		public String getLocaleCode() {
 			return localeCode;
@@ -54,14 +76,19 @@ public class LanguageFragment extends ListFragmentLoadableFromBackStack {
 			return localeLanguage;
 		}
 
+		public String getCountryCode() {
+			return countryCode;
+		}
+
 		public void setLocaleLanguage(int localeLanguage) {
 			this.localeLanguage = localeLanguage;
 		}
 		
+		// this function should not be used for ford
 		public static Locales getLocaleByLocaleCode(String localeCode) {
 			List<Locales> locales = Arrays.asList(Locales.values());
 			for (Locales locale : locales) {
-				if (locale.getLocaleCode().equals(localeCode)) {
+				if (locale.getLocaleCode().equals(localeCode) && locale.countryCode == null) {
 					return locale;
 				}
 			}
@@ -71,6 +98,20 @@ public class LanguageFragment extends ListFragmentLoadableFromBackStack {
 		public static boolean isDefaultLocale(Context context, Locales locale) {
 			EventSeekr app = (EventSeekr) context.getApplicationContext();
 			return locale.equals(app.getLocale());
+		}
+		
+		public static Locales getFordLocaleByLanguage(Language language) {
+			List<Locales> locales = Arrays.asList(Locales.values());
+			for (Locales locale : locales) {
+				if (locale.fordLanguage == language) {
+					return locale;
+				}
+			}
+			return ENGLISH_UNITED_STATES;
+		}
+		
+		public Language getFordLanguage() {
+			return fordLanguage;
 		}
 	}
 
