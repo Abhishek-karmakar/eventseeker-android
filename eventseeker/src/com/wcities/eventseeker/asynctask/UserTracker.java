@@ -54,7 +54,7 @@ public class UserTracker extends AsyncTask<Void, Void, Void> {
 		try {
 			JSONObject jsonObject = (trackingType == UserTrackingType.Add) ? 
 					userInfoApi.addUserTracking(type, id, attending, fb_postid) : userInfoApi.editUserTracking(type, id, attending);
-			//Log.d(TAG, "result = " + jsonObject.toString());
+			Log.d(TAG, "result = " + jsonObject.toString());
 			
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();

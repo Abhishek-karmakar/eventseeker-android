@@ -15,11 +15,9 @@ import android.util.Log;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
 import com.ford.syncV4.proxy.rpc.Choice;
-import com.ford.syncV4.proxy.rpc.OnButtonPress;
 import com.ford.syncV4.proxy.rpc.OnCommand;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
-import com.ford.syncV4.proxy.rpc.enums.ButtonName;
 import com.wcities.eventseeker.MainActivity;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.Api;
@@ -35,20 +33,18 @@ import com.wcities.eventseeker.applink.datastructure.EventList.GetEventsFrom;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.applink.util.ALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil;
-import com.wcities.eventseeker.applink.util.CommandsUtil.Commands;
+import com.wcities.eventseeker.applink.util.CommandsUtil.Command;
 import com.wcities.eventseeker.applink.util.EventALUtil;
 import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
-import com.wcities.eventseeker.core.BookingInfo;
+import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.ItemsList;
-import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
 import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
-import com.wcities.eventseeker.util.FragmentUtil;
 
 public class SearchAL extends ESIProxyALM {
 
@@ -152,19 +148,20 @@ public class SearchAL extends ESIProxyALM {
 	}
 	
 	private void addCommands() {
-		Vector<Commands> requiredCmds = new Vector<Commands>();
-		requiredCmds.add(Commands.DISCOVER);
-		requiredCmds.add(Commands.MY_EVENTS);
-		requiredCmds.add(Commands.SEARCH);
-		requiredCmds.add(Commands.NEXT);
-		requiredCmds.add(Commands.BACK);
-		requiredCmds.add(Commands.DETAILS);
+		Vector<Command> requiredCmds = new Vector<Command>();
+		requiredCmds.add(Command.CALL_VENUE);
 		//requiredCmds.add(Commands.PLAY);
 		if (selectedCategoryId == SearchCategories.SEARCH_EVENT.ordinal()) {
-			requiredCmds.add(Commands.CALL_VENUE);
+			requiredCmds.add(Command.CALL_VENUE);
 		} else {
-			requiredCmds.add(Commands.FOLLOW);			
+			requiredCmds.add(Command.FOLLOW);			
 		}
+		requiredCmds.add(Command.DETAILS);
+		requiredCmds.add(Command.BACK);
+		requiredCmds.add(Command.NEXT);
+		requiredCmds.add(Command.SEARCH);
+		requiredCmds.add(Command.MY_EVENTS);
+		requiredCmds.add(Command.DISCOVER);
 		CommandsUtil.addCommands(requiredCmds);
 	}
 	
@@ -317,14 +314,6 @@ public class SearchAL extends ESIProxyALM {
 	}
 
 	@Override
-	public void onOnButtonPress(OnButtonPress notification) {
-		Log.d(TAG, "onOnButtonPress");
-		ButtonName btnName = notification.getButtonName();
-		Commands cmd = Commands.getCommandByButtonName(btnName);
-		performOperationForCommand(cmd);
-	}
-	
-	@Override
 	public void onOnCommand(OnCommand notification) {
 		/************************************************
 		 * NOTE:notification.getCmdID() is not working. *
@@ -332,16 +321,16 @@ public class SearchAL extends ESIProxyALM {
 		 ************************************************/
 		int cmdId = Integer.parseInt(notification.getParameters("cmdID").toString());
 		//Log.d(TAG, "onOnCommand, cmdId = " + cmdId);
-		Commands cmd = Commands.getCommandById(cmdId);
+		Command cmd = Command.getCommandById(cmdId);
 		performOperationForCommand(cmd);
 	}
 	
-	@SuppressWarnings("unused")
-	public void performOperationForCommand(Commands cmd) {
+	public void performOperationForCommand(Command cmd) {
 		if (cmd == null) {
 			return;
 		}
 		Log.d(TAG, "performOperationForCommand : " + cmd.name());
+		reset();
 		
 		switch (cmd) {
 			case DISCOVER:

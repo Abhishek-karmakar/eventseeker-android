@@ -51,11 +51,13 @@ public abstract class Api {
 	};
 
 	private static String localeCode = Locales.ENGLISH.getLocaleCode();
+	private static String fordLocaleCode = Locales.ENGLISH_UNITED_STATES.getLocaleCode();
 	
 	/**
 	 * needs to be set true in the current api-call request, if it supports lang parameter.
 	 */
 	protected boolean addLangParam;
+	private boolean addFordLangParam;
 	
 	private String uri;
 	private String oauthToken;
@@ -80,15 +82,32 @@ public abstract class Api {
 		this.uri = uri;
 	}
 	
+	public void setAddFordLangParam(boolean addFordLangParam) {
+		this.addFordLangParam = addFordLangParam;
+	}
+
 	private void addLangParam() {
-		if (uri != null && addLangParam) {
-			uri = uri + "&lang=" + localeCode;
+		if (uri != null) {
+			/**
+			 * first check for addFordLangParam, because it's possible that both flags are true most of 
+			 * the times
+			 */
+			if (addFordLangParam) {
+				uri = uri + "&lang=" + fordLocaleCode;
+				
+			} else if (addLangParam) {
+				uri = uri + "&lang=" + localeCode;
+			}
 			Log.d(TAG, "uri="+uri);
 		}
 	}
 	
 	public static void updateLocaleCode(String newLocaleCode) {
 		localeCode = newLocaleCode;
+	}
+	
+	public static void updateFordLocaleCode(String newFordLocaleCode) {
+		fordLocaleCode = newFordLocaleCode;
 	}
 	
 	protected JSONObject execute(RequestMethod requestMethod, ContentType contentType, byte[] data) throws ClientProtocolException, IOException, JSONException {

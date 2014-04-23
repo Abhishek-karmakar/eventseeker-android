@@ -17,6 +17,7 @@ import com.ford.syncV4.proxy.rpc.Choice;
 import com.ford.syncV4.proxy.rpc.OnButtonPress;
 import com.ford.syncV4.proxy.rpc.OnCommand;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
+import com.ford.syncV4.proxy.rpc.SoftButton;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
 import com.ford.syncV4.proxy.rpc.enums.ButtonName;
 import com.wcities.eventseeker.R;
@@ -30,7 +31,7 @@ import com.wcities.eventseeker.applink.datastructure.EventList.LoadEventsListene
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.applink.util.ALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil;
-import com.wcities.eventseeker.applink.util.CommandsUtil.Commands;
+import com.wcities.eventseeker.applink.util.CommandsUtil.Command;
 import com.wcities.eventseeker.applink.util.EventALUtil;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.ItemsList;
@@ -82,7 +83,6 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		public int getCategoryId() {
 			return categoryId;
 		}
-		
 	}
 
 	private static DiscoverAL instance;
@@ -108,23 +108,32 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 	
 	@Override
 	public void onStartInstance() {
-		Log.d(TAG, "onStartInstance()");
+		//Log.d(TAG, "onStartInstance()");
 		initializeInteractionChoiceSets();
 		performInteraction();		
 		addCommands();
+		Vector<SoftButton> softBtns = buildSoftButtons();
+		ALUtil.displayMessage("Loading...", "", softBtns);
 	}
 	
 	private void addCommands() {
-		Vector<Commands> requiredCmds = new Vector<Commands>();
-		requiredCmds.add(Commands.DISCOVER);
-		requiredCmds.add(Commands.MY_EVENTS);
-		requiredCmds.add(Commands.SEARCH);
-		requiredCmds.add(Commands.NEXT);
-		requiredCmds.add(Commands.BACK);
-		requiredCmds.add(Commands.DETAILS);
+		Vector<Command> requiredCmds = new Vector<Command>();
+		requiredCmds.add(Command.CALL_VENUE);
 		//requiredCmds.add(Commands.PLAY);
-		requiredCmds.add(Commands.CALL_VENUE);
+		requiredCmds.add(Command.DETAILS);
+		requiredCmds.add(Command.BACK);
+		requiredCmds.add(Command.NEXT);
+		requiredCmds.add(Command.SEARCH);
+		requiredCmds.add(Command.MY_EVENTS);
+		requiredCmds.add(Command.DISCOVER);
 		CommandsUtil.addCommands(requiredCmds);
+	}
+	
+	private Vector<SoftButton> buildSoftButtons() {
+		Vector<SoftButton> softBtns = new Vector<SoftButton>();
+		//softBtns.add(Commands.PLAY.buildSoftBtn());
+		softBtns.add(Command.CALL_VENUE.buildSoftBtn());
+		return softBtns;
 	}
 
 	private void initializeInteractionChoiceSets() {
@@ -216,6 +225,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		eventApi.setAlreadyRequested(eventsAlreadyRequested);
 		eventApi.addMoreInfo(MoreInfo.booking);
 		eventApi.addMoreInfo(MoreInfo.multiplebooking);
+		eventApi.setAddFordLangParam(true);
 		
 		try {
 			JSONObject jsonObject = eventApi.getEvents();
@@ -262,6 +272,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		eventApi.setMiles(MILES_LIMIT);
 		eventApi.setLimit(EVENTS_LIMIT);
 		eventApi.setAlreadyRequested(eventsAlreadyRequested);
+		eventApi.setAddFordLangParam(true);
 		
 		try {
 			JSONObject jsonObject = eventApi.getFeaturedEventsForFord();
@@ -285,7 +296,6 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		eventList.addAll(tmpEvents);
 		eventList.setTotalNoOfEvents(totalNoOfEvents);
 	}
-
 	
 	private String getStartDate() {
 		Calendar c = Calendar.getInstance();
@@ -306,14 +316,6 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
     }
 
 	@Override
-	public void onOnButtonPress(OnButtonPress notification) {
-		Log.d(TAG, "onOnButtonPress");
-		ButtonName btnName = notification.getButtonName();
-		Commands cmd = Commands.getCommandByButtonName(btnName);
-		performOperationForCommand(cmd);
-	}
-	
-	@Override
 	public void onOnCommand(OnCommand notification) {
 		/************************************************
 		 * NOTE:notification.getCmdID() is not working. *
@@ -321,7 +323,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		 ************************************************/
 		int cmdId = Integer.parseInt(notification.getParameters("cmdID").toString());
 		//Log.d(TAG, "onOnCommand, cmdId = " + cmdId);
-		Commands cmd = Commands.getCommandById(cmdId);
+		Command cmd = Command.getCommandById(cmdId);
 		performOperationForCommand(cmd);
 	}
 	
@@ -335,12 +337,12 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		eventList.resetEventList();
 	}
 
-	@SuppressWarnings("unused")
-	public void performOperationForCommand(Commands cmd) {
+	public void performOperationForCommand(Command cmd) {
 		if (cmd == null) {
 			return;
 		}
 		Log.d(TAG, "performOperationForCommand : " + cmd.name());
+		reset();
 		
 		switch (cmd) {
 			case DISCOVER:

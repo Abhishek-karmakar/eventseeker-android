@@ -9,6 +9,7 @@ import com.ford.syncV4.proxy.TTSChunkFactory;
 import com.ford.syncV4.proxy.rpc.AddCommand;
 import com.ford.syncV4.proxy.rpc.Choice;
 import com.ford.syncV4.proxy.rpc.CreateInteractionChoiceSet;
+import com.ford.syncV4.proxy.rpc.DeleteCommand;
 import com.ford.syncV4.proxy.rpc.DeleteInteractionChoiceSet;
 import com.ford.syncV4.proxy.rpc.MenuParams;
 import com.ford.syncV4.proxy.rpc.PerformInteraction;
@@ -22,10 +23,10 @@ import com.wcities.eventseeker.constants.AppConstants;
 
 public class ALUtil {
 
-	private static final String TAG = ALUtil.class.getName();
+	private static final String TAG = ALUtil.class.getSimpleName();
 	
 	public static void addCommand(Vector<String> vrCommands, int cmdID) {
-		Log.d(TAG, "Command Id is : " + cmdID);
+		//Log.d(TAG, "Add Command Id is : " + cmdID);
 		AppLinkService appLinkService = AppLinkService.getInstance();
 		
 		AddCommand msg = new AddCommand();
@@ -37,6 +38,22 @@ public class ALUtil {
 		menuParams.setMenuName(vrCommands.get(0));
 		menuParams.setPosition(0);
 		msg.setMenuParams(menuParams);
+		
+		try {
+			appLinkService.getProxy().sendRPCRequest(msg);
+			
+		} catch (SyncException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void deleteCommand(int cmdID) {
+		//Log.d(TAG, "Delete Command Id is : " + cmdID);
+		AppLinkService appLinkService = AppLinkService.getInstance();
+		
+		DeleteCommand msg = new DeleteCommand();
+		msg.setCorrelationID(appLinkService.autoIncCorrId++);
+		msg.setCmdID(cmdID);
 		
 		try {
 			appLinkService.getProxy().sendRPCRequest(msg);
@@ -133,12 +150,17 @@ public class ALUtil {
 				AppLinkService.getInstance().getResources().getString(resIdText2), null);
 	}
 	
+	public static void displayMessage(int resIdText1, int resIdText2, Vector<SoftButton> softButtons) {
+		displayMessage(AppLinkService.getInstance().getResources().getString(resIdText1), 
+				AppLinkService.getInstance().getResources().getString(resIdText2), softButtons);
+	}
+	
 	public static void displayMessage(String text1, String text2) {
 		displayMessage(text1, text2, null);
     }
 	
 	public static void displayMessage(String text1, String text2, Vector<SoftButton> softButtons) {
-		Log.d(TAG,"text1 : " + text1 + " text2 : " + text2);
+		Log.d(TAG, "text1 : " + text1 + " text2 : " + text2);
 		try {
 			if (text1 == null) {
 				text1 = "";
@@ -151,7 +173,7 @@ public class ALUtil {
 
 		} catch (SyncException e) {
 			e.printStackTrace();
-			Log.d(TAG,"Failed to send Show");
+			Log.d(TAG, "Failed to send Show");
 		}
    }
 }

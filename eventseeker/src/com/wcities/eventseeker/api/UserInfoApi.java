@@ -371,6 +371,8 @@ public class UserInfoApi extends Api {
 		}
 		
 		setUri(uriBuilder.toString());
+		addLangParam = true;
+		
 		Log.i(TAG, "uri=" + getUri());
 		return execute(RequestMethod.GET, null, null); 
 	}

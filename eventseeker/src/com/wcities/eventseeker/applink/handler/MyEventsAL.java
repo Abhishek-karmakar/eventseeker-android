@@ -13,13 +13,10 @@ import android.util.Log;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
 import com.ford.syncV4.proxy.rpc.Choice;
-import com.ford.syncV4.proxy.rpc.OnButtonEvent;
 import com.ford.syncV4.proxy.rpc.OnCommand;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
 import com.ford.syncV4.proxy.rpc.SoftButton;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
-import com.ford.syncV4.proxy.rpc.enums.ButtonEventMode;
-import com.ford.syncV4.proxy.rpc.enums.ButtonName;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
@@ -30,7 +27,7 @@ import com.wcities.eventseeker.applink.datastructure.EventList.LoadEventsListene
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.applink.util.ALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil;
-import com.wcities.eventseeker.applink.util.CommandsUtil.Commands;
+import com.wcities.eventseeker.applink.util.CommandsUtil.Command;
 import com.wcities.eventseeker.applink.util.EventALUtil;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.ItemsList;
@@ -92,8 +89,9 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 			eventList.resetEventList();
 		}
 		addCommands();
-		addSoftButtons();
-		
+		Vector<SoftButton> softBtns = buildSoftButtons();
+		ALUtil.displayMessage("Loading...", "", softBtns);
+
 		generateLatLon();
 		loadEvents(Type.myevents);
 		
@@ -152,32 +150,24 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
     }
 	
 	private void addCommands() {
-		Vector<Commands> reqCmds = new Vector<Commands>();
-		reqCmds.add(Commands.CALL_VENUE);
+		//Log.d(TAG, "addCommands");
+		Vector<Command> reqCmds = new Vector<Command>();
+		reqCmds.add(Command.CALL_VENUE);
 		//reqCmds.add(Commands.PLAY);
-		reqCmds.add(Commands.DETAILS);
-		reqCmds.add(Commands.BACK);
-		reqCmds.add(Commands.NEXT);
-		reqCmds.add(Commands.SEARCH);
-		reqCmds.add(Commands.MY_EVENTS);
-		reqCmds.add(Commands.DISCOVER);
+		reqCmds.add(Command.DETAILS);
+		reqCmds.add(Command.BACK);
+		reqCmds.add(Command.NEXT);
+		reqCmds.add(Command.SEARCH);
+		reqCmds.add(Command.MY_EVENTS);
+		reqCmds.add(Command.DISCOVER);
 		CommandsUtil.addCommands(reqCmds);	
 	}
 	
-	private void addSoftButtons() {
+	private Vector<SoftButton> buildSoftButtons() {
 		Vector<SoftButton> softBtns = new Vector<SoftButton>();
-		
-		/*SoftButton softBtnPlay = new SoftButton();
-		softBtnPlay.setSoftButtonID(Commands.PLAY.getCmdId());
-		softBtnPlay.setText(Commands.PLAY.toString());
-		softBtns.add(softBtnPlay);*/
-		
-		SoftButton softBtnCallVenue = new SoftButton();
-		softBtnCallVenue.setSoftButtonID(Commands.CALL_VENUE.getCmdId());
-		softBtnCallVenue.setText(Commands.CALL_VENUE.toString());
-		softBtns.add(softBtnCallVenue);
-		
-		ALUtil.displayMessage("Loading...", "", softBtns);
+		//softBtns.add(Commands.PLAY.buildSoftBtn());		
+		softBtns.add(Command.CALL_VENUE.buildSoftBtn());
+		return softBtns;
 	}
 
 	private void loadEvents(Type type) {
@@ -223,10 +213,11 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 		userInfoApi.setUserId(mEventSeekr.getWcitiesId());
 		userInfoApi.setLat(lat);
 		userInfoApi.setLon(lon);
+		userInfoApi.setAddFordLangParam(true);
 		return userInfoApi;
 	}
 	
-	private void performOperationForCommand(Commands cmd) {
+	public void performOperationForCommand(Command cmd) {
 		if (cmd == null) {
 			return;
 		}
@@ -269,8 +260,8 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 	 * this my events screen itself.
 	 * @param cmd
 	 */
-	private void resetIfNeeded(Commands cmd) {
-		if (cmd == Commands.MY_EVENTS) {
+	private void resetIfNeeded(Command cmd) {
+		if (cmd == Command.MY_EVENTS) {
 			eventList.resetEventList();	
 		}
 	}
@@ -282,17 +273,9 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 		 * So, we have used the alternative for the same*
 		 ************************************************/
 		int cmdId = Integer.parseInt(notification.getParameters("cmdID").toString());
-		Commands cmd = Commands.getCommandById(cmdId);
+		Command cmd = Command.getCommandById(cmdId);
 		resetIfNeeded(cmd);
 		performOperationForCommand(cmd);
-	}
-	
-	@Override
-	public void onOnButtonEvent(OnButtonEvent notification) {
-		if (notification.getButtonName() == ButtonName.CUSTOM_BUTTON && notification.getCustomButtonID() == 
-				Commands.CALL_VENUE.getCmdId() && notification.getButtonEventMode() == ButtonEventMode.BUTTONUP) {
-			EventALUtil.callVenue(eventList);
-		}
 	}
 	
 	@Override
