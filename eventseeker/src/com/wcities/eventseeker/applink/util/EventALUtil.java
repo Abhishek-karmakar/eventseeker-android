@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Vector;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.util.Log;
 
@@ -208,7 +209,9 @@ public class EventALUtil {
 			speakEventTitle(eventList.getCurrentEvent(), context);
 			
 		} else {
-			speak(R.string.event_no_evts_avail);
+			Resources res = context.getResources();
+			ALUtil.alert(res.getString(R.string.alert_no_events_available), res.getString(
+					R.string.event_no_evts_avail));
 		}		
 	}
 
@@ -218,7 +221,9 @@ public class EventALUtil {
 			speakEventTitle(eventList.getCurrentEvent(), context);
 			
 		} else {
-			speak(R.string.event_no_evts_avail);
+			Resources res = context.getResources();
+			ALUtil.alert(res.getString(R.string.alert_no_events_available), res.getString(
+					R.string.event_no_evts_avail));
 		}		
 	}
 

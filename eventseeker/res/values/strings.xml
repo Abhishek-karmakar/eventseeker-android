@@ -343,12 +343,12 @@
     <string name="al_command_back">Back</string>
     <string name="al_command_details">Details</string>
     <string name="al_command_play">Play</string>
-    <string name="al_command_call_venue">Call Venue</string>
+    <string name="al_command_call_venue">Call</string>
     <string name="al_command_follow">Follow</string>
 
 	<!-- MainActivityAL -->
     <string name="al_command_my_events">My Events</string>
-    <string name="al_command_discover">Discover</string>
+    <string name="al_command_discover">Explore</string>
     <string name="al_command_search">Search</string>
         
 	<!-- DiscoverActivityAL -->
@@ -367,9 +367,11 @@
     <string name="search_artist">Artist</string>
     <string name="say_event_name">Say event name</string>
     <string name="say_artist_name">Say artist name</string>
+    <string name="alert_no_artists_available">No artists available.</string>
 
     <!-- Events -->
     <string name="event_no_evts_avail">There are no events available.</string>
+    <string name="alert_no_events_available">No events available.</string>
     <string name="plz_press_nxt_or_bck">, Please press the voice button and say next or back.</string>
     <string name="loading">Loading...</string>
     <string name="detail_not_available">Detail description not available</string>

@@ -133,7 +133,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 
 	public void onCreate() {
 		super.onCreate();
-		Log.d(TAG, "onCreate()");
+		//Log.d(TAG, "onCreate()");
 		instance = this;
 	}
 	
@@ -183,7 +183,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 							new Vector<String>(Arrays.asList(new String[] {getResources().getString(
 							R.string.app_name)})), true, syncMsgVersion, language, language, 
 							AppConstants.FORD_APP_ID, null);
-					Log.d(TAG, "startProxy() registration done");
+					//Log.d(TAG, "startProxy() registration done");
 				}
 				
 			} catch (SyncException e) {
@@ -197,7 +197,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	}
 	
 	public void onDestroy() {
-		Log.d(TAG, "onDestroy()");
+		//Log.d(TAG, "onDestroy()");
 		//unSubscribeButtons();
 		disposeSyncProxy();
 		clearLockScreen();
@@ -206,7 +206,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	}
 	
 	public void disposeSyncProxy() {
-		Log.d(TAG, "disposeSyncProxy()");
+		//Log.d(TAG, "disposeSyncProxy()");
 		if (proxy != null) {
 			try {
 				proxy.dispose();
@@ -219,7 +219,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	}
 	
 	public void onProxyClosed(String info, Exception e) {
-		Log.d(TAG, "onProxyClosed()");
+		//Log.d(TAG, "onProxyClosed()");
 		clearLockScreen();
 
 		if ((((SyncException) e).getSyncExceptionCause() != SyncExceptionCause.SYNC_PROXY_CYCLED)) {
@@ -231,7 +231,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	}
 
    public void reset() {
-	   Log.d(TAG, "reset()");
+	   //Log.d(TAG, "reset()");
 	   if (proxy != null) {
 		   try {
 			   proxy.resetProxy();
@@ -301,6 +301,16 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 			//if (driverDistractionNotif == false) {
 			showLockScreen();
 			//}
+			
+			try {
+				Language tdkLanguage = proxy.getHmiDisplayLanguage();
+				if (tdkLanguage != ((EventSeekr) getApplication()).getFordLocale().getFordLanguage()) {
+					((EventSeekr) getApplication()).updateFordLocale(Locales.getFordLocaleByLanguage(tdkLanguage));
+				}
+				
+			} catch (SyncException e) {
+				e.printStackTrace();
+			}
 			
 			if (notification.getFirstRun()) {
 				
@@ -565,6 +575,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 
 	@Override
 	public void onChangeRegistrationResponse(ChangeRegistrationResponse arg0) {
+		// TODO Auto-generated method stub
 		
 	}
 

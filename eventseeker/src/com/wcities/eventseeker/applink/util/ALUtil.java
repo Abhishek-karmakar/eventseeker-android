@@ -5,7 +5,9 @@ import java.util.Vector;
 import android.util.Log;
 
 import com.ford.syncV4.exception.SyncException;
+import com.ford.syncV4.proxy.TTSChunkFactory;
 import com.ford.syncV4.proxy.rpc.AddCommand;
+import com.ford.syncV4.proxy.rpc.Alert;
 import com.ford.syncV4.proxy.rpc.Choice;
 import com.ford.syncV4.proxy.rpc.CreateInteractionChoiceSet;
 import com.ford.syncV4.proxy.rpc.DeleteCommand;
@@ -17,6 +19,7 @@ import com.ford.syncV4.proxy.rpc.Speak;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
 import com.ford.syncV4.proxy.rpc.enums.InteractionMode;
 import com.ford.syncV4.proxy.rpc.enums.TextAlignment;
+import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.constants.AppConstants;
 
@@ -169,4 +172,21 @@ public class ALUtil {
 			Log.d(TAG, "Failed to send Show");
 		}
    }
+	
+	public static void alert(String alertText1, String speakText) {
+		try {
+			Alert msg = new Alert();
+			msg.setCorrelationID(AppLinkService.getInstance().autoIncCorrId++);
+			msg.setAlertText1(alertText1);
+			msg.setDuration(5000);
+			msg.setPlayTone(true);
+			Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(speakText);
+			msg.setTtsChunks(ttsChunks);
+			AppLinkService.getInstance().getProxy().sendRPCRequest(msg);
+			
+		} catch (SyncException e) {
+			e.printStackTrace();
+			Log.d(TAG, "Failed to show alert");
+		}
+	}
 }
