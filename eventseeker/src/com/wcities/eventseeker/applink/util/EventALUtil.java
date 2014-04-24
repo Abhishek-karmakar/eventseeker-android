@@ -24,7 +24,7 @@ import com.wcities.eventseeker.core.Venue;
 public class EventALUtil {
 	
 	private static final String COUNTRY_NAME = "United States";
-	private static final String TAG = EventALUtil.class.getSimpleName();
+	private static final String TAG = EventALUtil.class.getName();
 	
 	public static void speakEventTitle(Event event, EventSeekr app) {
 		/**
@@ -55,7 +55,7 @@ public class EventALUtil {
 			app.setFirstEventTitleForFordEventAL(false);
 		}
 		
-		Log.i(TAG, "simple = " + simple);
+		Log.d(TAG, "simple = " + simple);
 		Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
 		ALUtil.speakText(ttsChunks);				
 	}
@@ -71,7 +71,7 @@ public class EventALUtil {
 
 		if (event.hasArtists()) {
 			List<Artist> artists = event.getArtists();
-			int appendResId = R.string.is_performing_for_this_event;
+			String verb = " is ";
 			
 			simple += artists.get(0).getName();
 			for (int i = 1; i < artists.size() - 1; i++) {
@@ -79,10 +79,10 @@ public class EventALUtil {
 				simple += ", " + artist.getName();
 			}
 			if (artists.size() > 1) {
-				simple += " " + app.getResources().getString(R.string.and) + ", " + artists.get(artists.size() - 1).getName();
-				appendResId = R.string.are_performing_for_this_event;
+				simple += " and, " + artists.get(artists.size() - 1).getName();
+				verb = " are ";
 			}
-			simple += " " + app.getResources().getString(appendResId);
+			simple += verb + "performing for this event";
 		}
 
 		if (event.getSchedule() != null) {
@@ -100,12 +100,12 @@ public class EventALUtil {
 				
 				if (maxPrice != 0) {
 					if (maxPrice == minPrice) {
-						simple += app.getResources().getString(R.string.price_would_be) + " " + maxPrice + 
-								" " + currency + ".";
+						simple += ", price would be " + maxPrice + " " + currency + ".";
 						
 					} else {
-						simple += app.getResources().getString(R.string.price_range_would_be) + " "
-								+ minPrice + ", " + app.getResources().getString(R.string.and) + " " + maxPrice + " " + currency + ".";
+						simple += ", price range would be approximately between "
+								+ minPrice + ", and " + maxPrice + " " + currency + ".";
+						
 					}
 				}
 				
@@ -150,12 +150,6 @@ public class EventALUtil {
 		return "";
 	}
 	
-	public static void speak(int strResId) {
-		String simple = AppLinkService.getInstance().getResources().getString(strResId);
-		Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
-		ALUtil.speakText(ttsChunks);		
-	}
-	
 	public static void displayCurrentEvent(EventList eventList) {
 		ALUtil.displayMessage(eventList.getCurrentEvent().getName(), 
 				(eventList.getCurrentEventPosition() + 1) + "/" + eventList.getTotalNoOfEvents());
@@ -198,15 +192,15 @@ public class EventALUtil {
 			}
 			
 			dateTime += " hours";
-			Log.d(TAG, "dateTime : " + dateTime);
 		}
+		Log.d(TAG, "dateTime : " + dateTime);
 		return dateTime;
 	}
 	
 	public static void onNextCommand(EventList eventList, EventSeekr context) {
 		if (eventList.moveToNextEvent()) {
-			displayCurrentEvent(eventList);
-			speakEventTitle(eventList.getCurrentEvent(), context);
+			EventALUtil.displayCurrentEvent(eventList);
+			EventALUtil.speakEventTitle(eventList.getCurrentEvent(), context);
 			
 		} else {
 			Resources res = context.getResources();
@@ -217,8 +211,8 @@ public class EventALUtil {
 
 	public static void onBackCommand(EventList eventList,EventSeekr context) {
 		if (eventList.moveToPreviousEvent()) {
-			displayCurrentEvent(eventList);
-			speakEventTitle(eventList.getCurrentEvent(), context);
+			EventALUtil.displayCurrentEvent(eventList);
+			EventALUtil.speakEventTitle(eventList.getCurrentEvent(), context);
 			
 		} else {
 			Resources res = context.getResources();
@@ -237,7 +231,7 @@ public class EventALUtil {
 						intent, "Call..."));
 				
 			} else {
-				speak(R.string.ford_phone_no_is_unavailable);
+			ALUtil.speak(R.string.ford_phone_no_is_unavailable);
 			}
 		}
 	}

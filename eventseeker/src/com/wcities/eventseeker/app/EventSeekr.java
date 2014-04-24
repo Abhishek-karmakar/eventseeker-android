@@ -61,6 +61,7 @@ public class EventSeekr extends Application {
 	 */
 	private boolean isFirstEventTitleForFordEventAL = true;
 	private boolean isFirstEventDetailsForFordEventAL = true;
+	private boolean isFirstArtistTitleForFord = true;
 
 	private String gcmRegistrationId;
 	private int appVersionCode;
@@ -120,6 +121,14 @@ public class EventSeekr extends Application {
 
 	public void setFirstEventTitleForFordEventAL(boolean isFirstEventTitleForFordEventAL) {
 		this.isFirstEventTitleForFordEventAL = isFirstEventTitleForFordEventAL;
+	}
+	
+	public boolean isFirstArtistTitleForFord() {
+		return isFirstArtistTitleForFord;
+	}
+	
+	public void setFirstArtistTitleForFord(boolean isFirstArtistTitleForFord) {
+		this.isFirstArtistTitleForFord = isFirstArtistTitleForFord;
 	}
 
 	public boolean isFirstEventDetailsForFordEventAL() {

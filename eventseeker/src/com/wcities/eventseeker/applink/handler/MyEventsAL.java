@@ -38,7 +38,6 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 
 	private static final String TAG = MyEventsAL.class.getName();
 	private static final int EVENTS_LIMIT = 10;
-	private static final String COUNTRY_NAME = "United States";
 	private static final int START_CHOICE_ID_SUGGESTION_REPLY = 1;
 	private static final int CHOICE_SET_ID_SUGGESTION_REPLY = 1;
 	
@@ -288,14 +287,14 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 
 			if (eventList.isEmpty()) {
 				ALUtil.displayMessage(R.string.msg_welcome_to, R.string.msg_eventseeker);
-				EventALUtil.speak(R.string.event_no_evts_avail);
+				ALUtil.speak(R.string.event_no_evts_avail);
 				
 			} else {
 				handleNext();
 			}
 			
 		} else if (response.getChoiceID() == SuggestionReply.No.id) {
-			EventALUtil.speak(R.string.my_events_how_can_i_help);
+			ALUtil.speak(R.string.my_events_how_can_i_help);
 		}
 	}
 

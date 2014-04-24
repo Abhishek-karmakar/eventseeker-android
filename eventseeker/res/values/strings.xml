@@ -368,6 +368,9 @@
     <string name="say_event_name">Say event name</string>
     <string name="say_artist_name">Say artist name</string>
     <string name="alert_no_artists_available">No artists available.</string>
+    <string name="no_artists_avail">There are no artists available.</string>
+    <string name="already_followed">Already Followed</string>
+    <string name="followed">Followed</string>
 
     <!-- Events -->
     <string name="event_no_evts_avail">There are no events available.</string>
@@ -387,8 +390,11 @@
     <string name="my_events_al_no_evts_avail_make_suggestions">There are no events available, shall I make suggestions?</string>
     <string name="my_events_al_suggestions">Want Suggestions?</string>
     <string name="my_events_how_can_i_help">How can I help?</string>
+
+    <!-- LockScreenActivity -->
+    <string name="txt_eventseeker_activity_lockscreen">eventseeker</string>
+    <string name="txt_lockscreen_activity_lockscreen">Lock Screen</string>
     
-    <!-- <string name=""></string> -->
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for Ford ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 </resources>

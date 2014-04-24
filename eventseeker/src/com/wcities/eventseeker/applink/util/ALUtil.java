@@ -128,6 +128,33 @@ public class ALUtil {
 		}
 	}
 
+	public static void speak(int strResId) {
+		String simple = AppLinkService.getInstance().getResources().getString(strResId);
+		Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
+		ALUtil.speakText(ttsChunks);		
+	}
+	
+	public static void speak(String str) {
+		Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(str);			
+		ALUtil.speakText(ttsChunks);
+	}
+/*	
+	public static void speak(String str) {
+		int maxStrChars = 299;
+		String temp = (str.length() > maxStrChars + 1) ? str.substring(0, maxStrChars) : str;
+		Log.d(TAG, "Speak Text Chunck : " + temp);
+		Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(temp);			
+		ALUtil.speakText(ttsChunks);
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		if (str.length() > maxStrChars + 1) {
+			speak(str.substring(maxStrChars, str.length()));
+		}
+	}
+*/	
 	public static void speakText(Vector<TTSChunk> ttsChunks) {
 		Speak msg = new Speak();
 		msg.setCorrelationID(AppLinkService.getInstance().autoIncCorrId++);
