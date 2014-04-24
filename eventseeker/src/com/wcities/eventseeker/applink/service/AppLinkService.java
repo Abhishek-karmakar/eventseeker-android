@@ -325,8 +325,6 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 				// setup app on SYNC
 				// send welcome message if applicable
 				esIProxyALM = MainAL.getInstance((EventSeekr) getApplication());
-				//esIProxyALM.onOnHMIStatus(notification);
-				//esIProxyALM.onCreateInstance();
 				esIProxyALM.onStartInstance();
 				
 			} else if (isHMIStatusNone) {
@@ -529,6 +527,11 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 		if (esIProxyALM == null) {
 			return;
 		}
+		esIProxyALM.onStartInstance();
+	}
+	
+	public void initiateMainAL() {
+		esIProxyALM = MainAL.getInstance((EventSeekr) getApplication());
 		esIProxyALM.onStartInstance();
 	}
 

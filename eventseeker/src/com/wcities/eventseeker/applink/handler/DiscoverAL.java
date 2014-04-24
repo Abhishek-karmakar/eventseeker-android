@@ -14,12 +14,10 @@ import android.util.Log;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
 import com.ford.syncV4.proxy.rpc.Choice;
-import com.ford.syncV4.proxy.rpc.OnButtonPress;
 import com.ford.syncV4.proxy.rpc.OnCommand;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
 import com.ford.syncV4.proxy.rpc.SoftButton;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
-import com.ford.syncV4.proxy.rpc.enums.ButtonName;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.EventApi;
@@ -196,7 +194,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 
 		//show Welcome message when no events are available
 		if (eventList.isEmpty()) {
-			ALUtil.displayMessage(R.string.msg_welcome_to, R.string.msg_eventseeker);
+			AppLinkService.getInstance().initiateMainAL();
 		}
 		EventALUtil.onNextCommand(eventList, context);
 	}

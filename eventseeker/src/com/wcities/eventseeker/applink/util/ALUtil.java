@@ -205,7 +205,7 @@ public class ALUtil {
 			Alert msg = new Alert();
 			msg.setCorrelationID(AppLinkService.getInstance().autoIncCorrId++);
 			msg.setAlertText1(alertText1);
-			msg.setDuration(5000);
+			msg.setDuration(3000);
 			msg.setPlayTone(true);
 			Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(speakText);
 			msg.setTtsChunks(ttsChunks);

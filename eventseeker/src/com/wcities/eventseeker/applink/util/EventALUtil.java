@@ -231,7 +231,7 @@ public class EventALUtil {
 						intent, "Call..."));
 				
 			} else {
-			ALUtil.speak(R.string.ford_phone_no_is_unavailable);
+				ALUtil.speak(R.string.ford_phone_no_is_unavailable);
 			}
 		}
 	}

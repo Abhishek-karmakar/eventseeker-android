@@ -11,6 +11,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.res.Resources;
 import android.util.Log;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
@@ -278,21 +279,18 @@ public class SearchAL extends ESIProxyALM {
 		if (selectedCategoryId == SearchCategories.SEARCH_EVENT.ordinal()) {
 			loadSearchedEvent();
 
+			if (eventList.isEmpty()) {
+				AppLinkService.getInstance().initiateMainAL();
+			} 
 			EventALUtil.onNextCommand(eventList, context);
 			
-			//show Welcome message when no events are available
-			if (eventList.isEmpty()) {
-				ALUtil.displayMessage(R.string.msg_welcome_to, R.string.msg_eventseeker);
-			}
 		} else {
 			loadSearchedArtist();
 
-			onNextArtistCommand(artistList, context);
-			
-			//show Welcome message when no events are available
 			if (artistList.isEmpty()) {
-				ALUtil.displayMessage(R.string.msg_welcome_to, R.string.msg_eventseeker);
+				AppLinkService.getInstance().initiateMainAL();
 			}
+			onNextArtistCommand(artistList, context);
 		}
 	}
 
@@ -391,26 +389,30 @@ public class SearchAL extends ESIProxyALM {
 	}
 	
 	public void onNextArtistCommand(ArtistList artistList, EventSeekr context) {
-		int total = artistList.getTotalNoOfArtists();
 		if (artistList.moveToNextArtist()) {
+			int total = artistList.getTotalNoOfArtists();
 			ALUtil.displayMessage(artistList.getCurrentArtist().getName(), 
 					(artistList.getCurrentArtistPosition() + 1) + "/" + ((total < 11) ? total : 10));
 			speakArtistTitle(artistList.getCurrentArtist(), context);
 			
 		} else {
-			ALUtil.speak(R.string.no_artists_avail);
+			Resources res = context.getResources();
+			ALUtil.alert(res.getString(R.string.alert_no_artists_available), res.getString(
+					R.string.no_artists_avail));
 		}
 	}
 
 	public void onBackArtistCommand(ArtistList artistList,EventSeekr context) {
-		int total = artistList.getTotalNoOfArtists();
 		if (artistList.moveToPreviousArtist()) {
+			int total = artistList.getTotalNoOfArtists();
 			ALUtil.displayMessage(artistList.getCurrentArtist().getName(), 
 					(artistList.getCurrentArtistPosition() + 1) + "/" + ((total < 11) ? total : 10));
 			speakArtistTitle(artistList.getCurrentArtist(), context);
 			
 		} else {
-			ALUtil.speak(R.string.no_artists_avail);
+			Resources res = context.getResources();
+			ALUtil.alert(res.getString(R.string.alert_no_artists_available), res.getString(
+					R.string.no_artists_avail));
 		}		
 	}
 	
