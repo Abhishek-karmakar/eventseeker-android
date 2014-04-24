@@ -342,7 +342,6 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 			return;
 		}
 		Log.d(TAG, "performOperationForCommand : " + cmd.name());
-		reset();
 		
 		switch (cmd) {
 			case DISCOVER:

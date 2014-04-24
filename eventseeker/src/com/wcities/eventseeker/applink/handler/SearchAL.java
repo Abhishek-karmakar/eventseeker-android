@@ -89,10 +89,7 @@ public class SearchAL extends ESIProxyALM {
 		this.context = context;
 		eventList = new EventList();
 		eventList.setEventsLimit(EVENTS_LIMIT);
-		/**
-		 * No need to add the LoadListener as for Ford there will be at the max 10 Searched events.
-		 * eventList.setLoadEventsListener(this);
-		 */
+		artistList = new ArtistList();
 	}
 
 	public static ESIProxyALM getInstance(EventSeekr context) {
@@ -186,6 +183,7 @@ public class SearchAL extends ESIProxyALM {
 		eventApi.setMiles(MILES_LIMIT);
 		eventApi.addMoreInfo(MoreInfo.booking);
 		eventApi.addMoreInfo(MoreInfo.multiplebooking);
+		eventApi.setAddFordLangParam(true);
 		
 		try {
 			if (query != null) {
@@ -221,7 +219,8 @@ public class SearchAL extends ESIProxyALM {
 		ArtistApi artistApi = new ArtistApi(Api.OAUTH_TOKEN);
 		artistApi.setLimit(ARTISTS_LIMIT);
 		artistApi.setMethod(Method.artistSearch);
-
+		artistApi.setAddFordLangParam(true);
+		
 		try {
 			artistApi.setArtist(URLEncoder.encode(query, AppConstants.CHARSET_NAME));
 
@@ -229,10 +228,7 @@ public class SearchAL extends ESIProxyALM {
 			ArtistApiJSONParser jsonParser = new ArtistApiJSONParser();
 			
 			ItemsList<Artist> artistItemList = jsonParser.getArtistItemList(jsonObject);
-			
-			if (artistList == null) {
-				artistList = new ArtistList();
-			}
+
 			artistList.addAll(artistItemList.getItems());
 			artistList.setTotalNoOfArtists(artistItemList.getTotalCount());
 
@@ -330,7 +326,6 @@ public class SearchAL extends ESIProxyALM {
 			return;
 		}
 		Log.d(TAG, "performOperationForCommand : " + cmd.name());
-		reset();
 		
 		switch (cmd) {
 			case DISCOVER:
@@ -357,6 +352,7 @@ public class SearchAL extends ESIProxyALM {
 				if (selectedCategoryId == SearchCategories.SEARCH_EVENT.ordinal()) {
 					EventALUtil.speakDetailsOfEvent(eventList.getCurrentEvent(), context);
 				} else {
+					speakDetailsOfArtist(artistList.getCurrentArtist(), context);
 				}
 				break;
 			/*case PLAY:
@@ -378,10 +374,13 @@ public class SearchAL extends ESIProxyALM {
 				if (artist.getAttending() == Attending.NotTracked) {
 					artist.updateAttending(Attending.Tracked, context);
 					new UserTracker(context, UserTrackingItemType.artist, artist.getId()).execute();
+					ALUtil.displayMessage(artist.getName(), context.getResources().getString(R.string.followed));
+					ALUtil.speak(artist.getName() + " " + context.getResources().getString(R.string.followed));
 				} else {
-					//TODO:display & speak artist Already followed
 					//display : text1 : artist.getName(), text2 : already_followed
 					//speak : artist.getName() + " " + already_followed
+					ALUtil.displayMessage(artist.getName(), context.getResources().getString(R.string.already_followed));
+					ALUtil.speak(artist.getName() + " " + context.getResources().getString(R.string.already_followed));
 				} 
 				break;
 			default:
@@ -392,9 +391,10 @@ public class SearchAL extends ESIProxyALM {
 	}
 	
 	public void onNextArtistCommand(ArtistList artistList, EventSeekr context) {
-		if (artistList.moveToNextEvent()) {
+		int total = artistList.getTotalNoOfArtists();
+		if (artistList.moveToNextArtist()) {
 			ALUtil.displayMessage(artistList.getCurrentArtist().getName(), 
-					(artistList.getCurrentArtistPosition() + 1) + "/" + artistList.getTotalNoOfArtists());
+					(artistList.getCurrentArtistPosition() + 1) + "/" + ((total < 11) ? total : 10));
 			speakArtistTitle(artistList.getCurrentArtist(), context);
 			
 		} else {
@@ -403,9 +403,10 @@ public class SearchAL extends ESIProxyALM {
 	}
 
 	public void onBackArtistCommand(ArtistList artistList,EventSeekr context) {
-		if (artistList.moveToPreviousEvent()) {
+		int total = artistList.getTotalNoOfArtists();
+		if (artistList.moveToPreviousArtist()) {
 			ALUtil.displayMessage(artistList.getCurrentArtist().getName(), 
-					(artistList.getCurrentArtistPosition() + 1) + "/" + artistList.getTotalNoOfArtists());
+					(artistList.getCurrentArtistPosition() + 1) + "/" + ((total < 11) ? total : 10));
 			speakArtistTitle(artistList.getCurrentArtist(), context);
 			
 		} else {
@@ -426,10 +427,19 @@ public class SearchAL extends ESIProxyALM {
 		ALUtil.speakText(ttsChunks);				
 	}
 	
-	public static void speakDetailsOfArtist(Artist artist, EventSeekr app) {}
+	public static void speakDetailsOfArtist(Artist artist, EventSeekr app) {
+		String desc = artist.getDescription();
+		Log.d(TAG, "desc = " + desc);
+		if (desc == null) {
+			ALUtil.speak(R.string.detail_not_available);
+			return;
+		}
+		ALUtil.speak(desc);				
+	}
 	
 	private void reset() {
 		eventList.resetEventList();
+		artistList.resetArtistList();
 		selectedCategoryId = 0;
 		query = null;
 	}

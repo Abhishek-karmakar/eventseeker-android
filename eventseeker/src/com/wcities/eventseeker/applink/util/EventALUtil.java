@@ -149,12 +149,6 @@ public class EventALUtil {
 		return "";
 	}
 	
-	public static void speak(int strResId) {
-		String simple = AppLinkService.getInstance().getResources().getString(strResId);
-		Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
-		ALUtil.speakText(ttsChunks);		
-	}
-	
 	public static void displayCurrentEvent(EventList eventList) {
 		ALUtil.displayMessage(eventList.getCurrentEvent().getName(), 
 				(eventList.getCurrentEventPosition() + 1) + "/" + eventList.getTotalNoOfEvents());
@@ -208,7 +202,7 @@ public class EventALUtil {
 			EventALUtil.speakEventTitle(eventList.getCurrentEvent(), context);
 			
 		} else {
-			EventALUtil.speak(R.string.event_no_evts_avail);
+			ALUtil.speak(R.string.event_no_evts_avail);
 		}		
 	}
 
@@ -218,7 +212,7 @@ public class EventALUtil {
 			EventALUtil.speakEventTitle(eventList.getCurrentEvent(), context);
 			
 		} else {
-			EventALUtil.speak(R.string.event_no_evts_avail);
+			ALUtil.speak(R.string.event_no_evts_avail);
 		}		
 	}
 
@@ -232,7 +226,7 @@ public class EventALUtil {
 						intent, "Call..."));
 				
 			} else {
-				speak(R.string.ford_phone_no_is_unavailable);
+			ALUtil.speak(R.string.ford_phone_no_is_unavailable);
 			}
 		}
 	}

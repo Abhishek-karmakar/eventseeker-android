@@ -29,8 +29,8 @@ public class ArtistList {
 		return artistsLimit;
 	}
 
-	public void setArtistsLimit(int eventsLimit) {
-		this.artistsLimit = eventsLimit;
+	public void setArtistsLimit(int artistsLimit) {
+		this.artistsLimit = artistsLimit;
 	}
 	
 	public int getCurrentArtistPosition() {
@@ -87,7 +87,7 @@ public class ArtistList {
 	}
 	
 	public boolean hasNextArtist() {
-		Log.d(TAG, "hasNextEvents");
+		Log.d(TAG, "hasNextArtists");
 		if (currentArtistPos + 1 < artistList.size()) {
 			return true;
 			
@@ -113,18 +113,18 @@ public class ArtistList {
 		}
 	}
 
-	public boolean moveToNextEvent() {
-		Log.d(TAG, "moveToNextEvent");
+	public boolean moveToNextArtist() {
+		Log.d(TAG, "moveToNextArtist");
 		if(hasNextArtist()) {
 			currentArtistPos++;
-			Log.d(TAG, "moveToNextEvent true");
+			Log.d(TAG, "moveToNextArtist true");
 			return true;
 		}
-		Log.d(TAG, "moveToNextEvent false");
+		Log.d(TAG, "moveToNextArtist false");
 		return false;
 	}
 	
-	public boolean moveToPreviousEvent() {
+	public boolean moveToPreviousArtist() {
 		if(hasPreviousArtist()) {
 			currentArtistPos--;
 			return true;

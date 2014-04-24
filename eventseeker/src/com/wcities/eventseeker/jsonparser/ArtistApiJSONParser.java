@@ -542,6 +542,12 @@ public class ArtistApiJSONParser {
 				 */
 				artist.setImageUrl(imageUrl);
 			}
+			/**********************************************************
+			 * parsing and adding description, as it is needed in Ford*
+			 **********************************************************/
+			if (jsonObject.has(KEY_DESCRIPTION)) {
+				artist.setDescription(jsonObject.getString(KEY_DESCRIPTION));
+			}
 		}
 		
 		if (jsonObject.has(KEY_ONTOUR)) {
