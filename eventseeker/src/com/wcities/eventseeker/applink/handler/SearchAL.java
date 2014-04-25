@@ -221,6 +221,7 @@ public class SearchAL extends ESIProxyALM {
 		artistApi.setLimit(ARTISTS_LIMIT);
 		artistApi.setMethod(Method.artistSearch);
 		artistApi.setAddFordLangParam(true);
+		artistApi.setUserId(((EventSeekr) context).getWcitiesId());
 		
 		try {
 			artistApi.setArtist(URLEncoder.encode(query, AppConstants.CHARSET_NAME));
@@ -307,18 +308,6 @@ public class SearchAL extends ESIProxyALM {
 		 */
 	}
 
-	@Override
-	public void onOnCommand(OnCommand notification) {
-		/************************************************
-		 * NOTE:notification.getCmdID() is not working. *
-		 * So, we have used the alternative for the same*
-		 ************************************************/
-		int cmdId = Integer.parseInt(notification.getParameters("cmdID").toString());
-		//Log.d(TAG, "onOnCommand, cmdId = " + cmdId);
-		Command cmd = Command.getCommandById(cmdId);
-		performOperationForCommand(cmd);
-	}
-	
 	public void performOperationForCommand(Command cmd) {
 		if (cmd == null) {
 			return;

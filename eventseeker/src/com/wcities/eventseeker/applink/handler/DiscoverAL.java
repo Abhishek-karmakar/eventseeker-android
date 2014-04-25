@@ -312,18 +312,6 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
     	lon = latLon[1];
     	//Log.d(TAG, "lat = " + lat + ", lon = " + lon);
     }
-
-	@Override
-	public void onOnCommand(OnCommand notification) {
-		/************************************************
-		 * NOTE:notification.getCmdID() is not working. *
-		 * So, we have used the alternative for the same*
-		 ************************************************/
-		int cmdId = Integer.parseInt(notification.getParameters("cmdID").toString());
-		//Log.d(TAG, "onOnCommand, cmdId = " + cmdId);
-		Command cmd = Command.getCommandById(cmdId);
-		performOperationForCommand(cmd);
-	}
 	
 	/**
 	 * reset the fields to default if Discover screen is being launched from the

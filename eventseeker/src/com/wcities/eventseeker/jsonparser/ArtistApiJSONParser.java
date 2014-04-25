@@ -542,11 +542,16 @@ public class ArtistApiJSONParser {
 				 */
 				artist.setImageUrl(imageUrl);
 			}
-			/**********************************************************
-			 * parsing and adding description, as it is needed in Ford*
-			 **********************************************************/
+			/**************************************************************************
+			 ** parsing and adding description and attending, as it is needed in Ford**
+			 **************************************************************************/
 			if (jsonObject.has(KEY_DESCRIPTION)) {
 				artist.setDescription(jsonObject.getString(KEY_DESCRIPTION));
+			}
+			if (jsonObject.has(KEY_ATTENDING)) {
+				Attending attending = jsonObject.has(KEY_ATTENDING) ? 
+						Attending.getAttending(jsonObject.getInt(KEY_ATTENDING)) : Attending.NotTracked;
+				artist.setAttending(attending);
 			}
 		}
 		

@@ -255,29 +255,6 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 		}
 	}
 	
-	/**
-	 * reset the fields to default if my events screen is being launched from the
-	 * this my events screen itself.
-	 * @param cmd
-	 */
-	private void resetIfNeeded(Command cmd) {
-		if (cmd == Command.MY_EVENTS) {
-			eventList.resetEventList();	
-		}
-	}
-	
-	@Override
-	public void onOnCommand(OnCommand notification) {
-		/************************************************
-		 * NOTE:notification.getCmdID() is not working. *
-		 * So, we have used the alternative for the same*
-		 ************************************************/
-		int cmdId = Integer.parseInt(notification.getParameters("cmdID").toString());
-		Command cmd = Command.getCommandById(cmdId);
-		resetIfNeeded(cmd);
-		performOperationForCommand(cmd);
-	}
-	
 	@Override
 	public void onPerformInteractionResponse(PerformInteractionResponse response) {
 		super.onPerformInteractionResponse(response);
