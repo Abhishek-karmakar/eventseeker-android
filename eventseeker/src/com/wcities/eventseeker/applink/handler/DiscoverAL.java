@@ -307,10 +307,9 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 	}
 	
 	private void generateLatLon() {
-    	double[] latLon = DeviceUtil.getLatLon(context);
+    	double[] latLon = AppLinkService.getInstance().getLatLng();
     	lat = latLon[0];
     	lon = latLon[1];
-    	//Log.d(TAG, "lat = " + lat + ", lon = " + lon);
     }
 	
 	/**

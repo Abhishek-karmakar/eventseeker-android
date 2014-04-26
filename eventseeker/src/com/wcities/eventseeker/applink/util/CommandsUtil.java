@@ -44,27 +44,12 @@ public class CommandsUtil {
 		
 		public static Command getCommandByButtonName(ButtonName btnName) {
 			switch (btnName) {
-			case PRESET_0 : 
-				return DISCOVER;
-			case PRESET_1 : 
-				return MY_EVENTS;
-			case PRESET_2 : 
-				return SEARCH;
 			case SEEKRIGHT : 
-			case PRESET_3 : 
 				return NEXT;
 			case SEEKLEFT : 
-			case PRESET_4 : 
 				return BACK;
 			case OK : 
-			case PRESET_5 : 
 				return DETAILS;
-			/*case PRESET_6 : 
-				return PLAY;*/
-			case PRESET_7 : 
-				return CALL_VENUE;
-			case PRESET_8 : 
-				return FOLLOW;
 			default :
 				return null;
 			}

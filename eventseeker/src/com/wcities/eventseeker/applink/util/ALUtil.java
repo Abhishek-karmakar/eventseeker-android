@@ -12,14 +12,16 @@ import com.ford.syncV4.proxy.rpc.Choice;
 import com.ford.syncV4.proxy.rpc.CreateInteractionChoiceSet;
 import com.ford.syncV4.proxy.rpc.DeleteCommand;
 import com.ford.syncV4.proxy.rpc.DeleteInteractionChoiceSet;
+import com.ford.syncV4.proxy.rpc.GetVehicleData;
 import com.ford.syncV4.proxy.rpc.MenuParams;
 import com.ford.syncV4.proxy.rpc.PerformInteraction;
 import com.ford.syncV4.proxy.rpc.SoftButton;
 import com.ford.syncV4.proxy.rpc.Speak;
+import com.ford.syncV4.proxy.rpc.SubscribeVehicleData;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
+import com.ford.syncV4.proxy.rpc.UnsubscribeVehicleData;
 import com.ford.syncV4.proxy.rpc.enums.InteractionMode;
 import com.ford.syncV4.proxy.rpc.enums.TextAlignment;
-import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.constants.AppConstants;
 
@@ -216,4 +218,30 @@ public class ALUtil {
 			Log.d(TAG, "Failed to show alert");
 		}
 	}
+	
+	public static void subscribeForGps() {
+		SubscribeVehicleData msg = new SubscribeVehicleData();
+		msg.setGps(true);
+		msg.setCorrelationID(AppLinkService.getInstance().autoIncCorrId++);
+		
+		try {
+			AppLinkService.getInstance().getProxy().sendRPCRequest(msg);
+			
+		} catch (SyncException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/*public static void unsubscribeForGps() {
+		UnsubscribeVehicleData msg = new UnsubscribeVehicleData();
+		msg.setGps(true);
+		msg.setCorrelationID(AppLinkService.getInstance().autoIncCorrId++);
+		
+		try {
+			AppLinkService.getInstance().getProxy().sendRPCRequest(msg);
+			
+		} catch (SyncException e) {
+			e.printStackTrace();
+		}
+	}*/
 }

@@ -25,6 +25,7 @@ import android.util.Log;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.IPToCityApi;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.SharedPrefKeys;
 import com.wcities.eventseeker.jsonparser.IPToCityApiJSONParser;

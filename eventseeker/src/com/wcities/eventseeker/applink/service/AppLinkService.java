@@ -33,6 +33,7 @@ import com.ford.syncV4.proxy.rpc.EncodedSyncPDataResponse;
 import com.ford.syncV4.proxy.rpc.EndAudioPassThruResponse;
 import com.ford.syncV4.proxy.rpc.GenericResponse;
 import com.ford.syncV4.proxy.rpc.GetDTCsResponse;
+import com.ford.syncV4.proxy.rpc.GetVehicleData;
 import com.ford.syncV4.proxy.rpc.GetVehicleDataResponse;
 import com.ford.syncV4.proxy.rpc.ListFilesResponse;
 import com.ford.syncV4.proxy.rpc.OnAudioPassThru;
@@ -66,6 +67,7 @@ import com.ford.syncV4.proxy.rpc.UnsubscribeVehicleDataResponse;
 import com.ford.syncV4.proxy.rpc.enums.ButtonName;
 import com.ford.syncV4.proxy.rpc.enums.DriverDistractionState;
 import com.ford.syncV4.proxy.rpc.enums.Language;
+import com.ford.syncV4.proxy.rpc.enums.VehicleDataResultCode;
 import com.ford.syncV4.transport.TCPTransportConfig;
 import com.wcities.eventseeker.LanguageFragment.Locales;
 import com.wcities.eventseeker.LockScreenActivity;
@@ -77,9 +79,10 @@ import com.wcities.eventseeker.applink.handler.ESIProxyALM;
 import com.wcities.eventseeker.applink.handler.MainAL;
 import com.wcities.eventseeker.applink.handler.MyEventsAL;
 import com.wcities.eventseeker.applink.handler.SearchAL;
+import com.wcities.eventseeker.applink.util.ALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil.Command;
 import com.wcities.eventseeker.constants.AppConstants;
-import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.DeviceUtil;
 
 public class AppLinkService extends Service implements IProxyListenerALM {
 
@@ -105,7 +108,8 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	//variable to contain the current state of the lockscreen
 	private boolean lockscreenUP = false;
 	private ESIProxyALM esIProxyALM;
-	private boolean isHMIStatusNone;
+	private boolean isHMIStatusNone, isVehicleDataSubscribed;
+	private double lat = AppConstants.NOT_ALLOWED_LAT, lng = AppConstants.NOT_ALLOWED_LON;
 	
 	public static AppLinkService getInstance() {
 		return instance;
@@ -266,7 +270,11 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 		show(welcomeMsg1, welcomeMsg2, TextAlignment.CENTERED);
 	}*/
    
-   public void onOnHMIStatus(OnHMIStatus notification) {
+   public double[] getLatLng() {
+		return new double[] {lat, lng};
+	}
+	
+	public void onOnHMIStatus(final OnHMIStatus notification) {
 		switch (notification.getSystemContext()) {
 		case SYSCTXT_MAIN:
 			break;
@@ -340,6 +348,16 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 				 */
 				//ALUtil.displayMessage(R.string.msg_welcome_to, R.string.msg_eventseeker);
 			}
+			
+			if (!isVehicleDataSubscribed) {
+				// initialize with location from phone
+				if (lat == AppConstants.NOT_ALLOWED_LAT) {
+					double[] latLng = DeviceUtil.getLatLon((EventSeekr) getApplication());
+			    	lat = latLng[0];
+			    	lng = latLng[1];
+				}
+				ALUtil.subscribeForGps();
+			}
 			break;
 			
 		case HMI_LIMITED:
@@ -391,7 +409,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	}
    
 	private void showLockScreen() {
-		Log.d(TAG, "showLockScreen()");
+		//Log.d(TAG, "showLockScreen()");
 		// only throw up lockscreen if main activity is currently on top
 		// else, wait until onResume() to throw lockscreen so it doesn't
 		// pop-up while a user is using another app on the phone
@@ -409,11 +427,12 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	}
 
 	private void clearLockScreen() {
-		Log.d(TAG, "clearlockscreen()");
+		//Log.d(TAG, "clearlockscreen()");
 		if (LockScreenActivity.getInstance() != null) {
 			LockScreenActivity.getInstance().exit();
 		}
 		lockscreenUP = false;
+		//ALUtil.unsubscribeForGps();
 	}
 
 	public boolean getLockScreenStatus() {return lockscreenUP;}
@@ -423,38 +442,10 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	        proxy.subscribeButton(ButtonName.OK, autoIncCorrId++);
 	        proxy.subscribeButton(ButtonName.SEEKLEFT, autoIncCorrId++);
 			proxy.subscribeButton(ButtonName.SEEKRIGHT, autoIncCorrId++);
-			// TODO: Remove following subscriptions
-			proxy.subscribeButton(ButtonName.PRESET_0, autoIncCorrId++);
-			proxy.subscribeButton(ButtonName.PRESET_1, autoIncCorrId++);
-			proxy.subscribeButton(ButtonName.PRESET_2, autoIncCorrId++);
-			proxy.subscribeButton(ButtonName.PRESET_3, autoIncCorrId++);
-			proxy.subscribeButton(ButtonName.PRESET_4, autoIncCorrId++);
-			proxy.subscribeButton(ButtonName.PRESET_5, autoIncCorrId++);
-			proxy.subscribeButton(ButtonName.PRESET_6, autoIncCorrId++);
-			proxy.subscribeButton(ButtonName.PRESET_7, autoIncCorrId++);
-			proxy.subscribeButton(ButtonName.PRESET_8, autoIncCorrId++);
-			proxy.subscribeButton(ButtonName.PRESET_9, autoIncCorrId++);
+			
 		} catch (SyncException e) {}
 	}
 	
-	/*public void unSubscribeButtons() {
-		try {
-			proxy.unsubscribeButton(ButtonName.OK, autoIncCorrId++);
-			proxy.unsubscribeButton(ButtonName.SEEKLEFT, autoIncCorrId++);
-			proxy.unsubscribeButton(ButtonName.SEEKRIGHT, autoIncCorrId++);
-			proxy.unsubscribeButton(ButtonName.PRESET_0, autoIncCorrId++);
-			proxy.unsubscribeButton(ButtonName.PRESET_1, autoIncCorrId++);
-			proxy.unsubscribeButton(ButtonName.PRESET_2, autoIncCorrId++);
-			proxy.unsubscribeButton(ButtonName.PRESET_3, autoIncCorrId++);
-			proxy.unsubscribeButton(ButtonName.PRESET_4, autoIncCorrId++);
-			proxy.unsubscribeButton(ButtonName.PRESET_5, autoIncCorrId++);
-			proxy.unsubscribeButton(ButtonName.PRESET_6, autoIncCorrId++);
-			proxy.unsubscribeButton(ButtonName.PRESET_7, autoIncCorrId++);
-			proxy.unsubscribeButton(ButtonName.PRESET_8, autoIncCorrId++);
-			proxy.unsubscribeButton(ButtonName.PRESET_9, autoIncCorrId++);
-		} catch (SyncException e) {}
-	}*/
-
 	public void onOnDriverDistraction(OnDriverDistraction notification) {
 		driverDistractionNotif = true;
 		// Log.d(TAG, "dd: " + notification.getStringState());
@@ -469,7 +460,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	}
 
 	public void onOnCommand(OnCommand notification) {
-		Log.d(TAG, "onOnCommand");
+		//Log.d(TAG, "onOnCommand");
 		/*
 		 * notification obj structure :
 		 * {"notification": {"name": "OnCommand", "parameters": {"cmdID": "3", "triggerSource": "MENU"}}}
@@ -487,12 +478,12 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	}
 
 	public void onCreateInteractionChoiceSetResponse(CreateInteractionChoiceSetResponse response) {
-		Log.d(TAG, "onCreateInteractionChoiceSetResponse(), response: " + response.getInfo() + ", " 
-				+ response.getMessageType() + ", " + response.getResultCode());
+		/*Log.d(TAG, "onCreateInteractionChoiceSetResponse(), response: " + response.getInfo() + ", " 
+				+ response.getMessageType() + ", " + response.getResultCode());*/
 	}
 
 	public void onPerformInteractionResponse(PerformInteractionResponse response) {
-		Log.d(TAG, "onPerformInteractionResponse()");
+		//Log.d(TAG, "onPerformInteractionResponse()");
 		esIProxyALM.onPerformInteractionResponse(response);
 	}
 
@@ -520,15 +511,15 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	public void initiateESIProxyListener(Command cmd) {
 		switch (cmd) {
 			case DISCOVER:
-				Log.d(TAG, "DISCOVER");
+				//Log.d(TAG, "DISCOVER");
 				esIProxyALM =  DiscoverAL.getInstance((EventSeekr) getApplication());
 				break;
 			case MY_EVENTS:
-				Log.d(TAG, "MY EVENTS");
+				//Log.d(TAG, "MY EVENTS");
 				esIProxyALM =  MyEventsAL.getInstance((EventSeekr) getApplication());
 				break;
 			case SEARCH:
-				Log.d(TAG, "SEARCH");
+				//Log.d(TAG, "SEARCH");
 				esIProxyALM =  SearchAL.getInstance((EventSeekr) getApplication());
 				break;
 		}
@@ -542,7 +533,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 		esIProxyALM = MainAL.getInstance((EventSeekr) getApplication());
 		esIProxyALM.onStartInstance();
 	}
-
+	
 	public void onError(String info, Exception e) {}
 	
 	public void onGenericResponse(GenericResponse response) {}
@@ -615,8 +606,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	}
 
 	@Override
-	public void onGetVehicleDataResponse(GetVehicleDataResponse arg0) {
-		// TODO Auto-generated method stub
+	public void onGetVehicleDataResponse(final GetVehicleDataResponse arg0) {
 		
 	}
 
@@ -650,9 +640,18 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	}
 
 	@Override
-	public void onOnVehicleData(OnVehicleData arg0) {
-		// TODO Auto-generated method stub
+	public void onOnVehicleData(final OnVehicleData arg0) {
+		lat = arg0.getGps().getLatitudeDegrees();
+		lng = arg0.getGps().getLongitudeDegrees();
 		
+		/*currentUIActivity.runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				Toast.makeText(currentUIActivity, "onOnVehicleData lat = " + 
+						arg0.getGps().getLatitudeDegrees(), Toast.LENGTH_SHORT).show();
+			}
+		});*/
 	}
 
 	@Override
@@ -698,15 +697,26 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	}
 
 	@Override
-	public void onSubscribeVehicleDataResponse(SubscribeVehicleDataResponse arg0) {
-		// TODO Auto-generated method stub
-		
+	public void onSubscribeVehicleDataResponse(final SubscribeVehicleDataResponse arg0) {
+		VehicleDataResultCode resultCode = arg0.getGps().getResultCode();
+		if (resultCode == VehicleDataResultCode.SUCCESS || resultCode == VehicleDataResultCode.DATA_ALREADY_SUBSCRIBED) {
+			isVehicleDataSubscribed = true;
+			
+		} else {
+			isVehicleDataSubscribed = false;
+		}
+		/*currentUIActivity.runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				Toast.makeText(currentUIActivity, "onSubscribeVehicleDataResponse " + 
+						arg0.getGps().getResultCode().name(), Toast.LENGTH_SHORT).show();
+			}
+		});*/
 	}
 
 	@Override
-	public void onUnsubscribeVehicleDataResponse(
-			UnsubscribeVehicleDataResponse arg0) {
-		// TODO Auto-generated method stub
-		
+	public void onUnsubscribeVehicleDataResponse(final UnsubscribeVehicleDataResponse arg0) {
+		//isVehicleDataSubscribed = false;
 	}
 }

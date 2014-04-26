@@ -164,7 +164,7 @@ public class SearchAL extends ESIProxyALM {
 	}
 	
 	private void loadSearchedEvent() {
-		double[] latLon = DeviceUtil.getLatLon((EventSeekr) MainActivity.getInstance().getApplication());
+		double[] latLon = AppLinkService.getInstance().getLatLng();
 		
 		Calendar c = Calendar.getInstance();
 		String startDate = ConversionUtil.getDay(c);

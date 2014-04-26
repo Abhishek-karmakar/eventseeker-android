@@ -199,8 +199,8 @@ public class EventALUtil {
 	
 	public static void onNextCommand(EventList eventList, EventSeekr context) {
 		if (eventList.moveToNextEvent()) {
-			EventALUtil.displayCurrentEvent(eventList);
-			EventALUtil.speakEventTitle(eventList.getCurrentEvent(), context);
+			displayCurrentEvent(eventList);
+			speakEventTitle(eventList.getCurrentEvent(), context);
 			
 		} else {
 			Resources res = context.getResources();
@@ -211,8 +211,8 @@ public class EventALUtil {
 
 	public static void onBackCommand(EventList eventList,EventSeekr context) {
 		if (eventList.moveToPreviousEvent()) {
-			EventALUtil.displayCurrentEvent(eventList);
-			EventALUtil.speakEventTitle(eventList.getCurrentEvent(), context);
+			displayCurrentEvent(eventList);
+			speakEventTitle(eventList.getCurrentEvent(), context);
 			
 		} else {
 			Resources res = context.getResources();
