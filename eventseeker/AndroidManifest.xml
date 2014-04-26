@@ -82,7 +82,8 @@
         <activity
             android:name="com.wcities.eventseeker.LockScreenActivity"
             android:label="Locked"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" />
         
         <activity
             android:name="com.wcities.eventseeker.exception.ReportActivity"

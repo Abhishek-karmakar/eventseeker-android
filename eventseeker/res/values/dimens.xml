@@ -589,6 +589,7 @@
     <dimen name="img_ford_logo_w_h_lock_screen">180dp</dimen>	
     <dimen name="img_ford_logo_margin_t_lock_screen">90dp</dimen>	
     <dimen name="margin_t_lock_screen">10dp</dimen>	
+    <dimen name="margin_b_lock_screen">15dp</dimen>	
     <dimen name="txt_eventseeker_lock_screen">24sp</dimen>	
     <dimen name="txt_lock_screen_lock_screen">22sp</dimen>	
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for ford ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
