@@ -161,7 +161,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		Vector<Integer> interactionChoiceSetIDList = new Vector<Integer>();
 		interactionChoiceSetIDList.add(CHOICE_SET_ID_DISCOVER);
 		
-		String simple = AppLinkService.getInstance().getString(R.string.discover_al_discover_categories);
+		String simple = context.getResources().getString(R.string.discover_al_discover_categories);
 		String initialText = context.getResources().getString(R.string.discover_al_discover);		
 		
 		Vector<TTSChunk> initChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
@@ -175,9 +175,12 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 	public void onPerformInteractionResponse(PerformInteractionResponse response) {
 		Log.i(TAG, "onPerformInteractionResponse(), response.getChoiceID() = " + response.getChoiceID());
 		
-		if (Discover.getDiscoverChoiceId(response.getChoiceID()) == null) {
-			//TODO: when Choice Id is invalid that is null	
-			Log.i(TAG, "Discover.getDiscoverChoiceId(response.getChoiceID()) == null");
+		if (response == null || response.getChoiceID() == null) {
+			/**
+			* This will happen when on Choice menu user selects cancel button
+			*/
+			Log.i(TAG, "ChoiceID == null");
+			return;
 		}
 		
 		generateLatLon();
