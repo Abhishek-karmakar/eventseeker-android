@@ -343,7 +343,7 @@
     <string name="discover_al_festivals">Festivales</string>
     
     <!-- SearchAL -->
-    <string name="search_events_or_artists">OK, ¿Usted quiere buscar por artista, o evento?</string>
+    <string name="search_events_or_artists">OK, ¿Usted quiere buscar por artista, evento o lugar?</string>
     <string name="search_event">Evento</string>
     <string name="search_artist">Artista</string>
     

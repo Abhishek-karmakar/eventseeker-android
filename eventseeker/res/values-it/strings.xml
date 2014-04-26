@@ -316,4 +316,54 @@
     <string name="txt_app_details"><![CDATA[<b>App name :</b> eventseeker<br/><b>Description :</b> The eventseeker is the premier sources for event, artist and ticketing information available anywhere, gathered from worldwide ticketing partners, in-house research, and the insight of local contributors around the world.<br/><b>Mailing address :</b> Wcities.com, Inc. 512 2nd Street Second Floor, San Francisco, CA 94107, USA<br/><b>Tel :</b> 4154958090<br/><b>Fax : </b>4154958093]]></string>
   	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for Ford ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!-- Common Messages -->
+    <string name="msg_welcome_to">Benvenuti a</string>
+    <string name="msg_eventseeker">Eventseeker!</string>
+    <string name="time_out">Richiesta scaduta</string>
+    <string name="ford_phone_no_is_unavailable">Scusa ma il numero di telefono non è disponibile</string>
+    
+    <!-- Commands -->
+    <string name="al_command_next">Prossimo</string>
+    <string name="al_command_back">Ritornare</string>
+    <string name="al_command_details">Dettagli</string>
+    <string name="al_command_play">Play</string>
+    <string name="al_command_call_venue">Chiamare il luogo</string>
+    <string name="al_command_follow">Seguire</string>
+    
+    <!-- MainActivityAL -->
+    <string name="al_command_my_events">I miei eventi</string>
+    <string name="al_command_discover">Scoprire</string>
+    <string name="al_command_search">Cercare</string>
+    
+    <!-- DiscoverActivityAL -->
+    <string name="discover_al_discover_categories">OK, vuoi cercare concerti, club, sport, teatri o festival?</string>
+    <string name="discover_al_discover">Dici categoria</string>
+    <string name="discover_al_concerts">concerti</string>
+    <string name="discover_al_clubs">club</string>
+    <string name="discover_al_sports">sport</string>
+    <string name="discover_al_theater">teatri</string>
+    <string name="discover_al_festivals">festival</string>
+    
+    <!-- SearchAL -->
+    <string name="search_events_or_artists">OK, vuoi cercare artisti, eventi o luoghi?</string>
+    <string name="search_event">Evento</string>
+    <string name="search_artist">artista</string>
+    
+    <!-- Events -->
+    <string name="event_no_evts_avail">Non ci sono eventi disponibili.</string>
+    <string name="plz_press_nxt_or_bck">, Per favore premi il pulsante di voce e dici prossimo o dietro.</string>
+    <string name="is_performing_for_this_event">parteciperà a questo evento</string>
+    <string name="are_performing_for_this_event">parteciperanno a questo evento</string>
+    <string name="price_would_be">, il prezzo sarebbe</string>
+    <string name="price_range_would_be">, il prezzo sarebbe circa fra</string>
+    <string name="and">e</string>
+    
+    <!-- MyEventsAL -->
+    <string name="my_events_al_yes">Si</string>
+    <string name="my_events_al_no">Non</string>
+    <string name="my_events_al_no_evts_avail_make_suggestions">Non ci sono eventi disponibili, posso fare dei suggerimenti?</string>
+    <string name="my_events_how_can_i_help">Come posso aiutarti?</string>
+    
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for Ford ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 </resources>
