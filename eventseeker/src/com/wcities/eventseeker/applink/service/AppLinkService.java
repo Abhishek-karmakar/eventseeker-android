@@ -13,7 +13,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.ford.syncV4.exception.SyncException;
 import com.ford.syncV4.exception.SyncExceptionCause;
@@ -33,7 +32,6 @@ import com.ford.syncV4.proxy.rpc.EncodedSyncPDataResponse;
 import com.ford.syncV4.proxy.rpc.EndAudioPassThruResponse;
 import com.ford.syncV4.proxy.rpc.GenericResponse;
 import com.ford.syncV4.proxy.rpc.GetDTCsResponse;
-import com.ford.syncV4.proxy.rpc.GetVehicleData;
 import com.ford.syncV4.proxy.rpc.GetVehicleDataResponse;
 import com.ford.syncV4.proxy.rpc.ListFilesResponse;
 import com.ford.syncV4.proxy.rpc.OnAudioPassThru;
@@ -263,16 +261,16 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 		}
    }*/
    
-   /*public void showWelcomeMsg() {
+    /*public void showWelcomeMsg() {
 		//String welcomeMsg1 = "Inside", welcomeMsg2 = "eventseekr!";
 	   	String welcomeMsg1 = AppLinkService.getStringFromRes(R.string.msg_welcome_to), 
 	   	welcomeMsg2 = AppLinkService.getStringFromRes(R.string.msg_eventseeker);
 		show(welcomeMsg1, welcomeMsg2, TextAlignment.CENTERED);
 	}*/
    
-   public double[] getLatLng() {
+   	public double[] getLatLng() {
 		return new double[] {lat, lng};
-	}
+   	}
 	
 	public void onOnHMIStatus(final OnHMIStatus notification) {
 		switch (notification.getSystemContext()) {
