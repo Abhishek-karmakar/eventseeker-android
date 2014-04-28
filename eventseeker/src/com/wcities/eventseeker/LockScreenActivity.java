@@ -24,37 +24,9 @@ public class LockScreenActivity extends Activity {
         super.onCreate(savedInstanceState);
         instance = this;
         setContentView(R.layout.activity_lock_screen);
-		
-		/*final Button resetSYNCButton = (Button)findViewById(R.id.lockreset);
-		resetSYNCButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				//if not already started, show main activity and end lock screen activity
-				if (MainActivity.getInstance() == null) {
-					Intent i = new Intent(getBaseContext(), MainActivity.class);
-					i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					getApplication().startActivity(i);
-				}
-				Log.i(TAG, "start MainActivity");
-				
-				//reset proxy; do not shut down service
-				AppLinkService serviceInstance = AppLinkService.getInstance();
-				if (serviceInstance != null) {
-					SyncProxyALM proxyInstance = serviceInstance.getProxy();
-					if (proxyInstance != null) {
-						serviceInstance.reset();
-						
-					} else {
-						serviceInstance.startProxy();
-					}
-				}
-				
-				exit();
-			}
-		});*/
     }
     
-    //disable back button on lockscreen
+    //disable back button on lock screen
     @Override
     public void onBackPressed() {
     }
