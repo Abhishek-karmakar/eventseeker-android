@@ -96,10 +96,21 @@ public class CommandsUtil {
 			return str;
 		}
 		
+		private String getSoftBtnText() {
+			switch (this) {
+			
+			case DISCOVER:
+				return AppLinkService.getInstance().getResources().getString(R.string.soft_btn_discover);
+
+			default:
+				return toString();
+			}
+		}
+		
 		public SoftButton buildSoftBtn() {
 			SoftButton softBtn = new SoftButton();
 			softBtn.setSoftButtonID(cmdId);
-			softBtn.setText(toString());
+			softBtn.setText(getSoftBtnText());
 			softBtn.setIsHighlighted(false);
 			softBtn.setSystemAction(SystemAction.DEFAULT_ACTION);
 			softBtn.setType(SoftButtonType.SBT_TEXT);

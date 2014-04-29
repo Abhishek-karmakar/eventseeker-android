@@ -99,7 +99,7 @@ public class SelectCalendarFragment extends DialogFragment {
 			        reminderValues.put("method", 1); // Alert Methods: Default(0), Alert(1), Email(2), SMS(3)
 
 			        Uri reminderUri = contentResolver.insert(Uri.parse(reminderUriString), reminderValues);
-					msg = "Event added to calendar successfully!";
+					msg = FragmentUtil.getResources(SelectCalendarFragment.this).getString(R.string.event_added_to_calender_successfully);
 					//Log.d(TAG, "event uri = " + url);
 				}
 				

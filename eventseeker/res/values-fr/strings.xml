@@ -51,7 +51,11 @@
     <string name="yes">oui</string>
     <string name="go_to_login">Afficher la page de connéxion?</string>
 	<string name="add_to_calender">Ajouter</string>
-			
+	<string name="select_calender">Sélectionner l\'Agenda</string>
+	<string name="event_added_to_calender_successfully">Événement Ajouté au Calendrier</string>
+	<string name="event_not_found">Impossible de trouver l\'événement pour l\'ajouter à l\'agenda.</string>
+	<string name="can_not_add_event_to_calender">Impossible d\'ajouter l\'événement à l\'agenda à cause d\'un programme inconnu.</string>		
+	
     <!-- Strings used for navigation drawer list -->
     <string name="navigation_drawer_section_browse">Naviguer</string>
     <string name="navigation_drawer_item_discover">@string/title_discover</string>
@@ -324,7 +328,7 @@
     
     <!-- MainActivityAL -->
     <string name="al_command_my_events">Mes événements</string>
-    <string name="al_command_discover">Decouvrir</string>
+    <string name="al_command_discover">Explorer</string>
     <string name="al_command_search">Chercher</string>
     
    	<!-- DiscoverActivityAL -->

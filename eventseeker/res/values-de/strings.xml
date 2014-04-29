@@ -50,7 +50,12 @@
     <string name="connection_lost">Die Internetverbindung scheint offline zu sein.</string>
     <string name="yes">Ja</string>
     <string name="go_to_login">Zur Anmeldung gehen?</string>
-			
+    <string name="add_to_calender">Zum Kalender hinzufügen</string>
+    <string name="select_calender">Kalender auswählen</string>
+    <string name="event_added_to_calender_successfully">Veranstaltung erfolgreich zum Kalender hinzugefügt!</string>
+    <string name="event_not_found">Veranstaltung nicht gefunden, um zum Kalender hinzugefügt zu werden.</string>
+	<string name="can_not_add_event_to_calender">Veranstaltung kann nicht zum Kalender hinzugefügt werden, aufgrund von unbekanntem Zeitplan.</string>		
+    
     <!-- Strings used for navigation drawer list -->
     <string name="navigation_drawer_section_browse">Stöbern</string>
     <string name="navigation_drawer_item_discover">@string/title_discover</string>
@@ -321,6 +326,9 @@
     <string name="al_command_play">Abspielen</string>
     <string name="al_command_call_venue">Veranstaltungsort anrufen</string>
     <string name="al_command_follow">Folgen</string>
+    
+    <!-- SoftButtons -->
+    <string name="soft_btn_discover">Entd.</string>
     
     <!-- MainActivityAL -->
     <string name="al_command_my_events">Meine Veranstaltungen</string>

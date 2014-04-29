@@ -330,7 +330,7 @@
     
     <!-- MainActivityAL -->
     <string name="al_command_my_events">Mis Eventos</string>
-    <string name="al_command_discover">Descubre</string>
+    <string name="al_command_discover">Explorar</string>
     <string name="al_command_search">Buscar</string>
     
     <!-- DiscoverActivityAL -->

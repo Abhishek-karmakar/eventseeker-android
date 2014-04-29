@@ -56,6 +56,7 @@
 	<string name="select_calender">Selezioni calendario</string>
 	<string name="event_added_to_calender_successfully">Evento aggiunto al calendario</string>
 	<string name="event_not_found">Evento non trovato</string>
+	<string name="can_not_add_event_to_calender">Impossibile aggiungere questo evento al calendario a causa dell’orario sconosciuto.</string>
 	
     <!-- Strings used for navigation drawer list -->
     <string name="navigation_drawer_section_browse">Sfogliare</string>
@@ -333,7 +334,7 @@
     
     <!-- MainActivityAL -->
     <string name="al_command_my_events">I miei eventi</string>
-    <string name="al_command_discover">Scoprire</string>
+    <string name="al_command_discover">Esplorare</string>
     <string name="al_command_search">Cercare</string>
     
     <!-- DiscoverActivityAL -->
