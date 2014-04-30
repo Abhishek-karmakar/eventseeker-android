@@ -21,7 +21,9 @@ import android.os.Looper;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.IPToCityApi;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -53,6 +55,10 @@ public class DeviceUtil {
 	 */
 	public static double[] getLatLon(EventSeekr eventSeekr) {
 		//Log.d(TAG, "getLatLon()");
+		if (MySpinServerSDK.sharedInstance().isConnected() && !AppConstants.IS_CAR_STATIONARY) {
+			return getCurrentLatLonForBosch(eventSeekr);
+		}
+		
 		double[] latLon = new double[] {0, 0};
 		
 		final LocationManager locationManager = getLocationManagerInstance(eventSeekr);
@@ -211,6 +217,60 @@ public class DeviceUtil {
     	if (latLon[0] == 0 && latLon[1] == 0) {
 	    	latLon[0] = SAN_FRANCISCO_LAT;
 			latLon[1] = SAN_FRANCISCO_LON;
+    	}
+    	
+    	return latLon;
+    }
+	
+	private static double[] getCurrentLatLonForBosch(EventSeekr eventSeekr) {
+		//Log.d(TAG, "getLatLon()");
+		double[] latLon = new double[] {0, 0};
+		
+		LocationManager locationManager = getLocationManagerInstance(eventSeekr);
+
+		// getting GPS status
+        boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        // getting network status
+        boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        
+        if (isGPSEnabled || isNetworkEnabled) {
+        	Location lastKnownLocation = null;
+
+        	if (isGPSEnabled) {
+        		lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+				if (lastKnownLocation != null) {
+                 	latLon[0] = lastKnownLocation.getLatitude();
+ 		        	latLon[1] = lastKnownLocation.getLongitude();
+ 		        	updateCurLatLon(eventSeekr, latLon[0], latLon[1]);
+				} 
+            } 
+        	
+        	if (isNetworkEnabled && lastKnownLocation == null) {
+            	//get location from Network Provider
+
+                if (locationManager != null) {
+                	lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                        
+                	if (lastKnownLocation != null) {
+                        latLon[0] = lastKnownLocation.getLatitude();
+        		        latLon[1] = lastKnownLocation.getLongitude();
+        		        updateCurLatLon(eventSeekr, latLon[0], latLon[1]);
+                    }
+                }
+			}
+        } 
+
+    	if (latLon[0] == 0 && latLon[1] == 0) {
+    		if (eventSeekr.getCurLat() != AppConstants.NOT_ALLOWED_LAT 
+        			&& eventSeekr.getCurLon() != AppConstants.NOT_ALLOWED_LON) {
+        		latLon[0] = eventSeekr.getCurLat();
+        		latLon[1] = eventSeekr.getCurLon();
+        		
+        	} else {
+		    	latLon[0] = SAN_FRANCISCO_LAT;
+				latLon[1] = SAN_FRANCISCO_LON;
+        	}
     	}
     	
     	return latLon;

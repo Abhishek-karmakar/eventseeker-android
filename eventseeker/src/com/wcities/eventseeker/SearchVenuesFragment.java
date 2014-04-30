@@ -30,6 +30,7 @@ import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
+import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class SearchVenuesFragment extends ListFragment implements SearchFragmentChildListener, 
@@ -46,6 +47,7 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 	private VenueListAdapter venueListAdapter;
 	
 	private List<Venue> venueList;
+	private double[] latLng;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -85,7 +87,10 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 	
 	@Override
 	public void loadItemsInBackground() {
-		loadVenues = new LoadVenues(this, venueListAdapter, venueList);
+		if (latLng == null) {
+			latLng = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
+		}
+		loadVenues = new LoadVenues(this, venueListAdapter, venueList, latLng);
 		venueListAdapter.setLoadVenues(loadVenues);
         AsyncTaskUtil.executeAsyncTask(loadVenues, true, query);
 	}

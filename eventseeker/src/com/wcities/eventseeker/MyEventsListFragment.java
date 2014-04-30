@@ -44,6 +44,7 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 	private DateWiseEventList dateWiseEvtList;
 	
 	private ScrollView scrlVRootNoItemsFoundWithAction;
+	private double[] latLon;
 	
 	/**
 	 * Using its instance variable since otherwise calling getResources() directly from fragment from 
@@ -99,7 +100,9 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 	
 	@Override
 	public void loadItemsInBackground() {
-		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
+		if (latLon == null) {
+			latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
+		}
 		loadEvents = new LoadMyEvents(dateWiseEvtList, eventListAdapter, wcitiesId, loadType, 
 				latLon[0], latLon[1], this);
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);

@@ -27,6 +27,7 @@ public class SearchEventsFragment extends SearchEventsParentFragment implements 
 	private static final String TAG = SearchEventsFragment.class.getName();
 
 	private DateWiseEventListAdapter eventListAdapter;
+	private double[] latLon;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,7 +60,9 @@ public class SearchEventsFragment extends SearchEventsParentFragment implements 
 
 	@Override
 	public void loadItemsInBackground() {
-		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
+		if (latLon == null) {
+			latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
+		}
 		
 		Calendar c = Calendar.getInstance();
 		String startDate = ConversionUtil.getDay(c);

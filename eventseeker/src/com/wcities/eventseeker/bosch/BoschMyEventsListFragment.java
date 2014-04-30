@@ -33,6 +33,7 @@ public class BoschMyEventsListFragment extends ListFragment implements OnClickLi
 	private BoschLazyLoadingEventListAdapter eventListAdapter;
 	
 	private Type loadType;
+	private double[] latLon;
 
 	public static String getTag(Type loadType) {
 		return BoschMyEventsListFragment.class.getSimpleName() + loadType.name(); 
@@ -100,7 +101,9 @@ public class BoschMyEventsListFragment extends ListFragment implements OnClickLi
 
 	@Override
 	public void loadItemsInBackground() {
-		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
+		if (latLon == null) {
+			latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
+		}
 		loadEvents = new LoadMyEvents(eventList, eventListAdapter, wcitiesId, loadType, latLon[0], 
 				latLon[1]);
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);

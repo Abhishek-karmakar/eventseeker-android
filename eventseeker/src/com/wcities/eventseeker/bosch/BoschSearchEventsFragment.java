@@ -37,6 +37,7 @@ public class BoschSearchEventsFragment extends ListFragment implements LoadItems
 	private LoadDateWiseEvents loadEvents;
 
 	private BoschDateWiseEventListAdapter eventLstAdptr;
+	private double[] latLon;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,7 +77,9 @@ public class BoschSearchEventsFragment extends ListFragment implements LoadItems
 	
 	@Override
 	public void loadItemsInBackground() {
-		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
+		if (latLon == null) {
+			latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
+		}
 		
 		Calendar c = Calendar.getInstance();
 		String startDate = ConversionUtil.getDay(c);
