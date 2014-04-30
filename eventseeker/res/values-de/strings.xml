@@ -316,7 +316,7 @@
     <!-- Common Messages -->
     <string name="msg_welcome_to">Willkommen zum</string>
     <string name="msg_eventseeker">Eventseeker!</string>
-    <string name="time_out">Auszeit</string>
+    <string name="time_out">Zeitüberschreitung</string>
     <string name="ford_phone_no_is_unavailable">Entschuldigung. Die Telefonnummer ist nicht verfügbar</string>
     
     <!-- Commands -->
@@ -345,17 +345,31 @@
     <string name="discover_al_festivals">Feste</string>
     
     <!-- SearchAL -->
-    <string name="search_events_or_artists">Okay, möchten Sie Artist, Ereignis oder Veranstaltungsort suchen?</string>
+    <string name="search_events_or_artists">Okay, möchten Sie Künstler, oder Ereignis suchen?</string>
+    <string name="search_for">Suche nach</string>
+    <string name="searching_for">Suche nach</string>
     <string name="search_event">Veranstaltung</string>
     <string name="search_artist">Künstler</string>
+    <string name="say_event_name">Sagen Sie Ereignis Name</string>
+    <string name="say_artist_name">Sagen Sie Künstler Name</string>
+    <string name="alert_no_artists_available">keine Künstler verfügbar.</string>
+    <string name="no_artists_avail">Es sind keine Künstler verfügbar.</string>
+    <string name="already_followed">Bereits am Folgen</string>
+    <string name="followed">Gefolgt</string>
+    <string name="search_event_text">Suche Ereignis</string>
+    <string name="search_artist_text">Suche Künstler</string>
+    <string name="listening">Hören..</string>
+    <string name="processing">Verarbeiten..</string>
+    <string name="nuance_error">Entschuldigung, ein Fehler ist aufgetreten. Bitte wählen Sie die Sprachfunktion und sagen Sie meineVeranstaltungen,Entdecken oder Suche</string>
     
     <!-- Events -->
     <string name="event_no_evts_avail">Es sind keine Veranstaltungen verfügbar.</string>
     <string name="plz_press_nxt_or_bck">, drücken Sie bitte das Voice Button und sagen Sie nächste oder zurück.</string>
+    <string name="detail_not_available">Beschreibung Nicht verfügbar</string>
     <string name="is_performing_for_this_event">führt bei dieser Veranstaltung auf</string>
     <string name="are_performing_for_this_event">führen bei dieser Veranstaltung auf</string>
     <string name="price_would_be">, Kosten würden ..... sein</string>
-    <string name="price_range_would_be">, Preisklasse wird ungefähr zwischen ..... und...sein</string>
+    <string name="price_range_would_be">, Preisklasse wird ungefähr zwischen</string>
     <string name="and">und</string>
     
     <!-- MyEventsAL -->
