@@ -1,4 +1,4 @@
-package com.wcities.eventseeker.applink.datastructure;
+package com.wcities.eventseeker.applink.core;
 
 import java.util.ArrayList;
 import java.util.List;

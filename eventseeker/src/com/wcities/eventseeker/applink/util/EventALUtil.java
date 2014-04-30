@@ -13,7 +13,7 @@ import com.ford.syncV4.proxy.TTSChunkFactory;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
-import com.wcities.eventseeker.applink.datastructure.EventList;
+import com.wcities.eventseeker.applink.core.EventList;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.BookingInfo;

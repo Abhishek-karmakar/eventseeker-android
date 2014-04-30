@@ -13,7 +13,7 @@ import org.json.JSONObject;
 import android.util.SparseArray;
 
 import com.wcities.eventseeker.api.Api;
-import com.wcities.eventseeker.applink.datastructure.EventList.GetEventsFrom;
+import com.wcities.eventseeker.applink.core.EventList.GetEventsFrom;
 import com.wcities.eventseeker.core.Address;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.BookingInfo;

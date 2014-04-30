@@ -1,5 +1,6 @@
 package com.wcities.eventseeker.applink.handler;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.Arrays;
@@ -14,12 +15,16 @@ import org.json.JSONObject;
 import android.content.res.Resources;
 import android.util.Log;
 
+import com.ford.syncV4.exception.SyncException;
 import com.ford.syncV4.proxy.TTSChunkFactory;
 import com.ford.syncV4.proxy.rpc.Choice;
-import com.ford.syncV4.proxy.rpc.OnCommand;
+import com.ford.syncV4.proxy.rpc.OnAudioPassThru;
+import com.ford.syncV4.proxy.rpc.PerformAudioPassThruResponse;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
-import com.wcities.eventseeker.MainActivity;
+import com.ford.syncV4.proxy.rpc.enums.AudioType;
+import com.ford.syncV4.proxy.rpc.enums.BitsPerSample;
+import com.ford.syncV4.proxy.rpc.enums.SamplingRate;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.ArtistApi;
@@ -28,9 +33,10 @@ import com.wcities.eventseeker.api.EventApi;
 import com.wcities.eventseeker.api.EventApi.MoreInfo;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.app.EventSeekr;
-import com.wcities.eventseeker.applink.datastructure.ArtistList;
-import com.wcities.eventseeker.applink.datastructure.EventList;
-import com.wcities.eventseeker.applink.datastructure.EventList.GetEventsFrom;
+import com.wcities.eventseeker.applink.api.NuanceApi;
+import com.wcities.eventseeker.applink.core.ArtistList;
+import com.wcities.eventseeker.applink.core.EventList;
+import com.wcities.eventseeker.applink.core.EventList.GetEventsFrom;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.applink.util.ALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil;
@@ -45,11 +51,10 @@ import com.wcities.eventseeker.core.ItemsList;
 import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
 import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
 import com.wcities.eventseeker.util.ConversionUtil;
-import com.wcities.eventseeker.util.DeviceUtil;
 
 public class SearchAL extends ESIProxyALM {
 
-	private static final String TAG = SearchAL.class.getName();
+	private static final String TAG = SearchAL.class.getSimpleName();
 	private static final int CHOICE_SET_ID_SEARCH = 3;
 	private static final int EVENTS_LIMIT = 10;
 	private static final int MILES_LIMIT = 10000;
@@ -84,6 +89,7 @@ public class SearchAL extends ESIProxyALM {
 	private EventList eventList;
 	private ArtistList artistList;
 	private int selectedCategoryId;
+	private ByteArrayOutputStream audioDataOutputStream;
 	private String query;
 	
 	public SearchAL(EventSeekr context) {
@@ -103,13 +109,13 @@ public class SearchAL extends ESIProxyALM {
 	@Override
 	public void onStartInstance() {
 		//search_events_or_artists
-		Log.d(TAG, "onStartInstance()");
+		//Log.d(TAG, "onStartInstance()");
 		initializeInteractionChoiceSets();
 		performInteraction();		
 	}
 	
 	private void initializeInteractionChoiceSets() {
-		Log.d(TAG, "initializeInteractionChoiceSets()");
+		//Log.d(TAG, "initializeInteractionChoiceSets()");
 
 		Vector<Choice> choices = new Vector<Choice>();
 		
@@ -117,8 +123,8 @@ public class SearchAL extends ESIProxyALM {
 		for (int i = 0; i < categories.length; i++) {
 			SearchCategories category = categories[i];
 			
-			Log.d(TAG, "Category id : " + category.ordinal());
-			Log.d(TAG, "Category nameResId : " + category.getNameResId());
+			//Log.d(TAG, "Category id : " + category.ordinal());
+			//Log.d(TAG, "Category nameResId : " + category.getNameResId());
 			
 			Choice choice = ALUtil.createChoice(category.ordinal(), category.getNameResId(), 
 					new Vector<String>(Arrays.asList(new String[] {category.getNameResId()})));
@@ -129,8 +135,8 @@ public class SearchAL extends ESIProxyALM {
 	}
 	
 	private void performInteraction() {
-		Log.d(TAG, "performInteraction()");
-		Log.d(TAG, "Searchordinal : " + CHOICE_SET_ID_SEARCH);
+		//Log.d(TAG, "performInteraction()");
+		//Log.d(TAG, "Searchordinal : " + CHOICE_SET_ID_SEARCH);
 		
 		Vector<Integer> interactionChoiceSetIDList = new Vector<Integer>();
 		interactionChoiceSetIDList.add(CHOICE_SET_ID_SEARCH);
@@ -178,7 +184,7 @@ public class SearchAL extends ESIProxyALM {
 		EventApi eventApi = new EventApi(Api.OAUTH_TOKEN, latLon[0], latLon[1]);
 		eventApi.setLimit(EVENTS_LIMIT);
 		eventApi.setAlreadyRequested(eventsAlreadyRequested);
-		eventApi.setUserId(((EventSeekr) MainActivity.getInstance().getApplication()).getWcitiesId());//it can be null also
+		eventApi.setUserId(context.getWcitiesId());//it can also be null
 		eventApi.setStart(startDate);
 		eventApi.setEnd(endDate);
 		eventApi.setMiles(MILES_LIMIT);
@@ -248,71 +254,56 @@ public class SearchAL extends ESIProxyALM {
 	
 	@Override
 	public void onPerformInteractionResponse(PerformInteractionResponse response) {
-		Log.d(TAG, "onPerformInteractionResponse(), response.getChoiceID() = " + response.getChoiceID());
+		//Log.d(TAG, "onPerformInteractionResponse(), response.getChoiceID() = " + response.getChoiceID());
 		
-		if (SearchCategories.getSearchChoiceId(response.getChoiceID()) == null) {
-			//TODO: when Choice Id is invalid that is null
-			Log.d(TAG, "SearchCategories.getSearchChoiceId(response.getChoiceID()) == null");
+		if (response == null || response.getChoiceID() == null) {
+			/**
+			* This will happen when on Choice menu user selects cancel button
+			*/
+			Log.i(TAG, "ChoiceID == null");
+			return;
 		}
 		
 		selectedCategoryId = SearchCategories.getSearchChoiceId(response.getChoiceID()).ordinal();
-		Log.d(TAG, "Category selected : " + selectedCategoryId);
+		//Log.d(TAG, "Category selected : " + selectedCategoryId);
 		
 		addCommands();
-		
-		//show Welcome message when no events are available
-		if (eventList.isEmpty()) {
-			ALUtil.displayMessage(R.string.msg_welcome_to, R.string.msg_eventseeker);
-		}
-		
-		int msgResId = R.string.say_event_name;
-		if (selectedCategoryId == SearchCategories.SEARCH_ARTIST.ordinal()) {
-			msgResId = R.string.say_artist_name;
-		}
-
-		recordUserInput();
-		query = getTextFromNuanceApi();
-		
-		//After getting the text from nuance api and place a search call.
-		
-		//TODO:remove below line after the above implementation is completed
-		query = "a";
-		if (selectedCategoryId == SearchCategories.SEARCH_EVENT.ordinal()) {
-			loadSearchedEvent();
-
-			if (eventList.isEmpty()) {
-				AppLinkService.getInstance().initiateMainAL();
-			} 
-			EventALUtil.onNextCommand(eventList, context);
-			
-		} else {
-			loadSearchedArtist();
-
-			if (artistList.isEmpty()) {
-				AppLinkService.getInstance().initiateMainAL();
-			}
-			onNextArtistCommand(artistList, context);
-		}
+	
+		initiateSearchProcess();
 	}
 
-	private String getTextFromNuanceApi() {
+	private void initiateSearchProcess() {
 		/**
-		 * TODO:convert the user's input speech to the text form using Nuance api
-		 */				
-		return null;
-	}
-
-	private void recordUserInput() {
-		/**
-		 * TODO:ask for the user i/p and then process the User's speech
+		 * ask for the user i/p and then process the User's speech
 		 */
+		audioDataOutputStream = new ByteArrayOutputStream();
+		
+		try {
+		
+			int msgResId = R.string.say_event_name;
+			int search_cat = R.string.search_event_text;
+			if (selectedCategoryId == SearchCategories.SEARCH_ARTIST.ordinal()) {
+				msgResId = R.string.say_artist_name;
+				search_cat = R.string.search_artist_text;
+			}
+		
+			AppLinkService.getInstance().getProxy().performaudiopassthru(
+				context.getResources().getString(msgResId), context.getResources().getString(search_cat),
+				context.getResources().getString(R.string.listening), SamplingRate._8KHZ, 6000, BitsPerSample._16_BIT, 
+				AudioType.PCM, true, AppLinkService.getInstance().autoIncCorrId++);
+			
+			ALUtil.displayMessage(context.getResources().getString(R.string.processing), "");
+			
+		} catch (SyncException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void performOperationForCommand(Command cmd) {
 		if (cmd == null) {
 			return;
 		}
-		Log.d(TAG, "performOperationForCommand : " + cmd.name());
+		//Log.d(TAG, "performOperationForCommand : " + cmd.name());
 		
 		switch (cmd) {
 			case DISCOVER:
@@ -371,7 +362,7 @@ public class SearchAL extends ESIProxyALM {
 				} 
 				break;
 			default:
-				Log.d(TAG, cmd + " is an Invalid Command");
+				//Log.d(TAG, cmd + " is an Invalid Command");
 				break;
 			
 		}
@@ -413,14 +404,14 @@ public class SearchAL extends ESIProxyALM {
 			app.setFirstArtistTitleForFord(false);
 		}
 		
-		Log.d(TAG, "simple = " + simple);
+		//Log.d(TAG, "simple = " + simple);
 		Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
 		ALUtil.speakText(ttsChunks);				
 	}
 	
 	public static void speakDetailsOfArtist(Artist artist, EventSeekr app) {
 		String desc = artist.getDescription();
-		Log.d(TAG, "desc = " + desc);
+		//Log.d(TAG, "desc = " + desc);
 		if (desc == null) {
 			ALUtil.speak(R.string.detail_not_available);
 			return;
@@ -434,5 +425,58 @@ public class SearchAL extends ESIProxyALM {
 		selectedCategoryId = 0;
 		query = null;
 	}
+	
+	@Override
+	public void onOnAudioPassThru(OnAudioPassThru notification) {
+		super.onOnAudioPassThru(notification);
+		try {
+			byte[] tempBytes = notification.getAPTData();
+			//Log.d(TAG, "tempBytes l = " + tempBytes.length);
+				audioDataOutputStream.write(tempBytes);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
+	@Override
+	public void onPerformAudioPassThruResponse(PerformAudioPassThruResponse arg0) {
+		super.onPerformAudioPassThruResponse(arg0);
+		try {
+			if (audioDataOutputStream == null) {
+				return;
+			}
+			//Log.d(TAG, "audioDataOutputStream size : " + audioDataOutputStream.size());
+
+			query = (new NuanceApi()).execute(audioDataOutputStream);
+			Log.i(TAG, "Response Text from Nuance API: " + query);
+			if (query == null) {
+				ALUtil.speak(R.string.nuance_error);
+				AppLinkService.getInstance().initiateMainAL();
+				return;
+			}
+			
+			ALUtil.alertText(context.getResources().getString(R.string.searching_for), query);
+			//Log.d(TAG, "alert displayed");
+			
+			if (selectedCategoryId == SearchCategories.SEARCH_EVENT.ordinal()) {
+				loadSearchedEvent();
+
+				if (eventList.isEmpty()) {
+					AppLinkService.getInstance().initiateMainAL();
+				} 
+				EventALUtil.onNextCommand(eventList, context);
+				
+			} else {
+				loadSearchedArtist();
+
+				if (artistList.isEmpty()) {
+					AppLinkService.getInstance().initiateMainAL();
+				}
+				onNextArtistCommand(artistList, context);
+			}
+			
+		} catch (IOException e) {
+				e.printStackTrace();
+		}
+	}
 }

@@ -12,14 +12,12 @@ import com.ford.syncV4.proxy.rpc.Choice;
 import com.ford.syncV4.proxy.rpc.CreateInteractionChoiceSet;
 import com.ford.syncV4.proxy.rpc.DeleteCommand;
 import com.ford.syncV4.proxy.rpc.DeleteInteractionChoiceSet;
-import com.ford.syncV4.proxy.rpc.GetVehicleData;
 import com.ford.syncV4.proxy.rpc.MenuParams;
 import com.ford.syncV4.proxy.rpc.PerformInteraction;
 import com.ford.syncV4.proxy.rpc.SoftButton;
 import com.ford.syncV4.proxy.rpc.Speak;
 import com.ford.syncV4.proxy.rpc.SubscribeVehicleData;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
-import com.ford.syncV4.proxy.rpc.UnsubscribeVehicleData;
 import com.ford.syncV4.proxy.rpc.enums.InteractionMode;
 import com.ford.syncV4.proxy.rpc.enums.TextAlignment;
 import com.wcities.eventseeker.applink.service.AppLinkService;
@@ -123,7 +121,7 @@ public class ALUtil {
 		
 		try {
 			AppLinkService.getInstance().getProxy().sendRPCRequest(msg);
-			Log.d(TAG, "PerformInteraction sendRPCRequest() done");
+			//Log.d(TAG, "PerformInteraction sendRPCRequest() done");
 			
 		} catch (SyncException e) {
 			e.printStackTrace();
@@ -140,23 +138,7 @@ public class ALUtil {
 		Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(str);			
 		ALUtil.speakText(ttsChunks);
 	}
-/*	
-	public static void speak(String str) {
-		int maxStrChars = 299;
-		String temp = (str.length() > maxStrChars + 1) ? str.substring(0, maxStrChars) : str;
-		Log.d(TAG, "Speak Text Chunck : " + temp);
-		Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(temp);			
-		ALUtil.speakText(ttsChunks);
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		if (str.length() > maxStrChars + 1) {
-			speak(str.substring(maxStrChars, str.length()));
-		}
-	}
-*/	
+
 	public static void speakText(Vector<TTSChunk> ttsChunks) {
 		Speak msg = new Speak();
 		msg.setCorrelationID(AppLinkService.getInstance().autoIncCorrId++);
@@ -211,6 +193,22 @@ public class ALUtil {
 			msg.setPlayTone(true);
 			Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(speakText);
 			msg.setTtsChunks(ttsChunks);
+			AppLinkService.getInstance().getProxy().sendRPCRequest(msg);
+			
+		} catch (SyncException e) {
+			e.printStackTrace();
+			Log.d(TAG, "Failed to show alert");
+		}
+	}
+	
+	public static void alertText(String alertText1, String alertText2) {
+		try {
+			Alert msg = new Alert();
+			msg.setCorrelationID(AppLinkService.getInstance().autoIncCorrId++);
+			msg.setAlertText1(alertText1);
+			msg.setAlertText2(alertText2);
+			msg.setDuration(3000);
+			msg.setPlayTone(true);
 			AppLinkService.getInstance().getProxy().sendRPCRequest(msg);
 			
 		} catch (SyncException e) {

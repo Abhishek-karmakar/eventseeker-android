@@ -575,31 +575,26 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 
 	@Override
 	public void onChangeRegistrationResponse(ChangeRegistrationResponse arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onDeleteFileResponse(DeleteFileResponse arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onDialNumberResponse(DialNumberResponse arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onEndAudioPassThruResponse(EndAudioPassThruResponse arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onGetDTCsResponse(GetDTCsResponse arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -610,14 +605,14 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 
 	@Override
 	public void onListFilesResponse(ListFilesResponse arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onOnAudioPassThru(OnAudioPassThru arg0) {
-		// TODO Auto-generated method stub
-		
+		if (esIProxyALM instanceof SearchAL) {
+			esIProxyALM.onOnAudioPassThru(arg0);
+		}
 	}
 
 	@Override
@@ -654,43 +649,38 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 
 	@Override
 	public void onPerformAudioPassThruResponse(PerformAudioPassThruResponse arg0) {
-		// TODO Auto-generated method stub
-		
+		if (esIProxyALM instanceof SearchAL) {
+			esIProxyALM.onPerformAudioPassThruResponse(arg0);
+		}		
 	}
 
 	@Override
 	public void onPutFileResponse(PutFileResponse arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onReadDIDResponse(ReadDIDResponse arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onScrollableMessageResponse(ScrollableMessageResponse arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onSetAppIconResponse(SetAppIconResponse arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onSetDisplayLayoutResponse(SetDisplayLayoutResponse arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onSliderResponse(SliderResponse arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
