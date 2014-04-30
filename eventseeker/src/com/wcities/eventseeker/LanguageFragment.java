@@ -2,9 +2,9 @@ package com.wcities.eventseeker;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import android.content.Context;
-import android.net.rtp.RtpStream;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -105,6 +105,19 @@ public class LanguageFragment extends ListFragmentLoadableFromBackStack {
 			for (Locales locale : locales) {
 				if (locale.fordLanguage == language) {
 					return locale;
+				}
+			}
+			return ENGLISH_UNITED_STATES;
+		}
+		
+		public static Locales getFordLocaleByAppLocale(Locale locale) {
+			String countryCode = locale.getCountry();
+			String languageCode = locale.getLanguage();
+			List<Locales> locales = Arrays.asList(Locales.values());
+			for (Locales tmpLocale : locales) {
+				if (tmpLocale.localeCode.equals(languageCode) && tmpLocale.countryCode != null && 
+						tmpLocale.countryCode.equals(countryCode)) {
+					return tmpLocale;
 				}
 			}
 			return ENGLISH_UNITED_STATES;

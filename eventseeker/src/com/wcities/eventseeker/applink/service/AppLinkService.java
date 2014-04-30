@@ -6,6 +6,7 @@
 package com.wcities.eventseeker.applink.service;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Vector;
 
 import android.app.Service;
@@ -310,7 +311,10 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 			
 			try {
 				Language tdkLanguage = proxy.getHmiDisplayLanguage();
-				if (tdkLanguage != ((EventSeekr) getApplication()).getFordLocale().getFordLanguage()) {
+				Locales fordLocale = Locales.getFordLocaleByLanguage(tdkLanguage);
+				Locales appLocale = Locales.getFordLocaleByAppLocale(Locale.getDefault());
+				
+				if (fordLocale != appLocale) {
 					((EventSeekr) getApplication()).updateFordLocale(Locales.getFordLocaleByLanguage(tdkLanguage));
 				}
 				
@@ -624,7 +628,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 			@Override
 			public void run() {
 				Toast.makeText(currentUIActivity, "onOnLanguageChange to " + arg0.getLanguage().name() + ", " + 
-						arg0.getHmiDisplayLanguage().name(), Toast.LENGTH_LONG).show();
+						arg0.getHmiDisplayLanguage().name(), Toast.LENGTH_SHORT).show();
 			}
 		});*/
 		

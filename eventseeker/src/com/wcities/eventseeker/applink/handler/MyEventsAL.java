@@ -2,6 +2,7 @@ package com.wcities.eventseeker.applink.handler;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
@@ -157,10 +158,14 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 		reqCmds.add(Command.DETAILS);
 		reqCmds.add(Command.BACK);
 		reqCmds.add(Command.NEXT);
+		
+		Vector<Command> helpCommands = new Vector<CommandsUtil.Command>(reqCmds);
+		Collections.reverse(helpCommands);
+		
 		reqCmds.add(Command.SEARCH);
 		reqCmds.add(Command.MY_EVENTS);
 		reqCmds.add(Command.DISCOVER);
-		CommandsUtil.addCommands(reqCmds);	
+		CommandsUtil.addCommands(reqCmds, helpCommands);	
 	}
 	
 	private Vector<SoftButton> buildSoftButtons() {

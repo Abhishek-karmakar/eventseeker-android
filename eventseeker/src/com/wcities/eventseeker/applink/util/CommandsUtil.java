@@ -118,7 +118,7 @@ public class CommandsUtil {
 		}
 	}
 
-	public static void addCommands(Vector<Command> reqCommands) {
+	public static void addCommands(Vector<Command> reqCommands, Vector<Command> helpCommands) {
 		/**
 		 * Deleting all existing commands is required to have all the new commands placed in required 
 		 * order while running it on real SYNC. To run it on simulator we have to comment this for loop, 
@@ -135,6 +135,8 @@ public class CommandsUtil {
 			//Log.d(TAG, "onOnCommand add command cmd.getCmdId() = " + cmd.getCmdId());
 			ALUtil.addCommand(new Vector<String>(Arrays.asList(new String[] {cmd.toString()})), cmd.getCmdId());
 		}
+		
+		ALUtil.setGlobalProperties(helpCommands);
 	}
 	
 	/*public static void performOperationForCommand(Commands cmd) {

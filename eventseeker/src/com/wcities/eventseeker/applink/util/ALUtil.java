@@ -1,5 +1,6 @@
 package com.wcities.eventseeker.applink.util;
 
+import java.util.List;
 import java.util.Vector;
 
 import android.util.Log;
@@ -14,13 +15,16 @@ import com.ford.syncV4.proxy.rpc.DeleteCommand;
 import com.ford.syncV4.proxy.rpc.DeleteInteractionChoiceSet;
 import com.ford.syncV4.proxy.rpc.MenuParams;
 import com.ford.syncV4.proxy.rpc.PerformInteraction;
+import com.ford.syncV4.proxy.rpc.SetGlobalProperties;
 import com.ford.syncV4.proxy.rpc.SoftButton;
 import com.ford.syncV4.proxy.rpc.Speak;
 import com.ford.syncV4.proxy.rpc.SubscribeVehicleData;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
 import com.ford.syncV4.proxy.rpc.enums.InteractionMode;
 import com.ford.syncV4.proxy.rpc.enums.TextAlignment;
+import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.applink.service.AppLinkService;
+import com.wcities.eventseeker.applink.util.CommandsUtil.Command;
 import com.wcities.eventseeker.constants.AppConstants;
 
 public class ALUtil {
@@ -242,4 +246,27 @@ public class ALUtil {
 			e.printStackTrace();
 		}
 	}*/
+	
+	public static void setGlobalProperties(List<Command> commands) {
+		String helpPrompt = "";
+		for (int i = 0; i < commands.size() - 1; i++) {
+			Command command = (Command) commands.get(i);
+			helpPrompt += command.toString() + ", ";
+		}
+		helpPrompt += "and, " + commands.get(commands.size() - 1).toString();
+		Log.d(TAG, "help = " + helpPrompt);
+		
+		SetGlobalProperties msg = new SetGlobalProperties();
+		msg.setCorrelationID(AppLinkService.getInstance().autoIncCorrId++);
+		msg.setHelpPrompt(TTSChunkFactory.createSimpleTTSChunks(helpPrompt));
+		msg.setTimeoutPrompt(TTSChunkFactory.createSimpleTTSChunks(AppLinkService.getInstance()
+				.getResources().getString(R.string.time_out)));
+		
+		try {
+			AppLinkService.getInstance().getProxy().sendRPCRequest(msg);
+			
+		} catch (SyncException e) {
+			e.printStackTrace();
+		}
+	}
 }

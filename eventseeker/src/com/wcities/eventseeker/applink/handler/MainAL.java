@@ -1,5 +1,6 @@
 package com.wcities.eventseeker.applink.handler;
 
+import java.util.Collections;
 import java.util.Vector;
 
 import android.util.Log;
@@ -55,7 +56,9 @@ public class MainAL extends ESIProxyALM {
 		reqCmds.add(Command.SEARCH);
 		reqCmds.add(Command.MY_EVENTS);
 		reqCmds.add(Command.DISCOVER);
-		CommandsUtil.addCommands(reqCmds);
+		Vector<Command> helpCommands = new Vector<CommandsUtil.Command>(reqCmds);
+		Collections.reverse(helpCommands);
+		CommandsUtil.addCommands(reqCmds, helpCommands);
 	}
 	
 	private Vector<SoftButton> buildSoftButtons() {

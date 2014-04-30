@@ -3,6 +3,7 @@ package com.wcities.eventseeker.applink.handler;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
@@ -121,10 +122,14 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		requiredCmds.add(Command.DETAILS);
 		requiredCmds.add(Command.BACK);
 		requiredCmds.add(Command.NEXT);
+		
+		Vector<Command> helpCommands = new Vector<CommandsUtil.Command>(requiredCmds);
+		Collections.reverse(helpCommands);
+		
 		requiredCmds.add(Command.SEARCH);
 		requiredCmds.add(Command.MY_EVENTS);
 		requiredCmds.add(Command.DISCOVER);
-		CommandsUtil.addCommands(requiredCmds);
+		CommandsUtil.addCommands(requiredCmds, helpCommands);
 	}
 	
 	private Vector<SoftButton> buildSoftButtons() {
