@@ -239,7 +239,7 @@
  	<string name="rep_code_response_invalid_rep_code">Invalid Rep Code!</string>
  	<string name="rep_code_response_unknown_error">Could not complete the request. Please retry.</string>
  	<string name="rep_code_enter_a_valid_repcode">Please enter a valid rep code.</string>
- 	<string name="rep_code_submission">Rep Code Submission</string>
+ 	<string name="rep_code_submission">Rep Code Vorlage</string>
  	<string name="ok">Ok</string>
  
     <!-- My Events -->
@@ -307,7 +307,7 @@
     <string name="no_event_found">No Event Found.</string>
 
     <!-- RdioFragment -->
-    <string name="user_name_or_email">User Name or Email</string>
+    <string name="user_name_or_email">Username or email</string>
  
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>
@@ -365,10 +365,10 @@
 
     <!-- SearchAL -->
     <string name="search_events_or_artists">Okay, would you like to search for artist, or event?</string>
-    <string name="search_for">Search For</string>
-    <string name="searching_for">Searching for</string>
     <string name="search_event">Event</string>
     <string name="search_artist">Artist</string>
+    <string name="search_for">Search For</string>
+    <string name="searching_for">Searching for</string>
     <string name="say_event_name">Say event name</string>
     <string name="say_artist_name">Say artist name</string>
     <string name="alert_no_artists_available">No artists available.</string>
@@ -380,12 +380,11 @@
     <string name="listening">Listening..</string>
     <string name="processing">Processing..</string>
     <string name="nuance_error">Sorry, there was an error. Please press the voice button and say myevents, discover or search</string>
-
+ 
     <!-- Events -->
     <string name="event_no_evts_avail">There are no events available.</string>
     <string name="alert_no_events_available">No events available.</string>
     <string name="plz_press_nxt_or_bck">, Please press the voice button and say next or back.</string>
-    <string name="loading">Loading...</string>
     <string name="detail_not_available">Detail description not available</string>
     <string name="is_performing_for_this_event">is performing for this event</string>
     <string name="are_performing_for_this_event">are performing for this event</string>
@@ -403,7 +402,6 @@
     <!-- LockScreenActivity -->
     <string name="txt_eventseeker_activity_lockscreen">eventseeker</string>
     <string name="txt_lockscreen_activity_lockscreen">Lock Screen</string>
-    
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for Ford ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 </resources>

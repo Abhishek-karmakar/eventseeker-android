@@ -1,4 +1,0 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.bosch.myspin.serversdk" >
-    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="18"/>
-</manifest>

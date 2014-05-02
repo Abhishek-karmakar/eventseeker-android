@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:orientation="horizontal"  >
+
+    <RelativeLayout
+        android:id="@+id/connectedscreenimage_landscape"
+        android:layout_width="350dp"
+        android:layout_height="match_parent" 
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:id="@+id/connectedscreenimage_landscape_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/myspin_sdk_icon_connected"
+            android:contentDescription="@string/connected_screen_status_text" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/connectedscreentext_landscape"
+        android:layout_width="230dp"
+        android:layout_height="match_parent" 
+        android:layout_alignParentRight="true" >
+
+        <TextView
+            android:id="@+id/connectedscreenimage_landscape_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:singleLine="true"
+            android:rotation="-90"
+            android:text="@string/connected_screen_status_text" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+
+    <string-array name="keyboard_en">
+        <item>q w eéèêë r t yÿ uüúùû iìíîï oöóòôõøœ p</item>
+        <item>aäáàâåâãåæ sßšş d f g h j k l</item>
+        <item>*shift z x cç v b nñ m *del</item>
+        <item>*123 *lang - *space .:;,?! *enter</item>
+    </string-array>
+
+    <string-array name="keyboard_en_digits">
+        <item>1 2 3 4 5 6 7 8 9 0</item>
+        <item>_ * / + = ( ) € &amp; @</item>
+        <item>*123alt : ; , ? ! \' \" *del</item>
+        <item>*abc *lang - *space . *enter</item>
+    </string-array>
+
+    <string-array name="keyboard_en_shift">
+        <item>Q W EÉÈÊË R T YŸ UÜÚÙÛ IÌÍÎÏ OÖÓÒÔÕØŒ P</item>
+        <item>AÄÁÀÂÅÂÃÅÆ SŠŞ D F G H J K L</item>
+        <item>*shift Z X CÇ V B NÑ M *del</item>
+        <item>*123 *lang - *space .:;,?! *enter</item>
+    </string-array>
+
+    <string-array name="keyboard_en_digits_alt">
+        <item>~ #  \\ | ^ [ ] { } %</item>
+        <item>_ * / + =  &lt; &gt; $ £ ¥</item>
+        <item>*123alt : ; , ? ! \' \" *del</item>
+        <item>*abc *lang - *space . *enter</item>
+    </string-array>
+
+</resources>

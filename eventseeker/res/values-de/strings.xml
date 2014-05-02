@@ -47,6 +47,7 @@
     <string name="pls_login_through_mobile_app">Please log in through mobile app.</string>
     <string name="pls_login_to_see_friends_activity">Bitte melden Sie sich mit Facebook oder Google über die "Accounts synchronisieren"-Seite an, um die Aktivitäten von Freunden zu sehen. </string>
 	<string name="pls_login_to_see_artist_news">Bitte melden Sie sich mit Facebook oder Google über die "Accounts synchronisieren"-Seite an, um die Neuigkeiten des Künstlers zu sehen.</string>
+    <string name="pls_login_to_submit_repcode">Bitte melden Sie sich auf der \'Account synchronisieren\' mit Facebook oder Google an</string>
     <string name="connection_lost">Die Internetverbindung scheint offline zu sein.</string>
     <string name="yes">Ja</string>
     <string name="go_to_login">Zur Anmeldung gehen?</string>
@@ -127,6 +128,9 @@
     
     <string name="plus_generic_error">Sign in with Google is not available.</string>
 
+    <string name="already_signed_in_with_google_account">Sie sind bereits mit Facebook angemeldet. Möchten Sie sich von Facebook abmelden und stattdessen mit Google anmelden?</string>
+    <string name="already_signed_in_with_facebook_account">Sie sind bereits mit Google Account angemeldet. Möchten Sie sich von Google abmelden und stattdessen mit Facebook anmelden?</string>
+ 
     <!-- About us -->
     <string name="seek_share_live">Suchen. Teilen. Leben</string>
     <string name="eventseeker_desc">eventseeker macht das Entdecken von Künstlern und Veranstaltungen einfach und gesellig. Wir geben Ihnen das Mittel um nie wieder eine Veranstaltung zu verpassen.</string>
@@ -224,6 +228,9 @@
  	<string name="rep_code_response_database_insertion_error">Ein Fehler ist bei bei der Verarbeitung dieses Rep Codes aufgetreten.</string>
  	<string name="rep_code_response_invalid_rep_code">Ungültiger Rep Code!</string>
  	<string name="rep_code_response_unknown_error">Nachfrage konnte nicht vollendet werden. Bitte versuchen Sie es nochmal.</string>
+ 	<string name="rep_code_enter_a_valid_repcode">Bitte geben Sie einen gültigen Rep Code an</string>
+ 	<string name="rep_code_submission">Rep Code Vorlage</string>
+ 	<string name="ok">Ok</string>
  	
    	<!-- My Events -->
     <string name="no_events_in_your_area">Zur Zeit gibt es keine Veranstaltungen in deiner Gegend. Folgen Sie mehr Künstlern um die Personalisierung Ihres Veranstaltungskalenders zu starten.</string>
@@ -289,7 +296,10 @@
           
     <!-- Common -->
     <string name="no_event_found">Keine Veranstaltung gefunden</string>
- 
+  
+    <!-- RdioFragment -->
+    <string name="user_name_or_email">Benutzername oder E-Mail</string>
+    
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>
     
@@ -346,10 +356,10 @@
     
     <!-- SearchAL -->
     <string name="search_events_or_artists">Okay, möchten Sie Künstler, oder Ereignis suchen?</string>
-    <string name="search_for">Suche nach</string>
-    <string name="searching_for">Suche nach</string>
     <string name="search_event">Veranstaltung</string>
     <string name="search_artist">Künstler</string>
+    <string name="search_for">Suche nach</string>
+    <string name="searching_for">Suche nach</string>
     <string name="say_event_name">Sagen Sie Ereignis Name</string>
     <string name="say_artist_name">Sagen Sie Künstler Name</string>
     <string name="alert_no_artists_available">keine Künstler verfügbar.</string>
@@ -364,8 +374,9 @@
     
     <!-- Events -->
     <string name="event_no_evts_avail">Es sind keine Veranstaltungen verfügbar.</string>
-    <string name="plz_press_nxt_or_bck">, drücken Sie bitte das Voice Button und sagen Sie nächste oder zurück.</string>
-    <string name="detail_not_available">Beschreibung Nicht verfügbar</string>
+    <string name="alert_no_events_available">Es sind keine Veranstaltungen verfügbar.</string>
+	<string name="plz_press_nxt_or_bck">, drücken Sie bitte das Voice Button und sagen Sie nächste oder zurück.</string>
+	<string name="detail_not_available">Beschreibung Nicht verfügbar</string>
     <string name="is_performing_for_this_event">führt bei dieser Veranstaltung auf</string>
     <string name="are_performing_for_this_event">führen bei dieser Veranstaltung auf</string>
     <string name="price_would_be">, Kosten würden ..... sein</string>
@@ -376,7 +387,12 @@
     <string name="my_events_al_yes">Ja</string>
     <string name="my_events_al_no">Nein</string>
     <string name="my_events_al_no_evts_avail_make_suggestions">Es sind keine Veranstaltungen verfügbar, darf ich Ihnen einige Vorschläge machen?</string>
-    <string name="my_events_how_can_i_help">Wie kann ich helfen?</string>
+    <!-- <string name="my_events_al_suggestions"></string> -->
+	<string name="my_events_how_can_i_help">Wie kann ich helfen?</string>
+	
+	<!-- LockScreenActivity -->
+    <!-- <string name="txt_eventseeker_activity_lockscreen">eventseeker</string>
+    <string name="txt_lockscreen_activity_lockscreen">Lock Screen</string> -->
     
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for Ford ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 	
