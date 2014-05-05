@@ -205,15 +205,13 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 
 				if (orientation == Configuration.ORIENTATION_LANDSCAPE || isTablet) {
 					if (schedule.getDates().get(0).isStartTimeAvailable()) {
-						String[] timeInArray = ConversionUtil.getTimeInArray(schedule.getDates().get(0).getStartDate());
+						String time = ConversionUtil.getTime(schedule.getDates().get(0).getStartDate());
 
-						((TextView) convertView.findViewById(R.id.txtEvtTime)).setText(timeInArray[0]);
-						((TextView) convertView.findViewById(R.id.txtEvtTimeAMPM)).setText(" " + timeInArray[1]);
+						((TextView) convertView.findViewById(R.id.txtEvtTime)).setText(time);
 						convertView.findViewById(R.id.imgEvtTime).setVisibility(View.VISIBLE);
 
 					} else {
 						((TextView) convertView.findViewById(R.id.txtEvtTime)).setText("");
-						((TextView) convertView.findViewById(R.id.txtEvtTimeAMPM)).setText("");
 						convertView.findViewById(R.id.imgEvtTime).setVisibility(View.INVISIBLE);
 					}
 				}

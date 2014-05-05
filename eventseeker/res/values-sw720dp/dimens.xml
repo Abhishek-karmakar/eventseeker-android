@@ -111,7 +111,6 @@
     <dimen name="chk_box_margin_r_fragment_my_events_list_item">10dp</dimen>
     <dimen name="txt_evt_title_margin_l_fragment_my_events_list_item">6dp</dimen>
     <dimen name="row_txt_margin_l_fragment_my_events_list_item">15dp</dimen>
-    <dimen name="txt_evt_time_am_pm_txt_size_fragment_my_events_list_item">14sp</dimen>
     <!-- include_fragment_my_events_list_item_footer.xml -->
     <dimen name="lnr_layout_btns_txt_size_include_fragment_my_events_list_item_footer">18sp</dimen>
     <dimen name="lnr_layout_btns_min_ht_include_fragment_event_details_footer">90dp</dimen>
@@ -165,7 +164,6 @@
     <dimen name="img_evt_time_w_include_evt_details">15dp</dimen>
     <dimen name="img_evt_time_ht_include_evt_details">15dp</dimen>
     <dimen name="txt_evt_time_txt_size_include_evt_details">18sp</dimen>
-    <dimen name="txt_evt_time_am_pm_txt_size_include_evt_details">19sp</dimen>
 
     <!-- include_fragment_event_details_footer.xml -->
     <dimen name="divider_lnr_layout_btns_w_include_fragment_event_details_footer">2dp</dimen>

@@ -208,10 +208,10 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 				DateFormat dateFormat;
 				
 				if(isTablet) {
-					dateFormat = date.isStartTimeAvailable() ? new SimpleDateFormat("EEE MMM d, h:mm a") :
+					dateFormat = date.isStartTimeAvailable() ? new SimpleDateFormat("EEE MMM d, H:mm") :
 						new SimpleDateFormat("EEE MMM d");
 				} else {
-					dateFormat = date.isStartTimeAvailable() ? new SimpleDateFormat("MMMM dd, yyyy h:mm a") :
+					dateFormat = date.isStartTimeAvailable() ? new SimpleDateFormat("MMMM dd, yyyy H:mm") :
 						new SimpleDateFormat("MMMM dd, yyyy");
 				}				
 				

@@ -251,7 +251,7 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 				com.wcities.eventseeker.core.Date date = event.getSchedule().getDates().get(0);
 				
 				DateFormat dateFormat = date.isStartTimeAvailable() ? 
-						new SimpleDateFormat("EEE MMM d h:mm a") : new SimpleDateFormat("EEE MMM d");
+						new SimpleDateFormat("EEE MMM d H:mm") : new SimpleDateFormat("EEE MMM d");
 				
 				TextView txtEvtSchedule = (TextView)convertView.findViewById(R.id.txtEvtSchedule);
 				txtEvtSchedule.setText(dateFormat.format(date.getStartDate()));

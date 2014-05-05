@@ -143,7 +143,6 @@
     <dimen name="img_evt_time_w_include_evt_details">15dp</dimen>
     <dimen name="img_evt_time_ht_include_evt_details">15dp</dimen>
     <dimen name="txt_evt_time_txt_size_include_evt_details">12sp</dimen>
-    <dimen name="txt_evt_time_am_pm_txt_size_include_evt_details">13sp</dimen>
     <!-- activity_venue_details.xml -->
     <dimen name="rlt_layout_root_pad_venue_details">7dp</dimen>
     <dimen name="img_venue_w_venue_details">100dp</dimen>

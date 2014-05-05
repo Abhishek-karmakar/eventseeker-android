@@ -151,7 +151,6 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 					convertView.setTag(AppConstants.TAG_CONTENT);
 					convertView.findViewById(R.id.imgEvtTime).setVisibility(View.INVISIBLE);
 					convertView.findViewById(R.id.txtEvtTime).setVisibility(View.INVISIBLE);
-					convertView.findViewById(R.id.txtEvtTimeAMPM).setVisibility(View.INVISIBLE);
 				}
 				
 				((TextView)convertView.findViewById(R.id.txtEvtTitle)).setText(venue.getName());

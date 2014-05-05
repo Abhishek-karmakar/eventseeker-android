@@ -538,8 +538,8 @@ public class DiscoverActivityAL implements IProxyListener {
 		String simple = "Okay, " + event.getName();
 		
 		if (event.getSchedule() != null) {
-			simple += " at " + event.getSchedule().getVenue().getName() + " on " 
-					+ ConversionUtil.getDateTime(event.getSchedule().getDates().get(0));
+			/*simple += " at " + event.getSchedule().getVenue().getName() + " on " 
+					+ ConversionUtil.getDateTime(event.getSchedule().getDates().get(0));*/
 		}
 		
 		Log.i(TAG, "simple = " + simple);

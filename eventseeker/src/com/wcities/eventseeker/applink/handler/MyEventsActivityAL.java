@@ -716,8 +716,8 @@ public class MyEventsActivityAL implements IProxyListener {
 			String simple = "Okay, " + whenChoiceId.toString() + " " + event.getName();
 			
 			if (event.getSchedule() != null) {
-				simple += " is at " + event.getSchedule().getVenue().getName() + " on " 
-						+ ConversionUtil.getDateTime(event.getSchedule().getDates().get(0));
+				/*simple += " is at " + event.getSchedule().getVenue().getName() + " on " 
+						+ ConversionUtil.getDateTime(event.getSchedule().getDates().get(0));*/
 			}
 			
 			Log.d(TAG, "simple = " + simple);
@@ -886,8 +886,8 @@ public class MyEventsActivityAL implements IProxyListener {
 			String simple = "Okay, " + event.getName();
 			String postfix = "", appendForLimitedArtists = " & few more";
 			if (event.getSchedule() != null) {
-				postfix = " at " + event.getSchedule().getVenue().getName() + " on " 
-						+ ConversionUtil.getDateTime(event.getSchedule().getDates().get(0));
+				/*postfix = " at " + event.getSchedule().getVenue().getName() + " on " 
+						+ ConversionUtil.getDateTime(event.getSchedule().getDates().get(0));*/
 			}
 			
 			int reservedLength = postfix.length() + appendForLimitedArtists.length();
