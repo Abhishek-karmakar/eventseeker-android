@@ -370,7 +370,7 @@
     <string name="search_artist_text">Cerca artista</string>
     <string name="listening">Ascoltando..</string>
     <string name="processing">Elaborazione in corso..</string>
-    <string name="nuance_error">Mi dispiace, c\'è stato un errore. Per favore, premi il tasto voce e dici "i miei eventi," "scopri" o "cerca"</string>
+    <string name="nuance_error">Mi dispiace, c\'è stato un errore. Per favore, premi il tasto voce e dici i miei eventi, Esplorare o cerca</string>
     
     <!-- Events -->
     <string name="event_no_evts_avail">Non ci sono eventi disponibili.</string>

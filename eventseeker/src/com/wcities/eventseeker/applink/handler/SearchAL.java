@@ -22,6 +22,7 @@ import com.ford.syncV4.proxy.rpc.Choice;
 import com.ford.syncV4.proxy.rpc.OnAudioPassThru;
 import com.ford.syncV4.proxy.rpc.PerformAudioPassThruResponse;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
+import com.ford.syncV4.proxy.rpc.SoftButton;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
 import com.ford.syncV4.proxy.rpc.enums.AudioType;
 import com.ford.syncV4.proxy.rpc.enums.BitsPerSample;
@@ -273,8 +274,21 @@ public class SearchAL extends ESIProxyALM {
 		//Log.d(TAG, "Category selected : " + selectedCategoryId);
 		
 		addCommands();
-	
+		Vector<SoftButton> softBtns = buildSoftButtons();
+		ALUtil.displayMessage("", "", softBtns);
+		
 		initiateSearchProcess();
+	}
+	
+	private Vector<SoftButton> buildSoftButtons() {
+		Vector<SoftButton> softBtns = new Vector<SoftButton>();
+		if (selectedCategoryId == SearchCategories.SEARCH_EVENT.ordinal()) {
+			softBtns.add(Command.CALL_VENUE.buildSoftBtn());
+			
+		} else {
+			softBtns.add(Command.FOLLOW.buildSoftBtn());			
+		}
+		return softBtns;
 	}
 
 	private void initiateSearchProcess() {
@@ -462,6 +476,12 @@ public class SearchAL extends ESIProxyALM {
 			
 			ALUtil.alertText(context.getResources().getString(R.string.searching_for), query);
 			//Log.d(TAG, "alert displayed");
+			
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			
 			if (selectedCategoryId == SearchCategories.SEARCH_EVENT.ordinal()) {
 				loadSearchedEvent();
