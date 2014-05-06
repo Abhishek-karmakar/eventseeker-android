@@ -30,8 +30,10 @@ public class SyncArtists extends AsyncTask<Void, Void, Void> {
 	private EventSeekr eventSeekr;
 	private Service service;
 	private Fragment fragment;
+	private String oauthToken;
 	
-	public SyncArtists(List<String> artistNames, EventSeekr eventSeekr, Service service, Fragment fragment) {
+	public SyncArtists(String oauthToken, List<String> artistNames, EventSeekr eventSeekr, Service service, Fragment fragment) {
+		this.oauthToken = oauthToken;
 		this.artistNames = artistNames;
 		this.eventSeekr = eventSeekr;
 		this.service = service;
@@ -45,7 +47,7 @@ public class SyncArtists extends AsyncTask<Void, Void, Void> {
 		int artistSize = artistNames.size();
 		int calls = (artistSize / MAX_BATCH_SEARCH_LIMIT) + (artistSize % MAX_BATCH_SEARCH_LIMIT > 0 ? 1 : 0);
 		for (int call = 0; call < calls; call++) {
-			ArtistApi artistApi = new ArtistApi(Api.OAUTH_TOKEN);
+			ArtistApi artistApi = new ArtistApi(oauthToken);
 			artistApi.setExactSearchEnabled(true);
 			artistApi.setMethod(Method.artistSearch);
 			artistApi.setUserId(eventSeekr.getWcitiesId());

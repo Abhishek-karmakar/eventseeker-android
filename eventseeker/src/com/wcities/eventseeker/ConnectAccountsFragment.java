@@ -890,7 +890,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			showProgress();
 			double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 
-			loadMyEventsCount = new LoadMyEventsCount(wcitiesId, latLon[0], latLon[1], new AsyncTaskListener<Integer>() {
+			loadMyEventsCount = new LoadMyEventsCount(Api.OAUTH_TOKEN, wcitiesId, latLon[0], latLon[1], new AsyncTaskListener<Integer>() {
 				
 				@Override
 				public void onTaskCompleted(Integer... params) {

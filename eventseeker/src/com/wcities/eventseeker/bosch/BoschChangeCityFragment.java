@@ -228,7 +228,7 @@ public class BoschChangeCityFragment extends BoschFragmentLoadableFromBackStack 
 			
 			try {
 				
-				CityApi api = new CityApi(Api.OAUTH_TOKEN);
+				CityApi api = new CityApi(Api.OAUTH_TOKEN_CAR_APPS);
 				JSONObject jsonObject = null;
 				
 				switch (selectedApiCall) {

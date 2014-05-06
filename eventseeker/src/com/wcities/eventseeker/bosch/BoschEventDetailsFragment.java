@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -72,7 +73,7 @@ public class BoschEventDetailsFragment extends BoschFragmentLoadableFromBackStac
 		if (event == null) {
 			event = (Event) getArguments().getSerializable(BundleKeys.EVENT);
 			isEventLoading = true;
-			AsyncTaskUtil.executeAsyncTask(new LoadEventDetails(this, this, event), true);
+			AsyncTaskUtil.executeAsyncTask(new LoadEventDetails(Api.OAUTH_TOKEN_CAR_APPS, this, this, event), true);
 		}
 		
 		res = FragmentUtil.getResources(this);
@@ -262,14 +263,14 @@ public class BoschEventDetailsFragment extends BoschFragmentLoadableFromBackStac
 						: Attending.GOING;
 					if (attending == Attending.NOT_GOING) {
 						event.setAttending(attending);
-						new UserTracker((EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
+						new UserTracker(Api.OAUTH_TOKEN_CAR_APPS, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
 			               		UserTrackingItemType.event, event.getId(), event.getAttending().getValue(), 
 			               		UserTrackingType.Add).execute();
 						updateFollowBtn();
 							
 					} else {
 						event.setAttending(attending);
-						new UserTracker((EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
+						new UserTracker(Api.OAUTH_TOKEN_CAR_APPS, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
 			                	UserTrackingItemType.event, event.getId(), event.getAttending().getValue(), 
 			                	UserTrackingType.Add).execute();
 						updateFollowBtn();

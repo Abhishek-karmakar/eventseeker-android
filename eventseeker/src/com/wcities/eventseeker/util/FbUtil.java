@@ -21,6 +21,7 @@ import com.facebook.Session.StatusCallback;
 import com.facebook.SessionState;
 import com.facebook.model.GraphObject;
 import com.facebook.model.OpenGraphAction;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -344,7 +345,7 @@ public class FbUtil {
                     Log.d(TAG, "graphObj = null");
                    }
                    
-                   new UserTracker((EventSeekr) FragmentUtil.getActivity(fragment).getApplication(),
+                   new UserTracker(Api.OAUTH_TOKEN, (EventSeekr) FragmentUtil.getActivity(fragment).getApplication(),
                     UserTrackingItemType.event, event.getId(), event.getAttending().getValue(), postId,
                     UserTrackingType.Add).execute();
             }
@@ -396,7 +397,7 @@ public class FbUtil {
                 	Log.d(TAG, "graphObj = null");
                 }
                 
-                new UserTracker((EventSeekr) FragmentUtil.getActivity(fragment).getApplication(), 
+                new UserTracker(Api.OAUTH_TOKEN, (EventSeekr) FragmentUtil.getActivity(fragment).getApplication(), 
                 		UserTrackingItemType.event, item.getTrackId(), item.getUserAttending().getValue(), 
                 		postId, UserTrackingType.Add).execute();
             }

@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadFeaturedEvts;
 import com.wcities.eventseeker.constants.AppConstants;
@@ -108,7 +109,7 @@ public abstract class DiscoverParentFragment extends FragmentLoadableFromBackSta
 		 */
 
 		if (featuredEvts.isEmpty()) {
-			loadFeaturedEvts = new LoadFeaturedEvts(lat, lon) {
+			loadFeaturedEvts = new LoadFeaturedEvts(Api.OAUTH_TOKEN, lat, lon) {
 				
 				@Override
 				protected void onPreExecute() {

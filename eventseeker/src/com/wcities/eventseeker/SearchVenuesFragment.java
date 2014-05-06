@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.wcities.eventseeker.SearchFragment.SearchFragmentChildListener;
 import com.wcities.eventseeker.adapter.AbstractVenueListAdapter;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.asynctask.LoadVenues;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
@@ -90,7 +91,7 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 		if (latLng == null) {
 			latLng = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 		}
-		loadVenues = new LoadVenues(this, venueListAdapter, venueList, latLng);
+		loadVenues = new LoadVenues(Api.OAUTH_TOKEN, this, venueListAdapter, venueList, latLng);
 		venueListAdapter.setLoadVenues(loadVenues);
         AsyncTaskUtil.executeAsyncTask(loadVenues, true, query);
 	}

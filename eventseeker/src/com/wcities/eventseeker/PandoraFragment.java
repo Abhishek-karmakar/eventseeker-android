@@ -41,6 +41,7 @@ import android.widget.TextView.OnEditorActionListener;
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.ConnectAccountsFragment.ServiceAccount;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.SyncArtists;
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -283,7 +284,7 @@ public class PandoraFragment extends FragmentLoadableFromBackStack implements On
 	private void apiCallFinished(List<String> artistNames, EventSeekr app) {
 		//Log.d(TAG, "artists size = " + artistNames.size());
 		if (artistNames != null) {
-			new SyncArtists(artistNames, app, Service.Pandora, this).execute();
+			new SyncArtists(Api.OAUTH_TOKEN, artistNames, app, Service.Pandora, this).execute();
 		} else {
 			Activity activity = FragmentUtil.getActivity(this);
 			if(activity != null) {

@@ -12,6 +12,7 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.wcities.eventseeker.SearchFragment.SearchFragmentChildListener;
 import com.wcities.eventseeker.adapter.DateWiseEventListAdapter;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
@@ -69,7 +70,7 @@ public class SearchEventsFragment extends SearchEventsParentFragment implements 
 		c.add(Calendar.YEAR, 1);
 		String endDate = ConversionUtil.getDay(c);
 		
-		loadEvents = new LoadDateWiseEvents(eventList, eventListAdapter, query,
+		loadEvents = new LoadDateWiseEvents(Api.OAUTH_TOKEN, eventList, eventListAdapter, query,
 				latLon[0], latLon[1], MILES_LIMIT, null, startDate, endDate);
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);
 		AsyncTaskUtil.executeAsyncTask(loadEvents, true);

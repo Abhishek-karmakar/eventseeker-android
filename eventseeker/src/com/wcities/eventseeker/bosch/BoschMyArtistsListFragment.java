@@ -15,6 +15,7 @@ import android.widget.AbsListView.RecyclerListener;
 import android.widget.ImageView;
 
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadMyArtists;
 import com.wcities.eventseeker.asynctask.LoadMyArtists.LoadMyArtistsListener;
@@ -125,7 +126,7 @@ public class BoschMyArtistsListFragment extends ListFragment implements OnClickL
 
 	@Override
 	public void loadItemsInBackground() {
-		loadMyArtists = new LoadMyArtists(wcitiesId, artistList, boschArtistListAdapter, cachedFollowingList, 
+		loadMyArtists = new LoadMyArtists(Api.OAUTH_TOKEN_CAR_APPS, wcitiesId, artistList, boschArtistListAdapter, cachedFollowingList, 
 				artistIds, null, null, this);
 		boschArtistListAdapter.setLoadArtists(loadMyArtists);
 		AsyncTaskUtil.executeAsyncTask(loadMyArtists, true);

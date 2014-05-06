@@ -17,6 +17,7 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.MainActivity;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -140,7 +141,7 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 			id = friendNewsItem.getTrackId();
 			attending = friendNewsItem.getUserAttending().getValue();
 		}
-		new UserTracker((EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
+		new UserTracker(Api.OAUTH_TOKEN, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
         		UserTrackingItemType.event, id, attending, null, 
         		UserTrackingType.Add).execute();
 	}

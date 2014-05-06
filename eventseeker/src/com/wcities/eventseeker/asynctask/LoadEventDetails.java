@@ -24,12 +24,14 @@ public class LoadEventDetails extends AsyncTask<Void, Void, Void> {
 	private OnEventUpdatedListner listner;
 	private Fragment fragment;
 	private Event event;
+	private String oauthToken;
 	
 	public interface OnEventUpdatedListner{
 		public void onEventUpdated();
 	};
 	
-	public LoadEventDetails(OnEventUpdatedListner listner, Fragment fragment, Event event) {
+	public LoadEventDetails(String oauthToken, OnEventUpdatedListner listner, Fragment fragment, Event event) {
+		this.oauthToken = oauthToken;
 		this.fragment = fragment;
 		this.event = event;
 		this.listner = listner;
@@ -38,7 +40,7 @@ public class LoadEventDetails extends AsyncTask<Void, Void, Void> {
 	@Override
 	protected Void doInBackground(Void... params) {
 		//Log.d(TAG, "LoadEventDetails doInBackground()");
-		EventApi eventApi = new EventApi(Api.OAUTH_TOKEN, event.getId(), IdType.EVENT);
+		EventApi eventApi = new EventApi(oauthToken, event.getId(), IdType.EVENT);
 		
 		// null check is not required here, since if it's null, that's handled from eventApi
 		eventApi.setUserId(((EventSeekr)FragmentUtil.getActivity(fragment).getApplication()).getWcitiesId());

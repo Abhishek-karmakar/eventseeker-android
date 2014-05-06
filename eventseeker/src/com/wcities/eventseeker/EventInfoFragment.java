@@ -30,6 +30,7 @@ import com.facebook.SessionState;
 import com.wcities.eventseeker.EventDetailsFragment.EventDetailsFragmentChildListener;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -628,7 +629,7 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 			updateAttendingChkBoxes();
 			if (newAttending == Attending.NOT_GOING) {
 				event.setAttending(newAttending);
-				new UserTracker(eventSeekr, UserTrackingItemType.event, event.getId(), event.getAttending().getValue(), 
+				new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.event, event.getId(), event.getAttending().getValue(), 
                 		UserTrackingType.Add).execute();
     			((EventDetailsFragment) getParentFragment()).onEventAttendingUpdated();
 				

@@ -20,8 +20,10 @@ public class LoadFeaturedEvts extends AsyncTask<Void, Void, List<Event>> {
 	private static final int FEATURED_EVTS_LIMIT = 5;
 
 	private double lat, lon;
+	private String oauthToken;
 	
-	public LoadFeaturedEvts(double lat, double lon) {
+	public LoadFeaturedEvts(String oauthToken, double lat, double lon) {
+		this.oauthToken = oauthToken;
 		this.lat = lat;
 		this.lon = lon;
 	}
@@ -29,7 +31,7 @@ public class LoadFeaturedEvts extends AsyncTask<Void, Void, List<Event>> {
 	@Override
 	protected List<Event> doInBackground(Void... params) {
 		List<Event> events = new ArrayList<Event>();
-		EventApi eventApi = new EventApi(Api.OAUTH_TOKEN, lat, lon);
+		EventApi eventApi = new EventApi(oauthToken, lat, lon);
 		eventApi.setLimit(FEATURED_EVTS_LIMIT);
 		try {
 			JSONObject jsonObject = eventApi.getFeaturedEvents();

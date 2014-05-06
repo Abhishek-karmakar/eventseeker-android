@@ -30,7 +30,7 @@ public class LoadMyArtists extends AsyncTask<Void, Void, List<Artist>> {
 
 	private static final int ARTISTS_LIMIT = 10;
 
-	private String wcitiesId;
+	private String wcitiesId, oauthToken;
 	
 	private List<Artist> artistList;
 	private ArtistAdapterListener<Void> artistAdapterListener;
@@ -47,9 +47,10 @@ public class LoadMyArtists extends AsyncTask<Void, Void, List<Artist>> {
 		public void showNoArtistFound();
 	}
 	
-	public LoadMyArtists(String wcitiesId, List<Artist> artistList, ArtistAdapterListener<Void> artistAdapterListener,
+	public LoadMyArtists(String oauthToken, String wcitiesId, List<Artist> artistList, ArtistAdapterListener<Void> artistAdapterListener,
 			FollowingList cachedFollowingList, SortedSet<Integer> artistIds, List<Character> indices, 
 			Map<Character, Integer> alphaNumIndexer, LoadMyArtistsListener loadMyArtistsListener) {
+		this.oauthToken = oauthToken;
 		this.wcitiesId = wcitiesId;
 		this.artistList = artistList;
 		this.artistAdapterListener = artistAdapterListener;
@@ -63,7 +64,7 @@ public class LoadMyArtists extends AsyncTask<Void, Void, List<Artist>> {
 	@Override
 	protected List<Artist> doInBackground(Void... params) {
 		List<Artist> tmpArtists = new ArrayList<Artist>();
-		UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
+		UserInfoApi userInfoApi = new UserInfoApi(oauthToken);
 		userInfoApi.setLimit(ARTISTS_LIMIT);
 		userInfoApi.setAlreadyRequested(artistAdapterListener.getArtistsAlreadyRequested());
 		userInfoApi.setUserId(wcitiesId);

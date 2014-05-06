@@ -22,6 +22,7 @@ import com.wcities.eventseeker.EventDetailsFragment.EventDetailsFragmentChildLis
 import com.wcities.eventseeker.adapter.ArtistListAdapter;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -176,7 +177,7 @@ public class EventFeaturingFragment extends PublishEventListFragment implements 
 			
 			if (newAttending == Attending.NOT_GOING) {
 				event.setAttending(newAttending);
-				new UserTracker(eventSeekr, UserTrackingItemType.event, event.getId(), event.getAttending().getValue(), 
+				new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.event, event.getId(), event.getAttending().getValue(), 
                 		UserTrackingType.Add).execute();
     			((EventDetailsFragment) getParentFragment()).onEventAttendingUpdated();
 				

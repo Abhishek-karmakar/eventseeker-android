@@ -31,6 +31,7 @@ import com.wcities.eventseeker.MyEventsListFragment;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
@@ -398,7 +399,7 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 		if (attending == Attending.NOT_GOING) {
 			event.setAttending(attending);
 			updateAttendingChkBoxes(event, chkBoxGoing, chkBoxWantToGo);
-			new UserTracker((EventSeekr) mContext.getApplicationContext(), UserTrackingItemType.event, 
+			new UserTracker(Api.OAUTH_TOKEN, (EventSeekr) mContext.getApplicationContext(), UserTrackingItemType.event, 
 					event.getId(), event.getAttending().getValue(), UserTrackingType.Add).execute();
 			
 		} else {

@@ -27,7 +27,7 @@ public class LoadMyEvents extends AsyncTask<Void, Void, List<Event>> {
 
 	private static final String TAG = LoadMyEvents.class.getSimpleName();
 	
-	private String wcitiesId;
+	private String wcitiesId, oauthToken;
 	private Type loadType;
 	private double lat, lon;
 	
@@ -41,9 +41,10 @@ public class LoadMyEvents extends AsyncTask<Void, Void, List<Event>> {
 		public abstract void onEventsLoaded();
 	}
 	
-	public LoadMyEvents(DateWiseEventList dateWiseEventList, DateWiseEventParentAdapterListener 
+	public LoadMyEvents(String oauthToken, DateWiseEventList dateWiseEventList, DateWiseEventParentAdapterListener 
 			dateWiseEventParentAdapterListener, String wcitiesId, 
 			Type loadType, double lat, double lon, MyEventsLoadedListener myEventsLoadedListener) {
+		this.oauthToken = oauthToken;
 		this.dateWiseEventList = dateWiseEventList;
 		this.dateWiseEventParentAdapterListener = dateWiseEventParentAdapterListener;
 		this.wcitiesId = wcitiesId;
@@ -53,8 +54,9 @@ public class LoadMyEvents extends AsyncTask<Void, Void, List<Event>> {
 		this.myEventsLoadedListener = myEventsLoadedListener;
 	}
 	
-	public LoadMyEvents(List<Event> eventList, DateWiseEventParentAdapterListener dateWiseEventParentAdapterListener, 
+	public LoadMyEvents(String oauthToken, List<Event> eventList, DateWiseEventParentAdapterListener dateWiseEventParentAdapterListener, 
 			String wcitiesId, Type loadType, double lat, double lon) {
+		this.oauthToken = oauthToken;
 		this.eventList = eventList;
 		this.dateWiseEventParentAdapterListener = dateWiseEventParentAdapterListener;
 		this.wcitiesId = wcitiesId;
@@ -68,7 +70,7 @@ public class LoadMyEvents extends AsyncTask<Void, Void, List<Event>> {
 		List<Event> tmpEvents = new ArrayList<Event>();
 		int eventsAlreadyRequested = dateWiseEventParentAdapterListener.getEventsAlreadyRequested();
 		
-		UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
+		UserInfoApi userInfoApi = new UserInfoApi(oauthToken);
 		userInfoApi.setLimit(EVENTS_LIMIT);
 		userInfoApi.setAlreadyRequested(eventsAlreadyRequested);
 		userInfoApi.setUserId(wcitiesId);

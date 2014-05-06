@@ -11,6 +11,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadMyEvents;
@@ -104,7 +105,7 @@ public class BoschMyEventsListFragment extends ListFragment implements OnClickLi
 		if (latLon == null) {
 			latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 		}
-		loadEvents = new LoadMyEvents(eventList, eventListAdapter, wcitiesId, loadType, latLon[0], 
+		loadEvents = new LoadMyEvents(Api.OAUTH_TOKEN_CAR_APPS, eventList, eventListAdapter, wcitiesId, loadType, latLon[0], 
 				latLon[1]);
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);
         AsyncTaskUtil.executeAsyncTask(loadEvents, true);

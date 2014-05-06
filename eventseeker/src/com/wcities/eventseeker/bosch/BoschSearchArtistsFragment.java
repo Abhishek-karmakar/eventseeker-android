@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.asynctask.BoschLoadArtists;
 import com.wcities.eventseeker.bosch.adapter.BoschArtistListAdapter;
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -80,7 +81,7 @@ public class BoschSearchArtistsFragment extends ListFragment implements LoadItem
 	
 	@Override
 	public void loadItemsInBackground() {
-		boschLoadArtists = new BoschLoadArtists(artistList, boschArtistListAdapter);
+		boschLoadArtists = new BoschLoadArtists(Api.OAUTH_TOKEN_CAR_APPS, artistList, boschArtistListAdapter);
 		boschArtistListAdapter.setLoadArtists(boschLoadArtists);
 		AsyncTaskUtil.executeAsyncTask(boschLoadArtists, true, query);
 	}

@@ -17,6 +17,7 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.MainActivity;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -117,7 +118,7 @@ public abstract class PublishEventFragment extends Fragment implements PublishLi
 	}
 	
 	protected void trackEvent() {
-		new UserTracker((EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
+		new UserTracker(Api.OAUTH_TOKEN, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
         		UserTrackingItemType.event, event.getId(), event.getAttending().getValue(), null, 
         		UserTrackingType.Add).execute();
 	}

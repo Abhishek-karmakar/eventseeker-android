@@ -28,6 +28,7 @@ import android.widget.Button;
 
 import com.wcities.eventseeker.adapter.SwipeTabsAdapter;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadArtistDetails;
 import com.wcities.eventseeker.asynctask.LoadArtistDetails.OnArtistUpdatedListener;
@@ -87,7 +88,7 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 		if (artist == null) {
 			artist = (Artist) getArguments().getSerializable(BundleKeys.ARTIST);
 
-			loadArtistDetails = new LoadArtistDetails(artist, this, this);
+			loadArtistDetails = new LoadArtistDetails(Api.OAUTH_TOKEN, artist, this, this);
 			AsyncTaskUtil.executeAsyncTask(loadArtistDetails, true);
 			
 			artist.getVideos().clear();

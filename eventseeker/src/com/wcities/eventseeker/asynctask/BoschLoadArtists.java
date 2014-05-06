@@ -23,9 +23,11 @@ public class BoschLoadArtists extends AsyncTask<String, Void, List<Artist>> {
 	
 	private List<Artist> artistList;
 	private BoschArtistListAdapter<String> artistListAdapter;
+	private String oauthToken;
 	private final int ARTISTS_LIMIT = 10;
 	
-	public BoschLoadArtists(List<Artist> artistList, BoschArtistListAdapter<String> artistListAdapter) {
+	public BoschLoadArtists(String oauthToken, List<Artist> artistList, BoschArtistListAdapter<String> artistListAdapter) {
+		this.oauthToken = oauthToken;
 		this.artistList = artistList;
 		this.artistListAdapter = artistListAdapter;
 	}
@@ -33,7 +35,7 @@ public class BoschLoadArtists extends AsyncTask<String, Void, List<Artist>> {
 	@Override
 	protected List<Artist> doInBackground(String... params) {
 		List<Artist> tmpArtists = new ArrayList<Artist>();
-		ArtistApi artistApi = new ArtistApi(Api.OAUTH_TOKEN);
+		ArtistApi artistApi = new ArtistApi(oauthToken);
 		artistApi.setLimit(ARTISTS_LIMIT);
 		artistApi.setAlreadyRequested(artistListAdapter.getArtistsAlreadyRequested());
 		artistApi.setMethod(Method.artistSearch);

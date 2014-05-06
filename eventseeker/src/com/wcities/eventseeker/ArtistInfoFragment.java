@@ -34,6 +34,7 @@ import com.scvngr.levelup.views.gallery.Gallery;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.wcities.eventseeker.ArtistDetailsFragment.ArtistDetailsFragmentListener;
 import com.wcities.eventseeker.ArtistDetailsFragment.FooterTxt;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -687,12 +688,12 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 					artist.getAttending() == Attending.NotTracked) {
 				artist.updateAttending(Attending.Tracked, eventSeekr);
 				updateFollowingFooter();
-				new UserTracker(eventSeekr, UserTrackingItemType.artist, artist.getId()).execute();
+				new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.artist, artist.getId()).execute();
 
 			} else {
 				artist.updateAttending(Attending.NotTracked, eventSeekr);
 				updateFollowingFooter();
-				new UserTracker(eventSeekr, UserTrackingItemType.artist, artist.getId(), 
+				new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.artist, artist.getId(), 
 						Attending.NotTracked.getValue(), UserTrackingType.Edit).execute();
 			}
 			((ArtistDetailsFragment) getParentFragment()).onArtistFollowingUpdated();

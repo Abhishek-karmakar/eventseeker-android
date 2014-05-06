@@ -32,7 +32,7 @@ public class LoadDateWiseVenueEventsList extends AsyncTask<Void, Void, List<Even
 
 	private DateWiseEventParentAdapterListener eventListAdapter;
 
-	private String wcitiesId;
+	private String wcitiesId, oauthToken;
 	
 	private EventExistListener listener;
 	
@@ -40,21 +40,22 @@ public class LoadDateWiseVenueEventsList extends AsyncTask<Void, Void, List<Even
 		public void hasEvents(boolean hasEvents);
 	}
 	
-	private LoadDateWiseVenueEventsList(DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, String wcitiesId) {
+	private LoadDateWiseVenueEventsList(String oauthToken, DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, String wcitiesId) {
+		this.oauthToken = oauthToken;
 		this.eventList = eventList;
 		this.eventListAdapter = eventListAdapter;
 		this.wcitiesId = wcitiesId;
 	}
 
-	public LoadDateWiseVenueEventsList(DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, String wcitiesId, long venueId) {
-		this(eventList, eventListAdapter, wcitiesId);
+	public LoadDateWiseVenueEventsList(String oauthToken, DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, String wcitiesId, long venueId) {
+		this(oauthToken, eventList, eventListAdapter, wcitiesId);
 		this.venueId = venueId;
 	}
 	
-	public LoadDateWiseVenueEventsList(DateWiseEventList eventList, 
+	public LoadDateWiseVenueEventsList(String oauthToken, DateWiseEventList eventList, 
 			DateWiseEventParentAdapterListener eventListAdapter, String wcitiesId, long venueId, 
 			EventExistListener listener) {
-		this(eventList, eventListAdapter, wcitiesId);
+		this(oauthToken, eventList, eventListAdapter, wcitiesId);
 		this.venueId = venueId;
 		this.listener = listener;
 	}
@@ -69,7 +70,7 @@ public class LoadDateWiseVenueEventsList extends AsyncTask<Void, Void, List<Even
 		}
 		
 		EventApi eventApi;
-		eventApi = new EventApi(Api.OAUTH_TOKEN, venueId, IdType.VENUE);
+		eventApi = new EventApi(oauthToken, venueId, IdType.VENUE);
 		eventApi.setLimit(EVENTS_LIMIT);
 		eventApi.setAlreadyRequested(eventsAlreadyRequested);
 		eventApi.addMoreInfo(MoreInfo.fallbackimage);

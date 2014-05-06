@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.wcities.eventseeker.SearchFragment.SearchFragmentChildListener;
 import com.wcities.eventseeker.adapter.ArtistListAdapter;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.asynctask.LoadArtists;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
@@ -78,7 +79,7 @@ public class SearchArtistsFragment extends ListFragment implements SearchFragmen
 	
 	@Override
 	public void loadItemsInBackground() {
-		loadArtists = new LoadArtists(artistList, artistListAdapter);
+		loadArtists = new LoadArtists(Api.OAUTH_TOKEN, artistList, artistListAdapter);
 		artistListAdapter.setLoadArtists(loadArtists);
 		AsyncTaskUtil.executeAsyncTask(loadArtists, true, query);
 	}

@@ -772,7 +772,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 				if (userAttending == Attending.NOT_GOING) {
 					item.setUserAttending(userAttending);
 					updateAttendingChkBoxes(item, chkBoxGoing, chkBoxWantToGo);
-					new UserTracker(eventSeekr, UserTrackingItemType.event, item.getTrackId(), 
+					new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.event, item.getTrackId(), 
 							item.getUserAttending().getValue(), UserTrackingType.Add).execute();
 					
 				} else {

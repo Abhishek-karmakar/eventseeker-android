@@ -29,7 +29,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bosch.myspin.serversdk.IPhoneCallStateListener;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.RecordApi;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
