@@ -101,6 +101,9 @@ public class LanguageFragment extends ListFragmentLoadableFromBackStack {
 		}
 		
 		public static Locales getFordLocaleByLanguage(Language language) {
+			if (language == null) {
+				return ENGLISH_UNITED_STATES;
+			}
 			List<Locales> locales = Arrays.asList(Locales.values());
 			for (Locales locale : locales) {
 				if (locale.fordLanguage == language) {

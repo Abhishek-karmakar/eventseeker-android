@@ -521,7 +521,7 @@
     <dimen name="b_btn_bg_radius_fragment_bosch_about_us">10dp</dimen>
     <!-- fragment_bosch_change_city -->
     <dimen name="b_lnr_search_lyt_h_fragment_bosch_change_city">45dp</dimen>
-    <dimen name="b_lnr_search_lyt_pad_fragment_bosch_change_city">10dp</dimen>
+    <dimen name="b_lnr_search_lyt_pad_fragment_bosch_change_city"><!-- 10 -->5dp</dimen>
     <dimen name="b_edt_search_city_bg_edge_radius_fragment_bosch_change_city">10dp</dimen>
     <dimen name="b_edt_search_city_pad_l_r_fragment_bosch_change_city">10dp</dimen>
     <dimen name="b_edt_search_city_stroke_h_fragment_bosch_change_city">2dp</dimen>
