@@ -24,24 +24,25 @@ public class UserTracker extends AsyncTask<Void, Void, Void> {
 	private UserTrackingItemType type;
 	private long id;
 	private int attending;
-	private String fb_postid;
+	private String fb_postid, oauthToken;
 	
-	public UserTracker(EventSeekr eventSeekr, UserTrackingItemType type, long id) {
+	public UserTracker(String oauthToken, EventSeekr eventSeekr, UserTrackingItemType type, long id) {
+		this.oauthToken = oauthToken;
 		this.eventSeekr = eventSeekr;
 		this.type = type;
 		this.id = id;
 		trackingType = UserTrackingType.Add;
 	}
 	
-	public UserTracker(EventSeekr eventSeekr, UserTrackingItemType type, long id, int attending, UserTrackingType trackingType) {
-		this(eventSeekr, type, id);
+	public UserTracker(String oauthToken, EventSeekr eventSeekr, UserTrackingItemType type, long id, int attending, UserTrackingType trackingType) {
+		this(oauthToken, eventSeekr, type, id);
 		this.attending = attending;
 		this.trackingType = trackingType;
 	}
 	
-	public UserTracker(EventSeekr eventSeekr, UserTrackingItemType type, long id, int attending, String fb_postid, 
+	public UserTracker(String oauthToken, EventSeekr eventSeekr, UserTrackingItemType type, long id, int attending, String fb_postid, 
 			UserTrackingType trackingType) {
-		this(eventSeekr, type, id);
+		this(oauthToken, eventSeekr, type, id);
 		this.attending = attending;
 		this.fb_postid = fb_postid;
 		this.trackingType = trackingType;
@@ -49,7 +50,7 @@ public class UserTracker extends AsyncTask<Void, Void, Void> {
 
 	@Override
 	protected Void doInBackground(Void... params) {
-		UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
+		UserInfoApi userInfoApi = new UserInfoApi(oauthToken);
 		userInfoApi.setUserId(eventSeekr.getWcitiesId());
 		try {
 			JSONObject jsonObject = (trackingType == UserTrackingType.Add) ? 

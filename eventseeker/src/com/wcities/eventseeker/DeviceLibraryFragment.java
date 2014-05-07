@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.ConnectAccountsFragment.ServiceAccount;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.SyncArtists;
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -103,7 +104,7 @@ public class DeviceLibraryFragment extends FragmentLoadableFromBackStack impleme
 	private void apiCallFinished(List<String> artists) {
 		if (artists != null) {
 			//Log.d(TAG, "artists size = " + artists.size());
-			new SyncArtists(artists, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
+			new SyncArtists(Api.OAUTH_TOKEN, artists, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
 					Service.DeviceLibrary, this).execute();
 			
 		} else {

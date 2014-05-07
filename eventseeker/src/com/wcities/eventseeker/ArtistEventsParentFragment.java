@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.wcities.eventseeker.ArtistDetailsFragment.ArtistDetailsFragmentListener;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -121,12 +122,12 @@ public abstract class ArtistEventsParentFragment extends PublishEventListFragmen
 					artist.getAttending() == Attending.NotTracked) {
 				artist.updateAttending(Attending.Tracked, eventSeekr);
 				updateFollowingFooter();
-				new UserTracker(eventSeekr, UserTrackingItemType.artist, artist.getId()).execute();
+				new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.artist, artist.getId()).execute();
 
 			} else {
 				artist.updateAttending(Attending.NotTracked, eventSeekr);
 				updateFollowingFooter();
-				new UserTracker(eventSeekr, UserTrackingItemType.artist, artist.getId(), 
+				new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.artist, artist.getId(), 
 						Attending.NotTracked.getValue(), UserTrackingType.Edit).execute();
 			}
 
@@ -151,7 +152,7 @@ public abstract class ArtistEventsParentFragment extends PublishEventListFragmen
 
 	@Override
 	public void loadItemsInBackground() {
-		loadArtistEvents = new LoadArtistEvents(dateWiseEventList, adapter, artist.getId(),
+		loadArtistEvents = new LoadArtistEvents(Api.OAUTH_TOKEN, dateWiseEventList, adapter, artist.getId(),
 				((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).getWcitiesId());
 
 		adapter.setLoadDateWiseEvents(loadArtistEvents);

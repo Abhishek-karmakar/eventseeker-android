@@ -35,12 +35,13 @@ public class LoadDateWiseEvents extends AsyncTask<Void, Void, List<Event>> {
 	private String startDate, endDate;
 	private int categoryId;
 	private int miles;
-	private String wcitiesId;
+	private String wcitiesId, oauthToken;
 	
 	private DateWiseEventParentAdapterListener eventListAdapter;
 	
-	private LoadDateWiseEvents(DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, 
+	private LoadDateWiseEvents(String oauthToken, DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, 
 			double lat, double lon, String wcitiesId) {
+		this.oauthToken = oauthToken;
 		this.eventList = eventList;
 		this.eventListAdapter = eventListAdapter;
 		this.lat = lat;
@@ -48,18 +49,18 @@ public class LoadDateWiseEvents extends AsyncTask<Void, Void, List<Event>> {
 		this.wcitiesId = wcitiesId;
 	}
 
-	public LoadDateWiseEvents(DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, String query, 
+	public LoadDateWiseEvents(String oauthToken, DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, String query, 
 			double lat, double lon, int miles, String wcitiesId, String startDate, String endDate) {
-		this(eventList, eventListAdapter, lat, lon, wcitiesId);
+		this(oauthToken, eventList, eventListAdapter, lat, lon, wcitiesId);
 		this.query = query;
 		this.miles = miles;
 		this.startDate = startDate;
 		this.endDate = endDate;
 	}
 	
-	public LoadDateWiseEvents(DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, double lat, 
+	public LoadDateWiseEvents(String oauthToken, DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, double lat, 
 			double lon, String startDate, String endDate, int categoryId, String wcitiesId) {
-		this(eventList, eventListAdapter, lat, lon, wcitiesId);
+		this(oauthToken, eventList, eventListAdapter, lat, lon, wcitiesId);
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.categoryId = categoryId;
@@ -71,7 +72,7 @@ public class LoadDateWiseEvents extends AsyncTask<Void, Void, List<Event>> {
 		int eventsAlreadyRequested = eventListAdapter.getEventsAlreadyRequested();
 		
 		EventApi eventApi;
-		eventApi = new EventApi(Api.OAUTH_TOKEN, lat, lon);
+		eventApi = new EventApi(oauthToken, lat, lon);
 		eventApi.setLimit(EVENTS_LIMIT);
 		eventApi.setAlreadyRequested(eventsAlreadyRequested);
 		eventApi.addMoreInfo(MoreInfo.fallbackimage);

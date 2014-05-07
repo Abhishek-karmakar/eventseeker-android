@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.adapter.ArtistNewsListAdapter;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadArtistNews;
 import com.wcities.eventseeker.asynctask.LoadArtistNews.ArtistNewsListItem;
@@ -219,7 +220,7 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	
 	@Override
 	public void loadItemsInBackground() {
-		loadArtistsNews = new LoadArtistNews(artistNewsListAdapter, wcitiesId, artistsNewsListItems, null, this);
+		loadArtistsNews = new LoadArtistNews(Api.OAUTH_TOKEN, artistNewsListAdapter, wcitiesId, artistsNewsListItems, null, this);
 		artistNewsListAdapter.setLoadArtistNews(loadArtistsNews);
 		AsyncTaskUtil.executeAsyncTask(loadArtistsNews, true);
 	}

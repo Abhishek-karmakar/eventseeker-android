@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadDateWiseVenueEventsList;
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -77,7 +78,7 @@ public abstract class VenueEventsParentListFragment extends PublishEventListFrag
 	
 	@Override
 	public void loadItemsInBackground() {
-		LoadDateWiseVenueEventsList loadEvents = new LoadDateWiseVenueEventsList(dateWiseEvtList, adapter, 
+		LoadDateWiseVenueEventsList loadEvents = new LoadDateWiseVenueEventsList(Api.OAUTH_TOKEN, dateWiseEvtList, adapter, 
 				((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).getWcitiesId(), venue.getId());
         adapter.setLoadDateWiseEvents(loadEvents);
 		//loadEvents.execute();

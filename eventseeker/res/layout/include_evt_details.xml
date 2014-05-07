@@ -76,14 +76,6 @@
 			android:text="Time"
 			android:gravity="center_vertical" />
 	    
-	    <TextView android:id="@+id/txtEvtTimeAMPM"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:textColor="@color/txt_evt_location_include_evt_details"
-			android:textSize="@dimen/txt_evt_time_am_pm_txt_size_include_evt_details"
-			android:text="AM"
-			android:gravity="center_vertical" />
-        
     </LinearLayout>
     
 </RelativeLayout>

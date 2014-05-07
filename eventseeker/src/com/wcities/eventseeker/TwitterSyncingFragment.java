@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.SyncArtists;
 import com.wcities.eventseeker.constants.AppConstants;
@@ -107,7 +108,7 @@ public class TwitterSyncingFragment extends FragmentLoadableFromBackStack implem
 							
 							@Override
 							public void run() {
-								new SyncArtists(artistNames, eventSeekr, 
+								new SyncArtists(Api.OAUTH_TOKEN, artistNames, eventSeekr, 
 										Service.Twitter, TwitterSyncingFragment.this).execute();
 							}
 						});

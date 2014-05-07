@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg.AsyncLoadImageListener;
@@ -115,7 +116,7 @@ public class BoschVenueDetailsFragment extends BoschFragmentLoadableFromBackStac
 		 *  The below async task call is made just to check the number of events, if the events are more than 0, 
 		 *  then show the events button.
 		 */
-		LoadDateWiseVenueEventsList loadEvents = new LoadDateWiseVenueEventsList(null, null, 
+		LoadDateWiseVenueEventsList loadEvents = new LoadDateWiseVenueEventsList(Api.OAUTH_TOKEN_CAR_APPS, null, null, 
 			((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).getWcitiesId(), 
 			venue.getId(), this);
 		AsyncTaskUtil.executeAsyncTask(loadEvents, true);

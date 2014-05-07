@@ -22,8 +22,10 @@ public class LoadArtistDetails extends AsyncTask<Void, Void, Void> {
 	private Artist artist;
 	private Fragment fragment;
 	private OnArtistUpdatedListener listener;
+	private String oauthToken;
 
-	public LoadArtistDetails(Artist artist, OnArtistUpdatedListener listener, Fragment fragment) {
+	public LoadArtistDetails(String oauthToken, Artist artist, OnArtistUpdatedListener listener, Fragment fragment) {
+		this.oauthToken = oauthToken;
 		this.artist = artist;
 		this.listener = listener;
 		this.fragment = fragment;
@@ -35,7 +37,7 @@ public class LoadArtistDetails extends AsyncTask<Void, Void, Void> {
 	
 	@Override
 	protected Void doInBackground(Void... params) {
-		ArtistApi artistApi = new ArtistApi(Api.OAUTH_TOKEN);
+		ArtistApi artistApi = new ArtistApi(oauthToken);
 		artistApi.setArtistId(artist.getId());
 		artistApi.setMethod(Method.artistDetail);
 		// null check is not required here, since if it's null, that's handled from eventApi

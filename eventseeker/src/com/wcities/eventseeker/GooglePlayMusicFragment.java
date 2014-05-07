@@ -23,6 +23,7 @@ import com.android.gm.api.exception.InvalidGooglePlayMusicAccountException;
 import com.android.gm.api.model.Song;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.SyncArtists;
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -155,7 +156,7 @@ public class GooglePlayMusicFragment extends FragmentLoadableFromBackStack imple
 	    protected void onPostExecute(List<String> artistNames) {
 	    	super.onPostExecute(artistNames);
 	    	if (artistNames != null) {
-				new SyncArtists(artistNames, (EventSeekr) FragmentUtil.getActivity(fragment).getApplication(), 
+				new SyncArtists(Api.OAUTH_TOKEN, artistNames, (EventSeekr) FragmentUtil.getActivity(fragment).getApplication(), 
 						Service.GooglePlay, fragment).execute();
 				
 			} else {

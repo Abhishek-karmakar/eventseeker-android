@@ -32,7 +32,7 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 	private static final String TAG = LoadArtistNews.class.getName();
 	
 	private ArtistNewsListAdapter artistNewsListAdapter;
-	private String wcitiesId;
+	private String wcitiesId, oauthToken;
 	private Artist artist;
 	private List<ArtistNewsListItem> batchLoaded;
 	private List<ArtistNewsListItem> artistsNewsListItems;
@@ -43,8 +43,9 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 		public abstract void onNewsLoaded();
 	}
 	
-	public LoadArtistNews(ArtistNewsListAdapter artistNewsListAdapter, String wcitiesId, 
+	public LoadArtistNews(String oauthToken, ArtistNewsListAdapter artistNewsListAdapter, String wcitiesId, 
 			List<ArtistNewsListItem> artistsNewsListItems, Artist artist, OnNewsLoadedListener newsLoadedListener) {
+		this.oauthToken = oauthToken;
 		this.artistNewsListAdapter = artistNewsListAdapter;
 		this.wcitiesId = wcitiesId;
 		this.artist = artist;
@@ -58,7 +59,7 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 	@Override
 	protected List<ArtistNewsItem> doInBackground(Void... params) {
 		List<ArtistNewsItem> tmpArtistNewsItems = new ArrayList<ArtistNewsItem>();
-		UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
+		UserInfoApi userInfoApi = new UserInfoApi(oauthToken);
 		userInfoApi.setLimit(ARTISTS_NEWS_LIMIT);
 		userInfoApi.setAlreadyRequested(artistNewsListAdapter.getItemsAlreadyRequested());
 		userInfoApi.setUserId(wcitiesId);

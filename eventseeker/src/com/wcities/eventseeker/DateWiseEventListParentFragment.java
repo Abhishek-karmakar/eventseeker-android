@@ -6,6 +6,7 @@ import java.util.List;
 import android.os.Bundle;
 import android.widget.BaseAdapter;
 
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -112,7 +113,7 @@ public abstract class DateWiseEventListParentFragment extends PublishEventListFr
 	
 
 	protected LoadDateWiseEvents getLoadDateWiseEvents() {
-		return new LoadDateWiseEvents(dateWiseEvtList, eventListAdapter, lat, lon, startDate, endDate, 
+		return new LoadDateWiseEvents(Api.OAUTH_TOKEN, dateWiseEvtList, eventListAdapter, lat, lon, startDate, endDate, 
 				categories.get(categoryPosition).getId(), 
 				((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).getWcitiesId());
 	}

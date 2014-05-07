@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -66,7 +67,7 @@ public class BoschArtistDetailsFragment extends BoschFragmentLoadableFromBackSta
 		if (artist == null) {
 			artist = (Artist) getArguments().getSerializable(BundleKeys.ARTIST);
 			isLoadingArtistDetails = true;
-			AsyncTaskUtil.executeAsyncTask(new LoadArtistDetails(artist, this, this), true);
+			AsyncTaskUtil.executeAsyncTask(new LoadArtistDetails(Api.OAUTH_TOKEN_CAR_APPS, artist, this, this), true);
 		}
 		
 		res = FragmentUtil.getResources(this);
@@ -193,12 +194,12 @@ public class BoschArtistDetailsFragment extends BoschFragmentLoadableFromBackSta
 					
 					if (attending == Attending.Tracked) {
 						artist.setAttending(Attending.Tracked);
-							new UserTracker((EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
+							new UserTracker(Api.OAUTH_TOKEN_CAR_APPS, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
 								UserTrackingItemType.artist, artist.getId()).execute();
 
 					} else {
 						artist.setAttending(Attending.NotTracked);
-							new UserTracker((EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
+							new UserTracker(Api.OAUTH_TOKEN_CAR_APPS, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
 									UserTrackingItemType.artist, artist.getId(), Attending.NotTracked.getValue(),
 									UserTrackingType.Edit).execute();
 					

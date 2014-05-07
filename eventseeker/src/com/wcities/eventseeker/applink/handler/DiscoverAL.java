@@ -222,7 +222,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		int eventsAlreadyRequested = eventList.getEventsAlreadyRequested();
 		int totalNoOfEvents = 0;
 
-		EventApi eventApi = new EventApi(Api.FORD_OAUTH_TOKEN, lat, lon);
+		EventApi eventApi = new EventApi(Api.OAUTH_TOKEN_CAR_APPS, lat, lon);
 		eventApi.setStart(getStartDate());
 		eventApi.setEnd(getEndDate());
 		eventApi.setMiles(MILES_LIMIT);
@@ -271,7 +271,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		int eventsAlreadyRequested = eventList.getEventsAlreadyRequested();
 		int totalNoOfEvents = 0;
 		
-		EventApi eventApi = new EventApi(Api.FORD_OAUTH_TOKEN, lat, lon);
+		EventApi eventApi = new EventApi(Api.OAUTH_TOKEN_CAR_APPS, lat, lon);
 		eventApi.setCategory(categoryId);
 		eventApi.setStart(getStartDate());
 		eventApi.setEnd(getEndDate());

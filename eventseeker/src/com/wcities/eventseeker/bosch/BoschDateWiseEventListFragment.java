@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.widget.BaseAdapter;
 
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
 import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
@@ -70,7 +71,7 @@ public class BoschDateWiseEventListFragment extends ListFragment implements Load
 	
 	@Override
 	public void loadItemsInBackground() {
-		loadEvents = new LoadDateWiseEvents(dateWiseEvtList, eventListAdapter, lat, lon, startDate, endDate, 
+		loadEvents = new LoadDateWiseEvents(Api.OAUTH_TOKEN_CAR_APPS, dateWiseEvtList, eventListAdapter, lat, lon, startDate, endDate, 
 				selectedCategory.getId(), ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId());
 		((BoschDateWiseEventListAdapter) eventListAdapter).setLoadDateWiseEvents(loadEvents);
 		AsyncTaskUtil.executeAsyncTask(loadEvents, true);

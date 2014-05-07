@@ -18,12 +18,13 @@ public class LoadMyEventsCount extends AsyncTask<Void, Void, Integer> {
 	
 	private static final int EVENTS_LIMIT = 1;
 	
-	private String wcitiesId;
+	private String wcitiesId, oauthToken;
 	private double lat, lon;
 	
 	private AsyncTaskListener<Integer> listener;
 	
-	public LoadMyEventsCount(String wcitiesId, double lat, double lon, AsyncTaskListener<Integer> listener) {
+	public LoadMyEventsCount(String oauthToken, String wcitiesId, double lat, double lon, AsyncTaskListener<Integer> listener) {
+		this.oauthToken = oauthToken;
 		this.wcitiesId = wcitiesId;
 		this.lat = lat;
 		this.lon = lon;
@@ -34,7 +35,7 @@ public class LoadMyEventsCount extends AsyncTask<Void, Void, Integer> {
 	protected Integer doInBackground(Void... params) {
 		int count = 0;
 		
-		UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
+		UserInfoApi userInfoApi = new UserInfoApi(oauthToken);
 		userInfoApi.setLimit(EVENTS_LIMIT);
 		userInfoApi.setUserId(wcitiesId);
 		userInfoApi.setLat(lat);

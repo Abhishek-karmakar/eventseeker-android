@@ -371,7 +371,7 @@
     <string name="search_artist_text">Buscar por artista</string>
     <string name="listening">Escuchando...</string>
     <string name="processing">Procesamiento...</string>
-    <string name="nuance_error">Lo siento, se ha producido un error. Por favor pulse el botón de voz e diga mis eventos, descubrir o búsqueda</string>
+    <string name="nuance_error">Lo siento, se ha producido un error. Por favor pulse el botón de voz e diga mis eventos, explorar o búsqueda</string>
     
     <!-- Events -->
     <string name="event_no_evts_avail">No hay eventos disponibles.</string>

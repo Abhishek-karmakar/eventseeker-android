@@ -30,6 +30,7 @@ import android.widget.Button;
 
 import com.wcities.eventseeker.adapter.SwipeTabsAdapter;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadEventDetails;
 import com.wcities.eventseeker.asynctask.LoadEventDetails.OnEventUpdatedListner;
@@ -86,7 +87,7 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 			enableTabs = event.hasArtists();
 			//Log.d(TAG, "enableTabs = " + enableTabs);
 			
-			loadEventDetails = new LoadEventDetails(this, this, event);
+			loadEventDetails = new LoadEventDetails(Api.OAUTH_TOKEN, this, this, event);
 			AsyncTaskUtil.executeAsyncTask(loadEventDetails, true);
 			
 			event.getFriends().clear();

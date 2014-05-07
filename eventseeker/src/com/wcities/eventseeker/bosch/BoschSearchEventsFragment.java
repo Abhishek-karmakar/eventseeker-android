@@ -11,6 +11,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
 import com.wcities.eventseeker.bosch.adapter.BoschDateWiseEventListAdapter;
@@ -86,7 +87,7 @@ public class BoschSearchEventsFragment extends ListFragment implements LoadItems
 		c.add(Calendar.YEAR, 1);
 		String endDate = ConversionUtil.getDay(c);
 		
-		loadEvents = new LoadDateWiseEvents(eventList, eventLstAdptr, query, latLon[0], latLon[1], MILES_LIMIT, 
+		loadEvents = new LoadDateWiseEvents(Api.OAUTH_TOKEN, eventList, eventLstAdptr, query, latLon[0], latLon[1], MILES_LIMIT, 
 			((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId(), startDate, endDate);
 		eventLstAdptr.setLoadDateWiseEvents(loadEvents);
 		AsyncTaskUtil.executeAsyncTask(loadEvents, true);

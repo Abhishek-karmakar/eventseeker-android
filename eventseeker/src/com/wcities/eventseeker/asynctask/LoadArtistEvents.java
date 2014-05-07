@@ -30,9 +30,10 @@ public class LoadArtistEvents extends AsyncTask<Void, Void, List<Event>> {
 	private DateWiseEventList eventList;
 	private DateWiseEventParentAdapterListener eventListAdapter;
 	private int artistId;
-	private String wcitiesId;
+	private String wcitiesId, oauthToken;
 
-	public LoadArtistEvents(DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, int artistId, String wcitiesId) {
+	public LoadArtistEvents(String oauthToken, DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, int artistId, String wcitiesId) {
+		this.oauthToken = oauthToken;
 		this.eventList = eventList;
 		this.eventListAdapter = eventListAdapter;
 		this.artistId = artistId;
@@ -47,7 +48,7 @@ public class LoadArtistEvents extends AsyncTask<Void, Void, List<Event>> {
 		try {
 			int eventsAlreadyRequested = eventListAdapter.getEventsAlreadyRequested();
 			
-			ArtistApi artistApi = new ArtistApi(Api.OAUTH_TOKEN);
+			ArtistApi artistApi = new ArtistApi(oauthToken);
 			artistApi.setMethod(Method.artistEvent);
 			artistApi.setVenueDetailEnabled(true);
 			artistApi.setArtistId(artistId);

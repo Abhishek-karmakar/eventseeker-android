@@ -49,7 +49,7 @@ public class MusicNotificationReceiver extends BroadcastReceiver {
 		//if (strArtist == null || !strArtist.equals(artist)) {
 		if (intent.hasExtra(XTRA_PLAYING) && intent.getBooleanExtra(XTRA_PLAYING, false)) {
 			strArtist = artist;
-			new LoadArtistEvent(context).execute();
+			new LoadArtistEvent(context, Api.OAUTH_TOKEN).execute();
 		}
 	}
 	
@@ -60,9 +60,11 @@ public class MusicNotificationReceiver extends BroadcastReceiver {
 		private static final int MILES_LIMIT = 50;
 		
 		public Context context;
+		private String oauthToken;
 		
-		public LoadArtistEvent(Context context) {
+		public LoadArtistEvent(Context context, String oauthToken) {
 			this.context = context;
+			this.oauthToken = oauthToken;
 		}
 
 		@Override
@@ -70,7 +72,7 @@ public class MusicNotificationReceiver extends BroadcastReceiver {
 			//Log.d(TAG, "LoadArtistEvent");
 
 			try {
-				ArtistApi artistApi = new ArtistApi(Api.OAUTH_TOKEN);
+				ArtistApi artistApi = new ArtistApi(oauthToken);
 				artistApi.setMethod(Method.artistEvent);
 				artistApi.setArtist(URLEncoder.encode(strArtist, AppConstants.CHARSET_NAME));
 				artistApi.setPlayingArtistEnabled(true);

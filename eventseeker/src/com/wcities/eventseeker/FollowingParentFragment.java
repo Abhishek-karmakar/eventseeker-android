@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.adapter.MyArtistListAdapter;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadMyArtists;
 import com.wcities.eventseeker.asynctask.LoadMyArtists.LoadMyArtistsListener;
@@ -149,7 +150,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 
 	@Override
 	public void loadItemsInBackground() {
-		loadMyArtists = new LoadMyArtists(wcitiesId, artistList, myArtistListAdapter, 
+		loadMyArtists = new LoadMyArtists(Api.OAUTH_TOKEN, wcitiesId, artistList, myArtistListAdapter, 
 				cachedFollowingList, artistIds, indices, alphaNumIndexer, this);
 		myArtistListAdapter.setLoadArtists(loadMyArtists);
 		AsyncTaskUtil.executeAsyncTask(loadMyArtists, true);

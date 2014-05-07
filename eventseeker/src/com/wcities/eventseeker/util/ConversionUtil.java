@@ -40,7 +40,7 @@ public class ConversionUtil {
 	 * @param date
 	 * @return time considering 12-hour clock with AM/PM attached at the end
 	 */
-	public static String getTime(Date date) {
+	/*public static String getTime(Date date) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		
@@ -55,28 +55,18 @@ public class ConversionUtil {
 		String am_pm = ((calendar.get(Calendar.AM_PM) == Calendar.AM) ? "AM" : "PM");
 		String time = hr + ":" + strMin + am_pm;
 		return time;
-	}
+	}*/
 	
-	/**
-	 * @param date
-	 * @return time considering 12-hour clock with AM/PM attached at index 1 of the array
-	 */
-	public static String[] getTimeInArray(Date date) {
-		String[] time = new String[2];
+	public static String getTime(Date date) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		
-		int hr = calendar.get(Calendar.HOUR);
-		if (hr == 0) {
-			hr = 12;
-		}
+		int hr = calendar.get(Calendar.HOUR_OF_DAY);
 		
 		int min = calendar.get(Calendar.MINUTE);
 		String strMin = (min < 10) ? "0" + min : min + "";
-		time[0] = hr + ":" + strMin;
+		String time = hr + ":" + strMin;
 		
-		String am_pm = ((calendar.get(Calendar.AM_PM) == Calendar.AM) ? "AM" : "PM");
-		time[1] = am_pm;
 		return time;
 	}
 	
@@ -114,16 +104,6 @@ public class ConversionUtil {
 	public static String getDay(Calendar calendar) {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		return df.format(calendar.getTime());
-	}
-	
-	/**
-	 * @param day
-	 * @return date in the form (dd MMMM hh:mm a).
-	 */
-	public static String getDateTime(com.wcities.eventseeker.core.Date date) {
-		String pattern = date.isStartTimeAvailable() ? "dd MMMM hh:mm a" : "dd MMMM";
-		DateFormat df = new SimpleDateFormat(pattern);
-		return df.format(date.getStartDate());
 	}
 	
 	/**

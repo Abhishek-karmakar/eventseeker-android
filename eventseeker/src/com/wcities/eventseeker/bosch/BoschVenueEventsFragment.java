@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadDateWiseVenueEventsList;
 import com.wcities.eventseeker.bosch.adapter.BoschDateWiseEventListAdapter;
@@ -75,7 +76,7 @@ public class BoschVenueEventsFragment extends BoschListFragmentLoadableFromBackS
 	
 	@Override
 	public void loadItemsInBackground() {
-		LoadDateWiseVenueEventsList loadEvents = new LoadDateWiseVenueEventsList(dateWiseEvtList, adapter, 
+		LoadDateWiseVenueEventsList loadEvents = new LoadDateWiseVenueEventsList(Api.OAUTH_TOKEN_CAR_APPS, dateWiseEvtList, adapter, 
 			((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).getWcitiesId(), venue.getId());
         adapter.setLoadDateWiseEvents(loadEvents);
         AsyncTaskUtil.executeAsyncTask(loadEvents, true);

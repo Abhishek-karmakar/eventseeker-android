@@ -16,6 +16,7 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.adapter.DateWiseMyEventListAdapter;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadMyEvents;
@@ -103,7 +104,7 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 		if (latLon == null) {
 			latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 		}
-		loadEvents = new LoadMyEvents(dateWiseEvtList, eventListAdapter, wcitiesId, loadType, 
+		loadEvents = new LoadMyEvents(Api.OAUTH_TOKEN, dateWiseEvtList, eventListAdapter, wcitiesId, loadType, 
 				latLon[0], latLon[1], this);
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);
         AsyncTaskUtil.executeAsyncTask(loadEvents, true);

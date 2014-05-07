@@ -157,6 +157,10 @@ public class DeviceUtil {
 	
 	public static double[] getCurrentLatLon(EventSeekr eventSeekr) {
 		//Log.d(TAG, "getLatLon()");
+		if (MySpinServerSDK.sharedInstance().isConnected() && !AppConstants.IS_CAR_STATIONARY) {
+			return getCurrentLatLonForBosch(eventSeekr);
+		}
+		
 		double[] latLon = new double[] {0, 0};
 		
 		final LocationManager locationManager = getLocationManagerInstance(eventSeekr);

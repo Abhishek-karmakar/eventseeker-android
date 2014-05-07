@@ -35,9 +35,11 @@ public class LoadVenues extends AsyncTask<String, Void, List<Venue>> {
 	
 	private List<Venue> venueList;
 	private double[] latLon;
+	private String oauthToken;
 	
-	public LoadVenues(Fragment fragment, AbstractVenueListAdapter venueListAdapter, List<Venue> venueList, 
+	public LoadVenues(String oauthToken, Fragment fragment, AbstractVenueListAdapter venueListAdapter, List<Venue> venueList, 
 			double[] latLon) {
+		this.oauthToken = oauthToken;
 		this.fragment = fragment;
 		this.venueListAdapter = venueListAdapter;
 		this.venueList = venueList;
@@ -46,7 +48,7 @@ public class LoadVenues extends AsyncTask<String, Void, List<Venue>> {
 	
 	@Override
 	protected List<Venue> doInBackground(String... params) {
-		RecordApi recordApi = new RecordApi(Api.OAUTH_TOKEN, latLon[0], latLon[1]);
+		RecordApi recordApi = new RecordApi(oauthToken, latLon[0], latLon[1]);
 		recordApi.setLimit(VENUES_LIMIT);
 		recordApi.setAlreadyRequested(venueListAdapter.getVenuesAlreadyRequested());
 		recordApi.setMiles(MILES);

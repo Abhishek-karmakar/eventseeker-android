@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.asynctask.LoadFeaturedEvts;
 import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
 import com.wcities.eventseeker.bosch.adapter.BoschEventListAdapter;
@@ -51,7 +52,7 @@ public class BoschFeaturedEventsFragment extends BoschListFragmentLoadableFromBa
 		super.onActivityCreated(savedInstanceState);
 		
 		double latlon[] = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
-		AsyncTaskUtil.executeAsyncTask(new LoadFeaturedEvts(latlon[0], latlon[1]) {
+		AsyncTaskUtil.executeAsyncTask(new LoadFeaturedEvts(Api.OAUTH_TOKEN_CAR_APPS, latlon[0], latlon[1]) {
 			
 			@Override
 			protected void onPostExecute(List<Event> result) {
