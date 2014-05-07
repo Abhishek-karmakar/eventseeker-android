@@ -36,7 +36,7 @@ import com.wcities.eventseeker.util.GeoUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
 
 public class BoschNavigateFragment extends BoschFragmentLoadableFromBackStack implements OnMapLoadedListener, 
-	OnMapLeftListener, GeoUtilListener {
+		OnMapLeftListener, GeoUtilListener {
 
 	private static final String TAG = BoschNavigateFragment.class.getName();
 	
@@ -45,21 +45,19 @@ public class BoschNavigateFragment extends BoschFragmentLoadableFromBackStack im
 	private MySpinMap mMap;
 	
 	private double venueLon, venueLat, currentLat, currentLon;
+
+	private Venue venue;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
 		
-		Venue venue = (Venue) getArguments().getSerializable(BundleKeys.VENUE);
-		
-		venueLat = venue.getAddress().getLat();
-		venueLon = venue.getAddress().getLon();
-	
 		double[] latLon = DeviceUtil.getCurrentLatLon(FragmentUtil.getApplication(this));
 		currentLat = latLon[0];
 		currentLon = latLon[1];
 		
+		venue = (Venue) getArguments().getSerializable(BundleKeys.VENUE);
 		com.wcities.eventseeker.core.Address address = venue.getAddress();
 		if (address != null) {
 			venueLat = address.getLat();
@@ -259,7 +257,7 @@ public class BoschNavigateFragment extends BoschFragmentLoadableFromBackStack im
 					//MySpinBitmapDescriptor bitmapDescriptor = MySpinBitmapDescriptorFactory.fromResource("ic_des");
 					
 					MySpinMarkerOptions mySpinMarkerOptions = new MySpinMarkerOptions();
-					mySpinMarkerOptions.position(new MySpinLatLng(venueLat, venueLon));
+					mySpinMarkerOptions.position(new MySpinLatLng(venueLat, venueLon)).title(venue.getName());
 					//mySpinMarkerOptions.icon(bitmapDescriptor);
 					mMap.addMarker(mySpinMarkerOptions);
 

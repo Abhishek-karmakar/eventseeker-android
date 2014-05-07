@@ -1,20 +1,10 @@
 package com.wcities.eventseeker.bosch;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.content.Context;
-import android.content.res.ColorStateList;
-import android.content.res.Resources;
-import android.content.res.XmlResourceParser;
-import android.graphics.drawable.Drawable;
 import android.location.Address;
-import android.os.AsyncTask;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -22,59 +12,47 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
+import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.bosch.myspin.serversdk.maps.MySpinCameraUpdateFactory;
+import com.bosch.myspin.serversdk.maps.MySpinLatLng;
+import com.bosch.myspin.serversdk.maps.MySpinMap;
+import com.bosch.myspin.serversdk.maps.MySpinMapView;
+import com.bosch.myspin.serversdk.maps.MySpinMapView.OnMapLeftListener;
+import com.bosch.myspin.serversdk.maps.MySpinMapView.OnMapLoadedListener;
+import com.bosch.myspin.serversdk.maps.MySpinMarkerOptions;
 import com.wcities.eventseeker.R;
-import com.wcities.eventseeker.api.Api;
-import com.wcities.eventseeker.api.CityApi;
 import com.wcities.eventseeker.app.EventSeekr;
-import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
 import com.wcities.eventseeker.bosch.custom.fragment.BoschFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.bosch.interfaces.BoschEditTextListener;
 import com.wcities.eventseeker.constants.AppConstants;
-import com.wcities.eventseeker.core.CityPrefered;
-import com.wcities.eventseeker.jsonparser.CityApiJSONParser;
-import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GeoUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
 
 public class BoschChangeCityFragment extends BoschFragmentLoadableFromBackStack implements OnClickListener, 
-		OnItemClickListener, GeoUtilListener, OnDisplayModeChangedListener, BoschEditTextListener {
+		GeoUtilListener, BoschEditTextListener, OnMapLeftListener, OnMapLoadedListener {
 
 	private static final String TAG = BoschChangeCityFragment.class.getSimpleName();
-	
+
+	private FrameLayout frmlytMap;
 	private EditText edtCity;
-	private View prgSearchCity;
-	
-	private CitiesAdapter adapter;
-
-	private double latitiude, longitude;
-
-	private ListView lstCity;
+	private MySpinMapView mMapView;
+	private MySpinMap mMap;
 
 	private String cityName;
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		adapter = new CitiesAdapter(null, FragmentUtil.getActivity(BoschChangeCityFragment.this));
-	}
+	private String strAddress;
+	
+	private double latitude, longitude;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_bosch_change_city, null);
 
 		view.findViewById(R.id.btnSearchCity).setOnClickListener(this);
-		view.findViewById(R.id.btnNearbyCities).setOnClickListener(this);
 
 		edtCity = (EditText) view.findViewById(R.id.edtSearchCity);
 		edtCity.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -88,274 +66,169 @@ public class BoschChangeCityFragment extends BoschFragmentLoadableFromBackStack 
 				return false;
 			}
 		});
-
-		prgSearchCity = view.findViewById(R.id.prgSearchCity);
-		prgSearchCity.setVisibility(View.GONE);
 		
-		view.findViewById(R.id.btnUp).setOnClickListener(this);
-		view.findViewById(R.id.btnDown).setOnClickListener(this);
+		frmlytMap = (FrameLayout) view.findViewById(R.id.frmlytMap);
 		
-		lstCity = (ListView) view.findViewById(R.id.lstCities);
-		lstCity.setOnItemClickListener(this);
+		addNewMapView();
 		
 		updateColors();
 		return view;
 	}
 	
+	private void addNewMapView() {
+		mMapView = new MySpinMapView(FragmentUtil.getActivity(this));
+		mMapView.setOnMapLoadedListener(this);
+		mMapView.setOnMapLeftListener(this);
+		
+		/**
+		 * We are adding new MapWiew each and every time as in Bosch's MapView/Map instance there aren't any
+		 * methods available to remove the previous markers. So, when we do addMarker() it will add a new 
+		 * marker without removing the previous one. So, it will show that many markers as many time we will 
+		 * search a new city.
+		 */
+		if (frmlytMap.getChildCount() > 0) {
+			frmlytMap.removeAllViews();
+		}
+		frmlytMap.addView(mMapView);
+	}
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
-		lstCity.setAdapter(adapter);
-		
 		double[] latlon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 		
-		latitiude = latlon[0];
+		latitude = latlon[0];
 		longitude = latlon[1];
 	}
 	
 	@Override
+	public void onStart() {
+		super.onStart();
+		mMapView.onStartTemporaryDetach();
+	}
+	
+	@Override
  	public void onResume() {
+		mMapView.onResume();
 		cityName = EventSeekr.getCityName();
 		if (cityName == null) {
 			GeoUtil.getCityName(this, FragmentUtil.getActivity(this));
 		}
 		super.onResume(BoschMainActivity.INDEX_NAV_ITEM_CHANGE_CITY, buildTitle());
 	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		mMapView.onPause();
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		mMapView.onDestroy();
+	}
+
+	@Override
+	public void onMapLoadedListener() {
+		mMap = mMapView.getMap();
+
+		if (latitude == 0 || longitude == 0) {
+			double[] latlon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
+			
+			latitude = latlon[0];
+			longitude = latlon[1];
+		} 
+		setMarker(latitude, longitude);
+	}
 
 	private String buildTitle() {
 		return (cityName == null || cityName.length() == 0) ? "Change City" : cityName + " - Change City";
 	}
-
-	@Override
-	public void onItemClick(AdapterView<?> adpV, View v, int position, long arg) {
-		CityPrefered cityPrefered = (CityPrefered) adapter.getItem(position);
-
-		if (cityPrefered.getCityName() != null) {
-			latitiude = cityPrefered.getLatitude();
-			longitude = cityPrefered.getLongitude();
-			
-			cityName = cityPrefered.getCityName();
-			((BoschMainActivity)FragmentUtil.getActivity(this)).updateTitleForFragment(buildTitle(), 
-					getClass().getSimpleName());
-			
-			EventSeekr.setCityName(cityName);
-			DeviceUtil.updateLatLon(cityPrefered.getLatitude(), cityPrefered.getLongitude());
-			
-			adapter.setData(null);
-			adapter.notifyDataSetChanged();
-		}
-	}
 	
 	@Override
 	public void onClick(View v) {
-		
 		switch (v.getId()) {
 
-			case R.id.btnUp:
-				lstCity.smoothScrollByOffset(-1);
-				break;
-			case R.id.btnDown:
-				lstCity.smoothScrollByOffset(1);
-				break;
-		
 			case R.id.btnSearchCity:
 				onSearchClicked();
-				break;
-
-			case R.id.btnNearbyCities:
-				onNearByCitiesClicked();
 				break;
 		}
 	}
 
-	private void onNearByCitiesClicked() {
-
-		adapter.setData(null);
-		adapter.notifyDataSetChanged();
-		
-		LoadCities loadCities = new LoadCities(latitiude, longitude);
-		AsyncTaskUtil.executeAsyncTask(loadCities, true, LoadCities.GET_NEARBY_CITIES);		
-	
-	}
-
 	private void onSearchClicked() {
-
-		adapter.setData(null);
-		adapter.notifyDataSetChanged();
-		
 		String city = edtCity.getText().toString().trim();
 		city = city.replace("\\n", "");
 		if(city.equals("")) {
 			return;
 		}
 
-		LoadCities loadCities = new LoadCities(city);
-		AsyncTaskUtil.executeAsyncTask(loadCities, true, LoadCities.GET_CITIES);
-	
+		searchFor(city);
 	}
 	
-	private class LoadCities extends AsyncTask<Integer, Void, List<CityPrefered>> {
-
-		private final String TAG = LoadCities.class.getName();
-
-		private static final int GET_CITIES= 0;
-		private static final int GET_NEARBY_CITIES= 1;
-		
-		private String city;
-		
-		private double lon, lat;
-
-		public LoadCities(String city) {
-			this.city = city;
-		}
-
-		public LoadCities(double lat, double lon) {
-			this.lat = lat;
-			this.lon = lon;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			prgSearchCity.setVisibility(View.VISIBLE);
-		}
-		
-		@Override
-		protected List<CityPrefered> doInBackground(Integer... params) {
-			
-			int selectedApiCall = params[0];
-			
-			try {
-				
-				CityApi api = new CityApi(Api.OAUTH_TOKEN_CAR_APPS);
-				JSONObject jsonObject = null;
-				
-				switch (selectedApiCall) {
-				
-				case GET_CITIES :
-					jsonObject = api.getCities(city);
-					break;
-				
-				case GET_NEARBY_CITIES :
-					jsonObject = api.getNearbyCities(lat, lon);
-					break;
-				
-				}
-				
-				CityApiJSONParser jsonParser = new CityApiJSONParser();
-				return jsonParser.parseCities(FragmentUtil.getActivity(BoschChangeCityFragment.this), jsonObject);
-			
-			} catch (ClientProtocolException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (JSONException e) {		
-				e.printStackTrace();
+	public boolean searchFor(String query) {
+		//Log.i(TAG, "onQueryTextSubmit()");
+		Geocoder geocoder = new Geocoder(FragmentUtil.getActivity(this));
+		List<Address> addresses = null;
+		try {
+			addresses = geocoder.getFromLocationName(query, 1);
+			if (addresses != null && !addresses.isEmpty()) {
+				Address address = addresses.get(0);
+				onAddressUpdated(address);
 			}
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(List<CityPrefered> result) {
-			super.onPostExecute(result);
 			
-			prgSearchCity.setVisibility(View.GONE);
-			
-			if (result == null) {
-				CityPrefered cityPrefered = new CityPrefered(null, null, 
-						AppConstants.NOT_ALLOWED_LAT, AppConstants.NOT_ALLOWED_LON);
-				
-				result = new ArrayList<CityPrefered>();
-				result.add(cityPrefered);
-
-				Toast.makeText(FragmentUtil.getActivity(BoschChangeCityFragment.this)
-						, "Couldn't locate the City.", Toast.LENGTH_LONG).show();
-			}
-			adapter.setData(result);
-			adapter.notifyDataSetChanged();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+		
+		// Alternative way to find string address
+		if (addresses == null || addresses.isEmpty()) {
+			GeoUtil.getFromAddress(query, this);
+		}
+		
+		//TODO: if it is needed
+		//hideSoftKeypad();
+		
+		return true;
 	}
 	
-	private static class CitiesAdapter extends BaseAdapter {
+	private void onAddressUpdated(Address address) {
+    	updateStrAddress(address);
 		
-		private List<CityPrefered> lstCities;
-		private LayoutInflater inflater;
-		private Resources res;
+    	latitude = address.getLatitude();
+		longitude = address.getLongitude();
+		DeviceUtil.updateLatLon(latitude, longitude);
+		//setMarker(latitude, longitude);
+		addNewMapView();
 		
-		public CitiesAdapter(List<CityPrefered> lstCities, Context ctx) {
-			this.lstCities = lstCities;
-			inflater = LayoutInflater.from(ctx);
-			res = ctx.getResources();
-		}
-
-		@Override
-		public int getCount() {
-			if (lstCities == null) {
-				return 0;
+		GeoUtil.getCityName(this, FragmentUtil.getActivity(this));
+		
+    }
+	
+	private void setMarker(double lat, double lon) {
+    	if (mMap != null) {
+    		MySpinLatLng mySpinLatLng;
+	    	MySpinMarkerOptions mySpinMarkerOptions = new MySpinMarkerOptions();
+			mySpinMarkerOptions.position(mySpinLatLng = new MySpinLatLng(lat, lon)).title(strAddress);
+			
+			mMap.addMarker(mySpinMarkerOptions);
+			mMap.moveCamera(MySpinCameraUpdateFactory.newLatLng(mySpinLatLng));
+	    	mMap.moveCamera(MySpinCameraUpdateFactory.zoomTo(12));
+    	}
+    }
+	
+	private void updateStrAddress(Address address) {
+    	strAddress = "";
+    	int maxIndex = address.getMaxAddressLineIndex() > 1 ? 1 : address.getMaxAddressLineIndex();
+    	for (int i = 0; i <= maxIndex; i++) {
+			if (!strAddress.equals("")) {
+				strAddress = strAddress.concat(", ");
 			}
-			return lstCities.size();
+			strAddress = strAddress.concat(address.getAddressLine(i));
 		}
-
-		@Override
-		public Object getItem(int position) {
-			return lstCities.get(position);
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			convertView = inflater.inflate(R.layout.bosch_list_item_cities, null);
-			
-			RelativeLayout rltRootLyt = (RelativeLayout) convertView.findViewById(R.id.rltRootLyt);
-			
-			TextView txtCity = (TextView) convertView.findViewById(R.id.txtCity);
-
-			int txtClrResId = -1;
-			Drawable txtDrwble;
-			if (AppConstants.IS_NIGHT_MODE_ENABLED) {
-				rltRootLyt.setBackgroundResource(
-						R.drawable.slctr_item_lst_cities_fragment_change_city_night_mode);
-				
-				txtClrResId = R.color.slctr_black_on_white_off;
-				txtDrwble = res.getDrawable(R.drawable.slctr_txt_city_fragment_change_city_night_mode);				
-			} else {
-				rltRootLyt.setBackgroundResource(R.drawable.slctr_item_lst_cities_fragment_change_city);				
-				
-				txtClrResId = R.color.slctr_white_on_black_off;
-				txtDrwble = res.getDrawable(R.drawable.slctr_txt_city_fragment_change_city);				
-			}
-			
-			txtCity.setCompoundDrawablesWithIntrinsicBounds(txtDrwble, null, null, null);
-			
-			try {
-				XmlResourceParser parser = res.getXml(txtClrResId);
-				ColorStateList colors = ColorStateList.createFromXml(res, parser);
-				txtCity.setTextColor(colors);
-			} catch (Exception e) {}
-
-			CityPrefered cityPrefered = lstCities.get(position);
-
-			if (cityPrefered.getCityName() == null) {
-				txtCity.setText("No City Found");
-				
-			} else {
-				txtCity.setText(cityPrefered.getCityName() + ", " + cityPrefered.getCountryName());
-			
-			}
-			return convertView;
-		}
-
-		public void setData(List<CityPrefered> lstCities) {
-			this.lstCities = lstCities;
-		}
-
-	}
-
+    }
+	
 	@Override
 	public void onAddressSearchCompleted(String strAddress) {}
 
@@ -374,12 +247,10 @@ public class BoschChangeCityFragment extends BoschFragmentLoadableFromBackStack 
 	}
 
 	@Override
-	public void onLatlngSearchCompleted(Address address) {}
-
-	@Override
-	public void onDisplayModeChanged(boolean isNightModeEnabled) {
-		updateColors();
-		adapter.notifyDataSetChanged();
+	public void onLatlngSearchCompleted(Address address) {
+		if (address != null) {
+			onAddressUpdated(address);
+		}
 	}
 
 	private void updateColors() {
@@ -397,6 +268,11 @@ public class BoschChangeCityFragment extends BoschFragmentLoadableFromBackStack 
 	@Override
 	public EditText getEditText() {
 		return edtCity;
+	}
+
+	@Override
+	public void onMapLeftListener(String arg0) {
+		
 	}
 
 }

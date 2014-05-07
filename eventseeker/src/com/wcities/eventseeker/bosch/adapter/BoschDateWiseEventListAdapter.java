@@ -123,10 +123,14 @@ public class BoschDateWiseEventListAdapter extends BaseAdapter implements DateWi
 					title += " @ " + new SimpleDateFormat("ha").format(schedule.getDates().get(0)
 							.getStartDate()).toLowerCase();
 				}*/
-				String venueName = (schedule.getVenue() != null) ? schedule.getVenue().getName() : "";
-				String cityName = (schedule.getVenue() != null) ? (", " + schedule.getVenue().getAddress()
-						.getCity()) : "";
-				txtEvtLocation.setText(venueName + ", " + cityName);
+				String venueName = "", cityName = "";
+				if ((schedule.getVenue() != null)) {
+					venueName = schedule.getVenue().getName();
+					cityName = (venueName.equals("") ? "" : ", ") + schedule.getVenue().getAddress().getCity();
+				}
+				/*String venueName = (schedule.getVenue() != null) ? schedule.getVenue().getName() : "";
+				String cityName = (schedule.getVenue() != null) ? (", " + schedule.getVenue().getAddress().getCity()) : "";*/
+				txtEvtLocation.setText(venueName + cityName);
 			}
 			int leftDrawableId = AppConstants.IS_NIGHT_MODE_ENABLED ? R.drawable.ic_location_on 
 					: R.drawable.ic_location_off;
