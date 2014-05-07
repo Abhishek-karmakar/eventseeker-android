@@ -14,7 +14,6 @@ import android.util.Log;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
 import com.ford.syncV4.proxy.rpc.Choice;
-import com.ford.syncV4.proxy.rpc.OnCommand;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
 import com.ford.syncV4.proxy.rpc.SoftButton;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
@@ -33,7 +32,6 @@ import com.wcities.eventseeker.applink.util.EventALUtil;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.ItemsList;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
-import com.wcities.eventseeker.util.DeviceUtil;
 
 public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 
@@ -274,6 +272,7 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 			handleNext();
 			
 		} else if (response.getChoiceID() == SuggestionReply.No.id) {
+			AppLinkService.getInstance().initiateMainAL();
 			ALUtil.speak(R.string.my_events_how_can_i_help);
 		}
 	}

@@ -15,6 +15,7 @@ import org.json.JSONObject;
 
 import android.content.res.Resources;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.ford.syncV4.exception.SyncException;
 import com.ford.syncV4.proxy.TTSChunkFactory;
@@ -26,6 +27,7 @@ import com.ford.syncV4.proxy.rpc.SoftButton;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
 import com.ford.syncV4.proxy.rpc.enums.AudioType;
 import com.ford.syncV4.proxy.rpc.enums.BitsPerSample;
+import com.ford.syncV4.proxy.rpc.enums.Result;
 import com.ford.syncV4.proxy.rpc.enums.SamplingRate;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.Api;
@@ -298,7 +300,6 @@ public class SearchAL extends ESIProxyALM {
 		audioDataOutputStream = new ByteArrayOutputStream();
 		
 		try {
-		
 			int msgResId = R.string.say_event_name;
 			int search_cat = R.string.search_event_text;
 			if (selectedCategoryId == SearchCategories.SEARCH_ARTIST.ordinal()) {
@@ -451,7 +452,8 @@ public class SearchAL extends ESIProxyALM {
 		try {
 			byte[] tempBytes = notification.getAPTData();
 			//Log.d(TAG, "tempBytes l = " + tempBytes.length);
-				audioDataOutputStream.write(tempBytes);
+			audioDataOutputStream.write(tempBytes);
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -460,14 +462,24 @@ public class SearchAL extends ESIProxyALM {
 	@Override
 	public void onPerformAudioPassThruResponse(PerformAudioPassThruResponse arg0) {
 		super.onPerformAudioPassThruResponse(arg0);
-		try {
-			if (audioDataOutputStream == null) {
-				return;
-			}
-			//Log.d(TAG, "audioDataOutputStream size : " + audioDataOutputStream.size());
+		
+		switch (arg0.getResultCode()) {
+		
+		case ABORTED:
+			AppLinkService.getInstance().initiateMainAL();
+			return;
+			
+		case RETRY:
+			initiateSearchProcess();
+			return;
 
+		default:
+			break;
+		}
+		
+		try {
 			query = (new NuanceApi()).execute(audioDataOutputStream);
-			Log.i(TAG, "Response Text from Nuance API: " + query);
+			//Log.i(TAG, "Response Text from Nuance API: " + query);
 			if (query == null) {
 				ALUtil.speak(R.string.nuance_error);
 				AppLinkService.getInstance().initiateMainAL();
@@ -479,6 +491,7 @@ public class SearchAL extends ESIProxyALM {
 			
 			try {
 				Thread.sleep(2000);
+				
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -501,7 +514,7 @@ public class SearchAL extends ESIProxyALM {
 			}
 			
 		} catch (IOException e) {
-				e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 }
