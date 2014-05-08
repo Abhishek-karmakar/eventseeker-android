@@ -21,13 +21,11 @@ import android.os.Looper;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.IPToCityApi;
 import com.wcities.eventseeker.app.EventSeekr;
-import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.SharedPrefKeys;
 import com.wcities.eventseeker.jsonparser.IPToCityApiJSONParser;

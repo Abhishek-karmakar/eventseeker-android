@@ -448,7 +448,7 @@ public class UserInfoApiJSONParser {
 	}
 	
 	private Event getEvent(JSONObject jsonObject) throws JSONException {
-		Event event = new Event(jsonObject.getInt(KEY_ID), jsonObject.getString(KEY_NAME));
+		Event event = new Event(jsonObject.getInt(KEY_ID), ConversionUtil.decodeHtmlEntities(jsonObject, KEY_NAME));
 		
 		boolean hasArtists = jsonObject.has(KEY_ARTIST) ? true : false;
         event.setHasArtists(hasArtists);

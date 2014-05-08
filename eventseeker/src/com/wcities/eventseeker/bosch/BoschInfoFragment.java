@@ -8,6 +8,8 @@ import android.text.TextUtils.TruncateAt;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -34,6 +36,8 @@ public class BoschInfoFragment extends BoschFragmentLoadableFromBackStack implem
 	private TextView txtAddress;
 	private TextView txtDate;
 	
+	private String fullDescription;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -58,7 +62,7 @@ public class BoschInfoFragment extends BoschFragmentLoadableFromBackStack implem
 		view.findViewById(R.id.btnUp).setOnClickListener(this);
 		view.findViewById(R.id.btnDown).setOnClickListener(this);
 				
-		String description = null, address = null;
+		String address = null;
 		Date date = null;
 		
 		txtAddress = (TextView) view.findViewById(R.id.txtAddress);
@@ -70,21 +74,21 @@ public class BoschInfoFragment extends BoschFragmentLoadableFromBackStack implem
 			((TextView) view.findViewById(R.id.txtAddressLabel)).setVisibility(View.GONE);
 			txtAddress.setVisibility(View.GONE);
 			
-			description = artist.getDescription();
+			fullDescription = artist.getDescription();
 		
 		} else {
 			if (event != null) {
 				date = event.getSchedule().getDates().get(0);
 				address = event.getSchedule().getVenue().getFormatedAddress();
-				description = event.getDescription();
+				fullDescription = event.getDescription();
 
-				if (description == null) {
-					description = event.getSchedule().getVenue().getLongDesc();
+				if (fullDescription == null) {
+					fullDescription = event.getSchedule().getVenue().getLongDesc();
 				}
 			
 			} else if (venue != null) {
 				address = venue.getFormatedAddress();
-				description = venue.getLongDesc();
+				fullDescription = venue.getLongDesc();
 			}
 			txtAddress.setText(address);
 		}
@@ -98,11 +102,11 @@ public class BoschInfoFragment extends BoschFragmentLoadableFromBackStack implem
 			((TextView) view.findViewById(R.id.txtDate)).setText(sdf.format(date.getStartDate()));
 		}
 		
-		if (description == null) {
-			description = "Description Unavailable";
+		if (fullDescription == null) {
+			fullDescription = "Description Unavailable";
 		}
 		
-		txtDescription.setText(Html.fromHtml(description));
+		txtDescription.setText(Html.fromHtml(fullDescription));
 		updateDescriptionLines();
 		
 		updateColors();
@@ -127,11 +131,30 @@ public class BoschInfoFragment extends BoschFragmentLoadableFromBackStack implem
 	private void updateDescriptionLines() {
 		if (AppConstants.IS_CAR_STATIONARY) {
 			txtDescription.setMaxLines(Integer.MAX_VALUE);
-			txtDescription.setEllipsize(null);
+			//txtDescription.setEllipsize(null);
+			txtDescription.setText(fullDescription);
 
 		} else {
-			txtDescription.setMaxLines(1);
-			txtDescription.setEllipsize(TruncateAt.END);
+			final int maxLines = 1;
+			txtDescription.setMaxLines(maxLines);
+			//txtDescription.setEllipsize(TruncateAt.END);
+			/**
+			 * Since ellipsize doesn't work with multi-line textview, we have used this work around
+			 */
+			ViewTreeObserver vto = txtDescription.getViewTreeObserver();
+		    vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+
+		        @Override
+		        public void onGlobalLayout() {
+			        ViewTreeObserver obs = txtDescription.getViewTreeObserver();
+			        obs.removeGlobalOnLayoutListener(this);
+			        if (txtDescription.getLineCount() > maxLines) {
+			            int lineEndIndex = txtDescription.getLayout().getLineEnd(maxLines - 1);
+			            String text = txtDescription.getText().subSequence(0, lineEndIndex-3) +"...";
+			            txtDescription.setText(text);
+			        }
+		        }
+		    });
 		}
 	}
 	
