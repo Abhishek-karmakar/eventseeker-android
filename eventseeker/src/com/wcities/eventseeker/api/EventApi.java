@@ -22,7 +22,8 @@ public class EventApi extends Api {
 	public static enum MoreInfo {
 		fallbackimage,
 		booking,
-		multiplebooking;
+		multiplebooking,
+		strictlang;
 	};
 	
 	public static enum IdType {
@@ -236,6 +237,8 @@ public class EventApi extends Api {
 			uri = uri.concat("&limit=" + limit);
 		}
 		
+		uri += "&moreInfo=strictlang";
+		
 		setUri(uri);
 		addLangParam = true;
 		Log.i(TAG, "uri="+uri);
@@ -275,7 +278,8 @@ public class EventApi extends Api {
 			uri = uri + "&end=" + end;
 		}
 
-		uri += "&moreInfo=" + MoreInfo.booking.name() + "," + MoreInfo.multiplebooking.name();
+		uri += "&moreInfo=" + MoreInfo.booking.name() + "," + MoreInfo.multiplebooking.name() + "," + 
+				MoreInfo.strictlang.name();
 		
 		setUri(uri);
 		addLangParam = true;
@@ -346,7 +350,7 @@ public class EventApi extends Api {
 			}
 		}
 		
-		uri += "&moreInfo=artistdesc";
+		uri += "&moreInfo=artistdesc,strictlang";
 		if (!moreInfo.isEmpty()) {
 			for (Iterator<String> iterator = moreInfo.iterator(); iterator.hasNext();) {
 				uri = uri + "," + iterator.next();

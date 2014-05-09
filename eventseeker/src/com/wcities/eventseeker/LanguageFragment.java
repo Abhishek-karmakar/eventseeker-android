@@ -1,6 +1,8 @@
 package com.wcities.eventseeker;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -129,6 +131,21 @@ public class LanguageFragment extends ListFragmentLoadableFromBackStack {
 		public Language getFordLanguage() {
 			return fordLanguage;
 		}
+		
+		public static List<Locales> getMobileLocales() {
+			List<Locales> mobileLocales = new ArrayList<LanguageFragment.Locales>();
+			List<Locales> locales = Arrays.asList(Locales.values());
+			for (Iterator<Locales> iterator = locales.iterator(); iterator.hasNext();) {
+				Locales tmpLocale = iterator.next();
+				if (tmpLocale.countryCode == null) {
+					mobileLocales.add(tmpLocale);
+					
+				} else {
+					break;
+				}
+			}
+			return mobileLocales;
+		}
 	}
 
 	@Override
@@ -169,7 +186,7 @@ public class LanguageFragment extends ListFragmentLoadableFromBackStack {
 	}
 	
 	private void loadLanguages() {
-		languages = Arrays.asList(Locales.values());
+		languages = Locales.getMobileLocales();
 	}
 
 	private class LanguageAdapter extends BaseAdapter {

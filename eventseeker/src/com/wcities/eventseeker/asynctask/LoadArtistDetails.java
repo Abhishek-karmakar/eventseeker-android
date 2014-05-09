@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.ArtistApi;
 import com.wcities.eventseeker.api.ArtistApi.Method;
+import com.wcities.eventseeker.api.EventApi.MoreInfo;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;

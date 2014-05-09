@@ -2,6 +2,8 @@ package com.wcities.eventseeker.api;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
@@ -11,6 +13,7 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
+import com.wcities.eventseeker.api.EventApi.MoreInfo;
 import com.wcities.eventseeker.constants.AppConstants;
 
 public class ArtistApi extends Api {
@@ -42,7 +45,7 @@ public class ArtistApi extends Api {
 	public ArtistApi(String oauthToken) {
 		super(oauthToken);
 	}
-
+	
 	public String getArtist() {
 		return artist;
 	}
@@ -229,6 +232,9 @@ public class ArtistApi extends Api {
 				uri = uri + "&friends=enable";
 			}
 		}
+		
+		uri += "&moreInfo=strictlang";
+		
 		setUri(uri);
 		addLangParam = true;
 		
@@ -252,6 +258,9 @@ public class ArtistApi extends Api {
 			}
 		}
 		uri += "&response_type=json&strip_html=description";
+		
+		uri += "&moreInfo=strictlang";
+		
 		setUri(uri);
 		addLangParam = true;
 		

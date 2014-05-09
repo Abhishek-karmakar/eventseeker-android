@@ -33,8 +33,8 @@ public class DrawerListFragment extends ListFragment {
 	
 	public static final int SECT_1_HEADER_POS = 0;
 	public static final int SECT_2_HEADER_POS = 6;
-	// TODO: make it 10 for enabling language
-	public static final int SECT_3_HEADER_POS = 9;
+	// TODO: make it 9 for disabling language
+	public static final int SECT_3_HEADER_POS = 10;
 	
     private List<Integer> sectionHeaderIndices = new ArrayList<Integer>(Arrays.asList(SECT_1_HEADER_POS, SECT_2_HEADER_POS, SECT_3_HEADER_POS));
 	
