@@ -10,12 +10,9 @@ import java.util.GregorianCalendar;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.wcities.eventseeker.R;
-
-import android.content.Context;
 import android.content.res.Resources;
-import android.text.Html;
-import android.util.Log;
+
+import com.wcities.eventseeker.R;
 
 public class ConversionUtil {
 	
@@ -239,4 +236,14 @@ public class ConversionUtil {
 	public static String parseForPhone(String src) {
 		return src.replaceAll("[^\\d+]", "");
 	}
+
+	public static int doubleToIntRoundOff(double d) {
+		int floor = (int) Math.floor(d);
+		return (d - floor) > 0.5 ? (int) Math.ceil(d) : floor;
+	}
+
+	public static String formatFloatingNumber(int numAfterDecimal, double numberToBeFormatted) {
+		return String.format("%."+ numAfterDecimal +"f", numberToBeFormatted);
+	}
+	
 }

@@ -172,10 +172,14 @@ public class BoschEventDetailsFragment extends BoschFragmentLoadableFromBackStac
 	}
 
 	private void updateDistance() {
+		EventSeekr eventSeekr = FragmentUtil.getApplication(this);
+		
 		double curLatLon[] = DeviceUtil.getCurrentLatLon(FragmentUtil.getApplication(this));
-		String distance = event.getSchedule().getVenue().getDistanceFrom(curLatLon[0], curLatLon[1]) + "";
-		distance = String.format("%.3f", Double.parseDouble(distance));
-		txtDistance.setText(distance + " mi");
+		double distance = event.getSchedule().getVenue().getDistanceFrom(curLatLon[0], curLatLon[1], eventSeekr);
+		//distance = String.format("%.3f", Double.parseDouble(distance));
+		String dstnc = ConversionUtil.formatFloatingNumber(3, distance);
+		//txtDistance.setText(dstnc + " mi");
+		txtDistance.setText(dstnc + " " + eventSeekr.getSavedProximityUnit().toString(eventSeekr));
 	}
 	
 	private void updateArtistsAndInfoBtn() {

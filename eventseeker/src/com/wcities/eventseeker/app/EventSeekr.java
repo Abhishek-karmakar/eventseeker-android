@@ -11,12 +11,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Logger.LogLevel;
@@ -36,6 +38,7 @@ import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.ConnectionFailureListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
+import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FileUtil;
@@ -94,6 +97,48 @@ public class EventSeekr extends Application {
 	private int uniqueGcmNotificationId = AppConstants.UNIQUE_GCM_NOTIFICATION_ID_START;
 	
 	private double curLat = AppConstants.NOT_ALLOWED_LAT, curLon = AppConstants.NOT_ALLOWED_LON;
+
+	private ProximityUnit savedProximityUnit;
+	
+	public static enum ProximityUnit {
+		MI(R.string.unit_mi, R.string.unit_miles),
+		KM(R.string.unit_km, R.string.unit_kilometers);
+		
+		// 1km = 0.621371mi
+		public static final double CONVERSION_FACTOR = 0.621371;
+		private int unitStrResId, fullFormResId;
+
+		private ProximityUnit(int strFormResId, int fullFormResId) {
+			this.unitStrResId = strFormResId;
+			this.fullFormResId = fullFormResId;
+		}
+
+		public String toString(Context context) {
+			return context.getResources().getString(unitStrResId);
+		}
+		
+		public String getFullForm(Context context) {
+			return context.getResources().getString(fullFormResId);
+		}
+
+		public static int convertMiToKm(double mi) {
+			return ConversionUtil.doubleToIntRoundOff(mi / CONVERSION_FACTOR);
+		}
+		
+		public static int convertKmToMi(double km) {
+			return ConversionUtil.doubleToIntRoundOff(km * CONVERSION_FACTOR);
+		}
+
+		public static ProximityUnit getProximityUnitByOrdinal(int proximityUnitOrdinal, Context context) {
+			ProximityUnit[] pu = ProximityUnit.values();
+			for (ProximityUnit proximityUnit : pu) {
+				if (proximityUnitOrdinal == proximityUnit.ordinal()) {
+					return proximityUnit;
+				}
+			}
+			return null;
+		}
+	}	
 	
 	public interface EventSeekrListener {
 		public void onSyncCountUpdated(Service service);
@@ -473,7 +518,37 @@ public class EventSeekr extends Application {
 		}
 		return wcitiesId;
 	}
+	
+	public ProximityUnit getCurrentProximityUnit() {
+		/**String countryCode = Locale.getDefault().getCountry() - This will return Default Locale NOT CURRENT ONE*/;
+		String countryCode = getResources().getConfiguration().locale.getCountry();//will get current Locale
+		Log.i(TAG, "CURRENT COUNTRY CODE : " + countryCode);
+		if (countryCode.equals("US") || countryCode.equals("") || countryCode.equals("LR") || countryCode.equals("MM")) {
+			/**
+			 * If countryCode is "", we assume default as 'US'
+			 */
+			return ProximityUnit.MI;
+		} 
+		return ProximityUnit.KM;
+	}
+	
+	public ProximityUnit getSavedProximityUnit() {
+		if (savedProximityUnit == null) {
+			SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+			int proximityUnitOrdinal = pref.getInt(SharedPrefKeys.PROXIMITY_UNIT, ProximityUnit.MI.ordinal());
+			savedProximityUnit = ProximityUnit.getProximityUnitByOrdinal(proximityUnitOrdinal, this);
+		}
+		return savedProximityUnit;
+	}
 
+	public void updateSavedProximityUnit(ProximityUnit savedProximityUnit) {
+		this.savedProximityUnit = savedProximityUnit;
+		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+		Editor editor = pref.edit();
+		editor.putInt(SharedPrefKeys.PROXIMITY_UNIT, savedProximityUnit.ordinal());
+		editor.commit();
+	}
+	
 	private void updateWcitiesId(String wcitiesId) {
 		this.wcitiesId = wcitiesId;
 

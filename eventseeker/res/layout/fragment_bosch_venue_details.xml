@@ -36,6 +36,25 @@
                 android:src="@drawable/ic_launcher"
                 android:visibility="invisible"
                 app:compressAsPerWidth="true" />
+			
+			<TextView
+			    android:id="@+id/txtDistance"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_alignRight="@+id/imgItem"
+			    android:layout_alignTop="@+id/imgItem"
+			    android:background="@color/bg_black_transparent_strip"
+			    android:drawableLeft="@drawable/ic_location_on"
+			    android:drawablePadding="@dimen/txt_distance_drw_pad_bosch_venue_details"
+			    android:ellipsize="end"
+			    android:gravity="center"
+			    android:paddingBottom="@dimen/txt_distance_pad_t_b_bosch_venue_details"
+			    android:paddingLeft="@dimen/txt_distance_pad_l_r_bosch_venue_details"
+			    android:paddingRight="@dimen/txt_distance_pad_l_r_bosch_venue_details"
+			    android:paddingTop="@dimen/txt_distance_pad_t_b_bosch_venue_details"
+			    android:singleLine="true"
+			    android:textColor="@android:color/white"
+			    android:textSize="@dimen/txt_distance_size_bosch_venue_details" />
 
             <ProgressBar
                 android:id="@+id/prgImg"

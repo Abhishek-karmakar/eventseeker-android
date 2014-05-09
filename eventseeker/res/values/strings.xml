@@ -310,6 +310,13 @@
     <string name="user_name_or_email">Username or email</string>
  
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    
+    <!-- Common -->
+    <string name="unit_km">km</string>
+    <string name="unit_mi">mi</string>
+    <string name="unit_kilometers">Kilometers</string>
+    <string name="unit_miles">Miles</string>
+
     <string name="title_activity_bosch_main">BoschMainActivity</string>
 
     <!-- Strings used for navigation drawer list -->

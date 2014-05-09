@@ -571,6 +571,11 @@
     <dimen name="b_btn_drw_pad_fragment_bosch_all_details">0dp</dimen>
     <dimen name="b_btn_txt_size_fragment_bosch_all_details">12sp</dimen>
     <dimen name="b_btn_stroke_h_fragment_venue_details">3dp</dimen>
+    <!-- fragment_bosch_venue_details -->
+ 	<dimen name="txt_distance_drw_pad_bosch_venue_details">5dp</dimen>
+    <dimen name="txt_distance_pad_t_b_bosch_venue_details">2dp</dimen>
+    <dimen name="txt_distance_pad_l_r_bosch_venue_details">5dp</dimen>
+    <dimen name="txt_distance_size_bosch_venue_details">12sp</dimen>
      <!-- bosch_element_alert_dialog -->
     <dimen name="b_rlt_root_lyt_pad_bosch_element_alert_dialog">30dp</dimen>
     <dimen name="b_txt_title_txt_size_bosch_element_alert_dialog">15sp</dimen>

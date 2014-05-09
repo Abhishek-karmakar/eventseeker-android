@@ -27,4 +27,5 @@ public class SharedPrefKeys {
 	public static final String DEFAULT_LOCALE_CODE = "defaultLocaleCode";
 	
 	public static final String DEVICE_ID = "deviceId";
+	public static String PROXIMITY_UNIT = "proximityUnit";
 }

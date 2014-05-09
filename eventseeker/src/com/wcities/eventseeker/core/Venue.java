@@ -3,8 +3,10 @@ package com.wcities.eventseeker.core;
 import java.io.Serializable;
 
 import android.location.Location;
-import android.util.Log;
 
+import com.bosch.myspin.serversdk.MySpinServerSDK;
+import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.app.EventSeekr.ProximityUnit;
 import com.wcities.eventseeker.cache.BitmapCacheable;
 
 public class Venue implements Serializable, BitmapCacheable {
@@ -192,7 +194,7 @@ public class Venue implements Serializable, BitmapCacheable {
 	 * @param lon
 	 * @return
 	 */
-	public double getDistanceFrom(double lat, double lon) {
+	/*public double getDistanceFrom(double lat, double lon) {
 		// 1 Meter = 0.000621371 Mile
 		double mileConversionFactor = 0.000621371;
 		
@@ -207,6 +209,42 @@ public class Venue implements Serializable, BitmapCacheable {
 		float distanceInMeter = venueLocation.distanceTo(deviceLocation);
 		
 		return distanceInMeter * mileConversionFactor;
-	}
+	}*/
 	
+	/**
+	 * calculates the APPROXIMATE distance of venue location from the given GeoLocation Coordinates
+	 * @param lat
+	 * @param lon
+	 * @param ctx TODO
+	 * @param prxmtyUnt TODO
+	 * @return
+	 */
+	public double getDistanceFrom(double lat, double lon, EventSeekr eventSeekr) {
+		// 1 Meter = 0.000621371 Mile
+		//double mileConversionFactor = 0.000621371;
+		
+		Location venueLocation = new Location("");
+		venueLocation.setLatitude(address.getLat());
+		venueLocation.setLongitude(address.getLon());
+
+		Location savedLocation = new Location("");
+		savedLocation.setLatitude(lat);
+		savedLocation.setLongitude(lon);
+
+		float distance = venueLocation.distanceTo(savedLocation);
+		/******************************
+		 * this is distance in meters.*
+		 ******************************/
+		if (MySpinServerSDK.sharedInstance().isConnected()) {
+			ProximityUnit prxmtyUnt = eventSeekr.getSavedProximityUnit();
+			if (prxmtyUnt == ProximityUnit.MI) {
+				return distance * (ProximityUnit.CONVERSION_FACTOR / 1000);//meters to miles
+			} else {
+				return distance / 1000;//meters to kilometers
+			}
+		}
+		return distance * (ProximityUnit.CONVERSION_FACTOR / 1000);//meters to miles
+		//return distanceInMeter * mileConversionFactor;
+	}
+
 }

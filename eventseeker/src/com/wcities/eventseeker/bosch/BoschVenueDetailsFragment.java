@@ -32,6 +32,7 @@ import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.ConversionUtil;
+import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschVenueDetailsFragment extends BoschFragmentLoadableFromBackStack implements OnClickListener, 
@@ -46,7 +47,7 @@ public class BoschVenueDetailsFragment extends BoschFragmentLoadableFromBackStac
 	private Button btnInfo, btnEvents;
 	
 	private TextView txtVenueName, txtAddress, txtActionBarTitle;
-	// private TextView txtDistance;
+	private TextView txtDistance;
 	
 	private ImageView imgVenue;
 
@@ -79,7 +80,7 @@ public class BoschVenueDetailsFragment extends BoschFragmentLoadableFromBackStac
 
 		txtVenueName = (TextView) view.findViewById(R.id.txtVenueName);
 		txtAddress = (TextView) view.findViewById(R.id.txtAddress);
-		//txtDistance = (TextView) view.findViewById(R.id.txtDistance);
+		txtDistance = (TextView) view.findViewById(R.id.txtDistance);
 
 		(btnInfo = (Button) view.findViewById(R.id.btnInfo)).setOnClickListener(this);		
 		updateInfoBtn();
@@ -117,8 +118,7 @@ public class BoschVenueDetailsFragment extends BoschFragmentLoadableFromBackStac
 		 *  then show the events button.
 		 */
 		LoadDateWiseVenueEventsList loadEvents = new LoadDateWiseVenueEventsList(Api.OAUTH_TOKEN_CAR_APPS, null, null, 
-			((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).getWcitiesId(), 
-			venue.getId(), this);
+			((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).getWcitiesId(),  venue.getId(), this);
 		AsyncTaskUtil.executeAsyncTask(loadEvents, true);
 		
 		updateScreen();
@@ -130,7 +130,15 @@ public class BoschVenueDetailsFragment extends BoschFragmentLoadableFromBackStac
 		
 		txtVenueName.setText(venue.getName());
 		txtAddress.setText(venue.getFormatedAddress());
-		// txtDistance.setText(text);
+		
+		EventSeekr eventSeeker = FragmentUtil.getApplication(this);
+		
+		double[] latLng = DeviceUtil.getCurrentLatLon(eventSeeker);
+		double dstnc = venue.getDistanceFrom(latLng[0], latLng[1], eventSeeker);
+
+		String distance = ConversionUtil.formatFloatingNumber(3, dstnc) + " " + 
+							eventSeeker.getSavedProximityUnit().toString(eventSeeker);
+		txtDistance.setText(distance);
 	}
 
 	private void updateLoadingUI() {

@@ -30,6 +30,7 @@ import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.wcities.eventseeker.MainActivity;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.app.EventSeekr.ProximityUnit;
 import com.wcities.eventseeker.bosch.BoschDrawerListFragment.BoschDrawerListFragmentListener;
 import com.wcities.eventseeker.bosch.interfaces.BoschEditTextListener;
 import com.wcities.eventseeker.constants.AppConstants;
@@ -102,6 +103,8 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		MySpinServerSDK.sharedInstance().registerForPhoneCallStateEvents(iPhoneCallStateListener);
 
 		EventSeekr.setConnectionFailureListener(this);
+		
+		initializeCurrentProximityUnitForBosch();
 			
 		lnrLayoutRootNavDrawer = (LinearLayout) findViewById(R.id.rootNavigationDrawerBosch);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -144,6 +147,25 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			selectItem(INDEX_NAV_ITEM_HOME);
 		}
 		updateColors();
+	}
+
+	private void initializeCurrentProximityUnitForBosch() {
+		EventSeekr eventSeeker = (EventSeekr) getApplication();
+		
+		ProximityUnit previousProximityUnit = eventSeeker.getSavedProximityUnit();
+		ProximityUnit currentProximityUnit = eventSeeker.getCurrentProximityUnit();
+		
+		if (currentProximityUnit != previousProximityUnit) {
+			/*int convertedSearchedDistance = eventSeeker.getSearchDistance();
+			if (currentProximityUnit == ProximityUnit.MI) {
+				convertedSearchedDistance = ProximityUnit.convertKmToMi(convertedSearchedDistance);
+			} else {
+				convertedSearchedDistance = ProximityUnit.convertMiToKm(convertedSearchedDistance);				
+			}
+		
+			eventSeeker.setSearchDistance(convertedSearchedDistance);*/
+			eventSeeker.updateSavedProximityUnit(currentProximityUnit);
+		}
 	}
 
 	@Override
