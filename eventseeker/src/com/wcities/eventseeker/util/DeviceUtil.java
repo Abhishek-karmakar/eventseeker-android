@@ -161,7 +161,7 @@ public class DeviceUtil {
 		
 		double[] latLon = new double[] {0, 0};
 		
-		final LocationManager locationManager = getLocationManagerInstance(eventSeekr);
+		LocationManager locationManager = getLocationManagerInstance(eventSeekr);
 
 		// getting GPS status
         boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -245,6 +245,11 @@ public class DeviceUtil {
                  	latLon[0] = lastKnownLocation.getLatitude();
  		        	latLon[1] = lastKnownLocation.getLongitude();
  		        	updateCurLatLon(eventSeekr, latLon[0], latLon[1]);
+ 		        	/**
+ 		        	 * Update AppConstants.lat & lon values also, so that we get 
+ 		        	 * the same effective lat-lon values when bosch car stops.
+ 		        	 */
+ 		        	updateLatLon(latLon[0], latLon[1]);
 				} 
             } 
         	
@@ -258,6 +263,11 @@ public class DeviceUtil {
                         latLon[0] = lastKnownLocation.getLatitude();
         		        latLon[1] = lastKnownLocation.getLongitude();
         		        updateCurLatLon(eventSeekr, latLon[0], latLon[1]);
+        		        /**
+     		        	 * Update AppConstants.lat & lon values also, so that we get 
+     		        	 * the same effective lat-lon values when bosch car stops.
+     		        	 */
+        		        updateLatLon(latLon[0], latLon[1]);
                     }
                 }
 			}
@@ -269,7 +279,12 @@ public class DeviceUtil {
         		latLon[0] = eventSeekr.getCurLat();
         		latLon[1] = eventSeekr.getCurLon();
         		
-        	} else {
+        	} else if (AppConstants.lat != AppConstants.NOT_ALLOWED_LAT 
+        			&& AppConstants.lon != AppConstants.NOT_ALLOWED_LON) {
+				latLon[0] = AppConstants.lat;
+        		latLon[1] = AppConstants.lon;
+				
+			} else {
 		    	latLon[0] = SAN_FRANCISCO_LAT;
 				latLon[1] = SAN_FRANCISCO_LON;
         	}
