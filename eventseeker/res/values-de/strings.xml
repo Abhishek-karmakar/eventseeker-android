@@ -370,6 +370,7 @@
     <string name="search_artist_text">Suche Künstler</string>
     <string name="listening">Hören..</string>
     <string name="processing">Verarbeiten..</string>
+    <string name="error">Fehler</string>
     <string name="nuance_error">Entschuldigung, ein Fehler ist aufgetreten. Bitte wählen Sie die Sprachfunktion und sagen Sie meineVeranstaltungen,Entdecken oder Suche</string>
     
     <!-- Events -->

@@ -27,7 +27,6 @@ import com.ford.syncV4.proxy.rpc.SoftButton;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
 import com.ford.syncV4.proxy.rpc.enums.AudioType;
 import com.ford.syncV4.proxy.rpc.enums.BitsPerSample;
-import com.ford.syncV4.proxy.rpc.enums.Result;
 import com.ford.syncV4.proxy.rpc.enums.SamplingRate;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.Api;
@@ -177,6 +176,16 @@ public class SearchAL extends ESIProxyALM {
 		CommandsUtil.addCommands(requiredCmds, helpCommands);
 	}
 	
+	private void addCommandsMain() {
+		Vector<Command> reqCmds = new Vector<Command>();
+		reqCmds.add(Command.SEARCH);
+		reqCmds.add(Command.MY_EVENTS);
+		reqCmds.add(Command.DISCOVER);
+		Vector<Command> helpCommands = new Vector<CommandsUtil.Command>(reqCmds);
+		Collections.reverse(helpCommands);
+		CommandsUtil.addCommands(reqCmds, helpCommands);
+	}
+	
 	private void loadSearchedEvent() {
 		double[] latLon = AppLinkService.getInstance().getLatLng();
 		
@@ -290,6 +299,14 @@ public class SearchAL extends ESIProxyALM {
 		} else {
 			softBtns.add(Command.FOLLOW.buildSoftBtn());			
 		}
+		return softBtns;
+	}
+	
+	private Vector<SoftButton> buildSoftButtonsMain() {
+		Vector<SoftButton> softBtns = new Vector<SoftButton>();
+		softBtns.add(Command.DISCOVER.buildSoftBtn());
+		softBtns.add(Command.MY_EVENTS.buildSoftBtn());
+		softBtns.add(Command.SEARCH.buildSoftBtn());
 		return softBtns;
 	}
 
@@ -481,8 +498,12 @@ public class SearchAL extends ESIProxyALM {
 			query = (new NuanceApi()).execute(audioDataOutputStream);
 			//Log.i(TAG, "Response Text from Nuance API: " + query);
 			if (query == null) {
+				addCommandsMain();
+				Vector<SoftButton> softBtns = buildSoftButtonsMain();
+				ALUtil.displayMessage(context.getResources().getString(R.string.error), "", softBtns);
+				
 				ALUtil.speak(R.string.nuance_error);
-				AppLinkService.getInstance().initiateMainAL();
+				//AppLinkService.getInstance().initiateMainAL();
 				return;
 			}
 			

@@ -386,6 +386,7 @@
     <string name="search_artist_text">Search Artist</string>
     <string name="listening">Listening..</string>
     <string name="processing">Processing..</string>
+    <string name="error">Error</string>
     <string name="nuance_error">Sorry, there was an error. Please press the voice button and say myevents, explore or search</string>
  
     <!-- Events -->
