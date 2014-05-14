@@ -11,11 +11,11 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.res.Resources;
 import android.util.Log;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
 import com.ford.syncV4.proxy.rpc.Choice;
-import com.ford.syncV4.proxy.rpc.OnCommand;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
 import com.ford.syncV4.proxy.rpc.SoftButton;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
@@ -36,7 +36,6 @@ import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.ItemsList;
 import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
 import com.wcities.eventseeker.util.ConversionUtil;
-import com.wcities.eventseeker.util.DeviceUtil;
 
 public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 
@@ -140,7 +139,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 	}
 
 	private void initializeInteractionChoiceSets() {
-		Log.d(TAG, "initializeInteractionChoiceSets()");
+		//Log.d(TAG, "initializeInteractionChoiceSets()");
 
 		Vector<Choice> choices = new Vector<Choice>();
 		
@@ -148,8 +147,8 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		for (int i = 0; i < categories.length; i++) {
 			Discover category = categories[i];
 			
-			Log.d(TAG, "Category id : " + category.getId());
-			Log.d(TAG, "Category nameResId : " + category.getName());
+			//Log.d(TAG, "Category id : " + category.getId());
+			//Log.d(TAG, "Category nameResId : " + category.getName());
 			
 			Choice choice = ALUtil.createChoice(category.getId(), category.getName(), 
 					new Vector<String>(Arrays.asList(new String[] {category.getName()})));
@@ -160,8 +159,8 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 	}
 	
 	private void performInteraction() {
-		Log.d(TAG, "performInteraction()");
-		Log.d(TAG, "Discover ordinal : " + CHOICE_SET_ID_DISCOVER);
+		//Log.d(TAG, "performInteraction()");
+		//Log.d(TAG, "Discover ordinal : " + CHOICE_SET_ID_DISCOVER);
 		
 		Vector<Integer> interactionChoiceSetIDList = new Vector<Integer>();
 		interactionChoiceSetIDList.add(CHOICE_SET_ID_DISCOVER);
@@ -195,19 +194,25 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		 * According to current implementation, 1st make Featured events call and if events are available,
 		 * then show these events to user and if not, only then load events from 'getEvents' API call.
 		 */
-		loadFeaturedEvents(selectedCategoryId);
-		if (eventList.isEmpty()) {
-			loadEvents(selectedCategoryId);
-		}
+		try {
+			loadFeaturedEvents(selectedCategoryId);
+			if (eventList.isEmpty()) {
+				loadEvents(selectedCategoryId);
+			}
 
-		//show Welcome message when no events are available
-		if (eventList.isEmpty()) {
-			AppLinkService.getInstance().initiateMainAL();
+			//show Welcome message when no events are available
+			if (eventList.isEmpty()) {
+				AppLinkService.getInstance().initiateMainAL();
+			}
+			EventALUtil.onNextCommand(eventList, context);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+			AppLinkService.getInstance().handleNoNetConnectivity();
 		}
-		EventALUtil.onNextCommand(eventList, context);
 	}
 	
-	private void loadEvents(int categoryId) {
+	private void loadEvents(int categoryId) throws IOException {
 		/**
 		 * http://dev.wcities.com/V3/event_api/getEvents.php?oauth_token=5c63440e7db1ad33c3898cdac3405b1e
 		 * &lat=37.783300&lon=-122.416700&start=2014-04-14&end=2014-04-21&cat=900&subcat=&response_type=json
@@ -241,22 +246,23 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 			tmpEvents = eventsList.getItems();
 			totalNoOfEvents = eventsList.getTotalCount();
 			
+			eventList.setRequestCode(GetEventsFrom.EVENTS);
+			eventList.addAll(tmpEvents);
+			eventList.setTotalNoOfEvents(totalNoOfEvents);
+			
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 			
 		} catch (IOException e) {
 			e.printStackTrace();
+			throw e;
 			
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-
-		eventList.setRequestCode(GetEventsFrom.EVENTS);
-		eventList.addAll(tmpEvents);
-		eventList.setTotalNoOfEvents(totalNoOfEvents);
 	}
 	
-	private void loadFeaturedEvents(int categoryId) {
+	private void loadFeaturedEvents(int categoryId) throws IOException {
 		/**
 		 * http://dev.wcities.com/V3/featured_event/getFeaturedEvents.php?oauth_token=5c63440e7db1ad33c3898cdac3405b1e
 		 * &type=featured&lat=37.332331&lon=-122.031219&cat=900&subcat=&start=2014-04-14&end=2014-04-21&miles=25
@@ -288,19 +294,20 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 			tmpEvents = eventsList.getItems();
 			totalNoOfEvents = eventsList.getTotalCount();
 			
+			eventList.setRequestCode(GetEventsFrom.FEATURED_EVENTS);
+			eventList.addAll(tmpEvents);
+			eventList.setTotalNoOfEvents(totalNoOfEvents);
+			
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 			
 		} catch (IOException e) {
 			e.printStackTrace();
+			throw e;
 			
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-
-		eventList.setRequestCode(GetEventsFrom.FEATURED_EVENTS);
-		eventList.addAll(tmpEvents);
-		eventList.setTotalNoOfEvents(totalNoOfEvents);
 	}
 	
 	private String getStartDate() {
@@ -343,9 +350,17 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 				reset();
 				AppLinkService.getInstance().initiateESIProxyListener(cmd);
 				break;
+				
 			case NEXT:
-				EventALUtil.onNextCommand(eventList, context);
+				try {
+					EventALUtil.onNextCommand(eventList, context);
+					
+				} catch (IOException e) {
+					e.printStackTrace();
+					AppLinkService.getInstance().handleNoNetConnectivity();
+				}
 				break;
+				
 			case BACK:
 				EventALUtil.onBackCommand(eventList, context);
 				break;
@@ -365,7 +380,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 	}
 
 	@Override
-	public void loadEvents() {
+	public void loadEvents() throws IOException {
 		GetEventsFrom which = (GetEventsFrom) eventList.getRequestCode();
 		switch (which) {
 		case EVENTS:

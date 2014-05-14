@@ -1,5 +1,6 @@
 package com.wcities.eventseeker.applink.core;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class EventList {
 	private boolean isMoreDataAvailable = true;
 	
 	public interface LoadEventsListener {
-		public void loadEvents();
+		public void loadEvents() throws IOException;
 	}
 	
 	public EventList() {
@@ -129,26 +130,26 @@ public class EventList {
 		requestCode = null;
 	}
 	
-	public boolean hasNextEvent() {
-		Log.d(TAG, "hasNextEvents");
+	public boolean hasNextEvent() throws IOException {
+		//Log.d(TAG, "hasNextEvents");
 		if (currentEvtPos + 1 < eventList.size()) {
-			Log.d(TAG, "hasNextEvents true");
+			//Log.d(TAG, "hasNextEvents true");
 			return true;
 			
 		} else if (isMoreDataAvailable && loadEventsListener != null) {
-			Log.d(TAG, "Loading new events...");
+			//Log.d(TAG, "Loading new events...");
 			loadEventsListener.loadEvents();
 			if (currentEvtPos + 1 < eventList.size()) {
-				Log.d(TAG, "hasNextEvents true");
+				//Log.d(TAG, "hasNextEvents true");
 				return true;
 				
 			} else {
-				Log.d(TAG, "hasNextEvents false");
+				//Log.d(TAG, "hasNextEvents false");
 				return false;
 			}
 			
 		} else {
-			Log.d(TAG, "hasNextEvents false");
+			//Log.d(TAG, "hasNextEvents false");
 			return false;
 		}
 	}
@@ -162,14 +163,14 @@ public class EventList {
 		}
 	}
 
-	public boolean moveToNextEvent() {
-		Log.d(TAG, "moveToNextEvent");
+	public boolean moveToNextEvent() throws IOException {
+		//Log.d(TAG, "moveToNextEvent");
 		if(hasNextEvent()) {
 			currentEvtPos++;
-			Log.d(TAG, "moveToNextEvent true");
+			//Log.d(TAG, "moveToNextEvent true");
 			return true;
 		}
-		Log.d(TAG, "moveToNextEvent false");
+		//Log.d(TAG, "moveToNextEvent false");
 		return false;
 	}
 	
@@ -186,7 +187,7 @@ public class EventList {
 			eventList.addAll(events);
 			eventsAlreadyRequested += events.size();
 			
-			Log.d(TAG, "EVENT LIMIT IN EVENTLIST: " + eventsLimit);
+			//Log.d(TAG, "EVENT LIMIT IN EVENTLIST: " + eventsLimit);
 			if (events.size() < eventsLimit) {
 				isMoreDataAvailable = false;
 			}

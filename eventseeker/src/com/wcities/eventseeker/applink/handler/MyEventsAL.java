@@ -92,13 +92,18 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 		ALUtil.displayMessage("Loading...", "", softBtns);
 
 		generateLatLon();
-		loadEvents(Type.myevents);
-		
-		if (eventList.isEmpty()) {
-			onNoMyEventsFound();
+		try {
+			loadEvents(Type.myevents);
+			if (eventList.isEmpty()) {
+				onNoMyEventsFound();
+				
+			} else {
+				handleNext();
+			}
 			
-		} else {
-			handleNext();
+		} catch (IOException e) {
+			e.printStackTrace();
+			AppLinkService.getInstance().handleNoNetConnectivity();
 		}
 	}
 	
@@ -134,7 +139,7 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 		ALUtil.performInteractionChoiceSet(initChunks, initialText, interactionChoiceSetIDList, timeoutChunks);
 	}
 	
-	private void handleNext() {
+	private void handleNext() throws IOException {
 		EventALUtil.onNextCommand(eventList, mEventSeekr);
 	}
 	
@@ -173,7 +178,7 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 		return softBtns;
 	}
 
-	private void loadEvents(Type type) {
+	private void loadEvents(Type type) throws IOException {
 		List<Event> tmpEvents = null;
 		int totalNoOfEvents = 0;
 
@@ -194,19 +199,20 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 			totalNoOfEvents = myEventsList.getTotalCount();
 			Log.d(TAG, "load count = " + tmpEvents.size());
 			
+			eventList.setRequestCode(type);
+			eventList.addAll(tmpEvents);
+			eventList.setTotalNoOfEvents(totalNoOfEvents);
+			
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 			
 		} catch (IOException e) {
 			e.printStackTrace();
+			throw e;
 			
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		
-		eventList.setRequestCode(type);
-		eventList.addAll(tmpEvents);
-		eventList.setTotalNoOfEvents(totalNoOfEvents);
 	}
 	
 	private UserInfoApi buildUserInfoApi() {
@@ -234,7 +240,13 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 			break;
 			
 		case NEXT:
-			handleNext();
+			try {
+				handleNext();
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+				AppLinkService.getInstance().handleNoNetConnectivity();
+			}
 			break;
 			
 		case BACK:
@@ -263,14 +275,20 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 		super.onPerformInteractionResponse(response);
 		
 		if (response.getChoiceID() == SuggestionReply.Yes.id) {
-			loadEvents(Type.recommendedevent);
+			try {
+				loadEvents(Type.recommendedevent);
+				
+				if (eventList.isEmpty()) {
+					AppLinkService.getInstance().initiateMainAL();
+				} 
+				
+				handleNext();
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+				AppLinkService.getInstance().handleNoNetConnectivity();
+			}
 
-			if (eventList.isEmpty()) {
-				AppLinkService.getInstance().initiateMainAL();
-			} 
-			
-			handleNext();
-			
 		} else if (response.getChoiceID() == SuggestionReply.No.id) {
 			AppLinkService.getInstance().initiateMainAL();
 			ALUtil.speak(R.string.my_events_how_can_i_help);
@@ -278,7 +296,7 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 	}
 
 	@Override
-	public void loadEvents() {
+	public void loadEvents() throws IOException {
 		loadEvents(type);
 	}
 }

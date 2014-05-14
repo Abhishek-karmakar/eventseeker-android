@@ -16,7 +16,6 @@ import org.json.JSONObject;
 import android.util.Log;
 
 import com.wcities.eventseeker.LanguageFragment.Locales;
-import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.constants.AppConstants;
 
 public abstract class Api {

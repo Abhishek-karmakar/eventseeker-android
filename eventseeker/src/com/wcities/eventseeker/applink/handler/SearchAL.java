@@ -15,7 +15,6 @@ import org.json.JSONObject;
 
 import android.content.res.Resources;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.ford.syncV4.exception.SyncException;
 import com.ford.syncV4.proxy.TTSChunkFactory;
@@ -186,7 +185,7 @@ public class SearchAL extends ESIProxyALM {
 		CommandsUtil.addCommands(reqCmds, helpCommands);
 	}
 	
-	private void loadSearchedEvent() {
+	private void loadSearchedEvent() throws IOException {
 		double[] latLon = AppLinkService.getInstance().getLatLng();
 		
 		Calendar c = Calendar.getInstance();
@@ -220,26 +219,24 @@ public class SearchAL extends ESIProxyALM {
 			ItemsList<Event> eventsList = jsonParser.getEventItemList(jsonObject, GetEventsFrom.SEARCH_EVENTS);
 			tmpEvents = eventsList.getItems();
 			totalNoOfEvents = eventsList.getTotalCount();
+			
+			eventList.setRequestCode(GetEventsFrom.SEARCH_EVENTS);
+			eventList.addAll(tmpEvents);
+			eventList.setTotalNoOfEvents((totalNoOfEvents < 11) ? totalNoOfEvents : 10);
 
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 			
 		} catch (IOException e) {
 			e.printStackTrace();
+			throw e;
 			
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-
-		eventList.setRequestCode(GetEventsFrom.SEARCH_EVENTS);
-		eventList.addAll(tmpEvents);
-		/*****************************************************************************************
-		 *TODO:verify if only 1st 10 result need to be shown or it should lazily load new events.*
-		 *****************************************************************************************/
-		eventList.setTotalNoOfEvents((totalNoOfEvents < 11) ? totalNoOfEvents : 10);
 	}
 	
-	private void loadSearchedArtist() {
+	private void loadSearchedArtist() throws IOException {
 		ArtistApi artistApi = new ArtistApi(Api.OAUTH_TOKEN_CAR_APPS);
 		artistApi.setLimit(ARTISTS_LIMIT);
 		artistApi.setMethod(Method.artistSearch);
@@ -262,6 +259,7 @@ public class SearchAL extends ESIProxyALM {
 			
 		} catch (IOException e) {
 			e.printStackTrace();
+			throw e;
 			
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -349,13 +347,22 @@ public class SearchAL extends ESIProxyALM {
 				reset();
 				AppLinkService.getInstance().initiateESIProxyListener(cmd);
 				break;
+				
 			case NEXT:
 				if (selectedCategoryId == SearchCategories.SEARCH_EVENT.ordinal()) {
-					EventALUtil.onNextCommand(eventList, context);
+					try {
+						EventALUtil.onNextCommand(eventList, context);
+						
+					} catch (IOException e) {
+						e.printStackTrace();
+						AppLinkService.getInstance().handleNoNetConnectivity();
+					}
+					
 				} else {
 					onNextArtistCommand(artistList, context);
 				}
 				break;
+				
 			case BACK:
 				if (selectedCategoryId == SearchCategories.SEARCH_EVENT.ordinal()) {
 					EventALUtil.onBackCommand(eventList, context);
@@ -536,6 +543,7 @@ public class SearchAL extends ESIProxyALM {
 			
 		} catch (IOException e) {
 			e.printStackTrace();
+			AppLinkService.getInstance().handleNoNetConnectivity();
 		}
 	}
 }

@@ -12,6 +12,7 @@ import java.util.Vector;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -534,6 +535,12 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	public void initiateMainAL() {
 		esIProxyALM = MainAL.getInstance((EventSeekr) getApplication());
 		esIProxyALM.onStartInstance();
+	}
+	
+	public void handleNoNetConnectivity() {
+		ALUtil.alert(getResources().getString(R.string.error), getResources().getString(
+				R.string.connection_lost));
+		initiateMainAL();
 	}
 	
 	public void onError(String info, Exception e) {}

@@ -1,11 +1,13 @@
 package com.wcities.eventseeker.applink.util;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Vector;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.content.res.Resources.NotFoundException;
 import android.net.Uri;
 import android.util.Log;
 
@@ -197,7 +199,7 @@ public class EventALUtil {
 		return dateTime;
 	}
 	
-	public static void onNextCommand(EventList eventList, EventSeekr context) {
+	public static void onNextCommand(EventList eventList, EventSeekr context) throws IOException {
 		if (eventList.moveToNextEvent()) {
 			displayCurrentEvent(eventList);
 			speakEventTitle(eventList.getCurrentEvent(), context);
