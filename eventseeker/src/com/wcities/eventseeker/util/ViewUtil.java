@@ -50,16 +50,18 @@ public class ViewUtil {
 		int lnrTabBarBg;
 		int txtHeaderColor;
 
+		listDividerBgId = R.color.v_list_divider_color;
 		if (AppConstants.IS_NIGHT_MODE_ENABLED) {
 			txtColor = android.R.color.white;
-			listDividerBgId = R.drawable.info_divider;
+			//listDividerBgId = R.drawable.info_divider;
 			tabBtnTxtColor = android.R.color.white;
 			tabDividerBgId = android.R.color.white;
 			lnrTabBarBg = R.drawable.tab_bar_rounded_corners_night_mode;
 			txtHeaderColor = android.R.color.white;
 		} else {
 			txtColor = R.color.eventseeker_bosch_theme_grey;
-			listDividerBgId = android.R.color.black;
+			//listDividerBgId = android.R.color.black;
+			//listDividerBgId = R.color.v_list_divider_color;
 			tabBtnTxtColor = android.R.color.black;
 			tabDividerBgId = R.color.eventseeker_bosch_theme_grey;
 			lnrTabBarBg = R.drawable.tab_bar_rounded_corners;			

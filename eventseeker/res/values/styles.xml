@@ -46,8 +46,10 @@
 	</style>
 
     <style name="Theme.EventSeekr.Bosch" parent="@style/Theme.EventSeekr">
-        <item name="android:homeAsUpIndicator">@drawable/previous</item>
-    	<item name="homeAsUpIndicator">@drawable/previous</item>        
+        <!-- <item name="android:homeAsUpIndicator">@drawable/previous</item>
+    	<item name="homeAsUpIndicator">@drawable/previous</item> -->
+        <item name="android:homeAsUpIndicator">@drawable/slctr_btn_back</item>
+    	<item name="homeAsUpIndicator">@drawable/slctr_btn_back</item>
     </style>
 	
     <style name="Widget.EventSeekr.ActionButton.Overflow" parent="Widget.AppCompat.ActionButton.Overflow">

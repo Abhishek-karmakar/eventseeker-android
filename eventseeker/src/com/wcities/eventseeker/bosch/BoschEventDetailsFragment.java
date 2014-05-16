@@ -177,7 +177,7 @@ public class BoschEventDetailsFragment extends BoschFragmentLoadableFromBackStac
 		double curLatLon[] = DeviceUtil.getCurrentLatLon(FragmentUtil.getApplication(this));
 		double distance = event.getSchedule().getVenue().getDistanceFrom(curLatLon[0], curLatLon[1], eventSeekr);
 		//distance = String.format("%.3f", Double.parseDouble(distance));
-		String dstnc = ConversionUtil.formatFloatingNumber(3, distance);
+		String dstnc = ConversionUtil.formatFloatingNumber(2, distance);
 		//txtDistance.setText(dstnc + " mi");
 		txtDistance.setText(dstnc + " " + eventSeekr.getSavedProximityUnit().toString(eventSeekr));
 	}
