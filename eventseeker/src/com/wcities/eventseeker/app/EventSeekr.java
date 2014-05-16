@@ -20,6 +20,7 @@ import android.os.StrictMode;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Logger.LogLevel;
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
@@ -152,8 +153,17 @@ public class EventSeekr extends Application {
 		EventSeekr.connectionFailureListener = connectionFailureListener;
 	}
 
+	/**
+	 * @return null, if app is connected to bosch & car is in moving mode, so that based on current lat-lng
+	 * cityname has to be derived by caller; otherwise it returns last cityname set.
+	 */
 	public static String getCityName() {
-		return cityName;
+		if (MySpinServerSDK.sharedInstance().isConnected() && !AppConstants.IS_CAR_STATIONARY) {
+			return null;
+			
+		} else {
+			return cityName;
+		}
 	}
 
 	public static void setCityName(String cityName) {
