@@ -110,7 +110,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerToggle = new ActionBarDrawerToggle(this, // host this
 				mDrawerLayout, // DrawerLayout object
-				R.drawable.ic_nav_drawer_off, // nav drawer icon to replace 'Up' caret
+				R.drawable.slctr_btn_side_nav,//ic_nav_drawer_off, // nav drawer icon to replace 'Up' caret
 				R.string.drawer_open, // "open drawer" description
 				R.string.drawer_close // "close drawer" description
 		);

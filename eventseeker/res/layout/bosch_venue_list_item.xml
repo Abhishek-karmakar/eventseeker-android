@@ -36,6 +36,6 @@
         android:layout_below="@id/imgVenue"
         android:layout_marginBottom="@dimen/b_divider_margin_t_b_bosch_artists_list_item"
         android:layout_marginTop="@dimen/b_divider_margin_t_b_bosch_artists_list_item"
-        android:background="@android:color/black" />
+        android:background="@color/v_list_divider_color" />
 
 </RelativeLayout>

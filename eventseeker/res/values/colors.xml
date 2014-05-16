@@ -86,6 +86,7 @@
 	<color name="v_divider_fragment_preferences">#9a9a9a</color>
 	<color name="bg_black_transparent_strip_night_mode">#c8222222</color>
 	
+	<color name="v_list_divider_color">#999999</color>
 	<!-- ends for bosch -->
 	
 </resources>
