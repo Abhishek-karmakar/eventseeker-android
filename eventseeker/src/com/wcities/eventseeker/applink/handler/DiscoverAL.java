@@ -11,7 +11,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.res.Resources;
 import android.util.Log;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;

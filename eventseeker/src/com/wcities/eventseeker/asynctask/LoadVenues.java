@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import com.wcities.eventseeker.adapter.AbstractVenueListAdapter;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.RecordApi;
+import com.wcities.eventseeker.bosch.BoschSearchVenuesFragment;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.jsonparser.RecordApiJSONParser;
