@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 
 import android.os.Bundle;
 import android.text.Html;
-import android.text.TextUtils.TruncateAt;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -132,7 +131,7 @@ public class BoschInfoFragment extends BoschFragmentLoadableFromBackStack implem
 		if (AppConstants.IS_CAR_STATIONARY) {
 			txtDescription.setMaxLines(Integer.MAX_VALUE);
 			//txtDescription.setEllipsize(null);
-			txtDescription.setText(fullDescription);
+			txtDescription.setText(Html.fromHtml(fullDescription));
 
 		} else {
 			final int maxLines = 1;
