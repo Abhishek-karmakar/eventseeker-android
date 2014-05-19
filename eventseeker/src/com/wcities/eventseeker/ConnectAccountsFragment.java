@@ -325,7 +325,8 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				 * Reasons for null check:
 				 * Sometimes if user has not logged in to google account & clicks twice on google play 
 				 * sync option, then it crashes here with NullPointerException.
-				 * Also, after above steps on pressing back button it crashes here with the same exception.
+				 * In other cases (when app doesn't crash with above steps), 
+				 * after above steps on pressing back button it crashes here with the same exception.
 				 */
 				if (Session.getActiveSession() != null) {
 					Session.getActiveSession().onActivityResult(FragmentUtil.getActivity(this), requestCode, resultCode, data);
