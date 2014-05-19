@@ -143,7 +143,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     	}
     	
     	private String getStringFromResId(int strResId, Fragment fragment) {
-			return fragment.getResources().getString(strResId);
+			return FragmentUtil.getResources(fragment).getString(strResId);
 		}
     	
     	public static int getValueOf(String s, Fragment fragment) {
@@ -321,7 +321,15 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			super.onActivityResult(requestCode, resultCode, data);
 			//Log.d(TAG, "onActivityResult()");
 			if (!fbLoggedIn) {
-				Session.getActiveSession().onActivityResult(FragmentUtil.getActivity(this), requestCode, resultCode, data);
+				/**
+				 * Reasons for null check:
+				 * Sometimes if user has not logged in to google account & clicks twice on google play 
+				 * sync option, then it crashes here with NullPointerException.
+				 * Also, after above steps on pressing back button it crashes here with the same exception.
+				 */
+				if (Session.getActiveSession() != null) {
+					Session.getActiveSession().onActivityResult(FragmentUtil.getActivity(this), requestCode, resultCode, data);
+				}
 			}
 		}
 	}
@@ -701,11 +709,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				if (gPlusSignedIn) {
 					GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
 							res.getString(R.string.are_you_sure),
-							/*res.getString(R.string.already_signed_in_with_google_account),*/
-							/**
-							 * replace this string in above string id
-							 */
-							"You are already signed in with Google account. Would you like to sign out from Google and sign in with Facebook account?",
+							res.getString(R.string.already_signed_in_with_google_account),
 							TXT_BTN_CANCEL, res.getString(R.string.ok));
 					generalDialogFragment.show(getChildFragmentManager(), DIALOG_ALREADY_LOGGED_IN_WITH_OTHER_ACCOUNT);
 					return;
@@ -728,11 +732,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				if (fbLoggedIn) {
 					GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
 							res.getString(R.string.are_you_sure),
-							/*res.getString(R.string.already_signed_in_with_facebook_account),*/
-							/**
-							 * replace this string in above string id
-							 */
-							"You are already signed in with Facebook account. Would you like to sign out from Facebook and sign in with Google account?",
+							res.getString(R.string.already_signed_in_with_facebook_account),
 							TXT_BTN_CANCEL, res.getString(R.string.ok));
 					generalDialogFragment.show(getChildFragmentManager(), DIALOG_ALREADY_LOGGED_IN_WITH_OTHER_ACCOUNT);
 					return;
@@ -754,7 +754,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				
 			case Twitter:
 				//Log.d(TAG, "twitter");
-				ConfigurationBuilder builder = new ConfigurationBuilder();
+				/*ConfigurationBuilder builder = new ConfigurationBuilder();
 	            builder.setOAuthConsumerKey(AppConstants.TWITTER_CONSUMER_KEY);
 	            builder.setOAuthConsumerSecret(AppConstants.TWITTER_CONSUMER_SECRET);
 	            twitter4j.conf.Configuration configuration = builder.build();
@@ -786,8 +786,12 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
                         }
                     }
                 });
-                thread.start();
+                thread.start();*/
                 
+				Bundle args = new Bundle();
+                args.putSerializable(BundleKeys.SERVICE_ACCOUNTS, serviceAccount);
+				((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
+						.onServiceSelected(service, args, true);
 				break;
 				
 			case GooglePlay:
@@ -817,13 +821,13 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		protected void signInWithGoogle() {
 			int available = GooglePlayServicesUtil.isGooglePlayServicesAvailable(
 					FragmentUtil.getActivity(ConnectAccountsFragment.this));
-			Log.d(TAG, "available : " + available);
+			//Log.d(TAG, "available : " + available);
 			if (available != ConnectionResult.SUCCESS) {
 				GPlusUtil.showDialogForGPlayServiceUnavailability(available, ConnectAccountsFragment.this);
               return;
 			}
 			
-			Log.d(TAG, "mConnectionResult : " + mConnectionResult);
+			//Log.d(TAG, "mConnectionResult : " + mConnectionResult);
 			//Log.d(TAG, "mConnectionResult = " + mConnectionResult);
 			// if previously onConnectionFailed() has returned some result, resolve it
 			if (mConnectionResult != null) {

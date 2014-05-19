@@ -129,6 +129,7 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 		rltSyncAccount = v.findViewById(R.id.rltSyncAccount);
 		
 		edtUserCredential = (EditText) v.findViewById(R.id.edtUserCredential);
+		edtUserCredential.setHint(R.string.email);
 		btnRetrieveArtists = (Button) v.findViewById(R.id.btnRetrieveArtists);
 
 		imgProgressBar = (ImageView) v.findViewById(R.id.progressBar);

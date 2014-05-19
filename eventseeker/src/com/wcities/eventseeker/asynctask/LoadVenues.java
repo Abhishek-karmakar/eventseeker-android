@@ -13,14 +13,10 @@ import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 
 import com.wcities.eventseeker.adapter.AbstractVenueListAdapter;
-import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.RecordApi;
-import com.wcities.eventseeker.bosch.BoschSearchVenuesFragment;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.jsonparser.RecordApiJSONParser;
-import com.wcities.eventseeker.util.DeviceUtil;
-import com.wcities.eventseeker.util.FragmentUtil;
 
 public class LoadVenues extends AsyncTask<String, Void, List<Venue>> {
 	

@@ -72,6 +72,7 @@ public class LastfmFragment extends FragmentLoadableFromBackStack implements OnC
 		rltSyncAccount = v.findViewById(R.id.rltSyncAccount);
 		
 		edtUserCredential = (EditText) v.findViewById(R.id.edtUserCredential);
+		edtUserCredential.setHint(R.string.user_name);
 		btnRetrieveArtists = (Button) v.findViewById(R.id.btnRetrieveArtists);
 
 		imgProgressBar = (ImageView) v.findViewById(R.id.progressBar);

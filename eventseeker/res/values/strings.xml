@@ -264,6 +264,7 @@
     <string name="stay_connected_with_friends">Stay connected with friends and know who to invite to events</string>
 
     <!-- Last Fm -->
+    <string name="user_name">Username</string>
     <string name="user_name_could_not_be_found">User name could not be found</string>
 
     <!-- MainAcitivity -->
@@ -307,6 +308,7 @@
     <string name="no_event_found">No Event Found.</string>
 
     <!-- RdioFragment -->
+    <string name="email">Email</string>
     <string name="user_name_or_email">Username or email</string>
  
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
