@@ -300,7 +300,6 @@
     <string name="no_event_found">Nessun evento trovato</string>
  
     <!-- RdioFragment -->
-    <string name="email">Email</string>
     <string name="user_name_or_email">Nome utente o email</string>
  
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->

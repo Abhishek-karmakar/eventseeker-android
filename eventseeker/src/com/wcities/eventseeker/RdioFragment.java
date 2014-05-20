@@ -108,9 +108,9 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
                 accessToken = accessTokenSecret = null;
                 
             } else {
-                Log.d(TAG, "Found cached credentials:");
+                /*Log.d(TAG, "Found cached credentials:");
                 Log.d(TAG, "Access token: " + accessToken);
-                Log.d(TAG, "Access token secret: " + accessTokenSecret);
+                Log.d(TAG, "Access token secret: " + accessTokenSecret);*/
             }
 
             // Initialize our API object
@@ -129,7 +129,6 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 		rltSyncAccount = v.findViewById(R.id.rltSyncAccount);
 		
 		edtUserCredential = (EditText) v.findViewById(R.id.edtUserCredential);
-		edtUserCredential.setHint(R.string.email);
 		btnRetrieveArtists = (Button) v.findViewById(R.id.btnRetrieveArtists);
 
 		imgProgressBar = (ImageView) v.findViewById(R.id.progressBar);
@@ -198,7 +197,8 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 		final List<String> artistNames = new ArrayList<String>();
 
 		List<NameValuePair> args = new LinkedList<NameValuePair>();
-		args.add(new BasicNameValuePair("email", userId));
+		String key = userId.contains("@") ? "email" : "vanityName";
+		args.add(new BasicNameValuePair(key, userId));
 		
 		isLoading = true;
 		updateVisibility();
