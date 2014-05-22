@@ -310,6 +310,9 @@
     <!-- RdioFragment -->
     <string name="user_name_or_email">Username or email</string>
  
+    <!-- TwitterSyncingFragment -->
+    <string name="twitter_call_limit_exceeded">Your twitter call limit is exceeded. Please retry after some time.</string>
+    
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     
     <!-- Common -->

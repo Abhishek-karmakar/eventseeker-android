@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,10 +25,11 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.LogUtil;
 
 public class TwitterFragment extends FragmentLoadableFromBackStack {
 	
-	private static final String TAG = TwitterFragment.class.getName();
+	private static final String TAG = TwitterFragment.class.getSimpleName();
 	
 	private Twitter twitter;
 	private String url;

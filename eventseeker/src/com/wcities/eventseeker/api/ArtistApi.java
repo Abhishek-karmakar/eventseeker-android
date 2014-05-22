@@ -265,7 +265,7 @@ public class ArtistApi extends Api {
 		addLangParam = true;
 		
 		String postParams = "artist=" + URLEncoder.encode(buildSearchArtistsJSON(artistNames, startIndex, maxEndIndex), AppConstants.CHARSET_NAME);
-		//Log.d(TAG, "postParams="+URLEncoder.encode(buildSearchArtistsJSON(artistNames, startIndex, maxEndIndex), AppConstants.CHARSET_NAME));
+		//Log.d(TAG, "postParams="+buildSearchArtistsJSON(artistNames, startIndex, maxEndIndex));
 		return execute(RequestMethod.POST, ContentType.MIME_APPLICATION_X_WWW_FORM_URLENCODED, postParams.getBytes());
 	}
 }

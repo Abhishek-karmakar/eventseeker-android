@@ -9,20 +9,19 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
-import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.ArtistApi;
 import com.wcities.eventseeker.api.ArtistApi.Method;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.interfaces.OnFragmentAliveListener;
 import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.LogUtil;
 
 public class SyncArtists extends AsyncTask<Void, Void, Void> {
 	
-	private static final String TAG = SyncArtists.class.getName();
+	private static final String TAG = SyncArtists.class.getSimpleName();
 	
 	private static final int MAX_BATCH_SEARCH_LIMIT = 250;
 	

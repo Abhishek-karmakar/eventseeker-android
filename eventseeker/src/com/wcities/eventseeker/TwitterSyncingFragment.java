@@ -12,6 +12,7 @@ import twitter4j.User;
 import twitter4j.auth.AccessToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.api.Api;
@@ -34,14 +36,14 @@ import com.wcities.eventseeker.util.ViewUtil.AnimationUtil;
 
 public class TwitterSyncingFragment extends FragmentLoadableFromBackStack implements OnClickListener, OnFragmentAliveListener {
 
-	private static final String TAG = TwitterSyncingFragment.class.getName();
+	private static final String TAG = TwitterSyncingFragment.class.getSimpleName();
 	
 	private ImageView imgProgressBar, imgAccount;
 	private TextView txtLoading;
 	private Button btnConnectOtherAccounts;
 
 	private Twitter twitter;
-	
+	private Resources res;
 	private boolean isAlive;
 	
 	@Override
@@ -49,6 +51,7 @@ public class TwitterSyncingFragment extends FragmentLoadableFromBackStack implem
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
 		isAlive = true;
+		res = FragmentUtil.getResources(this);
 	}
 	
 	@Override
@@ -81,6 +84,8 @@ public class TwitterSyncingFragment extends FragmentLoadableFromBackStack implem
 				
 				@Override
 				public void run() {
+					final List<String> artistNames = new ArrayList<String>();
+
 					try {
 						AccessToken at = twitter.getOAuthAccessToken(oauthVerifier);
 						ConfigurationBuilder builder = new ConfigurationBuilder();
@@ -91,11 +96,11 @@ public class TwitterSyncingFragment extends FragmentLoadableFromBackStack implem
 			            Configuration conf = builder.build();
 			            Twitter t = new TwitterFactory(conf).getInstance();
 			            
-						final List<String> artistNames = new ArrayList<String>();
 						long cursor = -1;
+						int countPerPage = 200;
 						PagableResponseList<User> responseList;
 						do {
-							responseList = t.getFriendsList(t.getScreenName(), cursor);
+							responseList = t.getFriendsList(t.getScreenName(), cursor, countPerPage);
 							for (Iterator<User> iterator = responseList.iterator(); iterator.hasNext();) {
 								User user = (User) iterator.next();
 								//Log.d(TAG, "username = " + user.getName());
@@ -104,29 +109,54 @@ public class TwitterSyncingFragment extends FragmentLoadableFromBackStack implem
 							
 						} while ((cursor = responseList.getNextCursor()) != 0);
 						
-						FragmentUtil.getActivity(TwitterSyncingFragment.this).runOnUiThread(new Runnable() {
-							
-							@Override
-							public void run() {
-								new SyncArtists(Api.OAUTH_TOKEN, artistNames, eventSeekr, 
-										Service.Twitter, TwitterSyncingFragment.this).execute();
-							}
-						});
-												
+						onGetFriendsListSucceeded(artistNames, eventSeekr);
+						
 					} catch (TwitterException e) {
 						e.printStackTrace();
-						eventSeekr.setSyncCount(Service.Twitter, EventSeekr.UNSYNC_COUNT);
-						FragmentUtil.getActivity(TwitterSyncingFragment.this).runOnUiThread(new Runnable() {
-							
-							@Override
-							public void run() {
-								FragmentUtil.getActivity(TwitterSyncingFragment.this).onBackPressed();
+						if (e.exceededRateLimitation()) {
+							if (artistNames.isEmpty()) {
+								FragmentUtil.getActivity(TwitterSyncingFragment.this).runOnUiThread(new Runnable() {
+									
+									@Override
+									public void run() {
+										Toast.makeText(eventSeekr, res.getString(R.string.twitter_call_limit_exceeded), Toast.LENGTH_LONG).show();
+									}
+								});
+								onGetFriendsListFailed(eventSeekr);
+								
+							} else {
+								onGetFriendsListSucceeded(artistNames, eventSeekr);
 							}
-						});
+							
+						} else {
+							onGetFriendsListFailed(eventSeekr);
+						}
 					}
 				}
 			}).start();
 		}
+	}
+	
+	private void onGetFriendsListSucceeded(final List<String> artistNames, final EventSeekr eventSeekr) {
+		FragmentUtil.getActivity(TwitterSyncingFragment.this).runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				new SyncArtists(Api.OAUTH_TOKEN, artistNames, eventSeekr, 
+						Service.Twitter, TwitterSyncingFragment.this).execute();
+			}
+		});
+	}
+	
+	private void onGetFriendsListFailed(final EventSeekr eventSeekr) {
+		eventSeekr.setSyncCount(Service.Twitter, EventSeekr.UNSYNC_COUNT);
+		FragmentUtil.getActivity(TwitterSyncingFragment.this).runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				FragmentUtil.getActivity(TwitterSyncingFragment.this).onBackPressed();
+			}
+		});
 	}
 
 	private void updateVisibility() {
