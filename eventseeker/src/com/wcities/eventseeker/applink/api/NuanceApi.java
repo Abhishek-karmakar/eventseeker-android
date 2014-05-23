@@ -18,13 +18,13 @@ public class NuanceApi {
 
 	private static final String NUANCE_HOST = "https://dictation.nuancemobility.net";
 
-	private static final String NUANCE_APPKEY = "9f31e5fc9ddeae9882299d407f336728815126977e295c53ca9fbeb53d5b80dc8d65d82a4386c2c5b060052f936d5714be7dac3ca6088f70a74d26e4a9a6c136";
+	private static final String NUANCE_APPKEY = "1a3a8794d0431767224ac1b0ee67fd34d3992dddbc55688a49d7ef27ae7221c8aca95c7cec74e30fbea5bfac0cbce0e0550dbd1162259cabfc8bd3abfdf473a9";
 
 	private static final String COMMON_URL = NUANCE_HOST + "/NMDPAsrCmdServlet/dictation?";
 
-	private static final String APP_ID = "NMDPTRIAL_aazimparkar20130905101221";
+	private static final String APP_ID = "HTTP_NMDPPRODUCTION_wcities_eventseeker_20140519131346";
 	
-	private static final long ID = 20130905101221L;
+	private static final long ID = 20140519131346L;
 		
 	//private static String ACCEPT_TYPE = "text/plain";
 	
