@@ -147,6 +147,25 @@
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <!-- Bosch registrations end -->
         
+        <!-- Samsung Gear 2 registrations start -->
+        <service android:name="com.wcities.eventseeker.gear.service.SG2AccessoryProviderService" />
+        
+        <receiver android:name="com.samsung.android.sdk.accessory.ServiceConnectionIndicationBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="android.accessory.service.action.ACCESSORY_SERVICE_CONNECTION_IND" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name="com.samsung.android.sdk.accessory.RegisterUponInstallReceiver" >
+            <intent-filter>
+                <action android:name="android.accessory.device.action.REGISTER_AFTER_INSTALL" />
+            </intent-filter>
+        </receiver>
+
+        <meta-data android:name="AccessoryServicesLocation"
+            android:value="/res/xml/accessoryservices.xml" />
+        <!-- Samsung Gear 2 registrations end -->
+        
     </application>
 
     <permission
@@ -165,7 +184,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     
-    <!-- Required to pair Bluetooth devices for ford sync -->
+    <!-- Required to pair Bluetooth devices for ford sync & to support samsung gear 2 smart watch app -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     
@@ -178,6 +197,10 @@
     <!-- To add event to calendar -->
     <uses-permission android:name="android.permission.READ_CALENDAR" />
 	<uses-permission android:name="android.permission.WRITE_CALENDAR" />
+	<!-- To support samsung gear 2 smart watch app -->
+	<uses-permission android:name="com.samsung.accessory.permission.ACCESSORY_FRAMEWORK" />
+    <uses-permission android:name="com.samsung.wmanager.APP" />
+    <uses-permission android:name="com.samsung.wmanager.ENABLE_NOTIFICATION" />
 
     <permission
         android:name="com.wcities.eventseeker.permission.C2D_MESSAGE"

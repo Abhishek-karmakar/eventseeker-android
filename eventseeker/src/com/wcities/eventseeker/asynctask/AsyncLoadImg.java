@@ -13,14 +13,19 @@ import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 
+import com.wcities.eventseeker.MainActivity;
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg.ImgDetails;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.exception.DefaultUncaughtExceptionHandler;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.BitmapUtil;
+import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.widget.EventseekerWidget;
 
 public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
@@ -171,6 +176,9 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 	
 	@Override
 	protected Void doInBackground(Void... params) {
+		if (AppConstants.CRASH_REPORTING_ENABLED) {
+			Thread.setDefaultUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler((EventSeekr) MainActivity.getInstance().getApplication()));
+		}
 		//Log.i(TAG, "doInBackground(), imgDetailsList size = " + imgDetailsList.size());
 		ImgDetails imgDetails;
 		

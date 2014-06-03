@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.util.LogUtil;
 
 public class DefaultUncaughtExceptionHandler implements	UncaughtExceptionHandler {
 	
@@ -21,8 +22,8 @@ public class DefaultUncaughtExceptionHandler implements	UncaughtExceptionHandler
 	@Override
 	public void uncaughtException(Thread arg0, Throwable arg1) {
 		try {
+			LogUtil.write(TAG, Log.getStackTraceString(arg1));
 			//Log.d(TAG, "uncaughtException() " + Log.getStackTraceString(arg1));
-			
 		    Intent intent = new Intent(eventSeekr, ReportActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 		    		.putExtra(BundleKeys.STR_CRASH_LOG, Log.getStackTraceString(arg1));
 		    eventSeekr.startActivity(intent);

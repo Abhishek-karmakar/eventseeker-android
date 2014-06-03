@@ -13,7 +13,9 @@ import com.wcities.eventseeker.api.EventApi;
 import com.wcities.eventseeker.api.EventApi.IdType;
 import com.wcities.eventseeker.api.EventApi.MoreInfo;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.exception.DefaultUncaughtExceptionHandler;
 import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
 import com.wcities.eventseeker.util.FragmentUtil;
 
@@ -37,6 +39,9 @@ public class LoadEventDetails extends AsyncTask<Void, Void, Void> {
 	
 	@Override
 	protected Void doInBackground(Void... params) {
+		if (AppConstants.CRASH_REPORTING_ENABLED) {
+			Thread.setDefaultUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler((EventSeekr) FragmentUtil.getActivity(fragment).getApplication()));
+		}
 		//Log.d(TAG, "LoadEventDetails doInBackground()");
 		EventApi eventApi = new EventApi(oauthToken, event.getId(), IdType.EVENT);
 		
