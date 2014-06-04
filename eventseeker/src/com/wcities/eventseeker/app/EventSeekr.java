@@ -210,6 +210,7 @@ public class EventSeekr extends Application {
 
 		initConfigParams();
 		
+		//ReportHandler.install(this, "ankur@wcities.com");
 		if (AppConstants.CRASH_REPORTING_ENABLED) {
 			Thread.setDefaultUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(this));
 		}

@@ -1,30 +1,13 @@
 package com.wcities.eventseeker.core;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.graphics.Bitmap;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
-
-import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.cache.BitmapCacheable;
-import com.wcities.eventseeker.gear.api.SG2Base64;
-import com.wcities.eventseeker.gear.interfaces.SamsungGear2;
-import com.wcities.eventseeker.util.BitmapUtil;
-import com.wcities.eventseeker.util.ConversionUtil;
+import com.wcities.eventseeker.constants.AppConstants;
 
-public class Event implements Serializable, BitmapCacheable, SamsungGear2 {
+public class Event implements Serializable, BitmapCacheable {
 	
 	private static final String TAG = Event.class.getName();
 	
@@ -224,6 +207,7 @@ public class Event implements Serializable, BitmapCacheable, SamsungGear2 {
 	
 	@Override
 	public String getLowResImgUrl() {
+		//Log.d(TAG, "getLowResImgUrl()");
 		if (getImageAttribution() != null && getImgName() != null) {
 			return getImageAttribution().getLowResPath() + getImgName();
 		}
@@ -249,51 +233,5 @@ public class Event implements Serializable, BitmapCacheable, SamsungGear2 {
 	@Override
 	public String getKey(ImgResolution imgResolution) {
 		return new StringBuilder(getClass().getName()).append("_").append(id).append("_").append(imgResolution).toString();
-	}
-	
-	@Override
-	public JSONObject getJSONObjForSG() {
-		JSONObject jsonObject = new JSONObject();
-		try {
-			jsonObject.put("name", name);
-			
-			if (schedule != null) {
-				java.util.Date date = schedule.getDates().get(0).getStartDate();
-				Calendar calendar = Calendar.getInstance();
-				calendar.setTime(date);
-				jsonObject.put("dayOfMonth", calendar.get(Calendar.DAY_OF_MONTH));
-				jsonObject.put("month", calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()));
-				
-				List<String> urls = BitmapUtil.getUrlsInOrder(this, ImgResolution.LOW);
-				for (Iterator<String> iterator = urls.iterator(); iterator.hasNext();) {
-					String url = iterator.next();
-					Log.i(TAG, "url for img = " + url);
-					try {
-						Bitmap bitmap = BitmapUtil.getBitmap(url);
-						Log.i(TAG, "done getting bitmap");
-						if (bitmap != null) {
-							ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();  
-							bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-							byte[] byteArray = byteArrayOutputStream.toByteArray();
-							//to encode base64 from byte array use following method
-	
-							final String strImage = SG2Base64.encode(byteArray);
-							jsonObject.put("image", strImage);
-						}
-						
-						break;
-						
-					} catch (FileNotFoundException e) {
-						Log.i(TAG, "FileNotFoundException");
-						e.printStackTrace();
-						// continue for trying with next url
-					}
-				}
-			}
-			
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return jsonObject;
 	}
 }
