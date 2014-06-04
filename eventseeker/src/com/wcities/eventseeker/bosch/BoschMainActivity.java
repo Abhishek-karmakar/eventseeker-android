@@ -67,6 +67,8 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	private TextView txtActionBarTitle;
 	private FrameLayout frmLayoutContentFrame;
 	
+	private boolean isBoschActivityDestroying;
+	
 	private IPhoneCallStateListener iPhoneCallStateListener = new IPhoneCallStateListener() {
 		
 		@Override
@@ -92,10 +94,11 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		if (!MySpinServerSDK.sharedInstance().isConnected()) {
+		if (/*MySpinServerSDK.sharedInstance().isConnected()*/!EventSeekr.isConnectedWithBosch()) {
 			Intent intent = new Intent(getApplicationContext(), MainActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 			startActivity(intent);
+			isBoschActivityDestroying = true;
 		}
 		
 		setContentView(R.layout.activity_bosch_main);
@@ -171,8 +174,16 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
+		//Log.d(TAG, "onResume()");
 		try {
+			/**
+			 * This will set Locale to English just for Bosch System. This is done as if in Mobile app the Locale 
+			 * set to be different then some string which are common for Mobile app and Bosch app will appear in 
+			 * Language as per the default Locale set in Mobile app which shouldn't be happened.
+			 */
+			if (!isBoschActivityDestroying) {
+				((EventSeekr) getApplication()).updateLocaleForBosch();
+			}
 			
 			MySpinServerSDK.sharedInstance().registerCarDataChangedListener(new IOnCarDataChangeListener() {
 				
@@ -228,6 +239,9 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		super.onStop();
 		DeviceUtil.unregisterLocationListener((EventSeekr) getApplication());
 		EventSeekr.setConnectionFailureListener(null);
+		if (!isBoschActivityDestroying) {
+			((EventSeekr) getApplication()).resetDefaultLocale();
+		}
 	}
 	
 	@Override

@@ -3,6 +3,7 @@ package com.wcities.eventseeker.core;
 import java.io.Serializable;
 
 import android.location.Location;
+import android.util.Log;
 
 import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -232,10 +233,12 @@ public class Venue implements Serializable, BitmapCacheable {
 		savedLocation.setLongitude(lon);
 
 		float distance = venueLocation.distanceTo(savedLocation);
+		Log.i(TAG, "DISTANCE IN METERS: " + distance);
 		/******************************
 		 * this is distance in meters.*
 		 ******************************/
-		if (MySpinServerSDK.sharedInstance().isConnected()) {
+		Log.i(TAG, "SAVED UNIT: " + eventSeekr.getSavedProximityUnit().toString());
+		if (EventSeekr.isConnectedWithBosch()) {
 			ProximityUnit prxmtyUnt = eventSeekr.getSavedProximityUnit();
 			if (prxmtyUnt == ProximityUnit.MI) {
 				return distance * (ProximityUnit.CONVERSION_FACTOR / 1000);//meters to miles

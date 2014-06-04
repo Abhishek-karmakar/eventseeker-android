@@ -140,11 +140,13 @@ public class MainActivity extends ActionBarActivity implements
 		/**
 		 * Locale changes are Activity specific i.e. after the Activity gets destroyed, the Locale changes
 		 * associated with that activity will also get destroyed. So, if Activity was destroyed due to
-		 * configuration changes(like orientation change) then the Newer Activity will initialise itself with
-		 * the Device specific Locale. So, each and every time when activity gets initialised it should
-		 * also initialise its Locale from SharedPref.
+		 * configuration changes(like orientation change) then the Newer Activity will initialize itself with
+		 * the Device specific Locale. So, each and every time when activity gets initialized it should
+		 * also initialize its Locale from SharedPref.
 		 */
+		Log.d(TAG, "onCreate()");
 		((EventSeekr) getApplication()).setDefaultLocale();
+		Log.d(TAG, "onCreate()");
 		
 		UpdateAppUtil.updateCheckes((EventSeekr) getApplication());
 
@@ -156,7 +158,7 @@ public class MainActivity extends ActionBarActivity implements
 			e.printStackTrace();
 		}
 		
-		if (MySpinServerSDK.sharedInstance().isConnected()) {
+		if (EventSeekr.isConnectedWithBosch()/*MySpinServerSDK.sharedInstance().isConnected()*/) {
 			startBoschMainActivity();
 		}
 		
@@ -377,7 +379,7 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onResume() {
 		super.onResume();
 		//Log.d(TAG, "onResume()");
-		
+		boolean isLockscreenVisible = false;
 		if (AppConstants.FORD_SYNC_APP) {
 			activityOnTop = true;
 			// check if lockscreen should be up
@@ -389,17 +391,20 @@ public class MainActivity extends ActionBarActivity implements
 						i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 						i.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
 						startActivity(i);
+						isLockscreenVisible = true;
 					}
-					
-				} else {
-					/**
-					 * This is required because if user is connected to ford & then goes to change language 
-					 * from sync tdk, then lock screen is destroyed showing actual app screen on device.
-					 * In this case locale should be set for the device (not what is there on TDK).
-					 */
-					((EventSeekr) getApplication()).setDefaultLocale();
 				}
 			}
+		}
+		if (!isLockscreenVisible) {
+			/**
+			 * This is required because if user is connected to ford & then goes to change language 
+			 * from sync tdk, then lock screen is destroyed showing actual app screen on device.
+			 * In this case locale should be set for the device (not what is there on TDK).
+			 */
+			//Log.d(TAG, "onResume()");
+			((EventSeekr) getApplication()).setDefaultLocale();
+			//Log.d(TAG, "onResume()");
 		}
 	}
 

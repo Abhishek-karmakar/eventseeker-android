@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -243,7 +244,7 @@ public class ConversionUtil {
 	}
 
 	public static String formatFloatingNumber(int numAfterDecimal, double numberToBeFormatted) {
-		return String.format("%."+ numAfterDecimal +"f", numberToBeFormatted);
+		return String.format(Locale.ENGLISH, "%."+ numAfterDecimal +"f", numberToBeFormatted);
 	}
 	
 }

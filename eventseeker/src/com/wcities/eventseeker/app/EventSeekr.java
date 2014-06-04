@@ -49,6 +49,8 @@ public class EventSeekr extends Application {
 
 	private static final String TAG = EventSeekr.class.getName();
 	
+	private static Locale ACTUAL_SYSTEM_LOCALE;
+	
 	private boolean isTablet;
 	private boolean is7InchTablet;
 	private boolean isInLandscapeMode;
@@ -100,6 +102,10 @@ public class EventSeekr extends Application {
 	private double curLat = AppConstants.NOT_ALLOWED_LAT, curLon = AppConstants.NOT_ALLOWED_LON;
 
 	private ProximityUnit savedProximityUnit;
+	
+	static {
+		ACTUAL_SYSTEM_LOCALE = Locale.getDefault();
+	}
 	
 	public static enum ProximityUnit {
 		MI(R.string.unit_mi, R.string.unit_miles),
@@ -192,6 +198,10 @@ public class EventSeekr extends Application {
 
 	public void setFirstEventDetailsForFordEventAL(boolean isFirstEventDetailsForFordEventAL) {
 		this.isFirstEventDetailsForFordEventAL = isFirstEventDetailsForFordEventAL;
+	}
+	
+	public static boolean isConnectedWithBosch() {
+		return MySpinServerSDK.sharedInstance().isConnected();
 	}
 	
 	@Override
@@ -531,7 +541,8 @@ public class EventSeekr extends Application {
 	
 	public ProximityUnit getCurrentProximityUnit() {
 		/**String countryCode = Locale.getDefault().getCountry() - This will return Default Locale NOT CURRENT ONE*/;
-		String countryCode = getResources().getConfiguration().locale.getCountry();//will get current Locale
+		String countryCode = ACTUAL_SYSTEM_LOCALE.getCountry();//getResources().getConfiguration().locale.getCountry();
+		//will get current system Locale
 		Log.i(TAG, "CURRENT COUNTRY CODE : " + countryCode);
 		if (countryCode.equals("US") || countryCode.equals("") || countryCode.equals("LR") || countryCode.equals("MM")) {
 			/**
@@ -605,19 +616,28 @@ public class EventSeekr extends Application {
 		return followingList;
 	}
 	
+	public void updateLocaleForBosch() {
+		this.defaultLocale = Locales.ENGLISH;
+		//Log.d(TAG, "updateLocale()");
+		setDefaultLocale();
+		//Log.d(TAG, "updateLocale()");
+	}
+	
 	public void updateLocale(Locales locale) {
 		this.defaultLocale = locale;
 
-		SharedPreferences pref = getSharedPreferences(
-				AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
 		Editor editor = pref.edit();
 		editor.putString(SharedPrefKeys.DEFAULT_LOCALE_CODE, locale.getLocaleCode());
 		editor.commit();
 		
+		//Log.d(TAG, "updateLocale(locale)");
 		setDefaultLocale();
+		//Log.d(TAG, "updateLocale(locale)");
 	}
 	
 	public void setDefaultLocale() {
+		//Log.d(TAG, "getLocale().getLocaleCode() : " + getLocale().getLocaleCode());
 		Locale locale = new Locale(getLocale().getLocaleCode());
 		Locale.setDefault(locale);
 
@@ -634,8 +654,7 @@ public class EventSeekr extends Application {
 
 	public Locales getLocale() {
 		if (defaultLocale == null) {
-			SharedPreferences pref = getSharedPreferences(
-					AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+			SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
 			String localeCode = pref.getString(SharedPrefKeys.DEFAULT_LOCALE_CODE, Locales.ENGLISH.getLocaleCode());
 			defaultLocale = Locales.getLocaleByLocaleCode(localeCode);
 		}
@@ -670,8 +689,7 @@ public class EventSeekr extends Application {
 	}
 
 	public int getSyncCount(Service service) {
-		SharedPreferences pref = getSharedPreferences(
-				AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
 
 		switch (service) {
 		
@@ -767,8 +785,7 @@ public class EventSeekr extends Application {
 
 		editor.commit();
 
-		for (Iterator<EventSeekrListener> iterator = listeners.iterator(); iterator
-				.hasNext();) {
+		for (Iterator<EventSeekrListener> iterator = listeners.iterator(); iterator.hasNext();) {
 			EventSeekrListener listener = iterator.next();
 			listener.onSyncCountUpdated(service);
 		}
@@ -809,6 +826,16 @@ public class EventSeekr extends Application {
 
 	public void setCurLon(double curLon) {
 		this.curLon = curLon;
+	}
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		ACTUAL_SYSTEM_LOCALE = newConfig.locale;
+	}
+	
+	public void resetDefaultLocale() {
+		defaultLocale = null;
 	}
 
 	private class GetWcitiesId extends AsyncTask<Void, Void, String> {
