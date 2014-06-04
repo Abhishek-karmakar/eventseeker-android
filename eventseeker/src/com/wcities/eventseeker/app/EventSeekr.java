@@ -556,7 +556,7 @@ public class EventSeekr extends Application {
 	public ProximityUnit getSavedProximityUnit() {
 		if (savedProximityUnit == null) {
 			SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-			int proximityUnitOrdinal = pref.getInt(SharedPrefKeys.PROXIMITY_UNIT, ProximityUnit.MI.ordinal());
+			int proximityUnitOrdinal = pref.getInt(SharedPrefKeys.PROXIMITY_UNIT, getCurrentProximityUnit().ordinal());
 			savedProximityUnit = ProximityUnit.getProximityUnitByOrdinal(proximityUnitOrdinal, this);
 		}
 		return savedProximityUnit;
