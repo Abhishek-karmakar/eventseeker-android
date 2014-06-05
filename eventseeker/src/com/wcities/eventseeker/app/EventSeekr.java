@@ -49,6 +49,13 @@ public class EventSeekr extends Application {
 
 	private static final String TAG = EventSeekr.class.getName();
 	
+	/**
+	 * This will hold the value of Device specific Locale. Reason to create :- after setting the default locale 
+	 * in 'setDefaultLocale()' when we try to get Country code in 'getCurrentProximityUnit()' it was getting 
+	 * Country code as "". So, whatever be the Locale changed by the user outside of the app, the Proximity unit
+	 * was not getting changed accordingly but it was constantly MI. So, now this field holds the value and gets
+	 * notified for being updated in 'onConfigurationChanged()'
+	 */
 	private static Locale ACTUAL_SYSTEM_LOCALE;
 	
 	private boolean isTablet;
@@ -539,6 +546,10 @@ public class EventSeekr extends Application {
 		return wcitiesId;
 	}
 	
+	/**
+	 * This will decide the Proximity Unit for the current Locale
+	 * @return
+	 */
 	public ProximityUnit getCurrentProximityUnit() {
 		/**String countryCode = Locale.getDefault().getCountry() - This will return Default Locale NOT CURRENT ONE*/;
 		String countryCode = ACTUAL_SYSTEM_LOCALE.getCountry();//getResources().getConfiguration().locale.getCountry();
@@ -553,6 +564,10 @@ public class EventSeekr extends Application {
 		return ProximityUnit.KM;
 	}
 	
+	/**
+	 * Will get the saved Proximity unit. If the instance is null then will get it from the SharedPref.
+	 * @return
+	 */
 	public ProximityUnit getSavedProximityUnit() {
 		if (savedProximityUnit == null) {
 			SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
@@ -562,6 +577,10 @@ public class EventSeekr extends Application {
 		return savedProximityUnit;
 	}
 
+	/**
+	 * will update the given Proximity Unit in local instance and in SharedPref.
+	 * @param savedProximityUnit
+	 */
 	public void updateSavedProximityUnit(ProximityUnit savedProximityUnit) {
 		this.savedProximityUnit = savedProximityUnit;
 		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
@@ -616,6 +635,11 @@ public class EventSeekr extends Application {
 		return followingList;
 	}
 	
+	/**
+	 * This needs to be done as if user has set certain 'Language' other than English in Mobile app, and if he
+	 * connects the app in Bosch system then the strings used in Bosch app which are earlier defined for Mobile 
+	 * app will be changed as per the Language settings in the Mobile app.
+	 */
 	public void updateLocaleForBosch() {
 		this.defaultLocale = Locales.ENGLISH;
 		//Log.d(TAG, "updateLocale()");
@@ -827,13 +851,27 @@ public class EventSeekr extends Application {
 	public void setCurLon(double curLon) {
 		this.curLon = curLon;
 	}
-	
+
+	/**
+	 * THIS IS THE STARTING POINT FOR THE PROXIMITY RELATED UPDATES.
+	 * Whenever user will change the Locale(language from Device's Settings screen), this app will be notified
+	 * by 'onConfigurationChanged()' call back. So, now app must change its Proximity unit on the basis of the
+	 * new Locale selected.
+	 */
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		ACTUAL_SYSTEM_LOCALE = newConfig.locale;
 	}
 	
+	/**
+	 * This is called from BoschMainActivity's onStop(). Reason :- From BoscgMainActivity's onResume() app
+	 * makes a call for 'updateLocaleForBosch()' which will change the app's Locale to English for Bosch 
+	 * System. So, this method will revert this change by making the defaultLocale as null. Now, when 
+	 * BoschMainActivity will resume the MainActivity, then from MainActivity's onResume() a call to 
+	 * 'setDefaultLocale()' is made which will inturn make a call to 'getLocale()' and this method now 
+	 * will refresh the defaultLocale from the SharedPref value.
+	 */
 	public void resetDefaultLocale() {
 		defaultLocale = null;
 	}

@@ -67,6 +67,9 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	private TextView txtActionBarTitle;
 	private FrameLayout frmLayoutContentFrame;
 	
+	/**
+	 * This will keep track if the BoschMainActivity is being destroyed.
+	 **/
 	private boolean isBoschActivityDestroying;
 	
 	private IPhoneCallStateListener iPhoneCallStateListener = new IPhoneCallStateListener() {
