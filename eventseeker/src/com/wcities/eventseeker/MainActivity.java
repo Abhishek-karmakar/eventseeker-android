@@ -391,8 +391,8 @@ public class MainActivity extends ActionBarActivity implements
 						i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 						i.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
 						startActivity(i);
-						isLockscreenVisible = true;
 					}
+					isLockscreenVisible = true;
 				}
 			}
 		}
