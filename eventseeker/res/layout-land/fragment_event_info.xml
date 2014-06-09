@@ -49,7 +49,7 @@
 					        android:layout_width="match_parent"
 					        android:layout_height="@dimen/img_evt_ht_fragment_event_info"
 					        android:contentDescription="event image"
-					        android:scaleType="fitXY" />
+					        android:scaleType="centerCrop" />
 				        
 				        <RelativeLayout android:id="@+id/lnrLayoutEvtInfo"
 				            android:layout_width="match_parent"

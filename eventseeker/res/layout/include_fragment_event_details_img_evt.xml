@@ -8,7 +8,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="@dimen/img_evt_ht_include_fragment_event_details_img_evt"
 		android:contentDescription="event image"
-		android:scaleType="fitXY" />
+		android:scaleType="centerCrop" />
     
     <ProgressBar android:id="@+id/progressBar"
 		android:layout_width="wrap_content"
