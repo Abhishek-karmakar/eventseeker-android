@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.ford.syncV4.exception.SyncException;
 import com.ford.syncV4.exception.SyncExceptionCause;
@@ -630,14 +631,14 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	public void onOnLanguageChange(final OnLanguageChange arg0) {
 		Log.d(TAG, "onOnLanguageChange to " + arg0.getLanguage().name() + ", " + 
 				arg0.getHmiDisplayLanguage().name());
-		/*currentUIActivity.runOnUiThread(new Runnable() {
+		currentUIActivity.runOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
 				Toast.makeText(currentUIActivity, "onOnLanguageChange to " + arg0.getLanguage().name() + ", " + 
 						arg0.getHmiDisplayLanguage().name(), Toast.LENGTH_SHORT).show();
 			}
-		});*/
+		});
 		
 		Language language = arg0.getLanguage();
 		((EventSeekr) getApplication()).updateFordLocale(Locales.getFordLocaleByLanguage(language));

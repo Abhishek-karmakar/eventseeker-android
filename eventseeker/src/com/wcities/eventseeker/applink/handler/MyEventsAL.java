@@ -130,7 +130,7 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 		interactionChoiceSetIDList.add(CHOICE_SET_ID_SUGGESTION_REPLY);
 		
 		String simple = AppLinkService.getInstance().getString(R.string.my_events_al_no_evts_avail_make_suggestions);
-		String initialText = mEventSeekr.getResources().getString(R.string.my_events_al_suggestions);	
+		String initialText = mEventSeekr.getResources().getString(R.string.my_events_al_confirmation);	
 		
 		Vector<TTSChunk> initChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
 		Vector<TTSChunk> timeoutChunks = TTSChunkFactory.createSimpleTTSChunks(

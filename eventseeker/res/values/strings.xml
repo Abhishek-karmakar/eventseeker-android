@@ -388,10 +388,10 @@
     <string name="followed">Followed</string>
     <string name="search_event_text">Search Event</string>
     <string name="search_artist_text">Search Artist</string>
-    <string name="listening">Listening..</string>
-    <string name="processing">Processing..</string>
+    <string name="listening">Listening...</string>
+    <string name="processing">Processing...</string>
     <string name="error">Error</string>
-    <string name="nuance_error">Sorry, there was an error. Please press the voice button and say myevents, explore or search</string>
+    <string name="nuance_error">Sorry, there was an error. Please press the voice button and say my events, explore or search</string>
  
     <!-- Events -->
     <string name="event_no_evts_avail">There are no events available.</string>
@@ -408,7 +408,7 @@
     <string name="my_events_al_yes">Yes</string>
     <string name="my_events_al_no">No</string>
     <string name="my_events_al_no_evts_avail_make_suggestions">There are no events available, shall I make suggestions?</string>
-    <string name="my_events_al_suggestions">Want Suggestions?</string>
+    <string name="my_events_al_confirmation">Confirmation</string>
     <string name="my_events_how_can_i_help">How can I help?</string>
 
     <!-- LockScreenActivity -->

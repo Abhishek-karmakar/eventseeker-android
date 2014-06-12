@@ -357,7 +357,7 @@
     <string name="discover_al_festivals">festivais</string>
     
     <!-- SearchAL -->
-    <string name="search_events_or_artists">Bem, deseja buscar por artista, evento ou local?</string>
+    <string name="search_events_or_artists">Bem, deseja buscar por artista ou evento?</string>
     <string name="search_event">Evento</string>
     <string name="search_artist">Artista</string>
     <string name="search_for">Buscar por</string>
@@ -370,8 +370,8 @@
     <string name="followed">Seguido</string>
     <string name="search_event_text">Buscar por evento</string>
     <string name="search_artist_text">Buscar por artista</string>
-    <string name="listening">Está a escutar..</string>
-    <string name="processing">Está a processar..</string>
+    <string name="listening">Está a escutar...</string>
+    <string name="processing">Está a processar...</string>
     <string name="error">Error</string>
     <string name="nuance_error">Infelizmente, houve um error. Prima o botão de voz se faz favor e diga meus eventos, descobrir ou pesquisa</string>
     
@@ -379,23 +379,20 @@
     <string name="event_no_evts_avail">Não há eventos disponíveis.</string>
     <string name="alert_no_events_available">Não há eventos disponíveis.</string>
     <string name="plz_press_nxt_or_bck">, Se faz favor, prima o botão de voz e diga próximo ou atrás.</string>
-	<string name="detail_not_available">Descrição detalhada não disponível</string>
+	<string name="detail_not_available">Descrição detalhada não está disponível</string>
     <string name="is_performing_for_this_event">se apresenta por este evento</string>
     <string name="are_performing_for_this_event">se apresentam por este evento</string>
     <string name="price_would_be">, o preço seria</string>
-    <string name="price_range_would_be">, o preço seria entre   e   aproximadamente</string>
+    <string name="price_range_would_be">, o preço seria entre e aproximadamente</string>
     <string name="and">e</string>
     
     <!-- MyEventsAL -->
     <string name="my_events_al_yes">Sim</string>
     <string name="my_events_al_no">Não</string>
     <string name="my_events_al_no_evts_avail_make_suggestions">Não há eventos disponíveis, posso fazer umas sugestões?</string>
-    <!-- <string name="my_events_al_suggestions">Want Suggestions?</string> -->
+    <!-- <string name="my_events_al_confirmation">Confirmation</string> -->
     <string name="my_events_how_can_i_help">O que posso fazer para ajudar-lhe?</string>
 
-	<!-- LockScreenActivity -->
-    <!-- <string name="txt_eventseeker_activity_lockscreen">eventseeker</string>
-    <string name="txt_lockscreen_activity_lockscreen">Lock Screen</string> -->
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for Ford ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 </resources>
