@@ -341,6 +341,7 @@ public class SearchAL extends ESIProxyALM {
 		//Log.d(TAG, "performOperationForCommand : " + cmd.name());
 		
 		switch (cmd) {
+		
 			case DISCOVER:
 			case MY_EVENTS:
 			case SEARCH:
@@ -370,6 +371,7 @@ public class SearchAL extends ESIProxyALM {
 					onBackArtistCommand(artistList, context);					
 				}
 				break;
+				
 			case DETAILS:
 				if (selectedCategoryId == SearchCategories.SEARCH_EVENT.ordinal()) {
 					EventALUtil.speakDetailsOfEvent(eventList.getCurrentEvent(), context);
@@ -377,11 +379,14 @@ public class SearchAL extends ESIProxyALM {
 					speakDetailsOfArtist(artistList.getCurrentArtist(), context);
 				}
 				break;
+				
 			/*case PLAY:
 				break;*/
+				
 			case CALL_VENUE:
 				EventALUtil.callVenue(eventList);
 				break;
+				
 			case FOLLOW:
 				/**********************************************************************************
 				 * Here if User has already tracked the artist with other devices(mobile/Tab etc.)*
@@ -396,16 +401,17 @@ public class SearchAL extends ESIProxyALM {
 				if (artist.getAttending() == Attending.NotTracked) {
 					artist.updateAttending(Attending.Tracked, context);
 					new UserTracker(Api.OAUTH_TOKEN_CAR_APPS, context, UserTrackingItemType.artist, artist.getId()).execute();
-					ALUtil.displayMessage(artist.getName(), context.getResources().getString(R.string.followed));
-					ALUtil.speak(artist.getName() + " " + context.getResources().getString(R.string.followed));
+					ALUtil.alert(artist.getName(), context.getResources().getString(R.string.followed), "", 
+							artist.getName() + " " + context.getResources().getString(R.string.followed));
 					
 				} else {
 					//display : text1 : artist.getName(), text2 : already_followed
 					//speak : artist.getName() + " " + already_followed
-					ALUtil.displayMessage(artist.getName(), context.getResources().getString(R.string.already_followed));
-					ALUtil.speak(artist.getName() + " " + context.getResources().getString(R.string.already_followed));
+					ALUtil.alert(artist.getName(), context.getResources().getString(R.string.already_followed), "", 
+							artist.getName() + " " + context.getResources().getString(R.string.already_followed));
 				} 
 				break;
+				
 			default:
 				//Log.d(TAG, cmd + " is an Invalid Command");
 				break;

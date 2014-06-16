@@ -30,6 +30,7 @@ import com.wcities.eventseeker.constants.AppConstants;
 public class ALUtil {
 
 	private static final String TAG = ALUtil.class.getSimpleName();
+	private static final int ALERT_DURATION = 3000;
 	
 	public static void addCommand(Vector<String> vrCommands, int cmdID) {
 		//Log.d(TAG, "Add Command Id is : " + cmdID);
@@ -193,7 +194,7 @@ public class ALUtil {
 			Alert msg = new Alert();
 			msg.setCorrelationID(AppLinkService.getInstance().autoIncCorrId++);
 			msg.setAlertText1(alertText1);
-			msg.setDuration(3000);
+			msg.setDuration(ALERT_DURATION);
 			msg.setPlayTone(true);
 			Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(speakText);
 			msg.setTtsChunks(ttsChunks);
@@ -211,8 +212,27 @@ public class ALUtil {
 			msg.setCorrelationID(AppLinkService.getInstance().autoIncCorrId++);
 			msg.setAlertText1(alertText1);
 			msg.setAlertText2(alertText2);
-			msg.setDuration(3000);
+			msg.setDuration(ALERT_DURATION);
 			msg.setPlayTone(true);
+			AppLinkService.getInstance().getProxy().sendRPCRequest(msg);
+			
+		} catch (SyncException e) {
+			e.printStackTrace();
+			Log.d(TAG, "Failed to show alert");
+		}
+	}
+	
+	public static void alert(String alertText1, String alertText2, String alertText3, String speakText) {
+		try {
+			Alert msg = new Alert();
+			msg.setCorrelationID(AppLinkService.getInstance().autoIncCorrId++);
+			msg.setAlertText1(alertText1);
+			msg.setAlertText2(alertText2);
+			msg.setAlertText3(alertText3);
+			msg.setDuration(ALERT_DURATION);
+			msg.setPlayTone(true);
+			Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(speakText);
+			msg.setTtsChunks(ttsChunks);
 			AppLinkService.getInstance().getProxy().sendRPCRequest(msg);
 			
 		} catch (SyncException e) {
