@@ -109,7 +109,11 @@ public abstract class DiscoverParentFragment extends FragmentLoadableFromBackSta
 		 */
 
 		if (featuredEvts.isEmpty()) {
-			loadFeaturedEvts = new LoadFeaturedEvts(Api.OAUTH_TOKEN, lat, lon) {
+			/**
+			 * 12-06-2014 : added wcitiesId in Featured event call as per Rohit/Sameer's mail
+			 */
+			String wcitiesId = FragmentUtil.getApplication(this).getWcitiesId();
+			loadFeaturedEvts = new LoadFeaturedEvts(Api.OAUTH_TOKEN, lat, lon, wcitiesId) {
 				
 				@Override
 				protected void onPreExecute() {

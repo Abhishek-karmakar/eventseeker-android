@@ -229,6 +229,10 @@ public class EventApi extends Api {
 			uri = uri.concat("&lat=" + lat + "&lon=" + lon);
 		}
 		
+		if (userId != null) {
+			uri = uri + "&userId=" + userId + "&userType=wcities"; 
+		}
+		
 		if (miles != NOT_INITIALIZED) {
 			uri = uri.concat("&miles=" + miles);
 		}
@@ -252,6 +256,10 @@ public class EventApi extends Api {
 		
 		if (lat != AppConstants.NOT_ALLOWED_LAT && lon != AppConstants.NOT_ALLOWED_LON) {
 			uri = uri.concat("&lat=" + lat + "&lon=" + lon);
+		}
+		
+		if (userId != null) {
+			uri = uri + "&userId=" + userId + "&userType=wcities"; 
 		}
 		
 		if (miles != NOT_INITIALIZED) {

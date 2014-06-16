@@ -77,6 +77,7 @@ public class NuanceApi {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			result = null;
 		} finally {
 			conn.disconnect();
 		}

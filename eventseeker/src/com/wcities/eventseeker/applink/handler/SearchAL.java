@@ -508,8 +508,9 @@ public class SearchAL extends ESIProxyALM {
 				addCommandsMain();
 				Vector<SoftButton> softBtns = buildSoftButtonsMain();
 				ALUtil.displayMessage(context.getResources().getString(R.string.error), "", softBtns);
-				
-				ALUtil.speak(R.string.nuance_error);
+				//ALUtil.speak(R.string.nuance_error);
+				ALUtil.alert(context.getResources().getString(R.string.error), 
+					context.getResources().getString(R.string.nuance_error));
 				//AppLinkService.getInstance().initiateMainAL();
 				return;
 			}

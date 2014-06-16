@@ -18,6 +18,7 @@ import com.ford.syncV4.proxy.rpc.Choice;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
 import com.ford.syncV4.proxy.rpc.SoftButton;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
+import com.wcities.eventseeker.MainActivity;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.EventApi;
@@ -282,6 +283,10 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		eventApi.setEnd(getEndDate());
 		eventApi.setMiles(MILES_LIMIT);
 		eventApi.setLimit(EVENTS_LIMIT);
+		/**
+		 * 12-06-2014 : added wcitiesId in Featured event call as per Rohit/Sameer's mail
+		 */
+		eventApi.setUserId(((EventSeekr)MainActivity.getInstance().getApplication()).getWcitiesId());
 		eventApi.setAlreadyRequested(eventsAlreadyRequested);
 		eventApi.setAddFordLangParam(true);
 		

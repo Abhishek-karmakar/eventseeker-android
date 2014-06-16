@@ -52,7 +52,11 @@ public class BoschFeaturedEventsFragment extends BoschListFragmentLoadableFromBa
 		super.onActivityCreated(savedInstanceState);
 		
 		double latlon[] = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
-		AsyncTaskUtil.executeAsyncTask(new LoadFeaturedEvts(Api.OAUTH_TOKEN_CAR_APPS, latlon[0], latlon[1]) {
+		/**
+		 * 12-06-2014 : added wcitiesId in Featured event call as per Rohit/Sameer's mail
+		 */
+		String wcitiesId = FragmentUtil.getApplication(this).getWcitiesId();
+		AsyncTaskUtil.executeAsyncTask(new LoadFeaturedEvts(Api.OAUTH_TOKEN_CAR_APPS, latlon[0], latlon[1], wcitiesId) {
 			
 			@Override
 			protected void onPostExecute(List<Event> result) {

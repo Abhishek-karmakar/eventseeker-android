@@ -9,9 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
-import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.EventApi;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
@@ -21,12 +19,13 @@ public class LoadFeaturedEvts extends AsyncTask<Void, Void, List<Event>> {
 	private static final int FEATURED_EVTS_LIMIT = 5;
 
 	private double lat, lon;
-	private String oauthToken;
+	private String oauthToken, wcitiesId;
 	
-	public LoadFeaturedEvts(String oauthToken, double lat, double lon) {
+	public LoadFeaturedEvts(String oauthToken, double lat, double lon, String wcitiesId) {
 		this.oauthToken = oauthToken;
 		this.lat = lat;
 		this.lon = lon;
+		this.wcitiesId = wcitiesId;
 	}
 	
 	@Override
@@ -34,6 +33,7 @@ public class LoadFeaturedEvts extends AsyncTask<Void, Void, List<Event>> {
 		List<Event> events = new ArrayList<Event>();
 		EventApi eventApi = new EventApi(oauthToken, lat, lon);
 		eventApi.setLimit(FEATURED_EVTS_LIMIT);
+		eventApi.setUserId(wcitiesId);
 		try {
 			JSONObject jsonObject = eventApi.getFeaturedEvents();
 			EventApiJSONParser jsonParser = new EventApiJSONParser();
