@@ -171,7 +171,7 @@ public class ALUtil {
     }
 	
 	public static void displayMessage(String text1, String text2, Vector<SoftButton> softButtons) {
-		Log.d(TAG, "text1 : " + text1 + " text2 : " + text2);
+		//Log.d(TAG, "text1 : " + text1 + " text2 : " + text2);
 		try {
 			if (text1 == null) {
 				text1 = "";
@@ -186,7 +186,7 @@ public class ALUtil {
 			e.printStackTrace();
 			Log.d(TAG, "Failed to send Show");
 		}
-   }
+	}
 	
 	public static void alert(String alertText1, String speakText) {
 		try {

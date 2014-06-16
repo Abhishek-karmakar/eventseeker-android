@@ -41,7 +41,7 @@ public class AppLinkReceiver  extends BroadcastReceiver {
 				
 			//if SYNC is disconnected from phone or BT disabled, stop service (and thus the proxy)
 			} else if (intent.getAction().equals(BluetoothDevice.ACTION_ACL_DISCONNECTED)) {
-				if (bluetoothDevice.getName().contains("SYNC")) {
+				if (bluetoothDevice != null && bluetoothDevice.getName() != null && bluetoothDevice.getName().contains("SYNC")) {
 					AppLinkService serviceInstance = AppLinkService.getInstance();
 					if (serviceInstance != null){
 						Intent stopIntent = new Intent(context, AppLinkService.class);

@@ -398,6 +398,7 @@ public class SearchAL extends ESIProxyALM {
 					new UserTracker(Api.OAUTH_TOKEN_CAR_APPS, context, UserTrackingItemType.artist, artist.getId()).execute();
 					ALUtil.displayMessage(artist.getName(), context.getResources().getString(R.string.followed));
 					ALUtil.speak(artist.getName() + " " + context.getResources().getString(R.string.followed));
+					
 				} else {
 					//display : text1 : artist.getName(), text2 : already_followed
 					//speak : artist.getName() + " " + already_followed

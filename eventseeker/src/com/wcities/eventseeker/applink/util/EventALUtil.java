@@ -5,10 +5,12 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Vector;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.content.res.Resources.NotFoundException;
 import android.net.Uri;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
@@ -228,6 +230,7 @@ public class EventALUtil {
 		if (event != null) {
 			Venue venue = event.getSchedule().getVenue();
 			if (venue != null && venue.getPhone() != null) {
+				AppLinkService.getInstance().registerPhoneStateListener();
 				Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + venue.getPhone()));
 				AppLinkService.getInstance().getCurrentActivity().startActivity(Intent.createChooser(
 						intent, "Call..."));

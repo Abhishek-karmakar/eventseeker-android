@@ -11,11 +11,12 @@ import java.util.Vector;
 
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.IBinder;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.ford.syncV4.exception.SyncException;
 import com.ford.syncV4.exception.SyncExceptionCause;
@@ -67,6 +68,7 @@ import com.ford.syncV4.proxy.rpc.UnsubscribeButtonResponse;
 import com.ford.syncV4.proxy.rpc.UnsubscribeVehicleDataResponse;
 import com.ford.syncV4.proxy.rpc.enums.ButtonName;
 import com.ford.syncV4.proxy.rpc.enums.DriverDistractionState;
+import com.ford.syncV4.proxy.rpc.enums.HMILevel;
 import com.ford.syncV4.proxy.rpc.enums.Language;
 import com.ford.syncV4.proxy.rpc.enums.VehicleDataResultCode;
 import com.ford.syncV4.transport.TCPTransportConfig;
@@ -111,6 +113,10 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	private ESIProxyALM esIProxyALM;
 	private boolean isHMIStatusNone, isVehicleDataSubscribed;
 	private double lat = AppConstants.NOT_ALLOWED_LAT, lng = AppConstants.NOT_ALLOWED_LON;
+	
+	private ListenToPhoneState listener;
+	private boolean isCallAborted;
+	private int lastCallState;
 	
 	public static AppLinkService getInstance() {
 		return instance;
@@ -299,6 +305,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 		}
 		  
 		Log.d(TAG, "onOnHMIStatus(), " + notification.getSystemContext().name());
+
 		switch (notification.getHmiLevel()) {
 		
 		case HMI_FULL:			
@@ -308,7 +315,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 			 * goes to change language in between from sync tdk & then returns back to app
 			 */
 			//if (driverDistractionNotif == false) {
-			showLockScreen();
+			showLockScreen(HMILevel.HMI_FULL);
 			//}
 			
 			try {
@@ -351,6 +358,8 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 				 * message gets appear.
 				 */
 				//ALUtil.displayMessage(R.string.msg_welcome_to, R.string.msg_eventseeker);
+				esIProxyALM = MainAL.getInstance((EventSeekr) getApplication());
+				esIProxyALM.onStartInstance();
 			}
 			
 			if (!isVehicleDataSubscribed) {
@@ -367,14 +376,14 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 		case HMI_LIMITED:
 			Log.d(TAG, "onOnHMIStatus(), HMI_LIMITED, driverDistractionNotif = " + driverDistractionNotif);
 			if (driverDistractionNotif == false) {
-				showLockScreen();
+				showLockScreen(HMILevel.HMI_LIMITED);
 			}
 			break;
 			
 		case HMI_BACKGROUND:
 			Log.d(TAG, "onOnHMIStatus(), HMI_BACKGROUND, driverDistractionNotif = " + driverDistractionNotif);
 			if (driverDistractionNotif == false) {
-				showLockScreen();
+				showLockScreen(HMILevel.HMI_BACKGROUND);
 			}
 			break;
 			
@@ -403,8 +412,11 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 			 * method on esIProxyALM which should be initial AL, i.e., MainAL & not DiscoverAL.
 			 * That's why this resetting is done here on exit.
 			 */
-			esIProxyALM = MainAL.getInstance((EventSeekr) getApplication());
-			esIProxyALM.onStartInstance();
+			/**
+			 * Following code shifted to HMI_FULL case since we cannot make calls in HMI Status "NONE"
+			 */
+			/*esIProxyALM = MainAL.getInstance((EventSeekr) getApplication());
+			esIProxyALM.onStartInstance();*/
 			break;
 			
 		default:
@@ -412,7 +424,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 		}
 	}
    
-	private void showLockScreen() {
+	private void showLockScreen(HMILevel hmiLevel) {
 		//Log.d(TAG, "showLockScreen()");
 		// only throw up lockscreen if main activity is currently on top
 		// else, wait until onResume() to throw lockscreen so it doesn't
@@ -420,16 +432,24 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 		if (currentUIActivity != null) {
 			if (currentUIActivity.isActivityonTop()) {
 				if (LockScreenActivity.getInstance() == null) {
-					Intent i = new Intent(this, LockScreenActivity.class);
-					i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					i.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-					startActivity(i);
+					startLockScreen();
 				}
+				
+			} else if (hmiLevel == HMILevel.HMI_FULL && isCallAborted) {
+				isCallAborted = false;
+				startLockScreen();
 			}
 		}
 		lockscreenUP = true;
 	}
-
+	
+	private void startLockScreen() {
+		Intent i = new Intent(this, LockScreenActivity.class);
+		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		i.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+		startActivity(i);
+	}
+	
 	private void clearLockScreen() {
 		//Log.d(TAG, "clearlockscreen()");
 		if (LockScreenActivity.getInstance() != null) {
@@ -459,7 +479,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 
 		} else {
 			Log.d(TAG, "show lockscreen, DD_ON");
-			showLockScreen();
+			showLockScreen(null);
 		}
 	}
 
@@ -543,6 +563,41 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 				R.string.connection_lost));
 		initiateMainAL();
 	}
+	
+	public void registerPhoneStateListener() {
+		lastCallState = TelephonyManager.CALL_STATE_IDLE;
+		isCallAborted = false;
+        currentUIActivity.runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+		        listener = new ListenToPhoneState();
+		        TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		        tManager.listen(listener, PhoneStateListener.LISTEN_CALL_STATE);
+			}
+		});
+	}
+	
+	public void unregisterPhoneStateListener() {
+		TelephonyManager tManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		tManager.listen(listener, PhoneStateListener.LISTEN_NONE);
+		listener = null;
+	}
+	
+	private class ListenToPhoneState extends PhoneStateListener {
+
+        public void onCallStateChanged(final int state, String incomingNumber) {
+        	if (state == TelephonyManager.CALL_STATE_IDLE) {
+				if (lastCallState != TelephonyManager.CALL_STATE_IDLE) {
+					isCallAborted = true;
+					unregisterPhoneStateListener();
+				}
+				
+			} else {
+				lastCallState = state;
+			}
+        }
+    }
 	
 	public void onError(String info, Exception e) {}
 	
@@ -631,14 +686,14 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	public void onOnLanguageChange(final OnLanguageChange arg0) {
 		Log.d(TAG, "onOnLanguageChange to " + arg0.getLanguage().name() + ", " + 
 				arg0.getHmiDisplayLanguage().name());
-		currentUIActivity.runOnUiThread(new Runnable() {
+		/*currentUIActivity.runOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
 				Toast.makeText(currentUIActivity, "onOnLanguageChange to " + arg0.getLanguage().name() + ", " + 
 						arg0.getHmiDisplayLanguage().name(), Toast.LENGTH_SHORT).show();
 			}
-		});
+		});*/
 		
 		Language language = arg0.getLanguage();
 		((EventSeekr) getApplication()).updateFordLocale(Locales.getFordLocaleByLanguage(language));
