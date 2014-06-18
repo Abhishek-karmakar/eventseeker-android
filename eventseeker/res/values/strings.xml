@@ -351,7 +351,8 @@
     <string name="ford_phone_no">Sorry, phone number</string>
     <string name="is_unavailable">is unavailable</string> <!-- this is continuation of above string -->
     <string name="unavailability_continuation"></string> <!-- this is continuation of above string -->
-    
+    <string name="calling">Calling</string> 
+	
 	<!-- Commands -->
     <string name="al_command_next">Next</string>
     <string name="al_command_back">Back</string>
@@ -402,6 +403,8 @@
     <string name="alert_no_events_available">No events available.</string>
     <string name="plz_press_nxt_or_bck">, Please press the voice button and say next or back.</string>
     <string name="detail_not_available">Detail description not available</string>
+    <string name="description">Description</string>
+    <string name="not_available">not available</string><!-- Continuation of above -->
     <string name="is_performing_for_this_event">is performing for this event</string>
     <string name="are_performing_for_this_event">are performing for this event</string>
     <string name="price_would_be">, price would be</string>

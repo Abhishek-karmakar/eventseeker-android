@@ -333,6 +333,7 @@
     <string name="ford_phone_no">Lo siento, pero no hay</string>
     <string name="is_unavailable">el numero de teléfono.</string> <!-- this is continuation of above string  -->
     <string name="unavailability_continuation"></string> <!-- this is continuation of above string -->
+    <string name="calling">Llamando</string>
     
     <!-- Commands -->
     <string name="al_command_next">Próximo</string>
@@ -383,6 +384,8 @@
     <string name="alert_no_events_available">No hay eventos disponibles.</string>
     <string name="plz_press_nxt_or_bck">, Por favor pulse el botón de voz y diga siguiente u atrás.</string>
     <string name="detail_not_available">Descripción del detalle no disponible</string>
+    <string name="description">Descripción</string>
+    <string name="not_available">No está disponible</string><!-- Continuation of above -->
     <string name="is_performing_for_this_event">actúa para este evento</string>
     <string name="are_performing_for_this_event">actúan para este evento</string>
     <string name="price_would_be">, el precio seria</string>

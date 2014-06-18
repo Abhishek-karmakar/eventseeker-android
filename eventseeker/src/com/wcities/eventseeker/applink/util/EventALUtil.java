@@ -114,9 +114,9 @@ public class EventALUtil {
 				Log.d(TAG, "Price Details are not available.");
 			}
 		}
-		
 		if (simple.equals("")) {
 			simple = app.getResources().getString(R.string.detail_not_available);
+			
 		} else {
 			if (app.isFirstEventDetailsForFordEventAL()) {
 				simple += app.getResources().getString(R.string.plz_press_nxt_or_bck);
@@ -224,17 +224,21 @@ public class EventALUtil {
 
 	public static void callVenue(EventList eventList) {
 		Event event = eventList.getCurrentEvent();
+		Resources res = AppLinkService.getInstance().getResources();
 		if (event != null) {
 			Venue venue = event.getSchedule().getVenue();
 			if (venue != null && venue.getPhone() != null) {
 				AppLinkService.getInstance().registerPhoneStateListener();
+
+				String simple = res.getString(R.string.calling);
+				ALUtil.alert(simple + " " + venue.getName(), simple);
+				
 				Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + venue.getPhone()));
 				AppLinkService.getInstance().getCurrentActivity().startActivity(Intent.createChooser(
 						intent, "Call..."));
 				
 			} else {
 				//ALUtil.speak(R.string.ford_phone_no_is_unavailable);
-				Resources res = AppLinkService.getInstance().getResources();
 				ALUtil.alert(res.getString(R.string.ford_phone_no), res.getString(R.string.is_unavailable), 
 					res.getString(R.string.unavailability_continuation), res.getString(R.string.ford_phone_no_is_unavailable));
 			}
