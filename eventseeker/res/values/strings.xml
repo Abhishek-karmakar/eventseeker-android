@@ -348,6 +348,9 @@
     <string name="msg_eventseeker">Eventseeker!</string>
     <string name="time_out">time out</string>
     <string name="ford_phone_no_is_unavailable">Sorry, phone number is unavailable</string>
+    <string name="ford_phone_no">Sorry, phone number</string>
+    <string name="is_unavailable">is unavailable</string> <!-- this is continuation of above string -->
+    <string name="unavailability_continuation"></string> <!-- this is continuation of above string -->
     
 	<!-- Commands -->
     <string name="al_command_next">Next</string>
@@ -392,6 +395,7 @@
     <string name="processing">Processing...</string>
     <string name="error">Error</string>
     <string name="nuance_error">Sorry, there was an error. Please press the voice button and say my events, explore or search</string>
+    <string name="cancelling">Cancelling...</string>
  
     <!-- Events -->
     <string name="event_no_evts_avail">There are no events available.</string>

@@ -5,12 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Vector;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
-import android.telephony.PhoneStateListener;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
@@ -236,7 +233,10 @@ public class EventALUtil {
 						intent, "Call..."));
 				
 			} else {
-				ALUtil.speak(R.string.ford_phone_no_is_unavailable);
+				//ALUtil.speak(R.string.ford_phone_no_is_unavailable);
+				Resources res = AppLinkService.getInstance().getResources();
+				ALUtil.alert(res.getString(R.string.ford_phone_no), res.getString(R.string.is_unavailable), 
+					res.getString(R.string.unavailability_continuation), res.getString(R.string.ford_phone_no_is_unavailable));
 			}
 		}
 	}

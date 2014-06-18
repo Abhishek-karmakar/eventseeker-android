@@ -497,6 +497,8 @@ public class SearchAL extends ESIProxyALM {
 		switch (arg0.getResultCode()) {
 		
 		case ABORTED:
+			ALUtil.alert(context.getResources().getString(R.string.cancelling), 
+					context.getResources().getString(R.string.cancelling));
 			AppLinkService.getInstance().initiateMainAL();
 			return;
 			

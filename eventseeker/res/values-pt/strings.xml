@@ -330,6 +330,9 @@
     <string name="msg_eventseeker">Eventseeker!</string>
     <string name="time_out">Sessão interrompida</string>
     <string name="ford_phone_no_is_unavailable">Lamentavelmente, o número de telefone não está disponível</string>
+    <string name="ford_phone_no">Infelizmente, o número</string>
+    <string name="is_unavailable">de telefone não está</string> <!-- this is continuation of above string  -->
+    <string name="unavailability_continuation">disponível</string> <!-- this is continuation of above string -->
     
     <!-- Commands -->
     <string name="al_command_next">Próximo</string>
