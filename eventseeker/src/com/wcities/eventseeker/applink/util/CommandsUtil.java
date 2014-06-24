@@ -18,6 +18,9 @@ public class CommandsUtil {
 	public static enum Command {
 		DISCOVER(AppLinkService.CMD_ID_AL),
 		MY_EVENTS(AppLinkService.CMD_ID_AL + 1),
+		/**
+		 * The Search screen has been removed from the Ford app.
+		 */
 		SEARCH(AppLinkService.CMD_ID_AL + 2),
 		NEXT(AppLinkService.CMD_ID_AL + 3),
 		BACK(AppLinkService.CMD_ID_AL + 4),

@@ -116,6 +116,10 @@ public class EventALUtil {
 		}
 		if (simple.equals("")) {
 			simple = app.getResources().getString(R.string.detail_not_available);
+			String description = app.getResources().getString(R.string.description);
+			String notAvail = app.getResources().getString(R.string.not_available);
+			ALUtil.alert(description, notAvail, "", simple);
+			return;
 			
 		} else {
 			if (app.isFirstEventDetailsForFordEventAL()) {

@@ -339,7 +339,7 @@
     <string name="al_command_back">Ritornare</string>
     <string name="al_command_details">Dettagli</string>
     <string name="al_command_play">Play</string>
-    <string name="al_command_call_venue">Chiamare il luogo</string>
+    <string name="al_command_call_venue">Chiamare</string>
     <string name="al_command_follow">Seguire</string>
         
     <!-- SoftButtons -->

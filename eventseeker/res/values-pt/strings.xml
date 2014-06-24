@@ -340,7 +340,7 @@
     <string name="al_command_back">Atrás</string>
     <string name="al_command_details">Detalhes</string>
     <string name="al_command_play">Reprodução</string>
-    <string name="al_command_call_venue">Chamar o lugar</string>
+    <string name="al_command_call_venue">Chamar</string>
     <string name="al_command_follow">Seguir</string>
         
     <!-- SoftButtons -->

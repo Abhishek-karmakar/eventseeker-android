@@ -125,7 +125,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		Vector<Command> helpCommands = new Vector<CommandsUtil.Command>(requiredCmds);
 		Collections.reverse(helpCommands);
 		
-		requiredCmds.add(Command.SEARCH);
+		//requiredCmds.add(Command.SEARCH);
 		requiredCmds.add(Command.MY_EVENTS);
 		requiredCmds.add(Command.DISCOVER);
 		CommandsUtil.addCommands(requiredCmds, helpCommands);

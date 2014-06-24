@@ -165,7 +165,7 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 		Vector<Command> helpCommands = new Vector<CommandsUtil.Command>(reqCmds);
 		Collections.reverse(helpCommands);
 		
-		reqCmds.add(Command.SEARCH);
+		//reqCmds.add(Command.SEARCH);
 		reqCmds.add(Command.MY_EVENTS);
 		reqCmds.add(Command.DISCOVER);
 		CommandsUtil.addCommands(reqCmds, helpCommands);	

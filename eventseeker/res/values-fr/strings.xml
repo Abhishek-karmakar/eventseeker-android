@@ -338,7 +338,7 @@
     <string name="al_command_back">Retour</string>
     <string name="al_command_details">Detaille</string>
     <string name="al_command_play">Écouter</string>
-    <string name="al_command_call_venue">Appeler l\'Endroit</string>
+    <string name="al_command_call_venue">Appel</string>
     <string name="al_command_follow">Suivre</string>
         
     <!-- SoftButtons -->

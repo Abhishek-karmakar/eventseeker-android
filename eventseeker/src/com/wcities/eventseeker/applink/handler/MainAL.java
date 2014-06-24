@@ -53,7 +53,7 @@ public class MainAL extends ESIProxyALM {
 	
 	private void addCommands() {
 		Vector<Command> reqCmds = new Vector<Command>();
-		reqCmds.add(Command.SEARCH);
+		//reqCmds.add(Command.SEARCH);
 		reqCmds.add(Command.MY_EVENTS);
 		reqCmds.add(Command.DISCOVER);
 		Vector<Command> helpCommands = new Vector<CommandsUtil.Command>(reqCmds);
@@ -65,7 +65,7 @@ public class MainAL extends ESIProxyALM {
 		Vector<SoftButton> softBtns = new Vector<SoftButton>();
 		softBtns.add(Command.DISCOVER.buildSoftBtn());
 		softBtns.add(Command.MY_EVENTS.buildSoftBtn());
-		softBtns.add(Command.SEARCH.buildSoftBtn());
+		//softBtns.add(Command.SEARCH.buildSoftBtn());
 		return softBtns;
 	}
 	
