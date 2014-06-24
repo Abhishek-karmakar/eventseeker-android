@@ -178,7 +178,9 @@
     <!-- To add event to calendar -->
     <uses-permission android:name="android.permission.READ_CALENDAR" />
 	<uses-permission android:name="android.permission.WRITE_CALENDAR" />
-
+	<!-- For direct call on ford version -->
+	<uses-permission android:name="android.permission.CALL_PHONE" />
+	
     <permission
         android:name="com.wcities.eventseeker.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />

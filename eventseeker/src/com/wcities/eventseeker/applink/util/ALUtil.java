@@ -120,7 +120,7 @@ public class ALUtil {
 		msg.setInitialPrompt(initialPrompt);
 		msg.setInitialText(initialText);
 		msg.setInteractionChoiceSetIDList(interactionChoiceSetIDList);
-		msg.setInteractionMode(InteractionMode.VR_ONLY);
+		msg.setInteractionMode(InteractionMode.BOTH);
 		msg.setTimeout(AppConstants.INTERACTION_TIME_OUT_AL);
 		msg.setTimeoutPrompt(timeoutPrompt);
 		

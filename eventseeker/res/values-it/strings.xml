@@ -332,7 +332,7 @@
     <string name="ford_phone_no">Scusa ma il numero</string>
     <string name="is_unavailable">di telefono non</string> <!-- this is continuation of above string  -->
     <string name="unavailability_continuation">è disponibile</string> <!-- this is continuation of above string -->
-    <string name="calling"></string>
+    <string name="calling">Chiamando</string>
     
     <!-- Commands -->
     <string name="al_command_next">Prossimo</string>
