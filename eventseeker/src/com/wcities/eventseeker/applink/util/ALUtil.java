@@ -158,13 +158,15 @@ public class ALUtil {
 	}
 	
 	public static void displayMessage(int resIdText1, int resIdText2) {
-		displayMessage(AppLinkService.getInstance().getResources().getString(resIdText1), 
-				AppLinkService.getInstance().getResources().getString(resIdText2), null);
+		String text1 = (resIdText1 == AppConstants.INVALID_RES_ID) ? "" : AppLinkService.getInstance().getResources().getString(resIdText1);
+		String text2 = (resIdText2 == AppConstants.INVALID_RES_ID) ? "" : AppLinkService.getInstance().getResources().getString(resIdText2);
+		displayMessage(text1, text2, null);
 	}
 	
 	public static void displayMessage(int resIdText1, int resIdText2, Vector<SoftButton> softButtons) {
-		displayMessage(AppLinkService.getInstance().getResources().getString(resIdText1), 
-				AppLinkService.getInstance().getResources().getString(resIdText2), softButtons);
+		String text1 = (resIdText1 == AppConstants.INVALID_RES_ID) ? "" : AppLinkService.getInstance().getResources().getString(resIdText1);
+		String text2 = (resIdText2 == AppConstants.INVALID_RES_ID) ? "" : AppLinkService.getInstance().getResources().getString(resIdText2);
+		displayMessage(text1, text2, softButtons);
 	}
 	
 	public static void displayMessage(String text1, String text2) {

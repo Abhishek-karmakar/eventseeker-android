@@ -29,6 +29,7 @@ import com.wcities.eventseeker.applink.util.ALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil.Command;
 import com.wcities.eventseeker.applink.util.EventALUtil;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.ItemsList;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
@@ -85,11 +86,11 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 	public void onStartInstance() {
 		//Log.d(TAG, "onStartInstance()");
 		if (eventList != null) {
-			eventList.resetEventList();
+			reset();
 		}
 		addCommands();
 		Vector<SoftButton> softBtns = buildSoftButtons();
-		ALUtil.displayMessage("Loading...", "", softBtns);
+		ALUtil.displayMessage(R.string.loading, AppConstants.INVALID_RES_ID, softBtns);
 
 		generateLatLon();
 		try {
@@ -105,6 +106,12 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 			e.printStackTrace();
 			AppLinkService.getInstance().handleNoNetConnectivity();
 		}
+	}
+	
+	private void reset() {
+		eventList.resetEventList();
+		eventList.setEventsLimit(EVENTS_LIMIT);
+		eventList.setLoadEventsListener(this);	
 	}
 	
 	private void onNoMyEventsFound() {

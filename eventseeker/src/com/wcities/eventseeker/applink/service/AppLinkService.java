@@ -253,22 +253,6 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	   }
    }
    
-   /*public void show(String mainText1, String mainText2, TextAlignment alignment) {
-		try {
-			proxy.show(mainText1, mainText2, alignment, autoIncCorrId++);
-
-		} catch (SyncException e) {
-			DebugTool.logError("Failed to send Show", e);
-		}
-   }*/
-   
-    /*public void showWelcomeMsg() {
-		//String welcomeMsg1 = "Inside", welcomeMsg2 = "eventseekr!";
-	   	String welcomeMsg1 = AppLinkService.getStringFromRes(R.string.msg_welcome_to), 
-	   	welcomeMsg2 = AppLinkService.getStringFromRes(R.string.msg_eventseeker);
-		show(welcomeMsg1, welcomeMsg2, TextAlignment.CENTERED);
-	}*/
-   
    	public double[] getLatLng() {
 		return new double[] {lat, lng};
    	}
@@ -514,7 +498,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	}
 	
 	/**
-	 * must be called when Discver, My Events and search commands are invoked
+	 * must be called when Discover, My Events and search commands are invoked
 	 * cmd - non null value
 	 * @param cmd
 	 */

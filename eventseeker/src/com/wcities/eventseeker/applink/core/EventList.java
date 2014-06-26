@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
-
 import com.wcities.eventseeker.core.Event;
 
 public class EventList {
@@ -165,7 +163,7 @@ public class EventList {
 
 	public boolean moveToNextEvent() throws IOException {
 		//Log.d(TAG, "moveToNextEvent");
-		if(hasNextEvent()) {
+		if (hasNextEvent()) {
 			currentEvtPos++;
 			//Log.d(TAG, "moveToNextEvent true");
 			return true;
@@ -175,7 +173,7 @@ public class EventList {
 	}
 	
 	public boolean moveToPreviousEvent() {
-		if(hasPreviousEvent()) {
+		if (hasPreviousEvent()) {
 			currentEvtPos--;
 			return true;
 		}

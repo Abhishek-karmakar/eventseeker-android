@@ -112,6 +112,7 @@ public class SearchAL extends ESIProxyALM {
 	public void onStartInstance() {
 		//search_events_or_artists
 		//Log.d(TAG, "onStartInstance()");
+		reset();
 		initializeInteractionChoiceSets();
 		performInteraction();		
 	}

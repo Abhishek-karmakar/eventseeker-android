@@ -142,6 +142,7 @@ public class AppConstants {
 
 	public static final String FORD_APP_ID = "3260118906";
 	public static final int INTERACTION_TIME_OUT_AL = 5000;
+	public static final int INVALID_RES_ID = -1;
 	
 	/************************    ends for Ford    *******************************/
 }

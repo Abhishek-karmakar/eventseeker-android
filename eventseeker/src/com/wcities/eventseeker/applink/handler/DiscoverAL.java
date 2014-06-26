@@ -32,6 +32,7 @@ import com.wcities.eventseeker.applink.util.ALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil.Command;
 import com.wcities.eventseeker.applink.util.EventALUtil;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.ItemsList;
 import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
@@ -40,10 +41,14 @@ import com.wcities.eventseeker.util.ConversionUtil;
 public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 
 	private static final String TAG = DiscoverAL.class.getName();
+	
 	private static final int CHOICE_CATEGORIES_DISCOVER_AL = 1000;
-	private static final int EVENTS_LIMIT = 10;
-	private static final int MILES_LIMIT = 25;
 	private static final int CHOICE_SET_ID_DISCOVER = 0;
+	
+	private static final int EVENTS_LIMIT_10 = 10;
+	private static final int MIN_MILES = 25;
+	private static final int MAX_MILES = 100;
+	private static final int MAX_EVENTS = 25;
 	
 	private static enum Discover {
 		Concerts(CHOICE_CATEGORIES_DISCOVER_AL, 900, R.string.discover_al_concerts),
@@ -88,12 +93,11 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 	private EventSeekr context;
 	private EventList eventList;
 	private double lat, lon;
-	private int selectedCategoryId;
+	private int selectedCategoryId, miles = MIN_MILES, evtsLimit = EVENTS_LIMIT_10;
 	
 	public DiscoverAL(EventSeekr context) {
 		this.context = context;
 		eventList = new EventList();
-		eventList.setEventsLimit(EVENTS_LIMIT);
 		eventList.setLoadEventsListener(this);		
 	}
 
@@ -107,11 +111,12 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 	@Override
 	public void onStartInstance() {
 		//Log.d(TAG, "onStartInstance()");
+		reset();
 		initializeInteractionChoiceSets();
 		performInteraction();		
 		addCommands();
 		Vector<SoftButton> softBtns = buildSoftButtons();
-		ALUtil.displayMessage("Loading...", "", softBtns);
+		ALUtil.displayMessage(R.string.loading, AppConstants.INVALID_RES_ID, softBtns);
 	}
 	
 	private void addCommands() {
@@ -176,14 +181,14 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 	}
 	
 	@Override
-	public void onPerformInteractionResponse(PerformInteractionResponse response) {
-		Log.i(TAG, "onPerformInteractionResponse(), response.getChoiceID() = " + response.getChoiceID());
-		
+	public void onPerformInteractionResponse(final PerformInteractionResponse response) {
+		//Log.i(TAG, "onPerformInteractionResponse(), response.getChoiceID() = " + response.getChoiceID());
 		if (response == null || response.getChoiceID() == null) {
 			/**
 			* This will happen when on Choice menu user selects cancel button
 			*/
-			Log.i(TAG, "ChoiceID == null");
+			//Log.i(TAG, "ChoiceID == null");
+			AppLinkService.getInstance().initiateMainAL();
 			return;
 		}
 		
@@ -195,10 +200,15 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		 * then show these events to user and if not, only then load events from 'getEvents' API call.
 		 */
 		try {
-			loadFeaturedEvents(selectedCategoryId);
-			if (eventList.isEmpty()) {
-				loadEvents(selectedCategoryId);
+			while (eventList.isEmpty() && miles <= MAX_MILES) {
+				loadFeaturedEvents(selectedCategoryId);
+				if (eventList.isEmpty()) {
+					loadEvents(selectedCategoryId);
+				}
+				miles *= 2;
 			}
+			// divide by 2 to compensate for last one extra multiplication
+			miles /= 2;
 
 			//show Welcome message when no events are available
 			if (eventList.isEmpty()) {
@@ -218,6 +228,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		 * &lat=37.783300&lon=-122.416700&start=2014-04-14&end=2014-04-21&cat=900&subcat=&response_type=json
 		 * &limit=0,10&moreInfo=artistdesc&strip_html=nameResId,description&lang=en&miles=25
 		 */
+		
 		/**
 		 * First show the loading message
 		 */
@@ -225,13 +236,16 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		
 		List<Event> tmpEvents = null;
 		int eventsAlreadyRequested = eventList.getEventsAlreadyRequested();
+		evtsLimit = ((MAX_EVENTS - eventsAlreadyRequested) > EVENTS_LIMIT_10) ? EVENTS_LIMIT_10 : 
+			(MAX_EVENTS - eventsAlreadyRequested);
+		eventList.setEventsLimit(evtsLimit);
 		int totalNoOfEvents = 0;
 
 		EventApi eventApi = new EventApi(Api.OAUTH_TOKEN_CAR_APPS, lat, lon);
 		eventApi.setStart(getStartDate());
 		eventApi.setEnd(getEndDate());
-		eventApi.setMiles(MILES_LIMIT);
-		eventApi.setLimit(EVENTS_LIMIT);
+		eventApi.setMiles(miles);
+		eventApi.setLimit(evtsLimit);
 		eventApi.setCategory(categoryId);
 		eventApi.setAlreadyRequested(eventsAlreadyRequested);
 		eventApi.addMoreInfo(MoreInfo.booking);
@@ -244,11 +258,14 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 			
 			ItemsList<Event> eventsList = jsonParser.getEventItemList(jsonObject, GetEventsFrom.EVENTS);
 			tmpEvents = eventsList.getItems();
-			totalNoOfEvents = eventsList.getTotalCount();
+			totalNoOfEvents = (eventsList.getTotalCount() > MAX_EVENTS) ? MAX_EVENTS : eventsList.getTotalCount();
 			
 			eventList.setRequestCode(GetEventsFrom.EVENTS);
 			eventList.addAll(tmpEvents);
 			eventList.setTotalNoOfEvents(totalNoOfEvents);
+			if (eventList.size() >= MAX_EVENTS) {
+				eventList.setMoreDataAvailable(false);
+			}
 			
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
@@ -268,6 +285,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		 * &type=featured&lat=37.332331&lon=-122.031219&cat=900&subcat=&start=2014-04-14&end=2014-04-21&miles=25
 		 * &limit=0,10&moreInfo=booking&lang=en
 		 */
+		
 		/**
 		 * First show the loading message
 		 */
@@ -275,14 +293,17 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		
 		List<Event> tmpEvents = null;
 		int eventsAlreadyRequested = eventList.getEventsAlreadyRequested();
+		evtsLimit = ((MAX_EVENTS - eventsAlreadyRequested) > EVENTS_LIMIT_10) ? EVENTS_LIMIT_10 : 
+			(MAX_EVENTS - eventsAlreadyRequested);
+		eventList.setEventsLimit(evtsLimit);
 		int totalNoOfEvents = 0;
 		
 		EventApi eventApi = new EventApi(Api.OAUTH_TOKEN_CAR_APPS, lat, lon);
 		eventApi.setCategory(categoryId);
 		eventApi.setStart(getStartDate());
 		eventApi.setEnd(getEndDate());
-		eventApi.setMiles(MILES_LIMIT);
-		eventApi.setLimit(EVENTS_LIMIT);
+		eventApi.setMiles(miles);
+		eventApi.setLimit(evtsLimit);
 		/**
 		 * 12-06-2014 : added wcitiesId in Featured event call as per Rohit/Sameer's mail
 		 */
@@ -296,11 +317,14 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 			
 			ItemsList<Event> eventsList = jsonParser.getEventItemList(jsonObject, GetEventsFrom.FEATURED_EVENTS);
 			tmpEvents = eventsList.getItems();
-			totalNoOfEvents = eventsList.getTotalCount();
+			totalNoOfEvents = (eventsList.getTotalCount() > MAX_EVENTS) ? MAX_EVENTS : eventsList.getTotalCount();
 			
 			eventList.setRequestCode(GetEventsFrom.FEATURED_EVENTS);
 			eventList.addAll(tmpEvents);
 			eventList.setTotalNoOfEvents(totalNoOfEvents);
+			if (eventList.size() >= MAX_EVENTS) {
+				eventList.setMoreDataAvailable(false);
+			}
 			
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
@@ -337,15 +361,18 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 	 * @param cmd
 	 */
 	private void reset() {
-		selectedCategoryId = 0;
 		eventList.resetEventList();
+		selectedCategoryId = 0;
+		miles = MIN_MILES;
+		evtsLimit = EVENTS_LIMIT_10;
+		eventList.setLoadEventsListener(this);	
 	}
 
 	public void performOperationForCommand(Command cmd) {
 		if (cmd == null) {
 			return;
 		}
-		Log.d(TAG, "performOperationForCommand : " + cmd.name());
+		//Log.d(TAG, "performOperationForCommand : " + cmd.name());
 		
 		switch (cmd) {
 			case DISCOVER:
