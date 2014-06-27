@@ -344,6 +344,7 @@
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for Ford ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     
 	<!-- Common Messages -->
+	<string name="ford_app_name">Eventseeker</string>
     <string name="msg_welcome_to">Welcome to</string>
     <string name="msg_eventseeker">Eventseeker!</string>
     <string name="time_out">time out</string>

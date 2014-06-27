@@ -10,7 +10,7 @@ import com.ford.syncV4.proxy.rpc.DeleteCommandResponse;
 import com.ford.syncV4.proxy.rpc.DeleteFileResponse;
 import com.ford.syncV4.proxy.rpc.DeleteInteractionChoiceSetResponse;
 import com.ford.syncV4.proxy.rpc.DeleteSubMenuResponse;
-import com.ford.syncV4.proxy.rpc.DialNumberResponse;
+import com.ford.syncV4.proxy.rpc.EncodedSyncPDataResponse;
 import com.ford.syncV4.proxy.rpc.EndAudioPassThruResponse;
 import com.ford.syncV4.proxy.rpc.GenericResponse;
 import com.ford.syncV4.proxy.rpc.GetDTCsResponse;
@@ -21,9 +21,12 @@ import com.ford.syncV4.proxy.rpc.OnButtonEvent;
 import com.ford.syncV4.proxy.rpc.OnButtonPress;
 import com.ford.syncV4.proxy.rpc.OnCommand;
 import com.ford.syncV4.proxy.rpc.OnDriverDistraction;
+import com.ford.syncV4.proxy.rpc.OnEncodedSyncPData;
 import com.ford.syncV4.proxy.rpc.OnHMIStatus;
 import com.ford.syncV4.proxy.rpc.OnLanguageChange;
 import com.ford.syncV4.proxy.rpc.OnPermissionsChange;
+import com.ford.syncV4.proxy.rpc.OnSyncPData;
+import com.ford.syncV4.proxy.rpc.OnTBTClientState;
 import com.ford.syncV4.proxy.rpc.OnVehicleData;
 import com.ford.syncV4.proxy.rpc.PerformAudioPassThruResponse;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
@@ -40,6 +43,7 @@ import com.ford.syncV4.proxy.rpc.SliderResponse;
 import com.ford.syncV4.proxy.rpc.SpeakResponse;
 import com.ford.syncV4.proxy.rpc.SubscribeButtonResponse;
 import com.ford.syncV4.proxy.rpc.SubscribeVehicleDataResponse;
+import com.ford.syncV4.proxy.rpc.SyncPDataResponse;
 import com.ford.syncV4.proxy.rpc.UnsubscribeButtonResponse;
 import com.ford.syncV4.proxy.rpc.UnsubscribeVehicleDataResponse;
 import com.wcities.eventseeker.applink.util.CommandsUtil.Command;
@@ -128,9 +132,6 @@ public abstract class ESIProxyALM implements IProxyListenerALM {
 	public void onDeleteFileResponse(DeleteFileResponse arg0) {}
 
 	@Override
-	public void onDialNumberResponse(DialNumberResponse arg0) {}
-
-	@Override
 	public void onEndAudioPassThruResponse(EndAudioPassThruResponse arg0) {}
 
 	@Override
@@ -177,4 +178,19 @@ public abstract class ESIProxyALM implements IProxyListenerALM {
 
 	@Override
 	public void onUnsubscribeVehicleDataResponse(UnsubscribeVehicleDataResponse arg0) {}
+	
+	@Override
+	public void onEncodedSyncPDataResponse(EncodedSyncPDataResponse arg0) {}
+
+	@Override
+	public void onOnEncodedSyncPData(OnEncodedSyncPData arg0) {}
+
+	@Override
+	public void onOnSyncPData(OnSyncPData arg0) {}
+
+	@Override
+	public void onOnTBTClientState(OnTBTClientState arg0) {}
+
+	@Override
+	public void onSyncPDataResponse(SyncPDataResponse arg0) {}
 }

@@ -4,12 +4,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.widget.Toast;
+
+import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.applink.service.AppLinkService;
+import com.wcities.eventseeker.applink.util.ALUtil;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
 
 public class EventList {
 
 	private static final String TAG = EventList.class.getName();
 	private static final int DEFAULT_EVT_LIMIT = 10;
+	private static final int MAX_EVENTS = 25;
 	
 	public static enum GetEventsFrom {
 		EVENTS,
@@ -46,6 +53,16 @@ public class EventList {
 
 	public void removeLoadEventsListener() {
 		this.loadEventsListener = null;
+	}
+	
+	public int updateAndGetEventsLimit() {
+		if ((MAX_EVENTS - eventsAlreadyRequested) > DEFAULT_EVT_LIMIT) {
+			eventsLimit = DEFAULT_EVT_LIMIT; 
+			
+		} else {
+			eventsLimit = MAX_EVENTS - eventsAlreadyRequested;
+		}
+		return eventsLimit;
 	}
 	
 	public int getEventsLimit() {
@@ -85,7 +102,7 @@ public class EventList {
 	}
 
 	public void setTotalNoOfEvents(int totalNoOfEvents) {
-		this.totalNoOfEvents = totalNoOfEvents;
+		this.totalNoOfEvents = (totalNoOfEvents > MAX_EVENTS) ? MAX_EVENTS : totalNoOfEvents;
 	}
 
 	public boolean isMoreDataAvailable() {
@@ -134,8 +151,10 @@ public class EventList {
 			//Log.d(TAG, "hasNextEvents true");
 			return true;
 			
-		} else if (isMoreDataAvailable && loadEventsListener != null) {
-			//Log.d(TAG, "Loading new events...");
+		} else if (isMoreDataAvailable && loadEventsListener != null && size() < MAX_EVENTS) {
+			// 'size() < MAX_EVENTS' check is added as there should be at the most 25 result.
+			// First show the loading message
+			ALUtil.displayMessage(R.string.loading, AppConstants.INVALID_RES_ID);
 			loadEventsListener.loadEvents();
 			if (currentEvtPos + 1 < eventList.size()) {
 				//Log.d(TAG, "hasNextEvents true");

@@ -15,8 +15,13 @@ import android.util.Log;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
 import com.ford.syncV4.proxy.rpc.Choice;
+import com.ford.syncV4.proxy.rpc.EncodedSyncPDataResponse;
+import com.ford.syncV4.proxy.rpc.OnEncodedSyncPData;
+import com.ford.syncV4.proxy.rpc.OnSyncPData;
+import com.ford.syncV4.proxy.rpc.OnTBTClientState;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
 import com.ford.syncV4.proxy.rpc.SoftButton;
+import com.ford.syncV4.proxy.rpc.SyncPDataResponse;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
 import com.wcities.eventseeker.MainActivity;
 import com.wcities.eventseeker.R;
@@ -45,10 +50,8 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 	private static final int CHOICE_CATEGORIES_DISCOVER_AL = 1000;
 	private static final int CHOICE_SET_ID_DISCOVER = 0;
 	
-	private static final int EVENTS_LIMIT_10 = 10;
 	private static final int MIN_MILES = 25;
 	private static final int MAX_MILES = 100;
-	private static final int MAX_EVENTS = 25;
 	
 	private static enum Discover {
 		Concerts(CHOICE_CATEGORIES_DISCOVER_AL, 900, R.string.discover_al_concerts),
@@ -93,7 +96,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 	private EventSeekr context;
 	private EventList eventList;
 	private double lat, lon;
-	private int selectedCategoryId, miles = MIN_MILES, evtsLimit = EVENTS_LIMIT_10;
+	private int selectedCategoryId, miles = MIN_MILES;
 	
 	public DiscoverAL(EventSeekr context) {
 		this.context = context;
@@ -235,19 +238,19 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		ALUtil.displayMessage(context.getResources().getString(R.string.loading), "");
 		
 		List<Event> tmpEvents = null;
-		int eventsAlreadyRequested = eventList.getEventsAlreadyRequested();
+		/*int eventsAlreadyRequested = eventList.getEventsAlreadyRequested();
 		evtsLimit = ((MAX_EVENTS - eventsAlreadyRequested) > EVENTS_LIMIT_10) ? EVENTS_LIMIT_10 : 
 			(MAX_EVENTS - eventsAlreadyRequested);
 		eventList.setEventsLimit(evtsLimit);
-		int totalNoOfEvents = 0;
+		int totalNoOfEvents = 0;*/
 
 		EventApi eventApi = new EventApi(Api.OAUTH_TOKEN_CAR_APPS, lat, lon);
 		eventApi.setStart(getStartDate());
 		eventApi.setEnd(getEndDate());
 		eventApi.setMiles(miles);
-		eventApi.setLimit(evtsLimit);
+		eventApi.setLimit(eventList.updateAndGetEventsLimit());
 		eventApi.setCategory(categoryId);
-		eventApi.setAlreadyRequested(eventsAlreadyRequested);
+		eventApi.setAlreadyRequested(eventList.getEventsAlreadyRequested());
 		eventApi.addMoreInfo(MoreInfo.booking);
 		eventApi.addMoreInfo(MoreInfo.multiplebooking);
 		eventApi.setAddFordLangParam(true);
@@ -258,14 +261,14 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 			
 			ItemsList<Event> eventsList = jsonParser.getEventItemList(jsonObject, GetEventsFrom.EVENTS);
 			tmpEvents = eventsList.getItems();
-			totalNoOfEvents = (eventsList.getTotalCount() > MAX_EVENTS) ? MAX_EVENTS : eventsList.getTotalCount();
+			//totalNoOfEvents = (eventsList.getTotalCount() > MAX_EVENTS) ? MAX_EVENTS : eventsList.getTotalCount();
 			
 			eventList.setRequestCode(GetEventsFrom.EVENTS);
 			eventList.addAll(tmpEvents);
-			eventList.setTotalNoOfEvents(totalNoOfEvents);
-			if (eventList.size() >= MAX_EVENTS) {
+			eventList.setTotalNoOfEvents(eventsList.getTotalCount());
+			/*if (eventList.size() >= MAX_EVENTS) {
 				eventList.setMoreDataAvailable(false);
-			}
+			}*/
 			
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
@@ -292,23 +295,23 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		ALUtil.displayMessage(context.getResources().getString(R.string.loading), "");
 		
 		List<Event> tmpEvents = null;
-		int eventsAlreadyRequested = eventList.getEventsAlreadyRequested();
+		/*int eventsAlreadyRequested = eventList.getEventsAlreadyRequested();
 		evtsLimit = ((MAX_EVENTS - eventsAlreadyRequested) > EVENTS_LIMIT_10) ? EVENTS_LIMIT_10 : 
 			(MAX_EVENTS - eventsAlreadyRequested);
 		eventList.setEventsLimit(evtsLimit);
-		int totalNoOfEvents = 0;
+		int totalNoOfEvents = 0;*/
 		
 		EventApi eventApi = new EventApi(Api.OAUTH_TOKEN_CAR_APPS, lat, lon);
 		eventApi.setCategory(categoryId);
 		eventApi.setStart(getStartDate());
 		eventApi.setEnd(getEndDate());
 		eventApi.setMiles(miles);
-		eventApi.setLimit(evtsLimit);
+		eventApi.setLimit(eventList.updateAndGetEventsLimit());
 		/**
 		 * 12-06-2014 : added wcitiesId in Featured event call as per Rohit/Sameer's mail
 		 */
 		eventApi.setUserId(((EventSeekr)MainActivity.getInstance().getApplication()).getWcitiesId());
-		eventApi.setAlreadyRequested(eventsAlreadyRequested);
+		eventApi.setAlreadyRequested(eventList.getEventsAlreadyRequested());
 		eventApi.setAddFordLangParam(true);
 		
 		try {
@@ -317,14 +320,14 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 			
 			ItemsList<Event> eventsList = jsonParser.getEventItemList(jsonObject, GetEventsFrom.FEATURED_EVENTS);
 			tmpEvents = eventsList.getItems();
-			totalNoOfEvents = (eventsList.getTotalCount() > MAX_EVENTS) ? MAX_EVENTS : eventsList.getTotalCount();
+			//totalNoOfEvents = (eventsList.getTotalCount() > MAX_EVENTS) ? MAX_EVENTS : eventsList.getTotalCount();
 			
 			eventList.setRequestCode(GetEventsFrom.FEATURED_EVENTS);
 			eventList.addAll(tmpEvents);
-			eventList.setTotalNoOfEvents(totalNoOfEvents);
-			if (eventList.size() >= MAX_EVENTS) {
+			eventList.setTotalNoOfEvents(eventsList.getTotalCount());
+			/*if (eventList.size() >= MAX_EVENTS) {
 				eventList.setMoreDataAvailable(false);
-			}
+			}*/
 			
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
@@ -364,7 +367,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		eventList.resetEventList();
 		selectedCategoryId = 0;
 		miles = MIN_MILES;
-		evtsLimit = EVENTS_LIMIT_10;
+		//evtsLimit = EVENTS_LIMIT_10;
 		eventList.setLoadEventsListener(this);	
 	}
 
@@ -422,5 +425,4 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 			break;
 		}
 	}
-
 }

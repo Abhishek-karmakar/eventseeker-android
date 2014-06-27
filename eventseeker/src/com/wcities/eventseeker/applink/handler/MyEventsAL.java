@@ -37,7 +37,6 @@ import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 
 	private static final String TAG = MyEventsAL.class.getName();
-	private static final int EVENTS_LIMIT = 10;
 	private static final int START_CHOICE_ID_SUGGESTION_REPLY = 1;
 	private static final int CHOICE_SET_ID_SUGGESTION_REPLY = 1;
 	
@@ -71,7 +70,6 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 	public MyEventsAL(EventSeekr mEventSeekr) {
 		this.mEventSeekr = mEventSeekr;
 		eventList = new EventList();
-		eventList.setEventsLimit(EVENTS_LIMIT);
 		eventList.setLoadEventsListener(this);
 	}
 
@@ -110,7 +108,6 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 	
 	private void reset() {
 		eventList.resetEventList();
-		eventList.setEventsLimit(EVENTS_LIMIT);
 		eventList.setLoadEventsListener(this);	
 	}
 	
@@ -187,7 +184,6 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 
 	private void loadEvents(Type type) throws IOException {
 		List<Event> tmpEvents = null;
-		int totalNoOfEvents = 0;
 
 		UserInfoApi userInfoApi = buildUserInfoApi();
 		ItemsList<Event> myEventsList = null;
@@ -203,12 +199,11 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 				myEventsList = jsonParser.getRecommendedEventList(jsonObject);
 			}
 			tmpEvents = myEventsList.getItems();
-			totalNoOfEvents = myEventsList.getTotalCount();
-			Log.d(TAG, "load count = " + tmpEvents.size());
+			//Log.d(TAG, "load count = " + tmpEvents.size());
 			
 			eventList.setRequestCode(type);
 			eventList.addAll(tmpEvents);
-			eventList.setTotalNoOfEvents(totalNoOfEvents);
+			eventList.setTotalNoOfEvents(myEventsList.getTotalCount());
 			
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
@@ -224,7 +219,7 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 	
 	private UserInfoApi buildUserInfoApi() {
 		UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN_CAR_APPS);
-		userInfoApi.setLimit(EVENTS_LIMIT);
+		userInfoApi.setLimit(eventList.updateAndGetEventsLimit());
 		userInfoApi.setAlreadyRequested(eventList.getEventsAlreadyRequested());
 		userInfoApi.setUserId(mEventSeekr.getWcitiesId());
 		userInfoApi.setLat(lat);
@@ -280,6 +275,12 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 	@Override
 	public void onPerformInteractionResponse(PerformInteractionResponse response) {
 		super.onPerformInteractionResponse(response);
+		
+		if (response == null || response.getChoiceID() == null) {
+			// This will happen when on Choice menu user selects cancel button
+			AppLinkService.getInstance().initiateMainAL();
+			return;
+		}
 		
 		if (response.getChoiceID() == SuggestionReply.Yes.id) {
 			try {

@@ -28,7 +28,6 @@ import com.ford.syncV4.proxy.rpc.DeleteCommandResponse;
 import com.ford.syncV4.proxy.rpc.DeleteFileResponse;
 import com.ford.syncV4.proxy.rpc.DeleteInteractionChoiceSetResponse;
 import com.ford.syncV4.proxy.rpc.DeleteSubMenuResponse;
-import com.ford.syncV4.proxy.rpc.DialNumberResponse;
 import com.ford.syncV4.proxy.rpc.EncodedSyncPDataResponse;
 import com.ford.syncV4.proxy.rpc.EndAudioPassThruResponse;
 import com.ford.syncV4.proxy.rpc.GenericResponse;
@@ -44,6 +43,8 @@ import com.ford.syncV4.proxy.rpc.OnEncodedSyncPData;
 import com.ford.syncV4.proxy.rpc.OnHMIStatus;
 import com.ford.syncV4.proxy.rpc.OnLanguageChange;
 import com.ford.syncV4.proxy.rpc.OnPermissionsChange;
+import com.ford.syncV4.proxy.rpc.OnSyncPData;
+import com.ford.syncV4.proxy.rpc.OnTBTClientState;
 import com.ford.syncV4.proxy.rpc.OnVehicleData;
 import com.ford.syncV4.proxy.rpc.PerformAudioPassThruResponse;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
@@ -61,6 +62,7 @@ import com.ford.syncV4.proxy.rpc.SpeakResponse;
 import com.ford.syncV4.proxy.rpc.SubscribeButtonResponse;
 import com.ford.syncV4.proxy.rpc.SubscribeVehicleDataResponse;
 import com.ford.syncV4.proxy.rpc.SyncMsgVersion;
+import com.ford.syncV4.proxy.rpc.SyncPDataResponse;
 import com.ford.syncV4.proxy.rpc.UnsubscribeButtonResponse;
 import com.ford.syncV4.proxy.rpc.UnsubscribeVehicleDataResponse;
 import com.ford.syncV4.proxy.rpc.enums.ButtonName;
@@ -173,7 +175,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 			try {
 				if (AppConstants.DEBUG) {
 					//Log.d(TAG, "startProxy with TCP");
-					proxy = new SyncProxyALM(this, getResources().getString(R.string.app_name), true, 
+					proxy = new SyncProxyALM(this, getResources().getString(R.string.ford_app_name), true, 
 							AppConstants.FORD_APP_ID, new TCPTransportConfig(AppConstants.TCP_PORT, 
 									AppConstants.TCP_IP_ADDRESS, true));
 					
@@ -182,7 +184,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 					SyncMsgVersion syncMsgVersion = new SyncMsgVersion();
 					syncMsgVersion.setMajorVersion(1);
 					syncMsgVersion.setMinorVersion(1);
-					proxy = new SyncProxyALM(this, getResources().getString(R.string.app_name), null, 
+					proxy = new SyncProxyALM(this, getResources().getString(R.string.ford_app_name), null, 
 							new Vector<String>(Arrays.asList(new String[] {getResources().getString(
 							R.string.app_name)})), true, syncMsgVersion, language, language, 
 							AppConstants.FORD_APP_ID, null);
@@ -621,11 +623,6 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	}
 
 	@Override
-	public void onDialNumberResponse(DialNumberResponse arg0) {
-		
-	}
-
-	@Override
 	public void onEndAudioPassThruResponse(EndAudioPassThruResponse arg0) {
 		
 	}
@@ -743,5 +740,23 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	@Override
 	public void onUnsubscribeVehicleDataResponse(final UnsubscribeVehicleDataResponse arg0) {
 		//isVehicleDataSubscribed = false;
+	}
+
+	@Override
+	public void onOnSyncPData(OnSyncPData arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onOnTBTClientState(OnTBTClientState arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onSyncPDataResponse(SyncPDataResponse arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }
