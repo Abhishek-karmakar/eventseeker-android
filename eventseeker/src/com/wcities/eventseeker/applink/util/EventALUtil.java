@@ -56,13 +56,13 @@ public class EventALUtil {
 			app.setFirstEventTitleForFordEventAL(false);
 		}
 		
-		Log.d(TAG, "simple = " + simple);
+		//Log.d(TAG, "simple = " + simple);
 		Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
 		ALUtil.speakText(ttsChunks);				
 	}
 	
 	public static void speakDetailsOfEvent(Event event, EventSeekr app) {
-		Log.d(TAG, "speakDetailsOfCurrentEvent");
+		//Log.d(TAG, "speakDetailsOfCurrentEvent");
 		/**
 		 * after launching the app, each and every time system should speak the first 
 		 * event's Details and then append the 'plz press next or back' and then throughout 
@@ -72,7 +72,7 @@ public class EventALUtil {
 
 		if (event.hasArtists()) {
 			List<Artist> artists = event.getArtists();
-			String verb = " is ";
+			int appendResId = R.string.is_performing_for_this_event;
 			
 			simple += artists.get(0).getName();
 			for (int i = 1; i < artists.size() - 1; i++) {
@@ -80,10 +80,10 @@ public class EventALUtil {
 				simple += ", " + artist.getName();
 			}
 			if (artists.size() > 1) {
-				simple += " and, " + artists.get(artists.size() - 1).getName();
-				verb = " are ";
+				simple += " " + app.getResources().getString(R.string.and) + ", " + artists.get(artists.size() - 1).getName();
+				appendResId = R.string.are_performing_for_this_event;
 			}
-			simple += verb + "performing for this event";
+			simple += " " + app.getResources().getString(appendResId);
 		}
 
 		if (event.getSchedule() != null) {
@@ -101,12 +101,12 @@ public class EventALUtil {
 				
 				if (maxPrice != 0) {
 					if (maxPrice == minPrice) {
-						simple += ", price would be " + maxPrice + " " + currency + ".";
+						simple += app.getResources().getString(R.string.price_would_be) + " " + maxPrice + 
+								" " + currency + ".";
 						
 					} else {
-						simple += ", price range would be approximately between "
-								+ minPrice + ", and " + maxPrice + " " + currency + ".";
-						
+						simple += app.getResources().getString(R.string.price_range_would_be) + " "
+								+ minPrice + ", " + app.getResources().getString(R.string.and) + " " + maxPrice + " " + currency + ".";
 					}
 				}
 				
@@ -128,14 +128,14 @@ public class EventALUtil {
 			}
 		}
 		
-		Log.d(TAG, "Details : " + simple);
+		//Log.d(TAG, "Details : " + simple);
 		Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
 		ALUtil.speakText(ttsChunks);				
 	}
 	
 	private static String getCurrency(BookingInfo bookingInfo) {
 		String currency = bookingInfo.getCurrency();
-		Log.d(TAG, "CURRENCY : " + currency);
+		//Log.d(TAG, "CURRENCY : " + currency);
 		if (currency == null) {
 			return "";
 		}
@@ -198,7 +198,7 @@ public class EventALUtil {
 			
 			dateTime += " hours";
 		}
-		Log.d(TAG, "dateTime : " + dateTime);
+		//Log.d(TAG, "dateTime : " + dateTime);
 		return dateTime;
 	}
 	

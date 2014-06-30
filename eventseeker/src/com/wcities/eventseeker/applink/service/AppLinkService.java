@@ -282,7 +282,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 			return;
 		}
 		  
-		Log.d(TAG, "onOnHMIStatus(), " + notification.getSystemContext().name());
+		//Log.d(TAG, "onOnHMIStatus(), " + notification.getSystemContext().name());
 
 		switch (notification.getHmiLevel()) {
 		
