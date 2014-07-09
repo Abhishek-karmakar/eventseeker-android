@@ -242,9 +242,8 @@ public class EventALUtil {
 				AppLinkService.getInstance().getCurrentActivity().startActivity(intent);
 				
 			} else {
-				//ALUtil.speak(R.string.ford_phone_no_is_unavailable);
-				ALUtil.alert(res.getString(R.string.ford_phone_no), res.getString(R.string.is_unavailable), 
-					res.getString(R.string.unavailability_continuation), res.getString(R.string.ford_phone_no_is_unavailable));
+				ALUtil.alert(res.getString(R.string.ford_phone_no), res.getString(R.string.not_available), "", 
+					res.getString(R.string.ford_phone_no_is_unavailable));
 			}
 		}
 	}

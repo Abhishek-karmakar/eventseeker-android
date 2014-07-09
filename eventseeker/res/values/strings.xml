@@ -348,10 +348,8 @@
     <string name="msg_welcome_to">Welcome to</string>
     <string name="msg_eventseeker">Eventseeker!</string>
     <string name="time_out">time out</string>
-    <string name="ford_phone_no_is_unavailable">phone number not available</string>
-    <string name="ford_phone_no">Sorry, phone number</string>
-    <string name="is_unavailable">is unavailable</string> <!-- this is continuation of above string -->
-    <string name="unavailability_continuation"></string> <!-- this is continuation of above string -->
+	<string name="ford_phone_no_is_unavailable">phone number not available</string>
+    <string name="ford_phone_no">Phone Number</string>
     <string name="calling">Calling</string>
     <string name="leaving_app_for_call">You are now leaving cityseeker. Call will be initiated on your mobile device</string>
     

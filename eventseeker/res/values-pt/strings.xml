@@ -330,9 +330,7 @@
     <string name="msg_eventseeker">Eventseeker!</string>
     <string name="time_out">Sessão interrompida</string>
     <string name="ford_phone_no_is_unavailable">numero de telefone não está disponível</string>
-    <string name="ford_phone_no">Infelizmente, o número</string>
-    <string name="is_unavailable">de telefone não está</string> <!-- this is continuation of above string  -->
-    <string name="unavailability_continuation">disponível</string> <!-- this is continuation of above string -->
+    <string name="ford_phone_no">Número Telefónico</string>
     <string name="calling">Está a chamar</string>
     <string name="leaving_app_for_call">Estás a sair da aplicação Eventseeker. Uma convocação será realizada do seu telemóvel</string>
     

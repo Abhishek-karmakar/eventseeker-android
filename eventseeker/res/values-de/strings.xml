@@ -329,9 +329,7 @@
     <string name="msg_eventseeker">Eventseeker!</string>
     <string name="time_out">Zeitüberschreitung</string>
     <string name="ford_phone_no_is_unavailable">Telefonnummer nicht verfügbar</string>
-    <string name="ford_phone_no">Entschuldigung. Die</string>
-    <string name="is_unavailable">Telefonnummer ist nicht</string> <!-- this is continuation of above string  -->
-    <string name="unavailability_continuation">verfügbar.</string> <!-- this is continuation of above string -->
+    <string name="ford_phone_no">Telefonnummer</string>
     <string name="calling">Anrufen</string>
     <string name="leaving_app_for_call">Sie verlassen jetzt cityseeker. Ihr Anruf wird jetzt in die Wege geleitet</string>
     
@@ -383,12 +381,12 @@
     <string name="event_no_evts_avail">Es sind keine Veranstaltungen verfügbar.</string>
     <string name="alert_no_events_available">Es sind keine Veranstaltungen verfügbar</string>
 	<string name="plz_press_nxt_or_bck">, drücken Sie bitte das Voice Button und sagen Sie nächste oder zurück.</string>
-	<string name="detail_not_available">Beschreibung Nicht verfügbar</string>
+	<string name="detail_not_available">Detailbeschreibung nicht verfügbar</string>
 	<string name="description">Beschreibung</string>
     <string name="not_available">Nicht verfügbar</string><!-- Continuation of above -->
-    <string name="is_performing_for_this_event">führt bei dieser Veranstaltung auf</string>
-    <string name="are_performing_for_this_event">führen bei dieser Veranstaltung auf</string>
-    <string name="price_would_be">, Kosten würden ..... sein</string>
+    <string name="is_performing_for_this_event">tritt bei dieser Veranstaltung auf</string>
+    <string name="are_performing_for_this_event">treten bei dieser Veranstaltung auf</string>
+    <string name="price_would_be">, Kosten würden</string>
     <string name="price_range_would_be">, Preisklasse wird ungefähr zwischen</string>
     <string name="and">und</string>
     

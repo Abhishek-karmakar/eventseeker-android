@@ -5,9 +5,7 @@
     
     <!-- Common Messages -->
     <string name="ford_phone_no_is_unavailable">número de telefone não está disponível</string>
-    <string name="ford_phone_no">Desculpe, o número de</string>
-    <string name="is_unavailable">telefone não está</string> <!-- this is continuation of above string  -->
-    <string name="unavailability_continuation">disponível.</string> <!-- this is continuation of above string -->
+    <string name="ford_phone_no">Número de Telefone</string>
     <string name="calling">Chamando</string>
     <string name="leaving_app_for_call">Você está saindo do aplicativo Eventseeker. Um telefonema será realizado do seu celular</string>
     	

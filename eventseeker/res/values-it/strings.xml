@@ -329,9 +329,7 @@
     <string name="msg_eventseeker">Eventseeker!</string>
     <string name="time_out">Richiesta scaduta</string>
     <string name="ford_phone_no_is_unavailable">numero di telefono non è disponibile</string>
-    <string name="ford_phone_no">Scusa ma il numero</string>
-    <string name="is_unavailable">di telefono non</string> <!-- this is continuation of above string  -->
-    <string name="unavailability_continuation">è disponibile</string> <!-- this is continuation of above string -->
+    <string name="ford_phone_no">Numero di telefono</string>
     <string name="calling">Chiamando</string>
     <string name="leaving_app_for_call">Stai lasciando eventseeker. Chiamata sarà avviata sul tuo dispositivo mobile</string>
     
@@ -388,7 +386,7 @@
     <string name="not_available">Non disponibile</string><!-- Continuation of above -->
     <string name="is_performing_for_this_event">parteciperà a questo evento</string>
     <string name="are_performing_for_this_event">parteciperanno a questo evento</string>
-    <string name="price_would_be">, il prezzo sarebbe</string>
+    <string name="price_would_be">, Prezzo approssimativo</string>
     <string name="price_range_would_be">, il prezzo sarebbe circa fra</string>
     <string name="and">e</string>
     

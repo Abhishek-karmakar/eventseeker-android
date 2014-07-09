@@ -328,9 +328,7 @@
     <string name="msg_eventseeker">Eventseeker!</string>
     <string name="time_out">Délai d\'expiration</string>
     <string name="ford_phone_no_is_unavailable">le numéro de téléphone n\'est pas disponible</string>
-    <string name="ford_phone_no">Ce numéro de téléphone</string>
-    <string name="is_unavailable">n\'est pas disponible.</string> <!-- this is continuation of above string  -->
-    <string name="unavailability_continuation"></string> <!-- this is continuation of above string -->
+	<string name="ford_phone_no">Numéro de téléphone</string>
     <string name="calling">En train d\'appeler</string>
     <string name="leaving_app_for_call">Yá estás saliendo de la aplicación Eventseeker. Se realizará una llamada desde tu móvil</string>
     
