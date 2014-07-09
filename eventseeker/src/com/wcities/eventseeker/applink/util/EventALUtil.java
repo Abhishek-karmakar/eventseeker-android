@@ -234,6 +234,7 @@ public class EventALUtil {
 			if (venue != null && venue.getPhone() != null) {
 				String simple = res.getString(R.string.calling);
 				ALUtil.alert(simple + " " + venue.getName(), simple);
+				//ALUtil.speak(R.string.leaving_app_for_call);
 				
 				Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + venue.getPhone()));
 				/*AppLinkService.getInstance().getCurrentActivity().startActivity(Intent.createChooser(

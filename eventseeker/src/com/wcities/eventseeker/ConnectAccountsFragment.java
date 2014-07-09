@@ -97,29 +97,31 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	private List<Service> listAvailableServices;
 	
     public static enum Service {
-    	Title(0, R.string.service_title, R.drawable.placeholder, false),
-    	Facebook(1, R.string.service_facebook, R.drawable.facebook_colored, false),
-    	GooglePlus(2, R.string.service_google_plus, R.drawable.g_plus_colored, false),
-    	Blank(3, R.string.service_blank, R.drawable.placeholder, false),
-    	GooglePlay(4, R.string.service_google_play, R.drawable.google_play, true),
-    	DeviceLibrary(5, R.string.service_device_library, R.drawable.devicelibrary, true),
-    	Twitter(6, R.string.service_twitter, R.drawable.twitter_colored, true),
+    	Title(0, R.string.service_title, R.drawable.placeholder, false, null),
+    	Facebook(1, R.string.service_facebook, R.drawable.facebook_colored, false, null),
+    	GooglePlus(2, R.string.service_google_plus, R.drawable.g_plus_colored, false, null),
+    	Blank(3, R.string.service_blank, R.drawable.placeholder, false, null),
+    	GooglePlay(4, R.string.service_google_play, R.drawable.google_play, true, "googleplay"),
+    	DeviceLibrary(5, R.string.service_device_library, R.drawable.devicelibrary, true, "devicelibrary"),
+    	Twitter(6, R.string.service_twitter, R.drawable.twitter_colored, true, "twitter"),
     	//Spotify,
-    	Rdio(7, R.string.service_rdio, R.drawable.rdio, true),
-    	Lastfm(8, R.string.service_last_fm, R.drawable.lastfm, true),
-    	Pandora(9, R.string.service_pandora, R.drawable.pandora, true),
-    	Button(10, R.string.service_button, R.drawable.placeholder, false);
+    	Rdio(7, R.string.service_rdio, R.drawable.rdio, true, "rdio"),
+    	Lastfm(8, R.string.service_last_fm, R.drawable.lastfm, true, "lastfm"),
+    	Pandora(9, R.string.service_pandora, R.drawable.pandora, true, "pandora"),
+    	Button(10, R.string.service_button, R.drawable.placeholder, false, null);
     	
     	private int intId;
     	private int strResId;
     	private int drwResId;
     	private boolean isService;
+    	private String artistSource;
     	
-    	private Service(int intId, int strResId, int drwResId, boolean isService) {
+    	private Service(int intId, int strResId, int drwResId, boolean isService, String artistSource) {
     		this.intId = intId;
     		this.strResId = strResId;
     		this.drwResId = drwResId;
     		this.isService = isService;
+    		this.artistSource = artistSource;
 		}
     	
     	public int getDrwResId() {
@@ -129,6 +131,10 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     	public String getStr(Fragment fragment) {
 			return fragment.getResources().getString(strResId);
 		}
+    	
+    	public String getArtistSource() {
+    		return artistSource;
+    	}
     	
     	public int getIntId() {
 			return intId;

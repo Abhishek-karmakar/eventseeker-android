@@ -328,18 +328,19 @@
     <string name="msg_welcome_to">Benvenuti a</string>
     <string name="msg_eventseeker">Eventseeker!</string>
     <string name="time_out">Richiesta scaduta</string>
-    <string name="ford_phone_no_is_unavailable">Scusa ma il numero di telefono non è disponibile</string>
+    <string name="ford_phone_no_is_unavailable">numero di telefono non è disponibile</string>
     <string name="ford_phone_no">Scusa ma il numero</string>
     <string name="is_unavailable">di telefono non</string> <!-- this is continuation of above string  -->
     <string name="unavailability_continuation">è disponibile</string> <!-- this is continuation of above string -->
     <string name="calling">Chiamando</string>
+    <string name="leaving_app_for_call">Stai lasciando eventseeker. Chiamata sarà avviata sul tuo dispositivo mobile</string>
     
     <!-- Commands -->
-    <string name="al_command_next">Prossimo</string>
-    <string name="al_command_back">Ritornare</string>
+    <string name="al_command_next">Avanti</string>
+    <string name="al_command_back">Indietro</string>
     <string name="al_command_details">Dettagli</string>
     <string name="al_command_play">Play</string>
-    <string name="al_command_call_venue">Chiamare</string>
+    <string name="al_command_call_venue">chiamata</string>
     <string name="al_command_follow">Seguire</string>
         
     <!-- SoftButtons -->
@@ -380,7 +381,7 @@
     
     <!-- Events -->
     <string name="event_no_evts_avail">Non ci sono eventi disponibili.</string>
-    <string name="alert_no_events_available">Non ci sono eventi disponibili.</string>
+    <string name="alert_no_events_available">Non ci sono eventi disponibili</string>
     <string name="plz_press_nxt_or_bck">, Per favore premi il pulsante di voce e dici prossimo o dietro.</string>
     <string name="detail_not_available">Descrizione dettagliata non disponibile</string>
     <string name="description">Descrizione</string>
@@ -395,7 +396,7 @@
     <string name="my_events_al_yes">Si</string>
     <string name="my_events_al_no">Non</string>
     <string name="my_events_al_no_evts_avail_make_suggestions">Non ci sono eventi disponibili, posso fare dei suggerimenti?</string>
-    <!-- <string name="my_events_al_suggestions">Want Suggestions?</string> -->
+    <string name="my_events_al_confirmation">suggerimenti?</string>
     <string name="my_events_how_can_i_help">Come posso aiutarti?</string>
     
 	<!-- LockScreenActivity -->

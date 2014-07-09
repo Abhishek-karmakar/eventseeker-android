@@ -105,7 +105,7 @@ public class DeviceLibraryFragment extends FragmentLoadableFromBackStack impleme
 		if (artists != null) {
 			//Log.d(TAG, "artists size = " + artists.size());
 			new SyncArtists(Api.OAUTH_TOKEN, artists, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
-					Service.DeviceLibrary, this).execute();
+					Service.DeviceLibrary, this, Service.DeviceLibrary.getArtistSource()).execute();
 			
 		} else {
 			FragmentUtil.getActivity(this).onBackPressed();

@@ -308,7 +308,7 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 		//Log.d(TAG, "artists size = " + artistNames.size());
 		if (artistNames != null) {
 			new SyncArtists(Api.OAUTH_TOKEN, artistNames, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
-					Service.Rdio, this).execute();
+					Service.Rdio, this, Service.Rdio.getArtistSource()).execute();
 			
 		} else {
 			FragmentUtil.getActivity(this).onBackPressed();

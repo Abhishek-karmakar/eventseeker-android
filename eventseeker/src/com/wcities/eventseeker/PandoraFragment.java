@@ -284,7 +284,7 @@ public class PandoraFragment extends FragmentLoadableFromBackStack implements On
 	private void apiCallFinished(List<String> artistNames, EventSeekr app) {
 		//Log.d(TAG, "artists size = " + artistNames.size());
 		if (artistNames != null) {
-			new SyncArtists(Api.OAUTH_TOKEN, artistNames, app, Service.Pandora, this).execute();
+			new SyncArtists(Api.OAUTH_TOKEN, artistNames, app, Service.Pandora, this, Service.Pandora.getArtistSource()).execute();
 		} else {
 			Activity activity = FragmentUtil.getActivity(this);
 			if(activity != null) {

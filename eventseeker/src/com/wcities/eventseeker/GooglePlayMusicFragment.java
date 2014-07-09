@@ -157,7 +157,7 @@ public class GooglePlayMusicFragment extends FragmentLoadableFromBackStack imple
 	    	super.onPostExecute(artistNames);
 	    	if (artistNames != null) {
 				new SyncArtists(Api.OAUTH_TOKEN, artistNames, (EventSeekr) FragmentUtil.getActivity(fragment).getApplication(), 
-						Service.GooglePlay, fragment).execute();
+						Service.GooglePlay, fragment, Service.GooglePlay.getArtistSource()).execute();
 				
 			} else {
 				Toast.makeText(FragmentUtil.getActivity(fragment).getApplication(), 

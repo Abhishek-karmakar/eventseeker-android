@@ -208,7 +208,7 @@ public class LastfmFragment extends FragmentLoadableFromBackStack implements OnC
 		//Log.d(TAG, "artists size = " + artistNames.size());
 		if (artistNames != null) {
 			new SyncArtists(Api.OAUTH_TOKEN, artistNames, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
-					Service.Lastfm, this).execute();
+					Service.Lastfm, this, Service.Lastfm.getArtistSource()).execute();
 			
 		} else {
 			FragmentUtil.getActivity(this).onBackPressed();

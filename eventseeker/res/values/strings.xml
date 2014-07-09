@@ -348,11 +348,12 @@
     <string name="msg_welcome_to">Welcome to</string>
     <string name="msg_eventseeker">Eventseeker!</string>
     <string name="time_out">time out</string>
-    <string name="ford_phone_no_is_unavailable">Sorry, phone number is unavailable</string>
+    <string name="ford_phone_no_is_unavailable">phone number not available</string>
     <string name="ford_phone_no">Sorry, phone number</string>
     <string name="is_unavailable">is unavailable</string> <!-- this is continuation of above string -->
     <string name="unavailability_continuation"></string> <!-- this is continuation of above string -->
     <string name="calling">Calling</string>
+    <string name="leaving_app_for_call">You are now leaving cityseeker. Call will be initiated on your mobile device</string>
     
 	<!-- Commands -->
     <string name="al_command_next">Next</string>
@@ -401,7 +402,7 @@
 	
     <!-- Events -->
     <string name="event_no_evts_avail">There are no events available.</string>
-    <string name="alert_no_events_available">No events available.</string>
+    <string name="alert_no_events_available">No events available</string>
     <string name="plz_press_nxt_or_bck">, Please press the voice button and say next or back.</string>
     <string name="detail_not_available">Detail description not available</string>
     <string name="description">Description</string>
@@ -416,7 +417,7 @@
     <string name="my_events_al_yes">Yes</string>
     <string name="my_events_al_no">No</string>
     <string name="my_events_al_no_evts_avail_make_suggestions">There are no events available, shall I make suggestions?</string>
-    <string name="my_events_al_confirmation">Confirmation</string>
+    <string name="my_events_al_confirmation">suggestions?</string>
     <string name="my_events_how_can_i_help">How can I help?</string>
 
     <!-- LockScreenActivity -->

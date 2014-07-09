@@ -143,7 +143,7 @@ public class TwitterSyncingFragment extends FragmentLoadableFromBackStack implem
 			@Override
 			public void run() {
 				new SyncArtists(Api.OAUTH_TOKEN, artistNames, eventSeekr, 
-						Service.Twitter, TwitterSyncingFragment.this).execute();
+						Service.Twitter, TwitterSyncingFragment.this, Service.Twitter.getArtistSource()).execute();
 			}
 		});
 	}

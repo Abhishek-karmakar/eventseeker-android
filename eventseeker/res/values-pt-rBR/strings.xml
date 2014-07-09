@@ -4,14 +4,16 @@
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for Ford ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     
     <!-- Common Messages -->
-    <string name="ford_phone_no_is_unavailable">Desculpe, o número de telefone não está disponível</string>
+    <string name="ford_phone_no_is_unavailable">número de telefone não está disponível</string>
     <string name="ford_phone_no">Desculpe, o número de</string>
     <string name="is_unavailable">telefone não está</string> <!-- this is continuation of above string  -->
     <string name="unavailability_continuation">disponível.</string> <!-- this is continuation of above string -->
     <string name="calling">Chamando</string>
-    
+    <string name="leaving_app_for_call">Você está saindo do aplicativo Eventseeker. Um telefonema será realizado do seu celular</string>
+    	
     <!-- DiscoverActivityAL -->
     <string name="discover_al_discover_categories">Okay, Você deseja concertos, clubes, esportes, teatros ou festivais?</string>
+    <string name="discover_al_sports">esportes</string>
     
     <!-- SearchAL -->
     <string name="search_events_or_artists">Okay, Você deseja buscar por artista ou evento?</string>

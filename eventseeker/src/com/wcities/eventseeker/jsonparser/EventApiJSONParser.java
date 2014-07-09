@@ -573,7 +573,23 @@ public class EventApiJSONParser {
 				address.setLon(jsonObject.getDouble(KEY_LONGITUDE));
 	
 			}
-				
+			
+			if (jsonObject.has(KEY_PHONE)) {
+				Object jPhone = jsonObject.get(KEY_PHONE);
+				if (jPhone instanceof JSONArray) {
+					//Log.d(TAG, "array");
+					String phone = ((JSONArray) jPhone).getString(0);
+					phone = ConversionUtil.parseForPhone(phone);
+					venue.setPhone(phone);
+					
+				} else {
+					//Log.d(TAG, "not array");
+					String phone = (String) jPhone;
+					phone = ConversionUtil.parseForPhone(phone);
+					venue.setPhone(phone);
+				}
+			}
+			
 			if (jsonObject.has(KEY_COUNTRY)) {
 				Country country = new Country();
 				country.setName(jsonObject.getString(KEY_COUNTRY));

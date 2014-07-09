@@ -41,6 +41,11 @@ public class ArtistApi extends Api {
 	private int miles;
 	private boolean	trackingEnabled;
 	private String userId;
+	/**
+	 * 08-07/2014: added 'artistSource' param in batch artist call as per the samir's mail on July 02, 2014.
+	 * added this param
+	 */
+	private String artistSource;
 
 	public ArtistApi(String oauthToken) {
 		super(oauthToken);
@@ -184,7 +189,10 @@ public class ArtistApi extends Api {
 		this.trackingEnabled = trackingEnabled;
 	}
 
-
+	public void setArtistSource(String artistSource) {
+		this.artistSource = artistSource;
+	}
+	
 	public JSONObject getArtists() throws ClientProtocolException, IOException, JSONException {
 		String METHOD = "getArtist.php?";
 		String uri = COMMON_URL + API + METHOD + "oauth_token=" + getOauthToken();
@@ -249,6 +257,9 @@ public class ArtistApi extends Api {
 		}
 		if (method != null) {
 			uri = uri + "&method=" + method.name();
+		}
+		if (artistSource != null) {
+			uri = uri + "&source=" + artistSource;
 		}
 		if (userId != null) {
 			uri = uri + "&userId=" + userId + "&userType=wcities"; 
