@@ -377,9 +377,10 @@
     <string name="nuance_error">Une erreur s\'est produite. Veuillez appuyer sur le boutton voix et dites mes événements, explorer ou chercher</string>
     
     <!-- Events -->
-    <string name="event_no_evts_avail">Il n\'y a aucun événement disponible.</string>
-    <string name="alert_no_events_available">Il n\'y a aucun événement disponible</string>
-    <string name="plz_press_nxt_or_bck">, S\'il vous plaît, appuyez sur le bouton d\'enregistrement vocal et dites suivant ou précédent.</string>
+    <string name="event_no_evts_avail">Aucun événement disponible</string>
+    <string name="alert_no_events_available">Aucun événement disponible</string>
+    <string name="plz_press_nxt_or_bck">, Veuillez appuyez sur le bouton d\'enregistrement vocal et dites suivant ou précédent.</string>
+    <string name="plz_press_nxt_bck_dtls_cll">, Veuillez appuyer sur le bouton d\'enregistrement vocal et dites suivant, précédent, détail ou appel</string>
     <string name="detail_not_available">Description détaillée n\'est pas disponible</string>
     <string name="description">Description</string>
     <string name="not_available">Indisponible</string><!-- Continuation of above -->

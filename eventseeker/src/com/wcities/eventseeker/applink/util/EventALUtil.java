@@ -52,7 +52,7 @@ public class EventALUtil {
 		}
 
 		if (app.isFirstEventTitleForFordEventAL()) {
-			simple += app.getResources().getString(R.string.plz_press_nxt_or_bck);
+			simple += app.getResources().getString(R.string.plz_press_nxt_bck_dtls_cll);
 			app.setFirstEventTitleForFordEventAL(false);
 		}
 		
@@ -121,12 +121,16 @@ public class EventALUtil {
 			ALUtil.alert(description, notAvail, "", simple);
 			return;
 			
-		} else {
+		} 
+		/**
+		 * 10-07-2014 : removed the 'plz press voice btn...' text from the details of 1ST EVENT to match
+		 * the functionality similar to IOS Ford eventseeker app.
+		else {
 			if (app.isFirstEventDetailsForFordEventAL()) {
 				simple += app.getResources().getString(R.string.plz_press_nxt_or_bck);
 				app.setFirstEventDetailsForFordEventAL(false);
 			}
-		}
+		}*/
 		
 		//Log.d(TAG, "Details : " + simple);
 		Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(simple);

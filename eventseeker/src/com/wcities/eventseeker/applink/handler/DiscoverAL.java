@@ -309,8 +309,10 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		eventApi.setLimit(eventList.updateAndGetEventsLimit());
 		/**
 		 * 12-06-2014 : added wcitiesId in Featured event call as per Rohit/Sameer's mail
+		 * 10-07-2014 : Commenting below line(setting the userId) in featured events call, as
+		 * after setting it. The total events get restricted to '8'.
 		 */
-		eventApi.setUserId(((EventSeekr)MainActivity.getInstance().getApplication()).getWcitiesId());
+		//eventApi.setUserId(((EventSeekr)MainActivity.getInstance().getApplication()).getWcitiesId());
 		eventApi.setAlreadyRequested(eventList.getEventsAlreadyRequested());
 		eventApi.setAddFordLangParam(true);
 		

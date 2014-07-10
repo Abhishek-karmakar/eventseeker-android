@@ -399,9 +399,10 @@
 	<string name="cancelling">Cancelling...</string>
 	
     <!-- Events -->
-    <string name="event_no_evts_avail">There are no events available.</string>
+    <string name="event_no_evts_avail">No events available</string>
     <string name="alert_no_events_available">No events available</string>
     <string name="plz_press_nxt_or_bck">, Please press the voice button and say next or back.</string>
+    <string name="plz_press_nxt_bck_dtls_cll">, Please press the voice button and say next, back, details or call.</string>
     <string name="detail_not_available">Detail description not available</string>
     <string name="description">Description</string>
     <string name="not_available">not available</string><!-- Continuation of above -->

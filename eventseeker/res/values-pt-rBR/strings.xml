@@ -25,6 +25,7 @@
     
     <!-- Events -->
     <string name="plz_press_nxt_or_bck">, Por favor, pressione o botão de voz e diga próximo ou anterior.</string>
+    <string name="plz_press_nxt_bck_dtls_cll">, Por favor, pressione o botão de voz e diga próximo, anterior, detalhes ou chamar.</string>
     <string name="detail_not_available">Descrição detalhada não disponível</string>
     <string name="description">Descrição</string>
     <string name="not_available">Não disponível</string><!-- Continuation of above -->

@@ -378,9 +378,10 @@
     <string name="nuance_error">Mi dispiace, c\'è stato un errore. Per favore, premi il tasto voce e dici i miei eventi, Esplorare o cerca</string>
     
     <!-- Events -->
-    <string name="event_no_evts_avail">Non ci sono eventi disponibili.</string>
-    <string name="alert_no_events_available">Non ci sono eventi disponibili</string>
-    <string name="plz_press_nxt_or_bck">, Per favore premi il pulsante di voce e dici prossimo o dietro.</string>
+    <string name="event_no_evts_avail">Non eventi disponibili.</string>
+    <string name="alert_no_events_available">Non eventi disponibili</string>
+    <string name="plz_press_nxt_or_bck">, Per favore premi il tasto voce e dici avanti o dietro.</string>
+    <string name="plz_press_nxt_bck_dtls_cll">, Per favore premi il tasto voce e dici avanti, indietro, dettagli o chiamata.</string>
     <string name="detail_not_available">Descrizione dettagliata non disponibile</string>
     <string name="description">Descrizione</string>
     <string name="not_available">Non disponibile</string><!-- Continuation of above -->

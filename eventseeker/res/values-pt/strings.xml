@@ -379,9 +379,10 @@
     <string name="nuance_error">Infelizmente, houve um error. Prima o botão de voz se faz favor e diga meus eventos, descobrir ou pesquisa</string>
     
     <!-- Events -->
-    <string name="event_no_evts_avail">Não há eventos disponíveis.</string>
+    <string name="event_no_evts_avail">Não há eventos disponíveis</string>
     <string name="alert_no_events_available">Não há eventos disponíveis</string>
     <string name="plz_press_nxt_or_bck">, Se faz favor, prima o botão de voz e diga próximo ou atrás.</string>
+    <string name="plz_press_nxt_bck_dtls_cll">, Se faz favor, prima o botão de voz e diga próximo, atrás, detalhes ou chamar.</string>
 	<string name="detail_not_available">Descrição detalhada não está disponível</string>
 	<string name="description">Descrição</string>
     <string name="not_available">Não está disponível</string><!-- Continuation of above -->

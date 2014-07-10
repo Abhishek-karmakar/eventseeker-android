@@ -378,9 +378,10 @@
     <string name="nuance_error">Entschuldigung, ein Fehler ist aufgetreten. Bitte wählen Sie die Sprachfunktion und sagen Sie meineVeranstaltungen,Entdecken oder Suche</string>
     
     <!-- Events -->
-    <string name="event_no_evts_avail">Es sind keine Veranstaltungen verfügbar.</string>
-    <string name="alert_no_events_available">Es sind keine Veranstaltungen verfügbar</string>
-	<string name="plz_press_nxt_or_bck">, drücken Sie bitte das Voice Button und sagen Sie nächste oder zurück.</string>
+    <string name="event_no_evts_avail">Keine Veranstaltungen verfügbar</string>
+    <string name="alert_no_events_available">Keine Veranstaltungen verfügbar</string>
+	<string name="plz_press_nxt_or_bck">, Bitte drücken Sie auf Sprachfunktion und sagen Sie nächste oder zurück.</string>
+	<string name="plz_press_nxt_bck_dtls_cll">, Bitte drücken Sie auf Sprachfunktion und sagen Sie nächste, zurück, details, oder anruf</string>
 	<string name="detail_not_available">Detailbeschreibung nicht verfügbar</string>
 	<string name="description">Beschreibung</string>
     <string name="not_available">Nicht verfügbar</string><!-- Continuation of above -->

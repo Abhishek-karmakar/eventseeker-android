@@ -139,7 +139,11 @@ public class CommandsUtil {
 			ALUtil.addCommand(new Vector<String>(Arrays.asList(new String[] {cmd.toString()})), cmd.getCmdId());
 		}
 		
-		ALUtil.setGlobalProperties(helpCommands);
+		/**
+		 * 10-07-2014: commented below functionality as in IOS-Eventseeker_Ford app. The system on its own
+		 * speaks the available help commands.
+		 */
+		//ALUtil.setGlobalProperties(helpCommands);
 	}
 	
 	/*public static void performOperationForCommand(Commands cmd) {
