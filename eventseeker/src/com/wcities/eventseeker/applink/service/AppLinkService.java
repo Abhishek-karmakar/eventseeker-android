@@ -14,6 +14,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.ford.syncV4.exception.SyncException;
 import com.ford.syncV4.exception.SyncExceptionCause;
@@ -219,7 +220,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 				e.printStackTrace();
 			}
 			proxy = null;
-			clearLockScreen();
+			//clearLockScreen();
 		}
 	}
 	

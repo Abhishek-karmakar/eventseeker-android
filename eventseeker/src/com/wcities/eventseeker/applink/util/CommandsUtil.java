@@ -3,6 +3,8 @@ package com.wcities.eventseeker.applink.util;
 import java.util.Arrays;
 import java.util.Vector;
 
+import android.util.Log;
+
 import com.ford.syncV4.proxy.rpc.SoftButton;
 import com.ford.syncV4.proxy.rpc.enums.ButtonName;
 import com.ford.syncV4.proxy.rpc.enums.SoftButtonType;
@@ -30,6 +32,7 @@ public class CommandsUtil {
 		FOLLOW(AppLinkService.CMD_ID_AL + 7);
 
 		private int cmdId;
+		private boolean isAdded;
 		
 		private Command(int cId) {
 			this.cmdId = cId;
@@ -62,6 +65,14 @@ public class CommandsUtil {
 			return cmdId;
 		}
 		
+		public boolean isAdded() {
+			return isAdded;
+		}
+
+		public void setAdded(boolean isAdded) {
+			this.isAdded = isAdded;
+		}
+
 		@Override
 		public String toString() {
 			String str = null;
@@ -127,16 +138,20 @@ public class CommandsUtil {
 		 * order while running it on real SYNC. To run it on simulator we have to comment this for loop, 
 		 * otherwise simulator crashes on pressing any command.
 		 */
-		if (!AppConstants.DEBUG) {
-			for (int i = 0; i < Command.values().length; i++) {
-				Command command = Command.values()[i];
+		//if (!AppConstants.DEBUG) {
+		for (int i = 0; i < Command.values().length; i++) {
+			Command command = Command.values()[i];
+			if (command.isAdded()) {
 				ALUtil.deleteCommand(command.getCmdId());
+				command.setAdded(false);
 			}
 		}
+		//}
 		
 		for (Command cmd : reqCommands) {
 			//Log.d(TAG, "onOnCommand add command cmd.getCmdId() = " + cmd.getCmdId());
 			ALUtil.addCommand(new Vector<String>(Arrays.asList(new String[] {cmd.toString()})), cmd.getCmdId());
+			cmd.setAdded(true);
 		}
 		
 		/**
