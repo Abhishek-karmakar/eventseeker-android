@@ -72,6 +72,8 @@ public class GoogleAnalyticsTracker {
 			Tracker t = getTracker(eventSeekr, TrackerName.APP_TRACKER);
 			// Set screen name, where path is a String representing the screen name.
 			t.setScreenName(screenName);
+			t.setPage(screenName);
+			t.setTitle(screenName);
 			// Send a screen view.
 			t.send(new HitBuilders.EventBuilder()
 				.setCategory("uiAction")
