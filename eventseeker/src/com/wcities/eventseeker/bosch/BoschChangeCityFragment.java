@@ -25,6 +25,8 @@ import com.bosch.myspin.serversdk.maps.MySpinMapView.OnMapLoadedListener;
 import com.bosch.myspin.serversdk.maps.MySpinMarkerOptions;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.bosch.BoschDrawerListFragment.BoschDrawerListFragmentListener;
+import com.wcities.eventseeker.bosch.BoschMainActivity.OnCarStationaryStatusChangedListener;
 import com.wcities.eventseeker.bosch.custom.fragment.BoschFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.bosch.interfaces.BoschEditTextListener;
 import com.wcities.eventseeker.constants.AppConstants;
@@ -34,7 +36,7 @@ import com.wcities.eventseeker.util.GeoUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
 
 public class BoschChangeCityFragment extends BoschFragmentLoadableFromBackStack implements OnClickListener, 
-		GeoUtilListener, BoschEditTextListener, OnMapLeftListener, OnMapLoadedListener {
+		GeoUtilListener, BoschEditTextListener, OnMapLeftListener, OnMapLoadedListener, OnCarStationaryStatusChangedListener {
 
 	private static final String TAG = BoschChangeCityFragment.class.getSimpleName();
 
@@ -273,6 +275,19 @@ public class BoschChangeCityFragment extends BoschFragmentLoadableFromBackStack 
 	@Override
 	public void onMapLeftListener(String arg0) {
 		
+	}
+	
+	@Override
+	public void onCarStationaryStatusChanged(boolean isCarStationary) {
+		if (!isCarStationary) {
+			if (edtCity != null && edtCity.hasFocus()) {
+				edtCity.clearFocus();
+			}
+			((BoschDrawerListFragmentListener)FragmentUtil.getActivity(this)).onDrawerItemSelected(
+					BoschMainActivity.INDEX_NAV_ITEM_HOME);
+			((BoschMainActivity) FragmentUtil.getActivity(this)).showBoschDialog(
+					R.string.dialog_city_cannot_be_changed_while_driving);
+		}
 	}
 
 }

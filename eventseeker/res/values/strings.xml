@@ -339,6 +339,7 @@
 
     <!-- fragment_bosch_about_us -->
     <string name="txt_app_details"><![CDATA[<b>App name :</b> eventseeker<br/><b>Description :</b> The eventseeker is the premier sources for event, artist and ticketing information available anywhere, gathered from worldwide ticketing partners, in-house research, and the insight of local contributors around the world.<br/><b>Mailing address :</b> Wcities.com, Inc. 512 2nd Street Second Floor, San Francisco, CA 94107, USA<br/><b>Tel :</b> 4154958090<br/><b>Fax : </b>4154958093]]></string>
+    <string name="dialog_city_cannot_be_changed_while_driving">City cannot be changed while driving.</string>
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for Ford ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->

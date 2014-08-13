@@ -308,8 +308,11 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	private void selectItem(int position) {
 		//Log.d(TAG, "selectItem(), pos = " + position);
 		
-		drawerItemSelectedPosition = position;
-		setDrawerIndicatorEnabled(true);
+		if (position != INDEX_NAV_ITEM_CHANGE_CITY || AppConstants.IS_CAR_STATIONARY) {
+			// change city is not allowed while driving
+			drawerItemSelectedPosition = position;
+			setDrawerIndicatorEnabled(true);
+		}
 			
 		BoschDrawerListFragment boschDrawerListFragment = (BoschDrawerListFragment) getSupportFragmentManager()
 			.findFragmentByTag(BoschDrawerListFragment.class.getSimpleName());
@@ -326,8 +329,13 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			break;
 			
 		case INDEX_NAV_ITEM_CHANGE_CITY:
-			BoschChangeCityFragment boschChangeCityFragment = new BoschChangeCityFragment();
-			replaceContentFrameByFragment(boschChangeCityFragment, false);
+			if (!AppConstants.IS_CAR_STATIONARY) {
+				showBoschDialog(R.string.dialog_city_cannot_be_changed_while_driving);
+			
+			} else {
+				BoschChangeCityFragment boschChangeCityFragment = new BoschChangeCityFragment();
+				replaceContentFrameByFragment(boschChangeCityFragment, false);
+			}
 			break;
 			
 		case INDEX_NAV_ITEM_SEARCH:
@@ -521,6 +529,10 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			selectNonDrawerItem(fragment, addToBackStack);
 		}
 		
+	}
+	
+	public void showBoschDialog(int msgId) {
+		showBoschDialog(getResources().getString(msgId));
 	}
 
 	public void showBoschDialog(String msg) {
