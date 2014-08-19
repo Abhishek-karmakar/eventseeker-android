@@ -350,7 +350,8 @@
     <string name="al_command_search">Cercare</string>
     
     <!-- DiscoverActivityAL -->
-    <string name="discover_al_discover_categories">OK, vuoi cercare concerti, club, sport, teatri o festival?</string>
+    <string name="discover_al_discover_categories">OK, vuoi cercare concerti, club, sport, teatri, o, festival?</string>
+    <string name="discover_al_time_out_help_text">concerti, club, sport, teatri, festival</string>
     <string name="discover_al_discover">Dici categoria</string>
     <string name="discover_al_concerts">concerti</string>
     <string name="discover_al_clubs">club</string>
@@ -395,6 +396,7 @@
     <string name="my_events_al_yes">Si</string>
     <string name="my_events_al_no">Non</string>
     <string name="my_events_al_no_evts_avail_make_suggestions">Non ci sono eventi disponibili, posso fare dei suggerimenti?</string>
+    <string name="my_events_al_time_out_help_text">Si, Non</string>
     <string name="my_events_al_confirmation">suggerimenti?</string>
     <string name="my_events_how_can_i_help">Come posso aiutarti?</string>
     

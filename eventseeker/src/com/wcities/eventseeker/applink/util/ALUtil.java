@@ -123,6 +123,7 @@ public class ALUtil {
 		msg.setInteractionMode(InteractionMode.BOTH);
 		msg.setTimeout(AppConstants.INTERACTION_TIME_OUT_AL);
 		msg.setTimeoutPrompt(timeoutPrompt);
+		msg.setHelpPrompt(timeoutPrompt);
 		
 		try {
 			AppLinkService.getInstance().getProxy().sendRPCRequest(msg);

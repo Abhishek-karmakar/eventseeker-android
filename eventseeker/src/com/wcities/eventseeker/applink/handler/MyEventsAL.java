@@ -138,7 +138,8 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 		
 		Vector<TTSChunk> initChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
 		Vector<TTSChunk> timeoutChunks = TTSChunkFactory.createSimpleTTSChunks(
-				mEventSeekr.getResources().getString(R.string.time_out));
+				//mEventSeekr.getResources().getString(R.string.time_out));
+				mEventSeekr.getResources().getString(R.string.my_events_al_time_out_help_text));
 		
 		ALUtil.performInteractionChoiceSet(initChunks, initialText, interactionChoiceSetIDList, timeoutChunks);
 	}

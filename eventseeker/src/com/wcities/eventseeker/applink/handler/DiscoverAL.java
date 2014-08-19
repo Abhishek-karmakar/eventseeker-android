@@ -178,7 +178,8 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		
 		Vector<TTSChunk> initChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
 		Vector<TTSChunk> timeoutChunks = TTSChunkFactory.createSimpleTTSChunks(
-				context.getResources().getString(R.string.time_out));
+				//context.getResources().getString(R.string.time_out));
+				context.getResources().getString(R.string.discover_al_time_out_help_text)) ;  
 		
 		ALUtil.performInteractionChoiceSet(initChunks, initialText, interactionChoiceSetIDList, timeoutChunks);
 	}

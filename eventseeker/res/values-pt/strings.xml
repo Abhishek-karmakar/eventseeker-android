@@ -351,7 +351,8 @@
     <string name="al_command_search">Procurar</string>
     
     <!-- DiscoverActivityAL -->
-    <string name="discover_al_discover_categories">Bem, deseja os concertos, clubes, desporto, teatros ou festivais?</string>
+    <string name="discover_al_discover_categories">Bem, deseja os concertos, clubes, desporto, teatros, ou, festivais?</string>
+    <string name="discover_al_time_out_help_text">concertos, clubes, desporto, teatros, festivais</string>
     <string name="discover_al_discover">Diga categoria</string>
     <string name="discover_al_concerts">concertos</string>
     <string name="discover_al_clubs">clubes</string>
@@ -396,6 +397,7 @@
     <string name="my_events_al_yes">Sim</string>
     <string name="my_events_al_no">Não</string>
     <string name="my_events_al_no_evts_avail_make_suggestions">Não há eventos disponíveis, posso fazer umas sugestões?</string>
+    <string name="my_events_al_time_out_help_text">Sim, Não</string>
     <string name="my_events_al_confirmation">sugestões?</string>
     <string name="my_events_how_can_i_help">O que posso fazer para ajudar-lhe?</string>
 

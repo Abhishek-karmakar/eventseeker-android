@@ -11,6 +11,7 @@
     	
     <!-- DiscoverActivityAL -->
     <string name="discover_al_discover_categories">Okay, Você deseja concertos, clubes, esportes, teatros ou festivais?</string>
+    <string name="discover_al_time_out_help_text">concertos, clubes, esportes, teatros ou festivais</string>
     <string name="discover_al_sports">esportes</string>
     
     <!-- SearchAL -->
