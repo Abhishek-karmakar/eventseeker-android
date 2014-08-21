@@ -48,7 +48,7 @@
     <string name="pls_login_to_see_friends_activity">Si prega, accedi con Facebook o Google dalla pagina “Sincronizza account” per mostrare l\'attività dei tuoi amici.</string>
 	<string name="pls_login_to_see_artist_news">Si prega di accedere con Facebook o Google dalla pagina “Sincronizza i tuoi account” per vedere notizie d’artisti.</string>
     <string name="pls_login_to_submit_repcode">Si prega, accedi con Facebook o Google dalla pagina “Sincronizzazione”.</string>
-    <string name="connection_lost">La connessione Internet è offline.e</string>
+    <string name="connection_lost">La connessione Internet è offline.</string>
     <string name="no_internet_connectivity">Internet è disconnesso</string>
     <string name="yes">si</string>
     <string name="go_to_login">Vai al login?</string>
@@ -332,6 +332,9 @@
     <string name="ford_phone_no">Numero di telefono</string>
     <string name="calling">Chiamando</string>
     <string name="leaving_app_for_call">Stai lasciando eventseeker. Chiamata sarà avviata sul tuo dispositivo mobile</string>
+    <string name="the_internet">La connessione</string>
+    <string name="connection_appears">Internet è</string>
+    <string name="to_be_offline">offline</string>
     
     <!-- Commands -->
     <string name="al_command_next">Avanti</string>

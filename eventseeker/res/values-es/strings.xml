@@ -333,6 +333,9 @@
     <string name="ford_phone_no">Número de Teléfono</string>
     <string name="calling">Llamando</string>
     <string name="leaving_app_for_call">Yá estás saliendo de la aplicación Eventseeker. Se realizará una llamada desde tu móvil</string>
+    <string name="the_internet">La conexión</string>
+    <string name="connection_appears">Internet no</string>
+    <string name="to_be_offline">está en línea</string>
     
     <!-- Commands -->
     <string name="al_command_next">Siguiente</string>

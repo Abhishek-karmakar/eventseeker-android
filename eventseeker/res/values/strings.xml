@@ -320,6 +320,9 @@
     <string name="unit_mi">mi</string>
     <string name="unit_kilometers">Kilometers</string>
     <string name="unit_miles">Miles</string>
+    <string name="the_internet">The Internet</string>
+    <string name="connection_appears">connection appears</string>
+    <string name="to_be_offline">to be offline</string>
 
     <string name="title_activity_bosch_main">BoschMainActivity</string>
 

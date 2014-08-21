@@ -532,8 +532,8 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	}
 	
 	public void handleNoNetConnectivity() {
-		ALUtil.alert(getResources().getString(R.string.error), getResources().getString(
-				R.string.connection_lost));
+		ALUtil.alert(getResources().getString(R.string.the_internet), getResources().getString(R.string.connection_appears),
+			getResources().getString(R.string.to_be_offline), getResources().getString(R.string.connection_lost));
 		initiateMainAL();
 	}
 	

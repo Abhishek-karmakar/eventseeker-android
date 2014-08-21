@@ -332,6 +332,9 @@
     <string name="ford_phone_no">Telefonnummer</string>
     <string name="calling">Anrufen</string>
     <string name="leaving_app_for_call">Sie verlassen jetzt cityseeker. Ihr Anruf wird jetzt in die Wege geleitet</string>
+    <string name="the_internet">Die Internetverbindung</string>
+    <string name="connection_appears">scheint offline</string>
+    <string name="to_be_offline">zu sein</string>
     
     <!-- Commands -->
     <string name="al_command_next">Nächste</string>

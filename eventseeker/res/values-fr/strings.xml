@@ -48,7 +48,7 @@
     <string name="pls_login_to_see_friends_activity">Connectez-vous sur Facebook ou Google de la page Synchroniser Les Compters pour afficher votre activité d\'amis</string>
 	<string name="pls_login_to_see_artist_news">Connectez-vous sur Facebook ou Google de la page Synchroniser Les Comptes pour afficher les nouveautés d\'artistes.</string>
     <string name="pls_login_to_submit_repcode">Connectez vous sur facebook ou google de la page Synchroniser les Comptes</string>
-    <string name="connection_lost">Vous êtes hors connexion.</string>
+    <string name="connection_lost">Vous êtes déconnecté.</string>
     <string name="yes">oui</string>
     <string name="go_to_login">Afficher la page de connéxion?</string>
 	<string name="add_to_calender">Ajouter</string>
@@ -331,6 +331,9 @@
 	<string name="ford_phone_no">Numéro de téléphone</string>
     <string name="calling">En train d\'appeler</string>
     <string name="leaving_app_for_call">Yá estás saliendo de la aplicación Eventseeker. Se realizará una llamada desde tu móvil</string>
+    <string name="the_internet">Vous êtes</string>
+    <string name="connection_appears">déconnecté</string>
+    <string name="to_be_offline"></string>
     
     <!-- Commands -->
     <string name="al_command_next">Suivant</string>
