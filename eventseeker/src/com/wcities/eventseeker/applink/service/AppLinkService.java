@@ -576,13 +576,29 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	
 	public void onGenericResponse(GenericResponse response) {}
 
-	public void onAddCommandResponse(AddCommandResponse response) {}
+	public void onAddCommandResponse(final AddCommandResponse response) {
+		/*currentUIActivity.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				Toast.makeText(currentUIActivity, "onAddCommandResponse : " +  
+					"Response : " + response.getResultCode(), Toast.LENGTH_SHORT).show();
+			}
+		});*/
+	}
 	
 	public void onAddSubMenuResponse(AddSubMenuResponse response) {}
 
 	public void onAlertResponse(AlertResponse response) {}
 	
-	public void onDeleteCommandResponse(DeleteCommandResponse response) {}
+	public void onDeleteCommandResponse(final DeleteCommandResponse response) {
+		/*currentUIActivity.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				Toast.makeText(currentUIActivity, "onDeleteCommandResponse : " +  
+					"Response : " + response.getResultCode(), Toast.LENGTH_SHORT).show();
+			}
+		});*/
+	}
 	
 	public void onDeleteInteractionChoiceSetResponse(DeleteInteractionChoiceSetResponse response) {}
 	
