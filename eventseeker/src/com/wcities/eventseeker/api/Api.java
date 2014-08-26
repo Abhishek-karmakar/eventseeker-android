@@ -26,7 +26,7 @@ public abstract class Api {
 	public static final String OAUTH_TOKEN = "a82d32bd99044507417055f66c1a614c"; 
 											//"5c63440e7db1ad33c3898cdac3405b1e";
 	public static final String OAUTH_TOKEN_BOSCH_APP = "5455fb63e3e6804ed2b45a48abbdcd50";
-	public static final String OAUTH_TOKEN_FORD_APP = "5455fb63e3e6804ed2b45a48abbdcd50";
+	public static final String OAUTH_TOKEN_FORD_APP = "f435ec60b8f8cd9dbaf98c83c46caf4f";
 	
 	protected static final String COMMON_URL = "http://dev.wcities.com/V3/";
 	
