@@ -76,7 +76,7 @@ public class BoschVenueEventsFragment extends BoschListFragmentLoadableFromBackS
 	
 	@Override
 	public void loadItemsInBackground() {
-		LoadDateWiseVenueEventsList loadEvents = new LoadDateWiseVenueEventsList(Api.OAUTH_TOKEN_CAR_APPS, dateWiseEvtList, adapter, 
+		LoadDateWiseVenueEventsList loadEvents = new LoadDateWiseVenueEventsList(Api.OAUTH_TOKEN_BOSCH_APP, dateWiseEvtList, adapter, 
 			((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).getWcitiesId(), venue.getId());
         adapter.setLoadDateWiseEvents(loadEvents);
         AsyncTaskUtil.executeAsyncTask(loadEvents, true);

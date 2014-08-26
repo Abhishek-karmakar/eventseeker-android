@@ -198,7 +198,7 @@ public class SearchAL extends ESIProxyALM {
 		int eventsAlreadyRequested = eventList.getEventsAlreadyRequested();
 		int totalNoOfEvents = 0;
 		
-		EventApi eventApi = new EventApi(Api.OAUTH_TOKEN_CAR_APPS, latLon[0], latLon[1]);
+		EventApi eventApi = new EventApi(Api.OAUTH_TOKEN_FORD_APP, latLon[0], latLon[1]);
 		eventApi.setLimit(EVENTS_LIMIT);
 		eventApi.setAlreadyRequested(eventsAlreadyRequested);
 		eventApi.setUserId(context.getWcitiesId());//it can also be null
@@ -238,7 +238,7 @@ public class SearchAL extends ESIProxyALM {
 	}
 	
 	private void loadSearchedArtist() throws IOException {
-		ArtistApi artistApi = new ArtistApi(Api.OAUTH_TOKEN_CAR_APPS);
+		ArtistApi artistApi = new ArtistApi(Api.OAUTH_TOKEN_FORD_APP);
 		artistApi.setLimit(ARTISTS_LIMIT);
 		artistApi.setMethod(Method.artistSearch);
 		artistApi.setAddFordLangParam(true);
@@ -401,7 +401,7 @@ public class SearchAL extends ESIProxyALM {
 				Artist artist = artistList.getCurrentArtist();
 				if (artist.getAttending() == Attending.NotTracked) {
 					artist.updateAttending(Attending.Tracked, context);
-					new UserTracker(Api.OAUTH_TOKEN_CAR_APPS, context, UserTrackingItemType.artist, artist.getId()).execute();
+					new UserTracker(Api.OAUTH_TOKEN_FORD_APP, context, UserTrackingItemType.artist, artist.getId()).execute();
 					ALUtil.alert(artist.getName(), context.getResources().getString(R.string.followed), "", 
 							artist.getName() + " " + context.getResources().getString(R.string.followed));
 					

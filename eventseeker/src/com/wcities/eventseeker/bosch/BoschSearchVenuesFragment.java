@@ -90,7 +90,7 @@ public class BoschSearchVenuesFragment extends ListFragment implements LoadItems
 		if (latLng == null) {
 			latLng = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 		}
-		loadVenues = new LoadVenues(Api.OAUTH_TOKEN_CAR_APPS, this, venueListAdapter, venueList, latLng);
+		loadVenues = new LoadVenues(Api.OAUTH_TOKEN_BOSCH_APP, this, venueListAdapter, venueList, latLng);
 		venueListAdapter.setLoadVenues(loadVenues);
         AsyncTaskUtil.executeAsyncTask(loadVenues, true, query);
 	}

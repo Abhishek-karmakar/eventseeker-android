@@ -126,7 +126,7 @@ public class BoschMyArtistsListFragment extends ListFragment implements OnClickL
 
 	@Override
 	public void loadItemsInBackground() {
-		loadMyArtists = new LoadMyArtists(Api.OAUTH_TOKEN_CAR_APPS, wcitiesId, artistList, boschArtistListAdapter, cachedFollowingList, 
+		loadMyArtists = new LoadMyArtists(Api.OAUTH_TOKEN_BOSCH_APP, wcitiesId, artistList, boschArtistListAdapter, cachedFollowingList, 
 				artistIds, null, null, this);
 		boschArtistListAdapter.setLoadArtists(loadMyArtists);
 		AsyncTaskUtil.executeAsyncTask(loadMyArtists, true);

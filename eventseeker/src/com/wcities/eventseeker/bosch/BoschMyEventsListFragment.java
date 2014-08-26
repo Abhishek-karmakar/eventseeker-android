@@ -105,7 +105,7 @@ public class BoschMyEventsListFragment extends ListFragment implements OnClickLi
 		if (latLon == null) {
 			latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 		}
-		loadEvents = new LoadMyEvents(Api.OAUTH_TOKEN_CAR_APPS, eventList, eventListAdapter, wcitiesId, loadType, latLon[0], 
+		loadEvents = new LoadMyEvents(Api.OAUTH_TOKEN_BOSCH_APP, eventList, eventListAdapter, wcitiesId, loadType, latLon[0], 
 				latLon[1]);
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);
         AsyncTaskUtil.executeAsyncTask(loadEvents, true);

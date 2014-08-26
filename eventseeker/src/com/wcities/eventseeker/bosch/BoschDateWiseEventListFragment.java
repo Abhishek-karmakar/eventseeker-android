@@ -71,7 +71,7 @@ public class BoschDateWiseEventListFragment extends ListFragment implements Load
 	
 	@Override
 	public void loadItemsInBackground() {
-		loadEvents = new LoadDateWiseEvents(Api.OAUTH_TOKEN_CAR_APPS, dateWiseEvtList, eventListAdapter, lat, lon, startDate, endDate, 
+		loadEvents = new LoadDateWiseEvents(Api.OAUTH_TOKEN_BOSCH_APP, dateWiseEvtList, eventListAdapter, lat, lon, startDate, endDate, 
 				selectedCategory.getId(), ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId());
 		((BoschDateWiseEventListAdapter) eventListAdapter).setLoadDateWiseEvents(loadEvents);
 		AsyncTaskUtil.executeAsyncTask(loadEvents, true);

@@ -219,7 +219,7 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 	}
 	
 	private UserInfoApi buildUserInfoApi() {
-		UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN_CAR_APPS);
+		UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN_FORD_APP);
 		userInfoApi.setLimit(eventList.updateAndGetEventsLimit());
 		userInfoApi.setAlreadyRequested(eventList.getEventsAlreadyRequested());
 		userInfoApi.setUserId(mEventSeekr.getWcitiesId());

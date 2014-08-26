@@ -117,7 +117,7 @@ public class BoschVenueDetailsFragment extends BoschFragmentLoadableFromBackStac
 		 *  The below async task call is made just to check the number of events, if the events are more than 0, 
 		 *  then show the events button.
 		 */
-		LoadDateWiseVenueEventsList loadEvents = new LoadDateWiseVenueEventsList(Api.OAUTH_TOKEN_CAR_APPS, null, null, 
+		LoadDateWiseVenueEventsList loadEvents = new LoadDateWiseVenueEventsList(Api.OAUTH_TOKEN_BOSCH_APP, null, null, 
 			((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).getWcitiesId(),  venue.getId(), this);
 		AsyncTaskUtil.executeAsyncTask(loadEvents, true);
 		

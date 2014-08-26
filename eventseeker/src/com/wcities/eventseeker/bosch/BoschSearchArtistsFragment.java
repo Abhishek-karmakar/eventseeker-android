@@ -81,7 +81,7 @@ public class BoschSearchArtistsFragment extends ListFragment implements LoadItem
 	
 	@Override
 	public void loadItemsInBackground() {
-		boschLoadArtists = new BoschLoadArtists(Api.OAUTH_TOKEN_CAR_APPS, artistList, boschArtistListAdapter);
+		boschLoadArtists = new BoschLoadArtists(Api.OAUTH_TOKEN_BOSCH_APP, artistList, boschArtistListAdapter);
 		boschArtistListAdapter.setLoadArtists(boschLoadArtists);
 		AsyncTaskUtil.executeAsyncTask(boschLoadArtists, true, query);
 	}

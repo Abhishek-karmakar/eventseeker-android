@@ -73,7 +73,7 @@ public class BoschEventDetailsFragment extends BoschFragmentLoadableFromBackStac
 		if (event == null) {
 			event = (Event) getArguments().getSerializable(BundleKeys.EVENT);
 			isEventLoading = true;
-			AsyncTaskUtil.executeAsyncTask(new LoadEventDetails(Api.OAUTH_TOKEN_CAR_APPS, this, this, event), true);
+			AsyncTaskUtil.executeAsyncTask(new LoadEventDetails(Api.OAUTH_TOKEN_BOSCH_APP, this, this, event), true);
 		}
 		
 		res = FragmentUtil.getResources(this);
@@ -267,14 +267,14 @@ public class BoschEventDetailsFragment extends BoschFragmentLoadableFromBackStac
 						: Attending.GOING;
 					if (attending == Attending.NOT_GOING) {
 						event.setAttending(attending);
-						new UserTracker(Api.OAUTH_TOKEN_CAR_APPS, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
+						new UserTracker(Api.OAUTH_TOKEN_BOSCH_APP, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
 			               		UserTrackingItemType.event, event.getId(), event.getAttending().getValue(), 
 			               		UserTrackingType.Add).execute();
 						updateFollowBtn();
 							
 					} else {
 						event.setAttending(attending);
-						new UserTracker(Api.OAUTH_TOKEN_CAR_APPS, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
+						new UserTracker(Api.OAUTH_TOKEN_BOSCH_APP, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
 			                	UserTrackingItemType.event, event.getId(), event.getAttending().getValue(), 
 			                	UserTrackingType.Add).execute();
 						updateFollowBtn();
