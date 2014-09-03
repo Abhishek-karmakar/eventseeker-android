@@ -16,6 +16,8 @@ import org.json.JSONObject;
 import android.util.Log;
 
 import com.wcities.eventseeker.LanguageFragment.Locales;
+import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 
 public abstract class Api {
@@ -127,7 +129,8 @@ public abstract class Api {
 		 * using setLocale method.
 		 */
 		addLangParam();
-		
+		GoogleAnalyticsTracker.getInstance().sendApiCall(EventSeekr.getEventSeekr(), uri);
+
 		JSONObject jsonObject;
 		URL url = new URL(uri);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();

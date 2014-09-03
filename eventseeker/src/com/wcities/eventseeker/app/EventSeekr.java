@@ -58,6 +58,8 @@ public class EventSeekr extends Application {
 	 */
 	private static Locale ACTUAL_SYSTEM_LOCALE;
 	
+	private static EventSeekr eventSeekr;
+	
 	private boolean isTablet;
 	private boolean is7InchTablet;
 	private boolean isInLandscapeMode;
@@ -222,6 +224,7 @@ public class EventSeekr extends Application {
 		
 		super.onCreate();
 		
+		eventSeekr = this;
 		//Log.d(TAG, "onCreate()");
 		listeners = new ArrayList<EventSeekr.EventSeekrListener>();
 
@@ -274,6 +277,10 @@ public class EventSeekr extends Application {
 		}
 	}
 	
+	public static EventSeekr getEventSeekr() {
+		return eventSeekr;
+	}
+
 	public void registerListener(EventSeekrListener eventSeekrListener) {
 		if (eventSeekrListener != null) {
 			listeners.add(eventSeekrListener);

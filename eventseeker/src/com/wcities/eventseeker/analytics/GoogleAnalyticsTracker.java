@@ -74,11 +74,27 @@ public class GoogleAnalyticsTracker {
 			t.setScreenName(screenName);
 			t.setPage(screenName);
 			t.setTitle(screenName);
-			// Send a screen view.
 			t.send(new HitBuilders.EventBuilder()
 				.setCategory("uiAction")
 				.setAction("buttonPress")
 				.setLabel(label)
+				.build());
+		}
+	}
+	
+	public void sendApiCall(EventSeekr eventSeekr, String url) {
+		//Log.d(TAG, "send screen view");
+		if (url != null) {
+			if (!url.contains("userId=") && eventSeekr.getWcitiesId() != null) {
+				url = url.concat("&userId=").concat(eventSeekr.getWcitiesId());
+			}
+			Tracker t = getTracker(eventSeekr, TrackerName.APP_TRACKER);
+			// Set screen name, where path is a String representing the screen name.
+			t.setScreenName("Api call");
+			t.setPage(url);
+			t.setTitle("Api call");
+			t.send(new HitBuilders.EventBuilder()
+				.setCategory("apiCall")
 				.build());
 		}
 	}
