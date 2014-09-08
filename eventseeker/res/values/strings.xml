@@ -227,7 +227,7 @@
     <string name="add_comment">Add Comment</string>
     <string name="add">Add</string>
     <string name="sending_like_request">Sending like request...</string>
-    <string name="posting_comment">Colocando un comentario...</string>
+    <string name="posting_comment">Posting comment...</string>
     <string name="no_friends_activity_found">No Friends Activity Found.</string>
     
     <!-- RepCodeFragment -->

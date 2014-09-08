@@ -86,7 +86,8 @@ public class GoogleAnalyticsTracker {
 		//Log.d(TAG, "send screen view");
 		if (url != null) {
 			if (!url.contains("userId=") && eventSeekr.getWcitiesId() != null) {
-				url = url.concat("&userId=").concat(eventSeekr.getWcitiesId());
+				String token = (url.contains("?")) ? "&" : "?";
+				url = url.concat(token).concat("userId=").concat(eventSeekr.getWcitiesId());
 			}
 			Tracker t = getTracker(eventSeekr, TrackerName.APP_TRACKER);
 			// Set screen name, where path is a String representing the screen name.
