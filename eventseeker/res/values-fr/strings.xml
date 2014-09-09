@@ -390,8 +390,8 @@
     <string name="not_available">Indisponible</string><!-- Continuation of above -->
     <string name="is_performing_for_this_event">sera sur scène pour cet événement</string>
     <string name="are_performing_for_this_event">seront sur scène pour cet événement</string>
-    <string name="price_would_be">, Prix approximatif : </string>
-    <string name="price_range_would_be">, Fourchette de prix comprise entre</string>
+    <string name="price_would_be">Prix approximatif : </string>
+    <string name="price_range_would_be">Fourchette de prix comprise entre</string>
     <string name="and">et</string>
     
     <!-- MyEventsAL -->

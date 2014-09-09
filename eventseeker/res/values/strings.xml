@@ -413,8 +413,8 @@
     <string name="not_available">not available</string><!-- Continuation of above -->
     <string name="is_performing_for_this_event">is performing for this event</string>
     <string name="are_performing_for_this_event">are performing for this event</string>
-    <string name="price_would_be">, price would be</string>
-    <string name="price_range_would_be">, price range would be approximately between</string>
+    <string name="price_would_be">price would be</string>
+    <string name="price_range_would_be">price range would be approximately between</string>
     <string name="and">and</string>
 
     <!-- MyEventsAL -->

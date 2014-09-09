@@ -297,6 +297,8 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 			showLockScreen();
 			//}
 			
+			/**
+			 * 08-09-2014: This code is commented as for the first release only English Language is needed.
 			try {
 				Language tdkLanguage = proxy.getHmiDisplayLanguage();
 				Locales fordLocale = Locales.getFordLocaleByLanguage(tdkLanguage);
@@ -308,7 +310,12 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 				
 			} catch (SyncException e) {
 				e.printStackTrace();
-			}
+			}*/
+			
+			/**
+			 * 08-09-2014: This line is added for the first release only, as English Language is needed to be set.
+			 **/
+			((EventSeekr) getApplication()).updateFordLocale(Locales.ENGLISH_UNITED_STATES);
 			
 			if (notification.getFirstRun()) {
 				
@@ -668,19 +675,21 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 
 	@Override
 	public void onOnLanguageChange(final OnLanguageChange arg0) {
+		/**
+		 * 08-09-2014: This code is commented as for the first release only English Language is needed.
 		Log.d(TAG, "onOnLanguageChange to " + arg0.getLanguage().name() + ", " + 
 				arg0.getHmiDisplayLanguage().name());
-		/*currentUIActivity.runOnUiThread(new Runnable() {
+		currentUIActivity.runOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
 				Toast.makeText(currentUIActivity, "onOnLanguageChange to " + arg0.getLanguage().name() + ", " + 
 						arg0.getHmiDisplayLanguage().name(), Toast.LENGTH_SHORT).show();
 			}
-		});*/
+		});
 		
 		Language language = arg0.getLanguage();
-		((EventSeekr) getApplication()).updateFordLocale(Locales.getFordLocaleByLanguage(language));
+		((EventSeekr) getApplication()).updateFordLocale(Locales.getFordLocaleByLanguage(language));*/
 	}
 
 	@Override

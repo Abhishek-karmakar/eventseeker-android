@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
@@ -100,6 +101,9 @@ public class EventALUtil {
 				}
 				
 				if (maxPrice != 0) {
+					if (simple.trim().length() != 0) {
+						simple += ", ";
+					}
 					if (maxPrice == minPrice) {
 						simple += app.getResources().getString(R.string.price_would_be) + " " + maxPrice + 
 								" " + currency + ".";
@@ -120,8 +124,7 @@ public class EventALUtil {
 			String notAvail = app.getResources().getString(R.string.not_available);
 			ALUtil.alert(description, notAvail, "", simple);
 			return;
-			
-		} 
+		}
 		/**
 		 * 10-07-2014 : removed the 'plz press voice btn...' text from the details of 1ST EVENT to match
 		 * the functionality similar to IOS Ford eventseeker app.
@@ -131,7 +134,15 @@ public class EventALUtil {
 				app.setFirstEventDetailsForFordEventAL(false);
 			}
 		}*/
-		
+		final String tempsimple = simple;
+		AppLinkService.getInstance().getCurrentActivity().runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				Toast.makeText(AppLinkService.getInstance().getCurrentActivity(), 
+					"Simple : " + tempsimple, 
+					Toast.LENGTH_SHORT).show();
+			}
+		});
 		//Log.d(TAG, "Details : " + simple);
 		Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
 		ALUtil.speakText(ttsChunks);				

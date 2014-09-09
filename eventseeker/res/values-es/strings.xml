@@ -392,8 +392,8 @@
     <string name="not_available">No está disponible</string><!-- Continuation of above -->
     <string name="is_performing_for_this_event">actúa para este evento</string>
     <string name="are_performing_for_this_event">actúan para este evento</string>
-    <string name="price_would_be">, el precio seria</string>
-    <string name="price_range_would_be">, el precio seria entre</string>
+    <string name="price_would_be">el precio seria</string>
+    <string name="price_range_would_be">el precio seria entre</string>
     <string name="and">y</string>
     
     <!-- MyEventsAL -->
