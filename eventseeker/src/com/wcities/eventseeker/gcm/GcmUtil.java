@@ -23,7 +23,6 @@ public class GcmUtil {
 	private static final String TAG = GcmUtil.class.getName();
 	
 	// Default lifespan (7 days) of a reservation until it is considered expired.
-	private static final long REGISTRATION_EXPIRY_TIME_MS = 1000 * 3600 * 24 * 7;
 	
 	private EventSeekr eventSeekr;
 	private GoogleCloudMessaging gcm;
@@ -59,30 +58,26 @@ public class GcmUtil {
 	/**
 	 * Gets the current registration id for application on GCM service.
 	 * <p>
-	 * If result is null, the registration has failed.
+	 * If result is empty, the app needs to register.
 	 *
-	 * @return registration id, or empty string if the registration is not
-	 *         complete.
+	 * @return registration id, or empty string if there is no existing
+	 *         registration ID.
 	 */
 	private String getRegistrationId() {
 	    String gcmRegistrationId = eventSeekr.getGcmRegistrationId();
 	    if (gcmRegistrationId == null) {
-	        Log.v(TAG, "Registration not found.");
+	    	Log.i(TAG, "Registration not found.");
 	        return "";
 	    }
 	    
-	    // check if app was updated; if so, it must clear registration id to
-	    // avoid a race condition if GCM sends a message
+	    // Check if app was updated; if so, it must clear the registration ID
+	    // since the existing regID is not guaranteed to work with the new
+	    // app version.
 	    int registeredVersion = eventSeekr.getAppVersionCode();
 	    int currentVersion = getAppVersion();
 	    if (registeredVersion != currentVersion) {
-	    	Log.v(TAG, "App version changed or registration expired.");
+	    	Log.i(TAG, "App version changed.");
 	    	eventSeekr.updateAppVersionCode(currentVersion);
-	        return "";
-	    }
-	    
-	    if (isRegistrationExpired()) {
-	        Log.v(TAG, "App version changed or registration expired.");
 	        return "";
 	    }
 	    
@@ -103,23 +98,8 @@ public class GcmUtil {
 	    }
 	}
 	
-	/**
-	 * Checks if the registration has expired.
-	 *
-	 * <p>To avoid the scenario where the device sends the registration to the
-	 * server but the server loses it, the app developer may choose to re-register
-	 * after REGISTRATION_EXPIRY_TIME_MS.
-	 *
-	 * @return true if the registration has expired.
-	 */
-	private boolean isRegistrationExpired() {
-	    // checks if the information is not stale
-	    long expirationTime = eventSeekr.getGcmRegistrationExpirationTime();
-	    return System.currentTimeMillis() > expirationTime;
-	}
-	
 	private void register() {
-		Log.d(TAG, "register()");
+		//Log.d(TAG, "register()");
 		
 		try {
             if (gcm == null) {
@@ -152,10 +132,8 @@ public class GcmUtil {
 			registerGcmIdForNotification(eventSeekr.getWcitiesId(), gcmRegistrationId);
 			int appVersion = getAppVersion();
 		    Log.d(TAG, "Saving regId on app version " + appVersion);
-		    long expirationTime = System.currentTimeMillis() + REGISTRATION_EXPIRY_TIME_MS;
-		    Log.d(TAG, "Setting registration expiry time to " + new Timestamp(expirationTime));
 		    
-		    eventSeekr.updateGcmInfo(gcmRegistrationId, appVersion, expirationTime);
+		    eventSeekr.updateGcmInfo(gcmRegistrationId, appVersion);
 		    
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();

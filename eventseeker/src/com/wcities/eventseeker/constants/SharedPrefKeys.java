@@ -10,7 +10,6 @@ public class SharedPrefKeys {
 	public static final String GOOGLE_PLUS_USER_NAME = "gPlusUserName";
 	public static final String GOOGLE_PLUS_EMAIL_ID = "gPlusEmailId";
 	public static final String GCM_REGISTRATION_ID = "gcmRegistrationId";
-	public static final String GCM_REGISTRATION_EXPIRATION_TIME = "gcmRegistrationExpirationTime";
 	
 	public static final String APP_VERSION_CODE = "appVersionCode";
 	public static final String APP_VERSION_CODE_FOR_UPGRADES = "appVersionCodeForUpgrades";

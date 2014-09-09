@@ -80,7 +80,6 @@ public class EventSeekr extends Application {
 
 	private String gcmRegistrationId;
 	private int appVersionCode;
-	private long gcmRegistrationExpirationTime;
 
 	private static final int NOT_INITIALIZED = -1;
 	public static final int UNSYNC_COUNT = -2;
@@ -318,19 +317,15 @@ public class EventSeekr extends Application {
 		listeners.remove(eventSeekrListener);
 	}
 
-	public void updateGcmInfo(String gcmRegistrationId, int appVersionCode,
-			long gcmRegistrationExpirationTime) {
+	public void updateGcmInfo(String gcmRegistrationId, int appVersionCode) {
 		this.gcmRegistrationId = gcmRegistrationId;
 		this.appVersionCode = appVersionCode;
-		this.gcmRegistrationExpirationTime = gcmRegistrationExpirationTime;
 
 		SharedPreferences pref = getSharedPreferences(
 				AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
 		Editor editor = pref.edit();
 		editor.putString(SharedPrefKeys.GCM_REGISTRATION_ID, gcmRegistrationId);
 		editor.putInt(SharedPrefKeys.APP_VERSION_CODE, appVersionCode);
-		editor.putLong(SharedPrefKeys.GCM_REGISTRATION_EXPIRATION_TIME,
-				gcmRegistrationExpirationTime);
 
 		editor.commit();
 	}
@@ -383,28 +378,6 @@ public class EventSeekr extends Application {
 		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
 		Editor editor = pref.edit();
 		editor.putInt(SharedPrefKeys.APP_VERSION_CODE_FOR_UPGRADES, appVersionCodeForUpgrades);
-		editor.commit();
-	}
-
-	public long getGcmRegistrationExpirationTime() {
-		if (gcmRegistrationExpirationTime == 0) {
-			SharedPreferences pref = getSharedPreferences(
-					AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-			gcmRegistrationExpirationTime = pref.getLong(
-					SharedPrefKeys.GCM_REGISTRATION_EXPIRATION_TIME, 0);
-		}
-		return gcmRegistrationExpirationTime;
-	}
-
-	public void updateGcmRegistrationExpirationTime(
-			long gcmRegistrationExpirationTime) {
-		this.gcmRegistrationExpirationTime = gcmRegistrationExpirationTime;
-
-		SharedPreferences pref = getSharedPreferences(
-				AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-		Editor editor = pref.edit();
-		editor.putLong(SharedPrefKeys.GCM_REGISTRATION_EXPIRATION_TIME,
-				gcmRegistrationExpirationTime);
 		editor.commit();
 	}
 
