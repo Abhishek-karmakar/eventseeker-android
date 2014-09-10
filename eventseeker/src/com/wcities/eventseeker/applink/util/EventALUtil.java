@@ -134,6 +134,7 @@ public class EventALUtil {
 				app.setFirstEventDetailsForFordEventAL(false);
 			}
 		}*/
+		/**
 		final String tempsimple = simple;
 		AppLinkService.getInstance().getCurrentActivity().runOnUiThread(new Runnable() {
 			@Override
@@ -142,7 +143,7 @@ public class EventALUtil {
 					"Simple : " + tempsimple, 
 					Toast.LENGTH_SHORT).show();
 			}
-		});
+		});*/
 		//Log.d(TAG, "Details : " + simple);
 		Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
 		ALUtil.speakText(ttsChunks);				
