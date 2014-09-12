@@ -161,19 +161,16 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 	private void addCommands() {
 		//Log.d(TAG, "addCommands");
 		Vector<Command> reqCmds = new Vector<Command>();
-		reqCmds.add(Command.CALL_VENUE);
-		//reqCmds.add(Commands.PLAY);
-		reqCmds.add(Command.DETAILS);
-		reqCmds.add(Command.BACK);
-		reqCmds.add(Command.NEXT);
-		
-		Vector<Command> helpCommands = new Vector<CommandsUtil.Command>(reqCmds);
-		Collections.reverse(helpCommands);
-		
-		//reqCmds.add(Command.SEARCH);
-		reqCmds.add(Command.MY_EVENTS);
 		reqCmds.add(Command.DISCOVER);
-		CommandsUtil.addCommands(reqCmds, helpCommands);	
+		reqCmds.add(Command.MY_EVENTS);
+		//reqCmds.add(Command.SEARCH);
+		reqCmds.add(Command.NEXT);
+		reqCmds.add(Command.BACK);
+		reqCmds.add(Command.DETAILS);
+		//reqCmds.add(Commands.PLAY);
+		reqCmds.add(Command.CALL_VENUE);
+		
+		CommandsUtil.addCommands(reqCmds);	
 	}
 	
 	private Vector<SoftButton> buildSoftButtons() {

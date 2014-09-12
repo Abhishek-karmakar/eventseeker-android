@@ -156,34 +156,29 @@ public class SearchAL extends ESIProxyALM {
 	
 	private void addCommands() {
 		Vector<Command> requiredCmds = new Vector<Command>();
-		requiredCmds.add(Command.CALL_VENUE);
-		//requiredCmds.add(Commands.PLAY);
+		requiredCmds.add(Command.DISCOVER);
+		requiredCmds.add(Command.MY_EVENTS);
+		requiredCmds.add(Command.SEARCH);
+		requiredCmds.add(Command.NEXT);
+		requiredCmds.add(Command.BACK);
+		requiredCmds.add(Command.DETAILS);
 		if (selectedCategoryId == SearchCategories.SEARCH_EVENT.ordinal()) {
 			requiredCmds.add(Command.CALL_VENUE);
 		} else {
 			requiredCmds.add(Command.FOLLOW);			
 		}
-		requiredCmds.add(Command.DETAILS);
-		requiredCmds.add(Command.BACK);
-		requiredCmds.add(Command.NEXT);
+		//requiredCmds.add(Commands.PLAY);
+		requiredCmds.add(Command.CALL_VENUE);
 		
-		Vector<Command> helpCommands = new Vector<CommandsUtil.Command>(requiredCmds);
-		Collections.reverse(helpCommands);
-		
-		requiredCmds.add(Command.SEARCH);
-		requiredCmds.add(Command.MY_EVENTS);
-		requiredCmds.add(Command.DISCOVER);
-		CommandsUtil.addCommands(requiredCmds, helpCommands);
+		CommandsUtil.addCommands(requiredCmds);
 	}
 	
 	private void addCommandsMain() {
 		Vector<Command> reqCmds = new Vector<Command>();
-		reqCmds.add(Command.SEARCH);
-		reqCmds.add(Command.MY_EVENTS);
 		reqCmds.add(Command.DISCOVER);
-		Vector<Command> helpCommands = new Vector<CommandsUtil.Command>(reqCmds);
-		Collections.reverse(helpCommands);
-		CommandsUtil.addCommands(reqCmds, helpCommands);
+		reqCmds.add(Command.MY_EVENTS);
+		reqCmds.add(Command.SEARCH);
+		CommandsUtil.addCommands(reqCmds);
 	}
 	
 	private void loadSearchedEvent() throws IOException {

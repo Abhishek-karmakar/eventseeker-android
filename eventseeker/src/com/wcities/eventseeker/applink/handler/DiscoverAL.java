@@ -124,19 +124,16 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 	
 	private void addCommands() {
 		Vector<Command> requiredCmds = new Vector<Command>();
-		requiredCmds.add(Command.CALL_VENUE);
+		requiredCmds.add(Command.DISCOVER);
+		requiredCmds.add(Command.MY_EVENTS);
+		//requiredCmds.add(Command.SEARCH);
+		requiredCmds.add(Command.NEXT);
+		requiredCmds.add(Command.BACK);
 		//requiredCmds.add(Commands.PLAY);
 		requiredCmds.add(Command.DETAILS);
-		requiredCmds.add(Command.BACK);
-		requiredCmds.add(Command.NEXT);
+		requiredCmds.add(Command.CALL_VENUE);
 		
-		Vector<Command> helpCommands = new Vector<CommandsUtil.Command>(requiredCmds);
-		Collections.reverse(helpCommands);
-		
-		//requiredCmds.add(Command.SEARCH);
-		requiredCmds.add(Command.MY_EVENTS);
-		requiredCmds.add(Command.DISCOVER);
-		CommandsUtil.addCommands(requiredCmds, helpCommands);
+		CommandsUtil.addCommands(requiredCmds);
 	}
 	
 	private Vector<SoftButton> buildSoftButtons() {

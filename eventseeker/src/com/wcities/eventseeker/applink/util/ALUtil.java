@@ -53,6 +53,28 @@ public class ALUtil {
 			e.printStackTrace();
 		}
 	}
+
+	public static void addCommand(Vector<String> vrCommands, int cmdID, int position) {
+		//Log.d(TAG, "Add Command Id is : " + cmdID);
+		AppLinkService appLinkService = AppLinkService.getInstance();
+		
+		AddCommand msg = new AddCommand();
+		msg.setCorrelationID(appLinkService.autoIncCorrId++);
+		msg.setVrCommands(vrCommands);
+		msg.setCmdID(cmdID);
+		
+		MenuParams menuParams = new MenuParams();
+		menuParams.setMenuName(vrCommands.get(0));
+		menuParams.setPosition(position);
+		msg.setMenuParams(menuParams);
+		
+		try {
+			appLinkService.getProxy().sendRPCRequest(msg);
+			
+		} catch (SyncException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public static void deleteCommand(int cmdID) {
 		//Log.d(TAG, "Delete Command Id is : " + cmdID);

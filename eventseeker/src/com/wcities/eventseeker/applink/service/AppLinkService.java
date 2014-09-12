@@ -319,6 +319,17 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 			
 			if (notification.getFirstRun()) {
 				
+				/**
+				 * 11-09-2014:
+				 * This is added as, When app is running on handheld device connected with ford machine and user 
+				 * disconnects the handheld device's blue-tooth (but app is not killed on handheld device) and then 
+				 * reconnects it, then app carries the old state of added commands. So, now app will try to delete 
+				 * all the previously added commands but as the blue-tooth was disconnected this state is not
+				 * maintained by Ford machine and hence when delete command request gets invoked it will give 
+				 * 'INVALID_ID' error and app commands gets unstable.
+				 */
+				Command.reset();
+				
 				if (MainActivity.getInstance() != null) {
 					setCurrentActivity(MainActivity.getInstance());
 				}
@@ -588,7 +599,9 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 			@Override
 			public void run() {
 				Toast.makeText(currentUIActivity, "onAddCommandResponse : " +  
-					"Response : " + response.getResultCode(), Toast.LENGTH_SHORT).show();
+					"info : " + response.getInfo() +
+					"Response : " + response.getResultCode(), Toast.LENGTH_LONG).show();
+				Log.d(TAG, "info : " + response.getInfo() + " Response : " + response.getResultCode());
 			}
 		});*/
 	}
@@ -602,7 +615,9 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 			@Override
 			public void run() {
 				Toast.makeText(currentUIActivity, "onDeleteCommandResponse : " +  
-					"Response : " + response.getResultCode(), Toast.LENGTH_SHORT).show();
+					"info : " + response.getInfo() +
+					"Response : " + response.getResultCode(), Toast.LENGTH_LONG).show();
+				Log.d(TAG, "info : " + response.getInfo() + " Response : " + response.getResultCode());
 			}
 		});*/
 	}
