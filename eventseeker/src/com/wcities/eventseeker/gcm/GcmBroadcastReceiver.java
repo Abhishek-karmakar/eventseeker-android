@@ -65,7 +65,15 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
 		Log.i(TAG, "handleMessage() type: " + type + ", title: " + title + ", notificationId: " + 
 				notificationId + ", msg: " + message);
 		
-		NotificationType notificationType = NotificationType.values()[Integer.parseInt(type)];
+		NotificationType notificationType;
+		int notificationTypeOrdinal = Integer.parseInt(type);
+		if (notificationTypeOrdinal < NotificationType.values().length) {
+			notificationType = NotificationType.values()[notificationTypeOrdinal];
+			
+		} else {
+			Log.e(TAG, "Unknown notification type");
+			return;
+		}
 
 		try {
 			switch (notificationType) {
