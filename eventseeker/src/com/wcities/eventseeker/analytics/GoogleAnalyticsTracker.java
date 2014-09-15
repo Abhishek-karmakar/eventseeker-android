@@ -1,5 +1,7 @@
 package com.wcities.eventseeker.analytics;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 
 import android.content.Intent;
@@ -9,6 +11,7 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.constants.AppConstants;
 
 public class GoogleAnalyticsTracker {
 	
@@ -82,21 +85,30 @@ public class GoogleAnalyticsTracker {
 		}
 	}
 	
-	public void sendApiCall(EventSeekr eventSeekr, String url) {
+	public void sendApiCall(EventSeekr eventSeekr, String url, byte[] postData) {
 		//Log.d(TAG, "send screen view");
-		if (url != null) {
-			if (eventSeekr.getWcitiesId() != null) {
-				String token = (url.contains("?")) ? "&" : "?";
-				url = url.concat(token).concat("_u=").concat(eventSeekr.getWcitiesId());
+		try {
+			if (url != null) {
+				if (postData != null) {
+					String token = (url.contains("?")) ? "&" : "?";
+					url = url.concat(token).concat(URLDecoder.decode(new String(postData), AppConstants.CHARSET_NAME));
+				}
+				if (eventSeekr.getWcitiesId() != null) {
+					String token = (url.contains("?")) ? "&" : "?";
+					url = url.concat(token).concat("_u=").concat(eventSeekr.getWcitiesId());
+				}
+				Tracker t = getTracker(eventSeekr, TrackerName.APP_TRACKER);
+				// Set screen name, where path is a String representing the screen name.
+				t.setScreenName("Api call");
+				t.setPage(url);
+				t.setTitle("Api call");
+				t.send(new HitBuilders.EventBuilder()
+					.setCategory("apiCall")
+					.build());
 			}
-			Tracker t = getTracker(eventSeekr, TrackerName.APP_TRACKER);
-			// Set screen name, where path is a String representing the screen name.
-			t.setScreenName("Api call");
-			t.setPage(url);
-			t.setTitle("Api call");
-			t.send(new HitBuilders.EventBuilder()
-				.setCategory("apiCall")
-				.build());
+			
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
 		}
 	}
 	

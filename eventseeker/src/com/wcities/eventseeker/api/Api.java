@@ -129,7 +129,7 @@ public abstract class Api {
 		 * using setLocale method.
 		 */
 		addLangParam();
-		GoogleAnalyticsTracker.getInstance().sendApiCall(EventSeekr.getEventSeekr(), uri);
+		GoogleAnalyticsTracker.getInstance().sendApiCall(EventSeekr.getEventSeekr(), uri, data);
 
 		JSONObject jsonObject;
 		URL url = new URL(uri);
