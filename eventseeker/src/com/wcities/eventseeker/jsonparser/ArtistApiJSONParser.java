@@ -140,8 +140,13 @@ public class ArtistApiJSONParser {
 					JSONArray jArrFriends = jObjArtist.getJSONArray(KEY_FRIENDS);
 					
 					for (int i = 0; i < jArrFriends.length(); i++) {
-						Friend friend = getFriend(jArrFriends.getJSONObject(i));
-						friends.add(friend);
+						try {
+							Friend friend = getFriend(jArrFriends.getJSONObject(i));
+							friends.add(friend);
+							
+						} catch (JSONException e) {
+							continue;
+						}
 					}
 				}
 				artist.setFriends(friends);
@@ -253,8 +258,13 @@ public class ArtistApiJSONParser {
 					JSONArray jArrFriends = jObjArtist.getJSONArray(KEY_FRIENDS);
 					
 					for (int i = 0; i < jArrFriends.length(); i++) {
-						Friend friend = getFriend(jArrFriends.getJSONObject(i));
-						friends.add(friend);
+						try {
+							Friend friend = getFriend(jArrFriends.getJSONObject(i));
+							friends.add(friend);
+							
+						} catch (JSONException e) {
+							continue;
+						}
 					}
 					artistDetails.followingFriends = friends;
 				}
