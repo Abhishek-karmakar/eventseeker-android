@@ -106,10 +106,16 @@ public class BoschSearchResultFragment extends BoschFragmentLoadableFromBackStac
 
 	@Override
 	public void onResume() {
+		/*****************
+		 * 16-09-2014: Now city name is not required in the ActionBar as per the conversation with Amir Sir 
+		 * and suggested in the EventSeeker Bosch app issues mail(on 09-09-2014, issue no.23). 
+		 * Hence, the below 2 lines are commented and if in future it is required then just uncomment these 
+		 * commented lines.
+		 ****************** 
 		cityName = EventSeekr.getCityName();
 		if (cityName == null) {
 			GeoUtil.getCityName(this, FragmentUtil.getActivity(this));
-		}
+		}*/
 		super.onResume(AppConstants.INVALID_INDEX, buildTitle());
 	}
 

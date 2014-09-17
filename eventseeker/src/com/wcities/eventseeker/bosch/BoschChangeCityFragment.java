@@ -252,6 +252,9 @@ public class BoschChangeCityFragment extends BoschFragmentLoadableFromBackStack 
 	public void onLatlngSearchCompleted(Address address) {
 		if (address != null) {
 			onAddressUpdated(address);
+		
+		} else {
+			((BoschMainActivity) FragmentUtil.getActivity(this)).showBoschDialog("City not found.");
 		}
 	}
 
@@ -260,6 +263,7 @@ public class BoschChangeCityFragment extends BoschFragmentLoadableFromBackStack 
 			edtCity.setBackgroundResource(R.drawable.bg_edt_search_night_mode);
 			edtCity.setTextColor(getResources().getColor(android.R.color.white));
 			edtCity.setHintTextColor(getResources().getColor(android.R.color.white));
+		
 		} else {
 			edtCity.setBackgroundResource(R.drawable.bg_edt_search);
 			edtCity.setTextColor(getResources().getColor(R.color.eventseeker_bosch_theme_grey));			

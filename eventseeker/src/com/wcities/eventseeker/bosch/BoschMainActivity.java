@@ -96,7 +96,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+		//Log.d(TAG, "onCreate()");
 		if (/*MySpinServerSDK.sharedInstance().isConnected()*/!EventSeekr.isConnectedWithBosch()) {
 			Intent intent = new Intent(getApplicationContext(), MainActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -233,6 +233,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	@Override
 	protected void onStart() {
 		super.onStart();
+		//Log.d(TAG, "onStart()");
 		DeviceUtil.registerLocationListener(this);
 		EventSeekr.setConnectionFailureListener(this);
 	}
@@ -240,8 +241,9 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	@Override
 	protected void onStop() {
 		super.onStop();
+		//Log.d(TAG, "onStop()");
 		DeviceUtil.unregisterLocationListener((EventSeekr) getApplication());
-		EventSeekr.setConnectionFailureListener(null);
+		EventSeekr.resetConnectionFailureListener(this);
 		if (!isBoschActivityDestroying) {
 			((EventSeekr) getApplication()).resetDefaultLocale();
 		}
@@ -255,7 +257,8 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	
 	@Override
 	protected void onDestroy() {
-		EventSeekr.setConnectionFailureListener(null);
+		//Log.d(TAG, "onDestroy()");
+		EventSeekr.resetConnectionFailureListener(this);
 		MySpinServerSDK.sharedInstance().unregisterForPhoneCallStateEvents();
 		try {
 			// calling 'super.onDestroy()' in try catch as some times it gives no view found error while destroying

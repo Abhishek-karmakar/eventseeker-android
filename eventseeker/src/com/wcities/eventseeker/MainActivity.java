@@ -144,9 +144,7 @@ public class MainActivity extends ActionBarActivity implements
 		 * the Device specific Locale. So, each and every time when activity gets initialized it should
 		 * also initialize its Locale from SharedPref.
 		 */
-		Log.d(TAG, "onCreate()");
 		((EventSeekr) getApplication()).setDefaultLocale();
-		Log.d(TAG, "onCreate()");
 		
 		UpdateAppUtil.updateCheckes((EventSeekr) getApplication());
 
@@ -421,8 +419,8 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onStop() {
 		super.onStop();
 		//Log.d(TAG, "onStop()");
-
-		EventSeekr.setConnectionFailureListener(null);
+		
+		EventSeekr.resetConnectionFailureListener(this);
 		DeviceUtil.unregisterLocationListener((EventSeekr) getApplication());
 		handler.removeCallbacks(periodicCheckForBoschConnection);
 	}

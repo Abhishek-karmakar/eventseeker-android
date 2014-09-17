@@ -488,7 +488,7 @@
     <dimen name="b_txt_category_txt_size_bosch_grid_category">13sp</dimen>
     <!-- bosch_fragment_discover_by_category_list_item_header.xml -->
     <dimen name="b_txt_date_pad_bosch_fragment_discover_by_category_list_item_header">1dp</dimen>
-    <dimen name="b_txt_date_txt_size_bosch_fragment_discover_by_category_list_item_header">10sp</dimen>
+    <dimen name="b_txt_date_txt_size_bosch_fragment_discover_by_category_list_item_header">12sp</dimen>
     <!-- bosch_fragment_discover_by_category_list_item_evt.xml -->
     <dimen name="b_rlt_layout_root_pad_t_bosch_fragment_discover_by_category_list_item_evt">3dp</dimen>
     <dimen name="b_img_event_w_bosch_fragment_discover_by_category_list_item_evt">56dp</dimen>

@@ -167,6 +167,12 @@ public class EventSeekr extends Application {
 		EventSeekr.connectionFailureListener = connectionFailureListener;
 	}
 
+	public static void resetConnectionFailureListener(ConnectionFailureListener connectionFailureListener) {
+		if (EventSeekr.connectionFailureListener == connectionFailureListener) {
+			EventSeekr.connectionFailureListener = null;
+		}
+	}
+
 	/**
 	 * @return null, if app is connected to bosch & car is in moving mode, so that based on current lat-lng
 	 * cityname has to be derived by caller; otherwise it returns last cityname set.
