@@ -260,6 +260,19 @@ public class EventseekerWidgetProvider extends AppWidgetProvider {
 		
 		Intent mainActivityIntent = new Intent(context, MainActivity.class);
 		mainActivityIntent.putExtra(BundleKeys.EVENT, event);
+		/**
+		 * 18-09-2014: See Commit: removed launchmode=singletask due to error in Bosch
+		 * NOTE: added Action and Category of Launcher Activity for notification Intent so as to avoid
+		 * creating 2 new task for notification and app launch event(when from app menu).
+		 * For getting this issue, remove the below 2 lines and follow steps below:
+		 * e.g.:- Launch app -> sync accounts -> get notification of NotificationType=FOLLOWING -> click on it.
+		 *	      It redirects to 'following' screen -> press back to move out of app. Now from home screen click 
+		 *	      app icon. It displays discover screen rather then last 'following' screen which was browsed. Same result
+		 *	      can be observed now onwards for every launch. This happens due to onCreate() being called up on every 
+		 *	      launch after this, even though one task is there in back stack for the app.
+		 **/
+		mainActivityIntent.setAction(Intent.ACTION_MAIN);
+		mainActivityIntent.addCategory(Intent.CATEGORY_LAUNCHER);
 		mainActivityIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		PendingIntent pendingIntent = PendingIntent.getActivity(context, eventseekerWidget.getWidgetId(), 
 				mainActivityIntent, PendingIntent.FLAG_CANCEL_CURRENT);

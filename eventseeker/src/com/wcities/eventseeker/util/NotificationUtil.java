@@ -54,6 +54,19 @@ public class NotificationUtil {
 		//Log.d(TAG, "addNotification() Message: " + message);
 		String title = context.getString(R.string.app_name);
 		Intent notificationIntent = new Intent(context, MainActivity.class);
+		/**
+		 * 18-09-2014: See Commit: removed launchmode=singletask due to error in Bosch
+		 * NOTE: added Action and Category of Launcher Activity for notification Intent so as to avoid
+		 * creating 2 new task for notification and app launch event(when from app menu).
+		 * For getting this issue, remove the below 2 lines and follow steps below:
+		 * e.g.:- Launch app -> sync accounts -> get notification of NotificationType=FOLLOWING -> click on it.
+		 *	      It redirects to 'following' screen -> press back to move out of app. Now from home screen click 
+		 *	      app icon. It displays discover screen rather then last 'following' screen which was browsed. Same result
+		 *	      can be observed now onwards for every launch. This happens due to onCreate() being called up on every 
+		 *	      launch after this, even though one task is there in back stack for the app.
+		 **/
+		notificationIntent.setAction(Intent.ACTION_MAIN);
+		notificationIntent.addCategory(Intent.CATEGORY_LAUNCHER);
 		notificationIntent.putExtra(BundleKeys.NOTIFICATION_TYPE, notificationType);
 		if (notificationType == NotificationType.EVENT_DETAILS) {
 			notificationIntent.putExtra(BundleKeys.EVENT, event);
