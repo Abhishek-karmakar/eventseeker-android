@@ -665,5 +665,9 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		
 		dialog.show();
 	}
+
+	public void setMarqueeEnabledActionBar(boolean isEnabled) {
+		txtActionBarTitle.setSelected(isEnabled);
+	}
 	
 }

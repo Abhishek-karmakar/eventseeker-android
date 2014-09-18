@@ -137,6 +137,13 @@ public class BoschEventDetailsFragment extends BoschFragmentLoadableFromBackStac
 	@Override
 	public void onResume() {
 		super.onResume(AppConstants.INVALID_INDEX, event.getName());
+		((BoschMainActivity) FragmentUtil.getActivity(this)).setMarqueeEnabledActionBar(true);
+	}
+	
+	@Override
+	public void onStop() {
+		super.onStop();
+		((BoschMainActivity) FragmentUtil.getActivity(this)).setMarqueeEnabledActionBar(false);
 	}
 	
 	@Override
