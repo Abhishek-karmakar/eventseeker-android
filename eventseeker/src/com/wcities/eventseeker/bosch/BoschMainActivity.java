@@ -97,17 +97,21 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//Log.d(TAG, "onCreate()");
-		if (/*MySpinServerSDK.sharedInstance().isConnected()*/!EventSeekr.isConnectedWithBosch()) {
-			Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-			startActivity(intent);
-			isBoschActivityDestroying = true;
-		}
-		
 		setContentView(R.layout.activity_bosch_main);
 		
-		MySpinServerSDK.sharedInstance().registerForPhoneCallStateEvents(iPhoneCallStateListener);
-
+		/**
+		 * Note: the below try catch is added to avoid crash, When User is connected to Bosch then 
+		 * sometime app crashes with following Exception:
+		 * Caused by: java.lang.NullPointerException
+		 * at com.bosch.myspin.serversdk.MySpinServerSDK.registerForPhoneCallStateEvents(SourceFile:494)
+		 */
+		try {
+			MySpinServerSDK.sharedInstance().registerForPhoneCallStateEvents(iPhoneCallStateListener);
+			
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
+		
 		EventSeekr.setConnectionFailureListener(this);
 		
 		initializeCurrentProximityUnitForBosch();
@@ -234,6 +238,13 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	protected void onStart() {
 		super.onStart();
 		//Log.d(TAG, "onStart()");
+		if (/*MySpinServerSDK.sharedInstance().isConnected()*/!EventSeekr.isConnectedWithBosch()) {
+			Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+			startActivity(intent);
+			isBoschActivityDestroying = true;
+		}
+		
 		DeviceUtil.registerLocationListener(this);
 		EventSeekr.setConnectionFailureListener(this);
 	}
