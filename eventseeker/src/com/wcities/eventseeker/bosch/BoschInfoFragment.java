@@ -22,6 +22,7 @@ import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Venue;
+import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschInfoFragment extends BoschFragmentLoadableFromBackStack implements View.OnClickListener, 
 		OnCarStationaryStatusChangedListener, OnDisplayModeChangedListener {
@@ -129,6 +130,8 @@ public class BoschInfoFragment extends BoschFragmentLoadableFromBackStack implem
 	
 	private void updateDescriptionLines() {
 		if (AppConstants.IS_CAR_STATIONARY) {
+			((BoschMainActivity)FragmentUtil.getActivity(this)).dismissDialog();
+			
 			txtDescription.setMaxLines(Integer.MAX_VALUE);
 			//txtDescription.setEllipsize(null);
 			txtDescription.setText(Html.fromHtml(fullDescription));
@@ -149,11 +152,13 @@ public class BoschInfoFragment extends BoschFragmentLoadableFromBackStack implem
 			        obs.removeGlobalOnLayoutListener(this);
 			        if (txtDescription.getLineCount() > maxLines) {
 			            int lineEndIndex = txtDescription.getLayout().getLineEnd(maxLines - 1);
-			            String text = txtDescription.getText().subSequence(0, lineEndIndex-3) +"...";
+			            String text = txtDescription.getText().subSequence(0, lineEndIndex-3) + "...";
 			            txtDescription.setText(text);
 			        }
 		        }
 		    });
+		    
+		    ((BoschMainActivity) FragmentUtil.getActivity(this)).showBoschDialog("Text cannot be read while driving.");
 		}
 	}
 	

@@ -66,6 +66,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 
 	private TextView txtActionBarTitle;
 	private FrameLayout frmLayoutContentFrame;
+	private AlertDialog dialog;
 	
 	/**
 	 * This will keep track if the BoschMainActivity is being destroyed.
@@ -84,6 +85,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			}
 		}
 	};
+
 
 	public interface OnCarStationaryStatusChangedListener {
 		public void onCarStationaryStatusChanged(boolean isStationary);
@@ -550,12 +552,16 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	}
 
 	public void showBoschDialog(String msg) {
+		if (dialog != null && dialog.isShowing()) {
+			return;
+		}
+		
 		View view = LayoutInflater.from(this).inflate(R.layout.bosch_element_alert_dialog, null);
 		
 		((TextView)view.findViewById(R.id.txtTitle)).setText(msg);
 
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-		Dialog dialog = alertDialog.setCustomTitle(view).setCancelable(false)
+		dialog = alertDialog.setCustomTitle(view).setCancelable(false)
 			.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				dialog.dismiss();
@@ -570,6 +576,12 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		}
 		
 		dialog.show();
+	}
+	
+	public void dismissDialog() {
+		if (dialog != null && dialog.isShowing()) {
+			dialog.dismiss();
+		}
 	}
 	
 	private void selfStart() {
