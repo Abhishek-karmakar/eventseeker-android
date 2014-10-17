@@ -1,11 +1,9 @@
 package com.wcities.eventseeker.applink.handler;
 
-import java.util.Collections;
 import java.util.Vector;
 
 import android.util.Log;
 
-import com.ford.syncV4.proxy.rpc.OnCommand;
 import com.ford.syncV4.proxy.rpc.SoftButton;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -32,18 +30,6 @@ public class MainAL extends ESIProxyALM {
 		this.context = context;
 	}
 
-	@Override
-	public void onOnCommand(OnCommand notification) {
-		/************************************************
-		 * NOTE:notification.getCmdID() is not working. *
-		 * So, we have used the alternative for the same*
-		 ************************************************/
-		int cmdId = Integer.parseInt(notification.getParameters("cmdID").toString());
-		//Log.d(TAG, "onOnCommand, cmdId = " + cmdId);
-		Command cmd = Command.getCommandById(/*notification.getCmdID()*/cmdId);
-		performOperationForCommand(cmd);
-	}
-	
 	@Override
 	public void onStartInstance() {
 		addCommands();

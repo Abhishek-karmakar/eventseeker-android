@@ -1,8 +1,6 @@
 package com.wcities.eventseeker.applink.handler;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
@@ -13,7 +11,6 @@ import org.json.JSONObject;
 import android.util.Log;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
-import com.ford.syncV4.proxy.rpc.Choice;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
 import com.ford.syncV4.proxy.rpc.SoftButton;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
@@ -29,6 +26,7 @@ import com.wcities.eventseeker.applink.util.ALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil.Command;
 import com.wcities.eventseeker.applink.util.EventALUtil;
+import com.wcities.eventseeker.applink.util.InteractionChoiceSetUtil.ChoiceSet;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.ItemsList;
@@ -38,7 +36,6 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 
 	private static final String TAG = MyEventsAL.class.getName();
 	private static final int START_CHOICE_ID_SUGGESTION_REPLY = 1;
-	private static final int CHOICE_SET_ID_SUGGESTION_REPLY = 1;
 	
 	private static MyEventsAL instance;
 
@@ -47,7 +44,7 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 	private double lat, lon;
 	private Type type;
 	
-	private static enum SuggestionReply {
+	public static enum SuggestionReply {
 		Yes(START_CHOICE_ID_SUGGESTION_REPLY, R.string.my_events_al_yes),
 		No(START_CHOICE_ID_SUGGESTION_REPLY + 1, R.string.my_events_al_no);
 		
@@ -112,26 +109,12 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 	}
 	
 	private void onNoMyEventsFound() {
-		initializeInteractionChoiceSet();
 		performInteraction();
-	}
-	
-	private void initializeInteractionChoiceSet() {
-		Vector<Choice> choices = new Vector<Choice>();
-		SuggestionReply[] categories = SuggestionReply.values();
-		for (int i = 0; i < categories.length; i++) {
-			SuggestionReply category = categories[i];
-			Choice choice = ALUtil.createChoice(category.getId(), category.getName(), 
-					new Vector<String>(Arrays.asList(new String[] {category.getName()})));
-			choices.add(choice);
-		}
-
-		ALUtil.createInteractionChoiceSet(choices, CHOICE_SET_ID_SUGGESTION_REPLY);
 	}
 	
 	private void performInteraction() {
 		Vector<Integer> interactionChoiceSetIDList = new Vector<Integer>();
-		interactionChoiceSetIDList.add(CHOICE_SET_ID_SUGGESTION_REPLY);
+		interactionChoiceSetIDList.add(ChoiceSet.SUGGESTION_REPLY.ordinal());
 		
 		String simple = AppLinkService.getInstance().getString(R.string.my_events_al_no_evts_avail_make_suggestions);
 		String initialText = mEventSeekr.getResources().getString(R.string.my_events_al_confirmation);	

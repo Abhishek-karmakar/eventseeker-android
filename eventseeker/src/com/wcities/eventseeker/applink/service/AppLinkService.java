@@ -83,6 +83,7 @@ import com.wcities.eventseeker.applink.handler.MyEventsAL;
 import com.wcities.eventseeker.applink.handler.SearchAL;
 import com.wcities.eventseeker.applink.util.ALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil.Command;
+import com.wcities.eventseeker.applink.util.InteractionChoiceSetUtil;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.util.DeviceUtil;
 
@@ -261,6 +262,10 @@ public class AppLinkService extends Service implements IProxyListenerALM {
    	}
 	
 	public void onOnHMIStatus(final OnHMIStatus notification) {
+		if (esIProxyALM != null) {
+			esIProxyALM.onOnHMIStatus(notification);
+		}
+		
 		switch (notification.getSystemContext()) {
 		case SYSCTXT_MAIN:
 			break;
@@ -329,6 +334,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 				 * 'INVALID_ID' error and app commands gets unstable.
 				 */
 				Command.reset();
+				InteractionChoiceSetUtil.createInteractionChoiceSets();
 				
 				if (MainActivity.getInstance() != null) {
 					setCurrentActivity(MainActivity.getInstance());
@@ -493,6 +499,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	}
 
 	public void onCreateInteractionChoiceSetResponse(CreateInteractionChoiceSetResponse response) {
+		esIProxyALM.onCreateInteractionChoiceSetResponse(response);
 		/*Log.d(TAG, "onCreateInteractionChoiceSetResponse(), response: " + response.getInfo() + ", " 
 				+ response.getMessageType() + ", " + response.getResultCode());*/
 	}
@@ -595,34 +602,22 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	public void onGenericResponse(GenericResponse response) {}
 
 	public void onAddCommandResponse(final AddCommandResponse response) {
-		/*currentUIActivity.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				Toast.makeText(currentUIActivity, "onAddCommandResponse : " +  
-					"info : " + response.getInfo() +
-					"Response : " + response.getResultCode(), Toast.LENGTH_LONG).show();
-				Log.d(TAG, "info : " + response.getInfo() + " Response : " + response.getResultCode());
-			}
-		});*/
+		esIProxyALM.onAddCommandResponse(response);
 	}
 	
 	public void onAddSubMenuResponse(AddSubMenuResponse response) {}
 
-	public void onAlertResponse(AlertResponse response) {}
-	
-	public void onDeleteCommandResponse(final DeleteCommandResponse response) {
-		/*currentUIActivity.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				Toast.makeText(currentUIActivity, "onDeleteCommandResponse : " +  
-					"info : " + response.getInfo() +
-					"Response : " + response.getResultCode(), Toast.LENGTH_LONG).show();
-				Log.d(TAG, "info : " + response.getInfo() + " Response : " + response.getResultCode());
-			}
-		});*/
+	public void onAlertResponse(AlertResponse response) {
+		esIProxyALM.onAlertResponse(response);
 	}
 	
-	public void onDeleteInteractionChoiceSetResponse(DeleteInteractionChoiceSetResponse response) {}
+	public void onDeleteCommandResponse(final DeleteCommandResponse response) {
+		esIProxyALM.onDeleteCommandResponse(response);
+	}
+	
+	public void onDeleteInteractionChoiceSetResponse(DeleteInteractionChoiceSetResponse response) {
+		esIProxyALM.onDeleteInteractionChoiceSetResponse(response);
+	}
 	
 	public void onDeleteSubMenuResponse(DeleteSubMenuResponse response) {}
 	
@@ -767,6 +762,9 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 			
 		} else {
 			isVehicleDataSubscribed = false;
+		}
+		if (esIProxyALM != null) {
+			esIProxyALM.onSubscribeVehicleDataResponse(arg0);
 		}
 		/*currentUIActivity.runOnUiThread(new Runnable() {
 			

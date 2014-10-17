@@ -1,9 +1,7 @@
 package com.wcities.eventseeker.applink.handler;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
@@ -14,16 +12,9 @@ import org.json.JSONObject;
 import android.util.Log;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
-import com.ford.syncV4.proxy.rpc.Choice;
-import com.ford.syncV4.proxy.rpc.EncodedSyncPDataResponse;
-import com.ford.syncV4.proxy.rpc.OnEncodedSyncPData;
-import com.ford.syncV4.proxy.rpc.OnSyncPData;
-import com.ford.syncV4.proxy.rpc.OnTBTClientState;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
 import com.ford.syncV4.proxy.rpc.SoftButton;
-import com.ford.syncV4.proxy.rpc.SyncPDataResponse;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
-import com.wcities.eventseeker.MainActivity;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.EventApi;
@@ -37,6 +28,7 @@ import com.wcities.eventseeker.applink.util.ALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil.Command;
 import com.wcities.eventseeker.applink.util.EventALUtil;
+import com.wcities.eventseeker.applink.util.InteractionChoiceSetUtil.ChoiceSet;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.ItemsList;
@@ -48,12 +40,11 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 	private static final String TAG = DiscoverAL.class.getName();
 	
 	private static final int CHOICE_CATEGORIES_DISCOVER_AL = 1000;
-	private static final int CHOICE_SET_ID_DISCOVER = 0;
 	
 	private static final int MIN_MILES = 25;
 	private static final int MAX_MILES = 100;
 	
-	private static enum Discover {
+	public static enum Discover {
 		Concerts(CHOICE_CATEGORIES_DISCOVER_AL, 900, R.string.discover_al_concerts),
 		Clubs(CHOICE_CATEGORIES_DISCOVER_AL + 1, 905, R.string.discover_al_clubs),
 		Sports(CHOICE_CATEGORIES_DISCOVER_AL + 2, 902, R.string.discover_al_sports),
@@ -115,7 +106,6 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 	public void onStartInstance() {
 		//Log.d(TAG, "onStartInstance()");
 		reset();
-		initializeInteractionChoiceSets();
 		performInteraction();		
 		addCommands();
 		Vector<SoftButton> softBtns = buildSoftButtons();
@@ -143,32 +133,12 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		return softBtns;
 	}
 
-	private void initializeInteractionChoiceSets() {
-		//Log.d(TAG, "initializeInteractionChoiceSets()");
-
-		Vector<Choice> choices = new Vector<Choice>();
-		
-		Discover[] categories = Discover.values();
-		for (int i = 0; i < categories.length; i++) {
-			Discover category = categories[i];
-			
-			//Log.d(TAG, "Category id : " + category.getId());
-			//Log.d(TAG, "Category nameResId : " + category.getName());
-			
-			Choice choice = ALUtil.createChoice(category.getId(), category.getName(), 
-					new Vector<String>(Arrays.asList(new String[] {category.getName()})));
-			choices.add(choice);
-		}
-
-		ALUtil.createInteractionChoiceSet(choices, CHOICE_SET_ID_DISCOVER);
-	}
-	
 	private void performInteraction() {
 		//Log.d(TAG, "performInteraction()");
 		//Log.d(TAG, "Discover ordinal : " + CHOICE_SET_ID_DISCOVER);
 		
 		Vector<Integer> interactionChoiceSetIDList = new Vector<Integer>();
-		interactionChoiceSetIDList.add(CHOICE_SET_ID_DISCOVER);
+		interactionChoiceSetIDList.add(ChoiceSet.DISCOVER.ordinal());
 		
 		String simple = context.getResources().getString(R.string.discover_al_discover_categories);
 		String initialText = context.getResources().getString(R.string.discover_al_discover);		
@@ -183,6 +153,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 	
 	@Override
 	public void onPerformInteractionResponse(final PerformInteractionResponse response) {
+		super.onPerformInteractionResponse(response);
 		//Log.i(TAG, "onPerformInteractionResponse(), response.getChoiceID() = " + response.getChoiceID());
 		if (response == null || response.getChoiceID() == null) {
 			/**

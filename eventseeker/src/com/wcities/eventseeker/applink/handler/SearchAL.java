@@ -3,9 +3,7 @@ package com.wcities.eventseeker.applink.handler;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
@@ -18,7 +16,6 @@ import android.util.Log;
 
 import com.ford.syncV4.exception.SyncException;
 import com.ford.syncV4.proxy.TTSChunkFactory;
-import com.ford.syncV4.proxy.rpc.Choice;
 import com.ford.syncV4.proxy.rpc.OnAudioPassThru;
 import com.ford.syncV4.proxy.rpc.PerformAudioPassThruResponse;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
@@ -44,6 +41,7 @@ import com.wcities.eventseeker.applink.util.ALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil.Command;
 import com.wcities.eventseeker.applink.util.EventALUtil;
+import com.wcities.eventseeker.applink.util.InteractionChoiceSetUtil.ChoiceSet;
 import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
@@ -57,7 +55,6 @@ import com.wcities.eventseeker.util.ConversionUtil;
 public class SearchAL extends ESIProxyALM {
 
 	private static final String TAG = SearchAL.class.getSimpleName();
-	private static final int CHOICE_SET_ID_SEARCH = 3;
 	private static final int EVENTS_LIMIT = 10;
 	private static final int MILES_LIMIT = 10000;
 	private static final int ARTISTS_LIMIT = 10;
@@ -113,28 +110,7 @@ public class SearchAL extends ESIProxyALM {
 		//search_events_or_artists
 		//Log.d(TAG, "onStartInstance()");
 		reset();
-		initializeInteractionChoiceSets();
 		performInteraction();		
-	}
-	
-	private void initializeInteractionChoiceSets() {
-		//Log.d(TAG, "initializeInteractionChoiceSets()");
-
-		Vector<Choice> choices = new Vector<Choice>();
-		
-		SearchCategories[] categories = SearchCategories.values();
-		for (int i = 0; i < categories.length; i++) {
-			SearchCategories category = categories[i];
-			
-			//Log.d(TAG, "Category id : " + category.ordinal());
-			//Log.d(TAG, "Category nameResId : " + category.getNameResId());
-			
-			Choice choice = ALUtil.createChoice(category.ordinal(), category.getNameResId(), 
-					new Vector<String>(Arrays.asList(new String[] {category.getNameResId()})));
-			choices.add(choice);
-		}
-
-		ALUtil.createInteractionChoiceSet(choices, CHOICE_SET_ID_SEARCH);
 	}
 	
 	private void performInteraction() {
@@ -142,7 +118,7 @@ public class SearchAL extends ESIProxyALM {
 		//Log.d(TAG, "Searchordinal : " + CHOICE_SET_ID_SEARCH);
 		
 		Vector<Integer> interactionChoiceSetIDList = new Vector<Integer>();
-		interactionChoiceSetIDList.add(CHOICE_SET_ID_SEARCH);
+		interactionChoiceSetIDList.add(ChoiceSet.SEARCH.ordinal());
 		
 		String simple = AppLinkService.getInstance().getString(R.string.search_events_or_artists);
 		String initialText = context.getResources().getString(R.string.search_for);		
@@ -266,6 +242,7 @@ public class SearchAL extends ESIProxyALM {
 	@Override
 	public void onPerformInteractionResponse(PerformInteractionResponse response) {
 		//Log.d(TAG, "onPerformInteractionResponse(), response.getChoiceID() = " + response.getChoiceID());
+		super.onPerformInteractionResponse(response);
 		
 		if (response == null || response.getChoiceID() == null) {
 			/**
