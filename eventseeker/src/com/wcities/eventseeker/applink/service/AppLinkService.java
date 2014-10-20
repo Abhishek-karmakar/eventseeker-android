@@ -487,7 +487,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 		 * {"notification": {"name": "OnCommand", "parameters": {"cmdID": "3", "triggerSource": "MENU"}}}
 		 */
 		//int cmdId = Integer.parseInt(notification.getParameters("cmdID").toString());
-		//esIProxyALM.onOnCommand(notification);
+		esIProxyALM.onOnCommand(notification);
 		/************************************************
 		 * NOTE:notification.getCmdID() is not working. *
 		 * So, we have used the alternative for the same*
