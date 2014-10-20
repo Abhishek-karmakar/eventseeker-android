@@ -231,6 +231,8 @@ public class DrawerListFragment extends ListFragment {
 					listItemViewHolder.vSectionDivider.setVisibility(View.GONE);
 				}
 				
+				listItemViewHolder.imgIcon.setImageDrawable(drawerListItem.iconDrawable);
+
 				if (((ListView)parent).getCheckedItemPosition() == position) {
 					convertView.setBackgroundColor(mainActivity.get().getResources().getColor(R.color.font_blue));
 					listItemViewHolder.txtTitle.setTextColor(mainActivity.get().getResources().getColor(android.R.color.white));
@@ -241,8 +243,6 @@ public class DrawerListFragment extends ListFragment {
 					listItemViewHolder.txtTitle.setTextColor(mainActivity.get().getResources().getColor(R.color.darker_gray));
 					listItemViewHolder.imgIcon.setSelected(false);
 				}
-				
-				listItemViewHolder.imgIcon.setImageDrawable(drawerListItem.iconDrawable);
 			}
 			listItemViewHolder.txtTitle.setText(drawerListItem.title);
 			
