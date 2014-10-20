@@ -12,6 +12,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -240,9 +241,7 @@ public class AddressMapFragment extends SupportMapFragment implements GeoUtilLis
     	LatLng latLng = new LatLng(lat, lon);
     	mMap.clear();
     	mMap.addMarker(new MarkerOptions().position(latLng));
-    	
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-    	mMap.animateCamera(CameraUpdateFactory.zoomTo(14), 1, null);
+    	mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14), 100, null);
     	
     	if (drawDrivingDirection) {
     		new GetDrivingDirection().execute();
