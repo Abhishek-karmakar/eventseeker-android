@@ -27,6 +27,7 @@ import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.bosch.BoschDrawerListFragment.BoschDrawerListFragmentListener;
 import com.wcities.eventseeker.bosch.BoschMainActivity.OnCarStationaryStatusChangedListener;
+import com.wcities.eventseeker.bosch.BoschMainActivity.OnKeyboardVisibilityStateChangedListener;
 import com.wcities.eventseeker.bosch.custom.fragment.BoschFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.bosch.interfaces.BoschEditTextListener;
 import com.wcities.eventseeker.constants.AppConstants;
@@ -36,7 +37,8 @@ import com.wcities.eventseeker.util.GeoUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
 
 public class BoschChangeCityFragment extends BoschFragmentLoadableFromBackStack implements OnClickListener, 
-		GeoUtilListener, BoschEditTextListener, OnMapLeftListener, OnMapLoadedListener, OnCarStationaryStatusChangedListener {
+		GeoUtilListener, BoschEditTextListener, OnMapLeftListener, OnMapLoadedListener, OnCarStationaryStatusChangedListener,
+		OnKeyboardVisibilityStateChangedListener {
 
 	private static final String TAG = BoschChangeCityFragment.class.getSimpleName();
 
@@ -50,10 +52,14 @@ public class BoschChangeCityFragment extends BoschFragmentLoadableFromBackStack 
 	
 	private double latitude, longitude;
 
+	private View vDummy;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_bosch_change_city, null);
 
+		vDummy = view.findViewById(R.id.vDummy);
+		
 		view.findViewById(R.id.btnSearchCity).setOnClickListener(this);
 
 		edtCity = (EditText) view.findViewById(R.id.edtSearchCity);
@@ -167,6 +173,7 @@ public class BoschChangeCityFragment extends BoschFragmentLoadableFromBackStack 
 		}
 
 		searchFor(city);
+		edtCity.clearFocus();//This is just to hide the keyboard.
 	}
 	
 	public boolean searchFor(String query) {
@@ -292,6 +299,11 @@ public class BoschChangeCityFragment extends BoschFragmentLoadableFromBackStack 
 			((BoschMainActivity) FragmentUtil.getActivity(this)).showBoschDialog(
 					R.string.dialog_city_cannot_be_changed_while_driving);
 		}
+	}
+
+	@Override
+	public void onKeyboardVisibilityStateChanged(boolean isKeyboardVisible) {
+		vDummy.setVisibility(isKeyboardVisible ? View.INVISIBLE : View.GONE);
 	}
 
 }

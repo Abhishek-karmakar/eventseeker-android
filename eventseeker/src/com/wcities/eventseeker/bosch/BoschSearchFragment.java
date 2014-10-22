@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
+import com.wcities.eventseeker.bosch.BoschMainActivity.OnKeyboardVisibilityStateChangedListener;
 import com.wcities.eventseeker.bosch.custom.fragment.BoschFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.bosch.interfaces.BoschEditTextListener;
 import com.wcities.eventseeker.constants.AppConstants;
@@ -19,11 +20,13 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschSearchFragment extends BoschFragmentLoadableFromBackStack implements OnClickListener, 
-		OnDisplayModeChangedListener, BoschEditTextListener {
+		OnDisplayModeChangedListener, BoschEditTextListener, OnKeyboardVisibilityStateChangedListener {
 
 	private static final String TAG = BoschSearchFragment.class.getName();
 	
 	private EditText edtSearch;
+
+	private View vDummy;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,8 @@ public class BoschSearchFragment extends BoschFragmentLoadableFromBackStack impl
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		final View view = inflater.inflate(R.layout.fragment_bosch_search, null);
+		
+		vDummy = view.findViewById(R.id.vDummy);
 		
 		view.findViewById(R.id.btnSearch).setOnClickListener(this);
 		edtSearch = (EditText) view.findViewById(R.id.edtSearch);
@@ -48,11 +53,11 @@ public class BoschSearchFragment extends BoschFragmentLoadableFromBackStack impl
 				return false;
 			}
 		});
-		
+
 		updateColors();
 		return view;
 	}
-	
+			
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -72,7 +77,6 @@ public class BoschSearchFragment extends BoschFragmentLoadableFromBackStack impl
 	}
 		
 	private void onSearchClicked() {
-			
 		String query = edtSearch.getText().toString().trim();
 		query = query.replace("\\n", "");
 			
@@ -85,7 +89,7 @@ public class BoschSearchFragment extends BoschFragmentLoadableFromBackStack impl
 			
 		((BoschMainActivity) FragmentUtil.getActivity(this))
 			.replaceByFragment(BoschSearchResultFragment.class.getSimpleName(), args);
-
+		edtSearch.clearFocus();
 	}
 
 	@Override
@@ -108,5 +112,10 @@ public class BoschSearchFragment extends BoschFragmentLoadableFromBackStack impl
 	@Override
 	public EditText getEditText() {
 		return edtSearch;
+	}
+
+	@Override
+	public void onKeyboardVisibilityStateChanged(boolean isKeyboardVisible) {
+		vDummy.setVisibility(isKeyboardVisible ? View.INVISIBLE : View.GONE);
 	}
 }

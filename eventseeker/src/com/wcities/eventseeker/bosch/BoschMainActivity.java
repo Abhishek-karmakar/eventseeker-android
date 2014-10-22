@@ -2,8 +2,11 @@ package com.wcities.eventseeker.bosch;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -22,7 +25,9 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bosch.myspin.serversdk.IBlockStatusListener;
 import com.bosch.myspin.serversdk.IOnCarDataChangeListener;
 import com.bosch.myspin.serversdk.IPhoneCallStateListener;
 import com.bosch.myspin.serversdk.MySpinException;
@@ -45,6 +50,7 @@ import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
 import com.wcities.eventseeker.util.DeviceUtil;
+import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschMainActivity extends ActionBarActivity implements ReplaceFragmentListener, 
 		EventListener, ArtistListener, VenueListener, FragmentLoadedFromBackstackListener, 
@@ -86,6 +92,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		}
 	};
 
+	private BroadcastReceiver keyboardVisibilityStatusBR;
 
 	public interface OnCarStationaryStatusChangedListener {
 		public void onCarStationaryStatusChanged(boolean isStationary);
@@ -93,6 +100,10 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	
 	public interface OnDisplayModeChangedListener {
 		public void onDisplayModeChanged(boolean isNightModeEnabled);
+	}
+
+	public interface OnKeyboardVisibilityStateChangedListener {
+		public void onKeyboardVisibilityStateChanged(boolean isKeyboardVisible);
 	}
 	
 	@Override
@@ -246,6 +257,19 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			startActivity(intent);
 			isBoschActivityDestroying = true;
 		}
+
+		registerReceiver(keyboardVisibilityStatusBR = new BroadcastReceiver() {
+
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				Fragment fragment = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
+				if (fragment instanceof OnKeyboardVisibilityStateChangedListener) {						
+					((OnKeyboardVisibilityStateChangedListener) fragment).onKeyboardVisibilityStateChanged(
+							intent.getBooleanExtra(MySpinServerSDK.EXTRA_KEYBOARD_VISIBILITY, false));
+				}
+				
+			}
+		}, new IntentFilter(MySpinServerSDK.EVENT_KEYBOARD_VISIBILITY_CHANGED));
 		
 		DeviceUtil.registerLocationListener(this);
 		EventSeekr.setConnectionFailureListener(this);
@@ -255,6 +279,8 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	protected void onStop() {
 		super.onStop();
 		//Log.d(TAG, "onStop()");
+		//MySpinServerSDK.sharedInstance().unregisterBlockStatusListener();
+		unregisterReceiver(keyboardVisibilityStatusBR);
 		DeviceUtil.unregisterLocationListener((EventSeekr) getApplication());
 		EventSeekr.resetConnectionFailureListener(this);
 		if (!isBoschActivityDestroying) {
