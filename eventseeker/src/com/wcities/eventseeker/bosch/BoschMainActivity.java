@@ -92,7 +92,17 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		}
 	};
 
-	private BroadcastReceiver keyboardVisibilityStatusBR;
+	private BroadcastReceiver keyboardVisibilityStatusBR = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Fragment fragment = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
+			if (fragment instanceof OnKeyboardVisibilityStateChangedListener) {						
+				((OnKeyboardVisibilityStateChangedListener) fragment).onKeyboardVisibilityStateChanged(
+						intent.getBooleanExtra(MySpinServerSDK.EXTRA_KEYBOARD_VISIBILITY, false));
+			}
+		}
+	};
 
 	public interface OnCarStationaryStatusChangedListener {
 		public void onCarStationaryStatusChanged(boolean isStationary);
@@ -258,18 +268,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			isBoschActivityDestroying = true;
 		}
 
-		registerReceiver(keyboardVisibilityStatusBR = new BroadcastReceiver() {
-
-			@Override
-			public void onReceive(Context context, Intent intent) {
-				Fragment fragment = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
-				if (fragment instanceof OnKeyboardVisibilityStateChangedListener) {						
-					((OnKeyboardVisibilityStateChangedListener) fragment).onKeyboardVisibilityStateChanged(
-							intent.getBooleanExtra(MySpinServerSDK.EXTRA_KEYBOARD_VISIBILITY, false));
-				}
-				
-			}
-		}, new IntentFilter(MySpinServerSDK.EVENT_KEYBOARD_VISIBILITY_CHANGED));
+		registerReceiver(keyboardVisibilityStatusBR, new IntentFilter(MySpinServerSDK.EVENT_KEYBOARD_VISIBILITY_CHANGED));
 		
 		DeviceUtil.registerLocationListener(this);
 		EventSeekr.setConnectionFailureListener(this);
