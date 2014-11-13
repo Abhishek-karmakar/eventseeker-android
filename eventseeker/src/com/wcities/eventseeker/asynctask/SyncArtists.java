@@ -54,6 +54,7 @@ public class SyncArtists extends AsyncTask<Void, Void, Void> {
 			artistApi.setMethod(Method.artistSearch);
 			artistApi.setUserId(eventSeekr.getWcitiesId());
 			artistApi.setArtistSource(artistSource);
+			artistApi.setLimit(MAX_BATCH_SEARCH_LIMIT);
 
 			int startIndex = call * MAX_BATCH_SEARCH_LIMIT;
 			int maxEndIndex = startIndex + MAX_BATCH_SEARCH_LIMIT;

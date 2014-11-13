@@ -268,6 +268,9 @@ public class ArtistApi extends Api {
 				uri = uri + "&friends=enable";
 			}
 		}
+		if (limit != NOT_INITIALIZED) {
+			uri = uri + "&limit=" + limit;
+		}
 		uri += "&response_type=json&strip_html=description";
 		
 		uri += "&moreInfo=strictlang";
