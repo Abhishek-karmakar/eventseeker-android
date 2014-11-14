@@ -56,6 +56,8 @@ public class AppConstants {
 	public static final String FRAGMENT_TAG_DATE_WISE_EVENT_LIST = "dateWiseEventListFragment";
 	public static final String FRAGMENT_TAG_FOLLOWING = "followingFragment";
 	public static final String FRAGMENT_TAG_GET_STARTED = "getStartedFragment";
+	public static final String FRAGMENT_TAG_SIGN_UP = "signUpFragment";
+	public static final String FRAGMENT_TAG_LAUNCHER = "launcherFragment";
 	public static final String FRAGMENT_TAG_ARTISTS_NEWS_LIST = "artistsNewsFragment";
 	public static final String FRAGMENT_TAG_FRIEND_LIST = "friendListFragment";
 	public static final String FRAGMENT_TAG_MY_EVENTS = "myEventsFragment";

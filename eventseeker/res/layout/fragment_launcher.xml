@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rltLayoutRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/story_space" >
+
+    <TextView
+        android:id="@+id/txtAppName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/txt_app_name_margin_t_fragment_about_us"
+        android:text="@string/eventseeker"
+        android:textColor="@color/font_blue"
+        android:textSize="@dimen/txt_desc_txt_size_fragment_launcher"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/btn_default_ht"
+        android:layout_alignParentBottom="true" >
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/black"
+            android:text="Login"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/btnSignUp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/font_blue"
+            android:text="Sign Up"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+</RelativeLayout>

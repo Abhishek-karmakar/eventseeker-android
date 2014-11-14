@@ -52,7 +52,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 	
 	private static final String DIALOG_FRAGMENT_TAG_SKIP = "skipDialog";
 	
-	private Button btnSkip;
+	//private Button btnSkip;
 	private ImageView imgFbSignUp, imgGPlusSignIn;
     private Session.StatusCallback statusCallback;
     private TextView txtGPlusSignInStatus;
@@ -63,7 +63,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
     
 	private boolean isPermissionDisplayed;
 
-	private Resources res;
+	//private Resources res;
     
 	// Container Activity must implement this interface
     public interface GetStartedFragmentListener {
@@ -85,18 +85,17 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
     	setRetainInstance(true);
     	
     	mGoogleApiClient = GPlusUtil.createPlusClientInstance(this, this, this);
-    	res = getResources();
+    	//res = getResources();
     }
     
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		//Log.d(TAG, "onCreateView(), THIS:" + this);
 
 		View v = inflater.inflate(R.layout.fragment_get_started, container, false);
 		
-		btnSkip = (Button) v.findViewById(R.id.btnSkip);
-		btnSkip.setOnClickListener(this);
+		//btnSkip = (Button) v.findViewById(R.id.btnSkip);
+		//btnSkip.setOnClickListener(this);
 		
 		imgFbSignUp = (ImageView) v.findViewById(R.id.imgFbSignUp);
 		
@@ -108,7 +107,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 			if (((EventSeekr)appContext).getWcitiesId() == null) {
 			//if (!FbUtil.hasUserLoggedInBefore(appContext) && !GPlusUtil.hasUserLoggedInBefore(appContext)) {
 				Log.d(TAG, "not logged in");
-		    	GoogleAnalyticsTracker.getInstance().sendScreenView(FragmentUtil.getApplication(this), "First Start Screen");
+		    	GoogleAnalyticsTracker.getInstance().sendScreenView(FragmentUtil.getApplication(this), "Account Login Screen");
 
 				Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
 				
@@ -431,12 +430,12 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 			}
 			break;
 			
-		case R.id.btnSkip:
+		/*case R.id.btnSkip:
 			GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
 					res.getString(R.string.are_you_sure), res.getString(R.string.signin_for_better_experience), 
 					res.getString(R.string.cancel), res.getString(R.string.skip));
 			generalDialogFragment.show(getChildFragmentManager(), DIALOG_FRAGMENT_TAG_SKIP);
-			break;
+			break;*/
 
 		default:
 			break;

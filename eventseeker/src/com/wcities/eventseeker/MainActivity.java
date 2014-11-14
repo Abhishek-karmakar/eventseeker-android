@@ -298,9 +298,15 @@ public class MainActivity extends ActionBarActivity implements
 				onNotificationClicked((NotificationType) getIntent().getSerializableExtra(BundleKeys.NOTIFICATION_TYPE));
 
 			} else {
-				GetStartedFragment getStartedFragment = new GetStartedFragment();
+				/*GetStartedFragment getStartedFragment = new GetStartedFragment();
 				selectNonDrawerItem(getStartedFragment, AppConstants.FRAGMENT_TAG_GET_STARTED, getResources()
-								.getString(R.string.title_get_started), false);
+					.getString(R.string.title_get_started), false, true);*/
+				LauncherFragment launcherFragment = new LauncherFragment();
+				/**
+				 * Setting the hard-coded eventseeker app title in ActionBar as for the LauncherFragment as the ActionBar
+				 * is hidden for this fragment.
+				 */
+				selectNonDrawerItem(launcherFragment, AppConstants.FRAGMENT_TAG_LAUNCHER, "Eventseeker", false, true);
 			}
 			
 		} else {
@@ -1169,7 +1175,7 @@ public class MainActivity extends ActionBarActivity implements
 	}
 	
 	private void selectNonDrawerItem(Fragment replaceBy, String replaceByFragmentTag, String newTitle, 
-		boolean addToBackStack) {
+		boolean addToBackStack, boolean setHomeAsUpEnabled) {
 		//Log.d(TAG, "onDrawerItemSelected(), newTitle = " + newTitle + ", addToBackStack = " + addToBackStack);
 		
 		drawerItemSelectedPosition = AppConstants.INVALID_INDEX;
@@ -1182,10 +1188,26 @@ public class MainActivity extends ActionBarActivity implements
 				getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME
 						| ActionBar.DISPLAY_HOME_AS_UP);
 			}
+			
+		} else {
+			/**
+			 * This else & setHomeAsUpEnabled(new param) is added on 14-11-2014.
+			 * Reason: This case will get executed if current device is Mobile or Tablet with portrait orientation.
+			 * So, now here if 'setHomeAsUpEnabled' is false then 'home' button from ActionBar must hide. Mostly
+			 * this is the case for pre-login * pre-registration scenarios.
+			 */
+			if (!setHomeAsUpEnabled) {
+				if (isTablet) {
+					getSupportActionBar().setIcon(R.drawable.ic_actionbar_app_icon);
+					getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME);
+				
+				} else {					
+					getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
+				}
+			}
 		}
 		// getSupportActionBar().setDisplayHomeAsUpEnabled(addToBackStack);
-		replaceContentFrameByFragment(replaceBy, replaceByFragmentTag,
-				newTitle, addToBackStack);
+		replaceContentFrameByFragment(replaceBy, replaceByFragmentTag, newTitle, addToBackStack);
 	}
 
 	@Override
@@ -1197,17 +1219,25 @@ public class MainActivity extends ActionBarActivity implements
 
 			DiscoverByCategoryFragment discoverByCategoryFragment = new DiscoverByCategoryFragment();
 			discoverByCategoryFragment.setArguments(args);
-			selectNonDrawerItem(discoverByCategoryFragment, fragmentTag, 
-					categories.get(categoryPosition).getName(), true);
+			selectNonDrawerItem(discoverByCategoryFragment, fragmentTag, categories.get(categoryPosition).getName(), true, true);
 			
 		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_WEB_VIEW)) {
 			WebViewFragment webViewFragment = new WebViewFragment();
 			webViewFragment.setArguments(args);
-			selectNonDrawerItem(webViewFragment, fragmentTag, 
-					getResources().getString(R.string.title_web), true);
+			selectNonDrawerItem(webViewFragment, fragmentTag, getResources().getString(R.string.title_web), true, true);
 			
 		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS)) {
 			selectItem(INDEX_NAV_ITEM_CONNECT_ACCOUNTS, null);
+			
+		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_GET_STARTED)) {
+			GetStartedFragment getStartedFragment = new GetStartedFragment();
+			selectNonDrawerItem(getStartedFragment, AppConstants.FRAGMENT_TAG_GET_STARTED, getResources()
+				.getString(R.string.title_login), true, true);
+			
+		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_SIGN_UP)) {
+			SignUpFragment signUpFragment = new SignUpFragment();
+			selectNonDrawerItem(signUpFragment, AppConstants.FRAGMENT_TAG_SIGN_UP, getResources()
+				.getString(R.string.title_signup), true, true);
 			
 		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_TWITTER_SYNCING)) {
 			//Log.d(TAG, "FRAGMENT_TAG_TWITTER_SYNCING");
@@ -1232,7 +1262,7 @@ public class MainActivity extends ActionBarActivity implements
 			TwitterSyncingFragment twitterSyncingFragment = new TwitterSyncingFragment();
 			twitterSyncingFragment.setArguments(args);
 			selectNonDrawerItem(twitterSyncingFragment, fragmentTag, getResources().getString(
-					R.string.title_twitter), true);
+					R.string.title_twitter), true, true);
 		}
 	}
 
@@ -1290,7 +1320,7 @@ public class MainActivity extends ActionBarActivity implements
 		artistDetailsFragment.setArguments(args);
 		selectNonDrawerItem(artistDetailsFragment,
 				AppConstants.FRAGMENT_TAG_ARTIST_DETAILS, getResources()
-						.getString(R.string.title_artist_details), true);
+						.getString(R.string.title_artist_details), true, true);
 	}
 	
 	public void onArtistSelectedFromOtherTask(Artist artist, boolean addToBackStack) {
@@ -1302,7 +1332,7 @@ public class MainActivity extends ActionBarActivity implements
 		args.putBoolean(BundleKeys.IS_CALLED_FROM_OTHER_TASK, true);
 		artistDetailsFragment.setArguments(args);
 		selectNonDrawerItem(artistDetailsFragment, AppConstants.FRAGMENT_TAG_ARTIST_DETAILS, getResources()
-						.getString(R.string.title_artist_details), addToBackStack);
+						.getString(R.string.title_artist_details), addToBackStack, true);
 	}
 
 	@Override
@@ -1313,7 +1343,7 @@ public class MainActivity extends ActionBarActivity implements
 		venueDetailsFragment.setArguments(args);
 		selectNonDrawerItem(venueDetailsFragment,
 				AppConstants.FRAGMENT_TAG_VENUE_DETAILS, getResources()
-						.getString(R.string.title_venue_details), true);
+						.getString(R.string.title_venue_details), true, true);
 	}
 
 	@Override
@@ -1324,7 +1354,7 @@ public class MainActivity extends ActionBarActivity implements
 		eventDetailsFragment.setArguments(args);
 		selectNonDrawerItem(eventDetailsFragment,
 				AppConstants.FRAGMENT_TAG_EVENT_DETAILS, getResources()
-						.getString(R.string.title_event_details), true);
+						.getString(R.string.title_event_details), true, true);
 	}
 
 	public void onEventSelectedFromOtherTask(Event event, boolean addToBackStack) {
@@ -1337,7 +1367,7 @@ public class MainActivity extends ActionBarActivity implements
 		eventDetailsFragment.setArguments(args);
 		selectNonDrawerItem(eventDetailsFragment,
 				AppConstants.FRAGMENT_TAG_EVENT_DETAILS, getResources()
-						.getString(R.string.title_event_details), addToBackStack);
+						.getString(R.string.title_event_details), addToBackStack, true);
 	}
 	
 	/**
@@ -1376,7 +1406,7 @@ public class MainActivity extends ActionBarActivity implements
 			FullScreenAddressMapFragment fragment = new FullScreenAddressMapFragment();
 			fragment.setArguments(args);
 			selectNonDrawerItem(fragment, AppConstants.FRAGMENT_TAG_FULL_SCREEN_ADDRESS_MAP,
-					args.getString(BundleKeys.VENUE_NAME), true);
+					args.getString(BundleKeys.VENUE_NAME), true, true);
 		}
 	}
 
@@ -1389,21 +1419,21 @@ public class MainActivity extends ActionBarActivity implements
 			LoginSyncingFragment loginSyncingFragment = new LoginSyncingFragment();
 			loginSyncingFragment.setArguments(args);
 			selectNonDrawerItem(loginSyncingFragment, AppConstants.FRAGMENT_TAG_LOGIN_SYNCING, getResources()
-					.getString(R.string.title_facebook), addToBackStack);
+					.getString(R.string.title_facebook), addToBackStack, true);
 			break;
 			
 		case GooglePlus:
 			loginSyncingFragment = new LoginSyncingFragment();
 			loginSyncingFragment.setArguments(args);
 			selectNonDrawerItem(loginSyncingFragment, AppConstants.FRAGMENT_TAG_LOGIN_SYNCING, getResources()
-					.getString(R.string.title_google_plus), addToBackStack);
+					.getString(R.string.title_google_plus), addToBackStack, true);
 			break;
 			
 		case GooglePlay:
 			GooglePlayMusicFragment googlePlayMusicFragment = new GooglePlayMusicFragment();
 			googlePlayMusicFragment.setArguments(args);
 			selectNonDrawerItem(googlePlayMusicFragment, AppConstants.FRAGMENT_TAG_GOOGLE_PLAY_MUSIC, 
-					getResources().getString(R.string.title_google_play), addToBackStack);
+					getResources().getString(R.string.title_google_play), addToBackStack, true);
 			break;
 
 		case DeviceLibrary:
@@ -1411,7 +1441,7 @@ public class MainActivity extends ActionBarActivity implements
 			deviceLibraryFragment.setArguments(args);
 			selectNonDrawerItem(deviceLibraryFragment,
 					AppConstants.FRAGMENT_TAG_DEVICE_LIBRARY, getResources()
-							.getString(R.string.title_device_library), addToBackStack);
+							.getString(R.string.title_device_library), addToBackStack, true);
 			break;
 			
 		case Twitter:
@@ -1419,14 +1449,14 @@ public class MainActivity extends ActionBarActivity implements
 			twitterFragment.setArguments(args);
 			selectNonDrawerItem(twitterFragment,
 					AppConstants.FRAGMENT_TAG_TWITTER, getResources()
-							.getString(R.string.title_twitter), addToBackStack);
+							.getString(R.string.title_twitter), addToBackStack, true);
 			break;
 
 		case Rdio:
 			RdioFragment rdioFragment = new RdioFragment();
 			rdioFragment.setArguments(args);
 			selectNonDrawerItem(rdioFragment, AppConstants.FRAGMENT_TAG_RDIO,
-					getResources().getString(R.string.title_rdio), addToBackStack);
+					getResources().getString(R.string.title_rdio), addToBackStack, true);
 			break;
 
 		case Lastfm:
@@ -1434,7 +1464,7 @@ public class MainActivity extends ActionBarActivity implements
 			lastfmFragment.setArguments(args);
 			selectNonDrawerItem(lastfmFragment,
 					AppConstants.FRAGMENT_TAG_LASTFM,
-					getResources().getString(R.string.title_lastfm), addToBackStack);
+					getResources().getString(R.string.title_lastfm), addToBackStack, true);
 			break;
 
 		case Pandora:
@@ -1442,7 +1472,7 @@ public class MainActivity extends ActionBarActivity implements
 			pandoraFragment.setArguments(args);
 			selectNonDrawerItem(pandoraFragment,
 					AppConstants.FRAGMENT_TAG_PANDORA, getResources()
-							.getString(R.string.title_pandora), addToBackStack);
+							.getString(R.string.title_pandora), addToBackStack, true);
 			break;
 
 		default:
@@ -1646,7 +1676,7 @@ public class MainActivity extends ActionBarActivity implements
 			selectNonDrawerItem(searchFragment,
 					AppConstants.FRAGMENT_TAG_SEARCH,
 					getResources().getString(R.string.title_search_results),
-					true);
+					true, true);
 
 		} else {
 			searchFragment = (SearchFragment) getSupportFragmentManager()

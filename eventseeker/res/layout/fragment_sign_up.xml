@@ -62,15 +62,31 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:gravity="center"
-                android:text="Login with Email"
+                android:text="Sign Up with Email"
                 android:textColor="@color/font_blue"
                 android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/edtFN"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtLoginLabel"
+                android:layout_marginTop="20dp"
+                android:hint="First Name" />
+
+            <EditText
+                android:id="@+id/edtLN"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edtFN"
+                android:layout_marginTop="20dp"
+                android:hint="Last Name" />
 
             <EditText
                 android:id="@+id/edtEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/txtLoginLabel"
+                android:layout_below="@+id/edtLN"
                 android:layout_marginTop="20dp"
                 android:hint="Email" />
 
@@ -83,27 +99,26 @@
                 android:hint="Password"
                 android:password="true" />
 
-            <Button
-                android:id="@+id/btnLogin"
+            <EditText
+                android:id="@+id/edtReEnterPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtPassword"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/slctr_btn_login_default_grey_pressed_blue_rounded"
-                android:gravity="center"
-                android:text="Login"
-                android:textColor="@android:color/white" />
-            <!-- android:enabled="false" -->
+                android:hint="Re-Enter Password"
+                android:password="true" />
 
             <Button
-                android:id="@+id/btnForgotPassword"
+                android:id="@+id/btnSignUp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/btnLogin"
-                android:background="@android:color/transparent"
+                android:layout_height="@dimen/btn_default_ht"
+                android:layout_below="@+id/edtReEnterPassword"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/slctr_btn_login_default_grey_pressed_blue_rounded"
                 android:gravity="center"
-                android:text="Forgot your password?"
-                android:textSize="18sp" />
+                android:text="Sign Up"
+                android:textColor="@android:color/white" />
+            <!-- android:enabled="false" -->
         </RelativeLayout>
     </RelativeLayout>
 
