@@ -27,6 +27,7 @@ import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.api.UserInfoApi.RepCodeResponse;
+import com.wcities.eventseeker.api.UserInfoApi.UserType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
@@ -77,21 +78,17 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 		@Override
 		protected Integer doInBackground(Void... params) {
 			int repCodeResponse = RepCodeResponse.UNKNOWN_ERROR.getRepCode();
-			LoginType loginType = null;
 			UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
 			try {
+				JSONObject jsonObject = null;
 				if (eventSeekr.getFbUserId() != null) {
-					loginType = LoginType.facebook;
-					userInfoApi.setFbUserId(eventSeekr.getFbUserId());
-					userInfoApi.setFbEmailId(eventSeekr.getFbEmailId());
+					jsonObject = userInfoApi.syncAccount(repCode, eventSeekr.getFbUserId(), eventSeekr.getFbEmailId(), 
+							UserType.fb, eventSeekr.getWcitiesId());
 					
 				} else if (eventSeekr.getGPlusUserId() != null) {
-					loginType = LoginType.googlePlus;
-					userInfoApi.setGPlusUserId(eventSeekr.getGPlusUserId());
-					userInfoApi.setGPlusEmailId(eventSeekr.getGPlusEmailId());
+					jsonObject = userInfoApi.syncAccount(repCode, eventSeekr.getGPlusUserId(), eventSeekr.getGPlusEmailId(), 
+							UserType.google, eventSeekr.getWcitiesId());
 				}
-				userInfoApi.setUserId(eventSeekr.getWcitiesId());
-				JSONObject jsonObject = userInfoApi.syncAccount(repCode, loginType);
 				//Log.d(TAG, "response = " + jsonObject);
 				UserInfoApiJSONParser userInfoApiJSONParser = new UserInfoApiJSONParser();
 				repCodeResponse = userInfoApiJSONParser.getRepCodeResponse(jsonObject);

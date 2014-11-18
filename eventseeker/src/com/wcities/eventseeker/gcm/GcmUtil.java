@@ -22,13 +22,36 @@ public class GcmUtil {
 
 	private static final String TAG = GcmUtil.class.getName();
 	
-	// Default lifespan (7 days) of a reservation until it is considered expired.
-	
 	private EventSeekr eventSeekr;
 	private GoogleCloudMessaging gcm;
 
 	public GcmUtil(EventSeekr eventSeekr) {
 		this.eventSeekr = eventSeekr;
+	}
+	
+	/**
+	 * It uses wcitiesId from EventSeekr class, so make sure it's updated before calling this function
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 * @throws JSONException
+	 */
+	public void registerGCM() throws ClientProtocolException, IOException, JSONException {
+    	Log.d(TAG, "registerGCM()");
+    	String wcitiesId = eventSeekr.getWcitiesId();
+    	Log.d(TAG, "wcitiesId=" + wcitiesId);
+    	
+    	if (wcitiesId != null) {
+    		String regId = getRegistrationId();
+    		//Log.d(TAG, "regId = " + regId);
+    		
+            if (regId.length() == 0) {
+                register();
+                
+            } else {
+            	// no need to generate new registrationId, just call registerDevice api
+            	registerGcmIdForNotification(wcitiesId, regId);
+            }
+    	}
 	}
 
 	public void registerGCMInBackground(final boolean forceNewRegistration) {
@@ -146,7 +169,8 @@ public class GcmUtil {
 		}
 	}
 	
-	private void registerGcmIdForNotification(String wcitiesId, String gcmRegistrationId) throws ClientProtocolException, IOException, JSONException {
+	private void registerGcmIdForNotification(String wcitiesId, String gcmRegistrationId) throws 
+			ClientProtocolException, IOException, JSONException {
 		UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
 		userInfoApi.setUserId(wcitiesId);
 		userInfoApi.setGcmRegistrationId(gcmRegistrationId);
