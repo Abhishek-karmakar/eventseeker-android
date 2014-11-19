@@ -1,8 +1,8 @@
 package com.wcities.eventseeker;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,6 +23,16 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 	}
 	
 	@Override
+	public void onStart() {
+		super.onStart();
+		
+		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		ma.setDrawerLockMode(true);
+		ma.setDrawerIndicatorEnabled(false);
+		ma.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME);
+	}
+	
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_launcher, null);
 		
@@ -35,14 +45,14 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 	@Override
 	public void onResume() {
 		super.onResume();
-		Log.d(TAG, "onResume");
+		//Log.d(TAG, "onResume");
 		((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportActionBar().hide();
 	}
 	
 	@Override
 	public void onPause() {
 		super.onPause();
-		Log.d(TAG, "onPause");
+		//Log.d(TAG, "onPause");
 		((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportActionBar().show();
 	}
 	
@@ -52,7 +62,7 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 		switch (v.getId()) {
 		
 		case R.id.btnLogin:
-			((MainActivity) FragmentUtil.getActivity(this)).replaceByFragment(AppConstants.FRAGMENT_TAG_GET_STARTED, null);
+			((MainActivity) FragmentUtil.getActivity(this)).replaceByFragment(AppConstants.FRAGMENT_TAG_LOGIN, null);
 			break;
 
 		case R.id.btnSignUp:
@@ -62,12 +72,10 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 		default:
 			break;
 		}
-		
 	}
 
 	@Override
 	public String getScreenName() {
 		return "First Start Screen";
 	}
-	
 }

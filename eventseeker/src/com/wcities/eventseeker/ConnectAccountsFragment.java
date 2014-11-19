@@ -54,7 +54,7 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
-import com.wcities.eventseeker.GetStartedFragment.GetStartedFragmentListener;
+import com.wcities.eventseeker.LoginFragment.GetStartedFragmentListener;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;

@@ -44,7 +44,7 @@ import com.wcities.eventseeker.ConnectAccountsFragment.ConnectAccountsFragmentLi
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
-import com.wcities.eventseeker.GetStartedFragment.GetStartedFragmentListener;
+import com.wcities.eventseeker.LoginFragment.GetStartedFragmentListener;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.applink.service.AppLinkService;
@@ -187,14 +187,11 @@ public class MainActivity extends ActionBarActivity implements
 		isDrawerIndicatorEnabled = true;
 		if (savedInstanceState != null) {
 			mTitle = savedInstanceState.getString(BundleKeys.ACTION_BAR_TITLE);
-			currentContentFragmentTag = savedInstanceState
-					.getString(BundleKeys.CURRENT_CONTENT_FRAGMENT_TAG);
+			currentContentFragmentTag = savedInstanceState.getString(BundleKeys.CURRENT_CONTENT_FRAGMENT_TAG);
 			//Log.d(TAG, "savedInstanceState != null, currentContentFragmentTag = " + currentContentFragmentTag);
 
-			drawerItemSelectedPosition = savedInstanceState
-					.getInt(BundleKeys.DRAWER_ITEM_SELECTED_POSITION);
-			isDrawerIndicatorEnabled = savedInstanceState
-					.getBoolean(BundleKeys.IS_DRAWER_INDICATOR_ENABLED);
+			drawerItemSelectedPosition = savedInstanceState.getInt(BundleKeys.DRAWER_ITEM_SELECTED_POSITION);
+			isDrawerIndicatorEnabled = savedInstanceState.getBoolean(BundleKeys.IS_DRAWER_INDICATOR_ENABLED);
 		}
 		
 		lnrLayoutRootNavDrawer = (LinearLayout) findViewById(R.id.rootNavigationDrawer);
@@ -211,7 +208,6 @@ public class MainActivity extends ActionBarActivity implements
 					R.string.drawer_open, // "open drawer" description
 					R.string.drawer_close // "close drawer" description
 			) {
-
 				/**
 				 * Called when a drawer has settled in a completely closed
 				 * state.
@@ -243,16 +239,16 @@ public class MainActivity extends ActionBarActivity implements
 			// Set the drawer toggle as the DrawerListener
 			mDrawerLayout.setDrawerListener(mDrawerToggle);
 			
-			getSupportActionBar().setDisplayOptions(
-					ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME
-					| ActionBar.DISPLAY_HOME_AS_UP );
-		} else {
+			getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME
+					| ActionBar.DISPLAY_HOME_AS_UP);
 			
+		} else {
 			int displayOptions;
 			
-			if(getSupportFragmentManager().getBackStackEntryCount() > 0) {
+			if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
 				displayOptions = ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME
 						| ActionBar.DISPLAY_HOME_AS_UP;
+				
 			} else {
 				displayOptions = ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME;	
 			}
@@ -298,15 +294,13 @@ public class MainActivity extends ActionBarActivity implements
 				onNotificationClicked((NotificationType) getIntent().getSerializableExtra(BundleKeys.NOTIFICATION_TYPE));
 
 			} else {
-				/*GetStartedFragment getStartedFragment = new GetStartedFragment();
-				selectNonDrawerItem(getStartedFragment, AppConstants.FRAGMENT_TAG_GET_STARTED, getResources()
-					.getString(R.string.title_get_started), false, true);*/
-				LauncherFragment launcherFragment = new LauncherFragment();
-				/**
-				 * Setting the hard-coded eventseeker app title in ActionBar as for the LauncherFragment as the ActionBar
-				 * is hidden for this fragment.
-				 */
-				selectNonDrawerItem(launcherFragment, AppConstants.FRAGMENT_TAG_LAUNCHER, "Eventseeker", false, true);
+				if (eventSeekr.getWcitiesId() == null) {
+					selectNonDrawerItem(new LauncherFragment(), AppConstants.FRAGMENT_TAG_LAUNCHER, 
+							getResources().getString(R.string.title_launcher), false);
+					
+				} else {
+					selectItem(INDEX_NAV_ITEM_DISCOVER, null);
+				}
 			}
 			
 		} else {
@@ -485,16 +479,16 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		boolean disableSearch = currentContentFragmentTag
-				.equals(AppConstants.FRAGMENT_TAG_CHANGE_LOCATION)
-				|| currentContentFragmentTag
-						.equals(AppConstants.FRAGMENT_TAG_GET_STARTED)
-				|| currentContentFragmentTag
-						.equals(AppConstants.FRAGMENT_TAG_FULL_SCREEN_ADDRESS_MAP);
+		boolean disableSearch = currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_LOGIN)
+				|| currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_SIGN_UP)
+				|| currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_CHANGE_LOCATION)
+				|| currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_FULL_SCREEN_ADDRESS_MAP);
 		menu.findItem(R.id.action_search).setVisible(!disableSearch);
+		
 		if (currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_SEARCH)) {
 			searchView.setQuery(searchQuery, false);
 			searchView.clearFocus();
+			
 		} else if (currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_CHANGE_LOCATION)) {
 			searchView.setQuery("", false);			
 		}
@@ -526,7 +520,12 @@ public class MainActivity extends ActionBarActivity implements
 						mDrawerLayout.openDrawer(lnrLayoutRootNavDrawer);
 					}
 
-				} else {
+				} else if ((getSupportActionBar().getDisplayOptions() & ActionBar.DISPLAY_HOME_AS_UP) != 0) {
+					/**
+					 * above condition is to prevent back action when user clicks actionbar's home button on
+					 * launcher screen. In that case it should have no action; otherwise execute onBackPressed()
+					 * as long as home as up indicator is shown.
+					 */
 					onBackPressed();
 				}
 				
@@ -579,12 +578,9 @@ public class MainActivity extends ActionBarActivity implements
 		//Log.d(TAG, "onSaveInstanceState()");
 	
 		outState.putString(BundleKeys.ACTION_BAR_TITLE, mTitle);
-		outState.putString(BundleKeys.CURRENT_CONTENT_FRAGMENT_TAG,
-				currentContentFragmentTag);
-		outState.putInt(BundleKeys.DRAWER_ITEM_SELECTED_POSITION,
-				drawerItemSelectedPosition);
-		outState.putBoolean(BundleKeys.IS_DRAWER_INDICATOR_ENABLED,
-				isDrawerIndicatorEnabled);
+		outState.putString(BundleKeys.CURRENT_CONTENT_FRAGMENT_TAG, currentContentFragmentTag);
+		outState.putInt(BundleKeys.DRAWER_ITEM_SELECTED_POSITION, drawerItemSelectedPosition);
+		outState.putBoolean(BundleKeys.IS_DRAWER_INDICATOR_ENABLED, isDrawerIndicatorEnabled);
 	}
 	
 	@Override
@@ -768,12 +764,10 @@ public class MainActivity extends ActionBarActivity implements
 
 			if (mBtAdapter != null) {
 				// Log.i(TAG, "mBtAdapter is not null");
-				if ((mBtAdapter.isEnabled() && mBtAdapter.getBondedDevices()
-						.isEmpty() == false)) {
+				if ((mBtAdapter.isEnabled() && mBtAdapter.getBondedDevices().isEmpty() == false)) {
 					Log.i(TAG, "pairedDevices");
 					// Get a set of currently paired devices
-					Set<BluetoothDevice> pairedDevices = mBtAdapter
-							.getBondedDevices();
+					Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
 
 					// Check if there is a paired device with the name "SYNC"
 					if (pairedDevices.size() > 0) {
@@ -795,8 +789,7 @@ public class MainActivity extends ActionBarActivity implements
 					if (isSYNCpaired == true) {
 						if (AppLinkService.getInstance() == null) {
 							// Log.i(TAG, "start service");
-							Intent startIntent = new Intent(this,
-									AppLinkService.class);
+							Intent startIntent = new Intent(this, AppLinkService.class);
 							startService(startIntent);
 
 						} else {
@@ -804,7 +797,7 @@ public class MainActivity extends ActionBarActivity implements
     		        		AppLinkService serviceInstance = AppLinkService.getInstance();
     		        		serviceInstance.setCurrentActivity(this);
     		        		SyncProxyALM proxyInstance = serviceInstance.getProxy();
-    		        		if(proxyInstance != null) {
+    		        		if (proxyInstance != null) {
     		        			serviceInstance.reset();
     		        			
     		        		} else {
@@ -861,8 +854,7 @@ public class MainActivity extends ActionBarActivity implements
 	 * } catch (Exception e) { e.printStackTrace(); } }
 	 */
 
-	private void onFragmentResumed(int position, String title,
-			String fragmentTag) {
+	private void onFragmentResumed(int position, String title, String fragmentTag) {
 		//Log.d(TAG, "onFragmentResumed() - " + fragmentTag);
 		drawerItemSelectedPosition = position;
 		if (drawerItemSelectedPosition != AppConstants.INVALID_INDEX) {
@@ -893,8 +885,7 @@ public class MainActivity extends ActionBarActivity implements
 		currentContentFragmentTag = fragmentTag;
 	}
 	
-	private void onFragmentCalledFromOtherTaskResumed(int position,
-			String title, String fragmentTag) {
+	private void onFragmentCalledFromOtherTaskResumed(int position, String title, String fragmentTag) {
 		// Log.d(TAG, "onFragmentResumed() - " + fragmentTag);
 		drawerItemSelectedPosition = position;
 		if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
@@ -914,11 +905,9 @@ public class MainActivity extends ActionBarActivity implements
 				
 			setDrawerIndicatorEnabled(true);
 				
-			if(isTabletAndInLandscapeMode){
-				
+			if (isTabletAndInLandscapeMode) {
 				getSupportActionBar().setIcon(R.drawable.ic_actionbar_app_icon);
 				getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME);
-
 			}
 			
 			boolean isDrawerListFragmentFound = updateDrawerListCheckedItem(position);
@@ -1022,7 +1011,7 @@ public class MainActivity extends ActionBarActivity implements
 			break;
 		}
 	    
-	    if(!isTabletAndInLandscapeMode){
+	    if (!isTabletAndInLandscapeMode) {
 	    	mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
 	    }
 	}
@@ -1062,8 +1051,7 @@ public class MainActivity extends ActionBarActivity implements
 	private void inviteFriends() {
 		//Log.d(TAG, "inviteFriends()");
 		hasOtherActivityFinished = false;
-		String url = "https://play.google.com/store/apps/details?id="
-				+ getPackageName();
+		String url = "https://play.google.com/store/apps/details?id=" + getPackageName();
 		Intent intent = new Intent(android.content.Intent.ACTION_SEND);
 		intent.setType("text/plain");
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
@@ -1072,8 +1060,7 @@ public class MainActivity extends ActionBarActivity implements
 			startActivityForResult(intent, AppConstants.REQ_CODE_INVITE_FRIENDS);
 
 		} catch (ActivityNotFoundException e) {
-			Toast.makeText(getApplicationContext(),
-					"Error, this action cannot be completed at this time.",
+			Toast.makeText(getApplicationContext(), "Error, this action cannot be completed at this time.",
 					Toast.LENGTH_SHORT).show();
 		}
 	}
@@ -1086,22 +1073,19 @@ public class MainActivity extends ActionBarActivity implements
 			startActivityForResult(goToMarket, AppConstants.REQ_CODE_RATE_APP);
 
 		} catch (ActivityNotFoundException e) {
-			Toast.makeText(getApplicationContext(),
-					R.string.error_this_action_couldnt_be_completed_at_this_time,
+			Toast.makeText(getApplicationContext(), R.string.error_this_action_couldnt_be_completed_at_this_time,
 					Toast.LENGTH_SHORT).show();
 		}
 	}
 
-	private void replaceContentFrameByFragment(Fragment replaceBy,
-			String replaceByFragmentTag, String newTitle, boolean addToBackStack) {
+	private void replaceContentFrameByFragment(Fragment replaceBy, String replaceByFragmentTag, 
+			String newTitle, boolean addToBackStack) {
 		//Log.d(TAG, "replaceContentFrameByFragment() - newTitle = " + newTitle);
 		mTitle = newTitle;
 		updateTitle();
 
-		FragmentTransaction fragmentTransaction = getSupportFragmentManager()
-				.beginTransaction();
-		fragmentTransaction.replace(R.id.content_frame, replaceBy,
-				replaceByFragmentTag);
+		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+		fragmentTransaction.replace(R.id.content_frame, replaceBy, replaceByFragmentTag);
 
 		if (addToBackStack) {
 			fragmentTransaction.addToBackStack(null);
@@ -1127,12 +1111,9 @@ public class MainActivity extends ActionBarActivity implements
 		 * If condition is there to prevent momentary display of 2 search icons
 		 * placed side by side in case of these 3 fragments.
 		 */
-		if (!currentContentFragmentTag
-				.equals(AppConstants.FRAGMENT_TAG_ARTIST_DETAILS)
-				&& !currentContentFragmentTag
-						.equals(AppConstants.FRAGMENT_TAG_EVENT_DETAILS)
-				&& !currentContentFragmentTag
-						.equals(AppConstants.FRAGMENT_TAG_VENUE_DETAILS)) {
+		if (!currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_ARTIST_DETAILS)
+				&& !currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_EVENT_DETAILS)
+				&& !currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_VENUE_DETAILS)) {
 			supportInvalidateOptionsMenu();
 		}
 		
@@ -1175,7 +1156,7 @@ public class MainActivity extends ActionBarActivity implements
 	}
 	
 	private void selectNonDrawerItem(Fragment replaceBy, String replaceByFragmentTag, String newTitle, 
-		boolean addToBackStack, boolean setHomeAsUpEnabled) {
+			boolean addToBackStack) {
 		//Log.d(TAG, "onDrawerItemSelected(), newTitle = " + newTitle + ", addToBackStack = " + addToBackStack);
 		
 		drawerItemSelectedPosition = AppConstants.INVALID_INDEX;
@@ -1187,23 +1168,6 @@ public class MainActivity extends ActionBarActivity implements
 			if (addToBackStack) {
 				getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME
 						| ActionBar.DISPLAY_HOME_AS_UP);
-			}
-			
-		} else {
-			/**
-			 * This else & setHomeAsUpEnabled(new param) is added on 14-11-2014.
-			 * Reason: This case will get executed if current device is Mobile or Tablet with portrait orientation.
-			 * So, now here if 'setHomeAsUpEnabled' is false then 'home' button from ActionBar must hide. Mostly
-			 * this is the case for pre-login * pre-registration scenarios.
-			 */
-			if (!setHomeAsUpEnabled) {
-				if (isTablet) {
-					getSupportActionBar().setIcon(R.drawable.ic_actionbar_app_icon);
-					getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME);
-				
-				} else {					
-					getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
-				}
 			}
 		}
 		// getSupportActionBar().setDisplayHomeAsUpEnabled(addToBackStack);
@@ -1219,25 +1183,25 @@ public class MainActivity extends ActionBarActivity implements
 
 			DiscoverByCategoryFragment discoverByCategoryFragment = new DiscoverByCategoryFragment();
 			discoverByCategoryFragment.setArguments(args);
-			selectNonDrawerItem(discoverByCategoryFragment, fragmentTag, categories.get(categoryPosition).getName(), true, true);
+			selectNonDrawerItem(discoverByCategoryFragment, fragmentTag, categories.get(categoryPosition).getName(), true);
 			
 		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_WEB_VIEW)) {
 			WebViewFragment webViewFragment = new WebViewFragment();
 			webViewFragment.setArguments(args);
-			selectNonDrawerItem(webViewFragment, fragmentTag, getResources().getString(R.string.title_web), true, true);
+			selectNonDrawerItem(webViewFragment, fragmentTag, getResources().getString(R.string.title_web), true);
 			
 		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS)) {
 			selectItem(INDEX_NAV_ITEM_CONNECT_ACCOUNTS, null);
 			
-		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_GET_STARTED)) {
-			GetStartedFragment getStartedFragment = new GetStartedFragment();
-			selectNonDrawerItem(getStartedFragment, AppConstants.FRAGMENT_TAG_GET_STARTED, getResources()
-				.getString(R.string.title_login), true, true);
+		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_LOGIN)) {
+			LoginFragment getStartedFragment = new LoginFragment();
+			selectNonDrawerItem(getStartedFragment, AppConstants.FRAGMENT_TAG_LOGIN, getResources()
+				.getString(R.string.title_login), true);
 			
 		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_SIGN_UP)) {
 			SignUpFragment signUpFragment = new SignUpFragment();
 			selectNonDrawerItem(signUpFragment, AppConstants.FRAGMENT_TAG_SIGN_UP, getResources()
-				.getString(R.string.title_signup), true, true);
+				.getString(R.string.title_signup), true);
 			
 		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_TWITTER_SYNCING)) {
 			//Log.d(TAG, "FRAGMENT_TAG_TWITTER_SYNCING");
@@ -1262,7 +1226,7 @@ public class MainActivity extends ActionBarActivity implements
 			TwitterSyncingFragment twitterSyncingFragment = new TwitterSyncingFragment();
 			twitterSyncingFragment.setArguments(args);
 			selectNonDrawerItem(twitterSyncingFragment, fragmentTag, getResources().getString(
-					R.string.title_twitter), true, true);
+					R.string.title_twitter), true);
 		}
 	}
 
@@ -1320,7 +1284,7 @@ public class MainActivity extends ActionBarActivity implements
 		artistDetailsFragment.setArguments(args);
 		selectNonDrawerItem(artistDetailsFragment,
 				AppConstants.FRAGMENT_TAG_ARTIST_DETAILS, getResources()
-						.getString(R.string.title_artist_details), true, true);
+						.getString(R.string.title_artist_details), true);
 	}
 	
 	public void onArtistSelectedFromOtherTask(Artist artist, boolean addToBackStack) {
@@ -1332,7 +1296,7 @@ public class MainActivity extends ActionBarActivity implements
 		args.putBoolean(BundleKeys.IS_CALLED_FROM_OTHER_TASK, true);
 		artistDetailsFragment.setArguments(args);
 		selectNonDrawerItem(artistDetailsFragment, AppConstants.FRAGMENT_TAG_ARTIST_DETAILS, getResources()
-						.getString(R.string.title_artist_details), addToBackStack, true);
+						.getString(R.string.title_artist_details), addToBackStack);
 	}
 
 	@Override
@@ -1343,7 +1307,7 @@ public class MainActivity extends ActionBarActivity implements
 		venueDetailsFragment.setArguments(args);
 		selectNonDrawerItem(venueDetailsFragment,
 				AppConstants.FRAGMENT_TAG_VENUE_DETAILS, getResources()
-						.getString(R.string.title_venue_details), true, true);
+						.getString(R.string.title_venue_details), true);
 	}
 
 	@Override
@@ -1354,7 +1318,7 @@ public class MainActivity extends ActionBarActivity implements
 		eventDetailsFragment.setArguments(args);
 		selectNonDrawerItem(eventDetailsFragment,
 				AppConstants.FRAGMENT_TAG_EVENT_DETAILS, getResources()
-						.getString(R.string.title_event_details), true, true);
+						.getString(R.string.title_event_details), true);
 	}
 
 	public void onEventSelectedFromOtherTask(Event event, boolean addToBackStack) {
@@ -1367,7 +1331,7 @@ public class MainActivity extends ActionBarActivity implements
 		eventDetailsFragment.setArguments(args);
 		selectNonDrawerItem(eventDetailsFragment,
 				AppConstants.FRAGMENT_TAG_EVENT_DETAILS, getResources()
-						.getString(R.string.title_event_details), addToBackStack, true);
+						.getString(R.string.title_event_details), addToBackStack);
 	}
 	
 	/**
@@ -1406,7 +1370,7 @@ public class MainActivity extends ActionBarActivity implements
 			FullScreenAddressMapFragment fragment = new FullScreenAddressMapFragment();
 			fragment.setArguments(args);
 			selectNonDrawerItem(fragment, AppConstants.FRAGMENT_TAG_FULL_SCREEN_ADDRESS_MAP,
-					args.getString(BundleKeys.VENUE_NAME), true, true);
+					args.getString(BundleKeys.VENUE_NAME), true);
 		}
 	}
 
@@ -1419,21 +1383,21 @@ public class MainActivity extends ActionBarActivity implements
 			LoginSyncingFragment loginSyncingFragment = new LoginSyncingFragment();
 			loginSyncingFragment.setArguments(args);
 			selectNonDrawerItem(loginSyncingFragment, AppConstants.FRAGMENT_TAG_LOGIN_SYNCING, getResources()
-					.getString(R.string.title_facebook), addToBackStack, true);
+					.getString(R.string.title_facebook), addToBackStack);
 			break;
 			
 		case GooglePlus:
 			loginSyncingFragment = new LoginSyncingFragment();
 			loginSyncingFragment.setArguments(args);
 			selectNonDrawerItem(loginSyncingFragment, AppConstants.FRAGMENT_TAG_LOGIN_SYNCING, getResources()
-					.getString(R.string.title_google_plus), addToBackStack, true);
+					.getString(R.string.title_google_plus), addToBackStack);
 			break;
 			
 		case GooglePlay:
 			GooglePlayMusicFragment googlePlayMusicFragment = new GooglePlayMusicFragment();
 			googlePlayMusicFragment.setArguments(args);
 			selectNonDrawerItem(googlePlayMusicFragment, AppConstants.FRAGMENT_TAG_GOOGLE_PLAY_MUSIC, 
-					getResources().getString(R.string.title_google_play), addToBackStack, true);
+					getResources().getString(R.string.title_google_play), addToBackStack);
 			break;
 
 		case DeviceLibrary:
@@ -1441,7 +1405,7 @@ public class MainActivity extends ActionBarActivity implements
 			deviceLibraryFragment.setArguments(args);
 			selectNonDrawerItem(deviceLibraryFragment,
 					AppConstants.FRAGMENT_TAG_DEVICE_LIBRARY, getResources()
-							.getString(R.string.title_device_library), addToBackStack, true);
+							.getString(R.string.title_device_library), addToBackStack);
 			break;
 			
 		case Twitter:
@@ -1449,14 +1413,14 @@ public class MainActivity extends ActionBarActivity implements
 			twitterFragment.setArguments(args);
 			selectNonDrawerItem(twitterFragment,
 					AppConstants.FRAGMENT_TAG_TWITTER, getResources()
-							.getString(R.string.title_twitter), addToBackStack, true);
+							.getString(R.string.title_twitter), addToBackStack);
 			break;
 
 		case Rdio:
 			RdioFragment rdioFragment = new RdioFragment();
 			rdioFragment.setArguments(args);
 			selectNonDrawerItem(rdioFragment, AppConstants.FRAGMENT_TAG_RDIO,
-					getResources().getString(R.string.title_rdio), addToBackStack, true);
+					getResources().getString(R.string.title_rdio), addToBackStack);
 			break;
 
 		case Lastfm:
@@ -1464,7 +1428,7 @@ public class MainActivity extends ActionBarActivity implements
 			lastfmFragment.setArguments(args);
 			selectNonDrawerItem(lastfmFragment,
 					AppConstants.FRAGMENT_TAG_LASTFM,
-					getResources().getString(R.string.title_lastfm), addToBackStack, true);
+					getResources().getString(R.string.title_lastfm), addToBackStack);
 			break;
 
 		case Pandora:
@@ -1472,7 +1436,7 @@ public class MainActivity extends ActionBarActivity implements
 			pandoraFragment.setArguments(args);
 			selectNonDrawerItem(pandoraFragment,
 					AppConstants.FRAGMENT_TAG_PANDORA, getResources()
-							.getString(R.string.title_pandora), addToBackStack, true);
+							.getString(R.string.title_pandora), addToBackStack);
 			break;
 
 		default:
@@ -1482,72 +1446,62 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public void onFragmentResumed(Fragment fragment) {
+		if (fragment instanceof LauncherFragment) {
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_launcher),
+					AppConstants.FRAGMENT_TAG_LAUNCHER);
 
-		if (fragment instanceof DiscoverParentFragment) {
-			onFragmentResumed(INDEX_NAV_ITEM_DISCOVER, getResources()
-					.getString(R.string.title_discover),
+		} else if (fragment instanceof DiscoverParentFragment) {
+			onFragmentResumed(INDEX_NAV_ITEM_DISCOVER, getResources().getString(R.string.title_discover),
 					AppConstants.FRAGMENT_TAG_DISCOVER);
 
 		} else if (fragment instanceof MyEventsFragment) {
-			onFragmentResumed(INDEX_NAV_ITEM_MY_EVENTS, getResources()
-					.getString(R.string.title_my_events),
+			onFragmentResumed(INDEX_NAV_ITEM_MY_EVENTS, getResources().getString(R.string.title_my_events),
 					AppConstants.FRAGMENT_TAG_MY_EVENTS);
 
 		} else if (fragment instanceof ArtistsNewsListFragment) {
-			onFragmentResumed(INDEX_NAV_ITEM_ARTISTS_NEWS, getResources()
-					.getString(R.string.title_artists_news),
+			onFragmentResumed(INDEX_NAV_ITEM_ARTISTS_NEWS, getResources().getString(R.string.title_artists_news),
 					AppConstants.FRAGMENT_TAG_ARTISTS_NEWS_LIST);
 
 		} else if (fragment instanceof FriendsActivityFragment) {
-			onFragmentResumed(INDEX_NAV_ITEM_FRIENDS_ACTIVITY, getResources()
-					.getString(R.string.title_friends_activity),
+			onFragmentResumed(INDEX_NAV_ITEM_FRIENDS_ACTIVITY, getResources().getString(R.string.title_friends_activity),
 					AppConstants.FRAGMENT_TAG_FRIENDS_ACTIVITY);
 
 		} else if (fragment instanceof FollowingParentFragment) {
-			onFragmentResumed(INDEX_NAV_ITEM_FOLLOWING, getResources()
-					.getString(R.string.title_following),
+			onFragmentResumed(INDEX_NAV_ITEM_FOLLOWING, getResources().getString(R.string.title_following),
 					AppConstants.FRAGMENT_TAG_FOLLOWING);
 
 		} else if (fragment instanceof ConnectAccountsFragment) {
-			onFragmentResumed(INDEX_NAV_ITEM_CONNECT_ACCOUNTS, getResources()
-					.getString(R.string.title_connect_accounts),
+			onFragmentResumed(INDEX_NAV_ITEM_CONNECT_ACCOUNTS, getResources().getString(R.string.title_connect_accounts),
 					AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS);
 
 		} else if (fragment instanceof ChangeLocationFragment) {
-			onFragmentResumed(INDEX_NAV_ITEM_CHANGE_LOCATION, getResources()
-					.getString(R.string.title_change_location),
+			onFragmentResumed(INDEX_NAV_ITEM_CHANGE_LOCATION, getResources().getString(R.string.title_change_location),
 					AppConstants.FRAGMENT_TAG_CHANGE_LOCATION);
 			
 		} 
 		// TODO: comment following for disabling language
 		else if (fragment instanceof LanguageFragment) {
-			onFragmentResumed(INDEX_NAV_ITEM_LANGUAGE, getResources()
-					.getString(R.string.title_language),
+			onFragmentResumed(INDEX_NAV_ITEM_LANGUAGE, getResources().getString(R.string.title_language),
 					AppConstants.FRAGMENT_TAG_LANGUAGE);
 
 		} else if (fragment instanceof AboutUsFragment) {
-			onFragmentResumed(INDEX_NAV_ITEM_ABOUT_US, getResources()
-					.getString(R.string.title_about_us),
+			onFragmentResumed(INDEX_NAV_ITEM_ABOUT_US, getResources().getString(R.string.title_about_us),
 					AppConstants.FRAGMENT_TAG_ABOUT_US);
 
 		} else if (fragment instanceof EULAFragment) {
-			onFragmentResumed(INDEX_NAV_ITEM_EULA,
-					getResources().getString(R.string.title_eula),
+			onFragmentResumed(INDEX_NAV_ITEM_EULA, getResources().getString(R.string.title_eula),
 					AppConstants.FRAGMENT_TAG_EULA);
 
 		} else if (fragment instanceof RepCodeFragment) {
-			onFragmentResumed(INDEX_NAV_ITEM_REP_CODE, getResources()
-					.getString(R.string.title_rep_code),
+			onFragmentResumed(INDEX_NAV_ITEM_REP_CODE, getResources().getString(R.string.title_rep_code),
 					AppConstants.FRAGMENT_TAG_REP_CODE);
 
 		} else if (fragment instanceof FullScreenAddressMapFragment) {
-			onFragmentResumed(AppConstants.INVALID_INDEX, fragment.getArguments()
-					.getString(BundleKeys.VENUE_NAME),
+			onFragmentResumed(AppConstants.INVALID_INDEX, fragment.getArguments().getString(BundleKeys.VENUE_NAME),
 					AppConstants.FRAGMENT_TAG_FULL_SCREEN_ADDRESS_MAP);
 
 		} else if (fragment instanceof SearchFragment) {
-			onFragmentResumed(AppConstants.INVALID_INDEX, getResources()
-					.getString(R.string.title_search_results),
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_search_results),
 					AppConstants.FRAGMENT_TAG_SEARCH);
 			// Log.d(TAG, "fragment = " + fragment + ", query = " +
 			// ((SearchFragment) fragment).getSearchQuery());
@@ -1555,7 +1509,7 @@ public class MainActivity extends ActionBarActivity implements
 			 * on some devices onCreateOptionsMenu is called after onFragmentResumed, 
 			 * So the search item might be null at this point
 			 */
-			if(searchItem != null) {
+			if (searchItem != null) {
 				MenuItemCompat.expandActionView(searchItem);
 			}
 			// searchItem.expandActionView();
@@ -1570,45 +1524,37 @@ public class MainActivity extends ActionBarActivity implements
 		} else if (fragment instanceof DiscoverByCategoryFragment) {
 			Bundle args = fragment.getArguments();
 			int categoryPosition = args.getInt(BundleKeys.CATEGORY_POSITION);
-			List<Category> categories = (List<Category>) args
-					.getSerializable(BundleKeys.CATEGORIES);
+			List<Category> categories = (List<Category>) args.getSerializable(BundleKeys.CATEGORIES);
 
-			onFragmentResumed(AppConstants.INVALID_INDEX,
-					categories.get(categoryPosition).getName(),
+			onFragmentResumed(AppConstants.INVALID_INDEX, categories.get(categoryPosition).getName(),
 					AppConstants.FRAGMENT_TAG_DISCOVER_BY_CATEGORY);
 
 		} else if (fragment instanceof EventDetailsFragment) {
 			if (fragment.getArguments().containsKey(BundleKeys.IS_CALLED_FROM_OTHER_TASK)) {
-				onFragmentCalledFromOtherTaskResumed(AppConstants.INVALID_INDEX,
-						getResources().getString(R.string.title_event_details),
+				onFragmentCalledFromOtherTaskResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_event_details),
 						AppConstants.FRAGMENT_TAG_EVENT_DETAILS);
 
 			} else {
-				onFragmentResumed(AppConstants.INVALID_INDEX, getResources()
-						.getString(R.string.title_event_details),
+				onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_event_details),
 						AppConstants.FRAGMENT_TAG_EVENT_DETAILS);
 			}
 
 		} else if (fragment instanceof ArtistDetailsFragment) {
 			if (fragment.getArguments().containsKey(BundleKeys.IS_CALLED_FROM_OTHER_TASK)) {
-				onFragmentCalledFromOtherTaskResumed(AppConstants.INVALID_INDEX,
-						getResources().getString(R.string.title_artist_details),
+				onFragmentCalledFromOtherTaskResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_artist_details),
 						AppConstants.FRAGMENT_TAG_ARTIST_DETAILS);
 
 			} else {
-				onFragmentResumed(AppConstants.INVALID_INDEX, getResources()
-						.getString(R.string.title_artist_details),
+				onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_artist_details),
 						AppConstants.FRAGMENT_TAG_ARTIST_DETAILS);
 			}
 
 		} else if (fragment instanceof VenueDetailsFragment) {
-			onFragmentResumed(AppConstants.INVALID_INDEX, getResources()
-					.getString(R.string.title_venue_details),
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_venue_details),
 					AppConstants.FRAGMENT_TAG_VENUE_DETAILS);
 
 		} else if (fragment instanceof DeviceLibraryFragment) {
-			onFragmentResumed(AppConstants.INVALID_INDEX, getResources()
-					.getString(R.string.title_device_library),
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_device_library),
 					AppConstants.FRAGMENT_TAG_DEVICE_LIBRARY);
 
 		} else if (fragment instanceof LoginSyncingFragment) {
@@ -1617,23 +1563,19 @@ public class MainActivity extends ActionBarActivity implements
 			onFragmentResumed(AppConstants.INVALID_INDEX, title, AppConstants.FRAGMENT_TAG_LOGIN_SYNCING);
 
 		} else if (fragment instanceof TwitterFragment) {
-			onFragmentResumed(AppConstants.INVALID_INDEX, getResources()
-					.getString(R.string.title_twitter),
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_twitter),
 					AppConstants.FRAGMENT_TAG_TWITTER);
 
 		} else if (fragment instanceof RdioFragment) {
-			onFragmentResumed(AppConstants.INVALID_INDEX, getResources()
-					.getString(R.string.title_rdio),
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_rdio),
 					AppConstants.FRAGMENT_TAG_RDIO);
 
 		} else if (fragment instanceof LastfmFragment) {
-			onFragmentResumed(AppConstants.INVALID_INDEX, getResources()
-					.getString(R.string.title_lastfm),
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_lastfm),
 					AppConstants.FRAGMENT_TAG_LASTFM);
 
 		} else if (fragment instanceof PandoraFragment) {
-			onFragmentResumed(AppConstants.INVALID_INDEX, getResources()
-					.getString(R.string.title_pandora),
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_pandora),
 					AppConstants.FRAGMENT_TAG_PANDORA);
 			
 		} else if (fragment instanceof TwitterSyncingFragment) {
@@ -1673,10 +1615,8 @@ public class MainActivity extends ActionBarActivity implements
 			Bundle args = new Bundle();
 			args.putString(BundleKeys.QUERY, query);
 			searchFragment.setArguments(args);
-			selectNonDrawerItem(searchFragment,
-					AppConstants.FRAGMENT_TAG_SEARCH,
-					getResources().getString(R.string.title_search_results),
-					true, true);
+			selectNonDrawerItem(searchFragment, AppConstants.FRAGMENT_TAG_SEARCH,
+					getResources().getString(R.string.title_search_results), true);
 
 		} else {
 			searchFragment = (SearchFragment) getSupportFragmentManager()
@@ -1692,10 +1632,22 @@ public class MainActivity extends ActionBarActivity implements
 		onDrawerItemSelected(INDEX_NAV_ITEM_DISCOVER, null);
 	}
 
-	private void setDrawerIndicatorEnabled(boolean enable) {
+	public void setDrawerIndicatorEnabled(boolean enable) {
+		//Log.d(TAG, "enable = " + enable);
 		isDrawerIndicatorEnabled = enable;
-		if(mDrawerToggle != null) {
+		if (mDrawerToggle != null) {
 			mDrawerToggle.setDrawerIndicatorEnabled(enable);
+		}
+	}
+	
+	public void setDrawerLockMode(boolean lock) {
+		if (mDrawerLayout != null) {
+			if (lock) {
+				mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+				
+			} else {
+				mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+			}
 		}
 	}
 
