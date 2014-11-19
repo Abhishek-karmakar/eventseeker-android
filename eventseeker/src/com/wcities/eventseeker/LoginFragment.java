@@ -8,11 +8,15 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,16 +44,21 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.interfaces.ConnectionFailureListener;
 import com.wcities.eventseeker.util.FbUtil;
+import com.wcities.eventseeker.util.FieldValidationUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GPlusUtil;
 import com.wcities.eventseeker.util.NetworkUtil;
 
 public class LoginFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener, 
-		OnClickListener, DialogBtnClickListener {
+		OnClickListener, DialogBtnClickListener, TextWatcher {
 	
 	private static final String TAG = LoginFragment.class.getName();
 	
 	private static final String DIALOG_FRAGMENT_TAG_SKIP = "skipDialog";
+
+	private EditText edtEmail, edtPassword;
+	private boolean isEmailValid, isPasswordValid;
+	private Button btnLogin;
 	
 	//private Button btnSkip;
 	private ImageView imgFbSignUp, imgGPlusSignIn;
@@ -89,7 +98,13 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
     
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.fragment_get_started, container, false);
+		View v = inflater.inflate(R.layout.fragment_login, container, false);
+		
+		(edtEmail = (EditText) v.findViewById(R.id.edtEmail)).addTextChangedListener(this);
+		(edtPassword = (EditText) v.findViewById(R.id.edtPassword)).addTextChangedListener(this);
+
+		(btnLogin = (Button) v.findViewById(R.id.btnLogin)).setOnClickListener(this);
+		v.findViewById(R.id.btnForgotPassword).setOnClickListener(this);
 		
 		imgFbSignUp = (ImageView) v.findViewById(R.id.imgFbSignUp);
 		
@@ -418,6 +433,12 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 					res.getString(R.string.cancel), res.getString(R.string.skip));
 			generalDialogFragment.show(getChildFragmentManager(), DIALOG_FRAGMENT_TAG_SKIP);
 			break;*/
+			
+		case R.id.btnLogin:
+			break;
+
+		case R.id.btnForgotPassword:
+			break;
 
 		default:
 			break;
@@ -439,6 +460,37 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 			if (dialogFragment != null) {
 				dialogFragment.dismiss();
 			}
+		}
+	}
+
+	@Override
+	public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+	@Override
+	public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+	@Override
+	public void afterTextChanged(Editable s) {
+		View v = FragmentUtil.getActivity(this).getCurrentFocus();
+		if (!(v instanceof EditText)) {
+			return;
+		}
+		
+		switch (v.getId()) {
+			case R.id.edtEmail:
+				isEmailValid = FieldValidationUtil.isValidEmail(edtEmail.getText().toString());
+				break;
+				
+			case R.id.edtPassword:
+				isPasswordValid = edtPassword.getText().toString().length() > 0;
+				break;			
+		}
+		
+		if (isEmailValid && isPasswordValid) {
+			btnLogin.setEnabled(true);			
+			
+		} else {
+			btnLogin.setEnabled(false);
 		}
 	}
 }

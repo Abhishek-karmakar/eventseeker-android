@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_gray"
+    android:fillViewport="true"
+    android:padding="@dimen/rlt_layout_root_pad_fragment_connect_accounts_list" >
+
+    <RelativeLayout
+        android:id="@+id/rltLytRoot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/story_space"
+        android:gravity="center"
+        android:paddingBottom="@dimen/rlt_lyt_root_pad_l_r_b_get_started"
+        android:paddingLeft="@dimen/rlt_lyt_root_pad_l_r_b_get_started"
+        android:paddingRight="@dimen/rlt_lyt_root_pad_l_r_b_get_started" >
+
+        <ImageView
+            android:id="@+id/imgFbSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/all_components_margin_t_get_started"
+            android:src="@drawable/fb_login" />
+
+        <RelativeLayout
+            android:id="@+id/rltGPlus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imgFbSignUp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/all_components_margin_t_get_started" >
+
+            <TextView
+                android:id="@+id/txtGPlusSignInStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="Signing in..."
+                android:textSize="@dimen/txt_g_plus_sign_in_status_txt_size_get_started" />
+
+            <ImageView
+                android:id="@+id/imgGPlusSignIn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/g_plus_sign_in" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/rltGPlus"
+            android:layout_marginLeft="@dimen/mar_l_r_get_started_fragment"
+            android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
+            android:layout_marginTop="@dimen/lyt_mar_t_get_started_fragment" >
+
+            <TextView
+                android:id="@+id/txtLoginLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:gravity="center"
+                android:text="Login with Email"
+                android:textColor="@color/font_blue"
+                android:textSize="@dimen/txt_login_label_txt_size_get_started_fragment" />
+
+            <EditText
+                android:id="@+id/edtEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtLoginLabel"
+                android:layout_marginTop="@dimen/mar_t_get_started_fragment"
+                android:hint="Email" />
+
+            <EditText
+                android:id="@+id/edtPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edtEmail"
+                android:layout_marginTop="@dimen/mar_t_get_started_fragment"
+                android:hint="Password"
+                android:password="true" />
+
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/btn_default_ht"
+                android:layout_below="@+id/edtPassword"
+                android:layout_marginTop="@dimen/mar_t_get_started_fragment"
+                android:background="@drawable/slctr_btn_login_default_grey_pressed_blue_rounded"
+                android:gravity="center"
+                android:text="Login"
+            	android:enabled="false"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/btnForgotPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btnLogin"
+                android:layout_marginTop="@dimen/btn_forgot_pass_mar_t_get_started_fragment"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:text="Forgot your password?"
+                android:textSize="@dimen/btn_forgot_pass_txt_size_get_started_fragment" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</ScrollView>
