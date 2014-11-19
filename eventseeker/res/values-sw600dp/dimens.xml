@@ -358,5 +358,18 @@
     
     <!-- fragment_my_events_list.xml -->    
     <dimen name="txt_desc_txt_size_fragment_launcher">37sp</dimen>
+
+    <!-- fragment_launcher.xml -->
+    <dimen name="btn_default_ht">50dp</dimen>
     
+    <!-- login/register fragment -->    
+    <dimen name="lyt_mar_t_get_started_fragment">55dp</dimen>
+    <dimen name="mar_t_get_started_fragment">40dp</dimen>
+    <dimen name="mar_t_below_error_get_started_fragment">15dp</dimen>
+    <dimen name="btn_forgot_pass_mar_t_get_started_fragment">15dp</dimen>
+    <dimen name="mar_l_r_get_started_fragment">65dp</dimen>
+    <dimen name="rlt_register_details_mar_r_get_started_fragment">22dp</dimen>
+    <dimen name="txt_login_label_txt_size_get_started_fragment">30sp</dimen>
+    <dimen name="btn_forgot_pass_txt_size_get_started_fragment">22sp</dimen>
+        
 </resources>

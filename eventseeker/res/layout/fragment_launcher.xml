@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:app1="http://schemas.android.com/apk/res/com.wcities.eventseeker"
     android:id="@+id/rltLayoutRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,6 +19,7 @@
         android:textStyle="bold" />
 
     <LinearLayout
+        android:id="@+id/lnrBtn"
         android:layout_width="match_parent"
         android:layout_height="@dimen/btn_default_ht"
         android:layout_alignParentBottom="true" >
@@ -39,5 +42,24 @@
             android:text="Sign Up"
             android:textColor="@android:color/white" />
     </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_pager_ht_launcher_fragment"
+        android:layout_above="@+id/pageIndicator"
+        android:layout_marginTop="@dimen/all_component_mar_launcher_fragment" 
+        android:layout_marginLeft="@dimen/all_component_mar_launcher_fragment" 
+        android:layout_marginRight="@dimen/all_component_mar_launcher_fragment" />
+
+    <com.viewpagerindicator.CirclePageIndicator
+        android:id="@+id/pageIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/lnrBtn"
+        android:layout_marginBottom="@dimen/all_component_mar_launcher_fragment"
+        app:fillColor="@color/font_blue"
+        app:pageColor="@android:color/black"
+        app:radius="3dp" />
 
 </RelativeLayout>

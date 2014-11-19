@@ -119,7 +119,7 @@
     <!-- fragment_discover_by_category_list_item_evt.xml -->
     <!--
     summation of img_event_ht_fragment_discover_by_category_list_item_evt + img_event_margin_t_fragment_discover_by_category_list_item_evt +
-    img_event_margin_b_fragment_discover_by_category_list_item_evt + divider_ht_fragment_discover_by_category_list_item_evt
+    img_event_margin_b_fragment_discover_by_category_list_item_evt + divider_ht_fragment_discover_by_category_list_item_evt
     -->
     <dimen name="rlt_layout_root_ht_fragment_discover_by_category_list_item_evt">90dp</dimen>
     <dimen name="img_event_w_fragment_discover_by_category_list_item_evt">112dp</dimen>
@@ -188,7 +188,7 @@
     <dimen name="txt_count_margin_r_navigation_drawer_list_item">10dp</dimen>
     <dimen name="txt_count_pad_l_navigation_drawer_list_item">5dp</dimen>
     <dimen name="txt_count_pad_r_navigation_drawer_list_item">@dimen/txt_count_pad_l_navigation_drawer_list_item</dimen>
-    <dimen name="txt_count_txt_size_navigation_drawer_list_item">@dimen/txt_title_txt_size_navigation_drawer_list_item</dimen>
+    <dimen name="txt_count_txt_size_navigation_drawer_list_item">@dimen/txt_title_txt_size_navigation_drawer_list_item</dimen>
     -->
     <dimen name="divider_ht_navigation_drawer_list_item">1dp</dimen>
     <dimen name="divider_margin_l_navigation_drawer_list_item">@dimen/txt_title_margin_l_navigation_drawer_list_item</dimen>
@@ -399,7 +399,7 @@
     <dimen name="min_ht_widget_info">234dp</dimen>
     <!--
     <dimen name="widget_margin_hor">20dp</dimen>
-    <dimen name="widget_margin_vert">4dp</dimen>
+    <dimen name="widget_margin_vert">4dp</dimen>
     -->
     <!-- widget_layout.xml -->
     <dimen name="rlt_layout_root_w_widget_layout">312dp</dimen>
@@ -461,20 +461,34 @@
     <!-- list_item_language -->
     <dimen name="common_margin_padding_list_item_language">10dp</dimen>
     <dimen name="txt_language_txt_size_list_item_language">16sp</dimen>
-    <!-- fragment_fragment_launcher.xml -->    
+    <!-- fragment_launcher.xml -->
     <dimen name="txt_desc_txt_size_fragment_launcher">35sp</dimen>
     <dimen name="btn_default_ht">45dp</dimen>
-	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-	<!-- activity_bosch_main.xml -->
+    <dimen name="txt_desc_mar_t_text_fragment">20dp</dimen>
+    <dimen name="all_component_mar_launcher_fragment">10dp</dimen>
+    <dimen name="view_pager_ht_launcher_fragment">100dp</dimen>
+    <!-- login/register fragment -->
+    <dimen name="lyt_mar_t_get_started_fragment">40dp</dimen>
+    <dimen name="mar_t_get_started_fragment">25dp</dimen>
+    <dimen name="mar_t_below_error_get_started_fragment">12dp</dimen>
+    <dimen name="btn_forgot_pass_mar_t_get_started_fragment">10dp</dimen>
+    <dimen name="mar_l_r_get_started_fragment">40dp</dimen>
+    <dimen name="rlt_register_details_mar_r_get_started_fragment">12dp</dimen>
+    <dimen name="txt_login_label_txt_size_get_started_fragment">20sp</dimen>
+    <dimen name="btn_forgot_pass_txt_size_get_started_fragment">18sp</dimen>
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- activity_bosch_main.xml -->
     <dimen name="b_root_navigation_drawer_w_main">210dp</dimen>
     <!-- bosch_navigation_drawer_list_item.xml -->
-	<!--<dimen name="b_rlt_layout_content_pad_vert_navigation_drawer_list_item">12dp</dimen>
+    <!--
+    <dimen name="b_rlt_layout_content_pad_vert_navigation_drawer_list_item">12dp</dimen>
     <dimen name="b_rlt_layout_content_margin_l_navigation_drawer_list_item">10dp</dimen>
     <dimen name="b_txt_title_margin_l_navigation_drawer_list_item">10dp</dimen>
     <dimen name="b_txt_title_txt_size_navigation_drawer_list_item">18sp</dimen>
     <dimen name="b_divider_ht_navigation_drawer_list_item">1dp</dimen>
     <dimen name="b_divider_margin_l_navigation_drawer_list_item">10dp</dimen>
-    <dimen name="b_divider_margin_r_navigation_drawer_list_item">5dp</dimen> -->
+    <dimen name="b_divider_margin_r_navigation_drawer_list_item">5dp</dimen>
+    -->
     <dimen name="b_rlt_root_lyt_h_bosch_navigation_drawer_list_item">45dp</dimen>
     <dimen name="b_txt_screen_title_pad_bosch_navigation_drawer_list_item">5dp</dimen>
     <dimen name="b_v_divider_h_bosch_navigation_drawer_list_item">1dp</dimen>
@@ -523,7 +537,8 @@
     <dimen name="b_btn_bg_radius_fragment_bosch_about_us">10dp</dimen>
     <!-- fragment_bosch_change_city -->
     <dimen name="b_lnr_search_lyt_h_fragment_bosch_change_city">45dp</dimen>
-    <dimen name="b_lnr_search_lyt_pad_fragment_bosch_change_city"><!-- 10 -->5dp</dimen>
+    <dimen name="b_lnr_search_lyt_pad_fragment_bosch_change_city"> <!-- 10 -->
+5dp</dimen>
     <dimen name="b_edt_search_city_bg_edge_radius_fragment_bosch_change_city">10dp</dimen>
     <dimen name="b_edt_search_city_pad_l_r_fragment_bosch_change_city">10dp</dimen>
     <dimen name="b_edt_search_city_stroke_h_fragment_bosch_change_city">2dp</dimen>
@@ -536,7 +551,7 @@
     <dimen name="b_lnr_search_lyt_pad_fragment_change_city">10dp</dimen>
     <dimen name="edt_search_city_bg_edge_radius_fragment_change_city">10dp</dimen>
     <dimen name="b_edt_search_city_pad_l_r_fragment_change_city">10dp</dimen>
-	<dimen name="b_btn_margin_l_r_fragment_change_city">5dp</dimen>
+    <dimen name="b_btn_margin_l_r_fragment_change_city">5dp</dimen>
     <dimen name="b_btn_pad_l_r_fragment_change_city">5dp</dimen>
     <dimen name="b_lst_cities_pad_fragment_change_city">2dp</dimen>
     <dimen name="b_txt_size_fragment_change_city">11sp</dimen>
@@ -575,11 +590,11 @@
     <dimen name="b_btn_txt_size_fragment_bosch_all_details">16sp</dimen>
     <dimen name="b_btn_stroke_h_fragment_venue_details">3dp</dimen>
     <!-- fragment_bosch_venue_details -->
- 	<dimen name="txt_distance_drw_pad_bosch_venue_details">5dp</dimen>
+    <dimen name="txt_distance_drw_pad_bosch_venue_details">5dp</dimen>
     <dimen name="txt_distance_pad_t_b_bosch_venue_details">2dp</dimen>
     <dimen name="txt_distance_pad_l_r_bosch_venue_details">5dp</dimen>
     <dimen name="txt_distance_size_bosch_venue_details">12sp</dimen>
-     <!-- bosch_element_alert_dialog -->
+    <!-- bosch_element_alert_dialog -->
     <dimen name="b_rlt_root_lyt_pad_bosch_element_alert_dialog">30dp</dimen>
     <dimen name="b_txt_title_txt_size_bosch_element_alert_dialog">15sp</dimen>
     <!-- item_lst_cities -->
@@ -590,15 +605,16 @@
     <dimen name="b_txt_cities_drw_pad_item_lst_cities">@dimen/b_txt_cities_margin_l_r_item_lst_cities</dimen>
     <!-- ends for bosch -->
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-    
+
+
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for ford ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <!-- LockScreenActivity -->
-    <dimen name="img_ford_logo_w_h_lock_screen">180dp</dimen>	
-    <dimen name="img_ford_logo_margin_t_lock_screen">90dp</dimen>	
-    <dimen name="margin_t_lock_screen">10dp</dimen>	
-    <dimen name="margin_b_lock_screen">15dp</dimen>	
-    <dimen name="txt_eventseeker_lock_screen">24sp</dimen>	
-    <dimen name="txt_lock_screen_lock_screen">22sp</dimen>	
+    <dimen name="img_ford_logo_w_h_lock_screen">180dp</dimen>
+    <dimen name="img_ford_logo_margin_t_lock_screen">90dp</dimen>
+    <dimen name="margin_t_lock_screen">10dp</dimen>
+    <dimen name="margin_b_lock_screen">15dp</dimen>
+    <dimen name="txt_eventseeker_lock_screen">24sp</dimen>
+    <dimen name="txt_lock_screen_lock_screen">22sp</dimen>
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for ford ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 </resources>

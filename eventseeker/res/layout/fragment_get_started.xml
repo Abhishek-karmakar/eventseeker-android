@@ -52,9 +52,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/rltGPlus"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="40dp" >
+            android:layout_marginLeft="@dimen/mar_l_r_get_started_fragment"
+            android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
+            android:layout_marginTop="@dimen/lyt_mar_t_get_started_fragment" >
 
             <TextView
                 android:id="@+id/txtLoginLabel"
@@ -64,14 +64,14 @@
                 android:gravity="center"
                 android:text="Login with Email"
                 android:textColor="@color/font_blue"
-                android:textSize="20sp" />
+                android:textSize="@dimen/txt_login_label_txt_size_get_started_fragment" />
 
             <EditText
                 android:id="@+id/edtEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtLoginLabel"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/mar_t_get_started_fragment"
                 android:hint="Email" />
 
             <EditText
@@ -79,16 +79,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtEmail"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/mar_t_get_started_fragment"
                 android:hint="Password"
                 android:password="true" />
 
             <Button
                 android:id="@+id/btnLogin"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/btn_default_ht"
                 android:layout_below="@+id/edtPassword"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="@dimen/mar_t_get_started_fragment"
                 android:background="@drawable/slctr_btn_login_default_grey_pressed_blue_rounded"
                 android:gravity="center"
                 android:text="Login"
@@ -100,10 +100,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/btnLogin"
+                android:layout_marginTop="@dimen/btn_forgot_pass_mar_t_get_started_fragment"
                 android:background="@android:color/transparent"
                 android:gravity="center"
                 android:text="Forgot your password?"
-                android:textSize="18sp" />
+                android:textSize="@dimen/btn_forgot_pass_txt_size_get_started_fragment" />
         </RelativeLayout>
     </RelativeLayout>
 
