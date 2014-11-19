@@ -4,16 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -45,10 +44,10 @@ import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GPlusUtil;
 import com.wcities.eventseeker.util.NetworkUtil;
 
-public class GetStartedFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener, 
+public class LoginFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener, 
 		OnClickListener, DialogBtnClickListener {
 	
-	private static final String TAG = GetStartedFragment.class.getName();
+	private static final String TAG = LoginFragment.class.getName();
 	
 	private static final String DIALOG_FRAGMENT_TAG_SKIP = "skipDialog";
 	
@@ -85,17 +84,12 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
     	setRetainInstance(true);
     	
     	mGoogleApiClient = GPlusUtil.createPlusClientInstance(this, this, this);
-    	//res = getResources();
+    	GoogleAnalyticsTracker.getInstance().sendScreenView(FragmentUtil.getApplication(this), "Account Login Screen");
     }
     
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		//Log.d(TAG, "onCreateView(), THIS:" + this);
-
 		View v = inflater.inflate(R.layout.fragment_get_started, container, false);
-		
-		//btnSkip = (Button) v.findViewById(R.id.btnSkip);
-		//btnSkip.setOnClickListener(this);
 		
 		imgFbSignUp = (ImageView) v.findViewById(R.id.imgFbSignUp);
 		
@@ -103,11 +97,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 			
 			statusCallback = new SessionStatusCallback();
 			
-			Context appContext = FragmentUtil.getActivity(this).getApplicationContext();
-			if (((EventSeekr)appContext).getWcitiesId() == null) {
-			//if (!FbUtil.hasUserLoggedInBefore(appContext) && !GPlusUtil.hasUserLoggedInBefore(appContext)) {
-				Log.d(TAG, "not logged in");
-		    	GoogleAnalyticsTracker.getInstance().sendScreenView(FragmentUtil.getApplication(this), "Account Login Screen");
+			//if (((EventSeekr)appContext).getWcitiesId() == null) {
 
 				Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
 				
@@ -131,10 +121,10 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 		        
 		        updateView();
 		        
-			} else {
-				((GetStartedFragmentListener)FragmentUtil.getActivity(GetStartedFragment.this))
+			/*} else {
+				((GetStartedFragmentListener)FragmentUtil.getActivity(LoginFragment.this))
 						.replaceGetStartedFragmentBy(AppConstants.FRAGMENT_TAG_DISCOVER);
-			}
+			}*/
 			
 		} else {
 			if (!FbUtil.hasUserLoggedInBefore(FragmentUtil.getActivity(this).getApplicationContext())) {
@@ -151,23 +141,14 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 	}
 	
 	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		
-		/**
-		 * Even without signing in generate WCitesId  
-		 * 
-		 * Writing this in onActivityCreated() & not in onCreate() because it's possible to have very fast 
-		 * net generating wcitiesId before code reaches onCreateView() which in turn navigate directly to 
-		 * discover screen rather than displaying this get started screen.
-		 */
-        ((EventSeekr) FragmentUtil.getActivity(this).getApplication()).getWcitiesId(null);
-	}
-	
-	@Override
     public void onStart() {
 		//Log.d(TAG, "onStart()");
         super.onStart();
+        
+        MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		ma.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME 
+				| ActionBar.DISPLAY_HOME_AS_UP);
+				
         // In starting if user's credentials are available, then this active session will be null.
         if (Session.getActiveSession() != null) {
         	Session.getActiveSession().addCallback(statusCallback);
@@ -178,6 +159,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
     public void onStop() {
     	//Log.d(TAG, "onStop()");
         super.onStop();
+        
         // In starting if user's credentials are available, then this active session will be null.
         if (Session.getActiveSession() != null) {
         	Session.getActiveSession().removeCallback(statusCallback);
@@ -261,7 +243,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 	    	                	String email = (user.getProperty("email") == null) ? "" : user.getProperty("email").toString();
 	    	                	bundle.putString(BundleKeys.FB_EMAIL_ID, email);
 	    	                	ConnectAccountsFragmentListener listener = (ConnectAccountsFragmentListener)FragmentUtil.getActivity(
-										GetStartedFragment.this);
+										LoginFragment.this);
 	    	                	/**
 	    	                	 * While changing orientation quickly sometimes listener returned is null, 
 	    	                	 * hence the following check.
@@ -298,12 +280,12 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 			@Override
 			public void onClick(View v) {
 				ConnectionFailureListener connectionFailureListener = 
-						((ConnectionFailureListener) FragmentUtil.getActivity(GetStartedFragment.this));
+						((ConnectionFailureListener) FragmentUtil.getActivity(LoginFragment.this));
 				if (!NetworkUtil.getConnectivityStatus((Context) connectionFailureListener)) {
 					connectionFailureListener.onConnectionFailure();
 					return;
 				}
-				FbUtil.onClickLogin(GetStartedFragment.this, statusCallback);
+				FbUtil.onClickLogin(LoginFragment.this, statusCallback);
 			}
 		});
     }
@@ -355,7 +337,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 	        	bundle.putString(BundleKeys.GOOGLE_PLUS_EMAIL_ID, Plus.AccountApi.getAccountName(mGoogleApiClient));
 	        	
 	        	ConnectAccountsFragmentListener listener = (ConnectAccountsFragmentListener)FragmentUtil.getActivity(
-						GetStartedFragment.this);
+						LoginFragment.this);
 	        	
 	        	/**
 	        	 * While changing orientation quickly sometimes listener returned is null, 
@@ -367,7 +349,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 	        }
 	        
 		} else {
-			((GetStartedFragmentListener)FragmentUtil.getActivity(GetStartedFragment.this))
+			((GetStartedFragmentListener)FragmentUtil.getActivity(LoginFragment.this))
 					.replaceGetStartedFragmentBy(AppConstants.FRAGMENT_TAG_DISCOVER);
 		}
 	}
@@ -445,7 +427,7 @@ public class GetStartedFragment extends Fragment implements ConnectionCallbacks,
 	@Override
 	public void doPositiveClick(String dialogTag) {
 		if (dialogTag.equals(DIALOG_FRAGMENT_TAG_SKIP)) {
-			((GetStartedFragmentListener)FragmentUtil.getActivity(GetStartedFragment.this))
+			((GetStartedFragmentListener)FragmentUtil.getActivity(LoginFragment.this))
 					.replaceGetStartedFragmentBy(AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS);
 		}
 	}

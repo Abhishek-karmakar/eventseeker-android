@@ -22,6 +22,7 @@
     <string name="lang_portuguese">Portuguese</string>
     <string name="menu_search">Search</string>
     <string name="menu_change_location">Change Location</string>
+    <string name="title_launcher">eventseeker</string>
     <string name="title_discover">Discover</string>
     <string name="title_change_location">Change Location</string>
     <string name="title_language">Language</string>

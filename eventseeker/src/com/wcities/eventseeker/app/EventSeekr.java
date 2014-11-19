@@ -8,7 +8,6 @@ import java.util.Locale;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.Application;
 import android.content.Context;
@@ -27,12 +26,12 @@ import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.LanguageFragment.Locales;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.Api;
-import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.SharedPrefKeys;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.FollowingList;
+import com.wcities.eventseeker.core.registration.Registration;
 import com.wcities.eventseeker.exception.DefaultUncaughtExceptionHandler;
 import com.wcities.eventseeker.gcm.GcmUtil;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
@@ -41,9 +40,7 @@ import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
-import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FileUtil;
-import com.wcities.eventseeker.util.GPlusUtil;
 
 public class EventSeekr extends Application {
 
@@ -67,7 +64,15 @@ public class EventSeekr extends Application {
 	private String fbUserId, gPlusUserId;
 	private String fbUserName, gPlusUserName;
 	private String fbEmailId, gPlusEmailId;
+	private String emailId, password, firstName, lastName;
 	private String wcitiesId;
+	/**
+	 * previousUserId = fbUserId, previousEmailId = fbEmailId, previousWcitiesId = wcitiesId for previousLoginType = facebook
+	 * previousUserId = gPlusUserId, previousEmailId = gPlusEmailId, previousWcitiesId = wcitiesId for previousLoginType = googlePlus
+	 * else, previousUserId = null, previousEmailId = emailId, previousWcitiesId = wcitiesId
+	 */
+	private String previousUserId, previousEmailId, previousWcitiesId;
+	private LoginType previousLoginType;	
 
 	private boolean firstTimeLaunch;
 	/**
@@ -424,22 +429,23 @@ public class EventSeekr extends Application {
 		editor.putString(SharedPrefKeys.FACEBOOK_EMAIL_ID, fbEmailId);
 		editor.commit();
 		
-		//For safety purpose
-		GPlusUtil.callGPlusLogout(null, this);
-		
-		new GetWcitiesId(listener, LoginType.facebook, null).execute();
+		AsyncTaskUtil.executeAsyncTask(new GetWcitiesId(listener, LoginType.facebook), true);
 	}
 	
 	public void removeFbUserInfo() {
+		updatePreviousUserInfo(LoginType.facebook, fbUserId, fbEmailId, wcitiesId);
+		
 		this.fbUserId = null;
 		this.fbUserName = null;
 		this.fbEmailId = null;
+		this.wcitiesId = null;
 		
 		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
 		Editor editor = pref.edit();
 		editor.remove(SharedPrefKeys.FACEBOOK_USER_ID);
 		editor.remove(SharedPrefKeys.FACEBOOK_USER_NAME);
 		editor.remove(SharedPrefKeys.FACEBOOK_EMAIL_ID);
+		editor.remove(SharedPrefKeys.WCITIES_USER_ID);
 		editor.commit();
 	}
 	
@@ -481,55 +487,190 @@ public class EventSeekr extends Application {
 		editor.putString(SharedPrefKeys.GOOGLE_PLUS_EMAIL_ID, gPlusEmailId);
 		editor.commit();
 		
-		//For safety purpose
-		FbUtil.callFacebookLogout(this);
-		
-		new GetWcitiesId(listener, LoginType.googlePlus, gPlusEmailId).execute();
+		AsyncTaskUtil.executeAsyncTask(new GetWcitiesId(listener, LoginType.googlePlus), true);
 	}
 	
 	public void removeGPlusUserInfo() {
+		updatePreviousUserInfo(LoginType.googlePlus, gPlusUserId, gPlusEmailId, wcitiesId);
+		
 		this.gPlusUserId = null;
 		this.gPlusUserName = null;
 		this.gPlusEmailId = null;
+		this.wcitiesId = null;
 
 		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
 		Editor editor = pref.edit();
 		editor.remove(SharedPrefKeys.GOOGLE_PLUS_USER_ID);
 		editor.remove(SharedPrefKeys.GOOGLE_PLUS_USER_NAME);
 		editor.remove(SharedPrefKeys.GOOGLE_PLUS_EMAIL_ID);
+		editor.remove(SharedPrefKeys.WCITIES_USER_ID);
 		editor.commit();
 	}
 	
+	public String getEmailId() {
+		if (emailId == null) {
+			SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+			emailId = pref.getString(SharedPrefKeys.EMAIL_ID, null);
+		}
+		return emailId;
+	}
+
+	public String getFirstName() {
+		if (firstName == null) {
+			SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+			firstName = pref.getString(SharedPrefKeys.FIRST_NAME, null);
+		}
+		return firstName;
+	}
+
+	public String getLastName() {
+		if (lastName == null) {
+			SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+			lastName = pref.getString(SharedPrefKeys.LAST_NAME, null);
+		}
+		return lastName;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void updateEmailSignupInfo(String emailId, String firstName, String lastName, String password, 
+			AsyncTaskListener<Object> listener) {
+		this.emailId = emailId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.password = password;
+		
+		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+		Editor editor = pref.edit();
+		editor.putString(SharedPrefKeys.EMAIL_ID, emailId);
+		editor.putString(SharedPrefKeys.FIRST_NAME, firstName);
+		editor.putString(SharedPrefKeys.LAST_NAME, lastName);
+		editor.commit();
+		
+		AsyncTaskUtil.executeAsyncTask(new GetWcitiesId(listener, LoginType.emailSignup), true);
+	}
+	
+	public void removeEmailSignupInfo() {
+		updatePreviousUserInfo(LoginType.emailSignup, null, emailId, wcitiesId);
+		
+		this.emailId = null;
+		this.firstName = null;
+		this.lastName = null;
+		this.wcitiesId = null;
+
+		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+		Editor editor = pref.edit();
+		editor.remove(SharedPrefKeys.EMAIL_ID);
+		editor.remove(SharedPrefKeys.FIRST_NAME);
+		editor.remove(SharedPrefKeys.LAST_NAME);
+		editor.remove(SharedPrefKeys.WCITIES_USER_ID);
+		editor.commit();
+	}
+	
+	public void updateEmailLoginInfo(String emailId, String password, AsyncTaskListener<Object> listener) {
+		this.emailId = emailId;
+		this.password = password;
+		
+		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+		Editor editor = pref.edit();
+		editor.putString(SharedPrefKeys.EMAIL_ID, emailId);
+		editor.commit();
+		
+		AsyncTaskUtil.executeAsyncTask(new GetWcitiesId(listener, LoginType.emailLogin), true);
+	}
+	
+	public void removeEmailLoginInfo() {
+		updatePreviousUserInfo(LoginType.emailLogin, null, emailId, wcitiesId);
+		
+		this.emailId = null;
+		this.wcitiesId = null;
+
+		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+		Editor editor = pref.edit();
+		editor.remove(SharedPrefKeys.EMAIL_ID);
+		editor.remove(SharedPrefKeys.WCITIES_USER_ID);
+		editor.commit();
+	}
+
 	public String getWcitiesId() {
 		if (wcitiesId == null) {
 			SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
 			wcitiesId = pref.getString(SharedPrefKeys.WCITIES_USER_ID, null);
 		}
-
-		// generate wcitiesId if not found in shared preference & if fbUserId or gPlusUserId is existing
-		if (wcitiesId == null) {
-			if (getFbUserId() != null) {
-				new GetWcitiesId(null, LoginType.facebook, null).execute();
-				
-			} else if (getGPlusUserId() != null) {
-				new GetWcitiesId(null, LoginType.googlePlus, getGPlusEmailId()).execute();
-			}
-		}
 		return wcitiesId;
 	}
 	
-	public String getWcitiesId(AsyncTaskListener<Object> listener) {
-		if (wcitiesId == null) {
-			SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-			wcitiesId = pref.getString(SharedPrefKeys.WCITIES_USER_ID, null);
-		}
+	public void updateWcitiesId(String wcitiesId) {
+		this.wcitiesId = wcitiesId;
 
-		// generate wcitiesId if not found in shared preference
-		if (wcitiesId == null) {
-			GetWcitiesId getWcitiesId = new GetWcitiesId(listener);
-			AsyncTaskUtil.executeAsyncTask(getWcitiesId, true);
+		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+		Editor editor = pref.edit();
+		editor.putString(SharedPrefKeys.WCITIES_USER_ID, wcitiesId);
+		editor.commit();
+
+		//new GcmUtil(this).registerGCMInBackground(true);
+	}
+	
+	public void removeWcitiesId() {
+		this.wcitiesId = null;
+
+		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+		Editor editor = pref.edit();
+		editor.remove(SharedPrefKeys.WCITIES_USER_ID);
+		editor.commit();
+	}
+	
+	public String getPreviousUserId() {
+		if (previousUserId == null) {
+			SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+			previousUserId = pref.getString(SharedPrefKeys.PREVIOUS_USER_ID, null);
 		}
-		return wcitiesId;
+		return previousUserId;
+	}
+
+	public String getPreviousEmailId() {
+		if (previousEmailId == null) {
+			SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+			previousEmailId = pref.getString(SharedPrefKeys.PREVIOUS_EMAIL_ID, null);
+		}
+		return previousEmailId;
+	}
+
+	public String getPreviousWcitiesId() {
+		if (previousWcitiesId == null) {
+			SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+			previousWcitiesId = pref.getString(SharedPrefKeys.PREVIOUS_WCITIES_ID, null);
+		}
+		return previousWcitiesId;
+	}
+
+	public LoginType getPreviousLoginType() {
+		if (previousLoginType == null) {
+			SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+			String previousLoginTypeStr = pref.getString(SharedPrefKeys.PREVIOUS_LOGIN_TYPE, null);
+			if (previousLoginTypeStr != null) {
+				previousLoginType = LoginType.valueOf(previousLoginTypeStr);
+			}
+		}
+		return previousLoginType;
+	}
+
+	private void updatePreviousUserInfo(LoginType previousLoginType, String previousUserId, String previousEmailId, 
+			String previousWcitiesId) {
+		this.previousLoginType = previousLoginType;
+		this.previousUserId = previousUserId;
+		this.previousEmailId = previousEmailId;
+		this.previousWcitiesId = previousWcitiesId;
+		
+		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
+		Editor editor = pref.edit();
+		editor.putString(SharedPrefKeys.PREVIOUS_LOGIN_TYPE, previousLoginType.name());
+		editor.putString(SharedPrefKeys.PREVIOUS_USER_ID, previousUserId);
+		editor.putString(SharedPrefKeys.PREVIOUS_EMAIL_ID, previousEmailId);
+		editor.putString(SharedPrefKeys.PREVIOUS_WCITIES_ID, previousWcitiesId);
+		editor.commit();
 	}
 	
 	/**
@@ -572,27 +713,6 @@ public class EventSeekr extends Application {
 		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
 		Editor editor = pref.edit();
 		editor.putInt(SharedPrefKeys.PROXIMITY_UNIT, savedProximityUnit.ordinal());
-		editor.commit();
-	}
-	
-	private void updateWcitiesId(String wcitiesId) {
-		this.wcitiesId = wcitiesId;
-
-		SharedPreferences pref = getSharedPreferences(
-				AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-		Editor editor = pref.edit();
-		editor.putString(SharedPrefKeys.WCITIES_USER_ID, wcitiesId);
-		editor.commit();
-
-		new GcmUtil(this).registerGCMInBackground(true);
-	}
-	
-	public void removeWcitiesId() {
-		this.wcitiesId = null;
-
-		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-		Editor editor = pref.edit();
-		editor.remove(SharedPrefKeys.WCITIES_USER_ID);
 		editor.commit();
 	}
 	
@@ -862,67 +982,21 @@ public class EventSeekr extends Application {
 		defaultLocale = null;
 	}
 
-	private class GetWcitiesId extends AsyncTask<Void, Void, String> {
+	private class GetWcitiesId extends AsyncTask<Void, Void, Integer> {
 		
 		private AsyncTaskListener<Object> listener;
 		private LoginType loginType;
-		private String accountName;
 		
-		public GetWcitiesId(AsyncTaskListener<Object> listener) {
-			this.listener = listener;
-		}
-
-		public GetWcitiesId(AsyncTaskListener<Object> listener, LoginType loginType, String accountName) {
+		public GetWcitiesId(AsyncTaskListener<Object> listener, LoginType loginType) {
 			this.listener = listener;
 			this.loginType = loginType;
-			this.accountName = accountName;
 		}
 
 		@Override
-		protected String doInBackground(Void... params) {
-			String wcitiesId = null;
-			UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
-			userInfoApi.setDeviceId(DeviceUtil.getDeviceId(EventSeekr.this));
+		protected Integer doInBackground(Void... params) {
 			try {
-				JSONObject jsonObject = userInfoApi.signUp();
-				UserInfoApiJSONParser jsonParser = new UserInfoApiJSONParser();
-				String userId = jsonParser.getUserId(jsonObject);
-
-				if (loginType == null) {
-					return userId;
-					
-				} else if (loginType == LoginType.facebook) {
-					userInfoApi.setFbUserId(getFbUserId());
-					userInfoApi.setFbEmailId(getFbEmailId());
-					
-				} else if (loginType == LoginType.googlePlus) {
-					userInfoApi.setGPlusUserId(getGPlusUserId());
-					userInfoApi.setGPlusEmailId(getGPlusEmailId());
-				}
-				userInfoApi.setUserId(userId);
-				jsonObject = userInfoApi.syncAccount(null, loginType);
-				wcitiesId = jsonParser.getWcitiesId(jsonObject);
-				
-				if (loginType == LoginType.googlePlus) {
-					String accessToken = GPlusUtil.getAccessToken(EventSeekr.this, accountName);
-					//Log.d(TAG, "accessToken = " + accessToken);
-					
-					if (accessToken == null) {
-						/**
-						 * Return null from here so that it will try to update both wcitiesId & accesstoken 
-						 * next time getWcitiesId() function is called up.
-						 */
-						return null;
-						
-					} else {
-						userInfoApi.syncFriends(loginType, accessToken);
-						return wcitiesId;
-					}
-					
-				} else if (loginType == LoginType.facebook) {
-					jsonObject = userInfoApi.syncFriends(loginType, null);
-					return wcitiesId;
-				}
+				Registration registration = loginType.getRegistrationInstance(EventSeekr.this);
+				return registration.register();
 				
 			} catch (ClientProtocolException e) {
 				e.printStackTrace();
@@ -933,18 +1007,30 @@ public class EventSeekr extends Application {
 			} catch (JSONException e) {
 				e.printStackTrace();
 			} 
-			return null;
+			return UserInfoApiJSONParser.MSG_CODE_UNSUCCESS;
 		}
 		
 		@Override
-		protected void onPostExecute(String wcitiesId) {
-			if (wcitiesId != null) {
-				updateWcitiesId(wcitiesId);
+		protected void onPostExecute(Integer msgCode) {
+			if (msgCode.intValue() != UserInfoApiJSONParser.MSG_CODE_SUCCESS) {
+				removeWcitiesId();
 			}
-			
 			if (listener != null) {
-				listener.onTaskCompleted();
+				listener.onTaskCompleted(msgCode);
 			}
+			/*if (response != null) {
+				if (response instanceof String) {
+					
+					updateWcitiesId((String) response);
+					
+					if (listener != null) {
+						listener.onTaskCompleted();
+					}
+					
+				} else if (response instanceof Integer) {
+					
+				}
+			}*/
 		}
 	}
 }

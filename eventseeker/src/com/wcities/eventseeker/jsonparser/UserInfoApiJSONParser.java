@@ -80,7 +80,11 @@ public class UserInfoApiJSONParser {
 	private static final String KEY_SYNCACCOUNT = "syncaccount";
 	private static final String KEY_WCITIES_ID = "wcities_id";
 	private static final String KEY_REP_CODE = "repCode";
-
+	
+	private static final String KEY_SIGNUP = "signup";
+	private static final String KEY_MSG_CODE = "msg_code";
+	private static final String KEY_WCITIES_ID2 = "wcitiesId";
+	
 	private static final String KEY_ARTIST_ID = "artist_id";
 	private static final String KEY_ARTIST_NAME = "artist_name";
 	private static final String KEY_PRICE = "price";
@@ -105,6 +109,14 @@ public class UserInfoApiJSONParser {
 	private static final String KEY_SERVICE_RDIO = "4";
 	private static final String KEY_SERVICE_LAST_FM = "5";
 	private static final String KEY_SERVICE_PANDORA = "6";
+	
+	public static final int MSG_CODE_SUCCESS = -1;
+	public static final int MSG_CODE_UNSUCCESS = -2;
+	public static final int MSG_CODE_NO_ACCESS_TOKEN = -3;
+	public static final int MSG_CODE_INVALID_REQUEST = 1;
+	public static final int MSG_CODE_EMAIL_OR_PWD_INCORRECT = 2;
+	public static final int MSG_CODE_EMAIL_ALREADY_EXISTS = 15;
+	public static final int MSG_CODE_NEW_USER = 16;
 
 	public String getUserId(JSONObject jsonObject) throws JSONException {
 		JSONObject jObjSignup = jsonObject.getJSONObject(KEY_SIGN_UP);
@@ -116,6 +128,19 @@ public class UserInfoApiJSONParser {
 		JSONObject jObjSyncaccount = jsonObject.getJSONObject(KEY_SYNCACCOUNT);
 		String wcitiesId = jObjSyncaccount.getString(KEY_WCITIES_ID);
 		return wcitiesId;
+	}
+	
+	public SignupResponse parseSignup(JSONObject jsonObject) throws JSONException {
+		JSONObject jObjSignup = jsonObject.getJSONObject(KEY_SIGNUP);
+		if (jObjSignup.has(KEY_MSG_CODE)) {
+			return new SignupResponse(jObjSignup.getInt(KEY_MSG_CODE));
+			
+		} else if (jObjSignup.has(KEY_WCITIES_ID2)) {
+			return new SignupResponse(jObjSignup.getString(KEY_WCITIES_ID2));
+			
+		} else {
+			return new SignupResponse(MSG_CODE_SUCCESS);
+		}
 	}
 	
 	public int getRepCodeResponse(JSONObject jsonObject) throws JSONException {
@@ -638,17 +663,26 @@ public class UserInfoApiJSONParser {
 		return schedule;
 	}
 	
-	/*public class ItemsList<T> {
+	public class SignupResponse {
 		
-		private int totalCount;
-		private List<T> items;
+		private int msgCode;
+		private String wcitiesId;
 		
-		public int getTotalCount() {
-			return totalCount;
+		public SignupResponse(int msgCode) {
+			this.msgCode = msgCode;
+		}
+
+		public SignupResponse(String wcitiesId) {
+			this.wcitiesId = wcitiesId;
+			msgCode = MSG_CODE_SUCCESS;
+		}
+
+		public int getMsgCode() {
+			return msgCode;
 		}
 		
-		public List<T> getItems() {
-			return items;
+		public String getWcitiesId() {
+			return wcitiesId;
 		}
-	}*/
+	}
 }

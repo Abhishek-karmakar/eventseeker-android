@@ -10,7 +10,13 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.core.registration.EmailLogin;
+import com.wcities.eventseeker.core.registration.EmailSignup;
+import com.wcities.eventseeker.core.registration.FacebookLogin;
+import com.wcities.eventseeker.core.registration.GooglePlusLogin;
+import com.wcities.eventseeker.core.registration.Registration;
 
 public class UserInfoApi extends Api {
 	
@@ -26,7 +32,9 @@ public class UserInfoApi extends Api {
 		syncaccount,
 		syncfriends,
 		recommendedevent,
-		registerDevice;
+		registerDevice,
+		checkemail,
+		login;
 	};
 	
 	public static enum UserTrackingType {
@@ -47,12 +55,42 @@ public class UserInfoApi extends Api {
 	
 	public static enum LoginType {
 		facebook,
-		googlePlus;
+		googlePlus,
+		emailSignup,
+		emailLogin;
+		
+		public Registration getRegistrationInstance(EventSeekr eventSeekr) {
+			switch (this) {
+			
+			case emailSignup:
+				return new EmailSignup(eventSeekr);
+				
+			case emailLogin:
+				return new EmailLogin(eventSeekr);
+				
+			case facebook:
+				return new FacebookLogin(eventSeekr);
+				
+			case googlePlus:
+				return new GooglePlusLogin(eventSeekr);
+			}
+			return null;
+		}
 	}
 	
 	public static enum UserType {
 		fb,
 		google;
+		
+		public static UserType getUserType(LoginType loginType) {
+			if (loginType == LoginType.facebook) {
+				return fb;
+				
+			} else if (loginType == LoginType.googlePlus) {
+				return google;
+			}
+			return null;
+		}
 	}
 	
 	public static enum RepCodeResponse {
@@ -212,15 +250,62 @@ public class UserInfoApi extends Api {
 	public JSONObject signUp() throws ClientProtocolException, IOException, JSONException {
 		String METHOD = "myProfile.php?";
 		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD).append("oauth_token=")
-				.append(getOauthToken()).append("&type=").append(Type.signup.name()).append("&deviceId=")
-				.append(deviceId).append("&deviceType=android");
+				.append(getOauthToken()).append("&type=").append(Type.signup.name()).append("&deviceType=android");
+		if (deviceId != null) {
+			uriBuilder.append("&deviceId=").append(deviceId);
+		}
 		
 		setUri(uriBuilder.toString());
 		Log.i(TAG, "uri=" + getUri());
 		return execute(RequestMethod.GET, null, null); 
 	}
 	
-	public JSONObject syncAccount(String repCode, LoginType loginType) throws ClientProtocolException, IOException, JSONException {
+	public JSONObject signup(String email, String password, String fname, String lname, String wcitiesId) 
+			throws ClientProtocolException, IOException, JSONException {
+		String METHOD = "wLogin.php?";
+		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD);
+		setUri(uriBuilder.toString());
+		
+		StringBuilder paramsBuilder = new StringBuilder();
+		paramsBuilder = paramsBuilder.append("oauth_token=").append(getOauthToken()).append("&type=")
+				.append(Type.signup.name()).append("&email=").append(email).append("&password=").append(password)
+				.append("&fname=").append(fname).append("&lname=").append(lname).append("&deviceType=android")
+				.append("&wcitiesId=").append(wcitiesId);
+		Log.d(TAG, "uri=" + getUri());
+		//Log.d(TAG, "params=" + paramsBuilder.toString());
+		return execute(RequestMethod.POST, ContentType.MIME_APPLICATION_X_WWW_FORM_URLENCODED, paramsBuilder.toString().getBytes());
+	}
+	
+	public JSONObject login(String email, String password) throws ClientProtocolException, IOException, JSONException {
+		String METHOD = "wLogin.php?";
+		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD);
+		setUri(uriBuilder.toString());
+		
+		StringBuilder paramsBuilder = new StringBuilder();
+		paramsBuilder = paramsBuilder.append("oauth_token=").append(getOauthToken()).append("&type=")
+				.append(Type.login.name()).append("&email=").append(email).append("&password=").append(password);
+		Log.d(TAG, "uri=" + getUri());
+		//Log.d(TAG, "params=" + paramsBuilder.toString());
+		return execute(RequestMethod.POST, ContentType.MIME_APPLICATION_X_WWW_FORM_URLENCODED, paramsBuilder.toString().getBytes());
+	}
+	
+	public JSONObject syncAccount(String repCode, String loginId, String email, UserType userType, 
+			String wcitiesId) throws ClientProtocolException, IOException, JSONException {
+		String METHOD = "myProfile.php?";
+		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD).append("oauth_token=")
+				.append(getOauthToken()).append("&type=").append(Type.syncaccount.name()).append("&userId=")
+				.append(loginId).append("&email=").append(email).append("&userType=").append(userType.name())
+				.append("&wcitiesId=").append(wcitiesId);
+		if (repCode != null) {
+			uriBuilder.append("&repCode=" + repCode);
+		}
+		
+		setUri(uriBuilder.toString());
+		Log.i(TAG, "uri=" + getUri());
+		return execute(RequestMethod.GET, null, null); 
+	}
+	
+	/*public JSONObject syncAccount(String repCode, LoginType loginType) throws ClientProtocolException, IOException, JSONException {
 		String METHOD = "myProfile.php?";
 		String loginId = null, userType = null, email = null;
 		if (loginType == LoginType.facebook) {
@@ -235,7 +320,8 @@ public class UserInfoApi extends Api {
 		}
 		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD).append("oauth_token=")
 				.append(getOauthToken()).append("&type=").append(Type.syncaccount.name()).append("&userId=")
-				.append(loginId).append("&email=").append(email).append("&userType=").append(userType).append("&wcitiesId=").append(userId);
+				.append(loginId).append("&email=").append(email).append("&userType=").append(userType)
+				.append("&wcitiesId=").append(userId);
 		if (repCode != null) {
 			uriBuilder.append("&repCode=" + repCode);
 		}
@@ -243,7 +329,7 @@ public class UserInfoApi extends Api {
 		setUri(uriBuilder.toString());
 		Log.i(TAG, "uri=" + getUri());
 		return execute(RequestMethod.GET, null, null); 
-	}
+	}*/
 	
 	public JSONObject syncFriends(LoginType loginType, String accessToken) throws ClientProtocolException, IOException, JSONException {
 		String METHOD = "myProfile.php?";
@@ -268,7 +354,7 @@ public class UserInfoApi extends Api {
 		}
 		
 		setUri(uriBuilder.toString());
-		Log.i(TAG, "uri=" + getUri());
+		Log.d(TAG, "uri=" + getUri());
 		return execute(RequestMethod.GET, null, null); 
 	}
 	
@@ -283,6 +369,16 @@ public class UserInfoApi extends Api {
 		Log.i(TAG, "uri=" + getUri());
 		
 		return execute(RequestMethod.GET, null, null); 
+	}
+	
+	public JSONObject checkEmail(String email) throws ClientProtocolException, IOException, JSONException {
+		String METHOD = "wLogin.php?";
+		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD).append("oauth_token=")
+				.append(getOauthToken()).append("&type=").append(Type.checkemail.name()).append("&email=")
+				.append(email);
+		setUri(uriBuilder.toString());
+		Log.d(TAG, "uri=" + getUri());
+		return execute(RequestMethod.GET, null, null);
 	}
 	
 	public JSONObject addUserTracking(UserTrackingItemType type, long id, int attending, String fb_postid) throws ClientProtocolException, IOException, JSONException {
