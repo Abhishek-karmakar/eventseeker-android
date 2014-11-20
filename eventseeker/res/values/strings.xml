@@ -316,6 +316,21 @@
     <!-- TwitterSyncingFragment -->
     <string name="twitter_call_limit_exceeded">Your twitter call limit is exceeded. Please retry after some time.</string>
     
+    <!-- PagerTitle Array -->
+    <string-array name="pagerTitleArray">
+        <item>abc Title</item>
+        <item>def Title</item>
+        <item>ghi Title</item>
+        <item>jkl Title</item>
+    </string-array>
+
+    <string-array name="pagerTitleDescArray">
+        <item>abc Description, abc Description, abc Description, abc Description, abc Description, abc Description, abc Description</item>
+        <item>def Description, def Description, def Description, def Description, def Description, def Description, def Description</item>
+        <item>ghi Description, ghi Description, ghi Description, ghi Description, ghi Description, ghi Description, ghi Description</item>
+        <item>jkl Description, jkl Description, jkl Description, jkl Description, jkl Description, jkl Description, jkl Description</item>
+    </string-array>
+
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     
     <!-- Common -->

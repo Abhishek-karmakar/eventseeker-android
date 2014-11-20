@@ -112,6 +112,9 @@ public class AppConstants {
 	public static final int REQ_CODE_GET_GOOGLE_PLAY_SERVICES = 9001;
 	public static final int REQ_CODE_GOOGLE_AUTH_CODE_FOR_SERVER_ACCESS = 9002;
 
+	public static final String LAUNCHER_FRAGMENT_TITLE = "launcherFragmentTitle";
+	public static final String LAUNCHER_FRAGMENT_DESC = "launcherFragmentDesc";
+
 	/**
 	 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
 	 * This is the max limit for the looping

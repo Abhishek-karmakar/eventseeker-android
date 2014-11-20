@@ -12,9 +12,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/story_space"
         android:gravity="center"
-        android:paddingBottom="@dimen/rlt_lyt_root_pad_l_r_b_get_started"
-        android:paddingLeft="@dimen/rlt_lyt_root_pad_l_r_b_get_started"
-        android:paddingRight="@dimen/rlt_lyt_root_pad_l_r_b_get_started" >
+        android:paddingBottom="@dimen/rlt_lyt_root_pad_l_r_b_get_started" >
 
         <ImageView
             android:id="@+id/imgFbSignUp"
@@ -49,12 +47,11 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/rltRegisterDetails"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/rltGPlus"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="40dp" >
+            android:layout_marginTop="@dimen/lyt_mar_t_get_started_fragment" >
 
             <TextView
                 android:id="@+id/txtLoginLabel"
@@ -64,61 +61,150 @@
                 android:gravity="center"
                 android:text="Sign Up with Email"
                 android:textColor="@color/font_blue"
-                android:textSize="20sp" />
+                android:textSize="@dimen/txt_login_label_txt_size_get_started_fragment" />
 
             <EditText
                 android:id="@+id/edtFN"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtLoginLabel"
-                android:layout_marginTop="20dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="@dimen/mar_l_r_get_started_fragment"
+                android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
+                android:layout_marginTop="@dimen/mar_t_get_started_fragment"
                 android:hint="First Name" />
+
+            <ImageView
+                android:id="@+id/imgFNIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/edtFN"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/edtFN"
+                android:layout_marginRight="@dimen/rlt_register_details_mar_r_get_started_fragment" />
 
             <EditText
                 android:id="@+id/edtLN"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtFN"
-                android:layout_marginTop="20dp"
+                android:layout_marginLeft="@dimen/mar_l_r_get_started_fragment"
+                android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
+                android:layout_marginTop="@dimen/mar_t_get_started_fragment"
                 android:hint="Last Name" />
+
+            <ImageView
+                android:id="@+id/imgLNIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/edtLN"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/edtLN"
+                android:layout_marginRight="@dimen/rlt_register_details_mar_r_get_started_fragment" />
 
             <EditText
                 android:id="@+id/edtEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtLN"
-                android:layout_marginTop="20dp"
+                android:layout_marginLeft="@dimen/mar_l_r_get_started_fragment"
+                android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
+                android:layout_marginTop="@dimen/mar_t_get_started_fragment"
                 android:hint="Email" />
+
+            <ImageView
+                android:id="@+id/imgEmailIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/edtEmail"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/edtEmail"
+                android:layout_marginRight="@dimen/rlt_register_details_mar_r_get_started_fragment" />
+
+            <TextView
+                android:id="@+id/txtEmailInvalid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edtEmail"
+                android:gravity="center"
+                android:text="THIS EMAIL IS INVALID"
+                android:textColor="@color/font_blue"
+                android:visibility="invisible" />
 
             <EditText
                 android:id="@+id/edtPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/edtEmail"
-                android:layout_marginTop="20dp"
+                android:layout_below="@+id/txtEmailInvalid"
+                android:layout_marginLeft="@dimen/mar_l_r_get_started_fragment"
+                android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
+                android:layout_marginTop="@dimen/mar_t_below_error_get_started_fragment"
                 android:hint="Password"
                 android:password="true" />
 
+            <ImageView
+                android:id="@+id/imgPasswordIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/edtPassword"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/edtPassword"
+                android:layout_marginRight="@dimen/rlt_register_details_mar_r_get_started_fragment" />
+
             <EditText
-                android:id="@+id/edtReEnterPassword"
+                android:id="@+id/edtConfirmPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtPassword"
-                android:layout_marginTop="20dp"
-                android:hint="Re-Enter Password"
+                android:layout_marginLeft="@dimen/mar_l_r_get_started_fragment"
+                android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
+                android:layout_marginTop="@dimen/mar_t_get_started_fragment"
+                android:hint="Confirm Password"
                 android:password="true" />
+
+            <ImageView
+                android:id="@+id/imgConfirmPasswordIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/edtConfirmPassword"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/edtConfirmPassword"
+                android:layout_marginRight="@dimen/rlt_register_details_mar_r_get_started_fragment" />
+
+            <TextView
+                android:id="@+id/txtConfirmPasswordInvalid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edtConfirmPassword"
+                android:gravity="center"
+                android:text="PASSWORDS DO NOT MATCH"
+                android:textColor="@color/font_blue"
+                android:visibility="invisible" />
 
             <Button
                 android:id="@+id/btnSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/btn_default_ht"
-                android:layout_below="@+id/edtReEnterPassword"
-                android:layout_marginTop="20dp"
+                android:layout_below="@+id/txtConfirmPasswordInvalid"
+                android:layout_marginLeft="@dimen/mar_l_r_get_started_fragment"
+                android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
+                android:layout_marginTop="@dimen/mar_t_below_error_get_started_fragment"
                 android:background="@drawable/slctr_btn_login_default_grey_pressed_blue_rounded"
-                android:gravity="center"
+                android:enabled="false"
                 android:text="Sign Up"
                 android:textColor="@android:color/white" />
-            <!-- android:enabled="false" -->
+
+            <!-- 
+	            The below Dummy view and its margin top is added to ignore the issue of above button getting clipped
+	            as it is last view in scrollview. This issue was seen in ASUS Nexus 7.
+             -->
+            <View
+                android:id="@+id/vDummy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btnSignUp"
+                android:layout_marginTop="@dimen/mar_t_below_error_get_started_fragment"
+                android:enabled="false" />
         </RelativeLayout>
     </RelativeLayout>
 
