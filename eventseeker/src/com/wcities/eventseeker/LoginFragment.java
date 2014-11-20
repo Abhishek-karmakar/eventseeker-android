@@ -38,14 +38,16 @@ import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ConnectionFailureListener;
+import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GPlusUtil;
 import com.wcities.eventseeker.util.NetworkUtil;
 
-public class LoginFragment extends Fragment implements ConnectionCallbacks, OnConnectionFailedListener, 
-		OnClickListener, DialogBtnClickListener {
+public class LoginFragment extends FragmentLoadableFromBackStack implements ConnectionCallbacks, OnConnectionFailedListener, 
+		OnClickListener {
 	
 	private static final String TAG = LoginFragment.class.getName();
 	
@@ -53,7 +55,6 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 	
 	//private Button btnSkip;
 	private ImageView imgFbSignUp, imgGPlusSignIn;
-    private Session.StatusCallback statusCallback;
     private TextView txtGPlusSignInStatus;
     
     private GoogleApiClient mGoogleApiClient;
@@ -61,39 +62,42 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
     private boolean isGPlusSigningIn;
     
 	private boolean isPermissionDisplayed;
+	
+    private Session.StatusCallback statusCallback = new SessionStatusCallback();
 
 	//private Resources res;
     
-	// Container Activity must implement this interface
-    public interface GetStartedFragmentListener {
-        public void replaceGetStartedFragmentBy(String fragmentTag);
-    }
-
-    @Override
-	public void onAttach(Activity activity) {
-    	//Log.d(TAG, "onAttach()");
-		super.onAttach(activity);
-		if (!(activity instanceof GetStartedFragmentListener)) {
-            throw new ClassCastException(activity.toString() + " must implement FbLogInFragmentListener");
-        }
-	}
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
     	setRetainInstance(true);
     	
     	mGoogleApiClient = GPlusUtil.createPlusClientInstance(this, this, this);
-    	GoogleAnalyticsTracker.getInstance().sendScreenView(FragmentUtil.getApplication(this), "Account Login Screen");
+    	//Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
     }
     
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		//Log.d(TAG, "onCreateView()");
 		View v = inflater.inflate(R.layout.fragment_get_started, container, false);
 		
 		imgFbSignUp = (ImageView) v.findViewById(R.id.imgFbSignUp);
+		imgFbSignUp.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				ConnectionFailureListener connectionFailureListener = 
+						((ConnectionFailureListener) FragmentUtil.getActivity(LoginFragment.this));
+				if (!NetworkUtil.getConnectivityStatus((Context) connectionFailureListener)) {
+					connectionFailureListener.onConnectionFailure();
+					return;
+				}
+				FbUtil.onClickLogin(LoginFragment.this, statusCallback);
+			}
+		});
+		Log.d(TAG, "statusCallback = " + statusCallback);
 		
-		if (statusCallback == null) {
+		/*if (statusCallback == null) {
 			
 			statusCallback = new SessionStatusCallback();
 			
@@ -121,16 +125,16 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 		        
 		        updateView();
 		        
-			/*} else {
-				((GetStartedFragmentListener)FragmentUtil.getActivity(LoginFragment.this))
-						.replaceGetStartedFragmentBy(AppConstants.FRAGMENT_TAG_DISCOVER);
-			}*/
+			//} else {
+			//	((GetStartedFragmentListener)FragmentUtil.getActivity(LoginFragment.this))
+			//			.replaceGetStartedFragmentBy(AppConstants.FRAGMENT_TAG_DISCOVER);
+			//}
 			
 		} else {
 			if (!FbUtil.hasUserLoggedInBefore(FragmentUtil.getActivity(this).getApplicationContext())) {
 		        updateView();
 			}
-		}
+		}*/
 		
 		imgGPlusSignIn = (ImageView) v.findViewById(R.id.imgGPlusSignIn);
 		imgGPlusSignIn.setOnClickListener(this);
@@ -157,9 +161,9 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 
     @Override
     public void onStop() {
-    	//Log.d(TAG, "onStop()");
         super.onStop();
-        
+    	Log.d(TAG, "onStop()");
+
         // In starting if user's credentials are available, then this active session will be null.
         if (Session.getActiveSession() != null) {
         	Session.getActiveSession().removeCallback(statusCallback);
@@ -249,7 +253,7 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 	    	                	 * hence the following check.
 	    	                	 */
 	    	                	if (listener != null) {
-		    	                	((ConnectAccountsFragmentListener)listener).onServiceSelected(Service.Facebook, bundle, false);
+		    	                	((ConnectAccountsFragmentListener)listener).onServiceSelected(Service.Facebook, bundle, true);
 	    	                	}
 	    	                }
 	    	            }
@@ -272,35 +276,19 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
         			isPermissionDisplayed = false;
         		}
         	}
-        	
         } 
-        
-    	imgFbSignUp.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				ConnectionFailureListener connectionFailureListener = 
-						((ConnectionFailureListener) FragmentUtil.getActivity(LoginFragment.this));
-				if (!NetworkUtil.getConnectivityStatus((Context) connectionFailureListener)) {
-					connectionFailureListener.onConnectionFailure();
-					return;
-				}
-				FbUtil.onClickLogin(LoginFragment.this, statusCallback);
-			}
-		});
     }
 	
 	private class SessionStatusCallback implements Session.StatusCallback {
         @Override
         public void call(Session session, SessionState state, Exception exception) {
-        	Log.d(TAG, "call() - state = " + state.name());
+        	Log.d(TAG, "call() - state = " + state.name() + ", session = " + session);
             updateView();
         }
     }
 	
 	private void setGooglePlusSigningInVisibility() {
 		//Log.d(TAG, "updateGoogleButton(), isGPlusSigningIn = " + isGPlusSigningIn);
-		
 		if (isGPlusSigningIn) {
 			txtGPlusSignInStatus.setVisibility(View.VISIBLE);
 			imgGPlusSignIn.setVisibility(View.INVISIBLE);
@@ -349,8 +337,8 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 	        }
 	        
 		} else {
-			((GetStartedFragmentListener)FragmentUtil.getActivity(LoginFragment.this))
-					.replaceGetStartedFragmentBy(AppConstants.FRAGMENT_TAG_DISCOVER);
+			((ReplaceFragmentListener)FragmentUtil.getActivity(LoginFragment.this))
+					.replaceByFragment(AppConstants.FRAGMENT_TAG_DISCOVER, null);
 		}
 	}
 
@@ -425,6 +413,11 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 	}
 
 	@Override
+	public String getScreenName() {
+		return "Account Login Screen";
+	}
+
+	/*@Override
 	public void doPositiveClick(String dialogTag) {
 		if (dialogTag.equals(DIALOG_FRAGMENT_TAG_SKIP)) {
 			((GetStartedFragmentListener)FragmentUtil.getActivity(LoginFragment.this))
@@ -440,5 +433,5 @@ public class LoginFragment extends Fragment implements ConnectionCallbacks, OnCo
 				dialogFragment.dismiss();
 			}
 		}
-	}
+	}*/
 }

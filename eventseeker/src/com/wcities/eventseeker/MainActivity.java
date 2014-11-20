@@ -44,7 +44,6 @@ import com.wcities.eventseeker.ConnectAccountsFragment.ConnectAccountsFragmentLi
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
-import com.wcities.eventseeker.LoginFragment.GetStartedFragmentListener;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.applink.service.AppLinkService;
@@ -70,7 +69,7 @@ import com.wcities.eventseeker.util.GPlusUtil;
 import com.wcities.eventseeker.util.UpdateAppUtil;
 
 public class MainActivity extends ActionBarActivity implements
-		DrawerListFragmentListener, GetStartedFragmentListener, OnLocaleChangedListener,
+		DrawerListFragmentListener, OnLocaleChangedListener,
 		ReplaceFragmentListener, EventListener, ArtistListener, VenueListener,
 		FragmentLoadedFromBackstackListener, MapListener,
 		ConnectAccountsFragmentListener, SearchView.OnQueryTextListener,
@@ -482,7 +481,8 @@ public class MainActivity extends ActionBarActivity implements
 		boolean disableSearch = currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_LOGIN)
 				|| currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_SIGN_UP)
 				|| currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_CHANGE_LOCATION)
-				|| currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_FULL_SCREEN_ADDRESS_MAP);
+				|| currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_FULL_SCREEN_ADDRESS_MAP)
+				|| currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_LOGIN_SYNCING);
 		menu.findItem(R.id.action_search).setVisible(!disableSearch);
 		
 		if (currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_SEARCH)) {
@@ -1176,7 +1176,6 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public void replaceByFragment(String fragmentTag, Bundle args) {
-	
 		if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_DISCOVER_BY_CATEGORY)) {
 			int categoryPosition = args.getInt(BundleKeys.CATEGORY_POSITION);
 			List<Category> categories = (List<Category>) args.getSerializable(BundleKeys.CATEGORIES);
@@ -1189,9 +1188,6 @@ public class MainActivity extends ActionBarActivity implements
 			WebViewFragment webViewFragment = new WebViewFragment();
 			webViewFragment.setArguments(args);
 			selectNonDrawerItem(webViewFragment, fragmentTag, getResources().getString(R.string.title_web), true);
-			
-		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS)) {
-			selectItem(INDEX_NAV_ITEM_CONNECT_ACCOUNTS, null);
 			
 		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_LOGIN)) {
 			LoginFragment getStartedFragment = new LoginFragment();
@@ -1259,20 +1255,6 @@ public class MainActivity extends ActionBarActivity implements
 			if (!isTabletAndInLandscapeMode) {
 				mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
 			}
-		}
-	}
-
-	@Override
-	public void replaceGetStartedFragmentBy(String fragmentTag) {
-		//Log.d(TAG, "replaceGetStartedFragmentBy(), tag = " + fragmentTag);
-		if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_MY_EVENTS)) {
-			selectItem(INDEX_NAV_ITEM_MY_EVENTS, null);
-			
-		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_DISCOVER)) {
-			selectItem(INDEX_NAV_ITEM_DISCOVER, null);
-
-		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS)) {
-			selectItem(INDEX_NAV_ITEM_CONNECT_ACCOUNTS, null);
 		}
 	}
 
@@ -1449,6 +1431,14 @@ public class MainActivity extends ActionBarActivity implements
 		if (fragment instanceof LauncherFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_launcher),
 					AppConstants.FRAGMENT_TAG_LAUNCHER);
+
+		} else if (fragment instanceof LoginFragment) {
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_login),
+					AppConstants.FRAGMENT_TAG_LOGIN);
+
+		} else if (fragment instanceof SignUpFragment) {
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_signup),
+					AppConstants.FRAGMENT_TAG_SIGN_UP);
 
 		} else if (fragment instanceof DiscoverParentFragment) {
 			onFragmentResumed(INDEX_NAV_ITEM_DISCOVER, getResources().getString(R.string.title_discover),
@@ -1667,7 +1657,7 @@ public class MainActivity extends ActionBarActivity implements
 		}
 		
 		if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-			//Log.d(TAG, "super.onBackPressed()");
+			Log.d(TAG, "super.onBackPressed()");
 			try {
 				/**
 				 * This try catch will handle IllegalStateException which may occur if onBackPressed() on Super
@@ -1686,7 +1676,7 @@ public class MainActivity extends ActionBarActivity implements
 			}
 			
 		} else {
-			//Log.d(TAG, "moveTaskToBack()");
+			Log.d(TAG, "moveTaskToBack()");
 			/**
 			 * Here if we allow back press (super.onBackPressed();) then it can display unexpected result 
 			 * in following case:

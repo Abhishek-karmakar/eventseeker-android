@@ -995,6 +995,12 @@ public class EventSeekr extends Application {
 		@Override
 		protected Integer doInBackground(Void... params) {
 			try {
+				Thread.sleep(3000);
+				
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			/*try {
 				Registration registration = loginType.getRegistrationInstance(EventSeekr.this);
 				return registration.register();
 				
@@ -1006,7 +1012,7 @@ public class EventSeekr extends Application {
 
 			} catch (JSONException e) {
 				e.printStackTrace();
-			} 
+			}*/ 
 			return UserInfoApiJSONParser.MSG_CODE_UNSUCCESS;
 		}
 		

@@ -33,19 +33,20 @@ public class EmailLogin extends Registration {
 			return signupResponse.getMsgCode();
 			
 		} else if (signupResponse.getMsgCode() == UserInfoApiJSONParser.MSG_CODE_SUCCESS) {
-			eventSeekr.updateWcitiesId(signupResponse.getWcitiesId());
-			
-			// register device for notification
-			new GcmUtil(eventSeekr).registerGCM();
+			String userId = signupResponse.getWcitiesId();
 			
 			// sync last used fb/g+ account
 			LoginType prevLoginType = eventSeekr.getPreviousLoginType();
 			if (prevLoginType == LoginType.facebook || prevLoginType == LoginType.googlePlus) {
 				jsonObject = userInfoApi.syncAccount(null, eventSeekr.getPreviousUserId(), eventSeekr.getPreviousEmailId(), 
-						UserType.getUserType(prevLoginType), eventSeekr.getWcitiesId());
-				String userId = jsonParser.getWcitiesId(jsonObject);
-				eventSeekr.updateWcitiesId(userId);
+						UserType.getUserType(prevLoginType), userId);
+				userId = jsonParser.getWcitiesId(jsonObject);
 			}
+			eventSeekr.updateWcitiesId(userId);
+			
+			// register device for notification
+			new GcmUtil(eventSeekr).registerGCM();
+
 			return UserInfoApiJSONParser.MSG_CODE_SUCCESS;
 		}
 		return UserInfoApiJSONParser.MSG_CODE_UNSUCCESS;

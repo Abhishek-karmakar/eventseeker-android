@@ -35,7 +35,6 @@ public class GooglePlusLogin extends Registration {
 		jsonObject = userInfoApi.syncAccount(null, eventSeekr.getGPlusUserId(), eventSeekr.getGPlusEmailId(), 
 				UserType.google, userId);
 		userId = jsonParser.getWcitiesId(jsonObject);
-		eventSeekr.updateWcitiesId(userId);
 		
 		// sync friends
 		String accessToken = GPlusUtil.getAccessToken(eventSeekr, eventSeekr.getGPlusEmailId());
@@ -47,17 +46,18 @@ public class GooglePlusLogin extends Registration {
 			userInfoApi.syncFriends(LoginType.googlePlus, accessToken);
 		}
 		
-		// register device for notification
-		new GcmUtil(eventSeekr).registerGCM();
-		
 		// sync last used email account wcitiesId with this fb
 		LoginType prevLoginType = eventSeekr.getPreviousLoginType();
 		if (prevLoginType != null && prevLoginType != LoginType.googlePlus) {
 			jsonObject = userInfoApi.syncAccount(null, eventSeekr.getGPlusUserId(), eventSeekr.getGPlusEmailId(), 
 					UserType.google, eventSeekr.getPreviousWcitiesId());
 			userId = jsonParser.getWcitiesId(jsonObject);
-			eventSeekr.updateWcitiesId(userId);
 		}
+		eventSeekr.updateWcitiesId(userId);
+		
+		// register device for notification
+		new GcmUtil(eventSeekr).registerGCM();
+
 		return UserInfoApiJSONParser.MSG_CODE_SUCCESS;
 	}
 }

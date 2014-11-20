@@ -39,7 +39,6 @@ public class EmailSignup extends Registration {
 		 */
 		jsonObject = userInfoApi.signUp();
 		String userId = jsonParser.getUserId(jsonObject);
-		eventSeekr.updateWcitiesId(userId);
 		
 		// sign up with email & pwd
 		jsonObject = userInfoApi.signup(eventSeekr.getEmailId(), eventSeekr.getPassword(), eventSeekr.getFirstName(), 
@@ -47,17 +46,18 @@ public class EmailSignup extends Registration {
 		signupResponse = jsonParser.parseSignup(jsonObject);
 		
 		if (signupResponse.getMsgCode() == UserInfoApiJSONParser.MSG_CODE_SUCCESS) {
-			// register device for notification
-			new GcmUtil(eventSeekr).registerGCM();
-			
 			// sync last used fb/g+ account
 			LoginType prevLoginType = eventSeekr.getPreviousLoginType();
 			if (prevLoginType == LoginType.facebook || prevLoginType == LoginType.googlePlus) {
 				jsonObject = userInfoApi.syncAccount(null, eventSeekr.getPreviousUserId(), eventSeekr.getPreviousEmailId(), 
-						UserType.getUserType(prevLoginType), eventSeekr.getWcitiesId());
+						UserType.getUserType(prevLoginType), userId);
 				userId = jsonParser.getWcitiesId(jsonObject);
-				eventSeekr.updateWcitiesId(userId);
 			}
+			eventSeekr.updateWcitiesId(userId);
+			
+			// register device for notification
+			new GcmUtil(eventSeekr).registerGCM();
+
 			return UserInfoApiJSONParser.MSG_CODE_SUCCESS;
 		}
 		return UserInfoApiJSONParser.MSG_CODE_UNSUCCESS;

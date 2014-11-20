@@ -9,10 +9,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import twitter4j.Twitter;
-import twitter4j.TwitterFactory;
-import twitter4j.auth.RequestToken;
-import twitter4j.conf.ConfigurationBuilder;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Context;
@@ -53,8 +49,8 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
+import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
-import com.wcities.eventseeker.LoginFragment.GetStartedFragmentListener;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
@@ -907,20 +903,20 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				public void onTaskCompleted(Integer... params) {
 					Log.d(TAG, "params[0] = " + params[0]);
 					if (params[0] > 0) {
-						((GetStartedFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
-							.replaceGetStartedFragmentBy(AppConstants.FRAGMENT_TAG_MY_EVENTS);
+						((DrawerListFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
+							.onDrawerItemSelected(MainActivity.INDEX_NAV_ITEM_MY_EVENTS, null);
 						
 					} else {
-						((GetStartedFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
-							.replaceGetStartedFragmentBy(AppConstants.FRAGMENT_TAG_DISCOVER);
+						((DrawerListFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
+							.onDrawerItemSelected(MainActivity.INDEX_NAV_ITEM_DISCOVER, null);
 					}
 				}
 			});
 			loadMyEventsCount.execute();
 			
 		} else {
-			((GetStartedFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
-				.replaceGetStartedFragmentBy(AppConstants.FRAGMENT_TAG_DISCOVER);
+			((DrawerListFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
+				.onDrawerItemSelected(MainActivity.INDEX_NAV_ITEM_DISCOVER, null);
 		}
 	}
 	
