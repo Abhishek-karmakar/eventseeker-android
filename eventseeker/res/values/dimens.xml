@@ -188,7 +188,7 @@
     <dimen name="txt_count_margin_r_navigation_drawer_list_item">10dp</dimen>
     <dimen name="txt_count_pad_l_navigation_drawer_list_item">5dp</dimen>
     <dimen name="txt_count_pad_r_navigation_drawer_list_item">@dimen/txt_count_pad_l_navigation_drawer_list_item</dimen>
-    <dimen name="txt_count_txt_size_navigation_drawer_list_item">@dimen/txt_title_txt_size_navigation_drawer_list_item</dimen>
+    <dimen name="txt_count_txt_size_navigation_drawer_list_item">@dimen/txt_title_txt_size_navigation_drawer_list_item</dimen>
     -->
     <dimen name="divider_ht_navigation_drawer_list_item">1dp</dimen>
     <dimen name="divider_margin_l_navigation_drawer_list_item">@dimen/txt_title_margin_l_navigation_drawer_list_item</dimen>
@@ -399,8 +399,7 @@
     <dimen name="min_ht_widget_info">234dp</dimen>
     <!--
     <dimen name="widget_margin_hor">20dp</dimen>
-    <dimen name="widget_margin_vert">4dp</dimen>
-    -->
+    <dimen name="widget_margin_vert">4dp</dimen>    -->
     <!-- widget_layout.xml -->
     <dimen name="rlt_layout_root_w_widget_layout">312dp</dimen>
     <dimen name="rlt_layout_root_ht_widget_layout">234dp</dimen>
@@ -476,6 +475,11 @@
     <dimen name="rlt_register_details_mar_r_get_started_fragment">12dp</dimen>
     <dimen name="txt_login_label_txt_size_get_started_fragment">20sp</dimen>
     <dimen name="btn_forgot_pass_txt_size_get_started_fragment">18sp</dimen>
+    <!-- list_item_settings.xml -->
+	<dimen name="rlt_layout_content_pad_t_b_list_item_settings">4dp</dimen>
+    <dimen name="txt_title_mar_l_list_item_settings">10dp</dimen>
+    <dimen name="txt_title_txt_size_list_item_settings">20sp</dimen>
+    <dimen name="divider_ht_list_item_settings">1dp</dimen>
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <!-- activity_bosch_main.xml -->
     <dimen name="b_root_navigation_drawer_w_main">210dp</dimen>

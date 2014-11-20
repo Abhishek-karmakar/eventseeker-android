@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal" >
+
+    <RelativeLayout
+        android:id="@+id/rltLayoutContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/rlt_layout_content_pad_t_b_list_item_settings"
+        android:paddingTop="@dimen/rlt_layout_content_pad_t_b_list_item_settings" >
+
+        <ImageView
+            android:id="@+id/imgIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="icon"
+            android:src="@drawable/selector_changelocation" />
+
+        <TextView
+            android:id="@+id/txtTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/txt_title_mar_l_list_item_settings"
+            android:layout_toRightOf="@id/imgIcon"
+            android:text="Change Location"
+            android:textColor="@color/darker_gray"
+            android:textSize="@dimen/txt_title_txt_size_list_item_settings" />
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_ht_list_item_settings"
+        android:layout_alignLeft="@+id/rltLayoutContent"
+        android:layout_alignRight="@+id/rltLayoutContent"
+        android:layout_below="@id/rltLayoutContent"
+        android:background="@drawable/side_nav_topic_divider" />
+
+    <View
+        android:id="@+id/dividerSection"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_ht_list_item_settings"
+        android:layout_alignRight="@+id/rltLayoutContent"
+        android:layout_below="@id/rltLayoutContent"
+        android:background="@drawable/side_nav_topic_divider" />
+
+</RelativeLayout>
