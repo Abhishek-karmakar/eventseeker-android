@@ -54,6 +54,8 @@ import com.facebook.Session;
 import com.facebook.Session.StatusCallback;
 import com.facebook.SessionState;
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
+import com.wcities.eventseeker.SettingsFragment.OnSettingsItemClickedListener;
+import com.wcities.eventseeker.SettingsFragment.SettingsItem;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.Tracktype;
@@ -1099,8 +1101,9 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 		switch (v.getId()) {
 		
 		case R.id.btnAction:
-			((DrawerListFragmentListener)FragmentUtil.getActivity(this)).onDrawerItemSelected(
-					MainActivity.INDEX_NAV_ITEM_INVITE_FRIENDS, null);
+			/*((DrawerListFragmentListener)FragmentUtil.getActivity(this)).onDrawerItemSelected(
+					MainActivity.INDEX_NAV_ITEM_INVITE_FRIENDS, null);*/
+			((OnSettingsItemClickedListener) FragmentUtil.getActivity(this)).onSettingsItemClicked(SettingsItem.INVITE_FRIENDS);
 			break;
 
 		default:

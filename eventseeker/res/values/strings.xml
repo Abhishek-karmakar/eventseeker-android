@@ -53,6 +53,8 @@
     <string name="title_lastfm">last.fm</string>
     <string name="title_pandora">Pandora</string>
     <string name="title_web">Web</string>
+    <string name="title_settings_mobile_app">Settings</string>
+    <string name="title_logout">Logout</string>
     <string name="no_items_found_pls_login">Please login with Facebook or Google from \'Sync Accounts\' page to see</string>
     <string name="pls_login_to_see_all_events_you_are_following">Please login with Facebook or Google from \'Sync Accounts\' page to see all the events you are following.</string>
     <string name="pls_login_to_see_to_see_recommended_events">Please login with Facebook or Google from \'Sync Accounts\' page to see recommended events for you.</string>
@@ -79,6 +81,8 @@
     <string name="navigation_drawer_item_friends_activity">@string/title_friends_activity</string>
     <string name="navigation_drawer_item_following">@string/title_following</string>
     <string name="navigation_drawer_section_settings">SETTINGS</string>
+    <string name="navigation_drawer_item_settings">@string/title_settings_mobile_app</string>
+    <string name="navigation_drawer_item_logout">@string/title_logout</string>
     <string name="navigation_drawer_item_sync_accounts">Sync Accounts</string>
     <string name="navigation_drawer_item_change_location">@string/title_change_location</string>
     <string name="navigation_drawer_item_language">@string/title_language</string>

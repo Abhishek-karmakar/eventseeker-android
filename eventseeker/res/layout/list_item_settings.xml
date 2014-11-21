@@ -2,11 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_horizontal" >
+    android:gravity="center_horizontal"
+    android:paddingLeft="@dimen/rlt_layout_content_pad_l_r_list_item_settings"
+    android:paddingRight="@dimen/rlt_layout_content_pad_l_r_list_item_settings" >
 
     <RelativeLayout
         android:id="@+id/rltLayoutContent"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="@dimen/rlt_layout_content_pad_t_b_list_item_settings"
         android:paddingTop="@dimen/rlt_layout_content_pad_t_b_list_item_settings" >
@@ -28,7 +30,7 @@
             android:layout_marginLeft="@dimen/txt_title_mar_l_list_item_settings"
             android:layout_toRightOf="@id/imgIcon"
             android:text="Change Location"
-            android:textColor="@color/darker_gray"
+            android:textColor="@color/slctr_white_on_darker_gray_off"
             android:textSize="@dimen/txt_title_txt_size_list_item_settings" />
     </RelativeLayout>
 

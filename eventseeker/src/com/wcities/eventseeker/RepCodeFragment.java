@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
+import com.wcities.eventseeker.SettingsFragment.OnSettingsItemClickedListener;
+import com.wcities.eventseeker.SettingsFragment.SettingsItem;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.RepCodeResponse;
@@ -167,8 +169,9 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 		if (dialogTag.equals(AppConstants.DIALOG_FRAGMENT_TAG_LOGIN_TO_SUBMIT_REP_CODE)) {
 			// set firstTimeLaunch=false so as to keep facebook & google sign in rows visible.
 			((EventSeekr)FragmentUtil.getActivity(this).getApplication()).updateFirstTimeLaunch(false);
-			((DrawerListFragmentListener)FragmentUtil.getActivity(this)).onDrawerItemSelected(
-					MainActivity.INDEX_NAV_ITEM_CONNECT_ACCOUNTS, null);
+			/*((DrawerListFragmentListener)FragmentUtil.getActivity(this)).onDrawerItemSelected(
+					MainActivity.INDEX_NAV_ITEM_CONNECT_ACCOUNTS, null);*/
+			((OnSettingsItemClickedListener) FragmentUtil.getActivity(this)).onSettingsItemClicked(SettingsItem.SYNC_ACCOUNTS);
 		}
 	}
 	

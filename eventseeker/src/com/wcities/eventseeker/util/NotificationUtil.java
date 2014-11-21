@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.wcities.eventseeker.MainActivity;
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.SettingsFragment.SettingsItem;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Event;
@@ -73,6 +74,13 @@ public class NotificationUtil {
 			
 		} else if (notificationType == NotificationType.ARTIST_DETAILS) {
 			notificationIntent.putExtra(BundleKeys.ARTIST, artist);
+		
+		} else if (notificationType == NotificationType.SYNC_ACCOUNTS) {
+			notificationIntent.putExtra(BundleKeys.SETTINGS_ITEM_ORDINAL, SettingsItem.SYNC_ACCOUNTS.ordinal());
+		
+		} else if (notificationType == NotificationType.INVITE_FRIENDS) {
+			notificationIntent.putExtra(BundleKeys.SETTINGS_ITEM_ORDINAL, SettingsItem.INVITE_FRIENDS.ordinal());
+			
 		}
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationId, 

@@ -8,8 +8,8 @@ public class BundleKeys {
 	public static final String FEATURED_EVTS = "featuredEvts";
 	public static final String EVENT = "event";
 	public static final String NOTIFICATION_TYPE = "notificationType";
-	
 	public static final String ARTIST = "artist";
+	public static final String SETTINGS_ITEM_ORDINAL = "isSettingsItem";
 	
 	public static final String VENUE = "venue";
 	public static final String VENUE_ID = "venueId";

@@ -16,6 +16,8 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
+import com.wcities.eventseeker.SettingsFragment.OnSettingsItemClickedListener;
+import com.wcities.eventseeker.SettingsFragment.SettingsItem;
 import com.wcities.eventseeker.MainActivity;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
@@ -201,8 +203,9 @@ public abstract class PublishEventFragment extends Fragment implements PublishLi
 		if (dialogTag.equals(AppConstants.DIALOG_FRAGMENT_TAG_LOGIN_TO_TRACK_EVENT)) {
 			// set firstTimeLaunch=false so as to keep facebook & google sign in rows visible.
 			((EventSeekr)FragmentUtil.getActivity(this).getApplication()).updateFirstTimeLaunch(false);
-			((DrawerListFragmentListener)FragmentUtil.getActivity(this)).onDrawerItemSelected(
-					MainActivity.INDEX_NAV_ITEM_CONNECT_ACCOUNTS, null);
+			/*((DrawerListFragmentListener)FragmentUtil.getActivity(this)).onDrawerItemSelected(
+					MainActivity.INDEX_NAV_ITEM_CONNECT_ACCOUNTS, null);*/
+			((OnSettingsItemClickedListener) FragmentUtil.getActivity(this)).onSettingsItemClicked(SettingsItem.SYNC_ACCOUNTS);
 		}
 	}
 	

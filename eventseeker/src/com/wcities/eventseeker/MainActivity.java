@@ -44,6 +44,8 @@ import com.wcities.eventseeker.ConnectAccountsFragment.ConnectAccountsFragmentLi
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
+import com.wcities.eventseeker.SettingsFragment.OnSettingsItemClickedListener;
+import com.wcities.eventseeker.SettingsFragment.SettingsItem;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.applink.service.AppLinkService;
@@ -69,7 +71,7 @@ import com.wcities.eventseeker.util.GPlusUtil;
 import com.wcities.eventseeker.util.UpdateAppUtil;
 
 public class MainActivity extends ActionBarActivity implements
-		DrawerListFragmentListener, OnLocaleChangedListener,
+		DrawerListFragmentListener, OnLocaleChangedListener, OnSettingsItemClickedListener,
 		ReplaceFragmentListener, EventListener, ArtistListener, VenueListener,
 		FragmentLoadedFromBackstackListener, MapListener,
 		ConnectAccountsFragmentListener, SearchView.OnQueryTextListener,
@@ -82,7 +84,8 @@ public class MainActivity extends ActionBarActivity implements
 	public static final int INDEX_NAV_ITEM_FOLLOWING = INDEX_NAV_ITEM_MY_EVENTS + 1;
 	public static final int INDEX_NAV_ITEM_ARTISTS_NEWS = INDEX_NAV_ITEM_FOLLOWING + 1;
 	public static final int INDEX_NAV_ITEM_FRIENDS_ACTIVITY = INDEX_NAV_ITEM_ARTISTS_NEWS + 1;
-	public static final int INDEX_NAV_ITEM_CONNECT_ACCOUNTS = DrawerListFragment.SECT_2_HEADER_POS + 1;
+	public static final int INDEX_NAV_ITEM_SETTINGS = DrawerListFragment.SECT_2_HEADER_POS + 1;
+	/*public static final int INDEX_NAV_ITEM_CONNECT_ACCOUNTS = DrawerListFragment.SECT_2_HEADER_POS + 1;
 	private static final int INDEX_NAV_ITEM_CHANGE_LOCATION = INDEX_NAV_ITEM_CONNECT_ACCOUNTS + 1;
 	// TODO: comment following for disabling language
 	private static final int INDEX_NAV_ITEM_LANGUAGE = INDEX_NAV_ITEM_CHANGE_LOCATION + 1;
@@ -90,7 +93,7 @@ public class MainActivity extends ActionBarActivity implements
 	private static final int INDEX_NAV_ITEM_RATE_APP = INDEX_NAV_ITEM_INVITE_FRIENDS + 1;
 	private static final int INDEX_NAV_ITEM_ABOUT_US = INDEX_NAV_ITEM_RATE_APP + 1;
 	private static final int INDEX_NAV_ITEM_EULA = INDEX_NAV_ITEM_ABOUT_US + 1;
-	private static final int INDEX_NAV_ITEM_REP_CODE = INDEX_NAV_ITEM_EULA + 1;
+	private static final int INDEX_NAV_ITEM_REP_CODE = INDEX_NAV_ITEM_EULA + 1;*/
 	
 	private static final String DRAWER_LIST_FRAGMENT_TAG = "drawerListFragment";
 
@@ -288,6 +291,11 @@ public class MainActivity extends ActionBarActivity implements
 				
 			} else if (getIntent().hasExtra(BundleKeys.ARTIST)) {
 				onArtistSelectedFromOtherTask((Artist) getIntent().getSerializableExtra(BundleKeys.ARTIST), false);
+
+			} else if (getIntent().hasExtra(BundleKeys.SETTINGS_ITEM_ORDINAL)) {
+				SettingsItem settingsItem = SettingsItem.getSettingsItemByOrdinal(
+						getIntent().getExtras().getInt(BundleKeys.SETTINGS_ITEM_ORDINAL));
+				onSettingsItemClicked(settingsItem);
 				
 			} else if (getIntent().hasExtra(BundleKeys.NOTIFICATION_TYPE)) {
 				onNotificationClicked((NotificationType) getIntent().getSerializableExtra(BundleKeys.NOTIFICATION_TYPE));
@@ -356,6 +364,11 @@ public class MainActivity extends ActionBarActivity implements
 			
 		} else if (intent.hasExtra(BundleKeys.ARTIST)) {
 			onArtistSelectedFromOtherTask((Artist) intent.getSerializableExtra(BundleKeys.ARTIST), true);
+
+		} else if (intent.hasExtra(BundleKeys.SETTINGS_ITEM_ORDINAL)) {
+			SettingsItem settingsItem = SettingsItem.getSettingsItemByOrdinal(
+					intent.getExtras().getInt(BundleKeys.SETTINGS_ITEM_ORDINAL));
+			onSettingsItemClicked(settingsItem);
 			
 		} else if (intent.hasExtra(BundleKeys.NOTIFICATION_TYPE)) {
 			onNotificationClicked((NotificationType) intent.getSerializableExtra(BundleKeys.NOTIFICATION_TYPE));
@@ -855,7 +868,6 @@ public class MainActivity extends ActionBarActivity implements
 	 */
 
 	private void onFragmentResumed(int position, String title, String fragmentTag) {
-		//Log.d(TAG, "onFragmentResumed() - " + fragmentTag);
 		drawerItemSelectedPosition = position;
 		if (drawerItemSelectedPosition != AppConstants.INVALID_INDEX) {
 			setDrawerIndicatorEnabled(true);
@@ -961,8 +973,14 @@ public class MainActivity extends ActionBarActivity implements
 			replaceContentFrameByFragment(friendsActivityFragment, AppConstants.FRAGMENT_TAG_FRIENDS_ACTIVITY, getResources()
 							.getString(R.string.title_friends_activity), false);
 			break;
+
+		case INDEX_NAV_ITEM_SETTINGS:
+			SettingsFragment settingsFragment = new SettingsFragment();
+			replaceContentFrameByFragment(settingsFragment, AppConstants.FRAGMENT_TAG_SETTINGS, getResources()
+					.getString(R.string.title_settings_mobile_app), false);
+			break;
 			
-		case INDEX_NAV_ITEM_CONNECT_ACCOUNTS:
+		/*case INDEX_NAV_ITEM_CONNECT_ACCOUNTS:
 	    	ConnectAccountsFragment connectAccountsFragment = new ConnectAccountsFragment();
 	    	replaceContentFrameByFragment(connectAccountsFragment, AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS, 
 	    			getResources().getString(R.string.title_connect_accounts), false);
@@ -1005,7 +1023,7 @@ public class MainActivity extends ActionBarActivity implements
 			RepCodeFragment repCodeFragment = new RepCodeFragment();
 			replaceContentFrameByFragment(repCodeFragment, AppConstants.FRAGMENT_TAG_REP_CODE, 
 					getResources().getString(R.string.title_rep_code), false);
-			break;
+			break;*/
 
 		default:
 			break;
@@ -1330,6 +1348,60 @@ public class MainActivity extends ActionBarActivity implements
 			onDrawerItemSelected(notificationType.getNavDrawerIndex(), args);
 		}
 	}
+	
+	@Override
+	public void onSettingsItemClicked(SettingsItem settingsItem) {
+		switch (settingsItem) {
+				
+			case SYNC_ACCOUNTS:
+		    	ConnectAccountsFragment connectAccountsFragment = new ConnectAccountsFragment();
+		    	selectNonDrawerItem(connectAccountsFragment, AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS, 
+		    			getResources().getString(R.string.title_connect_accounts), true);
+		    	break;
+				
+			case CHANGE_LOCATION:
+				ChangeLocationFragment changeLocationFragment = new ChangeLocationFragment();
+				selectNonDrawerItem(changeLocationFragment, AppConstants.FRAGMENT_TAG_CHANGE_LOCATION, 
+						getResources().getString(R.string.title_change_location), true);
+				break;
+
+			// TODO: comment following for disabling language
+			case LANGUAGE:
+				LanguageFragment languageFragment = new LanguageFragment();
+				selectNonDrawerItem(languageFragment, AppConstants.FRAGMENT_TAG_LANGUAGE, 
+						getResources().getString(R.string.title_language), true);
+				break;
+				
+			case INVITE_FRIENDS:
+				inviteFriends();
+				break;
+				
+			case RATE_APP:
+				rateApp();
+				break;
+				
+			case ABOUT:
+				AboutUsFragment aboutUsFragment = new AboutUsFragment();
+				selectNonDrawerItem(aboutUsFragment, AppConstants.FRAGMENT_TAG_ABOUT_US, 
+						getResources().getString(R.string.title_about_us), true);
+				break;
+				
+			case EULA:
+				EULAFragment eulaFragment = new EULAFragment();
+				selectNonDrawerItem(eulaFragment, AppConstants.FRAGMENT_TAG_ABOUT_US, 
+						getResources().getString(R.string.title_eula), true);
+				break;
+				
+			case REPCODE:
+				RepCodeFragment repCodeFragment = new RepCodeFragment();
+				selectNonDrawerItem(repCodeFragment, AppConstants.FRAGMENT_TAG_REP_CODE, 
+						getResources().getString(R.string.title_rep_code), true);
+				break;
+				
+			default:
+				break;
+		}
+	}
 
 	@Override
 	public void onMapClicked(Bundle args) {
@@ -1459,31 +1531,35 @@ public class MainActivity extends ActionBarActivity implements
 		} else if (fragment instanceof FollowingParentFragment) {
 			onFragmentResumed(INDEX_NAV_ITEM_FOLLOWING, getResources().getString(R.string.title_following),
 					AppConstants.FRAGMENT_TAG_FOLLOWING);
+			
+		} else if (fragment instanceof SettingsFragment) {
+			onFragmentResumed(INDEX_NAV_ITEM_SETTINGS, getResources().getString(R.string.title_settings_mobile_app),
+					AppConstants.FRAGMENT_TAG_SETTINGS);
 
 		} else if (fragment instanceof ConnectAccountsFragment) {
-			onFragmentResumed(INDEX_NAV_ITEM_CONNECT_ACCOUNTS, getResources().getString(R.string.title_connect_accounts),
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_connect_accounts),
 					AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS);
 
 		} else if (fragment instanceof ChangeLocationFragment) {
-			onFragmentResumed(INDEX_NAV_ITEM_CHANGE_LOCATION, getResources().getString(R.string.title_change_location),
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_change_location),
 					AppConstants.FRAGMENT_TAG_CHANGE_LOCATION);
 			
 		} 
 		// TODO: comment following for disabling language
 		else if (fragment instanceof LanguageFragment) {
-			onFragmentResumed(INDEX_NAV_ITEM_LANGUAGE, getResources().getString(R.string.title_language),
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_language),
 					AppConstants.FRAGMENT_TAG_LANGUAGE);
 
 		} else if (fragment instanceof AboutUsFragment) {
-			onFragmentResumed(INDEX_NAV_ITEM_ABOUT_US, getResources().getString(R.string.title_about_us),
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_about_us),
 					AppConstants.FRAGMENT_TAG_ABOUT_US);
 
 		} else if (fragment instanceof EULAFragment) {
-			onFragmentResumed(INDEX_NAV_ITEM_EULA, getResources().getString(R.string.title_eula),
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_eula),
 					AppConstants.FRAGMENT_TAG_EULA);
 
 		} else if (fragment instanceof RepCodeFragment) {
-			onFragmentResumed(INDEX_NAV_ITEM_REP_CODE, getResources().getString(R.string.title_rep_code),
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_rep_code),
 					AppConstants.FRAGMENT_TAG_REP_CODE);
 
 		} else if (fragment instanceof FullScreenAddressMapFragment) {

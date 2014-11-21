@@ -26,8 +26,18 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
 		RECOMMENDED_EVENTS (MainActivity.INDEX_NAV_ITEM_MY_EVENTS),
 		FOLLOWING (MainActivity.INDEX_NAV_ITEM_FOLLOWING),
 		ARTIST_NEWS (MainActivity.INDEX_NAV_ITEM_ARTISTS_NEWS),
-		SYNC_ACCOUNTS (MainActivity.INDEX_NAV_ITEM_CONNECT_ACCOUNTS),
-		INVITE_FRIENDS (MainActivity.INDEX_NAV_ITEM_INVITE_FRIENDS);
+		/**
+		 * 20-11-2014:
+		 * SYNC_ACCOUNTS is now removed from the Drawer Items and hence changed its index to INVALID_INDEX
+		 */
+		SYNC_ACCOUNTS (AppConstants.INVALID_INDEX),
+		/**
+		 * 20-11-2014:
+		 * INVITE_FRIENDS is now removed from the Drawer Items and hence changed its index to INVALID_INDEX
+		 */
+		INVITE_FRIENDS (AppConstants.INVALID_INDEX);
+		/*SETTINGS_ITEM_ORDINAL (MainActivity.INDEX_NAV_ITEM_CONNECT_ACCOUNTS),
+		IS_INVITE_FRIENDS (MainActivity.INDEX_NAV_ITEM_INVITE_FRIENDS);*/
 		
 		private int navDrawerindex;
 		

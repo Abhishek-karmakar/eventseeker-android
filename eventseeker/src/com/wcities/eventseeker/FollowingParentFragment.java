@@ -26,6 +26,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
+import com.wcities.eventseeker.SettingsFragment.OnSettingsItemClickedListener;
+import com.wcities.eventseeker.SettingsFragment.SettingsItem;
 import com.wcities.eventseeker.adapter.MyArtistListAdapter;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -212,8 +214,9 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 		case R.id.btnAction:
 			// set firstTimeLaunch=false so as to keep facebook & google sign in rows visible.
 			((EventSeekr)FragmentUtil.getActivity(this).getApplication()).updateFirstTimeLaunch(false);
-			((DrawerListFragmentListener)FragmentUtil.getActivity(this)).onDrawerItemSelected(
-					MainActivity.INDEX_NAV_ITEM_CONNECT_ACCOUNTS, null);
+			/*((DrawerListFragmentListener)FragmentUtil.getActivity(this)).onDrawerItemSelected(
+					MainActivity.INDEX_NAV_ITEM_CONNECT_ACCOUNTS, null);*/
+			((OnSettingsItemClickedListener) FragmentUtil.getActivity(this)).onSettingsItemClicked(SettingsItem.SYNC_ACCOUNTS);
 			break;
 
 		default:
