@@ -65,12 +65,16 @@ public class BundleKeys {
 	public static final String STR_CRASH_LOG = "crashLog";
 	
 	public static final String LOGIN_TYPE = "loginType";
+	public static final String IS_FOR_SIGN_UP = "isForSignup";
 	
 	public static final String DIALOG_TITLE = "dialogTitle";
 	public static final String DIALOG_MSG = "dialogMsg";
 	public static final String BTN1_TXT = "btn1Txt";
 	public static final String BTN2_TXT = "btn2Txt";
 	public static final String DIALOG_TAG = "dialogTag";
+	
+	public static final String SETTINGS_ITEM = "settingsItem";
+	public static final String DISABLE_DRAWER_INDICATOR_FROM_ONRESUME = "disableDrawerIndicatorFromOnresume";
 
 	/**-------------------- starts for bosch ---------------------------**/
 	

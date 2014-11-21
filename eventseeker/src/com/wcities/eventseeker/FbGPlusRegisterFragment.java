@@ -45,6 +45,8 @@ public abstract class FbGPlusRegisterFragment extends FragmentLoadableFromBackSt
 	private Session.StatusCallback statusCallback = new SessionStatusCallback();
 	private boolean isPermissionDisplayed;
 	
+	private boolean isForSignUp;
+	
 	private class SessionStatusCallback implements Session.StatusCallback {
 
 		@Override
@@ -64,6 +66,8 @@ public abstract class FbGPlusRegisterFragment extends FragmentLoadableFromBackSt
 		
 		EventSeekr.mGoogleApiClient = mGoogleApiClient = GPlusUtil.createPlusClientInstance(this, this, this);
     	//Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
+		
+		isForSignUp = (this instanceof SignUpFragment) ? true : false;
 	}
 	
 	@Override
@@ -187,6 +191,7 @@ public abstract class FbGPlusRegisterFragment extends FragmentLoadableFromBackSt
             String personId = currentPerson.getId();
             //Log.d(TAG, "id = " + personId + ", accountName = " + mPlusClient.getAccountName());
             Bundle bundle = new Bundle();
+            bundle.putBoolean(BundleKeys.IS_FOR_SIGN_UP, isForSignUp);
             bundle.putSerializable(BundleKeys.LOGIN_TYPE, LoginType.googlePlus);
         	bundle.putString(BundleKeys.GOOGLE_PLUS_USER_ID, personId);
         	bundle.putString(BundleKeys.GOOGLE_PLUS_USER_NAME, currentPerson.getDisplayName());
@@ -228,6 +233,7 @@ public abstract class FbGPlusRegisterFragment extends FragmentLoadableFromBackSt
 	    				if (session == Session.getActiveSession()) {
 	    	                if (user != null) {
 	    	                	Bundle bundle = new Bundle();
+	    	                	bundle.putBoolean(BundleKeys.IS_FOR_SIGN_UP, isForSignUp);
 	    	                	bundle.putSerializable(BundleKeys.LOGIN_TYPE, LoginType.facebook);
 	    	                	bundle.putString(BundleKeys.FB_USER_ID, user.getId());
 	    	                	bundle.putString(BundleKeys.FB_USER_NAME, user.getUsername());

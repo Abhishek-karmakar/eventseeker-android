@@ -295,7 +295,7 @@ public class MainActivity extends ActionBarActivity implements
 			} else if (getIntent().hasExtra(BundleKeys.SETTINGS_ITEM_ORDINAL)) {
 				SettingsItem settingsItem = SettingsItem.getSettingsItemByOrdinal(
 						getIntent().getExtras().getInt(BundleKeys.SETTINGS_ITEM_ORDINAL));
-				onSettingsItemClicked(settingsItem);
+				onSettingsItemClicked(settingsItem, null);
 				
 			} else if (getIntent().hasExtra(BundleKeys.NOTIFICATION_TYPE)) {
 				onNotificationClicked((NotificationType) getIntent().getSerializableExtra(BundleKeys.NOTIFICATION_TYPE));
@@ -368,7 +368,7 @@ public class MainActivity extends ActionBarActivity implements
 		} else if (intent.hasExtra(BundleKeys.SETTINGS_ITEM_ORDINAL)) {
 			SettingsItem settingsItem = SettingsItem.getSettingsItemByOrdinal(
 					intent.getExtras().getInt(BundleKeys.SETTINGS_ITEM_ORDINAL));
-			onSettingsItemClicked(settingsItem);
+			onSettingsItemClicked(settingsItem, null);
 			
 		} else if (intent.hasExtra(BundleKeys.NOTIFICATION_TYPE)) {
 			onNotificationClicked((NotificationType) intent.getSerializableExtra(BundleKeys.NOTIFICATION_TYPE));
@@ -867,7 +867,8 @@ public class MainActivity extends ActionBarActivity implements
 	 * } catch (Exception e) { e.printStackTrace(); } }
 	 */
 
-	private void onFragmentResumed(int position, String title, String fragmentTag) {
+	private void onFragmentResumed(int position, String title, String fragmentTag, boolean disableDrawerIndicator) {
+		//Log.d(TAG, "onFragmentResumed() for title = " + title + ", getSupportFragmentManager().getBackStackEntryCount() = " + getSupportFragmentManager().getBackStackEntryCount());
 		drawerItemSelectedPosition = position;
 		if (drawerItemSelectedPosition != AppConstants.INVALID_INDEX) {
 			setDrawerIndicatorEnabled(true);
@@ -890,7 +891,18 @@ public class MainActivity extends ActionBarActivity implements
 				hasOtherActivityFinished = false;
 				updateDrawerListCheckedItem(drawerItemSelectedPosition);
 			}
+			
+		} else if (disableDrawerIndicator) {
+			/**
+			 * This is for redirection to sync accounts screen after signup where we add settings fragment first
+			 * followed by sync accounts screen. Since these transactions occur fast (as we are adding sync accounts 
+			 * from onCreate() of settings fragment) we cannot even use condition 
+			 * "getSupportFragmentManager().getBackStackEntryCount() > 0" because it gives result 0 instead of 1
+			 * as it returns right value only after some delay.
+			 */
+			setDrawerIndicatorEnabled(false);
 		}
+		
 		mTitle = title;
 		updateTitle();
 
@@ -976,6 +988,9 @@ public class MainActivity extends ActionBarActivity implements
 
 		case INDEX_NAV_ITEM_SETTINGS:
 			SettingsFragment settingsFragment = new SettingsFragment();
+			if (args != null) {
+				settingsFragment.setArguments(args);
+			}
 			replaceContentFrameByFragment(settingsFragment, AppConstants.FRAGMENT_TAG_SETTINGS, getResources()
 					.getString(R.string.title_settings_mobile_app), false);
 			break;
@@ -1175,7 +1190,7 @@ public class MainActivity extends ActionBarActivity implements
 	
 	private void selectNonDrawerItem(Fragment replaceBy, String replaceByFragmentTag, String newTitle, 
 			boolean addToBackStack) {
-		//Log.d(TAG, "onDrawerItemSelected(), newTitle = " + newTitle + ", addToBackStack = " + addToBackStack);
+		//Log.d(TAG, "selectNonDrawerItem(), newTitle = " + newTitle + ", addToBackStack = " + addToBackStack);
 		
 		drawerItemSelectedPosition = AppConstants.INVALID_INDEX;
 		// revertCheckedDrawerItemStateIfAny();
@@ -1350,11 +1365,14 @@ public class MainActivity extends ActionBarActivity implements
 	}
 	
 	@Override
-	public void onSettingsItemClicked(SettingsItem settingsItem) {
+	public void onSettingsItemClicked(SettingsItem settingsItem, Bundle args) {
 		switch (settingsItem) {
 				
 			case SYNC_ACCOUNTS:
 		    	ConnectAccountsFragment connectAccountsFragment = new ConnectAccountsFragment();
+		    	if (args != null) {
+		    		connectAccountsFragment.setArguments(args);
+		    	}
 		    	selectNonDrawerItem(connectAccountsFragment, AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS, 
 		    			getResources().getString(R.string.title_connect_accounts), true);
 		    	break;
@@ -1502,73 +1520,75 @@ public class MainActivity extends ActionBarActivity implements
 	public void onFragmentResumed(Fragment fragment) {
 		if (fragment instanceof LauncherFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_launcher),
-					AppConstants.FRAGMENT_TAG_LAUNCHER);
+					AppConstants.FRAGMENT_TAG_LAUNCHER, false);
 
 		} else if (fragment instanceof LoginFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_login),
-					AppConstants.FRAGMENT_TAG_LOGIN);
+					AppConstants.FRAGMENT_TAG_LOGIN, false);
 
 		} else if (fragment instanceof SignUpFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_signup),
-					AppConstants.FRAGMENT_TAG_SIGN_UP);
+					AppConstants.FRAGMENT_TAG_SIGN_UP, false);
 
 		} else if (fragment instanceof DiscoverParentFragment) {
 			onFragmentResumed(INDEX_NAV_ITEM_DISCOVER, getResources().getString(R.string.title_discover),
-					AppConstants.FRAGMENT_TAG_DISCOVER);
+					AppConstants.FRAGMENT_TAG_DISCOVER, false);
 
 		} else if (fragment instanceof MyEventsFragment) {
 			onFragmentResumed(INDEX_NAV_ITEM_MY_EVENTS, getResources().getString(R.string.title_my_events),
-					AppConstants.FRAGMENT_TAG_MY_EVENTS);
+					AppConstants.FRAGMENT_TAG_MY_EVENTS, false);
 
 		} else if (fragment instanceof ArtistsNewsListFragment) {
 			onFragmentResumed(INDEX_NAV_ITEM_ARTISTS_NEWS, getResources().getString(R.string.title_artists_news),
-					AppConstants.FRAGMENT_TAG_ARTISTS_NEWS_LIST);
+					AppConstants.FRAGMENT_TAG_ARTISTS_NEWS_LIST, false);
 
 		} else if (fragment instanceof FriendsActivityFragment) {
 			onFragmentResumed(INDEX_NAV_ITEM_FRIENDS_ACTIVITY, getResources().getString(R.string.title_friends_activity),
-					AppConstants.FRAGMENT_TAG_FRIENDS_ACTIVITY);
+					AppConstants.FRAGMENT_TAG_FRIENDS_ACTIVITY, false);
 
 		} else if (fragment instanceof FollowingParentFragment) {
 			onFragmentResumed(INDEX_NAV_ITEM_FOLLOWING, getResources().getString(R.string.title_following),
-					AppConstants.FRAGMENT_TAG_FOLLOWING);
+					AppConstants.FRAGMENT_TAG_FOLLOWING, false);
 			
 		} else if (fragment instanceof SettingsFragment) {
 			onFragmentResumed(INDEX_NAV_ITEM_SETTINGS, getResources().getString(R.string.title_settings_mobile_app),
-					AppConstants.FRAGMENT_TAG_SETTINGS);
+					AppConstants.FRAGMENT_TAG_SETTINGS, false);
 
 		} else if (fragment instanceof ConnectAccountsFragment) {
+			boolean disableDrawerIndicator = (fragment.getArguments() != null && fragment.getArguments().containsKey(
+					BundleKeys.DISABLE_DRAWER_INDICATOR_FROM_ONRESUME)) ? true : false;
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_connect_accounts),
-					AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS);
+					AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS, disableDrawerIndicator);
 
 		} else if (fragment instanceof ChangeLocationFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_change_location),
-					AppConstants.FRAGMENT_TAG_CHANGE_LOCATION);
+					AppConstants.FRAGMENT_TAG_CHANGE_LOCATION, false);
 			
 		} 
 		// TODO: comment following for disabling language
 		else if (fragment instanceof LanguageFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_language),
-					AppConstants.FRAGMENT_TAG_LANGUAGE);
+					AppConstants.FRAGMENT_TAG_LANGUAGE, false);
 
 		} else if (fragment instanceof AboutUsFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_about_us),
-					AppConstants.FRAGMENT_TAG_ABOUT_US);
+					AppConstants.FRAGMENT_TAG_ABOUT_US, false);
 
 		} else if (fragment instanceof EULAFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_eula),
-					AppConstants.FRAGMENT_TAG_EULA);
+					AppConstants.FRAGMENT_TAG_EULA, false);
 
 		} else if (fragment instanceof RepCodeFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_rep_code),
-					AppConstants.FRAGMENT_TAG_REP_CODE);
+					AppConstants.FRAGMENT_TAG_REP_CODE, false);
 
 		} else if (fragment instanceof FullScreenAddressMapFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, fragment.getArguments().getString(BundleKeys.VENUE_NAME),
-					AppConstants.FRAGMENT_TAG_FULL_SCREEN_ADDRESS_MAP);
+					AppConstants.FRAGMENT_TAG_FULL_SCREEN_ADDRESS_MAP, false);
 
 		} else if (fragment instanceof SearchFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_search_results),
-					AppConstants.FRAGMENT_TAG_SEARCH);
+					AppConstants.FRAGMENT_TAG_SEARCH, false);
 			// Log.d(TAG, "fragment = " + fragment + ", query = " +
 			// ((SearchFragment) fragment).getSearchQuery());
 			/**
@@ -1593,7 +1613,7 @@ public class MainActivity extends ActionBarActivity implements
 			List<Category> categories = (List<Category>) args.getSerializable(BundleKeys.CATEGORIES);
 
 			onFragmentResumed(AppConstants.INVALID_INDEX, categories.get(categoryPosition).getName(),
-					AppConstants.FRAGMENT_TAG_DISCOVER_BY_CATEGORY);
+					AppConstants.FRAGMENT_TAG_DISCOVER_BY_CATEGORY, false);
 
 		} else if (fragment instanceof EventDetailsFragment) {
 			if (fragment.getArguments().containsKey(BundleKeys.IS_CALLED_FROM_OTHER_TASK)) {
@@ -1602,7 +1622,7 @@ public class MainActivity extends ActionBarActivity implements
 
 			} else {
 				onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_event_details),
-						AppConstants.FRAGMENT_TAG_EVENT_DETAILS);
+						AppConstants.FRAGMENT_TAG_EVENT_DETAILS, false);
 			}
 
 		} else if (fragment instanceof ArtistDetailsFragment) {
@@ -1612,45 +1632,45 @@ public class MainActivity extends ActionBarActivity implements
 
 			} else {
 				onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_artist_details),
-						AppConstants.FRAGMENT_TAG_ARTIST_DETAILS);
+						AppConstants.FRAGMENT_TAG_ARTIST_DETAILS, false);
 			}
 
 		} else if (fragment instanceof VenueDetailsFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_venue_details),
-					AppConstants.FRAGMENT_TAG_VENUE_DETAILS);
+					AppConstants.FRAGMENT_TAG_VENUE_DETAILS, false);
 
 		} else if (fragment instanceof DeviceLibraryFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_device_library),
-					AppConstants.FRAGMENT_TAG_DEVICE_LIBRARY);
+					AppConstants.FRAGMENT_TAG_DEVICE_LIBRARY, false);
 
 		} else if (fragment instanceof LoginSyncingFragment) {
 			String title = (fragment.getArguments().getSerializable(BundleKeys.LOGIN_TYPE) == LoginType.facebook) ? 
 					getResources().getString(R.string.title_facebook) : getResources().getString(R.string.title_google_plus);
-			onFragmentResumed(AppConstants.INVALID_INDEX, title, AppConstants.FRAGMENT_TAG_LOGIN_SYNCING);
+			onFragmentResumed(AppConstants.INVALID_INDEX, title, AppConstants.FRAGMENT_TAG_LOGIN_SYNCING, false);
 
 		} else if (fragment instanceof TwitterFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_twitter),
-					AppConstants.FRAGMENT_TAG_TWITTER);
+					AppConstants.FRAGMENT_TAG_TWITTER, false);
 
 		} else if (fragment instanceof RdioFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_rdio),
-					AppConstants.FRAGMENT_TAG_RDIO);
+					AppConstants.FRAGMENT_TAG_RDIO, false);
 
 		} else if (fragment instanceof LastfmFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_lastfm),
-					AppConstants.FRAGMENT_TAG_LASTFM);
+					AppConstants.FRAGMENT_TAG_LASTFM, false);
 
 		} else if (fragment instanceof PandoraFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_pandora),
-					AppConstants.FRAGMENT_TAG_PANDORA);
+					AppConstants.FRAGMENT_TAG_PANDORA, false);
 			
 		} else if (fragment instanceof TwitterSyncingFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_twitter),
-					AppConstants.FRAGMENT_TAG_TWITTER_SYNCING);
+					AppConstants.FRAGMENT_TAG_TWITTER_SYNCING, false);
 
 		} else if (fragment instanceof GooglePlayMusicFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_google_play),
-					AppConstants.FRAGMENT_TAG_GOOGLE_PLAY_MUSIC);
+					AppConstants.FRAGMENT_TAG_GOOGLE_PLAY_MUSIC, false);
 		}
 	}
 

@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
+import com.wcities.eventseeker.SettingsFragment.SettingsItem;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -31,6 +32,7 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 
 	private LoginType loginType;
 	private boolean isAlive;
+	private boolean isForSignUp; // indicates if this fragment is called after fb/g+ signup or login
 	
 	private LoadMyEventsCount loadMyEventsCount;
 
@@ -49,11 +51,13 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 		if (loginType == LoginType.facebook) {
         	eventSeekr.updateFbUserInfo(args.getString(BundleKeys.FB_USER_ID), args.getString(BundleKeys.FB_USER_NAME), 
         			args.getString(BundleKeys.FB_EMAIL_ID), this);
+        	isForSignUp = args.getBoolean(BundleKeys.IS_FOR_SIGN_UP);
 			
-		} else {
+		} else if (loginType == LoginType.googlePlus) {
 			eventSeekr.updateGPlusUserInfo(args.getString(BundleKeys.GOOGLE_PLUS_USER_ID), 
 					args.getString(BundleKeys.GOOGLE_PLUS_USER_NAME), args.getString(BundleKeys.GOOGLE_PLUS_EMAIL_ID), 
 					this);
+			isForSignUp = args.getBoolean(BundleKeys.IS_FOR_SIGN_UP);
 		}
 	}
 
@@ -117,22 +121,30 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 				//Log.d(TAG, "wcitiesId != null");
 				double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 
-				loadMyEventsCount = new LoadMyEventsCount(Api.OAUTH_TOKEN, wcitiesId, latLon[0], latLon[1], new AsyncTaskListener<Integer>() {
+				if (isForSignUp) {
+					Bundle args = new Bundle();
+					args.putSerializable(BundleKeys.SETTINGS_ITEM, SettingsItem.SYNC_ACCOUNTS);
+					((DrawerListFragmentListener) FragmentUtil.getActivity(this)).onDrawerItemSelected(
+							MainActivity.INDEX_NAV_ITEM_SETTINGS, args);
 					
-					@Override
-					public void onTaskCompleted(Integer... params) {
-						Log.d(TAG, "params[0] = " + params[0]);
-						if (params[0] > 0) {
-							((DrawerListFragmentListener)FragmentUtil.getActivity(LoginSyncingFragment.this)).onDrawerItemSelected(
-									MainActivity.INDEX_NAV_ITEM_MY_EVENTS, null);
-							
-						} else {
-							((DrawerListFragmentListener)FragmentUtil.getActivity(LoginSyncingFragment.this)).onDrawerItemSelected(
-									MainActivity.INDEX_NAV_ITEM_DISCOVER, null);
+				} else {
+					loadMyEventsCount = new LoadMyEventsCount(Api.OAUTH_TOKEN, wcitiesId, latLon[0], latLon[1], new AsyncTaskListener<Integer>() {
+						
+						@Override
+						public void onTaskCompleted(Integer... params) {
+							Log.d(TAG, "params[0] = " + params[0]);
+							if (params[0] > 0) {
+								((DrawerListFragmentListener)FragmentUtil.getActivity(LoginSyncingFragment.this)).onDrawerItemSelected(
+										MainActivity.INDEX_NAV_ITEM_MY_EVENTS, null);
+								
+							} else {
+								((DrawerListFragmentListener)FragmentUtil.getActivity(LoginSyncingFragment.this)).onDrawerItemSelected(
+										MainActivity.INDEX_NAV_ITEM_DISCOVER, null);
+							}
 						}
-					}
-				});
-				loadMyEventsCount.execute();
+					});
+					loadMyEventsCount.execute();
+				}
 				
 			} else {
 				//Log.d(TAG, "wcitiesId = null");

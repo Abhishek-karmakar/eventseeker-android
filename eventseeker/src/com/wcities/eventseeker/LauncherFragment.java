@@ -91,7 +91,7 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		
+		//Log.d(TAG, "onDestroy()");
 		/**
 		 * This is required to unlock drawer after login/sign up process completes, because user is navigated 
 		 * to my events or discover screen. At this point first we clear back stack from selectItem()
