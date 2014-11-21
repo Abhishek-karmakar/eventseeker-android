@@ -60,6 +60,10 @@ public class BundleKeys {
 	public static final String GOOGLE_PLUS_USER_ID = "gPlusUserId";
 	public static final String GOOGLE_PLUS_USER_NAME = "gPlusUserName";
 	public static final String GOOGLE_PLUS_EMAIL_ID = "gPlusEmailId";
+	public static final String FIRST_NAME = "firstName";
+	public static final String LAST_NAME = "lastName";
+	public static final String EMAIL_ID = "emailId";
+	public static final String PASSWORD = "password";
 	public static final String AUTH_TOKEN = "authToken";
 
 	public static final String STR_CRASH_LOG = "crashLog";

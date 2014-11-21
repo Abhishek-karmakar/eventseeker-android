@@ -5,6 +5,9 @@ import java.io.IOException;
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 
+import android.os.Bundle;
+
+import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.app.EventSeekr;
 
 public abstract class Registration {
@@ -16,4 +19,8 @@ public abstract class Registration {
 	}
 	
 	public abstract int register() throws ClientProtocolException, IOException, JSONException;
+	
+	public interface RegistrationListener {
+    	public void onRegistration(LoginType loginType, Bundle args, boolean addToBackStack);
+    }
 }

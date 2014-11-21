@@ -56,6 +56,7 @@ import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Category;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Venue;
+import com.wcities.eventseeker.core.registration.Registration.RegistrationListener;
 import com.wcities.eventseeker.gcm.GcmBroadcastReceiver.NotificationType;
 import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.interfaces.ConnectionFailureListener;
@@ -73,7 +74,7 @@ import com.wcities.eventseeker.util.UpdateAppUtil;
 public class MainActivity extends ActionBarActivity implements
 		DrawerListFragmentListener, OnLocaleChangedListener, OnSettingsItemClickedListener,
 		ReplaceFragmentListener, EventListener, ArtistListener, VenueListener,
-		FragmentLoadedFromBackstackListener, MapListener,
+		FragmentLoadedFromBackstackListener, MapListener, RegistrationListener, 
 		ConnectAccountsFragmentListener, SearchView.OnQueryTextListener,
 		ChangeLocationFragmentListener, ConnectionFailureListener, DialogBtnClickListener {
 
@@ -1835,5 +1836,32 @@ public class MainActivity extends ActionBarActivity implements
 	public void onProxyClosed() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void onRegistration(LoginType loginType, Bundle args, boolean addToBackStack) {
+		LoginSyncingFragment loginSyncingFragment = new LoginSyncingFragment();
+		loginSyncingFragment.setArguments(args);
+
+		switch (loginType) {
+		
+		case facebook:
+			selectNonDrawerItem(loginSyncingFragment, AppConstants.FRAGMENT_TAG_LOGIN_SYNCING, getResources()
+					.getString(R.string.title_facebook), addToBackStack);
+			break;
+			
+		case googlePlus:
+			selectNonDrawerItem(loginSyncingFragment, AppConstants.FRAGMENT_TAG_LOGIN_SYNCING, getResources()
+					.getString(R.string.title_google_plus), addToBackStack);
+			break;
+			
+		case emailSignup:
+			selectNonDrawerItem(loginSyncingFragment, AppConstants.FRAGMENT_TAG_LOGIN_SYNCING, getResources()
+					.getString(R.string.title_email_sign_up), addToBackStack);
+			break;
+			
+		case emailLogin:
+			break;
+		}
 	}
 }

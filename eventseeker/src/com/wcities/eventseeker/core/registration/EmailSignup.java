@@ -6,6 +6,8 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
@@ -17,6 +19,8 @@ import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser.SignupResponse;
 
 public class EmailSignup extends Registration {
 
+	private static final String TAG = EmailSignup.class.getSimpleName();
+
 	public EmailSignup(EventSeekr eventSeekr) {
 		super(eventSeekr);
 	}
@@ -26,6 +30,7 @@ public class EmailSignup extends Registration {
 		// check if it's new user
 		UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
 		JSONObject jsonObject = userInfoApi.checkEmail(eventSeekr.getEmailId());
+		Log.d(TAG, jsonObject.toString());
 		UserInfoApiJSONParser jsonParser = new UserInfoApiJSONParser();
 		SignupResponse signupResponse = jsonParser.parseSignup(jsonObject);
 		if (signupResponse.getMsgCode() == UserInfoApiJSONParser.MSG_CODE_EMAIL_ALREADY_EXISTS) {
@@ -38,11 +43,14 @@ public class EmailSignup extends Registration {
 		 * Whereas we want to create new profile in such case.
 		 */
 		jsonObject = userInfoApi.signUp();
+		Log.d(TAG, jsonObject.toString());
 		String userId = jsonParser.getUserId(jsonObject);
+		Log.d(TAG, "userId = " + userId);
 		
 		// sign up with email & pwd
 		jsonObject = userInfoApi.signup(eventSeekr.getEmailId(), eventSeekr.getPassword(), eventSeekr.getFirstName(), 
 				eventSeekr.getLastName(), userId);
+		Log.d(TAG, jsonObject.toString());
 		signupResponse = jsonParser.parseSignup(jsonObject);
 		
 		if (signupResponse.getMsgCode() == UserInfoApiJSONParser.MSG_CODE_SUCCESS) {
@@ -52,6 +60,7 @@ public class EmailSignup extends Registration {
 				jsonObject = userInfoApi.syncAccount(null, eventSeekr.getPreviousUserId(), eventSeekr.getPreviousEmailId(), 
 						UserType.getUserType(prevLoginType), userId);
 				userId = jsonParser.getWcitiesId(jsonObject);
+				Log.d(TAG, "userId = " + userId);
 			}
 			eventSeekr.updateWcitiesId(userId);
 			

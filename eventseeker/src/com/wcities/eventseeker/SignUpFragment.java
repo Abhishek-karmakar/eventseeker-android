@@ -1,7 +1,6 @@
 package com.wcities.eventseeker;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -14,7 +13,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
+import com.wcities.eventseeker.ConnectAccountsFragment.ConnectAccountsFragmentListener;
+import com.wcities.eventseeker.ConnectAccountsFragment.Service;
+import com.wcities.eventseeker.api.UserInfoApi.LoginType;
+import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.core.registration.Registration.RegistrationListener;
 import com.wcities.eventseeker.util.FieldValidationUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
@@ -201,7 +204,15 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 			break;
 		
 		case R.id.btnSignUp:
-			//FragmentUtil.getApplication(this).updateEmailSignupInfo(edtEmail.getText(), edtFN.getText(), edtLN.getText(), edtPassword.getText(), );
+			Bundle bundle = new Bundle();
+        	bundle.putSerializable(BundleKeys.LOGIN_TYPE, LoginType.emailSignup);
+        	bundle.putString(BundleKeys.FIRST_NAME, edtFN.getText().toString());
+        	bundle.putString(BundleKeys.LAST_NAME, edtLN.getText().toString());
+        	bundle.putString(BundleKeys.EMAIL_ID, edtEmail.getText().toString());
+        	bundle.putString(BundleKeys.PASSWORD, edtPassword.getText().toString());
+        	
+        	((RegistrationListener)FragmentUtil.getActivity(this)).onRegistration(LoginType.emailSignup, bundle, 
+        			true);
 			break;
 			
 		default:

@@ -26,6 +26,7 @@ import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.core.registration.Registration.RegistrationListener;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ConnectionFailureListener;
 import com.wcities.eventseeker.util.FbUtil;
@@ -197,15 +198,14 @@ public abstract class FbGPlusRegisterFragment extends FragmentLoadableFromBackSt
         	bundle.putString(BundleKeys.GOOGLE_PLUS_USER_NAME, currentPerson.getDisplayName());
         	bundle.putString(BundleKeys.GOOGLE_PLUS_EMAIL_ID, Plus.AccountApi.getAccountName(mGoogleApiClient));
         	
-        	ConnectAccountsFragmentListener listener = (ConnectAccountsFragmentListener)FragmentUtil.getActivity(
-					FbGPlusRegisterFragment.this);
+        	RegistrationListener listener = (RegistrationListener)FragmentUtil.getActivity(FbGPlusRegisterFragment.this);
         	
         	/**
         	 * While changing orientation quickly sometimes listener returned is null, 
         	 * hence the following check.
         	 */
         	if (listener != null) {
-            	((ConnectAccountsFragmentListener)listener).onServiceSelected(Service.GooglePlus, bundle, true);
+            	((RegistrationListener)listener).onRegistration(LoginType.googlePlus, bundle, true);
         	}
         }
 	}
@@ -243,14 +243,14 @@ public abstract class FbGPlusRegisterFragment extends FragmentLoadableFromBackSt
 	    	                	 */
 	    	                	String email = (user.getProperty("email") == null) ? "" : user.getProperty("email").toString();
 	    	                	bundle.putString(BundleKeys.FB_EMAIL_ID, email);
-	    	                	ConnectAccountsFragmentListener listener = (ConnectAccountsFragmentListener)FragmentUtil.getActivity(
+	    	                	RegistrationListener listener = (RegistrationListener)FragmentUtil.getActivity(
 										FbGPlusRegisterFragment.this);
 	    	                	/**
 	    	                	 * While changing orientation quickly sometimes listener returned is null, 
 	    	                	 * hence the following check.
 	    	                	 */
 	    	                	if (listener != null) {
-		    	                	((ConnectAccountsFragmentListener)listener).onServiceSelected(Service.Facebook, bundle, true);
+		    	                	((RegistrationListener)listener).onRegistration(LoginType.facebook, bundle, true);
 	    	                	}
 	    	                }
 	    	            }

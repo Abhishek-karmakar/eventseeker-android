@@ -48,16 +48,32 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 		Bundle args = getArguments();
 		loginType = (LoginType) args.getSerializable(BundleKeys.LOGIN_TYPE);
 		
-		if (loginType == LoginType.facebook) {
-        	eventSeekr.updateFbUserInfo(args.getString(BundleKeys.FB_USER_ID), args.getString(BundleKeys.FB_USER_NAME), 
+		switch (loginType) {
+		
+		case facebook:
+			eventSeekr.updateFbUserInfo(args.getString(BundleKeys.FB_USER_ID), args.getString(BundleKeys.FB_USER_NAME), 
         			args.getString(BundleKeys.FB_EMAIL_ID), this);
         	isForSignUp = args.getBoolean(BundleKeys.IS_FOR_SIGN_UP);
+			break;
 			
-		} else if (loginType == LoginType.googlePlus) {
+		case googlePlus:
 			eventSeekr.updateGPlusUserInfo(args.getString(BundleKeys.GOOGLE_PLUS_USER_ID), 
 					args.getString(BundleKeys.GOOGLE_PLUS_USER_NAME), args.getString(BundleKeys.GOOGLE_PLUS_EMAIL_ID), 
 					this);
 			isForSignUp = args.getBoolean(BundleKeys.IS_FOR_SIGN_UP);
+			break;
+			
+		case emailSignup:
+			eventSeekr.updateEmailSignupInfo(args.getString(BundleKeys.EMAIL_ID), args.getString(BundleKeys.FIRST_NAME), 
+					args.getString(BundleKeys.LAST_NAME), args.getString(BundleKeys.PASSWORD), this);
+			isForSignUp = true;
+			break;
+			
+		case emailLogin:
+			break;
+
+		default:
+			break;
 		}
 	}
 
@@ -74,10 +90,14 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 			((ImageView) v.findViewById(R.id.imgAccount)).setImageResource(R.drawable.facebook_colored_big);
 			((TextView)v.findViewById(R.id.txtLoading)).setText(R.string.syncing_fb);
 			
-		} else {
+		} else if (loginType == LoginType.googlePlus) {
 			// It's for google plus
 			((ImageView) v.findViewById(R.id.imgAccount)).setImageResource(R.drawable.g_plus_colored_big);
 			((TextView)v.findViewById(R.id.txtLoading)).setText(R.string.syncing_google_plus);
+			
+		} else {
+			((ImageView) v.findViewById(R.id.imgAccount)).setImageResource(R.drawable.ic_launcher);
+			((TextView)v.findViewById(R.id.txtLoading)).setText(R.string.syncing_email);
 		}
 		
 		v.findViewById(R.id.btnConnectOtherAccuonts).setVisibility(View.GONE);
