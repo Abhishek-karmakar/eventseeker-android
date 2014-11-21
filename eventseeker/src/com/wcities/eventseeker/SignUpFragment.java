@@ -1,7 +1,6 @@
 package com.wcities.eventseeker;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -14,11 +13,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
+import com.wcities.eventseeker.ConnectAccountsFragment.ConnectAccountsFragmentListener;
+import com.wcities.eventseeker.ConnectAccountsFragment.Service;
+import com.wcities.eventseeker.api.UserInfoApi.LoginType;
+import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.core.registration.Registration.RegistrationListener;
 import com.wcities.eventseeker.util.FieldValidationUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class SignUpFragment extends FragmentLoadableFromBackStack implements OnClickListener, TextWatcher, 
+public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickListener, TextWatcher, 
 		OnFocusChangeListener {
 
 	private static final String TAG = SignUpFragment.class.getSimpleName();
@@ -28,21 +31,15 @@ public class SignUpFragment extends FragmentLoadableFromBackStack implements OnC
 	private TextView txtEmailInvalid, txtConfirmPasswordInvalid;
 	private boolean isFNValid, isLNValid, isEmailValid, isConfirmPasswordValid;
 	private Button btnSignUp;
+	
+	private ImageView imgFbSignUp, imgGPlusSignIn;
+    private TextView txtGPlusSignInStatus;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
 	}
-	
-	@Override
-    public void onStart() {
-        super.onStart();
-        
-        MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
-		ma.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME 
-				| ActionBar.DISPLAY_HOME_AS_UP);
-    }
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,7 +64,30 @@ public class SignUpFragment extends FragmentLoadableFromBackStack implements OnC
 		txtConfirmPasswordInvalid = (TextView) v.findViewById(R.id.txtConfirmPasswordInvalid);
 		
 		(btnSignUp = (Button) v.findViewById(R.id.btnSignUp)).setOnClickListener(this);
+		
+		imgFbSignUp = (ImageView) v.findViewById(R.id.imgFbSignUp);
+		imgFbSignUp.setOnClickListener(this);
+		
+		imgGPlusSignIn = (ImageView) v.findViewById(R.id.imgGPlusSignIn);
+		imgGPlusSignIn.setOnClickListener(this);
+		txtGPlusSignInStatus = (TextView) v.findViewById(R.id.txtGPlusSignInStatus);
+		
+		setGooglePlusSigningInVisibility();
 		return v;
+	}
+	
+	@Override
+	protected void setGooglePlusSigningInVisibility() {
+		//Log.d(TAG, "updateGoogleButton(), isGPlusSigningIn = " + isGPlusSigningIn);
+		if (isGPlusSigningIn) {
+			txtGPlusSignInStatus.setVisibility(View.VISIBLE);
+			imgGPlusSignIn.setVisibility(View.INVISIBLE);
+			
+		} else {
+            // Enable the sign-in button
+        	txtGPlusSignInStatus.setVisibility(View.INVISIBLE);
+        	imgGPlusSignIn.setVisibility(View.VISIBLE);
+		}
 	}
 
 	@Override
@@ -174,9 +194,27 @@ public class SignUpFragment extends FragmentLoadableFromBackStack implements OnC
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.btnSignUp:
-			
+		
+		case R.id.imgFbSignUp:
+			onFbClicked();
 			break;
+		
+		case R.id.imgGPlusSignIn:
+			onGPlusClicked();
+			break;
+		
+		case R.id.btnSignUp:
+			Bundle bundle = new Bundle();
+        	bundle.putSerializable(BundleKeys.LOGIN_TYPE, LoginType.emailSignup);
+        	bundle.putString(BundleKeys.FIRST_NAME, edtFN.getText().toString());
+        	bundle.putString(BundleKeys.LAST_NAME, edtLN.getText().toString());
+        	bundle.putString(BundleKeys.EMAIL_ID, edtEmail.getText().toString());
+        	bundle.putString(BundleKeys.PASSWORD, edtPassword.getText().toString());
+        	
+        	((RegistrationListener)FragmentUtil.getActivity(this)).onRegistration(LoginType.emailSignup, bundle, 
+        			true);
+			break;
+			
 		default:
 			break;
 		}

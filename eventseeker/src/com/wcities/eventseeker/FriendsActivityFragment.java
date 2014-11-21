@@ -1103,7 +1103,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 		case R.id.btnAction:
 			/*((DrawerListFragmentListener)FragmentUtil.getActivity(this)).onDrawerItemSelected(
 					MainActivity.INDEX_NAV_ITEM_INVITE_FRIENDS, null);*/
-			((OnSettingsItemClickedListener) FragmentUtil.getActivity(this)).onSettingsItemClicked(SettingsItem.INVITE_FRIENDS);
+			((OnSettingsItemClickedListener) FragmentUtil.getActivity(this)).onSettingsItemClicked(SettingsItem.INVITE_FRIENDS, null);
 			break;
 
 		default:

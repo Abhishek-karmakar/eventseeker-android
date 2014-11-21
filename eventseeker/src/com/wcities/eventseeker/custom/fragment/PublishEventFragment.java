@@ -205,7 +205,7 @@ public abstract class PublishEventFragment extends Fragment implements PublishLi
 			((EventSeekr)FragmentUtil.getActivity(this).getApplication()).updateFirstTimeLaunch(false);
 			/*((DrawerListFragmentListener)FragmentUtil.getActivity(this)).onDrawerItemSelected(
 					MainActivity.INDEX_NAV_ITEM_CONNECT_ACCOUNTS, null);*/
-			((OnSettingsItemClickedListener) FragmentUtil.getActivity(this)).onSettingsItemClicked(SettingsItem.SYNC_ACCOUNTS);
+			((OnSettingsItemClickedListener) FragmentUtil.getActivity(this)).onSettingsItemClicked(SettingsItem.SYNC_ACCOUNTS, null);
 		}
 	}
 	

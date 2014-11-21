@@ -48,6 +48,8 @@
     <string name="title_device_library">@string/service_device_library</string>
     <string name="title_facebook">Facebook</string>
     <string name="title_google_plus">Google Plus</string>
+    <string name="title_email_sign_up">Email Sign Up</string>
+    <string name="title_email_login">Email Login</string>
     <string name="title_twitter">Twitter</string>
     <string name="title_rdio">Rdio</string>
     <string name="title_lastfm">last.fm</string>
@@ -200,6 +202,7 @@
     <string name="btn_continue">Continue</string>
     <string name="syncing_fb">Syncing Facebook</string>
     <string name="syncing_google_plus">Syncing Google Plus</string>
+    <string name="syncing_email">Syncing Email</string>
     <string name="syncing_google_play">Syncing Google Play</string>
     <string name="syncing_device_lib">Syncing Device Library</string>
     <string name="syncing_twitter">Syncing Twitter</string>

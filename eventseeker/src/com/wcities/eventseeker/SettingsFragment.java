@@ -7,6 +7,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +16,14 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class SettingsFragment extends ListFragmentLoadableFromBackStack {
+	
+	private static final String TAG = SettingsFragment.class.getSimpleName();
+	
 	private List<SettingsItem> settingsItems;
 	private SettingsMenuAdapter settingsMenuAdapter;
 	
@@ -60,14 +65,25 @@ public class SettingsFragment extends ListFragmentLoadableFromBackStack {
 		/**
 		 * Handles the Actions related to the options in Settings screen.
 		 * @param settingsItem
+		 * @param args TODO
 		 */
-		public void onSettingsItemClicked(SettingsItem settingsItem);
+		public void onSettingsItemClicked(SettingsItem settingsItem, Bundle args);
 	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
+		
+		Bundle args = getArguments();
+		if (args != null && args.containsKey(BundleKeys.SETTINGS_ITEM)) {
+			// open passed settings item screen
+			SettingsItem settingsItem = (SettingsItem) args.getSerializable(BundleKeys.SETTINGS_ITEM);
+			//Log.d(TAG, "settings item = " + settingsItem.name());
+			Bundle passArgs = new Bundle();
+			passArgs.putBoolean(BundleKeys.DISABLE_DRAWER_INDICATOR_FROM_ONRESUME, true);
+			((OnSettingsItemClickedListener) FragmentUtil.getActivity(this)).onSettingsItemClicked(settingsItem, passArgs);
+		}
 	}
 
 	@Override
@@ -178,14 +194,12 @@ public class SettingsFragment extends ListFragmentLoadableFromBackStack {
 			private TextView txtTitle;
 			private Object tag;
 		}
-		
 	}
 	
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 		SettingsItem settingsItem = (SettingsItem) l.getAdapter().getItem(position);
-		((OnSettingsItemClickedListener) FragmentUtil.getActivity(this)).onSettingsItemClicked(settingsItem);
+		((OnSettingsItemClickedListener) FragmentUtil.getActivity(this)).onSettingsItemClicked(settingsItem, null);
 	}
-
 }
