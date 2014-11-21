@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
@@ -20,7 +21,9 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.interfaces.EventListener;
+import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.GPlusUtil;
 
 public class FeaturedEventsFragment extends Fragment {
 	
@@ -92,6 +95,12 @@ public class FeaturedEventsFragment extends Fragment {
 				 * should not be the case. So prefer using "(EventListener)FragmentUtil.getActivity(FeaturedEventsFragment.this)"
 				 * instead of mListener.
 				 */
+				/*if (FragmentUtil.getApplication(FeaturedEventsFragment.this).getFbUserId() != null) {
+					FbUtil.callFacebookLogout(FragmentUtil.getApplication(FeaturedEventsFragment.this));
+					
+				} else if (FragmentUtil.getApplication(FeaturedEventsFragment.this).getGPlusUserId() != null) {
+					GPlusUtil.callGPlusLogout(EventSeekr.mGoogleApiClient, FragmentUtil.getApplication(FeaturedEventsFragment.this));
+				}*/
 				((EventListener)FragmentUtil.getActivity(FeaturedEventsFragment.this)).onEventSelected(event);
 			}
 		});

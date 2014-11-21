@@ -2,6 +2,7 @@ package com.wcities.eventseeker;
 
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +38,7 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.d(TAG, "onCreate()");
+		//Log.d(TAG, "onCreate()");
 		setRetainInstance(true);
 		isAlive = true;
 		

@@ -1,6 +1,5 @@
 package com.wcities.eventseeker.util;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.json.JSONException;

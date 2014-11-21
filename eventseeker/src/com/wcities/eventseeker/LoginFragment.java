@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,12 +18,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.LoggingBehavior;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
-import com.facebook.Settings;
 import com.facebook.model.GraphUser;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -36,15 +32,12 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 import com.wcities.eventseeker.ConnectAccountsFragment.ConnectAccountsFragmentListener;
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
-import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
-import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ConnectionFailureListener;
-import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FieldValidationUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -81,7 +74,7 @@ public class LoginFragment extends FragmentLoadableFromBackStack implements Conn
     	super.onCreate(savedInstanceState);
     	setRetainInstance(true);
     	
-    	mGoogleApiClient = GPlusUtil.createPlusClientInstance(this, this, this);
+    	EventSeekr.mGoogleApiClient = mGoogleApiClient = GPlusUtil.createPlusClientInstance(this, this, this);
     	//Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
     }
     
@@ -109,46 +102,6 @@ public class LoginFragment extends FragmentLoadableFromBackStack implements Conn
 				FbUtil.onClickLogin(LoginFragment.this, statusCallback);
 			}
 		});
-		Log.d(TAG, "statusCallback = " + statusCallback);
-		
-		/*if (statusCallback == null) {
-			
-			statusCallback = new SessionStatusCallback();
-			
-			//if (((EventSeekr)appContext).getWcitiesId() == null) {
-
-				Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
-				
-				Session session = Session.getActiveSession();
-		        if (session == null) {
-		        	//Log.d(TAG, "session == null");
-		            if (savedInstanceState != null) {
-		                session = Session.restoreSession(FragmentUtil.getActivity(this), null, statusCallback, savedInstanceState);
-		            }
-		            if (session == null) {
-		                session = new Session(FragmentUtil.getActivity(this));
-		            }
-		            Session.setActiveSession(session);
-		            if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
-		            	Log.d(TAG, "CREATED_TOKEN_LOADED");
-		                session.openForRead(new Session.OpenRequest(this).setPermissions(
-		                		AppConstants.PERMISSIONS_FB_LOGIN).setCallback(statusCallback));
-		            	//session.closeAndClearTokenInformation();
-		            }
-		        }
-		        
-		        updateView();
-		        
-			//} else {
-			//	((GetStartedFragmentListener)FragmentUtil.getActivity(LoginFragment.this))
-			//			.replaceGetStartedFragmentBy(AppConstants.FRAGMENT_TAG_DISCOVER);
-			//}
-			
-		} else {
-			if (!FbUtil.hasUserLoggedInBefore(FragmentUtil.getActivity(this).getApplicationContext())) {
-		        updateView();
-			}
-		}*/
 		
 		imgGPlusSignIn = (ImageView) v.findViewById(R.id.imgGPlusSignIn);
 		imgGPlusSignIn.setOnClickListener(this);
@@ -176,7 +129,7 @@ public class LoginFragment extends FragmentLoadableFromBackStack implements Conn
     @Override
     public void onStop() {
         super.onStop();
-    	Log.d(TAG, "onStop()");
+    	//Log.d(TAG, "onStop()");
 
         // In starting if user's credentials are available, then this active session will be null.
         if (Session.getActiveSession() != null) {
@@ -297,7 +250,9 @@ public class LoginFragment extends FragmentLoadableFromBackStack implements Conn
         @Override
         public void call(Session session, SessionState state, Exception exception) {
         	Log.d(TAG, "call() - state = " + state.name() + ", session = " + session);
-            updateView();
+        	if (state == SessionState.OPENED || state == SessionState.OPENED_TOKEN_UPDATED) {
+        		updateView();
+        	}
         }
     }
 	
@@ -319,41 +274,39 @@ public class LoginFragment extends FragmentLoadableFromBackStack implements Conn
 		setGooglePlusSigningInVisibility();
     }
 	
-	@Override
-	public void onConnected(Bundle arg0) {
-		//Log.d(TAG, "onConnected()");
+	private void onGPlusConnected() {
+		//Log.d(TAG, "onGPlusConnected()");
         updateGoogleButton();
 
         //Log.d(TAG, "GPlusUserId : " + ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getGPlusUserId());
-		if (((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getGPlusUserId() == null) {
-			
-	        Person currentPerson = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
-	        //Log.d(TAG, "currentPerson = " + currentPerson);
-	        if (currentPerson != null) {
-	            String personId = currentPerson.getId();
-	            //Log.d(TAG, "id = " + personId + ", accountName = " + mPlusClient.getAccountName());
-	            Bundle bundle = new Bundle();
-	            bundle.putSerializable(BundleKeys.LOGIN_TYPE, LoginType.googlePlus);
-	        	bundle.putString(BundleKeys.GOOGLE_PLUS_USER_ID, personId);
-	        	bundle.putString(BundleKeys.GOOGLE_PLUS_USER_NAME, currentPerson.getDisplayName());
-	        	bundle.putString(BundleKeys.GOOGLE_PLUS_EMAIL_ID, Plus.AccountApi.getAccountName(mGoogleApiClient));
-	        	
-	        	ConnectAccountsFragmentListener listener = (ConnectAccountsFragmentListener)FragmentUtil.getActivity(
-						LoginFragment.this);
-	        	
-	        	/**
-	        	 * While changing orientation quickly sometimes listener returned is null, 
-	        	 * hence the following check.
-	        	 */
-	        	if (listener != null) {
-	            	((ConnectAccountsFragmentListener)listener).onServiceSelected(Service.GooglePlus, bundle, false);
-	        	}
-	        }
-	        
-		} else {
-			((ReplaceFragmentListener)FragmentUtil.getActivity(LoginFragment.this))
-					.replaceByFragment(AppConstants.FRAGMENT_TAG_DISCOVER, null);
-		}
+        Person currentPerson = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
+        Log.d(TAG, "currentPerson = " + currentPerson);
+        if (currentPerson != null) {
+            String personId = currentPerson.getId();
+            //Log.d(TAG, "id = " + personId + ", accountName = " + mPlusClient.getAccountName());
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(BundleKeys.LOGIN_TYPE, LoginType.googlePlus);
+        	bundle.putString(BundleKeys.GOOGLE_PLUS_USER_ID, personId);
+        	bundle.putString(BundleKeys.GOOGLE_PLUS_USER_NAME, currentPerson.getDisplayName());
+        	bundle.putString(BundleKeys.GOOGLE_PLUS_EMAIL_ID, Plus.AccountApi.getAccountName(mGoogleApiClient));
+        	
+        	ConnectAccountsFragmentListener listener = (ConnectAccountsFragmentListener)FragmentUtil.getActivity(
+					LoginFragment.this);
+        	
+        	/**
+        	 * While changing orientation quickly sometimes listener returned is null, 
+        	 * hence the following check.
+        	 */
+        	if (listener != null) {
+            	((ConnectAccountsFragmentListener)listener).onServiceSelected(Service.GooglePlus, bundle, true);
+        	}
+        }
+	}
+	
+	@Override
+	public void onConnected(Bundle arg0) {
+		//Log.d(TAG, "onConnected()");
+        onGPlusConnected();
 	}
 
 	@Override
@@ -411,6 +364,9 @@ public class LoginFragment extends FragmentLoadableFromBackStack implements Conn
 		        } else {
 		        	connectPlusClient();
 		        }
+				
+			} else {
+				onGPlusConnected();
 			}
 			break;
 			

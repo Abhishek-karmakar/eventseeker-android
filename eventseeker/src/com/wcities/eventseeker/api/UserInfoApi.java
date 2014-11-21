@@ -331,24 +331,15 @@ public class UserInfoApi extends Api {
 		return execute(RequestMethod.GET, null, null); 
 	}*/
 	
-	public JSONObject syncFriends(LoginType loginType, String accessToken) throws ClientProtocolException, IOException, JSONException {
+	public JSONObject syncFriends(UserType userType, String loginId, String accessToken) throws ClientProtocolException, IOException, JSONException {
 		String METHOD = "myProfile.php?";
-		String loginId = null, userType = null;
-		if (loginType == LoginType.facebook) {
-			loginId = fbUserId;
-			userType = UserType.fb.name();
-			
-		} else if (loginType == LoginType.googlePlus) {
-			loginId = gPlusUserId;
-			userType = UserType.google.name();
-		}
 		
 		/*StringBuilder uriBuilder = new StringBuilder("http://108.166.108.227/SocialApi/user/myProfile-gp.php?").append("oauth_token=")
 				.append(getOauthToken()).append("&type=").append(Type.syncfriends.name()).append("&userId=")
 				.append(loginId).append("&userType=").append(userType);*/
 		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD).append("oauth_token=")
 				.append(getOauthToken()).append("&type=").append(Type.syncfriends.name()).append("&userId=")
-				.append(loginId).append("&userType=").append(userType);
+				.append(loginId).append("&userType=").append(userType.name());
 		if (accessToken != null) {
 			uriBuilder = uriBuilder.append("&access_token=").append(accessToken);
 		}

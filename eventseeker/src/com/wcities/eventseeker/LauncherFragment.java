@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -85,6 +86,24 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 		super.onPause();
 		//Log.d(TAG, "onPause");
 		((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportActionBar().show();
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		
+		/**
+		 * This is required to unlock drawer after login/sign up process completes, because user is navigated 
+		 * to my events or discover screen. At this point first we clear back stack from selectItem()
+		 * of MainActivity followed by replacing the fragment. After all these calls in main activity, in the end
+		 * onStart(), onStop(), onDestroy() of this fragment are called. Hence to negate the effect of onStart()
+		 * above which locks the drawer & indicator, we need to unlock these features again below.
+		 */
+		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		ma.setDrawerLockMode(false);
+		ma.setDrawerIndicatorEnabled(true);
+		ma.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME
+				| ActionBar.DISPLAY_HOME_AS_UP);
 	}
 	
 	@Override

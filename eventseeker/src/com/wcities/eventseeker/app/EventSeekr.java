@@ -22,6 +22,7 @@ import android.util.Log;
 import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Logger.LogLevel;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.LanguageFragment.Locales;
 import com.wcities.eventseeker.R;
@@ -115,6 +116,8 @@ public class EventSeekr extends Application {
 	private double curLat = AppConstants.NOT_ALLOWED_LAT, curLon = AppConstants.NOT_ALLOWED_LON;
 
 	private ProximityUnit savedProximityUnit;
+	
+	public static GoogleApiClient mGoogleApiClient;
 	
 	static {
 		ACTUAL_SYSTEM_LOCALE = Locale.getDefault();
@@ -995,12 +998,6 @@ public class EventSeekr extends Application {
 		@Override
 		protected Integer doInBackground(Void... params) {
 			try {
-				Thread.sleep(3000);
-				
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			/*try {
 				Registration registration = loginType.getRegistrationInstance(EventSeekr.this);
 				return registration.register();
 				
@@ -1012,7 +1009,7 @@ public class EventSeekr extends Application {
 
 			} catch (JSONException e) {
 				e.printStackTrace();
-			}*/ 
+			} 
 			return UserInfoApiJSONParser.MSG_CODE_UNSUCCESS;
 		}
 		
@@ -1021,6 +1018,7 @@ public class EventSeekr extends Application {
 			if (msgCode.intValue() != UserInfoApiJSONParser.MSG_CODE_SUCCESS) {
 				removeWcitiesId();
 			}
+
 			if (listener != null) {
 				listener.onTaskCompleted(msgCode);
 			}

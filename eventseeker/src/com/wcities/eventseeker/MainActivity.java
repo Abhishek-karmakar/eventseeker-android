@@ -1631,6 +1631,7 @@ public class MainActivity extends ActionBarActivity implements
 	}
 	
 	public void setDrawerLockMode(boolean lock) {
+		//Log.d(TAG, "setDrawerLockMode = " + lock);
 		if (mDrawerLayout != null) {
 			if (lock) {
 				mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
@@ -1657,7 +1658,7 @@ public class MainActivity extends ActionBarActivity implements
 		}
 		
 		if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-			Log.d(TAG, "super.onBackPressed()");
+			//Log.d(TAG, "super.onBackPressed()");
 			try {
 				/**
 				 * This try catch will handle IllegalStateException which may occur if onBackPressed() on Super
@@ -1676,7 +1677,7 @@ public class MainActivity extends ActionBarActivity implements
 			}
 			
 		} else {
-			Log.d(TAG, "moveTaskToBack()");
+			//Log.d(TAG, "moveTaskToBack()");
 			/**
 			 * Here if we allow back press (super.onBackPressed();) then it can display unexpected result 
 			 * in following case:

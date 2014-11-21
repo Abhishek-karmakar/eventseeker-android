@@ -15,8 +15,7 @@ import android.view.ViewGroup;
 
 import com.viewpagerindicator.CirclePageIndicator;
 
-public class DiscoverFragment extends DiscoverParentFragment implements
-		OnPageChangeListener {
+public class DiscoverFragment extends DiscoverParentFragment implements OnPageChangeListener {
 
 	public static final String TAG = DiscoverFragment.class.getName();
 
