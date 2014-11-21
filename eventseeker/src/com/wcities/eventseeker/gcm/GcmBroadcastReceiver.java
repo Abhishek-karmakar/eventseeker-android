@@ -18,6 +18,11 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
 
 	private static final String TAG = GcmBroadcastReceiver.class.getName();
 	
+	/**
+	 * It is needed just for testing Dummy Notifications, in non production builds.
+	 */
+	private static GcmBroadcastReceiver gcmBroadcastReceiver;
+	
 	public static enum NotificationType {
 		DISCOVER (MainActivity.INDEX_NAV_ITEM_DISCOVER),
 		ARTIST_DETAILS (AppConstants.INVALID_INDEX),
@@ -65,6 +70,31 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
             handleMessage(context, intent);
         }
         setResultCode(Activity.RESULT_OK);
+	}
+	
+	/**
+	 * This method is for Debugging purpose
+	 * @param context
+	 * @param intent
+	 */
+	public static void createDummyNotificationForTesting(Context context, String type, String title, String msg) {
+		if (!AppConstants.IS_RELEASE_MODE) {
+			if (gcmBroadcastReceiver == null) {
+				gcmBroadcastReceiver = new GcmBroadcastReceiver();
+			}
+			Intent intent = new Intent();
+			intent.putExtra("type", type);
+			intent.putExtra("title", title);
+			intent.putExtra("msg", msg);
+			if (("" + NotificationType.EVENT_DETAILS.ordinal()).equals(type)) {
+				intent.putExtra("eventid", 98129422 + "");
+			}
+			if (("" + NotificationType.ARTIST_DETAILS.ordinal()).equals(type)) {
+				intent.putExtra("artist_id", 14 + "");
+				
+			}
+			gcmBroadcastReceiver.handleMessage(context, intent);
+		}
 	}
 	
 	private void handleMessage(final Context context, final Intent intent) {

@@ -21,6 +21,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.gcm.GcmBroadcastReceiver;
+import com.wcities.eventseeker.gcm.GcmBroadcastReceiver.NotificationType;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class DrawerListFragment extends ListFragment {
@@ -83,6 +86,20 @@ public class DrawerListFragment extends ListFragment {
 			@Override
 			public void onItemClick(AdapterView parent, View view, int position, long id) {
 				//Log.d(TAG, "onItemClick(), pos = " + position);
+				/**
+				 * This notification generation is just for testing purpose
+				 */
+				/*if (!AppConstants.IS_RELEASE_MODE) {
+					if (position == drawerListItems.size() - 1) {
+						//Change notification type in below line
+						NotificationType notificationType = NotificationType.SYNC_ACCOUNTS;
+						GcmBroadcastReceiver.createDummyNotificationForTesting(getActivity(), 
+							notificationType.ordinal() + "", "", "Testing Notification " + notificationType.name());
+						getActivity().finish();
+						return;
+					}
+				}*/
+				
 				if (!sectionHeaderIndices.contains(position)) {
 					mListener.onDrawerItemSelected(position, null);
 				}

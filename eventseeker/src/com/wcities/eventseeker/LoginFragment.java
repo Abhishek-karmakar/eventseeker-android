@@ -181,7 +181,7 @@ public class LoginFragment extends FragmentLoadableFromBackStack implements Conn
     	}
     }
     
-	private void updateView() {
+	private void updateView() {/*
 		//Log.d(TAG, "updateView()");
         final Session session = Session.getActiveSession();
         if (session.isOpened()) {
@@ -194,7 +194,7 @@ public class LoginFragment extends FragmentLoadableFromBackStack implements Conn
 				requestPublishPermissions(session, PERMISSIONS, 0);
 				
         	} else {*/
-        	if (FbUtil.hasPermission(AppConstants.PERMISSIONS_FB_LOGIN)) {
+        	/*if (FbUtil.hasPermission(AppConstants.PERMISSIONS_FB_LOGIN)) {
 	        	FbUtil.makeMeRequest(session, new Request.GraphUserCallback() {
 	
 	    			@Override
@@ -210,7 +210,7 @@ public class LoginFragment extends FragmentLoadableFromBackStack implements Conn
 	    	                	/**
 	    	                	 * this email property requires "email" permission while opening session.
 	    	                	 * Email comes null if user has not verified his primary emailId on fb account
-	    	                	 */
+	    	                	 *//*
 	    	                	String email = (user.getProperty("email") == null) ? "" : user.getProperty("email").toString();
 	    	                	bundle.putString(BundleKeys.FB_EMAIL_ID, email);
 	    	                	ConnectAccountsFragmentListener listener = (ConnectAccountsFragmentListener)FragmentUtil.getActivity(
@@ -218,7 +218,7 @@ public class LoginFragment extends FragmentLoadableFromBackStack implements Conn
 	    	                	/**
 	    	                	 * While changing orientation quickly sometimes listener returned is null, 
 	    	                	 * hence the following check.
-	    	                	 */
+	    	                	 *//*
 	    	                	if (listener != null) {
 		    	                	((ConnectAccountsFragmentListener)listener).onServiceSelected(Service.Facebook, bundle, true);
 	    	                	}
@@ -243,7 +243,7 @@ public class LoginFragment extends FragmentLoadableFromBackStack implements Conn
         			isPermissionDisplayed = false;
         		}
         	}
-        } 
+        }*/ 
     }
 	
 	private class SessionStatusCallback implements Session.StatusCallback {
@@ -274,7 +274,7 @@ public class LoginFragment extends FragmentLoadableFromBackStack implements Conn
 		setGooglePlusSigningInVisibility();
     }
 	
-	private void onGPlusConnected() {
+	private void onGPlusConnected() {/*
 		//Log.d(TAG, "onGPlusConnected()");
         updateGoogleButton();
 
@@ -296,12 +296,12 @@ public class LoginFragment extends FragmentLoadableFromBackStack implements Conn
         	/**
         	 * While changing orientation quickly sometimes listener returned is null, 
         	 * hence the following check.
-        	 */
+        	 *//*
         	if (listener != null) {
             	((ConnectAccountsFragmentListener)listener).onServiceSelected(Service.GooglePlus, bundle, true);
         	}
         }
-	}
+	*/}
 	
 	@Override
 	public void onConnected(Bundle arg0) {

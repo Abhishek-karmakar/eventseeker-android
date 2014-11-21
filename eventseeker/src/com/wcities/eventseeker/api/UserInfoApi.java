@@ -34,7 +34,8 @@ public class UserInfoApi extends Api {
 		recommendedevent,
 		registerDevice,
 		checkemail,
-		login;
+		login,
+		updaterepcode;
 	};
 	
 	public static enum UserTrackingType {
@@ -296,6 +297,36 @@ public class UserInfoApi extends Api {
 				.append(getOauthToken()).append("&type=").append(Type.syncaccount.name()).append("&userId=")
 				.append(loginId).append("&email=").append(email).append("&userType=").append(userType.name())
 				.append("&wcitiesId=").append(wcitiesId);
+		if (repCode != null) {
+			uriBuilder.append("&repCode=" + repCode);
+		}
+		
+		setUri(uriBuilder.toString());
+		Log.i(TAG, "uri=" + getUri());
+		return execute(RequestMethod.GET, null, null); 
+	}
+	
+	/**
+	 * Nov 19, 2014:
+	 * update Repcode with the wcities Id. Use this call only for Wcities Email Login as for Fb & Google Login the
+	 * Sync Account call handles the Recode updates.
+	 * @param repCode
+	 * @param loginId
+	 * @param email
+	 * @param userType
+	 * @param wcitiesId
+	 * @return
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 * @throws JSONException
+	 * http://dev.wcities.com/V3/userInfo/myProfile.php?oauth_token=5c63440e7db1ad33c3898cdac3405b1e&type=updaterepcode&wcitiesId=1111740&repCode=AX3315&response_type=xml
+	 */
+	public JSONObject updateRepcodeWithWcitiesId(String repCode, String wcitiesId)
+			throws ClientProtocolException, IOException, JSONException {
+		String METHOD = "myProfile.php?";
+		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD).append("oauth_token=")
+				.append(getOauthToken()).append("&type=").append(Type.updaterepcode.name()).append("&wcitiesId=")
+				.append(wcitiesId);
 		if (repCode != null) {
 			uriBuilder.append("&repCode=" + repCode);
 		}

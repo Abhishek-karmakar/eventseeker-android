@@ -1433,20 +1433,6 @@ public class MainActivity extends ActionBarActivity implements
 		//Log.d(TAG, "onServiceSelected()");
 		switch (service) {
 		
-		case Facebook:
-			LoginSyncingFragment loginSyncingFragment = new LoginSyncingFragment();
-			loginSyncingFragment.setArguments(args);
-			selectNonDrawerItem(loginSyncingFragment, AppConstants.FRAGMENT_TAG_LOGIN_SYNCING, getResources()
-					.getString(R.string.title_facebook), addToBackStack);
-			break;
-			
-		case GooglePlus:
-			loginSyncingFragment = new LoginSyncingFragment();
-			loginSyncingFragment.setArguments(args);
-			selectNonDrawerItem(loginSyncingFragment, AppConstants.FRAGMENT_TAG_LOGIN_SYNCING, getResources()
-					.getString(R.string.title_google_plus), addToBackStack);
-			break;
-			
 		case GooglePlay:
 			GooglePlayMusicFragment googlePlayMusicFragment = new GooglePlayMusicFragment();
 			googlePlayMusicFragment.setArguments(args);
@@ -1531,10 +1517,6 @@ public class MainActivity extends ActionBarActivity implements
 		} else if (fragment instanceof FollowingParentFragment) {
 			onFragmentResumed(INDEX_NAV_ITEM_FOLLOWING, getResources().getString(R.string.title_following),
 					AppConstants.FRAGMENT_TAG_FOLLOWING);
-			
-		} else if (fragment instanceof SettingsFragment) {
-			onFragmentResumed(INDEX_NAV_ITEM_SETTINGS, getResources().getString(R.string.title_settings_mobile_app),
-					AppConstants.FRAGMENT_TAG_SETTINGS);
 
 		} else if (fragment instanceof ConnectAccountsFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_connect_accounts),
@@ -1594,6 +1576,10 @@ public class MainActivity extends ActionBarActivity implements
 
 			onFragmentResumed(AppConstants.INVALID_INDEX, categories.get(categoryPosition).getName(),
 					AppConstants.FRAGMENT_TAG_DISCOVER_BY_CATEGORY);
+			
+		} else if (fragment instanceof SettingsFragment) {
+			onFragmentResumed(INDEX_NAV_ITEM_SETTINGS, getResources().getString(R.string.title_settings_mobile_app),
+					AppConstants.FRAGMENT_TAG_SETTINGS);
 
 		} else if (fragment instanceof EventDetailsFragment) {
 			if (fragment.getArguments().containsKey(BundleKeys.IS_CALLED_FROM_OTHER_TASK)) {

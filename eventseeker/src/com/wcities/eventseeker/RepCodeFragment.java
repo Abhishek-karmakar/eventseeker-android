@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.SettingsFragment.OnSettingsItemClickedListener;
 import com.wcities.eventseeker.SettingsFragment.SettingsItem;
@@ -87,6 +86,11 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 				} else if (eventSeekr.getGPlusUserId() != null) {
 					jsonObject = userInfoApi.syncAccount(repCode, eventSeekr.getGPlusUserId(), eventSeekr.getGPlusEmailId(), 
 							UserType.google, eventSeekr.getWcitiesId());
+				} else {
+					/**
+					 * TODO:Testing this call after Wcities Email implementation gets completed.
+					 */
+					jsonObject = userInfoApi.updateRepcodeWithWcitiesId(repCode, eventSeekr.getWcitiesId());
 				}
 				//Log.d(TAG, "response = " + jsonObject);
 				UserInfoApiJSONParser userInfoApiJSONParser = new UserInfoApiJSONParser();
@@ -135,14 +139,6 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 		
 		case R.id.btnSubmit:
 			EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(this).getApplication();
-			if (eventSeekr.getWcitiesId() == null || (eventSeekr.getFbUserId() == null && eventSeekr.getGPlusUserId() == null)) {
-				Resources res = FragmentUtil.getResources(this);
-				GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
-						res.getString(R.string.go_to_login), res.getString(R.string.pls_login_to_submit_repcode), 
-						res.getString(R.string.cancel), res.getString(R.string.yes));
-				generalDialogFragment.show(getChildFragmentManager(), AppConstants.DIALOG_FRAGMENT_TAG_LOGIN_TO_SUBMIT_REP_CODE);
-				return;
-			}
 			
 			String repCode = edtRepCode.getText().toString();
 			if (repCode == null || repCode.length() == 0) {

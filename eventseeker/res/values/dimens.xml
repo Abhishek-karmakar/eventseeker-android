@@ -481,6 +481,8 @@
     <dimen name="txt_title_mar_l_list_item_settings">20dp</dimen>
     <dimen name="txt_title_txt_size_list_item_settings">20sp</dimen>
     <dimen name="divider_ht_list_item_settings">1dp</dimen>
+    <!-- common_list_layout.xml -->
+    <dimen name="all_margin_common_list_layout">@dimen/divider_margin_l_fragment_discover_by_category_list_item_evt</dimen>
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <!-- activity_bosch_main.xml -->
     <dimen name="b_root_navigation_drawer_w_main">210dp</dimen>
