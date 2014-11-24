@@ -65,15 +65,14 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	
     public static enum Service {
     	Title(0, R.string.service_title, R.drawable.placeholder, false, null),
-    	//Blank(3, R.string.service_blank, R.drawable.placeholder, false, null),
-    	GooglePlay(4, R.string.service_google_play, R.drawable.google_play, true, "googleplay"),
-    	DeviceLibrary(5, R.string.service_device_library, R.drawable.devicelibrary, true, "devicelibrary"),
-    	Twitter(6, R.string.service_twitter, R.drawable.twitter_colored, true, "twitter"),
+    	GooglePlay(1, R.string.service_google_play, R.drawable.google_play, true, "googleplay"),
+    	DeviceLibrary(2, R.string.service_device_library, R.drawable.devicelibrary, true, "devicelibrary"),
+    	Twitter(3, R.string.service_twitter, R.drawable.twitter_colored, true, "twitter"),
     	//Spotify,
-    	Rdio(7, R.string.service_rdio, R.drawable.rdio, true, "rdio"),
-    	Lastfm(8, R.string.service_last_fm, R.drawable.lastfm, true, "lastfm"),
-    	Pandora(9, R.string.service_pandora, R.drawable.pandora, true, "pandora"),
-    	Button(10, R.string.service_button, R.drawable.placeholder, false, null);
+    	Rdio(4, R.string.service_rdio, R.drawable.rdio, true, "rdio"),
+    	Lastfm(5, R.string.service_last_fm, R.drawable.lastfm, true, "lastfm"),
+    	Pandora(6, R.string.service_pandora, R.drawable.pandora, true, "pandora"),
+    	Button(7, R.string.service_button, R.drawable.placeholder, false, null);
     	
     	private int intId;
     	private int strResId;

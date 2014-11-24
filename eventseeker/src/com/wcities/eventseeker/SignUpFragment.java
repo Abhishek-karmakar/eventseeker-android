@@ -13,16 +13,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.wcities.eventseeker.ConnectAccountsFragment.ConnectAccountsFragmentListener;
-import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.registration.Registration.RegistrationListener;
 import com.wcities.eventseeker.util.FieldValidationUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickListener, TextWatcher, 
-		OnFocusChangeListener {
+public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickListener, TextWatcher, OnFocusChangeListener {
 
 	private static final String TAG = SignUpFragment.class.getSimpleName();
 	
@@ -74,6 +71,12 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 		
 		setGooglePlusSigningInVisibility();
 		return v;
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		toggleSignUpBtnState();
 	}
 	
 	@Override
@@ -148,17 +151,21 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 			
 			boolean isPasswordEntered = edtPassword.getText().toString().length() > 0;
 			boolean isConfirmPasswordEntered = edtConfirmPassword.getText().toString().length() > 0;
-			isConfirmPasswordValid = FieldValidationUtil.isPasswordMatching(edtPassword.getText().toString(), 
-					edtConfirmPassword.getText().toString());
-			if (isPasswordEntered && isConfirmPasswordEntered && isConfirmPasswordValid) {
+			isConfirmPasswordValid = isPasswordEntered && isConfirmPasswordEntered && 
+					FieldValidationUtil.isPasswordMatching(edtPassword.getText().toString(), edtConfirmPassword.getText().toString());
+			if (isConfirmPasswordValid) {
 				imgPasswordIndicator.setImageResource(R.drawable.ic_valid_check);
 				imgConfirmPasswordIndicator.setImageResource(R.drawable.ic_valid_check);
 			}
 			break;			
 		}
 		
+		toggleSignUpBtnState();
+	}
+
+	private void toggleSignUpBtnState() {
 		if (isFNValid && isLNValid && isEmailValid && isConfirmPasswordValid) {
-			btnSignUp.setEnabled(true);			
+			btnSignUp.setEnabled(true);
 			
 		} else {
 			btnSignUp.setEnabled(false);

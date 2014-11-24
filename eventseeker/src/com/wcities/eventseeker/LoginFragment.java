@@ -19,17 +19,12 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 	
 	private static final String TAG = LoginFragment.class.getName();
 	
-	//private static final String DIALOG_FRAGMENT_TAG_SKIP = "skipDialog";
-
 	private EditText edtEmail, edtPassword;
 	private boolean isEmailValid, isPasswordValid;
 	private Button btnLogin;
 	
-	//private Button btnSkip;
 	private ImageView imgFbSignUp, imgGPlusSignIn;
     private TextView txtGPlusSignInStatus;
-    
-	//private Resources res;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {

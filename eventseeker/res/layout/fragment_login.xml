@@ -72,7 +72,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtLoginLabel"
                 android:layout_marginTop="@dimen/mar_t_get_started_fragment"
-                android:hint="Email" />
+                android:hint="Email"
+                android:singleLine="true" />
 
             <EditText
                 android:id="@+id/edtPassword"
@@ -81,7 +82,8 @@
                 android:layout_below="@+id/edtEmail"
                 android:layout_marginTop="@dimen/mar_t_get_started_fragment"
                 android:hint="Password"
-                android:password="true" />
+                android:password="true"
+                android:singleLine="true" />
 
             <Button
                 android:id="@+id/btnLogin"
@@ -90,9 +92,9 @@
                 android:layout_below="@+id/edtPassword"
                 android:layout_marginTop="@dimen/mar_t_get_started_fragment"
                 android:background="@drawable/slctr_btn_login_default_grey_pressed_blue_rounded"
+                android:enabled="false"
                 android:gravity="center"
                 android:text="Login"
-            	android:enabled="false"
                 android:textColor="@android:color/white" />
 
             <Button

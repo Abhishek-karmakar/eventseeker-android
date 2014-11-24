@@ -72,7 +72,8 @@
                 android:layout_marginLeft="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginTop="@dimen/mar_t_get_started_fragment"
-                android:hint="First Name" />
+                android:hint="First Name"
+                android:singleLine="true" />
 
             <ImageView
                 android:id="@+id/imgFNIndicator"
@@ -91,7 +92,8 @@
                 android:layout_marginLeft="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginTop="@dimen/mar_t_get_started_fragment"
-                android:hint="Last Name" />
+                android:hint="Last Name"
+                android:singleLine="true" />
 
             <ImageView
                 android:id="@+id/imgLNIndicator"
@@ -110,7 +112,8 @@
                 android:layout_marginLeft="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginTop="@dimen/mar_t_get_started_fragment"
-                android:hint="Email" />
+                android:hint="Email"
+                android:singleLine="true" />
 
             <ImageView
                 android:id="@+id/imgEmailIndicator"
@@ -140,7 +143,8 @@
                 android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginTop="@dimen/mar_t_below_error_get_started_fragment"
                 android:hint="Password"
-                android:password="true" />
+                android:password="true"
+                android:singleLine="true" />
 
             <ImageView
                 android:id="@+id/imgPasswordIndicator"
@@ -160,7 +164,8 @@
                 android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginTop="@dimen/mar_t_get_started_fragment"
                 android:hint="Confirm Password"
-                android:password="true" />
+                android:password="true"
+                android:singleLine="true" />
 
             <ImageView
                 android:id="@+id/imgConfirmPasswordIndicator"
@@ -194,10 +199,10 @@
                 android:text="Sign Up"
                 android:textColor="@android:color/white" />
 
-            <!-- 
+            <!--
 	            The below Dummy view and its margin top is added to ignore the issue of above button getting clipped
-	            as it is last view in scrollview. This issue was seen in ASUS Nexus 7.
-             -->
+	            as it is last view in scrollview. This issue was seen in ASUS Nexus 7.            -->
+
             <View
                 android:id="@+id/vDummy"
                 android:layout_width="match_parent"
