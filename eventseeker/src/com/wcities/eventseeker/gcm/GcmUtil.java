@@ -129,7 +129,7 @@ public class GcmUtil {
                 gcm = GoogleCloudMessaging.getInstance(eventSeekr);
             }
             
-            Log.d(TAG, "register in bg()");
+            Log.d(TAG, "register");
             String regId = gcm.register(AppConstants.GCM_SENDER_ID);
             Log.d(TAG, "GCM regId = " + regId);
 

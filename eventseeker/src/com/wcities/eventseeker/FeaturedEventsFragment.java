@@ -95,11 +95,18 @@ public class FeaturedEventsFragment extends Fragment {
 				 * should not be the case. So prefer using "(EventListener)FragmentUtil.getActivity(FeaturedEventsFragment.this)"
 				 * instead of mListener.
 				 */
-				/*if (FragmentUtil.getApplication(FeaturedEventsFragment.this).getFbUserId() != null) {
+				/*EventSeekr eventSeekr = FragmentUtil.getApplication(FeaturedEventsFragment.this);
+				if (eventSeekr.getFbUserId() != null) {
 					FbUtil.callFacebookLogout(FragmentUtil.getApplication(FeaturedEventsFragment.this));
 					
-				} else if (FragmentUtil.getApplication(FeaturedEventsFragment.this).getGPlusUserId() != null) {
+				} else if (eventSeekr.getGPlusUserId() != null) {
 					GPlusUtil.callGPlusLogout(EventSeekr.mGoogleApiClient, FragmentUtil.getApplication(FeaturedEventsFragment.this));
+					
+				} else if (eventSeekr.getFirstName() != null) {
+					eventSeekr.removeEmailSignupInfo();
+					
+				} else if (eventSeekr.getEmailId() != null) {
+					eventSeekr.removeEmailLoginInfo();
 				}*/
 				((EventListener)FragmentUtil.getActivity(FeaturedEventsFragment.this)).onEventSelected(event);
 			}

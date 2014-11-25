@@ -80,6 +80,7 @@ public class UserInfoApiJSONParser {
 	private static final String KEY_SYNCACCOUNT = "syncaccount";
 	private static final String KEY_WCITIES_ID = "wcities_id";
 	private static final String KEY_REP_CODE = "repCode";
+	private static final String KEY_SYNC = "sync";
 	
 	private static final String KEY_SIGNUP = "signup";
 	private static final String KEY_MSG_CODE = "msg_code";
@@ -128,6 +129,11 @@ public class UserInfoApiJSONParser {
 		JSONObject jObjSyncaccount = jsonObject.getJSONObject(KEY_SYNCACCOUNT);
 		String wcitiesId = jObjSyncaccount.getString(KEY_WCITIES_ID);
 		return wcitiesId;
+	}
+	
+	public SyncAccountResponse parseSyncAccount(JSONObject jsonObject) throws JSONException {
+		JSONObject jObjSyncaccount = jsonObject.getJSONObject(KEY_SYNCACCOUNT);
+		return new SyncAccountResponse(jObjSyncaccount.getBoolean(KEY_SYNC), jObjSyncaccount.getString(KEY_WCITIES_ID));
 	}
 	
 	public SignupResponse parseSignup(JSONObject jsonObject) throws JSONException {
@@ -681,6 +687,25 @@ public class UserInfoApiJSONParser {
 			return msgCode;
 		}
 		
+		public String getWcitiesId() {
+			return wcitiesId;
+		}
+	}
+	
+	public class SyncAccountResponse {
+		
+		private boolean sync;
+		private String wcitiesId;
+		
+		public SyncAccountResponse(boolean sync, String wcitiesId) {
+			this.sync = sync;
+			this.wcitiesId = wcitiesId;
+		}
+
+		public boolean isSync() {
+			return sync;
+		}
+
 		public String getWcitiesId() {
 			return wcitiesId;
 		}

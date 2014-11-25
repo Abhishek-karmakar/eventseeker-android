@@ -161,6 +161,7 @@ public abstract class Api {
 				Log.d(TAG, "after load time = " + (System.currentTimeMillis() / 1000));
 			}*/
 			String result = readStream(in);
+			//Log.d(TAG, "result = " + result);
 			jsonObject = new JSONObject(result);
 			return jsonObject;
 
@@ -168,25 +169,6 @@ public abstract class Api {
 			conn.disconnect();
 		}
 	}
-	
-	/*protected JSONObject execute() throws IOException, JSONException {
-		JSONObject jsonObject;
-		URL url = new URL(uri);
-		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		conn.setConnectTimeout(100000);
-		conn.setReadTimeout(100000);
-		conn.setRequestMethod("GET");
-		conn.setRequestProperty("Charset", AppConstants.CHARSET_NAME);
-		try {
-			InputStream in = new BufferedInputStream(conn.getInputStream());
-			String result = readStream(in);
-			jsonObject = new JSONObject(result);
-			return jsonObject;
-
-		} finally {
-			conn.disconnect();
-		}
-	}*/
 	
 	private String readStream(InputStream in) {
 		StringBuilder builder = new StringBuilder();

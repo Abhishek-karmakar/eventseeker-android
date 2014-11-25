@@ -1631,8 +1631,30 @@ public class MainActivity extends ActionBarActivity implements
 					AppConstants.FRAGMENT_TAG_DEVICE_LIBRARY, false);
 
 		} else if (fragment instanceof LoginSyncingFragment) {
-			String title = (fragment.getArguments().getSerializable(BundleKeys.LOGIN_TYPE) == LoginType.facebook) ? 
-					getResources().getString(R.string.title_facebook) : getResources().getString(R.string.title_google_plus);
+			String title = "";
+			LoginType loginType = (LoginType) fragment.getArguments().getSerializable(BundleKeys.LOGIN_TYPE);
+			
+			switch (loginType) {
+			
+			case facebook:
+				title = getResources().getString(R.string.title_facebook);
+				break;
+				
+			case googlePlus:
+				title = getResources().getString(R.string.title_google_plus);
+				break;
+				
+			case emailSignup:
+				title = getResources().getString(R.string.title_email_sign_up);
+				break;
+				
+			case emailLogin:
+				title = getResources().getString(R.string.title_email_login);
+				break;
+
+			default:
+				break;
+			}
 			onFragmentResumed(AppConstants.INVALID_INDEX, title, AppConstants.FRAGMENT_TAG_LOGIN_SYNCING, false);
 
 		} else if (fragment instanceof TwitterFragment) {

@@ -38,14 +38,16 @@ public class EmailSignup extends Registration {
 		}
 		
 		/**
+		 * Signup w/o deviceId
 		 * Don't set deviceId on userInfoApi, because otherwise if same device is used earlier
 		 * to sign up using some other email, server will replace old email & pwd by new ones.
-		 * Whereas we want to create new profile in such case.
+		 * Whereas we want to create new profile in such case so that all emails are saved at server side &
+		 * news letters can be sent out to all these email ids.
 		 */
 		jsonObject = userInfoApi.signUp();
 		Log.d(TAG, jsonObject.toString());
 		String userId = jsonParser.getUserId(jsonObject);
-		Log.d(TAG, "userId = " + userId);
+		//Log.d(TAG, "userId = " + userId);
 		
 		// sign up with email & pwd
 		jsonObject = userInfoApi.signup(eventSeekr.getEmailId(), eventSeekr.getPassword(), eventSeekr.getFirstName(), 
@@ -59,8 +61,9 @@ public class EmailSignup extends Registration {
 			if (prevLoginType == LoginType.facebook || prevLoginType == LoginType.googlePlus) {
 				jsonObject = userInfoApi.syncAccount(null, eventSeekr.getPreviousUserId(), eventSeekr.getPreviousEmailId(), 
 						UserType.getUserType(prevLoginType), userId);
+				Log.d(TAG, "jsonObject = " + jsonObject.toString());
 				userId = jsonParser.getWcitiesId(jsonObject);
-				Log.d(TAG, "userId = " + userId);
+				//Log.d(TAG, "userId = " + userId);
 			}
 			eventSeekr.updateWcitiesId(userId);
 			

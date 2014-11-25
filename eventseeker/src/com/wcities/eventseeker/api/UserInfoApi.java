@@ -264,14 +264,15 @@ public class UserInfoApi extends Api {
 	public JSONObject signup(String email, String password, String fname, String lname, String wcitiesId) 
 			throws ClientProtocolException, IOException, JSONException {
 		String METHOD = "wLogin.php?";
-		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD);
+		
+		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD).append("oauth_token=")
+				.append(getOauthToken());
 		setUri(uriBuilder.toString());
 		
 		StringBuilder paramsBuilder = new StringBuilder();
-		paramsBuilder = paramsBuilder.append("oauth_token=").append(getOauthToken()).append("&type=")
-				.append(Type.signup.name()).append("&email=").append(email).append("&password=").append(password)
-				.append("&fname=").append(fname).append("&lname=").append(lname).append("&deviceType=android")
-				.append("&wcitiesId=").append(wcitiesId);
+		paramsBuilder = paramsBuilder.append("type=").append(Type.signup.name()).append("&email=").append(email)
+				.append("&password=").append(password).append("&fname=").append(fname).append("&lname=")
+				.append(lname).append("&deviceType=android").append("&wcitiesId=").append(wcitiesId);
 		Log.d(TAG, "uri=" + getUri());
 		//Log.d(TAG, "params=" + paramsBuilder.toString());
 		return execute(RequestMethod.POST, ContentType.MIME_APPLICATION_X_WWW_FORM_URLENCODED, paramsBuilder.toString().getBytes());

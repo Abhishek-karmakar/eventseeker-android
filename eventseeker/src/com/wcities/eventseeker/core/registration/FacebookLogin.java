@@ -15,6 +15,7 @@ import com.wcities.eventseeker.api.UserInfoApi.UserType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.gcm.GcmUtil;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
+import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser.SyncAccountResponse;
 import com.wcities.eventseeker.util.DeviceUtil;
 
 public class FacebookLogin extends Registration {
@@ -39,8 +40,9 @@ public class FacebookLogin extends Registration {
 		jsonObject = userInfoApi.syncAccount(null, eventSeekr.getFbUserId(), eventSeekr.getFbEmailId(), 
 				UserType.fb, userId);
 		Log.d(TAG, jsonObject.toString());
-		userId = jsonParser.getWcitiesId(jsonObject);
-		Log.d(TAG, "userId = " + userId);
+		SyncAccountResponse syncAccountResponse = jsonParser.parseSyncAccount(jsonObject);
+		userId = syncAccountResponse.getWcitiesId();
+		//Log.d(TAG, "userId = " + userId);
 		
 		// sync friends
 		jsonObject = userInfoApi.syncFriends(UserType.getUserType(LoginType.facebook), eventSeekr.getFbUserId(), 
@@ -48,12 +50,21 @@ public class FacebookLogin extends Registration {
 		
 		// sync last used email account wcitiesId with this fb
 		LoginType prevLoginType = eventSeekr.getPreviousLoginType();
-		if (prevLoginType == LoginType.emailLogin && prevLoginType == LoginType.emailSignup) {
+		//Log.d(TAG, "prevLoginType = " + prevLoginType);
+		/**
+		 * 3rd condition below is to get new wcitiesId in following case:
+		 * If user's one profile created from this device already has 1 fb account, then 1st syncaccount call will 
+		 * return sync false with fb user id & wcitiesId associated with old profile, but after this sync friends
+		 * call will create new account & hence wcitiesId returned in next syncaccount call executed below will be 
+		 * of this new fb account.
+		 */
+		if (prevLoginType == LoginType.emailSignup || prevLoginType == LoginType.emailLogin || 
+				(prevLoginType != null && !syncAccountResponse.isSync())) {
 			jsonObject = userInfoApi.syncAccount(null, eventSeekr.getFbUserId(), eventSeekr.getFbEmailId(), 
 					UserType.fb, eventSeekr.getPreviousWcitiesId());
 			Log.d(TAG, jsonObject.toString());
 			userId = jsonParser.getWcitiesId(jsonObject);
-			Log.d(TAG, "userId = " + userId);
+			//Log.d(TAG, "userId = " + userId);
 		}
 		eventSeekr.updateWcitiesId(userId);
 
