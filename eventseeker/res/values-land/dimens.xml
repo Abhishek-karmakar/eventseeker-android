@@ -129,4 +129,6 @@
     <dimen name="rlt_layout_root_pad_l_fragment_my_events_list">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="rlt_layout_root_pad_r_fragment_my_events_list">@dimen/rlt_layout_root_pad_l_fragment_my_events_list</dimen>
     
+    <!-- login/register fragment -->
+    <dimen name="mar_l_r_get_started_fragment">70dp</dimen>
 </resources>

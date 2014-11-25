@@ -60,4 +60,7 @@
 
     <!-- fragment_sync_account.xml -->
     <dimen name="v_dummy_ht_fragment_sync_account">20dp</dimen>
+    
+    <!-- login/register fragment -->
+    <dimen name="mar_l_r_get_started_fragment">200dp</dimen>
 </resources>

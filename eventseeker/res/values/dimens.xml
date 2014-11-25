@@ -471,7 +471,7 @@
     <dimen name="mar_t_get_started_fragment">25dp</dimen>
     <dimen name="mar_t_below_error_get_started_fragment">12dp</dimen>
     <dimen name="btn_forgot_pass_mar_t_get_started_fragment">10dp</dimen>
-    <dimen name="mar_l_r_get_started_fragment">40dp</dimen>
+    <dimen name="mar_l_r_get_started_fragment">20dp</dimen>
     <dimen name="rlt_register_details_mar_r_get_started_fragment">12dp</dimen>
     <dimen name="txt_login_label_txt_size_get_started_fragment">20sp</dimen>
     <dimen name="btn_forgot_pass_txt_size_get_started_fragment">18sp</dimen>

@@ -1,6 +1,7 @@
 package com.wcities.eventseeker;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -74,9 +75,26 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 	}
 	
 	@Override
-	public void onResume() {
-		super.onResume();
+	public void onStart() {
+		super.onStart();
+		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		ma.setDrawerLockMode(true);
+		ma.setDrawerIndicatorEnabled(false);
+		ma.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME | 
+				ActionBar.DISPLAY_HOME_AS_UP);
+		if (ma.isTabletAndInLandscapeMode()) {
+			ma.hideDrawerList();
+		}
 		toggleSignUpBtnState();
+	}
+	
+	@Override
+	public void onStop() {
+		super.onStop();
+		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		if (ma.isTabletAndInLandscapeMode()) {
+			ma.unHideDrawerList();
+		}
 	}
 	
 	@Override
