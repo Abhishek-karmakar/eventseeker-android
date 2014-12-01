@@ -258,7 +258,6 @@ public class MainActivity extends ActionBarActivity implements
 			
 			getSupportActionBar().setDisplayOptions(displayOptions);
 		}
-		
 		/**
 		 * setIcon null throws NullPointerException while expanding
 		 * searchView in SearchFragment. So need to set any transparent icon
@@ -1872,5 +1871,13 @@ public class MainActivity extends ActionBarActivity implements
 		}
 		
 		selectNonDrawerItem(loginSyncingFragment, AppConstants.FRAGMENT_TAG_LOGIN_SYNCING, title, addToBackStack);
+	}
+
+	public void hideDrawerList() {
+		lnrLayoutRootNavDrawer.setVisibility(View.GONE);
+	}
+	
+	public void unHideDrawerList() {
+		lnrLayoutRootNavDrawer.setVisibility(View.VISIBLE);
 	}
 }

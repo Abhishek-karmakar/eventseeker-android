@@ -7,7 +7,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
+import java.util.HashMap;
+
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -34,20 +37,40 @@ import com.wcities.eventseeker.util.FragmentUtil;
 public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickListener, TextWatcher, OnFocusChangeListener {
 
 	private static final String TAG = SignUpFragment.class.getSimpleName();
+
+	private static final String IMG_FIRST_NAME = "firstName";
+	private static final String IMG_LAST_NAME = "lastName";
+	private static final String IMG_EMAIL = "email";
+	private static final String IMG_PASSWORD = "password";
+	private static final String IMG_CONFIRM_PASSWORD = "confirmPassword";
 	
 	private EditText edtFN, edtLN, edtEmail, edtPassword, edtConfirmPassword;
 	private ImageView imgFNIndicator, imgLNIndicator, imgEmailIndicator, imgPasswordIndicator, imgConfirmPasswordIndicator;
 	private TextView txtEmailInvalid, txtConfirmPasswordInvalid;
 	private boolean isFNValid, isLNValid, isEmailValid, isConfirmPasswordValid;
+	private HashMap<String, ImgIndicatorState> imgIndicatorStateMap;
 	private Button btnSignUp;
 	
 	private ImageView imgFbSignUp, imgGPlusSignIn;
     private TextView txtGPlusSignInStatus;
 
+	private enum ImgIndicatorState {
+		IMG_INVISIBLE,
+		IMG_CROSS,
+		IMG_CHECK;
+	}
+    
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
+		
+		imgIndicatorStateMap = new HashMap<String, ImgIndicatorState>();
+		imgIndicatorStateMap.put(IMG_FIRST_NAME, ImgIndicatorState.IMG_INVISIBLE);
+		imgIndicatorStateMap.put(IMG_LAST_NAME, ImgIndicatorState.IMG_INVISIBLE);
+		imgIndicatorStateMap.put(IMG_EMAIL, ImgIndicatorState.IMG_INVISIBLE);
+		imgIndicatorStateMap.put(IMG_PASSWORD, ImgIndicatorState.IMG_INVISIBLE);
+		imgIndicatorStateMap.put(IMG_CONFIRM_PASSWORD, ImgIndicatorState.IMG_INVISIBLE);
 	}
 	
 	@Override
@@ -86,9 +109,55 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 	}
 	
 	@Override
-	public void onResume() {
-		super.onResume();
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		if (imgIndicatorStateMap.get(IMG_FIRST_NAME) != ImgIndicatorState.IMG_INVISIBLE) {
+			imgFNIndicator.setImageResource(imgIndicatorStateMap.get(IMG_FIRST_NAME) == ImgIndicatorState.IMG_CHECK ?
+					R.drawable.ic_valid_check : R.drawable.ic_invalid_cross);			
+		}
+		if (imgIndicatorStateMap.get(IMG_LAST_NAME) != ImgIndicatorState.IMG_INVISIBLE) {
+			imgLNIndicator.setImageResource(imgIndicatorStateMap.get(IMG_LAST_NAME) == ImgIndicatorState.IMG_CHECK ?
+					R.drawable.ic_valid_check : R.drawable.ic_invalid_cross);			
+			
+		}
+		if (imgIndicatorStateMap.get(IMG_EMAIL) != ImgIndicatorState.IMG_INVISIBLE) {
+			imgEmailIndicator.setImageResource(imgIndicatorStateMap.get(IMG_EMAIL) == ImgIndicatorState.IMG_CHECK ?
+					R.drawable.ic_valid_check : R.drawable.ic_invalid_cross);			
+			
+		}
+		if (imgIndicatorStateMap.get(IMG_PASSWORD) != ImgIndicatorState.IMG_INVISIBLE) {
+			imgPasswordIndicator.setImageResource(imgIndicatorStateMap.get(IMG_FIRST_NAME) == ImgIndicatorState.IMG_CHECK ?
+					R.drawable.ic_valid_check : 0);			
+			
+		}
+		if (imgIndicatorStateMap.get(IMG_CONFIRM_PASSWORD) != ImgIndicatorState.IMG_INVISIBLE) {
+			imgConfirmPasswordIndicator.setImageResource(imgIndicatorStateMap.get(IMG_CONFIRM_PASSWORD) 
+					== ImgIndicatorState.IMG_CHECK ? R.drawable.ic_valid_check : R.drawable.ic_invalid_cross);			
+			
+		}
+	}
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		ma.setDrawerLockMode(true);
+		ma.setDrawerIndicatorEnabled(false);
+		ma.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME | 
+				ActionBar.DISPLAY_HOME_AS_UP);
+		if (ma.isTabletAndInLandscapeMode()) {
+			ma.hideDrawerList();
+		}
 		toggleSignUpBtnState();
+	}
+	
+	@Override
+	public void onStop() {
+		super.onStop();
+		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		if (ma.isTabletAndInLandscapeMode()) {
+			ma.unHideDrawerList();
+		}
 	}
 	
 	@Override
@@ -128,9 +197,11 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 			isFNValid = FieldValidationUtil.isValidName(edtFN.getText().toString());
 			if (isFNValid) {
 				imgFNIndicator.setImageResource(R.drawable.ic_valid_check);
+				imgIndicatorStateMap.put(IMG_FIRST_NAME, ImgIndicatorState.IMG_CHECK);
 
 			} else {
 				imgFNIndicator.setImageResource(0);
+				imgIndicatorStateMap.put(IMG_FIRST_NAME, ImgIndicatorState.IMG_INVISIBLE);
 			}
 			break;
 
@@ -138,9 +209,11 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 			isLNValid = FieldValidationUtil.isValidName(edtLN.getText().toString());
 			if (isLNValid) {
 				imgLNIndicator.setImageResource(R.drawable.ic_valid_check);
+				imgIndicatorStateMap.put(IMG_LAST_NAME, ImgIndicatorState.IMG_CHECK);
 
 			} else {
 				imgLNIndicator.setImageResource(0);
+				imgIndicatorStateMap.put(IMG_LAST_NAME, ImgIndicatorState.IMG_INVISIBLE);
 			}
 			break;
 			
@@ -148,10 +221,12 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 			// to remove the error icon if any present on it.
 			imgEmailIndicator.setImageResource(0);
 			txtEmailInvalid.setVisibility(View.INVISIBLE);
+			imgIndicatorStateMap.put(IMG_EMAIL, ImgIndicatorState.IMG_INVISIBLE);
 
 			isEmailValid = FieldValidationUtil.isValidEmail(edtEmail.getText().toString());
 			if (isEmailValid) {
 				imgEmailIndicator.setImageResource(R.drawable.ic_valid_check);
+				imgIndicatorStateMap.put(IMG_EMAIL, ImgIndicatorState.IMG_CHECK);
 			} 
 			break;
 			
@@ -160,6 +235,8 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 			imgPasswordIndicator.setImageResource(0);
 			imgConfirmPasswordIndicator.setImageResource(0);
 			txtConfirmPasswordInvalid.setVisibility(View.INVISIBLE);
+			imgIndicatorStateMap.put(IMG_PASSWORD, ImgIndicatorState.IMG_INVISIBLE);
+			imgIndicatorStateMap.put(IMG_CONFIRM_PASSWORD, ImgIndicatorState.IMG_INVISIBLE);
 			
 			boolean isPasswordEntered = edtPassword.getText().toString().length() > 0;
 			boolean isConfirmPasswordEntered = edtConfirmPassword.getText().toString().length() > 0;
@@ -168,6 +245,8 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 			if (isConfirmPasswordValid) {
 				imgPasswordIndicator.setImageResource(R.drawable.ic_valid_check);
 				imgConfirmPasswordIndicator.setImageResource(R.drawable.ic_valid_check);
+				imgIndicatorStateMap.put(IMG_PASSWORD, ImgIndicatorState.IMG_CHECK);
+				imgIndicatorStateMap.put(IMG_CONFIRM_PASSWORD, ImgIndicatorState.IMG_CHECK);
 			}
 			break;			
 		}
@@ -198,6 +277,7 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 						imgEmailIndicator.setImageResource(R.drawable.ic_invalid_cross);
 						txtEmailInvalid.setText(R.string.error_email_invalid);
 						txtEmailInvalid.setVisibility(View.VISIBLE);
+						imgIndicatorStateMap.put(IMG_EMAIL, ImgIndicatorState.IMG_CROSS);
 						
 					} else {
 						AsyncTaskUtil.executeAsyncTask(new CheckEmail(edtEmail.getText().toString()), true);
@@ -212,6 +292,8 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 				if(isPasswordEntered && isConfirmPasswordEntered && !isConfirmPasswordValid) {
 					imgConfirmPasswordIndicator.setImageResource(R.drawable.ic_invalid_cross);// Password not matching case
 					txtConfirmPasswordInvalid.setVisibility(View.VISIBLE);
+					imgIndicatorStateMap.put(IMG_PASSWORD, ImgIndicatorState.IMG_INVISIBLE);
+					imgIndicatorStateMap.put(IMG_CONFIRM_PASSWORD, ImgIndicatorState.IMG_CROSS);
 				}	
 				break;
 		}
@@ -287,6 +369,7 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 				imgEmailIndicator.setImageResource(R.drawable.ic_invalid_cross);
 				txtEmailInvalid.setText(R.string.error_email_exists);
 				txtEmailInvalid.setVisibility(View.VISIBLE);
+				imgIndicatorStateMap.put(IMG_EMAIL, ImgIndicatorState.IMG_CROSS);
 				
 			} else {
 				imgEmailIndicator.setImageResource(R.drawable.ic_valid_check);

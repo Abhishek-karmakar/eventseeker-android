@@ -107,6 +107,19 @@
                 android:gravity="center"
                 android:text="Forgot your password?"
                 android:textSize="@dimen/btn_forgot_pass_txt_size_get_started_fragment" />
+            
+              <!--
+	            The below Dummy view and its margin top is added to ignore the issue of above button getting clipped
+	            as it is last view in scrollview. This issue was seen in Samsung Galaxy Tab.
+           	  -->
+
+            <View
+                android:id="@+id/vDummy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btnForgotPassword"
+                android:layout_marginTop="@dimen/mar_t_below_error_get_started_fragment"
+                android:enabled="false" />
         </RelativeLayout>
     </RelativeLayout>
 

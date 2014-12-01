@@ -4,16 +4,16 @@
     <dimen name="root_navigation_drawer_w_main">320dp</dimen>
 
     <!-- navigation_drawer_list_section_header.xml -->
-    <dimen name="txt_title_margin_l_navigation_drawer_list_section_header">15dp</dimen>
-    <dimen name="txt_title_txt_size_navigation_drawer_list_section_header">15sp</dimen>
+    <dimen name="txt_title_margin_l_navigation_drawer_list_section_header">20dp</dimen>
+    <dimen name="txt_title_txt_size_navigation_drawer_list_section_header">18sp</dimen>
 
     <!-- navigation_drawer_list_item.xml -->
-    <dimen name="rlt_layout_content_pad_t_navigation_drawer_list_item">10dp</dimen>
+    <dimen name="rlt_layout_content_pad_t_navigation_drawer_list_item">20dp</dimen>
     <dimen name="rlt_layout_content_pad_b_navigation_drawer_list_item">@dimen/rlt_layout_content_pad_t_navigation_drawer_list_item</dimen>
     <dimen name="rlt_layout_content_margin_l_navigation_drawer_list_item">20dp</dimen>
     <dimen name="img_icon_margin_r_navigation_drawer_list_item">20dp</dimen>
     <dimen name="txt_title_margin_l_navigation_drawer_list_item">15dp</dimen>
-    <dimen name="txt_title_txt_size_navigation_drawer_list_item">24sp</dimen>
+    <dimen name="txt_title_txt_size_navigation_drawer_list_item">26sp</dimen>
     <dimen name="divider_ht_navigation_drawer_list_item">1dp</dimen>
     <dimen name="divider_margin_l_navigation_drawer_list_item">@dimen/txt_title_margin_l_navigation_drawer_list_item</dimen>
     <dimen name="divider_margin_r_navigation_drawer_list_item">@dimen/img_icon_margin_r_navigation_drawer_list_item</dimen>
@@ -379,5 +379,11 @@
     
     <!-- fragment_my_events_list.xml -->    
     <dimen name="txt_desc_txt_size_fragment_launcher">39sp</dimen>
+    
+    <!-- login/register fragment -->    
+    <dimen name="mar_l_r_get_started_fragment">60dp</dimen>
+        
+	<!-- fragment_settings.xml -->
+    <dimen name="lst_pad_l_r_fragment_settings">175dp</dimen>
     
 </resources>
