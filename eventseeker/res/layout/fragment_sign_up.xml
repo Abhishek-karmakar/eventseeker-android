@@ -130,7 +130,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtEmail"
                 android:gravity="center"
-                android:text="THIS EMAIL IS INVALID"
+                android:text="@string/error_email_invalid"
                 android:textColor="@color/font_blue"
                 android:visibility="invisible" />
 

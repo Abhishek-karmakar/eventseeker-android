@@ -323,6 +323,10 @@
     <!-- TwitterSyncingFragment -->
     <string name="twitter_call_limit_exceeded">Your twitter call limit is exceeded. Please retry after some time.</string>
     
+    <!-- SignUpFragment -->
+    <string name="error_email_invalid">THIS EMAIL IS INVALID</string>
+    <string name="error_email_exists">THIS EMAIL ALREADY EXISTS</string>
+    
     <!-- PagerTitle Array -->
     <string-array name="pagerTitleArray">
         <item>abc Title</item>

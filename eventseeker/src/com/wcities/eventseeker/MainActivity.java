@@ -1850,26 +1850,27 @@ public class MainActivity extends ActionBarActivity implements
 	public void onRegistration(LoginType loginType, Bundle args, boolean addToBackStack) {
 		LoginSyncingFragment loginSyncingFragment = new LoginSyncingFragment();
 		loginSyncingFragment.setArguments(args);
+		String title = "";
 
 		switch (loginType) {
 		
 		case facebook:
-			selectNonDrawerItem(loginSyncingFragment, AppConstants.FRAGMENT_TAG_LOGIN_SYNCING, getResources()
-					.getString(R.string.title_facebook), addToBackStack);
+			title = getResources().getString(R.string.title_facebook);
 			break;
 			
 		case googlePlus:
-			selectNonDrawerItem(loginSyncingFragment, AppConstants.FRAGMENT_TAG_LOGIN_SYNCING, getResources()
-					.getString(R.string.title_google_plus), addToBackStack);
+			title = getResources().getString(R.string.title_google_plus);
 			break;
 			
 		case emailSignup:
-			selectNonDrawerItem(loginSyncingFragment, AppConstants.FRAGMENT_TAG_LOGIN_SYNCING, getResources()
-					.getString(R.string.title_email_sign_up), addToBackStack);
+			title = getResources().getString(R.string.title_email_sign_up);
 			break;
 			
 		case emailLogin:
+			title = getResources().getString(R.string.title_email_login);
 			break;
 		}
+		
+		selectNonDrawerItem(loginSyncingFragment, AppConstants.FRAGMENT_TAG_LOGIN_SYNCING, title, addToBackStack);
 	}
 }

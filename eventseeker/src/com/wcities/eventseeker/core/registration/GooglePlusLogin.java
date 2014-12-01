@@ -52,7 +52,7 @@ public class GooglePlusLogin extends Registration {
 			return UserInfoApiJSONParser.MSG_CODE_NO_ACCESS_TOKEN;
 			
 		} else {
-			userInfoApi.syncFriends(UserType.getUserType(LoginType.googlePlus), eventSeekr.getGPlusUserId(), accessToken);
+			userInfoApi.syncFriends(UserType.google, eventSeekr.getGPlusUserId(), accessToken);
 		}
 		
 		// sync last used email account wcitiesId with this fb

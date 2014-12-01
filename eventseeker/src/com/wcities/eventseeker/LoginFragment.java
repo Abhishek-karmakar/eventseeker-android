@@ -12,6 +12,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.wcities.eventseeker.api.UserInfoApi.LoginType;
+import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.core.registration.Registration.RegistrationListener;
 import com.wcities.eventseeker.util.FieldValidationUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
@@ -79,6 +82,13 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 			break;
 			
 		case R.id.btnLogin:
+			Bundle bundle = new Bundle();
+        	bundle.putSerializable(BundleKeys.LOGIN_TYPE, LoginType.emailLogin);
+        	bundle.putString(BundleKeys.EMAIL_ID, edtEmail.getText().toString());
+        	bundle.putString(BundleKeys.PASSWORD, edtPassword.getText().toString());
+        	
+        	((RegistrationListener)FragmentUtil.getActivity(this)).onRegistration(LoginType.emailLogin, bundle, 
+        			true);
 			break;
 
 		case R.id.btnForgotPassword:

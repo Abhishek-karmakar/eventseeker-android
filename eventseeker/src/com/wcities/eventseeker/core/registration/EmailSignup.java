@@ -59,8 +59,8 @@ public class EmailSignup extends Registration {
 			// sync last used fb/g+ account
 			LoginType prevLoginType = eventSeekr.getPreviousLoginType();
 			if (prevLoginType == LoginType.facebook || prevLoginType == LoginType.googlePlus) {
-				jsonObject = userInfoApi.syncAccount(null, eventSeekr.getPreviousUserId(), eventSeekr.getPreviousEmailId(), 
-						UserType.getUserType(prevLoginType), userId);
+				jsonObject = userInfoApi.syncAccount(null, userId, eventSeekr.getEmailId(), 
+						UserType.wcities, eventSeekr.getPreviousWcitiesId());
 				Log.d(TAG, "jsonObject = " + jsonObject.toString());
 				userId = jsonParser.getWcitiesId(jsonObject);
 				//Log.d(TAG, "userId = " + userId);

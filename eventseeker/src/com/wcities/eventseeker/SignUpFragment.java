@@ -1,5 +1,12 @@
 package com.wcities.eventseeker;
 
+import java.io.IOException;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,9 +20,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.wcities.eventseeker.api.Api;
+import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.registration.Registration.RegistrationListener;
+import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
+import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser.SignupResponse;
+import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FieldValidationUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
@@ -174,15 +186,22 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 
 	@Override
 	public void onFocusChange(View v, boolean hasFocus) {
+		//Log.d(TAG, "onFocusChange(), hasFocus = " + hasFocus);
 		if (hasFocus) {
 			//We need to show the cross icon(if value is improper) at the end when focus is gone from this EditText.
 			return;
 		}
 		switch (v.getId()) {
 			case R.id.edtEmail:
-				if (edtEmail.getText().toString().length() > 0 && !isEmailValid) {
-					imgEmailIndicator.setImageResource(R.drawable.ic_invalid_cross);
-					txtEmailInvalid.setVisibility(View.VISIBLE);
+				if (edtEmail.getText().toString().length() > 0) {
+					if (!isEmailValid) {
+						imgEmailIndicator.setImageResource(R.drawable.ic_invalid_cross);
+						txtEmailInvalid.setText(R.string.error_email_invalid);
+						txtEmailInvalid.setVisibility(View.VISIBLE);
+						
+					} else {
+						AsyncTaskUtil.executeAsyncTask(new CheckEmail(edtEmail.getText().toString()), true);
+					}
 				}
 				break;
 			
@@ -224,6 +243,54 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 			
 		default:
 			break;
+		}
+	}
+	
+	private class CheckEmail extends AsyncTask<Void, Void, Integer> {
+		
+		private String emailId;
+
+		public CheckEmail(String emailId) {
+			this.emailId = emailId;
+		}
+
+		@Override
+		protected Integer doInBackground(Void... params) {
+			//Log.d(TAG, "doInBackground()");
+			UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
+			JSONObject jsonObject;
+			try {
+				jsonObject = userInfoApi.checkEmail(emailId);
+				//Log.d(TAG, jsonObject.toString());
+				UserInfoApiJSONParser jsonParser = new UserInfoApiJSONParser();
+				SignupResponse signupResponse = jsonParser.parseSignup(jsonObject);
+				return signupResponse.getMsgCode();
+				
+			} catch (ClientProtocolException e) {
+				e.printStackTrace();
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+				
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			
+			return UserInfoApiJSONParser.MSG_CODE_UNSUCCESS;
+		}
+		
+		@Override
+		protected void onPostExecute(Integer msgCode) {
+			super.onPostExecute(msgCode);
+			//Log.d(TAG, "onPostExecute(), msgCode = " + msgCode);
+			if (msgCode == UserInfoApiJSONParser.MSG_CODE_EMAIL_ALREADY_EXISTS) {
+				imgEmailIndicator.setImageResource(R.drawable.ic_invalid_cross);
+				txtEmailInvalid.setText(R.string.error_email_exists);
+				txtEmailInvalid.setVisibility(View.VISIBLE);
+				
+			} else {
+				imgEmailIndicator.setImageResource(R.drawable.ic_valid_check);
+			}
 		}
 	}
 }

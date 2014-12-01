@@ -45,8 +45,7 @@ public class FacebookLogin extends Registration {
 		//Log.d(TAG, "userId = " + userId);
 		
 		// sync friends
-		jsonObject = userInfoApi.syncFriends(UserType.getUserType(LoginType.facebook), eventSeekr.getFbUserId(), 
-				null);
+		jsonObject = userInfoApi.syncFriends(UserType.fb, eventSeekr.getFbUserId(), null);
 		
 		// sync last used email account wcitiesId with this fb
 		LoginType prevLoginType = eventSeekr.getPreviousLoginType();

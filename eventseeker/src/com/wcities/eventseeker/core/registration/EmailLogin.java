@@ -6,6 +6,8 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
@@ -17,6 +19,8 @@ import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser.SignupResponse;
 
 public class EmailLogin extends Registration {
 
+	private static final String TAG = EmailLogin.class.getSimpleName();
+
 	public EmailLogin(EventSeekr eventSeekr) {
 		super(eventSeekr);
 	}
@@ -26,6 +30,7 @@ public class EmailLogin extends Registration {
 		// login with email & pwd
 		UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
 		JSONObject jsonObject = userInfoApi.login(eventSeekr.getEmailId(), eventSeekr.getPassword());
+		Log.d(TAG, "login response = " + jsonObject.toString());
 		UserInfoApiJSONParser jsonParser = new UserInfoApiJSONParser();
 		SignupResponse signupResponse = jsonParser.parseSignup(jsonObject);
 		
@@ -38,8 +43,9 @@ public class EmailLogin extends Registration {
 			// sync last used fb/g+ account
 			LoginType prevLoginType = eventSeekr.getPreviousLoginType();
 			if (prevLoginType == LoginType.facebook || prevLoginType == LoginType.googlePlus) {
-				jsonObject = userInfoApi.syncAccount(null, eventSeekr.getPreviousUserId(), eventSeekr.getPreviousEmailId(), 
-						UserType.getUserType(prevLoginType), userId);
+				jsonObject = userInfoApi.syncAccount(null, userId, eventSeekr.getEmailId(), 
+						UserType.wcities, eventSeekr.getPreviousWcitiesId());
+				Log.d(TAG, "syncAccount response = " + jsonObject.toString());
 				userId = jsonParser.getWcitiesId(jsonObject);
 			}
 			eventSeekr.updateWcitiesId(userId);

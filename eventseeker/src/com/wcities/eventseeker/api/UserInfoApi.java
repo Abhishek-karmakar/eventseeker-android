@@ -81,17 +81,8 @@ public class UserInfoApi extends Api {
 	
 	public static enum UserType {
 		fb,
-		google;
-		
-		public static UserType getUserType(LoginType loginType) {
-			if (loginType == LoginType.facebook) {
-				return fb;
-				
-			} else if (loginType == LoginType.googlePlus) {
-				return google;
-			}
-			return null;
-		}
+		google,
+		wcities;
 	}
 	
 	public static enum RepCodeResponse {
@@ -280,24 +271,39 @@ public class UserInfoApi extends Api {
 	
 	public JSONObject login(String email, String password) throws ClientProtocolException, IOException, JSONException {
 		String METHOD = "wLogin.php?";
-		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD);
+		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD).append("oauth_token=")
+				.append(getOauthToken());
 		setUri(uriBuilder.toString());
 		
 		StringBuilder paramsBuilder = new StringBuilder();
-		paramsBuilder = paramsBuilder.append("oauth_token=").append(getOauthToken()).append("&type=")
-				.append(Type.login.name()).append("&email=").append(email).append("&password=").append(password);
+		paramsBuilder = paramsBuilder.append("type=").append(Type.login.name()).append("&email=").append(email)
+				.append("&password=").append(password);
 		Log.d(TAG, "uri=" + getUri());
 		//Log.d(TAG, "params=" + paramsBuilder.toString());
 		return execute(RequestMethod.POST, ContentType.MIME_APPLICATION_X_WWW_FORM_URLENCODED, paramsBuilder.toString().getBytes());
 	}
 	
+	/**
+	 * @param repCode
+	 * @param loginId
+	 * @param email Pass null when syncing current account with last used account
+	 * @param userType
+	 * @param wcitiesId
+	 * @return
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 * @throws JSONException
+	 */
 	public JSONObject syncAccount(String repCode, String loginId, String email, UserType userType, 
 			String wcitiesId) throws ClientProtocolException, IOException, JSONException {
 		String METHOD = "myProfile.php?";
-		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD).append("oauth_token=")
+		StringBuilder uriBuilder = new StringBuilder("http://social.wcities.com/SocialApi/user/myProfile-dec.php?"/*COMMON_URL).append(API).append(METHOD*/).append("oauth_token=")
 				.append(getOauthToken()).append("&type=").append(Type.syncaccount.name()).append("&userId=")
-				.append(loginId).append("&email=").append(email).append("&userType=").append(userType.name())
+				.append(loginId).append("&userType=").append(userType.name())
 				.append("&wcitiesId=").append(wcitiesId);
+		if (email != null) {
+			uriBuilder.append("&email=").append(email);
+		}
 		if (repCode != null) {
 			uriBuilder.append("&repCode=" + repCode);
 		}

@@ -70,6 +70,9 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 			break;
 			
 		case emailLogin:
+			eventSeekr.updateEmailLoginInfo(args.getString(BundleKeys.EMAIL_ID), args.getString(BundleKeys.PASSWORD), 
+					this);
+			isForSignUp = false;
 			break;
 
 		default:
