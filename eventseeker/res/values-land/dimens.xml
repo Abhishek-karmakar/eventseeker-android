@@ -131,4 +131,5 @@
     
     <!-- login/register fragment -->
     <dimen name="mar_l_r_get_started_fragment">70dp</dimen>
+   	<dimen name="rlt_register_details_mar_r_get_started_fragment">30dp</dimen>
 </resources>

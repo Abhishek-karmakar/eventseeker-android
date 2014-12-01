@@ -2,14 +2,19 @@
 
     <!-- activity_main.xml -->
     <dimen name="root_navigation_drawer_w_main">240dp</dimen>
+    
+    
+    <!-- navigation_drawer_list_section_header.xml -->
+    <dimen name="txt_title_margin_l_navigation_drawer_list_section_header">17dp</dimen>
+    <dimen name="txt_title_txt_size_navigation_drawer_list_section_header">15sp</dimen>
 
     <!-- navigation_drawer_list_item.xml -->
-    <dimen name="rlt_layout_content_pad_t_navigation_drawer_list_item">7dp</dimen>
+    <dimen name="rlt_layout_content_pad_t_navigation_drawer_list_item">15dp</dimen>
     <dimen name="rlt_layout_content_pad_b_navigation_drawer_list_item">@dimen/rlt_layout_content_pad_t_navigation_drawer_list_item</dimen>
     <dimen name="rlt_layout_content_margin_l_navigation_drawer_list_item">15dp</dimen>
     <dimen name="img_icon_margin_r_navigation_drawer_list_item">10dp</dimen>
     <dimen name="txt_title_margin_l_navigation_drawer_list_item">10dp</dimen>
-    <dimen name="txt_title_txt_size_navigation_drawer_list_item">18sp</dimen>
+    <dimen name="txt_title_txt_size_navigation_drawer_list_item">23sp</dimen>
     <dimen name="divider_margin_l_navigation_drawer_list_item">@dimen/txt_title_margin_l_navigation_drawer_list_item</dimen>
     <dimen name="divider_margin_r_navigation_drawer_list_item">@dimen/img_icon_margin_r_navigation_drawer_list_item</dimen>
     <dimen name="divider_section_ht_navigation_drawer_list_item">1dp</dimen>

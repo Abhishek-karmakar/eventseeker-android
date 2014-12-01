@@ -178,7 +178,7 @@
     <dimen name="txt_title_margin_t_navigation_drawer_section_header">10dp</dimen>
     <dimen name="txt_title_txt_size_navigation_drawer_section_header">14sp</dimen>
     <!-- navigation_drawer_list_item.xml -->
-    <dimen name="rlt_layout_content_pad_t_navigation_drawer_list_item">4dp</dimen>
+    <dimen name="rlt_layout_content_pad_t_navigation_drawer_list_item">10dp</dimen>
     <dimen name="rlt_layout_content_pad_b_navigation_drawer_list_item">@dimen/rlt_layout_content_pad_t_navigation_drawer_list_item</dimen>
     <dimen name="rlt_layout_content_margin_l_navigation_drawer_list_item">@dimen/txt_title_margin_l_navigation_drawer_section_header</dimen>
     <dimen name="img_icon_margin_r_navigation_drawer_list_item">20dp</dimen>
@@ -472,17 +472,18 @@
     <dimen name="mar_t_below_error_get_started_fragment">12dp</dimen>
     <dimen name="btn_forgot_pass_mar_t_get_started_fragment">10dp</dimen>
     <dimen name="mar_l_r_get_started_fragment">20dp</dimen>
-    <dimen name="rlt_register_details_mar_r_get_started_fragment">12dp</dimen>
+    <dimen name="rlt_register_details_mar_r_get_started_fragment">2dp</dimen>
     <dimen name="txt_login_label_txt_size_get_started_fragment">20sp</dimen>
     <dimen name="btn_forgot_pass_txt_size_get_started_fragment">18sp</dimen>
     <!-- list_item_settings.xml -->
-	<dimen name="rlt_layout_content_pad_t_b_list_item_settings">4dp</dimen>
+	<dimen name="rlt_layout_content_pad_t_b_list_item_settings">10dp</dimen>
 	<dimen name="rlt_layout_content_pad_l_r_list_item_settings">30dp</dimen>
     <dimen name="txt_title_mar_l_list_item_settings">20dp</dimen>
     <dimen name="txt_title_txt_size_list_item_settings">20sp</dimen>
     <dimen name="divider_ht_list_item_settings">1dp</dimen>
-    <!-- common_list_layout.xml -->
-    <dimen name="all_margin_common_list_layout">@dimen/divider_margin_l_fragment_discover_by_category_list_item_evt</dimen>
+    <!-- fragment_settings.xml -->
+    <dimen name="lst_mar_fragment_settings">@dimen/divider_margin_l_fragment_discover_by_category_list_item_evt</dimen>
+    <dimen name="lst_pad_l_r_fragment_settings">20dp</dimen>
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <!-- activity_bosch_main.xml -->
     <dimen name="b_root_navigation_drawer_w_main">210dp</dimen>

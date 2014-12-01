@@ -7,7 +7,6 @@ import java.util.List;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,7 @@ public class SettingsFragment extends ListFragmentLoadableFromBackStack {
 	private static final String TAG = SettingsFragment.class.getSimpleName();
 	
 	private List<SettingsItem> settingsItems;
-	private SettingsMenuAdapter settingsMenuAdapter;
+	private SettingsListAdapter settingsListAdapter;
 	
 	public enum SettingsItem {
 		SYNC_ACCOUNTS(R.drawable.selector_sync, R.string.navigation_drawer_item_sync_accounts),	  	
@@ -88,7 +87,7 @@ public class SettingsFragment extends ListFragmentLoadableFromBackStack {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.common_list_layout, null);
+		View view = inflater.inflate(R.layout.fragment_settings, null);
 		return view;
 	}
 	
@@ -97,13 +96,13 @@ public class SettingsFragment extends ListFragmentLoadableFromBackStack {
 		super.onActivityCreated(savedInstanceState);
 		if (settingsItems == null) {
 			settingsItems = new ArrayList<SettingsItem>(Arrays.asList(SettingsItem.values()));
-			settingsMenuAdapter = new SettingsMenuAdapter((Activity) FragmentUtil.getActivity(this), settingsItems);
+			settingsListAdapter = new SettingsListAdapter((Activity) FragmentUtil.getActivity(this), settingsItems);
 			
 		} else {
-			settingsMenuAdapter.setInflater((Activity) FragmentUtil.getActivity(this));
+			settingsListAdapter.setInflater((Activity) FragmentUtil.getActivity(this));
 		}
 		
-		setListAdapter(settingsMenuAdapter);
+		setListAdapter(settingsListAdapter);
         getListView().setDivider(null);
         //getListView().setBackgroundResource(R.drawable.side_nav_bg);
         //getListView().setBackgroundResource(R.drawable.bg_drawer_list);
@@ -132,13 +131,13 @@ public class SettingsFragment extends ListFragmentLoadableFromBackStack {
 		return "Menu Settings Screen";
 	}
 	
-	private static class SettingsMenuAdapter extends BaseAdapter {
+	private static class SettingsListAdapter extends BaseAdapter {
 
 		private List<SettingsItem> settingsItems;
 		private WeakReference<Activity> mainActivity;
 		private LayoutInflater inflater;
 
-		public SettingsMenuAdapter(Activity activity, List<SettingsItem> settingsMenuListItems) {
+		public SettingsListAdapter(Activity activity, List<SettingsItem> settingsMenuListItems) {
 			this.mainActivity = new WeakReference<Activity>(activity);
 	        inflater = LayoutInflater.from(this.mainActivity.get());
 	        this.settingsItems = settingsMenuListItems;
