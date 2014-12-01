@@ -126,7 +126,7 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 			
 		}
 		if (imgIndicatorStateMap.get(IMG_PASSWORD) != ImgIndicatorState.IMG_INVISIBLE) {
-			imgPasswordIndicator.setImageResource(imgIndicatorStateMap.get(IMG_FIRST_NAME) == ImgIndicatorState.IMG_CHECK ?
+			imgPasswordIndicator.setImageResource(imgIndicatorStateMap.get(IMG_PASSWORD) == ImgIndicatorState.IMG_CHECK ?
 					R.drawable.ic_valid_check : 0);			
 			
 		}
