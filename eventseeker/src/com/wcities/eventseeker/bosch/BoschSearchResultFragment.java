@@ -17,14 +17,12 @@ import android.widget.LinearLayout;
 
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.adapter.SwipeTabsAdapter;
-import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.bosch.BoschMainActivity.OnDisplayModeChangedListener;
 import com.wcities.eventseeker.bosch.custom.fragment.BoschFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.interfaces.BoschOnChildFragmentDisplayModeChangedListener;
 import com.wcities.eventseeker.util.FragmentUtil;
-import com.wcities.eventseeker.util.GeoUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
 import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.viewdata.TabBar;

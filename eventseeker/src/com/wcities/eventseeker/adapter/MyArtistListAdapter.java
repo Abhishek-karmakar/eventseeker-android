@@ -3,6 +3,20 @@ package com.wcities.eventseeker.adapter;
 import java.util.List;
 import java.util.Map;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
+import android.os.AsyncTask.Status;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.SectionIndexer;
+import android.widget.TextView;
+
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
@@ -13,20 +27,6 @@ import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.interfaces.ArtistAdapterListener;
 import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
-
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
-import android.os.AsyncTask.Status;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.SectionIndexer;
-import android.widget.TextView;
 
 // SectionIndexer is only required for 'FollowingFragment'.
 public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, ArtistAdapterListener<Void> {

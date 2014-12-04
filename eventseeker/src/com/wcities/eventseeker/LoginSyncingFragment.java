@@ -2,6 +2,7 @@ package com.wcities.eventseeker;
 
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadMyEventsCount;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.core.registration.Registration.RegistrationErrorListener;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.OnFragmentAliveListener;
@@ -171,7 +173,12 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 				
 			} else {
 				//Log.d(TAG, "wcitiesId = null");
+				//Log.d(TAG, "message code = " + params[0].toString());
 				((MainActivity)FragmentUtil.getActivity(this)).onBackPressed();
+				RegistrationErrorListener registrationErrorListener = (RegistrationErrorListener) 
+						((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager()
+						.findFragmentByTag(getArguments().getString(BundleKeys.REGISTER_ERROR_LISTENER));
+				registrationErrorListener.onErrorOccured((Integer)params[0]);
 			}
 		}
 	}

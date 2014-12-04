@@ -17,7 +17,6 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.interfaces.OnFragmentAliveListener;
 import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
 import com.wcities.eventseeker.util.FragmentUtil;
-import com.wcities.eventseeker.util.LogUtil;
 
 public class SyncArtists extends AsyncTask<Void, Void, Void> {
 	

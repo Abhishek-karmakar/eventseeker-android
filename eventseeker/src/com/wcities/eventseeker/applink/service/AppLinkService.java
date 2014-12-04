@@ -6,7 +6,6 @@
 package com.wcities.eventseeker.applink.service;
 
 import java.util.Arrays;
-import java.util.Locale;
 import java.util.Vector;
 
 import android.app.Service;
@@ -14,7 +13,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.ford.syncV4.exception.SyncException;
 import com.ford.syncV4.exception.SyncExceptionCause;

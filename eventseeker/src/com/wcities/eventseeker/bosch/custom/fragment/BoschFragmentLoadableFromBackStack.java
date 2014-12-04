@@ -1,13 +1,9 @@
 package com.wcities.eventseeker.bosch.custom.fragment;
 
 import android.app.Activity;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import com.wcities.eventseeker.MainActivity;
-import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
-import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
 import com.wcities.eventseeker.bosch.BoschMainActivity;
 import com.wcities.eventseeker.interfaces.ActivityImmediateFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;

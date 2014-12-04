@@ -86,10 +86,8 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 				} else if (eventSeekr.getGPlusUserId() != null) {
 					jsonObject = userInfoApi.syncAccount(repCode, eventSeekr.getGPlusUserId(), eventSeekr.getGPlusEmailId(), 
 							UserType.google, eventSeekr.getWcitiesId());
+				
 				} else {
-					/**
-					 * TODO:Testing this call after Wcities Email implementation gets completed.
-					 */
 					jsonObject = userInfoApi.updateRepcodeWithWcitiesId(repCode, eventSeekr.getWcitiesId());
 				}
 				//Log.d(TAG, "response = " + jsonObject);

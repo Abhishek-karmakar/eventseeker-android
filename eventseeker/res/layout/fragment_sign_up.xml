@@ -184,7 +184,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtConfirmPassword"
                 android:gravity="center"
-                android:text="PASSWORDS DO NOT MATCH"
+                android:text="@string/error_pass_do_not_match"
                 android:textColor="@color/font_blue"
                 android:visibility="invisible" />
 

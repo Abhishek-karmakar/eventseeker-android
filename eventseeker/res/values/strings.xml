@@ -324,8 +324,12 @@
     <string name="twitter_call_limit_exceeded">Your twitter call limit is exceeded. Please retry after some time.</string>
     
     <!-- SignUpFragment -->
+    <string name="error_title">Error</string>
     <string name="error_email_invalid">THIS EMAIL IS INVALID</string>
     <string name="error_email_exists">THIS EMAIL ALREADY EXISTS</string>
+    <string name="error_pass_do_not_match">PASSWORDS DO NOT MATCH</string>
+    <string name="error_email_or_password_incorrect">Email or Password is incorrect</string>
+    <string name="error_unknown_error">Unknown error occured. Please retry later.</string>
     
     <!-- PagerTitle Array -->
     <string-array name="pagerTitleArray">

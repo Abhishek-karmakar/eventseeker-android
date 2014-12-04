@@ -5,7 +5,6 @@ import java.io.Serializable;
 import android.location.Location;
 import android.util.Log;
 
-import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.app.EventSeekr.ProximityUnit;
 import com.wcities.eventseeker.cache.BitmapCacheable;

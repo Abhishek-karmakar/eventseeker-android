@@ -23,4 +23,8 @@ public abstract class Registration {
 	public interface RegistrationListener {
     	public void onRegistration(LoginType loginType, Bundle args, boolean addToBackStack);
     }
+
+	public interface RegistrationErrorListener {
+		public void onErrorOccured(int errorCode);
+	}
 }

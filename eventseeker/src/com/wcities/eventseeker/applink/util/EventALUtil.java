@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
 import com.ford.syncV4.proxy.rpc.TTSChunk;

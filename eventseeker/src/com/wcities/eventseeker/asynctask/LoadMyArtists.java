@@ -15,7 +15,6 @@ import org.json.JSONObject;
 import android.os.AsyncTask;
 import android.widget.BaseAdapter;
 
-import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.core.Artist;

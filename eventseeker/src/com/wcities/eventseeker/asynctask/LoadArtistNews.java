@@ -13,7 +13,6 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
 import com.wcities.eventseeker.adapter.ArtistNewsListAdapter;
-import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg.AsyncLoadImageListener;

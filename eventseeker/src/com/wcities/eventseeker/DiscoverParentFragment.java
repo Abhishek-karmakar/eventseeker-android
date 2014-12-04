@@ -32,9 +32,7 @@ import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.custom.view.ExpandableGridView;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.DeviceUtil;
-import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
-import com.wcities.eventseeker.util.GPlusUtil;
 
 public abstract class DiscoverParentFragment extends FragmentLoadableFromBackStack {
 

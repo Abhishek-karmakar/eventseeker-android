@@ -1,14 +1,8 @@
 package com.wcities.eventseeker;
 
-import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.core.Date;
-import com.wcities.eventseeker.core.Event;
-import com.wcities.eventseeker.core.Schedule;
-import com.wcities.eventseeker.util.FragmentUtil;
-
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.DialogInterface;
@@ -19,8 +13,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.format.Time;
-import android.util.Log;
 import android.widget.Toast;
+
+import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.core.Schedule;
+import com.wcities.eventseeker.util.FragmentUtil;
 
 public class SelectCalendarFragment extends DialogFragment {
 	

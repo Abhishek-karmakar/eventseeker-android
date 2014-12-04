@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.wcities.eventseeker.adapter.DateWiseMyEventListAdapter;
-import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.PublishListener;
 import com.wcities.eventseeker.util.FragmentUtil;

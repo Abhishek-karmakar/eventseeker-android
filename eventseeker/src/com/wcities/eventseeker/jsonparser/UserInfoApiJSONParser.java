@@ -78,6 +78,7 @@ public class UserInfoApiJSONParser {
 	private static final String KEY_SIGN_UP = "signUp";
 	private static final String KEY_USER_ID = "userId";
 	private static final String KEY_SYNCACCOUNT = "syncaccount";
+	private static final String KEY_UPDATE_REPCODE = "updaterepcode";
 	private static final String KEY_WCITIES_ID = "wcities_id";
 	private static final String KEY_REP_CODE = "repCode";
 	private static final String KEY_SYNC = "sync";
@@ -151,9 +152,16 @@ public class UserInfoApiJSONParser {
 	
 	public int getRepCodeResponse(JSONObject jsonObject) throws JSONException {
 		int repCodeResponse = RepCodeResponse.UNKNOWN_ERROR.getRepCode();
-		JSONObject jObjSyncaccount = jsonObject.getJSONObject(KEY_SYNCACCOUNT);
-		if (jObjSyncaccount.has(KEY_REP_CODE)) {
-			String repCode = jObjSyncaccount.getString(KEY_REP_CODE);
+		JSONObject jObj = null;
+		if (jsonObject.has(KEY_SYNCACCOUNT)) {
+			jObj = jsonObject.getJSONObject(KEY_SYNCACCOUNT);
+
+		} else if (jsonObject.has(KEY_UPDATE_REPCODE)) {
+			jObj = jsonObject.getJSONObject(KEY_UPDATE_REPCODE);	
+		}
+		
+		if (jObj != null && jObj.has(KEY_REP_CODE)) {
+			String repCode = jObj.getString(KEY_REP_CODE);
 			repCodeResponse = Integer.parseInt(repCode);
 		}
 		return repCodeResponse;

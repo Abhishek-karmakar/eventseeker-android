@@ -13,15 +13,22 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.core.registration.Registration.RegistrationErrorListener;
 import com.wcities.eventseeker.core.registration.Registration.RegistrationListener;
+import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.util.FieldValidationUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class LoginFragment extends FbGPlusRegisterFragment implements OnClickListener, TextWatcher {
+public class LoginFragment extends FbGPlusRegisterFragment implements OnClickListener, TextWatcher, RegistrationErrorListener, DialogBtnClickListener {
 	
 	private static final String TAG = LoginFragment.class.getName();
+
+	private static final String DIALOG_FRAGMENT_TAG_EMAIL_OR_PASSWORD_INCORRECT = "dialogEmailOrPasswordIncorrect";
+	private static final String DIALOG_FRAGMENT_TAG_UNKNOWN_ERROR = "unknownError";
 	
 	private EditText edtEmail, edtPassword;
 	private boolean isEmailValid, isPasswordValid;
@@ -68,6 +75,7 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 		if (ma.isTabletAndInLandscapeMode()) {
 			ma.hideDrawerList();
 		}
+		toggleSigninBtn();
 	}
 	
 	@Override
@@ -109,6 +117,7 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
         	bundle.putSerializable(BundleKeys.LOGIN_TYPE, LoginType.emailLogin);
         	bundle.putString(BundleKeys.EMAIL_ID, edtEmail.getText().toString());
         	bundle.putString(BundleKeys.PASSWORD, edtPassword.getText().toString());
+        	bundle.putSerializable(BundleKeys.REGISTER_ERROR_LISTENER, AppConstants.FRAGMENT_TAG_LOGIN);
         	
         	((RegistrationListener)FragmentUtil.getActivity(this)).onRegistration(LoginType.emailLogin, bundle, 
         			true);
@@ -168,11 +177,44 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 				break;			
 		}
 		
+		toggleSigninBtn();
+	}
+
+	private void toggleSigninBtn() {
 		if (isEmailValid && isPasswordValid) {
 			btnLogin.setEnabled(true);			
 			
 		} else {
 			btnLogin.setEnabled(false);
 		}
+	}
+
+	@Override
+	public void onErrorOccured(int errorCode) {
+		if (errorCode == UserInfoApiJSONParser.MSG_CODE_EMAIL_OR_PWD_INCORRECT) {
+			GeneralDialogFragment generalDialogFragment 
+				= GeneralDialogFragment.newInstance(this, 
+						FragmentUtil.getResources(this).getString(R.string.error_title), 
+						FragmentUtil.getResources(this).getString(R.string.error_email_or_password_incorrect), "Ok", null);
+			generalDialogFragment.show(getChildFragmentManager(), DIALOG_FRAGMENT_TAG_EMAIL_OR_PASSWORD_INCORRECT);
+		
+		} else if (errorCode == UserInfoApiJSONParser.MSG_CODE_NO_ACCESS_TOKEN 
+				|| errorCode == UserInfoApiJSONParser.MSG_CODE_UNSUCCESS) {
+			GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(this, 
+					FragmentUtil.getResources(this).getString(R.string.error_title), 
+					FragmentUtil.getResources(this).getString(R.string.error_unknown_error), "Ok", null);
+			generalDialogFragment.show(getChildFragmentManager(), DIALOG_FRAGMENT_TAG_UNKNOWN_ERROR);
+			
+		}
+	}
+
+	@Override
+	public void doPositiveClick(String dialogTag) {
+		
+	}
+
+	@Override
+	public void doNegativeClick(String dialogTag) {
+		
 	}
 }

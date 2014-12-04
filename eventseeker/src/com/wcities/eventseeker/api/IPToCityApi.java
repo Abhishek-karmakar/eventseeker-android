@@ -6,8 +6,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 public class IPToCityApi extends Api {
 	
 	private static final String TAG = IPToCityApi.class.getName();

@@ -21,9 +21,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.wcities.eventseeker.constants.AppConstants;
-import com.wcities.eventseeker.gcm.GcmBroadcastReceiver;
-import com.wcities.eventseeker.gcm.GcmBroadcastReceiver.NotificationType;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class DrawerListFragment extends ListFragment {

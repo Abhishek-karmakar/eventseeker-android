@@ -1,7 +1,6 @@
 package com.wcities.eventseeker.gcm;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;

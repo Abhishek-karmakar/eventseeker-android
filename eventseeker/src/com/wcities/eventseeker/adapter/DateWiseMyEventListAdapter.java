@@ -30,7 +30,6 @@ import com.facebook.SessionState;
 import com.wcities.eventseeker.MyEventsListFragment;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
-import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;

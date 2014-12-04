@@ -25,7 +25,6 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
-import com.wcities.eventseeker.util.LogUtil;
 
 public class TwitterFragment extends FragmentLoadableFromBackStack {
 	

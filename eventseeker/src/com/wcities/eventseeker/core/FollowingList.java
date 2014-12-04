@@ -6,8 +6,6 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import android.util.Log;
-
 public class FollowingList {
 
 	private static final String TAG = FollowingList.class.getSimpleName();

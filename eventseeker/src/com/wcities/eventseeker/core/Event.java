@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.wcities.eventseeker.cache.BitmapCacheable;
-import com.wcities.eventseeker.constants.AppConstants;
 
 public class Event implements Serializable, BitmapCacheable {
 	

@@ -1,14 +1,13 @@
 package com.wcities.eventseeker;
 
-import com.wcities.eventseeker.app.EventSeekr;
-import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.core.Event;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.widget.Toast;
+
+import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.core.Event;
 
 public class CalendarActivity extends ActionBarActivity {
 

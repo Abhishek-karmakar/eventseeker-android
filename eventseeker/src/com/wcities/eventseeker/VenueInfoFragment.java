@@ -31,7 +31,6 @@ import android.widget.Toast;
 
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.RecordApi;
-import com.wcities.eventseeker.api.EventApi.MoreInfo;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg.AsyncLoadImageListener;
 import com.wcities.eventseeker.cache.BitmapCache;

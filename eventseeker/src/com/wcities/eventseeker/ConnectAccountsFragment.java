@@ -9,6 +9,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -38,6 +39,7 @@ import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.app.EventSeekr.EventSeekrListener;
+import com.wcities.eventseeker.asynctask.GetAuthToken;
 import com.wcities.eventseeker.asynctask.LoadMyEventsCount;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -599,6 +601,17 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				}
 			}
 		});
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// Log.d(TAG, "onActivityResult(), requestCode = " + requestCode +
+		// ", resultCode = " + resultCode);
+		if (requestCode == AppConstants.REQ_CODE_GOOGLE_ACCOUNT_CHOOSER_FOR_GOOGLE_MUSIC && resultCode == Activity.RESULT_OK) {
+			String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+			new GetAuthToken(this, this).execute(accountName);
+
+		} 
 	}
 
 	@Override

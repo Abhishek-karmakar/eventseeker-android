@@ -1,14 +1,14 @@
 package com.wcities.eventseeker;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.res.Resources;
 import android.os.AsyncTask;
-import java.util.HashMap;
-
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.text.Editable;
@@ -23,10 +23,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.core.registration.Registration.RegistrationErrorListener;
 import com.wcities.eventseeker.core.registration.Registration.RegistrationListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser.SignupResponse;
@@ -34,7 +37,8 @@ import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FieldValidationUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickListener, TextWatcher, OnFocusChangeListener {
+public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickListener, TextWatcher, OnFocusChangeListener,
+		RegistrationErrorListener, DialogBtnClickListener {
 
 	private static final String TAG = SignUpFragment.class.getSimpleName();
 
@@ -43,16 +47,19 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 	private static final String IMG_EMAIL = "email";
 	private static final String IMG_PASSWORD = "password";
 	private static final String IMG_CONFIRM_PASSWORD = "confirmPassword";
+
+	private static final String DIALOG_FRAGMENT_TAG_UNKNOWN_ERROR = "unknownError";
 	
 	private EditText edtFN, edtLN, edtEmail, edtPassword, edtConfirmPassword;
-	private ImageView imgFNIndicator, imgLNIndicator, imgEmailIndicator, imgPasswordIndicator, imgConfirmPasswordIndicator;
-	private TextView txtEmailInvalid, txtConfirmPasswordInvalid;
+	private ImageView imgFNIndicator, imgLNIndicator, imgEmailIndicator, imgPasswordIndicator, imgConfirmPasswordIndicator, 
+						imgFbSignUp, imgGPlusSignIn;
+	private TextView txtEmailInvalid, txtConfirmPasswordInvalid, txtGPlusSignInStatus;
+	private Button btnSignUp;
+
 	private boolean isFNValid, isLNValid, isEmailValid, isConfirmPasswordValid;
 	private HashMap<String, ImgIndicatorState> imgIndicatorStateMap;
-	private Button btnSignUp;
+	private int errorMsgEmail, errorMsgPassword;
 	
-	private ImageView imgFbSignUp, imgGPlusSignIn;
-    private TextView txtGPlusSignInStatus;
 
 	private enum ImgIndicatorState {
 		IMG_INVISIBLE,
@@ -122,7 +129,14 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 		}
 		if (imgIndicatorStateMap.get(IMG_EMAIL) != ImgIndicatorState.IMG_INVISIBLE) {
 			imgEmailIndicator.setImageResource(imgIndicatorStateMap.get(IMG_EMAIL) == ImgIndicatorState.IMG_CHECK ?
-					R.drawable.ic_valid_check : R.drawable.ic_invalid_cross);			
+					R.drawable.ic_valid_check : R.drawable.ic_invalid_cross);
+			try {
+				txtEmailInvalid.setText(errorMsgEmail);
+				txtEmailInvalid.setVisibility(View.VISIBLE);
+			
+			} catch (Resources.NotFoundException e) {
+				e.printStackTrace();
+			}
 			
 		}
 		if (imgIndicatorStateMap.get(IMG_PASSWORD) != ImgIndicatorState.IMG_INVISIBLE) {
@@ -133,6 +147,13 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 		if (imgIndicatorStateMap.get(IMG_CONFIRM_PASSWORD) != ImgIndicatorState.IMG_INVISIBLE) {
 			imgConfirmPasswordIndicator.setImageResource(imgIndicatorStateMap.get(IMG_CONFIRM_PASSWORD) 
 					== ImgIndicatorState.IMG_CHECK ? R.drawable.ic_valid_check : R.drawable.ic_invalid_cross);			
+			try {
+				txtConfirmPasswordInvalid.setText(errorMsgPassword);
+				txtConfirmPasswordInvalid.setVisibility(View.VISIBLE);
+				
+			} catch (Resources.NotFoundException e) {
+				e.printStackTrace();
+			}
 			
 		}
 	}
@@ -275,7 +296,7 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 				if (edtEmail.getText().toString().length() > 0) {
 					if (!isEmailValid) {
 						imgEmailIndicator.setImageResource(R.drawable.ic_invalid_cross);
-						txtEmailInvalid.setText(R.string.error_email_invalid);
+						txtEmailInvalid.setText(errorMsgEmail = R.string.error_email_invalid);
 						txtEmailInvalid.setVisibility(View.VISIBLE);
 						imgIndicatorStateMap.put(IMG_EMAIL, ImgIndicatorState.IMG_CROSS);
 						
@@ -291,6 +312,7 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 				boolean isConfirmPasswordEntered = edtConfirmPassword.getText().toString().length() > 0;
 				if(isPasswordEntered && isConfirmPasswordEntered && !isConfirmPasswordValid) {
 					imgConfirmPasswordIndicator.setImageResource(R.drawable.ic_invalid_cross);// Password not matching case
+					txtConfirmPasswordInvalid.setText(errorMsgPassword = R.string.error_pass_do_not_match);
 					txtConfirmPasswordInvalid.setVisibility(View.VISIBLE);
 					imgIndicatorStateMap.put(IMG_PASSWORD, ImgIndicatorState.IMG_INVISIBLE);
 					imgIndicatorStateMap.put(IMG_CONFIRM_PASSWORD, ImgIndicatorState.IMG_CROSS);
@@ -318,9 +340,9 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
         	bundle.putString(BundleKeys.LAST_NAME, edtLN.getText().toString());
         	bundle.putString(BundleKeys.EMAIL_ID, edtEmail.getText().toString());
         	bundle.putString(BundleKeys.PASSWORD, edtPassword.getText().toString());
+        	bundle.putSerializable(BundleKeys.REGISTER_ERROR_LISTENER, AppConstants.FRAGMENT_TAG_SIGN_UP);
         	
-        	((RegistrationListener)FragmentUtil.getActivity(this)).onRegistration(LoginType.emailSignup, bundle, 
-        			true);
+        	((RegistrationListener)FragmentUtil.getActivity(this)).onRegistration(LoginType.emailSignup, bundle, true);
 			break;
 			
 		default:
@@ -336,6 +358,13 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 			this.emailId = emailId;
 		}
 
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			isEmailValid = false;
+			toggleSignUpBtnState();
+		}
+		
 		@Override
 		protected Integer doInBackground(Void... params) {
 			//Log.d(TAG, "doInBackground()");
@@ -367,13 +396,44 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 			//Log.d(TAG, "onPostExecute(), msgCode = " + msgCode);
 			if (msgCode == UserInfoApiJSONParser.MSG_CODE_EMAIL_ALREADY_EXISTS) {
 				imgEmailIndicator.setImageResource(R.drawable.ic_invalid_cross);
-				txtEmailInvalid.setText(R.string.error_email_exists);
+				txtEmailInvalid.setText(errorMsgEmail = R.string.error_email_exists);
 				txtEmailInvalid.setVisibility(View.VISIBLE);
 				imgIndicatorStateMap.put(IMG_EMAIL, ImgIndicatorState.IMG_CROSS);
 				
 			} else {
+				isEmailValid = true;
 				imgEmailIndicator.setImageResource(R.drawable.ic_valid_check);
+				toggleSignUpBtnState();
 			}
 		}
+	}
+
+	@Override
+	public void onErrorOccured(int errorCode) {
+		if (errorCode == UserInfoApiJSONParser.MSG_CODE_EMAIL_ALREADY_EXISTS) {
+			isEmailValid = false;
+			imgEmailIndicator.setImageResource(R.drawable.ic_invalid_cross);
+			txtEmailInvalid.setText(errorMsgEmail = R.string.error_email_exists);
+			txtEmailInvalid.setVisibility(View.VISIBLE);
+			imgIndicatorStateMap.put(IMG_EMAIL, ImgIndicatorState.IMG_CROSS);
+		
+		} else if (errorCode == UserInfoApiJSONParser.MSG_CODE_NO_ACCESS_TOKEN 
+				|| errorCode == UserInfoApiJSONParser.MSG_CODE_UNSUCCESS) {
+			GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(this, 
+					FragmentUtil.getResources(this).getString(R.string.error_title), 
+					FragmentUtil.getResources(this).getString(R.string.error_unknown_error), "Ok", null);
+			generalDialogFragment.show(getChildFragmentManager(), DIALOG_FRAGMENT_TAG_UNKNOWN_ERROR);
+			
+		}
+	}
+
+	@Override
+	public void doPositiveClick(String dialogTag) {
+		
+	}
+
+	@Override
+	public void doNegativeClick(String dialogTag) {
+		
 	}
 }

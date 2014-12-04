@@ -1,11 +1,11 @@
 package com.wcities.eventseeker.util;
 
-import com.wcities.eventseeker.constants.AppConstants;
-
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+
+import com.wcities.eventseeker.constants.AppConstants;
 
 public class NetworkUtil {
 	  

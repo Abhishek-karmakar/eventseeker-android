@@ -65,6 +65,8 @@ public class BundleKeys {
 	public static final String EMAIL_ID = "emailId";
 	public static final String PASSWORD = "password";
 	public static final String AUTH_TOKEN = "authToken";
+	
+	public static final String REGISTER_ERROR_LISTENER = "registerErrorListener";
 
 	public static final String STR_CRASH_LOG = "crashLog";
 	
