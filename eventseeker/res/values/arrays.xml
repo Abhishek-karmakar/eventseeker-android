@@ -84,6 +84,21 @@
 	  	<item>@string/evt_cat_tours</item>
 	</string-array>
     
+    <!-- PagerTitle Array -->
+    <string-array name="pagerTitleArray">
+        <item>Explore</item>
+        <item>Discover</item>
+        <item>Connect</item>
+        <item>Experience</item>
+    </string-array>
+
+    <string-array name="pagerTitleDescArray">
+        <item>Millions of events worldwide, just a click away. Concerts, Sports, Theater, Festivals, and more.</item>
+        <item>After you sync, we\'ll recommend customized events. Receive alerts and find tickets in any city.</item>
+        <item>Get social with friends and family. We make sharing events easy.</item>
+        <item>Minimize your search and maximise your discovery. Get out into the world, with eventseeker.</item>
+    </string-array>
+    
     <!-- starts for bosch -->
     <string-array name="bosch_navigation_drawer_item_titles">
         <item>@string/bosch_navigation_drawer_item_home</item>

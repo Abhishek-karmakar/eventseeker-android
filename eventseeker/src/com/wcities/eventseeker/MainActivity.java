@@ -67,6 +67,7 @@ import com.wcities.eventseeker.interfaces.OnLocaleChangedListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
 import com.wcities.eventseeker.util.DeviceUtil;
+import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GPlusUtil;
 import com.wcities.eventseeker.util.UpdateAppUtil;
@@ -86,6 +87,7 @@ public class MainActivity extends ActionBarActivity implements
 	public static final int INDEX_NAV_ITEM_ARTISTS_NEWS = INDEX_NAV_ITEM_FOLLOWING + 1;
 	public static final int INDEX_NAV_ITEM_FRIENDS_ACTIVITY = INDEX_NAV_ITEM_ARTISTS_NEWS + 1;
 	public static final int INDEX_NAV_ITEM_SETTINGS = DrawerListFragment.SECT_2_HEADER_POS + 1;
+	public static final int INDEX_NAV_ITEM_LOG_OUT = INDEX_NAV_ITEM_SETTINGS + 1;
 	/*public static final int INDEX_NAV_ITEM_CONNECT_ACCOUNTS = DrawerListFragment.SECT_2_HEADER_POS + 1;
 	private static final int INDEX_NAV_ITEM_CHANGE_LOCATION = INDEX_NAV_ITEM_CONNECT_ACCOUNTS + 1;
 	// TODO: comment following for disabling language
@@ -995,6 +997,23 @@ public class MainActivity extends ActionBarActivity implements
 					.getString(R.string.title_settings_mobile_app), false);
 			break;
 			
+		case INDEX_NAV_ITEM_LOG_OUT:
+			EventSeekr eventSeekr = (EventSeekr) getApplication();
+			if (eventSeekr.getFbUserId() != null) {
+				FbUtil.callFacebookLogout(eventSeekr);
+				
+			} else if (eventSeekr.getGPlusUserId() != null) {
+				GPlusUtil.callGPlusLogout(EventSeekr.mGoogleApiClient, eventSeekr);
+				
+			} else if (eventSeekr.getFirstName() != null) {
+				eventSeekr.removeEmailSignupInfo();
+				
+			} else if (eventSeekr.getEmailId() != null) {
+				eventSeekr.removeEmailLoginInfo();
+			}
+			selectNonDrawerItem(new LauncherFragment(), AppConstants.FRAGMENT_TAG_LAUNCHER, 
+					getResources().getString(R.string.title_launcher), false);
+			break;
 		/*case INDEX_NAV_ITEM_CONNECT_ACCOUNTS:
 	    	ConnectAccountsFragment connectAccountsFragment = new ConnectAccountsFragment();
 	    	replaceContentFrameByFragment(connectAccountsFragment, AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS, 
