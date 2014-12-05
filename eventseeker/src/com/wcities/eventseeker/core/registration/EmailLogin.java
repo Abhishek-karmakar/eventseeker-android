@@ -40,9 +40,8 @@ public class EmailLogin extends Registration {
 		} else if (signupResponse.getMsgCode() == UserInfoApiJSONParser.MSG_CODE_SUCCESS) {
 			String userId = signupResponse.getWcitiesId();
 			
-			// sync last used fb/g+ account
-			LoginType prevLoginType = eventSeekr.getPreviousLoginType();
-			if (prevLoginType == LoginType.facebook || prevLoginType == LoginType.googlePlus) {
+			// sync last used account
+			if (eventSeekr.getPreviousWcitiesId() != null) {
 				jsonObject = userInfoApi.syncAccount(null, userId, eventSeekr.getEmailId(), 
 						UserType.wcities, eventSeekr.getPreviousWcitiesId());
 				Log.d(TAG, "syncAccount response = " + jsonObject.toString());

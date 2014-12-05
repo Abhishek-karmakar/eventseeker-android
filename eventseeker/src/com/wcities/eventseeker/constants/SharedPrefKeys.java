@@ -15,10 +15,7 @@ public class SharedPrefKeys {
 	public static final String LAST_NAME = "lastName";
 	public static final String EMAIL_ID = "emailId";
 	
-	public static final String PREVIOUS_USER_ID = "previousUserId";
-	public static final String PREVIOUS_EMAIL_ID = "previousEmailId";
 	public static final String PREVIOUS_WCITIES_ID = "previousWcitiesId";
-	public static final String PREVIOUS_LOGIN_TYPE = "previousLoginType";
 	
 	public static final String APP_VERSION_CODE = "appVersionCode";
 	public static final String APP_VERSION_CODE_FOR_UPGRADES = "appVersionCodeForUpgrades";

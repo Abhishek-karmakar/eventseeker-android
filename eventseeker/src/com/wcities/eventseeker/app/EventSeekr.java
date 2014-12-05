@@ -67,13 +67,8 @@ public class EventSeekr extends Application {
 	private String fbEmailId, gPlusEmailId;
 	private String emailId, password, firstName, lastName;
 	private String wcitiesId;
-	/**
-	 * previousUserId = fbUserId, previousEmailId = fbEmailId, previousWcitiesId = wcitiesId for previousLoginType = facebook
-	 * previousUserId = gPlusUserId, previousEmailId = gPlusEmailId, previousWcitiesId = wcitiesId for previousLoginType = googlePlus
-	 * else, previousUserId = null, previousEmailId = emailId, previousWcitiesId = wcitiesId
-	 */
-	private String previousUserId, previousEmailId, previousWcitiesId;
-	private LoginType previousLoginType;	
+	
+	private String previousWcitiesId;
 
 	private boolean firstTimeLaunch;
 	/**
@@ -436,7 +431,7 @@ public class EventSeekr extends Application {
 	}
 	
 	public void removeFbUserInfo() {
-		updatePreviousUserInfo(LoginType.facebook, fbUserId, fbEmailId, wcitiesId);
+		updatePreviousWcitiesId(wcitiesId);
 		
 		this.fbUserId = null;
 		this.fbUserName = null;
@@ -494,7 +489,7 @@ public class EventSeekr extends Application {
 	}
 	
 	public void removeGPlusUserInfo() {
-		updatePreviousUserInfo(LoginType.googlePlus, gPlusUserId, gPlusEmailId, wcitiesId);
+		updatePreviousWcitiesId(wcitiesId);
 		
 		this.gPlusUserId = null;
 		this.gPlusUserName = null;
@@ -556,7 +551,7 @@ public class EventSeekr extends Application {
 	}
 	
 	public void removeEmailSignupInfo() {
-		updatePreviousUserInfo(LoginType.emailSignup, null, emailId, wcitiesId);
+		updatePreviousWcitiesId(wcitiesId);
 		
 		this.emailId = null;
 		this.firstName = null;
@@ -585,7 +580,7 @@ public class EventSeekr extends Application {
 	}
 	
 	public void removeEmailLoginInfo() {
-		updatePreviousUserInfo(LoginType.emailLogin, null, emailId, wcitiesId);
+		updatePreviousWcitiesId(wcitiesId);
 		
 		this.emailId = null;
 		this.wcitiesId = null;
@@ -625,22 +620,6 @@ public class EventSeekr extends Application {
 		editor.commit();
 	}
 	
-	public String getPreviousUserId() {
-		if (previousUserId == null) {
-			SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-			previousUserId = pref.getString(SharedPrefKeys.PREVIOUS_USER_ID, null);
-		}
-		return previousUserId;
-	}
-
-	public String getPreviousEmailId() {
-		if (previousEmailId == null) {
-			SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-			previousEmailId = pref.getString(SharedPrefKeys.PREVIOUS_EMAIL_ID, null);
-		}
-		return previousEmailId;
-	}
-
 	public String getPreviousWcitiesId() {
 		if (previousWcitiesId == null) {
 			SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
@@ -649,29 +628,11 @@ public class EventSeekr extends Application {
 		return previousWcitiesId;
 	}
 
-	public LoginType getPreviousLoginType() {
-		if (previousLoginType == null) {
-			SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-			String previousLoginTypeStr = pref.getString(SharedPrefKeys.PREVIOUS_LOGIN_TYPE, null);
-			if (previousLoginTypeStr != null) {
-				previousLoginType = LoginType.valueOf(previousLoginTypeStr);
-			}
-		}
-		return previousLoginType;
-	}
-
-	private void updatePreviousUserInfo(LoginType previousLoginType, String previousUserId, String previousEmailId, 
-			String previousWcitiesId) {
-		this.previousLoginType = previousLoginType;
-		this.previousUserId = previousUserId;
-		this.previousEmailId = previousEmailId;
+	private void updatePreviousWcitiesId(String previousWcitiesId) {
 		this.previousWcitiesId = previousWcitiesId;
 		
 		SharedPreferences pref = getSharedPreferences(AppConstants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
 		Editor editor = pref.edit();
-		editor.putString(SharedPrefKeys.PREVIOUS_LOGIN_TYPE, previousLoginType.name());
-		editor.putString(SharedPrefKeys.PREVIOUS_USER_ID, previousUserId);
-		editor.putString(SharedPrefKeys.PREVIOUS_EMAIL_ID, previousEmailId);
 		editor.putString(SharedPrefKeys.PREVIOUS_WCITIES_ID, previousWcitiesId);
 		editor.commit();
 	}

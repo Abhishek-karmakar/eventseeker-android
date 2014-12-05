@@ -28,15 +28,21 @@ public class FacebookLogin extends Registration {
 
 	@Override
 	public int register() throws ClientProtocolException, IOException, JSONException {
-		// signup with deviceId
+		JSONObject jsonObject;
 		UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
-		userInfoApi.setDeviceId(DeviceUtil.getDeviceId(eventSeekr));
-		JSONObject jsonObject = userInfoApi.signUp();
 		UserInfoApiJSONParser jsonParser = new UserInfoApiJSONParser();
-		String userId = jsonParser.getUserId(jsonObject);
+		
+		String userId = eventSeekr.getPreviousWcitiesId();
+		
+		if (userId == null) {
+			// signup with deviceId
+			userInfoApi.setDeviceId(DeviceUtil.getDeviceId(eventSeekr));
+			jsonObject = userInfoApi.signUp();
+			userId = jsonParser.getUserId(jsonObject);
+		}
 		Log.d(TAG, "userId = " + userId);
 		
-		// sync fb with device
+		// sync fb with previous userId or userId generated above based on deviceId
 		jsonObject = userInfoApi.syncAccount(null, eventSeekr.getFbUserId(), eventSeekr.getFbEmailId(), 
 				UserType.fb, userId);
 		Log.d(TAG, jsonObject.toString());
@@ -47,24 +53,6 @@ public class FacebookLogin extends Registration {
 		// sync friends
 		jsonObject = userInfoApi.syncFriends(UserType.fb, eventSeekr.getFbUserId(), null);
 		
-		// sync last used email account wcitiesId with this fb
-		LoginType prevLoginType = eventSeekr.getPreviousLoginType();
-		//Log.d(TAG, "prevLoginType = " + prevLoginType);
-		/**
-		 * 3rd condition below is to get new wcitiesId in following case:
-		 * If user's one profile created from this device already has 1 fb account, then 1st syncaccount call will 
-		 * return sync false with fb user id & wcitiesId associated with old profile, but after this sync friends
-		 * call will create new account & hence wcitiesId returned in next syncaccount call executed below will be 
-		 * of this new fb account.
-		 */
-		if (prevLoginType == LoginType.emailSignup || prevLoginType == LoginType.emailLogin || 
-				(prevLoginType != null && !syncAccountResponse.isSync())) {
-			jsonObject = userInfoApi.syncAccount(null, eventSeekr.getFbUserId(), eventSeekr.getFbEmailId(), 
-					UserType.fb, eventSeekr.getPreviousWcitiesId());
-			Log.d(TAG, jsonObject.toString());
-			userId = jsonParser.getWcitiesId(jsonObject);
-			//Log.d(TAG, "userId = " + userId);
-		}
 		eventSeekr.updateWcitiesId(userId);
 
 		// register device for notification

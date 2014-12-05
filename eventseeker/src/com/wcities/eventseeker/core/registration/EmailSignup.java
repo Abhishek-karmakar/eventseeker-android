@@ -27,25 +27,11 @@ public class EmailSignup extends Registration {
 
 	@Override
 	public int register() throws ClientProtocolException, IOException, JSONException {
-		// check if it's new user
+		// Signup w/o deviceId
 		UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
-		JSONObject jsonObject = userInfoApi.checkEmail(eventSeekr.getEmailId());
+		JSONObject jsonObject = userInfoApi.signUp();
 		Log.d(TAG, jsonObject.toString());
 		UserInfoApiJSONParser jsonParser = new UserInfoApiJSONParser();
-		SignupResponse signupResponse = jsonParser.parseSignup(jsonObject);
-		if (signupResponse.getMsgCode() == UserInfoApiJSONParser.MSG_CODE_EMAIL_ALREADY_EXISTS) {
-			return signupResponse.getMsgCode();
-		}
-		
-		/**
-		 * Signup w/o deviceId
-		 * Don't set deviceId on userInfoApi, because otherwise if same device is used earlier
-		 * to sign up using some other email, server will replace old email & pwd by new ones.
-		 * Whereas we want to create new profile in such case so that all emails are saved at server side &
-		 * news letters can be sent out to all these email ids.
-		 */
-		jsonObject = userInfoApi.signUp();
-		Log.d(TAG, jsonObject.toString());
 		String userId = jsonParser.getUserId(jsonObject);
 		//Log.d(TAG, "userId = " + userId);
 		
@@ -53,12 +39,11 @@ public class EmailSignup extends Registration {
 		jsonObject = userInfoApi.signup(eventSeekr.getEmailId(), eventSeekr.getPassword(), eventSeekr.getFirstName(), 
 				eventSeekr.getLastName(), userId);
 		Log.d(TAG, jsonObject.toString());
-		signupResponse = jsonParser.parseSignup(jsonObject);
+		SignupResponse signupResponse = jsonParser.parseSignup(jsonObject);
 		
 		if (signupResponse.getMsgCode() == UserInfoApiJSONParser.MSG_CODE_SUCCESS) {
-			// sync last used fb/g+ account
-			LoginType prevLoginType = eventSeekr.getPreviousLoginType();
-			if (prevLoginType == LoginType.facebook || prevLoginType == LoginType.googlePlus) {
+			// sync last used account
+			if (eventSeekr.getPreviousWcitiesId() != null) {
 				jsonObject = userInfoApi.syncAccount(null, userId, eventSeekr.getEmailId(), 
 						UserType.wcities, eventSeekr.getPreviousWcitiesId());
 				Log.d(TAG, "jsonObject = " + jsonObject.toString());
@@ -71,6 +56,9 @@ public class EmailSignup extends Registration {
 			new GcmUtil(eventSeekr).registerGCM();
 
 			return UserInfoApiJSONParser.MSG_CODE_SUCCESS;
+			
+		} else if (signupResponse.getMsgCode() == UserInfoApiJSONParser.MSG_CODE_EMAIL_ALREADY_EXISTS) {
+			return signupResponse.getMsgCode();
 		}
 		return UserInfoApiJSONParser.MSG_CODE_UNSUCCESS;
 	}

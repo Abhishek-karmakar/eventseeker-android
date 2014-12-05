@@ -283,21 +283,10 @@ public class UserInfoApi extends Api {
 		return execute(RequestMethod.POST, ContentType.MIME_APPLICATION_X_WWW_FORM_URLENCODED, paramsBuilder.toString().getBytes());
 	}
 	
-	/**
-	 * @param repCode
-	 * @param loginId
-	 * @param email Pass null when syncing current account with last used account
-	 * @param userType
-	 * @param wcitiesId
-	 * @return
-	 * @throws ClientProtocolException
-	 * @throws IOException
-	 * @throws JSONException
-	 */
 	public JSONObject syncAccount(String repCode, String loginId, String email, UserType userType, 
 			String wcitiesId) throws ClientProtocolException, IOException, JSONException {
 		String METHOD = "myProfile.php?";
-		StringBuilder uriBuilder = new StringBuilder("http://social.wcities.com/SocialApi/user/myProfile-dec.php?"/*COMMON_URL).append(API).append(METHOD*/).append("oauth_token=")
+		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD).append("oauth_token=")
 				.append(getOauthToken()).append("&type=").append(Type.syncaccount.name()).append("&userId=")
 				.append(loginId).append("&userType=").append(userType.name())
 				.append("&wcitiesId=").append(wcitiesId);
