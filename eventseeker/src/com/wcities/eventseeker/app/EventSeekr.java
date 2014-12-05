@@ -960,7 +960,7 @@ public class EventSeekr extends Application {
 		protected Integer doInBackground(Void... params) {
 			try {
 				Registration registration = loginType.getRegistrationInstance(EventSeekr.this);
-				return registration.register();
+				return registration.perform();
 				
 			} catch (ClientProtocolException e) {
 				e.printStackTrace();

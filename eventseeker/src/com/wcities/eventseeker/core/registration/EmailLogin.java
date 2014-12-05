@@ -10,7 +10,6 @@ import android.util.Log;
 
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
-import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.api.UserInfoApi.UserType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.gcm.GcmUtil;
@@ -26,7 +25,7 @@ public class EmailLogin extends Registration {
 	}
 
 	@Override
-	public int register() throws ClientProtocolException, IOException, JSONException {
+	public int perform() throws ClientProtocolException, IOException, JSONException {
 		// login with email & pwd
 		UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
 		JSONObject jsonObject = userInfoApi.login(eventSeekr.getEmailId(), eventSeekr.getPassword());

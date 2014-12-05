@@ -1,5 +1,11 @@
 package com.wcities.eventseeker;
 
+import java.io.IOException;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.text.Editable;
@@ -17,9 +23,11 @@ import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.core.registration.ForgotPassword;
 import com.wcities.eventseeker.core.registration.Registration.RegistrationErrorListener;
 import com.wcities.eventseeker.core.registration.Registration.RegistrationListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
+import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FieldValidationUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
@@ -32,7 +40,7 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 	
 	private EditText edtEmail, edtPassword;
 	private boolean isEmailValid, isPasswordValid;
-	private Button btnLogin;
+	private Button btnLogin, btnForgotPassword;
 	
 	private ImageView imgFbSignUp, imgGPlusSignIn;
     private TextView txtGPlusSignInStatus;
@@ -51,7 +59,7 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 		(edtPassword = (EditText) v.findViewById(R.id.edtPassword)).addTextChangedListener(this);
 
 		(btnLogin = (Button) v.findViewById(R.id.btnLogin)).setOnClickListener(this);
-		v.findViewById(R.id.btnForgotPassword).setOnClickListener(this);
+		(btnForgotPassword = (Button) v.findViewById(R.id.btnForgotPassword)).setOnClickListener(this);
 		
 		imgFbSignUp = (ImageView) v.findViewById(R.id.imgFbSignUp);
 		imgFbSignUp.setOnClickListener(this);
@@ -76,6 +84,7 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 			ma.hideDrawerList();
 		}
 		toggleSigninBtn();
+		toggleForgotPwdBtn();
 	}
 	
 	@Override
@@ -124,6 +133,7 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 			break;
 
 		case R.id.btnForgotPassword:
+			AsyncTaskUtil.executeAsyncTask(new ResetPassword(), true);
 			break;
 
 		default:
@@ -134,6 +144,33 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 	@Override
 	public String getScreenName() {
 		return "Account Login Screen";
+	}
+	
+	private class ResetPassword extends AsyncTask<Void, Void, Integer> {
+
+		@Override
+		protected Integer doInBackground(Void... params) {
+			ForgotPassword forgotPassword = new ForgotPassword(FragmentUtil.getApplication(LoginFragment.this), 
+					edtEmail.getText().toString());
+			try {
+				return forgotPassword.perform();
+				
+			} catch (ClientProtocolException e) {
+				e.printStackTrace();
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+				
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			return UserInfoApiJSONParser.MSG_CODE_UNSUCCESS;
+		}
+		
+		@Override
+		protected void onPostExecute(Integer result) {
+			super.onPostExecute(result);
+		}
 	}
 
 	/*@Override
@@ -178,15 +215,15 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 		}
 		
 		toggleSigninBtn();
+		toggleForgotPwdBtn();
 	}
 
 	private void toggleSigninBtn() {
-		if (isEmailValid && isPasswordValid) {
-			btnLogin.setEnabled(true);			
-			
-		} else {
-			btnLogin.setEnabled(false);
-		}
+		btnLogin.setEnabled(isEmailValid && isPasswordValid);			
+	}
+	
+	private void toggleForgotPwdBtn() {
+		btnForgotPassword.setEnabled(isEmailValid);			
 	}
 
 	@Override
@@ -204,7 +241,6 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 					FragmentUtil.getResources(this).getString(R.string.error_title), 
 					FragmentUtil.getResources(this).getString(R.string.error_unknown_error), "Ok", null);
 			generalDialogFragment.show(getChildFragmentManager(), DIALOG_FRAGMENT_TAG_UNKNOWN_ERROR);
-			
 		}
 	}
 

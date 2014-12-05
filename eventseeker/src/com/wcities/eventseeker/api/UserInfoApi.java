@@ -35,6 +35,7 @@ public class UserInfoApi extends Api {
 		registerDevice,
 		checkemail,
 		login,
+		forgot,
 		updaterepcode;
 	};
 	
@@ -300,6 +301,17 @@ public class UserInfoApi extends Api {
 		setUri(uriBuilder.toString());
 		Log.i(TAG, "uri=" + getUri());
 		return execute(RequestMethod.GET, null, null); 
+	}
+	
+	public JSONObject forgotPassword(String email) throws ClientProtocolException, IOException, JSONException {
+		String METHOD = "wLogin.php?";
+		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD).append("oauth_token=")
+				.append(getOauthToken()).append("&type=").append(Type.forgot.name()).append("&email=")
+				.append(email);
+		
+		setUri(uriBuilder.toString());
+		Log.d(TAG, "uri=" + getUri());
+		return execute(RequestMethod.GET, null, null);
 	}
 	
 	/**

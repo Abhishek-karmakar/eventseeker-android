@@ -18,7 +18,7 @@ public abstract class Registration {
 		this.eventSeekr = eventSeekr;
 	}
 	
-	public abstract int register() throws ClientProtocolException, IOException, JSONException;
+	public abstract int perform() throws ClientProtocolException, IOException, JSONException;
 	
 	public interface RegistrationListener {
     	public void onRegistration(LoginType loginType, Bundle args, boolean addToBackStack);

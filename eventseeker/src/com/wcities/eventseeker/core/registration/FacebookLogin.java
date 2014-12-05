@@ -27,7 +27,7 @@ public class FacebookLogin extends Registration {
 	}
 
 	@Override
-	public int register() throws ClientProtocolException, IOException, JSONException {
+	public int perform() throws ClientProtocolException, IOException, JSONException {
 		JSONObject jsonObject;
 		UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
 		UserInfoApiJSONParser jsonParser = new UserInfoApiJSONParser();

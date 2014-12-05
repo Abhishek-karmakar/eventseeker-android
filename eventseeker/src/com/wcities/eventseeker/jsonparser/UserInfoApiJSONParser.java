@@ -117,6 +117,7 @@ public class UserInfoApiJSONParser {
 	public static final int MSG_CODE_NO_ACCESS_TOKEN = -3;
 	public static final int MSG_CODE_INVALID_REQUEST = 1;
 	public static final int MSG_CODE_EMAIL_OR_PWD_INCORRECT = 2;
+	public static final int MSG_CODE_CHK_EMAIL_TO_RESET_PWD = 3;
 	public static final int MSG_CODE_EMAIL_ALREADY_EXISTS = 15;
 	public static final int MSG_CODE_NEW_USER = 16;
 
