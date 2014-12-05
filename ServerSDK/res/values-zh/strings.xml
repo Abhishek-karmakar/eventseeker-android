@@ -1,0 +1,12 @@
+<resources>    
+
+	<!-- Keyboard -->
+    <string name="keyboard_space">选定</string>
+    <string name="keyboard_done">确认</string>
+    <string name="keyboard_go">确认</string>
+    <string name="keyboard_next">确认</string>
+    <string name="keyboard_prev">确认</string>
+    <string name="keyboard_search">搜索</string>
+    <string name="keyboard_ok">确认</string>
+
+</resources>

@@ -1,0 +1,12 @@
+<resources>    
+
+	<!-- Keyboard -->
+    <string name="keyboard_space">espaço</string>
+    <string name="keyboard_done">enter</string>
+    <string name="keyboard_go">enter</string>
+    <string name="keyboard_next">enter</string>
+    <string name="keyboard_prev">enter</string>
+    <string name="keyboard_search">pesquisar</string>
+    <string name="keyboard_ok">enter</string>
+
+</resources>

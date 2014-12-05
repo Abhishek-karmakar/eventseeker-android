@@ -28,8 +28,8 @@ public class MySpinGMapV3Direction {
 
     public Document getDocument(MySpinLatLng start, MySpinLatLng end, String mode) {
         String url = "http://maps.googleapis.com/maps/api/directions/xml?" 
-                + "origin=" + start.mLatitude + "," + start.mLongitude 
-                + "&destination=" + end.mLatitude + "," + end.mLongitude 
+                + "origin=" + start.getLatitude() + "," + start.getLongitude() 
+                + "&destination=" + end.getLatitude() + "," + end.getLongitude()
                 + "&sensor=false&units=metric&mode=" + mode;
 
         try {
@@ -127,7 +127,7 @@ public class MySpinGMapV3Direction {
                 latNode = nl3.item(getNodeIndex(nl3, "points"));
                 ArrayList<MySpinLatLng> arr = decodePoly(latNode.getTextContent());
                 for(int j = 0 ; j < arr.size() ; j++) {
-                    listGeopoints.add(new MySpinLatLng(arr.get(j).mLatitude, arr.get(j).mLongitude));
+                    listGeopoints.add(new MySpinLatLng(arr.get(j).getLatitude(), arr.get(j).getLongitude()));
                 }
 
                 locationNode = nl2.item(getNodeIndex(nl2, "end_location"));
