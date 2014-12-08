@@ -331,6 +331,10 @@
     <string name="error_email_or_password_incorrect">Email or Password is incorrect</string>
     <string name="error_unknown_error">Unknown error occured. Please retry later.</string>
     
+    <!-- LoginFragment -->
+    <string name="dialog_msg_chk_email_to_reset_pwd">Please check your email to reset the password.</string>
+    <string name="dialog_msg_user_email_doesnt_exist">User with this email doesn\'t exist.</string>
+    
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     
     <!-- Common -->

@@ -29,10 +29,11 @@ public class ForgotPassword extends Registration {
 	public int perform() throws ClientProtocolException, IOException, JSONException {
 		UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
 		JSONObject jsonObject = userInfoApi.forgotPassword(email);
-		Log.d(TAG, jsonObject.toString());
+		//Log.d(TAG, jsonObject.toString());
 		UserInfoApiJSONParser jsonParser = new UserInfoApiJSONParser();
 		SignupResponse signupResponse = jsonParser.parseSignup(jsonObject);
-		if (signupResponse.getMsgCode() == UserInfoApiJSONParser.MSG_CODE_CHK_EMAIL_TO_RESET_PWD) {
+		if (signupResponse.getMsgCode() == UserInfoApiJSONParser.MSG_CODE_CHK_EMAIL_TO_RESET_PWD 
+				|| signupResponse.getMsgCode() == UserInfoApiJSONParser.MSG_CODE_USER_EMAIL_DOESNT_EXIST) {
 			return signupResponse.getMsgCode();
 		}
 		return UserInfoApiJSONParser.MSG_CODE_UNSUCCESS;

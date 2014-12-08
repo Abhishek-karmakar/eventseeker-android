@@ -10,13 +10,17 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
@@ -31,12 +35,14 @@ import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FieldValidationUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class LoginFragment extends FbGPlusRegisterFragment implements OnClickListener, TextWatcher, RegistrationErrorListener, DialogBtnClickListener {
+public class LoginFragment extends FbGPlusRegisterFragment implements OnClickListener, TextWatcher, 
+		RegistrationErrorListener, DialogBtnClickListener {
 	
 	private static final String TAG = LoginFragment.class.getName();
 
 	private static final String DIALOG_FRAGMENT_TAG_EMAIL_OR_PASSWORD_INCORRECT = "dialogEmailOrPasswordIncorrect";
 	private static final String DIALOG_FRAGMENT_TAG_UNKNOWN_ERROR = "unknownError";
+	private static final String DIALOG_FRAGMENT_TAG_CHK_EMAIL = "dialogChkEmail";
 	
 	private EditText edtEmail, edtPassword;
 	private boolean isEmailValid, isPasswordValid;
@@ -44,6 +50,9 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 	
 	private ImageView imgFbSignUp, imgGPlusSignIn;
     private TextView txtGPlusSignInStatus;
+    
+    private RelativeLayout rltLytPrgsBar;
+    private int progressBarVisibility = View.INVISIBLE;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,7 +77,18 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 		imgGPlusSignIn.setOnClickListener(this);
 		txtGPlusSignInStatus = (TextView) v.findViewById(R.id.txtGPlusSignInStatus);
 		
+		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
+		rltLytPrgsBar.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return true;
+			}
+		});
+		
 		setGooglePlusSigningInVisibility();
+		updateProgressBarVisibility();
+		
 		return v;
 	}
     
@@ -109,6 +129,10 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 		}
 	}
 	
+	private void updateProgressBarVisibility() {
+		rltLytPrgsBar.setVisibility(progressBarVisibility);
+	}
+	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -126,7 +150,7 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
         	bundle.putSerializable(BundleKeys.LOGIN_TYPE, LoginType.emailLogin);
         	bundle.putString(BundleKeys.EMAIL_ID, edtEmail.getText().toString());
         	bundle.putString(BundleKeys.PASSWORD, edtPassword.getText().toString());
-        	bundle.putSerializable(BundleKeys.REGISTER_ERROR_LISTENER, AppConstants.FRAGMENT_TAG_LOGIN);
+        	bundle.putString(BundleKeys.REGISTER_ERROR_LISTENER, AppConstants.FRAGMENT_TAG_LOGIN);
         	
         	((RegistrationListener)FragmentUtil.getActivity(this)).onRegistration(LoginType.emailLogin, bundle, 
         			true);
@@ -147,6 +171,13 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 	}
 	
 	private class ResetPassword extends AsyncTask<Void, Void, Integer> {
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			progressBarVisibility = View.VISIBLE;
+			updateProgressBarVisibility();
+		}
 
 		@Override
 		protected Integer doInBackground(Void... params) {
@@ -170,6 +201,34 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
+			progressBarVisibility = View.INVISIBLE;
+			updateProgressBarVisibility();
+			handleResetPwdResult(result);
+		}
+	}
+	
+	private void handleResetPwdResult(int msgCode) {
+		try {
+			if (msgCode == UserInfoApiJSONParser.MSG_CODE_CHK_EMAIL_TO_RESET_PWD) {
+				GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
+						FragmentUtil.getResources(this).getString(R.string.dialog_msg_chk_email_to_reset_pwd), "Ok");
+				generalDialogFragment.show(getChildFragmentManager(), DIALOG_FRAGMENT_TAG_CHK_EMAIL);
+			
+			} else if (msgCode == UserInfoApiJSONParser.MSG_CODE_USER_EMAIL_DOESNT_EXIST) {
+				GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
+						FragmentUtil.getResources(this).getString(R.string.dialog_msg_user_email_doesnt_exist), "Ok");
+				generalDialogFragment.show(getChildFragmentManager(), DIALOG_FRAGMENT_TAG_CHK_EMAIL);
+				
+			} else if (msgCode == UserInfoApiJSONParser.MSG_CODE_UNSUCCESS) {
+				GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance( 
+						FragmentUtil.getResources(this).getString(R.string.error_title), 
+						FragmentUtil.getResources(this).getString(R.string.error_unknown_error), "Ok", null);
+				generalDialogFragment.show(getChildFragmentManager(), DIALOG_FRAGMENT_TAG_UNKNOWN_ERROR);
+			}
+			
+		} catch (IllegalStateException e) {
+			Log.e(TAG, "Fragment is already removed...");
+			e.printStackTrace();
 		}
 	}
 
@@ -230,15 +289,13 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 	public void onErrorOccured(int errorCode) {
 		if (errorCode == UserInfoApiJSONParser.MSG_CODE_EMAIL_OR_PWD_INCORRECT) {
 			GeneralDialogFragment generalDialogFragment 
-				= GeneralDialogFragment.newInstance(this, 
-						FragmentUtil.getResources(this).getString(R.string.error_title), 
+				= GeneralDialogFragment.newInstance(FragmentUtil.getResources(this).getString(R.string.error_title), 
 						FragmentUtil.getResources(this).getString(R.string.error_email_or_password_incorrect), "Ok", null);
 			generalDialogFragment.show(getChildFragmentManager(), DIALOG_FRAGMENT_TAG_EMAIL_OR_PASSWORD_INCORRECT);
 		
 		} else if (errorCode == UserInfoApiJSONParser.MSG_CODE_NO_ACCESS_TOKEN 
 				|| errorCode == UserInfoApiJSONParser.MSG_CODE_UNSUCCESS) {
-			GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(this, 
-					FragmentUtil.getResources(this).getString(R.string.error_title), 
+			GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(					FragmentUtil.getResources(this).getString(R.string.error_title), 
 					FragmentUtil.getResources(this).getString(R.string.error_unknown_error), "Ok", null);
 			generalDialogFragment.show(getChildFragmentManager(), DIALOG_FRAGMENT_TAG_UNKNOWN_ERROR);
 		}

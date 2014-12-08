@@ -1818,7 +1818,7 @@ public class MainActivity extends ActionBarActivity implements
 	public void onConnectionFailure() {
 		GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(this, 
 				getResources().getString(R.string.no_internet_connectivity),
-				getResources().getString(R.string.connection_lost), null, "Ok");
+				getResources().getString(R.string.connection_lost), "Ok", null);
 		generalDialogFragment.show(getSupportFragmentManager(), DIALOG_FRAGMENT_TAG_CONNECTION_LOST);		
 	}
 

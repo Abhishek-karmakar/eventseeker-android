@@ -340,7 +340,7 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
         	bundle.putString(BundleKeys.LAST_NAME, edtLN.getText().toString());
         	bundle.putString(BundleKeys.EMAIL_ID, edtEmail.getText().toString());
         	bundle.putString(BundleKeys.PASSWORD, edtPassword.getText().toString());
-        	bundle.putSerializable(BundleKeys.REGISTER_ERROR_LISTENER, AppConstants.FRAGMENT_TAG_SIGN_UP);
+        	bundle.putString(BundleKeys.REGISTER_ERROR_LISTENER, AppConstants.FRAGMENT_TAG_SIGN_UP);
         	
         	((RegistrationListener)FragmentUtil.getActivity(this)).onRegistration(LoginType.emailSignup, bundle, true);
 			break;
@@ -419,7 +419,7 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 		
 		} else if (errorCode == UserInfoApiJSONParser.MSG_CODE_NO_ACCESS_TOKEN 
 				|| errorCode == UserInfoApiJSONParser.MSG_CODE_UNSUCCESS) {
-			GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(this, 
+			GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance( 
 					FragmentUtil.getResources(this).getString(R.string.error_title), 
 					FragmentUtil.getResources(this).getString(R.string.error_unknown_error), "Ok", null);
 			generalDialogFragment.show(getChildFragmentManager(), DIALOG_FRAGMENT_TAG_UNKNOWN_ERROR);

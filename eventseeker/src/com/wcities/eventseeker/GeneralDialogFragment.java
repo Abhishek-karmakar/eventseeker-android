@@ -16,6 +16,15 @@ public class GeneralDialogFragment extends DialogFragment {
 	
 	private static boolean isAlreadyShown;
 	
+	public static GeneralDialogFragment newInstance(String msg, String btn1Txt) {
+		GeneralDialogFragment frag = new GeneralDialogFragment();
+        Bundle args = new Bundle();
+        args.putString(BundleKeys.DIALOG_MSG, msg);
+        args.putString(BundleKeys.BTN1_TXT, btn1Txt);
+        frag.setArguments(args);
+        return frag;
+    }
+	
 	public static GeneralDialogFragment newInstance(String title, String msg, String btn1Txt, String btn2Txt) {
 		GeneralDialogFragment frag = new GeneralDialogFragment();
         Bundle args = new Bundle();
@@ -48,16 +57,27 @@ public class GeneralDialogFragment extends DialogFragment {
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		Bundle args = getArguments();
-		String title = args.getString(BundleKeys.DIALOG_TITLE);
+		String title = null;
+		if (args.containsKey(BundleKeys.DIALOG_TITLE)) {
+			title = args.getString(BundleKeys.DIALOG_TITLE);
+		}
 		String msg = args.getString(BundleKeys.DIALOG_MSG);
 		final String dialogTag = getTag();
 		
 		Builder builder = new Builder(FragmentUtil.getActivity(this));
-        builder.setTitle(title).setMessage(msg)
+		if (title != null) {
+			builder.setTitle(title);
+		}
+        builder.setMessage(msg)
         .setNegativeButton(args.getString(BundleKeys.BTN1_TXT), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
             	isAlreadyShown = false;
-                ((DialogBtnClickListener) getParentFragment()).doNegativeClick(dialogTag);
+            	if (getParentFragment() == null) {
+            		dialogBtnClickListener.doNegativeClick(dialogTag);
+            		
+            	} else {
+            		((DialogBtnClickListener) getParentFragment()).doNegativeClick(dialogTag);
+            	}
             }
         });
         
@@ -67,6 +87,7 @@ public class GeneralDialogFragment extends DialogFragment {
 	            	isAlreadyShown = false;
 	            	if (getParentFragment() == null) {
 	            		dialogBtnClickListener.doPositiveClick(dialogTag);
+	            		
 	            	} else {
 	            		((DialogBtnClickListener) getParentFragment()).doPositiveClick(dialogTag);
 					}

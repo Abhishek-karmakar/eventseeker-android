@@ -120,6 +120,7 @@ public class UserInfoApiJSONParser {
 	public static final int MSG_CODE_CHK_EMAIL_TO_RESET_PWD = 3;
 	public static final int MSG_CODE_EMAIL_ALREADY_EXISTS = 15;
 	public static final int MSG_CODE_NEW_USER = 16;
+	public static final int MSG_CODE_USER_EMAIL_DOESNT_EXIST = 17;
 
 	public String getUserId(JSONObject jsonObject) throws JSONException {
 		JSONObject jObjSignup = jsonObject.getJSONObject(KEY_SIGN_UP);
