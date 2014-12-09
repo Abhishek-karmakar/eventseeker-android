@@ -295,7 +295,8 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 		
 		} else if (errorCode == UserInfoApiJSONParser.MSG_CODE_NO_ACCESS_TOKEN 
 				|| errorCode == UserInfoApiJSONParser.MSG_CODE_UNSUCCESS) {
-			GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(					FragmentUtil.getResources(this).getString(R.string.error_title), 
+			GeneralDialogFragment generalDialogFragment 
+				= GeneralDialogFragment.newInstance(FragmentUtil.getResources(this).getString(R.string.error_title), 
 					FragmentUtil.getResources(this).getString(R.string.error_unknown_error), "Ok", null);
 			generalDialogFragment.show(getChildFragmentManager(), DIALOG_FRAGMENT_TAG_UNKNOWN_ERROR);
 		}

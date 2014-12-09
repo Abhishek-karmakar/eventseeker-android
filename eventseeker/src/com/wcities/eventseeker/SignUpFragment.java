@@ -128,12 +128,18 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 			
 		}
 		if (imgIndicatorStateMap.get(IMG_EMAIL) != ImgIndicatorState.IMG_INVISIBLE) {
-			imgEmailIndicator.setImageResource(imgIndicatorStateMap.get(IMG_EMAIL) == ImgIndicatorState.IMG_CHECK ?
-					R.drawable.ic_valid_check : R.drawable.ic_invalid_cross);
 			try {
-				txtEmailInvalid.setText(errorMsgEmail);
-				txtEmailInvalid.setVisibility(View.VISIBLE);
-			
+				if (imgIndicatorStateMap.get(IMG_EMAIL) == ImgIndicatorState.IMG_CHECK) {
+					imgEmailIndicator.setImageResource(R.drawable.ic_valid_check);
+					txtEmailInvalid.setText("");
+					txtEmailInvalid.setVisibility(View.INVISIBLE);
+					
+				} else {
+					imgEmailIndicator.setImageResource(R.drawable.ic_invalid_cross);
+					txtEmailInvalid.setText(errorMsgEmail);
+					txtEmailInvalid.setVisibility(View.VISIBLE);
+				}
+				
 			} catch (Resources.NotFoundException e) {
 				e.printStackTrace();
 			}
@@ -145,11 +151,17 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 			
 		}
 		if (imgIndicatorStateMap.get(IMG_CONFIRM_PASSWORD) != ImgIndicatorState.IMG_INVISIBLE) {
-			imgConfirmPasswordIndicator.setImageResource(imgIndicatorStateMap.get(IMG_CONFIRM_PASSWORD) 
-					== ImgIndicatorState.IMG_CHECK ? R.drawable.ic_valid_check : R.drawable.ic_invalid_cross);			
 			try {
-				txtConfirmPasswordInvalid.setText(errorMsgPassword);
-				txtConfirmPasswordInvalid.setVisibility(View.VISIBLE);
+				if (imgIndicatorStateMap.get(IMG_CONFIRM_PASSWORD) == ImgIndicatorState.IMG_CHECK) {
+					imgConfirmPasswordIndicator.setImageResource(R.drawable.ic_valid_check);
+					txtConfirmPasswordInvalid.setText("");
+					txtConfirmPasswordInvalid.setVisibility(View.INVISIBLE);
+					
+				} else {
+					imgConfirmPasswordIndicator.setImageResource(R.drawable.ic_invalid_cross);
+					txtConfirmPasswordInvalid.setText(errorMsgPassword);
+					txtConfirmPasswordInvalid.setVisibility(View.VISIBLE);
+				}
 				
 			} catch (Resources.NotFoundException e) {
 				e.printStackTrace();
@@ -301,7 +313,7 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 						imgIndicatorStateMap.put(IMG_EMAIL, ImgIndicatorState.IMG_CROSS);
 						
 					} else {
-						AsyncTaskUtil.executeAsyncTask(new CheckEmail(edtEmail.getText().toString()), true);
+						new CheckEmail(edtEmail.getText().toString()).execute();
 					}
 				}
 				break;
