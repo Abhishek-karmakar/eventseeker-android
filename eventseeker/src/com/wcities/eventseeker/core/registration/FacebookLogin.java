@@ -6,11 +6,8 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
-import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.api.UserInfoApi.UserType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.gcm.GcmUtil;
@@ -40,12 +37,12 @@ public class FacebookLogin extends Registration {
 			jsonObject = userInfoApi.signUp();
 			userId = jsonParser.getUserId(jsonObject);
 		}
-		Log.d(TAG, "userId = " + userId);
+		//Log.d(TAG, "userId = " + userId);
 		
 		// sync fb with previous userId or userId generated above based on deviceId
 		jsonObject = userInfoApi.syncAccount(null, eventSeekr.getFbUserId(), eventSeekr.getFbEmailId(), 
 				UserType.fb, userId);
-		Log.d(TAG, jsonObject.toString());
+		//Log.d(TAG, jsonObject.toString());
 		SyncAccountResponse syncAccountResponse = jsonParser.parseSyncAccount(jsonObject);
 		userId = syncAccountResponse.getWcitiesId();
 		//Log.d(TAG, "userId = " + userId);
@@ -62,7 +59,7 @@ public class FacebookLogin extends Registration {
 			// sync fb again with userId
 			jsonObject = userInfoApi.syncAccount(null, eventSeekr.getFbUserId(), eventSeekr.getFbEmailId(), 
 					UserType.fb, userId);
-			Log.d(TAG, jsonObject.toString());
+			//Log.d(TAG, jsonObject.toString());
 			syncAccountResponse = jsonParser.parseSyncAccount(jsonObject);
 			userId = syncAccountResponse.getWcitiesId();
 		}

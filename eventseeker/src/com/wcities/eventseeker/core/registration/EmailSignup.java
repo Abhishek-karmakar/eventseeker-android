@@ -6,8 +6,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.UserType;
@@ -29,7 +27,7 @@ public class EmailSignup extends Registration {
 		// Signup w/o deviceId
 		UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
 		JSONObject jsonObject = userInfoApi.signUp();
-		Log.d(TAG, jsonObject.toString());
+		//Log.d(TAG, jsonObject.toString());
 		UserInfoApiJSONParser jsonParser = new UserInfoApiJSONParser();
 		String userId = jsonParser.getUserId(jsonObject);
 		//Log.d(TAG, "userId = " + userId);
@@ -37,7 +35,7 @@ public class EmailSignup extends Registration {
 		// sign up with email & pwd
 		jsonObject = userInfoApi.signup(eventSeekr.getEmailId(), eventSeekr.getPassword(), eventSeekr.getFirstName(), 
 				eventSeekr.getLastName(), userId);
-		Log.d(TAG, jsonObject.toString());
+		//Log.d(TAG, jsonObject.toString());
 		SignupResponse signupResponse = jsonParser.parseSignup(jsonObject);
 		
 		if (signupResponse.getMsgCode() == UserInfoApiJSONParser.MSG_CODE_SUCCESS) {
@@ -45,7 +43,7 @@ public class EmailSignup extends Registration {
 			if (eventSeekr.getPreviousWcitiesId() != null) {
 				jsonObject = userInfoApi.syncAccount(null, userId, eventSeekr.getEmailId(), 
 						UserType.wcities, eventSeekr.getPreviousWcitiesId());
-				Log.d(TAG, "jsonObject = " + jsonObject.toString());
+				//Log.d(TAG, "jsonObject = " + jsonObject.toString());
 				userId = jsonParser.getWcitiesId(jsonObject);
 				//Log.d(TAG, "userId = " + userId);
 			}
