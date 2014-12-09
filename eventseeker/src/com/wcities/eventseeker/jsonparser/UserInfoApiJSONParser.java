@@ -82,6 +82,8 @@ public class UserInfoApiJSONParser {
 	private static final String KEY_WCITIES_ID = "wcities_id";
 	private static final String KEY_REP_CODE = "repCode";
 	private static final String KEY_SYNC = "sync";
+	private static final String KEY_FB_ID = "fb_id";
+	private static final String KEY_GOOGLE_ID = "google_id";
 	
 	private static final String KEY_SIGNUP = "signup";
 	private static final String KEY_MSG_CODE = "msg_code";
@@ -136,7 +138,17 @@ public class UserInfoApiJSONParser {
 	
 	public SyncAccountResponse parseSyncAccount(JSONObject jsonObject) throws JSONException {
 		JSONObject jObjSyncaccount = jsonObject.getJSONObject(KEY_SYNCACCOUNT);
-		return new SyncAccountResponse(jObjSyncaccount.getBoolean(KEY_SYNC), jObjSyncaccount.getString(KEY_WCITIES_ID));
+		if (jObjSyncaccount.has(KEY_FB_ID)) {
+			return new SyncAccountResponse(jObjSyncaccount.getBoolean(KEY_SYNC), 
+					jObjSyncaccount.getString(KEY_WCITIES_ID), jObjSyncaccount.getString(KEY_FB_ID));
+			
+		} else if (jObjSyncaccount.has(KEY_GOOGLE_ID)) {
+			return new SyncAccountResponse(jObjSyncaccount.getBoolean(KEY_SYNC), 
+					jObjSyncaccount.getString(KEY_WCITIES_ID), jObjSyncaccount.getString(KEY_GOOGLE_ID));
+			
+		} else {
+			return new SyncAccountResponse(jObjSyncaccount.getBoolean(KEY_SYNC), jObjSyncaccount.getString(KEY_WCITIES_ID));
+		}
 	}
 	
 	public SignupResponse parseSignup(JSONObject jsonObject) throws JSONException {
@@ -706,10 +718,16 @@ public class UserInfoApiJSONParser {
 		
 		private boolean sync;
 		private String wcitiesId;
+		private String fbGoogleId;
 		
 		public SyncAccountResponse(boolean sync, String wcitiesId) {
 			this.sync = sync;
 			this.wcitiesId = wcitiesId;
+		}
+		
+		public SyncAccountResponse(boolean sync, String wcitiesId, String fbGoogleId) {
+			this(sync, wcitiesId);
+			this.fbGoogleId = fbGoogleId;
 		}
 
 		public boolean isSync() {
@@ -718,6 +736,10 @@ public class UserInfoApiJSONParser {
 
 		public String getWcitiesId() {
 			return wcitiesId;
+		}
+
+		public String getFbGoogleId() {
+			return fbGoogleId;
 		}
 	}
 }

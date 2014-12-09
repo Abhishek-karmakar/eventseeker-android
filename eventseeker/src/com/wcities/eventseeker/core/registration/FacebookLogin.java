@@ -53,6 +53,20 @@ public class FacebookLogin extends Registration {
 		// sync friends
 		jsonObject = userInfoApi.syncFriends(UserType.fb, eventSeekr.getFbUserId(), null);
 		
+		/**
+		 * It is possible that first syncaccount call has returned false & some other fb id used
+		 * earlier from same device. In that case syncFriends call creates new account. We can get 
+		 * new wcitiesId corresponding to this new account by again calling syncaccount
+		 */
+		if (syncAccountResponse.getFbGoogleId() != null && !syncAccountResponse.getFbGoogleId().equals(eventSeekr.getFbUserId())) {
+			// sync fb again with userId
+			jsonObject = userInfoApi.syncAccount(null, eventSeekr.getFbUserId(), eventSeekr.getFbEmailId(), 
+					UserType.fb, userId);
+			Log.d(TAG, jsonObject.toString());
+			syncAccountResponse = jsonParser.parseSyncAccount(jsonObject);
+			userId = syncAccountResponse.getWcitiesId();
+		}
+		
 		eventSeekr.updateWcitiesId(userId);
 
 		// register device for notification

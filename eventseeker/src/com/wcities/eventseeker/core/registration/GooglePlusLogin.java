@@ -60,6 +60,20 @@ public class GooglePlusLogin extends Registration {
 			userInfoApi.syncFriends(UserType.google, eventSeekr.getGPlusUserId(), accessToken);
 		}
 		
+		/**
+		 * It is possible that first syncaccount call has returned false & some other g+ id used
+		 * earlier from same device. In that case syncFriends call creates new account. We can get 
+		 * new wcitiesId corresponding to this new account by again calling syncaccount
+		 */
+		if (syncAccountResponse.getFbGoogleId() != null && !syncAccountResponse.getFbGoogleId().equals(eventSeekr.getGPlusUserId())) {
+			// sync g+ again with userId
+			jsonObject = userInfoApi.syncAccount(null, eventSeekr.getGPlusUserId(), eventSeekr.getGPlusEmailId(), 
+					UserType.google, userId);
+			Log.d(TAG, jsonObject.toString());
+			syncAccountResponse = jsonParser.parseSyncAccount(jsonObject);
+			userId = syncAccountResponse.getWcitiesId();
+		}
+		
 		eventSeekr.updateWcitiesId(userId);
 		
 		// register device for notification

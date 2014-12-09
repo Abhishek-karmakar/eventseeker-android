@@ -2,6 +2,7 @@ package com.wcities.eventseeker;
 
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -49,36 +50,51 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 		
 		Bundle args = getArguments();
 		loginType = (LoginType) args.getSerializable(BundleKeys.LOGIN_TYPE);
+		boolean isRegistrationInitiated = false;
 		
 		switch (loginType) {
 		
 		case facebook:
-			eventSeekr.updateFbUserInfo(args.getString(BundleKeys.FB_USER_ID), args.getString(BundleKeys.FB_USER_NAME), 
+			isRegistrationInitiated = eventSeekr.updateFbUserInfo(args.getString(BundleKeys.FB_USER_ID), args.getString(BundleKeys.FB_USER_NAME), 
         			args.getString(BundleKeys.FB_EMAIL_ID), this);
         	isForSignUp = args.getBoolean(BundleKeys.IS_FOR_SIGN_UP);
 			break;
 			
 		case googlePlus:
-			eventSeekr.updateGPlusUserInfo(args.getString(BundleKeys.GOOGLE_PLUS_USER_ID), 
+			isRegistrationInitiated = eventSeekr.updateGPlusUserInfo(args.getString(BundleKeys.GOOGLE_PLUS_USER_ID), 
 					args.getString(BundleKeys.GOOGLE_PLUS_USER_NAME), args.getString(BundleKeys.GOOGLE_PLUS_EMAIL_ID), 
 					this);
 			isForSignUp = args.getBoolean(BundleKeys.IS_FOR_SIGN_UP);
 			break;
 			
 		case emailSignup:
-			eventSeekr.updateEmailSignupInfo(args.getString(BundleKeys.EMAIL_ID), args.getString(BundleKeys.FIRST_NAME), 
+			isRegistrationInitiated = eventSeekr.updateEmailSignupInfo(args.getString(BundleKeys.EMAIL_ID), args.getString(BundleKeys.FIRST_NAME), 
 					args.getString(BundleKeys.LAST_NAME), args.getString(BundleKeys.PASSWORD), this);
 			isForSignUp = true;
 			break;
 			
 		case emailLogin:
-			eventSeekr.updateEmailLoginInfo(args.getString(BundleKeys.EMAIL_ID), args.getString(BundleKeys.PASSWORD), 
+			isRegistrationInitiated = eventSeekr.updateEmailLoginInfo(args.getString(BundleKeys.EMAIL_ID), args.getString(BundleKeys.PASSWORD), 
 					this);
 			isForSignUp = false;
 			break;
 
 		default:
 			break;
+		}
+		
+		if (!isRegistrationInitiated) {
+			/**
+			 * Delaying this task; because otherwise it throws 
+			 * "java.lang.IllegalStateException: Recursive entry to executePendingTransactions" 
+			 */
+			new Handler().postDelayed(new Runnable() {
+				
+				@Override
+				public void run() {
+					((MainActivity)FragmentUtil.getActivity(LoginSyncingFragment.this)).onBackPressed();
+				}
+			}, 1000);
 		}
 	}
 
