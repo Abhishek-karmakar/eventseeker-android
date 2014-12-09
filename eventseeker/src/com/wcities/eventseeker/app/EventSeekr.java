@@ -414,7 +414,7 @@ public class EventSeekr extends Application {
 		return fbEmailId;
 	}
 
-	public void updateFbUserInfo(String fbUserId, String fbUserName, String fbEmailId, 
+	public boolean updateFbUserInfo(String fbUserId, String fbUserName, String fbEmailId, 
 			AsyncTaskListener<Object> listener) {
 		this.fbUserId = fbUserId;
 		this.fbUserName = fbUserName;
@@ -427,7 +427,7 @@ public class EventSeekr extends Application {
 		editor.putString(SharedPrefKeys.FACEBOOK_EMAIL_ID, fbEmailId);
 		editor.commit();
 		
-		AsyncTaskUtil.executeAsyncTask(new GetWcitiesId(listener, LoginType.facebook), true);
+		return AsyncTaskUtil.executeAsyncTask(new GetWcitiesId(listener, LoginType.facebook), true);
 	}
 	
 	public void removeFbUserInfo() {
@@ -472,7 +472,7 @@ public class EventSeekr extends Application {
 		return gPlusEmailId;
 	}
 	
-	public void updateGPlusUserInfo(String gPlusUserId, String gPlusUserName, String gPlusEmailId, 
+	public boolean updateGPlusUserInfo(String gPlusUserId, String gPlusUserName, String gPlusEmailId, 
 			AsyncTaskListener<Object> listener) {
 		this.gPlusUserId = gPlusUserId;
 		this.gPlusUserName = gPlusUserName;
@@ -485,7 +485,7 @@ public class EventSeekr extends Application {
 		editor.putString(SharedPrefKeys.GOOGLE_PLUS_EMAIL_ID, gPlusEmailId);
 		editor.commit();
 		
-		AsyncTaskUtil.executeAsyncTask(new GetWcitiesId(listener, LoginType.googlePlus), true);
+		return AsyncTaskUtil.executeAsyncTask(new GetWcitiesId(listener, LoginType.googlePlus), true);
 	}
 	
 	public void removeGPlusUserInfo() {
@@ -533,7 +533,7 @@ public class EventSeekr extends Application {
 		return password;
 	}
 
-	public void updateEmailSignupInfo(String emailId, String firstName, String lastName, String password, 
+	public boolean updateEmailSignupInfo(String emailId, String firstName, String lastName, String password, 
 			AsyncTaskListener<Object> listener) {
 		this.emailId = emailId;
 		this.firstName = firstName;
@@ -547,7 +547,7 @@ public class EventSeekr extends Application {
 		editor.putString(SharedPrefKeys.LAST_NAME, lastName);
 		editor.commit();
 		
-		AsyncTaskUtil.executeAsyncTask(new GetWcitiesId(listener, LoginType.emailSignup), true);
+		return AsyncTaskUtil.executeAsyncTask(new GetWcitiesId(listener, LoginType.emailSignup), true);
 	}
 	
 	public void removeEmailSignupInfo() {
@@ -567,7 +567,7 @@ public class EventSeekr extends Application {
 		editor.commit();
 	}
 	
-	public void updateEmailLoginInfo(String emailId, String password, AsyncTaskListener<Object> listener) {
+	public boolean updateEmailLoginInfo(String emailId, String password, AsyncTaskListener<Object> listener) {
 		this.emailId = emailId;
 		this.password = password;
 		
@@ -576,7 +576,7 @@ public class EventSeekr extends Application {
 		editor.putString(SharedPrefKeys.EMAIL_ID, emailId);
 		editor.commit();
 		
-		AsyncTaskUtil.executeAsyncTask(new GetWcitiesId(listener, LoginType.emailLogin), true);
+		return AsyncTaskUtil.executeAsyncTask(new GetWcitiesId(listener, LoginType.emailLogin), true);
 	}
 	
 	public void removeEmailLoginInfo() {
