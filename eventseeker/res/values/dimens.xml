@@ -465,7 +465,9 @@
     <dimen name="btn_default_ht">45dp</dimen>
     <dimen name="txt_desc_mar_t_text_fragment">20dp</dimen>
     <dimen name="all_component_mar_launcher_fragment">10dp</dimen>
-    <dimen name="view_pager_ht_launcher_fragment">100dp</dimen>
+    <dimen name="view_pager_ht_launcher_fragment">150dp</dimen>
+    <dimen name="txt_title_view_pager_launcher_fragment">20sp</dimen>
+    <dimen name="txt_desc_view_pager_launcher_fragment">16sp</dimen>
     <!-- login/register fragment -->
     <dimen name="lyt_mar_t_get_started_fragment">40dp</dimen>
     <dimen name="mar_t_get_started_fragment">25dp</dimen>

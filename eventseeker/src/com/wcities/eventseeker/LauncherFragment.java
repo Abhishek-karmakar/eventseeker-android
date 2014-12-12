@@ -14,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.lianghanzhen.endless.viewpager.BannerHandler;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
@@ -22,6 +23,8 @@ import com.wcities.eventseeker.util.FragmentUtil;
 public class LauncherFragment extends FragmentLoadableFromBackStack implements OnClickListener {
 
 	private static final String TAG = LauncherFragment.class.getSimpleName();
+	
+	private BannerHandler bannerHandler;
 	
 	private static enum PagerTitle {
 		firstTitle,
@@ -69,12 +72,27 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 		ActionBarActivity activity = (ActionBarActivity) FragmentUtil.getActivity(this);
 
 		ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewPager);
-		viewPager.setAdapter(new TextViewPagerAdapter(activity, activity.getSupportFragmentManager()));
+		viewPager.setAdapter(new TextViewPagerAdapter(activity, getChildFragmentManager()));
 
 		CirclePageIndicator pageIndicator = (CirclePageIndicator) view.findViewById(R.id.pageIndicator);
 		pageIndicator.setViewPager(viewPager);
 		
+        bannerHandler = new BannerHandler(viewPager);
+        pageIndicator.setOnPageChangeListener(bannerHandler);
+		
 		return view;
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		bannerHandler.start();
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		bannerHandler.stop();
 	}
 	
 	@Override
@@ -139,7 +157,7 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 
 		@Override
 		public Fragment getItem(int position) {
-			PagerTitle pagerTitle = PagerTitle.values()[position];
+			PagerTitle pagerTitle = PagerTitle.values()[position % PagerTitle.values().length];
 			
 			Bundle args = new Bundle();
 			args.putString(AppConstants.LAUNCHER_FRAGMENT_TITLE, pagerTitle.getTitle(context));
@@ -181,29 +199,4 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 		}
 		
 	}
-	/*private class TextViewPagerAdapter extends PagerAdapter {
-
-		private Context context;
-
-		public TextViewPagerAdapter(Context context) {
-			this.context = context;
-		}
-		
-		@Override
-		public int getCount() {
-			return PagerTitle.values().length;
-		}
-
-		@Override
-		public Object instantiateItem(ViewGroup container, int position) {
-			return super.instantiateItem(container, position);
-		}
-		
-		@Override
-		public boolean isViewFromObject(View view, Object obj) {
-			return view == obj;
-		}
-		
-	}*/
-	
 }

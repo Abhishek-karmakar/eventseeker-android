@@ -335,6 +335,10 @@
     <string name="dialog_msg_chk_email_to_reset_pwd">Please check your email to reset the password.</string>
     <string name="dialog_msg_user_email_doesnt_exist">User with this email doesn\'t exist.</string>
     
+    <!-- LauncherFragment -->
+    <string name="log_in">LOG IN</string>
+    <string name="sign_up">SIGN UP</string>
+    
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     
     <!-- Common -->
