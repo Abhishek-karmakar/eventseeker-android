@@ -114,6 +114,7 @@
                 android:layout_marginLeft="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginTop="@dimen/mar_t_get_started_fragment"
+                android:inputType="textEmailAddress"
                 android:hint="Email"
                 android:singleLine="true" />
 

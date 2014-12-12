@@ -16,7 +16,7 @@
 	
 	<color name="bg_black_transparent_strip">#99000000</color>
 	<color name="bg_white_transparent_strip">#99ffffff</color>
-	
+
     <color name="bg_bar_below_action_bar">#dddddd</color>
     
 	<color name="bg_share_dropdown_item">#555555</color>

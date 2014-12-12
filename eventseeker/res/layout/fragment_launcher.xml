@@ -5,7 +5,7 @@
     android:id="@+id/rltLayoutRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/story_space" >
+    android:background="@android:color/darker_gray" >
 
     <TextView
         android:id="@+id/txtAppName"
@@ -14,7 +14,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/txt_app_name_margin_t_fragment_about_us"
         android:text="@string/eventseeker"
-        android:textColor="@color/font_blue"
+        android:textColor="@android:color/white"
         android:textSize="@dimen/txt_desc_txt_size_fragment_launcher"
         android:textStyle="bold" />
 
@@ -29,8 +29,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            style="@style/Widget.EventSeeker.Button.Gray"
-            android:text="Login" />
+			android:text="@string/log_in"
+            style="@style/Widget.EventSeeker.Button.Gray" />
 
         <Button
             android:id="@+id/btnSignUp"
@@ -38,20 +38,21 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             style="@style/Widget.EventSeeker.Button"
-            android:text="Sign Up" />
+            android:text="@string/sign_up" />
         
     </LinearLayout>
 
-    <android.support.v4.view.ViewPager
+    <com.lianghanzhen.endless.viewpager.EndlessViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/view_pager_ht_launcher_fragment"
+        android:layout_height="match_parent"
         android:layout_above="@+id/pageIndicator"
-        android:layout_marginTop="@dimen/all_component_mar_launcher_fragment" 
-        android:layout_marginLeft="@dimen/all_component_mar_launcher_fragment" 
-        android:layout_marginRight="@dimen/all_component_mar_launcher_fragment" />
+        android:layout_marginLeft="@dimen/all_component_mar_launcher_fragment"
+        android:layout_marginRight="@dimen/all_component_mar_launcher_fragment"
+        android:layout_marginTop="@dimen/all_component_mar_launcher_fragment" />
+    <!-- android:layout_height="@dimen/view_pager_ht_launcher_fragment" -->
 
-    <com.viewpagerindicator.CirclePageIndicator
+    <com.lianghanzhen.endless.viewpager.EndlessCirclePageIndicator
         android:id="@+id/pageIndicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
