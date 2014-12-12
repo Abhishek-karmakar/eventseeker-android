@@ -53,7 +53,7 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		ma.setDrawerLockMode(true);
 		ma.setDrawerIndicatorEnabled(false);
-		ma.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME);
+		ma.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
 		if (ma.isTabletAndInLandscapeMode()) {
 			ma.hideDrawerList();
 		}
@@ -101,8 +101,7 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		ma.setDrawerLockMode(false);
 		ma.setDrawerIndicatorEnabled(true);
-		ma.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME
-				| ActionBar.DISPLAY_HOME_AS_UP);
+		ma.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_HOME_AS_UP);
 	}
 	
 	@Override

@@ -1,0 +1,7 @@
+<resources>
+    
+	<color name="primary_text_default_material_light">#ffffffff</color>
+	<!-- 26% of default values -->
+    <item name="disabled_alpha_material_light" format="float" type="dimen">0.26</item>
+    
+</resources>

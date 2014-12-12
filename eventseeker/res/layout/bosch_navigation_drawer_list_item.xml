@@ -15,7 +15,7 @@
 	        android:id="@+id/imgIcon"
         	android:layout_width="0dp" 
         	android:layout_height="match_parent" 
-	        android:src="@drawable/ic_launcher"
+	        android:src="@drawable/ic_launcher_d"
         	android:layout_weight="0.2" 
         	android:scaleType="center"/>
     

@@ -50,7 +50,7 @@
                         android:layout_weight="1"
                         android:contentDescription="artist image"
                         android:scaleType="fitXY"
-                        android:src="@drawable/ic_launcher"
+                        android:src="@drawable/ic_launcher_d"
                         app:compressAsPerWidth="true" />
                     <!-- android:layout_marginRight="@dimen/rlt_layout_img_evt_margin_r_fragment_event_info" -->
 

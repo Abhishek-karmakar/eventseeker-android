@@ -7,14 +7,14 @@
 
     <uses-sdk
         android:minSdkVersion="9"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="21" />
     
     <supports-screens android:largeScreens="true"
         android:xlargeScreens="true" />
 
     <application
         android:name="com.wcities.eventseeker.app.EventSeekr"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.EventSeekr" >        
         <activity
@@ -83,7 +83,7 @@
 
         <receiver
             android:name="com.wcities.eventseeker.widget.EventseekerWidgetProvider"
-            android:icon="@drawable/ic_launcher"
+            android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

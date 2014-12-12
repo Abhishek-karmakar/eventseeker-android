@@ -117,7 +117,7 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 			((TextView)v.findViewById(R.id.txtLoading)).setText(R.string.syncing_google_plus);
 			
 		} else {
-			((ImageView) v.findViewById(R.id.imgAccount)).setImageResource(R.drawable.ic_launcher);
+			((ImageView) v.findViewById(R.id.imgAccount)).setImageResource(R.drawable.ic_launcher_d);
 			((TextView)v.findViewById(R.id.txtLoading)).setText(R.string.syncing_email);
 		}
 		

@@ -1,0 +1,11 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="Widget.EventSeeker.Button" parent="@android:style/Widget.Material.Button">
+	    <item name="android:background">@drawable/btn_default_material</item>
+	</style>
+	
+    <style name="Widget.EventSeeker.Button.Gray" parent="@android:style/Widget.Material.Button">
+	    <item name="android:background">@drawable/btn_gray_material</item>
+	</style>
+	
+</resources>

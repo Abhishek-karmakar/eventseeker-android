@@ -49,7 +49,7 @@
                         android:layout_weight="1"
                         android:contentDescription="image event"
                         android:scaleType="fitXY"
-                        android:src="@drawable/ic_launcher"
+                        android:src="@drawable/ic_launcher_d"
                         app:compressAsPerWidth="true" />
 
                     <RelativeLayout
