@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_gray"
+    android:background="@color/bg_screen_dark_blue"
     android:fillViewport="true"
     android:padding="@dimen/rlt_layout_root_pad_fragment_connect_accounts_list"
     android:scrollbars="none" >
@@ -11,7 +11,6 @@
         android:id="@+id/rltLytRoot"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/story_space"
         android:gravity="center"
         android:paddingBottom="@dimen/rlt_lyt_root_pad_l_r_b_get_started"
         android:paddingLeft="@dimen/rlt_lyt_root_pad_l_r_b_get_started"
@@ -39,7 +38,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:gravity="center"
-                android:text="Signing in..."
+                android:text="@string/signing_in"
+                android:textColor="@android:color/white"
                 android:textSize="@dimen/txt_g_plus_sign_in_status_txt_size_get_started" />
 
             <ImageView
@@ -62,8 +62,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:gravity="center"
-                android:text="Sign Up with Email"
-                android:textColor="@color/font_blue"
+                android:text="@string/sign_up_with_email"
+                android:textColor="@android:color/white"
                 android:textSize="@dimen/txt_login_label_txt_size_get_started_fragment" />
 
             <EditText
@@ -75,8 +75,9 @@
                 android:layout_marginLeft="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginTop="@dimen/mar_t_get_started_fragment"
-                android:hint="First Name"
-                android:singleLine="true" />
+                android:hint="@string/first_name"
+                android:singleLine="true"
+                android:textColorHint="@android:color/white" />
 
             <ImageView
                 android:id="@+id/imgFNIndicator"
@@ -95,8 +96,9 @@
                 android:layout_marginLeft="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginTop="@dimen/mar_t_get_started_fragment"
-                android:hint="Last Name"
-                android:singleLine="true" />
+                android:hint="@string/last_name"
+                android:singleLine="true"
+                android:textColorHint="@android:color/white" />
 
             <ImageView
                 android:id="@+id/imgLNIndicator"
@@ -115,9 +117,10 @@
                 android:layout_marginLeft="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginTop="@dimen/mar_t_get_started_fragment"
-                android:hint="Email"
+                android:hint="@string/email"
                 android:inputType="textEmailAddress"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textColorHint="@android:color/white" />
 
             <ImageView
                 android:id="@+id/imgEmailIndicator"
@@ -135,7 +138,7 @@
                 android:layout_below="@+id/edtEmail"
                 android:gravity="center"
                 android:text="@string/error_email_invalid"
-                android:textColor="@color/font_blue"
+                android:textColor="@android:color/white"
                 android:visibility="invisible" />
 
             <EditText
@@ -146,9 +149,10 @@
                 android:layout_marginLeft="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginTop="@dimen/mar_t_below_error_get_started_fragment"
-                android:hint="Password"
+                android:hint="@string/password"
                 android:password="true"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textColorHint="@android:color/white" />
 
             <ImageView
                 android:id="@+id/imgPasswordIndicator"
@@ -167,9 +171,10 @@
                 android:layout_marginLeft="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginTop="@dimen/mar_t_get_started_fragment"
-                android:hint="Confirm Password"
+                android:hint="@string/confirm_password"
                 android:password="true"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textColorHint="@android:color/white" />
 
             <ImageView
                 android:id="@+id/imgConfirmPasswordIndicator"
@@ -187,7 +192,7 @@
                 android:layout_below="@+id/edtConfirmPassword"
                 android:gravity="center"
                 android:text="@string/error_pass_do_not_match"
-                android:textColor="@color/font_blue"
+                android:textColor="@android:color/white"
                 android:visibility="invisible" />
 
             <Button
@@ -198,15 +203,12 @@
                 android:layout_marginLeft="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginTop="@dimen/mar_t_below_error_get_started_fragment"
-                android:background="@drawable/slctr_btn_login_default_grey_pressed_blue_rounded"
+                android:background="@android:color/white"
                 android:enabled="false"
-                android:text="Sign Up"
-                android:textColor="@android:color/white" />
+                android:text="@string/sign_up"
+                android:textColor="@color/bg_screen_dark_blue" />
 
-            <!--
-	            The below Dummy view and its margin top is added to ignore the issue of above button getting clipped
-	            as it is last view in scrollview. This issue was seen in ASUS Nexus 7.
-            -->
+				<!--The below Dummy view and its margin top is added to ignore the issue of above button getting clipped	            as it is last view in scrollview. This issue was seen in ASUS Nexus 7.-->
 
             <View
                 android:id="@+id/vDummy"

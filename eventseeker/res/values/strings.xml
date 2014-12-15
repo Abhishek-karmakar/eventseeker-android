@@ -330,6 +330,13 @@
     <string name="error_pass_do_not_match">PASSWORDS DO NOT MATCH</string>
     <string name="error_email_or_password_incorrect">Email or Password is incorrect</string>
     <string name="error_unknown_error">Unknown error occured. Please retry later.</string>
+    <string name="sign_up_with_email">Sign Up with Email</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="sign_up">Sign Up</string>
     
     <!-- LoginFragment -->
     <string name="dialog_msg_chk_email_to_reset_pwd">Please check your email to reset the password.</string>
@@ -337,6 +344,9 @@
     <string name="sign_in_with_email">Sign In with Email</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
+    <string name="signing_in">Signing in...</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="forgot_your_password">Forgot your password?</string>
     
     <!-- LauncherFragment -->
     <string name="log_in">LOG IN</string>

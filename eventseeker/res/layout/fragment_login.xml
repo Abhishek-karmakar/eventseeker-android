@@ -42,7 +42,8 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:gravity="center"
-                    android:text="Signing in..."
+                    android:text="@string/signing_in"
+                    android:textColor="@android:color/white"
                     android:textSize="@dimen/txt_g_plus_sign_in_status_txt_size_get_started" />
 
                 <ImageView
@@ -100,7 +101,7 @@
                     android:background="@android:color/white"
                     android:enabled="false"
                     android:gravity="center"
-                    android:text="Login"
+                    android:text="@string/sign_in"
                     android:textColor="@color/bg_screen_dark_blue" />
                 <!-- android:background="@drawable/slctr_btn_login_default_grey_pressed_blue_rounded" -->
 
@@ -112,13 +113,12 @@
                     android:layout_marginTop="@dimen/btn_forgot_pass_mar_t_get_started_fragment"
                     android:background="@android:color/transparent"
                     android:gravity="center"
-                    android:text="Forgot your password?"
+                    android:text="@string/forgot_your_password"
                     android:textSize="@dimen/btn_forgot_pass_txt_size_get_started_fragment"
                     android:visibility="invisible" />
 
-                <!--
-                    The below Dummy view and its margin top is added to ignore the issue of above button getting clipped
-		            as it is last view in scrollview. This issue was seen in Samsung Galaxy Tab.                -->
+                <!--The below Dummy view and its margin top is added to ignore the issue of above button getting clipped
+		            as it is last view in scrollview. This issue was seen in Samsung Galaxy Tab.-->
 
                 <View
                     android:id="@+id/vDummy"

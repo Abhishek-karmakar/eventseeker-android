@@ -1,7 +1,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- MainTheme -->
-    <style name="Theme.EventSeekr" parent="@style/Theme.AppCompat.Light">
+    <style name="Theme.EventSeekr" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="android:actionBarStyle">@style/Widget.EventSeekr.ActionBar</item>
         <item name="actionBarStyle">@style/Widget.EventSeekr.ActionBar</item>
         <item name="android:actionOverflowButtonStyle">@style/Widget.EventSeekr.ActionButton.Overflow</item>
