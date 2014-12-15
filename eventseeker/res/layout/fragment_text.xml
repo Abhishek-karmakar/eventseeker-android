@@ -4,16 +4,18 @@
     android:layout_height="match_parent"
     android:background="@android:color/transparent" >
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/view_pager_ht_launcher_fragment"
-        android:layout_alignParentBottom="true" >
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:minHeight="@dimen/txt_frag_ht_launcher_fragment"
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/txtTitle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="@dimen/txt_title_view_pager_launcher_fragment"
@@ -22,13 +24,14 @@
         <TextView
             android:id="@+id/txtDesc"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_below="@+id/txtTitle"
             android:layout_marginTop="@dimen/txt_desc_mar_t_text_fragment"
+            android:layout_weight="3"
             android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="@dimen/txt_desc_view_pager_launcher_fragment"
             android:textStyle="bold" />
-    </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>

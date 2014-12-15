@@ -461,13 +461,15 @@
     <dimen name="common_margin_padding_list_item_language">10dp</dimen>
     <dimen name="txt_language_txt_size_list_item_language">16sp</dimen>
     <!-- fragment_launcher.xml -->
-    <dimen name="txt_desc_txt_size_fragment_launcher">35sp</dimen>
+    <dimen name="txt_desc_txt_size_fragment_launcher">40sp</dimen>
     <dimen name="btn_default_ht">45dp</dimen>
     <dimen name="txt_desc_mar_t_text_fragment">20dp</dimen>
     <dimen name="all_component_mar_launcher_fragment">10dp</dimen>
-    <dimen name="view_pager_ht_launcher_fragment">150dp</dimen>
-    <dimen name="txt_title_view_pager_launcher_fragment">20sp</dimen>
-    <dimen name="txt_desc_view_pager_launcher_fragment">16sp</dimen>
+    <dimen name="all_component_mar_launcher_fragment">10dp</dimen>
+    <dimen name="txt_frag_ht_launcher_fragment">120dp</dimen>
+    <dimen name="pg_indctr_pad_t_b_launcher_fragment">30dp</dimen>
+    <dimen name="txt_title_view_pager_launcher_fragment">25sp</dimen>
+    <dimen name="txt_desc_view_pager_launcher_fragment">15sp</dimen>
     <!-- login/register fragment -->
     <dimen name="lyt_mar_t_get_started_fragment">40dp</dimen>
     <dimen name="mar_t_get_started_fragment">25dp</dimen>

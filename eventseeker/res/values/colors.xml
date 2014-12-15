@@ -9,6 +9,9 @@
 	<color name="bg_white_transparent_strip">#99ffffff</color>
 
 	<color name="bg_login_btn_dark_gray_launcher_screen">#333333</color>
+	<color name="pgindctr_page_color_semi_trans_launcher_screen">#9fff</color>
+
+	<color name="bg_screen_dark_blue">#3baaf3</color>
 	
     <color name="bg_bar_below_action_bar">#dddddd</color>
     

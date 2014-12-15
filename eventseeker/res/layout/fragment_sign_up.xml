@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:background="@color/dark_gray"
     android:fillViewport="true"
-    android:padding="@dimen/rlt_layout_root_pad_fragment_connect_accounts_list" >
+    android:padding="@dimen/rlt_layout_root_pad_fragment_connect_accounts_list"
+    android:scrollbars="none" >
 
     <RelativeLayout
         android:id="@+id/rltLytRoot"
@@ -114,8 +115,8 @@
                 android:layout_marginLeft="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginTop="@dimen/mar_t_get_started_fragment"
-                android:inputType="textEmailAddress"
                 android:hint="Email"
+                android:inputType="textEmailAddress"
                 android:singleLine="true" />
 
             <ImageView
