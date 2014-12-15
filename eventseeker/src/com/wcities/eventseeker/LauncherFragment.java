@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
@@ -60,6 +59,21 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 		
 	}
 
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportActionBar().hide();
+
+		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		ma.setDrawerLockMode(true);
+		ma.setDrawerIndicatorEnabled(false);
+		ma.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME);
+		if (ma.isTabletAndInLandscapeMode()) {
+			ma.hideDrawerList();
+		}
+	}
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -70,7 +84,7 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 			delay[0] = PAGE_DELAY_TIME;
 		}
 	}
-	
+		
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_launcher, null);
@@ -98,20 +112,6 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 	private void createSurface() {
 		srfcHldr = srfvVideo.getHolder();
 		srfcHldr.addCallback(this);
-	}
-	
-	@Override
-	public void onStart() {
-		super.onStart();
-		((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportActionBar().hide();
-
-		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
-		ma.setDrawerLockMode(true);
-		ma.setDrawerIndicatorEnabled(false);
-		ma.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME);
-		if (ma.isTabletAndInLandscapeMode()) {
-			ma.hideDrawerList();
-		}
 	}
 	
 	@Override
@@ -150,8 +150,7 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		ma.setDrawerLockMode(false);
 		ma.setDrawerIndicatorEnabled(true);
-		ma.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME
-				| ActionBar.DISPLAY_HOME_AS_UP);
+		ma.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_HOME_AS_UP);
 	}
 	
 	@Override

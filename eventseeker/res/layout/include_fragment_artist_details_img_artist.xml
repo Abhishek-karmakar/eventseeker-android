@@ -11,7 +11,7 @@
 		android:layout_height="wrap_content"
 		app:compressAsPerWidth="true"
 		android:contentDescription="artist image"
-		android:src="@drawable/ic_launcher"
+		android:src="@drawable/ic_launcher_d"
 		android:scaleType="fitXY" />
     
     <TextView android:id="@+id/txtItemTitle"

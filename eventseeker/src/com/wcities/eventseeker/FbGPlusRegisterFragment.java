@@ -75,8 +75,7 @@ public abstract class FbGPlusRegisterFragment extends FragmentLoadableFromBackSt
         super.onStart();
         
         MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
-		ma.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME 
-				| ActionBar.DISPLAY_HOME_AS_UP);
+		ma.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_HOME_AS_UP);
 				
         // In starting if user's credentials are available, then this active session will be null.
         if (Session.getActiveSession() != null) {

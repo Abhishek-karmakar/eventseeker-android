@@ -25,6 +25,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -189,6 +190,9 @@ public class MainActivity extends ActionBarActivity implements
 		 */
 		FragmentUtil.updateActivityReferenceInAllFragments(getSupportFragmentManager(), this);
 
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarForActionbar);
+	    setSupportActionBar(toolbar);
+	    
 		isDrawerIndicatorEnabled = true;
 		if (savedInstanceState != null) {
 			mTitle = savedInstanceState.getString(BundleKeys.ACTION_BAR_TITLE);
@@ -244,18 +248,16 @@ public class MainActivity extends ActionBarActivity implements
 			// Set the drawer toggle as the DrawerListener
 			mDrawerLayout.setDrawerListener(mDrawerToggle);
 			
-			getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME
-					| ActionBar.DISPLAY_HOME_AS_UP);
+			getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_HOME_AS_UP);
 			
 		} else {
 			int displayOptions;
 			
 			if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-				displayOptions = ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME
-						| ActionBar.DISPLAY_HOME_AS_UP;
+				displayOptions = ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_HOME_AS_UP;
 				
 			} else {
-				displayOptions = ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME;	
+				displayOptions = ActionBar.DISPLAY_SHOW_TITLE;	
 			}
 			
 			getSupportActionBar().setDisplayOptions(displayOptions);
@@ -265,7 +267,7 @@ public class MainActivity extends ActionBarActivity implements
 		 * searchView in SearchFragment. So need to set any transparent icon
 		 * rather than null.
 		 */
-		getSupportActionBar().setIcon(R.drawable.ic_actionbar_app_icon);
+		//getSupportActionBar().setIcon(R.drawable.ic_actionbar_app_icon);
 		
 		DrawerListFragment drawerListFragment = (DrawerListFragment) getSupportFragmentManager()
 				.findFragmentByTag(DRAWER_LIST_FRAGMENT_TAG);
@@ -566,7 +568,7 @@ public class MainActivity extends ActionBarActivity implements
 						 * disappear from actionbar.
 						 */
 						getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE 
-								| ActionBar.DISPLAY_SHOW_CUSTOM  | ActionBar.DISPLAY_SHOW_HOME);
+								| ActionBar.DISPLAY_SHOW_CUSTOM);
 					}
 				}
 			}
@@ -707,8 +709,7 @@ public class MainActivity extends ActionBarActivity implements
 					 * e.g. - Launch --> Discover --> Event Details --> hardware back. In this case tabs & 
 					 * back should disappear from actionbar.
 					 */
-					getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME
-							| ActionBar.DISPLAY_SHOW_CUSTOM);
+					getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM);
 				}
 				return super.onKeyDown(keyCode, event);
 			}
@@ -932,8 +933,8 @@ public class MainActivity extends ActionBarActivity implements
 			setDrawerIndicatorEnabled(true);
 				
 			if (isTabletAndInLandscapeMode) {
-				getSupportActionBar().setIcon(R.drawable.ic_actionbar_app_icon);
-				getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME);
+				//getSupportActionBar().setIcon(R.drawable.ic_actionbar_app_icon);
+				getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
 			}
 			
 			boolean isDrawerListFragmentFound = updateDrawerListCheckedItem(position);
@@ -1216,10 +1217,9 @@ public class MainActivity extends ActionBarActivity implements
 		setDrawerIndicatorEnabled(!addToBackStack);
 		
 		if (isTabletAndInLandscapeMode) {
-			getSupportActionBar().setIcon(R.drawable.ic_actionbar_app_icon);			
+			//getSupportActionBar().setIcon(R.drawable.ic_actionbar_app_icon);			
 			if (addToBackStack) {
-				getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME
-						| ActionBar.DISPLAY_HOME_AS_UP);
+				getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_HOME_AS_UP);
 			}
 		}
 		// getSupportActionBar().setDisplayHomeAsUpEnabled(addToBackStack);
@@ -1777,7 +1777,7 @@ public class MainActivity extends ActionBarActivity implements
 		 * is retained in tablet landscape mode. So, to resolve the issue below statements are added.
 		 */
 		if (isTabletAndInLandscapeMode && currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_LOGIN_SYNCING)) {
-			getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME);
+			getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
 		}
 		
 		if (getSupportFragmentManager().getBackStackEntryCount() > 0) {

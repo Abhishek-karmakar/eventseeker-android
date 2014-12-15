@@ -98,8 +98,7 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		ma.setDrawerLockMode(true);
 		ma.setDrawerIndicatorEnabled(false);
-		ma.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME |
-				ActionBar.DISPLAY_HOME_AS_UP);
+		ma.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_HOME_AS_UP);
 		if (ma.isTabletAndInLandscapeMode()) {
 			ma.hideDrawerList();
 		}

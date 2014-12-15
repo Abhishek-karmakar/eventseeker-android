@@ -38,21 +38,19 @@
 
             <Button
                 android:id="@+id/btnLogin"
+                style="@style/Widget.EventSeeker.Button.Gray"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/bg_login_btn_dark_gray_launcher_screen"
-                android:text="@string/log_in"
-                android:textColor="@android:color/white" />
+                android:text="@string/log_in" />
 
             <Button
                 android:id="@+id/btnSignUp"
+                style="@style/Widget.EventSeeker.Button"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/font_blue"
-                android:text="@string/sign_up"
-                android:textColor="@android:color/white" />
+                android:text="@string/sign_up" />
         </LinearLayout>
 
         <com.lianghanzhen.endless.viewpager.EndlessViewPager
