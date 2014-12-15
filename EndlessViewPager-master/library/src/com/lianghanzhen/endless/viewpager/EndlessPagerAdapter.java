@@ -74,7 +74,7 @@ class EndlessPagerAdapter extends PagerAdapter {
 
     @Override
     public void restoreState(Parcelable state, ClassLoader loader) {
-        mPagerAdapter.restoreState(state, loader);
+        //mPagerAdapter.restoreState(state, loader);
     }
 
     @Override
