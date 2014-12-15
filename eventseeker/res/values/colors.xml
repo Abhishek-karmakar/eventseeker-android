@@ -7,7 +7,9 @@
 	<!-- 26% of default values -->
     <color name="primary_text_disabled_material_light">#42ffffff</color>
     
-    <color name="btn_login">#333333</color>
+    <color name="btn_bg_primary_pressed">#0060ff</color>
+	<color name="btn_bg_gray">#333333</color>
+	<color name="btn_bg_gray_pressed">#222222</color>
 
     <color name="silver">#c0c0c0</color>
 	<color name="light_gray">#f6f6f6</color>

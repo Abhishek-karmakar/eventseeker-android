@@ -50,12 +50,12 @@
 	</style>
 	
     <style name="Widget.EventSeeker.Button" parent="@android:style/Widget.Button">
-        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:background">@drawable/slctr_btn_bg_primary</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
     
     <style name="Widget.EventSeeker.Button.Gray" parent="@android:style/Widget.Button">
-        <item name="android:background">@color/btn_login</item>
+        <item name="android:background">@drawable/slctr_btn_bg_gray</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
 

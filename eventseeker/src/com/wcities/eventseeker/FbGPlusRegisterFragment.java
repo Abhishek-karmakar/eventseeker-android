@@ -194,6 +194,9 @@ public abstract class FbGPlusRegisterFragment extends FragmentLoadableFromBackSt
         	bundle.putString(BundleKeys.GOOGLE_PLUS_USER_ID, personId);
         	bundle.putString(BundleKeys.GOOGLE_PLUS_USER_NAME, currentPerson.getDisplayName());
         	bundle.putString(BundleKeys.GOOGLE_PLUS_EMAIL_ID, Plus.AccountApi.getAccountName(mGoogleApiClient));
+        	String registerErrorListener = isForSignUp ? AppConstants.FRAGMENT_TAG_SIGN_UP 
+        			: AppConstants.FRAGMENT_TAG_LOGIN;
+        	bundle.putString(BundleKeys.REGISTER_ERROR_LISTENER, registerErrorListener);
         	
         	RegistrationListener listener = (RegistrationListener)FragmentUtil.getActivity(FbGPlusRegisterFragment.this);
         	
@@ -240,6 +243,10 @@ public abstract class FbGPlusRegisterFragment extends FragmentLoadableFromBackSt
 	    	                	 */
 	    	                	String email = (user.getProperty("email") == null) ? "" : user.getProperty("email").toString();
 	    	                	bundle.putString(BundleKeys.FB_EMAIL_ID, email);
+	    	                	String registerErrorListener = isForSignUp ? AppConstants.FRAGMENT_TAG_SIGN_UP 
+	    	                			: AppConstants.FRAGMENT_TAG_LOGIN;
+	    	                	bundle.putString(BundleKeys.REGISTER_ERROR_LISTENER, registerErrorListener);
+	    	                	
 	    	                	RegistrationListener listener = (RegistrationListener)FragmentUtil.getActivity(
 										FbGPlusRegisterFragment.this);
 	    	                	/**
