@@ -30,7 +30,6 @@ import com.facebook.SessionState;
 import com.wcities.eventseeker.MyEventsListFragment;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
-import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
@@ -302,8 +301,13 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 						args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
 						((ReplaceFragmentListener)mContext).replaceByFragment(
 								AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
+						/**
+						 * added on 15-12-2014
+						 */
 						GoogleAnalyticsTracker.getInstance().sendEvent((EventSeekr)mContext.getApplicationContext(), 
-								googleAnalyticsScreenName, GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON);
+								googleAnalyticsScreenName, GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON, 
+								com.wcities.eventseeker.analytics.GoogleAnalyticsTracker.Type.Event.name(), 
+								null, event.getId());
 					}
 				}
 			});
