@@ -36,7 +36,7 @@ public class GoogleAnalyticsTracker {
 	private static final String ANALYTICS_PROPERTY_ID = "UA-167953-49";
 	
 	public static final String EVENT_LABEL_TICKETS_BUTTON = "Tickets Button";
-	public static final String ARIST_VIDEO_CLICK = "ARIST_VIDEO_CLICK";
+	public static final String ARIST_VIDEO_CLICK = "ARTIST_VIDEO_CLICK";
 
 	private static GoogleAnalyticsTracker googleAnalyticsTracker;
 

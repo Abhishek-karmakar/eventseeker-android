@@ -1,5 +1,6 @@
 package com.wcities.eventseeker.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
@@ -8,8 +9,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ShareCompat;
+import android.support.v4.app.ShareCompat.IntentBuilder;
 import android.util.Log;
 
 import com.google.android.gms.auth.GoogleAuthException;
@@ -18,14 +22,15 @@ import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusShare;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.cache.BitmapCache;
+import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.SharedPrefKeys;
 import com.wcities.eventseeker.core.Event;
@@ -59,7 +64,7 @@ public class GPlusUtil {
 	    	.build();*/
 		return new GoogleApiClient.Builder(FragmentUtil.getActivity(fragment), 
 				connectionCallbacks, onConnectionFailedListener)
-			.addApi(Plus.API, null)
+			.addApi(Plus.API)
 			.addScope(new Scope(Scopes.PLUS_LOGIN))  // PLUS_LOGIN is recommended login scope for social features)
 			.addScope(new Scope(Scopes.PLUS_ME))
 			.addScope(new Scope(AppConstants.SCOPE_URI_USERINFO_EMAIL))
@@ -128,6 +133,43 @@ public class GPlusUtil {
           	.setText(text)
           	.setContentUrl(Uri.parse(link))
           	.getIntent();
+        
+        /**
+         * 16-12-2014:
+         * Above code is commented and used below one because it was crashing after GooglePlayLib & support libs update.
+           Exception:
+           12-16 11:28:27.632: E/AndroidRuntime(10358): FATAL EXCEPTION: main
+		   12-16 11:28:27.632: E/AndroidRuntime(10358): Process: com.google.android.gms.ui, PID: 10358
+	       12-16 11:28:27.632: E/AndroidRuntime(10358): java.lang.IllegalArgumentException
+		   12-16 11:28:27.632: E/AndroidRuntime(10358): 	at com.google.k.a.aj.a(SourceFile:72)
+		   12-16 11:28:27.632: E/AndroidRuntime(10358): 	at com.google.android.gms.plus.audience.a.e.<init>(SourceFile:63)
+		   12-16 11:28:27.632: E/AndroidRuntime(10358): 	at com.google.android.gms.plus.audience.a.e.<init>(SourceFile:53)
+		   12-16 11:28:27.632: E/AndroidRuntime(10358): 	at com.google.android.gms.plus.audience.a.d.<init>(SourceFile:28)
+		   12-16 11:28:27.632: E/AndroidRuntime(10358): 	at com.google.android.gms.plus.sharebox.al.a(SourceFile:213)
+         */
+        
+        /*String key = event.getKey(ImgResolution.LOW);
+        BitmapCache bitmapCache = BitmapCache.getInstance();
+		Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
+		Uri uri = null;
+		if (bitmap != null) {
+			File tmpFile = FileUtil.createTempShareImgFile(FragmentUtil.getActivity(fragment).getApplication(), bitmap);
+			if (tmpFile != null) {
+				uri = Uri.fromFile(tmpFile);
+			}
+		}
+
+		IntentBuilder shareIntentbuBuilder = ShareCompat.IntentBuilder.from(FragmentUtil.getActivity(fragment));
+		if (uri != null) {
+			shareIntentbuBuilder.setStream(uri).setType("image/jpg");
+
+		} else {
+			shareIntentbuBuilder.setType("text/plain");	
+		}
+        Intent shareIntent = shareIntentbuBuilder
+                .setText(text + " " + link)
+                .getIntent()
+                .setPackage("com.google.android.apps.plus");*/
 
 		fragment.startActivityForResult(shareIntent, AppConstants.REQ_CODE_GOOGLE_PLUS_PUBLISH_EVT);
 	}
@@ -166,6 +208,43 @@ public class GPlusUtil {
           	.setContentUrl(Uri.parse(link))
           	.getIntent();
 
+        /**
+         * 16-12-2014:
+         * Above code is commented and used below one because it was crashing after GooglePlayLib & support libs update.
+           Exception:
+           12-16 11:28:27.632: E/AndroidRuntime(10358): FATAL EXCEPTION: main
+		   12-16 11:28:27.632: E/AndroidRuntime(10358): Process: com.google.android.gms.ui, PID: 10358
+	       12-16 11:28:27.632: E/AndroidRuntime(10358): java.lang.IllegalArgumentException
+		   12-16 11:28:27.632: E/AndroidRuntime(10358): 	at com.google.k.a.aj.a(SourceFile:72)
+		   12-16 11:28:27.632: E/AndroidRuntime(10358): 	at com.google.android.gms.plus.audience.a.e.<init>(SourceFile:63)
+		   12-16 11:28:27.632: E/AndroidRuntime(10358): 	at com.google.android.gms.plus.audience.a.e.<init>(SourceFile:53)
+		   12-16 11:28:27.632: E/AndroidRuntime(10358): 	at com.google.android.gms.plus.audience.a.d.<init>(SourceFile:28)
+		   12-16 11:28:27.632: E/AndroidRuntime(10358): 	at com.google.android.gms.plus.sharebox.al.a(SourceFile:213)
+         */
+        
+        /*String key = event.getKey(ImgResolution.LOW);
+        BitmapCache bitmapCache = BitmapCache.getInstance();
+		Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
+		Uri uri = null;
+		if (bitmap != null) {
+			File tmpFile = FileUtil.createTempShareImgFile(FragmentUtil.getActivity(fragment).getApplication(), bitmap);
+			if (tmpFile != null) {
+				uri = Uri.fromFile(tmpFile);
+			}
+		}
+
+		IntentBuilder shareIntentbuBuilder = ShareCompat.IntentBuilder.from(FragmentUtil.getActivity(fragment));
+		if (uri != null) {
+			shareIntentbuBuilder.setStream(uri).setType("image/jpg");
+
+		} else {
+			shareIntentbuBuilder.setType("text/plain");	
+		}
+        Intent shareIntent = shareIntentbuBuilder
+                .setText(text + " " + link)
+                .getIntent()
+                .setPackage("com.google.android.apps.plus");*/
+        
 		fragment.startActivityForResult(shareIntent, AppConstants.REQ_CODE_GOOGLE_PLUS_PUBLISH_EVT);
 	}
 	
