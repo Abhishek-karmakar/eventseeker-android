@@ -33,7 +33,6 @@ import com.wcities.eventseeker.core.registration.Registration.RegistrationErrorL
 import com.wcities.eventseeker.core.registration.Registration.RegistrationListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser.SignupResponse;
-import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FieldValidationUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
@@ -176,7 +175,6 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		ma.setDrawerLockMode(true);
 		ma.setDrawerIndicatorEnabled(false);
-		ma.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_HOME_AS_UP);
 		if (ma.isTabletAndInLandscapeMode()) {
 			ma.hideDrawerList();
 		}

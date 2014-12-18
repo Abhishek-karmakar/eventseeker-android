@@ -4,6 +4,7 @@ import java.lang.ref.WeakReference;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -132,6 +133,15 @@ public class DiscoverFragment extends DiscoverParentFragment implements OnPageCh
 			 */
 			// discoverActivity.get().updateRightLeftArrows(discoverActivity.get().viewPager.getCurrentItem());
 			return POSITION_NONE;
+		}
+		
+		/**
+		 * W/o following blank function, app crashes with NullPointerException in v4 support library
+		 * on orientation change on the screen where this adapter is used.
+		 */
+		@Override
+		public void restoreState(Parcelable arg0, ClassLoader arg1) {
+			
 		}
 	}
 

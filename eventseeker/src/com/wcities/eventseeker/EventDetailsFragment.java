@@ -157,7 +157,7 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 		super.onDestroyView();
 		//Log.d(TAG, "onDestroyView()");
 		ActionBar actionBar = ((ActionBarActivity)FragmentUtil.getActivity(this)).getSupportActionBar();
-		actionBar.setCustomView(null);
+		actionBar.setDisplayShowCustomEnabled(false);
 		
 		/**
 		 * set null listener, otherwise even for artist/venue details screen when selecting 

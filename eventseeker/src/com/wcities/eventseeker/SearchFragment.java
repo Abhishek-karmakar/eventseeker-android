@@ -124,7 +124,7 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 	public void onDestroyView() {
 		super.onDestroyView();
 		ActionBar actionBar = ((ActionBarActivity)FragmentUtil.getActivity(this)).getSupportActionBar();
-		actionBar.setCustomView(null);
+		actionBar.setDisplayShowCustomEnabled(false);
 	}
 	
 	@Override

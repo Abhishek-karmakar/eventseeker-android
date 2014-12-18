@@ -213,7 +213,6 @@ public class MainActivity extends ActionBarActivity implements
 			mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 			mDrawerToggle = new ActionBarDrawerToggle(this, // host Activity
 					mDrawerLayout, // DrawerLayout object
-					toolbar, 
 					R.string.drawer_open, // "open drawer" description
 					R.string.drawer_close // "close drawer" description
 			) {
@@ -247,7 +246,6 @@ public class MainActivity extends ActionBarActivity implements
 			//Log.i(TAG, "isDrawerIndicatorEnabled : " + isDrawerIndicatorEnabled);
 			// Set the drawer toggle as the DrawerListener
 			mDrawerLayout.setDrawerListener(mDrawerToggle);
-			
 			getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_HOME_AS_UP);
 			
 		} else {
@@ -259,7 +257,6 @@ public class MainActivity extends ActionBarActivity implements
 			} else {
 				displayOptions = ActionBar.DISPLAY_SHOW_TITLE;	
 			}
-			
 			getSupportActionBar().setDisplayOptions(displayOptions);
 		}
 		/**
@@ -523,13 +520,11 @@ public class MainActivity extends ActionBarActivity implements
 		switch (item.getItemId()) {
 
 		case android.R.id.home:
-			//Log.d(TAG, "home");
 			if (AppConstants.FRAGMENT_TAG_LOGIN_SYNCING.equals(currentContentFragmentTag)) {
 				return true;
 				
 			} else if (!isTabletAndInLandscapeMode) {
 				if (mDrawerToggle.isDrawerIndicatorEnabled()) {
-					//Log.d(TAG, "if");
 					if (mDrawerLayout.isDrawerOpen(lnrLayoutRootNavDrawer)) {
 						mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
 
@@ -538,7 +533,6 @@ public class MainActivity extends ActionBarActivity implements
 					}
 
 				} else if ((getSupportActionBar().getDisplayOptions() & ActionBar.DISPLAY_HOME_AS_UP) != 0) {
-					//Log.d(TAG, "else if");
 					/**
 					 * above condition is to prevent back action when user clicks actionbar's home button on
 					 * launcher screen. In that case it should have no action; otherwise execute onBackPressed()
@@ -546,7 +540,6 @@ public class MainActivity extends ActionBarActivity implements
 					 */
 					onBackPressed();
 				}
-				//Log.d(TAG, "out");
 				
 			} else {
 				/**

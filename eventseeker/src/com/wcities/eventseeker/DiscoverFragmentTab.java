@@ -105,7 +105,7 @@ public class DiscoverFragmentTab extends DiscoverParentFragment implements OnIte
 		//Log.d(TAG, "onDestroyView");
 		super.onDestroyView();
 		ActionBar actionBar = ((ActionBarActivity)FragmentUtil.getActivity(this)).getSupportActionBar();
-		actionBar.setCustomView(null);
+		actionBar.setDisplayShowCustomEnabled(false);
 	}
 
 	private void createCustomActionBar() {

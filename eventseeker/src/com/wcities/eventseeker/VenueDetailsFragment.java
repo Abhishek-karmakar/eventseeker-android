@@ -113,7 +113,7 @@ public class VenueDetailsFragment extends FragmentLoadableFromBackStack implemen
 	public void onDestroyView() {
 		super.onDestroyView();
 		ActionBar actionBar = ((ActionBarActivity)FragmentUtil.getActivity(this)).getSupportActionBar();
-		actionBar.setCustomView(null);
+		actionBar.setDisplayShowCustomEnabled(false);
 	}
 	
 	@Override

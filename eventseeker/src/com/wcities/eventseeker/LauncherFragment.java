@@ -149,8 +149,13 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 		 */
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		ma.setDrawerLockMode(false);
-		ma.setDrawerIndicatorEnabled(true);
+		
+		/**
+		 * Order of below 2 lines is important. If it's reversed then in above case mentioned, toolbar shows
+		 * back arrow even when it should be hamburger icon.
+		 */
 		ma.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_HOME_AS_UP);
+		ma.setDrawerIndicatorEnabled(true);
 	}
 	
 	@Override
