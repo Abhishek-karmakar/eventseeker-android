@@ -1137,7 +1137,23 @@ public class MainActivity extends ActionBarActivity implements
 		mTitle = newTitle;
 		updateTitle();
 
+		/*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			if (replaceByFragmentTag.equals(AppConstants.FRAGMENT_TAG_LOGIN)) {
+				Slide slide = new Slide(Gravity.BOTTOM);
+				slide.setDuration(1000);
+		        replaceBy.setEnterTransition(slide);
+		        
+		        slide = new Slide(Gravity.BOTTOM);
+		        slide.setDuration(1000);
+		        replaceBy.setReturnTransition(slide);
+			}
+		}*/
 		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+		Bundle args = replaceBy.getArguments();
+		if (args != null && args.containsKey(BundleKeys.FRAGMENT_TRANSACTION_ANIM_IDS)) {
+			int[] anims = args.getIntArray(BundleKeys.FRAGMENT_TRANSACTION_ANIM_IDS);
+			fragmentTransaction.setCustomAnimations(anims[0], anims[1], anims[2], anims[3]);
+		}
 		fragmentTransaction.replace(R.id.content_frame, replaceBy, replaceByFragmentTag);
 
 		if (addToBackStack) {
@@ -1242,12 +1258,20 @@ public class MainActivity extends ActionBarActivity implements
 			selectNonDrawerItem(webViewFragment, fragmentTag, getResources().getString(R.string.title_web), true);
 			
 		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_LOGIN)) {
-			LoginFragment getStartedFragment = new LoginFragment();
-			selectNonDrawerItem(getStartedFragment, AppConstants.FRAGMENT_TAG_LOGIN, getResources()
+			LoginFragment loginFragment = new LoginFragment();
+			args = new Bundle();
+			args.putIntArray(BundleKeys.FRAGMENT_TRANSACTION_ANIM_IDS, new int[]{R.anim.launcher_to_login, 
+					R.anim.fade_out, R.anim.fade_in, R.anim.login_to_launcher});
+			loginFragment.setArguments(args);
+			selectNonDrawerItem(loginFragment, AppConstants.FRAGMENT_TAG_LOGIN, getResources()
 				.getString(R.string.title_login), true);
 			
 		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_SIGN_UP)) {
 			SignUpFragment signUpFragment = new SignUpFragment();
+			args = new Bundle();
+			args.putIntArray(BundleKeys.FRAGMENT_TRANSACTION_ANIM_IDS, new int[]{R.anim.launcher_to_signup, 
+					R.anim.fade_out, R.anim.fade_in, R.anim.signup_to_launcher});
+			signUpFragment.setArguments(args);
 			selectNonDrawerItem(signUpFragment, AppConstants.FRAGMENT_TAG_SIGN_UP, getResources()
 				.getString(R.string.title_signup), true);
 			
