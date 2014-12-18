@@ -343,7 +343,7 @@
     <dimen name="txt_connect_accounts_margin_l_r_fragment_connect_account">40dp</dimen>
     <!-- fragment_about_us.xml -->
     <dimen name="rlt_layout_root_pad_fragment_about_us">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="txt_app_name_margin_t_fragment_about_us">30dp</dimen>
+    <dimen name="txt_app_name_margin_t_fragment_about_us">60dp</dimen>
     <dimen name="txt_app_name_txt_size_fragment_about_us">34sp</dimen>
     <dimen name="txt_app_slogan_margin_t_fragment_about_us">8dp</dimen>
     <dimen name="txt_app_slogan_txt_size_fragment_about_us">20sp</dimen>
@@ -462,7 +462,7 @@
     <dimen name="txt_language_txt_size_list_item_language">16sp</dimen>
     <!-- fragment_launcher.xml -->
     <dimen name="txt_desc_txt_size_fragment_launcher">40sp</dimen>
-    <dimen name="btn_default_ht">45dp</dimen>
+    <dimen name="btn_default_ht">50dp</dimen>
     <dimen name="txt_desc_mar_t_text_fragment">20dp</dimen>
     <dimen name="all_component_mar_launcher_fragment">10dp</dimen>
     <dimen name="all_component_mar_launcher_fragment">10dp</dimen>
