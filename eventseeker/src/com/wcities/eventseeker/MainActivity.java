@@ -15,7 +15,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,6 +23,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -213,7 +213,7 @@ public class MainActivity extends ActionBarActivity implements
 			mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 			mDrawerToggle = new ActionBarDrawerToggle(this, // host Activity
 					mDrawerLayout, // DrawerLayout object
-					R.drawable.sidenav, // nav drawer icon to replace 'Up' caret
+					toolbar, 
 					R.string.drawer_open, // "open drawer" description
 					R.string.drawer_close // "close drawer" description
 			) {
@@ -468,7 +468,6 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-
 		getMenuInflater().inflate(R.menu.main, menu);
 
 		searchItem = menu.findItem(R.id.action_search);
@@ -514,7 +513,6 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
-		
 		//Log.d(TAG, "onOptionsItemSelected() itemId = " + item.getItemId());
         // Pass the event to ActionBarDrawerToggle, if it returns
         // true, then it has handled the app icon touch event
@@ -525,11 +523,13 @@ public class MainActivity extends ActionBarActivity implements
 		switch (item.getItemId()) {
 
 		case android.R.id.home:
+			//Log.d(TAG, "home");
 			if (AppConstants.FRAGMENT_TAG_LOGIN_SYNCING.equals(currentContentFragmentTag)) {
 				return true;
 				
 			} else if (!isTabletAndInLandscapeMode) {
 				if (mDrawerToggle.isDrawerIndicatorEnabled()) {
+					//Log.d(TAG, "if");
 					if (mDrawerLayout.isDrawerOpen(lnrLayoutRootNavDrawer)) {
 						mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
 
@@ -538,6 +538,7 @@ public class MainActivity extends ActionBarActivity implements
 					}
 
 				} else if ((getSupportActionBar().getDisplayOptions() & ActionBar.DISPLAY_HOME_AS_UP) != 0) {
+					//Log.d(TAG, "else if");
 					/**
 					 * above condition is to prevent back action when user clicks actionbar's home button on
 					 * launcher screen. In that case it should have no action; otherwise execute onBackPressed()
@@ -545,6 +546,7 @@ public class MainActivity extends ActionBarActivity implements
 					 */
 					onBackPressed();
 				}
+				//Log.d(TAG, "out");
 				
 			} else {
 				/**
