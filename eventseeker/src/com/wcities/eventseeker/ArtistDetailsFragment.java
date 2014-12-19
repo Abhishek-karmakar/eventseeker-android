@@ -28,6 +28,7 @@ import android.widget.Button;
 
 import com.wcities.eventseeker.adapter.SwipeTabsAdapter;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
+import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker.Type;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadArtistDetails;
@@ -227,7 +228,7 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 				public boolean onShareTargetSelected(ShareActionProvider source, Intent intent) {
 					String shareTarget = intent.getComponent().getPackageName();
 					GoogleAnalyticsTracker.getInstance().sendShareEvent(FragmentUtil.getApplication(ArtistDetailsFragment.this), 
-							getScreenName(), shareTarget, "Artist");
+							getScreenName(), shareTarget, Type.Artist, artist.getId());
 					return false;
 				}
 			});

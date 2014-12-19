@@ -1,0 +1,12 @@
+<resources>    
+
+	<!-- Keyboard -->
+    <string name="keyboard_space">Пробел</string>
+    <string name="keyboard_done">Ввод</string>
+    <string name="keyboard_go">Ввод</string>
+    <string name="keyboard_next">Ввод</string>
+    <string name="keyboard_prev">Назад</string>
+    <string name="keyboard_search">Найти</string>
+    <string name="keyboard_ok">Ввод</string>
+
+</resources>

@@ -34,6 +34,8 @@ import com.scvngr.levelup.views.gallery.Gallery;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.wcities.eventseeker.ArtistDetailsFragment.ArtistDetailsFragmentListener;
 import com.wcities.eventseeker.ArtistDetailsFragment.FooterTxt;
+import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
+import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
@@ -152,17 +154,23 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
 					Video video = (Video) parent.getItemAtPosition(position);
 					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(video.getVideoUrl()));
 					startActivity(Intent.createChooser(intent, ""));
+					/**
+					 * 15-12-2014: added Google Analytics tracker code.
+					 */
+					GoogleAnalyticsTracker.getInstance().sendEvent(FragmentUtil.getApplication(ArtistInfoFragment.this), 
+						FragmentUtil.getScreenName(ArtistInfoFragment.this), GoogleAnalyticsTracker.ARTIST_VIDEO_CLICK,
+						GoogleAnalyticsTracker.Type.Artist.name(), video.getVideoUrl(), 
+						artist.getId());
 				}
 			});
 
 		} else {
 
 			viewPager = (ViewPager) v.findViewById(R.id.viewPager);
-			videoFragmentPagerAdapter = new VideoFragmentPagerAdapter(videos, getChildFragmentManager());
+			videoFragmentPagerAdapter = new VideoFragmentPagerAdapter(videos, getChildFragmentManager(), artist.getId());
 			viewPager.setAdapter(videoFragmentPagerAdapter);
 
 			indicator = (CirclePageIndicator) v.findViewById(R.id.pageIndicator);
@@ -492,19 +500,21 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 		private static final String TAG = VideoFragmentPagerAdapter.class.getSimpleName();
 		private static final int MAX_LIMIT = 5;
 
+		private int artistId;
 		List<Video> videos;
 		
-		public VideoFragmentPagerAdapter(List<Video> videos, FragmentManager fm) {
+		public VideoFragmentPagerAdapter(List<Video> videos, FragmentManager fm, int artistId) {
 			super(fm);
 			//Log.d(TAG, "VideoFragmentPagerAdapter()");
 			this.videos = videos;
+			this.artistId = artistId;
 		}
 
 		@Override
 		public Fragment getItem(int index) {
 			//Log.d(TAG, "VideoFragmentPagerAdapter()");
 			// Log.d(TAG, "getItem() for index = " + index);
-			VideoFragment videoFragment = VideoFragment.newInstance(videos.get(index));
+			VideoFragment videoFragment = VideoFragment.newInstance(videos.get(index), artistId);
 			return videoFragment;
 		}
 

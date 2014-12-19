@@ -30,6 +30,7 @@ import android.widget.Button;
 
 import com.wcities.eventseeker.adapter.SwipeTabsAdapter;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
+import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker.Type;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadEventDetails;
@@ -243,7 +244,7 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 					}
 					
 					GoogleAnalyticsTracker.getInstance().sendShareEvent(eventSeekr, getScreenName(), 
-							shareTarget, "Event");
+							shareTarget, Type.Event, event.getId());
 					return false;
 				}
 			});

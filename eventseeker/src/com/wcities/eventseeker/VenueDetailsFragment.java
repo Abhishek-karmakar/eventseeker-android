@@ -28,6 +28,7 @@ import android.widget.Button;
 
 import com.wcities.eventseeker.adapter.SwipeTabsAdapter;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
+import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker.Type;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -168,7 +169,7 @@ public class VenueDetailsFragment extends FragmentLoadableFromBackStack implemen
 				public boolean onShareTargetSelected(ShareActionProvider source, Intent intent) {
 					String shareTarget = intent.getComponent().getPackageName();
 					GoogleAnalyticsTracker.getInstance().sendShareEvent(FragmentUtil.getApplication(VenueDetailsFragment.this), 
-							getScreenName(), shareTarget, "Venue");
+							getScreenName(), shareTarget, Type.Venue, venue.getId());
 					return false;
 				}
 			});

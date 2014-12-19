@@ -30,7 +30,7 @@ public abstract class Api {
 	public static final String OAUTH_TOKEN_BOSCH_APP = "5455fb63e3e6804ed2b45a48abbdcd50";
 	public static final String OAUTH_TOKEN_FORD_APP = "f435ec60b8f8cd9dbaf98c83c46caf4f";
 	
-	protected static final String COMMON_URL = "http://dev.wcities.com/V3/";
+	public static final String COMMON_URL = "http://dev.wcities.com/V3/";
 	
 	protected static final float NOT_INITIALIZED = 0;
 	public static final int ERROR_CODE_NO_RECORDS_FOUND = 2;

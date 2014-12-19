@@ -41,6 +41,7 @@ public class BundleKeys {
 	public static final String FIRST_VISIBLE_NEWS_ITEM_POSITION = "firstVisibleNewsItemPosition";
 	
 	public static final String VIDEO = "video";
+	public static final String ARTIST_ID = "artistId";
 	public static final String DRAW_DRIVING_DIRECTION = "drawDrivingDirection";
 	
 	public static final String EVENT_ID = "eventId";
