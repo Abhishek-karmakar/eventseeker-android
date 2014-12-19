@@ -162,7 +162,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 					 */
 					GoogleAnalyticsTracker.getInstance().sendEvent(FragmentUtil.getApplication(ArtistInfoFragment.this), 
 						FragmentUtil.getScreenName(ArtistInfoFragment.this), GoogleAnalyticsTracker.ARTIST_VIDEO_CLICK,
-						com.wcities.eventseeker.analytics.GoogleAnalyticsTracker.Type.Artist.name(), video.getVideoUrl(), 
+						GoogleAnalyticsTracker.Type.Artist.name(), video.getVideoUrl(), 
 						artist.getId());
 				}
 			});

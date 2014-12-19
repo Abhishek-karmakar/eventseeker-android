@@ -87,7 +87,7 @@ public class VideoFragment extends Fragment {
 				 */
 				GoogleAnalyticsTracker.getInstance().sendEvent(FragmentUtil.getApplication(VideoFragment.this), 
 					FragmentUtil.getScreenName(VideoFragment.this), GoogleAnalyticsTracker.ARTIST_VIDEO_CLICK,
-					com.wcities.eventseeker.analytics.GoogleAnalyticsTracker.Type.Artist.name(), video.getVideoUrl(), 
+					GoogleAnalyticsTracker.Type.Artist.name(), video.getVideoUrl(), 
 					getArguments().getInt(BundleKeys.ARTIST_ID));
     		}
     	});
