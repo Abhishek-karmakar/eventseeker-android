@@ -8,7 +8,5 @@
     <string name="keyboard_prev">Zurück</string>
     <string name="keyboard_search">Suchen</string>
     <string name="keyboard_ok">OK</string>
-    <string name="keyboard_abc">ABC</string>
-    <string name="connected_screen_status_text">Verbunden mit Ihrem Fahrzeug.</string>
 
 </resources>

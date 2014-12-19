@@ -7,6 +7,7 @@ import java.util.HashMap;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 
@@ -22,10 +23,17 @@ public class GoogleAnalyticsTracker {
 	    APP_TRACKER; // Tracker used only in this app.
 	}
 	
+	public enum Type {
+		Event,
+		Artist,
+		Venue;
+	}
+	
 	private static final String TAG = GoogleAnalyticsTracker.class.getSimpleName();
 	private static final String ANALYTICS_PROPERTY_ID = "UA-167953-49";
 	
 	public static final String EVENT_LABEL_TICKETS_BUTTON = "Tickets Button";
+	public static final String ARTIST_VIDEO_CLICK = "ARTIST_VIDEO_CLICK";
 
 	private static GoogleAnalyticsTracker googleAnalyticsTracker;
 
@@ -82,6 +90,22 @@ public class GoogleAnalyticsTracker {
 		}
 	}
 	
+	public void sendEvent(EventSeekr eventSeekr, String screenName, String label, String type, String videoUrl, long typeId) {
+		//Log.d(TAG, "send screen view");
+		if (screenName != null) {
+			Tracker t = getTracker(eventSeekr, TrackerName.APP_TRACKER);
+			// Set screen name, where path is a String representing the screen name.
+			t.setScreenName(screenName);
+			t.setPage(getExtraInfoApiUrl(type, label, videoUrl, typeId, eventSeekr.getWcitiesId()));
+			t.setTitle(screenName);
+			t.send(new HitBuilders.EventBuilder()
+			.setCategory("uiAction")
+			.setAction("buttonPress")
+			.setLabel(label)
+			.build());
+		}
+	}
+	
 	public void sendApiCall(EventSeekr eventSeekr, String url, byte[] postData) {
 		//Log.d(TAG, "send screen view");
 		try {
@@ -109,41 +133,61 @@ public class GoogleAnalyticsTracker {
 		}
 	}
 	
-	public void sendShareEvent(EventSeekr eventSeekr, String screenName, String shareTarget, String shareItemName) {
+	public void sendShareEvent(EventSeekr eventSeekr, String screenName, String shareTarget, Type type, long typeId) {
 		if (eventSeekr.getPackageName().equals(shareTarget)) {
-			if ("Event".equals(shareItemName)) {
-				sendEvent(eventSeekr, screenName, "Add " + shareItemName + " To Calendar");
+			if (Type.Event.name().equals(type.name())) {
+				sendEvent(eventSeekr, screenName, "Add " + type.name() + " To Calendar", type.name(), null, typeId);
 			}
 			
 		} else if (shareTarget.contains("com.facebook")) {
-			sendEvent(eventSeekr, screenName, "Facebook " + shareItemName + " Share Button");
+			sendEvent(eventSeekr, screenName, "Facebook " + type.name() + " Share Button", type.name(), null, typeId);
 			
 		} else if (shareTarget.contains("com.android.mms")) {
-			sendEvent(eventSeekr, screenName, "Share " + shareItemName + " Using Messaging");
+			sendEvent(eventSeekr, screenName, "Share " + type.name() + " Using Messaging", type.name(), null, typeId);
 			
 		} else if (shareTarget.contains("com.google.android.apps.uploader")) {
-			sendEvent(eventSeekr, screenName, "Share " + shareItemName + " Using Picasa");
+			sendEvent(eventSeekr, screenName, "Share " + type.name() + " Using Picasa", type.name(), null, typeId);
 			
 		} else if (shareTarget.contains("com.android.bluetooth")) {
-			sendEvent(eventSeekr, screenName, "Share " + shareItemName + " Using Bluetooth");
+			sendEvent(eventSeekr, screenName, "Share " + type.name() + " Using Bluetooth", type.name(), null, typeId);
 			
 		} else if (shareTarget.contains("com.google.android.apps.plus")) {
-			sendEvent(eventSeekr, screenName, "Share " + shareItemName + " Using Google Plus");
+			sendEvent(eventSeekr, screenName, "Share " + type.name() + " Using Google Plus", type.name(), null, typeId);
 			
 		} else if (shareTarget.contains("com.android.email")) {
-			sendEvent(eventSeekr, screenName, "Share " + shareItemName + " Using Email");
+			sendEvent(eventSeekr, screenName, "Share " + type.name() + " Using Email", type.name(), null, typeId);
 			
 		} else if (shareTarget.contains("com.google.android.gm")) {
-			sendEvent(eventSeekr, screenName, "Share " + shareItemName + " Using Gmail");
+			sendEvent(eventSeekr, screenName, "Share " + type.name() + " Using Gmail", type.name(), null, typeId);
 			
 		} else if (shareTarget.contains("com.google.android.talk")) {
-			sendEvent(eventSeekr, screenName, "Share " + shareItemName + " Using Hangout");
+			sendEvent(eventSeekr, screenName, "Share " + type.name() + " Using Hangout", type.name(), null, typeId);
 			
 		} else if (shareTarget.contains("com.skype")) {
-			sendEvent(eventSeekr, screenName, "Share " + shareItemName + " Using Skype");
+			sendEvent(eventSeekr, screenName, "Share " + type.name() + " Using Skype", type.name(), null, typeId);
 			
 		} else if (shareTarget.contains("com.whatsapp")) {
-			sendEvent(eventSeekr, screenName, "Share " + shareItemName + " Using WhatsApp");
+			sendEvent(eventSeekr, screenName, "Share " + type.name() + " Using WhatsApp", type.name(), null, typeId);
 		}
+	}
+	
+	/**
+	 * added on 15-12-2014: It will create api call Url.
+	 * @param type
+	 * @param requestType
+	 * @param typeId
+	 * @param wcitiesId
+	 * @return
+	 */
+	private String getExtraInfoApiUrl(String type /*artist/event/venue*/, 
+			String requestType /*[SHARE_TYPE/ARIST_VIDEO_CLICK/BUY_TICKET]*/, 
+			String videoUrl /*This is only if type is artist*/,
+			long typeId /*artist/event/venue - id*/, String wcitiesId) {
+		String url = Api.COMMON_URL + "extraInfo_ga.php?oauth_token=" + Api.OAUTH_TOKEN + "&type=" + type + 
+				"&requestType=" + requestType + "&id=" + typeId + "&_u=" + wcitiesId;
+		if (videoUrl != null) {
+			url += "&video_url=" + videoUrl;
+		}
+		return url;
 	}
 }

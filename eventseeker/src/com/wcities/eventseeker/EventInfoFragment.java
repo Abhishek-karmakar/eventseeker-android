@@ -678,9 +678,13 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 			args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
 			((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
 					AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
+			/**
+			 * added on 15-12-2014
+			 */
 			GoogleAnalyticsTracker.getInstance().sendEvent(FragmentUtil.getApplication(this), 
 					((IGoogleAnalyticsTracker)getParentFragment()).getScreenName(), 
-					GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON);
+					GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON, 
+					com.wcities.eventseeker.analytics.GoogleAnalyticsTracker.Type.Event.name(), null, event.getId());
 			break;
 			
 		case R.id.chkBoxGoing:
