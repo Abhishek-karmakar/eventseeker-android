@@ -117,6 +117,8 @@ public class MainActivity extends ActionBarActivity implements
 	private String currentContentFragmentTag;
 	private int drawerItemSelectedPosition = AppConstants.INVALID_INDEX;
 	private String searchQuery;
+	
+	private View vStatusBar;
 
 	private boolean isTabletAndInLandscapeMode;/** This will check whether current device is tablet and if it is in 
 	Landscape mode, it is used for the side navigation List to be shown permanently in landscape mode and not in 
@@ -139,9 +141,15 @@ public class MainActivity extends ActionBarActivity implements
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState);		
 		setContentView(R.layout.activity_main);
 		//Log.d(TAG, "onCreate()");
+
+		/*LinearLayout.LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, getStatusBarHeight());
+		
+		vStatusBar = findViewById(R.id.vStatusBar);
+		vStatusBar.setLayoutParams(params);
+		vStatusBar.setBackgroundColor(Color.RED);*/
 		
 		/**
 		 * Locale changes are Activity specific i.e. after the Activity gets destroyed, the Locale changes
@@ -1917,5 +1925,18 @@ public class MainActivity extends ActionBarActivity implements
 	
 	public void unHideDrawerList() {
 		lnrLayoutRootNavDrawer.setVisibility(View.VISIBLE);
+	}
+	
+	/**
+	 * Referred from link: http://mrtn.me/blog/2012/03/17/get-the-height-of-the-status-bar-in-android/
+	 * @return
+	 */
+	public int getStatusBarHeight() {
+		int result = 0;
+		int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+		if (resourceId > 0) {
+			result = getResources().getDimensionPixelSize(resourceId);
+		}
+		return result;
 	}
 }

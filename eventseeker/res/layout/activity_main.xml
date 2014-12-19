@@ -5,27 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
-    
+    tools:context=".MainActivity" >
+
+    <!-- <View
+        android:id="@+id/vStatusBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" /> -->
+
     <include layout="@layout/toolbar" />
-    
-    <android.support.v4.widget.DrawerLayout android:id="@+id/drawer_layout"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent" >
-	    
+
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
         <!-- The main content view -->
-        <FrameLayout android:id="@+id/content_frame"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent" />
-        
+
+        <FrameLayout
+            android:id="@+id/content_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
         <!-- The navigation drawer -->
-        <LinearLayout android:id="@+id/rootNavigationDrawer"
-		    android:layout_width="@dimen/root_navigation_drawer_w_main"
-		    android:layout_height="match_parent"
-		    android:orientation="vertical"
-	        android:layout_gravity="start"
-		    android:background="@color/bg_navigation_drawer" />
-    
+
+        <LinearLayout
+            android:id="@+id/rootNavigationDrawer"
+            android:layout_width="@dimen/root_navigation_drawer_w_main"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@color/bg_navigation_drawer"
+            android:orientation="vertical" />
     </android.support.v4.widget.DrawerLayout>
-        
+
 </LinearLayout>
