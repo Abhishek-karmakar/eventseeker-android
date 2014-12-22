@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="common_t_mar_pad_for_all_layout">82dp</dimen>
+
+</resources>

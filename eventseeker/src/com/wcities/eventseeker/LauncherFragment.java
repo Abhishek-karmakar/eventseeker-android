@@ -1,6 +1,7 @@
 package com.wcities.eventseeker;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
@@ -73,6 +74,10 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 		if (ma.isTabletAndInLandscapeMode()) {
 			ma.hideDrawerList();
 		}
+		/**
+		 * Start the video
+		 */
+		createSurface();
 	}
 	
 	@Override
@@ -88,10 +93,14 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 		
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		/**
+		 * The below line will lock the screen orientation in portrait mode
+		 */
+		FragmentUtil.getActivity(this).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT);
+		
 		View view = inflater.inflate(R.layout.fragment_launcher, null);
 		
 		srfvVideo = (SurfaceView) view.findViewById(R.id.srfvVideo);
-		createSurface();
 		
 		view.findViewById(R.id.btnLogin).setOnClickListener(this);
 		view.findViewById(R.id.btnSignUp).setOnClickListener(this);
@@ -136,6 +145,15 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 		if (ma.isTabletAndInLandscapeMode()) {
 			ma.unHideDrawerList();
 		}
+	}
+	
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		/**
+		 * release the portrait mode lock
+		 */
+		FragmentUtil.getActivity(this).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 	}
 	
 	@Override

@@ -7,6 +7,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/common_t_mar_pad_for_all_layout"
         android:fillViewport="true"
         android:padding="@dimen/rlt_layout_root_pad_fragment_connect_accounts_list"
         android:scrollbars="none" >
@@ -77,7 +78,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txtLoginLabel"
                     android:layout_marginTop="@dimen/mar_t_get_started_fragment"
-                    android:hint="@string/hint_email"
+                    android:hint="@string/email"
+                    android:inputType="textEmailAddress"
                     android:singleLine="true"
                     android:textColorHint="@android:color/white" />
 
@@ -87,22 +89,20 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/edtEmail"
                     android:layout_marginTop="@dimen/mar_t_get_started_fragment"
-                    android:hint="@string/hint_password"
+                    android:hint="@string/password"
                     android:password="true"
                     android:singleLine="true"
                     android:textColorHint="@android:color/white" />
 
                 <Button
                     android:id="@+id/btnLogin"
+                    style="@style/Widget.EventSeeker.Button.White"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/btn_default_ht"
                     android:layout_below="@+id/edtPassword"
                     android:layout_marginTop="@dimen/mar_t_get_started_fragment"
-                    android:background="@android:color/white"
                     android:enabled="false"
-                    android:gravity="center"
-                    android:text="@string/sign_in"
-                    android:textColor="@color/bg_screen_dark_blue" />
+                    android:text="@string/sign_in" />
                 <!-- android:background="@drawable/slctr_btn_login_default_grey_pressed_blue_rounded" -->
 
                 <Button
@@ -117,8 +117,9 @@
                     android:textSize="@dimen/btn_forgot_pass_txt_size_get_started_fragment"
                     android:visibility="invisible" />
 
-                <!--The below Dummy view and its margin top is added to ignore the issue of above button getting clipped
-		            as it is last view in scrollview. This issue was seen in Samsung Galaxy Tab.-->
+                <!--
+                    The below Dummy view and its margin top is added to ignore the issue of above button getting clipped
+		            as it is last view in scrollview. This issue was seen in Samsung Galaxy Tab.                -->
 
                 <View
                     android:id="@+id/vDummy"

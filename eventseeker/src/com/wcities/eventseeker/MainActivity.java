@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -32,6 +33,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -118,8 +120,6 @@ public class MainActivity extends ActionBarActivity implements
 	private int drawerItemSelectedPosition = AppConstants.INVALID_INDEX;
 	private String searchQuery;
 	
-	private View vStatusBar;
-
 	private boolean isTabletAndInLandscapeMode;/** This will check whether current device is tablet and if it is in 
 	Landscape mode, it is used for the side navigation List to be shown permanently in landscape mode and not in 
 	portrait mode
@@ -145,12 +145,6 @@ public class MainActivity extends ActionBarActivity implements
 		setContentView(R.layout.activity_main);
 		//Log.d(TAG, "onCreate()");
 
-		/*LinearLayout.LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, getStatusBarHeight());
-		
-		vStatusBar = findViewById(R.id.vStatusBar);
-		vStatusBar.setLayoutParams(params);
-		vStatusBar.setBackgroundColor(Color.RED);*/
-		
 		/**
 		 * Locale changes are Activity specific i.e. after the Activity gets destroyed, the Locale changes
 		 * associated with that activity will also get destroyed. So, if Activity was destroyed due to
@@ -200,6 +194,11 @@ public class MainActivity extends ActionBarActivity implements
 
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarForActionbar);
 	    setSupportActionBar(toolbar);
+	    
+	    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+		    FrameLayout.LayoutParams params = (android.widget.FrameLayout.LayoutParams) toolbar.getLayoutParams();
+		    params.setMargins(0, getStatusBarHeight(), 0, 0);
+	    }
 	    
 		isDrawerIndicatorEnabled = true;
 		if (savedInstanceState != null) {

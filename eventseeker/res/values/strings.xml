@@ -338,8 +338,6 @@
     <string name="dialog_msg_chk_email_to_reset_pwd">Please check your email to reset the password.</string>
     <string name="dialog_msg_user_email_doesnt_exist">User with this email doesn\'t exist.</string>
     <string name="sign_in_with_email">Sign In with Email</string>
-    <string name="hint_email">Email</string>
-    <string name="hint_password">Password</string>
     <string name="signing_in">Signing in...</string>
     <string name="sign_in">SIGN IN</string>
     <string name="forgot_your_password">Forgot your password?</string>

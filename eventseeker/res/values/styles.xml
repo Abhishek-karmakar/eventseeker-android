@@ -35,6 +35,12 @@
         <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
 
+    <style name="Widget.EventSeeker.Button.White" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/slctr_bg_curved_edges_white</item>
+        <item name="android:textColor">@color/bg_screen_dark_blue</item>
+        <item name="android:textSize">@dimen/txt_size_widget_eventSeeker_btn_white</item>
+    </style>
+
     <style name="Widget.EventSeekr.ActionButton.Overflow" parent="Widget.AppCompat.ActionButton.Overflow">
         <item name="android:src">@drawable/more</item>
     </style>

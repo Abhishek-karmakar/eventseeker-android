@@ -5,6 +5,10 @@
     <dimen name="rel_layout_btns_w_evt_details">150dp</dimen>
     <dimen name="rel_layout_btns_ht_evt_details">60dp</dimen>
 
+    <!-- actionbar -->
+    <dimen name="action_bar_title_txt_size">20sp</dimen>
+    <dimen name="action_bar_ht">48dp</dimen>
+
     <!-- fragment_fb_login.xml -->
     <dimen name="txt_fb_login_desc_margin_t_fb_login">10dp</dimen>
     <dimen name="btn_fb_sign_up_margin_t_fb_login">10dp</dimen>
