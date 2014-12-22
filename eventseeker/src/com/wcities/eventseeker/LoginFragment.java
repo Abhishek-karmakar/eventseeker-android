@@ -108,6 +108,7 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 	@Override
 	public void onStop() {
 		super.onStop();
+		//Log.d(TAG, "onStop()");
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		if (ma.isTabletAndInLandscapeMode()) {
 			ma.unHideDrawerList();

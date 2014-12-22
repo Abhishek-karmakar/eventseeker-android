@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
@@ -129,6 +130,7 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 	@Override
 	public void onStop() {
 		super.onStop();
+		//Log.d(TAG, "onStop()");
 		((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportActionBar().show();
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		if (ma.isTabletAndInLandscapeMode()) {

@@ -1015,9 +1015,11 @@ public class MainActivity extends ActionBarActivity implements
 			} else if (eventSeekr.getEmailId() != null) {
 				eventSeekr.removeEmailLoginInfo();
 			}
+			getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 			selectNonDrawerItem(new LauncherFragment(), AppConstants.FRAGMENT_TAG_LAUNCHER, 
 					getResources().getString(R.string.title_launcher), false);
 			break;
+			
 		/*case INDEX_NAV_ITEM_CONNECT_ACCOUNTS:
 	    	ConnectAccountsFragment connectAccountsFragment = new ConnectAccountsFragment();
 	    	replaceContentFrameByFragment(connectAccountsFragment, AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS, 
@@ -1157,11 +1159,18 @@ public class MainActivity extends ActionBarActivity implements
 			int[] anims = args.getIntArray(BundleKeys.FRAGMENT_TRANSACTION_ANIM_IDS);
 			fragmentTransaction.setCustomAnimations(anims[0], anims[1], anims[2], anims[3]);
 		}
-		fragmentTransaction.replace(R.id.content_frame, replaceBy, replaceByFragmentTag);
-
+		
+		if (replaceByFragmentTag.equals(AppConstants.FRAGMENT_TAG_LOGIN_SYNCING)) {
+			fragmentTransaction.add(R.id.content_frame, replaceBy, replaceByFragmentTag);
+			
+		} else {
+			fragmentTransaction.replace(R.id.content_frame, replaceBy, replaceByFragmentTag);
+		}
+		
 		if (addToBackStack) {
 			fragmentTransaction.addToBackStack(null);
 		}
+		
 		fragmentTransaction.commitAllowingStateLoss();
 
 		// if moving away from search screen, collapse search actionview.
@@ -1316,7 +1325,7 @@ public class MainActivity extends ActionBarActivity implements
 		 * ().setItemChecked(drawerItemSelectedPosition, true); }
 		 */
 	}
-
+	
 	@Override
 	public void onDrawerItemSelected(int pos, Bundle args) {
 		//Log.d(TAG, "onDrawerItemSelected(), pos = " + pos);
@@ -1676,30 +1685,10 @@ public class MainActivity extends ActionBarActivity implements
 					AppConstants.FRAGMENT_TAG_DEVICE_LIBRARY, false);
 
 		} else if (fragment instanceof LoginSyncingFragment) {
-			String title = "";
-			LoginType loginType = (LoginType) fragment.getArguments().getSerializable(BundleKeys.LOGIN_TYPE);
-			
-			switch (loginType) {
-			
-			case facebook:
-				title = getResources().getString(R.string.title_facebook);
-				break;
-				
-			case googlePlus:
-				title = getResources().getString(R.string.title_google_plus);
-				break;
-				
-			case emailSignup:
-				title = getResources().getString(R.string.title_email_sign_up);
-				break;
-				
-			case emailLogin:
-				title = getResources().getString(R.string.title_email_login);
-				break;
-
-			default:
-				break;
-			}
+			Bundle args = fragment.getArguments();
+			boolean isForSignUp = args.getBoolean(BundleKeys.IS_FOR_SIGN_UP);
+			String title = isForSignUp ? getResources().getString(R.string.title_signup) 
+					: getResources().getString(R.string.title_login);
 			onFragmentResumed(AppConstants.INVALID_INDEX, title, AppConstants.FRAGMENT_TAG_LOGIN_SYNCING, false);
 
 		} else if (fragment instanceof TwitterFragment) {
@@ -1895,27 +1884,8 @@ public class MainActivity extends ActionBarActivity implements
 	public void onRegistration(LoginType loginType, Bundle args, boolean addToBackStack) {
 		LoginSyncingFragment loginSyncingFragment = new LoginSyncingFragment();
 		loginSyncingFragment.setArguments(args);
-		String title = "";
-
-		switch (loginType) {
-		
-		case facebook:
-			title = getResources().getString(R.string.title_facebook);
-			break;
-			
-		case googlePlus:
-			title = getResources().getString(R.string.title_google_plus);
-			break;
-			
-		case emailSignup:
-			title = getResources().getString(R.string.title_email_sign_up);
-			break;
-			
-		case emailLogin:
-			title = getResources().getString(R.string.title_email_login);
-			break;
-		}
-		
+		String title = args.getBoolean(BundleKeys.IS_FOR_SIGN_UP) ? getResources().getString(R.string.title_signup) 
+				: getResources().getString(R.string.title_login);
 		selectNonDrawerItem(loginSyncingFragment, AppConstants.FRAGMENT_TAG_LOGIN_SYNCING, title, addToBackStack);
 	}
 

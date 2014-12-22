@@ -46,10 +46,6 @@
     <string name="title_search_results">Search Results</string>
     <string name="title_google_play">Google Play</string>
     <string name="title_device_library">@string/service_device_library</string>
-    <string name="title_facebook">Facebook</string>
-    <string name="title_google_plus">Google Plus</string>
-    <string name="title_email_sign_up">Email Sign Up</string>
-    <string name="title_email_login">Email Login</string>
     <string name="title_twitter">Twitter</string>
     <string name="title_rdio">Rdio</string>
     <string name="title_lastfm">last.fm</string>

@@ -6,10 +6,11 @@ import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.RelativeLayout;
 
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.SettingsFragment.SettingsItem;
@@ -24,14 +25,11 @@ import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.OnFragmentAliveListener;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
-import com.wcities.eventseeker.util.ViewUtil.AnimationUtil;
 
 public class LoginSyncingFragment extends FragmentLoadableFromBackStack implements OnFragmentAliveListener, 
 		AsyncTaskListener<Object> {
 
 	private static final String TAG = LoginSyncingFragment.class.getName();
-
-	private ImageView imgProgressBar;
 
 	private LoginType loginType;
 	private boolean isAlive;
@@ -100,31 +98,15 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		//Log.d(TAG, "onCreateView()");
-		View v = inflater.inflate(R.layout.fragment_service_enter_credentials_layout, null);
-
-		v.findViewById(R.id.rltMainView).setVisibility(View.GONE);
-		v.findViewById(R.id.rltSyncAccount).setVisibility(View.VISIBLE);
-
-		imgProgressBar = (ImageView) v.findViewById(R.id.progressBar);
-		if (loginType == LoginType.facebook) {
-			((ImageView) v.findViewById(R.id.imgAccount)).setImageResource(R.drawable.facebook_colored_big);
-			((TextView)v.findViewById(R.id.txtLoading)).setText(R.string.syncing_fb);
+		View v = inflater.inflate(R.layout.fragment_login_syncing, null);
+		RelativeLayout rltLytRoot = (RelativeLayout) v.findViewById(R.id.rltLytRoot);
+		rltLytRoot.setOnTouchListener(new OnTouchListener() {
 			
-		} else if (loginType == LoginType.googlePlus) {
-			// It's for google plus
-			((ImageView) v.findViewById(R.id.imgAccount)).setImageResource(R.drawable.g_plus_colored_big);
-			((TextView)v.findViewById(R.id.txtLoading)).setText(R.string.syncing_google_plus);
-			
-		} else {
-			((ImageView) v.findViewById(R.id.imgAccount)).setImageResource(R.drawable.ic_launcher_d);
-			((TextView)v.findViewById(R.id.txtLoading)).setText(R.string.syncing_email);
-		}
-		
-		v.findViewById(R.id.btnConnectOtherAccuonts).setVisibility(View.GONE);
-
-		AnimationUtil.startRotationToView(imgProgressBar, 0f, 360f, 0.5f, 0.5f, 1000);
-		
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return true;
+			}
+		});
 		return v;
 	}
 	
@@ -133,13 +115,6 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 		return isAlive;
 	}
 	
-	@Override
-	public void onDestroyView() {
-		super.onDestroyView();
-		//Log.d(TAG, "onDestroyView()");
-		AnimationUtil.stopRotationToView(imgProgressBar);
-	}
-
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
