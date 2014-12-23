@@ -1,29 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="navigation_drawer_item_titles">
-        <item>@string/navigation_drawer_section_browse</item>
+        <!-- <item>@string/navigation_drawer_section_browse</item> -->
         <item>@string/navigation_drawer_item_discover</item>
 	  	<item>@string/navigation_drawer_item_my_events</item>
 	  	<item>@string/navigation_drawer_item_following</item>
 	  	<item>@string/navigation_drawer_item_artists_news</item>
 	  	<item>@string/navigation_drawer_item_friends_activity</item>
-	  	<item>@string/navigation_drawer_section_settings</item>
+	  	<!-- <item>@string/navigation_drawer_section_settings</item> -->
+	  	<item>@null</item>
 	  	<item>@string/navigation_drawer_item_settings</item>
 	  	<item>@string/navigation_drawer_item_logout</item>
-	  	<!-- <item>@string/navigation_drawer_item_sync_accounts</item>
-	  	<item>@string/navigation_drawer_item_change_location</item>
-	  	// TODO: comment following for disabling language
-	  	<item>@string/navigation_drawer_item_language</item>
-	  	<item>@string/navigation_drawer_section_about</item>
-	  	<item>@string/navigation_drawer_item_invite_friends</item>
-		<item>@string/navigation_drawer_item_rate_app</item>
-	  	<item>@string/navigation_drawer_item_about</item>
-	  	<item>@string/navigation_drawer_item_eula</item>
-	  	<item>@string/navigation_drawer_item_enter_rep_code</item> -->
 	</string-array>
 
     <array name="navigation_drawer_item_icons">
-        <item>@null</item>
+        <!-- <item>@null</item> -->
 	  	<item>@drawable/selector_discover</item>
 	  	<item>@drawable/selector_myevents</item>
 	  	<item>@drawable/selector_favorites</item>
@@ -32,15 +23,6 @@
 	  	<item>@null</item>
         <item>@drawable/selector_settings</item>
         <item>@drawable/selector_logout</item>
-	  	<!-- <item>@drawable/selector_changelocation</item>
-	  	// TODO: comment following for disabling language
-	  	<item>@drawable/selector_language</item>
-	  	<item>@null</item>
-	  	<item>@drawable/selector_invitefriends</item>
-        <item>@drawable/selector_store</item>
-	  	<item>@drawable/selector_info</item>
-	  	<item>@drawable/selector_eula</item>
-	  	<item>@drawable/selector_repcode</item> -->
     </array>
     
     <string-array name="connect_accounts_item_titles">

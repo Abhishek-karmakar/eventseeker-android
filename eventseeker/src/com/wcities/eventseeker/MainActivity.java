@@ -91,15 +91,6 @@ public class MainActivity extends ActionBarActivity implements
 	public static final int INDEX_NAV_ITEM_FRIENDS_ACTIVITY = INDEX_NAV_ITEM_ARTISTS_NEWS + 1;
 	public static final int INDEX_NAV_ITEM_SETTINGS = DrawerListFragment.SECT_2_HEADER_POS + 1;
 	public static final int INDEX_NAV_ITEM_LOG_OUT = INDEX_NAV_ITEM_SETTINGS + 1;
-	/*public static final int INDEX_NAV_ITEM_CONNECT_ACCOUNTS = DrawerListFragment.SECT_2_HEADER_POS + 1;
-	private static final int INDEX_NAV_ITEM_CHANGE_LOCATION = INDEX_NAV_ITEM_CONNECT_ACCOUNTS + 1;
-	// TODO: comment following for disabling language
-	private static final int INDEX_NAV_ITEM_LANGUAGE = INDEX_NAV_ITEM_CHANGE_LOCATION + 1;
-	public static final int INDEX_NAV_ITEM_INVITE_FRIENDS = DrawerListFragment.SECT_3_HEADER_POS + 1;
-	private static final int INDEX_NAV_ITEM_RATE_APP = INDEX_NAV_ITEM_INVITE_FRIENDS + 1;
-	private static final int INDEX_NAV_ITEM_ABOUT_US = INDEX_NAV_ITEM_RATE_APP + 1;
-	private static final int INDEX_NAV_ITEM_EULA = INDEX_NAV_ITEM_ABOUT_US + 1;
-	private static final int INDEX_NAV_ITEM_REP_CODE = INDEX_NAV_ITEM_EULA + 1;*/
 	
 	private static final String DRAWER_LIST_FRAGMENT_TAG = "drawerListFragment";
 
@@ -164,11 +155,9 @@ public class MainActivity extends ActionBarActivity implements
 			e.printStackTrace();
 		}
 		
-		if (EventSeekr.isConnectedWithBosch()/*MySpinServerSDK.sharedInstance().isConnected()*/) {
+		if (EventSeekr.isConnectedWithBosch()) {
 			startBoschMainActivity();
 		}
-		
-		//Log.d(TAG, "onCreate() isConnected = " + MySpinServerSDK.sharedInstance().isConnected());
 		
 		/**
 		 * check whether the current device is Tablet and if it is in Landscape

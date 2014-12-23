@@ -30,25 +30,8 @@
             android:layout_marginLeft="@dimen/txt_title_mar_l_list_item_settings"
             android:layout_toRightOf="@id/imgIcon"
             android:text="Change Location"
-            android:textColor="@color/slctr_white_on_darker_gray_off"
+            android:textColor="@android:color/white"
             android:textSize="@dimen/txt_title_txt_size_list_item_settings" />
     </RelativeLayout>
-
-    <View
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/divider_ht_list_item_settings"
-        android:layout_alignLeft="@+id/rltLayoutContent"
-        android:layout_alignRight="@+id/rltLayoutContent"
-        android:layout_below="@id/rltLayoutContent"
-        android:background="@drawable/side_nav_topic_divider" />
-
-    <View
-        android:id="@+id/dividerSection"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/divider_ht_list_item_settings"
-        android:layout_alignRight="@+id/rltLayoutContent"
-        android:layout_below="@id/rltLayoutContent"
-        android:background="@drawable/side_nav_topic_divider" />
 
 </RelativeLayout>

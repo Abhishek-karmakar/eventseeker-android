@@ -179,10 +179,10 @@
     <dimen name="txt_title_margin_t_navigation_drawer_section_header">10dp</dimen>
     <dimen name="txt_title_txt_size_navigation_drawer_section_header">14sp</dimen>
     <!-- navigation_drawer_list_item.xml -->
-    <dimen name="rlt_layout_content_pad_t_navigation_drawer_list_item">10dp</dimen>
+    <dimen name="rlt_layout_content_pad_t_navigation_drawer_list_item">20dp</dimen>
     <dimen name="rlt_layout_content_pad_b_navigation_drawer_list_item">@dimen/rlt_layout_content_pad_t_navigation_drawer_list_item</dimen>
     <dimen name="rlt_layout_content_margin_l_navigation_drawer_list_item">@dimen/txt_title_margin_l_navigation_drawer_section_header</dimen>
-    <dimen name="img_icon_margin_r_navigation_drawer_list_item">20dp</dimen>
+    <dimen name="img_icon_margin_l_navigation_drawer_list_item">20dp</dimen>
     <dimen name="txt_title_margin_l_navigation_drawer_list_item">20dp</dimen>
     <dimen name="txt_title_txt_size_navigation_drawer_list_item">18sp</dimen>
     <!--
@@ -193,7 +193,7 @@
     -->
     <dimen name="divider_ht_navigation_drawer_list_item">1dp</dimen>
     <dimen name="divider_margin_l_navigation_drawer_list_item">@dimen/txt_title_margin_l_navigation_drawer_list_item</dimen>
-    <dimen name="divider_margin_r_navigation_drawer_list_item">@dimen/img_icon_margin_r_navigation_drawer_list_item</dimen>
+    <dimen name="divider_margin_r_navigation_drawer_list_item">@dimen/img_icon_margin_l_navigation_drawer_list_item</dimen>
     <dimen name="divider_section_ht_navigation_drawer_list_item">1dp</dimen>
     <!-- navigation_drawer_list_section_header.xml -->
     <dimen name="txt_title_margin_l_navigation_drawer_list_section_header">15dp</dimen>
@@ -482,8 +482,8 @@
     <dimen name="txt_login_label_txt_size_get_started_fragment">20sp</dimen>
     <dimen name="btn_forgot_pass_txt_size_get_started_fragment">18sp</dimen>
     <!-- list_item_settings.xml -->
-    <dimen name="rlt_layout_content_pad_t_b_list_item_settings">10dp</dimen>
-    <dimen name="rlt_layout_content_pad_l_r_list_item_settings">30dp</dimen>
+    <dimen name="rlt_layout_content_pad_t_b_list_item_settings">15dp</dimen>
+    <dimen name="rlt_layout_content_pad_l_r_list_item_settings">40dp</dimen>
     <dimen name="txt_title_mar_l_list_item_settings">20dp</dimen>
     <dimen name="txt_title_txt_size_list_item_settings">20sp</dimen>
     <dimen name="divider_ht_list_item_settings">1dp</dimen>
