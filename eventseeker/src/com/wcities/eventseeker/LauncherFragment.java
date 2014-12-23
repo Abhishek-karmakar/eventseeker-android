@@ -13,7 +13,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
@@ -44,6 +43,8 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 	private long[] delay;
 
 	private int videoDuration;
+
+	private View rltLayoutRoot;
 	
 	private static enum PagerTitle {
 		firstTitle,
@@ -93,6 +94,7 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 		
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.GONE);
 		/**
 		 * The below line will lock the screen orientation in portrait mode
 		 */
@@ -101,6 +103,7 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 		View view = inflater.inflate(R.layout.fragment_launcher, null);
 		
 		srfvVideo = (SurfaceView) view.findViewById(R.id.srfvVideo);
+		rltLayoutRoot = view.findViewById(R.id.rltLayoutRoot);
 		
 		view.findViewById(R.id.btnLogin).setOnClickListener(this);
 		view.findViewById(R.id.btnSignUp).setOnClickListener(this);
@@ -145,6 +148,7 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 		if (ma.isTabletAndInLandscapeMode()) {
 			ma.unHideDrawerList();
 		}
+		
 	}
 	
 	@Override
@@ -296,7 +300,7 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 							mdPlyr.start();
 						
 						} else {
-							srfvVideo.setVisibility(View.GONE);						
+							hideVideoViewAndShowBG();
 						}
 					}
 				});
@@ -304,7 +308,7 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 					
 					@Override
 					public boolean onError(MediaPlayer mp, int what, int extra) {
-						srfvVideo.setVisibility(View.GONE);
+						hideVideoViewAndShowBG();
 						return false;
 					}
 				});
@@ -317,7 +321,7 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 				});
 				
 			} else {
-				srfvVideo.setVisibility(View.GONE);	
+				hideVideoViewAndShowBG();
 			}
 
 		} catch (IllegalArgumentException e) {
@@ -326,6 +330,12 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 		}
+	}
+
+	protected void hideVideoViewAndShowBG() {
+		rltLayoutRoot.setBackgroundColor(
+			FragmentUtil.getResources(LauncherFragment.this).getColor(R.color.bg_screen_dark_blue));		
+		srfvVideo.setVisibility(View.GONE);
 	}
 
 	private void releaseMediaPlayer() {

@@ -11,8 +11,8 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -36,6 +36,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.Toast;
 
 import com.bosch.myspin.serversdk.MySpinException;
@@ -73,7 +74,7 @@ import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GPlusUtil;
-import com.wcities.eventseeker.util.UpdateAppUtil;
+import com.wcities.eventseeker.util.VersionUtil;
 
 public class MainActivity extends ActionBarActivity implements
 		DrawerListFragmentListener, OnLocaleChangedListener, OnSettingsItemClickedListener,
@@ -125,6 +126,8 @@ public class MainActivity extends ActionBarActivity implements
 	private Handler handler;
 
 	private boolean isCalledFromTwitterSection;
+
+	private View vStatusBar;
 	
 	public static MainActivity getInstance() {
 		return instance;
@@ -136,6 +139,13 @@ public class MainActivity extends ActionBarActivity implements
 		setContentView(R.layout.activity_main);
 		//Log.d(TAG, "onCreate()");
 
+		if (VersionUtil.isApiLevelAbove19()) {
+			vStatusBar = findViewById(R.id.vStatusBar);
+			
+			LinearLayout.LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, getStatusBarHeight());
+			vStatusBar.setLayoutParams(params);
+		}
+		
 		/**
 		 * Locale changes are Activity specific i.e. after the Activity gets destroyed, the Locale changes
 		 * associated with that activity will also get destroyed. So, if Activity was destroyed due to
@@ -145,7 +155,7 @@ public class MainActivity extends ActionBarActivity implements
 		 */
 		((EventSeekr) getApplication()).setDefaultLocale();
 		
-		UpdateAppUtil.updateCheckes((EventSeekr) getApplication());
+		VersionUtil.updateCheckes((EventSeekr) getApplication());
 
 		//Log.d(TAG, "deviceId = " + DeviceUtil.getDeviceId((EventSeekr) getApplication()));
 		
@@ -184,7 +194,7 @@ public class MainActivity extends ActionBarActivity implements
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarForActionbar);
 	    setSupportActionBar(toolbar);
 	    
-	    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+	    if (VersionUtil.isApiLevelAbove19()) {
 		    FrameLayout.LayoutParams params = (android.widget.FrameLayout.LayoutParams) toolbar.getLayoutParams();
 		    params.setMargins(0, getStatusBarHeight(), 0, 0);
 	    }
@@ -1897,4 +1907,25 @@ public class MainActivity extends ActionBarActivity implements
 		}
 		return result;
 	}
+
+	/**
+	 * will set color to vStatusBar, if current api level is greater than v19
+	 * @param colorRes
+	 */
+	public void setVStatusBarColor(int colorRes) {
+		if (VersionUtil.isApiLevelAbove19() && vStatusBar != null) {
+			vStatusBar.setBackgroundColor(getResources().getColor(colorRes));
+		}
+	}
+
+	/**
+	 * will set visibility to vStatusBar, if current api level is greater than v19
+	 * @param viewVisibility
+	 */
+	public void setVStatusBarVisibility(int viewVisibility) {
+		if (VersionUtil.isApiLevelAbove19() && vStatusBar != null) {
+			vStatusBar.setVisibility(viewVisibility);
+		}
+	}
+
 }

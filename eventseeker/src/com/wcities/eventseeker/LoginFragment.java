@@ -7,7 +7,6 @@ import org.json.JSONException;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -62,6 +61,9 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
     
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.VISIBLE);
+		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarColor(R.color.bg_screen_dark_blue);
+		
 		View v = inflater.inflate(R.layout.fragment_login, container, false);
 		
 		(edtEmail = (EditText) v.findViewById(R.id.edtEmail)).addTextChangedListener(this);
