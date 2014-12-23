@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -157,7 +159,13 @@ public class LanguageFragment extends ListFragmentLoadableFromBackStack {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-
+		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarColor(R.color.bg_screen_dark_blue);
+		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.VISIBLE);
+		
+		FrameLayout.LayoutParams params = (LayoutParams) getView().getLayoutParams();
+		params.setMargins(0, ((MainActivity) FragmentUtil.getActivity(this)).getStatusBarHeight(), 0, 0);
+		getListView().setLayoutParams(params);
+		
 		getListView().setDivider(null);
 		
 		if (languages == null) {
@@ -220,7 +228,6 @@ public class LanguageFragment extends ListFragmentLoadableFromBackStack {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			
 			VHLanguages vhLanguages;
 			
 			if (convertView == null) {
@@ -239,10 +246,10 @@ public class LanguageFragment extends ListFragmentLoadableFromBackStack {
 			vhLanguages.txtLanguage.setText(locale.getLocaleLanguage());
 			if (Locales.isDefaultLocale(context, locale)) {
 				vhLanguages.imgSelected.setVisibility(View.VISIBLE);
+				
 			} else {
 				vhLanguages.imgSelected.setVisibility(View.INVISIBLE);
 			}
-			
 			return convertView;
 		}
 		

@@ -2,12 +2,12 @@
 <resources>
 
     <!-- Languages -->
-    <string name="lang_english">Inglese</string>
+    <!-- <string name="lang_english">Inglese</string>
     <string name="lang_french">Francese</string>
     <string name="lang_german">Tedesco</string>
     <string name="lang_italian">Italiano</string>
     <string name="lang_spanish">Spagnolo</string>
-    <string name="lang_portuguese">Portoghese</string>
+    <string name="lang_portuguese">Portoghese</string> -->
     
     <string name="menu_search">Cercare</string>
     <string name="menu_change_location">Modifica città</string>

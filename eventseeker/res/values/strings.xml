@@ -15,11 +15,16 @@
     
     <!-- Languages -->
     <string name="lang_english">English</string>
-    <string name="lang_french">French</string>
-    <string name="lang_german">German</string>
-    <string name="lang_italian">Italian</string>
-    <string name="lang_spanish">Spanish</string>
-    <string name="lang_portuguese">Portuguese</string>
+    <!-- <string name="lang_french">French</string> -->
+    <string name="lang_french">Français</string>
+    <!-- <string name="lang_german">German</string> --> 
+    <string name="lang_german">Deutsch</string>
+    <!-- <string name="lang_italian">Italian</string> -->
+    <string name="lang_italian">Italiano</string>
+    <!-- <string name="lang_spanish">Spanish</string> -->
+     <string name="lang_spanish">Español</string>
+    <!-- <string name="lang_portuguese">Portuguese</string> -->
+    <string name="lang_portuguese">Português</string>
     <string name="menu_search">Search</string>
     <string name="menu_change_location">Change Location</string>
     <string name="title_launcher">eventseeker</string>

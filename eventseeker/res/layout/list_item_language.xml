@@ -4,9 +4,10 @@
     android:id="@+id/rltLayoutRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/common_margin_padding_list_item_language"
-    android:paddingLeft="@dimen/common_margin_padding_list_item_language"
-    android:paddingRight="@dimen/common_margin_padding_list_item_language" >
+    android:paddingBottom="@dimen/common_margin_padding_b_list_item_language"
+    android:paddingLeft="@dimen/common_margin_padding_l_list_item_language"
+    android:paddingRight="@dimen/common_margin_padding_r_list_item_language"
+    android:paddingTop="@dimen/common_margin_padding_t_list_item_language" >
 
     <ImageView
         android:id="@+id/imgSelected"
@@ -20,18 +21,17 @@
         android:id="@+id/txtLanguage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/imgSelected"
-        android:gravity="center_vertical"
+        android:gravity="bottom"
         android:text="Language"
         android:textSize="@dimen/txt_language_txt_size_list_item_language" />
 
-    <View
+    <!-- <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@id/imgSelected"
         android:layout_marginTop="@dimen/common_margin_padding_list_item_language"
-        android:background="@color/darker_gray" />
+        android:background="@color/darker_gray" /> -->
 
 </RelativeLayout>
