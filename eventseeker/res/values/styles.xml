@@ -71,6 +71,10 @@
         <item name="android:textStyle">normal</item>
     </style>
 	
+    <style name="CustomListViewItemSelector">
+        <item name="android:background">@drawable/slctr_bg_lst_off_transparent_on_dark_gray</item>
+	</style>
+	
 	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 	
 	<!-- Custom actionbar tabs style for bosch -->

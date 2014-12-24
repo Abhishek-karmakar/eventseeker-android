@@ -200,7 +200,7 @@
     <!-- Connect Accounts -->
     <string name="fb_login">Facebook Sign In</string>
     <string name="fb_logout">Facebook Sign Out</string>
-    <string name="btn_continue">Continue</string>
+    <string name="btn_continue">CONTINUE</string>
     <string name="syncing_fb">Syncing Facebook</string>
     <string name="syncing_google_plus">Syncing Google Plus</string>
     <string name="syncing_email">Syncing Email</string>

@@ -3,30 +3,33 @@
     android:id="@+id/rltLayoutRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_gray"
+    android:background="@color/bg_screen_dark_blue"
     android:padding="@dimen/rlt_layout_root_pad_fragment_connect_accounts_list" >
-    
-	<ListView android:id="@id/android:list"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-	    android:background="@drawable/story_space" />
-	
-	<LinearLayout android:id="@+id/lnrLayoutProgress"
+
+    <ListView
+        android:id="@id/android:list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/common_t_mar_pad_for_all_layout" />
+
+    <LinearLayout
+        android:id="@+id/lnrLayoutProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="gone">
-    
-	    <ProgressBar android:id="@+id/progressBar"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content" />
-	    
-	    <TextView android:id="@+id/txtLoading"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="@string/loading"
-	        android:layout_gravity="center_vertical" />
-    
+        android:visibility="gone" >
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txtLoading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/loading" />
     </LinearLayout>
-	
+
 </RelativeLayout>

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Locale;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -159,12 +160,12 @@ public class LanguageFragment extends ListFragmentLoadableFromBackStack {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarColor(R.color.bg_screen_dark_blue);
+		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarColor(R.color.colorPrimary);
 		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.VISIBLE);
-		
-		FrameLayout.LayoutParams params = (LayoutParams) getView().getLayoutParams();
-		params.setMargins(0, ((MainActivity) FragmentUtil.getActivity(this)).getStatusBarHeight(), 0, 0);
-		getListView().setLayoutParams(params);
+
+		getListView().setBackgroundColor(Color.WHITE);
+		getListView().setPadding(0, 
+			(int) FragmentUtil.getResources(this).getDimensionPixelSize(R.dimen.common_t_mar_pad_for_all_layout), 0, 0);			
 		
 		getListView().setDivider(null);
 		

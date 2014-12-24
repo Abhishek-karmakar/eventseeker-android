@@ -81,7 +81,7 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.VISIBLE);
-		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarColor(R.color.bg_screen_dark_blue);
+		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarColor(R.color.colorPrimary);
 		
 		View v = inflater.inflate(R.layout.fragment_sign_up, null);
 		(edtFN = (EditText) v.findViewById(R.id.edtFN)).addTextChangedListener(this);

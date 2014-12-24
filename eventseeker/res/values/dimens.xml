@@ -327,13 +327,11 @@
     <dimen name="btn_drawable_pad_friends_activity_item">10dp</dimen>
     <dimen name="btn_txt_size_friends_activity_item">15sp</dimen>
     <!-- connect_accounts_list_item.xml -->
-    <dimen name="rlt_layout_root_ht_connect_accounts_list_item">45dp</dimen>
+    <dimen name="rlt_layout_root_ht_connect_accounts_list_item">@dimen/action_bar_ht</dimen>
     <dimen name="rlt_layout_root_pad_l_connect_accounts_list_item">14dp</dimen>
     <dimen name="rlt_layout_root_pad_r_connect_accounts_list_item">@dimen/rlt_layout_root_pad_l_connect_accounts_list_item</dimen>
-    <dimen name="rlt_layout_service_details_ht_connect_accounts_list_item">44dp</dimen>
-    <dimen name="img_service_margin_l_r_connect_accounts_list_item">0dp</dimen>
-    <dimen name="txt_service_name_margin_l_connect_accounts_list_item">15dp</dimen>
-    <dimen name="rlt_layout_service_details_txt_size_connect_accounts_list_item">17sp</dimen>
+    <dimen name="txt_service_name_margin_l_connect_accounts_list_item">25dp</dimen>
+    <dimen name="rlt_layout_service_details_txt_size_connect_accounts_list_item">22sp</dimen>
     <dimen name="img_plus_margin_r_connect_accounts_list_item">10dp</dimen>
     <dimen name="txt_count_margin_r_connect_accounts_list_item">20dp</dimen>
     <dimen name="divider_ht_connect_accounts_list_item">1dp</dimen>
@@ -343,6 +341,7 @@
     <dimen name="txt_connect_accounts_txt_size_fragment_connect_account">17sp</dimen>
     <dimen name="txt_connect_accounts_margin_t_b_fragment_connect_account">30dp</dimen>
     <dimen name="txt_connect_accounts_margin_l_r_fragment_connect_account">40dp</dimen>
+    <dimen name="btn_continue_margin_l_r_fragment_connect_account">40dp</dimen>
     <!-- fragment_about_us.xml -->
     <dimen name="rlt_layout_root_pad_fragment_about_us">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="txt_app_name_margin_t_fragment_about_us">60dp</dimen>
@@ -496,6 +495,7 @@
     <dimen name="lst_pad_l_r_fragment_settings">20dp</dimen>
     <!-- common -->
     <dimen name="txt_size_widget_eventSeeker_btn_white">16dp</dimen>
+    <dimen name="elevation_widget_eventSeeker_btn_white">15dp</dimen>
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <!-- activity_bosch_main.xml -->
     <dimen name="b_root_navigation_drawer_w_main">210dp</dimen>

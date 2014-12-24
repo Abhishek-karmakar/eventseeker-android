@@ -19,6 +19,7 @@ import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -56,12 +57,12 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	
     private static final String TAG = ConnectAccountsFragment.class.getName();
     
-    private static final String TXT_BTN_SKIP = "Skip";
+    private static final String TXT_BTN_SKIP_DIALOG = "Skip";
+    protected static final String TXT_BTN_CANCEL_DIALOG = "Cancel";
+    private static final String TXT_BTN_SKIP = "SKIP";
     private String TXT_BTN_CONTINUE;
     
-	private static final String DIALOG_FRAGMENT_TAG_SKIP = "skipDialog";
-
-	protected static final String TXT_BTN_CANCEL = "Cancel";
+    private static final String DIALOG_FRAGMENT_TAG_SKIP = "skipDialog";    
 
 	private List<Service> listAvailableServices;
 	
@@ -181,6 +182,9 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.VISIBLE);
+		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarColor(R.color.colorPrimary);
+		
 		View v = LayoutInflater.from(FragmentUtil.getActivity(this)).inflate(R.layout.fragment_connect_accounts, null);
 		lnrLayoutProgress = (LinearLayout) v.findViewById(R.id.lnrLayoutProgress);
 		return v;
@@ -283,9 +287,9 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
         		
         	Service service = connectAccountsItemTitles[i];
 
-        	if (!isFirstTimeLaunch && service.equals(Service.Title, this)) {
+        	/*if (!isFirstTimeLaunch && service.equals(Service.Title, this)) {
         		continue;
-        	}
+        	}*/
         		
         	/**
         	 * the following two lines are written above the 'if' condition of Google Play Music Service
@@ -518,7 +522,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			} else {
 				GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
 						res.getString(R.string.are_you_sure), res.getString(R.string.connecting_account_allow_us), 
-						TXT_BTN_CANCEL, TXT_BTN_SKIP);
+						TXT_BTN_CANCEL_DIALOG, TXT_BTN_SKIP_DIALOG);
 				generalDialogFragment.show(getChildFragmentManager(), DIALOG_FRAGMENT_TAG_SKIP);
 			}
 		}
