@@ -35,7 +35,11 @@ public class VersionUtil {
 		eventSeekr.removeWcitiesId();
 	}
 	
-	public static boolean isApiLevelAbove19() {
+	public static boolean isApiLevelAbove18() {
 		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
-	}	
+	}
+	
+	public static boolean isApiLevelAbove15() {
+		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
+	}
 }

@@ -1,165 +1,169 @@
 package com.wcities.eventseeker;
 
-import java.lang.ref.WeakReference;
-
-import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 
-import com.viewpagerindicator.CirclePageIndicator;
+import com.nineoldandroids.animation.ObjectAnimator;
+import com.nineoldandroids.view.ViewHelper;
+import com.wcities.eventseeker.adapter.CatTitlesAdapter;
+import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
+import com.wcities.eventseeker.custom.view.ObservableScrollView;
+import com.wcities.eventseeker.custom.view.ObservableScrollView.Callbacks;
+import com.wcities.eventseeker.util.ConversionUtil;
+import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.VersionUtil;
 
-public class DiscoverFragment extends DiscoverParentFragment implements OnPageChangeListener {
-
-	public static final String TAG = DiscoverFragment.class.getName();
-
-	private ViewPager viewPager;
-	private FeaturedEventsFragmentPagerAdapter featuredEventsFragmentPagerAdapter;
-
-	private int viewPagerSelectedPos;
-
+public class DiscoverFragment extends FragmentLoadableFromBackStack implements Callbacks {
+	
+	private static final String TAG = DiscoverFragment.class.getSimpleName();
+	
+	private static final int TRANSLATION_Z_DP = 10;
+	private static final int UNSCROLLED = -1;
+	
+	private ImageView imgCategory;
+	private ViewPager viewPagerCatTitles;
+	
+	private int toolbarSize, prevScrollY = UNSCROLLED;
+	private float limitScrollAt, translationZPx;
+	private boolean isTranslationZApplied;
+	private String title = "";
+	
 	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View v = super.onCreateView(inflater, container, savedInstanceState);
-
-		// txtFeaturedEvtsTitle = (TextView)
-		// v.findViewById(R.id.txtFeaturedEvtsTitle);
-		// updateCityName();
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		
-		featuredEventsFragmentPagerAdapter = new FeaturedEventsFragmentPagerAdapter(
-				this, getChildFragmentManager());
+		setHasOptionsMenu(true);
+		setRetainInstance(true);
+		
+		toolbarSize = FragmentUtil.getResources(this).getDimensionPixelSize(R.dimen.action_bar_ht);
+		translationZPx = ConversionUtil.toPx(FragmentUtil.getResources(this), TRANSLATION_Z_DP);
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		//Log.d(TAG, "onCreateView()");
+		View v = inflater.inflate(R.layout.fragment_discover, container, false);
+		
+		imgCategory = (ImageView) v.findViewById(R.id.imgCategory);
+		viewPagerCatTitles = (ViewPager) v.findViewById(R.id.pagerCatTitles);
+		
+		final ObservableScrollView obsrScrlV = (ObservableScrollView) v.findViewById(R.id.obsrScrlV);
+		obsrScrlV.setCallbacks(this);
+		
+		obsrScrlV.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                    	//Log.d(TAG, "onGlobalLayout()");
+						if (VersionUtil.isApiLevelAbove15()) {
+							obsrScrlV.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
-		viewPager = (ViewPager) v.findViewById(R.id.viewPager);
-		viewPager.setAdapter(featuredEventsFragmentPagerAdapter);
-		viewPager.setOnPageChangeListener(this);
-
-		CirclePageIndicator indicator = (CirclePageIndicator) v
-				.findViewById(R.id.pageIndicator);
-		if (indicator != null) {
-			indicator.setViewPager(viewPager);
-		}
-		// Log.d(TAG, "viewPagerSelectedPos = " + viewPagerSelectedPos);
-		viewPager.setCurrentItem(viewPagerSelectedPos);
-
-		/*
-		 * imgPrev = (ImageView) v.findViewById(R.id.imgPrev); imgNext =
-		 * (ImageView) v.findViewById(R.id.imgNext);
-		 * imgPrev.setOnClickListener(this); imgNext.setOnClickListener(this);
-		 */
-
-		/**
-		 * Following call to onPageSelected() is required due to ViewPager api
-		 * bug where it doesn't call onPageSelected() for first item (at
-		 * index=0) on its own. It is needed only on orientation change because
-		 * for first launch, we have a work around placed within getItem() of
-		 * DiscoverFragmentPagerAdapter.
-		 */
-		/*
-		 * if (viewPager.getCurrentItem() == 0) {
-		 * onPageSelected(viewPager.getCurrentItem()); }
-		 */
-
+						} else {
+							obsrScrlV.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+						}
+                        onScrollChanged(obsrScrlV.getScrollY(), true);
+                    }
+                });
+		
 		return v;
 	}
-
+	
 	@Override
-	public void onDestroyView() {
-		// Log.d(TAG, "onDestroyView()");
-		if (viewPager != null) {
-			viewPagerSelectedPos = viewPager.getCurrentItem();
+	public void onStart() {
+		super.onStart();
+		//Log.d(TAG, "onStart(), prevScrollY = " + prevScrollY);
+		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.GONE);
+		if (prevScrollY != UNSCROLLED) {
+			onScrollChanged(prevScrollY, true);
 		}
-		super.onDestroyView();
 	}
-
-	private static class FeaturedEventsFragmentPagerAdapter extends
-			FragmentStatePagerAdapter {
-
-		private WeakReference<DiscoverFragment> discoverFragment;
-
-		public FeaturedEventsFragmentPagerAdapter(
-				DiscoverFragment discoverFragment, FragmentManager fm) {
-			super(fm);
-			this.discoverFragment = new WeakReference<DiscoverFragment>(
-					discoverFragment);
+	
+	private void onScrollChanged(int scrollY, boolean forceUpdate) {
+		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		// Translate image
+		ViewHelper.setTranslationY(imgCategory, scrollY / 2);
+		
+		// Translate tabs
+		if (limitScrollAt == 0) {
+			float pagerTop = viewPagerCatTitles.getTop();
+			limitScrollAt = pagerTop - toolbarSize;
+			
+			if (VersionUtil.isApiLevelAbove18()) {
+				limitScrollAt -= ma.getStatusBarHeight();
+			}
 		}
-
-		@Override
-		public Fragment getItem(int index) {
-			// Log.d(TAG, "getItem() for index = " + index);
-			/**
-			 * When viewpager data source changes & notifyDataSetChanged() is
-			 * refreshing viewpager, onPageSelected() method is not called up
-			 * for first time unless we scroll in any direction. Hence to update
-			 * left & right arrow buttons, we need to call this call back method
-			 * explicitly for currently visible index.
-			 */
-			/*
-			 * if (index == discoverActivity.get().viewPager.getCurrentItem()) {
-			 * discoverActivity.get().onPageSelected(index); }
-			 */
-
-			FeaturedEventsFragment featuredEventsFragment = FeaturedEventsFragment
-					.newInstance(discoverFragment.get().featuredEvts.get(index));
-			return featuredEventsFragment;
-		}
-
-		@Override
-		public int getCount() {
-			// Log.i(TAG, "count = " +
-			// discoverActivity.get().featuredEvts.size());
-			return discoverFragment.get().featuredEvts.size();
-		}
-
-		@Override
-		public int getItemPosition(Object object) {
-			/**
-			 * This update of right left arrows is required on user changing
-			 * location & hence featured events are to be requeried (basically
-			 * invalidating previous views & hence updating arrows' visibility
-			 * accordingly).
-			 */
-			// discoverActivity.get().updateRightLeftArrows(discoverActivity.get().viewPager.getCurrentItem());
-			return POSITION_NONE;
+		float translationY = (scrollY >= limitScrollAt) ? (scrollY - limitScrollAt) : 0;
+		
+		//Log.d(TAG, "scrollY = " + scrollY + ", limitScrollAt = " + limitScrollAt + ", translationY = " + translationY + ", forceUpdate = " + forceUpdate);
+		ViewHelper.setTranslationY(viewPagerCatTitles, translationY);
+		
+		if ((!isTranslationZApplied || forceUpdate) && scrollY >= limitScrollAt) {
+			//Log.d(TAG, "translation apply z");
+			ObjectAnimator elevateAnim = ObjectAnimator.ofFloat(viewPagerCatTitles, "translationZ", 0.0f, translationZPx);
+			elevateAnim.setDuration(100);
+			elevateAnim.start();
+			
+			ma.setVStatusBarLayeredVisibility(View.VISIBLE);
+			ma.setVStatusBarLayeredColor(R.color.colorPrimaryDark);
+			ma.setToolbarBg(ma.getResources().getColor(R.color.colorPrimary));
+			viewPagerCatTitles.setBackgroundColor(ma.getResources().getColor(R.color.colorPrimary));
+			ma.setToolbarElevation(0);
+			
+			title = ma.getResources().getString(R.string.title_discover);
+			ma.updateTitle(title);
+			
+			isTranslationZApplied = true;
+			
+		} else if ((isTranslationZApplied || forceUpdate) && scrollY < limitScrollAt) {
+			//Log.d(TAG, "translation remove z");
+			ObjectAnimator elevateAnim = ObjectAnimator.ofFloat(viewPagerCatTitles, "translationZ", translationZPx, 0.0f);
+			elevateAnim.setDuration(100);
+			elevateAnim.start();
+			
+			ma.setVStatusBarLayeredVisibility(View.GONE);
+			ma.setToolbarBg(Color.TRANSPARENT);
+			viewPagerCatTitles.setBackgroundResource(R.drawable.bg_pager_cat_titles);
+			ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
+			
+			title = "";
+			ma.updateTitle(title);
+			
+			isTranslationZApplied = false;
 		}
 		
-		/**
-		 * W/o following blank function, app crashes with NullPointerException in v4 support library
-		 * on orientation change on the screen where this adapter is used.
-		 */
-		@Override
-		public void restoreState(Parcelable arg0, ClassLoader arg1) {
-			
-		}
+		prevScrollY = scrollY;
+	}
+	
+	public String getCurrentTitle() {
+		return title;
 	}
 
 	@Override
-	public void onPageScrollStateChanged(int arg0) {
+	public String getScreenName() {
+		return "Discover Screen";
 	}
 
 	@Override
-	public void onPageScrolled(int arg0, float arg1, int arg2) {
+	public void onScrollChanged(int scrollY) {
+		onScrollChanged(scrollY, false);
+	}
+	
+	@Override
+	public void onDownMotionEvent() {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void onPageSelected(int arg0) {
+	public void onUpOrCancelMotionEvent() {
+		// TODO Auto-generated method stub
 	}
-
-	@Override
-	protected void notifyDataSetChanged() {
-		featuredEventsFragmentPagerAdapter.notifyDataSetChanged();
-	}
-
 }

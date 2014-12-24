@@ -87,10 +87,6 @@ public abstract class DiscoverParentFragment extends FragmentLoadableFromBackSta
 		int progressVisibility = featuredEventsLoaded ? View.GONE : View.VISIBLE;
 		progressBar.setVisibility(progressVisibility);
 
-		// txtFeaturedEvtsTitle = (TextView)
-		// v.findViewById(R.id.txtFeaturedEvtsTitle);
-		// updateCityName();
-
 		GridView grdEvtCategories = (GridView) v.findViewById(R.id.grdEvtCategories);
 		if(((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).isTabletAndInPortraitMode()) {
 			grdEvtCategories.setNumColumns(DEFAULT_NUM_OF_COLUMNS_FOR_TABLET_IN_PORTRAIT_MODE);
@@ -102,12 +98,7 @@ public abstract class DiscoverParentFragment extends FragmentLoadableFromBackSta
 		}
 
 		grdEvtCategories.setAdapter(evtCategoriesListAdapter);
-
 		
-		/*
-		 * if (evtCategories.isEmpty()) { new LoadEvtCategories().execute(); }
-		 */
-
 		if (featuredEvts.isEmpty()) {
 			/**
 			 * 12-06-2014 : added wcitiesId in Featured event call as per Rohit/Sameer's mail
@@ -133,25 +124,6 @@ public abstract class DiscoverParentFragment extends FragmentLoadableFromBackSta
 			};
 			loadFeaturedEvts.execute();
 		}
-
-		/*
-		 * imgPrev = (ImageView) v.findViewById(R.id.imgPrev); imgNext =
-		 * (ImageView) v.findViewById(R.id.imgNext);
-		 * imgPrev.setOnClickListener(this); imgNext.setOnClickListener(this);
-		 */
-
-		/**
-		 * Following call to onPageSelected() is required due to ViewPager api
-		 * bug where it doesn't call onPageSelected() for first item (at
-		 * index=0) on its own. It is needed only on orientation change because
-		 * for first launch, we have a work around placed within getItem() of
-		 * DiscoverFragmentPagerAdapter.
-		 */
-
-		/*
-		 * if (viewPager.getCurrentItem() == 0) {
-		 * onPageSelected(viewPager.getCurrentItem()); }
-		 */
 
 		return v;
 	}

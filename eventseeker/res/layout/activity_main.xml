@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity" >
-
+    
     <LinearLayout
         android:id="@+id/lnrLytRoot"
         android:layout_width="match_parent"
@@ -14,8 +14,7 @@
         android:orientation="vertical" >
 
         <!-- Significance of the below view is in api level above v19 -->
-        <View
-            android:id="@+id/vStatusBar"
+        <View android:id="@+id/vStatusBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone" />
@@ -44,6 +43,11 @@
                 android:paddingTop="@dimen/common_t_mar_pad_for_all_layout" />
         </android.support.v4.widget.DrawerLayout>
     </LinearLayout>
+    
+    <View android:id="@+id/vStatusBarLayered"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
     <include layout="@layout/toolbar" />
 

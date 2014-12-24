@@ -11,7 +11,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,6 +20,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -127,7 +127,8 @@ public class MainActivity extends ActionBarActivity implements
 
 	private boolean isCalledFromTwitterSection;
 
-	private View vStatusBar;
+	private View vStatusBar, vStatusBarLayered;
+	private Toolbar toolbar;
 	
 	public static MainActivity getInstance() {
 		return instance;
@@ -139,11 +140,14 @@ public class MainActivity extends ActionBarActivity implements
 		setContentView(R.layout.activity_main);
 		//Log.d(TAG, "onCreate()");
 
-		if (VersionUtil.isApiLevelAbove19()) {
+		if (VersionUtil.isApiLevelAbove18()) {
 			vStatusBar = findViewById(R.id.vStatusBar);
-			
 			LinearLayout.LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, getStatusBarHeight());
 			vStatusBar.setLayoutParams(params);
+			
+			vStatusBarLayered = findViewById(R.id.vStatusBarLayered);
+			FrameLayout.LayoutParams frmParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, getStatusBarHeight());
+			vStatusBarLayered.setLayoutParams(frmParams);
 		}
 		
 		/**
@@ -191,10 +195,10 @@ public class MainActivity extends ActionBarActivity implements
 		 */
 		FragmentUtil.updateActivityReferenceInAllFragments(getSupportFragmentManager(), this);
 
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarForActionbar);
+		toolbar = (Toolbar) findViewById(R.id.toolbarForActionbar);
 	    setSupportActionBar(toolbar);
 	    
-	    if (VersionUtil.isApiLevelAbove19()) {
+	    if (VersionUtil.isApiLevelAbove18()) {
 		    FrameLayout.LayoutParams params = (android.widget.FrameLayout.LayoutParams) toolbar.getLayoutParams();
 		    params.setMargins(0, getStatusBarHeight(), 0, 0);
 	    }
@@ -947,14 +951,14 @@ public class MainActivity extends ActionBarActivity implements
 	    switch (position) {
 	    
 		case INDEX_NAV_ITEM_DISCOVER:
-			DiscoverParentFragment discoverFragment; 
-			if(isTablet) {
+			//DiscoverParentFragment discoverFragment;
+			DiscoverFragment discoverFragment;
+			/*if(isTablet) {
 				discoverFragment = new DiscoverFragmentTab();
-			} else {
+			} else {*/
 				discoverFragment = new DiscoverFragment();
-			}
-			replaceContentFrameByFragment(discoverFragment, AppConstants.FRAGMENT_TAG_DISCOVER, getResources()
-							.getString(R.string.title_discover), false);
+			//}
+			replaceContentFrameByFragment(discoverFragment, AppConstants.FRAGMENT_TAG_DISCOVER, "", false);
 			break;
 
 		case INDEX_NAV_ITEM_MY_EVENTS:
@@ -1232,6 +1236,11 @@ public class MainActivity extends ActionBarActivity implements
 		 */
 		getSupportActionBar().setTitle(mTitle);
 		// }
+	}
+	
+	public void updateTitle(String title) {
+		mTitle = title;
+		updateTitle();
 	}
 	
 	private void selectNonDrawerItem(Fragment replaceBy, String replaceByFragmentTag, String newTitle, 
@@ -1569,8 +1578,9 @@ public class MainActivity extends ActionBarActivity implements
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_signup),
 					AppConstants.FRAGMENT_TAG_SIGN_UP, false);
 
-		} else if (fragment instanceof DiscoverParentFragment) {
-			onFragmentResumed(INDEX_NAV_ITEM_DISCOVER, getResources().getString(R.string.title_discover),
+		//} else if (fragment instanceof DiscoverParentFragment) {
+		} else if (fragment instanceof DiscoverFragment) {
+			onFragmentResumed(INDEX_NAV_ITEM_DISCOVER, ((DiscoverFragment)fragment).getCurrentTitle(), 
 					AppConstants.FRAGMENT_TAG_DISCOVER, false);
 
 		} else if (fragment instanceof MyEventsFragment) {
@@ -1913,8 +1923,14 @@ public class MainActivity extends ActionBarActivity implements
 	 * @param colorRes
 	 */
 	public void setVStatusBarColor(int colorRes) {
-		if (VersionUtil.isApiLevelAbove19() && vStatusBar != null) {
+		if (VersionUtil.isApiLevelAbove18() && vStatusBar != null) {
 			vStatusBar.setBackgroundColor(getResources().getColor(colorRes));
+		}
+	}
+	
+	public void setVStatusBarLayeredColor(int colorRes) {
+		if (VersionUtil.isApiLevelAbove18() && vStatusBarLayered != null) {
+			vStatusBarLayered.setBackgroundColor(getResources().getColor(colorRes));
 		}
 	}
 
@@ -1923,9 +1939,22 @@ public class MainActivity extends ActionBarActivity implements
 	 * @param viewVisibility
 	 */
 	public void setVStatusBarVisibility(int viewVisibility) {
-		if (VersionUtil.isApiLevelAbove19() && vStatusBar != null) {
+		if (VersionUtil.isApiLevelAbove18() && vStatusBar != null) {
 			vStatusBar.setVisibility(viewVisibility);
 		}
 	}
+	
+	public void setVStatusBarLayeredVisibility(int viewVisibility) {
+		if (VersionUtil.isApiLevelAbove18() && vStatusBarLayered != null) {
+			vStatusBarLayered.setVisibility(viewVisibility);
+		}
+	}
 
+	public void setToolbarBg(int color) {
+		toolbar.setBackgroundColor(color);
+	}
+	
+	public void setToolbarElevation(float elevation) {
+		ViewCompat.setElevation(toolbar, elevation);
+	}
 }
