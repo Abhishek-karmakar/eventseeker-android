@@ -183,7 +183,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.VISIBLE);
-		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarColor(R.color.colorPrimary);
+		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarColor(R.color.colorPrimaryDark);
 		
 		View v = LayoutInflater.from(FragmentUtil.getActivity(this)).inflate(R.layout.fragment_connect_accounts, null);
 		lnrLayoutProgress = (LinearLayout) v.findViewById(R.id.lnrLayoutProgress);
@@ -357,8 +357,12 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				btnContinue.setOnClickListener(onBtnContinueClickListener);
 				
 			} else if(serviceAccount.name.equals(Service.Title.getStr(ConnectAccountsFragment.this))) {
-				convertView = mInflater.inflate(R.layout.connect_accounts_txt_list_item, null);
+				/*convertView = mInflater.inflate(R.layout.connect_accounts_txt_list_item, null);*/
+				convertView = mInflater.inflate(R.layout.connect_accounts_list_item_top, null);
 				convertView.setTag("");
+				((TextView)convertView.findViewById(R.id.txtSyncCount)).setText(
+						((EventSeekr) FragmentUtil.getActivity(ConnectAccountsFragment.this)
+								.getApplication()).getTotalSyncCount() + "");
 				
 			} else {
 				//Log.d(TAG, "setting Title : " + serviceAccount.name);
@@ -369,9 +373,10 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 					//holder.rltLayoutServiceDetails = (RelativeLayout) convertView.findViewById(R.id.rltLayoutServiceDetails);
 					holder.imgService = (ImageView) convertView.findViewById(R.id.imgService);
 					holder.txtServiceName = (TextView) convertView.findViewById(R.id.txtServiceName);
-					holder.txtCount = (TextView) convertView.findViewById(R.id.txtCount);
+					/*holder.txtCount = (TextView) convertView.findViewById(R.id.txtCount);
 					holder.imgPlus = (ImageView) convertView.findViewById(R.id.imgPlus);
-					holder.imgProgressBar = (ImageView) convertView.findViewById(R.id.progressBar);
+					holder.imgProgressBar = (ImageView) convertView.findViewById(R.id.progressBar);*/
+					holder.imgCorrect = (ImageView) convertView.findViewById(R.id.imgCorrect);
 					convertView.setTag(holder);
 					
 				} else {
@@ -381,7 +386,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				holder.imgService.setImageResource(serviceAccount.drawable);
 				holder.txtServiceName.setText(serviceAccount.name);
 				
-				if (serviceAccount.isInProgress) {
+				/*if (serviceAccount.isInProgress) {
 					holder.imgProgressBar.setVisibility(View.VISIBLE);
 					holder.imgPlus.setVisibility(View.INVISIBLE);
 					holder.txtCount.setVisibility(View.INVISIBLE);
@@ -396,9 +401,16 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 					
 				} else {
 					holder.txtCount.setVisibility(View.INVISIBLE);
-					holder.imgProgressBar.setVisibility(View.INVISIBLE);
 					holder.imgPlus.setVisibility(View.VISIBLE);
+					holder.imgProgressBar.setVisibility(View.INVISIBLE);
 					AnimationUtil.stopRotationToView(holder.imgProgressBar);
+				}*/
+			
+				if (serviceAccount.count != EventSeekr.UNSYNC_COUNT) {
+					holder.imgCorrect.setVisibility(View.VISIBLE);
+				
+				} else {
+					holder.imgCorrect.setVisibility(View.INVISIBLE);					
 				}
 				
 				convertView.setOnClickListener(new OnClickListener() {
@@ -500,8 +512,8 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		}
 		
 		private class AccountViewHolder {
-			private ImageView imgService, imgPlus, imgProgressBar;
-			private TextView txtServiceName, txtCount;
+			private ImageView imgService, imgCorrect/*imgPlus, imgProgressBar*/;
+			private TextView txtServiceName/*, txtCount*/;
 		}
 	}
 	

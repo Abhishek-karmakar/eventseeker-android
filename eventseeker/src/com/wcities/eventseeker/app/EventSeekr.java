@@ -894,6 +894,20 @@ public class EventSeekr extends Application {
 				syncCountLastfm + syncCountPandora) == ALL_UNSYNCED_COUNT) ? false : true;
 	}
 	
+	public int getTotalSyncCount() {
+		int totalSyncCnt = 0;
+		Service[] services = Service.values();
+		for (int i = 0; i < services.length; i++) {
+			if (services[i].isService()) {
+				int cnt = getSyncCount(services[i]);
+				if (cnt != UNSYNC_COUNT) {
+					totalSyncCnt += cnt;
+				}
+			}
+		}
+		return totalSyncCnt;
+	}
+	
 	public Event getEventToAddToCalendar() {
 		return eventToAddToCalendar;
 	}

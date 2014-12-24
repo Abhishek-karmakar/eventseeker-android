@@ -11,15 +11,9 @@
 	and hence ripple effect will occur on touch
     -->
 
-    <View
-        android:id="@+id/dummy1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.5" />
-
     <RelativeLayout
         android:id="@+id/rltLayoutServiceDetails"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/rlt_layout_root_ht_connect_accounts_list_item"
         android:layout_weight="3"
         android:gravity="center_vertical" >
@@ -37,19 +31,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/txt_service_name_margin_l_connect_accounts_list_item"
+            android:layout_marginLeft="@dimen/lst_item_v_margin_l_connect_accounts_list_item"
             android:layout_toRightOf="@id/imgService"
             android:text="Facebook"
             android:textColor="@android:color/white"
             android:textSize="@dimen/rlt_layout_service_details_txt_size_connect_accounts_list_item" />
 
+        <ImageView
+            android:id="@+id/imgCorrect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/lst_item_v_margin_l_connect_accounts_list_item"
+            android:layout_toRightOf="@+id/txtServiceName"
+            android:background="@android:color/black"
+            android:contentDescription="plus image"
+            android:src="@drawable/ic_correct"
+            android:visibility="invisible" >
+
+            <!--
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/img_plus_margin_r_connect_accounts_list_item" >
-
+            android:layout_marginRight="@dimen/img_plus_margin_r_connect_accounts_list_item"
+            android:layout_toRightOf="@+id/txtServiceName" >
             <ImageView
                 android:id="@+id/imgPlus"
                 android:layout_width="wrap_content"
@@ -72,14 +78,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:src="@drawable/refresh_smaller" />
-        </RelativeLayout>
+                android:src="@drawable/refresh_smaller" />
+        </RelativeLayout>            -->
+        </ImageView>
     </RelativeLayout>
-
-    <View
-        android:id="@+id/dummy2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.5" />
 
 </LinearLayout>

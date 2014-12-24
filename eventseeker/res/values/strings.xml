@@ -210,7 +210,9 @@
     <string name="syncing_rdio">Syncing Rdio</string>
     <string name="syncing_last_fm">Syncing Last.fm</string>
     <string name="syncing_pandora">Syncing Pandora</string>
-
+	<string name="artist_synced">ARTIST SYNCED</string>
+	<string name="personalize_by_syncing">Further Personalize by syncing your other accounts and letting us know who your favorites are.</string>
+	
     <!-- My Events -->
     <string name="following">FOLLOWING</string>
     <string name="recommended">RECOMMENDED</string>

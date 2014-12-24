@@ -160,7 +160,7 @@ public class LanguageFragment extends ListFragmentLoadableFromBackStack {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarColor(R.color.colorPrimary);
+		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarColor(R.color.colorPrimaryDark);
 		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.VISIBLE);
 
 		getListView().setBackgroundColor(Color.WHITE);
