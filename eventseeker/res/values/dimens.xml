@@ -332,23 +332,22 @@
     <!-- connect_accounts_list_item_top.xml -->
     <dimen name="txt_sync_count_margin_t_connect_accounts_li_top">20dp</dimen>
     <dimen name="txt_sync_count_txt_size_connect_accounts_li_top">40sp</dimen>
-    <dimen name="txt_sync_count_pad_l_r_connect_accounts_li_top">8dp</dimen>
     <dimen name="txt_artist_synced_txt_size_connect_accounts_li_top">14sp</dimen>
     <dimen name="txt_artist_synced_margin_t_connect_accounts_li_top">15dp</dimen>
     <dimen name="txt_artist_synced_pad_l_r_connect_accounts_li_top">10dp</dimen>
     <dimen name="txt_artist_synced_pad_t_b_connect_accounts_li_top">1dp</dimen>
-    <dimen name="txt_personalize_w_connect_accounts_li_top">220dp</dimen>
     <dimen name="txt_personalize_margin_t_connect_accounts_li_top">20dp</dimen>
     <dimen name="txt_personalize_pad_b_connect_accounts_li_top">20dp</dimen>
     <!-- connect_accounts_list_item.xml -->
     <dimen name="rlt_layout_root_ht_connect_accounts_list_item">@dimen/action_bar_ht</dimen>
     <dimen name="rlt_layout_root_pad_l_connect_accounts_list_item">14dp</dimen>
     <dimen name="rlt_layout_root_pad_r_connect_accounts_list_item">@dimen/rlt_layout_root_pad_l_connect_accounts_list_item</dimen>
-    <dimen name="lst_item_v_margin_l_connect_accounts_list_item">25dp</dimen>
+    <dimen name="lst_item_v_margin_l_connect_accounts_list_item">20dp</dimen>
     <dimen name="rlt_layout_service_details_txt_size_connect_accounts_list_item">22sp</dimen>
     <dimen name="img_plus_margin_r_connect_accounts_list_item">10dp</dimen>
     <dimen name="txt_count_margin_r_connect_accounts_list_item">20dp</dimen>
     <dimen name="divider_ht_connect_accounts_list_item">1dp</dimen>
+    <dimen name="txt_service_name_w_connect_accounts_list_item">150dp</dimen>
     <!-- fragment_connect_accounts_list.xml -->
     <dimen name="rlt_layout_root_pad_fragment_connect_accounts_list">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="list_margin_t_b_fragment_connect_account_and_get_started">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>

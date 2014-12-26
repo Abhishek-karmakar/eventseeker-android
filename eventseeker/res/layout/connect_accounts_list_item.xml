@@ -4,19 +4,18 @@
     style="@style/CustomListViewItemSelector"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:gravity="center"
     android:orientation="horizontal" >
 
     <!--
     android:background="?android:selectableItemBackground" will make this item selectable 
-	and hence ripple effect will occur on touch
-    -->
+	and hence ripple effect will occur on touch    -->
 
     <RelativeLayout
         android:id="@+id/rltLayoutServiceDetails"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/rlt_layout_root_ht_connect_accounts_list_item"
-        android:layout_weight="3"
-        android:gravity="center_vertical" >
+        android:gravity="center" >
 
         <ImageView
             android:id="@+id/imgService"
@@ -28,7 +27,7 @@
 
         <TextView
             android:id="@+id/txtServiceName"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/txt_service_name_w_connect_accounts_list_item"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/lst_item_v_margin_l_connect_accounts_list_item"
@@ -44,42 +43,9 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/lst_item_v_margin_l_connect_accounts_list_item"
             android:layout_toRightOf="@+id/txtServiceName"
-            android:background="@android:color/black"
             android:contentDescription="plus image"
-            android:src="@drawable/ic_correct"
+            android:src="@drawable/ic_valid_check"
             android:visibility="invisible" >
-
-            <!--
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/img_plus_margin_r_connect_accounts_list_item"
-            android:layout_toRightOf="@+id/txtServiceName" >
-            <ImageView
-                android:id="@+id/imgPlus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:contentDescription="plus image"
-                android:src="@drawable/plus" />
-
-            <TextView
-                android:id="@+id/txtCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="13"
-                android:textColor="@color/font_blue"
-                android:textSize="@dimen/rlt_layout_service_details_txt_size_connect_accounts_list_item" />
-
-            <ImageView
-                android:id="@+id/progressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:src="@drawable/refresh_smaller" />
-        </RelativeLayout>            -->
         </ImageView>
     </RelativeLayout>
 

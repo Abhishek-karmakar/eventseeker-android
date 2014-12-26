@@ -22,7 +22,8 @@ public class SquareTextView extends TextView {
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-		setMeasuredDimension(getMeasuredWidth(), getMeasuredWidth());
+		int size = (getMeasuredWidth() > getMeasuredHeight()) ? getMeasuredWidth() : getMeasuredHeight();
+		setMeasuredDimension(size, size);
 		setGravity(Gravity.CENTER);
 	}
 }

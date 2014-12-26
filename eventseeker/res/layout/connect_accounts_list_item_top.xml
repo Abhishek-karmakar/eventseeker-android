@@ -10,10 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/txt_sync_count_margin_t_connect_accounts_li_top"
-        android:background="@drawable/ic_invalid_cross"
-        android:gravity="center_vertical"
-        android:paddingLeft="@dimen/txt_sync_count_pad_l_r_connect_accounts_li_top"
-        android:paddingRight="@dimen/txt_sync_count_pad_l_r_connect_accounts_li_top"
+        android:background="@drawable/ic_launcher_d"
         android:text="217"
         android:textColor="@android:color/white"
         android:textSize="@dimen/txt_sync_count_txt_size_connect_accounts_li_top"
@@ -36,11 +33,13 @@
 
     <TextView
         android:id="@+id/txtPersonalize"
-        android:layout_width="@dimen/txt_personalize_w_connect_accounts_li_top"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/txt_personalize_margin_t_connect_accounts_li_top"
         android:gravity="center"
         android:paddingBottom="@dimen/txt_personalize_pad_b_connect_accounts_li_top"
+        android:paddingLeft="@dimen/txt_artist_synced_pad_l_r_connect_accounts_li_top"
+        android:paddingRight="@dimen/txt_artist_synced_pad_l_r_connect_accounts_li_top"
         android:text="@string/personalize_by_syncing"
         android:textColor="@android:color/white" />
 
