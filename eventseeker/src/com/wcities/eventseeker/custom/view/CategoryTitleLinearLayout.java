@@ -3,6 +3,7 @@ package com.wcities.eventseeker.custom.view;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.LinearLayout;
 
 import com.wcities.eventseeker.adapter.CatTitlesAdapter;
@@ -13,10 +14,14 @@ public class CategoryTitleLinearLayout extends LinearLayout {
 
 	public CategoryTitleLinearLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		// following call is needed so that call to invalidate() from setScaleBoth() can invoke onDraw() 
+		setWillNotDraw(false);
 	}
 
 	public CategoryTitleLinearLayout(Context context) {
 		super(context);
+		// following call is needed so that call to invalidate() from setScaleBoth() can invoke onDraw()
+		setWillNotDraw(false);
 	}
 
 	public void setScaleBoth(float scale) {

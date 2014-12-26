@@ -1,14 +1,18 @@
 package com.wcities.eventseeker;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
@@ -16,6 +20,8 @@ import android.widget.ImageView;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.wcities.eventseeker.adapter.CatTitlesAdapter;
+import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.core.Category;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.custom.view.ObservableScrollView;
 import com.wcities.eventseeker.custom.view.ObservableScrollView.Callbacks;
@@ -31,12 +37,15 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements C
 	private static final int UNSCROLLED = -1;
 	
 	private ImageView imgCategory;
-	private ViewPager viewPagerCatTitles;
+	private ViewPager vPagerCatTitles;
+	private ObservableScrollView obsrScrlV;
+	private CatTitlesAdapter catTitlesAdapter;
 	
 	private int toolbarSize, prevScrollY = UNSCROLLED;
 	private float limitScrollAt, translationZPx;
 	private boolean isTranslationZApplied;
 	private String title = "";
+	protected List<Category> evtCategories;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -55,9 +64,24 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements C
 		View v = inflater.inflate(R.layout.fragment_discover, container, false);
 		
 		imgCategory = (ImageView) v.findViewById(R.id.imgCategory);
-		viewPagerCatTitles = (ViewPager) v.findViewById(R.id.pagerCatTitles);
+		vPagerCatTitles = (ViewPager) v.findViewById(R.id.vPagerCatTitles);
 		
-		final ObservableScrollView obsrScrlV = (ObservableScrollView) v.findViewById(R.id.obsrScrlV);
+		if (evtCategories == null) {
+			buildEvtCategories();
+		}
+		
+		catTitlesAdapter = new CatTitlesAdapter(getChildFragmentManager(), vPagerCatTitles, evtCategories, 
+				imgCategory);
+		imgCategory.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				vPagerCatTitles.onTouchEvent(event);
+				return true;
+			}
+		});
+		
+		obsrScrlV = (ObservableScrollView) v.findViewById(R.id.obsrScrlV);
 		obsrScrlV.setCallbacks(this);
 		
 		obsrScrlV.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -74,6 +98,17 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements C
                     }
                 });
 		
+		vPagerCatTitles.setAdapter(catTitlesAdapter);
+		vPagerCatTitles.setOnPageChangeListener(catTitlesAdapter);
+		
+		// Set current item to the middle page so we can fling to both
+		// directions left and right
+		vPagerCatTitles.setCurrentItem(CatTitlesAdapter.FIRST_PAGE - 1);
+		
+		// Necessary or the pager will only have one extra page to show
+		// make this at least however many pages you can see
+		vPagerCatTitles.setOffscreenPageLimit(9);
+		
 		return v;
 	}
 	
@@ -87,6 +122,15 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements C
 		}
 	}
 	
+	private void buildEvtCategories() {
+		evtCategories = new ArrayList<Category>();
+		int categoryIdStart = AppConstants.CATEGORY_ID_START;
+		String[] categoryNames = getResources().getStringArray(R.array.evt_category_titles);
+		for (int i = 0; i < AppConstants.TOTAL_CATEGORIES; i++) {
+			evtCategories.add(new Category(categoryIdStart + i, categoryNames[i]));
+		}
+	}
+	
 	private void onScrollChanged(int scrollY, boolean forceUpdate) {
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		// Translate image
@@ -94,28 +138,28 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements C
 		
 		// Translate tabs
 		if (limitScrollAt == 0) {
-			float pagerTop = viewPagerCatTitles.getTop();
-			limitScrollAt = pagerTop - toolbarSize;
+			limitScrollAt = vPagerCatTitles.getTop() - toolbarSize;
 			
 			if (VersionUtil.isApiLevelAbove18()) {
 				limitScrollAt -= ma.getStatusBarHeight();
 			}
+			//Log.d(TAG, "vPagerCatTitles.getTop() = " + vPagerCatTitles.getTop() + ", toolbarSize = " + toolbarSize + ", ma.getStatusBarHeight() = " + ma.getStatusBarHeight());
 		}
 		float translationY = (scrollY >= limitScrollAt) ? (scrollY - limitScrollAt) : 0;
 		
 		//Log.d(TAG, "scrollY = " + scrollY + ", limitScrollAt = " + limitScrollAt + ", translationY = " + translationY + ", forceUpdate = " + forceUpdate);
-		ViewHelper.setTranslationY(viewPagerCatTitles, translationY);
+		ViewHelper.setTranslationY(vPagerCatTitles, translationY);
 		
 		if ((!isTranslationZApplied || forceUpdate) && scrollY >= limitScrollAt) {
 			//Log.d(TAG, "translation apply z");
-			ObjectAnimator elevateAnim = ObjectAnimator.ofFloat(viewPagerCatTitles, "translationZ", 0.0f, translationZPx);
+			ObjectAnimator elevateAnim = ObjectAnimator.ofFloat(vPagerCatTitles, "translationZ", 0.0f, translationZPx);
 			elevateAnim.setDuration(100);
 			elevateAnim.start();
 			
 			ma.setVStatusBarLayeredVisibility(View.VISIBLE);
 			ma.setVStatusBarLayeredColor(R.color.colorPrimaryDark);
 			ma.setToolbarBg(ma.getResources().getColor(R.color.colorPrimary));
-			viewPagerCatTitles.setBackgroundColor(ma.getResources().getColor(R.color.colorPrimary));
+			vPagerCatTitles.setBackgroundColor(ma.getResources().getColor(R.color.colorPrimary));
 			ma.setToolbarElevation(0);
 			
 			title = ma.getResources().getString(R.string.title_discover);
@@ -125,13 +169,13 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements C
 			
 		} else if ((isTranslationZApplied || forceUpdate) && scrollY < limitScrollAt) {
 			//Log.d(TAG, "translation remove z");
-			ObjectAnimator elevateAnim = ObjectAnimator.ofFloat(viewPagerCatTitles, "translationZ", translationZPx, 0.0f);
+			ObjectAnimator elevateAnim = ObjectAnimator.ofFloat(vPagerCatTitles, "translationZ", translationZPx, 0.0f);
 			elevateAnim.setDuration(100);
 			elevateAnim.start();
 			
 			ma.setVStatusBarLayeredVisibility(View.GONE);
 			ma.setToolbarBg(Color.TRANSPARENT);
-			viewPagerCatTitles.setBackgroundResource(R.drawable.bg_pager_cat_titles);
+			vPagerCatTitles.setBackgroundResource(R.drawable.bg_v_pager_cat_titles);
 			ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
 			
 			title = "";
@@ -147,6 +191,10 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements C
 		return title;
 	}
 
+	public boolean isTranslationZApplied() {
+		return isTranslationZApplied;
+	}
+	
 	@Override
 	public String getScreenName() {
 		return "Discover Screen";

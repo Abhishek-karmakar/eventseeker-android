@@ -118,7 +118,7 @@
     <string name="evt_cat_sports">Sports</string>
     <string name="evt_cat_arts_museums">Arts et Musées</string>
     <string name="evt_cat_dance">Danse</string>
-    <string name="evt_cat_clubbing_nightlife">Boîtes de Nuit &amp; Vie Nocturne</string>
+    <string name="evt_cat_nightlife">Vie Nocturne</string>
     <string name="evt_cat_educational">Éducatif</string>
     <string name="evt_cat_festivals_fairs">Festivals et Foires</string>
     <string name="evt_cat_family">Famille</string>

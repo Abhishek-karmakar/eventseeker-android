@@ -133,18 +133,18 @@
     <string name="retrieve_artists">Retrieve Artists</string>
  
     <!-- Strings used for event category titles -->
-    <string name="evt_cat_concerts">Concerts</string>
-    <string name="evt_cat_theater">Theater</string>
-    <string name="evt_cat_sports">Sports</string>
-    <string name="evt_cat_arts_museums">Arts &amp; Museums</string>
-    <string name="evt_cat_dance">Dance</string>
-    <string name="evt_cat_clubbing_nightlife">Clubbing &amp; Nightlife</string>
-    <string name="evt_cat_educational">Educational</string>
-    <string name="evt_cat_festivals_fairs">Festivals &amp; Fairs</string>
-    <string name="evt_cat_family">Family</string>
-    <string name="evt_cat_community">Community</string>
-    <string name="evt_cat_business_tech">Business &amp; Tech</string>
-    <string name="evt_cat_tours">Tours</string>
+    <string name="evt_cat_concerts">CONCERTS</string>
+    <string name="evt_cat_theater">THEATER</string>
+    <string name="evt_cat_sports">SPORTS</string>
+    <string name="evt_cat_arts_museums">ARTS &amp; MUSEUMS</string>
+    <string name="evt_cat_dance">DANCE</string>
+    <string name="evt_cat_nightlife">NIGHTLIFE</string>
+    <string name="evt_cat_educational">EDUCATIONAL</string>
+    <string name="evt_cat_festivals_fairs">FESTIVALS &amp; FAIRS</string>
+    <string name="evt_cat_family">FAMILY</string>
+    <string name="evt_cat_community">COMMUNITY</string>
+    <string name="evt_cat_business_tech">BUSINESS &amp; TECH</string>
+    <string name="evt_cat_tours">TOURS</string>
     <string name="plus_generic_error">Sign in with Google is not available.</string>
     
     <string name="already_signed_in_with_google_account">You are already signed in with Google account. Would you like to sign out from Google and sign in with Facebook account?</string>

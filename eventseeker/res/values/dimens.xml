@@ -21,11 +21,14 @@
     <dimen name="grd_evt_categories_hor_space_discover">6dp</dimen>
     <dimen name="grd_evt_categories_ver_space_discover">@dimen/grd_evt_categories_hor_space_discover</dimen>
     <dimen name="grd_evt_categories_pad_discover">10dp</dimen>
+    <dimen name="v_pager_cat_titles_margin_t_discover">160dp</dimen>
+    <dimen name="v_pager_cat_titles_ht_discover">60dp</dimen>
+    <!-- img_category_ht_discover = v_pager_cat_titles_ht_discover + v_pager_cat_titles_margin_t_discover -->
     <dimen name="img_category_ht_discover">220dp</dimen>
-    <dimen name="pager_cat_titles_margin_t_discover">160dp</dimen>
     <!-- cat_title.xml -->
-    <dimen name="txt_title_txt_size_cat_titles">24dp</dimen>
-    <dimen name="v_hor_line_ht_cat_titles">3dp</dimen>
+    <dimen name="txt_title_txt_size_cat_titles">20sp</dimen>
+    <dimen name="v_hor_line_ht_cat_titles">4dp</dimen>
+    <dimen name="v_hor_line_margin_b_cat_titles">3dp</dimen>
     <!-- fragment_featured_events.xml -->
     <dimen name="root_rlt_layout_pad_t_frag_featured_events">8dp</dimen>
     <dimen name="root_rlt_layout_pad_l_frag_featured_events">@dimen/root_rlt_layout_pad_t_frag_featured_events</dimen>

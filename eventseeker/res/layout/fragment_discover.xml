@@ -15,8 +15,6 @@
             android:src="@drawable/cat_900"
             android:contentDescription="Category Image" />
         
-        <!-- Added android:layout_gravity="top" due to 2.3 api bug:
-        http://stackoverflow.com/questions/5401952/framelayout-margin-not-working -->
         <View android:id="@+id/vDummy"
 		    android:layout_width="match_parent"
 		    android:layout_height="1000dp"
@@ -24,18 +22,14 @@
 		    android:layout_marginTop="@dimen/img_category_ht_discover"
 		    android:layout_gravity="top" />
         
-        <!-- <View android:id="@+id/pagerCatTitles"
+        <!-- Added android:layout_gravity="top" due to 2.3 api bug:
+        http://stackoverflow.com/questions/5401952/framelayout-margin-not-working -->
+		<android.support.v4.view.ViewPager android:id="@+id/vPagerCatTitles"
 		    android:layout_width="match_parent"
-		    android:layout_height="60dp"
-		    android:background="@drawable/bg_pager_cat_titles"
-		    android:layout_marginTop="@dimen/pager_cat_titles_margin_t_discover"
-		    android:layout_gravity="top" /> -->
-		    
-		<android.support.v4.view.ViewPager android:id="@+id/pagerCatTitles"
-		    android:layout_width="match_parent"
-		    android:layout_height="@dimen/img_category_ht_discover"
+		    android:layout_height="@dimen/v_pager_cat_titles_ht_discover"
+		    android:layout_marginTop="@dimen/v_pager_cat_titles_margin_t_discover"
 		    android:layout_gravity="top"
-		    android:overScrollMode="never" />
+		    android:background="@drawable/bg_v_pager_cat_titles" />
         
     </FrameLayout>
 
