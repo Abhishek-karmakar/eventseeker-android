@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import android.content.res.Resources;
 import android.util.Log;
 
+import com.wcities.eventseeker.ArtistsNewsListFragment.SortBy;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
@@ -131,6 +132,8 @@ public class UserInfoApi extends Api {
 	private double lat = AppConstants.NOT_ALLOWED_LAT, lon = AppConstants.NOT_ALLOWED_LON;
 	
 	private int artistId;
+	
+	private SortBy sortBy;
 
 	public UserInfoApi(String oauthToken) {
 		super(oauthToken);
@@ -238,6 +241,14 @@ public class UserInfoApi extends Api {
 
 	public void setArtistId(int artistId) {
 		this.artistId = artistId;
+	}
+
+	public SortBy getSortBy() {
+		return sortBy;
+	}
+
+	public void setSortBy(SortBy sortBy) {
+		this.sortBy = sortBy;
 	}
 
 	public JSONObject signUp() throws ClientProtocolException, IOException, JSONException {
@@ -478,7 +489,10 @@ public class UserInfoApi extends Api {
 			if (tracktype != null) {
 				uriBuilder.append("&tracktype=").append(tracktype.name()).append("&removeTracking=enable");
 			}
-		} 
+			
+		} else if (type == Type.artistsfeed && sortBy == SortBy.trending) {
+			uriBuilder.append("&sort=" + sortBy.trending.name());			
+		}
 		
 		if (limit != NOT_INITIALIZED) {
 			uriBuilder.append("&limit=").append(alreadyRequested).append(",").append(limit);

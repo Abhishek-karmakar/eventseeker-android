@@ -14,7 +14,7 @@
 
     <style name="Widget.EventSeeker.Button.White" parent="@android:style/Widget.Button">
         <item name="android:background">@drawable/bg_btn_curved_edges_white_material</item>
-        <item name="android:textColor">@color/bg_screen_dark_blue</item>
+        <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textSize">@dimen/txt_size_widget_eventSeeker_btn_white</item>
         <item name="android:elevation">@dimen/elevation_widget_eventSeeker_btn_white</item>
     </style>

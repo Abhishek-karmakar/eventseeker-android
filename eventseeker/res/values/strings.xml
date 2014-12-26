@@ -33,6 +33,7 @@
     <string name="title_language">Language</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_calendar">Calendar</string>
+    <string name="menu_sort_by">Sort by</string>
     <string name="artist_on_tour">" On Tour "</string>
     <string name="title_event_details">Event Details</string>
     <string name="title_artist_details">Artist Details</string>
@@ -183,6 +184,9 @@
     <string name="posted_a_status">posted a status</string>
     <string name="follow_artists_for_updates">Follow artists to receive real time updates.</string>
     <string name="search_artists">Search Artists</string>
+    <string name="sort_by">Sort By : </string>
+    <string name="chronological">Chronological</string>
+    <string name="trending">Trending</string>
 
     <!-- Connect Accounts Services -->
     <string name="service_google_play">Google Play</string>

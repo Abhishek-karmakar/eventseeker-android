@@ -3,7 +3,8 @@
     android:id="@+id/rltLayoutRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_gray" >
+    android:background="@color/dark_gray" 
+    android:paddingTop="@dimen/common_t_mar_pad_for_all_layout" >
 
     <!-- This is used to have story_space as background when list is empty where we show a message
     indicating no items found or ask user to login first with facebook when wcitiesId is also null. -->

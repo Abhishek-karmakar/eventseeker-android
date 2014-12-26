@@ -25,6 +25,19 @@
 		android:layout_marginLeft="@dimen/txt_margin_l_artist_news_item"
 		android:layout_marginRight="@dimen/txt_margin_r_artist_news_item"
 		android:textColor="@android:color/black" />
+ 
+	<ImageView android:id="@+id/imgTrending"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/txtTitle"
+		android:layout_marginBottom="@dimen/txt_time_margin_b_artist_news_item"
+		android:layout_alignParentRight="true"
+		android:layout_marginRight="@dimen/txt_margin_r_artist_news_item" 
+		android:layout_alignBottom="@+id/txtTime"
+		android:layout_alignTop="@+id/txtTime" 
+		android:visibility="gone"
+		android:src="@mipmap/ic_launcher" />
+		<!-- android:src="@drawable/ic_src" /> -->
 	 
 	<ImageView android:id="@+id/imgPhoto"
 		android:layout_width="wrap_content"

@@ -1919,7 +1919,7 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	/**
-	 * will set color to vStatusBar, if current api level is greater than v19
+	 * will set color to vStatusBar, if current api level is greater than v18
 	 * @param colorRes
 	 */
 	public void setVStatusBarColor(int colorRes) {
@@ -1935,7 +1935,7 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	/**
-	 * will set visibility to vStatusBar, if current api level is greater than v19
+	 * will set visibility to vStatusBar, if current api level is greater than v18
 	 * @param viewVisibility
 	 */
 	public void setVStatusBarVisibility(int viewVisibility) {

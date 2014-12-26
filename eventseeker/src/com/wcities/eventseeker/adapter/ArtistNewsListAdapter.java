@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -55,15 +56,18 @@ public class ArtistNewsListAdapter extends BaseAdapter {
     private List<ArtistNewsListItem> batchLoaded;
     
     private Resources res;
+	private boolean isTrending;
     
     public ArtistNewsListAdapter(Context context, AsyncTask<Void, Void, List<ArtistNewsItem>> loadArtistNews, 
-    		LoadItemsInBackgroundListener listener, List<ArtistNewsListItem> artistsNewsListItems, int width) {
+    		LoadItemsInBackgroundListener listener, List<ArtistNewsListItem> artistsNewsListItems, 
+    		int width, boolean isTrending) {
     	mContext = context;
         this.loadArtistNews = loadArtistNews;
         mListener = listener;
         this.artistsNewsListItems = artistsNewsListItems;
         this.imgWidth = width;
         this.batchLoaded = new ArrayList<ArtistNewsListItem>();
+        this.isTrending = isTrending;
         res = context.getResources();
         
         mInflater = LayoutInflater.from(context);
@@ -157,6 +161,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 				holder.imgLink = (ImageView) rltLayoutNewsItemContainer.findViewById(R.id.imgLink);
 				holder.txtLinkTitle = (TextView) rltLayoutNewsItemContainer.findViewById(R.id.txtLinkTitle);
 				holder.txtDesc = (TextView) rltLayoutNewsItemContainer.findViewById(R.id.txtDesc);
+				holder.imgTrending = (ImageView) rltLayoutNewsItemContainer.findViewById(R.id.imgTrending);
 				
 				RelativeLayout rltLayoutNewsItem2Container = holder.rltLayoutNewsItem2Container 
 						= (RelativeLayout) convertView.findViewById(R.id.rltLayoutNewsItemContainer2);
@@ -167,6 +172,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 				holder.imgLink2 = (ImageView) rltLayoutNewsItem2Container.findViewById(R.id.imgLink);
 				holder.txtLinkTitle2 = (TextView) rltLayoutNewsItem2Container.findViewById(R.id.txtLinkTitle);
 				holder.txtDesc2 = (TextView) rltLayoutNewsItem2Container.findViewById(R.id.txtDesc);
+				holder.imgTrending2 = (ImageView) rltLayoutNewsItemContainer.findViewById(R.id.imgTrending);
 				
 				convertView.setTag(holder);
 				
@@ -221,12 +227,12 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 		private RelativeLayout rltLayoutNewsItemContainer;
 		private ImageView imgPhoto;
 		private TextView txtTitle, txtTime, txtLinkTitle, txtDesc;
-		private ImageView imgLink, imgVideo;
+		private ImageView imgLink, imgVideo, imgTrending;
 		
 		private RelativeLayout rltLayoutNewsItem2Container;
 		private ImageView imgPhoto2;
 		private TextView txtTitle2, txtTime2, txtLinkTitle2, txtDesc2;
-		private ImageView imgLink2, imgVideo2;
+		private ImageView imgLink2, imgVideo2, imgTrending2;
 		
 		public ImageView getImgPhoto() {
 			return imgPhoto;
@@ -344,6 +350,8 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 			txtTitle.setText(title);
 			txtTime.setText(time);
 			txtDesc.setText(item.getPostDesc());
+			imgTrending.setVisibility(isTrending ? View.VISIBLE : View.GONE);
+			Log.d(TAG, "imgTrending : isTrending : " + isTrending);
 			
 			rltLayoutNewsItemContainer.setOnClickListener(new OnClickListener() {
 				
@@ -417,6 +425,8 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 			txtTitle2.setText(title);
 			txtTime2.setText(time);
 			txtDesc2.setText(item.getPostDesc());
+			Log.d(TAG, "imgTrending2 : isTrending : " + isTrending);
+			imgTrending2.setVisibility(isTrending ? View.VISIBLE : View.GONE);
 			
 			rltLayoutNewsItem2Container.setOnClickListener(new OnClickListener() {
 				

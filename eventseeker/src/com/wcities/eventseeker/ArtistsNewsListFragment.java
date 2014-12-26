@@ -4,17 +4,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView.RecyclerListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -52,6 +65,14 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 
 	private View rltDummyLyt;
 	private ScrollView scrlVRootNoItemsFoundWithAction;
+	private SortBy sortBy = SortBy.chronological;
+	
+	public enum SortBy {
+		chronological,
+		trending
+	}
+	
+	private com.wcities.eventseeker.ArtistsNewsListFragment.SortByDialogFragment.OnSortTypeSelectedListener onSortTypeSelectedListener;
 	
 	/**
 	 * Using its instance variable since otherwise calling getResources() directly from fragment from 
@@ -73,6 +94,7 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        setHasOptionsMenu(true);
 		isTablet = ((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).isTablet();
 
         if (wcitiesId == null) {
@@ -83,6 +105,9 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.VISIBLE);
+		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarColor(R.color.colorPrimaryDark);
+		
 		orientation = getResources().getConfiguration().orientation;
 		is7InchTabletInPortrait = ((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext())
 				.is7InchTabletAndInPortraitMode();
@@ -129,10 +154,29 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
+		onSortTypeSelectedListener 
+			= new com.wcities.eventseeker.ArtistsNewsListFragment.SortByDialogFragment.OnSortTypeSelectedListener() {
+			
+			@Override
+			public void onSortTypeSelectedListener(SortBy sortBy) {
+				if (ArtistsNewsListFragment.this.sortBy == sortBy) {
+					return;
+				}
+				ArtistsNewsListFragment.this.sortBy = sortBy;
+				artistsNewsListItems = null;
+				
+				initListView();
+			}
+		};
+		
+		initListView();
+	}
+	
+	private void initListView() {
 		if (artistsNewsListItems == null) {
 			artistsNewsListItems = new ArrayList<ArtistNewsListItem>();
 			artistNewsListAdapter = new ArtistNewsListAdapter(FragmentUtil.getActivity(this), null, 
-					this, artistsNewsListItems, imgWidth);
+					this, artistsNewsListItems, imgWidth, (sortBy == SortBy.trending));
 	        
 			artistsNewsListItems.add(null);
 			loadItemsInBackground();
@@ -177,7 +221,29 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 			public void onMovedToScrapHeap(View view) {
 				freeUpBitmapMemory(view);
 			}
-		});
+		});		
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.fragment_artist_news, menu);
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_sort_by:
+			Log.d(TAG, "action_sort_by");
+			SortByDialogFragment.getInstance(this, onSortTypeSelectedListener, sortBy)
+				.show(((ActionBarActivity) FragmentUtil.getActivity(this))
+					.getSupportFragmentManager(), "dialogSortBy");
+			return true;
+
+		default:
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 	
 	@Override
@@ -220,7 +286,8 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	
 	@Override
 	public void loadItemsInBackground() {
-		loadArtistsNews = new LoadArtistNews(Api.OAUTH_TOKEN, artistNewsListAdapter, wcitiesId, artistsNewsListItems, null, this);
+		loadArtistsNews = new LoadArtistNews(Api.OAUTH_TOKEN, artistNewsListAdapter, wcitiesId, artistsNewsListItems, 
+				null, this, sortBy);
 		artistNewsListAdapter.setLoadArtistNews(loadArtistsNews);
 		AsyncTaskUtil.executeAsyncTask(loadArtistsNews, true);
 	}
@@ -287,5 +354,95 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	@Override
 	public String getScreenName() {
 		return "Artist News Screen";
+	}
+	
+	private static class SortByDialogFragment extends DialogFragment implements OnCheckedChangeListener {
+		
+		private static SortByDialogFragment dialogFragment;
+		private Fragment fragment;
+		//private static boolean isShowing;
+		private SortBy sortBy = null;
+		private OnSortTypeSelectedListener onSortTypeSelectedListener;
+		
+		public interface OnSortTypeSelectedListener {
+			public void onSortTypeSelectedListener(SortBy sortBy);
+		}
+		
+		public static SortByDialogFragment getInstance(Fragment fragment, 
+				OnSortTypeSelectedListener onSortTypeSelectedListener, SortBy sortBy) {
+			dialogFragment = new SortByDialogFragment(fragment, onSortTypeSelectedListener, sortBy);
+			return dialogFragment;
+		}
+		
+		private SortByDialogFragment(Fragment fragment, OnSortTypeSelectedListener listener, SortBy sortBy) {
+			this.fragment = fragment;
+			this.onSortTypeSelectedListener = listener;
+			this.sortBy = sortBy;
+		}
+		
+		@Override
+		public Dialog onCreateDialog(Bundle savedInstanceState) {
+			View v = LayoutInflater.from(FragmentUtil.getActivity(fragment))
+				.inflate(R.layout.fragment_artist_news_dialog, null);
+
+			setupViews(v);
+			
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+			builder.setView(v);
+			builder.setNegativeButton(R.string.cancel,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dismiss();
+					}
+				});
+	        // Create the AlertDialog object and return it
+	        Dialog dialog = builder.create();
+	        dialog.setTitle(R.string.sort_by);
+	        dialog.setCancelable(false);
+			return dialog;
+		}
+		
+		/*@Override
+		public void onDismiss(DialogInterface dialog) {
+			super.onDismiss(dialog);
+			isShowing = false;
+		}*/
+		
+		private void setupViews(View v) {
+			if (sortBy != null) {
+				if (sortBy == SortBy.chronological) {
+					((RadioButton) v.findViewById(R.id.rdbChronological)).setChecked(true);
+					
+				} else {
+					((RadioButton) v.findViewById(R.id.rdbTrending)).setChecked(true);
+				}
+				((RadioGroup) v.findViewById(R.id.rdgSortBy)).setOnCheckedChangeListener(this);
+			}
+		}
+
+		/*@Override
+		public void show(FragmentManager manager, String tag) {
+			if (!isShowing) {
+				isShowing = true;
+				super.show(manager, tag);
+			}
+		}*/
+
+		@Override
+		public void onDestroy() {
+			super.onDestroy();
+			fragment = null;
+			onSortTypeSelectedListener = null;
+		}
+		
+		@Override
+		public void onCheckedChanged(RadioGroup group, int checkedId) {
+			sortBy = (checkedId == R.id.rdbChronological) ? SortBy.chronological : SortBy.trending;
+			onSortTypeSelectedListener.onSortTypeSelectedListener(sortBy);
+			
+			Log.d(TAG, "onCheckedChanged : sortBy : " + sortBy);
+			//isShowing = false;
+			dismiss();
+		}
 	}
 }

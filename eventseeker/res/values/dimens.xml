@@ -467,6 +467,7 @@
     <dimen name="btn_action_pad_r_include_no_items_found_with_action">@dimen/btn_action_pad_l_include_no_items_found_with_action</dimen>
     <!-- fragment_artists_news_list.xml -->
     <dimen name="include_no_items_found_with_action_margin_fragment_artists_news_list">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="rlt_root_pad_fragment_artists_news_list">10dp</dimen>
     <!-- fragment_my_events_list.xml -->
     <dimen name="rlt_layout_root_pad_l_fragment_my_events_list">0dp</dimen>
     <dimen name="rlt_layout_root_pad_r_fragment_my_events_list">@dimen/rlt_layout_root_pad_l_fragment_my_events_list</dimen>

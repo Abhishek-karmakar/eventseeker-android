@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
+import com.wcities.eventseeker.ArtistsNewsListFragment.SortBy;
 import com.wcities.eventseeker.adapter.ArtistNewsListAdapter;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
@@ -37,19 +38,23 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 	private List<ArtistNewsListItem> artistsNewsListItems;
 	private int count;
 	private OnNewsLoadedListener newsLoadedListener;
+
+	private SortBy sortBy;
 	
 	public interface OnNewsLoadedListener {
 		public abstract void onNewsLoaded();
 	}
 	
 	public LoadArtistNews(String oauthToken, ArtistNewsListAdapter artistNewsListAdapter, String wcitiesId, 
-			List<ArtistNewsListItem> artistsNewsListItems, Artist artist, OnNewsLoadedListener newsLoadedListener) {
+			List<ArtistNewsListItem> artistsNewsListItems, Artist artist, OnNewsLoadedListener newsLoadedListener, 
+			SortBy sortBy) {
 		this.oauthToken = oauthToken;
 		this.artistNewsListAdapter = artistNewsListAdapter;
 		this.wcitiesId = wcitiesId;
 		this.artist = artist;
 		this.artistsNewsListItems = artistsNewsListItems;
 		this.newsLoadedListener = newsLoadedListener;
+		this.sortBy = sortBy;
 		
 		batchLoaded = new ArrayList<ArtistNewsListItem>();
 		artistNewsListAdapter.setBatchLoaded(batchLoaded);
@@ -62,6 +67,7 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 		userInfoApi.setLimit(ARTISTS_NEWS_LIMIT);
 		userInfoApi.setAlreadyRequested(artistNewsListAdapter.getItemsAlreadyRequested());
 		userInfoApi.setUserId(wcitiesId);
+		userInfoApi.setSortBy(sortBy);
 		if (artist != null) {
 			userInfoApi.setArtistId(artist.getId());
 		}

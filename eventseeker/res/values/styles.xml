@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
     
     <style name="ThemeOverlay.EventSeeker.Dark.ActionBar" parent="@style/Widget.AppCompat.Toolbar">
         <item name="android:background">?attr/colorPrimary</item>
@@ -37,8 +37,9 @@
 
     <style name="Widget.EventSeeker.Button.White" parent="@android:style/Widget.Button">
         <item name="android:background">@drawable/slctr_bg_curved_edges_white</item>
-        <item name="android:textColor">@color/bg_screen_dark_blue</item>
+        <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textSize">@dimen/txt_size_widget_eventSeeker_btn_white</item>
+        <item name="android:minHeight">@dimen/btn_default_ht</item>
     </style>
 
     <style name="Widget.EventSeekr.ActionButton.Overflow" parent="Widget.AppCompat.ActionButton.Overflow">
