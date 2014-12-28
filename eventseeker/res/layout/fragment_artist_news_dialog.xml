@@ -15,15 +15,17 @@
 
         <RadioButton
             android:id="@+id/rdbChronological"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:checked="true"
             android:text="@string/chronological" />
 
         <RadioButton
             android:id="@+id/rdbTrending"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="@string/trending" />
     </RadioGroup>
 

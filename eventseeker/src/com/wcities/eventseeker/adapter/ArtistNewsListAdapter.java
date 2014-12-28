@@ -172,7 +172,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 				holder.imgLink2 = (ImageView) rltLayoutNewsItem2Container.findViewById(R.id.imgLink);
 				holder.txtLinkTitle2 = (TextView) rltLayoutNewsItem2Container.findViewById(R.id.txtLinkTitle);
 				holder.txtDesc2 = (TextView) rltLayoutNewsItem2Container.findViewById(R.id.txtDesc);
-				holder.imgTrending2 = (ImageView) rltLayoutNewsItemContainer.findViewById(R.id.imgTrending);
+				holder.imgTrending2 = (ImageView) rltLayoutNewsItem2Container.findViewById(R.id.imgTrending);
 				
 				convertView.setTag(holder);
 				
@@ -425,8 +425,9 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 			txtTitle2.setText(title);
 			txtTime2.setText(time);
 			txtDesc2.setText(item.getPostDesc());
-			Log.d(TAG, "imgTrending2 : isTrending : " + isTrending);
 			imgTrending2.setVisibility(isTrending ? View.VISIBLE : View.GONE);
+			Log.d(TAG, "imgTrending2 : isTrending : " + isTrending);
+			Log.d(TAG, "imgTrending2 : isVisible : " + (imgTrending2.getVisibility() == View.VISIBLE));
 			
 			rltLayoutNewsItem2Container.setOnClickListener(new OnClickListener() {
 				

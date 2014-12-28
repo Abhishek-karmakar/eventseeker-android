@@ -402,12 +402,6 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 			return dialog;
 		}
 		
-		/*@Override
-		public void onDismiss(DialogInterface dialog) {
-			super.onDismiss(dialog);
-			isShowing = false;
-		}*/
-		
 		private void setupViews(View v) {
 			if (sortBy != null) {
 				if (sortBy == SortBy.chronological) {
@@ -440,7 +434,6 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 			sortBy = (checkedId == R.id.rdbChronological) ? SortBy.chronological : SortBy.trending;
 			onSortTypeSelectedListener.onSortTypeSelectedListener(sortBy);
 			
-			Log.d(TAG, "onCheckedChanged : sortBy : " + sortBy);
 			//isShowing = false;
 			dismiss();
 		}

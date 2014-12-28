@@ -37,7 +37,6 @@
 		android:layout_alignTop="@+id/txtTime" 
 		android:visibility="gone"
 		android:src="@mipmap/ic_launcher" />
-		<!-- android:src="@drawable/ic_src" /> -->
 	 
 	<ImageView android:id="@+id/imgPhoto"
 		android:layout_width="wrap_content"
