@@ -3,18 +3,27 @@
     android:id="@+id/rltLayoutRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_gray"
+    android:background="@android:color/white"
     android:padding="@dimen/rlt_layout_root_pad_fragment_connect_accounts_list" >
+    
+    <Button android:id="@+id/btnFollowMoreArtists"
+         android:layout_width="match_parent" 
+         android:layout_height="wrap_content" 
+         android:layout_marginTop="@dimen/common_t_mar_pad_for_all_layout"
+         android:text="@string/follow_more_artists" 
+         style="@style/Widget.EventSeeker.Button.WhiteBgBlueStroke" />
     
 	<ListView android:id="@id/android:list"
 	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-	    android:background="@drawable/story_space" />
+	    android:layout_height="match_parent" 
+	    android:layout_below="@+id/btnFollowMoreArtists" 
+	    android:layout_marginTop="@dimen/list_margin_t_b_fragment_connect_account_and_get_started" />
 	    
     <RelativeLayout android:id="@+id/rltDummyLyt" 
         android:layout_width="match_parent"
 	    android:layout_height="match_parent"
-	    android:background="@drawable/story_space"
+	    android:layout_marginTop="@dimen/common_t_mar_pad_for_all_layout"
+	    android:background="@android:color/transparent"
 	    android:visibility="gone">
     	
 	    <TextView android:id="@+id/txtNoItemsFound"

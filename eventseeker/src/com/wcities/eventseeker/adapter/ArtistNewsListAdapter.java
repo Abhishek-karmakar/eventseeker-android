@@ -351,7 +351,6 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 			txtTime.setText(time);
 			txtDesc.setText(item.getPostDesc());
 			imgTrending.setVisibility(isTrending ? View.VISIBLE : View.GONE);
-			Log.d(TAG, "imgTrending : isTrending : " + isTrending);
 			
 			rltLayoutNewsItemContainer.setOnClickListener(new OnClickListener() {
 				
@@ -426,8 +425,6 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 			txtTime2.setText(time);
 			txtDesc2.setText(item.getPostDesc());
 			imgTrending2.setVisibility(isTrending ? View.VISIBLE : View.GONE);
-			Log.d(TAG, "imgTrending2 : isTrending : " + isTrending);
-			Log.d(TAG, "imgTrending2 : isVisible : " + (imgTrending2.getVisibility() == View.VISIBLE));
 			
 			rltLayoutNewsItem2Container.setOnClickListener(new OnClickListener() {
 				

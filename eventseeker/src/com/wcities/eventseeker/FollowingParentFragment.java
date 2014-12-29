@@ -1,5 +1,6 @@
 package com.wcities.eventseeker;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,9 +8,14 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
-import android.os.Build;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,11 +36,14 @@ import com.wcities.eventseeker.SettingsFragment.OnSettingsItemClickedListener;
 import com.wcities.eventseeker.SettingsFragment.SettingsItem;
 import com.wcities.eventseeker.adapter.MyArtistListAdapter;
 import com.wcities.eventseeker.api.Api;
+import com.wcities.eventseeker.api.UserInfoApi;
+import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadMyArtists;
 import com.wcities.eventseeker.asynctask.LoadMyArtists.LoadMyArtistsListener;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
+import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.core.FollowingList;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
@@ -70,6 +79,8 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 	 * then changed the orientation.
 	 */
 	private Resources res;
+
+	protected Button btnFollowMoreArtists;
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -116,7 +127,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 			indices = new ArrayList<Character>();
 
 			myArtistListAdapter = new MyArtistListAdapter(FragmentUtil.getActivity(this), artistList, null, 
-					alphaNumIndexer, indices, this);
+					alphaNumIndexer, indices, this, this);
 
 			loadItemsInBackground();
 
@@ -145,9 +156,9 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 		
 		absListView.setScrollingCacheEnabled(false);
 		absListView.setFastScrollEnabled(true);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			absListView.setFastScrollAlwaysVisible(true);
-		}
+		/*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			absListView.setFastScrollAlwaysVisible(false);
+		}*/
 	}
 
 	@Override
@@ -183,6 +194,9 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 		 */
 		try {
 			absListView.setVisibility(View.GONE);
+			if (btnFollowMoreArtists != null) {
+				btnFollowMoreArtists.setVisibility(View.GONE);
+			}
 			
 		} catch (IllegalStateException e) {
 			Log.e(TAG, "" + e.getMessage());
@@ -229,5 +243,42 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 		return "Following Screen";
 	}
 	
+	public void removeFollowedArtist(Context context, int artistId) {
+		new EditArtistTrackingAsync(context, artistId, Attending.NotTracked.getValue()).execute();
+	}
+
+	private class EditArtistTrackingAsync extends AsyncTask<Void, Void, Void> {		
+		
+		private Context context;
+		private int artistId;
+		private int attending;
+		
+		public EditArtistTrackingAsync(Context context, int artistId, int attending) {
+			this.context = context;
+			this.artistId = artistId;
+			this.attending = attending;
+		}
+		
+		@Override
+		protected Void doInBackground(Void... params) {
+			try {
+				UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
+				userInfoApi.setUserId(((EventSeekr) context.getApplicationContext()).getWcitiesId());
+				JSONObject jsonObject = userInfoApi.editUserTracking(UserTrackingItemType.artist, artistId, attending);
+				Log.d(TAG, "result = " + jsonObject.toString());
+				
+			} catch (ClientProtocolException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+		
+	}
+	
 	protected abstract AbsListView getScrollableView();
+	
 }

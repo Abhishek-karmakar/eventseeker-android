@@ -513,6 +513,7 @@
     <!-- common -->
     <dimen name="txt_size_widget_eventSeeker_btn_white">16dp</dimen>
     <dimen name="elevation_widget_eventSeeker_btn_white">15dp</dimen>
+    <dimen name="elevation_widget_eventSeeker_btn_white_blue_stroke">30dp</dimen>
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <!-- activity_bosch_main.xml -->
     <dimen name="b_root_navigation_drawer_w_main">210dp</dimen>

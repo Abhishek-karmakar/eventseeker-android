@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
+import com.wcities.eventseeker.FollowingFragment;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
@@ -46,8 +48,10 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 	private boolean isTablet;
 	private LoadItemsInBackgroundListener mListener;
 	
+	private Fragment fragment;
+	
 	public MyArtistListAdapter(Context context, List<Artist> artistList, AsyncTask<Void, Void, List<Artist>> loadMyArtists, 
-			Map<Character, Integer> alphaNumIndexer, List<Character> indices, LoadItemsInBackgroundListener mListener) {
+			Map<Character, Integer> alphaNumIndexer, List<Character> indices, LoadItemsInBackgroundListener mListener, Fragment fragment) {
 		if (!(context instanceof ArtistListener)) {
 			throw new ClassCastException(context.toString() + " must implement ArtistListener");
 		}
@@ -62,6 +66,7 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 		this.indices = indices;
 		
 		this.mListener = mListener;
+		this.fragment = fragment;
 	}
 
 	@Override
@@ -90,13 +95,14 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		//Log.d(TAG, "pos = " + position);
 		final Artist artist = getItem(position);
 		if (artist == null) {
 			if (convertView == null || !convertView.getTag().equals(AppConstants.TAG_PROGRESS_INDICATOR)) {
 				if(isTablet) {
 					convertView = LayoutInflater.from(mContext).inflate(R.layout.grd_progress_bar, null);
+					
 				} else {
 					convertView = LayoutInflater.from(mContext).inflate(R.layout.list_progress_bar, null);
 				}
@@ -112,6 +118,7 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 			if (convertView == null || !convertView.getTag().equals(AppConstants.TAG_CONTENT)) {
 				if (isTablet) {
 					convertView = LayoutInflater.from(mContext).inflate(R.layout.fragment_following_artists_list_item_tab, null);
+					
 				} else {
 					convertView = LayoutInflater.from(mContext).inflate(R.layout.fragment_search_artists_list_item, null);
 				}
@@ -126,6 +133,14 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 			} else {
 				convertView.findViewById(R.id.txtOnTour).setVisibility(View.INVISIBLE);
 			}
+
+			convertView.findViewById(R.id.btnFollow).setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					removeItemAt(position);
+				}
+			});
 
 			String key = artist.getKey(ImgResolution.LOW);
 			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
@@ -169,6 +184,12 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 		return artistList.size();
 	}
 
+	void removeItemAt(int position) {
+		((FollowingFragment) fragment).removeFollowedArtist(mContext, getItem(position).getId());
+		artistList.remove(position);
+		notifyDataSetChanged();
+	}
+	
 	@Override
 	public int getPositionForSection(int sectionIndex) {
 		//Log.d(TAG, "index = " + alphaNumIndexer.get(indices.get(sectionIndex)));

@@ -3,7 +3,7 @@
     android:id="@+id/scrlVRootNoItemsFoundWithAction"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/story_space" >
+    android:background="@color/transparent" >
     
     <RelativeLayout android:id="@+id/rltLayoutRootNoItemsFoundWithAction"
 	    android:layout_width="match_parent"

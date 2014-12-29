@@ -12,11 +12,27 @@
         <item name="android:background">?android:selectableItemBackground</item>
     </style>
 
-    <style name="Widget.EventSeeker.Button.White" parent="@android:style/Widget.Button">
+    <style name="Widget.EventSeeker.ImageButton.White" parent="@android:style/Widget.Material.ImageButton">
+        <item name="android:background">@drawable/bg_btn_curved_edges_white_material</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">@dimen/txt_size_widget_eventSeeker_btn_white</item>
+        <item name="android:minHeight">@dimen/btn_default_ht</item>
+    </style>
+
+    <style name="Widget.EventSeeker.Button.White" parent="@android:style/Widget.Material.Button">
         <item name="android:background">@drawable/bg_btn_curved_edges_white_material</item>
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textSize">@dimen/txt_size_widget_eventSeeker_btn_white</item>
         <item name="android:elevation">@dimen/elevation_widget_eventSeeker_btn_white</item>
+        <item name="android:minHeight">@dimen/btn_default_ht</item>
+    </style>
+
+    <style name="Widget.EventSeeker.Button.WhiteBgBlueStroke" parent="@android:style/Widget.Material.Button">
+        <item name="android:background">@drawable/bg_btn_curved_edges_blue_material</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">@dimen/txt_size_widget_eventSeeker_btn_white</item>
+        <item name="android:elevation">@dimen/elevation_widget_eventSeeker_btn_white_blue_stroke</item>
+        <item name="android:minHeight">@dimen/btn_default_ht</item>
     </style>
 
 </resources>

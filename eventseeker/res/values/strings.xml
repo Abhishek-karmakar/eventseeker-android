@@ -221,6 +221,9 @@
     <string name="following">FOLLOWING</string>
     <string name="recommended">RECOMMENDED</string>
 
+    <!-- Following -->
+    <string name="follow_more_artists">FOLLOW MORE ARTISTS +</string>
+
     <!-- Search Results -->
     <string name="artists">ARTISTS</string>
     <string name="venues">VENUES</string>
