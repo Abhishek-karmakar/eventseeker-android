@@ -1,13 +1,13 @@
 package com.wcities.eventseeker;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -15,7 +15,9 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
@@ -23,13 +25,12 @@ import com.wcities.eventseeker.adapter.CatTitlesAdapter;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Category;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
-import com.wcities.eventseeker.custom.view.ObservableScrollView;
-import com.wcities.eventseeker.custom.view.ObservableScrollView.Callbacks;
+import com.wcities.eventseeker.custom.view.RecyclerViewInterceptingVerticalScroll;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 
-public class DiscoverFragment extends FragmentLoadableFromBackStack implements Callbacks {
+public class DiscoverFragment extends FragmentLoadableFromBackStack {
 	
 	private static final String TAG = DiscoverFragment.class.getSimpleName();
 	
@@ -38,14 +39,34 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements C
 	
 	private ImageView imgCategory;
 	private ViewPager vPagerCatTitles;
-	private ObservableScrollView obsrScrlV;
+	/**
+	 * Used RecyclerViewInterceptingVerticalScroll in place of RecyclerView since we want to intercept only
+	 * vertical scroll events; otherwise horizontal must be handled by its child as done for child at 
+	 * position 0 (which is overlapping category image view)
+	 */
+	private RecyclerViewInterceptingVerticalScroll recyclerVEvents;
+	private EventListAdapter eventListAdapter;
+    private RecyclerView.LayoutManager layoutManager;
 	private CatTitlesAdapter catTitlesAdapter;
 	
-	private int toolbarSize, prevScrollY = UNSCROLLED;
-	private float limitScrollAt, translationZPx;
-	private boolean isTranslationZApplied;
+	private int toolbarSize;
+	private int limitScrollAt;
+	private float translationZPx;
+	private boolean isScrollLimitReached, isDrawerOpen;
 	private String title = "";
 	protected List<Category> evtCategories;
+	private int totalScrolledDy = UNSCROLLED; // indicates layout not yet created
+	
+	String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
+	        "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
+	        "Linux", "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux",
+	        "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux", "OS/2",
+	        "Android", "iPhone", "WindowsMobile", 
+	        "Android", "iPhone", "WindowsMobile",
+	        "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
+	        "Linux", "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux",
+	        "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux", "OS/2",
+	        "Android", "iPhone", "WindowsMobile"};
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +75,6 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements C
 		setHasOptionsMenu(true);
 		setRetainInstance(true);
 		
-		toolbarSize = FragmentUtil.getResources(this).getDimensionPixelSize(R.dimen.action_bar_ht);
 		translationZPx = ConversionUtil.toPx(FragmentUtil.getResources(this), TRANSLATION_Z_DP);
 	}
 	
@@ -81,23 +101,6 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements C
 			}
 		});
 		
-		obsrScrlV = (ObservableScrollView) v.findViewById(R.id.obsrScrlV);
-		obsrScrlV.setCallbacks(this);
-		
-		obsrScrlV.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                    	//Log.d(TAG, "onGlobalLayout()");
-						if (VersionUtil.isApiLevelAbove15()) {
-							obsrScrlV.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-						} else {
-							obsrScrlV.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-						}
-                        onScrollChanged(obsrScrlV.getScrollY(), true);
-                    }
-                });
-		
 		vPagerCatTitles.setAdapter(catTitlesAdapter);
 		vPagerCatTitles.setOnPageChangeListener(catTitlesAdapter);
 		
@@ -109,6 +112,44 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements C
 		// make this at least however many pages you can see
 		vPagerCatTitles.setOffscreenPageLimit(9);
 		
+		recyclerVEvents = (RecyclerViewInterceptingVerticalScroll) v.findViewById(R.id.recyclerVEvents);
+		
+		// use a linear layout manager
+		layoutManager = new LinearLayoutManager(FragmentUtil.getActivity(this));
+		recyclerVEvents.setLayoutManager(layoutManager);
+		
+	    if (eventListAdapter == null) {
+	    	eventListAdapter = new EventListAdapter();
+	    }
+	    recyclerVEvents.setAdapter(eventListAdapter);
+		
+	    recyclerVEvents.setOnScrollListener(new RecyclerView.OnScrollListener() {
+	    	
+	    	@Override
+	    	public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+	    		super.onScrolled(recyclerView, dx, dy);
+	    		DiscoverFragment.this.onScrolled(dy, false);
+	    	}
+		});
+	    
+	    recyclerVEvents.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+            	//Log.d(TAG, "onGlobalLayout()");
+				if (VersionUtil.isApiLevelAbove15()) {
+					recyclerVEvents.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+				} else {
+					recyclerVEvents.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+				}
+				onScrolled(0, true);
+				if (isDrawerOpen) {
+					// to maintain status bar & toolbar decorations after orientation change
+					onDrawerOpened();
+				}
+            }
+        });
+		
 		return v;
 	}
 	
@@ -116,10 +157,31 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements C
 	public void onStart() {
 		super.onStart();
 		//Log.d(TAG, "onStart(), prevScrollY = " + prevScrollY);
-		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.GONE);
-		if (prevScrollY != UNSCROLLED) {
-			onScrollChanged(prevScrollY, true);
+		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this); 
+		ma.setVStatusBarVisibility(View.GONE);
+		ma.setVDrawerStatusBarVisibility(View.VISIBLE);
+		if (totalScrolledDy != UNSCROLLED) {
+			onScrolled(0, true);
+			if (isDrawerOpen) {
+				onDrawerOpened();
+			}
 		}
+	}
+	
+	@Override
+	public void onStop() {
+		super.onStop();
+		/**
+		 * Revert toolbar & layered status bar updates here itself.
+		 * We prefer reverting these changes here itself rather than applying updates for each screen 
+		 * depending on specific requirement, since these are the changes applied to very small
+		 * number of screens & hence no need to update these effects on every screen after reverting these here.
+		 */
+		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		ma.setToolbarBg(ma.getResources().getColor(R.color.colorPrimary));
+		ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
+		ma.setVStatusBarLayeredVisibility(View.GONE);
+		ma.setVDrawerStatusBarVisibility(View.GONE);
 	}
 	
 	private void buildEvtCategories() {
@@ -131,27 +193,45 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements C
 		}
 	}
 	
-	private void onScrollChanged(int scrollY, boolean forceUpdate) {
+	private void calculateScrollLimit() {
+		toolbarSize = FragmentUtil.getResources(this).getDimensionPixelSize(R.dimen.action_bar_ht);
+		int initialPagerTop = FragmentUtil.getResources(this).getDimensionPixelSize(R.dimen.v_pager_cat_titles_margin_t_discover);
+		limitScrollAt = initialPagerTop - toolbarSize;
+		
+		if (VersionUtil.isApiLevelAbove18()) {
+			limitScrollAt -= ((MainActivity) FragmentUtil.getActivity(this)).getStatusBarHeight();
+		}
+	}
+	
+	private void onScrolled(int dy, boolean forceUpdate) {
+		//Log.d(TAG, "totalScrolledDy = " + totalScrolledDy);
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		
+		if (totalScrolledDy == UNSCROLLED) {
+			totalScrolledDy = 0;
+		}
+		totalScrolledDy += dy;
+		
 		// Translate image
-		ViewHelper.setTranslationY(imgCategory, scrollY / 2);
+		ViewHelper.setTranslationY(imgCategory, (0 - totalScrolledDy) / 2);
 		
 		// Translate tabs
 		if (limitScrollAt == 0) {
-			limitScrollAt = vPagerCatTitles.getTop() - toolbarSize;
-			
-			if (VersionUtil.isApiLevelAbove18()) {
-				limitScrollAt -= ma.getStatusBarHeight();
-			}
+			calculateScrollLimit();
 			//Log.d(TAG, "vPagerCatTitles.getTop() = " + vPagerCatTitles.getTop() + ", toolbarSize = " + toolbarSize + ", ma.getStatusBarHeight() = " + ma.getStatusBarHeight());
 		}
-		float translationY = (scrollY >= limitScrollAt) ? (scrollY - limitScrollAt) : 0;
 		
-		//Log.d(TAG, "scrollY = " + scrollY + ", limitScrollAt = " + limitScrollAt + ", translationY = " + translationY + ", forceUpdate = " + forceUpdate);
-		ViewHelper.setTranslationY(vPagerCatTitles, translationY);
+		int scrollY = (totalScrolledDy >= limitScrollAt) ? limitScrollAt : totalScrolledDy;
+		/**
+		 * Using layout parameters instead of setTranslationY(), since tabs scrolling doesn't work properly
+		 * after applying setTranslationY()
+		 */
+		FrameLayout.LayoutParams frameLParams = (FrameLayout.LayoutParams) vPagerCatTitles.getLayoutParams();
+		frameLParams.topMargin = FragmentUtil.getResources(this).getDimensionPixelSize(R.dimen.v_pager_cat_titles_margin_t_discover) 
+				- scrollY;
+		vPagerCatTitles.setLayoutParams(frameLParams);
 		
-		if ((!isTranslationZApplied || forceUpdate) && scrollY >= limitScrollAt) {
-			//Log.d(TAG, "translation apply z");
+		if ((!isScrollLimitReached || forceUpdate) && totalScrolledDy >= limitScrollAt) {
 			ObjectAnimator elevateAnim = ObjectAnimator.ofFloat(vPagerCatTitles, "translationZ", 0.0f, translationZPx);
 			elevateAnim.setDuration(100);
 			elevateAnim.start();
@@ -165,10 +245,9 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements C
 			title = ma.getResources().getString(R.string.title_discover);
 			ma.updateTitle(title);
 			
-			isTranslationZApplied = true;
+			isScrollLimitReached = true;
 			
-		} else if ((isTranslationZApplied || forceUpdate) && scrollY < limitScrollAt) {
-			//Log.d(TAG, "translation remove z");
+		} else if ((isScrollLimitReached || forceUpdate) && totalScrolledDy < limitScrollAt) {
 			ObjectAnimator elevateAnim = ObjectAnimator.ofFloat(vPagerCatTitles, "translationZ", translationZPx, 0.0f);
 			elevateAnim.setDuration(100);
 			elevateAnim.start();
@@ -181,37 +260,130 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements C
 			title = "";
 			ma.updateTitle(title);
 			
-			isTranslationZApplied = false;
+			isScrollLimitReached = false;
 		}
-		
-		prevScrollY = scrollY;
 	}
 	
 	public String getCurrentTitle() {
 		return title;
 	}
 
-	public boolean isTranslationZApplied() {
-		return isTranslationZApplied;
+	public void onDrawerOpened() {
+		//Log.d(TAG, "onDrawerOpened()");
+		isDrawerOpen = true;
+		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		ma.setToolbarBg(ma.getResources().getColor(R.color.colorPrimary));
+		ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
+		ma.setVStatusBarLayeredVisibility(View.VISIBLE);
+		ma.setVStatusBarLayeredColor(R.color.colorPrimaryDark);
+		title = ma.getResources().getString(R.string.title_discover);
+		ma.updateTitle(title);
+	}
+	
+	public void onDrawerClosed(View view) {
+		//Log.d(TAG, "onDrawerClosed()");
+		isDrawerOpen = false;
+		onScrolled(0, true);
+	}
+	
+	public void onDrawerSlide(View drawerView, float slideOffset) {
+		//Log.d(TAG, "onDrawerSlide(), slideOffset = " + slideOffset);
+		if (!isScrollLimitReached) {
+			((MainActivity)FragmentUtil.getActivity(this)).updateToolbarOnDrawerSlide(slideOffset);
+		}
+	}
+	
+	public void onCatTitleClicked(int item) {
+		if (item - 1 >= 0) {
+			vPagerCatTitles.setCurrentItem(item - 1, true);
+		}
 	}
 	
 	@Override
 	public String getScreenName() {
 		return "Discover Screen";
 	}
-
-	@Override
-	public void onScrollChanged(int scrollY) {
-		onScrollChanged(scrollY, false);
-	}
 	
-	@Override
-	public void onDownMotionEvent() {
-		// TODO Auto-generated method stub
-	}
+	private class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> {
+		
+		private class ViewHolder extends RecyclerView.ViewHolder {
+			
+			public View root;
+	        public TextView mTextView;
+	        
+	        public ViewHolder(View root) {
+	            super(root);
+	            this.root = root;
+	            mTextView = (TextView) root.findViewById(android.R.id.text1);
+	        }
+	    }
+		
+		@Override
+		public int getItemViewType(int position) {
+			//Log.d(TAG, "getItemViewType() - pos = " + position);
+			if (position == 0) {
+				return 0;
+				
+			} else if (position == 1) {
+				return 1;
+				
+			} else {
+				return 2;
+			}
+		}
 
-	@Override
-	public void onUpOrCancelMotionEvent() {
-		// TODO Auto-generated method stub
+		@Override
+		public int getItemCount() {
+			//Log.d(TAG, "getItemCount()");
+			return values.length + 2;
+		}
+
+		@Override
+		public void onBindViewHolder(ViewHolder holder, int position) {
+			//Log.d(TAG, "onBindViewHolder(), pos = " + position);
+			if (position != 0 && position != 1) {
+				holder.mTextView.setText(values[position - 2]);
+			}
+		}
+
+		@Override
+		public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+			//Log.d(TAG, "onCreateViewHolder(), viewType = " + viewType);
+			View v = null;
+			switch (viewType) {
+			
+			case 0:
+				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_child_cat_title_top, 
+						parent, false);
+				v.setOnTouchListener(new OnTouchListener() {
+					
+					@Override
+					public boolean onTouch(View v, MotionEvent event) {
+						//Log.d(TAG, "child 0 onTouch()");
+						// Scroll the category titles
+						vPagerCatTitles.onTouchEvent(event);
+						return true;
+					}
+				});
+				break;
+				
+			case 1:
+				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_child_cat_title, 
+						parent, false);
+				break;
+				
+			case 2:
+				v = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, 
+						parent, false);
+				v.setBackgroundColor(FragmentUtil.getResources(DiscoverFragment.this).getColor(android.R.color.black));
+				break;
+
+			default:
+				break;
+			}
+			
+			ViewHolder vh = new ViewHolder(v);
+	        return vh;
+		}
 	}
 }

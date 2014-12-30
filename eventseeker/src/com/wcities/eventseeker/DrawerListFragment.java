@@ -7,11 +7,9 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +71,7 @@ public class DrawerListFragment extends ListFragment {
         getListView().setDivider(null);
         getListView().setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
         //getListView().setBackgroundResource(R.drawable.side_nav_bg);
-        //getListView().setBackgroundResource(R.drawable.bg_drawer_list);
+        getListView().setBackgroundColor(FragmentUtil.getResources(this).getColor(R.color.bg_screen_dark_blue));
         getListView().setVerticalScrollBarEnabled(false);
         getListView().setHorizontalScrollBarEnabled(false);
         getListView().setCacheColorHint(android.R.color.transparent);
@@ -85,20 +83,6 @@ public class DrawerListFragment extends ListFragment {
 			@Override
 			public void onItemClick(AdapterView parent, View view, int position, long id) {
 				//Log.d(TAG, "onItemClick(), pos = " + position);
-				/**
-				 * This notification generation is just for testing purpose
-				 */
-				/*if (!AppConstants.IS_RELEASE_MODE) {
-					if (position == drawerListItems.size() - 1) {
-						//Change notification type in below line
-						NotificationType notificationType = NotificationType.SYNC_ACCOUNTS;
-						GcmBroadcastReceiver.createDummyNotificationForTesting(getActivity(), 
-							notificationType.ordinal() + "", "", "Testing Notification " + notificationType.name());
-						getActivity().finish();
-						return;
-					}
-				}*/
-				
 				if (!sectionHeaderIndices.contains(position)) {
 					mListener.onDrawerItemSelected(position, null);
 				}

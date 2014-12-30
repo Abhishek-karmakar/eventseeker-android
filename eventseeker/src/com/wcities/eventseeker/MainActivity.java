@@ -11,6 +11,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,6 +20,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -127,7 +129,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	private boolean isCalledFromTwitterSection;
 
-	private View vStatusBar, vStatusBarLayered;
+	private View vStatusBar, vStatusBarLayered, vDrawerStatusBar;
 	private Toolbar toolbar;
 	
 	public static MainActivity getInstance() {
@@ -141,13 +143,19 @@ public class MainActivity extends ActionBarActivity implements
 		//Log.d(TAG, "onCreate()");
 
 		if (VersionUtil.isApiLevelAbove18()) {
+			int statusBarHeight = getStatusBarHeight();
+			
 			vStatusBar = findViewById(R.id.vStatusBar);
-			LinearLayout.LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, getStatusBarHeight());
+			LinearLayout.LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, statusBarHeight);
 			vStatusBar.setLayoutParams(params);
 			
 			vStatusBarLayered = findViewById(R.id.vStatusBarLayered);
-			FrameLayout.LayoutParams frmParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, getStatusBarHeight());
+			FrameLayout.LayoutParams frmParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, 
+					statusBarHeight);
 			vStatusBarLayered.setLayoutParams(frmParams);
+			
+			vDrawerStatusBar = findViewById(R.id.vDrawerStatusBar);
+			vDrawerStatusBar.setLayoutParams(params);
 		}
 		
 		/**
@@ -230,13 +238,20 @@ public class MainActivity extends ActionBarActivity implements
 				 * Called when a drawer has settled in a completely closed
 				 * state.
 				 */
-				/*
-				 * public void onDrawerClosed(View view) {
-				 * getSupportActionBar().setTitle(mTitle); }
-				 */
+				
+				public void onDrawerClosed(View view) {
+					super.onDrawerClosed(view);
+					//getSupportActionBar().setTitle(mTitle);
+					if (currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_DISCOVER)) {
+						DiscoverFragment df = (DiscoverFragment) getSupportFragmentManager().findFragmentByTag(
+								currentContentFragmentTag);
+						df.onDrawerClosed(view);
+					}
+				}
 
 				/** Called when a drawer has settled in a completely open state. */
 				public void onDrawerOpened(View drawerView) {
+					super.onDrawerOpened(drawerView);
 					// getSupportActionBar().setTitle(AppConstants.NAVIGATION_DRAWER_TITLE);
 					/**
 					 * On some devices drawer is partially overlapped by map. To
@@ -248,6 +263,24 @@ public class MainActivity extends ActionBarActivity implements
 									.equals(AppConstants.FRAGMENT_TAG_FULL_SCREEN_ADDRESS_MAP)) {
 						lnrLayoutRootNavDrawer.getParent().requestLayout();
 						// ((View)lnrLayoutRootNavDrawer.getParent()).invalidate();
+						
+					} else if (currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_DISCOVER)) {
+						DiscoverFragment df = (DiscoverFragment) getSupportFragmentManager().findFragmentByTag(
+								currentContentFragmentTag);
+						df.onDrawerOpened();
+					}
+				}
+				
+				@Override
+				public void onDrawerSlide(View drawerView, float slideOffset) {
+					super.onDrawerSlide(drawerView, slideOffset);
+					if (currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_DISCOVER)) {
+						DiscoverFragment df = (DiscoverFragment) getSupportFragmentManager().findFragmentByTag(
+								currentContentFragmentTag);
+						// on changing fragment to discover, it returns null for df
+						if (df != null) {
+							df.onDrawerSlide(drawerView, slideOffset);
+						}
 					}
 				}
 			};
@@ -865,16 +898,6 @@ public class MainActivity extends ActionBarActivity implements
 		fragmentTransaction.commit();
 	}
 
-	/*
-	 * private void getOverflowMenu() { try { ViewConfiguration config =
-	 * ViewConfiguration.get(this); Field menuKeyField =
-	 * ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey"); if
-	 * (menuKeyField != null) { menuKeyField.setAccessible(true);
-	 * menuKeyField.setBoolean(config, false); }
-	 * 
-	 * } catch (Exception e) { e.printStackTrace(); } }
-	 */
-
 	private void onFragmentResumed(int position, String title, String fragmentTag, boolean disableDrawerIndicator) {
 		//Log.d(TAG, "onFragmentResumed() for title = " + title + ", getSupportFragmentManager().getBackStackEntryCount() = " + getSupportFragmentManager().getBackStackEntryCount());
 		drawerItemSelectedPosition = position;
@@ -943,6 +966,7 @@ public class MainActivity extends ActionBarActivity implements
 			}
 			
 			boolean isDrawerListFragmentFound = updateDrawerListCheckedItem(position);
+			Log.d(TAG, "isDrawerListFragmentFound = " + isDrawerListFragmentFound);
 			if (!isDrawerListFragmentFound) {
 				return;
 			}
@@ -1081,6 +1105,7 @@ public class MainActivity extends ActionBarActivity implements
 	 * @return true if DrawerListFragment instance is existing (not null)
 	 */
 	private boolean updateDrawerListCheckedItem(int position) {
+		Log.d(TAG, "updateDrawerListCheckedItem()");
 		if (position == AppConstants.INVALID_INDEX) {
 			return false;
 		}
@@ -1088,6 +1113,7 @@ public class MainActivity extends ActionBarActivity implements
 		DrawerListFragment drawerListFragment = (DrawerListFragment) getSupportFragmentManager()
 				.findFragmentByTag(DRAWER_LIST_FRAGMENT_TAG);
 		if (drawerListFragment == null) {
+			Log.d(TAG, "drawerListFragment == null");
 			return false;
 		}
 		try {
@@ -1203,30 +1229,6 @@ public class MainActivity extends ActionBarActivity implements
 		//Log.d(TAG, "back stack count = " + getSupportFragmentManager().getBackStackEntryCount());
 	}
 
-	/*
-	 * private void revertCheckedDrawerItemStateIfAny() {
-	 * drawerItemSelectedPosition = AppConstants.INVALID_INDEX;
-	 * DrawerListFragment drawerListFragment = (DrawerListFragment)
-	 * getSupportFragmentManager() .findFragmentByTag(DRAWER_LIST_FRAGMENT_TAG);
-	 * 
-	 * try { int previousCheckedItemPos =
-	 * drawerListFragment.getListView().getCheckedItemPosition(); if
-	 * (previousCheckedItemPos != -1) {
-	 * drawerListFragment.getListView().setItemChecked(previousCheckedItemPos,
-	 * false); }
-	 * 
-	 * } catch (IllegalStateException e) {
-	 *//**
-	 * This exception is thrown when this function call hierarchy starts from
-	 * onCreate(), since content view for drawerListFragment is not created yet.
-	 * In this case, to accomplish this we have a callback
-	 * 'onDrawerListFragmentViewCreated()' which does the same task of marking
-	 * right drawer item as selected, if any.
-	 */
-	/*
-	 * Log.i(TAG, "IllegalSTateException"); e.printStackTrace(); } }
-	 */
-
 	private void updateTitle() {
 		/*
 		 * if (mDrawerLayout.isDrawerOpen(lnrLayoutRootNavDrawer)) {
@@ -1323,14 +1325,11 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public void onDrawerListFragmentViewCreated() {
-		/*
-		 * if (drawerItemSelectedPosition != AppConstants.INVALID_INDEX) {
-		 * DrawerListFragment drawerListFragment = (DrawerListFragment)
-		 * getSupportFragmentManager()
-		 * .findFragmentByTag(DRAWER_LIST_FRAGMENT_TAG);
-		 * drawerListFragment.getListView
-		 * ().setItemChecked(drawerItemSelectedPosition, true); }
-		 */
+		if (drawerItemSelectedPosition != AppConstants.INVALID_INDEX) {
+			DrawerListFragment drawerListFragment = (DrawerListFragment) getSupportFragmentManager()
+					.findFragmentByTag(DRAWER_LIST_FRAGMENT_TAG);
+			drawerListFragment.getListView().setItemChecked(drawerItemSelectedPosition, true);
+		}
 	}
 	
 	@Override
@@ -1788,7 +1787,7 @@ public class MainActivity extends ActionBarActivity implements
 			}
 		}
 	}
-
+	
 	@Override
 	public void onFragmentResumed(Fragment fragment, int drawerPosition, String actionBarTitle) {
 		//Added right now just for Bosch Main Activity
@@ -1949,6 +1948,12 @@ public class MainActivity extends ActionBarActivity implements
 			vStatusBarLayered.setVisibility(viewVisibility);
 		}
 	}
+	
+	public void setVDrawerStatusBarVisibility(int viewVisibility) {
+		if (VersionUtil.isApiLevelAbove18() && vDrawerStatusBar != null) {
+			vDrawerStatusBar.setVisibility(viewVisibility);
+		}
+	}
 
 	public void setToolbarBg(int color) {
 		toolbar.setBackgroundColor(color);
@@ -1957,4 +1962,10 @@ public class MainActivity extends ActionBarActivity implements
 	public void setToolbarElevation(float elevation) {
 		ViewCompat.setElevation(toolbar, elevation);
 	}
+	
+	public void updateToolbarOnDrawerSlide(float slideOffset) {
+        int newAlpha = (int) (slideOffset * 255);
+        int color = getResources().getColor(R.color.colorPrimary);
+        toolbar.setBackgroundColor(Color.argb(newAlpha, Color.red(color), Color.green(color), Color.blue(color)));
+    }
 }

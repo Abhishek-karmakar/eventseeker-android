@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,7 +23,7 @@ public class CatTitlesAdapter extends FragmentPagerAdapter implements ViewPager.
 	private static final String TAG = CatTitlesAdapter.class.getSimpleName();
 	
 	public final static float BIG_SCALE = 1.0f;
-	private final static float SMALL_SCALE = 0.8f;
+	private final static float SMALL_SCALE = 0.7f;
 	private final static float DIFF_SCALE = BIG_SCALE - SMALL_SCALE;
 	private static final int LOOPS = 1000;
 	public final static int FIRST_PAGE = AppConstants.TOTAL_CATEGORIES * LOOPS / 2;
@@ -77,8 +76,8 @@ public class CatTitlesAdapter extends FragmentPagerAdapter implements ViewPager.
         else
         	scale = SMALL_SCALE;
         
-        position = position % AppConstants.TOTAL_CATEGORIES;
-        return CategoryTitleFragment.newInstance(evtCategories.get(position).getName(), scale);
+        int actualPosition = position % AppConstants.TOTAL_CATEGORIES;
+        return CategoryTitleFragment.newInstance(evtCategories.get(actualPosition).getName(), scale, position);
 	}
 
 	@Override

@@ -5,6 +5,7 @@ public class BundleKeys {
 	public static final String CATEGORY_POSITION = "categoryPosition";
 	public static final String CATEGORIES = "categories";
 	public static final String SCALE = "scale";
+	public static final String POS = "pos";
 	
 	public static final String FEATURED_EVTS = "featuredEvts";
 	public static final String EVENT = "event";

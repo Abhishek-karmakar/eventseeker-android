@@ -26,7 +26,7 @@
     <!-- img_category_ht_discover = v_pager_cat_titles_ht_discover + v_pager_cat_titles_margin_t_discover -->
     <dimen name="img_category_ht_discover">220dp</dimen>
     <!-- cat_title.xml -->
-    <dimen name="txt_title_txt_size_cat_titles">20sp</dimen>
+    <dimen name="txt_title_txt_size_cat_titles">18sp</dimen>
     <dimen name="v_hor_line_ht_cat_titles">4dp</dimen>
     <dimen name="v_hor_line_margin_b_cat_titles">3dp</dimen>
     <!-- fragment_featured_events.xml -->

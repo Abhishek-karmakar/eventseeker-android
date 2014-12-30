@@ -26,8 +26,7 @@
 
             <!-- The main content view -->
 
-            <FrameLayout
-                android:id="@+id/content_frame"
+            <FrameLayout android:id="@+id/content_frame"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
@@ -38,10 +37,19 @@
                 android:layout_width="@dimen/root_navigation_drawer_w_main"
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
-                android:background="@color/bg_screen_dark_blue"
+                android:background="@android:color/transparent"
                 android:orientation="vertical"
-                android:paddingTop="@dimen/common_t_mar_pad_for_all_layout" />
+                android:paddingTop="@dimen/common_t_mar_pad_for_all_layout" >
+                
+                <View android:id="@+id/vDrawerStatusBar"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:visibility="gone" />
+                
+            </LinearLayout>
+            
         </android.support.v4.widget.DrawerLayout>
+        
     </LinearLayout>
     
     <View android:id="@+id/vStatusBarLayered"
