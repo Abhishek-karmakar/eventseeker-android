@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/common_t_mar_pad_for_all_layout" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/lnr_root_padding_fragment_follow_more_artists"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+
+        <!--
+            textAllCaps="false" is added in all the buttons as in android api level 21 was having 
+        	an issue which was keeping textAllCaps="true" by default. So, all the button text were 
+        	appearing in capital        -->
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/cat_900" >
+
+            <Button
+                android:id="@+id/btnSyncAccounts"
+                style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/btn_sync_accounts" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent" />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/cat_901" >
+
+            <Button
+                android:id="@+id/btnPopularArtists"
+                style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/btn_popular_artists" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/lnr_root_padding_fragment_follow_more_artists"
+        android:layout_marginLeft="@dimen/lnr_root_padding_fragment_follow_more_artists"
+        android:layout_marginRight="@dimen/lnr_root_padding_fragment_follow_more_artists"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/cat_902" >
+
+            <Button
+                android:id="@+id/btnRecommended"
+                style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/btn_recommended" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent" />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/cat_903" >
+
+            <Button
+                android:id="@+id/btnSearch"
+                style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/btn_search" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

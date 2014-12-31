@@ -43,13 +43,12 @@
 	        android:background="@drawable/txt_on_tour_rounded_corners"
 	        android:layout_alignParentBottom="true" />
 	    
-	    <ImageButton android:id="@+id/btnFollow"
-	        style="@style/Widget.EventSeeker.ImageButton.White"
+	    <CheckBox android:id="@+id/chkFollow"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentRight="true"
 	        android:layout_centerVertical="true"
-	        android:src="@drawable/ic_correct" />
+	        android:button="@drawable/slctr_following" />
         
 	</RelativeLayout>
 	

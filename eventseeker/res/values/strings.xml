@@ -223,6 +223,10 @@
 
     <!-- Following -->
     <string name="follow_more_artists">FOLLOW MORE ARTISTS +</string>
+    <string name="remove_artist">Remove Artist</string>
+    <string name="are_you_sure_you_want_to_remove_this_Artist">Are you sure you want to remove this Artist?</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="btn_Ok">OK</string>
 
     <!-- Search Results -->
     <string name="artists">ARTISTS</string>
@@ -359,6 +363,19 @@
     <!-- LauncherFragment -->
     <string name="log_in">LOG IN</string>
     <string name="sign_up">SIGN UP</string>
+    
+    <!-- FollowMoreArtistFragment -->
+    <string name="btn_sync_accounts">Sync Accounts</string>
+    <string name="btn_popular_artists">Popular Artists</string>
+    <string name="btn_recommended">Recommended</string>
+    <string name="btn_search">Search</string>
+
+    <!-- PopularArtistsFragment -->
+    <string name="btn_featured">Featured</string>
+    <string name="btn_music">Music</string>
+    <string name="btn_comedy">Comedy</string>
+    <string name="btn_theater">Theater</string>
+    <string name="btn_sports">Sports</string>
     
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     

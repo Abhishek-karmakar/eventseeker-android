@@ -510,8 +510,12 @@
     <!-- fragment_settings.xml -->
     <dimen name="lst_mar_fragment_settings">@dimen/divider_margin_l_fragment_discover_by_category_list_item_evt</dimen>
     <dimen name="lst_pad_l_r_fragment_settings">20dp</dimen>
+    <!-- fragment_follow_more_artists.xml -->
+    <dimen name="v_dummy_wt_ht_fragment_follow_more_artists">10dp</dimen>
+    <dimen name="lnr_root_padding_fragment_follow_more_artists">10dp</dimen>
     <!-- common -->
-    <dimen name="txt_size_widget_eventSeeker_btn_white">16dp</dimen>
+    <dimen name="txt_size_widget_eventSeeker_btn_white">16sp</dimen>
+    <dimen name="txt_size_widget_eventSeeker_btn_alpha">20sp</dimen>
     <dimen name="elevation_widget_eventSeeker_btn_white">15dp</dimen>
     <dimen name="elevation_widget_eventSeeker_btn_white_blue_stroke">30dp</dimen>
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->

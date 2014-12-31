@@ -32,6 +32,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
+import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.SettingsFragment.OnSettingsItemClickedListener;
 import com.wcities.eventseeker.SettingsFragment.SettingsItem;
 import com.wcities.eventseeker.adapter.MyArtistListAdapter;
@@ -51,7 +52,7 @@ import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public abstract class FollowingParentFragment extends FragmentLoadableFromBackStack implements 
-		OnClickListener, LoadMyArtistsListener, LoadItemsInBackgroundListener {
+		OnClickListener, LoadMyArtistsListener, LoadItemsInBackgroundListener, DialogBtnClickListener {
 
 	private static final String TAG = FollowingParentFragment.class.getName();
 
@@ -81,7 +82,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 	private Resources res;
 
 	protected Button btnFollowMoreArtists;
-	
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -265,7 +266,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 				UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
 				userInfoApi.setUserId(((EventSeekr) context.getApplicationContext()).getWcitiesId());
 				JSONObject jsonObject = userInfoApi.editUserTracking(UserTrackingItemType.artist, artistId, attending);
-				Log.d(TAG, "result = " + jsonObject.toString());
+				//Log.d(TAG, "result = " + jsonObject.toString());
 				
 			} catch (ClientProtocolException e) {
 				e.printStackTrace();
@@ -277,6 +278,19 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 			return null;
 		}
 		
+	}
+
+	@Override
+	public void doPositiveClick(String dialogTag) {
+		/**
+		 * Here in this case we would have passed the position of the Artist as its tag.
+		 */
+		myArtistListAdapter.removeItemAt(Integer.parseInt(dialogTag));
+	}
+
+	@Override
+	public void doNegativeClick(String dialogTag) {
+		myArtistListAdapter.notifyDataSetChanged();
 	}
 	
 	protected abstract AbsListView getScrollableView();

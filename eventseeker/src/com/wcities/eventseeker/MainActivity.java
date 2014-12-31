@@ -1046,51 +1046,6 @@ public class MainActivity extends ActionBarActivity implements
 					getResources().getString(R.string.title_launcher), false);
 			break;
 			
-		/*case INDEX_NAV_ITEM_CONNECT_ACCOUNTS:
-	    	ConnectAccountsFragment connectAccountsFragment = new ConnectAccountsFragment();
-	    	replaceContentFrameByFragment(connectAccountsFragment, AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS, 
-	    			getResources().getString(R.string.title_connect_accounts), false);
-	    	break;
-			
-		case INDEX_NAV_ITEM_CHANGE_LOCATION:
-			ChangeLocationFragment changeLocationFragment = new ChangeLocationFragment();
-			replaceContentFrameByFragment(changeLocationFragment, AppConstants.FRAGMENT_TAG_CHANGE_LOCATION, 
-					getResources().getString(R.string.title_change_location), false);
-			break;
-
-		// TODO: comment following for disabling language
-		case INDEX_NAV_ITEM_LANGUAGE:
-			LanguageFragment languageFragment = new LanguageFragment();
-			replaceContentFrameByFragment(languageFragment, AppConstants.FRAGMENT_TAG_LANGUAGE, 
-					getResources().getString(R.string.title_language), false);
-			break;
-			
-		case INDEX_NAV_ITEM_INVITE_FRIENDS:
-			inviteFriends();
-			break;
-			
-		case INDEX_NAV_ITEM_RATE_APP:
-			rateApp();
-			break;
-			
-		case INDEX_NAV_ITEM_ABOUT_US:
-			AboutUsFragment aboutUsFragment = new AboutUsFragment();
-			replaceContentFrameByFragment(aboutUsFragment, AppConstants.FRAGMENT_TAG_ABOUT_US, 
-					getResources().getString(R.string.title_about_us), false);
-			break;
-			
-		case INDEX_NAV_ITEM_EULA:
-			EULAFragment eulaFragment = new EULAFragment();
-			replaceContentFrameByFragment(eulaFragment, AppConstants.FRAGMENT_TAG_ABOUT_US, 
-					getResources().getString(R.string.title_eula), false);
-			break;
-			
-		case INDEX_NAV_ITEM_REP_CODE:
-			RepCodeFragment repCodeFragment = new RepCodeFragment();
-			replaceContentFrameByFragment(repCodeFragment, AppConstants.FRAGMENT_TAG_REP_CODE, 
-					getResources().getString(R.string.title_rep_code), false);
-			break;*/
-
 		default:
 			break;
 		}
@@ -1295,6 +1250,18 @@ public class MainActivity extends ActionBarActivity implements
 			signUpFragment.setArguments(args);
 			selectNonDrawerItem(signUpFragment, AppConstants.FRAGMENT_TAG_SIGN_UP, getResources()
 				.getString(R.string.title_signup), true);
+
+		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_FOLLOW_MORE_ARTISTS)) {
+			FollowMoreArtistsFragment followMoreArtistsFragment = new FollowMoreArtistsFragment();
+			followMoreArtistsFragment.setArguments(args);
+			selectNonDrawerItem(followMoreArtistsFragment, AppConstants.FRAGMENT_TAG_FOLLOW_MORE_ARTISTS, getResources()
+				.getString(R.string.title_following), true);
+
+		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_POPULAR_ARTISTS)) {
+			PopularArtistsFragment popularArtistsFragment = new PopularArtistsFragment();
+			popularArtistsFragment.setArguments(args);
+			selectNonDrawerItem(popularArtistsFragment, AppConstants.FRAGMENT_TAG_POPULAR_ARTISTS, getResources()
+					.getString(R.string.title_following), true);
 			
 		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_TWITTER_SYNCING)) {
 			//Log.d(TAG, "FRAGMENT_TAG_TWITTER_SYNCING");
@@ -1308,6 +1275,7 @@ public class MainActivity extends ActionBarActivity implements
 					 */
 					isCalledFromTwitterSection = true;
 					onBackPressed();
+					
 				} catch (IllegalStateException e) {
 					e.printStackTrace();
 					/**
@@ -1721,6 +1689,14 @@ public class MainActivity extends ActionBarActivity implements
 		} else if (fragment instanceof GooglePlayMusicFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_google_play),
 					AppConstants.FRAGMENT_TAG_GOOGLE_PLAY_MUSIC, false);
+
+		} else if (fragment instanceof FollowMoreArtistsFragment) {
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_following),
+					AppConstants.FRAGMENT_TAG_FOLLOW_MORE_ARTISTS, false);
+
+		} else if (fragment instanceof PopularArtistsFragment) {
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_following),
+					AppConstants.FRAGMENT_TAG_POPULAR_ARTISTS, false);
 		}
 	}
 

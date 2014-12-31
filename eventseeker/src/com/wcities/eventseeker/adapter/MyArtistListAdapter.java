@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.os.AsyncTask.Status;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,11 +16,13 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.wcities.eventseeker.FollowingFragment;
+import com.wcities.eventseeker.GeneralDialogFragment;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
@@ -33,6 +37,7 @@ import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 // SectionIndexer is only required for 'FollowingFragment'.
 public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, ArtistAdapterListener<Void> {
 
+	private static final long DELAY_REMOVE_ARTIST = 500;
 	private Context mContext;
 	private BitmapCache bitmapCache;
 	
@@ -49,9 +54,11 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 	private LoadItemsInBackgroundListener mListener;
 	
 	private Fragment fragment;
+	private Handler handler;
 	
 	public MyArtistListAdapter(Context context, List<Artist> artistList, AsyncTask<Void, Void, List<Artist>> loadMyArtists, 
-			Map<Character, Integer> alphaNumIndexer, List<Character> indices, LoadItemsInBackgroundListener mListener, Fragment fragment) {
+			Map<Character, Integer> alphaNumIndexer, List<Character> indices, LoadItemsInBackgroundListener mListener, 
+			Fragment fragment) {
 		if (!(context instanceof ArtistListener)) {
 			throw new ClassCastException(context.toString() + " must implement ArtistListener");
 		}
@@ -67,6 +74,8 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 		
 		this.mListener = mListener;
 		this.fragment = fragment;
+
+		handler = new Handler();
 	}
 
 	@Override
@@ -134,11 +143,23 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 				convertView.findViewById(R.id.txtOnTour).setVisibility(View.INVISIBLE);
 			}
 
-			convertView.findViewById(R.id.btnFollow).setOnClickListener(new OnClickListener() {
+			CheckBox chkFollow = (CheckBox) convertView.findViewById(R.id.chkFollow);
+			chkFollow.setChecked(true);
+			chkFollow.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
-					removeItemAt(position);
+					Resources res = mContext.getResources();
+					GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(							
+							res.getString(R.string.remove_artist),  
+							res.getString(R.string.are_you_sure_you_want_to_remove_this_Artist),  
+							res.getString(R.string.btn_cancel),  
+							res.getString(R.string.btn_Ok));
+					/**
+					 * Pass the position as tag. So, that in Positive button if response comes as
+					 * true then we can remove that Artist.
+					 */
+					generalDialogFragment.show(fragment.getChildFragmentManager(), "" + position);
 				}
 			});
 
@@ -184,10 +205,19 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 		return artistList.size();
 	}
 
-	void removeItemAt(int position) {
+	public void removeItemAt(final int position) {
 		((FollowingFragment) fragment).removeFollowedArtist(mContext, getItem(position).getId());
-		artistList.remove(position);
-		notifyDataSetChanged();
+		/**
+		 * Delay is just for the list item removal effect.
+		 */
+		handler.postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				artistList.remove(position);
+				notifyDataSetChanged();				
+			}
+		}, DELAY_REMOVE_ARTIST);
 	}
 	
 	@Override
