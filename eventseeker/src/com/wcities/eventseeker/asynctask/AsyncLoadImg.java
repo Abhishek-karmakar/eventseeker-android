@@ -9,7 +9,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.LayoutManager;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 
@@ -37,6 +41,7 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 		private ImageView imageView;
 		private String key;
 		private AdapterView adapterView;
+		private RecyclerView recyclerView;
 		private int pos;
 		private Bitmap bitmap;
 		private long id;
@@ -97,6 +102,19 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 		imgDetails.imageView = imageView;
 		imgDetails.key = bitmapCacheable.getKey(imgResolution);
 		imgDetails.adapterView = adapterView;
+		imgDetails.pos = pos;
+		imgDetails.urls = BitmapUtil.getUrlsInOrder(bitmapCacheable, imgResolution);
+		
+		startExecution(imgDetails);
+	}
+	
+	public void loadImg(ImageView imageView, ImgResolution imgResolution, RecyclerView recyclerView, 
+			int pos, BitmapCacheable bitmapCacheable) {
+		//Log.i(TAG, "loadImg() for pos = " + pos);
+		ImgDetails imgDetails = new ImgDetails();
+		imgDetails.imageView = imageView;
+		imgDetails.key = bitmapCacheable.getKey(imgResolution);
+		imgDetails.recyclerView = recyclerView;
 		imgDetails.pos = pos;
 		imgDetails.urls = BitmapUtil.getUrlsInOrder(bitmapCacheable, imgResolution);
 		
@@ -262,8 +280,7 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 		ImgDetails imgDetails = values[0];
 		if (imgDetails.bitmap != null) {
 			//Log.i(TAG, "bitmap is not null");
-			
-			if (imgDetails.adapterView == null) {
+			if (imgDetails.adapterView == null && imgDetails.recyclerView == null) {
 				if (imgDetails.widgetId == 0) {
 					//Log.i(TAG, "adapterView is null, imgDetails.imageView = " + imgDetails.imageView);
 					if (imgDetails.imageView != null) {
@@ -287,10 +304,24 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 			} else {
 				/*Log.i(TAG, "onProgressUpdate() else, pos="+imgDetails.pos + ", lastPos=" + imgDetails.adapterView.getLastVisiblePosition()
 						+ ", firstPos=" + imgDetails.adapterView.getFirstVisiblePosition());*/
-				if (imgDetails.pos <= imgDetails.adapterView.getLastVisiblePosition() && 
-						imgDetails.pos >= imgDetails.adapterView.getFirstVisiblePosition()) {
-					imgDetails.imageView.setImageBitmap(imgDetails.bitmap);
-					//Log.i(TAG, "onProgressUpdate() bitmap set");
+				if (imgDetails.recyclerView != null) {
+					LayoutManager lm = imgDetails.recyclerView.getLayoutManager();
+					
+					if (lm instanceof LinearLayoutManager) {
+						LinearLayoutManager llm = (LinearLayoutManager) lm;
+						if (imgDetails.pos <= llm.findLastVisibleItemPosition() && 
+								imgDetails.pos >= llm.findFirstVisibleItemPosition()) {
+							imgDetails.imageView.setImageBitmap(imgDetails.bitmap);
+							//Log.i(TAG, "onProgressUpdate() bitmap set");
+						}
+					}
+					
+				} else {
+					if (imgDetails.pos <= imgDetails.adapterView.getLastVisiblePosition() && 
+							imgDetails.pos >= imgDetails.adapterView.getFirstVisiblePosition()) {
+						imgDetails.imageView.setImageBitmap(imgDetails.bitmap);
+						//Log.i(TAG, "onProgressUpdate() bitmap set");
+					}
 				}
 			}
 			

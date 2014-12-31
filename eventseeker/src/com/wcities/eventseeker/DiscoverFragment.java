@@ -1,36 +1,55 @@
 package com.wcities.eventseeker;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.wcities.eventseeker.adapter.CatTitlesAdapter;
+import com.wcities.eventseeker.api.Api;
+import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.asynctask.AsyncLoadImg;
+import com.wcities.eventseeker.asynctask.LoadEvents;
+import com.wcities.eventseeker.cache.BitmapCache;
+import com.wcities.eventseeker.cache.BitmapCacheable;
+import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Category;
+import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.custom.view.RecyclerViewInterceptingVerticalScroll;
+import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
+import com.wcities.eventseeker.interfaces.EventListener;
+import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
+import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.ConversionUtil;
+import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 
-public class DiscoverFragment extends FragmentLoadableFromBackStack {
+public class DiscoverFragment extends FragmentLoadableFromBackStack implements LoadItemsInBackgroundListener {
 	
 	private static final String TAG = DiscoverFragment.class.getSimpleName();
 	
@@ -48,14 +67,20 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack {
 	private EventListAdapter eventListAdapter;
     private RecyclerView.LayoutManager layoutManager;
 	private CatTitlesAdapter catTitlesAdapter;
+	private RelativeLayout prgsBarLyt;
+	//private View vDummy;
 	
 	private int toolbarSize;
 	private int limitScrollAt;
 	private float translationZPx;
 	private boolean isScrollLimitReached, isDrawerOpen;
 	private String title = "";
-	protected List<Category> evtCategories;
+	private List<Category> evtCategories;
 	private int totalScrolledDy = UNSCROLLED; // indicates layout not yet created
+	private List<Event> eventList;
+	private double lat, lon;
+	private String startDate, endDate;
+	private LoadEvents loadEvents;
 	
 	String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
 	        "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
@@ -67,6 +92,17 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack {
 	        "Linux", "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux",
 	        "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux", "OS/2",
 	        "Android", "iPhone", "WindowsMobile"};
+	
+	/*View.OnTouchListener vDummyOnTouchListener = new OnTouchListener() {
+		
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			Log.d(TAG, "onTouch() - event = " + event.getAction());
+			vPagerCatTitles.onTouchEvent(event);
+			recyclerVEvents.onTouchEvent(event);
+	        return true;
+		}
+	};*/
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -85,6 +121,8 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack {
 		
 		imgCategory = (ImageView) v.findViewById(R.id.imgCategory);
 		vPagerCatTitles = (ViewPager) v.findViewById(R.id.vPagerCatTitles);
+		/*vDummy = v.findViewById(R.id.vDummy);
+		vDummy.setOnTouchListener(vDummyOnTouchListener);*/
 		
 		if (evtCategories == null) {
 			buildEvtCategories();
@@ -92,14 +130,6 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack {
 		
 		catTitlesAdapter = new CatTitlesAdapter(getChildFragmentManager(), vPagerCatTitles, evtCategories, 
 				imgCategory);
-		imgCategory.setOnTouchListener(new OnTouchListener() {
-			
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				vPagerCatTitles.onTouchEvent(event);
-				return true;
-			}
-		});
 		
 		vPagerCatTitles.setAdapter(catTitlesAdapter);
 		vPagerCatTitles.setOnPageChangeListener(catTitlesAdapter);
@@ -118,16 +148,12 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack {
 		layoutManager = new LinearLayoutManager(FragmentUtil.getActivity(this));
 		recyclerVEvents.setLayoutManager(layoutManager);
 		
-	    if (eventListAdapter == null) {
-	    	eventListAdapter = new EventListAdapter();
-	    }
-	    recyclerVEvents.setAdapter(eventListAdapter);
-		
 	    recyclerVEvents.setOnScrollListener(new RecyclerView.OnScrollListener() {
 	    	
 	    	@Override
 	    	public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 	    		super.onScrolled(recyclerView, dx, dy);
+	    		//Log.d(TAG, "onScrolled - dx = " + dx + ", dy = " + dy);
 	    		DiscoverFragment.this.onScrolled(dy, false);
 	    	}
 		});
@@ -149,8 +175,39 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack {
 				}
             }
         });
+	    
+	    prgsBarLyt = (RelativeLayout) v.findViewById(R.id.prgsBarLyt);
 		
 		return v;
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		if (eventList == null) {
+			double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
+			lat = latLon[0];
+			lon = latLon[1];
+			
+			Calendar c = Calendar.getInstance();
+			startDate = ConversionUtil.getDay(c);
+			
+			c.add(Calendar.YEAR, 1);
+			endDate = ConversionUtil.getDay(c);
+
+			eventList = new ArrayList<Event>();
+			eventList.add(null);
+			
+			eventListAdapter = new EventListAdapter(FragmentUtil.getActivity(this), null, eventList, 
+					this, this);
+			
+			loadItemsInBackground();
+			
+		} else {
+			eventListAdapter.updateContext(FragmentUtil.getActivity(this));
+		}
+		
+		recyclerVEvents.setAdapter(eventListAdapter);
 	}
 	
 	@Override
@@ -160,8 +217,10 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack {
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this); 
 		ma.setVStatusBarVisibility(View.GONE);
 		ma.setVDrawerStatusBarVisibility(View.VISIBLE);
+		
 		if (totalScrolledDy != UNSCROLLED) {
 			onScrolled(0, true);
+			
 			if (isDrawerOpen) {
 				onDrawerOpened();
 			}
@@ -230,6 +289,10 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack {
 		frameLParams.topMargin = FragmentUtil.getResources(this).getDimensionPixelSize(R.dimen.v_pager_cat_titles_margin_t_discover) 
 				- scrollY;
 		vPagerCatTitles.setLayoutParams(frameLParams);
+		
+		/*frameLParams = (FrameLayout.LayoutParams) vDummy.getLayoutParams();
+		frameLParams.topMargin = 0 - scrollY;
+		vDummy.setLayoutParams(frameLParams);*/
 		
 		if ((!isScrollLimitReached || forceUpdate) && totalScrolledDy >= limitScrollAt) {
 			ObjectAnimator elevateAnim = ObjectAnimator.ofFloat(vPagerCatTitles, "translationZ", 0.0f, translationZPx);
@@ -304,45 +367,166 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack {
 		return "Discover Screen";
 	}
 	
-	private class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> {
+	@Override
+	public void loadItemsInBackground() {
+		loadEvents = new LoadEvents(Api.OAUTH_TOKEN, eventList, eventListAdapter, lat, lon, startDate, endDate, 
+				catTitlesAdapter.getSelectedCatId(), ((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).getWcitiesId());
+		eventListAdapter.setLoadDateWiseEvents(loadEvents);
+		AsyncTaskUtil.executeAsyncTask(loadEvents, true);
+	}
+	
+	public void onTouchRecyclerViewDummyItem0(MotionEvent event) {
+		vPagerCatTitles.onTouchEvent(event);
+	}
+	
+	public void setCenterProgressBarVisibility(int visibility) {
+		prgsBarLyt.setVisibility(visibility);
+	}
+	
+	private static class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> implements 
+			DateWiseEventParentAdapterListener {
 		
-		private class ViewHolder extends RecyclerView.ViewHolder {
+		private static final int EXTRA_DUMMY_ITEM_COUNT = 2;
+		
+		private Context mContext;
+		private AsyncTask<Void, Void, List<Event>> loadDateWiseEvents;
+		private List<Event> eventList;
+		private int eventsAlreadyRequested;
+		private boolean isMoreDataAvailable = true;
+		private BitmapCache bitmapCache;
+		private LoadItemsInBackgroundListener mListener;
+		private DiscoverFragment discoverFragment;
+		private RecyclerView recyclerView;
+		
+		private static enum ViewType {
+			POS_0, POS_1, PROGRESS, CONTENT
+		};
+		
+		private static class ViewHolder extends RecyclerView.ViewHolder {
 			
-			public View root;
-	        public TextView mTextView;
+			private View root;
+	        private TextView txtEvtTitle, txtEvtTime, txtEvtLocation;
+	        private ImageView imgEvtTime, imgEvent;
 	        
 	        public ViewHolder(View root) {
 	            super(root);
 	            this.root = root;
-	            mTextView = (TextView) root.findViewById(android.R.id.text1);
+	            txtEvtTitle = (TextView) root.findViewById(R.id.txtEvtTitle);
+	            txtEvtTime = (TextView) root.findViewById(R.id.txtEvtTime);
+	            imgEvtTime = (ImageView) root.findViewById(R.id.imgEvtTime);
+	            txtEvtLocation = (TextView) root.findViewById(R.id.txtEvtLocation);
+	            imgEvent = (ImageView) root.findViewById(R.id.imgEvent);
 	        }
 	    }
 		
+		public EventListAdapter(Context mContext, AsyncTask<Void, Void, List<Event>> loadDateWiseEvents,
+				List<Event> eventList, LoadItemsInBackgroundListener mListener, 
+				DiscoverFragment discoverFragment) {
+			this.mContext = mContext;
+			this.loadDateWiseEvents = loadDateWiseEvents;
+			this.eventList = eventList;
+			this.mListener = mListener;
+			this.discoverFragment = discoverFragment;
+			bitmapCache = BitmapCache.getInstance();
+		}
+
 		@Override
 		public int getItemViewType(int position) {
 			//Log.d(TAG, "getItemViewType() - pos = " + position);
 			if (position == 0) {
-				return 0;
+				return ViewType.POS_0.ordinal();
 				
 			} else if (position == 1) {
-				return 1;
+				return ViewType.POS_1.ordinal();
+				
+			} else if (eventList.get(position - EXTRA_DUMMY_ITEM_COUNT) == null) {
+				return ViewType.PROGRESS.ordinal();
 				
 			} else {
-				return 2;
+				return ViewType.CONTENT.ordinal();
 			}
 		}
 
 		@Override
 		public int getItemCount() {
-			//Log.d(TAG, "getItemCount()");
-			return values.length + 2;
+			//Log.d(TAG, "getItemCount() = " + (eventList.size() + EXTRA_DUMMY_ITEM_COUNT));
+			return eventList.size() + EXTRA_DUMMY_ITEM_COUNT;
 		}
 
 		@Override
 		public void onBindViewHolder(ViewHolder holder, int position) {
 			//Log.d(TAG, "onBindViewHolder(), pos = " + position);
 			if (position != 0 && position != 1) {
-				holder.mTextView.setText(values[position - 2]);
+				final Event event = eventList.get(position - EXTRA_DUMMY_ITEM_COUNT);
+				
+				if (event == null) {
+					// progress indicator
+					if (eventList.size() == 1) {
+						// no events yet loaded
+						holder.root.setVisibility(View.INVISIBLE);
+						discoverFragment.setCenterProgressBarVisibility(View.VISIBLE);
+						 
+					} else {
+						// at least 1 event is there
+						holder.root.setVisibility(View.VISIBLE);
+					}
+					
+				} else if (event.getId() == AppConstants.INVALID_ID) {
+					// no events found
+					
+				} else {
+					holder.txtEvtTitle.setText(event.getName());
+					
+					if (event.getSchedule() != null) {
+						Schedule schedule = event.getSchedule();
+						
+						if (schedule.getDates().get(0).isStartTimeAvailable()) {
+							String time = ConversionUtil.getTime(schedule.getDates().get(0).getStartDate());
+							
+							holder.txtEvtTime.setText(time);
+							holder.imgEvtTime.setVisibility(View.VISIBLE);
+							
+						} else {
+							holder.txtEvtTime.setText("");
+							holder.imgEvtTime.setVisibility(View.INVISIBLE);
+						}
+						String venueName = (schedule.getVenue() != null) ? schedule.getVenue().getName() : "";
+						holder.txtEvtLocation.setText(venueName);
+					}
+					
+					BitmapCacheable bitmapCacheable = null;
+					/**
+					 * added this try catch as if event will not have valid url and schedule object then
+					 * the below line may cause NullPointerException. So, added the try-catch and added the
+					 * null check for bitmapCacheable on following statements.
+					 */
+					try {
+						bitmapCacheable = event.doesValidImgUrlExist() ? event : event.getSchedule().getVenue();
+					} catch (NullPointerException e) {
+						e.printStackTrace();
+					}
+					
+					if (bitmapCacheable != null) {
+						String key = bitmapCacheable.getKey(ImgResolution.LOW);
+						Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
+						if (bitmap != null) {
+					        holder.imgEvent.setImageBitmap(bitmap);
+					        
+					    } else {
+					    	holder.imgEvent.setImageBitmap(null);
+					    	AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
+					        asyncLoadImg.loadImg(holder.imgEvent, ImgResolution.LOW, recyclerView, position, bitmapCacheable);
+					    }
+					}
+					
+					holder.root.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							((EventListener) mContext).onEventSelected(event);
+						}
+					});
+				}
 			}
 		}
 
@@ -350,6 +534,9 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack {
 		public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 			//Log.d(TAG, "onCreateViewHolder(), viewType = " + viewType);
 			View v = null;
+			
+			recyclerView = (RecyclerView) parent;
+			
 			switch (viewType) {
 			
 			case 0:
@@ -361,7 +548,7 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack {
 					public boolean onTouch(View v, MotionEvent event) {
 						//Log.d(TAG, "child 0 onTouch()");
 						// Scroll the category titles
-						vPagerCatTitles.onTouchEvent(event);
+						discoverFragment.onTouchRecyclerViewDummyItem0(event);
 						return true;
 					}
 				});
@@ -373,17 +560,51 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack {
 				break;
 				
 			case 2:
-				v = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, 
-						parent, false);
-				v.setBackgroundColor(FragmentUtil.getResources(DiscoverFragment.this).getColor(android.R.color.black));
+				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.progress_bar_eventseeker, parent, 
+						false);
 				break;
-
+				
+			case 3:
+				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_discover_by_category_list_item_evt, 
+						parent, false);
+				break;
+				
 			default:
 				break;
 			}
 			
 			ViewHolder vh = new ViewHolder(v);
 	        return vh;
+		}
+
+		@Override
+		public int getEventsAlreadyRequested() {
+			return eventsAlreadyRequested;
+		}
+
+		@Override
+		public void setMoreDataAvailable(boolean isMoreDataAvailable) {
+			this.isMoreDataAvailable = isMoreDataAvailable;
+		}
+
+		@Override
+		public void setEventsAlreadyRequested(int eventsAlreadyRequested) {
+			this.eventsAlreadyRequested = eventsAlreadyRequested;
+		}
+
+		@Override
+		public void updateContext(Context context) {
+			mContext = context;
+		}
+
+		@Override
+		public void setLoadDateWiseEvents(AsyncTask<Void, Void, List<Event>> loadDateWiseEvents) {
+			this.loadDateWiseEvents = loadDateWiseEvents;
+		}
+
+		@Override
+		public void onEventLoadingFinished() {
+			discoverFragment.setCenterProgressBarVisibility(View.INVISIBLE);
 		}
 	}
 }

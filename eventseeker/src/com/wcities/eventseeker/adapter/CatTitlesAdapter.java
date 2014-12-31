@@ -35,6 +35,7 @@ public class CatTitlesAdapter extends FragmentPagerAdapter implements ViewPager.
 	private ImageView imgCategory;
 	private float scale;
 	private List<Category> evtCategories;
+	private int selectedCatId;
 	
 	private final HashMap<Integer, Integer> categoryImgs = new HashMap<Integer, Integer>() {
 		{
@@ -130,9 +131,9 @@ public class CatTitlesAdapter extends FragmentPagerAdapter implements ViewPager.
 	public void onPageSelected(int position) {
 		// 1 is added in position because viewpager counts from left hand side whereas we want centered page img
 		position = (position + 1) % AppConstants.TOTAL_CATEGORIES;
-		int catId = evtCategories.get(position).getId();
+		selectedCatId = evtCategories.get(position).getId();
 		//Log.d(TAG, "position = " + position + ", catId = " + catId);
-		imgCategory.setImageResource(categoryImgs.get(catId));
+		imgCategory.setImageResource(categoryImgs.get(selectedCatId));
 	}
 	
 	@Override
@@ -143,6 +144,10 @@ public class CatTitlesAdapter extends FragmentPagerAdapter implements ViewPager.
 		return 0.33f;
 	}
 	
+	public int getSelectedCatId() {
+		return selectedCatId;
+	}
+
 	private CategoryTitleLinearLayout getRootView(int position) {
 		View v = fm.findFragmentByTag(getFragmentTag(position)).getView();
 		// on changing orientation, this v becomes null

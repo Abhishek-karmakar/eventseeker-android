@@ -9,10 +9,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.os.AsyncTask;
-import android.support.v7.widget.RecyclerView;
-import android.widget.BaseAdapter;
-
 import com.wcities.eventseeker.api.EventApi;
 import com.wcities.eventseeker.api.EventApi.MoreInfo;
 import com.wcities.eventseeker.constants.AppConstants;
@@ -20,14 +16,19 @@ import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
+import com.wcities.eventseeker.viewdata.DateWiseEventList.EventListItem;
 
-public class LoadDateWiseEvents extends AsyncTask<Void, Void, List<Event>> {
+import android.os.AsyncTask;
+import android.support.v7.widget.RecyclerView;
+import android.widget.BaseAdapter;
+
+public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 	
 	private static final int EVENTS_LIMIT = 10;
 
 	private static final String TAG = LoadDateWiseEvents.class.getName();
 	
-	private DateWiseEventList eventList;
+	private List<Event> eventList;
 	
 	private String query;
 	
@@ -39,7 +40,7 @@ public class LoadDateWiseEvents extends AsyncTask<Void, Void, List<Event>> {
 	
 	private DateWiseEventParentAdapterListener eventListAdapter;
 	
-	private LoadDateWiseEvents(String oauthToken, DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, 
+	private LoadEvents(String oauthToken, List<Event> eventList, DateWiseEventParentAdapterListener eventListAdapter, 
 			double lat, double lon, String wcitiesId) {
 		this.oauthToken = oauthToken;
 		this.eventList = eventList;
@@ -49,16 +50,7 @@ public class LoadDateWiseEvents extends AsyncTask<Void, Void, List<Event>> {
 		this.wcitiesId = wcitiesId;
 	}
 
-	public LoadDateWiseEvents(String oauthToken, DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, String query, 
-			double lat, double lon, int miles, String wcitiesId, String startDate, String endDate) {
-		this(oauthToken, eventList, eventListAdapter, lat, lon, wcitiesId);
-		this.query = query;
-		this.miles = miles;
-		this.startDate = startDate;
-		this.endDate = endDate;
-	}
-	
-	public LoadDateWiseEvents(String oauthToken, DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, double lat, 
+	public LoadEvents(String oauthToken, List<Event> eventList, DateWiseEventParentAdapterListener eventListAdapter, double lat, 
 			double lon, String startDate, String endDate, int categoryId, String wcitiesId) {
 		this(oauthToken, eventList, eventListAdapter, lat, lon, wcitiesId);
 		this.startDate = startDate;
@@ -114,24 +106,36 @@ public class LoadDateWiseEvents extends AsyncTask<Void, Void, List<Event>> {
 	@Override
 	protected void onPostExecute(List<Event> result) {
 		if (result.size() > 0) {
-			eventList.addEventListItems(result, this);
+			eventList.addAll(eventList.size() - 1, result);
 			eventListAdapter.setEventsAlreadyRequested(eventListAdapter.getEventsAlreadyRequested() + result.size());
 			
 			if (result.size() < EVENTS_LIMIT) {
 				eventListAdapter.setMoreDataAvailable(false);
-				eventList.removeProgressBarIndicator(this);
+				
+				if (!isCancelled()) {
+					//Log.d(TAG, "remove");
+					eventList.remove(eventList.size() - 1);
+					eventList.add(new Event(AppConstants.INVALID_ID, null));
+				}
 			}
 			
 		} else {
 			eventListAdapter.setMoreDataAvailable(false);
-			eventList.removeProgressBarIndicator(this);
+			
+			if (!isCancelled()) {
+				//Log.d(TAG, "remove");
+				eventList.remove(eventList.size() - 1);
+				eventList.add(new Event(AppConstants.INVALID_ID, null));
+			}
 		}
 		
-		if (eventListAdapter instanceof BaseAdapter) {
+		eventListAdapter.onEventLoadingFinished();
+		
+		/*if (eventListAdapter instanceof BaseAdapter) {
 			((BaseAdapter)eventListAdapter).notifyDataSetChanged();
 			
-		} else {
+		} else {*/
 			((RecyclerView.Adapter)eventListAdapter).notifyDataSetChanged();
-		}
-	}    	
+		//}
+	}   
 }

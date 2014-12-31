@@ -98,7 +98,7 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.fragment_login_syncing, null);
+		View v = inflater.inflate(R.layout.progress_bar_eventseeker, null);
 		RelativeLayout rltLytRoot = (RelativeLayout) v.findViewById(R.id.rltLytRoot);
 		rltLytRoot.setOnTouchListener(new OnTouchListener() {
 			

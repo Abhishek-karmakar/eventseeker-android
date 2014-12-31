@@ -25,5 +25,19 @@
 	    android:layout_marginTop="@dimen/v_pager_cat_titles_margin_t_discover"
 	    android:layout_gravity="top"
 	    android:background="@drawable/bg_v_pager_cat_titles" />
+	
+	<!-- Added dummy view to allow vertical scroll even when touch starts from vPagerCatTitles -->
+	<!-- <View android:id="@+id/vDummy"
+      	android:layout_width="match_parent"
+      	android:layout_height="@dimen/img_category_ht_discover"
+      	android:layout_gravity="top"
+      	android:background="@android:color/transparent" /> -->
+      	
+    <include layout="@layout/progress_bar_eventseeker"
+        android:id="@+id/prgsBarLyt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="invisible" />
       
  </FrameLayout>
