@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.AsyncTask.Status;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 
 import com.wcities.eventseeker.FollowingFragment;
 import com.wcities.eventseeker.GeneralDialogFragment;
+import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
@@ -33,6 +35,7 @@ import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.interfaces.ArtistAdapterListener;
 import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
+import com.wcities.eventseeker.util.FragmentUtil;
 
 // SectionIndexer is only required for 'FollowingFragment'.
 public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, ArtistAdapterListener<Void> {
@@ -150,7 +153,8 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 				@Override
 				public void onClick(View v) {
 					Resources res = mContext.getResources();
-					GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(							
+					GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
+							(DialogBtnClickListener) fragment,							
 							res.getString(R.string.remove_artist),  
 							res.getString(R.string.are_you_sure_you_want_to_remove_this_Artist),  
 							res.getString(R.string.btn_cancel),  
@@ -159,7 +163,7 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 					 * Pass the position as tag. So, that in Positive button if response comes as
 					 * true then we can remove that Artist.
 					 */
-					generalDialogFragment.show(fragment.getChildFragmentManager(), "" + position);
+					generalDialogFragment.show(((ActionBarActivity) mContext).getSupportFragmentManager(), "" + position);
 				}
 			});
 

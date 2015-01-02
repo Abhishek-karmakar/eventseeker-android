@@ -25,6 +25,7 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -269,9 +270,10 @@ public class PandoraFragment extends FragmentLoadableFromBackStack implements On
 				updateVisibility();
 
 				if (doesErrorExist) {
-					GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
+					GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(PandoraFragment.this,
 							"Error", errorMsg, "Ok", null);
-					generalDialogFragment.show(getChildFragmentManager(), DIALOG_FRAGMENT_TAG_ERROR);
+					generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(PandoraFragment.this))
+							.getSupportFragmentManager(), DIALOG_FRAGMENT_TAG_ERROR);
 				}
 				
 				eventSeekr.setSyncCount(Service.Pandora, EventSeekr.UNSYNC_COUNT);

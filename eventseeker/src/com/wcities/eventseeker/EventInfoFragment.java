@@ -644,7 +644,7 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 					handlePublishEvent();
 					
 				} else {
-					FragmentUtil.showLoginNeededForTrackingEventDialog(getChildFragmentManager(), FragmentUtil.getActivity(this));
+					FragmentUtil.showLoginNeededForTrackingEventDialog(FragmentUtil.getActivity(this), this);
 				}
 			}
 			

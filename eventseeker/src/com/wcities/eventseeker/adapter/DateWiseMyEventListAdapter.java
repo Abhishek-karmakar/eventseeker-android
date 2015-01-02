@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
+import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.MyEventsListFragment;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
@@ -81,12 +82,15 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 	
 	private Event eventPendingPublish;
 	private CheckBox eventPendingPublishChkBoxGoing, eventPendingPublishChkBoxWantToGo;
+	private DialogBtnClickListener listener;
 	
 	public DateWiseMyEventListAdapter(Context context, DateWiseEventList dateWiseEvtList,
 			AsyncTask<Void, Void, List<Event>> loadDateWiseEvents, LoadItemsInBackgroundListener mListener, 
-			PublishListener fbPublishListener, String googleAnalyticsScreenName) {
+			PublishListener fbPublishListener, String googleAnalyticsScreenName, DialogBtnClickListener listener) {
 		
 		mContext = context;
+		this.listener = listener;
+		
 		bitmapCache = BitmapCache.getInstance();
 		this.dateWiseEvtList = dateWiseEvtList;
 		this.loadDateWiseMyEvents = loadDateWiseEvents;
@@ -433,7 +437,7 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 				((PublishEventListFragment)mListener).handlePublishEvent();
 				
 			} else {
-				FragmentUtil.showLoginNeededForTrackingEventDialog(((Fragment)mListener).getChildFragmentManager(), mContext);
+				FragmentUtil.showLoginNeededForTrackingEventDialog(mContext, listener);
 			}
 		}
 	}

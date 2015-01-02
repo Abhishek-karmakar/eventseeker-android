@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -430,10 +431,11 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 		
 		} else if (errorCode == UserInfoApiJSONParser.MSG_CODE_NO_ACCESS_TOKEN 
 				|| errorCode == UserInfoApiJSONParser.MSG_CODE_UNSUCCESS) {
-			GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance( 
+			GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(this,
 					FragmentUtil.getResources(this).getString(R.string.error_title), 
 					FragmentUtil.getResources(this).getString(R.string.error_unknown_error), "Ok", null);
-			generalDialogFragment.show(getChildFragmentManager(), DIALOG_FRAGMENT_TAG_UNKNOWN_ERROR);
+			generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), 
+					DIALOG_FRAGMENT_TAG_UNKNOWN_ERROR);
 			
 		}
 	}

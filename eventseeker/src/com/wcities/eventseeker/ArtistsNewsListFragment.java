@@ -1,5 +1,6 @@
 package com.wcities.eventseeker;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,8 +12,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +30,7 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.wcities.eventseeker.ArtistsNewsListFragment.SortByDialogFragment.OnSortTypeSelectedListener;
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.adapter.ArtistNewsListAdapter;
 import com.wcities.eventseeker.api.Api;
@@ -49,6 +49,9 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 		LoadItemsInBackgroundListener, OnNewsLoadedListener, OnClickListener {
 	
 	protected static final String TAG = ArtistsNewsListFragment.class.getName();
+
+	public static final String ON_SORT_TYPE_SELECTED_LISETER_TAG = "onSortTypeSelectedListener";
+	public static final String SORT_BY_TAG = "sortBy";
 
 	private LoadArtistNews loadArtistsNews;
 	private ArtistNewsListAdapter artistNewsListAdapter;
@@ -72,12 +75,10 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 		trending
 	}
 	
-	private com.wcities.eventseeker.ArtistsNewsListFragment.SortByDialogFragment.OnSortTypeSelectedListener onSortTypeSelectedListener;
-	
 	/**
-	 * Using its instance variable since otherwise calling getResources() directly from fragment from 
+	 * Using its instance variable since otherwise calling getResources() directly from onSortTypeSelectedListener from 
 	 * callback methods is dangerous in a sense that it may throw java.lang.IllegalStateException: 
-	 * Fragment not attached to Activity, if user has already left this fragment & 
+	 * Fragment not attached to Activity, if user has already left this onSortTypeSelectedListener & 
 	 * then changed the orientation.
 	 */
 	private Resources res;
@@ -153,22 +154,6 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		
-		onSortTypeSelectedListener 
-			= new com.wcities.eventseeker.ArtistsNewsListFragment.SortByDialogFragment.OnSortTypeSelectedListener() {
-			
-			@Override
-			public void onSortTypeSelectedListener(SortBy sortBy) {
-				if (ArtistsNewsListFragment.this.sortBy == sortBy) {
-					return;
-				}
-				ArtistsNewsListFragment.this.sortBy = sortBy;
-				artistsNewsListItems = null;
-				
-				initListView();
-			}
-		};
-		
 		initListView();
 	}
 	
@@ -234,9 +219,25 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_sort_by:
-			Log.d(TAG, "action_sort_by");
-			SortByDialogFragment.getInstance(this, onSortTypeSelectedListener, sortBy)
-				.show(((ActionBarActivity) FragmentUtil.getActivity(this))
+			Bundle args = new Bundle();
+			args.putSerializable(SORT_BY_TAG, sortBy);
+			args.putSerializable(ON_SORT_TYPE_SELECTED_LISETER_TAG, new OnSortTypeSelectedListener() {
+
+				@Override
+				public void onSortTypeSelected(SortBy sortBy) {
+					if (ArtistsNewsListFragment.this.sortBy == sortBy) {
+						return;
+					}
+					ArtistsNewsListFragment.this.sortBy = sortBy;
+					artistsNewsListItems = null;
+					
+					initListView();
+				}
+			});
+			
+			SortByDialogFragment dialogFragment = new SortByDialogFragment();
+			dialogFragment.setArguments(args);
+			dialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this))
 					.getSupportFragmentManager(), "dialogSortBy");
 			return true;
 
@@ -355,35 +356,32 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	public String getScreenName() {
 		return "Artist News Screen";
 	}
-	
-	private static class SortByDialogFragment extends DialogFragment implements OnCheckedChangeListener {
+
+	public static class SortByDialogFragment extends DialogFragment implements OnCheckedChangeListener {
 		
-		private static SortByDialogFragment dialogFragment;
-		private Fragment fragment;
 		//private static boolean isShowing;
-		private SortBy sortBy = null;
+
+		private SortBy sortBy = SortBy.chronological;
 		private OnSortTypeSelectedListener onSortTypeSelectedListener;
 		
-		public interface OnSortTypeSelectedListener {
-			public void onSortTypeSelectedListener(SortBy sortBy);
+		public interface OnSortTypeSelectedListener extends Serializable {
+			public void onSortTypeSelected(SortBy sortBy);
+		}
+				
+		public SortByDialogFragment() {
 		}
 		
-		public static SortByDialogFragment getInstance(Fragment fragment, 
-				OnSortTypeSelectedListener onSortTypeSelectedListener, SortBy sortBy) {
-			dialogFragment = new SortByDialogFragment(fragment, onSortTypeSelectedListener, sortBy);
-			return dialogFragment;
-		}
-		
-		private SortByDialogFragment(Fragment fragment, OnSortTypeSelectedListener listener, SortBy sortBy) {
-			this.fragment = fragment;
-			this.onSortTypeSelectedListener = listener;
-			this.sortBy = sortBy;
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			onSortTypeSelectedListener = (OnSortTypeSelectedListener) getArguments()
+					.getSerializable(ON_SORT_TYPE_SELECTED_LISETER_TAG);
+			sortBy = (SortBy) getArguments().getSerializable(SORT_BY_TAG);
 		}
 		
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
-			View v = LayoutInflater.from(FragmentUtil.getActivity(fragment))
-				.inflate(R.layout.fragment_artist_news_dialog, null);
+			View v = LayoutInflater.from(FragmentUtil.getActivity(this)).inflate(R.layout.fragment_artist_news_dialog, null);
 
 			setupViews(v);
 			
@@ -423,16 +421,9 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 		}*/
 
 		@Override
-		public void onDestroy() {
-			super.onDestroy();
-			fragment = null;
-			onSortTypeSelectedListener = null;
-		}
-		
-		@Override
 		public void onCheckedChanged(RadioGroup group, int checkedId) {
 			sortBy = (checkedId == R.id.rdbChronological) ? SortBy.chronological : SortBy.trending;
-			onSortTypeSelectedListener.onSortTypeSelectedListener(sortBy);
+			onSortTypeSelectedListener.onSortTypeSelected(sortBy);
 			
 			//isShowing = false;
 			dismiss();

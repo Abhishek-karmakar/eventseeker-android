@@ -77,7 +77,7 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 			dateWiseEvtList.addDummyItem();
 			
 	        eventListAdapter = new DateWiseMyEventListAdapter(FragmentUtil.getActivity(this),  
-	        		dateWiseEvtList, null, this, this, FragmentUtil.getScreenName(this));
+	        		dateWiseEvtList, null, this, this, FragmentUtil.getScreenName(this), this);
 
 			loadItemsInBackground();
 			

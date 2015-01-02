@@ -12,31 +12,23 @@ import com.wcities.eventseeker.util.FragmentUtil;
 
 public class GeneralDialogFragment extends DialogFragment {
 	
+	private static final String TAG = GeneralDialogFragment.class.getSimpleName();
+
 	private static DialogBtnClickListener dialogBtnClickListener;
 	
 	private static boolean isAlreadyShown;
 	
-	public static GeneralDialogFragment newInstance(String msg, String btn1Txt) {
+	public static GeneralDialogFragment newInstance(DialogBtnClickListener dialogBtnClickListener, String msg, 
+			String btn1Txt) {
+		GeneralDialogFragment.dialogBtnClickListener = dialogBtnClickListener;
+		
 		GeneralDialogFragment frag = new GeneralDialogFragment();
-        Bundle args = new Bundle();
-        args.putString(BundleKeys.DIALOG_MSG, msg);
-        args.putString(BundleKeys.BTN1_TXT, btn1Txt);
-        frag.setArguments(args);
-        return frag;
-    }
-	
-	public static GeneralDialogFragment newInstance(String title, String msg, String btn1Txt, String btn2Txt) {
-		GeneralDialogFragment frag = new GeneralDialogFragment();
-        Bundle args = new Bundle();
-        args.putString(BundleKeys.DIALOG_TITLE, title);
-        args.putString(BundleKeys.DIALOG_MSG, msg);
-        args.putString(BundleKeys.BTN1_TXT, btn1Txt);
-        if (btn2Txt != null) {
-        	args.putString(BundleKeys.BTN2_TXT, btn2Txt);
-        }
-        frag.setArguments(args);
-        return frag;
-    }
+		Bundle args = new Bundle();
+		args.putString(BundleKeys.DIALOG_MSG, msg);
+		args.putString(BundleKeys.BTN1_TXT, btn1Txt);
+		frag.setArguments(args);
+		return frag;
+	}
 
 	public static GeneralDialogFragment newInstance(DialogBtnClickListener dialogBtnClickListener, 
 			String title, String msg, String btn1Txt, String btn2Txt) {
@@ -72,7 +64,7 @@ public class GeneralDialogFragment extends DialogFragment {
         .setNegativeButton(args.getString(BundleKeys.BTN1_TXT), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
             	isAlreadyShown = false;
-            	if (getParentFragment() == null) {
+            	if (dialogBtnClickListener != null) {
             		dialogBtnClickListener.doNegativeClick(dialogTag);
             		
             	} else {
@@ -85,7 +77,7 @@ public class GeneralDialogFragment extends DialogFragment {
         	builder.setPositiveButton(args.getString(BundleKeys.BTN2_TXT), new DialogInterface.OnClickListener() {
 	            public void onClick(DialogInterface dialog, int whichButton) {
 	            	isAlreadyShown = false;
-	            	if (getParentFragment() == null) {
+	            	if (dialogBtnClickListener != null) {
 	            		dialogBtnClickListener.doPositiveClick(dialogTag);
 	            		
 	            	} else {

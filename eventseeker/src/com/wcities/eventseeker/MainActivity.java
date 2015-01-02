@@ -1262,6 +1262,12 @@ public class MainActivity extends ActionBarActivity implements
 			popularArtistsFragment.setArguments(args);
 			selectNonDrawerItem(popularArtistsFragment, AppConstants.FRAGMENT_TAG_POPULAR_ARTISTS, getResources()
 					.getString(R.string.title_following), true);
+
+		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_SPORTS_ARTISTS)) {
+			SportsArtistsFragment sportsArtistsFragment = new SportsArtistsFragment();
+			sportsArtistsFragment.setArguments(args);
+			selectNonDrawerItem(sportsArtistsFragment, AppConstants.FRAGMENT_TAG_SPORTS_ARTISTS, getResources()
+					.getString(R.string.title_following), true);
 			
 		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_TWITTER_SYNCING)) {
 			//Log.d(TAG, "FRAGMENT_TAG_TWITTER_SYNCING");
@@ -1697,6 +1703,10 @@ public class MainActivity extends ActionBarActivity implements
 		} else if (fragment instanceof PopularArtistsFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_following),
 					AppConstants.FRAGMENT_TAG_POPULAR_ARTISTS, false);
+
+		} else if (fragment instanceof SportsArtistsFragment) {
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_following),
+					AppConstants.FRAGMENT_TAG_SPORTS_ARTISTS, false);
 		}
 	}
 

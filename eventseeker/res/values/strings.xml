@@ -377,6 +377,13 @@
     <string name="btn_theater">Theater</string>
     <string name="btn_sports">Sports</string>
     
+    <!-- SportsArtistsFragment -->
+    <string name="btn_nfl">NFL</string>
+    <string name="btn_nba">NBA</string>
+    <string name="btn_nhl">NHL</string>
+    <string name="btn_mlb">MLB</string>
+    <string name="btn_mls">MLS</string>
+    
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     
     <!-- Common -->

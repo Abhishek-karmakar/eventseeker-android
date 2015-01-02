@@ -60,7 +60,8 @@ public class AppConstants {
 	public static final String FRAGMENT_TAG_LAUNCHER = "launcherFragment";
 	public static final String FRAGMENT_TAG_SETTINGS = "settingsFragment";
 	public static final String FRAGMENT_TAG_FOLLOW_MORE_ARTISTS = "followMoreArtistsFragment";
-	public static final String FRAGMENT_TAG_POPULAR_ARTISTS = "popularFragment";
+	public static final String FRAGMENT_TAG_POPULAR_ARTISTS = "popularArtistsFragment";
+	public static final String FRAGMENT_TAG_SPORTS_ARTISTS = "SportsArtistsFragment";
 	public static final String FRAGMENT_TAG_ARTISTS_NEWS_LIST = "artistsNewsFragment";
 	public static final String FRAGMENT_TAG_FRIEND_LIST = "friendListFragment";
 	public static final String FRAGMENT_TAG_MY_EVENTS = "myEventsFragment";

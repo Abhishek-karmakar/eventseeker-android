@@ -27,6 +27,7 @@ import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -802,8 +803,9 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 						((PublishEventListFragment)FriendsActivityFragment.this).handlePublishEvent();
 						
 					} else {
-						FragmentUtil.showLoginNeededForTrackingEventDialog(FriendsActivityFragment.this
-								.getChildFragmentManager(),  FragmentUtil.getActivity(FriendsActivityFragment.this));
+						FragmentUtil.showLoginNeededForTrackingEventDialog(
+								((ActionBarActivity) FragmentUtil.getActivity(FriendsActivityFragment.this)),  
+								FriendsActivityFragment.this);
 					}
 				}
 			}

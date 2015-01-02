@@ -10,6 +10,7 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -111,10 +112,11 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 			super.onPostExecute(result);
 			RepCodeResponse repCodeResponse = RepCodeResponse.getRepCodeResponse(result);
 			Resources res = eventSeekr.getResources();
-			GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
+			GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(RepCodeFragment.this,
 					res.getString(R.string.rep_code_submission), repCodeResponse.getMsg(res), 
 					res.getString(R.string.ok), null);
-			generalDialogFragment.show(getChildFragmentManager(), AppConstants.DIALOG_FRAGMENT_TAG_SUBMIT_REP_CODE_RESPONSE);
+			generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(RepCodeFragment.this))
+					.getSupportFragmentManager(), AppConstants.DIALOG_FRAGMENT_TAG_SUBMIT_REP_CODE_RESPONSE);
 			isSubmitting = false;
 			setVisibility();
 		}

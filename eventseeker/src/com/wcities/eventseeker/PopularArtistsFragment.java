@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.FragmentUtil;
 
@@ -39,7 +40,7 @@ public class PopularArtistsFragment extends FragmentLoadableFromBackStack implem
 			case R.id.btnFeatured:
 				break;
 				
-			case R.id.btnMusic:				
+			case R.id.btnMusic:		
 				break;
 				
 			case R.id.btnComedy:
@@ -49,6 +50,8 @@ public class PopularArtistsFragment extends FragmentLoadableFromBackStack implem
 				break;
 				
 			case R.id.btnSports:
+				((MainActivity) FragmentUtil.getActivity(this))
+					.replaceByFragment(AppConstants.FRAGMENT_TAG_SPORTS_ARTISTS, null);
 				break;
 		}
 	}

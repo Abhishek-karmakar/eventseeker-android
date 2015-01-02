@@ -7,6 +7,7 @@ import org.json.JSONException;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -211,20 +212,22 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 	private void handleResetPwdResult(int msgCode) {
 		try {
 			if (msgCode == UserInfoApiJSONParser.MSG_CODE_CHK_EMAIL_TO_RESET_PWD) {
-				GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
+				GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(this,
 						FragmentUtil.getResources(this).getString(R.string.dialog_msg_chk_email_to_reset_pwd), "Ok");
-				generalDialogFragment.show(getChildFragmentManager(), DIALOG_FRAGMENT_TAG_CHK_EMAIL);
+				generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), 
+						DIALOG_FRAGMENT_TAG_CHK_EMAIL);
 			
 			} else if (msgCode == UserInfoApiJSONParser.MSG_CODE_USER_EMAIL_DOESNT_EXIST) {
-				GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
+				GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(this,
 						FragmentUtil.getResources(this).getString(R.string.dialog_msg_user_email_doesnt_exist), "Ok");
-				generalDialogFragment.show(getChildFragmentManager(), DIALOG_FRAGMENT_TAG_CHK_EMAIL);
+				generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), 
+						DIALOG_FRAGMENT_TAG_CHK_EMAIL);
 				
 			} else if (msgCode == UserInfoApiJSONParser.MSG_CODE_UNSUCCESS) {
-				GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance( 
+				GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(this,
 						FragmentUtil.getResources(this).getString(R.string.error_title), 
 						FragmentUtil.getResources(this).getString(R.string.error_unknown_error), "Ok", null);
-				generalDialogFragment.show(getChildFragmentManager(), DIALOG_FRAGMENT_TAG_UNKNOWN_ERROR);
+				generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), DIALOG_FRAGMENT_TAG_UNKNOWN_ERROR);
 			}
 			
 		} catch (IllegalStateException e) {
@@ -290,26 +293,26 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 	public void onErrorOccured(int errorCode) {
 		if (errorCode == UserInfoApiJSONParser.MSG_CODE_EMAIL_OR_PWD_INCORRECT) {
 			GeneralDialogFragment generalDialogFragment 
-				= GeneralDialogFragment.newInstance(FragmentUtil.getResources(this).getString(R.string.error_title), 
-						FragmentUtil.getResources(this).getString(R.string.error_email_or_password_incorrect), "Ok", null);
-			generalDialogFragment.show(getChildFragmentManager(), DIALOG_FRAGMENT_TAG_EMAIL_OR_PASSWORD_INCORRECT);
+				= GeneralDialogFragment.newInstance(this,
+					FragmentUtil.getResources(this).getString(R.string.error_title), 
+					FragmentUtil.getResources(this).getString(R.string.error_email_or_password_incorrect), "Ok", null);
+			generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), 
+					DIALOG_FRAGMENT_TAG_EMAIL_OR_PASSWORD_INCORRECT);
 		
 		} else if (errorCode == UserInfoApiJSONParser.MSG_CODE_NO_ACCESS_TOKEN 
 				|| errorCode == UserInfoApiJSONParser.MSG_CODE_UNSUCCESS) {
 			GeneralDialogFragment generalDialogFragment 
-				= GeneralDialogFragment.newInstance(FragmentUtil.getResources(this).getString(R.string.error_title), 
+				= GeneralDialogFragment.newInstance(this,
+					FragmentUtil.getResources(this).getString(R.string.error_title), 
 					FragmentUtil.getResources(this).getString(R.string.error_unknown_error), "Ok", null);
-			generalDialogFragment.show(getChildFragmentManager(), DIALOG_FRAGMENT_TAG_UNKNOWN_ERROR);
+			generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), 
+					DIALOG_FRAGMENT_TAG_UNKNOWN_ERROR);
 		}
 	}
 
 	@Override
-	public void doPositiveClick(String dialogTag) {
-		
-	}
+	public void doPositiveClick(String dialogTag) {}
 
 	@Override
-	public void doNegativeClick(String dialogTag) {
-		
-	}
+	public void doNegativeClick(String dialogTag) {}
 }

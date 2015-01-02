@@ -16,13 +16,13 @@ public class SportsArtistsFragment extends FragmentLoadableFromBackStack impleme
 		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.VISIBLE);
 		
 		super.onCreateView(inflater, container, savedInstanceState);
-		View view = inflater.inflate(R.layout.fragment_popular_artists, null);
+		View view = inflater.inflate(R.layout.fragment_sports_artists, null);
 		
-		view.findViewById(R.id.btnFeatured).setOnClickListener(this);
-		view.findViewById(R.id.btnMusic).setOnClickListener(this);
-		view.findViewById(R.id.btnComedy).setOnClickListener(this);
-		view.findViewById(R.id.btnTheater).setOnClickListener(this);
-		view.findViewById(R.id.btnSports).setOnClickListener(this);
+		view.findViewById(R.id.btnNFL).setOnClickListener(this);
+		view.findViewById(R.id.btnNBA).setOnClickListener(this);
+		view.findViewById(R.id.btnNHL).setOnClickListener(this);
+		view.findViewById(R.id.btnMLB).setOnClickListener(this);
+		view.findViewById(R.id.btnMLS).setOnClickListener(this);
 		
 		return view;
 	}
