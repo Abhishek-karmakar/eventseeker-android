@@ -505,10 +505,4 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 	public void onPublishPermissionGranted() {
 		updateAttendingChkBoxes(eventPendingPublish, eventPendingPublishChkBoxGoing, eventPendingPublishChkBoxWantToGo);
 	}
-
-	@Override
-	public void onEventLoadingFinished() {
-		// TODO Auto-generated method stub
-		
-	}
 }

@@ -1,6 +1,5 @@
 package com.wcities.eventseeker.adapter;
 
-import java.util.HashMap;
 import java.util.List;
 
 import android.graphics.Typeface;
@@ -9,10 +8,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wcities.eventseeker.CategoryTitleFragment;
+import com.wcities.eventseeker.DiscoverFragment;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Category;
@@ -32,40 +31,18 @@ public class CatTitlesAdapter extends FragmentPagerAdapter implements ViewPager.
 	private CategoryTitleLinearLayout next = null, prev = null;
 	private FragmentManager fm;
 	private ViewPager viewPager;
-	private ImageView imgCategory;
 	private float scale;
 	private List<Category> evtCategories;
 	private int selectedCatId;
+	private DiscoverFragment discoverFragment;
 	
-	private final HashMap<Integer, Integer> categoryImgs = new HashMap<Integer, Integer>() {
-		{
-			put(AppConstants.CATEGORY_ID_START, R.drawable.cat_900);
-			put(AppConstants.CATEGORY_ID_START + 1, R.drawable.cat_901);
-			put(AppConstants.CATEGORY_ID_START + 2, R.drawable.cat_902);
-			put(AppConstants.CATEGORY_ID_START + 3, R.drawable.cat_903);
-			put(AppConstants.CATEGORY_ID_START + 4, R.drawable.cat_904);
-			put(AppConstants.CATEGORY_ID_START + 5, R.drawable.cat_905);
-			put(AppConstants.CATEGORY_ID_START + 6, R.drawable.cat_906);
-			put(AppConstants.CATEGORY_ID_START + 7, R.drawable.cat_907);
-			put(AppConstants.CATEGORY_ID_START + 8, R.drawable.cat_908);
-			put(AppConstants.CATEGORY_ID_START + 9, R.drawable.cat_909);
-			put(AppConstants.CATEGORY_ID_START + 10, R.drawable.cat_910);
-			put(AppConstants.CATEGORY_ID_START + 11, R.drawable.cat_911);
-		}
-	};
-
 	public CatTitlesAdapter(FragmentManager fm, ViewPager viewPager, List<Category> evtCategories, 
-			ImageView imgCategory) {
+			DiscoverFragment discoverFragment) {
 		super(fm);
 		this.fm = fm;
 		this.viewPager = viewPager;
 		this.evtCategories = evtCategories;
-		this.imgCategory = imgCategory;
-	}
-
-	public void updateViews(ViewPager viewPager, ImageView imgCategory) {
-		this.viewPager = viewPager;
-		this.imgCategory = imgCategory;
+		this.discoverFragment = discoverFragment;
 	}
 
 	@Override
@@ -131,9 +108,12 @@ public class CatTitlesAdapter extends FragmentPagerAdapter implements ViewPager.
 	public void onPageSelected(int position) {
 		// 1 is added in position because viewpager counts from left hand side whereas we want centered page img
 		position = (position + 1) % AppConstants.TOTAL_CATEGORIES;
-		selectedCatId = evtCategories.get(position).getId();
+		int newCatId = evtCategories.get(position).getId();
 		//Log.d(TAG, "position = " + position + ", catId = " + catId);
-		imgCategory.setImageResource(categoryImgs.get(selectedCatId));
+		if (selectedCatId != newCatId) {
+			selectedCatId = newCatId;
+			discoverFragment.onCatChanged(selectedCatId);
+		}
 	}
 	
 	@Override

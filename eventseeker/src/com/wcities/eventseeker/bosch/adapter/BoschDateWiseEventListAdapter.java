@@ -211,10 +211,4 @@ public class BoschDateWiseEventListAdapter extends BaseAdapter implements DateWi
 	public void setMoreDataAvailable(boolean isMoreDataAvailable) {
 		this.isMoreDataAvailable = isMoreDataAvailable;
 	}
-
-	@Override
-	public void onEventLoadingFinished() {
-		// TODO Auto-generated method stub
-		
-	}
 }

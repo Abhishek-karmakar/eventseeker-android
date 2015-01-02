@@ -2,16 +2,22 @@ package com.wcities.eventseeker;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.LayoutParams;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,7 +27,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -65,13 +70,11 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 	 */
 	private RecyclerViewInterceptingVerticalScroll recyclerVEvents;
 	private EventListAdapter eventListAdapter;
-    private RecyclerView.LayoutManager layoutManager;
 	private CatTitlesAdapter catTitlesAdapter;
-	private RelativeLayout prgsBarLyt;
 	//private View vDummy;
 	
 	private int toolbarSize;
-	private int limitScrollAt;
+	private int limitScrollAt, screenHt, minRecyclerVHt, recyclerVDummyTopViewsHt, recyclerVPrgsBarHt, recyclerVContentRowHt;
 	private float translationZPx;
 	private boolean isScrollLimitReached, isDrawerOpen;
 	private String title = "";
@@ -81,17 +84,24 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 	private double lat, lon;
 	private String startDate, endDate;
 	private LoadEvents loadEvents;
+	private int selectedCatId;
 	
-	String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
-	        "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-	        "Linux", "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux",
-	        "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux", "OS/2",
-	        "Android", "iPhone", "WindowsMobile", 
-	        "Android", "iPhone", "WindowsMobile",
-	        "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-	        "Linux", "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux",
-	        "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux", "OS/2",
-	        "Android", "iPhone", "WindowsMobile"};
+	private final HashMap<Integer, Integer> categoryImgs = new HashMap<Integer, Integer>() {
+		{
+			put(AppConstants.CATEGORY_ID_START, R.drawable.cat_900);
+			put(AppConstants.CATEGORY_ID_START + 1, R.drawable.cat_901);
+			put(AppConstants.CATEGORY_ID_START + 2, R.drawable.cat_902);
+			put(AppConstants.CATEGORY_ID_START + 3, R.drawable.cat_903);
+			put(AppConstants.CATEGORY_ID_START + 4, R.drawable.cat_904);
+			put(AppConstants.CATEGORY_ID_START + 5, R.drawable.cat_905);
+			put(AppConstants.CATEGORY_ID_START + 6, R.drawable.cat_906);
+			put(AppConstants.CATEGORY_ID_START + 7, R.drawable.cat_907);
+			put(AppConstants.CATEGORY_ID_START + 8, R.drawable.cat_908);
+			put(AppConstants.CATEGORY_ID_START + 9, R.drawable.cat_909);
+			put(AppConstants.CATEGORY_ID_START + 10, R.drawable.cat_910);
+			put(AppConstants.CATEGORY_ID_START + 11, R.drawable.cat_911);
+		}
+	};
 	
 	/*View.OnTouchListener vDummyOnTouchListener = new OnTouchListener() {
 		
@@ -107,7 +117,7 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+		//Log.d(TAG, "onCreate()");
 		setHasOptionsMenu(true);
 		setRetainInstance(true);
 		
@@ -116,6 +126,9 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		// calculating here instead of onCreate() since it needs to be recalculated on orientation change
+		calculateHeights();
+		
 		//Log.d(TAG, "onCreateView()");
 		View v = inflater.inflate(R.layout.fragment_discover, container, false);
 		
@@ -128,8 +141,12 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 			buildEvtCategories();
 		}
 		
+		/**
+		 * creating this adapter everytime, since otherwise reusing same adapter instance on orientation change
+		 * & updating just the viewpager instance on adapter doesn't inflate the titles at all
+		 */
 		catTitlesAdapter = new CatTitlesAdapter(getChildFragmentManager(), vPagerCatTitles, evtCategories, 
-				imgCategory);
+				this);
 		
 		vPagerCatTitles.setAdapter(catTitlesAdapter);
 		vPagerCatTitles.setOnPageChangeListener(catTitlesAdapter);
@@ -145,7 +162,7 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 		recyclerVEvents = (RecyclerViewInterceptingVerticalScroll) v.findViewById(R.id.recyclerVEvents);
 		
 		// use a linear layout manager
-		layoutManager = new LinearLayoutManager(FragmentUtil.getActivity(this));
+		RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(FragmentUtil.getActivity(this));
 		recyclerVEvents.setLayoutManager(layoutManager);
 		
 	    recyclerVEvents.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -176,14 +193,13 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
             }
         });
 	    
-	    prgsBarLyt = (RelativeLayout) v.findViewById(R.id.prgsBarLyt);
-		
 		return v;
 	}
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		//Log.d(TAG, "onActivityCreated()");
 		if (eventList == null) {
 			double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 			lat = latLon[0];
@@ -198,10 +214,9 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 			eventList = new ArrayList<Event>();
 			eventList.add(null);
 			
-			eventListAdapter = new EventListAdapter(FragmentUtil.getActivity(this), null, eventList, 
-					this, this);
+			eventListAdapter = new EventListAdapter(FragmentUtil.getActivity(this), null, eventList, this, this);
 			
-			loadItemsInBackground();
+			//loadItemsInBackground();
 			
 		} else {
 			eventListAdapter.updateContext(FragmentUtil.getActivity(this));
@@ -213,7 +228,7 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 	@Override
 	public void onStart() {
 		super.onStart();
-		//Log.d(TAG, "onStart(), prevScrollY = " + prevScrollY);
+		//Log.d(TAG, "onStart()");
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this); 
 		ma.setVStatusBarVisibility(View.GONE);
 		ma.setVDrawerStatusBarVisibility(View.VISIBLE);
@@ -243,6 +258,24 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 		ma.setVDrawerStatusBarVisibility(View.GONE);
 	}
 	
+	private void calculateHeights() {
+		DisplayMetrics dm = new DisplayMetrics();
+		FragmentUtil.getActivity(this).getWindowManager().getDefaultDisplay().getMetrics(dm);
+		screenHt = VersionUtil.isApiLevelAbove18() ? dm.heightPixels : dm.heightPixels - 
+				((MainActivity) FragmentUtil.getActivity(this)).getStatusBarHeight();
+		
+		Resources res = FragmentUtil.getResources(this);
+		recyclerVDummyTopViewsHt = res.getDimensionPixelSize(R.dimen.v_pager_cat_titles_margin_t_discover) + 
+				res.getDimensionPixelSize(R.dimen.v_pager_cat_titles_ht_discover);
+		recyclerVPrgsBarHt = res.getDimensionPixelSize(R.dimen.rlt_lyt_root_ht_progress_bar_eventseeker_fixed_ht);
+		recyclerVContentRowHt = res.getDimensionPixelSize(R.dimen.rlt_layout_root_ht_list_item_discover);
+		
+		if (limitScrollAt != 0) {
+			// this is not the first call to onCreateView(); otherwise limitScrollAt would be 0
+			minRecyclerVHt = screenHt + limitScrollAt;
+		}
+	}
+	
 	private void buildEvtCategories() {
 		evtCategories = new ArrayList<Category>();
 		int categoryIdStart = AppConstants.CATEGORY_ID_START;
@@ -260,6 +293,11 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 		if (VersionUtil.isApiLevelAbove18()) {
 			limitScrollAt -= ((MainActivity) FragmentUtil.getActivity(this)).getStatusBarHeight();
 		}
+		
+		minRecyclerVHt = screenHt + limitScrollAt;
+		// to decide dummy foorter view ht based on above value of minRecyclerVHt
+		eventListAdapter.notifyDataSetChanged();
+		//Log.d(TAG, "screenHt = " + screenHt + ", limitScrollAt = " + limitScrollAt);
 	}
 	
 	private void onScrolled(int dy, boolean forceUpdate) {
@@ -327,6 +365,34 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 		}
 	}
 	
+	private void resetEventList() {
+		if (eventListAdapter == null) {
+			return;
+		}
+		eventListAdapter.setEventsAlreadyRequested(0);
+		eventListAdapter.setMoreDataAvailable(true);
+
+		if (loadEvents != null) {
+			loadEvents.cancel(true);
+		}
+
+		eventList.clear();
+		eventList.add(null);
+		
+		eventListAdapter.notifyDataSetChanged();
+		//Log.d(TAG, "");
+		// reset totalScrolledDy amount
+		totalScrolledDy = (totalScrolledDy > limitScrollAt) ? limitScrollAt : totalScrolledDy;
+		/**
+		 * Only call to notifyDataSetChanged() is not enough to retain scrolled position, because it's possible that
+		 * we had many events earlier, but now on resetting the list there are no events, hence 
+		 * following manual scrolling to right position is required
+		 */
+		((LinearLayoutManager)recyclerVEvents.getLayoutManager()).scrollToPositionWithOffset(0, 0 - totalScrolledDy);
+
+		loadItemsInBackground();
+	}
+	
 	public String getCurrentTitle() {
 		return title;
 	}
@@ -375,18 +441,39 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 		AsyncTaskUtil.executeAsyncTask(loadEvents, true);
 	}
 	
+	public void onCatChanged(int selectedCatId) {
+		//Log.d(TAG, "onCatChanged(), selectedCatId = " + selectedCatId);
+		if (this.selectedCatId != selectedCatId) {
+			this.selectedCatId = selectedCatId;
+			imgCategory.setImageResource(categoryImgs.get(selectedCatId));
+			resetEventList();
+		}
+	}
+	
 	public void onTouchRecyclerViewDummyItem0(MotionEvent event) {
 		vPagerCatTitles.onTouchEvent(event);
 	}
 	
-	public void setCenterProgressBarVisibility(int visibility) {
-		prgsBarLyt.setVisibility(visibility);
+	private int getRecyclerVHtExcludingFooter() {
+		int recyclerVHt = recyclerVDummyTopViewsHt;
+		if (eventList.size() > 0 && eventList.get(eventList.size() - 1) == null) {
+			// progress bar is displayed
+			recyclerVHt += (recyclerVContentRowHt * (eventList.size() - 1));
+			recyclerVHt += recyclerVPrgsBarHt;
+			
+		} else {
+			recyclerVHt += (recyclerVContentRowHt * eventList.size());
+		}
+		
+		//Log.d(TAG, "recyclerVHt = " + recyclerVHt);
+		return recyclerVHt;
 	}
 	
 	private static class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> implements 
 			DateWiseEventParentAdapterListener {
 		
-		private static final int EXTRA_DUMMY_ITEM_COUNT = 2;
+		private static final int EXTRA_TOP_DUMMY_ITEM_COUNT = 2;
+		private static final int EXTRA_BOTTOM_DUMMY_ITEM_COUNT = 1;
 		
 		private Context mContext;
 		private AsyncTask<Void, Void, List<Event>> loadDateWiseEvents;
@@ -399,7 +486,7 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 		private RecyclerView recyclerView;
 		
 		private static enum ViewType {
-			POS_0, POS_1, PROGRESS, CONTENT
+			POS_0, POS_1, LAST_POS, PROGRESS, CONTENT
 		};
 		
 		private static class ViewHolder extends RecyclerView.ViewHolder {
@@ -420,8 +507,7 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 	    }
 		
 		public EventListAdapter(Context mContext, AsyncTask<Void, Void, List<Event>> loadDateWiseEvents,
-				List<Event> eventList, LoadItemsInBackgroundListener mListener, 
-				DiscoverFragment discoverFragment) {
+				List<Event> eventList, LoadItemsInBackgroundListener mListener, DiscoverFragment discoverFragment) {
 			this.mContext = mContext;
 			this.loadDateWiseEvents = loadDateWiseEvents;
 			this.eventList = eventList;
@@ -439,7 +525,10 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 			} else if (position == 1) {
 				return ViewType.POS_1.ordinal();
 				
-			} else if (eventList.get(position - EXTRA_DUMMY_ITEM_COUNT) == null) {
+			} else if (position == getItemCount() - 1) {
+				return ViewType.LAST_POS.ordinal();
+				
+			} else if (eventList.get(position - EXTRA_TOP_DUMMY_ITEM_COUNT) == null) {
 				return ViewType.PROGRESS.ordinal();
 				
 			} else {
@@ -450,25 +539,31 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 		@Override
 		public int getItemCount() {
 			//Log.d(TAG, "getItemCount() = " + (eventList.size() + EXTRA_DUMMY_ITEM_COUNT));
-			return eventList.size() + EXTRA_DUMMY_ITEM_COUNT;
+			return eventList.size() + EXTRA_TOP_DUMMY_ITEM_COUNT + EXTRA_BOTTOM_DUMMY_ITEM_COUNT;
 		}
 
 		@Override
 		public void onBindViewHolder(ViewHolder holder, int position) {
 			//Log.d(TAG, "onBindViewHolder(), pos = " + position);
-			if (position != 0 && position != 1) {
-				final Event event = eventList.get(position - EXTRA_DUMMY_ITEM_COUNT);
+			if (position == getItemCount() - 1) {
+				RecyclerView.LayoutParams lp = (LayoutParams) holder.root.getLayoutParams();
+				int recyclerVHtExcludingFooter = discoverFragment.getRecyclerVHtExcludingFooter();
+				lp.height = (recyclerVHtExcludingFooter > discoverFragment.minRecyclerVHt) ?
+						0 : discoverFragment.minRecyclerVHt - recyclerVHtExcludingFooter;
+				//Log.d(TAG, "lp.ht = " + lp.height);
+				holder.root.setLayoutParams(lp);
+				
+			} else if (position != 0 && position != 1) {
+				final Event event = eventList.get(position - EXTRA_TOP_DUMMY_ITEM_COUNT);
 				
 				if (event == null) {
 					// progress indicator
-					if (eventList.size() == 1) {
-						// no events yet loaded
-						holder.root.setVisibility(View.INVISIBLE);
-						discoverFragment.setCenterProgressBarVisibility(View.VISIBLE);
-						 
-					} else {
-						// at least 1 event is there
-						holder.root.setVisibility(View.VISIBLE);
+					holder.root.setVisibility(View.VISIBLE);
+					
+					if ((loadDateWiseEvents == null || loadDateWiseEvents.getStatus() == Status.FINISHED) && 
+							isMoreDataAvailable) {
+						//Log.d(TAG, "onBindViewHolder(), pos = " + position);
+						mListener.loadItemsInBackground();
 					}
 					
 				} else if (event.getId() == AppConstants.INVALID_ID) {
@@ -502,6 +597,7 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 					 */
 					try {
 						bitmapCacheable = event.doesValidImgUrlExist() ? event : event.getSchedule().getVenue();
+						
 					} catch (NullPointerException e) {
 						e.printStackTrace();
 					}
@@ -560,13 +656,17 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 				break;
 				
 			case 2:
-				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.progress_bar_eventseeker, parent, 
+				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_child_dummy_footer, parent, 
 						false);
 				break;
 				
 			case 3:
-				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_discover_by_category_list_item_evt, 
-						parent, false);
+				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.progress_bar_eventseeker_fixed_ht, parent, 
+						false);
+				break;
+				
+			case 4:
+				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_discover, parent, false);
 				break;
 				
 			default:
@@ -600,11 +700,6 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 		@Override
 		public void setLoadDateWiseEvents(AsyncTask<Void, Void, List<Event>> loadDateWiseEvents) {
 			this.loadDateWiseEvents = loadDateWiseEvents;
-		}
-
-		@Override
-		public void onEventLoadingFinished() {
-			discoverFragment.setCenterProgressBarVisibility(View.INVISIBLE);
 		}
 	}
 }

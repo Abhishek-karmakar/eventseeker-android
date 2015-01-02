@@ -197,11 +197,4 @@ public class DateWiseEventListAdapter extends BaseAdapter implements DateWiseEve
 	public void setMoreDataAvailable(boolean isMoreDataAvailable) {
 		this.isMoreDataAvailable = isMoreDataAvailable;
 	}
-
-	@Override
-	public void onEventLoadingFinished() {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

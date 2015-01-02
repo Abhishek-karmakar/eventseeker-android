@@ -9,18 +9,15 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.os.AsyncTask;
+import android.support.v7.widget.RecyclerView;
+
 import com.wcities.eventseeker.api.EventApi;
 import com.wcities.eventseeker.api.EventApi.MoreInfo;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
-import com.wcities.eventseeker.viewdata.DateWiseEventList;
-import com.wcities.eventseeker.viewdata.DateWiseEventList.EventListItem;
-
-import android.os.AsyncTask;
-import android.support.v7.widget.RecyclerView;
-import android.widget.BaseAdapter;
 
 public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 	
@@ -128,8 +125,6 @@ public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 				eventList.add(new Event(AppConstants.INVALID_ID, null));
 			}
 		}
-		
-		eventListAdapter.onEventLoadingFinished();
 		
 		/*if (eventListAdapter instanceof BaseAdapter) {
 			((BaseAdapter)eventListAdapter).notifyDataSetChanged();

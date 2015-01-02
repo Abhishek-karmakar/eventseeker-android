@@ -157,10 +157,4 @@ public class BoschLazyLoadingEventListAdapter extends BaseAdapter implements Dat
 		public ImageView imgEvent;
 		public TextView txtTitle;
 	}
-
-	@Override
-	public void onEventLoadingFinished() {
-		// TODO Auto-generated method stub
-		
-	}
 }
