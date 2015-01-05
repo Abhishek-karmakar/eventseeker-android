@@ -1,40 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rltLayoutRoot"
+    android:id="@+id/rltLytRoot"
     android:layout_width="match_parent"
     android:layout_height="@dimen/rlt_layout_root_ht_list_item_discover"
     android:background="@android:color/white" >
     
-    <RelativeLayout 
-        android:id="@+id/rltContent"
+    <RelativeLayout android:id="@+id/rltLytContent"
    		android:layout_width="match_parent"
-    	android:layout_height="wrap_content" >
+    	android:layout_height="wrap_content"
+    	android:layout_toRightOf="@+id/imgEvent"
+    	android:layout_centerVertical="true" >
     
-	    <ImageView android:id="@+id/imgEvent"
-	        android:layout_width="@dimen/img_event_w_fragment_discover_by_category_list_item_evt"
-	        android:layout_height="@dimen/img_event_ht_fragment_discover_by_category_list_item_evt"
-	        android:scaleType="fitXY"
-	        android:layout_centerVertical="true"
-	        android:layout_marginTop="@dimen/img_event_margin_t_fragment_discover_by_category_list_item_evt"
-	        android:layout_marginLeft="@dimen/img_event_margin_l_fragment_discover_by_category_list_item_evt"
-	        android:layout_marginBottom="@dimen/img_event_margin_b_fragment_discover_by_category_list_item_evt" />
+	    <View android:id="@+id/vOpenHandle"
+	        android:layout_width="@dimen/v_handle_w_list_item_discover"
+	        android:layout_height="@dimen/v_handle_ht_list_item_discover"
+	        android:layout_alignParentRight="true"
+	        android:background="@android:drawable/ic_menu_more" />
 	    
-	    <include layout="@layout/include_evt_details"
-	        android:layout_width="match_parent"
-	    	android:layout_height="match_parent"
-	        android:layout_toRightOf="@id/imgEvent"
-	        android:layout_marginLeft="@dimen/rlt_layout_evt_details_margin_l_fragment_discover_by_category_list_item_evt"
-	        android:layout_marginRight="@dimen/rlt_layout_evt_details_margin_r_fragment_discover_by_category_list_item_evt"
-	        android:layout_centerVertical="true" />
+	    <RelativeLayout android:id="@+id/lnrLytEvtDetails"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:gravity="center_vertical"
+	        android:layout_marginRight="@dimen/rlt_lyt_evt_details_margin_r_list_item_discover"
+	        android:layout_centerVertical="true"
+	        android:layout_toLeftOf="@id/vOpenHandle" >
+		    
+	        <TextView android:id="@+id/txtEvtTitle"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textStyle="bold"
+				android:textSize="@dimen/txt_evt_title_txt_size_list_item_discover"
+				android:text="Event Name"
+				android:lines="2"
+				android:ellipsize="end" />
+	        
+	        <TextView android:id="@+id/txtEvtTime"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textColor="@color/txt_evt_location_list_item_discover"
+				android:textSize="@dimen/txt_evt_time_txt_size_list_item_discover"
+				android:text="Time"
+				android:layout_below="@id/txtEvtTitle"
+				android:gravity="center_vertical"
+				android:lines="1"
+				android:ellipsize="end" />
+	        
+	        <TextView android:id="@+id/txtEvtLocation"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textColor="@color/txt_evt_location_list_item_discover"
+				android:textSize="@dimen/txt_evt_location_txt_size_list_item_discover"
+				android:text="Location"
+				android:lines="2"
+				android:ellipsize="end"
+				android:layout_below="@id/txtEvtTime"
+				android:gravity="bottom" />
+		    
+	    </RelativeLayout>
 	    
     </RelativeLayout>
     
+    <ImageView android:id="@+id/imgEvent"
+        android:layout_width="@dimen/img_event_w_list_item_discover"
+        android:layout_height="@dimen/img_event_ht_list_item_discover"
+        android:scaleType="fitXY"
+        android:layout_centerVertical="true"
+        android:paddingLeft="@dimen/img_event_pad_l_list_item_discover"
+        android:paddingRight="@dimen/img_event_pad_r_list_item_discover"
+        android:contentDescription="event image" />
+    
+    <LinearLayout android:id="@+id/lnrSliderContent"
+        android:layout_width="@dimen/lnr_slider_content_ht_list_item_discover"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/rltContent"
+        android:layout_alignBottom="@id/rltContent"
+        android:visibility="invisible"
+        android:gravity="center_vertical" >
+	    
+        <View android:id="@+id/vCloseHandle"
+	        android:layout_width="@dimen/v_handle_w_list_item_discover"
+	        android:layout_height="@dimen/v_handle_ht_list_item_discover"
+	        android:background="@android:drawable/ic_menu_more"
+	        android:layout_gravity="top" />
+	    
+        <ImageView android:id="@+id/imgTicket"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/tickets_grey"
+            android:layout_weight="1" />
+
+        <ImageView android:id="@+id/imgCalendar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/calendar"
+            android:layout_weight="1" />
+        
+        <ImageView android:id="@+id/imgShare"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/share"
+            android:layout_weight="1" />
+        
+    </LinearLayout>
+    
     <View android:id="@+id/divider"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/divider_ht_fragment_discover_by_category_list_item_evt"
+        android:layout_height="@dimen/divider_ht_list_item_discover"
         android:background="@drawable/event_divide"
-        android:layout_below="@id/rltContent"
-        android:layout_marginLeft="@dimen/divider_margin_l_fragment_discover_by_category_list_item_evt"
-        android:layout_marginRight="@dimen/divider_margin_r_fragment_discover_by_category_list_item_evt" />
+        android:layout_marginLeft="@dimen/divider_margin_l_list_item_discover"
+        android:layout_marginRight="@dimen/divider_margin_r_list_item_discover"
+        android:layout_alignParentBottom="true" />
     
 </RelativeLayout>

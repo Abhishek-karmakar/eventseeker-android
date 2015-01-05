@@ -17,7 +17,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutParams;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,8 +24,13 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -41,6 +45,7 @@ import com.wcities.eventseeker.cache.BitmapCacheable;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Category;
+import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
@@ -491,18 +496,23 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 		
 		private static class ViewHolder extends RecyclerView.ViewHolder {
 			
-			private View root;
+			private View root, vOpenHandle, vCloseHandle;
 	        private TextView txtEvtTitle, txtEvtTime, txtEvtLocation;
-	        private ImageView imgEvtTime, imgEvent;
+	        private ImageView imgEvent;
+	        private LinearLayout lnrSliderContent;
+	        private RelativeLayout rltLytContent;
 	        
 	        public ViewHolder(View root) {
 	            super(root);
 	            this.root = root;
 	            txtEvtTitle = (TextView) root.findViewById(R.id.txtEvtTitle);
 	            txtEvtTime = (TextView) root.findViewById(R.id.txtEvtTime);
-	            imgEvtTime = (ImageView) root.findViewById(R.id.imgEvtTime);
 	            txtEvtLocation = (TextView) root.findViewById(R.id.txtEvtLocation);
 	            imgEvent = (ImageView) root.findViewById(R.id.imgEvent);
+	            vOpenHandle = root.findViewById(R.id.vOpenHandle);
+	            vCloseHandle = root.findViewById(R.id.vCloseHandle);
+	            lnrSliderContent = (LinearLayout) root.findViewById(R.id.lnrSliderContent);
+	            rltLytContent = (RelativeLayout) root.findViewById(R.id.rltLytContent);
 	        }
 	    }
 		
@@ -543,7 +553,7 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 		}
 
 		@Override
-		public void onBindViewHolder(ViewHolder holder, int position) {
+		public void onBindViewHolder(final ViewHolder holder, final int position) {
 			//Log.d(TAG, "onBindViewHolder(), pos = " + position);
 			if (position == getItemCount() - 1) {
 				RecyclerView.LayoutParams lp = (LayoutParams) holder.root.getLayoutParams();
@@ -574,17 +584,9 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 					
 					if (event.getSchedule() != null) {
 						Schedule schedule = event.getSchedule();
+						Date date = schedule.getDates().get(0);
+						holder.txtEvtTime.setText(ConversionUtil.getDateTime(date.getStartDate(), date.isStartTimeAvailable()));
 						
-						if (schedule.getDates().get(0).isStartTimeAvailable()) {
-							String time = ConversionUtil.getTime(schedule.getDates().get(0).getStartDate());
-							
-							holder.txtEvtTime.setText(time);
-							holder.imgEvtTime.setVisibility(View.VISIBLE);
-							
-						} else {
-							holder.txtEvtTime.setText("");
-							holder.imgEvtTime.setVisibility(View.INVISIBLE);
-						}
 						String venueName = (schedule.getVenue() != null) ? schedule.getVenue().getName() : "";
 						holder.txtEvtLocation.setText(venueName);
 					}
@@ -620,6 +622,40 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 						@Override
 						public void onClick(View v) {
 							((EventListener) mContext).onEventSelected(event);
+						}
+					});
+					
+					holder.vOpenHandle.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							holder.lnrSliderContent.setVisibility(View.VISIBLE);
+							
+							RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) holder.lnrSliderContent.getLayoutParams();
+							lp.rightMargin = 0;
+							holder.lnrSliderContent.setLayoutParams(lp);
+							
+							Animation slide = AnimationUtils.loadAnimation(FragmentUtil.getActivity(
+									discoverFragment), R.anim.slide_in_from_left);
+							slide.setAnimationListener(new AnimationListener() {
+								
+								@Override
+								public void onAnimationStart(Animation animation) {}
+								
+								@Override
+								public void onAnimationRepeat(Animation animation) {}
+								
+								@Override
+								public void onAnimationEnd(Animation animation) {
+									holder.vOpenHandle.setVisibility(View.INVISIBLE);
+									RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) 
+											holder.rltLytContent.getLayoutParams();
+									lp.leftMargin = 0 - holder.lnrSliderContent.getWidth();
+									holder.rltLytContent.setLayoutParams(lp);
+									//updateOpenPos(position, recyclerView);
+								}
+							});
+							holder.lnrSliderContent.startAnimation(slide);
 						}
 					});
 				}

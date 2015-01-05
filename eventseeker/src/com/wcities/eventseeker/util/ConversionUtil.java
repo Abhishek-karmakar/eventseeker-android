@@ -84,6 +84,37 @@ public class ConversionUtil {
 	}
 	
 	/**
+	 * 
+	 * @param date
+	 * @return datetime in format Friday October 10, 2015 10:00pm
+	 */
+	public static String getDateTime(Date date, boolean parseTime) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		
+		DateFormatSymbols dateFormatSymbols = new DateFormatSymbols();
+		String time = dateFormatSymbols.getWeekdays()[calendar.get(Calendar.DAY_OF_WEEK)] 
+				+ " " + dateFormatSymbols.getMonths()[calendar.get(Calendar.MONTH)] 
+				+ " " + calendar.get(Calendar.DATE)
+				+ ", " + calendar.get(Calendar.YEAR);
+		
+		if (parseTime) {
+			int hr = calendar.get(Calendar.HOUR);
+			if (hr == 0) {
+				hr = 12;
+			}
+			
+			int min = calendar.get(Calendar.MINUTE);
+			String strMin = (min < 10) ? "0" + min : min + "";
+			
+			String am_pm = ((calendar.get(Calendar.AM_PM) == Calendar.AM) ? "am" : "pm");
+			time += " " + hr + ":" + strMin + am_pm;
+		}
+		
+		return time;
+	}
+	
+	/**
 	 * @param year
 	 * @param month
 	 * @param day

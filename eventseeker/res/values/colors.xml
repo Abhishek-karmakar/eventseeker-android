@@ -87,6 +87,9 @@
 	<color name="txt_why_login_txt_color_fragment_get_started">#555</color>
 	<color name="txt_guide_txt_color_fragment_get_started">#888</color>
 	
+	<!-- list_item_discover.xml -->
+	<color name="txt_evt_location_list_item_discover">#aaaaaa</color>
+	
 	<!-- starts for bosch -->
 	<color name="b_bg_navigation_drawer">#666</color>
 	<!-- <color name="b_lnr_layout_btns_txt_color_fragment_plan_travel">#0088ff</color> -->
