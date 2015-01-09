@@ -1,6 +1,7 @@
 package com.wcities.eventseeker.util;
 
 import android.content.res.Resources;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -99,6 +100,18 @@ public class ViewUtil {
 
 		} catch (Exception e) {
 		}
+	}
+	
+	public static boolean isPointInsideView(float x, float y, View view){
+	    int location[] = new int[2];
+	    view.getLocationOnScreen(location);
+	    int viewX = location[0];
+	    int viewY = location[1];
+
+	    //point is inside view bounds
+	    /*Log.d(TAG, "Point lies in view ? " + 
+	    		((x > viewX && x < (viewX + view.getWidth())) && (y > viewY && y < (viewY + view.getHeight()))));*/
+	    return (x > viewX && x < (viewX + view.getWidth())) && (y > viewY && y < (viewY + view.getHeight()));
 	}
 	
 	public static class AnimationUtil {

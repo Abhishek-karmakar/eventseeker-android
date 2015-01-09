@@ -57,6 +57,8 @@
 	<color name="holo_blue_light">#ff33b5e5</color>
 	<color name="darker_gray">#aaa</color>
 	
+	<color name="gray_shade_d">#ddd</color>
+	
 	<color name="divider1_bg_fragment_discover_by_category_list_item_header">#ccc</color>
 	<color name="lnr_layout_btns_bg_include_fragment_my_events_list_item_footer">#ddd</color>
 	<color name="root_lnr_layout_bg_artists_news_list_item">#ddd</color>

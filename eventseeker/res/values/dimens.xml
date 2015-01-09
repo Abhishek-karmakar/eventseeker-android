@@ -21,7 +21,9 @@
     <dimen name="grd_evt_categories_hor_space_discover">6dp</dimen>
     <dimen name="grd_evt_categories_ver_space_discover">@dimen/grd_evt_categories_hor_space_discover</dimen>
     <dimen name="grd_evt_categories_pad_discover">10dp</dimen>
-    <dimen name="v_pager_cat_titles_margin_t_discover">160dp</dimen>
+    <dimen name="v_pager_cat_titles_margin_t_discover_port">160dp</dimen>
+    <dimen name="v_pager_cat_titles_margin_t_discover_land">152dp</dimen>
+    <dimen name="v_pager_cat_titles_margin_t_discover">@dimen/v_pager_cat_titles_margin_t_discover_port</dimen>
     <dimen name="v_pager_cat_titles_ht_discover">60dp</dimen>
     <!-- img_category_ht_discover = v_pager_cat_titles_ht_discover + v_pager_cat_titles_margin_t_discover -->
     <dimen name="img_category_ht_discover">220dp</dimen>
@@ -524,9 +526,13 @@
     <dimen name="rlt_layout_root_ht_list_item_discover">100dp</dimen>
     <!-- img_event_w_list_item_discover = img w (104dp) + img_event_pad_l_list_item_discover + img_event_pad_r_list_item_discover -->
     <dimen name="img_event_w_list_item_discover">119dp</dimen>
-    <dimen name="img_event_ht_list_item_discover">78dp</dimen>
+    <!-- img_event_ht_list_item_discover = img ht (78dp) + img_event_pad_t_list_item_discover + img_event_pad_b_list_item_discover
+    Also, img_event_ht_list_item_discover = rlt_layout_root_ht_list_item_discover - divider_ht_list_item_discover -->
+    <dimen name="img_event_ht_list_item_discover">99dp</dimen>
     <dimen name="img_event_pad_l_list_item_discover">2dp</dimen>
     <dimen name="img_event_pad_r_list_item_discover">13dp</dimen>
+    <dimen name="img_event_pad_t_list_item_discover">10dp</dimen>
+    <dimen name="img_event_pad_b_list_item_discover">11dp</dimen>
     <dimen name="rlt_lyt_evt_details_margin_r_list_item_discover">3dp</dimen>
     <dimen name="txt_evt_title_txt_size_list_item_discover">14sp</dimen>
     <dimen name="txt_evt_time_txt_size_list_item_discover">12sp</dimen>
@@ -534,9 +540,11 @@
     <dimen name="divider_ht_list_item_discover">1dp</dimen>
     <dimen name="divider_margin_l_list_item_discover">8dp</dimen>
     <dimen name="divider_margin_r_list_item_discover">@dimen/divider_margin_l_list_item_discover</dimen>
-    <dimen name="v_handle_w_list_item_discover">15dp</dimen>
+    <dimen name="rlt_lyt_content_margin_l_list_item_discover">@dimen/img_event_w_list_item_discover</dimen>
+    <dimen name="v_handle_w_list_item_discover">18dp</dimen>
     <dimen name="v_handle_ht_list_item_discover">40dp</dimen>
-    <dimen name="lnr_slider_content_ht_list_item_discover">180dp</dimen>
+    <dimen name="lnr_slider_content_w_list_item_discover">170dp</dimen>
+    <dimen name="lnr_slider_content_ht_list_item_discover">@dimen/img_event_ht_list_item_discover</dimen>
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <!-- activity_bosch_main.xml -->
     <dimen name="b_root_navigation_drawer_w_main">210dp</dimen>

@@ -16,7 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.wcities.eventseeker.DatePickerFragment.OnDateSelectedListener;
+import com.wcities.eventseeker.DiscoverSettingDialogFragment.OnDateSelectedListener;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -80,7 +80,7 @@ public class DiscoverByCategoryFragment extends FragmentLoadableFromBackStack im
     	switch (item.getItemId()) {
     	
 		case R.id.action_calendar:
-			DialogFragment newFragment = new DatePickerFragment();
+			DialogFragment newFragment = new DiscoverSettingDialogFragment();
 			
 			Bundle args = new Bundle();
 			args.putInt(BundleKeys.YEAR, year);

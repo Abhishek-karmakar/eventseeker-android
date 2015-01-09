@@ -18,8 +18,9 @@
     <dimen name="grd_evt_categories_margin_t_discover">@dimen/rlt_layout_featured_evts_parent_margin_discover</dimen>
     <dimen name="grd_evt_categories_margin_b_discover">@dimen/rlt_layout_featured_evts_parent_margin_discover</dimen>
     <dimen name="grd_evt_categories_margin_r_discover">@dimen/rlt_layout_featured_evts_parent_margin_discover</dimen>
-    <dimen name="v_pager_cat_titles_margin_t_discover">152dp</dimen>
-    <dimen name="v_pager_cat_titles_ht_discover">60dp</dimen>
+    <!-- v_pager_cat_titles_margin_t_discover = v_pager_cat_titles_margin_t_discover in portrait(160) - 
+    (action_bar_ht in portrait(56) - action_bar_ht in landscape(48)) -->
+    <dimen name="v_pager_cat_titles_margin_t_discover">@dimen/v_pager_cat_titles_margin_t_discover_land</dimen>
     <!-- img_category_ht_discover = v_pager_cat_titles_ht_discover + v_pager_cat_titles_margin_t_discover -->
     <dimen name="img_category_ht_discover">212dp</dimen>
 

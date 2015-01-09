@@ -85,7 +85,7 @@ public class MainActivity extends ActionBarActivity implements
 		ConnectAccountsFragmentListener, SearchView.OnQueryTextListener,
 		ChangeLocationFragmentListener, ConnectionFailureListener, DialogBtnClickListener {
 
-	private static final String TAG = MainActivity.class.getName();
+	private static final String TAG = MainActivity.class.getSimpleName();
 
 	public static final int INDEX_NAV_ITEM_DISCOVER = DrawerListFragment.SECT_1_HEADER_POS + 1;
 	public static final int INDEX_NAV_ITEM_MY_EVENTS = INDEX_NAV_ITEM_DISCOVER + 1;
