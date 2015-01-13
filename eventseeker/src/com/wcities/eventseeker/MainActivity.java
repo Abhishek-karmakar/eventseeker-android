@@ -982,6 +982,9 @@ public class MainActivity extends ActionBarActivity implements
 			} else {*/
 				discoverFragment = new DiscoverFragment();
 			//}
+			if (args != null) {
+				discoverFragment.setArguments(args);
+			}
 			replaceContentFrameByFragment(discoverFragment, AppConstants.FRAGMENT_TAG_DISCOVER, "", false);
 			break;
 
@@ -1414,6 +1417,9 @@ public class MainActivity extends ActionBarActivity implements
 				
 			case CHANGE_LOCATION:
 				ChangeLocationFragment changeLocationFragment = new ChangeLocationFragment();
+				if (args != null) {
+					changeLocationFragment.setArguments(args);
+		    	}
 				selectNonDrawerItem(changeLocationFragment, AppConstants.FRAGMENT_TAG_CHANGE_LOCATION, 
 						getResources().getString(R.string.title_change_location), true);
 				break;
@@ -1750,8 +1756,8 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	@Override
-	public void onLocationChanged() {
-		onDrawerItemSelected(INDEX_NAV_ITEM_DISCOVER, null);
+	public void onLocationChanged(Bundle args) {
+		onDrawerItemSelected(INDEX_NAV_ITEM_DISCOVER, args);
 	}
 
 	public void setDrawerIndicatorEnabled(boolean enable) {

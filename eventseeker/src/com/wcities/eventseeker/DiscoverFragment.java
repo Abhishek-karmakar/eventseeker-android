@@ -16,7 +16,6 @@ import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,12 +29,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,7 +45,9 @@ import android.widget.TextView;
 
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
-import com.wcities.eventseeker.DiscoverSettingDialogFragment.OnDateSelectedListener;
+import com.wcities.eventseeker.DiscoverSettingDialogFragment.DiscoverSettingChangedListener;
+import com.wcities.eventseeker.SettingsFragment.OnSettingsItemClickedListener;
+import com.wcities.eventseeker.SettingsFragment.SettingsItem;
 import com.wcities.eventseeker.adapter.CatTitlesAdapter;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -72,16 +75,19 @@ import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
 
 public class DiscoverFragment extends FragmentLoadableFromBackStack implements LoadItemsInBackgroundListener, 
-		OnDateSelectedListener {
+		DiscoverSettingChangedListener {
 	
 	private static final String TAG = DiscoverFragment.class.getSimpleName();
 	
 	private static final String FRAGMENT_TAG_DISCOVER_SETTING_DIALOG = DiscoverSettingDialogFragment.class.getSimpleName();
 	private static final int TRANSLATION_Z_DP = 10;
 	private static final int UNSCROLLED = -1;
+	private static final int DEFAULT_SEARCH_RADIUS = 50;
 	
 	private ImageView imgCategory;
 	private ViewPager vPagerCatTitles;
+	private RelativeLayout rltLytNoEvts;
+	 
 	/**
 	 * Used RecyclerViewInterceptingVerticalScroll in place of RecyclerView since we want to intercept only
 	 * vertical scroll events; otherwise horizontal must be handled by its child as done for child at 
@@ -101,7 +107,7 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 	private int totalScrolledDy = UNSCROLLED; // indicates layout not yet created
 	private List<Event> eventList;
 	private double lat, lon;
-	private int year, month, day;
+	private int year, month, day, miles = DEFAULT_SEARCH_RADIUS;
 	private String startDate, endDate;
 	private LoadEvents loadEvents;
 	private int selectedCatId, currentItem = CatTitlesAdapter.FIRST_PAGE - 1;
@@ -151,6 +157,16 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 		firstItemHtPort = res.getDimensionPixelSize(R.dimen.v_pager_cat_titles_margin_t_discover_port);
 		firstItemHtLand = res.getDimensionPixelSize(R.dimen.v_pager_cat_titles_margin_t_discover_land);
 		firstItemHtDiff = firstItemHtPort - firstItemHtLand;
+		
+		if (getArguments() != null) {
+			//Log.d(TAG, "onCreate()");
+			Bundle args = getArguments();
+			year = args.getInt(BundleKeys.YEAR);
+			month = args.getInt(BundleKeys.MONTH);
+			day = args.getInt(BundleKeys.DAY);
+			miles = args.getInt(BundleKeys.MILES);
+			updateStartEndDates();
+		}
 	}
 	
 	@Override
@@ -172,6 +188,20 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 		
 		imgCategory = (ImageView) v.findViewById(R.id.imgCategory);
 		vPagerCatTitles = (ViewPager) v.findViewById(R.id.vPagerCatTitles);
+		rltLytNoEvts = (RelativeLayout) v.findViewById(R.id.rltLytNoEvts);
+		((Button) v.findViewById(R.id.btnChgLoc)).setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Bundle args = new Bundle();
+				args.putInt(BundleKeys.YEAR, year);
+				args.putInt(BundleKeys.MONTH, month);
+				args.putInt(BundleKeys.DAY, day);
+				args.putInt(BundleKeys.MILES, miles);
+				((OnSettingsItemClickedListener) FragmentUtil.getActivity(DiscoverFragment.this))
+						.onSettingsItemClicked(SettingsItem.CHANGE_LOCATION, args);
+			}
+		});
 		/*vDummy = v.findViewById(R.id.vDummy);
 		vDummy.setOnTouchListener(vDummyOnTouchListener);*/
 		
@@ -324,15 +354,13 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 		switch (item.getItemId()) {
 
 		case R.id.action_setting:
-			DialogFragment newFragment = new DiscoverSettingDialogFragment();
-			
-			Bundle args = new Bundle();
-			args.putInt(BundleKeys.YEAR, year);
-			args.putInt(BundleKeys.MONTH, month);
-			args.putInt(BundleKeys.DAY, day);
-			newFragment.setArguments(args);
-			
-		    newFragment.show(getChildFragmentManager(), FRAGMENT_TAG_DISCOVER_SETTING_DIALOG);
+			DiscoverSettingDialogFragment discoverSettingDialogFragment = DiscoverSettingDialogFragment
+					.newInstance(this, year, month, day, miles);
+			/**
+			 * Passing activity fragment manager, since using this fragment's child fragment manager 
+			 * doesn't retain dialog on orientation change
+			 */
+			discoverSettingDialogFragment.show(getActivity().getSupportFragmentManager(), FRAGMENT_TAG_DISCOVER_SETTING_DIALOG);
 			return true;
 
 		default:
@@ -522,7 +550,8 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 	@Override
 	public void loadItemsInBackground() {
 		loadEvents = new LoadEvents(Api.OAUTH_TOKEN, eventList, eventListAdapter, lat, lon, startDate, endDate, 
-				catTitlesAdapter.getSelectedCatId(), ((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).getWcitiesId());
+				catTitlesAdapter.getSelectedCatId(), ((EventSeekr)FragmentUtil.getActivity(this)
+						.getApplicationContext()).getWcitiesId(), miles);
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);
 		AsyncTaskUtil.executeAsyncTask(loadEvents, true);
 	}
@@ -565,15 +594,19 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 	}
 	
 	@Override
-	public void onDateSelected(int year, int month, int day) {
+	public void onSettingChanged(int year, int month, int day, int miles) {
+		//Log.d(TAG, "onSettingChanged(), " + year + ", " + month + ", " + day + ", " + miles);
+		String prevStartDate = startDate;
+		int prevMiles = this.miles;
+		
 		this.year = year;
 		this.month = month;
 		this.day = day;
-
-		String prevStartDate = startDate;
+		this.miles = miles;
+		
 		updateStartEndDates();
 		
-	    if (!startDate.equals(prevStartDate)) {
+	    if (!startDate.equals(prevStartDate) || this.miles != prevMiles) {
 			resetEventList();
 		}
 	}
@@ -594,7 +627,7 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 		private DiscoverFragment discoverFragment;
 		private RecyclerView recyclerView;
 		private int openPos = INVALID;
-		private int rltLytContentInitialMarginL, lnrSliderContentW, rltLytContentW = INVALID;
+		private int rltLytContentInitialMarginL, lnrSliderContentW, imgEventW, rltLytContentW = INVALID;
 		
 		private static enum ViewType {
 			POS_0, POS_1, LAST_POS, PROGRESS, CONTENT
@@ -637,6 +670,7 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 			Resources res = FragmentUtil.getResources(discoverFragment);
 			rltLytContentInitialMarginL = res.getDimensionPixelSize(R.dimen.rlt_lyt_content_margin_l_list_item_discover);
 			lnrSliderContentW = res.getDimensionPixelSize(R.dimen.lnr_slider_content_w_list_item_discover);
+			imgEventW = res.getDimensionPixelSize(R.dimen.img_event_w_list_item_discover);
 		}
 
 		@Override
@@ -676,21 +710,24 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 				//Log.d(TAG, "lp.ht = " + lp.height);
 				holder.root.setLayoutParams(lp);
 				
+				if (eventList.isEmpty()) {
+					discoverFragment.rltLytNoEvts.setVisibility(View.VISIBLE);
+					
+				} else {
+					discoverFragment.rltLytNoEvts.setVisibility(View.INVISIBLE);
+				}
+				
 			} else if (position != 0 && position != 1) {
 				final Event event = eventList.get(position - EXTRA_TOP_DUMMY_ITEM_COUNT);
 				
 				if (event == null) {
 					// progress indicator
-					holder.root.setVisibility(View.VISIBLE);
 					
 					if ((loadDateWiseEvents == null || loadDateWiseEvents.getStatus() == Status.FINISHED) && 
 							isMoreDataAvailable) {
 						//Log.d(TAG, "onBindViewHolder(), pos = " + position);
 						mListener.loadItemsInBackground();
 					}
-					
-				} else if (event.getId() == AppConstants.INVALID_ID) {
-					// no events found
 					
 				} else {
 					holder.txtEvtTitle.setText(event.getName());
@@ -731,20 +768,35 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 					}
 					
 					if (rltLytContentW == INVALID) {
-						holder.rltLytContent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+						/**
+						 * Setting global layout listener on rltLytRoot instead of rltLytContent, because 
+						 * on nexus 5, when orientation changes from portrait to landscape onGlobalLayout() 
+						 * of rltLytContent returns wrong width (126px less than actual width)
+						 */
+						holder.rltLytRoot.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 				            @Override
 				            public void onGlobalLayout() {
-								if (VersionUtil.isApiLevelAbove15()) {
-									holder.rltLytContent.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+								RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) holder.rltLytContent.getLayoutParams();
 
-								} else {
-									holder.rltLytContent.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+								/**
+								 * Following condition is to prevent above mentioned situation for nexus 5, 
+								 * where orientation change from portrait to landscape returns less width (by 126px)
+								 * for first time even when global layout listener is set on rltLytRoot.
+								 */
+								if (lp.width != RelativeLayout.LayoutParams.MATCH_PARENT) {
+									if (VersionUtil.isApiLevelAbove15()) {
+										holder.rltLytRoot.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+	
+									} else {
+										holder.rltLytRoot.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+									}
 								}
 								
-								RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) holder.rltLytContent.getLayoutParams();
-								rltLytContentW = lp.width = holder.rltLytContent.getWidth();
+								rltLytContentW = lp.width = (holder.rltLytRoot.getWidth() - imgEventW);
 								holder.rltLytContent.setLayoutParams(lp);
-								
+				            	/*Log.d(TAG, "onGlobalLayout(), rltLytContentW = " + rltLytContentW + 
+				            			", holder.rltLytRoot.getWidth() = " + holder.rltLytRoot.getWidth());*/
+
 								if (openPos == position) {
 									/**
 									 * Now since we know fixed height of rltLytContent, we can update its 
@@ -760,8 +812,9 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 					} else {
 						RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) holder.rltLytContent.getLayoutParams();
 						lp.width = rltLytContentW;
+						//Log.d(TAG, "else, rltLytContentW = " + rltLytContentW);
 						holder.rltLytContent.setLayoutParams(lp);
-					}
+					} 
 					
 					holder.rltLytRoot.setOnTouchListener(new OnTouchListener() {
 						
@@ -786,6 +839,7 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 							case MotionEvent.ACTION_MOVE:
 								//Log.d(TAG, "move");
 								holder.rltLytRoot.setPressed(true);
+								
 								isScrolled = true;
 								holder.lnrSliderContent.setVisibility(View.VISIBLE);
 								
@@ -795,7 +849,10 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 								int scrollX = rltLytContentLP.leftMargin - rltLytContentInitialMarginL + dx;
 								//Log.d(TAG, "move, rltLytContentLP.leftMargin = " + rltLytContentLP.leftMargin + ", lnrDrawerContentW = " + lnrDrawerContentW);
 								if (scrollX >= (0 - lnrSliderContentW) && scrollX <= 0) {
+									ViewCompat.setElevation(holder.imgEvent, discoverFragment.translationZPx);
+									
 									rltLytContentLP.leftMargin = rltLytContentInitialMarginL + scrollX;
+									//Log.d(TAG, "onTouch(), ACTION_MOVE");
 									holder.rltLytContent.setLayoutParams(rltLytContentLP);
 									
 									lnrSliderContentLP.rightMargin = rltLytContentInitialMarginL 
@@ -826,7 +883,7 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 								if (isMinSwipeDistanceXTravelled) {
 									//Log.d(TAG, "isMinSwipeDistanceXTravelled");
 									if (isSwipedToOpen) {
-										Log.d(TAG, "isSwipedToOpen");
+										//Log.d(TAG, "isSwipedToOpen");
 										openSlider(holder, position, true);
 										
 									} else {
@@ -877,6 +934,7 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 		}
 		
 		private void openSlider(ViewHolder holder, int position, boolean isUserInitiated) {
+			ViewCompat.setElevation(holder.imgEvent, discoverFragment.translationZPx);
 			holder.lnrSliderContent.setVisibility(View.VISIBLE);
 			
 			RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) holder.lnrSliderContent.getLayoutParams();
@@ -886,6 +944,7 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 			lp = (RelativeLayout.LayoutParams) holder.rltLytContent.getLayoutParams();
 			lp.leftMargin = rltLytContentInitialMarginL - lnrSliderContentW;
 			holder.rltLytContent.setLayoutParams(lp);
+			//Log.d(TAG, "openSlider()");
 			
 			if (isUserInitiated) {
 				updateOpenPos(position, recyclerView);
@@ -902,6 +961,9 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 			lp = (RelativeLayout.LayoutParams) holder.rltLytContent.getLayoutParams();
 			lp.leftMargin = rltLytContentInitialMarginL;
 			holder.rltLytContent.setLayoutParams(lp);
+			//Log.d(TAG, "closeSlider()");
+			
+			ViewCompat.setElevation(holder.imgEvent, 0);
 			
 			if (isUserInitiated) {
 				if (openPos == position) {
@@ -1005,6 +1067,7 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 			if (holder.isSliderClose(rltLytContentInitialMarginL)) {
 				// slider is close, so open it
 				//Log.d(TAG, "open slider");
+				ViewCompat.setElevation(holder.imgEvent, discoverFragment.translationZPx);
 				holder.lnrSliderContent.setVisibility(View.VISIBLE);
 				
 				RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) holder.lnrSliderContent.getLayoutParams();
@@ -1016,13 +1079,7 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 				slide.setAnimationListener(new AnimationListener() {
 					
 					@Override
-					public void onAnimationStart(Animation animation) {
-						/*ObjectAnimator elevateAnim = ObjectAnimator.ofFloat(holder.imgEvent, "translationZ", 
-								0.0f, discoverFragment.translationZPx);
-						elevateAnim.setDuration(android.R.integer.config_mediumAnimTime);
-						elevateAnim.start();*/
-						//ViewCompat.setElevation(holder.imgEvent, discoverFragment.translationZPx);
-					}
+					public void onAnimationStart(Animation animation) {}
 					
 					@Override
 					public void onAnimationRepeat(Animation animation) {}
@@ -1035,6 +1092,7 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 								holder.rltLytContent.getLayoutParams();
 						lp.leftMargin -= holder.lnrSliderContent.getWidth();
 						holder.rltLytContent.setLayoutParams(lp);
+						//Log.d(TAG, "isSliderClose");
 						
 						updateOpenPos(position, recyclerView);
 					}
@@ -1049,19 +1107,14 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 				slide.setAnimationListener(new AnimationListener() {
 					
 					@Override
-					public void onAnimationStart(Animation animation) {
-						/*ObjectAnimator elevateAnim = ObjectAnimator.ofFloat(holder.imgEvent, "translationZ", 
-								discoverFragment.translationZPx, 0.0f);
-						elevateAnim.setDuration(android.R.integer.config_mediumAnimTime);
-						elevateAnim.start();*/
-					}
+					public void onAnimationStart(Animation animation) {}
 					
 					@Override
 					public void onAnimationRepeat(Animation animation) {}
 					
 					@Override
 					public void onAnimationEnd(Animation animation) {
-						//ViewCompat.setElevation(holder.imgEvent, 0);
+						ViewCompat.setElevation(holder.imgEvent, 0);
 						
 						holder.vHandle.setPressed(false);
 						
@@ -1073,6 +1126,7 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 						lp = (RelativeLayout.LayoutParams) holder.rltLytContent.getLayoutParams();
 						lp.leftMargin += holder.lnrSliderContent.getWidth();
 						holder.rltLytContent.setLayoutParams(lp);
+						//Log.d(TAG, "!isSliderClose");
 						
 						updateOpenPos(INVALID, null);
 					}

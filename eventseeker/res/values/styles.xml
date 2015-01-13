@@ -30,6 +30,11 @@
         <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
     
+    <style name="Widget.EventSeeker.ButtonRoundedCorner" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/slctr_btn_bg_primary_rounded_corners</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+    
     <style name="Widget.EventSeeker.Button.Gray" parent="@android:style/Widget.Button">
         <item name="android:background">@drawable/slctr_btn_bg_gray</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>

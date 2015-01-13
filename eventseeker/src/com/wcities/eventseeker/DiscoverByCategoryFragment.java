@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.wcities.eventseeker.DiscoverSettingDialogFragment.OnDateSelectedListener;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -24,7 +23,7 @@ import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class DiscoverByCategoryFragment extends FragmentLoadableFromBackStack implements OnDateSelectedListener {
+public class DiscoverByCategoryFragment extends FragmentLoadableFromBackStack {
 	
 	private static final String TAG = DiscoverByCategoryFragment.class.getName();
 
@@ -113,7 +112,7 @@ public class DiscoverByCategoryFragment extends FragmentLoadableFromBackStack im
         fragmentTransaction.commit();
     }
     
-	@Override
+	/*@Override
 	public void onDateSelected(int year, int month, int day) {
 		this.year = year;
 		this.month = month;
@@ -127,7 +126,7 @@ public class DiscoverByCategoryFragment extends FragmentLoadableFromBackStack im
 				getChildFragmentManager().findFragmentByTag(AppConstants.FRAGMENT_TAG_DATE_WISE_EVENT_LIST);
 		
 		dateWiseEventListFragment.resetWith(startDate, endDate);
-	}
+	}*/
 	
 	@Override
 	public String getScreenName() {

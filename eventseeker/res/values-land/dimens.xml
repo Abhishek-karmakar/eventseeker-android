@@ -23,6 +23,9 @@
     <dimen name="v_pager_cat_titles_margin_t_discover">@dimen/v_pager_cat_titles_margin_t_discover_land</dimen>
     <!-- img_category_ht_discover = v_pager_cat_titles_ht_discover + v_pager_cat_titles_margin_t_discover -->
     <dimen name="img_category_ht_discover">212dp</dimen>
+    <!-- txt_no_events_margin_t_discover = img_category_ht_discover (212dp) + actual margin (4dp) -->
+    <dimen name="txt_no_events_margin_t_discover">216dp</dimen>
+    <dimen name="btn_chg_loc_margin_b_discover">5dp</dimen>
 
     <!-- grid_category.xml -->
     <dimen name="img_category_ht_grid_category">120dp</dimen>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <item name="bg_slctr_img_event_list_item_discover" type="drawable">@drawable/bg_slctr_rlt_lyt_root_list_item_discover</item>
 	<item name="bg_slctr_v_handle_list_item_discover" type="drawable">@drawable/bg_slctr_rlt_lyt_root_list_item_discover</item>
 
 </resources>

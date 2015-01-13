@@ -25,8 +25,18 @@
     <dimen name="v_pager_cat_titles_margin_t_discover_land">152dp</dimen>
     <dimen name="v_pager_cat_titles_margin_t_discover">@dimen/v_pager_cat_titles_margin_t_discover_port</dimen>
     <dimen name="v_pager_cat_titles_ht_discover">60dp</dimen>
+    <dimen name="txt_no_events_pad_l_discover">30dp</dimen>
+    <dimen name="txt_no_events_pad_r_discover">@dimen/txt_no_events_pad_l_discover</dimen>
+    <!-- txt_no_events_margin_t_discover = img_category_ht_discover (220dp) + actual margin (40dp) -->
+    <dimen name="txt_no_events_margin_t_discover">260dp</dimen>
+    <dimen name="txt_no_events_txt_size_discover">17sp</dimen>
     <!-- img_category_ht_discover = v_pager_cat_titles_ht_discover + v_pager_cat_titles_margin_t_discover -->
     <dimen name="img_category_ht_discover">220dp</dimen>
+    <dimen name="btn_chg_loc_ht_discover">45dp</dimen>
+    <dimen name="btn_chg_loc_margin_b_discover">20dp</dimen>
+    <dimen name="btn_chg_loc_pad_l_discover">25dp</dimen>
+    <dimen name="btn_chg_loc_pad_r_discover">@dimen/btn_chg_loc_pad_l_discover</dimen>
+    <dimen name="btn_chg_loc_txt_size_discover">17sp</dimen>
     <!-- cat_title.xml -->
     <dimen name="txt_title_txt_size_cat_titles">18sp</dimen>
     <dimen name="v_hor_line_ht_cat_titles">4dp</dimen>
@@ -525,12 +535,12 @@
     <!-- list_item_discover.xml -->
     <dimen name="rlt_layout_root_ht_list_item_discover">100dp</dimen>
     <!-- img_event_w_list_item_discover = img w (104dp) + img_event_pad_l_list_item_discover + img_event_pad_r_list_item_discover -->
-    <dimen name="img_event_w_list_item_discover">119dp</dimen>
+    <dimen name="img_event_w_list_item_discover">112dp</dimen>
     <!-- img_event_ht_list_item_discover = img ht (78dp) + img_event_pad_t_list_item_discover + img_event_pad_b_list_item_discover
     Also, img_event_ht_list_item_discover = rlt_layout_root_ht_list_item_discover - divider_ht_list_item_discover -->
     <dimen name="img_event_ht_list_item_discover">99dp</dimen>
     <dimen name="img_event_pad_l_list_item_discover">2dp</dimen>
-    <dimen name="img_event_pad_r_list_item_discover">13dp</dimen>
+    <dimen name="img_event_pad_r_list_item_discover">6dp</dimen>
     <dimen name="img_event_pad_t_list_item_discover">10dp</dimen>
     <dimen name="img_event_pad_b_list_item_discover">11dp</dimen>
     <dimen name="rlt_lyt_evt_details_margin_r_list_item_discover">3dp</dimen>
@@ -541,10 +551,23 @@
     <dimen name="divider_margin_l_list_item_discover">8dp</dimen>
     <dimen name="divider_margin_r_list_item_discover">@dimen/divider_margin_l_list_item_discover</dimen>
     <dimen name="rlt_lyt_content_margin_l_list_item_discover">@dimen/img_event_w_list_item_discover</dimen>
+    <dimen name="rlt_lyt_content_pad_l_list_item_discover">7dp</dimen>
     <dimen name="v_handle_w_list_item_discover">18dp</dimen>
     <dimen name="v_handle_ht_list_item_discover">40dp</dimen>
     <dimen name="lnr_slider_content_w_list_item_discover">170dp</dimen>
     <dimen name="lnr_slider_content_ht_list_item_discover">@dimen/img_event_ht_list_item_discover</dimen>
+    <!-- dialog_discover_setting.xml -->
+    <dimen name="v_hor_line_ht_dialog_discover_setting">1dp</dimen>
+    <dimen name="lnr_lyt_root_pad_t_dialog_discover_setting">8dp</dimen>
+    <dimen name="lnr_lyt_root_pad_l_dialog_discover_setting">8dp</dimen>
+    <dimen name="lnr_lyt_root_pad_r_dialog_discover_setting">@dimen/lnr_lyt_root_pad_l_dialog_discover_setting</dimen>
+    <dimen name="txt_search_radius_txt_size_dialog_discover_setting">20sp</dimen>
+    <dimen name="txt_search_radius_margin_b_dialog_discover_setting">6dp</dimen>
+    <dimen name="seek_bar_margin_b_dialog_discover_setting">8dp</dimen>
+    <dimen name="v_hor_line_margin_b_dialog_discover_setting">6dp</dimen>
+    <dimen name="txt_select_date_margin_b_dialog_discover_setting">6dp</dimen>
+    <dimen name="txt_select_date_txt_size_dialog_discover_setting">@dimen/txt_search_radius_txt_size_dialog_discover_setting</dimen>
+    <dimen name="v_dummy_ht_dialog_discover_setting">6dp</dimen>
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <!-- activity_bosch_main.xml -->
     <dimen name="b_root_navigation_drawer_w_main">210dp</dimen>

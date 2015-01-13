@@ -48,11 +48,12 @@ public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 	}
 
 	public LoadEvents(String oauthToken, List<Event> eventList, DateWiseEventParentAdapterListener eventListAdapter, double lat, 
-			double lon, String startDate, String endDate, int categoryId, String wcitiesId) {
+			double lon, String startDate, String endDate, int categoryId, String wcitiesId, int miles) {
 		this(oauthToken, eventList, eventListAdapter, lat, lon, wcitiesId);
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.categoryId = categoryId;
+		this.miles = miles;
 	}
 
 	@Override
@@ -112,7 +113,6 @@ public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 				if (!isCancelled()) {
 					//Log.d(TAG, "remove");
 					eventList.remove(eventList.size() - 1);
-					eventList.add(new Event(AppConstants.INVALID_ID, null));
 				}
 			}
 			
@@ -122,7 +122,6 @@ public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 			if (!isCancelled()) {
 				//Log.d(TAG, "remove");
 				eventList.remove(eventList.size() - 1);
-				eventList.add(new Event(AppConstants.INVALID_ID, null));
 			}
 		}
 		

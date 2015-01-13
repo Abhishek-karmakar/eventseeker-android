@@ -35,6 +35,10 @@ public class VersionUtil {
 		eventSeekr.removeWcitiesId();
 	}
 	
+	public static boolean isApiLevelAbove10() {
+		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
+	}
+	
 	public static boolean isApiLevelAbove13() {
 		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH;
 	}

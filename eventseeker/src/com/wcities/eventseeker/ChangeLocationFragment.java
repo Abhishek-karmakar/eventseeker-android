@@ -48,7 +48,7 @@ public class ChangeLocationFragment extends FragmentLoadableFromBackStack implem
 	private double lat, lon;
 	
 	public interface ChangeLocationFragmentListener {
-		public void onLocationChanged();
+		public void onLocationChanged(Bundle args);
 	}
 	
 	@Override
@@ -254,7 +254,7 @@ public class ChangeLocationFragment extends FragmentLoadableFromBackStack implem
 	@Override
 	public boolean onMenuItemActionCollapse(MenuItem arg0) {
 		Log.d(TAG, "onMenuItemActionCollapse()");
-		((ChangeLocationFragmentListener)FragmentUtil.getActivity(this)).onLocationChanged();
+		((ChangeLocationFragmentListener)FragmentUtil.getActivity(this)).onLocationChanged(getArguments());
 		return true;
 	}
 

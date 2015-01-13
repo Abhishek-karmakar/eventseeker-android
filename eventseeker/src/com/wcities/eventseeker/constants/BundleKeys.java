@@ -24,6 +24,8 @@ public class BundleKeys {
 	public static final String YEAR = "year";
 	public static final String MONTH = "month";
 	public static final String DAY = "day";
+	public static final String MILES = "miles";
+	public static final String LISTENER = "listener";
 	
 	public static final String CITY_NAME = "cityName";
 	

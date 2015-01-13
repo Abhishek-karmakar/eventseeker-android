@@ -26,11 +26,34 @@
 	    android:layout_gravity="top"
 	    android:background="@drawable/bg_v_pager_cat_titles" />
 	
-	<!-- Added dummy view to allow vertical scroll even when touch starts from vPagerCatTitles -->
-	<!-- <View android:id="@+id/vDummy"
-      	android:layout_width="match_parent"
-      	android:layout_height="@dimen/img_category_ht_discover"
-      	android:layout_gravity="top"
-      	android:background="@android:color/transparent" /> -->
+	<RelativeLayout android:id="@+id/rltLytNoEvts"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:background="@android:color/transparent"
+	    android:visibility="invisible" >
+	
+		<TextView android:id="@+id/txtNoEvents"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:text="@string/txt_no_events"
+		    android:textSize="@dimen/txt_no_events_txt_size_discover"
+		    android:gravity="center"
+		    android:paddingLeft="@dimen/txt_no_events_pad_l_discover"
+		    android:paddingRight="@dimen/txt_no_events_pad_r_discover"
+		    android:layout_marginTop="@dimen/txt_no_events_margin_t_discover" />
+		
+		<Button android:id="@+id/btnChgLoc"
+		    android:layout_width="wrap_content"
+		    android:layout_height="@dimen/btn_chg_loc_ht_discover"
+		    android:text="@string/btn_chg_loc_txt"
+		    android:textSize="@dimen/btn_chg_loc_txt_size_discover"
+		    android:layout_alignParentBottom="true" 
+		    android:layout_marginBottom="@dimen/btn_chg_loc_margin_b_discover"
+		    android:paddingLeft="@dimen/btn_chg_loc_pad_l_discover"
+		    android:paddingRight="@dimen/btn_chg_loc_pad_r_discover"
+		    android:layout_centerHorizontal="true"
+		    style="@style/Widget.EventSeeker.ButtonRoundedCorner" />
+	
+	</RelativeLayout>
       	
  </FrameLayout>
