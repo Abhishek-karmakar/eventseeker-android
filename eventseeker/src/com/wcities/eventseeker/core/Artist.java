@@ -39,6 +39,39 @@ public class Artist implements Serializable, BitmapCacheable {
 		}
 	}
 	
+	public static enum Genre {
+		Featured(),
+		//This is because for Featured Artist List we do not have to pass any genre Parameter in url.
+		Comedy("Comedy"),
+		Theater("Theater"),
+		NFL("National Football League (NFL)"),
+		NBA("National Basketball Association (NBA)"),
+		NHL("National Hockey League (NHL)"),
+		MLB("Major League Baseball (MLB)"),
+		MLS("Major League Soccer (MLS)"),
+		AlternativeRock("alternative rock"),
+		ClassicRock("classic rock"),
+		IndieRock("indie rock"),
+		Folk("folk"),
+		CountryAndWestern("Country and Western"),
+		Electronic("electronic"),
+		Pop("pop"),
+		Punk("punk"),
+		HardRock("hard rock"),
+		International("International");
+		
+		private String urlForm;
+		private Genre(String urlForm) {
+			this.urlForm = urlForm;
+		}
+
+		private Genre() {}
+		
+		public String getUrlForm() {
+			return urlForm;
+		}
+	}
+	
 	private int id;
 	private String name;
 	private String imageName;

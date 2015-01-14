@@ -1,18 +1,22 @@
 package com.wcities.eventseeker.api;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.res.Resources;
 import android.util.Log;
 
-import com.wcities.eventseeker.ArtistsNewsListFragment.SortBy;
+import com.wcities.eventseeker.ArtistsNewsListFragment.SortArtistNewsBy;
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.RecommendedArtistsFragment.SortRecommendedArtist;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.core.Artist.Genre;
 import com.wcities.eventseeker.core.registration.EmailLogin;
 import com.wcities.eventseeker.core.registration.EmailSignup;
 import com.wcities.eventseeker.core.registration.FacebookLogin;
@@ -29,6 +33,8 @@ public class UserInfoApi extends Api {
 		friendsfeed,
 		myevents,
 		myartists,
+		recommendedartist,
+		popularartist,
 		signup,
 		syncaccount,
 		syncfriends,
@@ -42,6 +48,7 @@ public class UserInfoApi extends Api {
 	
 	public static enum UserTrackingType {
 		Add,
+		AddMultiple,
 		Edit;
 	}
 	
@@ -133,7 +140,8 @@ public class UserInfoApi extends Api {
 	
 	private int artistId;
 	
-	private SortBy sortBy;
+	private SortArtistNewsBy sortBy;
+	private SortRecommendedArtist sortRecommendedArtist;
 
 	public UserInfoApi(String oauthToken) {
 		super(oauthToken);
@@ -243,12 +251,20 @@ public class UserInfoApi extends Api {
 		this.artistId = artistId;
 	}
 
-	public SortBy getSortBy() {
+	public SortArtistNewsBy getSortBy() {
 		return sortBy;
 	}
 
-	public void setSortBy(SortBy sortBy) {
+	public void setSortBy(SortArtistNewsBy sortBy) {
 		this.sortBy = sortBy;
+	}
+
+	public SortRecommendedArtist getSortRecommendedArtist() {
+		return sortRecommendedArtist;
+	}
+
+	public void setSortRecommendedArtist(SortRecommendedArtist sortRecommendedArtist) {
+		this.sortRecommendedArtist = sortRecommendedArtist;
 	}
 
 	public JSONObject signUp() throws ClientProtocolException, IOException, JSONException {
@@ -459,6 +475,56 @@ public class UserInfoApi extends Api {
 		return execute(RequestMethod.POST, ContentType.MIME_APPLICATION_X_WWW_FORM_URLENCODED, paramsBuilder.toString().getBytes());
 	}
 	
+	/**
+	 * 06-01-2014:
+	 * Currently, created considering the scenario for multiple Artist Tracking. So, check if using for the events or pois
+	 * then if any modifications are needed.
+	 * mailed this call to Anupam on 09-01-2015
+	 * @param type
+	 * @param id
+	 * @param attending
+	 * @return
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 * @throws JSONException
+	 */
+	public JSONObject addMultipleUserTracking(UserTrackingItemType type, List<Long> ids) 
+			throws ClientProtocolException, IOException, JSONException {
+		String METHOD = "addUserTracking.php";
+		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD);
+		setUri(uriBuilder.toString());
+		
+		JSONObject jObjUserDetail = new JSONObject();
+		jObjUserDetail.put("id", "" + userId);
+		jObjUserDetail.put("type", "wcities");
+
+		JSONArray jArrTrackInfo = new JSONArray();
+		for (long id : ids) {
+			JSONObject jObj = new JSONObject();
+			jObj.put("type", type.name());
+			jObj.put("type_id", "" + id);
+			
+			jArrTrackInfo.put(jObj);
+		}
+		
+		JSONObject jObjUserTracking = new JSONObject();
+		jObjUserTracking.put("trackInfo", jArrTrackInfo);
+		
+		JSONObject jObjData = new JSONObject();
+		jObjData.put("userDetail", jObjUserDetail);
+		jObjData.put("userTracking", jObjUserTracking);
+		
+		StringBuilder paramsBuilder = new StringBuilder();
+		/*paramsBuilder = paramsBuilder.append("oauth_token=")
+				.append(getOauthToken()).append("&data={\"userDetail\": {\"id\": \"").append(userId)
+				.append("\",\"type\": \"wcities\"},\"userTracking\": {\"trackInfo\": [{\"type\": \"event\",\"type_id\": \"")
+				.append(eventId).append("\", \"attending\": \"").append(attending.getValue()).append("\"}]}}");*/
+		paramsBuilder = paramsBuilder.append("oauth_token=").append(getOauthToken()).append("&data=").append(jObjData.toString());
+		Log.d(TAG, "params = " + paramsBuilder.toString());
+		Log.i(TAG, "uri=" + getUri());
+		return execute(RequestMethod.POST, ContentType.MIME_APPLICATION_X_WWW_FORM_URLENCODED, paramsBuilder.toString().getBytes());
+	}
+	
 	public JSONObject editUserTracking(UserTrackingItemType type, long id, int attending) throws ClientProtocolException, IOException, JSONException {
 		String METHOD = "editUserTracking.php?";
 		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD).append("oauth_token=")
@@ -490,8 +556,14 @@ public class UserInfoApi extends Api {
 				uriBuilder.append("&tracktype=").append(tracktype.name()).append("&removeTracking=enable");
 			}
 			
-		} else if (type == Type.artistsfeed && sortBy == SortBy.trending) {
+		} else if (type == Type.artistsfeed && sortBy == SortArtistNewsBy.trending) {
 			uriBuilder.append("&sort=" + sortBy.trending.name());			
+		
+		} else if (type == Type.recommendedartist) {
+			uriBuilder.append("&moreInfo=score");
+			if (sortRecommendedArtist == SortRecommendedArtist.name) {
+				uriBuilder.append("&sort=" + sortRecommendedArtist.name.name());				
+			}
 		}
 		
 		if (limit != NOT_INITIALIZED) {
@@ -508,6 +580,36 @@ public class UserInfoApi extends Api {
 		
 		if (type == Type.myevents || type == Type.recommendedevent) {
 			uriBuilder.append("&link=enable");
+		}
+		
+		setUri(uriBuilder.toString());
+		addLangParam = true;
+		
+		Log.i(TAG, "uri=" + getUri());
+		return execute(RequestMethod.GET, null, null); 
+	}
+	
+	public JSONObject getMyProfileInfoForPopularArtist(Genre genre) throws ClientProtocolException, IOException, JSONException {
+		String METHOD = "myProfile.php?";
+		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append(METHOD).append("oauth_token=")
+				.append(getOauthToken()).append("&type=").append(Type.popularartist.name())
+				.append("&userId=").append(userId).append("&userType=wcities");
+		
+		//For Featured Artist List Genre's URL form will be 'null'.
+		if (genre.getUrlForm() != null) {
+			uriBuilder.append("&genre=").append(genre.getUrlForm());
+		}
+		
+		if (limit != NOT_INITIALIZED) {
+			uriBuilder.append("&limit=").append(alreadyRequested).append(",").append(limit);
+		}
+		
+		if (lat != AppConstants.NOT_ALLOWED_LAT && lon != AppConstants.NOT_ALLOWED_LON) {
+			uriBuilder.append("&lat=").append(lat).append("&lon=").append(lon).append("&miles=50");
+		}
+		
+		if (artistId != 0) {
+			uriBuilder.append("&artistId=").append(artistId);
 		}
 		
 		setUri(uriBuilder.toString());

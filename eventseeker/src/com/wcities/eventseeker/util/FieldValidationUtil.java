@@ -40,4 +40,8 @@ public class FieldValidationUtil {
 		return password.equals(confirmPassword);
 	}
 	
+	public static boolean isNumber(String number) {
+		return number.matches("[0-9]+");
+	}
+	
 }

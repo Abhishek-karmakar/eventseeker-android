@@ -12,7 +12,7 @@ import org.json.JSONObject;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
-import com.wcities.eventseeker.ArtistsNewsListFragment.SortBy;
+import com.wcities.eventseeker.ArtistsNewsListFragment.SortArtistNewsBy;
 import com.wcities.eventseeker.adapter.ArtistNewsListAdapter;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
@@ -39,7 +39,7 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 	private int count;
 	private OnNewsLoadedListener newsLoadedListener;
 
-	private SortBy sortBy;
+	private SortArtistNewsBy sortBy;
 	
 	public interface OnNewsLoadedListener {
 		public abstract void onNewsLoaded();
@@ -47,7 +47,7 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 	
 	public LoadArtistNews(String oauthToken, ArtistNewsListAdapter artistNewsListAdapter, String wcitiesId, 
 			List<ArtistNewsListItem> artistsNewsListItems, Artist artist, OnNewsLoadedListener newsLoadedListener, 
-			SortBy sortBy) {
+			SortArtistNewsBy sortBy) {
 		this.oauthToken = oauthToken;
 		this.artistNewsListAdapter = artistNewsListAdapter;
 		this.wcitiesId = wcitiesId;

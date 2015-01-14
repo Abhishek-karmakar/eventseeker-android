@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.core.Artist.Genre;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.FragmentUtil;
 
@@ -36,17 +38,35 @@ public class PopularArtistsFragment extends FragmentLoadableFromBackStack implem
 
 	@Override
 	public void onClick(View v) {
+		Bundle args;
 		switch (v.getId()) {
 			case R.id.btnFeatured:
+				args = new Bundle();
+				args.putSerializable(BundleKeys.GENRE, Genre.Featured);
+				args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_featured_list);
+				((MainActivity) FragmentUtil.getActivity(this))
+					.replaceByFragment(AppConstants.FRAGMENT_TAG_SELECTED_ARTIST_CATEGORY_FRAGMENT, args);				
 				break;
 				
-			case R.id.btnMusic:		
+			case R.id.btnMusic:
+				((MainActivity) FragmentUtil.getActivity(this))
+					.replaceByFragment(AppConstants.FRAGMENT_TAG_MUSIC_ARTISTS, null);				
 				break;
 				
 			case R.id.btnComedy:
+				args = new Bundle();
+				args.putSerializable(BundleKeys.GENRE, Genre.Comedy);
+				args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_comedy);
+				((MainActivity) FragmentUtil.getActivity(this))
+					.replaceByFragment(AppConstants.FRAGMENT_TAG_SELECTED_ARTIST_CATEGORY_FRAGMENT, args);
 				break;
 				
 			case R.id.btnTheater:
+				args = new Bundle();
+				args.putSerializable(BundleKeys.GENRE, Genre.Theater);
+				args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_theater);
+				((MainActivity) FragmentUtil.getActivity(this))
+					.replaceByFragment(AppConstants.FRAGMENT_TAG_SELECTED_ARTIST_CATEGORY_FRAGMENT, args);
 				break;
 				
 			case R.id.btnSports:

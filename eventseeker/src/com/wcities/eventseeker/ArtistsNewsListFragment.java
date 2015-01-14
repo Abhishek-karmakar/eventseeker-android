@@ -1,17 +1,12 @@
 package com.wcities.eventseeker;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,14 +19,12 @@ import android.view.ViewGroup;
 import android.widget.AbsListView.RecyclerListener;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.wcities.eventseeker.ArtistsNewsListFragment.SortByDialogFragment.OnSortTypeSelectedListener;
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
+import com.wcities.eventseeker.RadioGroupDialogFragment.OnValueSelectedListener;
 import com.wcities.eventseeker.adapter.ArtistNewsListAdapter;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -50,9 +43,6 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	
 	protected static final String TAG = ArtistsNewsListFragment.class.getName();
 
-	public static final String ON_SORT_TYPE_SELECTED_LISETER_TAG = "onSortTypeSelectedListener";
-	public static final String SORT_BY_TAG = "sortBy";
-
 	private LoadArtistNews loadArtistsNews;
 	private ArtistNewsListAdapter artistNewsListAdapter;
 	
@@ -68,11 +58,29 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 
 	private View rltDummyLyt;
 	private ScrollView scrlVRootNoItemsFoundWithAction;
-	private SortBy sortBy = SortBy.chronological;
+	private SortArtistNewsBy sortBy = SortArtistNewsBy.chronological;
 	
-	public enum SortBy {
-		chronological,
-		trending
+	public enum SortArtistNewsBy {
+		chronological(0),
+		trending(1);
+		
+		int value;
+		private SortArtistNewsBy(int value) {
+			this.value = value;
+		}
+
+		public int getValue() {
+			return value;
+		}
+		
+		public static SortArtistNewsBy getSortTypeBy(int value) {
+			for (SortArtistNewsBy sortBy : values()) {
+				if (sortBy.getValue() == value) {
+					return sortBy;
+				}
+			}
+			return null;
+		}
 	}
 	
 	/**
@@ -161,7 +169,7 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 		if (artistsNewsListItems == null) {
 			artistsNewsListItems = new ArrayList<ArtistNewsListItem>();
 			artistNewsListAdapter = new ArtistNewsListAdapter(FragmentUtil.getActivity(this), null, 
-					this, artistsNewsListItems, imgWidth, (sortBy == SortBy.trending));
+					this, artistsNewsListItems, imgWidth, (sortBy == SortArtistNewsBy.trending));
 	        
 			artistsNewsListItems.add(null);
 			loadItemsInBackground();
@@ -220,11 +228,18 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 		switch (item.getItemId()) {
 		case R.id.action_sort_by:
 			Bundle args = new Bundle();
-			args.putSerializable(SORT_BY_TAG, sortBy);
-			args.putSerializable(ON_SORT_TYPE_SELECTED_LISETER_TAG, new OnSortTypeSelectedListener() {
+			args.putInt(RadioGroupDialogFragment.DEFAULT_VALUE, sortBy.getValue());
+			args.putString(RadioGroupDialogFragment.DIALOG_TITLE, 
+					FragmentUtil.getResources(this).getString(R.string.sort_by));
+			args.putString(RadioGroupDialogFragment.DIALOG_RDB_ZEROTH_TEXT, 
+					FragmentUtil.getResources(this).getString(R.string.chronological));
+			args.putString(RadioGroupDialogFragment.DIALOG_RDB_FIRST_TEXT, 
+					FragmentUtil.getResources(this).getString(R.string.trending));
+			args.putSerializable(RadioGroupDialogFragment.ON_VALUE_SELECTED_LISETER, new OnValueSelectedListener() {
 
 				@Override
-				public void onSortTypeSelected(SortBy sortBy) {
+				public void onValueSelected(int selectedValue) {
+					SortArtistNewsBy sortBy = SortArtistNewsBy.getSortTypeBy(selectedValue);
 					if (ArtistsNewsListFragment.this.sortBy == sortBy) {
 						return;
 					}
@@ -235,7 +250,7 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 				}
 			});
 			
-			SortByDialogFragment dialogFragment = new SortByDialogFragment();
+			RadioGroupDialogFragment dialogFragment = new RadioGroupDialogFragment();
 			dialogFragment.setArguments(args);
 			dialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this))
 					.getSupportFragmentManager(), "dialogSortBy");
@@ -357,76 +372,4 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 		return "Artist News Screen";
 	}
 
-	public static class SortByDialogFragment extends DialogFragment implements OnCheckedChangeListener {
-		
-		//private static boolean isShowing;
-
-		private SortBy sortBy = SortBy.chronological;
-		private OnSortTypeSelectedListener onSortTypeSelectedListener;
-		
-		public interface OnSortTypeSelectedListener extends Serializable {
-			public void onSortTypeSelected(SortBy sortBy);
-		}
-				
-		public SortByDialogFragment() {
-		}
-		
-		@Override
-		public void onCreate(Bundle savedInstanceState) {
-			super.onCreate(savedInstanceState);
-			onSortTypeSelectedListener = (OnSortTypeSelectedListener) getArguments()
-					.getSerializable(ON_SORT_TYPE_SELECTED_LISETER_TAG);
-			sortBy = (SortBy) getArguments().getSerializable(SORT_BY_TAG);
-		}
-		
-		@Override
-		public Dialog onCreateDialog(Bundle savedInstanceState) {
-			View v = LayoutInflater.from(FragmentUtil.getActivity(this)).inflate(R.layout.fragment_artist_news_dialog, null);
-
-			setupViews(v);
-			
-			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-			builder.setView(v);
-			builder.setNegativeButton(R.string.cancel,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						dismiss();
-					}
-				});
-	        // Create the AlertDialog object and return it
-	        Dialog dialog = builder.create();
-	        dialog.setTitle(R.string.sort_by);
-	        dialog.setCancelable(false);
-			return dialog;
-		}
-		
-		private void setupViews(View v) {
-			if (sortBy != null) {
-				if (sortBy == SortBy.chronological) {
-					((RadioButton) v.findViewById(R.id.rdbChronological)).setChecked(true);
-					
-				} else {
-					((RadioButton) v.findViewById(R.id.rdbTrending)).setChecked(true);
-				}
-				((RadioGroup) v.findViewById(R.id.rdgSortBy)).setOnCheckedChangeListener(this);
-			}
-		}
-
-		/*@Override
-		public void show(FragmentManager manager, String tag) {
-			if (!isShowing) {
-				isShowing = true;
-				super.show(manager, tag);
-			}
-		}*/
-
-		@Override
-		public void onCheckedChanged(RadioGroup group, int checkedId) {
-			sortBy = (checkedId == R.id.rdbChronological) ? SortBy.chronological : SortBy.trending;
-			onSortTypeSelectedListener.onSortTypeSelected(sortBy);
-			
-			//isShowing = false;
-			dismiss();
-		}
-	}
 }

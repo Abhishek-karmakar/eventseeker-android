@@ -13,6 +13,9 @@ public class BundleKeys {
 	public static final String ARTIST = "artist";
 	public static final String SETTINGS_ITEM_ORDINAL = "isSettingsItem";
 	
+	public static final String SCREEN_TITLE = "ScreenTitle";
+	public static final String GENRE = "genre";
+	
 	public static final String VENUE = "venue";
 	public static final String VENUE_ID = "venueId";
 	public static final String VENUE_NAME = "venueName";

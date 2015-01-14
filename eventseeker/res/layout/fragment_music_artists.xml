@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:fillViewport="true"
+    android:paddingTop="@dimen/common_t_mar_pad_for_all_layout" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/lnr_root_padding_fragment_follow_more_artists"
+            android:orientation="horizontal" >
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <com.wcities.eventseeker.custom.view.ResizableImageView
+                    android:id="@+id/imgAlternativeRock"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/cat_900" />
+
+                <Button
+                    android:id="@+id/btnAlternativeRock"
+                    style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/imgAlternativeRock"
+                    android:layout_alignTop="@+id/imgAlternativeRock"
+                    android:text="@string/btn_alternative_rock" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent" />
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <com.wcities.eventseeker.custom.view.ResizableImageView
+                    android:id="@+id/imgClassicRock"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/cat_900" />
+
+                <Button
+                    android:id="@+id/btnClassicRock"
+                    style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/imgClassicRock"
+                    android:layout_alignTop="@+id/imgClassicRock"
+                    android:text="@string/btn_classic_rock" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/lnr_root_padding_fragment_follow_more_artists"
+            android:layout_marginLeft="@dimen/lnr_root_padding_fragment_follow_more_artists"
+            android:layout_marginRight="@dimen/lnr_root_padding_fragment_follow_more_artists"
+            android:orientation="horizontal" >
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <com.wcities.eventseeker.custom.view.ResizableImageView
+                    android:id="@+id/imgIndieRock"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/cat_900" />
+
+                <Button
+                    android:id="@+id/btnIndieRock"
+                    style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/imgIndieRock"
+                    android:layout_alignTop="@+id/imgIndieRock"
+                    android:text="@string/btn_indie_rock" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent" />
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <com.wcities.eventseeker.custom.view.ResizableImageView
+                    android:id="@+id/imgFolk"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/cat_900" />
+
+                <Button
+                    android:id="@+id/btnFolk"
+                    style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/imgFolk"
+                    android:layout_alignTop="@+id/imgFolk"
+                    android:text="@string/btn_folk" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/lnr_root_padding_fragment_follow_more_artists"
+            android:layout_marginLeft="@dimen/lnr_root_padding_fragment_follow_more_artists"
+            android:layout_marginRight="@dimen/lnr_root_padding_fragment_follow_more_artists"
+            android:orientation="horizontal" >
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <com.wcities.eventseeker.custom.view.ResizableImageView
+                    android:id="@+id/imgCountry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/cat_900" />
+
+                <Button
+                    android:id="@+id/btnCountry"
+                    style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/imgCountry"
+                    android:layout_alignTop="@+id/imgCountry"
+                    android:text="@string/btn_country" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent" />
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <com.wcities.eventseeker.custom.view.ResizableImageView
+                    android:id="@+id/imgElectronic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/cat_900" />
+
+                <Button
+                    android:id="@+id/btnElectronic"
+                    style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignBottom="@+id/imgElectronic"
+                    android:layout_alignTop="@+id/imgElectronic"
+                    android:text="@string/btn_electronic" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/lnr_root_padding_fragment_follow_more_artists"
+            android:layout_marginLeft="@dimen/lnr_root_padding_fragment_follow_more_artists"
+            android:layout_marginRight="@dimen/lnr_root_padding_fragment_follow_more_artists"
+            android:orientation="horizontal" >
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <com.wcities.eventseeker.custom.view.ResizableImageView
+                    android:id="@+id/imgPop"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/cat_900" />
+
+                <Button
+                    android:id="@+id/btnPop"
+                    style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignBottom="@+id/imgPop"
+                    android:layout_alignTop="@+id/imgPop"
+                    android:text="@string/btn_pop" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent" />
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <com.wcities.eventseeker.custom.view.ResizableImageView
+                    android:id="@+id/imgPunk"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/cat_900" />
+
+                <Button
+                    android:id="@+id/btnPunk"
+                    style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignBottom="@+id/imgPunk"
+                    android:layout_alignTop="@+id/imgPunk"
+                    android:text="@string/btn_punk" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/lnr_root_padding_fragment_follow_more_artists"
+            android:layout_marginLeft="@dimen/lnr_root_padding_fragment_follow_more_artists"
+            android:layout_marginRight="@dimen/lnr_root_padding_fragment_follow_more_artists"
+            android:orientation="horizontal" >
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <com.wcities.eventseeker.custom.view.ResizableImageView
+                    android:id="@+id/imgHardRockMetal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/cat_900" />
+
+                <Button
+                    android:id="@+id/btnHardRockMetal"
+                    style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignBottom="@+id/imgHardRockMetal"
+                    android:layout_alignTop="@+id/imgHardRockMetal"
+                    android:text="@string/btn_hard_rock_metal" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent" />
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <com.wcities.eventseeker.custom.view.ResizableImageView
+                    android:id="@+id/imgWorldMusic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/cat_900" />
+
+                <Button
+                    android:id="@+id/btnWorldMusic"
+                    style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignBottom="@+id/imgWorldMusic"
+                    android:layout_alignTop="@+id/imgWorldMusic"
+                    android:text="@string/btn_world_music" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/lnr_root_padding_fragment_follow_more_artists"
+            android:layout_marginLeft="@dimen/lnr_root_padding_fragment_follow_more_artists"
+            android:layout_marginRight="@dimen/lnr_root_padding_fragment_follow_more_artists"
+            android:orientation="horizontal" >
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <com.wcities.eventseeker.custom.view.ResizableImageView
+                    android:id="@+id/imgBluesJazz"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/cat_900" />
+
+                <Button
+                    android:id="@+id/btnBluesJazz"
+                    style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignBottom="@+id/imgBluesJazz"
+                    android:layout_alignTop="@+id/imgBluesJazz"
+                    android:text="@string/btn_blues_jazz" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent" />
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <com.wcities.eventseeker.custom.view.ResizableImageView
+                    android:id="@+id/imgHipHop"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/cat_900" />
+
+                <Button
+                    android:id="@+id/btnHipHop"
+                    style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignBottom="@+id/imgHipHop"
+                    android:layout_alignTop="@+id/imgHipHop"
+                    android:text="@string/btn_hip_hop" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/lnr_root_padding_fragment_follow_more_artists"
+            android:layout_marginLeft="@dimen/lnr_root_padding_fragment_follow_more_artists"
+            android:layout_marginRight="@dimen/lnr_root_padding_fragment_follow_more_artists"
+            android:layout_weight="1"
+            android:orientation="horizontal" >
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <com.wcities.eventseeker.custom.view.ResizableImageView
+                    android:id="@+id/imgSoulRAndBFunck"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/cat_900" />
+
+                <Button
+                    android:id="@+id/btnSoulRAndBFunck"
+                    style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignBottom="@+id/imgSoulRAndBFunck"
+                    android:layout_alignTop="@+id/imgSoulRAndBFunck"
+                    android:text="@string/btn_soul_r_and_b_funck" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent" />
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <com.wcities.eventseeker.custom.view.ResizableImageView
+                    android:id="@+id/imgClassical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/cat_900" />
+
+                <Button
+                    android:id="@+id/btnClassical"
+                    style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignBottom="@+id/imgClassical"
+                    android:layout_alignTop="@+id/imgClassical"
+                    android:text="@string/btn_classical" />
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

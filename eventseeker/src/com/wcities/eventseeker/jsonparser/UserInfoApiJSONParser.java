@@ -67,6 +67,8 @@ public class UserInfoApiJSONParser {
 	private static final String KEY_EVENT_DATE = "event_date";
 	private static final String KEY_EVENT_TIME = "event_time";
 
+	private static final String KEY_RECOMMENDED_ARTIST = "recommendedArtist";
+	private static final String KEY_POPULAR_ARTIST = "popularArtist";
 	private static final String KEY_TRACKED = "tracked";
 	private static final String KEY_ID = "id";
 	private static final String KEY_CITY = "city";
@@ -199,11 +201,13 @@ public class UserInfoApiJSONParser {
 					JSONArray jArrTrackedInfos = (JSONArray) jTrackedInfo;
 					for (int i = 0; i < jArrTrackedInfos.length(); i++) {
 						Artist artist = getArtist(jArrTrackedInfos.getJSONObject(i));
+						artist.setAttending(Artist.Attending.Tracked);//As this artist is Followed
 						artists.add(artist);
 					}
 					
 				} else {
 					Artist artist = getArtist((JSONObject) jTrackedInfo);
+					artist.setAttending(Artist.Attending.Tracked);//As this artist is Followed
 					artists.add(artist);
 				}
 			}
@@ -213,6 +217,58 @@ public class UserInfoApiJSONParser {
 		}
 		
 		return myArtistsList;
+	}
+
+	public ItemsList<Artist> getRecommendedArtistList(JSONObject jsonObject) {
+		ItemsList<Artist> recommendedArtistsList = new ItemsList<Artist>();
+		List<Artist> artists = new ArrayList<Artist>();
+		recommendedArtistsList.setItems(artists);
+		
+		try {
+			JSONObject jObjTracked = jsonObject.getJSONObject(KEY_RECOMMENDED_ARTIST);
+			recommendedArtistsList.setTotalCount(jObjTracked.getInt(KEY_TOTAL));
+			fillArtists(artists, jObjTracked);
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		return recommendedArtistsList;
+	}
+	
+	private void fillArtists(List<Artist> artists, JSONObject jObj) throws JSONException {
+		if (jObj.has(KEY_ARTIST)) {
+			Object jArtist = jObj.get(KEY_ARTIST);
+			
+			if (jArtist instanceof JSONArray) {
+				JSONArray jArrTrackedInfos = (JSONArray) jArtist;
+				for (int i = 0; i < jArrTrackedInfos.length(); i++) {
+					Artist artist = getArtist(jArrTrackedInfos.getJSONObject(i));
+					artists.add(artist);
+				}
+				
+			} else {
+				Artist artist = getArtist((JSONObject) jArtist);
+				artists.add(artist);
+			}
+		}		
+	}
+	
+	public ItemsList<Artist> getPopularArtistList(JSONObject jsonObject) {
+		ItemsList<Artist> popularArtistsList = new ItemsList<Artist>();
+		List<Artist> artists = new ArrayList<Artist>();
+		popularArtistsList.setItems(artists);
+		
+		try {
+			JSONObject jObjTracked = jsonObject.getJSONObject(KEY_POPULAR_ARTIST);
+			popularArtistsList.setTotalCount(jObjTracked.getInt(KEY_TOTAL));
+			fillArtists(artists, jObjTracked);
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		return popularArtistsList;
 	}
 	
 	public List<FriendNewsItem> getFriendNews(JSONObject jsonObject) {

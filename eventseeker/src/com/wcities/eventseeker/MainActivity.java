@@ -20,7 +20,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -1258,19 +1257,37 @@ public class MainActivity extends ActionBarActivity implements
 			FollowMoreArtistsFragment followMoreArtistsFragment = new FollowMoreArtistsFragment();
 			followMoreArtistsFragment.setArguments(args);
 			selectNonDrawerItem(followMoreArtistsFragment, AppConstants.FRAGMENT_TAG_FOLLOW_MORE_ARTISTS, getResources()
-				.getString(R.string.title_following), true);
+				.getString(R.string.title_find_more_artist), true);
 
 		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_POPULAR_ARTISTS)) {
 			PopularArtistsFragment popularArtistsFragment = new PopularArtistsFragment();
 			popularArtistsFragment.setArguments(args);
 			selectNonDrawerItem(popularArtistsFragment, AppConstants.FRAGMENT_TAG_POPULAR_ARTISTS, getResources()
-					.getString(R.string.title_following), true);
+					.getString(R.string.title_popular), true);
 
 		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_SPORTS_ARTISTS)) {
 			SportsArtistsFragment sportsArtistsFragment = new SportsArtistsFragment();
 			sportsArtistsFragment.setArguments(args);
 			selectNonDrawerItem(sportsArtistsFragment, AppConstants.FRAGMENT_TAG_SPORTS_ARTISTS, getResources()
-					.getString(R.string.title_following), true);
+					.getString(R.string.title_popular_sports), true);
+			
+		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_MUSIC_ARTISTS)) {
+			MusicArtistsFragment musicArtistsFragment = new MusicArtistsFragment();
+			musicArtistsFragment.setArguments(args);
+			selectNonDrawerItem(musicArtistsFragment, AppConstants.FRAGMENT_TAG_MUSIC_ARTISTS, getResources()
+					.getString(R.string.title_categories), true);
+			
+		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_RECOMMENDED_ARTISTS)) {
+			RecommendedArtistsFragment recommendedArtistsFragment = new RecommendedArtistsFragment();
+			recommendedArtistsFragment.setArguments(args);
+			selectNonDrawerItem(recommendedArtistsFragment, AppConstants.FRAGMENT_TAG_RECOMMENDED_ARTISTS, getResources()
+					.getString(R.string.title_recommended), true);
+			
+		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_SELECTED_ARTIST_CATEGORY_FRAGMENT)) {
+			SelectedArtistCategoryFragment selectedArtistCategoryFragment = new SelectedArtistCategoryFragment();
+			selectedArtistCategoryFragment.setArguments(args);
+			selectNonDrawerItem(selectedArtistCategoryFragment, AppConstants.FRAGMENT_TAG_SELECTED_ARTIST_CATEGORY_FRAGMENT, 
+					getResources().getString(args.getInt(BundleKeys.SCREEN_TITLE)), true);
 			
 		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_TWITTER_SYNCING)) {
 			//Log.d(TAG, "FRAGMENT_TAG_TWITTER_SYNCING");
@@ -1703,16 +1720,29 @@ public class MainActivity extends ActionBarActivity implements
 					AppConstants.FRAGMENT_TAG_GOOGLE_PLAY_MUSIC, false);
 
 		} else if (fragment instanceof FollowMoreArtistsFragment) {
-			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_following),
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_find_more_artist),
 					AppConstants.FRAGMENT_TAG_FOLLOW_MORE_ARTISTS, false);
 
 		} else if (fragment instanceof PopularArtistsFragment) {
-			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_following),
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_popular),
 					AppConstants.FRAGMENT_TAG_POPULAR_ARTISTS, false);
 
 		} else if (fragment instanceof SportsArtistsFragment) {
-			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_following),
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_popular_sports),
 					AppConstants.FRAGMENT_TAG_SPORTS_ARTISTS, false);
+			
+		} else if (fragment instanceof RecommendedArtistsFragment) {
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_recommended),
+					AppConstants.FRAGMENT_TAG_RECOMMENDED_ARTISTS, false);
+
+		} else if (fragment instanceof MusicArtistsFragment) {
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_categories),
+					AppConstants.FRAGMENT_TAG_MUSIC_ARTISTS, false);
+
+		} else if (fragment instanceof SelectedArtistCategoryFragment) {
+			Bundle args = fragment.getArguments();
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(args.getInt(BundleKeys.SCREEN_TITLE)),
+					AppConstants.FRAGMENT_TAG_SELECTED_ARTIST_CATEGORY_FRAGMENT, false);
 		}
 	}
 

@@ -11,15 +11,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AbsListView.RecyclerListener;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -35,12 +34,13 @@ import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
-import com.wcities.eventseeker.asynctask.LoadMyArtists;
+import com.wcities.eventseeker.asynctask.LoadArtistsByCategory;
 import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Artist.Attending;
-import com.wcities.eventseeker.core.FollowingList;
+import com.wcities.eventseeker.core.Artist.Genre;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
 import com.wcities.eventseeker.interfaces.LoadArtistsListener;
@@ -48,37 +48,33 @@ import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public abstract class FollowingParentFragment extends FragmentLoadableFromBackStack implements ArtistTrackingListener,
+public class SelectedArtistCategoryFragment extends FragmentLoadableFromBackStack implements ArtistTrackingListener,
 		OnClickListener, LoadArtistsListener, LoadItemsInBackgroundListener, DialogBtnClickListener {
 
-	private static final String TAG = FollowingParentFragment.class.getName();
+	private static final String TAG = SelectedArtistCategoryFragment.class.getName();
 
+	private static final String DIALOG_FOLLOW_ALL = "dialogFollowAll";
+	private static final String DIALOG_ARTIST_SAVED = "dialogArtistSaved";
+	
 	private String wcitiesId;
-	private FollowingList cachedFollowingList;
 
-	private LoadMyArtists loadMyArtists;
-	protected MyArtistListAdapter myArtistListAdapter;
+	private Genre genre;
 
-	private List<Artist> artistList;
+	private LoadArtistsByCategory loadCategorialArtists;
+	private MyArtistListAdapter myArtistListAdapter;
+
+	private Map<Character, Integer> alphaNumIndexer;
 	private SortedSet<Integer> artistIds;
 	
-	private Map<Character, Integer> alphaNumIndexer;
+	private List<Artist> artistList;
 	private List<Character> indices;
-
-	private AbsListView absListView;
 
 	private View rltDummyLyt;
 	private ScrollView scrlVRootNoItemsFoundWithAction;
-	
-	/**
-	 * Using its instance variable since otherwise calling getResources() directly from fragment from 
-	 * callback methods is dangerous in a sense that it may throw java.lang.IllegalStateException: 
-	 * Fragment not attached to Activity, if user has already left this fragment & 
-	 * then changed the orientation.
-	 */
-	private Resources res;
+	private Button btnFollowAll;	
+	private ListView listView;
 
-	protected Button btnFollowMoreArtists;
+	private Resources res;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -93,29 +89,62 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
 
+		genre = (Genre) getArguments().getSerializable(BundleKeys.GENRE);
+		
 		if (wcitiesId == null) {
 			wcitiesId = ((EventSeekr) FragmentUtil.getActivity(this).getApplication()).getWcitiesId();
-			cachedFollowingList = ((EventSeekr) FragmentUtil.getActivity(this).getApplication()).getCachedFollowingList();
 		}
 		res = getResources();
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarColor(R.color.colorPrimaryDark);
+		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.VISIBLE);
+
 		View v = inflater.inflate(R.layout.fragment_following, null);
 		rltDummyLyt = v.findViewById(R.id.rltDummyLyt);
 		scrlVRootNoItemsFoundWithAction = (ScrollView) v.findViewById(R.id.scrlVRootNoItemsFoundWithAction);
+		
+		listView = (ListView) v.findViewById(android.R.id.list);
+
+		btnFollowAll = (Button) v.findViewById(R.id.btnFollowMoreArtists);
+		btnFollowAll.setText(R.string.btn_follow_all);
+		btnFollowAll.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
+					SelectedArtistCategoryFragment.this,
+					res.getString(R.string.dialog_title_follow_all),  
+					/**
+					 * 'artistList.size() - 1' is being passed as number of Artist as 1 value is 
+					 * null to show progress dialog.
+					 */
+					String.format(res.getString(R.string.dialog_msg_follow_all), artistList.size() - 1),
+					res.getString(R.string.dialog_btn_no),
+					res.getString(R.string.dialog_btn_yes));
+				generalDialogFragment.show(
+					((ActionBarActivity) FragmentUtil.getActivity(SelectedArtistCategoryFragment.this))
+					.getSupportFragmentManager(), DIALOG_FOLLOW_ALL);
+			}
+		});
+
 		v.findViewById(R.id.btnAction).setOnClickListener(this);
 		return v;
 	}
 
 	@Override
+	public String getScreenName() {
+		return "";
+	}
+	
+
+	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		// Log.d(TAG, "onActivityCreated()");
+		//Log.d(TAG, "onActivityCreated()");
 		
-		absListView = getScrollableView();
-
 		if (artistList == null) {
 			artistList = new ArrayList<Artist>();
 			artistList.add(null);
@@ -125,7 +154,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 			indices = new ArrayList<Character>();
 
 			myArtistListAdapter = new MyArtistListAdapter(FragmentUtil.getActivity(this), artistList, null, 
-					alphaNumIndexer, indices, this, this, this, AdapterFor.following);
+					alphaNumIndexer, indices, this, this, this, AdapterFor.popular);
 
 			loadItemsInBackground();
 
@@ -136,7 +165,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 			myArtistListAdapter.updateContext(FragmentUtil.getActivity(this));
 		}
 		
-		absListView.setRecyclerListener(new RecyclerListener() {
+		listView.setRecyclerListener(new RecyclerListener() {
 			
 			@Override
 			public void onMovedToScrapHeap(View view) {
@@ -144,27 +173,18 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 			}
 		});
 		
-		// this is because setAdapter method on 'absListView' is added from api level 11. 
-		// So, that 'absListView.setAdapter(myArtistListAdapter);' was throwing java.lang.NoSuchMethodError
-		if (absListView instanceof ListView) {
-			((ListView) absListView).setAdapter(myArtistListAdapter);
-		} else {			
-			((GridView) absListView).setAdapter(myArtistListAdapter);
-		}
-		
-		absListView.setScrollingCacheEnabled(false);
-		absListView.setFastScrollEnabled(true);
-		/*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			absListView.setFastScrollAlwaysVisible(false);
-		}*/
+		listView.setAdapter(myArtistListAdapter);
+		listView.setScrollingCacheEnabled(false);
+		listView.setFastScrollEnabled(true);
+		listView.setDivider(null);
 	}
 
 	@Override
 	public void loadItemsInBackground() {
-		loadMyArtists = new LoadMyArtists(Api.OAUTH_TOKEN, wcitiesId, artistList, myArtistListAdapter, 
-				cachedFollowingList, artistIds, indices, alphaNumIndexer, this);
-		myArtistListAdapter.setLoadArtists(loadMyArtists);
-		AsyncTaskUtil.executeAsyncTask(loadMyArtists, true);
+		loadCategorialArtists = new LoadArtistsByCategory(Api.OAUTH_TOKEN, wcitiesId, artistList, 
+				myArtistListAdapter, artistIds, indices, alphaNumIndexer, this, genre);
+		myArtistListAdapter.setLoadArtists(loadCategorialArtists);
+		AsyncTaskUtil.executeAsyncTask(loadCategorialArtists, true);
 	}
 	
 	protected void freeUpBitmapMemory(View view) {
@@ -176,10 +196,10 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		for (int i = absListView.getFirstVisiblePosition(), j = 0; 
-				i <= absListView.getLastVisiblePosition(); 
+		for (int i = listView.getFirstVisiblePosition(), j = 0; 
+				i <= listView.getLastVisiblePosition(); 
 				i++, j++) {
-			freeUpBitmapMemory(absListView.getChildAt(j));
+			freeUpBitmapMemory(listView.getChildAt(j));
 		}
 	}
 	
@@ -190,9 +210,9 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 		 * this screen.
 		 */
 		try {
-			absListView.setVisibility(View.GONE);
-			if (btnFollowMoreArtists != null) {
-				btnFollowMoreArtists.setVisibility(View.GONE);
+			listView.setVisibility(View.GONE);
+			if (btnFollowAll != null) {
+				btnFollowAll.setVisibility(View.GONE);
 			}
 			
 		} catch (IllegalStateException e) {
@@ -238,32 +258,64 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 		}
 	}
 	
-	@Override
-	public String getScreenName() {
-		return "Following Screen";
-	}
-	
-	@Override
-	public void onArtistTracking(Context context, Artist artist) {
-		EventSeekr eventseekr = FragmentUtil.getApplication(this);
-		artist.updateAttending(Attending.NotTracked, eventseekr );
-		new UserTracker(Api.OAUTH_TOKEN, eventseekr, UserTrackingItemType.artist, artist.getId(), 
-				Attending.NotTracked.getValue(), UserTrackingType.Edit).execute();
-	}
 
 	@Override
 	public void doPositiveClick(String dialogTag) {
-		/**
-		 * Here in this case we would have passed the position of the Artist as its tag.
-		 */
-		myArtistListAdapter.unTrackArtistAt(Integer.parseInt(dialogTag));
+		if (dialogTag.equals(DIALOG_FOLLOW_ALL)) {
+			EventSeekr eventSeekr = FragmentUtil.getApplication(SelectedArtistCategoryFragment.this);
+			List<Long> ids = new ArrayList<Long>();
+			for (Artist artist : artistList) {
+				if (artist != null && artist.getAttending() == Attending.NotTracked) {
+					ids.add((long) artist.getId());
+					artist.updateAttending(Attending.Tracked, eventSeekr);
+				}
+			}
+			if (ids.size() > 1) {
+				new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.artist, ids).execute();
+				myArtistListAdapter.notifyDataSetChanged();
+			
+			} else if (ids.size() == 1) {
+				new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.artist, ids.get(0)).execute();				
+				myArtistListAdapter.notifyDataSetChanged();
+			}
+			
+		} else {
+			//This is for Remove Artist Dialog
+			myArtistListAdapter.unTrackArtistAt(Integer.parseInt(dialogTag));
+			myArtistListAdapter.notifyDataSetChanged();
+		}
 	}
 
 	@Override
 	public void doNegativeClick(String dialogTag) {
-		/*myArtistListAdapter.notifyDataSetChanged();*/
+		/*if (FieldValidationUtil.isNumber(dialogTag)) {
+			//This is for Remove Artist Dialog
+			myArtistListAdapter.notifyDataSetChanged();
+		}*/
 	}
-	
-	protected abstract AbsListView getScrollableView();
-	
+
+	@Override
+	public void onArtistTracking(Context context, Artist artist) {
+		EventSeekr eventseekr = FragmentUtil.getApplication(this);
+		if (artist.getAttending() == Attending.NotTracked) {
+			artist.updateAttending(Attending.Tracked, eventseekr);
+			new UserTracker(Api.OAUTH_TOKEN, eventseekr, UserTrackingItemType.artist, artist.getId()).execute();
+			//The below notifyDataSetChange will change the status of following Checkbox for current Artist
+			myArtistListAdapter.notifyDataSetChanged();
+			
+			GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
+					this,
+					res.getString(R.string.follow_artist),  
+					res.getString(R.string.artist_saved),  
+					res.getString(R.string.btn_Ok),
+					null);
+			generalDialogFragment.show(
+					((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), DIALOG_ARTIST_SAVED);
+			
+		} else {			
+			artist.updateAttending(Attending.NotTracked, eventseekr);
+			new UserTracker(Api.OAUTH_TOKEN, eventseekr, UserTrackingItemType.artist, artist.getId(), 
+					Attending.NotTracked.getValue(), UserTrackingType.Edit).execute();
+		}
+	}
 }

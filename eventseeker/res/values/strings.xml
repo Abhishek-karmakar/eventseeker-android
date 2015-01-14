@@ -39,6 +39,7 @@
     <string name="title_artist_details">Artist Details</string>
     <string name="title_venue_details">Venue Details</string>
     <string name="title_following">Following</string>
+    <string name="title_recommended">Recommended</string>
     <string name="title_my_events">My Events</string>
     <string name="title_artists_news">Artist News</string>
     <string name="title_friends_activity">Friends Activity</string>
@@ -59,6 +60,39 @@
     <string name="title_web">Web</string>
     <string name="title_settings_mobile_app">Settings</string>
     <string name="title_logout">Logout</string>
+    
+    <!-- Following section screen names -->
+    <string name="title_find_more_artist">Find More Artists</string>
+
+    <string name="title_popular">Popular</string>
+    <string name="title_featured_list">Featured List</string>
+    <string name="title_comedy">Comedy</string>
+    <string name="title_theater">Theater</string>
+    
+    <string name="title_categories">Categories</string>
+    <string name="title_alternative_rock">Alternative Rock</string>
+    <string name="title_classic_rock">Classic Rock</string>
+    <string name="title_indie_rock">Indie Rock</string>
+    <string name="title_folk">Folk</string>
+    <string name="title_country">Country</string>
+    <string name="title_electronic">Electronic</string>
+    <string name="title_pop">Pop</string>
+    <string name="title_punk">Punk</string>
+    <string name="title_hard_rock_metal">Hard Rock / Metal</string>
+    <string name="title_world_music">World Music</string>
+    <string name="title_blues_jazz">Blues / Jazz</string>
+    <string name="title_hip_hop">Hip Hop</string>
+    <string name="title_soul_r_and_b_funk">Soul / R&amp;B / Funk</string>
+    <string name="title_classical">Classical</string>
+
+    <string name="title_popular_sports">Popular Sports</string>
+    <string name="title_nfl">NFL</string>
+    <string name="title_nba">NBA</string>
+    <string name="title_nhl">NHL</string>
+    <string name="title_mlb">MLB</string>
+    <string name="title_mls">MLS</string>
+    <!-- Following section screen names till here -->
+        
     <string name="no_items_found_pls_login">Please login with Facebook or Google from \'Sync Accounts\' page to see</string>
     <string name="pls_login_to_see_all_events_you_are_following">Please login with Facebook or Google from \'Sync Accounts\' page to see all the events you are following.</string>
     <string name="pls_login_to_see_to_see_recommended_events">Please login with Facebook or Google from \'Sync Accounts\' page to see recommended events for you.</string>
@@ -224,7 +258,9 @@
     <!-- Following -->
     <string name="follow_more_artists">FOLLOW MORE ARTISTS +</string>
     <string name="remove_artist">Remove Artist</string>
-    <string name="are_you_sure_you_want_to_remove_this_Artist">Are you sure you want to remove this Artist?</string>
+    <string name="follow_artist">Follow Artist</string>
+    <string name="are_you_sure_you_want_to_remove_this_artist">Are you sure you want to remove this Artist?</string>
+    <string name="artist_saved">Artist Saved!</string>
     <string name="btn_cancel">Cancel</string>
     <string name="btn_Ok">OK</string>
 
@@ -383,6 +419,31 @@
     <string name="btn_nhl">NHL</string>
     <string name="btn_mlb">MLB</string>
     <string name="btn_mls">MLS</string>
+
+    <!-- RecommendedArtistsFragment -->
+    <string name="btn_follow_all">Follow All</string>
+    <string name="a_z">A - Z</string>
+    <string name="recommendation_score">Recommendation Score</string>
+    <string name="dialog_title_follow_all">Follow All</string>
+    <string name="dialog_msg_follow_all">Do you want to follow %1$d artists?</string>
+    <string name="dialog_btn_yes">yes</string>
+    <string name="dialog_btn_no">no</string>
+    
+    <!-- MusicArtistsFragment -->
+    <string name="btn_alternative_rock">Alternative Rock</string>
+    <string name="btn_classic_rock">Classic Rock</string>
+    <string name="btn_indie_rock">Indie Rock</string>
+    <string name="btn_folk">Folk</string>
+    <string name="btn_country">Country</string>
+    <string name="btn_electronic">Electronic</string>
+    <string name="btn_pop">Pop</string>
+    <string name="btn_punk">Punk</string>
+    <string name="btn_hard_rock_metal">Hard Rock \/ Metal</string>
+    <string name="btn_world_music">World Music</string>
+    <string name="btn_blues_jazz">Blues \/ Jazz</string>
+    <string name="btn_hip_hop">Hip Hop</string>
+    <string name="btn_soul_r_and_b_funck">Soul \/ R&amp;D \/ Funk</string>
+    <string name="btn_classical">Classical</string>
     
     <!-- DiscoverSettingDialogFragment -->
     <string name="txt_search_radius">Search Radius (Miles)</string>
@@ -423,6 +484,7 @@
     <!-- fragment_bosch_about_us -->
     <string name="txt_app_details"><![CDATA[<b>App name :</b> eventseeker<br/><b>Description :</b> The eventseeker is the premier sources for event, artist and ticketing information available anywhere, gathered from worldwide ticketing partners, in-house research, and the insight of local contributors around the world.<br/><b>Mailing address :</b> Wcities.com, Inc. 512 2nd Street Second Floor, San Francisco, CA 94107, USA<br/><b>Tel :</b> 4154958090<br/><b>Fax : </b>4154958093]]></string>
     <string name="dialog_city_cannot_be_changed_while_driving">City cannot be changed while driving.</string>
+
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for Ford ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->

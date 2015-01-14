@@ -1,6 +1,5 @@
 package com.wcities.eventseeker.util;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
@@ -9,11 +8,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ShareCompat;
-import android.support.v4.app.ShareCompat.IntentBuilder;
 import android.util.Log;
 
 import com.google.android.gms.auth.GoogleAuthException;
@@ -29,8 +25,6 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.PlusShare;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
-import com.wcities.eventseeker.cache.BitmapCache;
-import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.SharedPrefKeys;
 import com.wcities.eventseeker.core.Event;

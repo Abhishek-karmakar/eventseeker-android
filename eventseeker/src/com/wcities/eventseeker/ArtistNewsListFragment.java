@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
-import com.wcities.eventseeker.ArtistsNewsListFragment.SortBy;
+import com.wcities.eventseeker.ArtistsNewsListFragment.SortArtistNewsBy;
 import com.wcities.eventseeker.adapter.ArtistNewsListAdapter;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -208,7 +208,7 @@ public class ArtistNewsListFragment extends ListFragment implements LoadItemsInB
 	@Override
 	public void loadItemsInBackground() {
 		loadArtistNews = new LoadArtistNews(Api.OAUTH_TOKEN, artistNewsListAdapter, wcitiesId, artistNewsListItems, 
-				artist, this, SortBy.chronological);
+				artist, this, SortArtistNewsBy.chronological);
 		artistNewsListAdapter.setLoadArtistNews(loadArtistNews);
 		AsyncTaskUtil.executeAsyncTask(loadArtistNews, true);
 	}

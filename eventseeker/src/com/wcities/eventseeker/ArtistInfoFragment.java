@@ -35,7 +35,6 @@ import com.viewpagerindicator.CirclePageIndicator;
 import com.wcities.eventseeker.ArtistDetailsFragment.ArtistDetailsFragmentListener;
 import com.wcities.eventseeker.ArtistDetailsFragment.FooterTxt;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
-import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;

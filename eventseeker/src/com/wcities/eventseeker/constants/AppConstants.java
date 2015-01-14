@@ -62,6 +62,9 @@ public class AppConstants {
 	public static final String FRAGMENT_TAG_FOLLOW_MORE_ARTISTS = "followMoreArtistsFragment";
 	public static final String FRAGMENT_TAG_POPULAR_ARTISTS = "popularArtistsFragment";
 	public static final String FRAGMENT_TAG_SPORTS_ARTISTS = "SportsArtistsFragment";
+	public static final String FRAGMENT_TAG_MUSIC_ARTISTS = "musicArtistsFragment";
+	public static final String FRAGMENT_TAG_RECOMMENDED_ARTISTS = "RecommendedArtistsFragment";
+	public static final String FRAGMENT_TAG_SELECTED_ARTIST_CATEGORY_FRAGMENT = "selectedArtistCategoryFragment";
 	public static final String FRAGMENT_TAG_ARTISTS_NEWS_LIST = "artistsNewsFragment";
 	public static final String FRAGMENT_TAG_FRIEND_LIST = "friendListFragment";
 	public static final String FRAGMENT_TAG_MY_EVENTS = "myEventsFragment";

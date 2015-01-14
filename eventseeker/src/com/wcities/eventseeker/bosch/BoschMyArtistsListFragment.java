@@ -18,18 +18,18 @@ import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadMyArtists;
-import com.wcities.eventseeker.asynctask.LoadMyArtists.LoadMyArtistsListener;
 import com.wcities.eventseeker.bosch.adapter.BoschArtistListAdapter;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.FollowingList;
 import com.wcities.eventseeker.interfaces.BoschOnChildFragmentDisplayModeChangedListener;
+import com.wcities.eventseeker.interfaces.LoadArtistsListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class BoschMyArtistsListFragment extends ListFragment implements OnClickListener, 
-		LoadItemsInBackgroundListener, BoschOnChildFragmentDisplayModeChangedListener, LoadMyArtistsListener {
+		LoadItemsInBackgroundListener, BoschOnChildFragmentDisplayModeChangedListener, LoadArtistsListener {
 
 	private String wcitiesId;
 	private FollowingList cachedFollowingList;

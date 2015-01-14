@@ -7,9 +7,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.os.AsyncTask.Status;
-import android.support.v4.app.Fragment;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-import com.wcities.eventseeker.FollowingFragment;
 import com.wcities.eventseeker.GeneralDialogFragment;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.R;
@@ -32,15 +30,18 @@ import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
+import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.interfaces.ArtistAdapterListener;
 import com.wcities.eventseeker.interfaces.ArtistListener;
+import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
-import com.wcities.eventseeker.util.FragmentUtil;
 
 // SectionIndexer is only required for 'FollowingFragment'.
 public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, ArtistAdapterListener<Void> {
 
+	private static final String TAG = MyArtistListAdapter.class.getSimpleName();
 	private static final long DELAY_REMOVE_ARTIST = 500;
+	
 	private Context mContext;
 	private BitmapCache bitmapCache;
 	
@@ -54,14 +55,24 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 	private List<Character> indices;
 	
 	private boolean isTablet;
-	private LoadItemsInBackgroundListener mListener;
 	
-	private Fragment fragment;
+	private LoadItemsInBackgroundListener mListener;
+	private DialogBtnClickListener dialogBtnClickListener;
+	private ArtistTrackingListener artistTrackingListener;
+
 	private Handler handler;
+	
+	private AdapterFor currentAdapterIsFor;
+	
+	public enum AdapterFor {
+		following,
+		recommended,
+		popular
+	}
 	
 	public MyArtistListAdapter(Context context, List<Artist> artistList, AsyncTask<Void, Void, List<Artist>> loadMyArtists, 
 			Map<Character, Integer> alphaNumIndexer, List<Character> indices, LoadItemsInBackgroundListener mListener, 
-			Fragment fragment) {
+			DialogBtnClickListener dialogBtnClickListener, ArtistTrackingListener artistTrackingListener, AdapterFor adapterFor) {
 		if (!(context instanceof ArtistListener)) {
 			throw new ClassCastException(context.toString() + " must implement ArtistListener");
 		}
@@ -75,9 +86,12 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 		this.alphaNumIndexer = alphaNumIndexer;
 		this.indices = indices;
 		
+		this.currentAdapterIsFor = adapterFor;
+		
 		this.mListener = mListener;
-		this.fragment = fragment;
-
+		this.dialogBtnClickListener = dialogBtnClickListener;
+		this.artistTrackingListener = artistTrackingListener;
+		
 		handler = new Handler();
 	}
 
@@ -147,23 +161,33 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 			}
 
 			CheckBox chkFollow = (CheckBox) convertView.findViewById(R.id.chkFollow);
-			chkFollow.setChecked(true);
+			chkFollow.setSelected(artist.getAttending() == Attending.Tracked);
 			chkFollow.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
 					Resources res = mContext.getResources();
-					GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
-							(DialogBtnClickListener) fragment,							
-							res.getString(R.string.remove_artist),  
-							res.getString(R.string.are_you_sure_you_want_to_remove_this_Artist),  
-							res.getString(R.string.btn_cancel),  
-							res.getString(R.string.btn_Ok));
+					if (artist.getAttending() == Attending.Tracked) {
+						GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
+								dialogBtnClickListener,						
+								res.getString(R.string.remove_artist),  
+								res.getString(R.string.are_you_sure_you_want_to_remove_this_artist),  
+								res.getString(R.string.btn_cancel),  
+								res.getString(R.string.btn_Ok));
+						generalDialogFragment.show(((ActionBarActivity) mContext).getSupportFragmentManager(), "" + position);
+						
+					} else {
+						/**
+						 * This is the case, where user wants to Track an Artist. So, no dialog here.
+						 */
+						if (artistTrackingListener != null) {
+							artistTrackingListener.onArtistTracking(mContext, getItem(position));
+						}
+					}
 					/**
 					 * Pass the position as tag. So, that in Positive button if response comes as
 					 * true then we can remove that Artist.
 					 */
-					generalDialogFragment.show(((ActionBarActivity) mContext).getSupportFragmentManager(), "" + position);
 				}
 			});
 
@@ -209,19 +233,24 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 		return artistList.size();
 	}
 
-	public void removeItemAt(final int position) {
-		((FollowingFragment) fragment).removeFollowedArtist(mContext, getItem(position).getId());
-		/**
-		 * Delay is just for the list item removal effect.
-		 */
-		handler.postDelayed(new Runnable() {
-			
-			@Override
-			public void run() {
-				artistList.remove(position);
-				notifyDataSetChanged();				
-			}
-		}, DELAY_REMOVE_ARTIST);
+	public void unTrackArtistAt(final int position) {
+		if (artistTrackingListener != null) {
+			artistTrackingListener.onArtistTracking(mContext, getItem(position));
+		}
+		
+		if (currentAdapterIsFor == AdapterFor.following) {
+			/**
+			 * Delay is just for the list item removal effect.
+			 */
+			handler.postDelayed(new Runnable() {
+				
+				@Override
+				public void run() {
+					artistList.remove(position);
+					notifyDataSetChanged();		
+				}
+			}, DELAY_REMOVE_ARTIST);
+		}
 	}
 	
 	@Override

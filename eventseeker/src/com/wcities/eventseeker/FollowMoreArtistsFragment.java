@@ -46,10 +46,12 @@ public class FollowMoreArtistsFragment extends FragmentLoadableFromBackStack imp
 				
 			case R.id.btnPopularArtists:
 				((ReplaceFragmentListener) FragmentUtil.getActivity(this))
-				.replaceByFragment(AppConstants.FRAGMENT_TAG_POPULAR_ARTISTS, null);
+					.replaceByFragment(AppConstants.FRAGMENT_TAG_POPULAR_ARTISTS, null);
 				break;
 				
 			case R.id.btnRecommended:
+				((ReplaceFragmentListener) FragmentUtil.getActivity(this))
+					.replaceByFragment(AppConstants.FRAGMENT_TAG_RECOMMENDED_ARTISTS, null);
 				break;
 				
 			case R.id.btnSearch:

@@ -1,12 +1,14 @@
 package com.wcities.eventseeker.asynctask;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
@@ -21,6 +23,7 @@ public class UserTracker extends AsyncTask<Void, Void, Void> {
 	private EventSeekr eventSeekr;
 	private UserTrackingItemType type;
 	private long id;
+	private List<Long> ids;
 	private int attending;
 	private String fb_postid, oauthToken;
 	
@@ -30,6 +33,14 @@ public class UserTracker extends AsyncTask<Void, Void, Void> {
 		this.type = type;
 		this.id = id;
 		trackingType = UserTrackingType.Add;
+	}
+
+	public UserTracker(String oauthToken, EventSeekr eventSeekr, UserTrackingItemType type, List<Long> ids) {
+		this.oauthToken = oauthToken;
+		this.eventSeekr = eventSeekr;
+		this.type = type;
+		this.ids = ids;
+		trackingType = UserTrackingType.AddMultiple;
 	}
 	
 	public UserTracker(String oauthToken, EventSeekr eventSeekr, UserTrackingItemType type, long id, int attending, UserTrackingType trackingType) {
@@ -51,8 +62,16 @@ public class UserTracker extends AsyncTask<Void, Void, Void> {
 		UserInfoApi userInfoApi = new UserInfoApi(oauthToken);
 		userInfoApi.setUserId(eventSeekr.getWcitiesId());
 		try {
-			JSONObject jsonObject = (trackingType == UserTrackingType.Add) ? 
-					userInfoApi.addUserTracking(type, id, attending, fb_postid) : userInfoApi.editUserTracking(type, id, attending);
+			JSONObject jsonObject;
+			if (trackingType == UserTrackingType.Add) {
+				jsonObject = userInfoApi.addUserTracking(type, id, attending, fb_postid);
+			
+			} else if (trackingType == UserTrackingType.AddMultiple) {				
+				jsonObject = userInfoApi.addMultipleUserTracking(type, ids);
+			
+			} else {
+				jsonObject = userInfoApi.editUserTracking(type, id, attending);
+			}
 			//Log.d(TAG, "result = " + jsonObject.toString());
 			
 		} catch (ClientProtocolException e) {
