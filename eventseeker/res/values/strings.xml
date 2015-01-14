@@ -454,6 +454,9 @@
     <string name="txt_no_events">No events currently in your location. Try another category or search a new location / Radius.</string>
     <string name="btn_chg_loc_txt">CHANGE LOCATION</string>
     
+    <!-- DiscoverFragment -->
+    <string name="share_via">Share via</string>
+    
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     
     <!-- Common -->

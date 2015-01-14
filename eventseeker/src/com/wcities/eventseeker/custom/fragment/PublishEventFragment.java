@@ -117,7 +117,7 @@ public abstract class PublishEventFragment extends Fragment implements PublishLi
 		return pendingAnnounce;
 	}
 	
-	protected void trackEvent() {
+	private void trackEvent() {
 		new UserTracker(Api.OAUTH_TOKEN, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
         		UserTrackingItemType.event, event.getId(), event.getAttending().getValue(), null, 
         		UserTrackingType.Add).execute();

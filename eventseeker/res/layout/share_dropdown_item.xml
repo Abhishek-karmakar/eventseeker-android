@@ -3,8 +3,7 @@
     android:id="@+id/rltLayoutRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/rlt_layout_root_pad_t_share_dropdown_item"
-    android:background="@color/bg_share_dropdown_item" >
+    android:paddingTop="@dimen/rlt_layout_root_pad_t_share_dropdown_item" >
     
     <ImageView android:id="@+id/imgAppIcon"
         android:layout_width="@dimen/img_app_icon_w_share_dropdown_item"
@@ -24,7 +23,6 @@
     <TextView android:id="@+id/txtAppLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
         android:layout_toRightOf="@id/imgAppIcon"
         android:layout_centerVertical="true"
         android:textSize="@dimen/txt_app_label_txt_size_share_dropdown_item" />

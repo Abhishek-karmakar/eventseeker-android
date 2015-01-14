@@ -87,20 +87,23 @@
         <ImageView android:id="@+id/imgTicket"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/tickets_grey"
-            android:layout_weight="1" />
+            android:src="@drawable/tic_blue"
+            android:layout_weight="1"
+            android:background="@drawable/bg_slctr_lnr_slider_content_list_item_discover" />
 
-        <ImageView android:id="@+id/imgCalendar"
+        <ImageView android:id="@+id/imgSave"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:src="@drawable/calendar"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="@drawable/bg_slctr_lnr_slider_content_list_item_discover" />
         
         <ImageView android:id="@+id/imgShare"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:src="@drawable/share"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="@drawable/bg_slctr_lnr_slider_content_list_item_discover" />
         
     </LinearLayout>
     

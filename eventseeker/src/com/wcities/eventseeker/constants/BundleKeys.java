@@ -12,6 +12,7 @@ public class BundleKeys {
 	public static final String NOTIFICATION_TYPE = "notificationType";
 	public static final String ARTIST = "artist";
 	public static final String SETTINGS_ITEM_ORDINAL = "isSettingsItem";
+	public static final String SCREEN_NAME = "screenName";
 	
 	public static final String SCREEN_TITLE = "ScreenTitle";
 	public static final String GENRE = "genre";

@@ -16,6 +16,7 @@ import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,16 +43,22 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.facebook.Session;
+import com.facebook.SessionState;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.wcities.eventseeker.DiscoverSettingDialogFragment.DiscoverSettingChangedListener;
 import com.wcities.eventseeker.SettingsFragment.OnSettingsItemClickedListener;
 import com.wcities.eventseeker.SettingsFragment.SettingsItem;
 import com.wcities.eventseeker.adapter.CatTitlesAdapter;
+import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.api.Api;
+import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
+import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.asynctask.LoadEvents;
+import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
@@ -60,25 +67,31 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Category;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
+import com.wcities.eventseeker.custom.fragment.PublishEventFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.custom.view.RecyclerViewInterceptingVerticalScroll;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
+import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
+import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
 
-public class DiscoverFragment extends FragmentLoadableFromBackStack implements LoadItemsInBackgroundListener, 
+public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack implements LoadItemsInBackgroundListener, 
 		DiscoverSettingChangedListener {
 	
 	private static final String TAG = DiscoverFragment.class.getSimpleName();
 	
 	private static final String FRAGMENT_TAG_DISCOVER_SETTING_DIALOG = DiscoverSettingDialogFragment.class.getSimpleName();
+	private static final String FRAGMENT_TAG_SHARE_VIA_DIALOG = ShareViaDialogFragment.class.getSimpleName();
+	
 	private static final int TRANSLATION_Z_DP = 10;
 	private static final int UNSCROLLED = -1;
 	private static final int DEFAULT_SEARCH_RADIUS = 50;
@@ -106,12 +119,14 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 	private int totalScrolledDy = UNSCROLLED; // indicates layout not yet created
 	private List<Event> eventList;
 	private double lat, lon;
-	private int year, month, day, miles = DEFAULT_SEARCH_RADIUS;
-	private String startDate, endDate;
+	
 	private LoadEvents loadEvents;
 	private int selectedCatId, currentItem = CatTitlesAdapter.FIRST_PAGE - 1;
 	private Handler handler;
 	private int firstItemHtDiff, firstItemHtPort, firstItemHtLand, prevOrientation = Configuration.ORIENTATION_UNDEFINED;
+	
+	private int year, month, day, miles = DEFAULT_SEARCH_RADIUS;
+	private String startDate, endDate;
 	
 	private final HashMap<Integer, Integer> categoryImgs = new HashMap<Integer, Integer>() {
 		{
@@ -359,7 +374,7 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 			 * Passing activity fragment manager, since using this fragment's child fragment manager 
 			 * doesn't retain dialog on orientation change
 			 */
-			discoverSettingDialogFragment.show(getActivity().getSupportFragmentManager(), FRAGMENT_TAG_DISCOVER_SETTING_DIALOG);
+			discoverSettingDialogFragment.show(((FragmentActivity)FragmentUtil.getActivity(this)).getSupportFragmentManager(), FRAGMENT_TAG_DISCOVER_SETTING_DIALOG);
 			return true;
 
 		default:
@@ -628,6 +643,10 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 		private int openPos = INVALID;
 		private int rltLytContentInitialMarginL, lnrSliderContentW, imgEventW, rltLytContentW = INVALID;
 		
+		private int fbCallCountForSameEvt = 0;
+		private EventListAdapter.ViewHolder holderPendingPublish;
+		private Event eventPendingPublish;
+		
 		private static enum ViewType {
 			POS_0, POS_1, LAST_POS, PROGRESS, CONTENT
 		};
@@ -636,7 +655,7 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 			
 			private View root, vHandle;
 	        private TextView txtEvtTitle, txtEvtTime, txtEvtLocation;
-	        private ImageView imgEvent;
+	        private ImageView imgEvent, imgTicket, imgSave, imgShare;
 	        private LinearLayout lnrSliderContent;
 	        private RelativeLayout rltLytRoot, rltLytContent;
 	        
@@ -651,6 +670,9 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 	            lnrSliderContent = (LinearLayout) root.findViewById(R.id.lnrSliderContent);
 	            rltLytRoot = (RelativeLayout) root.findViewById(R.id.rltLytRoot);
 	            rltLytContent = (RelativeLayout) root.findViewById(R.id.rltLytContent);
+	            imgTicket = (ImageView) root.findViewById(R.id.imgTicket);
+	            imgSave = (ImageView) root.findViewById(R.id.imgSave);
+	            imgShare = (ImageView) root.findViewById(R.id.imgShare);
 	        }
 	        
 	        private boolean isSliderClose(int rltLytContentInitialMarginL) {
@@ -729,6 +751,14 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 					}
 					
 				} else {
+					/**
+					 * If user clicks on save & changes orientation before call to onPublishPermissionGranted(), 
+					 * then we need to update holderPendingPublish with right holder pointer in new orientation
+					 */
+					if (eventPendingPublish == event) {
+						holderPendingPublish = holder;
+					}
+					
 					holder.txtEvtTitle.setText(event.getName());
 					
 					if (event.getSchedule() != null) {
@@ -765,6 +795,18 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 					        asyncLoadImg.loadImg(holder.imgEvent, ImgResolution.LOW, recyclerView, position, bitmapCacheable);
 					    }
 					}
+					
+					Resources res = FragmentUtil.getResources(discoverFragment);
+					if (event.getSchedule().getBookingInfos().isEmpty()) {
+						holder.imgTicket.setImageDrawable(res.getDrawable(R.drawable.tickets_disabled));
+						holder.imgTicket.setEnabled(false);
+						
+					} else {
+						holder.imgTicket.setImageDrawable(res.getDrawable(R.drawable.tic_blue));
+						holder.imgTicket.setEnabled(true);
+					}
+					
+					updateImgSaveSrc(holder, event, res);
 					
 					if (rltLytContentW == INVALID) {
 						/**
@@ -866,10 +908,40 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 							case MotionEvent.ACTION_UP:
 							case MotionEvent.ACTION_CANCEL:
 								//Log.d(TAG, "up");
-								if (!isScrolled) { 
+								if (!isScrolled) {
+									/**
+									 * Handle click event.
+									 * We do it here instead of implementing onClick listener because then onClick listener
+									 * of child element would block onTouch event on its parent (rltLytRoot) 
+									 * if this onTouch starts from such a child view 
+									 */
 									if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.vHandle)) {
 										onHandleClick(holder, position);
 
+									} else if (openPos == position) { 
+										/**
+										 * above condition is required, because otherwise these 3 conditions
+										 * prevent event click on these positions even if slider is closed
+										 */
+										if (holder.imgTicket.isEnabled() && ViewUtil.isPointInsideView(
+												mEvent.getRawX(), mEvent.getRawY(), holder.imgTicket)) {
+											onImgTicketClick(holder, event);
+												
+										} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.imgSave)) {
+											onImgSaveClick(holder, event);
+											
+										} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.imgShare)) {
+											onImgShareClick(holder, event);
+											
+										} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltLytRoot)) {
+											/**
+											 * This block is added to consider row click as event click even when
+											 * slider is open (openPos == position); otherwise it won't do anything 
+											 * on clicking outside the slider when it's open
+											 */
+											onEventClick(holder, event);
+										}
+										
 									} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltLytRoot)) {
 										onEventClick(holder, event);
 									}
@@ -930,6 +1002,11 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 					}
 				}
 			}
+		}
+		
+		private void updateImgSaveSrc(ViewHolder holder, Event event, Resources res) {
+			int drawableId = (event.getAttending() == Attending.SAVED) ? R.drawable.checked_blue : R.drawable.calendar;
+			holder.imgSave.setImageDrawable(res.getDrawable(drawableId));
 		}
 		
 		private void openSlider(ViewHolder holder, int position, boolean isUserInitiated) {
@@ -1067,18 +1144,19 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 				// slider is close, so open it
 				//Log.d(TAG, "open slider");
 				ViewCompat.setElevation(holder.imgEvent, discoverFragment.translationZPx);
-				holder.lnrSliderContent.setVisibility(View.VISIBLE);
-				
-				RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) holder.lnrSliderContent.getLayoutParams();
-				lp.rightMargin = 0;
-				holder.lnrSliderContent.setLayoutParams(lp);
 				
 				Animation slide = AnimationUtils.loadAnimation(FragmentUtil.getActivity(
 						discoverFragment), R.anim.slide_in_from_left);
 				slide.setAnimationListener(new AnimationListener() {
 					
 					@Override
-					public void onAnimationStart(Animation animation) {}
+					public void onAnimationStart(Animation animation) {
+						holder.lnrSliderContent.setVisibility(View.VISIBLE);
+						
+						RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) holder.lnrSliderContent.getLayoutParams();
+						lp.rightMargin = 0;
+						holder.lnrSliderContent.setLayoutParams(lp);
+					}
 					
 					@Override
 					public void onAnimationRepeat(Animation animation) {}
@@ -1146,12 +1224,108 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 			}, 200);
 		}
 		
+		private void onImgTicketClick(final ViewHolder holder, final Event event) {
+			holder.imgTicket.setPressed(true);
+			discoverFragment.handler.postDelayed(new Runnable() {
+				
+				@Override
+				public void run() {
+					holder.imgTicket.setPressed(false);
+					Bundle args = new Bundle();
+					args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
+					((ReplaceFragmentListener)FragmentUtil.getActivity(discoverFragment)).replaceByFragment(
+							AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
+					/**
+					 * added on 15-12-2014
+					 */
+					GoogleAnalyticsTracker.getInstance().sendEvent(FragmentUtil.getApplication(discoverFragment), 
+							discoverFragment.getScreenName(), GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON, 
+							GoogleAnalyticsTracker.Type.Event.name(), null, event.getId());
+				}
+			}, 200);
+		}
+		
+		private void onImgSaveClick(final ViewHolder holder, final Event event) {
+			holder.imgSave.setPressed(true);
+			discoverFragment.handler.postDelayed(new Runnable() {
+				
+				@Override
+				public void run() {
+					holder.imgSave.setPressed(false);
+					
+					EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(discoverFragment).getApplication();
+					if (event.getAttending() == Attending.SAVED) {
+						event.setAttending(Attending.NOT_GOING);
+						new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.event, event.getId(), 
+								event.getAttending().getValue(), UserTrackingType.Add).execute();
+		    			updateImgSaveSrc(holder, event, FragmentUtil.getResources(discoverFragment));
+						
+					} else {
+						discoverFragment.event = eventPendingPublish = event;
+						holderPendingPublish = holder;
+						
+						if (eventSeekr.getFbUserId() != null) {
+							fbCallCountForSameEvt = 0;
+							event.setNewAttending(Attending.SAVED);
+							FbUtil.handlePublishEvent(discoverFragment, discoverFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT, 
+									AppConstants.REQ_CODE_FB_PUBLISH_EVT, event);
+							
+						} else if (eventSeekr.getGPlusUserId() != null) {
+							event.setNewAttending(Attending.SAVED);
+							discoverFragment.handlePublishEvent();
+						}
+					}
+				}
+			}, 200);
+		}
+		
+		private void onImgShareClick(final ViewHolder holder, final Event event) {
+			holder.imgShare.setPressed(true);
+			discoverFragment.handler.postDelayed(new Runnable() {
+				
+				@Override
+				public void run() {
+					holder.imgShare.setPressed(false);
+					
+					ShareViaDialogFragment shareViaDialogFragment = ShareViaDialogFragment.newInstance(event, 
+							discoverFragment.getScreenName());
+					/**
+					 * Passing activity fragment manager, since using this fragment's child fragment manager 
+					 * doesn't retain dialog on orientation change
+					 */
+					shareViaDialogFragment.show(((FragmentActivity)FragmentUtil.getActivity(discoverFragment))
+							.getSupportFragmentManager(), FRAGMENT_TAG_SHARE_VIA_DIALOG);
+				}
+			}, 200);
+		}
+		
 		// to update values which should change on orientation change
 		private void onActivityCreated() {
 			rltLytContentW = INVALID;
 			Resources res = FragmentUtil.getResources(discoverFragment);
 			rltLytContentInitialMarginL = res.getDimensionPixelSize(R.dimen.rlt_lyt_content_margin_l_list_item_discover);
 			lnrSliderContentW = res.getDimensionPixelSize(R.dimen.lnr_slider_content_w_list_item_discover);
+		}
+		
+		private void call(Session session, SessionState state, Exception exception) {
+			//Log.i(TAG, "call()");
+			fbCallCountForSameEvt++;
+			/**
+			 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
+			 */
+			if (fbCallCountForSameEvt < AppConstants.MAX_FB_CALL_COUNT_FOR_SAME_EVT) {
+				FbUtil.call(session, state, exception, discoverFragment, discoverFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT, 
+						AppConstants.REQ_CODE_FB_PUBLISH_EVT, eventPendingPublish);
+				
+			} else {
+				fbCallCountForSameEvt = 0;
+				discoverFragment.setPendingAnnounce(false);
+			}
+		}
+
+		private void onPublishPermissionGranted() {
+			//Log.d(TAG, "onPublishPermissionGranted()");
+			updateImgSaveSrc(holderPendingPublish, eventPendingPublish, FragmentUtil.getResources(discoverFragment));
 		}
 
 		@Override
@@ -1178,5 +1352,17 @@ public class DiscoverFragment extends FragmentLoadableFromBackStack implements L
 		public void setLoadDateWiseEvents(AsyncTask<Void, Void, List<Event>> loadDateWiseEvents) {
 			this.loadDateWiseEvents = loadDateWiseEvents;
 		}
+	}
+
+	@Override
+	public void call(Session session, SessionState state, Exception exception) {
+		//Log.i(TAG, "call()");
+		eventListAdapter.call(session, state, exception);
+	}
+
+	@Override
+	public void onPublishPermissionGranted() {
+		//Log.d(TAG, "onPublishPermissionGranted()");
+		eventListAdapter.onPublishPermissionGranted();
 	}
 }

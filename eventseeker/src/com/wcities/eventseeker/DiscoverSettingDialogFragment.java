@@ -93,7 +93,7 @@ public class DiscoverSettingDialogFragment extends DialogFragment {
 			datePicker.setMinDate(System.currentTimeMillis() - 1000);
 		}
 		
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		AlertDialog.Builder builder = new AlertDialog.Builder(FragmentUtil.getActivity(this));
 		builder.setView(v);
 		builder.setPositiveButton(R.string.ok,
 				new DialogInterface.OnClickListener() {

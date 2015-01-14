@@ -13,7 +13,8 @@ public class Event implements Serializable, BitmapCacheable {
 	public static enum Attending {
 		GOING(1),
 		WANTS_TO_GO(2),
-		NOT_GOING(3);
+		NOT_GOING(3),
+		SAVED(4);
 		
 		private int value;
 		
