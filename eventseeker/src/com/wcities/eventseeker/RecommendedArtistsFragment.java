@@ -46,6 +46,7 @@ import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
 import com.wcities.eventseeker.interfaces.LoadArtistsListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
+import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class RecommendedArtistsFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
@@ -203,6 +204,20 @@ public class RecommendedArtistsFragment extends FragmentLoadableFromBackStack im
 		 * if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 		 * lstView.setFastScrollAlwaysVisible(false); }
 		 */		
+	}
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		ma.setToolbarElevation(0);
+	}
+	
+	@Override
+	public void onStop() {
+		super.onStop();
+		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
 	}
 
 	@Override
@@ -380,6 +395,17 @@ public class RecommendedArtistsFragment extends FragmentLoadableFromBackStack im
 			//This is for Remove Artist Dialog
 			myArtistListAdapter.notifyDataSetChanged();
 		}*/
+		Log.d(TAG, "doNegativeClick");
+		if (dialogTag.contains(DIALOG_ARTIST_SAVED)) {
+			String strId = dialogTag.substring(dialogTag.indexOf(":") + 1);
+			Log.d(TAG, "strId : " + strId);
+			for (Artist artist : artistList) {
+				if (artist != null && artist.getId() == Integer.parseInt(strId)) {					
+					FbUtil.publishArtist(artist, this);
+					break;
+				}
+			}
+		}
 	}
 
 	@Override
@@ -398,7 +424,8 @@ public class RecommendedArtistsFragment extends FragmentLoadableFromBackStack im
 					res.getString(R.string.btn_Ok),
 					null);
 			generalDialogFragment.show(
-					((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), DIALOG_ARTIST_SAVED);
+					((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), 
+						DIALOG_ARTIST_SAVED + ":" + artist.getId());
 			
 		} else {			
 			artist.updateAttending(Attending.NotTracked, eventseekr);

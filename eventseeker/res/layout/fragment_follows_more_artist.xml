@@ -22,7 +22,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/cat_900" >
+            android:background="@drawable/ic_sync" >
 
             <Button
                 android:id="@+id/btnSyncAccounts"
@@ -41,7 +41,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/cat_901" >
+            android:background="@drawable/ic_popular_artists" >
 
             <Button
                 android:id="@+id/btnPopularArtists"
@@ -65,7 +65,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/cat_902" >
+            android:background="@drawable/ic_recomended" >
 
             <Button
                 android:id="@+id/btnRecommended"
@@ -84,7 +84,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/cat_903" >
+            android:background="@drawable/ic_search" >
 
             <Button
                 android:id="@+id/btnSearch"

@@ -58,7 +58,11 @@ public class Artist implements Serializable, BitmapCacheable {
 		Pop("pop"),
 		Punk("punk"),
 		HardRock("hard rock"),
-		International("International");
+		International("International"),
+		Blues("blues"),
+		RAndBFunkAndSoul("R&B Funk and Soul"),
+		HipHopAndRap("Hip-Hop & Rap"),
+		Classical("classical");
 		
 		private String urlForm;
 		private Genre(String urlForm) {

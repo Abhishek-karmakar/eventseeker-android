@@ -191,6 +191,20 @@ public class SelectedArtistCategoryFragment extends FragmentLoadableFromBackStac
 	}
 	
 	@Override
+	public void onStart() {
+		super.onStart();
+		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		ma.setToolbarElevation(0);
+	}
+	
+	@Override
+	public void onStop() {
+		super.onStop();
+		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
+	}
+	
+	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
 		for (int i = listView.getFirstVisiblePosition(), j = 0; 

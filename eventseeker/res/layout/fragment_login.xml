@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_screen_dark_blue" >
+    android:background="@drawable/ic_blue_app_bg" >
 
     <ScrollView
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/all_components_margin_t_get_started"
-                android:src="@drawable/fb_login" />
+                android:src="@drawable/ic_fb_continue" />
 
             <RelativeLayout
                 android:id="@+id/rltGPlus"
@@ -51,7 +51,7 @@
                     android:id="@+id/imgGPlusSignIn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/g_plus_sign_in" />
+                    android:src="@drawable/ic_ggl_continue" />
             </RelativeLayout>
 
             <RelativeLayout

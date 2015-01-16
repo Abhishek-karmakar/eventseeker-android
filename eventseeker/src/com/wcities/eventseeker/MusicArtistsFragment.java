@@ -17,6 +17,20 @@ public class MusicArtistsFragment extends FragmentLoadableFromBackStack implemen
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_music_artists, null);
+		view.findViewById(R.id.btnAlternativeRock).setOnClickListener(this);
+		view.findViewById(R.id.btnClassicRock).setOnClickListener(this);
+		view.findViewById(R.id.btnIndieRock).setOnClickListener(this);
+		view.findViewById(R.id.btnFolk).setOnClickListener(this);
+		view.findViewById(R.id.btnCountry).setOnClickListener(this);
+		view.findViewById(R.id.btnElectronic).setOnClickListener(this);
+		view.findViewById(R.id.btnPop).setOnClickListener(this);
+		view.findViewById(R.id.btnPunk).setOnClickListener(this);
+		view.findViewById(R.id.btnHardRockMetal).setOnClickListener(this);
+		view.findViewById(R.id.btnWorldMusic).setOnClickListener(this);
+		view.findViewById(R.id.btnBluesJazz).setOnClickListener(this);
+		view.findViewById(R.id.btnHipHop).setOnClickListener(this);
+		view.findViewById(R.id.btnSoulRAndBFunck).setOnClickListener(this);
+		view.findViewById(R.id.btnClassical).setOnClickListener(this);
 		return view;
 	}
 	
@@ -89,30 +103,30 @@ public class MusicArtistsFragment extends FragmentLoadableFromBackStack implemen
 			((MainActivity) FragmentUtil.getActivity(this))
 					.replaceByFragment(AppConstants.FRAGMENT_TAG_SELECTED_ARTIST_CATEGORY_FRAGMENT, args);
 			break;
-		/*case R.id.btnBluesJazz:
+		case R.id.btnBluesJazz:
 			args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_blues_jazz);
-			args.putSerializable(BundleKeys.GENRE, Genre.);
+			args.putSerializable(BundleKeys.GENRE, Genre.Blues);
 			((MainActivity) FragmentUtil.getActivity(this))
 					.replaceByFragment(AppConstants.FRAGMENT_TAG_SELECTED_ARTIST_CATEGORY_FRAGMENT, args);
 			break;
-		case R.id.btn:
-			args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_);
-			args.putSerializable(BundleKeys.GENRE, Genre.);
+		case R.id.btnHipHop:
+			args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_hip_hop);
+			args.putSerializable(BundleKeys.GENRE, Genre.HipHopAndRap);
 			((MainActivity) FragmentUtil.getActivity(this))
 					.replaceByFragment(AppConstants.FRAGMENT_TAG_SELECTED_ARTIST_CATEGORY_FRAGMENT, args);
 			break;
-		case R.id.btn:
-			args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_);
-			args.putSerializable(BundleKeys.GENRE, Genre.);
+		case R.id.btnSoulRAndBFunck:
+			args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_soul_r_and_b_funk);
+			args.putSerializable(BundleKeys.GENRE, Genre.RAndBFunkAndSoul);
 			((MainActivity) FragmentUtil.getActivity(this))
 					.replaceByFragment(AppConstants.FRAGMENT_TAG_SELECTED_ARTIST_CATEGORY_FRAGMENT, args);
 			break;
-		case R.id.btn:
-			args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_);
-			args.putSerializable(BundleKeys.GENRE, Genre.);
+		case R.id.btnClassical:
+			args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_classical);
+			args.putSerializable(BundleKeys.GENRE, Genre.Classical);
 			((MainActivity) FragmentUtil.getActivity(this))
 					.replaceByFragment(AppConstants.FRAGMENT_TAG_SELECTED_ARTIST_CATEGORY_FRAGMENT, args);
-			break;*/
+			break;
 		}
 	}	
 }

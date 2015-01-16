@@ -3,21 +3,30 @@
     android:id="@+id/rltLayoutRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:padding="@dimen/rlt_layout_root_pad_fragment_connect_accounts_list" >
+    android:background="@android:color/white" >
     
-    <Button android:id="@+id/btnFollowMoreArtists"
+    <RelativeLayout android:id="@+id/rltFollowMoreArtist"
+         android:layout_marginTop="@dimen/common_t_mar_pad_for_all_layout"
          android:layout_width="match_parent" 
          android:layout_height="wrap_content" 
-         android:layout_marginTop="@dimen/common_t_mar_pad_for_all_layout"
-         android:text="@string/follow_more_artists" 
-         style="@style/Widget.EventSeeker.Button.WhiteBgBlueStroke" />
+         android:padding="@dimen/rlt_layout_root_pad_fragment_connect_accounts_list"
+         android:elevation="@dimen/elevation_top_button" 
+         android:background="@android:color/white">
+    
+	    <Button android:id="@+id/btnFollowMoreArtists"
+	         android:layout_width="match_parent" 
+	         android:layout_height="wrap_content" 
+	         android:text="@string/follow_more_artists" 
+	         style="@style/Widget.EventSeeker.Button.WhiteBgBlueStroke" />
+    
+    </RelativeLayout>
     
 	<ListView android:id="@id/android:list"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent" 
-	    android:layout_below="@+id/btnFollowMoreArtists" 
-	    android:layout_marginTop="@dimen/list_margin_t_b_fragment_connect_account_and_get_started" />
+	    android:layout_below="@+id/rltFollowMoreArtist" 
+	    android:padding="@dimen/rlt_layout_root_pad_fragment_connect_accounts_list"/>
+	    <!-- android:layout_marginTop="@dimen/list_margin_t_b_fragment_connect_account_and_get_started" --> 
 	    
     <RelativeLayout android:id="@+id/rltDummyLyt" 
         android:layout_width="match_parent"

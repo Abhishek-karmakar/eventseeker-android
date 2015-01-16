@@ -1,5 +1,6 @@
 package com.wcities.eventseeker.util;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.json.JSONException;
@@ -7,12 +8,16 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.util.Log;
 
 import com.facebook.FacebookRequestError;
+import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.Request.GraphUserCallback;
+import com.facebook.RequestAsyncTask;
 import com.facebook.RequestBatch;
 import com.facebook.Response;
 import com.facebook.Session;
@@ -27,6 +32,7 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.SharedPrefKeys;
+import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.FriendNewsItem;
@@ -412,5 +418,57 @@ public class FbUtil {
 	    requestBatch.executeAsync();
        
 	}
-	
+
+	public static void publishArtist(final Artist artist, final Fragment fragment) {
+	    Session session = Session.getActiveSession();
+
+        Bundle postParams = new Bundle();
+        postParams.putString("caption", artist.getName());
+        String description = artist.getDescription() == null ? " " : artist.getDescription();
+        postParams.putString("description", Html.fromHtml(description).toString());
+        
+        String link = artist.getArtistUrl();
+        if (link == null) {
+        	link = "http://eventseeker.com/artist/" + artist.getId();
+	    }
+        postParams.putString("link", link);
+
+        if (artist.doesValidImgUrlExist()) {
+        	String imgUrl = artist.getHighResImgUrl();
+        	if (imgUrl == null) {
+        		imgUrl = artist.getLowResImgUrl();
+        	}
+        	if (imgUrl == null) {
+        		imgUrl = artist.getMobiResImgUrl();
+        	}
+            postParams.putString("picture", imgUrl);
+        }
+
+        Request.Callback callback = new Request.Callback() {
+        	
+            public void onCompleted(Response response) {
+            	Log.d(TAG, "response = " + response.toString());
+            	String postId = null;
+
+                GraphObject graphObject = response.getGraphObject();
+                if (graphObject != null) {
+                	JSONObject graphResponse = graphObject.getInnerJSONObject();
+                    try {
+                        postId = graphResponse.getString("id");
+                        postId = postId.split("_")[1];
+                        
+                    } catch (JSONException e) {
+                        Log.i(TAG, "JSON error "+ e.getMessage());
+                    }
+                    
+                } else {
+                	Log.d(TAG, "graphObj = null");
+                }
+            }
+        };
+
+        Request request = new Request(session, "me/feed", postParams, HttpMethod.POST, callback);
+        RequestAsyncTask task = new RequestAsyncTask(request);
+        task.execute();
+	}
 }

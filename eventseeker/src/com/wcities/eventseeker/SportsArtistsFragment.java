@@ -5,6 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.core.Artist.Genre;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.FragmentUtil;
 
@@ -32,22 +35,35 @@ public class SportsArtistsFragment extends FragmentLoadableFromBackStack impleme
 
 	@Override
 	public void onClick(View v) {
+		Bundle args = new Bundle();
 		switch (v.getId()) {
-			case R.id.btnFeatured:
+			case R.id.btnNFL:
+				args.putSerializable(BundleKeys.GENRE, Genre.NFL);
+				args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_nfl);
 				break;
 				
-			case R.id.btnMusic:				
+			case R.id.btnNBA:
+				args.putSerializable(BundleKeys.GENRE, Genre.NBA);
+				args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_nba);
 				break;
 				
-			case R.id.btnComedy:
+			case R.id.btnNHL:
+				args.putSerializable(BundleKeys.GENRE, Genre.NHL);
+				args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_nhl);
 				break;
 				
-			case R.id.btnTheater:
+			case R.id.btnMLB:
+				args.putSerializable(BundleKeys.GENRE, Genre.MLB);
+				args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_mlb);
 				break;
 				
-			case R.id.btnSports:
+			case R.id.btnMLS:
+				args.putSerializable(BundleKeys.GENRE, Genre.MLS);
+				args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_mls);
 				break;
 		}
+		((MainActivity) FragmentUtil.getActivity(this))
+			.replaceByFragment(AppConstants.FRAGMENT_TAG_SELECTED_ARTIST_CATEGORY_FRAGMENT, args);
 	}
 
 }

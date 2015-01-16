@@ -528,9 +528,10 @@
     <dimen name="lnr_root_padding_fragment_follow_more_artists">10dp</dimen>
     <!-- common -->
     <dimen name="txt_size_widget_eventSeeker_btn_white">16sp</dimen>
-    <dimen name="txt_size_widget_eventSeeker_btn_alpha">20sp</dimen>
+    <dimen name="txt_size_widget_eventSeeker_btn_alpha">18sp</dimen>
     <dimen name="elevation_widget_eventSeeker_btn_white">15dp</dimen>
     <dimen name="elevation_widget_eventSeeker_btn_white_blue_stroke">30dp</dimen>
+    <dimen name="elevation_top_button">5dp</dimen>
     <!-- progress_bar_eventseeker_fixed_ht.xml -->
     <dimen name="rlt_lyt_root_ht_progress_bar_eventseeker_fixed_ht">70dp</dimen>
     <!-- list_item_discover.xml -->

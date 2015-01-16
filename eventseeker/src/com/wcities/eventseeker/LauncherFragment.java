@@ -335,8 +335,9 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 	}
 
 	protected void hideVideoViewAndShowBG() {
-		rltLayoutRoot.setBackgroundColor(
-			FragmentUtil.getResources(LauncherFragment.this).getColor(R.color.bg_screen_dark_blue));		
+		/*rltLayoutRoot.setBackgroundColor(
+			FragmentUtil.getResources(LauncherFragment.this).getColor(R.color.bg_screen_dark_blue));*/		
+		rltLayoutRoot.setBackgroundResource(R.drawable.ic_loading_page_img_bg);
 		srfvVideo.setVisibility(View.GONE);
 	}
 
