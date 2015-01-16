@@ -4,6 +4,7 @@
     <style name="ThemeOverlay.EventSeeker.Dark.ActionBar" parent="@style/Widget.AppCompat.Toolbar">
         <item name="android:background">?attr/colorPrimary</item>
     	<item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+    	<item name="titleMarginStart">@dimen/action_bar_title_margin_start</item>
     	<!-- <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item> -->
     </style>
     

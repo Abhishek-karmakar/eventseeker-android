@@ -144,4 +144,12 @@
     <!-- login/register fragment -->
     <dimen name="mar_l_r_get_started_fragment">70dp</dimen>
    	<dimen name="rlt_register_details_mar_r_get_started_fragment">30dp</dimen>
+   	
+   	<!-- fragment_event_details.xml -->
+    <!-- After scrolling to top, txtEvtTitle text must be in center vertical position exactly aligned with 
+    toolbar title (for good looking transition effect), hence following calculation is used to derive txt_evt_title_ht_event_details. 
+    Here, rlt_lyt_txt_evt_title_pad_b_event_details is fixed to 8dp, so to keep txtEvtTitle textview
+    in center vertical position, we leave aside 8dp more (for top). Hence ht comes out as 48 - 2*8 = 32dp 
+    txt_evt_title_ht_event_details = action_bar_ht - 2*rlt_lyt_txt_evt_title_pad_b_event_details -->
+    <dimen name="txt_evt_title_ht_event_details">32dp</dimen>
 </resources>

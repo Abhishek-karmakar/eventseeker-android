@@ -99,9 +99,6 @@ public class SelectedArtistCategoryFragment extends FragmentLoadableFromBackStac
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarColor(R.color.colorPrimaryDark);
-		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.VISIBLE);
-
 		View v = inflater.inflate(R.layout.fragment_following, null);
 		rltDummyLyt = v.findViewById(R.id.rltDummyLyt);
 		scrlVRootNoItemsFoundWithAction = (ScrollView) v.findViewById(R.id.scrlVRootNoItemsFoundWithAction);

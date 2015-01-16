@@ -17,7 +17,7 @@
         <View android:id="@+id/vStatusBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone" />
+            android:background="?android:attr/colorPrimaryDark" />
 
         <android.support.v4.widget.DrawerLayout
             android:id="@+id/drawer_layout"
@@ -41,6 +41,9 @@
                 android:orientation="vertical"
                 android:paddingTop="@dimen/common_t_mar_pad_for_all_layout" >
                 
+                <!-- When screen content starts from top (even visible behind translucent statusbar), i.e.,
+                when vStatusBar visibility is gone, we want that drawer should leave space at top equal to 
+                statusbar height & then it should start its navigation drawer which is fulfilled by this view -->
                 <View android:id="@+id/vDrawerStatusBar"
 			        android:layout_width="match_parent"
 			        android:layout_height="wrap_content"
@@ -52,6 +55,14 @@
         
     </LinearLayout>
     
+    <!-- Significance of the below view is in api level above v19 -->
+    <!-- Purpose of this layered status bar: 
+    vStatusBar used above is in lnrLytRoot, which means if it's gone, then entire screen content would be visible 
+    through translucent statusbar, but on some screens after specific amount of scrolling we want that even the 
+    statusbar color should be solid overlapping the screen content behind it, which can be done only if we have
+    this overlapping view vStatusBarLayered of statusbar size where we can apply required solid color. Note that 
+    we can't use vStatusBar for this purpose because then changing its visibility from gone to visible at runtime 
+    would just move content down by its height since it's container is linear layout -->
     <View android:id="@+id/vStatusBarLayered"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

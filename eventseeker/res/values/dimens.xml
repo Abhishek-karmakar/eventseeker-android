@@ -4,12 +4,13 @@
     <dimen name="padding_small">8dp</dimen>
     <dimen name="padding_medium">8dp</dimen>
     <dimen name="padding_large">16dp</dimen>
-    <!-- actionbar -->
+    <!-- toolbar.xml -->
     <dimen name="action_bar_title_txt_size">22sp</dimen>
     <dimen name="action_bar_ht">56dp</dimen>
     <dimen name="common_t_mar_pad_for_all_layout">@dimen/action_bar_ht</dimen>
     <dimen name="action_bar_tab_txt_size">17sp</dimen>
-    <dimen name="action_bar_elevation">10dp</dimen>
+    <dimen name="action_bar_elevation">4dp</dimen>
+    <dimen name="action_bar_title_margin_start">0dp</dimen>
     <!-- fragment_discover.xml -->
     <dimen name="rlt_layout_featured_evts_parent_ht_discover">250dp</dimen>
     <dimen name="rlt_layout_featured_evts_parent_margin_discover">8dp</dimen>
@@ -568,6 +569,23 @@
     <dimen name="txt_select_date_margin_b_dialog_discover_setting">6dp</dimen>
     <dimen name="txt_select_date_txt_size_dialog_discover_setting">@dimen/txt_search_radius_txt_size_dialog_discover_setting</dimen>
     <dimen name="v_dummy_ht_dialog_discover_setting">6dp</dimen>
+    <!-- fragment_event_details.xml -->
+    <dimen name="img_evt_ht_event_details">230dp</dimen>
+    <!-- rlt_lyt_txt_evt_title_pad_l_event_details = 56dp to keep it left aligned with toolbar title 
+    Ref: http://www.google.com/design/spec/layout/metrics-keylines.html#metrics-keylines-keylines-spacing, where
+    72dp is specified as actionbar title margin from screen left edge, but if we skip 16dp margin just before title,
+    then it comes out to be 56dp. Also note that we have set titleMarginStart for toolbar to 0 under styles.xml
+    for style="ThemeOverlay.EventSeeker.Dark.ActionBar" -->
+    <dimen name="rlt_lyt_txt_evt_title_pad_l_event_details">56dp</dimen>
+    <dimen name="rlt_lyt_txt_evt_title_pad_b_event_details">8dp</dimen>
+    <dimen name="rlt_lyt_txt_evt_title_pad_t_event_details">30dp</dimen>
+    <dimen name="txt_evt_title_txt_size_event_details">24sp</dimen>
+    <!-- After scrolling to top, txtEvtTitle text must be in center vertical position exactly aligned with 
+    toolbar title (for good looking transition effect), hence following calculation is used to derive txt_evt_title_ht_event_details. 
+    Here, rlt_lyt_txt_evt_title_pad_b_event_details is fixed to 8dp, so to keep txtEvtTitle textview
+    in center vertical position, we leave aside 8dp more (for top). Hence ht comes out as 56 - 2*8 = 40dp 
+    txt_evt_title_ht_event_details = action_bar_ht - 2*rlt_lyt_txt_evt_title_pad_b_event_details -->
+    <dimen name="txt_evt_title_ht_event_details">40dp</dimen>
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <!-- activity_bosch_main.xml -->
     <dimen name="b_root_navigation_drawer_w_main">210dp</dimen>

@@ -19,6 +19,7 @@ import android.os.Looper;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutParams;
@@ -64,12 +65,12 @@ import com.wcities.eventseeker.cache.BitmapCacheable;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.constants.TransitionName;
 import com.wcities.eventseeker.core.Category;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
-import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.custom.fragment.PublishEventFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.custom.view.RecyclerViewInterceptingVerticalScroll;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
@@ -85,7 +86,7 @@ import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
 
 public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack implements LoadItemsInBackgroundListener, 
-		DiscoverSettingChangedListener {
+		DiscoverSettingChangedListener, DrawerListener {
 	
 	private static final String TAG = DiscoverFragment.class.getSimpleName();
 	
@@ -328,9 +329,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	public void onStart() {
 		super.onStart();
 		//Log.d(TAG, "onStart()");
-		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this); 
-		ma.setVStatusBarVisibility(View.GONE);
-		ma.setVDrawerStatusBarVisibility(View.VISIBLE);
+		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.GONE, AppConstants.INVALID_ID);
 		
 		if (totalScrolledDy != UNSCROLLED) {
 			onScrolled(0, true);
@@ -353,8 +352,8 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		ma.setToolbarBg(ma.getResources().getColor(R.color.colorPrimary));
 		ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
-		ma.setVStatusBarLayeredVisibility(View.GONE);
-		ma.setVDrawerStatusBarVisibility(View.GONE);
+		ma.setVStatusBarVisibility(View.VISIBLE, R.color.colorPrimaryDark);
+		ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
 	}
 	
 	@Override
@@ -464,8 +463,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 			elevateAnim.setDuration(100);
 			elevateAnim.start();
 			
-			ma.setVStatusBarLayeredVisibility(View.VISIBLE);
-			ma.setVStatusBarLayeredColor(R.color.colorPrimaryDark);
+			ma.setVStatusBarLayeredVisibility(View.VISIBLE, R.color.colorPrimaryDark);
 			ma.setToolbarBg(ma.getResources().getColor(R.color.colorPrimary));
 			vPagerCatTitles.setBackgroundColor(ma.getResources().getColor(R.color.colorPrimary));
 			ma.setToolbarElevation(0);
@@ -481,7 +479,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 			elevateAnim.setDuration(100);
 			elevateAnim.start();
 			
-			ma.setVStatusBarLayeredVisibility(View.GONE);
+			ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
 			ma.setToolbarBg(Color.TRANSPARENT);
 			vPagerCatTitles.setBackgroundResource(R.drawable.bg_v_pager_cat_titles);
 			ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
@@ -525,31 +523,6 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		return title;
 	}
 
-	public void onDrawerOpened() {
-		//Log.d(TAG, "onDrawerOpened()");
-		isDrawerOpen = true;
-		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
-		ma.setToolbarBg(ma.getResources().getColor(R.color.colorPrimary));
-		ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
-		ma.setVStatusBarLayeredVisibility(View.VISIBLE);
-		ma.setVStatusBarLayeredColor(R.color.colorPrimaryDark);
-		title = ma.getResources().getString(R.string.title_discover);
-		ma.updateTitle(title);
-	}
-	
-	public void onDrawerClosed(View view) {
-		//Log.d(TAG, "onDrawerClosed()");
-		isDrawerOpen = false;
-		onScrolled(0, true);
-	}
-	
-	public void onDrawerSlide(View drawerView, float slideOffset) {
-		//Log.d(TAG, "onDrawerSlide(), slideOffset = " + slideOffset);
-		if (!isScrollLimitReached) {
-			((MainActivity)FragmentUtil.getActivity(this)).updateToolbarOnDrawerSlide(slideOffset);
-		}
-	}
-	
 	public void onCatTitleClicked(int item) {
 		if (item - 1 >= 0) {
 			vPagerCatTitles.setCurrentItem(item - 1, true);
@@ -795,6 +768,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 					        asyncLoadImg.loadImg(holder.imgEvent, ImgResolution.LOW, recyclerView, position, bitmapCacheable);
 					    }
 					}
+					ViewCompat.setTransitionName(holder.imgEvent, TransitionName.DISCOVER_IMG_EVT + position);
 					
 					Resources res = FragmentUtil.getResources(discoverFragment);
 					if (event.getSchedule().getBookingInfos().isEmpty()) {
@@ -939,11 +913,11 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 											 * slider is open (openPos == position); otherwise it won't do anything 
 											 * on clicking outside the slider when it's open
 											 */
-											onEventClick(holder, event);
+											onEventClick(holder, event, position);
 										}
 										
 									} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltLytRoot)) {
-										onEventClick(holder, event);
+										onEventClick(holder, event, position);
 									}
 									break;
 								}
@@ -1212,13 +1186,15 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 			}
 		}
 		
-		private void onEventClick(final ViewHolder holder, final Event event) {
+		private void onEventClick(final ViewHolder holder, final Event event, final int position) {
 			holder.rltLytRoot.setPressed(true);
 			discoverFragment.handler.postDelayed(new Runnable() {
 				
 				@Override
 				public void run() {
-					((EventListener) FragmentUtil.getActivity(discoverFragment)).onEventSelected(event);
+					List<View> sharedElements = new ArrayList<View>();
+					sharedElements.add(holder.imgEvent);
+					((EventListener) FragmentUtil.getActivity(discoverFragment)).onEventSelected(event, sharedElements);
 					holder.rltLytRoot.setPressed(false);
 				}
 			}, 200);
@@ -1364,5 +1340,40 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	public void onPublishPermissionGranted() {
 		//Log.d(TAG, "onPublishPermissionGranted()");
 		eventListAdapter.onPublishPermissionGranted();
+	}
+	
+	private void onDrawerOpened() {
+		isDrawerOpen = true;
+		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		ma.setToolbarBg(ma.getResources().getColor(R.color.colorPrimary));
+		ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
+		ma.setVStatusBarLayeredVisibility(View.VISIBLE, R.color.colorPrimaryDark);
+		title = ma.getResources().getString(R.string.title_discover);
+		ma.updateTitle(title);
+	}
+
+	@Override
+	public void onDrawerOpened(View arg0) {
+		onDrawerOpened();
+	}
+	
+	@Override
+	public void onDrawerClosed(View view) {
+		//Log.d(TAG, "onDrawerClosed()");
+		isDrawerOpen = false;
+		onScrolled(0, true);
+	}
+	
+	@Override
+	public void onDrawerSlide(View drawerView, float slideOffset) {
+		//Log.d(TAG, "onDrawerSlide(), slideOffset = " + slideOffset);
+		if (!isScrollLimitReached) {
+			((MainActivity)FragmentUtil.getActivity(this)).updateToolbarOnDrawerSlide(slideOffset);
+		}
+	}
+
+	@Override
+	public void onDrawerStateChanged(int arg0) {
+		// TODO Auto-generated method stub
 	}
 }

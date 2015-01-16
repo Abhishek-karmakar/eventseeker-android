@@ -27,7 +27,7 @@ import android.widget.Toast;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
-import com.wcities.eventseeker.EventDetailsFragment.EventDetailsFragmentChildListener;
+import com.wcities.eventseeker.EventDetailsFragment1.EventDetailsFragmentChildListener;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
 import com.wcities.eventseeker.api.Api;
@@ -631,7 +631,7 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 				event.setAttending(newAttending);
 				new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.event, event.getId(), event.getAttending().getValue(), 
                 		UserTrackingType.Add).execute();
-    			((EventDetailsFragment) getParentFragment()).onEventAttendingUpdated();
+    			((EventDetailsFragment1) getParentFragment()).onEventAttendingUpdated();
 				
 			} else {
 				if (eventSeekr.getFbUserId() != null) {
@@ -775,6 +775,6 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 	@Override
 	public void onPublishPermissionGranted() {
 		//Log.d(TAG, "onPublishPermissionGranted()");
-		((EventDetailsFragment)getParentFragment()).onEventAttendingUpdated();
+		((EventDetailsFragment1)getParentFragment()).onEventAttendingUpdated();
 	}
 }

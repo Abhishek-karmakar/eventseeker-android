@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.wcities.eventseeker.custom.view.ObservableScrollView 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/obsrScrlV"
+  	android:layout_width="match_parent" 
+  	android:layout_height="match_parent">
+  	
+    <RelativeLayout android:id="@+id/rltLyt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+  	
+	    <ImageView android:id="@+id/imgEvent"
+	      	android:layout_width="match_parent"
+	      	android:layout_height="@dimen/img_evt_ht_event_details"
+	      	android:scaleType="centerCrop"
+	      	android:contentDescription="Event Image"
+	      	android:src="@drawable/cat_900" />
+	    
+	    <RelativeLayout android:id="@+id/rltLytTxtEvtTitle"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignBottom="@id/imgEvent"
+	        android:paddingLeft="@dimen/rlt_lyt_txt_evt_title_pad_l_event_details"
+	    	android:paddingBottom="@dimen/rlt_lyt_txt_evt_title_pad_b_event_details"
+	    	android:paddingTop="@dimen/rlt_lyt_txt_evt_title_pad_t_event_details"
+	    	android:background="@drawable/bg_rlt_lyt_txt_evt_title_event_details" >
+	    
+	    	<TextView android:id="@+id/txtEvtTitle"
+	    	    android:layout_width="match_parent"
+	    	    android:layout_height="@dimen/txt_evt_title_ht_event_details"
+	    	    android:textColor="@android:color/white"
+	    	    android:text="Cut Copy"
+	    	    android:textSize="@dimen/txt_evt_title_txt_size_event_details"
+	    	    android:gravity="center_vertical" />
+	    	
+	    </RelativeLayout>
+    	
+    	<View android:id="@+id/vDummy"
+    	    android:layout_width="match_parent"
+    	    android:layout_height="800dp"
+    	    android:layout_below="@id/rltLytTxtEvtTitle"
+    	    android:background="#f00" />
+	    
+    </RelativeLayout>
+    
+</com.wcities.eventseeker.custom.view.ObservableScrollView>

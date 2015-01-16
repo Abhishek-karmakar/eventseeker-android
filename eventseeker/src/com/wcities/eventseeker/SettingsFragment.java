@@ -87,9 +87,6 @@ public class SettingsFragment extends ListFragmentLoadableFromBackStack {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.VISIBLE);
-		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarColor(R.color.colorPrimaryDark);
-		
 		View view = inflater.inflate(R.layout.fragment_settings, null);
 		return view;
 	}

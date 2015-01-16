@@ -1,5 +1,7 @@
 package com.wcities.eventseeker.bosch;
 
+import java.util.List;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -714,5 +716,9 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	public void setMarqueeEnabledActionBar(boolean isEnabled) {
 		txtActionBarTitle.setSelected(isEnabled);
 	}
-	
+
+	@Override
+	public void onEventSelected(Event event, List<View> sharedElements) {
+		// TODO Auto-generated method stub
+	}
 }

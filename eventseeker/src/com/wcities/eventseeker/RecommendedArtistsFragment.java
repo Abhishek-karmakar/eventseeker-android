@@ -129,9 +129,6 @@ public class RecommendedArtistsFragment extends FragmentLoadableFromBackStack im
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarColor(R.color.colorPrimaryDark);
-		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.VISIBLE);
-
 		View v = inflater.inflate(R.layout.fragment_following, null);
 		lstView = (ListView) v.findViewById(android.R.id.list);
 		

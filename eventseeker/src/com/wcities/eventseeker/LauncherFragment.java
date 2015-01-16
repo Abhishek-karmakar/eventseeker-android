@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
@@ -66,9 +67,11 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 	@Override
 	public void onStart() {
 		super.onStart();
+		//Log.d(TAG, "onStart()");
 		((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportActionBar().hide();
 
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		ma.setVStatusBarVisibility(View.GONE, AppConstants.INVALID_ID);
 		ma.setDrawerLockMode(true);
 		ma.setDrawerIndicatorEnabled(false);
 		ma.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME);
@@ -94,7 +97,6 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 		
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.GONE);
 		/**
 		 * The below line will lock the screen orientation in portrait mode
 		 */
@@ -145,10 +147,10 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 		//Log.d(TAG, "onStop()");
 		((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportActionBar().show();
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		ma.setVStatusBarVisibility(View.VISIBLE, R.color.colorPrimaryDark);
 		if (ma.isTabletAndInLandscapeMode()) {
 			ma.unHideDrawerList();
 		}
-		
 	}
 	
 	@Override

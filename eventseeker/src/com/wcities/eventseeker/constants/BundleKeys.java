@@ -92,6 +92,7 @@ public class BundleKeys {
 	public static final String DISABLE_DRAWER_INDICATOR_FROM_ONRESUME = "disableDrawerIndicatorFromOnresume";
 	
 	public static final String FRAGMENT_TRANSACTION_ANIM_IDS = "fragmentTransactionAnimIds";
+	public static final String SHARED_IMG_TRANSITION_NAME = "sharedImgTransitionName";
 
 	/**-------------------- starts for bosch ---------------------------**/
 	

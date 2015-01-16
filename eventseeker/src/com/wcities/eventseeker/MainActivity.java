@@ -2,6 +2,9 @@ package com.wcities.eventseeker;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -23,11 +26,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -44,6 +49,7 @@ import com.bosch.myspin.serversdk.MySpinException;
 import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.ford.syncV4.proxy.SyncProxyALM;
 import com.ford.syncV4.transport.TransportType;
+import com.nineoldandroids.animation.ObjectAnimator;
 import com.wcities.eventseeker.ChangeLocationFragment.ChangeLocationFragmentListener;
 import com.wcities.eventseeker.ConnectAccountsFragment.ConnectAccountsFragmentListener;
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
@@ -130,6 +136,8 @@ public class MainActivity extends ActionBarActivity implements
 
 	private View vStatusBar, vStatusBarLayered, vDrawerStatusBar;
 	private Toolbar toolbar;
+	
+	private List<View> sharedElements = new ArrayList<View>();
 	
 	public static MainActivity getInstance() {
 		return instance;
@@ -240,17 +248,18 @@ public class MainActivity extends ActionBarActivity implements
 				
 				public void onDrawerClosed(View view) {
 					super.onDrawerClosed(view);
+					
 					//getSupportActionBar().setTitle(mTitle);
-					if (currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_DISCOVER)) {
-						DiscoverFragment df = (DiscoverFragment) getSupportFragmentManager().findFragmentByTag(
-								currentContentFragmentTag);
-						df.onDrawerClosed(view);
+					Fragment fragment = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
+					if (fragment instanceof DrawerListener) {
+						((DrawerListener) fragment).onDrawerClosed(view);
 					}
 				}
 
 				/** Called when a drawer has settled in a completely open state. */
 				public void onDrawerOpened(View drawerView) {
 					super.onDrawerOpened(drawerView);
+					
 					// getSupportActionBar().setTitle(AppConstants.NAVIGATION_DRAWER_TITLE);
 					/**
 					 * On some devices drawer is partially overlapped by map. To
@@ -262,24 +271,21 @@ public class MainActivity extends ActionBarActivity implements
 									.equals(AppConstants.FRAGMENT_TAG_FULL_SCREEN_ADDRESS_MAP)) {
 						lnrLayoutRootNavDrawer.getParent().requestLayout();
 						// ((View)lnrLayoutRootNavDrawer.getParent()).invalidate();
-						
-					} else if (currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_DISCOVER)) {
-						DiscoverFragment df = (DiscoverFragment) getSupportFragmentManager().findFragmentByTag(
-								currentContentFragmentTag);
-						df.onDrawerOpened();
+					}
+					
+					Fragment fragment = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
+					if (fragment instanceof DrawerListener) {
+						((DrawerListener) fragment).onDrawerOpened(drawerView);
 					}
 				}
 				
 				@Override
 				public void onDrawerSlide(View drawerView, float slideOffset) {
 					super.onDrawerSlide(drawerView, slideOffset);
-					if (currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_DISCOVER)) {
-						DiscoverFragment df = (DiscoverFragment) getSupportFragmentManager().findFragmentByTag(
-								currentContentFragmentTag);
-						// on changing fragment to discover, it returns null for df
-						if (df != null) {
-							df.onDrawerSlide(drawerView, slideOffset);
-						}
+					
+					Fragment fragment = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
+					if (fragment instanceof DrawerListener) {
+						((DrawerListener) fragment).onDrawerSlide(drawerView, slideOffset);
 					}
 				}
 			};
@@ -567,6 +573,7 @@ public class MainActivity extends ActionBarActivity implements
 				
 			} else if (!isTabletAndInLandscapeMode) {
 				if (mDrawerToggle.isDrawerIndicatorEnabled()) {
+					//Log.d(TAG, "isDrawerIndicatorEnabled");
 					if (mDrawerLayout.isDrawerOpen(lnrLayoutRootNavDrawer)) {
 						mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
 
@@ -574,12 +581,22 @@ public class MainActivity extends ActionBarActivity implements
 						mDrawerLayout.openDrawer(lnrLayoutRootNavDrawer);
 					}
 
+				} else if (mDrawerLayout.isDrawerOpen(lnrLayoutRootNavDrawer)) {
+					/**
+					 * If user is on any screen apart from first level screens accessible from navigation drawer
+					 * & if user has opened drawer by swipe action (although drawer indicator is not enabled & 
+					 * back arrow is there on top left corner), then clicking on toolbar back icon should close 
+					 * drawer first instead of moving back to previous screen in the back stack.
+					 */
+					mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
+					
 				} else if ((getSupportActionBar().getDisplayOptions() & ActionBar.DISPLAY_HOME_AS_UP) != 0) {
 					/**
 					 * above condition is to prevent back action when user clicks actionbar's home button on
 					 * launcher screen. In that case it should have no action; otherwise execute onBackPressed()
 					 * as long as home as up indicator is shown.
 					 */
+					//Log.d(TAG, "onBackPressed");
 					onBackPressed();
 				}
 				
@@ -720,7 +737,6 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// Log.d(TAG, "onKeyDown()");
-			
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			if (AppConstants.FRAGMENT_TAG_WEB_VIEW.equals(currentContentFragmentTag)) {
 				WebViewFragment webViewFragment = (WebViewFragment) getSupportFragmentManager()
@@ -748,7 +764,20 @@ public class MainActivity extends ActionBarActivity implements
 					 */
 					getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM);
 				}
-				return super.onKeyDown(keyCode, event);
+				
+				if (!isTabletAndInLandscapeMode && mDrawerLayout.isDrawerOpen(lnrLayoutRootNavDrawer)) {
+					/**
+					 * If user is on any screen apart from first level screens accessible from navigation drawer
+					 * & if user has opened drawer by swipe action (although drawer indicator is not enabled & 
+					 * back arrow is there on top left corner), then clicking on device back button should close 
+					 * drawer first instead of moving back to previous screen in the back stack.
+					 */
+					mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
+					return true;
+					
+				} else {
+					return super.onKeyDown(keyCode, event);
+				}
 			}
 		}
 		
@@ -1146,10 +1175,26 @@ public class MainActivity extends ActionBarActivity implements
 		}
 		
 		if (replaceByFragmentTag.equals(AppConstants.FRAGMENT_TAG_LOGIN_SYNCING)) {
+			// add fragment instead of replacing so that behind its transparent background sign in/sign up screen remains visible
 			fragmentTransaction.add(R.id.content_frame, replaceBy, replaceByFragmentTag);
 			
 		} else {
 			fragmentTransaction.replace(R.id.content_frame, replaceBy, replaceByFragmentTag);
+		}
+		
+		if (!sharedElements.isEmpty()) {
+			getWindow().setAllowEnterTransitionOverlap(true);
+			//DiscoverFragment discoverFragment = (DiscoverFragment) getSupportFragmentManager().findFragmentByTag(AppConstants.FRAGMENT_TAG_DISCOVER);
+			//discoverFragment.setSharedElementReturnTransition(TransitionInflater.from(this).inflateTransition(R.transition.change_image_transform));
+			//discoverFragment.setExitTransition(TransitionInflater.from(this).inflateTransition(android.R.transition.explode));
+
+			replaceBy.setSharedElementEnterTransition(TransitionInflater.from(this).inflateTransition(R.transition.change_image_transform));
+			replaceBy.setSharedElementReturnTransition(TransitionInflater.from(this).inflateTransition(R.transition.change_image_transform));
+			//replaceBy.setEnterTransition(TransitionInflater.from(this).inflateTransition(android.R.transition.explode));
+
+			addSharedElements(fragmentTransaction);
+
+			sharedElements.clear();
 		}
 		
 		if (addToBackStack) {
@@ -1184,6 +1229,13 @@ public class MainActivity extends ActionBarActivity implements
 		}
 		
 		//Log.d(TAG, "back stack count = " + getSupportFragmentManager().getBackStackEntryCount());
+	}
+	
+	private void addSharedElements(FragmentTransaction ft) {
+		for (Iterator<View> iterator = sharedElements.iterator(); iterator.hasNext();) {
+			View sharedElement = iterator.next();
+			ft.addSharedElement(sharedElement, ViewCompat.getTransitionName(sharedElement));
+		}
 	}
 
 	private void updateTitle() {
@@ -1382,13 +1434,20 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public void onEventSelected(Event event) {
+		onEventSelected(event, null);
+	}
+	
+	@Override
+	public void onEventSelected(Event event, List<View> sharedElements) {
 		EventDetailsFragment eventDetailsFragment = new EventDetailsFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(BundleKeys.EVENT, event);
+		if (sharedElements != null) {
+			this.sharedElements = sharedElements;
+			args.putString(BundleKeys.SHARED_IMG_TRANSITION_NAME, ViewCompat.getTransitionName(sharedElements.get(0)));
+		}
 		eventDetailsFragment.setArguments(args);
-		selectNonDrawerItem(eventDetailsFragment,
-				AppConstants.FRAGMENT_TAG_EVENT_DETAILS, getResources()
-						.getString(R.string.title_event_details), true);
+		selectNonDrawerItem(eventDetailsFragment, AppConstants.FRAGMENT_TAG_EVENT_DETAILS, "", true);
 	}
 
 	public void onEventSelectedFromOtherTask(Event event, boolean addToBackStack) {
@@ -1400,8 +1459,7 @@ public class MainActivity extends ActionBarActivity implements
 		args.putBoolean(BundleKeys.IS_CALLED_FROM_OTHER_TASK, true);
 		eventDetailsFragment.setArguments(args);
 		selectNonDrawerItem(eventDetailsFragment,
-				AppConstants.FRAGMENT_TAG_EVENT_DETAILS, getResources()
-						.getString(R.string.title_event_details), addToBackStack);
+				AppConstants.FRAGMENT_TAG_EVENT_DETAILS, "", addToBackStack);
 	}
 	
 	/**
@@ -1662,11 +1720,11 @@ public class MainActivity extends ActionBarActivity implements
 			
 		} else if (fragment instanceof EventDetailsFragment) {
 			if (fragment.getArguments().containsKey(BundleKeys.IS_CALLED_FROM_OTHER_TASK)) {
-				onFragmentCalledFromOtherTaskResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_event_details),
+				onFragmentCalledFromOtherTaskResumed(AppConstants.INVALID_INDEX, ((EventDetailsFragment)fragment).getCurrentTitle(),
 						AppConstants.FRAGMENT_TAG_EVENT_DETAILS);
 
 			} else {
-				onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_event_details),
+				onFragmentResumed(AppConstants.INVALID_INDEX, ((EventDetailsFragment)fragment).getCurrentTitle(),
 						AppConstants.FRAGMENT_TAG_EVENT_DETAILS, false);
 			}
 
@@ -1940,49 +1998,49 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	/**
-	 * will set color to vStatusBar, if current api level is greater than v18
-	 * @param colorRes
-	 */
-	public void setVStatusBarColor(int colorRes) {
-		if (VersionUtil.isApiLevelAbove18() && vStatusBar != null) {
-			vStatusBar.setBackgroundColor(getResources().getColor(colorRes));
-		}
-	}
-	
-	public void setVStatusBarLayeredColor(int colorRes) {
-		if (VersionUtil.isApiLevelAbove18() && vStatusBarLayered != null) {
-			vStatusBarLayered.setBackgroundColor(getResources().getColor(colorRes));
-		}
-	}
-
-	/**
-	 * will set visibility to vStatusBar, if current api level is greater than v18
 	 * @param viewVisibility
+	 * @param colorRes Required only for viewVisibility = View.VISIBLE
 	 */
-	public void setVStatusBarVisibility(int viewVisibility) {
+	public void setVStatusBarVisibility(int viewVisibility, int colorRes) {
+		//Log.d(TAG, "setVStatusBarVisibility(), viewVisibility = " + viewVisibility);
 		if (VersionUtil.isApiLevelAbove18() && vStatusBar != null) {
 			vStatusBar.setVisibility(viewVisibility);
+			
+			if (viewVisibility == View.VISIBLE) {
+				vStatusBar.setBackgroundColor(getResources().getColor(colorRes));
+			}
+			
+			int drawerStatusBarVisibility = (viewVisibility == View.GONE) ? View.VISIBLE : View.GONE; 
+			vDrawerStatusBar.setVisibility(drawerStatusBarVisibility);
 		}
 	}
 	
-	public void setVStatusBarLayeredVisibility(int viewVisibility) {
+	/**
+	 * @param viewVisibility
+	 * @param colorRes Required only for viewVisibility = View.VISIBLE
+	 */
+	public void setVStatusBarLayeredVisibility(int viewVisibility, int colorRes) {
 		if (VersionUtil.isApiLevelAbove18() && vStatusBarLayered != null) {
 			vStatusBarLayered.setVisibility(viewVisibility);
+			
+			if (viewVisibility == View.VISIBLE) {
+				vStatusBarLayered.setBackgroundColor(getResources().getColor(colorRes));
+			}
 		}
 	}
 	
-	public void setVDrawerStatusBarVisibility(int viewVisibility) {
-		if (VersionUtil.isApiLevelAbove18() && vDrawerStatusBar != null) {
-			vDrawerStatusBar.setVisibility(viewVisibility);
-		}
-	}
-
 	public void setToolbarBg(int color) {
 		toolbar.setBackgroundColor(color);
 	}
 	
 	public void setToolbarElevation(float elevation) {
 		ViewCompat.setElevation(toolbar, elevation);
+	}
+	
+	public void animateToolbarElevation(float start, float end) {
+		ObjectAnimator elevateAnim = ObjectAnimator.ofFloat(toolbar, "elevation", 0.0f, end);
+		elevateAnim.setDuration(5000);
+		elevateAnim.start();
 	}
 	
 	public void updateToolbarOnDrawerSlide(float slideOffset) {
