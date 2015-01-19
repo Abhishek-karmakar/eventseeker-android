@@ -1,9 +1,9 @@
 package com.wcities.eventseeker;
 
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -22,6 +22,8 @@ import android.os.HandlerThread;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentManager.BackStackEntry;
+import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewCompat;
@@ -32,7 +34,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -71,6 +72,8 @@ import com.wcities.eventseeker.core.registration.Registration.RegistrationListen
 import com.wcities.eventseeker.gcm.GcmBroadcastReceiver.NotificationType;
 import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.interfaces.ConnectionFailureListener;
+import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionDestination;
+import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.interfaces.MapListener;
@@ -82,6 +85,8 @@ import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GPlusUtil;
 import com.wcities.eventseeker.util.VersionUtil;
+import com.wcities.eventseeker.util.ViewUtil;
+import com.wcities.eventseeker.viewdata.SharedElement;
 
 public class MainActivity extends ActionBarActivity implements
 		DrawerListFragmentListener, OnLocaleChangedListener, OnSettingsItemClickedListener,
@@ -137,7 +142,9 @@ public class MainActivity extends ActionBarActivity implements
 	private View vStatusBar, vStatusBarLayered, vDrawerStatusBar;
 	private Toolbar toolbar;
 	
-	private List<View> sharedElements = new ArrayList<View>();
+	//private List<SharedElement> sharedElements = new ArrayList<SharedElement>();
+	private boolean exitAnimCalled;
+	private int prevBackStackEntryCount;
 	
 	public static MainActivity getInstance() {
 		return instance;
@@ -145,14 +152,19 @@ public class MainActivity extends ActionBarActivity implements
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);		
+		super.onCreate(savedInstanceState);	
+		
+		if (!((EventSeekr)getApplication()).isTablet()) {
+			setRequestedOrientation(Configuration.ORIENTATION_PORTRAIT);
+		}
 		setContentView(R.layout.activity_main);
 		//Log.d(TAG, "onCreate()");
 
+		vStatusBar = findViewById(R.id.vStatusBar);
+		
 		if (VersionUtil.isApiLevelAbove18()) {
-			int statusBarHeight = getStatusBarHeight();
+			int statusBarHeight = ViewUtil.getStatusBarHeight(getResources());
 			
-			vStatusBar = findViewById(R.id.vStatusBar);
 			LinearLayout.LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, statusBarHeight);
 			vStatusBar.setLayoutParams(params);
 			
@@ -163,6 +175,9 @@ public class MainActivity extends ActionBarActivity implements
 			
 			vDrawerStatusBar = findViewById(R.id.vDrawerStatusBar);
 			vDrawerStatusBar.setLayoutParams(params);
+			
+		} else {
+			vStatusBar.setVisibility(View.GONE);
 		}
 		
 		/**
@@ -209,13 +224,37 @@ public class MainActivity extends ActionBarActivity implements
 		 * back stack fragments by below call.
 		 */
 		FragmentUtil.updateActivityReferenceInAllFragments(getSupportFragmentManager(), this);
+		
+		/**
+		 * Used to notify shared element transition source fragment when it's popped from back stack, 
+		 * because when we are using custom shared element transition we add fragment instead of replacing it
+		 * so that transition looks proper with initially transparent background of new fragment & old fragment being 
+		 * visible behind it. Due to adding fragment, no lifecycle methods will be called while popping it
+		 * back from backstack & hence we need this manual callback handling.
+		 */
+		getSupportFragmentManager().addOnBackStackChangedListener(new OnBackStackChangedListener() {
+			
+			@Override
+			public void onBackStackChanged() {
+				int newBackStackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
+				//Log.d(TAG, "onBackStackChanged(), newBackStackEntryCount = " + newBackStackEntryCount);
+
+				if (newBackStackEntryCount < prevBackStackEntryCount) {
+					Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+					if (fragment instanceof CustomSharedElementTransitionSource) {
+						((CustomSharedElementTransitionSource) fragment).onPoppedFromBackStack();
+					}
+				}
+				prevBackStackEntryCount = newBackStackEntryCount;
+			}
+		});
 
 		toolbar = (Toolbar) findViewById(R.id.toolbarForActionbar);
 	    setSupportActionBar(toolbar);
 	    
 	    if (VersionUtil.isApiLevelAbove18()) {
 		    FrameLayout.LayoutParams params = (android.widget.FrameLayout.LayoutParams) toolbar.getLayoutParams();
-		    params.setMargins(0, getStatusBarHeight(), 0, 0);
+		    params.setMargins(0, ViewUtil.getStatusBarHeight(getResources()), 0, 0);
 	    }
 	    
 		isDrawerIndicatorEnabled = true;
@@ -1174,7 +1213,8 @@ public class MainActivity extends ActionBarActivity implements
 			fragmentTransaction.setCustomAnimations(anims[0], anims[1], anims[2], anims[3]);
 		}
 		
-		if (replaceByFragmentTag.equals(AppConstants.FRAGMENT_TAG_LOGIN_SYNCING)) {
+		if (replaceByFragmentTag.equals(AppConstants.FRAGMENT_TAG_LOGIN_SYNCING) || 
+				((args != null && args.containsKey(BundleKeys.SHARED_ELEMENTS)))) {
 			// add fragment instead of replacing so that behind its transparent background sign in/sign up screen remains visible
 			fragmentTransaction.add(R.id.content_frame, replaceBy, replaceByFragmentTag);
 			
@@ -1182,20 +1222,21 @@ public class MainActivity extends ActionBarActivity implements
 			fragmentTransaction.replace(R.id.content_frame, replaceBy, replaceByFragmentTag);
 		}
 		
-		if (!sharedElements.isEmpty()) {
-			getWindow().setAllowEnterTransitionOverlap(true);
+		//if (!sharedElements.isEmpty()) {
+			//getWindow().setAllowEnterTransitionOverlap(true);
 			//DiscoverFragment discoverFragment = (DiscoverFragment) getSupportFragmentManager().findFragmentByTag(AppConstants.FRAGMENT_TAG_DISCOVER);
 			//discoverFragment.setSharedElementReturnTransition(TransitionInflater.from(this).inflateTransition(R.transition.change_image_transform));
 			//discoverFragment.setExitTransition(TransitionInflater.from(this).inflateTransition(android.R.transition.explode));
 
-			replaceBy.setSharedElementEnterTransition(TransitionInflater.from(this).inflateTransition(R.transition.change_image_transform));
-			replaceBy.setSharedElementReturnTransition(TransitionInflater.from(this).inflateTransition(R.transition.change_image_transform));
+			//replaceBy.setSharedElementEnterTransition(TransitionInflater.from(this).inflateTransition(R.transition.change_image_transform));
+			//replaceBy.setSharedElementReturnTransition(TransitionInflater.from(this).inflateTransition(R.transition.change_image_transform));
+			
 			//replaceBy.setEnterTransition(TransitionInflater.from(this).inflateTransition(android.R.transition.explode));
 
-			addSharedElements(fragmentTransaction);
+			//addSharedElements(fragmentTransaction);
 
-			sharedElements.clear();
-		}
+			//sharedElements.clear();
+		//}
 		
 		if (addToBackStack) {
 			fragmentTransaction.addToBackStack(null);
@@ -1231,12 +1272,12 @@ public class MainActivity extends ActionBarActivity implements
 		//Log.d(TAG, "back stack count = " + getSupportFragmentManager().getBackStackEntryCount());
 	}
 	
-	private void addSharedElements(FragmentTransaction ft) {
-		for (Iterator<View> iterator = sharedElements.iterator(); iterator.hasNext();) {
-			View sharedElement = iterator.next();
+	/*private void addSharedElements(FragmentTransaction ft) {
+		for (Iterator<SharedElement> iterator = sharedElements.iterator(); iterator.hasNext();) {
+			View sharedElement = ((SharedElement)iterator.next()).getView();
 			ft.addSharedElement(sharedElement, ViewCompat.getTransitionName(sharedElement));
 		}
-	}
+	}*/
 
 	private void updateTitle() {
 		/*
@@ -1438,13 +1479,14 @@ public class MainActivity extends ActionBarActivity implements
 	}
 	
 	@Override
-	public void onEventSelected(Event event, List<View> sharedElements) {
+	public void onEventSelected(Event event, List<SharedElement> sharedElements) {
 		EventDetailsFragment eventDetailsFragment = new EventDetailsFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(BundleKeys.EVENT, event);
 		if (sharedElements != null) {
-			this.sharedElements = sharedElements;
-			args.putString(BundleKeys.SHARED_IMG_TRANSITION_NAME, ViewCompat.getTransitionName(sharedElements.get(0)));
+			//this.sharedElements = sharedElements;
+			//args.putString(BundleKeys.SHARED_IMG_TRANSITION_NAME, sharedElements.get(0).getTransitionName());
+			args.putSerializable(BundleKeys.SHARED_ELEMENTS, (Serializable) sharedElements);
 		}
 		eventDetailsFragment.setArguments(args);
 		selectNonDrawerItem(eventDetailsFragment, AppConstants.FRAGMENT_TAG_EVENT_DETAILS, "", true);
@@ -1890,7 +1932,25 @@ public class MainActivity extends ActionBarActivity implements
 				 * This try catch will handle IllegalStateException which may occur if onBackPressed() on Super
 				 * has been called after the onSaveInstanceState().
 				 */
-				super.onBackPressed();
+				if (!isTabletAndInLandscapeMode) {
+					Fragment currentFrag = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
+					if (currentFrag instanceof CustomSharedElementTransitionDestination) {
+						if (exitAnimCalled) {
+				    		exitAnimCalled = false;
+				    		super.onBackPressed();
+				    		
+				    	} else {
+				    		exitAnimCalled = true;
+				    		((CustomSharedElementTransitionDestination)currentFrag).exitAnimation();
+				    	}
+						
+					} else {
+						super.onBackPressed();
+					}
+					
+				} else {
+					super.onBackPressed();
+				}
 				
 			} catch (IllegalStateException e) {
 				if (isCalledFromTwitterSection) {
@@ -1984,19 +2044,6 @@ public class MainActivity extends ActionBarActivity implements
 		lnrLayoutRootNavDrawer.setVisibility(View.VISIBLE);
 	}
 	
-	/**
-	 * Referred from link: http://mrtn.me/blog/2012/03/17/get-the-height-of-the-status-bar-in-android/
-	 * @return
-	 */
-	public int getStatusBarHeight() {
-		int result = 0;
-		int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-		if (resourceId > 0) {
-			result = getResources().getDimensionPixelSize(resourceId);
-		}
-		return result;
-	}
-
 	/**
 	 * @param viewVisibility
 	 * @param colorRes Required only for viewVisibility = View.VISIBLE

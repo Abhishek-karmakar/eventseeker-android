@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
@@ -23,7 +24,9 @@ import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutParams;
+import android.text.method.HideReturnsTransformationMethod;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -73,6 +76,7 @@ import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.custom.fragment.PublishEventFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.custom.view.RecyclerViewInterceptingVerticalScroll;
+import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
@@ -84,10 +88,14 @@ import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
+import com.wcities.eventseeker.viewdata.SharedElement;
+import com.wcities.eventseeker.viewdata.SharedElementPosition;
 
 public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack implements LoadItemsInBackgroundListener, 
-		DiscoverSettingChangedListener, DrawerListener {
+		DiscoverSettingChangedListener, DrawerListener, CustomSharedElementTransitionSource {
 	
+	private static final long serialVersionUID = 1L;
+
 	private static final String TAG = DiscoverFragment.class.getSimpleName();
 	
 	private static final String FRAGMENT_TAG_DISCOVER_SETTING_DIALOG = DiscoverSettingDialogFragment.class.getSimpleName();
@@ -128,6 +136,9 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	
 	private int year, month, day, miles = DEFAULT_SEARCH_RADIUS;
 	private String startDate, endDate;
+	
+	private int imgEventPadL, imgEventPadR, imgEventPadT, imgEventPadB;
+	private List<View> hiddenViews;
 	
 	private final HashMap<Integer, Integer> categoryImgs = new HashMap<Integer, Integer>() {
 		{
@@ -182,12 +193,14 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 			miles = args.getInt(BundleKeys.MILES);
 			updateStartEndDates();
 		}
+		
+		hiddenViews = new ArrayList<View>();
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// calculating here instead of onCreate() since it needs to be recalculated on orientation change
-		calculateHeights();
+		calculateDimensions();
 		final int orientation = FragmentUtil.getResources(this).getConfiguration().orientation;
 		
 		if (year == 0) {
@@ -383,11 +396,11 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private void calculateHeights() {
+	private void calculateDimensions() {
 		DisplayMetrics dm = new DisplayMetrics();
 		FragmentUtil.getActivity(this).getWindowManager().getDefaultDisplay().getMetrics(dm);
 		screenHt = VersionUtil.isApiLevelAbove18() ? dm.heightPixels : dm.heightPixels - 
-				((MainActivity) FragmentUtil.getActivity(this)).getStatusBarHeight();
+				ViewUtil.getStatusBarHeight(FragmentUtil.getResources(this));
 		
 		Resources res = FragmentUtil.getResources(this);
 		recyclerVDummyTopViewsHt = res.getDimensionPixelSize(R.dimen.v_pager_cat_titles_margin_t_discover) + 
@@ -399,6 +412,11 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 			// this is not the first call to onCreateView(); otherwise limitScrollAt would be 0
 			minRecyclerVHt = screenHt + limitScrollAt;
 		}
+		
+		imgEventPadL = res.getDimensionPixelSize(R.dimen.img_event_pad_l_list_item_discover);
+		imgEventPadR = res.getDimensionPixelSize(R.dimen.img_event_pad_r_list_item_discover);
+		imgEventPadT = res.getDimensionPixelSize(R.dimen.img_event_pad_t_list_item_discover);
+		imgEventPadB = res.getDimensionPixelSize(R.dimen.img_event_pad_b_list_item_discover);
 	}
 	
 	private void buildEvtCategories() {
@@ -416,7 +434,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		limitScrollAt = initialPagerTop - toolbarSize;
 		
 		if (VersionUtil.isApiLevelAbove18()) {
-			limitScrollAt -= ((MainActivity) FragmentUtil.getActivity(this)).getStatusBarHeight();
+			limitScrollAt -= ViewUtil.getStatusBarHeight(FragmentUtil.getResources(this));
 		}
 		
 		minRecyclerVHt = screenHt + limitScrollAt;
@@ -1192,9 +1210,19 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 				
 				@Override
 				public void run() {
-					List<View> sharedElements = new ArrayList<View>();
-					sharedElements.add(holder.imgEvent);
+					List<SharedElement> sharedElements = new ArrayList<SharedElement>();
+					
+					SharedElementPosition sharedElementPosition = new SharedElementPosition(discoverFragment.imgEventPadL, 
+							holder.itemView.getTop() + discoverFragment.imgEventPadT, 
+							holder.imgEvent.getWidth() - discoverFragment.imgEventPadL - discoverFragment.imgEventPadR, 
+							holder.imgEvent.getHeight() - discoverFragment.imgEventPadT - discoverFragment.imgEventPadB);
+					SharedElement sharedElement = new SharedElement(sharedElementPosition, holder.imgEvent);
+					sharedElements.add(sharedElement);
+					
 					((EventListener) FragmentUtil.getActivity(discoverFragment)).onEventSelected(event, sharedElements);
+					
+					discoverFragment.hideSharedElement(holder.imgEvent);
+					
 					holder.rltLytRoot.setPressed(false);
 				}
 			}, 200);
@@ -1375,5 +1403,25 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	@Override
 	public void onDrawerStateChanged(int arg0) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onPoppedFromBackStack() {
+		// to update statusbar visibility
+		onStart();
+		// to call onFragmentResumed(Fragment) of MainActivity (to update title, current fragment tag, etc.)
+		onResume();
+		
+		for (Iterator<View> iterator = hiddenViews.iterator(); iterator.hasNext();) {
+			View view = iterator.next();
+			view.setVisibility(View.VISIBLE);
+		}
+		hiddenViews.clear();
+	}
+
+	@Override
+	public void hideSharedElement(View view) {
+		view.setVisibility(View.INVISIBLE);
+		hiddenViews.add(view);
 	}
 }

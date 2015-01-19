@@ -50,6 +50,7 @@ import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
 import com.wcities.eventseeker.util.DeviceUtil;
+import com.wcities.eventseeker.viewdata.SharedElement;
 
 public class BoschMainActivity extends ActionBarActivity implements ReplaceFragmentListener, 
 		EventListener, ArtistListener, VenueListener, FragmentLoadedFromBackstackListener, 
@@ -718,7 +719,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	}
 
 	@Override
-	public void onEventSelected(Event event, List<View> sharedElements) {
+	public void onEventSelected(Event event, List<SharedElement> sharedElements) {
 		// TODO Auto-generated method stub
 	}
 }

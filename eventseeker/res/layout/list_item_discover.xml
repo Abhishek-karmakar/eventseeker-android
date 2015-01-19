@@ -58,7 +58,7 @@
 				android:ellipsize="end"
 				android:layout_below="@id/txtEvtTime"
 				android:gravity="bottom" />
-		    
+	        
 	    </RelativeLayout>
 	    
     </RelativeLayout>

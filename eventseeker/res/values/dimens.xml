@@ -571,7 +571,7 @@
     <dimen name="txt_select_date_txt_size_dialog_discover_setting">@dimen/txt_search_radius_txt_size_dialog_discover_setting</dimen>
     <dimen name="v_dummy_ht_dialog_discover_setting">6dp</dimen>
     <!-- fragment_event_details.xml -->
-    <dimen name="img_evt_ht_event_details">230dp</dimen>
+    <dimen name="img_event_ht_event_details">230dp</dimen>
     <!-- rlt_lyt_txt_evt_title_pad_l_event_details = 56dp to keep it left aligned with toolbar title 
     Ref: http://www.google.com/design/spec/layout/metrics-keylines.html#metrics-keylines-keylines-spacing, where
     72dp is specified as actionbar title margin from screen left edge, but if we skip 16dp margin just before title,
@@ -587,6 +587,10 @@
     in center vertical position, we leave aside 8dp more (for top). Hence ht comes out as 56 - 2*8 = 40dp 
     txt_evt_title_ht_event_details = action_bar_ht - 2*rlt_lyt_txt_evt_title_pad_b_event_details -->
     <dimen name="txt_evt_title_ht_event_details">40dp</dimen>
+    <dimen name="txt_evt_details_margin_l_event_details">15dp</dimen>
+    <dimen name="txt_evt_details_margin_t_event_details">25dp</dimen>
+    <dimen name="txt_evt_details_drawable_pad_event_details">20dp</dimen>
+    <dimen name="txt_evt_details_txt_size_event_details">16sp</dimen>
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <!-- activity_bosch_main.xml -->
     <dimen name="b_root_navigation_drawer_w_main">210dp</dimen>

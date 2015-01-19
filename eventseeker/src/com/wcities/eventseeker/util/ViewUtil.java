@@ -114,6 +114,33 @@ public class ViewUtil {
 	    return (x > viewX && x < (viewX + view.getWidth())) && (y > viewY && y < (viewY + view.getHeight()));
 	}
 	
+	/**
+	 * @param view
+	 * @param res
+	 * @return int[] containing left & top co-ordinates. It subtracts statusbar height for api <= 18
+	 */
+	/*public static int[] getLocation(View view, Resources res) {
+		int[] location = new int[2];
+		view.getLocationOnScreen(location);
+		if (!VersionUtil.isApiLevelAbove18()) {
+			location[1] -= getStatusBarHeight(res);
+		}
+		return location;
+	}*/
+	
+	/**
+	 * Referred from link: http://mrtn.me/blog/2012/03/17/get-the-height-of-the-status-bar-in-android/
+	 * @return
+	 */
+	public static int getStatusBarHeight(Resources res) {
+		int result = 0;
+		int resourceId = res.getIdentifier("status_bar_height", "dimen", "android");
+		if (resourceId > 0) {
+			result = res.getDimensionPixelSize(resourceId);
+		}
+		return result;
+	}
+	
 	public static class AnimationUtil {
 
 		public static void startRotationToView(View view, float toDegrees, 
