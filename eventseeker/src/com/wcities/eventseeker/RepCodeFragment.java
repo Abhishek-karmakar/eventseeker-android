@@ -114,7 +114,7 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 			Resources res = eventSeekr.getResources();
 			GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(RepCodeFragment.this,
 					res.getString(R.string.rep_code_submission), repCodeResponse.getMsg(res), 
-					res.getString(R.string.ok), null);
+					res.getString(R.string.ok), null, false);
 			generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(RepCodeFragment.this))
 					.getSupportFragmentManager(), AppConstants.DIALOG_FRAGMENT_TAG_SUBMIT_REP_CODE_RESPONSE);
 			isSubmitting = false;

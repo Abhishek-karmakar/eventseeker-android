@@ -792,7 +792,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 						newsItemPendingPublishChkBoxWantToGo = chkBoxWantToGo;
 						fbCallCountForSameEvt = 0;
 						FbUtil.handlePublishFriendNewsItem(FriendsActivityFragment.this, FriendsActivityFragment.this, 
-								AppConstants.PERMISSIONS_FB_PUBLISH_EVT, AppConstants.REQ_CODE_FB_PUBLISH_EVT, item);
+								AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, item);
 						
 					} else if (eventSeekr.getGPlusUserId() != null) {
 						item.setNewUserAttending(userAttending);
@@ -842,7 +842,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 			 */
 			if (fbCallCountForSameEvt < MAX_FB_CALL_COUNT_FOR_SAME_EVT) {
 				FbUtil.call(session, state, exception, FriendsActivityFragment.this, FriendsActivityFragment.this, 
-						AppConstants.PERMISSIONS_FB_PUBLISH_EVT, AppConstants.REQ_CODE_FB_PUBLISH_EVT, 
+						AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, 
 						newsItemPendingPublish);
 				
 			} else {
@@ -1122,4 +1122,32 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	public String getScreenName() {
 		return "Friend News Screen";
 	}    	
+	
+	
+	/***
+	 * Tracking logic:
+	 * EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(discoverFragment).getApplication();
+					if (event.getAttending() == Attending.SAVED) {
+						event.setAttending(Attending.NOT_GOING);
+						new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.event, event.getId(), 
+								event.getAttending().getValue(), UserTrackingType.Add).execute();
+		    			updateImgSaveSrc(holder, event, FragmentUtil.getResources(discoverFragment));
+						
+					} else {
+						discoverFragment.event = eventPendingPublish = event;
+						holderPendingPublish = holder;
+						
+						if (eventSeekr.getFbUserId() != null) {
+							fbCallCountForSameEvt = 0;
+							event.setNewAttending(Attending.SAVED);
+							FbUtil.handlePublishEvent(discoverFragment, discoverFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
+									AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
+							
+						} else if (eventSeekr.getGPlusUserId() != null) {
+							event.setNewAttending(Attending.SAVED);
+							discoverFragment.handlePublishEvent();
+						}
+					}
+				}
+	 */
 }

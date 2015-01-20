@@ -25,6 +25,8 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.facebook.Session;
+import com.facebook.SessionState;
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.RadioGroupDialogFragment.OnValueSelectedListener;
@@ -41,7 +43,7 @@ import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Artist.Attending;
-import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
+import com.wcities.eventseeker.custom.fragment.PublishArtistFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
 import com.wcities.eventseeker.interfaces.LoadArtistsListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
@@ -49,10 +51,10 @@ import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class RecommendedArtistsFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
+public class RecommendedArtistsFragment extends PublishArtistFragmentLoadableFromBackStack implements OnClickListener, 
 		LoadArtistsListener, LoadItemsInBackgroundListener, DialogBtnClickListener, ArtistTrackingListener {
 
-	private static final String TAG = FollowingParentFragment.class.getName();
+	private static final String TAG = RecommendedArtistsFragment.class.getName();
 
 	private static final String DIALOG_ARTIST_SAVED = "dialogArtistSaved";
 	private static final String DIALOG_FOLLOW_ALL = "dialogFollowAll";
@@ -109,6 +111,10 @@ public class RecommendedArtistsFragment extends FragmentLoadableFromBackStack im
 
 	private SortRecommendedArtist sortBy = SortRecommendedArtist.score;
 
+	private int fbCallCountForSameArtist = 0;
+
+	private Artist artistToBeSaved;
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -151,7 +157,7 @@ public class RecommendedArtistsFragment extends FragmentLoadableFromBackStack im
 					 */
 					String.format(res.getString(R.string.dialog_msg_follow_all), artistList.size() - 1),
 					res.getString(R.string.dialog_btn_no),
-					res.getString(R.string.dialog_btn_yes));
+					res.getString(R.string.dialog_btn_yes), false);
 				generalDialogFragment.show(
 					((ActionBarActivity) FragmentUtil.getActivity(RecommendedArtistsFragment.this))
 					.getSupportFragmentManager(), DIALOG_FOLLOW_ALL);				
@@ -395,13 +401,16 @@ public class RecommendedArtistsFragment extends FragmentLoadableFromBackStack im
 			//This is for Remove Artist Dialog
 			myArtistListAdapter.notifyDataSetChanged();
 		}*/
-		Log.d(TAG, "doNegativeClick");
+		//Log.d(TAG, "doNegativeClick");
 		if (dialogTag.contains(DIALOG_ARTIST_SAVED)) {
 			String strId = dialogTag.substring(dialogTag.indexOf(":") + 1);
-			Log.d(TAG, "strId : " + strId);
+			//Log.d(TAG, "strId : " + strId);
 			for (Artist artist : artistList) {
 				if (artist != null && artist.getId() == Integer.parseInt(strId)) {					
-					FbUtil.publishArtist(artist, this);
+					fbCallCountForSameArtist = 0;
+					artistToBeSaved = artist;
+					FbUtil.handlePublishArtist(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
+							AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, artist);
 					break;
 				}
 			}
@@ -414,23 +423,42 @@ public class RecommendedArtistsFragment extends FragmentLoadableFromBackStack im
 		if (artist.getAttending() == Attending.NotTracked) {
 			artist.updateAttending(Attending.Tracked, eventseekr);
 			new UserTracker(Api.OAUTH_TOKEN, eventseekr, UserTrackingItemType.artist, artist.getId()).execute();
-			//The below notifyDataSetChange will change the status of following Checkbox for current Artist
+			//The below notifyDataSetChange will change the status of following CheckBox for current Artist
 			myArtistListAdapter.notifyDataSetChanged();
 			
-			GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
-					this,
-					res.getString(R.string.follow_artist),  
-					res.getString(R.string.artist_saved),  
-					res.getString(R.string.btn_Ok),
-					null);
-			generalDialogFragment.show(
-					((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), 
+			GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(this, 
+					res.getString(R.string.follow_artist), res.getString(R.string.artist_saved));
+			generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), 
 						DIALOG_ARTIST_SAVED + ":" + artist.getId());
 			
 		} else {			
 			artist.updateAttending(Attending.NotTracked, eventseekr);
 			new UserTracker(Api.OAUTH_TOKEN, eventseekr, UserTrackingItemType.artist, artist.getId(), 
 					Attending.NotTracked.getValue(), UserTrackingType.Edit).execute();
+		}
+	}
+
+	@Override
+	public void onPublishPermissionGranted() {
+		
+	}
+
+	@Override
+	public void call(Session session, SessionState state, Exception exception) {
+		if (artistToBeSaved == null) {
+			return;
+		}
+		fbCallCountForSameArtist++;
+		/**
+		 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
+		 */
+		if (fbCallCountForSameArtist < AppConstants.MAX_FB_CALL_COUNT_FOR_SAME_EVT_OR_ART) {
+			FbUtil.call(session, state, exception, this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
+					AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, artistToBeSaved);
+			
+		} else {
+			fbCallCountForSameArtist = 0;
+			setPendingAnnounce(false);
 		}
 	}
 

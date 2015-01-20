@@ -271,7 +271,7 @@ public class PandoraFragment extends FragmentLoadableFromBackStack implements On
 
 				if (doesErrorExist) {
 					GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(PandoraFragment.this,
-							"Error", errorMsg, "Ok", null);
+							"Error", errorMsg, "Ok", null, false);
 					generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(PandoraFragment.this))
 							.getSupportFragmentManager(), DIALOG_FRAGMENT_TAG_ERROR);
 				}

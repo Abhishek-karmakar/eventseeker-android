@@ -84,8 +84,10 @@ public class BundleKeys {
 	
 	public static final String DIALOG_TITLE = "dialogTitle";
 	public static final String DIALOG_MSG = "dialogMsg";
+	public static final String DIALOG_FB_SHARE = "dialogFbShare";
 	public static final String BTN1_TXT = "btn1Txt";
 	public static final String BTN2_TXT = "btn2Txt";
+	public static final String DIALOG_IS_CANCELLABLE = "dialogIsCancellable";
 	public static final String DIALOG_TAG = "dialogTag";
 	
 	public static final String SETTINGS_ITEM = "settingsItem";

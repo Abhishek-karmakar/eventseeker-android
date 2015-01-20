@@ -173,7 +173,7 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 								res.getString(R.string.remove_artist),  
 								res.getString(R.string.are_you_sure_you_want_to_remove_this_artist),  
 								res.getString(R.string.btn_cancel),  
-								res.getString(R.string.btn_Ok));
+								res.getString(R.string.btn_Ok), false);
 						generalDialogFragment.show(((ActionBarActivity) mContext).getSupportFragmentManager(), "" + position);
 						
 					} else {

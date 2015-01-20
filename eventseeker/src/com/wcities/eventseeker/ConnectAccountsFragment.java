@@ -531,7 +531,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
 						ConnectAccountsFragment.this,
 						res.getString(R.string.are_you_sure), res.getString(R.string.connecting_account_allow_us), 
-						TXT_BTN_CANCEL_DIALOG, TXT_BTN_SKIP_DIALOG);
+						TXT_BTN_CANCEL_DIALOG, TXT_BTN_SKIP_DIALOG, false);
 				generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(ConnectAccountsFragment.this))
 						.getSupportFragmentManager(), DIALOG_FRAGMENT_TAG_SKIP);
 			}

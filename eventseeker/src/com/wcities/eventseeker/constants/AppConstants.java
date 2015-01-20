@@ -109,9 +109,9 @@ public class AppConstants {
 	
 	public static final List<String> PERMISSIONS_FB_LOGIN = Arrays.asList("email");
 	// List of additional write permissions being requested
-	public static final List<String> PERMISSIONS_FB_PUBLISH_EVT = Arrays.asList("publish_actions");
+	public static final List<String> PERMISSIONS_FB_PUBLISH_EVT_OR_ART = Arrays.asList("publish_actions");
 	// Request code for facebook reauthorization requests. 
-	public static final int REQ_CODE_FB_PUBLISH_EVT = 100;
+	public static final int REQ_CODE_FB_PUBLISH_EVT_OR_ART = 100;
 	public static final int REQ_CODE_FB_LOGIN_EMAIL = 101;
 	public static final int REQ_CODE_GOOGLE_PLUS_PUBLISH_EVT = 200;
 	
@@ -126,7 +126,7 @@ public class AppConstants {
 	 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
 	 * This is the max limit for the looping
 	 */
-	public static final int MAX_FB_CALL_COUNT_FOR_SAME_EVT = 20;
+	public static final int MAX_FB_CALL_COUNT_FOR_SAME_EVT_OR_ART = 20;
 	
 	public static final String TAG_PROGRESS_INDICATOR = "progressIndicator";
 	public static final String TAG_CONTENT = "content";

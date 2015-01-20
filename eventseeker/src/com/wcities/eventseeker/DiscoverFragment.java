@@ -1243,8 +1243,8 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 						if (eventSeekr.getFbUserId() != null) {
 							fbCallCountForSameEvt = 0;
 							event.setNewAttending(Attending.SAVED);
-							FbUtil.handlePublishEvent(discoverFragment, discoverFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT, 
-									AppConstants.REQ_CODE_FB_PUBLISH_EVT, event);
+							FbUtil.handlePublishEvent(discoverFragment, discoverFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
+									AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
 							
 						} else if (eventSeekr.getGPlusUserId() != null) {
 							event.setNewAttending(Attending.SAVED);
@@ -1289,9 +1289,9 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 			/**
 			 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
 			 */
-			if (fbCallCountForSameEvt < AppConstants.MAX_FB_CALL_COUNT_FOR_SAME_EVT) {
-				FbUtil.call(session, state, exception, discoverFragment, discoverFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT, 
-						AppConstants.REQ_CODE_FB_PUBLISH_EVT, eventPendingPublish);
+			if (fbCallCountForSameEvt < AppConstants.MAX_FB_CALL_COUNT_FOR_SAME_EVT_OR_ART) {
+				FbUtil.call(session, state, exception, discoverFragment, discoverFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
+						AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, eventPendingPublish);
 				
 			} else {
 				fbCallCountForSameEvt = 0;

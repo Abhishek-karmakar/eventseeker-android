@@ -425,8 +425,8 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 				eventPendingPublishChkBoxGoing = chkBoxGoing;
 				eventPendingPublishChkBoxWantToGo = chkBoxWantToGo;
 				fbCallCountForSameEvt = 0;
-				FbUtil.handlePublishEvent(fbPublishListener, (Fragment) mListener, AppConstants.PERMISSIONS_FB_PUBLISH_EVT, 
-						AppConstants.REQ_CODE_FB_PUBLISH_EVT, event);
+				FbUtil.handlePublishEvent(fbPublishListener, (Fragment) mListener, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
+						AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
 				
 			} else if (eventSeekr.getGPlusUserId() != null) {
 				event.setNewAttending(attending);
@@ -497,8 +497,8 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 		 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
 		 */
 		if (fbCallCountForSameEvt < MAX_FB_CALL_COUNT_FOR_SAME_EVT) {
-			FbUtil.call(session, state, exception, fbPublishListener, (Fragment) mListener, AppConstants.PERMISSIONS_FB_PUBLISH_EVT, 
-	    			AppConstants.REQ_CODE_FB_PUBLISH_EVT, eventPendingPublish);
+			FbUtil.call(session, state, exception, fbPublishListener, (Fragment) mListener, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
+	    			AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, eventPendingPublish);
 			
 		} else {
 			fbCallCountForSameEvt = 0;

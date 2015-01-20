@@ -74,6 +74,7 @@ public class UserInfoApiJSONParser {
 	private static final String KEY_CITY = "city";
 	private static final String KEY_IMAGE_ATTRIBUTION = "image_attribution";
 	private static final String KEY_TOTAL = "total";
+	private static final String KEY_URL = "url";
 
 	private static final String KEY_ONTOUR = "ontour";
 
@@ -553,6 +554,9 @@ public class UserInfoApiJSONParser {
 			artist.setOntour(true);
 		}
 		artist.setImageAttribution(getImageAttribution(jsonObject.getJSONObject(KEY_IMAGE_ATTRIBUTION)));
+		if (jsonObject.has(KEY_URL)) {
+			artist.setArtistUrl(jsonObject.getString(KEY_URL));
+		}
 		return artist;
 	}
 	

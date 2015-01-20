@@ -212,20 +212,20 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 		try {
 			if (msgCode == UserInfoApiJSONParser.MSG_CODE_CHK_EMAIL_TO_RESET_PWD) {
 				GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(this,
-						FragmentUtil.getResources(this).getString(R.string.dialog_msg_chk_email_to_reset_pwd), "Ok");
+						FragmentUtil.getResources(this).getString(R.string.dialog_msg_chk_email_to_reset_pwd), "Ok", false);
 				generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), 
 						DIALOG_FRAGMENT_TAG_CHK_EMAIL);
 			
 			} else if (msgCode == UserInfoApiJSONParser.MSG_CODE_USER_EMAIL_DOESNT_EXIST) {
 				GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(this,
-						FragmentUtil.getResources(this).getString(R.string.dialog_msg_user_email_doesnt_exist), "Ok");
+						FragmentUtil.getResources(this).getString(R.string.dialog_msg_user_email_doesnt_exist), "Ok", false);
 				generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), 
 						DIALOG_FRAGMENT_TAG_CHK_EMAIL);
 				
 			} else if (msgCode == UserInfoApiJSONParser.MSG_CODE_UNSUCCESS) {
 				GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(this,
 						FragmentUtil.getResources(this).getString(R.string.error_title), 
-						FragmentUtil.getResources(this).getString(R.string.error_unknown_error), "Ok", null);
+						FragmentUtil.getResources(this).getString(R.string.error_unknown_error), "Ok", null, false);
 				generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), DIALOG_FRAGMENT_TAG_UNKNOWN_ERROR);
 			}
 			
@@ -294,7 +294,7 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 			GeneralDialogFragment generalDialogFragment 
 				= GeneralDialogFragment.newInstance(this,
 					FragmentUtil.getResources(this).getString(R.string.error_title), 
-					FragmentUtil.getResources(this).getString(R.string.error_email_or_password_incorrect), "Ok", null);
+					FragmentUtil.getResources(this).getString(R.string.error_email_or_password_incorrect), "Ok", null, false);
 			generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), 
 					DIALOG_FRAGMENT_TAG_EMAIL_OR_PASSWORD_INCORRECT);
 		
@@ -303,7 +303,7 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 			GeneralDialogFragment generalDialogFragment 
 				= GeneralDialogFragment.newInstance(this,
 					FragmentUtil.getResources(this).getString(R.string.error_title), 
-					FragmentUtil.getResources(this).getString(R.string.error_unknown_error), "Ok", null);
+					FragmentUtil.getResources(this).getString(R.string.error_unknown_error), "Ok", null, false);
 			generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), 
 					DIALOG_FRAGMENT_TAG_UNKNOWN_ERROR);
 		}

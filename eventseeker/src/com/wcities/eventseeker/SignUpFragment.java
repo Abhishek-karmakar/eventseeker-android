@@ -430,7 +430,7 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 				|| errorCode == UserInfoApiJSONParser.MSG_CODE_UNSUCCESS) {
 			GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(this,
 					FragmentUtil.getResources(this).getString(R.string.error_title), 
-					FragmentUtil.getResources(this).getString(R.string.error_unknown_error), "Ok", null);
+					FragmentUtil.getResources(this).getString(R.string.error_unknown_error), "Ok", null, false);
 			generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), 
 					DIALOG_FRAGMENT_TAG_UNKNOWN_ERROR);
 			

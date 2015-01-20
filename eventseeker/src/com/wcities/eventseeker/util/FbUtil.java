@@ -1,6 +1,5 @@
 package com.wcities.eventseeker.util;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.json.JSONException;
@@ -41,6 +40,12 @@ import com.wcities.eventseeker.interfaces.PublishListener;
 public class FbUtil {
 
 	private static final String TAG = FbUtil.class.getName();
+
+	private static final int FB_ERROR_CODE_368 = 368;//Your message couldn't be sent because it includes content 
+		//that other people on Facebook have reported as abusive.
+
+	private static final int FB_ERROR_CODE_341 = 341;//Feed action request limit reached.
+
 
 	public static boolean hasUserLoggedInBefore(Context context) {
 		//Log.d(TAG, "hasUserLoggedInBefore()");
@@ -107,11 +112,20 @@ public class FbUtil {
 	
 	public static void handlePublishEvent(PublishListener fbPublishListener, Fragment fragment, 
 			List<String> permissions, int requestCode, Event event) {
-		Log.d(TAG, "handlePublish()");
+		Log.d(TAG, "handlePublishEvent()");
 		if (canPublishNow(fbPublishListener, fragment, permissions, requestCode)) {
 			event.updateAttendingToNewAttending();
 			fbPublishListener.onPublishPermissionGranted();
 			publishEvent(event, fragment);
+		}
+	}
+	
+	public static void handlePublishArtist(PublishListener fbPublishListener, Fragment fragment, 
+			List<String> permissions, int requestCode, Artist artist) {
+		Log.d(TAG, "handlePublishArtist()");
+		if (canPublishNow(fbPublishListener, fragment, permissions, requestCode)) {
+			fbPublishListener.onPublishPermissionGranted();
+			publishArtist(artist, fragment, true);
 		}
 	}
 	
@@ -200,6 +214,25 @@ public class FbUtil {
 	}
 	
 	public static void call(Session session, SessionState state, Exception exception, 
+			PublishListener fbPublishListener, Fragment fragment, List<String> permissions, int requestCode, Artist artist) {
+		Log.d(TAG, "call(): state = " + state);
+		if (session != null && session.isOpened()) {
+			if (state.equals(SessionState.OPENED)) {
+				Log.d(TAG, "OPENED");
+				// Session opened 
+				// so try publishing once more.
+				sessionOpened(fbPublishListener, fragment, permissions, requestCode, artist);
+				
+			} else if (state.equals(SessionState.OPENED_TOKEN_UPDATED)) {
+				Log.d(TAG, "OPENED_TOKEN_UPDATED");
+				// Session updated with new permissions
+				// so try publishing once more.
+				tokenUpdated(fbPublishListener, fragment, permissions, requestCode, artist);
+			}
+		}
+	}
+	
+	public static void call(Session session, SessionState state, Exception exception, 
 			PublishListener fbPublishListener, Fragment fragment, 
 			List<String> permissions, int requestCode, Event event) {
 		Log.d(TAG, "call(): state = " + state);
@@ -244,6 +277,17 @@ public class FbUtil {
 	}
 	
 	private static void sessionOpened(PublishListener fbPublishListener, Fragment fragment, 
+			List<String> permissions, int requestCode, Artist artist) {
+		Log.d(TAG, "sessionOpened()");
+		// Check if a publish action is in progress
+		// awaiting a successful reauthorization
+		if (fbPublishListener.isPendingAnnounce()) {
+			// Publish the action
+			handlePublishArtist(fbPublishListener, fragment, permissions, requestCode, artist);
+		}
+	}
+	
+	private static void sessionOpened(PublishListener fbPublishListener, Fragment fragment, 
 			List<String> permissions, int requestCode, Event event) {
 		Log.d(TAG, "sessionOpened()");
 		// Check if a publish action is in progress
@@ -265,6 +309,27 @@ public class FbUtil {
 	    }
 	}
 	
+	/**
+	 * Called when additional permission request is completed successfully.
+	 */
+	private static void tokenUpdated(PublishListener fbPublishListener, Fragment fragment, 
+			List<String> permissions, int requestCode, Artist artist) {
+		Log.d(TAG, "tokenUpdated()");
+		// Check if a publish action is in progress
+		// awaiting a successful reauthorization
+		if (fbPublishListener.isPendingAnnounce()) {
+			
+			if (hasPermission(permissions)) {
+				// Publish the action
+				handlePublishArtist(fbPublishListener, fragment, permissions, requestCode, artist);
+				
+			} else {
+				// user has denied the permission
+				fbPublishListener.setPendingAnnounce(false);
+			}
+		}
+	}
+
 	/**
 	 * Called when additional permission request is completed successfully.
 	 */
@@ -418,29 +483,43 @@ public class FbUtil {
 	    requestBatch.executeAsync();
        
 	}
-
-	public static void publishArtist(final Artist artist, final Fragment fragment) {
+	/**
+	 * 19-01-2015:
+	 * NOTE:
+	 * Added addLink parameter. Because in some Artist while posting to FB. It was giving error code : 100
+	 * saying 'Invalid Parameter' on debugging found without 'Link' those artists were getting posted without
+	 * link. So, added this parameter and passing it 'false' from callback So, that atleast other data gets posted.
+	 * @param artist
+	 * @param fragment
+	 * @param addLink
+	 */
+	public static void publishArtist(final Artist artist, final Fragment fragment, boolean addLink) {
 	    Session session = Session.getActiveSession();
 
         Bundle postParams = new Bundle();
-        postParams.putString("caption", artist.getName());
+        postParams.putString("caption", "EVENTSEEKER.COM");
         String description = artist.getDescription() == null ? " " : artist.getDescription();
-        postParams.putString("description", Html.fromHtml(description).toString());
-        
+        description = Html.fromHtml(description).toString();
+        postParams.putString("description", description);
+        //Log.d(TAG, "description : " + description);
         String link = artist.getArtistUrl();
         if (link == null) {
         	link = "http://eventseeker.com/artist/" + artist.getId();
+        	//Log.d(TAG, "link created : " + link);
 	    }
-        postParams.putString("link", link);
-
+        //if (addLink) {
+        	postParams.putString("link", link);
+        //}
+        
         if (artist.doesValidImgUrlExist()) {
         	String imgUrl = artist.getHighResImgUrl();
-        	if (imgUrl == null) {
+        	if (imgUrl == null || !addLink) {
         		imgUrl = artist.getLowResImgUrl();
         	}
         	if (imgUrl == null) {
         		imgUrl = artist.getMobiResImgUrl();
         	}
+        	//Log.d(TAG, "pic : " + imgUrl);
             postParams.putString("picture", imgUrl);
         }
 
@@ -460,13 +539,22 @@ public class FbUtil {
                     } catch (JSONException e) {
                         Log.i(TAG, "JSON error "+ e.getMessage());
                     }
-                    
+                                        
                 } else {
                 	Log.d(TAG, "graphObj = null");
+                	int errorCode = response.getError().getErrorCode();
+					if (errorCode == FB_ERROR_CODE_341 || errorCode == FB_ERROR_CODE_368) {
+						Log.d(TAG, "errorCode : " + errorCode);
+                		return;
+                	}
+                	publishArtist(artist, fragment, false);
                 }
             }
         };
 
+        for (String key: postParams.keySet()) {
+          Log.d (TAG, key + " : " + postParams.getString(key));
+        }
         Request request = new Request(session, "me/feed", postParams, HttpMethod.POST, callback);
         RequestAsyncTask task = new RequestAsyncTask(request);
         task.execute();

@@ -185,7 +185,7 @@ public class EventFeaturingFragment extends PublishEventListFragment implements 
 				if (eventSeekr.getFbUserId() != null) {
 					fbCallCountForSameEvt = 0;
 					event.setNewAttending(newAttending);
-					FbUtil.handlePublishEvent(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT, AppConstants.REQ_CODE_FB_PUBLISH_EVT, event);
+					FbUtil.handlePublishEvent(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
 					
 				} else if (eventSeekr.getGPlusUserId() != null) {
 					event.setNewAttending(newAttending);
@@ -271,7 +271,7 @@ public class EventFeaturingFragment extends PublishEventListFragment implements 
 		 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
 		 */
 		if (fbCallCountForSameEvt < MAX_FB_CALL_COUNT_FOR_SAME_EVT) {
-			FbUtil.call(session, state, exception, this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT, AppConstants.REQ_CODE_FB_PUBLISH_EVT, 
+			FbUtil.call(session, state, exception, this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, 
 					event);
 			
 		} else {

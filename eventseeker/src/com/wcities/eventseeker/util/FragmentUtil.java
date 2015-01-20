@@ -87,7 +87,7 @@ public class FragmentUtil {
 		Resources res = activityContext.getResources();
 		GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(listener,
 				res.getString(R.string.go_to_login), res.getString(R.string.pls_login_to_track_evt), 
-				res.getString(R.string.cancel), res.getString(R.string.yes));
+				res.getString(R.string.cancel), res.getString(R.string.yes), false);
 		generalDialogFragment.show(((ActionBarActivity) activityContext).getSupportFragmentManager(), 
 				AppConstants.DIALOG_FRAGMENT_TAG_LOGIN_TO_TRACK_EVENT);
 	}

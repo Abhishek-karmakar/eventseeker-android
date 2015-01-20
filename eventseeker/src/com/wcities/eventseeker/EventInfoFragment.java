@@ -637,7 +637,7 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 				if (eventSeekr.getFbUserId() != null) {
 					fbCallCountForSameEvt = 0;
 					event.setNewAttending(newAttending);
-					FbUtil.handlePublishEvent(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT, AppConstants.REQ_CODE_FB_PUBLISH_EVT, event);
+					FbUtil.handlePublishEvent(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
 					
 				} else if (eventSeekr.getGPlusUserId() != null) {
 					event.setNewAttending(newAttending);
@@ -762,8 +762,8 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 		/**
 		 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
 		 */
-		if (fbCallCountForSameEvt < AppConstants.MAX_FB_CALL_COUNT_FOR_SAME_EVT) {
-			FbUtil.call(session, state, exception, this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT, AppConstants.REQ_CODE_FB_PUBLISH_EVT, 
+		if (fbCallCountForSameEvt < AppConstants.MAX_FB_CALL_COUNT_FOR_SAME_EVT_OR_ART) {
+			FbUtil.call(session, state, exception, this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, 
 					event);
 			
 		} else {

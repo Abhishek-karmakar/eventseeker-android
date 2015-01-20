@@ -148,11 +148,10 @@ public class MainActivity extends ActionBarActivity implements
 		super.onCreate(savedInstanceState);		
 		setContentView(R.layout.activity_main);
 		//Log.d(TAG, "onCreate()");
-
+		vStatusBar = findViewById(R.id.vStatusBar);
 		if (VersionUtil.isApiLevelAbove18()) {
 			int statusBarHeight = getStatusBarHeight();
 			
-			vStatusBar = findViewById(R.id.vStatusBar);
 			LinearLayout.LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, statusBarHeight);
 			vStatusBar.setLayoutParams(params);
 			
@@ -163,6 +162,9 @@ public class MainActivity extends ActionBarActivity implements
 			
 			vDrawerStatusBar = findViewById(R.id.vDrawerStatusBar);
 			vDrawerStatusBar.setLayoutParams(params);
+		
+		} else {
+			vStatusBar.setVisibility(View.GONE);
 		}
 		
 		/**
@@ -1921,7 +1923,7 @@ public class MainActivity extends ActionBarActivity implements
 	public void onConnectionFailure() {
 		GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(this, 
 				getResources().getString(R.string.no_internet_connectivity),
-				getResources().getString(R.string.connection_lost), "Ok", null);
+				getResources().getString(R.string.connection_lost), "Ok", null, false);
 		generalDialogFragment.show(getSupportFragmentManager(), DIALOG_FRAGMENT_TAG_CONNECTION_LOST);		
 	}
 
