@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/obsrScrlV"
   	android:layout_width="match_parent" 
-  	android:layout_height="match_parent">
+  	android:layout_height="match_parent"
+  	android:fillViewport="true" >
   	
     <RelativeLayout android:id="@+id/rltLyt"
         android:layout_width="match_parent"
@@ -11,10 +12,9 @@
   	
 	    <ImageView android:id="@+id/imgEvent"
 	      	android:layout_width="match_parent"
-	      	android:layout_height="@dimen/img_evt_ht_event_details"
+	      	android:layout_height="@dimen/img_event_ht_event_details"
 	      	android:scaleType="centerCrop"
-	      	android:contentDescription="Event Image"
-	      	android:src="@drawable/cat_900" />
+	      	android:contentDescription="Event Image" />
 	    
 	    <RelativeLayout android:id="@+id/rltLytTxtEvtTitle"
 	        android:layout_width="match_parent"
@@ -29,17 +29,46 @@
 	    	    android:layout_width="match_parent"
 	    	    android:layout_height="@dimen/txt_evt_title_ht_event_details"
 	    	    android:textColor="@android:color/white"
-	    	    android:text="Cut Copy"
+	    	    android:text=""
 	    	    android:textSize="@dimen/txt_evt_title_txt_size_event_details"
 	    	    android:gravity="center_vertical" />
 	    	
+	    </RelativeLayout>
+	    
+	    <RelativeLayout android:id="@+id/rltLytConetnt"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/rltLytTxtEvtTitle">
+	        
+	        <TextView android:id="@+id/txtEvtLoc"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:text=""
+	            android:drawableLeft="@drawable/location"
+	            android:gravity="center_vertical"
+	            android:layout_marginLeft="@dimen/txt_evt_details_margin_l_event_details"
+	            android:layout_marginTop="@dimen/txt_evt_details_margin_t_event_details"
+	            android:drawablePadding="@dimen/txt_evt_details_drawable_pad_event_details"
+	            android:textSize="@dimen/txt_evt_details_txt_size_event_details" />
+	        
+	        <TextView android:id="@+id/txtEvtTime"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:text=""
+	            android:drawableLeft="@drawable/time"
+	            android:gravity="center_vertical"
+	            android:layout_marginLeft="@dimen/txt_evt_details_margin_l_event_details"
+	            android:layout_marginTop="@dimen/txt_evt_details_margin_t_event_details"
+	            android:drawablePadding="@dimen/txt_evt_details_drawable_pad_event_details"
+	            android:textSize="@dimen/txt_evt_details_txt_size_event_details"
+	            android:layout_below="@id/txtEvtLoc" />
+	        
 	    </RelativeLayout>
     	
     	<View android:id="@+id/vDummy"
     	    android:layout_width="match_parent"
     	    android:layout_height="800dp"
-    	    android:layout_below="@id/rltLytTxtEvtTitle"
-    	    android:background="#f00" />
+    	    android:layout_below="@id/rltLytTxtEvtTitle" />
 	    
     </RelativeLayout>
     

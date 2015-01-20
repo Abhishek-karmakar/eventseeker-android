@@ -1,37 +1,65 @@
 package com.wcities.eventseeker;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.List;
+
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.Animator.AnimatorListener;
+import com.nineoldandroids.animation.AnimatorSet;
+import com.nineoldandroids.animation.ObjectAnimator;
+import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
+import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
+import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.core.Schedule;
+import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.custom.view.ObservableScrollView;
 import com.wcities.eventseeker.custom.view.ObservableScrollView.ObservableScrollViewListener;
+import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionDestination;
+import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
+import com.wcities.eventseeker.interfaces.VenueListener;
+import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
+import com.wcities.eventseeker.util.ViewUtil;
+import com.wcities.eventseeker.viewdata.SharedElement;
+import com.wcities.eventseeker.viewdata.SharedElementPosition;
 
 public class EventDetailsFragment extends FragmentLoadableFromBackStack implements ObservableScrollViewListener, 
-		DrawerListener {
+		DrawerListener, CustomSharedElementTransitionDestination, OnClickListener {
 	
 	private static final String TAG = EventDetailsFragment.class.getSimpleName();
 	
 	private static final int UNSCROLLED = -1;
+	private static final int TRANSITION_ANIM_DURATION = 400;
 	
+	private View rootView;
 	private ImageView imgEvent;
 	private TextView txtEvtTitle;
 	
@@ -40,9 +68,11 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 	private String title = "";
 	private float minTitleScale;
 	
-	private String imgEventTransitionName;
-	
 	private Event event;
+	
+	private List<SharedElement> sharedElements;
+	private boolean isOnCreateViewCalledFirstTime = true;
+	private int screenW, imgEventHt;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,8 +84,8 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 		actionBarElevation = FragmentUtil.getResources(this).getDimensionPixelSize(R.dimen.action_bar_elevation);
 		
 		Bundle args = getArguments();
-		if (args != null && args.containsKey(BundleKeys.SHARED_IMG_TRANSITION_NAME)) {
-			imgEventTransitionName = args.getString(BundleKeys.SHARED_IMG_TRANSITION_NAME);
+		if (args != null && args.containsKey(BundleKeys.SHARED_ELEMENTS)) {
+			sharedElements = (List<SharedElement>) args.getSerializable(BundleKeys.SHARED_ELEMENTS);
 		}
 		
 		if (event == null) {
@@ -71,18 +101,42 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 		 * action_bar_ht on both orientations
 		 */
 		calculateScrollLimit();
+		calculateDimensions();
 		
-		View v = inflater.inflate(R.layout.fragment_event_details, container, false);
+		rootView = inflater.inflate(R.layout.fragment_event_details, container, false);
 		
-		imgEvent = (ImageView) v.findViewById(R.id.imgEvent);
-		if (imgEventTransitionName != null) {
-			imgEvent.setTransitionName(imgEventTransitionName);
+		imgEvent = (ImageView) rootView.findViewById(R.id.imgEvent);
+		txtEvtTitle = (TextView) rootView.findViewById(R.id.txtEvtTitle);
+		txtEvtTitle.setText(event.getName());
+		
+		TextView txtEvtLoc = (TextView) rootView.findViewById(R.id.txtEvtLoc);
+		TextView txtEvtTime = (TextView) rootView.findViewById(R.id.txtEvtTime);
+		
+		Schedule schedule = event.getSchedule();
+		if (schedule != null) {
+			if (schedule.getVenue() != null) {
+				txtEvtLoc.setText(event.getSchedule().getVenue().getName());
+				txtEvtLoc.setOnClickListener(this);
+			}
+			
+			if (schedule.getDates().size() > 0) {
+				Date date = schedule.getDates().get(0);
+				
+				/*if (isTablet) {
+					dateFormat = date.isStartTimeAvailable() ? new SimpleDateFormat("EEE MMM d, H:mm") :
+						new SimpleDateFormat("EEE MMM d");
+				} else {
+					dateFormat = date.isStartTimeAvailable() ? new SimpleDateFormat("MMMM dd, yyyy H:mm") :
+						new SimpleDateFormat("MMMM dd, yyyy");
+				}*/				
+				
+				txtEvtTime.setText(ConversionUtil.getDateTime(date.getStartDate(), date.isStartTimeAvailable()));
+			}
 		}
-		txtEvtTitle = (TextView) v.findViewById(R.id.txtEvtTitle);
 		
 		updateEventImg();
 		
-		final ObservableScrollView obsrScrlV = (ObservableScrollView) v.findViewById(R.id.obsrScrlV);
+		final ObservableScrollView obsrScrlV = (ObservableScrollView) rootView.findViewById(R.id.obsrScrlV);
 		obsrScrlV.setListener(this);
 		
 		obsrScrlV.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -109,7 +163,12 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
                     }
                 });
 		
-		return v;
+		if (isOnCreateViewCalledFirstTime && sharedElements != null) {
+			isOnCreateViewCalledFirstTime = false;
+			animateSharedElements();
+		}
+		
+		return rootView;
 	}
 	
 	@Override
@@ -136,6 +195,105 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 		ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
 	}
 	
+	private void calculateDimensions() {
+		DisplayMetrics dm = new DisplayMetrics();
+		FragmentUtil.getActivity(this).getWindowManager().getDefaultDisplay().getMetrics(dm);
+		screenW = dm.widthPixels;
+		imgEventHt = FragmentUtil.getResources(this).getDimensionPixelSize(R.dimen.img_event_ht_event_details);
+	}
+	
+	@Override
+	public void animateSharedElements() {
+		SharedElement sharedElement = sharedElements.get(0);
+		
+		ViewCompat.setTransitionName(imgEvent, sharedElement.getTransitionName());
+		
+		final SharedElementPosition sharedElementPosition = sharedElement.getSharedElementPosition();
+		
+        ObjectAnimator xAnim = ObjectAnimator.ofFloat(imgEvent, "x", sharedElementPosition.getStartX(), 0);
+        xAnim.setDuration(TRANSITION_ANIM_DURATION);
+        
+        ObjectAnimator yAnim = ObjectAnimator.ofFloat(imgEvent, "y", sharedElementPosition.getStartY(), 0);
+        yAnim.setDuration(TRANSITION_ANIM_DURATION);
+        
+        ValueAnimator va = ValueAnimator.ofInt(1, 100);
+        va.setDuration(TRANSITION_ANIM_DURATION);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        	
+            int color = FragmentUtil.getResources(EventDetailsFragment.this).getColor(android.R.color.white);
+            
+            public void onAnimationUpdate(ValueAnimator animation) {
+                Integer progress = (Integer) animation.getAnimatedValue();
+
+                RelativeLayout.LayoutParams lp = (LayoutParams) imgEvent.getLayoutParams();
+                lp.width = (int) (sharedElementPosition.getWidth() + 
+                		(((screenW - sharedElementPosition.getWidth()) * progress.intValue()) / 100));
+                lp.height = (int) (sharedElementPosition.getHeight() + 
+                		(((imgEventHt - sharedElementPosition.getHeight()) * progress.intValue()) / 100));
+                imgEvent.setLayoutParams(lp);
+                
+                int newAlpha = (int) (progress * 2.55);
+                rootView.setBackgroundColor(Color.argb(newAlpha, Color.red(color), Color.green(color), Color.blue(color)));
+            }
+        });
+        
+		AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(xAnim, yAnim, va);
+        animatorSet.start();
+	}
+	
+	@Override
+	public void exitAnimation() {
+		SharedElement sharedElement = sharedElements.get(0);
+		AnimatorSet animatorSet = new AnimatorSet();
+        
+		final SharedElementPosition sharedElementPosition = sharedElement.getSharedElementPosition();
+        ObjectAnimator xAnim = ObjectAnimator.ofFloat(imgEvent, "x", 0, sharedElementPosition.getStartX());
+        xAnim.setDuration(TRANSITION_ANIM_DURATION);
+        
+        ObjectAnimator yAnim = ObjectAnimator.ofFloat(imgEvent, "y", 0, sharedElementPosition.getStartY());
+        yAnim.setDuration(TRANSITION_ANIM_DURATION);
+        
+        ValueAnimator va = ValueAnimator.ofInt(100, 1);
+        va.setDuration(TRANSITION_ANIM_DURATION);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        	
+        	int color = FragmentUtil.getResources(EventDetailsFragment.this).getColor(android.R.color.white);
+        	
+            public void onAnimationUpdate(ValueAnimator animation) {
+                Integer value = (Integer) animation.getAnimatedValue();
+                imgEvent.getLayoutParams().width = (int) (sharedElementPosition.getWidth() + 
+                		(((screenW - sharedElementPosition.getWidth()) * value.intValue()) / 100));
+                imgEvent.getLayoutParams().height = (int) (sharedElementPosition.getHeight() + 
+                		(((imgEventHt - sharedElementPosition.getHeight()) * value.intValue()) / 100));
+                imgEvent.requestLayout();
+                
+                int newAlpha = (int) (value * 2.55);
+                rootView.setBackgroundColor(Color.argb(newAlpha, Color.red(color), Color.green(color), Color.blue(color)));
+            }
+        });
+        
+        animatorSet.playTogether(xAnim, yAnim, va);
+        animatorSet.addListener(new AnimatorListener() {
+			
+			@Override
+			public void onAnimationStart(Animator animation) {}
+			
+			@Override
+			public void onAnimationRepeat(Animator animation) {}
+			
+			@Override
+			public void onAnimationEnd(Animator animation) {
+				//Log.d(TAG, "onAnimationEnd()");
+				FragmentUtil.getActivity(EventDetailsFragment.this).onBackPressed();
+			}
+			
+			@Override
+			public void onAnimationCancel(Animator animation) {}
+		});
+        animatorSet.start();
+    }
+	
 	private void updateEventImg() {
 		//Log.d(TAG, "updateEventImg(), url = " + event.getLowResImgUrl());
 		if (event.doesValidImgUrlExist()) {
@@ -155,11 +313,11 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 	
 	private void calculateScrollLimit() {
 		Resources res = FragmentUtil.getResources(this);
-		limitScrollAt = res.getDimensionPixelSize(R.dimen.img_evt_ht_event_details) - res.getDimensionPixelSize(
+		limitScrollAt = res.getDimensionPixelSize(R.dimen.img_event_ht_event_details) - res.getDimensionPixelSize(
 				R.dimen.action_bar_ht);
 		
 		if (VersionUtil.isApiLevelAbove18()) {
-			limitScrollAt -= ((MainActivity) FragmentUtil.getActivity(this)).getStatusBarHeight();
+			limitScrollAt -= ViewUtil.getStatusBarHeight(FragmentUtil.getResources(this));
 		}
 		
 		actionBarTitleTextSize = res.getDimensionPixelSize(R.dimen.abc_text_size_title_material_toolbar);
@@ -270,5 +428,18 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 	@Override
 	public void onDrawerStateChanged(int arg0) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		
+		case R.id.txtEvtLoc:
+			((VenueListener)FragmentUtil.getActivity(this)).onVenueSelected(event.getSchedule().getVenue());
+			break;
+			
+		default:
+			break;
+		}
 	}
 }
