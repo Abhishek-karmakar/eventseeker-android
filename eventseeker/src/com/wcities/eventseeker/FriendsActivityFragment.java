@@ -20,7 +20,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -41,7 +40,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.ScrollView;
@@ -109,7 +107,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	private LoadFriendsNews loadFriendsNews;
 	private FriendActivityListAdapter friendActivityListAdapter;
 
-	private int orientation;
+	//private int orientation;
 	private String wcitiesId;
 	private List<FriendNewsItem> friendNewsItems;
 
@@ -117,8 +115,8 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	private boolean isMoreDataAvailable = true;
 	private int firstVisibleActivityItemPosition;
 	
-	private boolean isTablet;
-	private boolean is7InchTabletInPortrait;
+	/*private boolean isTablet;
+	private boolean is7InchTabletInPortrait;*/
 	private View rltDummyLyt;
 	private ScrollView scrlVRootNoItemsFoundWithAction;
 	
@@ -147,16 +145,16 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 			wcitiesId = ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId();
 		}
 		
-		isTablet = ((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).isTablet();
+		//isTablet = ((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).isTablet();
 		res = FragmentUtil.getResources(this);
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-		is7InchTabletInPortrait = ((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext())
-				.is7InchTabletAndInPortraitMode();
-		orientation = getResources().getConfiguration().orientation;
+		/*is7InchTabletInPortrait = ((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext())
+				.is7InchTabletAndInPortraitMode();*/
+		//orientation = getResources().getConfiguration().orientation;
 		View v = inflater.inflate(R.layout.fragment_friends_activity_list, null);
 		rltDummyLyt = v.findViewById(R.id.rltDummyLyt);
 		scrlVRootNoItemsFoundWithAction = (ScrollView) v.findViewById(R.id.scrlVRootNoItemsFoundWithAction);
@@ -186,14 +184,14 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 		getListView().setDivider(null);
 		getListView().setScrollingCacheEnabled(false);
 		
-		final int pos;
-		if(is7InchTabletInPortrait) {
+		final int pos = firstVisibleActivityItemPosition;
+		/*if(is7InchTabletInPortrait) {
 			pos = firstVisibleActivityItemPosition;
 		} else if (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) {
 			pos = firstVisibleActivityItemPosition;			
 		} else {
 			pos = (int)Math.floor(firstVisibleActivityItemPosition / 2.0);
-		}
+		}*/
 		
 		getListView().post(new Runnable() {
 			
@@ -223,13 +221,14 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	public void onDestroyView() {
 		//Log.d(TAG, "onDestroyView()");
 		
-		if(is7InchTabletInPortrait) {
+		firstVisibleActivityItemPosition = getListView().getFirstVisiblePosition();
+		/*if(is7InchTabletInPortrait) {
 			firstVisibleActivityItemPosition = getListView().getFirstVisiblePosition();
 		} else if (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) {
 			firstVisibleActivityItemPosition = getListView().getFirstVisiblePosition();			
 		} else {
 			firstVisibleActivityItemPosition = getListView().getFirstVisiblePosition() * 2;;
-		}
+		}*/
 		
 		for (int i = getListView().getFirstVisiblePosition(), j = 0; 
 				i <= getListView().getLastVisiblePosition(); i++, j++) {
@@ -411,7 +410,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 					holder.chkBoxGoing = (CheckBox) rltLayoutNewsItemContainer.findViewById(R.id.chkBoxGoing);
 					holder.chkBoxWantToGo = (CheckBox) rltLayoutNewsItemContainer.findViewById(R.id.chkBoxWantToGo);
 					
-					RelativeLayout rltLayoutNewsItem2Container = holder.rltLayoutNewsItem2Container 
+					/*RelativeLayout rltLayoutNewsItem2Container = holder.rltLayoutNewsItem2Container 
 							= (RelativeLayout) convertView.findViewById(R.id.rltLayoutNewsItemContainer2);
 					holder.txtTitle2 = (TextView) rltLayoutNewsItem2Container.findViewById(R.id.txtTitle);
 					holder.imgEvt2 = (ResizableImageView) rltLayoutNewsItem2Container.findViewById(R.id.imgEvt);
@@ -426,7 +425,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 					holder.lnrLayoutTickets2 = (LinearLayout) rltLayoutNewsItem2Container.findViewById(R.id.lnrLayoutTickets);
 					holder.chkBoxGoing2 = (CheckBox) rltLayoutNewsItem2Container.findViewById(R.id.chkBoxGoing);
 					holder.chkBoxWantToGo2 = (CheckBox) rltLayoutNewsItem2Container.findViewById(R.id.chkBoxWantToGo);
-					holder.progressBar2 = (ProgressBar) rltLayoutNewsItem2Container.findViewById(R.id.progressBar);
+					holder.progressBar2 = (ProgressBar) rltLayoutNewsItem2Container.findViewById(R.id.progressBar);*/
 					
 					convertView.setTag(holder);
 					
@@ -443,7 +442,8 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 		@Override
 		public Object getItem(int position) {
 
-			if (is7InchTabletInPortrait || (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet)) {
+			return friendNewsItems.get(position); // returning an object of FriendNewsItem, NOT A LIST 
+			/*if (is7InchTabletInPortrait || (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet)) {
 				return friendNewsItems.get(position); // returning an object of FriendNewsItem, NOT A LIST 
 				
 			} else {
@@ -453,7 +453,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 					friendsNewsItemList.add(friendNewsItems.get(position * 2 + 1));
 				}
 				return friendsNewsItemList; // returning an object of List<FriendNewsItem>
-			}
+			}*/
 		}
 
 		@Override
@@ -463,12 +463,13 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 
 		@Override
 		public int getCount() {
+			return friendNewsItems.size();
 			//Mithil: In tablet we have to show two elements in both the cases
-			if (is7InchTabletInPortrait || (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet)) {
+			/*if (is7InchTabletInPortrait || (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet)) {
 				return friendNewsItems.size();
 			} else {
 				return (int) Math.ceil(friendNewsItems.size() / 2.0);
-			}
+			}*/
 		}
 		
 		private class FriendNewsItemViewHolder {
@@ -481,17 +482,18 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 			private Button btnBuyTickets;
 			private CheckBox chkBoxGoing, chkBoxWantToGo;
 			
-			private RelativeLayout rltLayoutNewsItem2Container, lnrLayoutEvtInfo2;
+			/*private RelativeLayout rltLayoutNewsItem2Container, lnrLayoutEvtInfo2;
 			private ResizableImageView imgEvt2;
 			private TextView txtTitle2, txtEvtTime2, txtVenueTitle2;
 			private LinearLayout lnrLayoutBtns2, lnrLayoutBtnLike2, lnrLayoutBtnComment2;
 			private LinearLayout lnrLytTrackBtns2, lnrLayoutTickets2;
 			private Button btnBuyTickets2;
 			private CheckBox chkBoxGoing2, chkBoxWantToGo2;
-			private ProgressBar progressBar2;
+			private ProgressBar progressBar2;*/
 			
 			private void setContent(Object listItem, ViewGroup parent, int pos) {
-				if (listItem instanceof FriendNewsItem) {
+				setNewsItemContent((FriendNewsItem) listItem, parent, pos);
+				/*if (listItem instanceof FriendNewsItem) {
 					//Log.d(TAG, "ArtistNewsItem");
 					rltLayoutNewsItem2Container.setVisibility(View.GONE);
 					setNewsItemContent((FriendNewsItem) listItem, parent, pos);
@@ -517,10 +519,10 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 						//Log.d(TAG, "not ArtistNewsItem, size = 1");
 						rltLayoutNewsItem2Container.setVisibility(View.INVISIBLE);
 					}
-				}
+				}*/
 			}
 			
-			private void setProgressBar2Visibility(boolean isProgress) {
+			/*private void setProgressBar2Visibility(boolean isProgress) {
 				int progressVisibility, othersVisibility;
 				if (isProgress) {
 					progressVisibility = View.VISIBLE;
@@ -536,7 +538,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 				imgEvt2.setVisibility(othersVisibility);
 				lnrLayoutEvtInfo2.setVisibility(othersVisibility);
 				lnrLayoutBtns2.setVisibility(othersVisibility);
-			}
+			}*/
 			
 			private void setNewsItemContent(final FriendNewsItem item, ViewGroup parent, int pos) {
 				switch (item.getAttending()) {
@@ -619,7 +621,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 				});
 			}
 			
-			private void setNewsItem2Content(final FriendNewsItem item, ViewGroup parent, int pos) {
+			/*private void setNewsItem2Content(final FriendNewsItem item, ViewGroup parent, int pos) {
 				switch (item.getAttending()) {
 				case GOING:
 					txtTitle2.setText(res.getString(R.string.is_going_to, item.getFriendName(), item.getTrackName()));
@@ -698,7 +700,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 						((EventListener)FragmentUtil.getActivity(FriendsActivityFragment.this)).onEventSelected(item.toEvent());
 					}
 				});
-			}
+			}*/
 			
 			private void setBuyTickets(final FriendNewsItem item, Button btnBuyTickets, LinearLayout lnrLayoutTickets) {
 				
@@ -1126,28 +1128,27 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	
 	/***
 	 * Tracking logic:
-	 * EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(discoverFragment).getApplication();
-					if (event.getAttending() == Attending.SAVED) {
-						event.setAttending(Attending.NOT_GOING);
-						new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.event, event.getId(), 
-								event.getAttending().getValue(), UserTrackingType.Add).execute();
-		    			updateImgSaveSrc(holder, event, FragmentUtil.getResources(discoverFragment));
-						
-					} else {
-						discoverFragment.event = eventPendingPublish = event;
-						holderPendingPublish = holder;
-						
-						if (eventSeekr.getFbUserId() != null) {
-							fbCallCountForSameEvt = 0;
-							event.setNewAttending(Attending.SAVED);
-							FbUtil.handlePublishEvent(discoverFragment, discoverFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-									AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
-							
-						} else if (eventSeekr.getGPlusUserId() != null) {
-							event.setNewAttending(Attending.SAVED);
-							discoverFragment.handlePublishEvent();
-						}
-					}
-				}
+	 * 	EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(discoverFragment).getApplication();
+		if (event.getAttending() == Attending.SAVED) {
+			event.setAttending(Attending.NOT_GOING);
+			new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.event, event.getId(), 
+					event.getAttending().getValue(), UserTrackingType.Add).execute();
+			updateImgSaveSrc(holder, event, FragmentUtil.getResources(discoverFragment));
+			
+		} else {
+			discoverFragment.event = eventPendingPublish = event;
+			holderPendingPublish = holder;
+			
+			if (eventSeekr.getFbUserId() != null) {
+				fbCallCountForSameEvt = 0;
+				event.setNewAttending(Attending.SAVED);
+				FbUtil.handlePublishEvent(discoverFragment, discoverFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
+						AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
+				
+			} else if (eventSeekr.getGPlusUserId() != null) {
+				event.setNewAttending(Attending.SAVED);
+				discoverFragment.handlePublishEvent();
+			}
+		}
 	 */
 }
