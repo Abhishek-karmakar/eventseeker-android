@@ -105,6 +105,7 @@ public class EventApiJSONParser {
 			JSONObject jObjEvent = jObjCityevent.getJSONObject(KEY_EVENTS).getJSONObject(KEY_EVENT);
 			
 			if (jObjEvent.has(KEY_ARTIST)) {
+				event.setHasArtists(true);
 				fillArtists(event, jObjEvent);
 				
 			} else {

@@ -1,35 +1,35 @@
 package com.wcities.eventseeker.custom.view;
 
+import com.wcities.eventseeker.adapter.CatTitlesAdapter;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
-import com.wcities.eventseeker.adapter.CatTitlesAdapter;
-
-public class CategoryTitleLinearLayout extends LinearLayout {
+public class FeaturingArtistRelativeLayout extends RelativeLayout {
 	
 	private float scale = CatTitlesAdapter.BIG_SCALE;
 
-	public CategoryTitleLinearLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+	public FeaturingArtistRelativeLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
 		super(context, attrs, defStyleAttr, defStyleRes);
-		// following call is needed so that call to invalidate() from setScaleBoth() can invoke onDraw() 
+		// following call is needed so that call to invalidate() from setScaleBoth() can invoke onDraw()
 		setWillNotDraw(false);
 	}
 
-	public CategoryTitleLinearLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+	public FeaturingArtistRelativeLayout(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
-		// following call is needed so that call to invalidate() from setScaleBoth() can invoke onDraw() 
+		// following call is needed so that call to invalidate() from setScaleBoth() can invoke onDraw()
 		setWillNotDraw(false);
 	}
 
-	public CategoryTitleLinearLayout(Context context, AttributeSet attrs) {
+	public FeaturingArtistRelativeLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// following call is needed so that call to invalidate() from setScaleBoth() can invoke onDraw() 
+		// following call is needed so that call to invalidate() from setScaleBoth() can invoke onDraw()
 		setWillNotDraw(false);
 	}
 
-	public CategoryTitleLinearLayout(Context context) {
+	public FeaturingArtistRelativeLayout(Context context) {
 		super(context);
 		// following call is needed so that call to invalidate() from setScaleBoth() can invoke onDraw()
 		setWillNotDraw(false);
@@ -50,7 +50,7 @@ public class CategoryTitleLinearLayout extends LinearLayout {
 		int w = this.getWidth();
 		int h = this.getHeight();
 		//Log.d(VIEW_LOG_TAG, "h = " + h);
-		canvas.scale(scale, scale, w/2, h);
+		canvas.scale(scale, scale, w/2, h/2);
 		
 		super.onDraw(canvas);
 	}

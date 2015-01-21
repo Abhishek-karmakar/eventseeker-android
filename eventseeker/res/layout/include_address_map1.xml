@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/rltLayoutAddress"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/story_space"
+    android:layout_marginTop="@dimen/rlt_layout_evt_address_margin_t_fragment_event_info"
+    android:padding="@dimen/rlt_layout_evt_address_pad_fragment_event_info" >
+
+	<TextView android:id="@+id/txtAddress"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:text=""
+	    android:layout_marginBottom="@dimen/txt_address_margin_b_fragment_event_info"
+	    android:textSize="@dimen/txt_address_txt_size_fragment_event_info" />
+	
+	<View android:id="@+id/vDummyAddress"
+	    android:layout_width="match_parent"
+	    android:layout_height="@dimen/v_dummy_address_ht_fragment_event_info"
+	    android:layout_below="@id/txtAddress"
+	    android:layout_alignLeft="@id/txtAddress"
+	    android:layout_alignRight="@id/txtAddress"
+	    android:background="@color/transparent" />
+	 
+	<FrameLayout android:id="@+id/frmLayoutMapContainer"
+	    android:layout_width="match_parent"
+	   	android:layout_height="@dimen/frm_layout_map_container_ht_fragment_event_info"
+	    android:layout_below="@id/txtAddress" />
+	 
+	<View android:id="@+id/vDummyTransparent"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@id/txtAddress"
+	    android:layout_alignLeft="@id/frmLayoutMapContainer"
+	    android:layout_alignTop="@id/frmLayoutMapContainer"
+	    android:layout_alignRight="@id/frmLayoutMapContainer"
+	    android:layout_alignBottom="@id/frmLayoutMapContainer"
+	    android:background="@color/transparent" />
+
+</RelativeLayout>

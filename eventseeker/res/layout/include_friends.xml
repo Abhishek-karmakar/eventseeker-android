@@ -1,56 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/rltLayoutFriends"
+    android:id="@+id/rltLytFriends"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/story_space"
-    android:layout_marginTop="@dimen/rlt_layout_friends_margin_t_fragment_event_info"
-    android:orientation="vertical"
-    android:padding="@dimen/rlt_layout_evt_address_pad_fragment_event_info" >
- 
-	<TextView android:id="@+id/txtFriends"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:text="@string/friends_who_like"
-	    android:layout_marginBottom="@dimen/txt_friends_margin_b_fragment_event_info"
-	    android:textSize="@dimen/txt_address_txt_size_fragment_event_info" />
-	 
-	<com.wcities.eventseeker.custom.view.ExpandableGridView android:id="@+id/grdVFriends"
-	    android:layout_width="match_parent"
-	  	android:layout_height="wrap_content"
-	    android:layout_below="@id/txtFriends"
-	    android:stretchMode="spacingWidth"
-	    android:numColumns="3"
-	    android:horizontalSpacing="@dimen/grd_v_friends_hor_space_fragment_event_info"
-	    android:columnWidth="@dimen/grd_v_friends_col_w_fragment_event_info"
-	    android:layout_marginLeft="@dimen/grd_v_friends_margin_l_fragment_event_info"
-	    android:layout_marginRight="@dimen/grd_v_friends_margin_r_fragment_event_info" />
-	 
-	<View android:id="@+id/vDivider"
-		android:layout_width="match_parent"
-		android:layout_height="@dimen/v_divider_ht_fragment_event_info"
-		android:layout_below="@id/grdVFriends"
-		android:background="@color/light_gray" />
-	        
-    <RelativeLayout android:id="@+id/rltLayoutViewAll"
+    android:layout_height="wrap_content">
+
+    <TextView android:id="@+id/txtFriends"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="@string/friends_who_like"
+        android:layout_marginTop="@dimen/txt_friends_margin_t_include_friends"
+        android:textSize="@dimen/txt_friends_txt_size_include_friends" />
+    
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerVFriends"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/vDivider"
-        android:gravity="center_vertical"
-        android:visibility="gone">
-	        
-		<TextView android:id="@+id/txtViewAll"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/txt_view_all"
-			android:layout_centerVertical="true" />
-        
-        <ImageView android:id="@+id/imgRight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/down" />
-		        
-	</RelativeLayout>
+        android:scrollbars="horizontal"
+        android:layout_below="@id/txtFriends"
+        android:layout_marginTop="@dimen/recycler_v_friends_margin_t_include_friends"
+        android:layout_marginLeft="@dimen/recycler_v_friends_margin_l_include_friends"
+        android:layout_marginRight="@dimen/recycler_v_friends_margin_r_include_friends" />
     
+    <View android:id="@+id/vHorLineFriends"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/v_hor_line_ht_include_friends"
+        android:background="@color/gray_shade_d"
+        android:layout_below="@id/recyclerVFriends"
+        android:layout_marginLeft="@dimen/v_hor_line_margin_l_include_friends"
+        android:layout_marginRight="@dimen/v_hor_line_margin_r_include_friends"
+        android:layout_marginTop="@dimen/v_hor_line_margin_t_include_friends" />
+   
 </RelativeLayout>

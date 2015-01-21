@@ -24,7 +24,6 @@ import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutParams;
-import android.text.method.HideReturnsTransformationMethod;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -200,6 +199,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// calculating here instead of onCreate() since it needs to be recalculated on orientation change
+		//Log.d(TAG, "onCreateView()");
 		calculateDimensions();
 		final int orientation = FragmentUtil.getResources(this).getConfiguration().orientation;
 		
@@ -789,7 +789,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 					ViewCompat.setTransitionName(holder.imgEvent, TransitionName.DISCOVER_IMG_EVT + position);
 					
 					Resources res = FragmentUtil.getResources(discoverFragment);
-					if (event.getSchedule().getBookingInfos().isEmpty()) {
+					if (event.getSchedule() == null || event.getSchedule().getBookingInfos().isEmpty()) {
 						holder.imgTicket.setImageDrawable(res.getDrawable(R.drawable.tickets_disabled));
 						holder.imgTicket.setEnabled(false);
 						
@@ -863,7 +863,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 							switch (mEvent.getAction()) {
 							
 							case MotionEvent.ACTION_DOWN:
-								//Log.d(TAG, "down");
+								//Log.d(TAG, "down, x = " + mEvent.getRawX() + ", y = " + mEvent.getRawY());
 								initX = pointerX = (int) mEvent.getRawX();
 								isSliderOpenInititally = !holder.isSliderClose(rltLytContentInitialMarginL);
 								isScrolled = false;
@@ -899,8 +899,12 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 								
 							case MotionEvent.ACTION_UP:
 							case MotionEvent.ACTION_CANCEL:
-								//Log.d(TAG, "up");
+								//Log.d(TAG, "up, action = " + mEvent.getAction() + ", x = " + mEvent.getRawX() + ", y = " + mEvent.getRawY());
 								if (!isScrolled) {
+									if (mEvent.getAction() == MotionEvent.ACTION_CANCEL) {
+										break;
+									}
+									
 									/**
 									 * Handle click event.
 									 * We do it here instead of implementing onClick listener because then onClick listener

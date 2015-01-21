@@ -588,9 +588,46 @@
     txt_evt_title_ht_event_details = action_bar_ht - 2*rlt_lyt_txt_evt_title_pad_b_event_details -->
     <dimen name="txt_evt_title_ht_event_details">40dp</dimen>
     <dimen name="txt_evt_details_margin_l_event_details">15dp</dimen>
+    <dimen name="txt_evt_details_margin_r_event_details">16dp</dimen>
     <dimen name="txt_evt_details_margin_t_event_details">25dp</dimen>
     <dimen name="txt_evt_details_drawable_pad_event_details">20dp</dimen>
     <dimen name="txt_evt_details_txt_size_event_details">16sp</dimen>
+    <dimen name="txt_desc_margin_l_event_details">16dp</dimen>
+    <dimen name="txt_desc_margin_t_event_details">15dp</dimen>
+    <dimen name="lnr_lyt_expand_desc_margin_l_event_details">16dp</dimen>
+    <dimen name="lnr_lyt_expand_desc_margin_t_event_details">@dimen/txt_desc_margin_t_event_details</dimen>
+    <dimen name="img_down_margin_r_event_details">@dimen/txt_desc_margin_l_event_details</dimen>
+    <dimen name="v_hor_line_ht_event_details">1dp</dimen>
+    <dimen name="prgs_bar_margin_t_event_details">@dimen/txt_desc_margin_t_event_details</dimen>
+    <dimen name="txt_featuring_margin_t_event_details">@dimen/txt_desc_margin_t_event_details</dimen>
+    <dimen name="v_pager_featuring_ht_event_details">150dp</dimen>
+    <dimen name="v_pager_featuring_margin_t_event_details">@dimen/txt_desc_margin_t_event_details</dimen>
+    <dimen name="v_hor_line_margin_l_event_details">16dp</dimen>
+    <dimen name="v_hor_line_margin_r_event_details">@dimen/v_hor_line_margin_l_event_details</dimen>
+    <dimen name="v_hor_line_margin_t_event_details">@dimen/txt_desc_margin_t_event_details</dimen>
+    <dimen name="txt_venue_margin_t_event_details">@dimen/txt_desc_margin_t_event_details</dimen>
+    <dimen name="txt_venue_margin_t_event_details">@dimen/txt_desc_margin_t_event_details</dimen>
+    <dimen name="rlt_lyt_address_margin_t_event_details">@dimen/txt_desc_margin_t_event_details</dimen>
+    <dimen name="rlt_lyt_address_margin_l_event_details">@dimen/v_hor_line_margin_l_event_details</dimen>
+    <dimen name="rlt_lyt_address_margin_r_event_details">@dimen/v_hor_line_margin_r_event_details</dimen>
+    <dimen name="txt_venue_drawable_pad_event_details">10dp</dimen>
+    <!-- featuring_artist.xml -->
+    <dimen name="rlt_lyt_root_w_featuring_artist">200dp</dimen>
+    <dimen name="txt_artist_name_txt_size_featuring_artist">20sp</dimen>
+    <dimen name="txt_artist_name_pad_l_featuring_artist">5dp</dimen>
+    <dimen name="txt_artist_name_pad_r_featuring_artist">@dimen/txt_artist_name_pad_l_featuring_artist</dimen>
+    <dimen name="txt_artist_name_pad_b_featuring_artist">12dp</dimen>
+    <dimen name="txt_artist_name_pad_t_featuring_artist">@dimen/txt_artist_name_pad_b_featuring_artist</dimen>
+    <!-- include_friends.xml -->
+    <dimen name="txt_friends_margin_t_include_friends">@dimen/txt_desc_margin_t_event_details</dimen>
+    <dimen name="txt_friends_txt_size_include_friends">@dimen/txt_evt_details_txt_size_event_details</dimen>
+    <dimen name="recycler_v_friends_margin_t_include_friends">@dimen/txt_desc_margin_t_event_details</dimen>
+    <dimen name="recycler_v_friends_margin_l_include_friends">@dimen/v_hor_line_margin_l_event_details</dimen>
+    <dimen name="recycler_v_friends_margin_r_include_friends">@dimen/recycler_v_friends_margin_l_include_friends</dimen>
+    <dimen name="v_hor_line_ht_include_friends">@dimen/v_hor_line_ht_event_details</dimen>
+    <dimen name="v_hor_line_margin_l_include_friends">@dimen/v_hor_line_margin_l_event_details</dimen>
+    <dimen name="v_hor_line_margin_r_include_friends">@dimen/v_hor_line_margin_l_include_friends</dimen>
+    <dimen name="v_hor_line_margin_t_include_friends">@dimen/txt_desc_margin_t_event_details</dimen>
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <!-- activity_bosch_main.xml -->
     <dimen name="b_root_navigation_drawer_w_main">210dp</dimen>

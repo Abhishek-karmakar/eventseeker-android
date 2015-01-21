@@ -76,30 +76,54 @@ public class CatTitlesAdapter extends FragmentPagerAdapter implements ViewPager.
 			if (prev == null) {
 				return;
 			}
-			cur = getRootView(position + 1);
-			next = getRootView(position + 2);
+			
+			if (position + 2 < getCount()) {
+				cur = getRootView(position + 1);
+				next = getRootView(position + 2);
+				
+			} else if (position + 1 < getCount()) {
+				cur = getRootView(position + 1);
+				next = null;
+				
+			} else {
+				cur = next = null;
+			}
 
-			cur.setScaleBoth(BIG_SCALE - DIFF_SCALE * positionOffset);
+			if (cur != null) {
+				cur.setScaleBoth(BIG_SCALE - DIFF_SCALE * positionOffset);
+			}
 			float scalePrevNext = SMALL_SCALE + DIFF_SCALE * positionOffset;
 			prev.setScaleBoth(scalePrevNext);
-			next.setScaleBoth(scalePrevNext);
+			if (next != null) {
+				next.setScaleBoth(scalePrevNext);
+			}
 			
 			if (positionOffset > 0.9f) {
-				cur.findViewById(R.id.vHorLine).setVisibility(View.INVISIBLE);
-				((TextView)cur.findViewById(R.id.txtTitle)).setTypeface(null, Typeface.NORMAL);
-				next.findViewById(R.id.vHorLine).setVisibility(View.VISIBLE);
-				((TextView)next.findViewById(R.id.txtTitle)).setTypeface(null, Typeface.BOLD);
-				CategoryTitleLinearLayout next2next = getRootView(position + 3);
-				next2next.findViewById(R.id.vHorLine).setVisibility(View.INVISIBLE);
-				((TextView)next2next.findViewById(R.id.txtTitle)).setTypeface(null, Typeface.NORMAL);
+				if (cur != null) {
+					cur.findViewById(R.id.vHorLine).setVisibility(View.INVISIBLE);
+					((TextView)cur.findViewById(R.id.txtTitle)).setTypeface(null, Typeface.NORMAL);
+				}
+				if (next != null) {
+					next.findViewById(R.id.vHorLine).setVisibility(View.VISIBLE);
+					((TextView)next.findViewById(R.id.txtTitle)).setTypeface(null, Typeface.BOLD);
+				}
+				if (position + 3 < getCount()) {
+					CategoryTitleLinearLayout next2next = getRootView(position + 3);
+					next2next.findViewById(R.id.vHorLine).setVisibility(View.INVISIBLE);
+					((TextView)next2next.findViewById(R.id.txtTitle)).setTypeface(null, Typeface.NORMAL);
+				}
 				
 			} else {
 				prev.findViewById(R.id.vHorLine).setVisibility(View.INVISIBLE);
 				((TextView)prev.findViewById(R.id.txtTitle)).setTypeface(null, Typeface.NORMAL);
-				cur.findViewById(R.id.vHorLine).setVisibility(View.VISIBLE);
-				((TextView)cur.findViewById(R.id.txtTitle)).setTypeface(null, Typeface.BOLD);
-				next.findViewById(R.id.vHorLine).setVisibility(View.INVISIBLE);
-				((TextView)next.findViewById(R.id.txtTitle)).setTypeface(null, Typeface.NORMAL);
+				if (cur != null) {
+					cur.findViewById(R.id.vHorLine).setVisibility(View.VISIBLE);
+					((TextView)cur.findViewById(R.id.txtTitle)).setTypeface(null, Typeface.BOLD);
+				}
+				if (next != null) {
+					next.findViewById(R.id.vHorLine).setVisibility(View.INVISIBLE);
+					((TextView)next.findViewById(R.id.txtTitle)).setTypeface(null, Typeface.NORMAL);
+				}
 			}
 		}
 	}

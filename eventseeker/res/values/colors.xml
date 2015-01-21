@@ -89,6 +89,9 @@
 	<!-- list_item_discover.xml -->
 	<color name="txt_evt_location_list_item_discover">#aaaaaa</color>
 	
+	<!-- featuring_artist.xml -->
+	<color name="bg_v_translucent_layer_featuring_artist">#80ffffff</color>
+	
 	<!-- starts for bosch -->
 	<color name="b_bg_navigation_drawer">#666</color>
 	<!-- <color name="b_lnr_layout_btns_txt_color_fragment_plan_travel">#0088ff</color> -->

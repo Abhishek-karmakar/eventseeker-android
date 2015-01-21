@@ -46,7 +46,7 @@
 			            android:layout_weight="1"
 			            android:layout_marginRight="@dimen/rlt_layout_img_evt_margin_r_fragment_event_info" />
 		            
-		            <include layout="@layout/include_address_map" />
+		            <include layout="@layout/include_address_map1" />
 		            
 		        </LinearLayout>
 		        

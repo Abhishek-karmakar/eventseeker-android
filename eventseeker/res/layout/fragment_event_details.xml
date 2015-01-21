@@ -31,14 +31,17 @@
 	    	    android:textColor="@android:color/white"
 	    	    android:text=""
 	    	    android:textSize="@dimen/txt_evt_title_txt_size_event_details"
-	    	    android:gravity="center_vertical" />
+	    	    android:gravity="center_vertical"
+	    	    android:singleLine="true"
+	    	    android:ellipsize="marquee" />
 	    	
 	    </RelativeLayout>
 	    
-	    <RelativeLayout android:id="@+id/rltLytConetnt"
+	    <RelativeLayout android:id="@+id/rltLytContent"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:layout_below="@id/rltLytTxtEvtTitle">
+	        android:layout_below="@id/rltLytTxtEvtTitle"
+	        android:background="@android:color/white">
 	        
 	        <TextView android:id="@+id/txtEvtLoc"
 	            android:layout_width="match_parent"
@@ -47,6 +50,7 @@
 	            android:drawableLeft="@drawable/location"
 	            android:gravity="center_vertical"
 	            android:layout_marginLeft="@dimen/txt_evt_details_margin_l_event_details"
+	            android:layout_marginRight="@dimen/txt_evt_details_margin_r_event_details"
 	            android:layout_marginTop="@dimen/txt_evt_details_margin_t_event_details"
 	            android:drawablePadding="@dimen/txt_evt_details_drawable_pad_event_details"
 	            android:textSize="@dimen/txt_evt_details_txt_size_event_details" />
@@ -58,18 +62,122 @@
 	            android:drawableLeft="@drawable/time"
 	            android:gravity="center_vertical"
 	            android:layout_marginLeft="@dimen/txt_evt_details_margin_l_event_details"
+	            android:layout_marginRight="@dimen/txt_evt_details_margin_r_event_details"
 	            android:layout_marginTop="@dimen/txt_evt_details_margin_t_event_details"
 	            android:drawablePadding="@dimen/txt_evt_details_drawable_pad_event_details"
 	            android:textSize="@dimen/txt_evt_details_txt_size_event_details"
 	            android:layout_below="@id/txtEvtLoc" />
 	        
+	        <TextView android:id="@+id/txtDesc"
+		     	android:layout_width="match_parent"
+		     	android:layout_height="wrap_content"
+		     	android:layout_marginLeft="@dimen/txt_desc_margin_l_event_details"
+		     	android:layout_marginRight="@dimen/txt_evt_details_margin_r_event_details"
+		     	android:layout_marginTop="@dimen/txt_desc_margin_t_event_details"
+		     	android:layout_below="@id/txtEvtTime" />
+	        
+	        <LinearLayout android:id="@+id/lnrLytExpandDesc"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:orientation="horizontal"
+	            android:layout_below="@id/txtDesc"
+	            android:layout_marginLeft="@dimen/lnr_lyt_expand_desc_margin_l_event_details"
+	            android:layout_marginRight="@dimen/txt_evt_details_margin_r_event_details"
+	            android:layout_marginTop="@dimen/lnr_lyt_expand_desc_margin_t_event_details">
+	        
+		        <ImageView android:id="@+id/imgDown"
+			     	android:layout_width="wrap_content"
+			     	android:layout_height="wrap_content"
+			     	android:src="@drawable/down"
+			     	android:layout_marginRight="@dimen/img_down_margin_r_event_details" />
+		        
+		        <View android:id="@+id/vHorLine1"
+		            android:layout_width="match_parent"
+		            android:layout_height="@dimen/v_hor_line_ht_event_details"
+		            android:background="@color/gray_shade_d"
+		            android:layout_gravity="bottom" />
+		        
+		    </LinearLayout>
+		    
+	        <include layout="@layout/progress_bar_eventseeker_fixed_ht"
+	            android:id="@+id/prgsBar"
+	            android:layout_width="match_parent"
+    			android:layout_height="@dimen/rlt_lyt_root_ht_progress_bar_eventseeker_fixed_ht"
+	            android:layout_below="@id/lnrLytExpandDesc"
+	            android:layout_marginTop="@dimen/prgs_bar_margin_t_event_details" />
+		    
+	        <RelativeLayout android:id="@+id/rltLytFeaturing"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_below="@id/lnrLytExpandDesc">
+		    
+		        <TextView android:id="@+id/txtFeaturing"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_centerHorizontal="true"
+		            android:text="@string/featuring"
+		            android:layout_marginTop="@dimen/txt_featuring_margin_t_event_details"
+		            android:textSize="@dimen/txt_evt_details_txt_size_event_details" />
+		        
+		        <android.support.v4.view.ViewPager android:id="@+id/vPagerFeaturing"
+				    android:layout_width="match_parent"
+				    android:layout_height="@dimen/v_pager_featuring_ht_event_details"
+				    android:layout_marginTop="@dimen/v_pager_featuring_margin_t_event_details"
+				    android:layout_below="@id/txtFeaturing" />
+		        
+		        <View android:id="@+id/vHorLine2"
+		            android:layout_width="match_parent"
+		            android:layout_height="@dimen/v_hor_line_ht_event_details"
+		            android:background="@color/gray_shade_d"
+		            android:layout_below="@id/vPagerFeaturing"
+		            android:layout_marginLeft="@dimen/v_hor_line_margin_l_event_details"
+		            android:layout_marginRight="@dimen/v_hor_line_margin_r_event_details"
+		            android:layout_marginTop="@dimen/v_hor_line_margin_t_event_details" />
+	        
+	        </RelativeLayout>
+	        
+	        <RelativeLayout android:id="@+id/rltLytVenue"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_below="@id/rltLytFeaturing">
+		    
+		        <TextView android:id="@+id/txtVenue"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_centerHorizontal="true"
+		            android:layout_marginTop="@dimen/txt_venue_margin_t_event_details"
+		            android:textSize="@dimen/txt_evt_details_txt_size_event_details"
+		            android:drawableLeft="@drawable/location"
+		            android:drawablePadding="@dimen/txt_venue_drawable_pad_event_details"
+		            android:gravity="center_vertical" />
+		        
+		        <include layout="@layout/include_address_map"
+		            android:id="@+id/rltLytAddress"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:layout_below="@id/txtVenue"
+		            android:layout_marginTop="@dimen/rlt_lyt_address_margin_t_event_details"
+		            android:layout_marginLeft="@dimen/rlt_lyt_address_margin_l_event_details"
+		            android:layout_marginRight="@dimen/rlt_lyt_address_margin_r_event_details" />
+		        
+		        <View android:id="@+id/vHorLine3"
+		            android:layout_width="match_parent"
+		            android:layout_height="@dimen/v_hor_line_ht_event_details"
+		            android:background="@color/gray_shade_d"
+		            android:layout_below="@id/rltLytAddress"
+		            android:layout_marginLeft="@dimen/v_hor_line_margin_l_event_details"
+		            android:layout_marginRight="@dimen/v_hor_line_margin_r_event_details"
+		            android:layout_marginTop="@dimen/v_hor_line_margin_t_event_details" />
+	        
+	        </RelativeLayout>
+	        
+	        <include layout="@layout/include_friends"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_below="@id/rltLytVenue" />
+	        
 	    </RelativeLayout>
     	
-    	<View android:id="@+id/vDummy"
-    	    android:layout_width="match_parent"
-    	    android:layout_height="800dp"
-    	    android:layout_below="@id/rltLytTxtEvtTitle" />
-	    
     </RelativeLayout>
     
 </com.wcities.eventseeker.custom.view.ObservableScrollView>

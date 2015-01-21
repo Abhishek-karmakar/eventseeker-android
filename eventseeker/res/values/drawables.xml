@@ -2,5 +2,6 @@
 <resources>
 
 	<item name="bg_slctr_v_handle_list_item_discover" type="drawable">@drawable/bg_slctr_rlt_lyt_root_list_item_discover</item>
+	<item name="bg_txt_artist_name_featuring_artist" type="drawable">@drawable/bg_rlt_lyt_txt_evt_title_event_details</item>
 
 </resources>

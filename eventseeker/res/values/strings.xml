@@ -269,7 +269,6 @@
     <string name="venues">VENUES</string>
 
     <!-- Event Details -->
-    <string name="featuring">FEATURING</string>
     <string name="cancel">Cancel</string>
     <string name="time">Time</string>
 
@@ -456,6 +455,9 @@
     
     <!-- DiscoverFragment -->
     <string name="share_via">Share via</string>
+    
+    <!-- fragment_event_details.xml -->
+    <string name="featuring">Featuring</string>
     
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     

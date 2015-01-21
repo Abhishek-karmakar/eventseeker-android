@@ -183,10 +183,10 @@
 
                     <include layout="@layout/include_desc" />
 
-                    <include layout="@layout/include_address_map" />
+                    <include layout="@layout/include_address_map1" />
                 </LinearLayout>
 
-                <include layout="@layout/include_friends" />
+                <include layout="@layout/include_friends1" />
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>
