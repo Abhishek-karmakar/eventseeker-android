@@ -21,6 +21,7 @@ import com.wcities.eventseeker.core.ArtistNewsItem.PostType;
 import com.wcities.eventseeker.core.BookingInfo;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
+import com.wcities.eventseeker.core.Friend;
 import com.wcities.eventseeker.core.FriendNewsItem;
 import com.wcities.eventseeker.core.ImageAttribution;
 import com.wcities.eventseeker.core.ItemsList;
@@ -28,6 +29,7 @@ import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.core.Video;
 import com.wcities.eventseeker.util.ConversionUtil;
+import com.wcities.eventseeker.util.FbUtil;
 
 public class UserInfoApiJSONParser {
 	
@@ -303,14 +305,20 @@ public class UserInfoApiJSONParser {
 	
 	private FriendNewsItem getFriendNewsItem(JSONObject jsonObject) throws JSONException {
 		FriendNewsItem friendNewsItem = new FriendNewsItem();
-		friendNewsItem.setFriendId(jsonObject.getString(KEY_FRIEND_ID));
-		friendNewsItem.setFriendName(jsonObject.getString(KEY_FRIEND_NAME));
+		
+		Friend friend = new Friend();
+		friend.setId(jsonObject.getString(KEY_FRIEND_ID));
+		friend.setName(jsonObject.getString(KEY_FRIEND_NAME));
+		friend.setAttending(Attending.getAttending(jsonObject.getInt(KEY_ATTENDING)));
+		friend.setImgUrl(FbUtil.getFriendImgUrl(friend.getId()));
+		
+		friendNewsItem.setFriend(friend);
+		
 		friendNewsItem.setTrackId(jsonObject.getLong(KEY_TRACK_ID));
 		if (jsonObject.has(KEY_FB_POSTID)) {
 			friendNewsItem.setFbPostId(jsonObject.getString(KEY_FB_POSTID));
 		}
 		friendNewsItem.setTrackName(jsonObject.getString(KEY_TRACK_NAME));
-		friendNewsItem.setAttending(Attending.getAttending(jsonObject.getInt(KEY_ATTENDING)));
 		
 		Attending userAttending = Attending.NOT_GOING;
 		if (jsonObject.has(KEY_USER_ATTENDING)) {

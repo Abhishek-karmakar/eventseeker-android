@@ -33,7 +33,7 @@
         android:layout_alignLeft="@id/txtTitle"
         android:layout_alignRight="@id/txtTitle"
         android:layout_below="@id/txtTitle"
-        android:layout_marginBottom="@dimen/img_evt_margin_b_friends_activity_item"
+        android:layout_marginBottom="@dimen/img_evt_margin_friends_activity_item"
         android:contentDescription="event image"
         android:src="@drawable/placeholder"
         app:compressAsPerWidth="true" />
@@ -74,7 +74,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/lnr_layout_btns_ht_friends_activity_item"
         android:layout_below="@id/imgEvt"
-        android:layout_marginBottom="@dimen/lnr_layout_btns_margin_b_friends_activity_item"
+        android:layout_marginBottom="@dimen/lnr_layout_btns_margin_friends_activity_item"
         android:layout_marginLeft="@dimen/lnr_layout_btns_margin_l_friends_activity_item"
         android:layout_marginRight="@dimen/lnr_layout_btns_margin_r_friends_activity_item"
         android:background="@drawable/button_bar"

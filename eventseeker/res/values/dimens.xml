@@ -337,14 +337,16 @@
     <dimen name="lnr_layout_btns_txt_size_include_fragment_my_events_list_item_footer">12sp</dimen>
     <!-- friends_activity_item.xml -->
     <dimen name="txt_title_txt_size_friends_activity_item">16sp</dimen>
+    <dimen name="txt_venue_txt_size_friends_activity_item">10sp</dimen>
     <dimen name="txt_title_margin_friends_activity_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="img_evt_margin_b_friends_activity_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="img_evt_margin_friends_activity_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="lnr_layout_btns_ht_friends_activity_item">40dp</dimen>
-    <dimen name="lnr_layout_btns_margin_l_friends_activity_item">0dp</dimen>
-    <dimen name="lnr_layout_btns_margin_r_friends_activity_item">@dimen/lnr_layout_btns_margin_l_friends_activity_item</dimen>
-    <dimen name="lnr_layout_btns_margin_b_friends_activity_item">0dp</dimen>
+    <dimen name="lnr_layout_btns_margin_friends_activity_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="btn_drawable_pad_friends_activity_item">10dp</dimen>
     <dimen name="btn_txt_size_friends_activity_item">15sp</dimen>
+    <dimen name="img_crcl_friend_w_h_friends_activity_item">40dp</dimen>
+    <dimen name="img_crcl_friend_mar_l_r_friends_activity_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="rlt_root_padding_friends_activity_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <!-- connect_accounts_list_item_top.xml -->
     <dimen name="txt_sync_count_margin_t_connect_accounts_li_top">20dp</dimen>
     <dimen name="txt_sync_count_txt_size_connect_accounts_li_top">40sp</dimen>

@@ -42,7 +42,7 @@
     <string name="title_recommended">Recommended</string>
     <string name="title_my_events">My Events</string>
     <string name="title_artists_news">Artist News</string>
-    <string name="title_friends_activity">Friends Activity</string>
+    <string name="title_friends_activity">Friends\' Activity</string>
     <string name="title_connect_accounts">Connect Accounts</string>
     <string name="title_get_started">Get Started</string>
     <string name="title_login">Sign In</string>
@@ -279,6 +279,7 @@
     <!-- Friends Activity -->
     <string name="is_going_to">%1$s is going to %2$s</string>
     <string name="wants_to_go_to">%1$s wants to go to %2$s</string>
+    <string name="saved">%1$s saved %2$s</string>
     <string name="like">Like</string>
     <string name="comment">Comment</string>
     <string name="events_are_better_with_friends">Events are always better with friends. Invite them to join eventseeker.</string>

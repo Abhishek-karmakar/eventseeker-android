@@ -3,7 +3,8 @@
     android:id="@+id/rltLayoutRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_gray" >
+    android:background="@color/dark_gray" 
+    android:paddingTop="@dimen/common_t_mar_pad_for_all_layout">
 
     <RelativeLayout android:id="@+id/rltDummyLyt"
         android:layout_width="match_parent"

@@ -9,18 +9,18 @@
     android:background="@color/root_lnr_layout_bg_artists_news_list_item"
     android:orientation="horizontal" >
     
-    <include layout="@layout/friends_activity_item"
+    <include layout="@layout/item_friends_activity"
         android:id="@+id/rltLayoutNewsItemContainer"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1" />
     
-    <include layout="@layout/friends_activity_item"
+    <!-- <include layout="@layout/item_friends_activity"
         android:id="@+id/rltLayoutNewsItemContainer2"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:layout_marginLeft="@dimen/rlt_layout_news_item_container2_margin_l_artists_news_list_item"
-        android:visibility="gone" />
+        android:visibility="gone" /> -->
     
 </LinearLayout>

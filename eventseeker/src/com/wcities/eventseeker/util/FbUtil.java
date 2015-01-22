@@ -93,6 +93,16 @@ public class FbUtil {
         }
     }
 	
+	/**
+	 * gets friend's image url
+	 * @param friendId
+	 * @return
+	 */
+	public static String getFriendImgUrl(String friendId) {
+		return "http://graph.facebook.com/" + friendId + "/picture?type=square";
+		//return "http://graph.facebook.com/" + friendId + "/picture?type=square&height=100&width=100";
+	}
+	
 	public static void makeMeRequest(final Session session, GraphUserCallback graphUserCallback) {
 	    // Make an API call to get user data and define a 
 	    // new callback to handle the response.
@@ -449,7 +459,7 @@ public class FbUtil {
         Request.Callback callback = new Request.Callback() {
         	
             public void onCompleted(Response response) {
-            	Log.d(TAG, "response = " + response.toString());
+            	//Log.d(TAG, "response = " + response.toString());
             	String postId = null;
 
                 GraphObject graphObject = response.getGraphObject();

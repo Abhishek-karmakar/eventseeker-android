@@ -84,6 +84,20 @@ public class ConversionUtil {
 	}
 	
 	/**
+	 * @param date
+	 * @return day in the form MARCH 17.
+	 */
+	public static String getDayForFriendsActivity(Date date) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		
+		DateFormatSymbols dateFormatSymbols = new DateFormatSymbols();
+		String time = dateFormatSymbols.getMonths()[calendar.get(Calendar.MONTH)].toUpperCase() 
+				+ " " + calendar.get(Calendar.DATE);
+		return time;
+	}
+	
+	/**
 	 * 
 	 * @param date
 	 * @return datetime in format Friday October 10, 2015 10:00pm

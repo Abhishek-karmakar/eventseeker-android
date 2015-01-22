@@ -210,10 +210,10 @@
     <!-- friends_activity_item.xml -->
     <dimen name="txt_venue_title_txt_size_friends_activity_item">22sp</dimen>
     <dimen name="txt_evt_time_txt_size_friends_activity_item">15sp</dimen>
-    <dimen name="lnr_layout_btns_margin_b_friends_activity_item">0dp</dimen>
+    <dimen name="lnr_layout_btns_margin_friends_activity_item">0dp</dimen>
     <dimen name="lnr_layout_btns_margin_l_friends_activity_item">0dp</dimen>
     <dimen name="lnr_layout_btns_margin_r_friends_activity_item">@dimen/lnr_layout_btns_margin_l_friends_activity_item</dimen>
-    <dimen name="img_evt_margin_b_friends_activity_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="img_evt_margin_friends_activity_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="txt_title_txt_size_friends_activity_item">22sp</dimen>
     <dimen name="txt_title_margin_t_b_friends_activity_item">7dp</dimen>
     <dimen name="txt_title_margin_l_r_friends_activity_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
@@ -223,7 +223,7 @@
 
     <!-- fragment_artist_info.xml -->
     <dimen name="lnr_btn_social_networking_links_margin_t_b_fragment_artist_info">@dimen/txt_margin_t_b_rlt_evt_info_fragment_event_details_img_evt</dimen>
-    <dimen name="lnr_layout_btns_margin_b_friends_activity_item">0dp</dimen>
+    <dimen name="lnr_layout_btns_margin_friends_activity_item">0dp</dimen>
     <dimen name="lnr_layout_btns_margin_l_friends_activity_item">0dp</dimen>
     <dimen name="lnr_layout_top_margin_l_fragment_event_info">0dp</dimen>
     <dimen name="lnr_layout_top_margin_r_fragment_event_info">@dimen/lnr_layout_top_margin_l_fragment_event_info</dimen>

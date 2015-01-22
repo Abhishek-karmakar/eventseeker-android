@@ -46,6 +46,17 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 		private long id;
 		private int widgetId;
 		private AsyncLoadImageListener listener;
+		/**
+		 * 22-01-2015:
+		 * The isFBUserProfilePic is added because, for friendsactivity screen, we need to download facebook 
+		 * profile image of friends by id, for that facebook api call is available (refer FBUtil's 
+		 * getFriendImgUrl()). But for that call using normal image downloading code following error was 
+		 * occurring:"skia SkImageDecoder::Factory returned null android" So, by referring post from : 
+		 * "http://stackoverflow.com/questions/23559736/android-skimagedecoderfactory-returned-null-error"
+		 * changed implementation for downloading fb user profile pic and hence to judge whether to download
+		 * image for fb user pic or normal(WCities) images added this boolean flag
+		 */
+		private boolean isFBUserProfilePic;
 		
 		/**
 		 * list of urls in order of their priorities. First url will be attempted first. 
@@ -105,6 +116,21 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 		imgDetails.urls = BitmapUtil.getUrlsInOrder(bitmapCacheable, imgResolution);
 		
 		startExecution(imgDetails);
+	}
+
+	public void loadFBUserImg(ImageView imageView, ImgResolution imgResolution, AdapterView adapterView, 
+			int pos, BitmapCacheable bitmapCacheable) {
+		//Log.i(TAG, "loadImg() for pos = " + pos);
+		ImgDetails imgDetails = new ImgDetails();
+		imgDetails.imageView = imageView;
+		imgDetails.key = bitmapCacheable.getKey(imgResolution);
+		imgDetails.adapterView = adapterView;
+		imgDetails.pos = pos;
+		imgDetails.isFBUserProfilePic = true;
+		imgDetails.urls = BitmapUtil.getUrlsInOrder(bitmapCacheable, imgResolution);
+		
+		startExecution(imgDetails);
+		
 	}
 	
 	public void loadImg(ImageView imageView, ImgResolution imgResolution, RecyclerView recyclerView, 
@@ -218,7 +244,12 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 					String url = iterator.next();
 					Log.i(TAG, "url for img = " + url);
 					try {
-						imgDetails.bitmap = BitmapUtil.getBitmap(url);
+						if (!imgDetails.isFBUserProfilePic) {
+							imgDetails.bitmap = BitmapUtil.getBitmap(url);
+							
+						} else {
+							imgDetails.bitmap = BitmapUtil.getFBUserBitmap(url);
+						}
 						//Log.i(TAG, "done getting bitmap");
 						break;
 						

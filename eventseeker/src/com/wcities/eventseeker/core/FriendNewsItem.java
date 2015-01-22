@@ -5,8 +5,7 @@ import com.wcities.eventseeker.core.Event.Attending;
 
 public class FriendNewsItem implements BitmapCacheable {
 
-	private String friendId;
-	private String friendName;
+	private Friend friend;
 	private long trackId;
 	private String trackName;
 	private Attending attending;
@@ -18,13 +17,13 @@ public class FriendNewsItem implements BitmapCacheable {
 	private String fbPostId;
 	private Attending userAttending, newUserAttending;
 	private String bookingUrl;
-	
-	public String getFriendId() {
-		return friendId;
+
+	public Friend getFriend() {
+		return friend;
 	}
 
-	public void setFriendId(String friendId) {
-		this.friendId = friendId;
+	public void setFriend(Friend friend) {
+		this.friend = friend;
 	}
 
 	public long getTrackId() {
@@ -33,14 +32,6 @@ public class FriendNewsItem implements BitmapCacheable {
 
 	public void setTrackId(long trackId) {
 		this.trackId = trackId;
-	}
-
-	public String getFriendName() {
-		return friendName;
-	}
-
-	public void setFriendName(String friendName) {
-		this.friendName = friendName;
 	}
 
 	public String getTrackName() {
@@ -167,7 +158,7 @@ public class FriendNewsItem implements BitmapCacheable {
 
 	@Override
 	public String getKey(ImgResolution imgResolution) {
-		return getClass().getName() + "_" + friendId + "_" + trackId;
+		return getClass().getName() + "_" + friend.getId() + "_" + trackId;
 	}
 	
 	@Override

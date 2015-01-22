@@ -1,8 +1,6 @@
 package com.wcities.eventseeker;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -73,6 +71,7 @@ import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.FriendNewsItem;
 import com.wcities.eventseeker.custom.fragment.PublishEventListFragment;
 import com.wcities.eventseeker.custom.fragment.PublishEventListFragmentLoadableFromBackStack;
+import com.wcities.eventseeker.custom.view.CircleImageView;
 import com.wcities.eventseeker.custom.view.ResizableImageView;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.interfaces.PublishListener;
@@ -350,7 +349,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	    private EventSeekr eventSeekr;
 	    
 	    private FriendNewsItem newsItemPendingPublish;
-		private CheckBox newsItemPendingPublishChkBoxGoing, newsItemPendingPublishChkBoxWantToGo;
+		private CheckBox newsItemPendingPublishChkBoxSave;
 		private int fbCallCountForSameEvt = 0;
 
 	    public FriendActivityListAdapter(Context context) {
@@ -392,23 +391,21 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 					return convertView;
 					
 				} else */if (convertView == null || !(convertView.getTag() instanceof FriendNewsItemViewHolder)) {
-					convertView = mInflater.inflate(R.layout.friends_activity_list_item, null);
+					convertView = mInflater.inflate(R.layout.item_list_friends_activity, null);
 					holder = new FriendNewsItemViewHolder();
 					
 					RelativeLayout rltLayoutNewsItemContainer = holder.rltLayoutNewsItemContainer 
 							= (RelativeLayout) convertView.findViewById(R.id.rltLayoutNewsItemContainer);
-					holder.txtTitle = (TextView) rltLayoutNewsItemContainer.findViewById(R.id.txtTitle);
+					holder.imgCrclFriend = (CircleImageView) rltLayoutNewsItemContainer.findViewById(R.id.imgCrclFriend);
 					holder.imgEvt = (ResizableImageView) rltLayoutNewsItemContainer.findViewById(R.id.imgEvt);
-					holder.lnrLayoutBtns = (LinearLayout) rltLayoutNewsItemContainer.findViewById(R.id.lnrLayoutBtns);
-					holder.lnrLayoutBtnLike = (LinearLayout) rltLayoutNewsItemContainer.findViewById(R.id.lnrLayoutBtnLike);
-					holder.lnrLayoutBtnComment = (LinearLayout) rltLayoutNewsItemContainer.findViewById(R.id.lnrLayoutBtnComment);
-					holder.txtEvtTime = (TextView) rltLayoutNewsItemContainer.findViewById(R.id.txtEvtTime);
-					holder.txtVenueTitle = (TextView) rltLayoutNewsItemContainer.findViewById(R.id.txtVenueTitle);
-					holder.lnrLytTrackBtns = (LinearLayout) rltLayoutNewsItemContainer.findViewById(R.id.lnrLayoutTrackBtns);
-					holder.btnBuyTickets = (Button) rltLayoutNewsItemContainer.findViewById(R.id.btnBuyTickets);
-					holder.lnrLayoutTickets = (LinearLayout) rltLayoutNewsItemContainer.findViewById(R.id.lnrLayoutTickets);
-					holder.chkBoxGoing = (CheckBox) rltLayoutNewsItemContainer.findViewById(R.id.chkBoxGoing);
-					holder.chkBoxWantToGo = (CheckBox) rltLayoutNewsItemContainer.findViewById(R.id.chkBoxWantToGo);
+					holder.txtTitle = (TextView) rltLayoutNewsItemContainer.findViewById(R.id.txtTitle);
+					holder.txtVenue = (TextView) rltLayoutNewsItemContainer.findViewById(R.id.txtVenue);
+					holder.lnrSave = (LinearLayout) rltLayoutNewsItemContainer.findViewById(R.id.lnrSave);
+					holder.lnrLike = (LinearLayout) rltLayoutNewsItemContainer.findViewById(R.id.lnrLike);
+					holder.lnrComment = (LinearLayout) rltLayoutNewsItemContainer.findViewById(R.id.lnrComment);
+					holder.lnrTickets = (LinearLayout) rltLayoutNewsItemContainer.findViewById(R.id.lnrTickets);
+					holder.chkSave = (CheckBox) rltLayoutNewsItemContainer.findViewById(R.id.chkSave);
+					holder.chkBtnBuy = (CheckBox) rltLayoutNewsItemContainer.findViewById(R.id.chkBuyTickets);
 					
 					/*RelativeLayout rltLayoutNewsItem2Container = holder.rltLayoutNewsItem2Container 
 							= (RelativeLayout) convertView.findViewById(R.id.rltLayoutNewsItemContainer2);
@@ -475,12 +472,19 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 		private class FriendNewsItemViewHolder {
 			
 			private RelativeLayout rltLayoutNewsItemContainer;
+			private CircleImageView imgCrclFriend;
+			private ResizableImageView imgEvt;
+			private TextView txtTitle, txtVenue;
+			private LinearLayout lnrSave, lnrLike, lnrComment, lnrTickets;
+			private CheckBox chkSave, chkBtnBuy;
+			
+			/*private RelativeLayout rltLayoutNewsItemContainer;
 			private ResizableImageView imgEvt;
 			private TextView txtTitle, txtEvtTime, txtVenueTitle;
 			private LinearLayout lnrLayoutBtns, lnrLayoutBtnLike, lnrLayoutBtnComment;
 			private LinearLayout lnrLytTrackBtns, lnrLayoutTickets;
 			private Button btnBuyTickets;
-			private CheckBox chkBoxGoing, chkBoxWantToGo;
+			private CheckBox chkSave, chkBoxWantToGo;*/
 			
 			/*private RelativeLayout rltLayoutNewsItem2Container, lnrLayoutEvtInfo2;
 			private ResizableImageView imgEvt2;
@@ -541,51 +545,62 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 			}*/
 			
 			private void setNewsItemContent(final FriendNewsItem item, ViewGroup parent, int pos) {
-				switch (item.getAttending()) {
+				/*switch (item.getAttending()) {
 				case GOING:
-					txtTitle.setText(res.getString(R.string.is_going_to, item.getFriendName(), item.getTrackName()));
+					txtTitle.setText(res.getString(R.string.is_going_to, item.getFriend().getName(), item.getTrackName()));
 					break;
 					
 				case WANTS_TO_GO:
-					txtTitle.setText(res.getString(R.string.wants_to_go_to, item.getFriendName(), item.getTrackName()));
+					txtTitle.setText(res.getString(R.string.wants_to_go_to, item.getFriend().getName(), item.getTrackName()));
+					break;
+
+				case SAVED:
+					txtTitle.setText(res.getString(R.string.saved, item.getFriend().getName(), item.getTrackName()));
 					break;
 
 				default:
 					break;
-				}
+				}*/
+				txtTitle.setText(res.getString(R.string.saved, item.getFriend().getName(), item.getTrackName()));
 				
-				String key = item.getKey(ImgResolution.LOW);
-		        BitmapCache bitmapCache = BitmapCache.getInstance();
+				String key = item.getFriend().getKey(ImgResolution.LOW);
+				BitmapCache bitmapCache = BitmapCache.getInstance();
 				Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
+				if (bitmap != null) {
+					imgCrclFriend.setImageBitmap(bitmap);
+					
+				} else {
+					imgCrclFriend.setImageResource(R.drawable.placeholder);
+					AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
+					asyncLoadImg.loadFBUserImg(imgCrclFriend, ImgResolution.LOW, (AdapterView) parent, pos, item.getFriend());
+				}
+
+				key = item.getKey(ImgResolution.LOW);
+		        bitmapCache = BitmapCache.getInstance();
+				bitmap = bitmapCache.getBitmapFromMemCache(key);
 				if (bitmap != null) {
 					imgEvt.setImageBitmap(bitmap);
 			        
 			    } else {
 					imgEvt.setImageResource(R.drawable.placeholder);
 			        AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-			        asyncLoadImg.loadImg(imgEvt, ImgResolution.LOW, (AdapterView) parent, 
-			        		pos, item);
+			        asyncLoadImg.loadImg(imgEvt, ImgResolution.LOW, (AdapterView) parent, pos, item);
 			    }
-				
-				txtVenueTitle.setText(item.getVenueName());
-				
+								
 				Date date = item.getStartTime();
-				if (date == null) {
-					txtEvtTime.setVisibility(View.INVISIBLE);
-					
-				} else {
-					txtEvtTime.setVisibility(View.VISIBLE);
-					
-					DateFormat dateFormat = new SimpleDateFormat("EEE MMMM dd, yyyy");
-					txtEvtTime.setText(dateFormat.format(date.getStartDate()));
+				String strDate = "";
+				if (date != null) {
+					strDate = ConversionUtil.getDayForFriendsActivity(date.getStartDate()) + " @ ";
 				}
+				txtVenue.setText(strDate + item.getVenueName().toUpperCase());
 				
 				if (item.getFbPostId() != null) {
-					lnrLytTrackBtns.setVisibility(View.INVISIBLE);
-					lnrLayoutBtns.setVisibility(View.VISIBLE);
+					lnrLike.setVisibility(View.VISIBLE);
+					lnrComment.setVisibility(View.VISIBLE);
+					lnrTickets.setVisibility(View.GONE);
 					rltLayoutNewsItemContainer.setPadding(0, 0, 0, 0);
 					
-					lnrLayoutBtnLike.setOnClickListener(new View.OnClickListener() {
+					lnrLike.setOnClickListener(new View.OnClickListener() {
 						
 						@Override
 						public void onClick(View v) {
@@ -596,7 +611,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 						}
 					});
 					
-					lnrLayoutBtnComment.setOnClickListener(new View.OnClickListener() {
+					lnrComment.setOnClickListener(new View.OnClickListener() {
 						
 						@Override
 						public void onClick(View v) {
@@ -607,11 +622,13 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 					});
 					
 				} else {
-					lnrLayoutBtns.setVisibility(View.INVISIBLE);
-					lnrLytTrackBtns.setVisibility(View.VISIBLE);
-					setBuyTickets(item, btnBuyTickets, lnrLayoutTickets);
-					setChkBoxes(item, chkBoxGoing, chkBoxWantToGo);
+					lnrLike.setVisibility(View.GONE);
+					lnrComment.setVisibility(View.GONE);
+					lnrTickets.setVisibility(View.VISIBLE);
+
+					setBuyTickets(item);
 				}
+				setSaveLyt(item);
 				rltLayoutNewsItemContainer.setOnClickListener(new OnClickListener() {
 					
 					@Override
@@ -702,24 +719,22 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 				});
 			}*/
 			
-			private void setBuyTickets(final FriendNewsItem item, Button btnBuyTickets, LinearLayout lnrLayoutTickets) {
+			private void setBuyTickets(final FriendNewsItem item) {
 				
 				if (item.getBookingUrl() != null) {
-					lnrLayoutTickets.setEnabled(true);
-
-					btnBuyTickets.setTextColor(res.getColor(color.black));
-					btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(res.getDrawable(
-							R.drawable.tickets_grey), null, null, null);
+					chkBtnBuy.setEnabled(true);
+					chkBtnBuy.setTextColor(res.getColor(color.black));
+					/*btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(res.getDrawable(
+							R.drawable.tickets_grey), null, null, null);*/
 
 				} else {
-					lnrLayoutTickets.setEnabled(false);
-
-					btnBuyTickets.setTextColor(res.getColor(R.color.btn_buy_tickets_disabled_txt_color));
-					btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(res.getDrawable(
-							R.drawable.tickets_disabled), null, null, null);
+					chkBtnBuy.setEnabled(false);
+					chkBtnBuy.setTextColor(res.getColor(R.color.btn_buy_tickets_disabled_txt_color));
+					/*btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(res.getDrawable(
+							R.drawable.tickets_disabled), null, null, null);*/
 				}
 				
-				lnrLayoutTickets.setOnClickListener(new OnClickListener() {
+				lnrTickets.setOnClickListener(new OnClickListener() {
 
 					@Override
 					public void onClick(View arg0) {
@@ -732,66 +747,46 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 				});
 			}
 			
-			private void setChkBoxes(final FriendNewsItem item, final CheckBox chkBoxGoing, final CheckBox chkBoxWantToGo) {
-				updateAttendingChkBoxes(item, chkBoxGoing, chkBoxWantToGo);
-				
-				OnClickListener goingClickListener = new OnClickListener() {
+			private void setSaveLyt(final FriendNewsItem item) {
+				updateAttendingChkSave(item, chkSave);
+				lnrSave.setOnClickListener(new OnClickListener() {
 					
 					@Override
 					public void onClick(View v) {
-						onChkBoxClick(item, chkBoxGoing, chkBoxWantToGo, true);
+						onSaveClick(item);
 					}
-				};
-				OnClickListener wantToClickListener = new OnClickListener() {
-					
-					@Override
-					public void onClick(View v) {
-						onChkBoxClick(item, chkBoxGoing, chkBoxWantToGo, false);
-					}
-				};
-				
-				chkBoxGoing.setOnClickListener(goingClickListener);
-				chkBoxWantToGo.setOnClickListener(wantToClickListener);
+				});
 				
 				/**
 				 * If user clicks on going or wantToGo & changes orientation instantly before call to 
-				 * onPublishPermissionGranted(), then we need to update both checkboxes with right 
-				 * checkbox pointers in new orientation
+				 * onPublishPermissionGranted(), then we need to update both CheckBoxes with right 
+				 * CheckBox pointers in new orientation
 				 */
 				if (newsItemPendingPublish == item) {
-					newsItemPendingPublishChkBoxGoing = chkBoxGoing;
-					newsItemPendingPublishChkBoxWantToGo = chkBoxWantToGo;
+					newsItemPendingPublishChkBoxSave = chkSave;
 				}
 			}
 			
-			private void onChkBoxClick(FriendNewsItem item, CheckBox chkBoxGoing, CheckBox chkBoxWantToGo, 
-					boolean isGoingClicked) {
-				Attending userAttending;
-				if (isGoingClicked) {
-					userAttending = item.getUserAttending() == Attending.GOING ? Attending.NOT_GOING : Attending.GOING;
-					
-				} else {
-					userAttending = item.getUserAttending() == Attending.WANTS_TO_GO ? Attending.NOT_GOING : Attending.WANTS_TO_GO;
-				}
-				
+			private void onSaveClick(FriendNewsItem item) {
+				Attending userAttending = item.getUserAttending() == Attending.SAVED ? 
+						Attending.NOT_GOING : Attending.SAVED;
 				if (userAttending == Attending.NOT_GOING) {
 					item.setUserAttending(userAttending);
-					updateAttendingChkBoxes(item, chkBoxGoing, chkBoxWantToGo);
+					updateAttendingChkSave(item, chkSave);
 					new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.event, item.getTrackId(), 
 							item.getUserAttending().getValue(), UserTrackingType.Add).execute();
 					
 				} else {
 					/**
-					 * call to updateAttendingChkBoxes() to negate the click event for now on checkbox, 
+					 * call to updateAttendingChkBoxes() to negate the click event for now on CheckBox, 
 					 * since it's handled after checking fb/google publish permission
 					 */
-					updateAttendingChkBoxes(item, chkBoxGoing, chkBoxWantToGo);
+					updateAttendingChkSave(item, chkSave);
 					
 					if (eventSeekr.getFbUserId() != null) {
 						item.setNewUserAttending(userAttending);
 						newsItemPendingPublish = item;
-						newsItemPendingPublishChkBoxGoing = chkBoxGoing;
-						newsItemPendingPublishChkBoxWantToGo = chkBoxWantToGo;
+						newsItemPendingPublishChkBoxSave = chkSave;
 						fbCallCountForSameEvt = 0;
 						FbUtil.handlePublishFriendNewsItem(FriendsActivityFragment.this, FriendsActivityFragment.this, 
 								AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, item);
@@ -799,8 +794,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 					} else if (eventSeekr.getGPlusUserId() != null) {
 						item.setNewUserAttending(userAttending);
 						newsItemPendingPublish = item;
-						newsItemPendingPublishChkBoxGoing = chkBoxGoing;
-						newsItemPendingPublishChkBoxWantToGo = chkBoxWantToGo;
+						newsItemPendingPublishChkBoxSave = chkSave;
 						((PublishEventListFragment)FriendsActivityFragment.this).setFriendNewsItem(newsItemPendingPublish);
 						((PublishEventListFragment)FriendsActivityFragment.this).handlePublishEvent();
 						
@@ -809,30 +803,33 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 								((ActionBarActivity) FragmentUtil.getActivity(FriendsActivityFragment.this)),  
 								FriendsActivityFragment.this);
 					}
+					
+					/*
+					 EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(discoverFragment).getApplication();
+						if (event.getAttending() == Attending.SAVED) {
+							event.setAttending(Attending.NOT_GOING);
+							new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.event, event.getId(), 
+									event.getAttending().getValue(), UserTrackingType.Add).execute();
+							updateImgSaveSrc(holder, event, FragmentUtil.getResources(discoverFragment));
+							
+						} else {
+							discoverFragment.event = eventPendingPublish = event;
+							holderPendingPublish = holder;
+							
+							if (eventSeekr.getFbUserId() != null) {
+								fbCallCountForSameEvt = 0;
+								event.setNewAttending(Attending.SAVED);
+								FbUtil.handlePublishEvent(discoverFragment, discoverFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
+										AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
+								
+							} else if (eventSeekr.getGPlusUserId() != null) {
+								event.setNewAttending(Attending.SAVED);
+								discoverFragment.handlePublishEvent();
+							}
+						}
+					 */
+					
 				}
-			}
-		}
-		
-		private void updateAttendingChkBoxes(FriendNewsItem item, CheckBox chkBoxGoing, CheckBox chkBoxWantToGo) {
-			switch (item.getUserAttending()) {
-
-			case GOING:
-				chkBoxGoing.setChecked(true);
-				chkBoxWantToGo.setChecked(false);
-				break;
-
-			case WANTS_TO_GO:
-				chkBoxGoing.setChecked(false);
-				chkBoxWantToGo.setChecked(true);
-				break;
-
-			case NOT_GOING:
-				chkBoxGoing.setChecked(false);
-				chkBoxWantToGo.setChecked(false);
-				break;
-
-			default:
-				break;
 			}
 		}
 		
@@ -854,8 +851,13 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 		}
 		
 		public void onPublishPermissionGranted() {
-			updateAttendingChkBoxes(newsItemPendingPublish, newsItemPendingPublishChkBoxGoing, newsItemPendingPublishChkBoxWantToGo);
+			updateAttendingChkSave(newsItemPendingPublish, newsItemPendingPublishChkBoxSave);
 		}
+		
+		private void updateAttendingChkSave(FriendNewsItem item, CheckBox chkSave) {
+			chkSave.setChecked(item.getUserAttending() == Attending.SAVED);			
+		}
+		
 	}
 	
 	private void onBuyTicketClicked(Bundle args) {
@@ -1105,9 +1107,8 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 		switch (v.getId()) {
 		
 		case R.id.btnAction:
-			/*((DrawerListFragmentListener)FragmentUtil.getActivity(this)).onDrawerItemSelected(
-					MainActivity.INDEX_NAV_ITEM_INVITE_FRIENDS, null);*/
-			((OnSettingsItemClickedListener) FragmentUtil.getActivity(this)).onSettingsItemClicked(SettingsItem.INVITE_FRIENDS, null);
+			((OnSettingsItemClickedListener) FragmentUtil.getActivity(this))
+				.onSettingsItemClicked(SettingsItem.INVITE_FRIENDS, null);
 			break;
 
 		default:
@@ -1125,30 +1126,4 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 		return "Friend News Screen";
 	}    	
 	
-	
-	/***
-	 * Tracking logic:
-	 * 	EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(discoverFragment).getApplication();
-		if (event.getAttending() == Attending.SAVED) {
-			event.setAttending(Attending.NOT_GOING);
-			new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.event, event.getId(), 
-					event.getAttending().getValue(), UserTrackingType.Add).execute();
-			updateImgSaveSrc(holder, event, FragmentUtil.getResources(discoverFragment));
-			
-		} else {
-			discoverFragment.event = eventPendingPublish = event;
-			holderPendingPublish = holder;
-			
-			if (eventSeekr.getFbUserId() != null) {
-				fbCallCountForSameEvt = 0;
-				event.setNewAttending(Attending.SAVED);
-				FbUtil.handlePublishEvent(discoverFragment, discoverFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-						AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
-				
-			} else if (eventSeekr.getGPlusUserId() != null) {
-				event.setNewAttending(Attending.SAVED);
-				discoverFragment.handlePublishEvent();
-			}
-		}
-	 */
 }

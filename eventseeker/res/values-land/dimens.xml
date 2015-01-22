@@ -95,10 +95,10 @@
     <dimen name="lnr_layout_btns_margin_t_fragment_my_events_list_item">2dp</dimen>
 
     <!-- friends_activity_item.xml -->
-    <dimen name="img_evt_margin_b_friends_activity_item">0dp</dimen>
+    <dimen name="img_evt_margin_friends_activity_item">0dp</dimen>
     <dimen name="lnr_layout_btns_margin_l_friends_activity_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="lnr_layout_btns_margin_r_friends_activity_item">@dimen/lnr_layout_btns_margin_l_friends_activity_item</dimen>
-    <dimen name="lnr_layout_btns_margin_b_friends_activity_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="lnr_layout_btns_margin_friends_activity_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="lnr_layout_btns_ht_friends_activity_item">50dp</dimen>
     <dimen name="btn_drawable_pad_friends_activity_item">5dp</dimen>
 

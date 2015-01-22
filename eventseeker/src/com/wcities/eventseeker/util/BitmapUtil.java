@@ -8,6 +8,14 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.entity.BufferedHttpEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -57,7 +65,30 @@ public class BitmapUtil {
 		//Log.i(TAG, "return bitmap");
 		return bitmap;
 	}
-	
+
+	public static Bitmap getFBUserBitmap(String strURL) {
+		Bitmap img = null;
+		try {
+	        HttpGet request = new HttpGet(strURL);
+
+	        HttpClient client = new DefaultHttpClient();
+	        HttpResponse response = (HttpResponse)client.execute(request);           
+	        
+	        HttpEntity entity = response.getEntity();
+	        BufferedHttpEntity bufferedEntity = new BufferedHttpEntity(entity);
+	        
+	        InputStream inputStream = bufferedEntity.getContent();
+	        img = BitmapFactory.decodeStream(inputStream);
+            
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+		return img;
+	}
+
 	public static List<String> getUrlsInOrder(BitmapCacheable bitmapCacheable, ImgResolution imgResolution) {
 		List<String> urls = new ArrayList<String>();
 		
