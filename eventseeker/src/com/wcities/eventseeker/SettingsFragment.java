@@ -79,9 +79,7 @@ public class SettingsFragment extends ListFragmentLoadableFromBackStack {
 			// open passed settings item screen
 			SettingsItem settingsItem = (SettingsItem) args.getSerializable(BundleKeys.SETTINGS_ITEM);
 			//Log.d(TAG, "settings item = " + settingsItem.name());
-			Bundle passArgs = new Bundle();
-			passArgs.putBoolean(BundleKeys.DISABLE_DRAWER_INDICATOR_FROM_ONRESUME, true);
-			((OnSettingsItemClickedListener) FragmentUtil.getActivity(this)).onSettingsItemClicked(settingsItem, passArgs);
+			((OnSettingsItemClickedListener) FragmentUtil.getActivity(this)).onSettingsItemClicked(settingsItem, null);
 		}
 	}
 

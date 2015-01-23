@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
 import android.util.SparseArray;
 
 import com.wcities.eventseeker.api.Api;
@@ -139,9 +140,17 @@ public class EventApiJSONParser {
 				//Log.i(TAG, "No booking info found for this event.");
 			}
 			
+			//Log.d(TAG, "AT issue fillEventDetails event = " + event);
+			/*if (jObjEvent.has(KEY_ATTENDING)) {
+				Log.d(TAG, "AT issue fillEventDetails jObjEvent.has(KEY_ATTENDING) = " + jObjEvent.getInt(KEY_ATTENDING));
+				
+			} else {
+				Log.d(TAG, "AT issue fillEventDetails !jObjEvent.has(KEY_ATTENDING)");
+			}*/
 			Attending attending = jObjEvent.has(KEY_ATTENDING) ? 
 					Attending.getAttending(jObjEvent.getInt(KEY_ATTENDING)) : Attending.NOT_GOING;
 			event.setAttending(attending);
+			//Log.d(TAG, "AT issue fillEventDetails event.getAttending() = " + event.getAttending().getValue());
 			
 			JSONObject jObjAddress = jObjCityevent.getJSONObject(KEY_VENUES).getJSONObject(KEY_VENUE).getJSONObject(KEY_ADDRESS);
 			event.getSchedule().getVenue().setAddress(getAddress(jObjAddress));

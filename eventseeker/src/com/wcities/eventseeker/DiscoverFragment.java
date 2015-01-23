@@ -1010,6 +1010,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		}
 		
 		private void updateImgSaveSrc(ViewHolder holder, Event event, Resources res) {
+			//Log.d(TAG, "updateImgSaveSrc() - event name = " + event.getName() + ", attending = " + event.getAttending().getValue());
 			int drawableId = (event.getAttending() == Attending.SAVED) ? R.drawable.checked_blue : R.drawable.calendar;
 			holder.imgSave.setImageDrawable(res.getDrawable(drawableId));
 		}
@@ -1233,6 +1234,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 					sharedElements.add(sharedElement);
 					discoverFragment.addViewsToBeHidden(holder.imgEvent);
 					
+					//Log.d(TAG, "AT issue event = " + event);
 					((EventListener) FragmentUtil.getActivity(discoverFragment)).onEventSelected(event, sharedElements);
 					
 					discoverFragment.onPushedToBackStack();

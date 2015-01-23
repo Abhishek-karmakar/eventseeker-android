@@ -91,7 +91,6 @@ public class BundleKeys {
 	public static final String DIALOG_TAG = "dialogTag";
 	
 	public static final String SETTINGS_ITEM = "settingsItem";
-	public static final String DISABLE_DRAWER_INDICATOR_FROM_ONRESUME = "disableDrawerIndicatorFromOnresume";
 	
 	public static final String FRAGMENT_TRANSACTION_ANIM_IDS = "fragmentTransactionAnimIds";
 	

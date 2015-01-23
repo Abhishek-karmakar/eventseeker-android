@@ -108,7 +108,6 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	private String title = "";
 	private float minTitleScale;
 	
-	private Event event;
 	private boolean isEvtDescExpanded;
 	
 	private LoadEventDetails loadEventDetails;
@@ -163,19 +162,15 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			
 			event.getFriends().clear();
 
-			loadEventDetails = new LoadEventDetails(Api.OAUTH_TOKEN, this, this, event);
-			AsyncTaskUtil.executeAsyncTask(loadEventDetails, true);
-			
 			updateShareIntent();
 		}
-		
+		//Log.d(TAG, "AT issue event = " + event);
 		fabScrollThreshold = ConversionUtil.toPx(FragmentUtil.getResources(this), FAB_SCROLL_THRESHOLD_IN_DP);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		//Log.d(TAG, "onCreateView()");
-
 		/**
 		 * on orientation change we need to recalculate this due to different values of 
 		 * action_bar_ht on both orientations
@@ -429,6 +424,25 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 					//Log.d(TAG, "!isCancelled");
 					rltLytContent.setVisibility(View.VISIBLE);
 					Animation slideInFromBottom = AnimationUtils.loadAnimation(FragmentUtil.getApplication(EventDetailsFragment.this), R.anim.slide_in_from_bottom);
+					slideInFromBottom.setAnimationListener(new AnimationListener() {
+						
+						@Override
+						public void onAnimationStart(Animation animation) {}
+						
+						@Override
+						public void onAnimationRepeat(Animation animation) {}
+						
+						@Override
+						public void onAnimationEnd(Animation animation) {
+							/**
+							 * Load here instead of onCreate(), because otherwise animation slows down on some 
+							 * devices
+							 */
+							loadEventDetails = new LoadEventDetails(Api.OAUTH_TOKEN, EventDetailsFragment.this, 
+									EventDetailsFragment.this, event);
+							AsyncTaskUtil.executeAsyncTask(loadEventDetails, true);
+						}
+					});
 					rltLytContent.startAnimation(slideInFromBottom);
 				}
 			}
@@ -597,15 +611,20 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	
 	private void updateAddressMapVisibility() {
 		if (event.getSchedule() == null || event.getSchedule().getVenue() == null) {
-			return;
+			/**
+			 * set again to gone since it won't be set from updateDetailsVisibility() in case user has moved to
+			 * say tickets screen & comes back to this. 
+			 */
+			rltLytVenue.setVisibility(View.GONE);
+			
+		} else {
+			rltLytVenue.setVisibility(View.VISIBLE);
+			AddressMapFragment fragment = (AddressMapFragment) getChildFragmentManager().findFragmentByTag(
+					AppConstants.FRAGMENT_TAG_ADDRESS_MAP);
+	        if (fragment == null) {
+	        	addAddressMapFragment();
+	        }
 		}
-		
-		rltLytVenue.setVisibility(View.VISIBLE);
-		AddressMapFragment fragment = (AddressMapFragment) getChildFragmentManager().findFragmentByTag(
-				AppConstants.FRAGMENT_TAG_ADDRESS_MAP);
-        if (fragment == null) {
-        	addAddressMapFragment();
-        }
 	}
 	
 	private void updateFriendsVisibility() {
@@ -613,6 +632,9 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			//Log.d(TAG, "event.getFriends() = " + event.getFriends());
 			rltLytFriends.setVisibility(View.VISIBLE);
 			friendsRVAdapter.notifyDataSetChanged();
+			
+		} else {
+			rltLytFriends.setVisibility(View.GONE);
 		}
 	}
 	
@@ -654,6 +676,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	}
 	
 	private void updateFabSaveSrc(Resources res) {
+		//Log.d(TAG, "AT issue event.getAttending() = " + event.getAttending().getValue());
 		int drawableId = (event.getAttending() == Attending.SAVED) ? R.drawable.checked : R.drawable.calendar;
 		fabSave.setImageDrawable(res.getDrawable(drawableId));
 	}

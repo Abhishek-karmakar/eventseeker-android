@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 
 import com.wcities.eventseeker.api.EventApi;
 import com.wcities.eventseeker.api.EventApi.IdType;
@@ -18,6 +19,8 @@ import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class LoadEventDetails extends AsyncTask<Void, Void, Void> {
+	
+	private static final String TAG = LoadEventDetails.class.getSimpleName();
 	
 	private OnEventUpdatedListner listner;
 	private Fragment fragment;
@@ -47,6 +50,7 @@ public class LoadEventDetails extends AsyncTask<Void, Void, Void> {
 		
 		try {
 			JSONObject jsonObject = eventApi.getEvents();
+			//Log.d(TAG, "AT issue res = " + jsonObject.toString());
 			EventApiJSONParser jsonParser = new EventApiJSONParser();
 			jsonParser.fillEventDetails(event, jsonObject);
 			
