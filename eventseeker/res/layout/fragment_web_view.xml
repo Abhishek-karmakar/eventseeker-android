@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- added background color since otherwise removal (of existing fragment) & addition of this fragment on slow 
+devices sometimes shows some other fragment available in backstack through this screen's default transparent background -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white" >
     
 	<WebView android:id="@+id/webview"
 	    android:layout_width="match_parent"

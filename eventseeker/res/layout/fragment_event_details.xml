@@ -104,7 +104,7 @@
 			    </LinearLayout>
 			    
 		        <include layout="@layout/progress_bar_eventseeker_fixed_ht"
-		            android:id="@+id/prgsBar"
+		            android:id="@+id/rltLytPrgsBar"
 		            android:layout_width="match_parent"
 	    			android:layout_height="@dimen/rlt_lyt_root_ht_progress_bar_eventseeker_fixed_ht"
 		            android:layout_below="@id/lnrLytExpandDesc"

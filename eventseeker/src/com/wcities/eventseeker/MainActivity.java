@@ -1210,24 +1210,50 @@ public class MainActivity extends ActionBarActivity implements
 			fragmentTransaction.setCustomAnimations(anims[0], anims[1], anims[2], anims[3]);
 		}
 		
-		if (args != null && args.containsKey(BundleKeys.SHARED_ELEMENTS)) {
-			prevCustomSharedElementTransitionSource = (CustomSharedElementTransitionSource) getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
-		}
-		fragmentTransaction.add(R.id.content_frame, replaceBy, replaceByFragmentTag);
-		
-		/*if (replaceByFragmentTag.equals(AppConstants.FRAGMENT_TAG_LOGIN_SYNCING) || 
+		if (replaceByFragmentTag.equals(AppConstants.FRAGMENT_TAG_LOGIN_SYNCING) || 
 				((args != null && args.containsKey(BundleKeys.SHARED_ELEMENTS)))) {
 			if (args != null && args.containsKey(BundleKeys.SHARED_ELEMENTS)) {
 				prevCustomSharedElementTransitionSource = (CustomSharedElementTransitionSource) getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
 			}
-			Log.d(TAG, "add");
-			// add fragment instead of replacing so that behind its transparent background sign in/sign up screen remains visible
+			//Log.d(TAG, "add");
+			/**
+			 * add fragment instead of replacing so that behind its transparent background 
+			 * a) sign in/sign up screen remains visible OR
+			 * b) screen transition executes intuitively when there are some shared elements 
+			 */
 			fragmentTransaction.add(R.id.content_frame, replaceBy, replaceByFragmentTag);
 			
 		} else {
-			Log.d(TAG, "replace");
-			fragmentTransaction.add(R.id.content_frame, replaceBy, replaceByFragmentTag);
-		}*/
+			if (drawerItemSelectedPosition == AppConstants.INVALID_INDEX && currentContentFragmentTag != null) {
+				//Log.d(TAG, "remove add");
+				/**
+				 * Instead of using replace function, we use combination of remove & add, since we just want to 
+				 * replace top fragment whereas replace empties out entire container followed by adding new
+				 * fragment. Note that on using replace() in this case, addToBackStack() will consider 
+				 * transaction of last fragment(at index 0) replaced by new fragment, so pressing back afterwards 
+				 * won't display right fragment.
+				 * e.g.: 
+				 * 1) replace() - fragment A
+				 * 2) add() - fragment B, add to back stack
+				 * 3) replace() - fragment C, add to back stack
+				 * Press back will display fragment A (not B which we want), press back once more will also display same fragment A & 
+				 * pressing back now will move app to backstack (as we are calling moveTaskToBack() from onBackPressed())
+				 * 
+				 * When drawerItemSelectedPosition is valid for items from navigation drawer (drawerItemSelectedPosition != AppConstants.INVALID_INDEX), 
+				 * we already pop entire backstack from onDrawerItemSelected() function & hence we can use replace() method
+				 * directly from else block. Otherwise using this method in such case is causing issue: 
+				 * e.g. - if we use remove & add after login process completion, then app doesn't unlock
+				 * the drawer (it doesn't call onDestroy() of LauncherFragment).
+				 */
+				Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
+				fragmentTransaction.remove(currentFragment);
+				fragmentTransaction.add(R.id.content_frame, replaceBy, replaceByFragmentTag);
+				
+			} else {
+				//Log.d(TAG, "replace");
+				fragmentTransaction.replace(R.id.content_frame, replaceBy, replaceByFragmentTag);
+			}
+		}
 		
 		//if (!sharedElements.isEmpty()) {
 			//getWindow().setAllowEnterTransitionOverlap(true);

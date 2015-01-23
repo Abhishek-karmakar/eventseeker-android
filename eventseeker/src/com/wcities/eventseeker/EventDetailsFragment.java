@@ -97,7 +97,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	private View rootView;
 	private ImageView imgEvent, imgDown;
 	private TextView txtEvtTitle, txtEvtDesc, txtEvtLoc, txtVenue, txtEvtTime;
-	private RelativeLayout rltLytContent, rltLytFeaturing, prgsBar, rltLytVenue, rltLytFriends;
+	private RelativeLayout rltLytContent, rltLytFeaturing, rltLytPrgsBar, rltLytVenue, rltLytFriends;
 	private RecyclerView recyclerVFriends;
 	private ShareActionProvider mShareActionProvider;
 	private FloatingActionButton fabTickets, fabSave;
@@ -207,7 +207,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		final ObservableScrollView obsrScrlV = (ObservableScrollView) rootView.findViewById(R.id.obsrScrlV);
 		obsrScrlV.setListener(this);
 		
-		prgsBar = (RelativeLayout) rootView.findViewById(R.id.prgsBar);
+		rltLytPrgsBar = (RelativeLayout) rootView.findViewById(R.id.rltLytPrgsBar);
 		rltLytFeaturing = (RelativeLayout) rootView.findViewById(R.id.rltLytFeaturing);
 		rltLytVenue = (RelativeLayout) rootView.findViewById(R.id.rltLytVenue);
 		rltLytFriends = (RelativeLayout) rootView.findViewById(R.id.rltLytFriends);
@@ -312,12 +312,6 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		ma.setVStatusBarVisibility(View.VISIBLE, R.color.colorPrimaryDark);
 		ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
 	}
-	
-	/*@Override
-	public void onDestroyView() {
-		super.onDestroyView();
-		Log.d(TAG, "onDestroyView()");
-	}*/
 	
 	@Override
 	public void onDestroy() {
@@ -668,7 +662,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		if (allDetailsLoaded) {
 			updateShareIntent();
 			
-			prgsBar.setVisibility(View.GONE);
+			rltLytPrgsBar.setVisibility(View.GONE);
 			updateFeaturingVisibility();
 			updateEventSchedule();
 			updateAddressMapVisibility();
@@ -676,7 +670,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			updateFabs();
 			
 		} else {
-			prgsBar.setVisibility(View.VISIBLE);
+			rltLytPrgsBar.setVisibility(View.VISIBLE);
 			rltLytFeaturing.setVisibility(View.GONE);
 			rltLytVenue.setVisibility(View.GONE);
 			rltLytFriends.setVisibility(View.GONE);
