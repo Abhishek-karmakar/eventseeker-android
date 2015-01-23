@@ -32,6 +32,7 @@ public class MyEventsFragment extends FragmentLoadableFromBackStack implements O
 
 	private static final String FRAGMENT_TAG_FOLLOWING = "following";
 	private static final String FRAGMENT_TAG_RECOMMENDED = "recommended";
+	private static final String FRAGMENT_TAG_SAVED = "saved";
 	
 	private SwipeTabsAdapter mTabsAdapter;
 	private TabBar tabBar;
@@ -77,8 +78,12 @@ public class MyEventsFragment extends FragmentLoadableFromBackStack implements O
 		btnRecommended.setText(R.string.recommended);
 		btnRecommended.setOnClickListener(this);
 		
-		vTabBar.findViewById(R.id.btnTab3).setVisibility(View.GONE);
-		vTabBar.findViewById(R.id.vDivider2).setVisibility(View.GONE);
+		Button btnSaved = (Button) vTabBar.findViewById(R.id.btnTab3);
+		btnSaved.setText(R.string.saved_event);
+		btnSaved.setOnClickListener(this);
+		
+		//vTabBar.findViewById(R.id.btnTab3).setVisibility(View.GONE);
+		//vTabBar.findViewById(R.id.vDivider2).setVisibility(View.GONE);
 		
 		Bundle args = new Bundle();
 		args.putSerializable(BundleKeys.LOAD_TYPE, UserInfoApi.Type.myevents);
@@ -91,6 +96,12 @@ public class MyEventsFragment extends FragmentLoadableFromBackStack implements O
 		TabBar.Tab tabRecommended = new TabBar.Tab(btnRecommended, FRAGMENT_TAG_RECOMMENDED, 
 				MyEventsListFragment.class, args);
 		mTabsAdapter.addTab(tabRecommended, oldAdapter);
+
+		args = new Bundle();
+		args.putSerializable(BundleKeys.LOAD_TYPE, UserInfoApi.Type.recommendedevent);
+		TabBar.Tab tabSaved = new TabBar.Tab(btnSaved, FRAGMENT_TAG_SAVED, 
+				MyEventsListFragment.class, args);
+		mTabsAdapter.addTab(tabSaved, oldAdapter);
 		
 		return v;
 	}
@@ -101,6 +112,20 @@ public class MyEventsFragment extends FragmentLoadableFromBackStack implements O
 		if (getArguments() != null && getArguments().containsKey(BundleKeys.SELECT_RECOMMENDED_EVENTS)) {
 			tabBar.select(tabBar.getTabByTag(FRAGMENT_TAG_RECOMMENDED));
 		}
+	}
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		ma.setToolbarElevation(0);
+	}
+	
+	@Override
+	public void onStop() {
+		super.onStop();
+		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
 	}
 	
 	@Override
@@ -130,6 +155,10 @@ public class MyEventsFragment extends FragmentLoadableFromBackStack implements O
 			
 		case R.id.btnTab2:
 			tabBar.select(tabBar.getTabByTag(FRAGMENT_TAG_RECOMMENDED));
+			break;
+
+		case R.id.btnTab3:
+			tabBar.select(tabBar.getTabByTag(FRAGMENT_TAG_SAVED));
 			break;
 			
 		default:

@@ -285,6 +285,7 @@
     <dimen name="v_divider_margin_b_fragment_custom_tabs">@dimen/v_divider_margin_t_fragment_custom_tabs</dimen>
     <dimen name="tab_bar_ht_fragment_custom_tabs">45dp</dimen>
     <dimen name="tab_bar_margin_fragment_custom_tabs">8dp</dimen>
+    <dimen name="txt_size_btn_tab_bar_fragment_custom_tabs">15sp</dimen>
     <!-- fragment_event_info.xml -->
     <dimen name="txt_evt_desc_pad_fragment_evt_info">8dp</dimen>
     <dimen name="img_down_margin_r_fragment_evt_info">8dp</dimen>
@@ -335,6 +336,11 @@
     <!-- item_list_my_events.xml -->
     <dimen name="rlt_lyt_txt_evt_title_pad_l_item_list_my_events">15dp</dimen>
     <dimen name="rlt_floating_btn_mar_t_item_list_my_events">-28dp</dimen>
+    <dimen name="fab_margin_item_list_my_events">10dp</dimen>
+    <dimen name="txt_evt_details_margin_l_r_item_list_my_events">15dp</dimen>
+    <dimen name="txt_evt_details_margin_t_item_list_my_events">10dp</dimen>
+    <dimen name="rlt_content_pad_t_item_list_my_events">30dp</dimen>
+    <dimen name="rlt_content_pad_b_item_list_my_events">10dp</dimen>
     <!-- include_fragment_my_events_list_item_footer.xml -->
     <dimen name="lnr_layout_btns_ht_fragment_my_events_list_item">40dp</dimen>
     <dimen name="lnr_layout_btns_txt_size_include_fragment_my_events_list_item_footer">12sp</dimen>

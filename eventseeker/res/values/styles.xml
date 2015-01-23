@@ -86,6 +86,8 @@
 	<style name="CustomTabBar" parent="@android:style/Widget.Button">
         <item name="android:background">@drawable/tab_indicator_holo</item>
         <item name="android:textAppearance">@style/CustomTabBarTextAppearance</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/txt_size_btn_tab_bar_fragment_custom_tabs</item>
     </style>
     
 	<style name="CustomTabBarTextAppearance" parent="@android:style/TextAppearance.Widget.TabWidget">

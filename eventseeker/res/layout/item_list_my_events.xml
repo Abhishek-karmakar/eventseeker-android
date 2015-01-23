@@ -27,7 +27,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.6"
-            android:ellipsize="marquee"
+            android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="2"
             android:text="Cut Copy And The Red Hot Chilli Peppers"
@@ -45,19 +45,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/lnrEvtTitle"
-        android:background="@android:color/white" >
+        android:background="@android:color/white"
+        android:paddingBottom="@dimen/rlt_content_pad_b_item_list_my_events"
+        android:paddingTop="@dimen/rlt_content_pad_t_item_list_my_events" >
 
         <TextView
             android:id="@+id/txtEvtLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/txt_evt_details_margin_l_event_details"
-            android:layout_marginRight="@dimen/txt_evt_details_margin_r_event_details"
-            android:layout_marginTop="@dimen/txt_evt_details_margin_t_event_details"
+            android:layout_marginLeft="@dimen/txt_evt_details_margin_l_r_item_list_my_events"
+            android:layout_marginRight="@dimen/txt_evt_details_margin_l_r_item_list_my_events"
             android:drawableLeft="@drawable/location"
             android:drawablePadding="@dimen/txt_evt_details_drawable_pad_event_details"
             android:gravity="center_vertical"
-            android:text=""
             android:textSize="@dimen/txt_evt_details_txt_size_event_details" />
 
         <TextView
@@ -65,13 +65,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/txtEvtLocation"
-            android:layout_marginLeft="@dimen/txt_evt_details_margin_l_event_details"
-            android:layout_marginRight="@dimen/txt_evt_details_margin_r_event_details"
-            android:layout_marginTop="@dimen/txt_evt_details_margin_t_event_details"
+            android:layout_marginLeft="@dimen/txt_evt_details_margin_l_r_item_list_my_events"
+            android:layout_marginRight="@dimen/txt_evt_details_margin_l_r_item_list_my_events"
+            android:layout_marginTop="@dimen/txt_evt_details_margin_t_item_list_my_events"
             android:drawableLeft="@drawable/time"
             android:drawablePadding="@dimen/txt_evt_details_drawable_pad_event_details"
             android:gravity="center_vertical"
-            android:text=""
             android:textSize="@dimen/txt_evt_details_txt_size_event_details" />
     </RelativeLayout>
 
@@ -85,7 +84,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/imgEvent" >
+            android:layout_marginLeft="@dimen/rlt_lyt_txt_evt_title_pad_l_item_list_my_events" >
 
             <View
                 android:layout_width="0dp"
@@ -103,7 +102,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginRight="@dimen/fab_margin_l_r_event_details"
+                    android:layout_marginBottom="@dimen/fab_margin_item_list_my_events"
+                    android:layout_marginRight="@dimen/fab_margin_item_list_my_events"
                     android:src="@drawable/tickets"
                     fab:fab_colorNormal="@color/colorPrimary"
                     fab:fab_colorPressed="@color/colorPrimaryDark"
@@ -115,13 +115,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginLeft="@dimen/fab_margin_l_r_event_details"
+                    android:layout_marginBottom="@dimen/fab_margin_item_list_my_events"
+                    android:layout_marginRight="@dimen/fab_margin_item_list_my_events"
                     android:src="@drawable/calendar"
                     fab:fab_colorNormal="@color/colorPrimary"
                     fab:fab_colorPressed="@color/colorPrimaryDark"
                     fab:fab_colorRipple="@color/ripple_material_light"
                     fab:fab_type="normal" />
             </RelativeLayout>
+
         </LinearLayout>
     </RelativeLayout>
 

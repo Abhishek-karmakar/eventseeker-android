@@ -2,15 +2,12 @@ package com.wcities.eventseeker.adapter;
 
 import java.util.List;
 
-import android.R.color;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,15 +15,13 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
+import com.melnykov.fab.FloatingActionButton;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.MyEventsListFragment;
 import com.wcities.eventseeker.R;
@@ -71,9 +66,9 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 	private int eventsAlreadyRequested;
 	private boolean isMoreDataAvailable = true;
 	private LoadItemsInBackgroundListener mListener;
-	private int orientation;
-	private LayoutParams lpImgEvtPort;
-	private boolean isTablet;
+	//private int orientation;
+	//private LayoutParams lpImgEvtPort;
+	//private boolean isTablet;
 	private String wcitiesId, googleAnalyticsScreenName;
 	
 	// vars for fb event publish
@@ -81,7 +76,8 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 	private int fbCallCountForSameEvt = 0;
 	
 	private Event eventPendingPublish;
-	private CheckBox eventPendingPublishChkBoxGoing, eventPendingPublishChkBoxWantToGo;
+	//private CheckBox eventPendingPublishChkBoxGoing, eventPendingPublishChkBoxWantToGo;
+	private FloatingActionButton eventPendingPublishFabSave;
 	private DialogBtnClickListener listener;
 	
 	public DateWiseMyEventListAdapter(Context context, DateWiseEventList dateWiseEvtList,
@@ -95,20 +91,19 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 		this.dateWiseEvtList = dateWiseEvtList;
 		this.loadDateWiseMyEvents = loadDateWiseEvents;
 		this.mListener = mListener;
-		orientation = mContext.getResources().getConfiguration().orientation;
+		//orientation = mContext.getResources().getConfiguration().orientation;
 
-		DisplayMetrics dm = mContext.getResources().getDisplayMetrics();
+		/*DisplayMetrics dm = mContext.getResources().getDisplayMetrics();
 		int width = dm.widthPixels < dm.heightPixels ? dm.widthPixels : dm.heightPixels;
-		int widthPort = width 
-				- (mContext.getResources().getDimensionPixelSize(
-						R.dimen.tab_bar_margin_fragment_custom_tabs) * 2)
-				- (mContext.getResources().getDimensionPixelSize(
-						R.dimen.img_event_margin_fragment_my_events_list_item) * 2);
+		int widthPort = width - (mContext.getResources()
+						.getDimensionPixelSize(R.dimen.tab_bar_margin_fragment_custom_tabs) * 2)
+								- (mContext.getResources()
+						.getDimensionPixelSize(R.dimen.img_event_margin_fragment_my_events_list_item) * 2);
 		lpImgEvtPort = new LayoutParams(widthPort, widthPort * 3 / 4);
 		lpImgEvtPort.topMargin = lpImgEvtPort.leftMargin = lpImgEvtPort.rightMargin = mContext
 				.getResources().getDimensionPixelSize(
 						R.dimen.img_event_margin_fragment_my_events_list_item);
-		isTablet = ((EventSeekr) mContext.getApplicationContext()).isTablet();
+		isTablet = ((EventSeekr) mContext.getApplicationContext()).isTablet();*/
 		
 		this.fbPublishListener = fbPublishListener;
 		wcitiesId = ((EventSeekr)mContext.getApplicationContext()).getWcitiesId();
@@ -118,7 +113,7 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 	@Override
 	public void updateContext(Context context) {
 		mContext = context;
-		orientation = mContext.getResources().getConfiguration().orientation;
+		//orientation = mContext.getResources().getConfiguration().orientation;
 	}
 
 	@Override
@@ -197,7 +192,7 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 		} else if (getItemViewType(position) == LIST_ITEM_TYPE.CONTENT.ordinal()) {
 
 			if (convertView == null	|| convertView.getTag() != LIST_ITEM_TYPE.CONTENT) {
-				convertView = LayoutInflater.from(mContext).inflate(R.layout.fragment_my_events_list_item, null);
+				convertView = LayoutInflater.from(mContext).inflate(R.layout.item_list_my_events, null);
 				convertView.setTag(LIST_ITEM_TYPE.CONTENT);
 			}
 
@@ -207,18 +202,18 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 			if (event.getSchedule() != null) {
 				Schedule schedule = event.getSchedule();
 
-				if (orientation == Configuration.ORIENTATION_LANDSCAPE || isTablet) {
+				//if (orientation == Configuration.ORIENTATION_LANDSCAPE || isTablet) {
 					if (schedule.getDates().get(0).isStartTimeAvailable()) {
 						String time = ConversionUtil.getTime(schedule.getDates().get(0).getStartDate());
 
 						((TextView) convertView.findViewById(R.id.txtEvtTime)).setText(time);
-						convertView.findViewById(R.id.imgEvtTime).setVisibility(View.VISIBLE);
+						//convertView.findViewById(R.id.imgEvtTime).setVisibility(View.VISIBLE);
 
 					} else {
 						((TextView) convertView.findViewById(R.id.txtEvtTime)).setText("");
-						convertView.findViewById(R.id.imgEvtTime).setVisibility(View.INVISIBLE);
+						//convertView.findViewById(R.id.imgEvtTime).setVisibility(View.INVISIBLE);
 					}
-				}
+				//}
 				String cityName = ""; 
 				if (event.getCityName() != null) {
 					cityName = ", " + event.getCityName();
@@ -229,11 +224,11 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 			}
 
 			ImageView imgEvent = (ImageView) convertView.findViewById(R.id.imgEvent);
-			if(!isTablet) {
+			/*if(!isTablet) {
 				if (orientation == Configuration.ORIENTATION_PORTRAIT) {
 					imgEvent.setLayoutParams(lpImgEvtPort);
 				}
-			}
+			}*/
 
 			BitmapCacheable bitmapCacheable = null;
 			/**
@@ -242,7 +237,8 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 			 * null check for bitmapCacheable on following statements.
 			 */
 			try {
-				bitmapCacheable = event.doesValidImgUrlExist() ? event : event.getSchedule().getVenue();  
+				bitmapCacheable = event.doesValidImgUrlExist() ? event : event.getSchedule().getVenue(); 
+				
 			} catch (NullPointerException e) {
 				e.printStackTrace();
 			}
@@ -252,6 +248,7 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 				Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 				if (bitmap != null) {
 					imgEvent.setImageBitmap(bitmap);
+					
 				} else {
 					imgEvent.setImageBitmap(null);
 					AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
@@ -261,11 +258,11 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 				}
 			}
 
-			LinearLayout lnrLayoutTickets = (LinearLayout) convertView.findViewById(R.id.lnrLayoutTickets);
-			/**
+			/*LinearLayout lnrLayoutTickets = (LinearLayout) convertView.findViewById(R.id.lnrLayoutTickets);
+			*//**
 			 * Using super class TextView instead of Button since some layouts have Button & 
 			 * others have TextView.
-			 */
+			 *//*
 			TextView btnBuyTickets = (TextView) convertView.findViewById(R.id.btnBuyTickets);
 			CheckBox chkBoxTickets = (CheckBox) convertView.findViewById(R.id.chkBoxTickets);
 			
@@ -305,18 +302,41 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 						args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
 						((ReplaceFragmentListener)mContext).replaceByFragment(
 								AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
-						/**
+						*//**
 						 * added on 15-12-2014
-						 */
+						 *//*
 						GoogleAnalyticsTracker.getInstance().sendEvent((EventSeekr)mContext.getApplicationContext(), 
 								googleAnalyticsScreenName, GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON, 
 								com.wcities.eventseeker.analytics.GoogleAnalyticsTracker.Type.Event.name(), 
 								null, event.getId());
 					}
 				}
-			});
+			});*/
 
-			final CheckBox chkBoxGoing = (CheckBox) convertView.findViewById(R.id.chkBoxGoing);
+			final boolean doesBookingUrlExist = (event.getSchedule() != null && !event.getSchedule().getBookingInfos().isEmpty() 
+					&& event.getSchedule().getBookingInfos().get(0).getBookingUrl() != null) ? true : false;
+			
+			FloatingActionButton fabTickets = (FloatingActionButton) convertView.findViewById(R.id.fabTickets);
+			fabTickets.setEnabled(doesBookingUrlExist);
+			fabTickets.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View arg0) {
+					if (doesBookingUrlExist) {
+						Bundle args = new Bundle();
+						args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
+						((ReplaceFragmentListener) mContext).replaceByFragment(AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
+						/**
+						 * added on 15-12-2014
+						 */
+						GoogleAnalyticsTracker.getInstance().sendEvent((EventSeekr) mContext.getApplicationContext(), 
+							googleAnalyticsScreenName, GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON, 
+							com.wcities.eventseeker.analytics.GoogleAnalyticsTracker.Type.Event.name(), null, event.getId());
+					}
+				}
+			});
+			
+			/*final CheckBox chkBoxGoing = (CheckBox) convertView.findViewById(R.id.chkBoxGoing);
 			final CheckBox chkBoxWantToGo = (CheckBox) convertView.findViewById(R.id.chkBoxWantToGo);
 			updateAttendingChkBoxes(event, chkBoxGoing, chkBoxWantToGo);
 
@@ -357,16 +377,33 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 			if (txtGoing != null) {
 				txtGoing.setOnClickListener(goingClickListener);
 				txtWantTo.setOnClickListener(wantToClickListener);
-			}
+			}*/
+			final FloatingActionButton fabSave = (FloatingActionButton) convertView.findViewById(R.id.fabSave);
+			updateAttendingFabSaved(event, fabSave);
+			fabSave.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					if (wcitiesId != null) {
+						onSaveClick(event, fabSave);
+						
+					} else {
+						updateAttendingFabSaved(event, fabSave);
+						Toast.makeText(mContext, 
+							mContext.getString(R.string.pls_login_to_track_evt), Toast.LENGTH_LONG).show();
+					}
+				}
+			});
 			
 			/**
-			 * If user clicks on going or wantToGo & changes orientation instantly before call to 
-			 * onPublishPermissionGranted(), then we need to update both checkboxes with right 
-			 * checkbox pointers in new orientation
+			 * If user clicks on going or wantToGo or save & changes orientation instantly before call to 
+			 * onPublishPermissionGranted(), then we need to update both checkboxes or FAB with right 
+			 * checkbox or FAB pointers in new orientation
 			 */
 			if (eventPendingPublish == event) {
-				eventPendingPublishChkBoxGoing = chkBoxGoing;
-				eventPendingPublishChkBoxWantToGo = chkBoxWantToGo;
+				eventPendingPublishFabSave = fabSave;
+				/*eventPendingPublishChkBoxGoing = chkBoxGoing;
+				eventPendingPublishChkBoxWantToGo = chkBoxWantToGo;*/
 			}
 
 			convertView.setOnClickListener(new OnClickListener() {
@@ -395,7 +432,46 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 		return convertView;
 	}
 	
-	private void onChkBoxClick(Event event, CheckBox chkBoxGoing, CheckBox chkBoxWantToGo, boolean isGoingClicked) {
+	private void onSaveClick(Event event, FloatingActionButton fabSave) {
+		Attending attending = event.getAttending() == Attending.SAVED ? Attending.NOT_GOING : Attending.SAVED;
+		EventSeekr eventSeekr = (EventSeekr) mContext.getApplicationContext();
+		if (attending == Attending.NOT_GOING) {
+			event.setAttending(attending);
+			updateAttendingFabSaved(event, fabSave);
+			new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.event, event.getId(), 
+					event.getAttending().getValue(), UserTrackingType.Add).execute();
+			
+		} else {
+
+			/**
+			 * call to updateAttendingChkBoxes() to negate the click event for now on checkbox, 
+			 * since it's handled after checking fb/google publish permission
+			 */
+			updateAttendingFabSaved(event, fabSave);
+			
+			if (eventSeekr.getFbUserId() != null) {
+				event.setNewAttending(attending);
+				eventPendingPublish = event;
+				eventPendingPublishFabSave = fabSave;
+				fbCallCountForSameEvt = 0;
+				FbUtil.handlePublishEvent(fbPublishListener, (Fragment) mListener, 
+						AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
+						AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
+				
+			} else if (eventSeekr.getGPlusUserId() != null) {
+				event.setNewAttending(attending);
+				eventPendingPublish = event;
+				eventPendingPublishFabSave = fabSave;
+				((PublishEventListFragment) mListener).setEvent(eventPendingPublish);
+				((PublishEventListFragment) mListener).handlePublishEvent();
+				
+			} else {
+				FragmentUtil.showLoginNeededForTrackingEventDialog(mContext, listener);
+			}
+		}
+	}
+	
+	/*private void onChkBoxClick(Event event, CheckBox chkBoxGoing, CheckBox chkBoxWantToGo, boolean isGoingClicked) {
 		Attending attending;
 		if (isGoingClicked) {
 			attending = event.getAttending() == Attending.GOING ? Attending.NOT_GOING : Attending.GOING;
@@ -413,10 +489,10 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 		} else {
 			EventSeekr eventSeekr = (EventSeekr) mContext.getApplicationContext();
 
-			/**
+			*//**
 			 * call to updateAttendingChkBoxes() to negate the click event for now on checkbox, 
 			 * since it's handled after checking fb/google publish permission
-			 */
+			 *//*
 			updateAttendingChkBoxes(event, chkBoxGoing, chkBoxWantToGo);
 			
 			if (eventSeekr.getFbUserId() != null) {
@@ -440,9 +516,13 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 				FragmentUtil.showLoginNeededForTrackingEventDialog(mContext, listener);
 			}
 		}
-	}
+	}*/
 	
-	private void updateAttendingChkBoxes(Event event, CheckBox chkBoxGoing, CheckBox chkBoxWantToGo) {
+	private void updateAttendingFabSaved(Event event, FloatingActionButton fabSave) {
+		fabSave.setBackgroundResource(event.getAttending() == Attending.SAVED ? 
+				R.drawable.checked_blue : R.drawable.calendar);
+	}
+	/*private void updateAttendingChkBoxes(Event event, CheckBox chkBoxGoing, CheckBox chkBoxWantToGo) {
 		switch (event.getAttending()) {
 
 		case GOING:
@@ -463,7 +543,7 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 		default:
 			break;
 		}
-	}
+	}*/
 
 	@Override
 	public EventListItem getItem(int position) {
@@ -507,6 +587,6 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 	}
 	
 	public void onPublishPermissionGranted() {
-		updateAttendingChkBoxes(eventPendingPublish, eventPendingPublishChkBoxGoing, eventPendingPublishChkBoxWantToGo);
+		updateAttendingFabSaved(eventPendingPublish, eventPendingPublishFabSave);
 	}
 }

@@ -254,6 +254,7 @@
     <!-- My Events -->
     <string name="following">FOLLOWING</string>
     <string name="recommended">RECOMMENDED</string>
+    <string name="saved_event">SAVED</string>
 
     <!-- Following -->
     <string name="follow_more_artists">FOLLOW MORE ARTISTS +</string>
