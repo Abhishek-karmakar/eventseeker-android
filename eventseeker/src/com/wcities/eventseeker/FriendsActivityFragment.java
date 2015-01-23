@@ -788,6 +788,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 						newsItemPendingPublish = item;
 						newsItemPendingPublishChkBoxSave = chkSave;
 						fbCallCountForSameEvt = 0;
+						//NOTE: THIS CAN BE TESTED WITH PODUCTION BUILD ONLY
 						FbUtil.handlePublishFriendNewsItem(FriendsActivityFragment.this, FriendsActivityFragment.this, 
 								AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, item);
 						
@@ -918,12 +919,12 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	    Session session = Session.getActiveSession();
 
 	    if (session == null) {
-	    	Log.d(TAG, "session=null");
+	    	//Log.d(TAG, "session=null");
 	    	session = new Session(FragmentUtil.getActivity(this));
 			Session.setActiveSession(session);
 	    }
 	    
-	    Log.d(TAG, "active session, state=" + session.getState().name());
+	    //Log.d(TAG, "active session, state=" + session.getState().name());
 	    if (!session.isOpened()) {
 	    	Log.d(TAG, "session is not opened");
 	    	pendingLikeOrComment = true; // Mark that we are currently waiting for opening of session
@@ -932,7 +933,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	    }
 
 	    if (!hasPublishPermission()) {
-	    	Log.d(TAG, "publish permission is not there");
+	    	//Log.d(TAG, "publish permission is not there");
 	    	pendingLikeOrComment = true; // Mark that we are currently waiting for confirmation of publish permissions
 	        session.addCallback(this); 
 	        requestPublishPermissions(session, PERMISSIONS, FACEBOOK_REAUTH_ACTIVITY_CODE);

@@ -1285,6 +1285,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 						if (eventSeekr.getFbUserId() != null) {
 							fbCallCountForSameEvt = 0;
 							event.setNewAttending(Attending.SAVED);
+							//NOTE: THIS CAN BE TESTED WITH PODUCTION BUILD ONLY
 							FbUtil.handlePublishEvent(discoverFragment, discoverFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
 									AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
 							

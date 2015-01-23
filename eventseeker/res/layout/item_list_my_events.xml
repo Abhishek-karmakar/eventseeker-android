@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rltLyt"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" xmlns:app="http://schemas.android.com/apk/res/com.wcities.eventseeker">
+    android:layout_height="wrap_content" >
 
-    
     <ImageView
         android:id="@+id/imgEvent"
         android:layout_width="match_parent"
@@ -29,16 +29,17 @@
             android:layout_weight="0.6"
             android:ellipsize="marquee"
             android:gravity="center_vertical"
-			android:maxLines="2"
+            android:maxLines="2"
             android:text="Cut Copy And The Red Hot Chilli Peppers"
             android:textColor="@android:color/white"
             android:textSize="@dimen/txt_evt_title_txt_size_event_details" />
-        
-        <View android:layout_width="0dp" 
-            android:layout_height="match_parent" 
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="0.4" />
     </LinearLayout>
-    
+
     <RelativeLayout
         android:id="@+id/rltContent"
         android:layout_width="match_parent"
@@ -47,7 +48,7 @@
         android:background="@android:color/white" >
 
         <TextView
-            android:id="@+id/txtEvtLoc"
+            android:id="@+id/txtEvtLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/txt_evt_details_margin_l_event_details"
@@ -63,7 +64,7 @@
             android:id="@+id/txtEvtTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/txtEvtLoc"
+            android:layout_below="@id/txtEvtLocation"
             android:layout_marginLeft="@dimen/txt_evt_details_margin_l_event_details"
             android:layout_marginRight="@dimen/txt_evt_details_margin_r_event_details"
             android:layout_marginTop="@dimen/txt_evt_details_margin_t_event_details"
@@ -74,7 +75,6 @@
             android:textSize="@dimen/txt_evt_details_txt_size_event_details" />
     </RelativeLayout>
 
-    
     <RelativeLayout
         android:id="@+id/rltBtns"
         android:layout_width="match_parent"
@@ -97,76 +97,32 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.4" >
-                
-                <Button android:layout_width="56dp"
-                    android:layout_height="56dp" 
-                    android:background="@color/font_blue" 
-                    android:elevation="10dp" />
-                
+
+                <com.melnykov.fab.FloatingActionButton
+                    android:id="@+id/fabTickets"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginRight="@dimen/fab_margin_l_r_event_details"
+                    android:src="@drawable/tickets"
+                    fab:fab_colorNormal="@color/colorPrimary"
+                    fab:fab_colorPressed="@color/colorPrimaryDark"
+                    fab:fab_colorRipple="@android:color/white"
+                    fab:fab_type="normal" />
+
+                <com.melnykov.fab.FloatingActionButton
+                    android:id="@+id/fabSave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="@dimen/fab_margin_l_r_event_details"
+                    android:src="@drawable/calendar"
+                    fab:fab_colorNormal="@color/colorPrimary"
+                    fab:fab_colorPressed="@color/colorPrimaryDark"
+                    fab:fab_colorRipple="@color/ripple_material_light"
+                    fab:fab_type="normal" />
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>
-    
-</RelativeLayout>
 
-<!-- <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rltLayoutRoot"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
-    
-    <ImageView android:id="@+id/imgEvent"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/img_event_ht_fragment_my_events_list_item"
-        android:scaleType="fitXY"
-        android:layout_marginTop="@dimen/img_event_margin_fragment_my_events_list_item"
-        android:layout_marginLeft="@dimen/img_event_margin_fragment_my_events_list_item"
-        android:layout_marginRight="@dimen/img_event_margin_fragment_my_events_list_item"
-        android:contentDescription="Event image" />
-    
-    <RelativeLayout android:id="@+id/lnrLayoutEvtInfo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/imgEvent"
-        android:layout_alignLeft="@id/imgEvent"
-        android:layout_alignRight="@id/imgEvent"
-        android:background="@color/bg_black_transparent_strip">
-    
-		<TextView android:id="@+id/txtEvtTitle"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:textColor="@android:color/white"
-			android:text="Event Title"
-			android:textSize="@dimen/txt_evt_title_txt_size_include_fragment_event_details_img_evt"
-			android:layout_marginLeft="@dimen/txt_evt_title_margin_l_include_fragment_event_details_img_evt"
-			android:maxLines="2"
-			android:ellipsize="end" />
-	     
-	    <TextView android:id="@+id/txtEvtLocation"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_below="@id/txtEvtTitle"
-			android:textColor="@android:color/white"
-			style="@style/SingleLineMarqueeTxt"
-			android:layout_alignLeft="@id/txtEvtTitle"
-			android:textSize="@dimen/txt_evt_time_txt_size_include_fragment_event_details_img_evt" />
-    
-    </RelativeLayout>
-    
-    <include layout="@layout/include_fragment_my_events_list_item_footer"
-		android:id="@+id/lnrLayoutBtns"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/lnr_layout_btns_ht_fragment_my_events_list_item"
-        android:layout_below="@id/imgEvent"
-        android:layout_alignLeft="@id/imgEvent"
-        android:layout_alignRight="@id/imgEvent" />
-    
-    <View android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/divider_ht_fragment_discover_by_category_list_item_evt"
-        android:background="@color/dark_gray"
-        android:layout_below="@id/lnrLayoutBtns"
-        android:layout_marginLeft="@dimen/divider_margin_l_fragment_discover_by_category_list_item_evt"
-        android:layout_marginRight="@dimen/divider_margin_r_fragment_discover_by_category_list_item_evt"
-        android:layout_marginTop="@dimen/divider_margin_t_fragment_my_events_list_item" />
-    
-</RelativeLayout> -->
+</RelativeLayout>

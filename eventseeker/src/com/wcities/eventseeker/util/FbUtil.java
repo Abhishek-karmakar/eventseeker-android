@@ -41,13 +41,30 @@ public class FbUtil {
 
 	private static final String TAG = FbUtil.class.getName();
 
-	private static final int FB_ERROR_CODE_368 = 368;//Your message couldn't be sent because it includes content 
-		//that other people on Facebook have reported as abusive.
+	/**
+	 * error not occured
+	 */
+	private static final int FB_ERROR_CODE_NO_ERROR = -1;
+	
+	/**
+	 * TODO:This issue is occurring more frequently for the Recommended Artist & Selected Artist Category
+	 * need to test it thoroughly and resolve it.
+	 */
+	/**
+	 * Your message couldn't be sent because it includes content 
+	 * that other people on Facebook have reported as abusive.
+	 */
+	private static final int FB_ERROR_CODE_368 = 368;
 
-	private static final int FB_ERROR_CODE_341 = 341;//Feed action request limit reached.
+	/**
+	 * Feed action request limit reached.
+	 */
+	private static final int FB_ERROR_CODE_341 = 341;
 
-	private static final int FB_ERROR_CODE_100 = 100;//Invalid Parameter.
-
+	/**
+	 * Invalid Parameter.
+	 */
+	private static final int FB_ERROR_CODE_100 = 100;
 
 	public static boolean hasUserLoggedInBefore(Context context) {
 		//Log.d(TAG, "hasUserLoggedInBefore()");
@@ -112,6 +129,14 @@ public class FbUtil {
 	    request.executeAsync();
 	}
 	
+	/**
+	 * NOTE: THIS CAN BE TESTED WITH PODUCTION BUILD ONLY
+	 * @param fbPublishListener
+	 * @param fragment
+	 * @param permissions
+	 * @param requestCode
+	 * @param friendNewsItem
+	 */
 	public static void handlePublishFriendNewsItem(PublishListener fbPublishListener, Fragment fragment, 
 			List<String> permissions, int requestCode, FriendNewsItem friendNewsItem) {
 		Log.d(TAG, "handlePublish()");
@@ -122,6 +147,14 @@ public class FbUtil {
 		}
 	}
 	
+	/**
+	 * NOTE: THIS CAN BE TESTED WITH PODUCTION BUILD ONLY
+	 * @param fbPublishListener
+	 * @param fragment
+	 * @param permissions
+	 * @param requestCode
+	 * @param event
+	 */
 	public static void handlePublishEvent(PublishListener fbPublishListener, Fragment fragment, 
 			List<String> permissions, int requestCode, Event event) {
 		Log.d(TAG, "handlePublishEvent()");
@@ -137,7 +170,7 @@ public class FbUtil {
 		Log.d(TAG, "handlePublishArtist()");
 		if (canPublishNow(fbPublishListener, fragment, permissions, requestCode)) {
 			fbPublishListener.onPublishPermissionGranted();
-			publishArtist(artist, fragment, true);
+			publishArtist(artist, fragment, FB_ERROR_CODE_NO_ERROR);
 		}
 	}
 	
@@ -383,6 +416,11 @@ public class FbUtil {
 	    }
 	}
 	
+	/**
+	 * NOTE: THIS CAN BE TESTED WITH PODUCTION BUILD ONLY
+	 * @param event
+	 * @param fragment
+	 */
 	private static void publishEvent(final Event event, final Fragment fragment) {
 		
 		RequestBatch requestBatch = new RequestBatch();
@@ -444,6 +482,11 @@ public class FbUtil {
        
 	}
 
+	/**
+	 * NOTE: THIS CAN BE TESTED WITH PODUCTION BUILD ONLY
+	 * @param item
+	 * @param fragment
+	 */
 	private static void publishFriendNewsItem(final FriendNewsItem item, final Fragment fragment) {
 		
 		RequestBatch requestBatch = new RequestBatch();
@@ -503,33 +546,34 @@ public class FbUtil {
 	 * link. So, added this parameter and passing it 'false' from callback So, that atleast other data gets posted.
 	 * @param artist
 	 * @param fragment
-	 * @param addLink
+	 * @param errorCode
 	 */
-	public static void publishArtist(final Artist artist, final Fragment fragment, boolean addLink) {
+	public static void publishArtist(final Artist artist, final Fragment fragment, final int errorCode) {
+		Log.d(TAG, "publishArtist");
 	    Session session = Session.getActiveSession();
 
         Bundle postParams = new Bundle();
         postParams.putString("caption", "EVENTSEEKER.COM");
-        String description = artist.getDescription() == null ? " " : artist.getDescription();
-        description = Html.fromHtml(description).toString();
-        postParams.putString("description", description);
+        if (errorCode != FB_ERROR_CODE_368) {
+	        String description = artist.getDescription() == null ? " " : artist.getDescription();
+	        description = Html.fromHtml(description).toString();
+        	postParams.putString("description", description);
+        }
         //Log.d(TAG, "description : " + description);
         String link = artist.getArtistUrl();
         if (link == null) {
         	link = "http://eventseeker.com/artist/" + artist.getId();
         	//Log.d(TAG, "link created : " + link);
 	    }
-        //if (addLink) {
-        	postParams.putString("link", link);
-        //}
+        postParams.putString("link", link);
         
         if (artist.doesValidImgUrlExist()) {
-        	String imgUrl = artist.getHighResImgUrl();
-        	if (imgUrl == null || !addLink) {
-        		imgUrl = artist.getLowResImgUrl();
+        	String imgUrl = artist.getLowResImgUrl();
+        	if (imgUrl == null && errorCode == FB_ERROR_CODE_100) {
+        		imgUrl = artist.getMobiResImgUrl();
         	}
         	if (imgUrl == null) {
-        		imgUrl = artist.getMobiResImgUrl();
+        		imgUrl = artist.getHighResImgUrl();
         	}
         	//Log.d(TAG, "pic : " + imgUrl);
             postParams.putString("picture", imgUrl);
@@ -554,13 +598,15 @@ public class FbUtil {
                                         
                 } else {
                 	Log.d(TAG, "graphObj = null");
-                	int errorCode = response.getError().getErrorCode();
-					if (errorCode == FB_ERROR_CODE_341 || errorCode == FB_ERROR_CODE_368 
-							|| errorCode == FB_ERROR_CODE_100) {
-						Log.d(TAG, "errorCode : " + errorCode);
+                	if (errorCode != FB_ERROR_CODE_NO_ERROR) {
                 		return;
                 	}
-                	publishArtist(artist, fragment, false);
+                	int eC = response.getError().getErrorCode();
+					/*if (eC == FB_ERROR_CODE_341 || eC == FB_ERROR_CODE_368 || eC == FB_ERROR_CODE_100) {
+						Log.d(TAG, "errorCode : " + eC);
+                		return;
+                	}*/
+                	publishArtist(artist, fragment, eC);
                 }
             }
         };
