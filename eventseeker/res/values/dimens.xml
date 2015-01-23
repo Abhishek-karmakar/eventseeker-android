@@ -613,6 +613,8 @@
     <dimen name="rlt_lyt_address_margin_l_event_details">@dimen/v_hor_line_margin_l_event_details</dimen>
     <dimen name="rlt_lyt_address_margin_r_event_details">@dimen/v_hor_line_margin_r_event_details</dimen>
     <dimen name="txt_venue_drawable_pad_event_details">10dp</dimen>
+    <dimen name="fab_margin_b_event_details">16dp</dimen>
+    <dimen name="fab_margin_l_r_event_details">60dp</dimen>
     <!-- featuring_artist.xml -->
     <dimen name="rlt_lyt_root_w_featuring_artist">200dp</dimen>
     <dimen name="txt_artist_name_txt_size_featuring_artist">20sp</dimen>
@@ -623,6 +625,7 @@
     <!-- include_friends.xml -->
     <dimen name="txt_friends_margin_t_include_friends">@dimen/txt_desc_margin_t_event_details</dimen>
     <dimen name="txt_friends_txt_size_include_friends">@dimen/txt_evt_details_txt_size_event_details</dimen>
+    <dimen name="recycler_v_friends_ht_include_friends">120dp</dimen>
     <dimen name="recycler_v_friends_margin_t_include_friends">@dimen/txt_desc_margin_t_event_details</dimen>
     <dimen name="recycler_v_friends_margin_l_include_friends">@dimen/v_hor_line_margin_l_event_details</dimen>
     <dimen name="recycler_v_friends_margin_r_include_friends">@dimen/recycler_v_friends_margin_l_include_friends</dimen>
@@ -630,6 +633,13 @@
     <dimen name="v_hor_line_margin_l_include_friends">@dimen/v_hor_line_margin_l_event_details</dimen>
     <dimen name="v_hor_line_margin_r_include_friends">@dimen/v_hor_line_margin_l_include_friends</dimen>
     <dimen name="v_hor_line_margin_t_include_friends">@dimen/txt_desc_margin_t_event_details</dimen>
+    <!-- rv_item_friend.xml -->
+    <dimen name="rlt_lyt_root_pad_l_rv_item_friend">10dp</dimen>
+    <dimen name="rlt_lyt_root_pad_r_rv_item_friend">@dimen/rlt_lyt_root_pad_l_rv_item_friend</dimen>
+    <dimen name="circle_img_v_friend_w_rv_item_friend">80dp</dimen>
+    <dimen name="circle_img_v_friend_ht_rv_item_friend">@dimen/circle_img_v_friend_w_rv_item_friend</dimen>
+    <dimen name="circle_img_v_friend_border_w_rv_item_friend">0dp</dimen>
+    <dimen name="txt_friend_name_margin_t_rv_item_friend">8dp</dimen>
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <!-- activity_bosch_main.xml -->
     <dimen name="b_root_navigation_drawer_w_main">210dp</dimen>

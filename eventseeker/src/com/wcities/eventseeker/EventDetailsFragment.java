@@ -1,23 +1,32 @@
 package com.wcities.eventseeker;
 
+import java.io.File;
 import java.util.List;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ShareActionProvider;
+import android.support.v7.widget.ShareActionProvider.OnShareTargetSelectedListener;
 import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -30,6 +39,9 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.melnykov.fab.FloatingActionButton;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.Animator.AnimatorListener;
 import com.nineoldandroids.animation.AnimatorSet;
@@ -37,44 +49,61 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.wcities.eventseeker.adapter.FeaturingArtistPagerAdapter;
+import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
+import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker.Type;
 import com.wcities.eventseeker.api.Api;
+import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
+import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.asynctask.LoadEventDetails;
 import com.wcities.eventseeker.asynctask.LoadEventDetails.OnEventUpdatedListner;
+import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.core.Event.Attending;
+import com.wcities.eventseeker.core.Friend;
 import com.wcities.eventseeker.core.Schedule;
-import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
+import com.wcities.eventseeker.custom.fragment.PublishEventFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.custom.view.ObservableScrollView;
 import com.wcities.eventseeker.custom.view.ObservableScrollView.ObservableScrollViewListener;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionDestination;
+import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
+import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.ConversionUtil;
+import com.wcities.eventseeker.util.FbUtil;
+import com.wcities.eventseeker.util.FileUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.viewdata.SharedElement;
 import com.wcities.eventseeker.viewdata.SharedElementPosition;
 
-public class EventDetailsFragment extends FragmentLoadableFromBackStack implements ObservableScrollViewListener, 
-		DrawerListener, CustomSharedElementTransitionDestination, OnClickListener, OnEventUpdatedListner {
+public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackStack implements ObservableScrollViewListener, 
+		DrawerListener, CustomSharedElementTransitionDestination, OnClickListener, OnEventUpdatedListner, 
+		CustomSharedElementTransitionSource {
 	
 	private static final String TAG = EventDetailsFragment.class.getSimpleName();
 	
 	private static final int UNSCROLLED = -1;
-	private static final int TRANSITION_ANIM_DURATION = 400;
+	private static final int TRANSITION_ANIM_DURATION = 400, FAB_SCROLL_THRESHOLD_IN_DP = 4;
 	
 	private View rootView;
 	private ImageView imgEvent, imgDown;
 	private TextView txtEvtTitle, txtEvtDesc, txtEvtLoc, txtVenue, txtEvtTime;
 	private RelativeLayout rltLytContent, rltLytFeaturing, prgsBar, rltLytVenue, rltLytFriends;
+	private RecyclerView recyclerVFriends;
+	private ShareActionProvider mShareActionProvider;
+	private FloatingActionButton fabTickets, fabSave;
 	
-	private int limitScrollAt, actionBarElevation, actionBarTitleTextSize, txtEvtTitleTextSize, prevScrollY = UNSCROLLED;
+	private int limitScrollAt, actionBarElevation, actionBarTitleTextSize, txtEvtTitleTextSize, 
+		fabScrollThreshold, prevScrollY = UNSCROLLED;
 	private boolean isScrollLimitReached, isDrawerOpen;
 	private String title = "";
 	private float minTitleScale;
@@ -86,11 +115,33 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 	private boolean allDetailsLoaded;
 	
 	private FeaturingArtistPagerAdapter featuringArtistPagerAdapter;
+	private FriendsRVAdapter friendsRVAdapter;
 	
 	private List<SharedElement> sharedElements;
 	private boolean isOnCreateViewCalledFirstTime = true;
 	private int screenW, imgEventHt;
 	private AnimatorSet animatorSet;
+	
+	private int fbCallCountForSameEvt = 0;
+	
+	private OnShareTargetSelectedListener onShareTargetSelectedListener = new OnShareTargetSelectedListener() {
+		
+		@Override
+		public boolean onShareTargetSelected(ShareActionProvider source, Intent intent) {
+			EventSeekr eventSeekr = FragmentUtil.getApplication(EventDetailsFragment.this);
+			String shareTarget = intent.getComponent().getPackageName();
+			//Log.d(TAG, "shareTarget = " + shareTarget);
+			if (eventSeekr.getPackageName().equals(shareTarget)) {
+				//Log.d(TAG, "shareTarget = " + shareTarget);
+				// required to handle "add to calendar" action
+				eventSeekr.setEventToAddToCalendar(event);
+			}
+			
+			GoogleAnalyticsTracker.getInstance().sendShareEvent(eventSeekr, getScreenName(), 
+					shareTarget, Type.Event, event.getId());
+			return false;
+		}
+	};
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -114,7 +165,11 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 
 			loadEventDetails = new LoadEventDetails(Api.OAUTH_TOKEN, this, this, event);
 			AsyncTaskUtil.executeAsyncTask(loadEventDetails, true);
+			
+			updateShareIntent();
 		}
+		
+		fabScrollThreshold = ConversionUtil.toPx(FragmentUtil.getResources(this), FAB_SCROLL_THRESHOLD_IN_DP);
 	}
 
 	@Override
@@ -149,15 +204,25 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 		
 		updateEventImg();
 		
+		final ObservableScrollView obsrScrlV = (ObservableScrollView) rootView.findViewById(R.id.obsrScrlV);
+		obsrScrlV.setListener(this);
+		
 		prgsBar = (RelativeLayout) rootView.findViewById(R.id.prgsBar);
 		rltLytFeaturing = (RelativeLayout) rootView.findViewById(R.id.rltLytFeaturing);
 		rltLytVenue = (RelativeLayout) rootView.findViewById(R.id.rltLytVenue);
 		rltLytFriends = (RelativeLayout) rootView.findViewById(R.id.rltLytFriends);
+		
+		fabTickets = (FloatingActionButton) rootView.findViewById(R.id.fabTickets);
+		fabSave = (FloatingActionButton) rootView.findViewById(R.id.fabSave);
+		fabTickets.setOnClickListener(this);
+		fabSave.setOnClickListener(this);
+        
 		updateDetailsVisibility();
 		
+		recyclerVFriends = (RecyclerView) rootView.findViewById(R.id.recyclerVFriends);
 		// use a linear layout manager
-		RecyclerView recyclerVFriends = (RecyclerView) rootView.findViewById(R.id.recyclerVFriends);
-		RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(FragmentUtil.getActivity(this));
+		RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(FragmentUtil.getActivity(this), 
+				LinearLayoutManager.HORIZONTAL, false);
 		recyclerVFriends.setLayoutManager(layoutManager);
 		
 		ViewPager vPagerFeaturing = (ViewPager) rootView.findViewById(R.id.vPagerFeaturing);
@@ -180,9 +245,6 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 		// Set margin for pages as a negative number, so a part of next and previous pages will be showed
 		vPagerFeaturing.setPageMargin(FragmentUtil.getResources(this).getDimensionPixelSize(
 				R.dimen.rlt_lyt_root_w_featuring_artist) - screenW);
-		
-		final ObservableScrollView obsrScrlV = (ObservableScrollView) rootView.findViewById(R.id.obsrScrlV);
-		obsrScrlV.setListener(this);
 		
 		obsrScrlV.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
@@ -217,6 +279,17 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 	}
 	
 	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		
+		if (friendsRVAdapter == null) {
+			friendsRVAdapter = new FriendsRVAdapter(event.getFriends());
+		} 
+		
+		recyclerVFriends.setAdapter(friendsRVAdapter);
+	}
+	
+	@Override
 	public void onStart() {
 		super.onStart();
 		
@@ -240,6 +313,12 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 		ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
 	}
 	
+	/*@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		Log.d(TAG, "onDestroyView()");
+	}*/
+	
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
@@ -247,6 +326,49 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 		if (loadEventDetails != null && loadEventDetails.getStatus() != Status.FINISHED) {
 			loadEventDetails.cancel(true);
 		}
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.fragment_event_details, menu);
+		
+		MenuItem item = (MenuItem) menu.findItem(R.id.action_share);
+	    mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+	    updateShareIntent();
+	    
+    	super.onCreateOptionsMenu(menu, inflater);
+	}
+	
+	private void updateShareIntent() {
+		//Log.d(TAG, "updateShareIntent()");
+	    if (mShareActionProvider != null && event != null) {
+	    	Intent shareIntent = new Intent(Intent.ACTION_SEND);
+		    shareIntent.setType("image/*");
+		    shareIntent.putExtra(Intent.EXTRA_SUBJECT, FragmentUtil.getResources(this).getString(
+		    		R.string.title_event_details));
+		    String message = "Checkout " + event.getName();
+		    if (event.getSchedule() != null && event.getSchedule().getVenue() != null) {
+		    	message += " @ " + event.getSchedule().getVenue().getName();
+		    }
+		    if (event.getEventUrl() != null) {
+		    	message += ": " + event.getEventUrl();
+		    }
+		    shareIntent.putExtra(Intent.EXTRA_TEXT, message);
+			
+			String key = event.getKey(ImgResolution.LOW);
+	        BitmapCache bitmapCache = BitmapCache.getInstance();
+			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
+			if (bitmap != null) {
+				File tmpFile = FileUtil.createTempShareImgFile(FragmentUtil.getActivity(this).getApplication(), bitmap);
+				if (tmpFile != null) {
+					shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(tmpFile));
+				}
+			}
+		    
+	        mShareActionProvider.setShareIntent(shareIntent);
+	        
+	        mShareActionProvider.setOnShareTargetSelectedListener(onShareTargetSelectedListener);
+	    }
 	}
 	
 	private void calculateDimensions() {
@@ -300,6 +422,7 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 			@Override
 			public void onAnimationStart(Animator arg0) {
 				rltLytContent.setVisibility(View.INVISIBLE);
+				((MainActivity)FragmentUtil.getActivity(EventDetailsFragment.this)).onSharedElementAnimStart();
 			}
 			
 			@Override
@@ -493,7 +616,9 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 	
 	private void updateFriendsVisibility() {
 		if (!event.getFriends().isEmpty()) {
+			//Log.d(TAG, "event.getFriends() = " + event.getFriends());
 			rltLytFriends.setVisibility(View.VISIBLE);
+			friendsRVAdapter.notifyDataSetChanged();
 		}
 	}
 	
@@ -517,19 +642,46 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 		}
     }
 	
+	private void updateFabs() {
+		fabTickets.setVisibility(View.VISIBLE);
+		fabSave.setVisibility(View.VISIBLE);
+		
+		final Resources res = FragmentUtil.getResources(this);
+		if (event.getSchedule() == null || event.getSchedule().getBookingInfos().isEmpty()) {
+			fabTickets.setImageDrawable(res.getDrawable(R.drawable.tickets_disabled));
+			fabTickets.setEnabled(false);
+			
+		} else {
+			fabTickets.setImageDrawable(res.getDrawable(R.drawable.tickets));
+			fabTickets.setEnabled(true);
+		}
+		
+		updateFabSaveSrc(res);
+	}
+	
+	private void updateFabSaveSrc(Resources res) {
+		int drawableId = (event.getAttending() == Attending.SAVED) ? R.drawable.checked : R.drawable.calendar;
+		fabSave.setImageDrawable(res.getDrawable(drawableId));
+	}
+	
 	private void updateDetailsVisibility() {
 		if (allDetailsLoaded) {
+			updateShareIntent();
+			
 			prgsBar.setVisibility(View.GONE);
 			updateFeaturingVisibility();
 			updateEventSchedule();
 			updateAddressMapVisibility();
 			updateFriendsVisibility();
+			updateFabs();
 			
 		} else {
 			prgsBar.setVisibility(View.VISIBLE);
 			rltLytFeaturing.setVisibility(View.GONE);
 			rltLytVenue.setVisibility(View.GONE);
 			rltLytFriends.setVisibility(View.GONE);
+			fabTickets.setVisibility(View.GONE);
+			fabSave.setVisibility(View.GONE);
 		}
 	}
 	
@@ -548,6 +700,7 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 	}
 	
 	private void onScrollChanged(int scrollY, boolean forceUpdate) {
+		//Log.d(TAG, "scrollY = " + scrollY);
 		// Translate image
 		ViewHelper.setTranslationY(imgEvent, scrollY / 2);
 		
@@ -589,6 +742,18 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 	        ViewHelper.setScaleX(txtEvtTitle, scale);
 	        ViewHelper.setScaleY(txtEvtTitle, scale);
 		}
+        
+		boolean isSignificantDelta = Math.abs(scrollY - prevScrollY) > fabScrollThreshold;
+        if (isSignificantDelta) {
+            if (scrollY > prevScrollY) {
+                fabTickets.hide(true);
+                fabSave.hide(true);
+                
+            } else {
+                fabTickets.show(true);
+                fabSave.show(true);
+            }
+        }
         
 		prevScrollY = scrollY;
 	}
@@ -669,6 +834,41 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 			}
 			break;
 			
+		case R.id.fabTickets:
+			Bundle args = new Bundle();
+			args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
+			((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
+					AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
+			/**
+			 * added on 15-12-2014
+			 */
+			GoogleAnalyticsTracker.getInstance().sendEvent(FragmentUtil.getApplication(this), 
+					getScreenName(), GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON, 
+					GoogleAnalyticsTracker.Type.Event.name(), null, event.getId());
+			break;
+			
+		case R.id.fabSave:
+			EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getApplication(this);
+			if (event.getAttending() == Attending.SAVED) {
+				event.setAttending(Attending.NOT_GOING);
+				new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.event, event.getId(), 
+						event.getAttending().getValue(), UserTrackingType.Add).execute();
+    			updateFabSaveSrc(FragmentUtil.getResources(this));
+				
+			} else {
+				if (eventSeekr.getFbUserId() != null) {
+					fbCallCountForSameEvt = 0;
+					event.setNewAttending(Attending.SAVED);
+					FbUtil.handlePublishEvent(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
+							AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
+					
+				} else if (eventSeekr.getGPlusUserId() != null) {
+					event.setNewAttending(Attending.SAVED);
+					handlePublishEvent();
+				}
+			}
+			break;
+			
 		default:
 			break;
 		}
@@ -678,5 +878,117 @@ public class EventDetailsFragment extends FragmentLoadableFromBackStack implemen
 	public void onEventUpdated() {
 		allDetailsLoaded = true;
 		updateDetailsVisibility();
+	}
+	
+	private static class FriendsRVAdapter extends RecyclerView.Adapter<FriendsRVAdapter.ViewHolder> {
+		
+		private static class ViewHolder extends RecyclerView.ViewHolder {
+			
+			private ImageView circleImgFriends;
+			private TextView txtFriendName;
+
+			public ViewHolder(View itemView) {
+				super(itemView);
+				this.circleImgFriends = (ImageView) itemView.findViewById(R.id.circleImgVFriend);
+				this.txtFriendName = (TextView) itemView.findViewById(R.id.txtFriendName);
+			}
+		}
+		
+		private BitmapCache bitmapCache;
+		private List<Friend> friends;
+		
+		public FriendsRVAdapter(List<Friend> friends) {
+			this.friends = friends;
+			this.bitmapCache = BitmapCache.getInstance();
+		}
+
+		@Override
+		public int getItemCount() {
+			return friends.size();
+		}
+
+		@Override
+		public void onBindViewHolder(ViewHolder holder, int position) {
+			Friend friend = friends.get(position);
+			holder.txtFriendName.setText(friend.getName());
+			
+			String key = friend.getKey(ImgResolution.LOW);
+			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
+			if (bitmap != null) {
+				holder.circleImgFriends.setImageBitmap(bitmap);
+		        
+		    } else {
+		    	holder.circleImgFriends.setImageBitmap(null);
+		        AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
+		        asyncLoadImg.loadImg(holder.circleImgFriends, ImgResolution.LOW, friend);
+		    }
+		}
+
+		@Override
+		public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+			View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_friend, parent, false);
+			ViewHolder vh = new ViewHolder(v);
+			return vh;
+		}
+	}
+
+	@Override
+	public void onPoppedFromBackStack() {
+		// to update statusbar visibility
+		onStart();
+		// to call onFragmentResumed(Fragment) of MainActivity (to update title, current fragment tag, etc.)
+		onResume();
+		
+		if (mShareActionProvider != null) {
+			mShareActionProvider.setOnShareTargetSelectedListener(onShareTargetSelectedListener);
+		}
+		setMenuVisibility(true);
+	}
+
+	@Override
+	public void onPushedToBackStack() {
+		/**
+		 * set null listener, otherwise even for artist/venue details screen when selecting 
+		 * "add to calendar" option it calls this listener's onShareTargetSelected() method which in turn 
+		 * sets eventToAddToCalendar on EventSeekr class. This results in sharing event wrongly from 
+		 * artist/venue details screen.
+		 */
+		if (mShareActionProvider != null) {
+			mShareActionProvider.setOnShareTargetSelectedListener(null);
+		}
+		setMenuVisibility(false);
+	}
+
+	@Override
+	public void addViewsToBeHidden(View... views) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void hideSharedElements() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPublishPermissionGranted() {
+		updateFabSaveSrc(FragmentUtil.getResources(this));
+	}
+
+	@Override
+	public void call(Session session, SessionState state, Exception exception) {
+		fbCallCountForSameEvt++;
+		/**
+		 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
+		 */
+		if (fbCallCountForSameEvt < AppConstants.MAX_FB_CALL_COUNT_FOR_SAME_EVT_OR_ART) {
+			FbUtil.call(session, state, exception, this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
+					AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
+			
+		} else {
+			fbCallCountForSameEvt = 0;
+			setPendingAnnounce(false);
+		}
 	}
 }

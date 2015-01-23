@@ -151,14 +151,19 @@ public class EventApiJSONParser {
 						: null;
 				Object jSuggestedInvites = jObjEvent.has(KEY_SUGGESTED_INVITES) ? 
 						jObjEvent.get(KEY_SUGGESTED_INVITES) : null;
-				event.setFriends(getFriends(jObjFriends, jSuggestedInvites));
+				/**
+				 * use getFriends followed by addAll; otherwise using setFriends directly will just
+				 * change the entire list object & it might cause issues if we have previously passed friends list
+				 * object somewhere & it's watching for changes in same list object. 
+				 */
+				event.getFriends().addAll(getFriends(jObjFriends, jSuggestedInvites));
 				
 			} else {
 				/**
-				 * Set empty list so that if dummy placeholders are added by screens indicating loading, 
+				 * clear list so that if dummy placeholders are added by screens indicating loading, 
 				 * then it gets removed.
 				 */
-				event.setFriends(new ArrayList<Friend>());
+				event.getFriends().clear();
 			}
 			
 			if (jObjEvent.has(KEY_LINKS)) {

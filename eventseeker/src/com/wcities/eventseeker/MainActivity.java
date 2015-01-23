@@ -142,6 +142,7 @@ public class MainActivity extends ActionBarActivity implements
 	//private List<SharedElement> sharedElements = new ArrayList<SharedElement>();
 	private boolean exitAnimCalled;
 	private int prevBackStackEntryCount;
+	private CustomSharedElementTransitionSource prevCustomSharedElementTransitionSource;
 	
 	public static MainActivity getInstance() {
 		return instance;
@@ -1209,14 +1210,24 @@ public class MainActivity extends ActionBarActivity implements
 			fragmentTransaction.setCustomAnimations(anims[0], anims[1], anims[2], anims[3]);
 		}
 		
-		if (replaceByFragmentTag.equals(AppConstants.FRAGMENT_TAG_LOGIN_SYNCING) || 
+		if (args != null && args.containsKey(BundleKeys.SHARED_ELEMENTS)) {
+			prevCustomSharedElementTransitionSource = (CustomSharedElementTransitionSource) getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
+		}
+		fragmentTransaction.add(R.id.content_frame, replaceBy, replaceByFragmentTag);
+		
+		/*if (replaceByFragmentTag.equals(AppConstants.FRAGMENT_TAG_LOGIN_SYNCING) || 
 				((args != null && args.containsKey(BundleKeys.SHARED_ELEMENTS)))) {
+			if (args != null && args.containsKey(BundleKeys.SHARED_ELEMENTS)) {
+				prevCustomSharedElementTransitionSource = (CustomSharedElementTransitionSource) getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
+			}
+			Log.d(TAG, "add");
 			// add fragment instead of replacing so that behind its transparent background sign in/sign up screen remains visible
 			fragmentTransaction.add(R.id.content_frame, replaceBy, replaceByFragmentTag);
 			
 		} else {
-			fragmentTransaction.replace(R.id.content_frame, replaceBy, replaceByFragmentTag);
-		}
+			Log.d(TAG, "replace");
+			fragmentTransaction.add(R.id.content_frame, replaceBy, replaceByFragmentTag);
+		}*/
 		
 		//if (!sharedElements.isEmpty()) {
 			//getWindow().setAllowEnterTransitionOverlap(true);
@@ -1922,7 +1933,7 @@ public class MainActivity extends ActionBarActivity implements
 		}
 		
 		if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-			//Log.d(TAG, "super.onBackPressed()");
+			//Log.d(TAG, "onBackPressed()");
 			try {
 				/**
 				 * This try catch will handle IllegalStateException which may occur if onBackPressed() on Super
@@ -1931,6 +1942,7 @@ public class MainActivity extends ActionBarActivity implements
 				if (!isTabletAndInLandscapeMode) {
 					Fragment currentFrag = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
 					if (currentFrag instanceof CustomSharedElementTransitionDestination) {
+						//Log.d(TAG, "CustomSharedElementTransitionDestination, exitAnimCalled = " + exitAnimCalled);
 						if (exitAnimCalled) {
 				    		exitAnimCalled = false;
 				    		super.onBackPressed();
@@ -1941,6 +1953,7 @@ public class MainActivity extends ActionBarActivity implements
 				    	}
 						
 					} else {
+						//Log.d(TAG, "!CustomSharedElementTransitionDestination");
 						super.onBackPressed();
 					}
 					
@@ -2081,8 +2094,8 @@ public class MainActivity extends ActionBarActivity implements
 	}
 	
 	public void animateToolbarElevation(float start, float end) {
-		ObjectAnimator elevateAnim = ObjectAnimator.ofFloat(toolbar, "elevation", 0.0f, end);
-		elevateAnim.setDuration(5000);
+		ObjectAnimator elevateAnim = ObjectAnimator.ofFloat(toolbar, "elevation", start, end);
+		elevateAnim.setDuration(100);
 		elevateAnim.start();
 	}
 	
@@ -2091,4 +2104,11 @@ public class MainActivity extends ActionBarActivity implements
         int color = getResources().getColor(R.color.colorPrimary);
         toolbar.setBackgroundColor(Color.argb(newAlpha, Color.red(color), Color.green(color), Color.blue(color)));
     }
+	
+	public void onSharedElementAnimStart() {
+		if (prevCustomSharedElementTransitionSource != null) {
+			prevCustomSharedElementTransitionSource.hideSharedElements();
+			prevCustomSharedElementTransitionSource = null;
+		}
+	}
 }
