@@ -332,6 +332,9 @@
     <dimen name="img_event_margin_fragment_my_events_list_item">10dp</dimen>
     <dimen name="img_event_ht_fragment_my_events_list_item">200dp</dimen>
     <dimen name="divider_margin_t_fragment_my_events_list_item">@dimen/img_event_margin_fragment_my_events_list_item</dimen>
+    <!-- item_list_my_events.xml -->
+    <dimen name="rlt_lyt_txt_evt_title_pad_l_item_list_my_events">15dp</dimen>
+    <dimen name="rlt_floating_btn_mar_t_item_list_my_events">-28dp</dimen>
     <!-- include_fragment_my_events_list_item_footer.xml -->
     <dimen name="lnr_layout_btns_ht_fragment_my_events_list_item">40dp</dimen>
     <dimen name="lnr_layout_btns_txt_size_include_fragment_my_events_list_item_footer">12sp</dimen>

@@ -46,6 +46,8 @@ public class FbUtil {
 
 	private static final int FB_ERROR_CODE_341 = 341;//Feed action request limit reached.
 
+	private static final int FB_ERROR_CODE_100 = 100;//Invalid Parameter.
+
 
 	public static boolean hasUserLoggedInBefore(Context context) {
 		//Log.d(TAG, "hasUserLoggedInBefore()");
@@ -553,7 +555,8 @@ public class FbUtil {
                 } else {
                 	Log.d(TAG, "graphObj = null");
                 	int errorCode = response.getError().getErrorCode();
-					if (errorCode == FB_ERROR_CODE_341 || errorCode == FB_ERROR_CODE_368) {
+					if (errorCode == FB_ERROR_CODE_341 || errorCode == FB_ERROR_CODE_368 
+							|| errorCode == FB_ERROR_CODE_100) {
 						Log.d(TAG, "errorCode : " + errorCode);
                 		return;
                 	}
