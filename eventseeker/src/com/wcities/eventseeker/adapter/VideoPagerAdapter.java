@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -26,22 +27,16 @@ public class VideoPagerAdapter extends FragmentStatePagerAdapter implements OnPa
 	private final static float DIFF_SCALE = BIG_SCALE - RelativeLayoutCenterScale.SMALL_SCALE;
 	
 	private FragmentManager fm;
-	private ViewPager viewPager;
 	private float scale;
 	private int artistId;
 	List<Video> videos;
 	private int currentPosition = 0;
 
-	public VideoPagerAdapter(FragmentManager fm, List<Video> videos, int artistId, ViewPager viewPager) {
+	public VideoPagerAdapter(FragmentManager fm, List<Video> videos, int artistId) {
 		super(fm);
 		this.fm = fm;
-		this.viewPager = viewPager;
 		this.videos = (videos != null) ? videos : new ArrayList<Video>();
 		this.artistId = artistId;
-	}
-
-	public void setViewPager(ViewPager viewPager) {
-		this.viewPager = viewPager;
 	}
 
 	@Override
@@ -61,6 +56,15 @@ public class VideoPagerAdapter extends FragmentStatePagerAdapter implements OnPa
 
 	@Override
 	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+		//Log.d(TAG, "onPageScrolled(), position = " + position + ", " + "positionOffset = " + positionOffset);
+		if (position > videos.size() - 1) {
+			/**
+			 * This chk is required because of onPageScrolled() being called even if 
+			 * no videos are there which in turn callls getRootView() which calls instantiateItem() 
+			 * causing NullPointerException in instantiateItem()
+			 */
+			return;
+		}
 		/**
 		 * positionOffset value is 0 for centered position & swiping towards left it increases this value
 		 * gradually from 0 to 0.99 & then position value increases by 1 & positionOffset becomes again 0 for this new 
@@ -68,7 +72,7 @@ public class VideoPagerAdapter extends FragmentStatePagerAdapter implements OnPa
 		 * Similarly, swiping towards right, position value instantly decreases by 1 & positionOffset starts from
 		 * 0.99, goes on decreasing upto 0 at which point this left page now occupies centered position. 
 		 */
-		//Log.d(TAG, "onPageScrolled(), position = " + position + ", " + "positionOffset = " + positionOffset);
+		//Log.d(TAG, "onPageScrolled() 2, position = " + position + ", " + "positionOffset = " + positionOffset);
 		if (positionOffset >= 0f && positionOffset <= 1f) {
 			
 			RelativeLayoutCenterScale cur = getRootView(position);

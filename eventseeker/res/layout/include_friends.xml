@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rltLytFriends"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@android:color/white" >
 
     <TextView android:id="@+id/txtFriends"
         android:layout_width="wrap_content"
@@ -21,5 +22,13 @@
         android:layout_marginTop="@dimen/recycler_v_friends_margin_t_include_friends"
         android:layout_marginLeft="@dimen/recycler_v_friends_margin_l_include_friends"
         android:layout_marginRight="@dimen/recycler_v_friends_margin_r_include_friends" />
+    
+    <View android:id="@+id/vHorLineFriends"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/v_hor_line_ht_event_details"
+        android:background="@color/gray_shade_d"
+        android:layout_below="@id/recyclerVFriends"
+        android:layout_marginLeft="@dimen/v_hor_line_margin_l_event_details"
+        android:layout_marginRight="@dimen/v_hor_line_margin_r_event_details" />
    
 </RelativeLayout>

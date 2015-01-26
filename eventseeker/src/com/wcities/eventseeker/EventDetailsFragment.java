@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.widget.LinearLayoutManager;
@@ -51,6 +50,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.wcities.eventseeker.adapter.FeaturingArtistPagerAdapter;
+import com.wcities.eventseeker.adapter.FriendsRVAdapter;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker.Type;
 import com.wcities.eventseeker.api.Api;
@@ -68,7 +68,6 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
-import com.wcities.eventseeker.core.Friend;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.custom.fragment.PublishEventFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.custom.view.ObservableScrollView;
@@ -907,58 +906,6 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		updateDetailsVisibility();
 	}
 	
-	private static class FriendsRVAdapter extends RecyclerView.Adapter<FriendsRVAdapter.ViewHolder> {
-		
-		private static class ViewHolder extends RecyclerView.ViewHolder {
-			
-			private ImageView circleImgFriends;
-			private TextView txtFriendName;
-
-			public ViewHolder(View itemView) {
-				super(itemView);
-				this.circleImgFriends = (ImageView) itemView.findViewById(R.id.circleImgVFriend);
-				this.txtFriendName = (TextView) itemView.findViewById(R.id.txtFriendName);
-			}
-		}
-		
-		private BitmapCache bitmapCache;
-		private List<Friend> friends;
-		
-		public FriendsRVAdapter(List<Friend> friends) {
-			this.friends = friends;
-			this.bitmapCache = BitmapCache.getInstance();
-		}
-
-		@Override
-		public int getItemCount() {
-			return friends.size();
-		}
-
-		@Override
-		public void onBindViewHolder(ViewHolder holder, int position) {
-			Friend friend = friends.get(position);
-			holder.txtFriendName.setText(friend.getName());
-			
-			String key = friend.getKey(ImgResolution.LOW);
-			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
-			if (bitmap != null) {
-				holder.circleImgFriends.setImageBitmap(bitmap);
-		        
-		    } else {
-		    	holder.circleImgFriends.setImageBitmap(null);
-		        AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-		        asyncLoadImg.loadImg(holder.circleImgFriends, ImgResolution.LOW, friend);
-		    }
-		}
-
-		@Override
-		public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-			View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_friend, parent, false);
-			ViewHolder vh = new ViewHolder(v);
-			return vh;
-		}
-	}
-
 	@Override
 	public void onPoppedFromBackStack() {
 		// to update statusbar visibility

@@ -9,6 +9,8 @@ import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils.TruncateAt;
 import android.util.DisplayMetrics;
@@ -31,7 +33,7 @@ import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
-import com.wcities.eventseeker.adapter.FeaturingArtistPagerAdapter;
+import com.wcities.eventseeker.adapter.FriendsRVAdapter;
 import com.wcities.eventseeker.adapter.VideoPagerAdapter;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
@@ -43,8 +45,6 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
-import com.wcities.eventseeker.custom.view.ObservableScrollView;
-import com.wcities.eventseeker.custom.view.ObservableScrollView.ObservableScrollViewListener;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionDestination;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -53,36 +53,37 @@ import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.viewdata.SharedElement;
 import com.wcities.eventseeker.viewdata.SharedElementPosition;
 
-public class ArtistDetailsFragment extends FragmentLoadableFromBackStack implements ObservableScrollViewListener, 
+public class ArtistDetailsFragment extends FragmentLoadableFromBackStack implements  
 		DrawerListener, CustomSharedElementTransitionDestination, OnArtistUpdatedListener, OnClickListener {
 	
 	private static final String TAG = ArtistDetailsFragment.class.getName();
 	
 	private static final int UNSCROLLED = -1;
 	private static final int TRANSITION_ANIM_DURATION = 400;
-	private static final int MAX_LINES_ARTIST_DESC = 5;
 
 	private View rootView;
-	private ImageView imgArtist, imgDown;
-	private TextView txtArtistTitle, txtArtistDesc;
-	private RelativeLayout rltLytContent, rltLytPrgsBar, rltLytVideos;
+	private ImageView imgArtist;
+	private TextView txtArtistTitle;
+	private RecyclerView recyclerVArtists;
+	private RelativeLayout rltLytTxtArtistTitle;
 	
-	private int limitScrollAt, actionBarElevation, prevScrollY = UNSCROLLED;
+	private ArtistRVAdapter artistRVAdapter;
+	
+	private int totalScrolledDy = UNSCROLLED; // indicates layout not yet created
+	private int limitScrollAt, actionBarElevation;
 	private float minTitleScale;
 	private boolean isScrollLimitReached, isDrawerOpen;
 	private String title = "";
 	
 	private Artist artist;
-	private LoadArtistDetails loadArtistDetails;
-	private boolean allDetailsLoaded;
-	private boolean isArtistDescExpanded;
 	
 	private List<SharedElement> sharedElements;
 	private boolean isOnCreateViewCalledFirstTime = true;
 	private int screenW, imgArtistHt;
 	private AnimatorSet animatorSet;
 	
-	private VideoPagerAdapter videoPagerAdapter;
+	private LoadArtistDetails loadArtistDetails;
+	private boolean allDetailsLoaded;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -116,68 +117,47 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 		
 		rootView = inflater.inflate(R.layout.fragment_artist_details, container, false);
 		
-		rltLytContent = (RelativeLayout) rootView.findViewById(R.id.rltLytContent);
-		
 		imgArtist = (ImageView) rootView.findViewById(R.id.imgArtist);
 		updateArtistImg();
+		
+		rltLytTxtArtistTitle = (RelativeLayout) rootView.findViewById(R.id.rltLytTxtArtistTitle);
 		
 		txtArtistTitle = (TextView) rootView.findViewById(R.id.txtArtistTitle);
 		txtArtistTitle.setText(artist.getName());
 		// for marquee to work
 		txtArtistTitle.setSelected(true);
 		
-		rltLytPrgsBar = (RelativeLayout) rootView.findViewById(R.id.rltLytPrgsBar);
-		txtArtistDesc = (TextView) rootView.findViewById(R.id.txtDesc);
-		imgDown = (ImageView) rootView.findViewById(R.id.imgDown);
-		rltLytVideos = (RelativeLayout) rootView.findViewById(R.id.rltLytVideos);
+		recyclerVArtists = (RecyclerView) rootView.findViewById(R.id.recyclerVArtists);
+		// use a linear layout manager
+		RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(FragmentUtil.getActivity(this));
+		recyclerVArtists.setLayoutManager(layoutManager);
 		
-		updateDetailsVisibility();
+		recyclerVArtists.setOnScrollListener(new RecyclerView.OnScrollListener() {
+	    	
+	    	@Override
+	    	public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+	    		super.onScrolled(recyclerView, dx, dy);
+	    		//Log.d(TAG, "onScrolled - dx = " + dx + ", dy = " + dy);
+	    		ArtistDetailsFragment.this.onScrolled(dy, false);
+	    	}
+		});
 		
-		ViewPager vPagerVideos = (ViewPager) rootView.findViewById(R.id.vPagerVideos);
-		if (videoPagerAdapter == null) {
-			videoPagerAdapter = new VideoPagerAdapter(getChildFragmentManager(), artist.getVideos(), artist.getId(),  
-					vPagerVideos);
-			
-		} else {
-			videoPagerAdapter.setViewPager(vPagerVideos);
-		}
-		vPagerVideos.setAdapter(videoPagerAdapter);
-		vPagerVideos.setOnPageChangeListener(videoPagerAdapter);
-		
-		// Set current item to the middle page so we can fling to both directions left and right
-		vPagerVideos.setCurrentItem(videoPagerAdapter.getCurrentPosition());
-		
-		// Necessary or the pager will only have one extra page to show make this at least however many pages you can see
-		vPagerVideos.setOffscreenPageLimit(7);
-		
-		// Set margin for pages as a negative number, so a part of next and previous pages will be showed
-		vPagerVideos.setPageMargin(FragmentUtil.getResources(this).getDimensionPixelSize(
-				R.dimen.rlt_lyt_root_w_video) - screenW);
-		
-		final ObservableScrollView obsrScrlV = (ObservableScrollView) rootView.findViewById(R.id.obsrScrlV);
-		obsrScrlV.setListener(this);
-		
-		obsrScrlV.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+		recyclerVArtists.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
             	//Log.d(TAG, "onGlobalLayout()");
 				if (VersionUtil.isApiLevelAbove15()) {
-					obsrScrlV.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+					recyclerVArtists.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
 				} else {
-					obsrScrlV.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+					recyclerVArtists.getViewTreeObserver().removeGlobalOnLayoutListener(this);
 				}
 				
-                if (prevScrollY == UNSCROLLED) {
-                	onScrollChanged(obsrScrlV.getScrollY(), true);
-                	
-                } else {
-                	obsrScrlV.scrollTo(0, prevScrollY);
-                	
-                	if (isDrawerOpen) {
-        				onDrawerOpened();
-        			}
-                }
+				onScrolled(0, true);
+				if (isDrawerOpen) {
+					// to maintain status bar & toolbar decorations after orientation change
+					onDrawerOpened();
+				}
             }
         });
 		
@@ -190,12 +170,21 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 	}
 	
 	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		if (artistRVAdapter == null) {
+			artistRVAdapter = new ArtistRVAdapter(this);
+		}
+		recyclerVArtists.setAdapter(artistRVAdapter);
+	}
+	
+	@Override
 	public void onStart() {
 		super.onStart();
 		
 		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.GONE, AppConstants.INVALID_ID);
-		if (prevScrollY != UNSCROLLED) {
-			onScrollChanged(prevScrollY, true);
+		if (totalScrolledDy != UNSCROLLED) {
+			onScrolled(0, true);
 			
 			if (isDrawerOpen) {
 				onDrawerOpened();
@@ -222,75 +211,60 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 		}
 	}
 	
-	private void updateDescVisibility() {
-		if (artist.getDescription() != null) {
-			makeDescVisible();
-			
-		} else {
-			txtArtistDesc.setVisibility(View.GONE);
-			imgDown.setVisibility(View.GONE);
-		}
-	}
-	
-	private void makeDescVisible() {
-		txtArtistDesc.setVisibility(View.VISIBLE);
-		txtArtistDesc.setText(Html.fromHtml(artist.getDescription()));
-		imgDown.setVisibility(View.VISIBLE);
-		imgDown.setOnClickListener(this);
+	private void onScrolled(int dy, boolean forceUpdate) {
+		//Log.d(TAG, "totalScrolledDy = " + totalScrolledDy);
+		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		
-		if (isArtistDescExpanded) {
-			expandArtistDesc();
-			
-		} else {
-			collapseArtistDesc();
+		if (totalScrolledDy == UNSCROLLED) {
+			totalScrolledDy = 0;
 		}
-	}
-	
-	private void expandArtistDesc() {
-		txtArtistDesc.setMaxLines(Integer.MAX_VALUE);
-		txtArtistDesc.setEllipsize(null);
-		imgDown.setImageDrawable(FragmentUtil.getResources(this).getDrawable(R.drawable.less));
-		isArtistDescExpanded = true;
-	}
-	
-	private void collapseArtistDesc() {
-		txtArtistDesc.setMaxLines(MAX_LINES_ARTIST_DESC);
-		txtArtistDesc.setEllipsize(TruncateAt.END);
-		imgDown.setImageDrawable(FragmentUtil.getResources(this).getDrawable(R.drawable.down));
-		isArtistDescExpanded = false;
-	}
-	
-	private void updateVideosVisibility() {
-		if (!artist.getVideos().isEmpty()) {
-			rltLytVideos.setVisibility(View.VISIBLE);
-			videoPagerAdapter.notifyDataSetChanged();
-			
-		} else {
-			rltLytVideos.setVisibility(View.GONE);
+		totalScrolledDy += dy;
+		
+		// Translate image
+		ViewHelper.setTranslationY(imgArtist, (0 - totalScrolledDy) / 2);
+		
+		if (limitScrollAt == 0) {
+			calculateScrollLimit();
+			//Log.d(TAG, "vPagerCatTitles.getTop() = " + vPagerCatTitles.getTop() + ", toolbarSize = " + toolbarSize + ", ma.getStatusBarHeight() = " + ma.getStatusBarHeight());
 		}
-	}
-	
-	private void updateDetailsVisibility() {
-		if (allDetailsLoaded) {
-			//updateShareIntent();
+		
+		int scrollY = (totalScrolledDy >= limitScrollAt) ? limitScrollAt : totalScrolledDy;
+		//Log.d(TAG, "totalScrolledDy = " + totalScrolledDy + ", limitScrollAt = " + limitScrollAt + ", scrollY = " + scrollY);
+		
+		ViewHelper.setTranslationY(rltLytTxtArtistTitle, -totalScrolledDy);
+		
+		if ((!isScrollLimitReached || forceUpdate) && totalScrolledDy >= limitScrollAt) {
+			ma.animateToolbarElevation(0.0f, actionBarElevation);
 			
-			rltLytPrgsBar.setVisibility(View.GONE);
-			updateDescVisibility();
-			updateVideosVisibility();
-			/*updateEventSchedule();
-			updateAddressMapVisibility();
-			updateFriendsVisibility();
-			updateFabs();*/
+			ma.setVStatusBarLayeredVisibility(View.VISIBLE, R.color.colorPrimaryDark);
+			ma.setToolbarBg(ma.getResources().getColor(R.color.colorPrimary));
 			
-		} else {
-			rltLytPrgsBar.setVisibility(View.VISIBLE);
-			txtArtistDesc.setVisibility(View.GONE);
-			imgDown.setVisibility(View.GONE);
-			rltLytVideos.setVisibility(View.GONE);
-			/*rltLytVenue.setVisibility(View.GONE);
-			rltLytFriends.setVisibility(View.GONE);
-			fabTickets.setVisibility(View.GONE);
-			fabSave.setVisibility(View.GONE);*/
+			title = artist.getName();
+			ma.updateTitle(title);
+			
+			isScrollLimitReached = true;
+			
+		} else if ((isScrollLimitReached || forceUpdate) && totalScrolledDy < limitScrollAt) {
+			//Log.d(TAG, "totalScrolledDy < limitScrollAt");
+			ma.animateToolbarElevation(actionBarElevation, 0.0f);
+			
+			ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
+			ma.setToolbarBg(Color.TRANSPARENT);
+			
+			title = "";
+			ma.updateTitle(title);
+			
+			isScrollLimitReached = false;
+		}
+		
+		if (scrollY < limitScrollAt) {
+			float scale = 1 - (((1 - minTitleScale) / limitScrollAt) * scrollY);
+			//Log.d(TAG, "scale = " + scale);
+			
+			ViewHelper.setPivotX(txtArtistTitle, 0);
+	        ViewHelper.setPivotY(txtArtistTitle, txtArtistTitle.getHeight() / 2);
+	        ViewHelper.setScaleX(txtArtistTitle, scale);
+	        ViewHelper.setScaleY(txtArtistTitle, scale);
 		}
 	}
 	
@@ -332,53 +306,6 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 		minTitleScale = actionBarTitleTextSize / (float) txtArtistTitleTextSize;
 	}
 	
-	private void onScrollChanged(int scrollY, boolean forceUpdate) {
-		//Log.d(TAG, "scrollY = " + scrollY);
-		// Translate image
-		ViewHelper.setTranslationY(imgArtist, scrollY / 2);
-		
-		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
-		
-		if (limitScrollAt == 0) {
-			calculateScrollLimit();
-		}
-		
-		if ((!isScrollLimitReached || forceUpdate) && scrollY >= limitScrollAt) {
-			ma.animateToolbarElevation(0.0f, actionBarElevation);
-			
-			ma.setVStatusBarLayeredVisibility(View.VISIBLE, R.color.colorPrimaryDark);
-			ma.setToolbarBg(ma.getResources().getColor(R.color.colorPrimary));
-			
-			title = artist.getName();
-			ma.updateTitle(title);
-			
-			isScrollLimitReached = true;
-			
-		} else if ((isScrollLimitReached || forceUpdate) && scrollY < limitScrollAt) {
-			ma.animateToolbarElevation(actionBarElevation, 0.0f);
-			
-			ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
-			ma.setToolbarBg(Color.TRANSPARENT);
-			
-			title = "";
-			ma.updateTitle(title);
-			
-			isScrollLimitReached = false;
-		}
-		
-		if (scrollY < limitScrollAt) {
-			float scale = 1 - (((1 - minTitleScale) / limitScrollAt) * scrollY);
-			//Log.d(TAG, "scale = " + scale);
-			
-			ViewHelper.setPivotX(txtArtistTitle, 0);
-	        ViewHelper.setPivotY(txtArtistTitle, txtArtistTitle.getHeight() / 2);
-	        ViewHelper.setScaleX(txtArtistTitle, scale);
-	        ViewHelper.setScaleY(txtArtistTitle, scale);
-		}
-        
-		prevScrollY = scrollY;
-	}
-
 	private void onDrawerOpened() {
 		isDrawerOpen = true;
 		
@@ -400,24 +327,9 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 	}
 
 	@Override
-	public void onScrollChanged(int scrollY) {
-		onScrollChanged(scrollY, false);
-	}
-
-	@Override
-	public void onDownMotionEvent() {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void onUpOrCancelMotionEvent() {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
 	public void onDrawerClosed(View arg0) {
 		isDrawerOpen = false;
-		onScrollChanged(prevScrollY, true);
+		onScrolled(0, true);
 	}
 
 	@Override
@@ -478,7 +390,7 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 			
 			@Override
 			public void onAnimationStart(Animator arg0) {
-				rltLytContent.setVisibility(View.INVISIBLE);
+				recyclerVArtists.setVisibility(View.INVISIBLE);
 				((MainActivity)FragmentUtil.getActivity(ArtistDetailsFragment.this)).onSharedElementAnimStart();
 			}
 			
@@ -490,7 +402,7 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 				//Log.d(TAG, "onAnimationEnd()");
 				if (!isCancelled) {
 					//Log.d(TAG, "!isCancelled");
-					rltLytContent.setVisibility(View.VISIBLE);
+					recyclerVArtists.setVisibility(View.VISIBLE);
 					Animation slideInFromBottom = AnimationUtils.loadAnimation(FragmentUtil.getApplication(ArtistDetailsFragment.this), R.anim.slide_in_from_bottom);
 					slideInFromBottom.setAnimationListener(new AnimationListener() {
 						
@@ -510,7 +422,7 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 							AsyncTaskUtil.executeAsyncTask(loadArtistDetails, true);
 						}
 					});
-					rltLytContent.startAnimation(slideInFromBottom);
+					recyclerVArtists.startAnimation(slideInFromBottom);
 				}
 			}
 			
@@ -527,7 +439,7 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 	@Override
 	public void exitAnimation() {
 		animatorSet.cancel();
-		rltLytContent.clearAnimation();
+		recyclerVArtists.clearAnimation();
 		
 		Animation slideOutToBottom = AnimationUtils.loadAnimation(FragmentUtil.getApplication(ArtistDetailsFragment.this), R.anim.slide_out_to_bottom);
 		slideOutToBottom.setAnimationListener(new AnimationListener() {
@@ -540,7 +452,7 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 			
 			@Override
 			public void onAnimationEnd(Animation animation) {
-				rltLytContent.setVisibility(View.INVISIBLE);
+				recyclerVArtists.setVisibility(View.INVISIBLE);
 				
 				animatorSet = new AnimatorSet();
 				
@@ -550,7 +462,7 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 		        ObjectAnimator xAnim = ObjectAnimator.ofFloat(imgArtist, "x", 0, sharedElementPosition.getStartX());
 		        xAnim.setDuration(TRANSITION_ANIM_DURATION);
 		        
-		        ObjectAnimator yAnim = ObjectAnimator.ofFloat(imgArtist, "y", 0, sharedElementPosition.getStartY() + prevScrollY);
+		        ObjectAnimator yAnim = ObjectAnimator.ofFloat(imgArtist, "y", 0, sharedElementPosition.getStartY());
 		        yAnim.setDuration(TRANSITION_ANIM_DURATION);
 		        
 		        ValueAnimator va = ValueAnimator.ofInt(100, 1);
@@ -592,13 +504,13 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 		        animatorSet.start();
 			}
 		});
-		rltLytContent.startAnimation(slideOutToBottom);
+		recyclerVArtists.startAnimation(slideOutToBottom);
     }
 
 	@Override
 	public void onArtistUpdated() {
 		allDetailsLoaded = true;
-		updateDetailsVisibility();
+		artistRVAdapter.notifyDataSetChanged();
 	}
 
 	@Override
@@ -606,16 +518,261 @@ public class ArtistDetailsFragment extends FragmentLoadableFromBackStack impleme
 		switch (v.getId()) {
 		
 		case R.id.imgDown:
-			if (isArtistDescExpanded) {
-				collapseArtistDesc();
-				
-			} else {
-				expandArtistDesc();
-			}
 			break;
 			
 		default:
 			break;
+		}
+	}
+	
+	private static class ArtistRVAdapter extends RecyclerView.Adapter<ArtistRVAdapter.ViewHolder>  {
+		
+		private static final int EXTRA_TOP_DUMMY_ITEM_COUNT = 2;
+		private static final int EXTRA_TOP_DUMMY_ITEM_COUNT_AFTER_DETAILS_LOADED = 4;
+		private static final int MAX_LINES_ARTIST_DESC = 5;
+		
+		private ArtistDetailsFragment artistDetailsFragment;
+		
+		private boolean isArtistDescExpanded;
+		
+		private VideoPagerAdapter videoPagerAdapter;
+		private FriendsRVAdapter friendsRVAdapter;
+		
+		private static enum ViewType {
+			POS_0, DESC, VIDEOS, FRIENDS
+		};
+		
+		private static class ViewHolder extends RecyclerView.ViewHolder {
+			
+			private TextView txtDesc;
+			private ImageView imgDown;
+			private RelativeLayout rltLytPrgsBar;
+			private View vHorLine;
+			private ViewPager vPagerVideos;
+			private RecyclerView recyclerVFriends;
+
+			public ViewHolder(View itemView) {
+				super(itemView);
+				txtDesc = (TextView) itemView.findViewById(R.id.txtDesc);
+				imgDown = (ImageView) itemView.findViewById(R.id.imgDown);
+				rltLytPrgsBar = (RelativeLayout) itemView.findViewById(R.id.rltLytPrgsBar);
+				vHorLine = itemView.findViewById(R.id.vHorLine);
+				vPagerVideos = (ViewPager) itemView.findViewById(R.id.vPagerVideos);
+				recyclerVFriends = (RecyclerView) itemView.findViewById(R.id.recyclerVFriends);
+			}
+		}
+		
+		public ArtistRVAdapter(ArtistDetailsFragment artistDetailsFragment) {
+			this.artistDetailsFragment = artistDetailsFragment;
+		}
+
+		@Override
+		public int getItemViewType(int position) {
+			if (position == ViewType.POS_0.ordinal()) {
+				return ViewType.POS_0.ordinal();
+				
+			} else if (position == ViewType.DESC.ordinal()) {
+				return ViewType.DESC.ordinal();
+				
+			} else if (position == ViewType.VIDEOS.ordinal()) {
+				return ViewType.VIDEOS.ordinal();
+				
+			} else {
+				return ViewType.FRIENDS.ordinal();
+			}
+		}
+
+		@Override
+		public int getItemCount() {
+			return artistDetailsFragment.allDetailsLoaded ? EXTRA_TOP_DUMMY_ITEM_COUNT_AFTER_DETAILS_LOADED :
+				EXTRA_TOP_DUMMY_ITEM_COUNT;
+		}
+
+		@Override
+		public void onBindViewHolder(ViewHolder holder, int position) {
+			if (position == ViewType.DESC.ordinal()) {
+				updateDescVisibility(holder);
+				
+			} else if (position == ViewType.VIDEOS.ordinal()) {
+				if (videoPagerAdapter == null) {
+					videoPagerAdapter = new VideoPagerAdapter(artistDetailsFragment.getChildFragmentManager(), 
+							artistDetailsFragment.artist.getVideos(), artistDetailsFragment.artist.getId());
+				}
+				
+				holder.vPagerVideos.setAdapter(videoPagerAdapter);
+				holder.vPagerVideos.setOnPageChangeListener(videoPagerAdapter);
+				
+				// Necessary or the pager will only have one extra page to show make this at least however many pages you can see
+				holder.vPagerVideos.setOffscreenPageLimit(7);
+				
+				// Set margin for pages as a negative number, so a part of next and previous pages will be showed
+				holder.vPagerVideos.setPageMargin(FragmentUtil.getResources(artistDetailsFragment).getDimensionPixelSize(
+						R.dimen.rlt_lyt_root_w_video) - artistDetailsFragment.screenW);
+				
+				// Set current item to the middle page so we can fling to both directions left and right
+				holder.vPagerVideos.setCurrentItem(videoPagerAdapter.getCurrentPosition());
+				
+				updateVideosVisibility(holder);
+				
+			} else if (position == ViewType.FRIENDS.ordinal()) {
+				if (friendsRVAdapter == null) {
+					friendsRVAdapter = new FriendsRVAdapter(artistDetailsFragment.artist.getFriends());
+					
+					// use a linear layout manager
+					RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(FragmentUtil.getActivity(artistDetailsFragment), 
+							LinearLayoutManager.HORIZONTAL, false);
+					holder.recyclerVFriends.setLayoutManager(layoutManager);
+				} 
+				
+				holder.recyclerVFriends.setAdapter(friendsRVAdapter);
+				
+				updateFriendsVisibility(holder);
+			}
+		}
+
+		@Override
+		public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+			//Log.d(TAG, "onCreateViewHolder(), viewType = " + viewType);
+			View v;
+			
+			switch (viewType) {
+			
+			case 0:
+				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_img_artist_artist_details, 
+						parent, false);
+				break;
+				
+			case 1:
+				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_desc_artist_details, 
+						parent, false);
+				break;
+				
+			case 2:
+				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_videos_artist_details, 
+						parent, false);
+				break;
+				
+			case 3:
+				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.include_friends, 
+						parent, false);
+				break;
+				
+			default:
+				v = null;
+				break;
+			}
+			
+			ViewHolder vh = new ViewHolder(v);
+	        return vh;
+		}
+		
+		private void updateDescVisibility(ViewHolder holder) {
+			if (artistDetailsFragment.allDetailsLoaded) {
+				if (artistDetailsFragment.artist.getDescription() != null) {
+					holder.rltLytPrgsBar.setVisibility(View.GONE);
+					holder.txtDesc.setVisibility(View.VISIBLE);
+					holder.imgDown.setVisibility(View.VISIBLE);
+					holder.vHorLine.setVisibility(View.VISIBLE);
+					
+					makeDescVisible(holder);
+					
+				} else {
+					setViewGone(holder);
+				}
+				
+			} else {
+				holder.rltLytPrgsBar.setVisibility(View.VISIBLE);
+				holder.txtDesc.setVisibility(View.GONE);
+				holder.imgDown.setVisibility(View.GONE);
+				holder.vHorLine.setVisibility(View.GONE);
+			}
+		}
+		
+		private void makeDescVisible(final ViewHolder holder) {
+			holder.txtDesc.setText(Html.fromHtml(artistDetailsFragment.artist.getDescription()));
+			holder.imgDown.setVisibility(View.VISIBLE);
+			holder.imgDown.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					//Log.d(TAG, "totalScrolled  = " + holder.itemView.getTop());
+					if (isArtistDescExpanded) {
+						collapseArtistDesc(holder);
+						
+						/**
+						 * update scrolled distance after collapse, because sometimes it can happen that view becamse scrollable only
+						 * due to expanded description after which if user collapses it, then based on recyclerview
+						 * height it automatically resettles itself such that recyclerview again becomes unscrollable.
+						 * Accordingly we need to reset scrolled amount, artist img & title
+						 */
+						holder.itemView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+				            @Override
+				            public void onGlobalLayout() {
+				            	//Log.d(TAG, "onGlobalLayout()");
+								if (VersionUtil.isApiLevelAbove15()) {
+									holder.itemView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+								} else {
+									holder.itemView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+								}
+								
+								//Log.d(TAG, "totalScrolled on global layout  = " + holder.itemView.getTop());
+								artistDetailsFragment.totalScrolledDy = artistDetailsFragment.imgArtistHt - holder.itemView.getTop();
+								artistDetailsFragment.onScrolled(0, true);
+				            }
+				        });
+						
+					} else {
+						expandArtistDesc(holder);
+					}
+					//Log.d(TAG, "totalScrolled after  = " + holder.itemView.getTop());
+				}
+			});
+			
+			if (isArtistDescExpanded) {
+				expandArtistDesc(holder);
+				
+			} else {
+				collapseArtistDesc(holder);
+			}
+		}
+		
+		private void expandArtistDesc(ViewHolder holder) {
+			holder.txtDesc.setMaxLines(Integer.MAX_VALUE);
+			holder.txtDesc.setEllipsize(null);
+			holder.imgDown.setImageDrawable(FragmentUtil.getResources(artistDetailsFragment).getDrawable(R.drawable.less));
+			isArtistDescExpanded = true;
+		}
+		
+		private void collapseArtistDesc(ViewHolder holder) {
+			holder.txtDesc.setMaxLines(MAX_LINES_ARTIST_DESC);
+			holder.txtDesc.setEllipsize(TruncateAt.END);
+			holder.imgDown.setImageDrawable(FragmentUtil.getResources(artistDetailsFragment).getDrawable(R.drawable.down));
+			isArtistDescExpanded = false;
+		}
+		
+		private void updateVideosVisibility(ViewHolder holder) {
+			if (!artistDetailsFragment.artist.getVideos().isEmpty()) {
+				videoPagerAdapter.notifyDataSetChanged();
+				
+			} else {
+				setViewGone(holder);
+			}
+		}
+		
+		private void updateFriendsVisibility(ViewHolder holder) {
+			if (!artistDetailsFragment.artist.getFriends().isEmpty()) {
+				friendsRVAdapter.notifyDataSetChanged();
+				
+			} else {
+				setViewGone(holder);
+			}
+		}
+		
+		private void setViewGone(ViewHolder holder) {
+			RecyclerView.LayoutParams lp = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
+			lp.height = 0;
+			holder.itemView.setLayoutParams(lp);
 		}
 	}
 }
