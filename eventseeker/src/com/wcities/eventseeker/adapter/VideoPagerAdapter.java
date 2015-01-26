@@ -3,21 +3,22 @@ package com.wcities.eventseeker.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wcities.eventseeker.FeaturingArtistFragment;
+import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.VideoFragment;
+import com.wcities.eventseeker.core.Artist;
+import com.wcities.eventseeker.core.Video;
+import com.wcities.eventseeker.custom.view.RelativeLayoutCenterScale;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
 import android.widget.TextView;
 
-import com.wcities.eventseeker.FeaturingArtistFragment;
-import com.wcities.eventseeker.R;
-import com.wcities.eventseeker.core.Artist;
-import com.wcities.eventseeker.custom.view.RelativeLayoutCenterScale;
-
-public class FeaturingArtistPagerAdapter extends FragmentStatePagerAdapter implements ViewPager.OnPageChangeListener {
+public class VideoPagerAdapter extends FragmentStatePagerAdapter implements OnPageChangeListener {
 	
 	private static final String TAG = FeaturingArtistPagerAdapter.class.getSimpleName();
 	
@@ -27,14 +28,16 @@ public class FeaturingArtistPagerAdapter extends FragmentStatePagerAdapter imple
 	private FragmentManager fm;
 	private ViewPager viewPager;
 	private float scale;
-	private List<Artist> artists;
+	private int artistId;
+	List<Video> videos;
 	private int currentPosition = 0;
 
-	public FeaturingArtistPagerAdapter(FragmentManager fm, List<Artist> artists, ViewPager viewPager) {
+	public VideoPagerAdapter(FragmentManager fm, List<Video> videos, int artistId, ViewPager viewPager) {
 		super(fm);
 		this.fm = fm;
 		this.viewPager = viewPager;
-		this.artists = (artists != null) ? artists : new ArrayList<Artist>();
+		this.videos = (videos != null) ? videos : new ArrayList<Video>();
+		this.artistId = artistId;
 	}
 
 	public void setViewPager(ViewPager viewPager) {
@@ -45,12 +48,12 @@ public class FeaturingArtistPagerAdapter extends FragmentStatePagerAdapter imple
 	public Fragment getItem(int position) {
 		//Log.d(TAG, "getItem(), pos = " + position);
         scale = RelativeLayoutCenterScale.SMALL_SCALE;
-        return FeaturingArtistFragment.newInstance(artists.get(position), scale);
+        return VideoFragment.newInstance(videos.get(position), artistId, scale);
 	}
 
 	@Override
 	public int getCount() {
-		return artists.size();
+		return videos.size();
 	}
 
 	@Override
@@ -89,33 +92,6 @@ public class FeaturingArtistPagerAdapter extends FragmentStatePagerAdapter imple
 			if (prev != null) {
 				prev.setScaleBoth(RelativeLayoutCenterScale.SMALL_SCALE + DIFF_SCALE * positionOffset);
 			}
-
-			if (positionOffset < 0.5f) {
-				cur.findViewById(R.id.vTranslucentLayer).setVisibility(View.GONE);
-				((TextView)cur.findViewById(R.id.txtArtistName)).setVisibility(View.VISIBLE);
-				
-				if (next != null) {
-					next.findViewById(R.id.vTranslucentLayer).setVisibility(View.VISIBLE);
-					((TextView)next.findViewById(R.id.txtArtistName)).setVisibility(View.GONE);
-				}
-				if (prev != null) {
-					prev.findViewById(R.id.vTranslucentLayer).setVisibility(View.VISIBLE);
-					((TextView)prev.findViewById(R.id.txtArtistName)).setVisibility(View.GONE);
-				}
-				
-			} else {
-				cur.findViewById(R.id.vTranslucentLayer).setVisibility(View.VISIBLE);
-				((TextView)cur.findViewById(R.id.txtArtistName)).setVisibility(View.GONE);
-				
-				if (next != null) {
-					next.findViewById(R.id.vTranslucentLayer).setVisibility(View.GONE);
-					((TextView)next.findViewById(R.id.txtArtistName)).setVisibility(View.VISIBLE);
-				}
-				if (prev != null) {
-					prev.findViewById(R.id.vTranslucentLayer).setVisibility(View.VISIBLE);
-					((TextView)prev.findViewById(R.id.txtArtistName)).setVisibility(View.GONE);
-				}
-			}
 		}
 	}
 
@@ -129,7 +105,7 @@ public class FeaturingArtistPagerAdapter extends FragmentStatePagerAdapter imple
 	}
 
 	private RelativeLayoutCenterScale getRootView(int position) {
-		Fragment fragment = (Fragment) instantiateItem(null, position);//fm.findFragmentByTag(getFragmentTag(position));
+		Fragment fragment = (Fragment) instantiateItem(null, position);
 		/**
 		 * fragment is null in case if artists size is 0. In such case onPageScrolled() is still called which
 		 * in turn calls getRootView()
@@ -143,8 +119,4 @@ public class FeaturingArtistPagerAdapter extends FragmentStatePagerAdapter imple
 		}
 		return null;
 	}
-	
-	/*private String getFragmentTag(int position) {
-	    return "android:switcher:" + viewPager.getId() + ":" + position;
-	}*/
 }

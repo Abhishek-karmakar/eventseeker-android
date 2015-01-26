@@ -1,35 +1,36 @@
 package com.wcities.eventseeker.custom.view;
 
-import com.wcities.eventseeker.adapter.CatTitlesAdapter;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
-public class FeaturingArtistRelativeLayout extends RelativeLayout {
-	
-	private float scale = CatTitlesAdapter.BIG_SCALE;
+import com.wcities.eventseeker.adapter.FeaturingArtistPagerAdapter;
 
-	public FeaturingArtistRelativeLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+public class RelativeLayoutCenterScale extends RelativeLayout {
+	
+	public final static float SMALL_SCALE = 0.8f;
+	private float scale = SMALL_SCALE;
+
+	public RelativeLayoutCenterScale(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
 		super(context, attrs, defStyleAttr, defStyleRes);
 		// following call is needed so that call to invalidate() from setScaleBoth() can invoke onDraw()
 		setWillNotDraw(false);
 	}
 
-	public FeaturingArtistRelativeLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+	public RelativeLayoutCenterScale(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
 		// following call is needed so that call to invalidate() from setScaleBoth() can invoke onDraw()
 		setWillNotDraw(false);
 	}
 
-	public FeaturingArtistRelativeLayout(Context context, AttributeSet attrs) {
+	public RelativeLayoutCenterScale(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		// following call is needed so that call to invalidate() from setScaleBoth() can invoke onDraw()
 		setWillNotDraw(false);
 	}
 
-	public FeaturingArtistRelativeLayout(Context context) {
+	public RelativeLayoutCenterScale(Context context) {
 		super(context);
 		// following call is needed so that call to invalidate() from setScaleBoth() can invoke onDraw()
 		setWillNotDraw(false);
@@ -53,5 +54,9 @@ public class FeaturingArtistRelativeLayout extends RelativeLayout {
 		canvas.scale(scale, scale, w/2, h/2);
 		
 		super.onDraw(canvas);
+	}
+	
+	public float getScale() {
+		return scale;
 	}
 }

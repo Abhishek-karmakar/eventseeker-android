@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.wcities.eventseeker.ArtistDetailsFragment.ArtistDetailsFragmentListener;
+import com.wcities.eventseeker.ArtistDetailsFragment1.ArtistDetailsFragmentListener;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
@@ -131,7 +131,7 @@ public abstract class ArtistEventsParentFragment extends PublishEventListFragmen
 						Attending.NotTracked.getValue(), UserTrackingType.Edit).execute();
 			}
 
-			((ArtistDetailsFragment) getParentFragment()).onArtistFollowingUpdated();
+			((ArtistDetailsFragment1) getParentFragment()).onArtistFollowingUpdated();
 			break;
 
 		default:

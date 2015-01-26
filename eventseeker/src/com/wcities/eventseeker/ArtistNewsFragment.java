@@ -12,8 +12,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.wcities.eventseeker.ArtistDetailsFragment.ArtistDetailsFragmentListener;
-import com.wcities.eventseeker.ArtistDetailsFragment.FooterTxt;
+import com.wcities.eventseeker.ArtistDetailsFragment1.ArtistDetailsFragmentListener;
+import com.wcities.eventseeker.ArtistDetailsFragment1.FooterTxt;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
@@ -119,7 +119,7 @@ public class ArtistNewsFragment extends Fragment implements ArtistDetailsFragmen
 				new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.artist, artist.getId(), 
 						Attending.NotTracked.getValue(), UserTrackingType.Edit).execute();
 			}
-			((ArtistDetailsFragment) getParentFragment()).onArtistFollowingUpdated();
+			((ArtistDetailsFragment1) getParentFragment()).onArtistFollowingUpdated();
 			break;
 			
 		default:

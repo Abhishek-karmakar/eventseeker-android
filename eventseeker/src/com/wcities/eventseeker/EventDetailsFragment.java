@@ -1,6 +1,8 @@
 package com.wcities.eventseeker;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import android.content.Intent;
@@ -102,8 +104,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	private ShareActionProvider mShareActionProvider;
 	private FloatingActionButton fabTickets, fabSave;
 	
-	private int limitScrollAt, actionBarElevation, actionBarTitleTextSize, txtEvtTitleTextSize, 
-		fabScrollThreshold, prevScrollY = UNSCROLLED;
+	private int limitScrollAt, actionBarElevation, fabScrollThreshold, prevScrollY = UNSCROLLED;
 	private boolean isScrollLimitReached, isDrawerOpen;
 	private String title = "";
 	private float minTitleScale;
@@ -122,6 +123,8 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	private AnimatorSet animatorSet;
 	
 	private int fbCallCountForSameEvt = 0;
+	
+	private List<View> hiddenViews;
 	
 	private OnShareTargetSelectedListener onShareTargetSelectedListener = new OnShareTargetSelectedListener() {
 		
@@ -152,7 +155,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		actionBarElevation = FragmentUtil.getResources(this).getDimensionPixelSize(R.dimen.action_bar_elevation);
 		
 		Bundle args = getArguments();
-		if (args != null && args.containsKey(BundleKeys.SHARED_ELEMENTS)) {
+		if (args.containsKey(BundleKeys.SHARED_ELEMENTS)) {
 			sharedElements = (List<SharedElement>) args.getSerializable(BundleKeys.SHARED_ELEMENTS);
 		}
 		
@@ -166,6 +169,8 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		}
 		//Log.d(TAG, "AT issue event = " + event);
 		fabScrollThreshold = ConversionUtil.toPx(FragmentUtil.getResources(this), FAB_SCROLL_THRESHOLD_IN_DP);
+		
+		hiddenViews = new ArrayList<View>();
 	}
 
 	@Override
@@ -364,14 +369,16 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		DisplayMetrics dm = new DisplayMetrics();
 		FragmentUtil.getActivity(this).getWindowManager().getDefaultDisplay().getMetrics(dm);
 		screenW = dm.widthPixels;
-		imgEventHt = FragmentUtil.getResources(this).getDimensionPixelSize(R.dimen.img_event_ht_event_details);
+		
+		Resources res = FragmentUtil.getResources(this);
+		imgEventHt = res.getDimensionPixelSize(R.dimen.img_event_ht_event_details);
 	}
 	
 	@Override
 	public void animateSharedElements() {
 		SharedElement sharedElement = sharedElements.get(0);
 		
-		ViewCompat.setTransitionName(imgEvent, sharedElement.getTransitionName());
+		//ViewCompat.setTransitionName(imgEvent, sharedElement.getTransitionName());
 		
 		final SharedElementPosition sharedElementPosition = sharedElement.getSharedElementPosition();
 		
@@ -396,6 +403,10 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
                 lp.height = (int) (sharedElementPosition.getHeight() + 
                 		(((imgEventHt - sharedElementPosition.getHeight()) * progress.intValue()) / 100));
                 imgEvent.setLayoutParams(lp);
+                
+                /*lp = (LayoutParams) rltLytTxtEvtTitle.getLayoutParams();
+                lp.topMargin = rltLytTxtEvtTitleMarginT * progress.intValue() / 100;
+                rltLytTxtEvtTitle.setLayoutParams(lp);*/
                 
                 int newAlpha = (int) (progress * 2.55);
                 rootView.setBackgroundColor(Color.argb(newAlpha, Color.red(color), Color.green(color), Color.blue(color)));
@@ -474,23 +485,22 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			@Override
 			public void onAnimationEnd(Animation animation) {
 				rltLytContent.setVisibility(View.INVISIBLE);
-				
 				animatorSet = new AnimatorSet();
 				
 				SharedElement sharedElement = sharedElements.get(0);
-		        
+				
 				final SharedElementPosition sharedElementPosition = sharedElement.getSharedElementPosition();
 		        ObjectAnimator xAnim = ObjectAnimator.ofFloat(imgEvent, "x", 0, sharedElementPosition.getStartX());
 		        xAnim.setDuration(TRANSITION_ANIM_DURATION);
 		        
-		        ObjectAnimator yAnim = ObjectAnimator.ofFloat(imgEvent, "y", 0, sharedElementPosition.getStartY());
+		        ObjectAnimator yAnim = ObjectAnimator.ofFloat(imgEvent, "y", 0, sharedElementPosition.getStartY() + prevScrollY);
 		        yAnim.setDuration(TRANSITION_ANIM_DURATION);
 		        
 		        ValueAnimator va = ValueAnimator.ofInt(100, 1);
 		        va.setDuration(TRANSITION_ANIM_DURATION);
 		        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 		        	
-		        	int color = FragmentUtil.getResources(EventDetailsFragment.this).getColor(android.R.color.white);
+		        	private int color = FragmentUtil.getResources(EventDetailsFragment.this).getColor(android.R.color.white);
 		        	
 		            public void onAnimationUpdate(ValueAnimator animation) {
 		                Integer value = (Integer) animation.getAnimatedValue();
@@ -711,8 +721,8 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			limitScrollAt -= ViewUtil.getStatusBarHeight(FragmentUtil.getResources(this));
 		}
 		
-		actionBarTitleTextSize = res.getDimensionPixelSize(R.dimen.abc_text_size_title_material_toolbar);
-		txtEvtTitleTextSize = res.getDimensionPixelSize(R.dimen.txt_evt_title_txt_size_event_details);
+		int actionBarTitleTextSize = res.getDimensionPixelSize(R.dimen.abc_text_size_title_material_toolbar);
+		int txtEvtTitleTextSize = res.getDimensionPixelSize(R.dimen.txt_evt_title_txt_size_event_details);
 		minTitleScale = actionBarTitleTextSize / (float) txtEvtTitleTextSize;
 	}
 	
@@ -720,7 +730,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		//Log.d(TAG, "scrollY = " + scrollY);
 		// Translate image
 		ViewHelper.setTranslationY(imgEvent, scrollY / 2);
-		
+        
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		
 		if (limitScrollAt == 0) {
@@ -786,7 +796,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		ma.setToolbarBg(ma.getResources().getColor(R.color.colorPrimary));
 		ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
 		ma.setVStatusBarLayeredVisibility(View.VISIBLE, R.color.colorPrimaryDark);
-		title = "Cut Copy";
+		title = event.getName();
 		ma.updateTitle(title);
 	}
 	
@@ -956,6 +966,12 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		// to call onFragmentResumed(Fragment) of MainActivity (to update title, current fragment tag, etc.)
 		onResume();
 		
+		for (Iterator<View> iterator = hiddenViews.iterator(); iterator.hasNext();) {
+			View view = iterator.next();
+			view.setVisibility(View.VISIBLE);
+		}
+		hiddenViews.clear();
+		
 		if (mShareActionProvider != null) {
 			mShareActionProvider.setOnShareTargetSelectedListener(onShareTargetSelectedListener);
 		}
@@ -978,14 +994,17 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 
 	@Override
 	public void addViewsToBeHidden(View... views) {
-		// TODO Auto-generated method stub
-		
+		for (int i = 0; i < views.length; i++) {
+			hiddenViews.add(views[i]);
+		}
 	}
 
 	@Override
 	public void hideSharedElements() {
-		// TODO Auto-generated method stub
-		
+		for (Iterator<View> iterator = hiddenViews.iterator(); iterator.hasNext();) {
+			View view = iterator.next();
+			view.setVisibility(View.INVISIBLE);
+		}
 	}
 
 	@Override

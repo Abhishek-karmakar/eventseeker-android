@@ -1487,13 +1487,20 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public void onArtistSelected(Artist artist) {
+		onArtistSelected(artist, null);
+	}
+	
+	@Override
+	public void onArtistSelected(Artist artist, List<SharedElement> sharedElements) {
 		ArtistDetailsFragment artistDetailsFragment = new ArtistDetailsFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(BundleKeys.ARTIST, artist);
+		if (sharedElements != null) {
+			args.putSerializable(BundleKeys.SHARED_ELEMENTS, (Serializable) sharedElements);
+		}
 		artistDetailsFragment.setArguments(args);
 		selectNonDrawerItem(artistDetailsFragment,
-				AppConstants.FRAGMENT_TAG_ARTIST_DETAILS, getResources()
-						.getString(R.string.title_artist_details), true);
+				AppConstants.FRAGMENT_TAG_ARTIST_DETAILS, "", true);
 	}
 	
 	public void onArtistSelectedFromOtherTask(Artist artist, boolean addToBackStack) {
@@ -1504,8 +1511,7 @@ public class MainActivity extends ActionBarActivity implements
 		// resumed
 		args.putBoolean(BundleKeys.IS_CALLED_FROM_OTHER_TASK, true);
 		artistDetailsFragment.setArguments(args);
-		selectNonDrawerItem(artistDetailsFragment, AppConstants.FRAGMENT_TAG_ARTIST_DETAILS, getResources()
-						.getString(R.string.title_artist_details), addToBackStack);
+		selectNonDrawerItem(artistDetailsFragment, AppConstants.FRAGMENT_TAG_ARTIST_DETAILS, "", addToBackStack);
 	}
 
 	@Override
@@ -1813,11 +1819,11 @@ public class MainActivity extends ActionBarActivity implements
 
 		} else if (fragment instanceof ArtistDetailsFragment) {
 			if (fragment.getArguments().containsKey(BundleKeys.IS_CALLED_FROM_OTHER_TASK)) {
-				onFragmentCalledFromOtherTaskResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_artist_details),
+				onFragmentCalledFromOtherTaskResumed(AppConstants.INVALID_INDEX, ((ArtistDetailsFragment)fragment).getCurrentTitle(),
 						AppConstants.FRAGMENT_TAG_ARTIST_DETAILS);
 
 			} else {
-				onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_artist_details),
+				onFragmentResumed(AppConstants.INVALID_INDEX, ((ArtistDetailsFragment)fragment).getCurrentTitle(),
 						AppConstants.FRAGMENT_TAG_ARTIST_DETAILS);
 			}
 

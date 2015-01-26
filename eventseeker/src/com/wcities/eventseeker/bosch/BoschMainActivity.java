@@ -722,4 +722,9 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	public void onEventSelected(Event event, List<SharedElement> sharedElements) {
 		// TODO Auto-generated method stub
 	}
+
+	@Override
+	public void onArtistSelected(Artist artist, List<SharedElement> sharedElements) {
+		// TODO Auto-generated method stub
+	}
 }

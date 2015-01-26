@@ -649,6 +649,40 @@
     <dimen name="circle_img_v_friend_ht_rv_item_friend">@dimen/circle_img_v_friend_w_rv_item_friend</dimen>
     <dimen name="circle_img_v_friend_border_w_rv_item_friend">0dp</dimen>
     <dimen name="txt_friend_name_margin_t_rv_item_friend">8dp</dimen>
+    <!-- fragment_artist_details.xml -->
+    <dimen name="img_artist_ht_artist_details">230dp</dimen>
+    <!-- rlt_lyt_txt_artist_title_pad_l_artist_details = 56dp to keep it left aligned with toolbar title 
+    Ref: http://www.google.com/design/spec/layout/metrics-keylines.html#metrics-keylines-keylines-spacing, where
+    72dp is specified as actionbar title margin from screen left edge, but if we skip 16dp margin just before title,
+    then it comes out to be 56dp. Also note that we have set titleMarginStart for toolbar to 0 under styles.xml
+    for style="ThemeOverlay.EventSeeker.Dark.ActionBar" -->
+    <dimen name="rlt_lyt_txt_artist_title_pad_l_artist_details">56dp</dimen>
+    <dimen name="rlt_lyt_txt_artist_title_pad_b_artist_details">8dp</dimen>
+    <dimen name="rlt_lyt_txt_artist_title_pad_t_artist_details">30dp</dimen>
+    <dimen name="txt_artist_title_txt_size_artist_details">24sp</dimen>
+    <!-- After scrolling to top, txtArtistTitle text must be in center vertical position exactly aligned with 
+    toolbar title (for good looking transition effect), hence following calculation is used to derive txt_artist_title_ht_artist_details. 
+    Here, rlt_lyt_txt_artist_title_pad_b_artist_details is fixed to 8dp, so to keep txtArtistTitle textview
+    in center vertical position, we leave aside 8dp more (for top). Hence ht comes out as 56 - 2*8 = 40dp 
+    txt_artist_title_ht_artist_details = action_bar_ht - 2*rlt_lyt_txt_artist_title_pad_b_artist_details -->
+    <dimen name="txt_artist_title_ht_artist_details">40dp</dimen>
+    <dimen name="txt_desc_margin_l_artist_details">16dp</dimen>
+    <dimen name="txt_artist_details_margin_r_artist_details">16dp</dimen>
+    <dimen name="txt_desc_margin_t_artist_details">15dp</dimen>
+    <dimen name="lnr_lyt_expand_desc_margin_l_artist_details">16dp</dimen>
+    <dimen name="lnr_lyt_expand_desc_margin_t_artist_details">@dimen/txt_desc_margin_t_artist_details</dimen>
+    <dimen name="img_down_margin_r_artist_details">@dimen/txt_desc_margin_l_artist_details</dimen>
+    <dimen name="v_hor_line_ht_artist_details">1dp</dimen>
+    <dimen name="prgs_bar_margin_t_artist_details">@dimen/txt_desc_margin_t_artist_details</dimen>
+    <dimen name="txt_videos_margin_t_artist_details">@dimen/txt_desc_margin_t_artist_details</dimen>
+    <dimen name="txt_artist_details_txt_size_artist_details">16sp</dimen>
+    <dimen name="v_pager_videos_ht_artist_details">150dp</dimen>
+    <dimen name="v_pager_videos_margin_t_artist_details">@dimen/txt_desc_margin_t_artist_details</dimen>
+    <dimen name="v_hor_line_margin_l_artist_details">16dp</dimen>
+    <dimen name="v_hor_line_margin_r_artist_details">@dimen/v_hor_line_margin_l_artist_details</dimen>
+    <dimen name="v_hor_line_margin_t_artist_details">@dimen/txt_desc_margin_t_artist_details</dimen>
+    <!-- fragment_video.xml -->
+    <dimen name="rlt_lyt_root_w_video">200dp</dimen>
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <!-- activity_bosch_main.xml -->
     <dimen name="b_root_navigation_drawer_w_main">210dp</dimen>

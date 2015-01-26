@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
-import com.wcities.eventseeker.ArtistDetailsFragment.FooterTxt;
+import com.wcities.eventseeker.ArtistDetailsFragment1.FooterTxt;
 import com.wcities.eventseeker.adapter.DateWiseEventListAdapter;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;

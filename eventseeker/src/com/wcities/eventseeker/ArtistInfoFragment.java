@@ -32,8 +32,8 @@ import com.scvngr.levelup.views.gallery.AdapterView;
 import com.scvngr.levelup.views.gallery.AdapterView.OnItemClickListener;
 import com.scvngr.levelup.views.gallery.Gallery;
 import com.viewpagerindicator.CirclePageIndicator;
-import com.wcities.eventseeker.ArtistDetailsFragment.ArtistDetailsFragmentListener;
-import com.wcities.eventseeker.ArtistDetailsFragment.FooterTxt;
+import com.wcities.eventseeker.ArtistDetailsFragment1.ArtistDetailsFragmentListener;
+import com.wcities.eventseeker.ArtistDetailsFragment1.FooterTxt;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
@@ -513,7 +513,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 		public Fragment getItem(int index) {
 			//Log.d(TAG, "VideoFragmentPagerAdapter()");
 			// Log.d(TAG, "getItem() for index = " + index);
-			VideoFragment videoFragment = VideoFragment.newInstance(videos.get(index), artistId);
+			VideoFragment1 videoFragment = VideoFragment1.newInstance(videos.get(index), artistId);
 			return videoFragment;
 		}
 
@@ -705,7 +705,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 				new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.artist, artist.getId(), 
 						Attending.NotTracked.getValue(), UserTrackingType.Edit).execute();
 			}
-			((ArtistDetailsFragment) getParentFragment()).onArtistFollowingUpdated();
+			((ArtistDetailsFragment1) getParentFragment()).onArtistFollowingUpdated();
 			break;
 
 		case R.id.rltLayoutViewAll:

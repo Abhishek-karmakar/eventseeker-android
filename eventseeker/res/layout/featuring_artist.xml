@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
     
-	<com.wcities.eventseeker.custom.view.FeaturingArtistRelativeLayout 
+	<com.wcities.eventseeker.custom.view.RelativeLayoutCenterScale 
 	    android:id="@+id/rltLytRoot"
 	    android:layout_width="@dimen/rlt_lyt_root_w_featuring_artist"
 	    android:layout_height="match_parent"
@@ -37,6 +37,6 @@
 	        android:singleLine="true"
 	        android:ellipsize="end" />
 	
-	</com.wcities.eventseeker.custom.view.FeaturingArtistRelativeLayout>
+	</com.wcities.eventseeker.custom.view.RelativeLayoutCenterScale>
 
 </LinearLayout>

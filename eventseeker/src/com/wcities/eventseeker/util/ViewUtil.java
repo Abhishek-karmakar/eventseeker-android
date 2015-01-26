@@ -141,6 +141,20 @@ public class ViewUtil {
 		return result;
 	}
 	
+	/**
+	 * @param view
+	 * @param res
+	 * @return location of screen for view where status bar height is subtracted from topY for apis <= 18
+	 */
+	public static int[] getLocationOnScreen(View view, Resources res) {
+		int[] loc = new int[2];
+		view.getLocationOnScreen(loc);
+		if (!VersionUtil.isApiLevelAbove18()) {
+			loc[1] -= getStatusBarHeight(res);
+		}
+		return loc;
+	}
+	
 	public static class AnimationUtil {
 
 		public static void startRotationToView(View view, float toDegrees, 

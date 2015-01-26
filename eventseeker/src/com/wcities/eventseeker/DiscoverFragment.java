@@ -25,7 +25,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutParams;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -67,7 +66,6 @@ import com.wcities.eventseeker.cache.BitmapCacheable;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.constants.TransitionName;
 import com.wcities.eventseeker.core.Category;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
@@ -786,7 +784,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 					        asyncLoadImg.loadImg(holder.imgEvent, ImgResolution.LOW, recyclerView, position, bitmapCacheable);
 					    }
 					}
-					ViewCompat.setTransitionName(holder.imgEvent, TransitionName.DISCOVER_IMG_EVT + position);
+					//ViewCompat.setTransitionName(holder.imgEvent, TransitionName.DISCOVER_IMG_EVT + position);
 					
 					final Resources res = FragmentUtil.getResources(discoverFragment);
 					if (event.getSchedule() == null || event.getSchedule().getBookingInfos().isEmpty()) {

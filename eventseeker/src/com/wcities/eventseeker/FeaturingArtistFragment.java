@@ -1,26 +1,31 @@
 package com.wcities.eventseeker;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.wcities.eventseeker.adapter.CatTitlesAdapter;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
-import com.wcities.eventseeker.custom.view.CategoryTitleLinearLayout;
-import com.wcities.eventseeker.custom.view.FeaturingArtistRelativeLayout;
+import com.wcities.eventseeker.custom.view.RelativeLayoutCenterScale;
+import com.wcities.eventseeker.interfaces.ArtistListener;
+import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
+import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.ViewUtil;
+import com.wcities.eventseeker.viewdata.SharedElement;
+import com.wcities.eventseeker.viewdata.SharedElementPosition;
 
 public class FeaturingArtistFragment extends Fragment {
 	
@@ -40,22 +45,22 @@ public class FeaturingArtistFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		//Log.d(TAG, "onCreateView()");
 		Bundle args = getArguments();
-		Artist artist = (Artist) args.getSerializable(BundleKeys.ARTIST);
+		final Artist artist = (Artist) args.getSerializable(BundleKeys.ARTIST);
 		
-		LinearLayout l = (LinearLayout) inflater.inflate(R.layout.featuring_artist, container, false);
+		final LinearLayout l = (LinearLayout) inflater.inflate(R.layout.featuring_artist, container, false);
 		
-		FeaturingArtistRelativeLayout featuringArtistRelativeLayout = (FeaturingArtistRelativeLayout) l.findViewById(R.id.rltLytRoot);
+		final RelativeLayoutCenterScale featuringArtistRelativeLayout = (RelativeLayoutCenterScale) l.findViewById(R.id.rltLytRoot);
 		float scale = getArguments().getFloat(BundleKeys.SCALE);
 		featuringArtistRelativeLayout.setScaleBoth(scale);
 		
+		ImageView imgArtist = (ImageView) l.findViewById(R.id.imgArtist);
 		String key = artist.getKey(ImgResolution.LOW);
 		BitmapCache bitmapCache = BitmapCache.getInstance();
 		Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 		if (bitmap != null) {
-	        ((ImageView) l.findViewById(R.id.imgArtist)).setImageBitmap(bitmap);
+	        imgArtist.setImageBitmap(bitmap);
 	        
 	    } else {
-	    	ImageView imgArtist = (ImageView) l.findViewById(R.id.imgArtist); 
 	        imgArtist.setImageBitmap(null);
 
 	        AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
@@ -66,6 +71,28 @@ public class FeaturingArtistFragment extends Fragment {
 		if (txtArtistName != null) {
 			txtArtistName.setText(artist.getName());
 		}
+		
+		featuringArtistRelativeLayout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				int[] loc = ViewUtil.getLocationOnScreen(featuringArtistRelativeLayout, FragmentUtil.getResources(FeaturingArtistFragment.this));
+				int scaledW = (int) (featuringArtistRelativeLayout.getWidth() * featuringArtistRelativeLayout.getScale());
+				int scaledHt = (int) (featuringArtistRelativeLayout.getHeight() * featuringArtistRelativeLayout.getScale());
+				List<SharedElement> sharedElements = new ArrayList<SharedElement>();
+				
+				SharedElementPosition sharedElementPosition = new SharedElementPosition(loc[0] + ((featuringArtistRelativeLayout.getWidth() - scaledW) / 2), 
+						loc[1] + ((featuringArtistRelativeLayout.getHeight() - scaledHt) / 2), scaledW, scaledHt);
+				SharedElement sharedElement = new SharedElement(sharedElementPosition, featuringArtistRelativeLayout);
+				sharedElements.add(sharedElement);
+				((CustomSharedElementTransitionSource)getParentFragment()).addViewsToBeHidden(featuringArtistRelativeLayout);
+				
+				//Log.d(TAG, "AT issue event = " + event);
+				((ArtistListener)FragmentUtil.getActivity(FeaturingArtistFragment.this)).onArtistSelected(artist, sharedElements);
+				
+				((CustomSharedElementTransitionSource)getParentFragment()).onPushedToBackStack();
+			}
+		});
 		
 		return l;
 	}

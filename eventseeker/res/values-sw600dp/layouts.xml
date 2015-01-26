@@ -16,7 +16,7 @@
     <item name="grid_friend" type="layout">@layout/grid_friend_tab</item>
     <item name="friends_activity_item" type="layout">@layout/friends_activity_item_tab</item>
     <item name="fragment_artist_info" type="layout">@layout/fragment_artist_info_tab</item>
-    <item name="fragment_video" type="layout">@layout/fragment_video_tab</item>
+    <item name="fragment_video1" type="layout">@layout/fragment_video_tab</item>
     <item name="fragment_venue_info" type="layout">@layout/fragment_venue_info_tab</item>
     <item name="fragment_connect_accounts" type="layout">@layout/fragment_connect_accounts_tab</item>
     <item name="fragment_event_featuring" type="layout">@layout/fragment_event_featuring_tab</item>

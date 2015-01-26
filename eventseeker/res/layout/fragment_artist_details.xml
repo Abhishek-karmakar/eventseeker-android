@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white" >
+    
+    <com.wcities.eventseeker.custom.view.ObservableScrollView 
+	    android:id="@+id/obsrScrlV"
+	  	android:layout_width="match_parent" 
+	  	android:layout_height="match_parent"
+	  	android:fillViewport="true" >
+	  	
+	    <RelativeLayout android:id="@+id/rltLyt"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
+	        
+	        <ImageView android:id="@+id/imgArtist"
+		      	android:layout_width="match_parent"
+		      	android:layout_height="@dimen/img_artist_ht_artist_details"
+		      	android:scaleType="centerCrop"
+		      	android:contentDescription="Artist Image" />
+		    
+		    <RelativeLayout android:id="@+id/rltLytTxtArtistTitle"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_alignBottom="@id/imgArtist"
+		        android:paddingLeft="@dimen/rlt_lyt_txt_artist_title_pad_l_artist_details"
+		    	android:paddingBottom="@dimen/rlt_lyt_txt_artist_title_pad_b_artist_details"
+		    	android:paddingTop="@dimen/rlt_lyt_txt_artist_title_pad_t_artist_details"
+		    	android:background="@drawable/bg_rlt_lyt_txt_artist_title_artist_details" >
+		    
+		    	<TextView android:id="@+id/txtArtistTitle"
+		    	    android:layout_width="match_parent"
+		    	    android:layout_height="@dimen/txt_artist_title_ht_artist_details"
+		    	    android:textColor="@android:color/white"
+		    	    android:text="artist name"
+		    	    android:textSize="@dimen/txt_artist_title_txt_size_artist_details"
+		    	    android:gravity="center_vertical"
+		    	    android:singleLine="true"
+		    	    android:ellipsize="marquee" />
+		    	
+		    </RelativeLayout>
+		    
+		    <RelativeLayout android:id="@+id/rltLytContent"
+		        android:layout_width="match_parent"
+		        android:layout_height="800dp"
+		        android:layout_below="@id/rltLytTxtArtistTitle"
+		        android:background="@android:color/white">
+		    	
+		        <include layout="@layout/progress_bar_eventseeker_fixed_ht"
+		            android:id="@+id/rltLytPrgsBar"
+		            android:layout_width="match_parent"
+	    			android:layout_height="@dimen/rlt_lyt_root_ht_progress_bar_eventseeker_fixed_ht"
+		            android:layout_marginTop="@dimen/prgs_bar_margin_t_artist_details" />
+		    	
+		        <TextView android:id="@+id/txtDesc"
+			     	android:layout_width="match_parent"
+			     	android:layout_height="wrap_content"
+			     	android:layout_marginLeft="@dimen/txt_desc_margin_l_artist_details"
+			     	android:layout_marginRight="@dimen/txt_artist_details_margin_r_artist_details"
+			     	android:layout_marginTop="@dimen/txt_desc_margin_t_artist_details"
+			     	android:ellipsize="end" />
+		        
+		        <LinearLayout android:id="@+id/lnrLytExpandDesc"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:orientation="horizontal"
+		            android:layout_below="@id/txtDesc"
+		            android:layout_marginLeft="@dimen/lnr_lyt_expand_desc_margin_l_artist_details"
+		            android:layout_marginRight="@dimen/txt_artist_details_margin_r_artist_details"
+		            android:layout_marginTop="@dimen/lnr_lyt_expand_desc_margin_t_artist_details">
+		        
+			        <ImageView android:id="@+id/imgDown"
+				     	android:layout_width="wrap_content"
+				     	android:layout_height="wrap_content"
+				     	android:src="@drawable/down"
+				     	android:layout_marginRight="@dimen/img_down_margin_r_artist_details" />
+			        
+			        <View android:id="@+id/vHorLine1"
+			            android:layout_width="match_parent"
+			            android:layout_height="@dimen/v_hor_line_ht_artist_details"
+			            android:background="@color/gray_shade_d"
+			            android:layout_gravity="bottom" />
+			        
+			    </LinearLayout>
+			    
+		        <RelativeLayout android:id="@+id/rltLytVideos"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:layout_below="@id/lnrLytExpandDesc">
+			    
+			        <TextView android:id="@+id/txtVideos"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:layout_centerHorizontal="true"
+			            android:text="@string/videos"
+			            android:layout_marginTop="@dimen/txt_videos_margin_t_artist_details"
+			            android:textSize="@dimen/txt_artist_details_txt_size_artist_details" />
+			        
+			        <android.support.v4.view.ViewPager android:id="@+id/vPagerVideos"
+					    android:layout_width="match_parent"
+					    android:layout_height="@dimen/v_pager_videos_ht_artist_details"
+					    android:layout_marginTop="@dimen/v_pager_featuring_margin_t_event_details"
+					    android:layout_below="@id/txtVideos" />
+			        
+			        <View android:id="@+id/vHorLine2"
+			            android:layout_width="match_parent"
+			            android:layout_height="@dimen/v_hor_line_ht_artist_details"
+			            android:background="@color/gray_shade_d"
+			            android:layout_below="@id/vPagerVideos"
+			            android:layout_marginLeft="@dimen/v_hor_line_margin_l_artist_details"
+			            android:layout_marginRight="@dimen/v_hor_line_margin_r_artist_details"
+			            android:layout_marginTop="@dimen/v_hor_line_margin_t_artist_details" />
+		        
+		        </RelativeLayout>
+		    	
+		    </RelativeLayout>
+		    
+	    </RelativeLayout>
+	    
+	</com.wcities.eventseeker.custom.view.ObservableScrollView>
+    
+</FrameLayout>
