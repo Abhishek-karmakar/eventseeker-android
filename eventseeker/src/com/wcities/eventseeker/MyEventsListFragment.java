@@ -1,48 +1,44 @@
 package com.wcities.eventseeker;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
-import com.wcities.eventseeker.adapter.DateWiseMyEventListAdapter;
+import com.wcities.eventseeker.adapter.MyEventListAdapter;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.app.EventSeekr;
-import com.wcities.eventseeker.asynctask.LoadMyEvents;
-import com.wcities.eventseeker.asynctask.LoadMyEvents.MyEventsLoadedListener;
-import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.asynctask.LoadMyEventsNewUI;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.custom.fragment.PublishEventListFragment;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.interfaces.PublishListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
-import com.wcities.eventseeker.viewdata.DateWiseEventList;
-import com.wcities.eventseeker.viewdata.DateWiseEventList.LIST_ITEM_TYPE;
 
 public class MyEventsListFragment extends PublishEventListFragment implements LoadItemsInBackgroundListener, 
-		PublishListener, MyEventsLoadedListener, OnClickListener {
+		PublishListener, /*MyEventsLoadedListener, */OnClickListener {
 	
 	private static final String TAG = MyEventsListFragment.class.getSimpleName();
 	
 	private Type loadType;
 	private String wcitiesId;
 	
-	private LoadMyEvents loadEvents;
-	private DateWiseMyEventListAdapter eventListAdapter;
-	private DateWiseEventList dateWiseEvtList;
+	private LoadMyEventsNewUI loadEvents;
+	private MyEventListAdapter eventListAdapter;
+	private List<Event> eventList;
 	
 	private ScrollView scrlVRootNoItemsFoundWithAction;
 	private double[] latLon;
@@ -69,21 +65,21 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
-		if (dateWiseEvtList == null) {
+		if (eventList == null) {
 			Bundle args = getArguments();
 			loadType = (Type) args.getSerializable(BundleKeys.LOAD_TYPE);
 			
-			dateWiseEvtList = new DateWiseEventList();
-			dateWiseEvtList.addDummyItem();
+			eventList = new ArrayList<Event>();
+			eventList.add(null);
 			
-	        eventListAdapter = new DateWiseMyEventListAdapter(FragmentUtil.getActivity(this),  
-	        		dateWiseEvtList, null, this, this, FragmentUtil.getScreenName(this), this);
+	        eventListAdapter = new MyEventListAdapter(FragmentUtil.getActivity(this),  
+	        		eventList, null, this, this, FragmentUtil.getScreenName(this), this);
 
 			loadItemsInBackground();
 			
 		} else {
 			eventListAdapter.updateContext(FragmentUtil.getActivity(this));
-			onEventsLoaded();
+			//onEventsLoaded();
 		}
 
 		setListAdapter(eventListAdapter);
@@ -104,8 +100,8 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 		if (latLon == null) {
 			latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 		}
-		loadEvents = new LoadMyEvents(Api.OAUTH_TOKEN, dateWiseEvtList, eventListAdapter, wcitiesId, loadType, 
-				latLon[0], latLon[1], this);
+		loadEvents = new LoadMyEventsNewUI(Api.OAUTH_TOKEN, eventList, eventListAdapter, wcitiesId, loadType, 
+				latLon[0], latLon[1], null);
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);
         AsyncTaskUtil.executeAsyncTask(loadEvents, true);
 	}
@@ -124,10 +120,10 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 		eventListAdapter.onPublishPermissionGranted();
 	}
 
-	@Override
+	/*@Override
 	public void onEventsLoaded() {
-		if (dateWiseEvtList.getCount() == 1 && dateWiseEvtList.getItemViewType(0) == LIST_ITEM_TYPE.NO_EVENTS 
-				&& dateWiseEvtList.getItem(0).getEvent().getId() == AppConstants.INVALID_ID 
+		if (eventList.size() == 1 && eventList.getItemViewType(0) == LIST_ITEM_TYPE.NO_EVENTS 
+				&& eventList.getItem(0).getEvent().getId() == AppConstants.INVALID_ID 
 				&& wcitiesId != null) {
 			scrlVRootNoItemsFoundWithAction.setVisibility(View.VISIBLE);
 			((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsHeading)).setText(
@@ -138,10 +134,10 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 					R.string.search_artists);
 			((ImageView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.imgNoItems)).setImageDrawable(
 					res.getDrawable(R.drawable.no_my_events));
-			/**
+			*//**
 			 * try-catch is used to handle case where even before we get call back to this function, user leaves 
 			 * this screen.
-			 */
+			 *//*
 			try {
 				getListView().setVisibility(View.GONE);
 				
@@ -150,7 +146,7 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 				e.printStackTrace();
 			}
 		}	
-	}
+	}*/
 
 	@Override
 	public void onClick(View v) {
@@ -164,5 +160,5 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 		default:
 			break;
 		}
-	}
+	}	
 }

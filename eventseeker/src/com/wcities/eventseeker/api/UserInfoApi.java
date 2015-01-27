@@ -43,6 +43,7 @@ public class UserInfoApi extends Api {
 		checkemail,
 		login,
 		forgot,
+		mysavedevents,
 		updaterepcode;
 	};
 	
@@ -580,6 +581,12 @@ public class UserInfoApi extends Api {
 		
 		if (type == Type.myevents || type == Type.recommendedevent) {
 			uriBuilder.append("&link=enable");
+		}
+		
+		if (type == Type.mysavedevents) {
+			uriBuilder.append("&link=enable");
+			uriBuilder.append("&moreInfo=fallbackimage");
+			uriBuilder.append("&strip_html=name,description");
 		}
 		
 		setUri(uriBuilder.toString());
