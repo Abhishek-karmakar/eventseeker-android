@@ -108,20 +108,20 @@
                     fab:fab_colorNormal="@color/colorPrimary"
                     fab:fab_colorPressed="@color/colorPrimaryDark"
                     fab:fab_colorRipple="@android:color/white"
-                    fab:fab_type="normal" />
+                    fab:fab_type="mini" />
 
                 <com.melnykov.fab.FloatingActionButton
                     android:id="@+id/fabSave"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
+                    android:layout_toRightOf="@+id/fabTickets"
                     android:layout_marginBottom="@dimen/fab_margin_item_list_my_events"
                     android:layout_marginRight="@dimen/fab_margin_item_list_my_events"
                     android:src="@drawable/calendar"
                     fab:fab_colorNormal="@color/colorPrimary"
                     fab:fab_colorPressed="@color/colorPrimaryDark"
                     fab:fab_colorRipple="@color/ripple_material_light"
-                    fab:fab_type="normal" />
+                    fab:fab_type="mini" />
             </RelativeLayout>
 
         </LinearLayout>

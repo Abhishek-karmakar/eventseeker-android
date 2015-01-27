@@ -98,7 +98,7 @@ public class MyEventsFragment extends FragmentLoadableFromBackStack implements O
 		mTabsAdapter.addTab(tabRecommended, oldAdapter);
 
 		args = new Bundle();
-		args.putSerializable(BundleKeys.LOAD_TYPE, UserInfoApi.Type.recommendedevent);
+		args.putSerializable(BundleKeys.LOAD_TYPE, UserInfoApi.Type.mysavedevents);
 		TabBar.Tab tabSaved = new TabBar.Tab(btnSaved, FRAGMENT_TAG_SAVED, 
 				MyEventsListFragment.class, args);
 		mTabsAdapter.addTab(tabSaved, oldAdapter);
