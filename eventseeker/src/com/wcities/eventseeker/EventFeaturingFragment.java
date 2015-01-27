@@ -190,9 +190,6 @@ public class EventFeaturingFragment extends PublishEventListFragment implements 
 				} else if (eventSeekr.getGPlusUserId() != null) {
 					event.setNewAttending(newAttending);
 					handlePublishEvent();
-					
-				} else {
-					FragmentUtil.showLoginNeededForTrackingEventDialog(FragmentUtil.getActivity(this), this);
 				}
 			}
 			

@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
+import android.support.v7.widget.RecyclerView;
 import android.widget.BaseAdapter;
 
 import com.wcities.eventseeker.api.ArtistApi;
@@ -30,10 +31,19 @@ public class LoadArtistEvents extends AsyncTask<Void, Void, List<Event>> {
 	private DateWiseEventParentAdapterListener eventListAdapter;
 	private int artistId;
 	private String wcitiesId, oauthToken;
+	private List<Event> events;
 
 	public LoadArtistEvents(String oauthToken, DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, int artistId, String wcitiesId) {
 		this.oauthToken = oauthToken;
 		this.eventList = eventList;
+		this.eventListAdapter = eventListAdapter;
+		this.artistId = artistId;
+		this.wcitiesId = wcitiesId;
+	}
+	
+	public LoadArtistEvents(String oauthToken, List<Event> eventList, DateWiseEventParentAdapterListener eventListAdapter, int artistId, String wcitiesId) {
+		this.oauthToken = oauthToken;
+		this.events = eventList;
 		this.eventListAdapter = eventListAdapter;
 		this.artistId = artistId;
 		this.wcitiesId = wcitiesId;
@@ -84,20 +94,44 @@ public class LoadArtistEvents extends AsyncTask<Void, Void, List<Event>> {
 	
 	@Override
 	protected void onPostExecute(List<Event> result) {
-		if (result.size() > 0) {
-			eventList.addEventListItems(result, this);
-			eventListAdapter.setEventsAlreadyRequested(eventListAdapter.getEventsAlreadyRequested() + result.size());
-			
-			if (result.size() < EVENTS_LIMIT) {
+		if (eventList != null) {
+			if (result.size() > 0) {
+				eventList.addEventListItems(result, this);
+				eventListAdapter.setEventsAlreadyRequested(eventListAdapter.getEventsAlreadyRequested() + result.size());
+				
+				if (result.size() < EVENTS_LIMIT) {
+					eventListAdapter.setMoreDataAvailable(false);
+					eventList.removeProgressBarIndicator(this);
+				}
+				
+			} else {
 				eventListAdapter.setMoreDataAvailable(false);
 				eventList.removeProgressBarIndicator(this);
 			}
+			((BaseAdapter)eventListAdapter).notifyDataSetChanged();
 			
 		} else {
-			eventListAdapter.setMoreDataAvailable(false);
-			eventList.removeProgressBarIndicator(this);
+			if (result.size() > 0) {
+				events.addAll(events.size() - 1, result);
+				eventListAdapter.setEventsAlreadyRequested(eventListAdapter.getEventsAlreadyRequested() + result.size());
+				
+				if (result.size() < EVENTS_LIMIT) {
+					eventListAdapter.setMoreDataAvailable(false);
+					
+					if (!isCancelled()) {
+						events.remove(events.size() - 1);
+					}
+				}
+				
+			} else {
+				eventListAdapter.setMoreDataAvailable(false);
+				
+				if (!isCancelled()) {
+					events.remove(events.size() - 1);
+				}
+			}
+			((RecyclerView.Adapter)eventListAdapter).notifyDataSetChanged();
 		}
-		((BaseAdapter)eventListAdapter).notifyDataSetChanged();
 	}    	
 
 }

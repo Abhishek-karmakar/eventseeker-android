@@ -33,7 +33,7 @@ public class DateWiseEventListFragmentTab extends DateWiseEventListParentFragmen
 	@Override
 	protected DateWiseEventParentAdapterListener getAdapterInstance() {
 		return new DateWiseMyEventListAdapter(FragmentUtil.getActivity(this), dateWiseEvtList, null, 
-				this, this, FragmentUtil.getScreenName(this), this);
+				this, this, FragmentUtil.getScreenName(this));
 	}
 
 	@Override

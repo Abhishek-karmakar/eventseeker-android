@@ -78,14 +78,12 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 	private Event eventPendingPublish;
 	//private CheckBox eventPendingPublishChkBoxGoing, eventPendingPublishChkBoxWantToGo;
 	private FloatingActionButton eventPendingPublishFabSave;
-	private DialogBtnClickListener listener;
 	
 	public DateWiseMyEventListAdapter(Context context, DateWiseEventList dateWiseEvtList,
 			AsyncTask<Void, Void, List<Event>> loadDateWiseEvents, LoadItemsInBackgroundListener mListener, 
-			PublishListener fbPublishListener, String googleAnalyticsScreenName, DialogBtnClickListener listener) {
+			PublishListener fbPublishListener, String googleAnalyticsScreenName) {
 		
 		mContext = context;
-		this.listener = listener;
 		
 		bitmapCache = BitmapCache.getInstance();
 		this.dateWiseEvtList = dateWiseEvtList;
@@ -464,9 +462,6 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 				eventPendingPublishFabSave = fabSave;
 				((PublishEventListFragment) mListener).setEvent(eventPendingPublish);
 				((PublishEventListFragment) mListener).handlePublishEvent();
-				
-			} else {
-				FragmentUtil.showLoginNeededForTrackingEventDialog(mContext, listener);
 			}
 		}
 	}

@@ -798,11 +798,6 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 						newsItemPendingPublishChkBoxSave = chkSave;
 						((PublishEventListFragment)FriendsActivityFragment.this).setFriendNewsItem(newsItemPendingPublish);
 						((PublishEventListFragment)FriendsActivityFragment.this).handlePublishEvent();
-						
-					} else {
-						FragmentUtil.showLoginNeededForTrackingEventDialog(
-								((ActionBarActivity) FragmentUtil.getActivity(FriendsActivityFragment.this)),  
-								FriendsActivityFragment.this);
 					}
 					
 					/*

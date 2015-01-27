@@ -642,9 +642,6 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 				} else if (eventSeekr.getGPlusUserId() != null) {
 					event.setNewAttending(newAttending);
 					handlePublishEvent();
-					
-				} else {
-					FragmentUtil.showLoginNeededForTrackingEventDialog(FragmentUtil.getActivity(this), this);
 				}
 			}
 			

@@ -203,6 +203,7 @@
     <string name="news">NEWS</string>
     <string name="videos">Videos</string>
     <string name="friends_who_like">Friends Who Like</string>
+    <string name="upcoming_events">Upcoming Events</string>
     <string name="no_artist_news_found">No Artist News Found.</string>
     <string name="facebook_link_unavailable">Facebook link is not available for this artist.</string>
     <string name="twitter_link_unavailable">Twitter link is not available for this artist.</string>

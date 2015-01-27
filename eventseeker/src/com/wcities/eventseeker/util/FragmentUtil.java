@@ -82,26 +82,6 @@ public class FragmentUtil {
 		}
 	}
 	
-	public static void showLoginNeededForTrackingEventDialog(Context activityContext, 
-			DialogBtnClickListener listener) {
-		Resources res = activityContext.getResources();
-		GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(listener,
-				res.getString(R.string.go_to_login), res.getString(R.string.pls_login_to_track_evt), 
-				res.getString(R.string.cancel), res.getString(R.string.yes), false);
-		generalDialogFragment.show(((ActionBarActivity) activityContext).getSupportFragmentManager(), 
-				AppConstants.DIALOG_FRAGMENT_TAG_LOGIN_TO_TRACK_EVENT);
-	}
-	
-	/**
-	 * 02-01-2015: replaced with the above method
-	 * public static void showLoginNeededForTrackingEventDialog(FragmentManager fm, Context context) {
-		Resources res = context.getResources();
-		GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
-				res.getString(R.string.go_to_login), res.getString(R.string.pls_login_to_track_evt), 
-				res.getString(R.string.cancel), res.getString(R.string.yes));
-		generalDialogFragment.show(fm, AppConstants.DIALOG_FRAGMENT_TAG_LOGIN_TO_TRACK_EVENT);
-	}*/
-	
 	public static String getScreenName(Fragment fragment) {
 		while ((fragment != null && !(fragment instanceof IGoogleAnalyticsTracker))) {
 			fragment = fragment.getParentFragment();

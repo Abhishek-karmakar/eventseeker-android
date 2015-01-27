@@ -681,6 +681,11 @@
     <dimen name="v_hor_line_margin_l_artist_details">16dp</dimen>
     <dimen name="v_hor_line_margin_r_artist_details">@dimen/v_hor_line_margin_l_artist_details</dimen>
     <dimen name="v_hor_line_margin_t_artist_details">@dimen/txt_desc_margin_t_artist_details</dimen>
+    <!-- fab_margin_t_artist_details = (img_artist_ht_artist_details - fab_ht(56 for normal size)*2/3)
+    = 230 - 37 = 193 -->
+    <dimen name="fab_margin_t_artist_details">193dp</dimen>
+    <dimen name="fab_margin_b_artist_details">16dp</dimen>
+    <dimen name="fab_margin_r_artist_details">@dimen/fab_margin_b_artist_details</dimen>
     <!-- fragment_video.xml -->
     <dimen name="rlt_lyt_root_w_video">200dp</dimen>
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->

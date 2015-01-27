@@ -34,7 +34,6 @@
 	    android:textColor="@android:color/black"
 	    android:gravity="center_horizontal"
 	    android:layout_alignLeft="@id/rltLytImgFriend"
-	    android:layout_alignRight="@id/rltLytImgFriend"
-	    android:text="fadf dzddg zdzd zdzdhbzdh" />
+	    android:layout_alignRight="@id/rltLytImgFriend" />
     
 </RelativeLayout>

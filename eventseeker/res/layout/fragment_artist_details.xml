@@ -46,4 +46,17 @@
 	    android:layout_height="match_parent"
 	    android:background="@android:color/transparent" />
     
+    <com.melnykov.fab.FloatingActionButton android:id="@+id/fabSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
+        android:layout_marginBottom="@dimen/fab_margin_b_artist_details"
+        android:layout_marginTop="@dimen/fab_margin_t_artist_details"
+        android:layout_marginRight="@dimen/fab_margin_r_artist_details"
+        android:src="@drawable/slctr_following"
+        fab:fab_type="normal"
+        fab:fab_colorNormal="@color/colorPrimary"
+        fab:fab_colorPressed="@color/colorPrimaryDark"
+        fab:fab_colorRipple="@color/ripple_material_light" />
+    
 </FrameLayout>

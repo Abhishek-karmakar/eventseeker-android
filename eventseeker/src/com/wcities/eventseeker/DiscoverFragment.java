@@ -117,7 +117,8 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	//private View vDummy;
 	
 	private int toolbarSize;
-	private int limitScrollAt, screenHt, minRecyclerVHt, recyclerVDummyTopViewsHt, recyclerVPrgsBarHt, recyclerVContentRowHt;
+	private int limitScrollAt, screenHt, minRecyclerVHt, recyclerVDummyTopViewsHt, recyclerVPrgsBarHt, 
+		recyclerVContentRowHt, vPagerCatTitlesMarginT;
 	private float translationZPx;
 	private boolean isScrollLimitReached, isDrawerOpen;
 	private String title = "";
@@ -415,6 +416,8 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		imgEventPadR = res.getDimensionPixelSize(R.dimen.img_event_pad_r_list_item_discover);
 		imgEventPadT = res.getDimensionPixelSize(R.dimen.img_event_pad_t_list_item_discover);
 		imgEventPadB = res.getDimensionPixelSize(R.dimen.img_event_pad_b_list_item_discover);
+		
+		vPagerCatTitlesMarginT = res.getDimensionPixelSize(R.dimen.v_pager_cat_titles_margin_t_discover);
 	}
 	
 	private void buildEvtCategories() {
@@ -466,8 +469,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		 * after applying setTranslationY()
 		 */
 		FrameLayout.LayoutParams frameLParams = (FrameLayout.LayoutParams) vPagerCatTitles.getLayoutParams();
-		frameLParams.topMargin = FragmentUtil.getResources(this).getDimensionPixelSize(R.dimen.v_pager_cat_titles_margin_t_discover) 
-				- scrollY;
+		frameLParams.topMargin = vPagerCatTitlesMarginT - scrollY;
 		vPagerCatTitles.setLayoutParams(frameLParams);
 		
 		/*frameLParams = (FrameLayout.LayoutParams) vDummy.getLayoutParams();

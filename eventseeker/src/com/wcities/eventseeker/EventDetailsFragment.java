@@ -375,6 +375,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	
 	@Override
 	public void animateSharedElements() {
+		//Log.d(TAG, "animateSharedElements()");
 		SharedElement sharedElement = sharedElements.get(0);
 		
 		//ViewCompat.setTransitionName(imgEvent, sharedElement.getTransitionName());
@@ -594,6 +595,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	private void updateEventImg() {
 		//Log.d(TAG, "updateEventImg(), url = " + event.getLowResImgUrl());
 		if (event.doesValidImgUrlExist()) {
+			//Log.d(TAG, "updateEventImg(), ValidImgUrlExist");
 			String key = event.getKey(ImgResolution.LOW);
 	        BitmapCache bitmapCache = BitmapCache.getInstance();
 			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);

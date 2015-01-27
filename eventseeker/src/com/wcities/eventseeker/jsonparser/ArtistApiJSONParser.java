@@ -619,6 +619,13 @@ public class ArtistApiJSONParser {
 				Event.Attending.getAttending(jsonObject.getInt(KEY_ATTENDING)) : Event.Attending.NOT_GOING;
 		event.setAttending(attending);
 		
+		if (jsonObject.has(KEY_IMAGE)) {
+			event.setImageUrl(jsonObject.getString(KEY_IMAGE));
+		}
+		if (jsonObject.has(KEY_IMAGE_ATTRIBUTION)) {
+			event.setImageAttribution(getImageAttribution(jsonObject.getJSONObject(KEY_IMAGE_ATTRIBUTION)));
+		}
+		
 		return event;
 	}
 	

@@ -58,6 +58,14 @@ public class FeaturingArtistPagerAdapter extends FragmentStatePagerAdapter imple
 
 	@Override
 	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+		if (position > artists.size() - 1) {
+			/**
+			 * This chk is required because of onPageScrolled() being called even if 
+			 * no videos are there which in turn callls getRootView() which calls instantiateItem() 
+			 * causing NullPointerException in instantiateItem()
+			 */
+			return;
+		}
 		/**
 		 * positionOffset value is 0 for centered position & swiping towards left it increases this value
 		 * gradually from 0 to 0.99 & then position value increases by 1 & positionOffset becomes again 0 for this new 

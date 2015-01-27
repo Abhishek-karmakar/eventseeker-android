@@ -86,7 +86,6 @@ public class AppConstants {
 	public static final String FRAGMENT_TAG_TWITTER_SYNCING = "twitterSyncingFragment";
 	public static final String FRAGMENT_TAG_GOOGLE_PLAY_MUSIC = "GooglePlayMusicFragment";
 	
-	public static final String DIALOG_FRAGMENT_TAG_LOGIN_TO_TRACK_EVENT = "loginToTrackEventDialog";
 	public static final String DIALOG_FRAGMENT_TAG_LOGIN_TO_SUBMIT_REP_CODE = "loginToSubmitRepCodeDialog";
 	public static final String DIALOG_FRAGMENT_TAG_SUBMIT_REP_CODE_RESPONSE = "submitRepCodeResponseDialog";
 	

@@ -38,7 +38,7 @@ public class ArtistEventsFragmentTab extends ArtistEventsParentFragment {
 	@Override
 	protected DateWiseEventParentAdapterListener getAdapterInstance() {
 		return new DateWiseMyEventListAdapter(FragmentUtil.getActivity(this), dateWiseEventList, null, 
-				this, this, FragmentUtil.getScreenName(this), this);
+				this, this, FragmentUtil.getScreenName(this));
 	}
 	
 	@Override

@@ -30,7 +30,7 @@ import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GPlusUtil;
 
 public abstract class PublishEventListFragment extends ListFragment implements PublishListener, 
-		ConnectionCallbacks, OnConnectionFailedListener, DialogBtnClickListener {
+		ConnectionCallbacks, OnConnectionFailedListener {
 	
 	private static final String TAG = PublishEventListFragment.class.getSimpleName();
 	
@@ -229,28 +229,6 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 		}
 	}
 	
-	@Override
-	public void doPositiveClick(String dialogTag) {
-		if (dialogTag.equals(AppConstants.DIALOG_FRAGMENT_TAG_LOGIN_TO_TRACK_EVENT)) {
-			// set firstTimeLaunch=false so as to keep facebook & google sign in rows visible.
-			((EventSeekr)FragmentUtil.getActivity(this).getApplication()).updateFirstTimeLaunch(false);
-			/*((DrawerListFragmentListener)FragmentUtil.getActivity(this)).onDrawerItemSelected(
-					MainActivity.INDEX_NAV_ITEM_CONNECT_ACCOUNTS, null);*/
-			((OnSettingsItemClickedListener) FragmentUtil.getActivity(this)).onSettingsItemClicked(SettingsItem.SYNC_ACCOUNTS, null);
-		}
-	}
-	
-	@Override
-	public void doNegativeClick(String dialogTag) {
-		if (dialogTag.equals(AppConstants.DIALOG_FRAGMENT_TAG_LOGIN_TO_TRACK_EVENT)) {
-			DialogFragment dialogFragment = (DialogFragment) getChildFragmentManager().findFragmentByTag(
-					AppConstants.DIALOG_FRAGMENT_TAG_LOGIN_TO_TRACK_EVENT);
-			if (dialogFragment != null) {
-				dialogFragment.dismiss();
-			}
-		}
-	}
-
 	public boolean isPermissionDisplayed() {
 		return isPublishPermissionDisplayed;
 	}
