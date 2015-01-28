@@ -66,6 +66,8 @@
     <string name="navigation_drawer_item_friends_activity">@string/title_friends_activity</string>
     <string name="navigation_drawer_item_following">@string/title_following</string>
     <string name="navigation_drawer_section_settings">Configuraciones</string>
+    <string name="navigation_drawer_item_settings">Configuraciones</string>
+    <string name="navigation_drawer_item_logout">Desconectarse</string>
     <string name="navigation_drawer_item_sync_accounts">Sincronizar cuentas</string>
     <string name="navigation_drawer_item_change_location">@string/title_change_location</string>
     <string name="navigation_drawer_item_language">@string/title_language</string>
@@ -191,9 +193,13 @@
 	<string name="syncing_last_fm">Sincronizando Last.fm</string>
 	<string name="syncing_pandora">Sincronizando Pandora</string>
 	
+	<!-- Following -->
+    <string name="follow_more_artists">Sigue más artistas +</string>
+	
    	<!-- My Events -->
     <string name="following">Siguiendo</string>
     <string name="recommended">Recomendada</string>
+    <string name="saved_event">Guardado</string>
    	
    	<!-- Search Results -->
     <string name="artists">Artistas</string>
@@ -301,6 +307,33 @@
     
     <!-- RdioFragment -->
     <string name="user_name_or_email">Nombre de usuario u email</string>
+    
+    <!-- LauncherFragment -->
+    <string name="firstTitle">Explorar</string>
+    <string name="secondTitle">Descubrir</string>
+    <string name="thirdTitle">Conectarse</string>
+    <string name="forthTitle">Viver</string>
+    <string name="firstTitleDescription">Millones de eventos en el mundo, solo tiene que hacer un clic. ¡Conciertos, deportes, teatro, fiestas y mucho más!</string>
+    <string name="secondTitleDescription">Después la sincronización, te recomendamos unos eventos personalizados. Recibir alertas y encontrar billetes en cualquier ciudad.</string>
+    <string name="thirdTitleDescription">Mantengas en contacto con amigos y familiares. Hacemos que sea fácil el reparto de eventos.</string>
+    <string name="forthTitleDescription">Minimizar tu búsqueda y aumentar tu descubrimiento. Ve y descubre el mundo con eventseeker.</string>
+    <string name="log_in">Conectarse</string>
+    <string name="sign_up">Inscríbase</string>
+    
+    <!-- SignUpFragment -->
+    <string name="sign_up_with_email">Conectarse con email</string>
+    <string name="first_name">Nombre</string>
+    <string name="last_name">Apellido</string>
+    <string name="email">email</string>
+    <string name="password">contraseña</string>
+    <string name="confirm_password">Confirmar la contraseña</string>
+    
+    <!-- FollowMoreArtistFragment -->
+    <string name="btn_sync_accounts">Sync Accounts</string>
+    <string name="btn_popular_artists">Popular</string>
+    <string name="btn_recommended">Recomendada</string>
+    <string name="btn_search">Search</string>
+    <string name="title_find_more_artist">Find More Artists</string>
     
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>
