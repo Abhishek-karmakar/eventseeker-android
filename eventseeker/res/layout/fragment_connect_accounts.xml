@@ -3,7 +3,7 @@
     android:id="@+id/rltLayoutRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_screen_dark_blue"
+    android:background="@drawable/ic_blue_app_bg"
     android:padding="@dimen/rlt_layout_root_pad_fragment_connect_accounts_list" >
 
     <ListView

@@ -94,7 +94,8 @@
                 android:layout_height="wrap_content"
                 android:button="@drawable/slctr_checkbox_save_event"
                 android:clickable="false"
-                android:drawablePadding="@dimen/btn_drawable_pad_friends_activity_item" />
+                android:drawablePadding="@dimen/btn_drawable_pad_friends_activity_item"
+                android:gravity="center" />
         </LinearLayout>
 
         <LinearLayout
@@ -108,9 +109,10 @@
                 android:id="@+id/chkLike"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:button="@drawable/like"
+                android:button="@drawable/ic_like"
                 android:clickable="false"
-                android:drawablePadding="@dimen/btn_drawable_pad_friends_activity_item" />
+                android:drawablePadding="@dimen/btn_drawable_pad_friends_activity_item"
+                android:gravity="center" />
         </LinearLayout>
 
         <LinearLayout
@@ -124,9 +126,10 @@
                 android:id="@+id/chkComment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:button="@drawable/comment"
+                android:button="@drawable/ic_comment"
                 android:clickable="false"
-                android:drawablePadding="@dimen/btn_drawable_pad_friends_activity_item" />
+                android:drawablePadding="@dimen/btn_drawable_pad_friends_activity_item"
+                android:gravity="center" />
         </LinearLayout>
 
         <LinearLayout
@@ -141,9 +144,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@drawable/slctr_tickets"
-                android:drawablePadding="@dimen/btn_drawable_pad_friends_activity_item"
                 android:clickable="false"
-                android:enabled="false" />
+                android:drawablePadding="@dimen/btn_drawable_pad_friends_activity_item"
+                android:enabled="false"
+                android:gravity="center" />
         </LinearLayout>
     </LinearLayout>
 

@@ -97,7 +97,7 @@ public class VenueDetailsFragment extends FragmentLoadableFromBackStack implemen
 		btnEvents.setOnClickListener(this);
 		
 		vTabBar.findViewById(R.id.btnTab3).setVisibility(View.GONE);
-		vTabBar.findViewById(R.id.vDivider2).setVisibility(View.GONE);
+		//vTabBar.findViewById(R.id.vDivider2).setVisibility(View.GONE);
 		
 		TabBar.Tab tabInfo = new TabBar.Tab(btnArtists, FRAGMENT_TAG_INFO, VenueInfoFragment.class, 
 				getArguments());

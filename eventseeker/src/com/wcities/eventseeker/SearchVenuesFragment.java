@@ -10,6 +10,7 @@ import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -148,17 +149,15 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 					return convertView;
 				
 				} else if (convertView == null || !convertView.getTag().equals(AppConstants.TAG_CONTENT)) {
-					convertView = mInflater.inflate(R.layout.fragment_discover_by_category_list_item_evt, null);
+					convertView = mInflater.inflate(R.layout.item_list_search_venue, null);
 					convertView.setTag(AppConstants.TAG_CONTENT);
-					convertView.findViewById(R.id.imgEvtTime).setVisibility(View.INVISIBLE);
-					convertView.findViewById(R.id.txtEvtTime).setVisibility(View.INVISIBLE);
 				}
 				
-				((TextView)convertView.findViewById(R.id.txtEvtTitle)).setText(venue.getName());
+				((TextView)convertView.findViewById(R.id.txtVenueTitle)).setText(venue.getName());
 				
-				Address address = venue.getAddress();
-				((TextView)convertView.findViewById(R.id.txtEvtLocation)).setText(address.getCity() + ", " 
-						+ address.getCountry().getName());
+				String[] address = getVenueAddress(venue);
+				((TextView)convertView.findViewById(R.id.txtVenueLocation)).setText(address[0]);
+				((TextView)convertView.findViewById(R.id.txtVenueCity)).setText(address[1]);
 				
 				String key = venue.getKey(ImgResolution.LOW);
 				Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
@@ -186,8 +185,41 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 			
 			return convertView;
 		}
-	}
+	    
+	    private String[] getVenueAddress(Venue venue) {
+			String location = "";
+			String city = "";
+			if (venue.getAddress() != null) {
+				if (venue.getAddress().getAddress1() != null) {
+					location += venue.getAddress().getAddress1();
+					Log.d(TAG, "Address 1 : " + location);
+				}
 
+				if (venue.getAddress().getAddress2() != null) {
+					if (location.length() != 0) {
+						location += ", ";
+					}
+					location += venue.getAddress().getAddress2();
+					Log.d(TAG, "Address1, Address2 : " + location);
+				}
+				
+				if (venue.getAddress().getCity() != null) {
+					city += venue.getAddress().getCity();
+					Log.d(TAG, "+ City : " + city);
+				} 
+				
+				if (venue.getAddress().getState() != null) {
+					if (city.length() != 0) {
+						city += ", ";
+					}
+					city += venue.getAddress().getState();
+					Log.d(TAG, "+ City, State : " + city);
+				} 
+			}
+			return new String[]{location, city};
+		}
+	}
+	
 	@Override
 	public void onQueryTextSubmit(String query) {
 		refresh(query);
