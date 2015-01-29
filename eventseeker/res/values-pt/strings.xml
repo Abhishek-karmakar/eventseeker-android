@@ -38,6 +38,7 @@
     <string name="title_rdio">Rdio</string>
     <string name="title_lastfm">last.fm</string>
     <string name="title_pandora">Pandora</string>
+    <string name="title_settings_mobile_app">Configurações</string>
     <string name="title_web">Web</string>
     
     <string name="no_items_found_pls_login">Please login with Facebook or Google from \'Sync Accounts\' page to see</string>
@@ -68,7 +69,7 @@
     <string name="navigation_drawer_section_settings">Configurações</string>
     <string name="navigation_drawer_item_settings">Configurações</string>
     <string name="navigation_drawer_item_logout">Sair da sessão</string>
-    <string name="navigation_drawer_item_sync_accounts">Sincronizar contas</string>
+    <string name="navigation_drawer_item_sync_accounts">Ligar Contas</string>
     <string name="navigation_drawer_item_change_location">@string/title_change_location</string>
     <string name="navigation_drawer_item_language">@string/title_language</string>
     <string name="navigation_drawer_section_about">Sobre</string>
@@ -192,6 +193,7 @@
 	<string name="syncing_rdio">Sincronizando Rdio</string>
 	<string name="syncing_last_fm">Sincronizando Last.fm</string>
 	<string name="syncing_pandora">Sincronizando Pandora</string>
+	<string name="artist_synced">Artistas Sincronizados</string>
     
 	<!-- Following -->
     <string name="follow_more_artists">Segue mais artistas +</string>
@@ -334,6 +336,22 @@
     <string name="btn_recommended">Recomendada</string>
     <string name="btn_search">Search</string>
     <string name="title_find_more_artist">Find More Artists</string>
+    
+    <!-- PopularArtistsFragment -->
+    <string name="btn_featured">Featured</string>
+    <string name="btn_music">Music</string>
+    <string name="btn_comedy">Comedy</string>
+    <string name="btn_theater">Theater</string>
+    <string name="btn_sports">Sports</string>
+    
+    <!-- RecommendedArtistsFragment -->
+    <string name="btn_follow_all">Segue todos</string>
+    <string name="a_z">A - Z</string>
+    <string name="recommendation_score">Recommendation Score</string>
+    <string name="dialog_title_follow_all">Segue todos</string>
+    <string name="dialog_msg_follow_all">Do you want to follow %1$d artists?</string>
+    <string name="dialog_btn_yes">yes</string>
+    <string name="dialog_btn_no">no</string>
     
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>

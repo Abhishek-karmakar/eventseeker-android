@@ -63,7 +63,6 @@
     
     <!-- Following section screen names -->
     <string name="title_find_more_artist">Find More Artists</string>
-
     <string name="title_popular">Popular</string>
     <string name="title_featured_list">Featured List</string>
     <string name="title_comedy">Comedy</string>
@@ -450,7 +449,7 @@
     <!-- DiscoverSettingDialogFragment -->
     <string name="txt_search_radius">Search Radius (Miles)</string>
     <string name="txt_select_date">Select Date</string>
-    <string name="title_dialog_discover_setting">Settings</string>
+    <string name="title_dialog_discover_setting">@string/title_settings_mobile_app</string>
     
     <!--  fragment_discover.xml -->
     <string name="txt_no_events">No events currently in your location. Try another category or search a new location / Radius.</string>

@@ -38,6 +38,7 @@
     <string name="title_rdio">Rdio</string>
     <string name="title_lastfm">last.fm</string>
     <string name="title_pandora">Pandora</string>
+    <string name="title_settings_mobile_app">Einstellungen</string>
     <string name="title_web">Web</string>
     
     <string name="no_items_found_pls_login">Please login with Facebook or Google from \'Sync Accounts\' page to see</string>
@@ -67,7 +68,7 @@
     <string name="navigation_drawer_section_settings">Einstellungen</string>
     <string name="navigation_drawer_item_settings">Einstellungen</string>
     <string name="navigation_drawer_item_logout">Abmelden</string>
-    <string name="navigation_drawer_item_sync_accounts">Accounts synchronisieren</string>
+    <string name="navigation_drawer_item_sync_accounts">Synchronisieren</string>
     <string name="navigation_drawer_item_change_location">@string/title_change_location</string>
     <string name="navigation_drawer_item_language">@string/title_language</string>
     <string name="navigation_drawer_section_about">Über</string>
@@ -191,6 +192,7 @@
 	<string name="syncing_rdio">Rdio synchronisieren</string>
 	<string name="syncing_last_fm">Last.fm synchronisieren</string>
 	<string name="syncing_pandora">Pandora synchronisieren</string>
+	<string name="artist_synced">Künstler synchronisiert</string>
    	
 	<!-- Following -->
     <string name="follow_more_artists">Folge mehr Künstlern +</string>
@@ -333,6 +335,22 @@
     <string name="btn_recommended">Vorschläge</string>
     <string name="btn_search">Suchen</string>
     <string name="title_find_more_artist">Folge mehr Künstlern</string>
+    
+    <!-- PopularArtistsFragment -->
+    <string name="btn_featured">Featured</string>
+    <string name="btn_music">Musik</string>
+    <string name="btn_comedy">Comedy</string>
+    <string name="btn_theater">Theater</string>
+    <string name="btn_sports">Sport</string>
+    
+    <!-- RecommendedArtistsFragment -->
+    <string name="btn_follow_all">Allen folgen</string>
+    <string name="a_z">A - Z</string>
+    <string name="recommendation_score">Recommendation Score</string>
+    <string name="dialog_title_follow_all">Allen folgen</string>
+    <string name="dialog_msg_follow_all">Do you want to follow %1$d artists?</string>
+    <string name="dialog_btn_yes">yes</string>
+    <string name="dialog_btn_no">no</string>
     
     <!-- LoginFragment -->
     

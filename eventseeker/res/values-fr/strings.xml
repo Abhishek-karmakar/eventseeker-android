@@ -38,6 +38,7 @@
     <string name="title_rdio">Rdio</string>
     <string name="title_lastfm">last.fm</string>
     <string name="title_pandora">Pandora</string>
+    <string name="title_settings_mobile_app">Règlages</string>
     <string name="title_web">Web</string>
     
     <string name="no_items_found_pls_login">Please login with Facebook or Google from \'Sync Accounts\' page to see</string>
@@ -191,6 +192,7 @@
 	<string name="syncing_rdio">Synchroniser Rdio</string>
 	<string name="syncing_last_fm">Synchroniser Last.fm</string>
 	<string name="syncing_pandora">Synchroniser Pandora</string>
+	<string name="artist_synced">Artist Synced</string>
 	
 	<!-- Following -->
     <string name="follow_more_artists">Suivre d\'avantage d\'artistes +</string>
@@ -252,7 +254,7 @@
     <string name="loading">Chargement en cours...</string>	
  
     <!-- Get Started -->
-    <string name="skip">Sauter</string>
+    <string name="skip">Ignorer</string>
  	<string name="signin_for_better_experience">Connectez-vous pour optimiser votre experience.</string>
     <string name="couldnt_login_to_google_play_music">Impossible de connecter à votre compte Google Play Music. Veuillez verifier vos données de compte Google Play Music</string>
     <string name="why_login">Pourquoi se connecter?</string>
@@ -333,6 +335,22 @@
     <string name="btn_recommended">Suggérés</string>
     <string name="btn_search">Rechercher</string>
     <string name="title_find_more_artist">Trouver d\'autres artists</string>
+    
+    <!-- PopularArtistsFragment -->
+    <string name="btn_featured">En Vedette</string>
+    <string name="btn_music">Musique</string>
+    <string name="btn_comedy">Comédie</string>
+    <string name="btn_theater">Théâtre</string>
+    <string name="btn_sports">Sport</string>
+    
+    <!-- RecommendedArtistsFragment -->
+    <string name="btn_follow_all">Les Suivre Tous</string>
+    <string name="a_z">A - Z</string>
+    <string name="recommendation_score">Recommendation Score</string>
+    <string name="dialog_title_follow_all">Les Suivre Tous</string>
+    <string name="dialog_msg_follow_all">Do you want to follow %1$d artists?</string>
+    <string name="dialog_btn_yes">yes</string>
+    <string name="dialog_btn_no">no</string>
     
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>

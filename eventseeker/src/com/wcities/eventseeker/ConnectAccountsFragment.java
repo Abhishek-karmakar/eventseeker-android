@@ -58,7 +58,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     
     private static final String TXT_BTN_SKIP_DIALOG = "Skip";
     protected static final String TXT_BTN_CANCEL_DIALOG = "Cancel";
-    private static final String TXT_BTN_SKIP = "SKIP";
+    private static String TXT_BTN_SKIP = "SKIP";
     private String TXT_BTN_CONTINUE;
     
     private static final String DIALOG_FRAGMENT_TAG_SKIP = "skipDialog";    
@@ -177,6 +177,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		res = getResources();
 		
 		TXT_BTN_CONTINUE = res.getString(R.string.btn_continue);
+		TXT_BTN_SKIP = res.getString(R.string.skip);
 	}
 	
 	@Override
