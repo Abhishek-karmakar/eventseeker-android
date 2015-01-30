@@ -1161,6 +1161,22 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 						lat = venue.getAddress().getLat();
 						lon = venue.getAddress().getLon();
 						
+						/*intent = new Intent(android.content.Intent.ACTION_VIEW, 
+							    Uri.parse("navicon://setPOI?ver=1.4&ll=" + lat + "," + lon 
+							    		+ "&appName=pb6Nlvh1&title=" + venue.getName() 
+							    		+ "&radKM=15&tel=" + venue.getPhone() + "&callURL=com.wcities.eventseekrapp://"));
+						Log.d(TAG, "uri = " + Uri.parse("navicon://setPOI?ver=1.4&ll=" + lat + "," + lon 
+					    		+ "&appName=pb6Nlvh1&title=" + venue.getName() 
+					    		+ "&radKM=15&tel=" + venue.getPhone() + "&callURL=com.wcities.eventseeker"));*/
+						
+						/*intent = new Intent(android.content.Intent.ACTION_VIEW, 
+							    Uri.parse("http://apps.scout.me/v1/driveto?dt=" + venue.getAddress().getAddress1() + "@" + 
+							    		lat + ", " + lon + "&title=" + venue.getName() 
+							    		+ "&token=6T5HI14ZzJdKRk-PUhWzT7Zn-enFiGsUYskrN5EnXENaQnBUE3GDalgi8SN0x2J4aTxvvZuTwDfGx9WHtdwmJeJpzFprUq79p4gf54Yiq9jM6wFwHaZSBp1k1AYtzdcfhlWvjLcKWCpqe9juykeaHSTsRr-cJde4uYeWGDSFerI"));
+						Log.d(TAG, "uri = " + Uri.parse("http://apps.scout.me/v1/driveto?dt=" + venue.getAddress().getAddress1() + "@" + 
+					    		lat + ", " + lon + "&title=" + venue.getName() 
+					    		+ "&token=6T5HI14ZzJdKRk-PUhWzT7Zn-enFiGsUYskrN5EnXENaQnBUE3GDalgi8SN0x2J4aTxvvZuTwDfGx9WHtdwmJeJpzFprUq79p4gf54Yiq9jM6wFwHaZSBp1k1AYtzdcfhlWvjLcKWCpqe9juykeaHSTsRr-cJde4uYeWGDSFerI"));*/
+						
 						if (lat == 0 && lon == 0) {
 							if (venue.getAddress().getAddress1() != null) {
 								//Log.d(TAG, "fabNavigate address - " + venue.getAddress().getAddress1());

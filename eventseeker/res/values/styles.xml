@@ -98,6 +98,12 @@
         <item name="android:background">@drawable/slctr_bg_lst_off_transparent_on_dark_gray</item>
 	</style>
 	
+    <!-- Used this style at runtime for discover settings dialog font color. Without this, since we have overwritten
+    textColorPrimary in application base theme to white color, texts in datepicker are not visible on same white background -->
+    <style name="EventSeekr.Dialog.DatePicker" parent="@style/Theme.AppCompat.Light.NoActionBar">
+		<item name="android:textColorPrimary">@android:color/black</item>
+	</style>
+	
 	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 	
 	<!-- Custom actionbar tabs style for bosch -->

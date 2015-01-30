@@ -13,6 +13,8 @@ behind this layout-->
 	    android:layout_height="wrap_content"
 	    android:layout_centerHorizontal="true"
 	    android:layout_marginTop="@dimen/txt_venue_margin_t_event_details"
+	    android:layout_marginLeft="@dimen/rlt_lyt_address_margin_l_event_details"
+        android:layout_marginRight="@dimen/rlt_lyt_address_margin_r_event_details"
 	    android:textSize="@dimen/txt_evt_details_txt_size_event_details"
 	    android:gravity="center" />
     
