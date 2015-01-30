@@ -54,7 +54,7 @@ public class DiscoverSettingDialogFragment extends DialogFragment {
 		final DiscoverSettingChangedListener listener = (DiscoverSettingChangedListener) args.getSerializable(BundleKeys.LISTENER);
 		
 		// create ContextThemeWrapper from the original Activity Context with the custom theme
-		Context contextThemeWrapper = new ContextThemeWrapper(FragmentUtil.getActivity(this), R.style.EventSeekr_Dialog_DatePicker);
+		Context contextThemeWrapper = new ContextThemeWrapper(FragmentUtil.getActivity(this), R.style.Theme_AppCompat_Light_NoActionBar);
 		/**
 		 * clone the inflater using the ContextThemeWrapper
 		 * We need this to change font color (textColorPrimary) in datepicker, which we have overwritten 
