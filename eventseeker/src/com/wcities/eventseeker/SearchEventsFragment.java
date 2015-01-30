@@ -400,7 +400,7 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 				
 				holder.rltLytRoot.setOnTouchListener(new OnTouchListener() {
 					
-					int MIN_SWIPE_DISTANCE_X = ConversionUtil.toPx(res, 30);
+					int MIN_SWIPE_DISTANCE_X = ConversionUtil.toPx(res, 50);
 					int MAX_CLICK_DISTANCE = ConversionUtil.toPx(res, 4);
 					int pointerX = 0, initX = 0, pointerY = 0, initY = 0;
 					boolean isSliderOpenInititally;
@@ -461,12 +461,13 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 							
 						case MotionEvent.ACTION_UP:
 						case MotionEvent.ACTION_CANCEL:
+							Log.d(TAG, "letParentHandleTouchEvent : " + letParentHandleTouchEvent);
+							holder.rltLytRoot.setPressed(false);
 							if (letParentHandleTouchEvent) {
 								letParentHandleTouchEvent = false;//resetting the value
-								return false;
+								//return false;
 							}
 						    //Log.d(TAG, "up, action = " + mEvent.getAction() + ", x = " + mEvent.getRawX() + ", y = " + mEvent.getRawY());
-							holder.rltLytRoot.setPressed(false);
 							boolean isMinSwipeDistanceXTravelled = Math.abs(initX - pointerX) > MIN_SWIPE_DISTANCE_X;
 							boolean isSwipedToOpen = (initX > pointerX);
 							
@@ -750,6 +751,7 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 		
 		private void onEventClick(final ViewHolder holder, final Event event, final int position) {
 			holder.rltLytRoot.setPressed(true);
+			
 			searchEventFragment.handler.postDelayed(new Runnable() {
 				
 				@Override

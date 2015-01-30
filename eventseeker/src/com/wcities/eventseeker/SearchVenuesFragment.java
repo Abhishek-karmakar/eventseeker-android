@@ -10,7 +10,6 @@ import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -192,7 +191,6 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 			if (venue.getAddress() != null) {
 				if (venue.getAddress().getAddress1() != null) {
 					location += venue.getAddress().getAddress1();
-					Log.d(TAG, "Address 1 : " + location);
 				}
 
 				if (venue.getAddress().getAddress2() != null) {
@@ -200,12 +198,10 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 						location += ", ";
 					}
 					location += venue.getAddress().getAddress2();
-					Log.d(TAG, "Address1, Address2 : " + location);
 				}
 				
 				if (venue.getAddress().getCity() != null) {
 					city += venue.getAddress().getCity();
-					Log.d(TAG, "+ City : " + city);
 				} 
 				
 				if (venue.getAddress().getState() != null) {
@@ -213,7 +209,6 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 						city += ", ";
 					}
 					city += venue.getAddress().getState();
-					Log.d(TAG, "+ City, State : " + city);
 				} 
 			}
 			return new String[]{location, city};
