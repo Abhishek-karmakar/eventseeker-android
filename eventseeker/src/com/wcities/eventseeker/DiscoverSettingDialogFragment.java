@@ -61,7 +61,7 @@ public class DiscoverSettingDialogFragment extends DialogFragment {
 		 * under main theme in themes.xml. This theme can't be changed once it's applied to an activity
 		 * or application unless we are ready to restart activity.  
 		 * So we just create clone of inflater with new context having 
-		 * default style Theme_AppCompat_Light_NoActionBar but with overwritten textColorPrimary. 
+		 * default style Theme_AppCompat_Light_NoActionBar (parent of Theme.EventSeekr).
 		 * So original textColorPrimary is retained for this dialog display.
 		 */
 		LayoutInflater localInflater = LayoutInflater.from(FragmentUtil.getActivity(this)).cloneInContext(contextThemeWrapper);
