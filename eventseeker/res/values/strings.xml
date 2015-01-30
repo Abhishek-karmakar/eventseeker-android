@@ -163,7 +163,7 @@
     <string name="txt_view_less">View Less</string>
 
     <!-- fragment_device_library.xml -->
-    <string name="txt_service_desc_txt_fragment_device_library">Would you like the application to search your music library for artists that you can then follow? The artists will be placed under the \"Following\" section.</string>
+    <string name="txt_service_desc_txt_fragment_device_library">Would you like the application to search your music library for artists that you can then follow? The artists will be placed under the \"Following\" section?</string>
     <string name="retrieve_artists">Retrieve Artists</string>
  
     <!-- Strings used for event category titles -->
@@ -310,7 +310,7 @@
     <string name="version">Version</string>
 
     <!-- Navigate -->
-    <string name="couldnt_find_drive_location">Could not find the driving direction for this venue.</string>	
+    <string name="couldnt_find_drive_location">Could not find driving direction for this venue.</string>	
 
     <!-- Discover -->
     <string name="set_start_date">Set Event Start Date</string>	
@@ -326,7 +326,7 @@
 
     <!-- Last Fm -->
     <string name="user_name">Username</string>
-    <string name="user_name_could_not_be_found">User name could not be found</string>
+    <string name="user_name_could_not_be_found">Username could not be found</string>
 
     <!-- MainAcitivity -->
     <string name="error_this_action_couldnt_be_completed_at_this_time">Error, this action cannot be completed at this time.</string>

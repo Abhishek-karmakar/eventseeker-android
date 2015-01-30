@@ -104,7 +104,7 @@ public class VenueEventsFragment extends Fragment implements OnClickListener {
 				startActivity(intent);
 				
 			} else {
-				Toast.makeText(FragmentUtil.getActivity(this), "Web address is not available for this venue.", 
+				Toast.makeText(FragmentUtil.getActivity(this), R.string.web_address_isnt_available, 
 						Toast.LENGTH_SHORT).show();
 			}
 			break;

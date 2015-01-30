@@ -9,20 +9,20 @@
     <string name="lang_spanish">Spagnolo</string>
     <string name="lang_portuguese">Portoghese</string> -->
     
-    <string name="menu_search">Cercare</string>
+    <string name="menu_search">cerca</string>
     <string name="menu_change_location">Modifica città</string>
     <string name="title_discover">Scopri</string>
     <string name="title_change_location">Modifica città</string>
     <string name="title_language">Lingua</string>
     <string name="menu_settings">Configurazione</string>
     <string name="menu_calendar">Calendar</string>
-    <string name="artist_on_tour">" In giro "</string>
+    <string name="artist_on_tour">" In tour "</string>
     <string name="title_event_details">Dettagli</string>
     <string name="title_artist_details">Dettagli</string>
     <string name="title_venue_details">Venue Details</string>
     <string name="title_following">Seguendo</string>
     <string name="title_my_events">I miei eventi</string>
-    <string name="title_artists_news">Notizie dell’artista</string>
+    <string name="title_artists_news">Notizie d\'artisti</string>
     <string name="title_friends_activity">Attività degli amici</string>
     <string name="title_connect_accounts">Collegi Account</string>
     <string name="title_get_started">Comincia</string>
@@ -57,10 +57,10 @@
 	<string name="select_calender">Selezioni calendario</string>
 	<string name="event_added_to_calender_successfully">Evento aggiunto al calendario</string>
 	<string name="event_not_found">Evento non trovato</string>
-	<string name="can_not_add_event_to_calender">Impossibile aggiungere questo evento al calendario a causa dell’orario sconosciuto.</string>
+	<string name="can_not_add_event_to_calender">Impossibile aggiungere questo evento al calendario a causa di orario sconosciuto.</string>
 	
     <!-- Strings used for navigation drawer list -->
-    <string name="navigation_drawer_section_browse">Sfogliare</string>
+    <string name="navigation_drawer_section_browse">Navigazione</string>
     <string name="navigation_drawer_item_discover">@string/title_discover</string>
     <string name="navigation_drawer_item_my_events">@string/title_my_events</string>
     <string name="navigation_drawer_item_artists_news">@string/title_artists_news</string>
@@ -113,7 +113,7 @@
     <string name="txt_view_less">Mostra meno</string>
 
     <!-- fragment_device_library.xml -->
-    <string name="txt_service_desc_txt_fragment_device_library">Would you like the application to search your music library for artists that you can then follow? The artists will be placed under the \"Following\" section.</string>
+    <string name="txt_service_desc_txt_fragment_device_library">Vuoi permettere l’applicazione a cercare la tua collezione musica per artisti? Questi artisti saranno aggiunti alla sezione “Seguendo.”</string>
     <string name="retrieve_artists">Cerca artisti</string>
  
     <!-- Strings used for event category titles -->
@@ -161,9 +161,9 @@
     <string name="no_artist_found">Nessun artista trovato</string>
  
     <!-- Artists News -->
-    <string name="posted_a_picture">impostava una foto</string>
+    <string name="posted_a_picture">ha impostato una foto</string>
     <string name="shared_a_link">impostava un collegamento</string>
-    <string name="posted_a_video">impostava un video nuovo</string>
+    <string name="posted_a_video">ha impostato un video nuovo</string>
     <string name="posted_a_status">ha impostato un status</string>
     <string name="follow_artists_for_updates">Segue gli artisti per ricevere le ultime notizie in tempo reale</string>
     <string name="search_artists">Cerca artisti</string>
@@ -209,12 +209,12 @@
    	
    	<!-- Event Details -->
     <string name="featuring">Presentando</string>
-    <string name="cancel">Anulla</string>
+    <string name="cancel">Annulla</string>
 	<string name="time">Tempo</string>
     		
    	<!-- Venue Details -->
     <string name="phone">Telefono</string>
-   	<string name="drive">Indicazioni stradali</string>
+   	<string name="drive">Indicazioni</string>
    	
     <!-- Friends Activity -->
     <string name="is_going_to">%1$s va a %2$s</string>
@@ -222,7 +222,7 @@
     <string name="like">Piacere</string>
     <string name="comment">Commentario</string>
     <string name="events_are_better_with_friends">Eventi sono più divertenti con amici. Invitali a eventseeker.</string>
-    <string name="invite_friends">Invitare amici</string>
+    <string name="invite_friends">Inviti amici</string>
     <string name="add_comment">Commenta</string>
     <string name="add">Aggiungi</string>
     <string name="sending_like_request">Inviando richiesta "mi piace"</string>
@@ -251,7 +251,7 @@
     <string name="couldnt_find_drive_location">Impossibile trovare indicazioni stradale per questo luogo.</string>	
     
     <!-- Discover -->
-    <string name="set_start_date">Assegni la data d’inizio</string>	
+    <string name="set_start_date">Imposta la data d’inizio</string>	
     <string name="loading">Caricamento in corso...</string>	
  
     <!-- Get Started -->
@@ -401,7 +401,7 @@
     <!-- MainActivityAL -->
     <string name="al_command_my_events">I miei eventi</string>
     <string name="al_command_discover">Esplorare</string>
-    <string name="al_command_search">Cercare</string>
+    <string name="al_command_search">cerca</string>
     
     <!-- DiscoverActivityAL -->
     <string name="discover_al_discover_categories">OK, vuoi cercare concerti, club, sport, teatri, o, festival?</string>
@@ -414,7 +414,7 @@
     <string name="discover_al_festivals">festival</string>
     
     <!-- SearchAL -->
-    <string name="search_events_or_artists">OK, vuoi cercare artisti, eventi o luoghi?</string>
+    <string name="search_events_or_artists">OK, vuoi cerca artisti, eventi o luoghi?</string>
     <string name="search_event">Evento</string>
     <string name="search_artist">artista</string>
     <string name="search_for">Cerca per</string>

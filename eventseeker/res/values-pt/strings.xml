@@ -113,7 +113,7 @@
     <string name="txt_view_less">Olhar menos</string>
 
     <!-- fragment_device_library.xml -->
-    <string name="txt_service_desc_txt_fragment_device_library">Would you like the application to search your music library for artists that you can then follow? The artists will be placed under the \"Following\" section.</string>
+    <string name="txt_service_desc_txt_fragment_device_library">Você quer que a aplicação busca sua biblioteca de música pelos artistas em que você pode seguir? Os artistas serão colocados sob a secção ‘Seguir’.</string>
     <string name="retrieve_artists">Recuperar artistas</string>
  
     <!-- Strings used for event category titles -->
@@ -225,7 +225,7 @@
     <string name="invite_friends">Convidar amigos</string>
     <string name="add_comment">Adicionar comentários</string>
     <string name="add">Adicionar</string>
-    <string name="sending_like_request">Está a enviar um pedido \'apreciar\'</string>
+    <string name="sending_like_request">Está a enviar um pedido \'gostei\'</string>
     <string name="posting_comment">Está a colocar um comentário...</string>
  	<string name="no_friends_activity_found">Não encontrou atividade dos amigos</string>
  	

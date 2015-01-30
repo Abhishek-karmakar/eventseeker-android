@@ -50,13 +50,14 @@
 	<string name="pls_login_to_see_artist_news">Connectez-vous sur Facebook ou Google de la page Synchroniser Les Comptes pour afficher les nouveautés d\'artistes.</string>
     <string name="pls_login_to_submit_repcode">Connectez vous sur facebook ou google de la page Synchroniser les Comptes</string>
     <string name="connection_lost">Vous êtes déconnecté.</string>
+    <string name="no_internet_connectivity">Vous êtes déconnectés d\'internet</string>
     <string name="yes">oui</string>
     <string name="go_to_login">Afficher la page de connéxion?</string>
 	<string name="add_to_calender">Ajouter</string>
-	<string name="select_calender">Sélectionner l\'Agenda</string>
+	<string name="select_calender">Sélectionner le calendrier</string>
 	<string name="event_added_to_calender_successfully">Événement Ajouté au Calendrier</string>
-	<string name="event_not_found">Impossible de trouver l\'événement pour l\'ajouter à l\'agenda.</string>
-	<string name="can_not_add_event_to_calender">Impossible d\'ajouter l\'événement à l\'agenda à cause d\'un programme inconnu.</string>		
+	<string name="event_not_found">Evénement introuvable: impossible d\'ajouter l\'événement au calendrier.</string>
+	<string name="can_not_add_event_to_calender">problème inconnu: Impossible d\'ajouter l\'événement au calendrier.</string>		
 	
     <!-- Strings used for navigation drawer list -->
     <string name="navigation_drawer_section_browse">Naviguer</string>
@@ -104,7 +105,7 @@
     <string name="pls_login">Connectez-vous sur Facebook ou Google avant de synchroniser vos comptes.</string>    
     <string name="syncing_your_acc">En train de synchroniser votre compte...Veuillez patienter...</string>    
     <string name="are_you_sure">Etes-vous sûr?</string>    
-    <string name="connecting_account_allow_us">La connexion nous permet de vous offir des alertes pertinentes et instantanées.</string>    
+    <string name="connecting_account_allow_us">La connexion à votre compte nous permet de vous envoyer des alertes pertinentes et instantanées.</string>    
     <string name="follow_your_favorite_Artists">Suivez vos artistes préférés et recevez des nouvelles sur des événements en synchronisant les comptes suivants:</string>    
     
     <!-- include_friends.xml -->
@@ -112,7 +113,7 @@
     <string name="txt_view_less">Afficher Moins</string>
 
     <!-- fragment_device_library.xml -->
-    <string name="txt_service_desc_txt_fragment_device_library">Would you like the application to search your music library for artists that you can then follow? The artists will be placed under the \"Following\" section.</string>
+    <string name="txt_service_desc_txt_fragment_device_library">Voudriez-vous que l’application cherche votre bibliothèque de musique pour les artistes qui vous-pouvez suivre? Les artistes se mettront sous la section « Suivant ».</string>
     <string name="retrieve_artists">Rechercher des Artistes</string>
  
     <!-- Strings used for event category titles -->
@@ -209,7 +210,7 @@
    	<!-- Event Details -->
     <string name="featuring">Avec</string>
    	<string name="cancel">Annuler</string>
-	<string name="time">Temps</string>
+	<string name="time">Horaire</string>
    			
    	<!-- Venue Details -->
     <string name="phone">Téléphone</string>
@@ -220,24 +221,24 @@
     <string name="wants_to_go_to">%1$s veut aller à %2$s</string>
     <string name="like">J\'aime</string>
     <string name="comment">Commentaire</string>
-    <string name="events_are_better_with_friends">Les événements sont toujours meilleur avec vos amis ! Invitez-les à rejoindre eventseeker.</string>
+    <string name="events_are_better_with_friends">Les événements sont toujours mieux entre amis. Invitez les à vous rejoindre sur eventseeker.</string>
     <string name="invite_friends">Inviter des amis</string>
     <string name="add_comment">Ajouter un commentaire</string>
     <string name="add">Ajouter</string>
     <string name="sending_like_request">Demande "J'aime" Envoyée</string>
-    <string name="posting_comment">En train de poster votre commentaire.</string>
+    <string name="posting_comment">Commentaire en cours de publication...</string>
  	<string name="no_friends_activity_found">Aucune activité à afficher</string>
  	
  	<!-- RepCodeFragment -->
- 	<string name="submit">Soumettre</string>
+ 	<string name="submit">Envoyer</string>
  	<string name="rep_code">Code Rep</string>
  	<string name="rep_code_response_other_account_already_synced">Un autre compte est déjà synchronisé sur cet appareil.</string>
- 	<string name="rep_code_response_successfully_submitted">Soumis avec succès!</string>
+ 	<string name="rep_code_response_successfully_submitted">Envoyé avec succès!</string>
  	<string name="rep_code_response_database_insertion_error">Une erreur est survenue lors du traitement de ce code rep.</string>
  	<string name="rep_code_response_invalid_rep_code">Code Rep Non Valide!</string>
  	<string name="rep_code_response_unknown_error">Impossible de traiter votre demande. Veuillez réessayer.</string>
-  	<string name="rep_code_enter_a_valid_repcode">S\'il vous plait, entrer un code rep valide.</string>
- 	<string name="rep_code_submission">Soumission du code rep</string>
+  	<string name="rep_code_enter_a_valid_repcode">Vous devez entrer un code rep valide.</string>
+ 	<string name="rep_code_submission">Envoi du code rep</string>
  	<string name="ok">Ok</string>
  	
    	<!-- My Events -->
@@ -269,7 +270,7 @@
     <string name="error_this_action_couldnt_be_completed_at_this_time">Erreur: impossible de traiter votre demande en ce moment.</string>
  
     <!-- VenueDetails -->
-    <string name="phone_number_not_available">Un numéro de téléphone n\'est pas disponible pour ce lieu.</string>
+    <string name="phone_number_not_available">Le numéro de téléphone n\'est pas disponible pour ce lieu. </string>
     <string name="web_address_isnt_available">Un lien n\'est pas disponible pour ce lieu.</string>
  
     <!-- include_sync_account.xml -->

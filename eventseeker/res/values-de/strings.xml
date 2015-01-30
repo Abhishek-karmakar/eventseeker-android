@@ -50,6 +50,7 @@
 	<string name="pls_login_to_see_artist_news">Bitte melden Sie sich mit Facebook oder Google über die "Accounts synchronisieren"-Seite an, um die Neuigkeiten des Künstlers zu sehen.</string>
     <string name="pls_login_to_submit_repcode">Bitte melden Sie sich auf der \'Account synchronisieren\' mit Facebook oder Google an</string>
     <string name="connection_lost">Die Internetverbindung scheint offline zu sein.</string>
+    <string name="no_internet_connectivity">Keine Internetverbindung</string>
     <string name="yes">Ja</string>
     <string name="go_to_login">Zur Anmeldung gehen?</string>
     <string name="add_to_calender">Zum Kalender hinzufügen</string>
@@ -103,7 +104,7 @@
     
     <string name="pls_login">Bitte melden Sie sich mit Facebook oder Google an, bevor Sie andere Accounts synchronisieren.</string>    
     <string name="syncing_your_acc">Accounts werden synchronisiert... Bitte warten Sie...</string>    
-    <string name="are_you_sure">Sind Sie sicher?</string>    
+    <string name="are_you_sure">Bist du sicher?</string>    
     <string name="connecting_account_allow_us">Verbinden von Accounts hilft bei der Bereitstellung von direkten, relevanten Benachrichtigungen.</string>    
     <string name="follow_your_favorite_Artists">Folgen Sie Ihren Lieblingskünstlern und erhalten Sie Updates über Veranstaltungen durch synchronisieren der folgenden.</string>    
     
@@ -112,7 +113,7 @@
     <string name="txt_view_less">Zeig weniger</string>
 
     <!-- fragment_device_library.xml -->
-    <string name="txt_service_desc_txt_fragment_device_library">Would you like the application to search your music library for artists that you can then follow? The artists will be placed under the \"Following\" section.</string>
+    <string name="txt_service_desc_txt_fragment_device_library">Möchtest du, dass die Applikation in Deine Musik-Datenbank nach Künstlern sucht, denen Du dann folgen kannst? Die Künstler werden unter "Folgen" aufgeführt.</string>
     <string name="retrieve_artists">Künstler wieder aufrufen</string>
  
     <!-- Strings used for event category titles -->
@@ -220,7 +221,7 @@
     <string name="wants_to_go_to">%1$s möchte zu %2$s gehen</string>
     <string name="like">Mag ich</string>
     <string name="comment">Kommentar</string>
-    <string name="events_are_better_with_friends">Veranstaltungen sind immer besser mit Freunden. Lade Sie zu eventseeker ein.</string>
+    <string name="events_are_better_with_friends">Veranstaltungen sind immer besser mit Freunden. Lade sie jetzt zu eventseeker ein.</string>
     <string name="invite_friends">Freunde einladen</string>
     <string name="add_comment">Kommentar hinzufügen</string>
     <string name="add">Hinzufügen</string>
@@ -235,9 +236,9 @@
  	<string name="rep_code_response_successfully_submitted">Erfolgreich übermittelt!</string>
  	<string name="rep_code_response_database_insertion_error">Ein Fehler ist bei bei der Verarbeitung dieses Rep Codes aufgetreten.</string>
  	<string name="rep_code_response_invalid_rep_code">Ungültiger Rep Code!</string>
- 	<string name="rep_code_response_unknown_error">Nachfrage konnte nicht vollendet werden. Bitte versuchen Sie es nochmal.</string>
+ 	<string name="rep_code_response_unknown_error">Nachfrage konnte nicht vollendet werden. Bitte versuch es nochmal.</string>
  	<string name="rep_code_enter_a_valid_repcode">Bitte geben Sie einen gültigen Rep Code an</string>
- 	<string name="rep_code_submission">Rep Code Vorlage</string>
+ 	<string name="rep_code_submission">Rep Code Übermittlung</string>
  	<string name="ok">Ok</string>
  	
    	<!-- My Events -->
@@ -247,7 +248,7 @@
     <string name="version">Version</string>
         
     <!-- Navigate -->
-    <string name="couldnt_find_drive_location">Die Fahrinstruktionen für diesen Veranstaltungsort konnte nicht gefunden werden.</string>	
+    <string name="couldnt_find_drive_location">Die Fahrinstruktionen konnte nicht gefunden werden.</string>	
     
     <!-- Discover -->
     <string name="set_start_date">Anfangsdatum für Veranstaltung einstellen</string>	
@@ -270,7 +271,7 @@
  
     <!-- VenueDetails -->
     <string name="phone_number_not_available">Telefonnummer ist für diesen Veranstaltungsort nicht verfügbar.</string>
-    <string name="web_address_isnt_available">Webseite ist für diesen Veranstaltungsort ist nict verfügbar.</string>
+    <string name="web_address_isnt_available">Webseite ist für diesen Veranstaltungsort ist nicht verfügbar.</string>
     
     <!-- include_sync_account.xml -->
  	<string name="connect_other_accounts">Andere Accounts verbinden</string>

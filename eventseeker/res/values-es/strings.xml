@@ -18,8 +18,8 @@
     <string name="menu_calendar">Calendar</string>
     <string name="artist_on_tour">" En gira "</string>
     <string name="title_event_details">Detalles del evento</string>
-    <string name="title_artist_details">Noticías del artista</string>
-    <string name="title_venue_details">Venue Details</string>
+    <string name="title_artist_details">Detalles del artista</string>
+    <string name="title_venue_details">Dettagli</string>
     <string name="title_following">Siguiendo</string>
     <string name="title_my_events">Mis eventos</string>
     <string name="title_artists_news">Noticia del artista</string>
@@ -113,7 +113,7 @@
     <string name="txt_view_less">Ver menos</string>
 
     <!-- fragment_device_library.xml -->
-    <string name="txt_service_desc_txt_fragment_device_library">Would you like the application to search your music library for artists that you can then follow? The artists will be placed under the \"Following\" section.</string>
+    <string name="txt_service_desc_txt_fragment_device_library">¿Te gustaría que la aplicación buscara a los distintos artistas de tu lista de reproducciones para que los puedas seguir? Se irán almacenando en la sección "Siguiendo".</string>
     <string name="retrieve_artists">Recuperar los artistas</string>
  
     <!-- Strings used for event category titles -->
