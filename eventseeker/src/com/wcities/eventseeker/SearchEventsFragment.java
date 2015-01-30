@@ -461,7 +461,6 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 							
 						case MotionEvent.ACTION_UP:
 						case MotionEvent.ACTION_CANCEL:
-							Log.d(TAG, "letParentHandleTouchEvent : " + letParentHandleTouchEvent);
 							holder.rltLytRoot.setPressed(false);
 							if (letParentHandleTouchEvent) {
 								letParentHandleTouchEvent = false;//resetting the value
