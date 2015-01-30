@@ -170,7 +170,8 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 				loadEvents.cancel(true);
 			}
 
-			eventList = null;
+			eventList.clear();
+			eventList.add(null);
 			eventListAdapter.notifyDataSetChanged();
 
 			loadItemsInBackground();
