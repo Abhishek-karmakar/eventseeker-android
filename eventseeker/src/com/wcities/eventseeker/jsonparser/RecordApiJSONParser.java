@@ -26,6 +26,7 @@ public class RecordApiJSONParser {
 	private static final String KEY_ADDRESS1 = "address1";
 	private static final String KEY_ADDRESS2 = "address2";
 	private static final String KEY_CITY = "city";
+	private static final String KEY_STATE = "state";
 	private static final String KEY_COUNTRY = "country";
 	private static final String KEY_LONG_DESC = "long_desc";
 	private static final String KEY_LATITUDE = "latitude";
@@ -123,6 +124,9 @@ public class RecordApiJSONParser {
 			address.setAddress2(ConversionUtil.decodeHtmlEntities(jsonObject, KEY_ADDRESS2));
 		}
 		address.setCity(ConversionUtil.decodeHtmlEntities(jsonObject, KEY_CITY));
+		if (jsonObject.has(KEY_STATE)) {
+			address.setState(ConversionUtil.decodeHtmlEntities(jsonObject, KEY_STATE));
+		}
 		address.setCountry(getCountry(jsonObject.getJSONObject(KEY_COUNTRY)));
 		if (jsonObject.has(KEY_LATITUDE)) {
 			String strLat = jsonObject.getString(KEY_LATITUDE);

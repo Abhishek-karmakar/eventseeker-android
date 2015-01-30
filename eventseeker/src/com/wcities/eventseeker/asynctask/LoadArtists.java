@@ -24,11 +24,14 @@ public class LoadArtists extends AsyncTask<String, Void, List<Artist>> {
 	private ArtistListAdapter<String> artistListAdapter;
 	private String oauthToken;
 	private final int ARTISTS_LIMIT = 10;
+	private String userId;
 	
-	public LoadArtists(String oauthToken, List<Artist> artistList, ArtistListAdapter<String> artistListAdapter) {
+	public LoadArtists(String oauthToken, List<Artist> artistList, ArtistListAdapter<String> artistListAdapter, 
+			String userId) {
 		this.oauthToken = oauthToken;
 		this.artistList = artistList;
 		this.artistListAdapter = artistListAdapter;
+		this.userId = userId;
 	}
 
 	@Override
@@ -38,6 +41,8 @@ public class LoadArtists extends AsyncTask<String, Void, List<Artist>> {
 		artistApi.setLimit(ARTISTS_LIMIT);
 		artistApi.setAlreadyRequested(artistListAdapter.getArtistsAlreadyRequested());
 		artistApi.setMethod(Method.artistSearch);
+		artistApi.setTrackingEnabled(true);
+		artistApi.setUserId(userId);
 
 		try {
 			artistApi.setArtist(URLEncoder.encode(params[0], AppConstants.CHARSET_NAME));

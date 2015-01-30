@@ -31,8 +31,7 @@ public class SearchEventsFragment extends SearchEventsParentFragment implements 
 	private double[] latLon;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		return super.onCreateView(inflater, container, savedInstanceState);
 	}
 
@@ -56,7 +55,8 @@ public class SearchEventsFragment extends SearchEventsParentFragment implements 
 			eventListAdapter.updateContext(FragmentUtil.getActivity(this));
 		}
 
-		setListAdapter(eventListAdapter);
+		//TODO:need to make changes as per recyclerview
+		//setListAdapter(eventListAdapter);
 	}
 
 	@Override

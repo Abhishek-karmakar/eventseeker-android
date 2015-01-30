@@ -7,7 +7,7 @@ public class Address implements Serializable {
 	private static final String TAG = Address.class.getName();
 	
 	private String address1, address2;
-	private String city;
+	private String city, state;
 	private Country country;
 	private double lat, lon;
 
@@ -33,6 +33,14 @@ public class Address implements Serializable {
 
 	public void setCity(String city) {
 		this.city = city;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
 	}
 
 	public Country getCountry() {

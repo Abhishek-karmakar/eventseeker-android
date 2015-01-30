@@ -63,7 +63,6 @@
     
     <!-- Following section screen names -->
     <string name="title_find_more_artist">Find More Artists</string>
-
     <string name="title_popular">Popular</string>
     <string name="title_featured_list">Featured List</string>
     <string name="title_comedy">Comedy</string>
@@ -376,7 +375,7 @@
     <string name="twitter_call_limit_exceeded">Your twitter call limit is exceeded. Please retry after some time.</string>
     
     <!-- SignUpFragment -->
-    <string name="error_title">Error</string>
+    <string name="error_title">@string/error</string>
     <string name="error_email_invalid">THIS EMAIL IS INVALID</string>
     <string name="error_email_exists">THIS EMAIL ALREADY EXISTS</string>
     <string name="error_pass_do_not_match">PASSWORDS DO NOT MATCH</string>
@@ -450,7 +449,7 @@
     <!-- DiscoverSettingDialogFragment -->
     <string name="txt_search_radius">Search Radius (Miles)</string>
     <string name="txt_select_date">Select Date</string>
-    <string name="title_dialog_discover_setting">Settings</string>
+    <string name="title_dialog_discover_setting">@string/title_settings_mobile_app</string>
     
     <!--  fragment_discover.xml -->
     <string name="txt_no_events">No events currently in your location. Try another category or search a new location / Radius.</string>
@@ -461,6 +460,18 @@
     
     <!-- fragment_event_details.xml -->
     <string name="featuring">Featuring</string>
+    
+    <!-- LauncherFragment -->
+    <string name="firstTitle">Explore</string>
+    <string name="secondTitle">Discover</string>
+    <string name="thirdTitle">Connect</string>
+    <string name="forthTitle">Experience</string>
+    
+    <string name="firstTitleDescription">Millions of events worldwide, just a click away. Concerts, Sports, Theater, Festivals, and more.</string>
+    <string name="secondTitleDescription">After you sync, we\'ll recommend customized events. Receive alerts and find tickets in any city.</string>
+    <string name="thirdTitleDescription">Get social with friends and family. We make sharing events easy.</string>
+    <string name="forthTitleDescription">Minimize your search and maximise your discovery. Get out into the world, with eventseeker.</string>
+    
     
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     

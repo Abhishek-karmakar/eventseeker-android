@@ -68,17 +68,17 @@
     
     <!-- PagerTitle Array -->
     <string-array name="pagerTitleArray">
-        <item>Explore</item>
-        <item>Discover</item>
-        <item>Connect</item>
-        <item>Experience</item>
+        <item>@string/firstTitle</item>
+        <item>@string/secondTitle</item>
+        <item>@string/thirdTitle</item>
+        <item>@string/forthTitle</item>
     </string-array>
 
     <string-array name="pagerTitleDescArray">
-        <item>Millions of events worldwide, just a click away. Concerts, Sports, Theater, Festivals, and more.</item>
-        <item>After you sync, we\'ll recommend customized events. Receive alerts and find tickets in any city.</item>
-        <item>Get social with friends and family. We make sharing events easy.</item>
-        <item>Minimize your search and maximise your discovery. Get out into the world, with eventseeker.</item>
+        <item>@string/firstTitleDescription</item>
+        <item>@string/secondTitleDescription</item>
+        <item>@string/thirdTitleDescription</item>
+        <item>@string/forthTitleDescription</item>
     </string-array>
     
     <!-- starts for bosch -->

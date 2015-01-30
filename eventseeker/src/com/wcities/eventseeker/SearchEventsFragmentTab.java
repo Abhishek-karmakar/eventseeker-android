@@ -58,7 +58,8 @@ public class SearchEventsFragmentTab extends SearchEventsParentFragment implemen
 			eventListAdapter.updateContext(FragmentUtil.getActivity(this));
 		}
 
-		setListAdapter(eventListAdapter);
+		//TODO:make appropriate changes as per recyclerview
+		//setListAdapter(eventListAdapter);
 	}
 	
 	@Override

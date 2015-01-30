@@ -38,6 +38,7 @@
     <string name="title_rdio">Rdio</string>
     <string name="title_lastfm">last.fm</string>
     <string name="title_pandora">Pandora</string>
+    <string name="title_settings_mobile_app">Configurações</string>
     <string name="title_web">Web</string>
     
     <string name="no_items_found_pls_login">Please login with Facebook or Google from \'Sync Accounts\' page to see</string>
@@ -66,7 +67,9 @@
     <string name="navigation_drawer_item_friends_activity">@string/title_friends_activity</string>
     <string name="navigation_drawer_item_following">@string/title_following</string>
     <string name="navigation_drawer_section_settings">Configurações</string>
-    <string name="navigation_drawer_item_sync_accounts">Sincronizar contas</string>
+    <string name="navigation_drawer_item_settings">Configurações</string>
+    <string name="navigation_drawer_item_logout">Sair da sessão</string>
+    <string name="navigation_drawer_item_sync_accounts">Ligar Contas</string>
     <string name="navigation_drawer_item_change_location">@string/title_change_location</string>
     <string name="navigation_drawer_item_language">@string/title_language</string>
     <string name="navigation_drawer_section_about">Sobre</string>
@@ -190,10 +193,15 @@
 	<string name="syncing_rdio">Sincronizando Rdio</string>
 	<string name="syncing_last_fm">Sincronizando Last.fm</string>
 	<string name="syncing_pandora">Sincronizando Pandora</string>
+	<string name="artist_synced">Artistas Sincronizados</string>
     
+	<!-- Following -->
+    <string name="follow_more_artists">Segue mais artistas +</string>
+	
    	<!-- My Events -->
     <string name="following">Seguindo</string>
     <string name="recommended">Recomendada</string>
+    <string name="saved_event">Guardado</string>
    	
    	<!-- Search Results -->
     <string name="artists">Artistas</string>
@@ -301,6 +309,49 @@
  
     <!-- RdioFragment -->
     <string name="user_name_or_email">Nome de utilizador ou email</string>
+    
+    <!-- LauncherFragment -->
+    <string name="firstTitle">Explorar</string>
+    <string name="secondTitle">Descobrir</string>
+    <string name="thirdTitle">Conectar-se</string>
+    <string name="forthTitle">Viver</string>
+    <string name="firstTitleDescription">Milhões de eventos no mundo, só precisa um clic. Concertos, sport, teatro, feiras e muito mais!</string>
+    <string name="secondTitleDescription">Após a sincronização, recomendamos uns eventos personalizados. Recebir alertas e encontrar bilhetes em qualquer cidade.</string>
+    <string name="thirdTitleDescription">Fique em contacto com amigos e familia. Fazemos que a partilha de eventos seja fácil.</string>
+    <string name="forthTitleDescription">Minimizar sua procura e aumentar seu descobrimento. Vai e descobre o mundo com eventseeker.</string>
+    <string name="log_in">Conectar-se</string>
+    <string name="sign_up">Registar-se</string>
+    
+    <!-- SignUpFragment -->
+    <string name="sign_up_with_email">Conectar-se com email</string>
+    <string name="first_name">Nome</string>
+    <string name="last_name">Sobrenome</string>
+    <string name="email">Email</string>
+    <string name="password">Senha</string>
+    <string name="confirm_password">Confirmar a senha</string>
+    
+    <!-- FollowMoreArtistFragment -->
+    <string name="btn_sync_accounts">Sync Accounts</string>
+    <string name="btn_popular_artists">Popular</string>
+    <string name="btn_recommended">Recomendada</string>
+    <string name="btn_search">Search</string>
+    <string name="title_find_more_artist">Find More Artists</string>
+    
+    <!-- PopularArtistsFragment -->
+    <string name="btn_featured">Featured</string>
+    <string name="btn_music">Music</string>
+    <string name="btn_comedy">Comedy</string>
+    <string name="btn_theater">Theater</string>
+    <string name="btn_sports">Sports</string>
+    
+    <!-- RecommendedArtistsFragment -->
+    <string name="btn_follow_all">Segue todos</string>
+    <string name="a_z">A - Z</string>
+    <string name="recommendation_score">Recommendation Score</string>
+    <string name="dialog_title_follow_all">Segue todos</string>
+    <string name="dialog_msg_follow_all">Do you want to follow %1$d artists?</string>
+    <string name="dialog_btn_yes">yes</string>
+    <string name="dialog_btn_no">no</string>
     
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>

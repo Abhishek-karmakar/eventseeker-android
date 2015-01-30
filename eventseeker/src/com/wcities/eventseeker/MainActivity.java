@@ -1576,7 +1576,7 @@ public class MainActivity extends ActionBarActivity implements
 			case SYNC_ACCOUNTS:
 		    	ConnectAccountsFragment connectAccountsFragment = new ConnectAccountsFragment();
 		    	selectNonDrawerItem(connectAccountsFragment, AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS, 
-		    			getResources().getString(R.string.title_connect_accounts), true);
+		    			getResources().getString(R.string.navigation_drawer_item_sync_accounts), true);
 		    	break;
 				
 			case CHANGE_LOCATION:
@@ -1747,7 +1747,7 @@ public class MainActivity extends ActionBarActivity implements
 					AppConstants.FRAGMENT_TAG_SETTINGS);
 
 		} else if (fragment instanceof ConnectAccountsFragment) {
-			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_connect_accounts),
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.navigation_drawer_item_sync_accounts),
 					AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS);
 
 		} else if (fragment instanceof ChangeLocationFragment) {

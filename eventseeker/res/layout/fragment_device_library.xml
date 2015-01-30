@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dark_gray"
+    android:layout_marginTop="@dimen/common_t_mar_pad_for_all_layout"
     android:padding="@dimen/rlt_layout_root_pad_fragment_device_library" >
 
     <RelativeLayout

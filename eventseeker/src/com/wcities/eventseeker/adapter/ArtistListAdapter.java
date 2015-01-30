@@ -3,26 +3,34 @@ package com.wcities.eventseeker.adapter;
 import java.util.List;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.wcities.eventseeker.GeneralDialogFragment;
+import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.adapter.MyArtistListAdapter.AdapterFor;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
+import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.interfaces.ArtistListener;
+import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 
 public class ArtistListAdapter<T> extends BaseAdapter {
@@ -37,6 +45,16 @@ public class ArtistListAdapter<T> extends BaseAdapter {
     private boolean isMoreDataAvailable = true;
     private LoadItemsInBackgroundListener mListener;
     private int artistsAlreadyRequested;
+    private ArtistTrackingListener artistTrackingListener;
+    private DialogBtnClickListener dialogBtnClickListener;
+    
+    public ArtistListAdapter(Context context, List<Artist> artistList, AsyncTask<T, Void, List<Artist>> 
+    loadArtists, LoadItemsInBackgroundListener listener, ArtistTrackingListener artistTrackingListener,
+    DialogBtnClickListener dialogBtnClickListener) {
+    	this(context, artistList, loadArtists, listener);
+    	this.artistTrackingListener = artistTrackingListener;
+    	this.dialogBtnClickListener = dialogBtnClickListener;
+    }
 
     public ArtistListAdapter(Context context, List<Artist> artistList, AsyncTask<T, Void, List<Artist>> 
     		loadArtists, LoadItemsInBackgroundListener listener) {
@@ -57,7 +75,7 @@ public class ArtistListAdapter<T> extends BaseAdapter {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		//Log.d(TAG, "pos = " + position);
 		if (artistList.get(position) == null) {
 			if (convertView == null || !convertView.getTag().equals(AppConstants.TAG_PROGRESS_INDICATOR)) {
@@ -96,6 +114,37 @@ public class ArtistListAdapter<T> extends BaseAdapter {
 				}
 			}
 			
+			CheckBox chkFollow = (CheckBox) convertView.findViewById(R.id.chkFollow);
+			chkFollow.setSelected(artist.getAttending() == Attending.Tracked);
+			chkFollow.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Resources res = mContext.getResources();
+					if (artist.getAttending() == Attending.Tracked) {
+						GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
+								dialogBtnClickListener,						
+								res.getString(R.string.remove_artist),  
+								res.getString(R.string.are_you_sure_you_want_to_remove_this_artist),  
+								res.getString(R.string.btn_cancel),  
+								res.getString(R.string.btn_Ok), false);
+						generalDialogFragment.show(((ActionBarActivity) mContext).getSupportFragmentManager(), "" + position);
+						
+					} else {
+						/**
+						 * This is the case, where user wants to Track an Artist. So, no dialog here.
+						 */
+						if (artistTrackingListener != null) {
+							artistTrackingListener.onArtistTracking(mContext, getItem(position));
+						}
+					}
+					/**
+					 * Pass the position as tag. So, that in Positive button if response comes as
+					 * true then we can remove that Artist.
+					 */
+				}
+			});
+			
 			String key = artist.getKey(ImgResolution.LOW);
 			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 			if (bitmap != null) {
@@ -121,6 +170,13 @@ public class ArtistListAdapter<T> extends BaseAdapter {
 		}
 		
 		return convertView;
+	}
+	
+	public void unTrackArtistAt(final int position) {
+		if (artistTrackingListener != null) {
+			artistTrackingListener.onArtistTracking(mContext, getItem(position));
+			notifyDataSetChanged();
+		}
 	}
 
 	@Override
