@@ -1520,9 +1520,7 @@ public class MainActivity extends ActionBarActivity implements
 		Bundle args = new Bundle();
 		args.putSerializable(BundleKeys.VENUE, venue);
 		venueDetailsFragment.setArguments(args);
-		selectNonDrawerItem(venueDetailsFragment,
-				AppConstants.FRAGMENT_TAG_VENUE_DETAILS, getResources()
-						.getString(R.string.title_venue_details), true);
+		selectNonDrawerItem(venueDetailsFragment, AppConstants.FRAGMENT_TAG_VENUE_DETAILS, "", true);
 	}
 
 	@Override
@@ -1828,7 +1826,7 @@ public class MainActivity extends ActionBarActivity implements
 			}
 
 		} else if (fragment instanceof VenueDetailsFragment) {
-			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_venue_details),
+			onFragmentResumed(AppConstants.INVALID_INDEX, ((VenueDetailsFragment)fragment).getCurrentTitle(),
 					AppConstants.FRAGMENT_TAG_VENUE_DETAILS);
 
 		} else if (fragment instanceof DeviceLibraryFragment) {
@@ -1981,7 +1979,9 @@ public class MainActivity extends ActionBarActivity implements
 				 */
 				if (!isTabletAndInLandscapeMode) {
 					Fragment currentFrag = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
-					if (currentFrag instanceof CustomSharedElementTransitionDestination) {
+					if (currentFrag instanceof CustomSharedElementTransitionDestination && 
+							currentFrag.getArguments() != null && currentFrag.getArguments().containsKey(
+									BundleKeys.SHARED_ELEMENTS)) {
 						//Log.d(TAG, "CustomSharedElementTransitionDestination, exitAnimCalled = " + exitAnimCalled);
 						if (exitAnimCalled) {
 				    		exitAnimCalled = false;

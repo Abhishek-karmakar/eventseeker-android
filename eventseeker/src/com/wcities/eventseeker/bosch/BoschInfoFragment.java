@@ -79,7 +79,7 @@ public class BoschInfoFragment extends BoschFragmentLoadableFromBackStack implem
 		} else {
 			if (event != null) {
 				date = event.getSchedule().getDates().get(0);
-				address = event.getSchedule().getVenue().getFormatedAddress();
+				address = event.getSchedule().getVenue().getFormatedAddress(true);
 				fullDescription = event.getDescription();
 
 				if (fullDescription == null) {
@@ -87,7 +87,7 @@ public class BoschInfoFragment extends BoschFragmentLoadableFromBackStack implem
 				}
 			
 			} else if (venue != null) {
-				address = venue.getFormatedAddress();
+				address = venue.getFormatedAddress(true);
 				fullDescription = venue.getLongDesc();
 			}
 			txtAddress.setText(address);

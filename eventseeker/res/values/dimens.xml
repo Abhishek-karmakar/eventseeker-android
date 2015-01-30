@@ -168,7 +168,6 @@
     <!-- activity_venue_details.xml -->
     <dimen name="rlt_layout_root_pad_venue_details">7dp</dimen>
     <dimen name="img_venue_w_venue_details">100dp</dimen>
-    <dimen name="img_venue_ht_venue_details">75dp</dimen>
     <dimen name="img_venue_margin_b_venue_details">@dimen/rlt_layout_root_pad_venue_details</dimen>
     <dimen name="img_venue_location_w_venue_details">20dp</dimen>
     <dimen name="img_venue_location_ht_venue_details">20dp</dimen>
@@ -668,28 +667,40 @@
     in center vertical position, we leave aside 8dp more (for top). Hence ht comes out as 56 - 2*8 = 40dp 
     txt_artist_title_ht_artist_details = action_bar_ht - 2*rlt_lyt_txt_artist_title_pad_b_artist_details -->
     <dimen name="txt_artist_title_ht_artist_details">40dp</dimen>
-    <dimen name="txt_desc_margin_l_artist_details">16dp</dimen>
-    <dimen name="txt_artist_details_margin_r_artist_details">16dp</dimen>
-    <dimen name="txt_desc_margin_t_artist_details">15dp</dimen>
-    <dimen name="lnr_lyt_expand_desc_margin_l_artist_details">16dp</dimen>
-    <dimen name="lnr_lyt_expand_desc_margin_t_artist_details">@dimen/txt_desc_margin_t_artist_details</dimen>
-    <dimen name="img_down_margin_r_artist_details">@dimen/txt_desc_margin_l_artist_details</dimen>
     <dimen name="v_hor_line_ht_artist_details">1dp</dimen>
-    <dimen name="prgs_bar_margin_t_artist_details">@dimen/txt_desc_margin_t_artist_details</dimen>
-    <dimen name="txt_videos_margin_t_artist_details">@dimen/txt_desc_margin_t_artist_details</dimen>
+    <dimen name="txt_videos_margin_t_artist_details">@dimen/txt_desc_margin_t_rv_item_desc</dimen>
     <dimen name="txt_artist_details_txt_size_artist_details">16sp</dimen>
     <dimen name="v_pager_videos_ht_artist_details">150dp</dimen>
-    <dimen name="v_pager_videos_margin_t_artist_details">@dimen/txt_desc_margin_t_artist_details</dimen>
+    <dimen name="v_pager_videos_margin_t_artist_details">@dimen/txt_desc_margin_t_rv_item_desc</dimen>
     <dimen name="v_hor_line_margin_l_artist_details">16dp</dimen>
     <dimen name="v_hor_line_margin_r_artist_details">@dimen/v_hor_line_margin_l_artist_details</dimen>
-    <dimen name="v_hor_line_margin_t_artist_details">@dimen/txt_desc_margin_t_artist_details</dimen>
+    <dimen name="v_hor_line_margin_t_artist_details">@dimen/txt_desc_margin_t_rv_item_desc</dimen>
     <!-- fab_margin_t_artist_details = (img_artist_ht_artist_details - fab_ht(56 for normal size)*2/3)
     = 230 - 37 = 193 -->
     <dimen name="fab_margin_t_artist_details">193dp</dimen>
     <dimen name="fab_margin_b_artist_details">16dp</dimen>
     <dimen name="fab_margin_r_artist_details">@dimen/fab_margin_b_artist_details</dimen>
+    <!-- rv_item_desc.xml -->
+    <dimen name="prgs_bar_margin_t_rv_item_desc">@dimen/txt_desc_margin_t_rv_item_desc</dimen>
+    <dimen name="txt_desc_margin_l_rv_item_desc">16dp</dimen>
+    <dimen name="txt_desc_margin_r_rv_item_desc">16dp</dimen>
+    <dimen name="txt_desc_margin_t_rv_item_desc">15dp</dimen>
+    <dimen name="img_down_margin_l_rv_item_desc">16dp</dimen>
+    <dimen name="img_down_margin_r_rv_item_desc">@dimen/txt_desc_margin_l_rv_item_desc</dimen>
+    <dimen name="img_down_margin_t_rv_item_desc">@dimen/txt_desc_margin_t_rv_item_desc</dimen>
     <!-- fragment_video.xml -->
     <dimen name="rlt_lyt_root_w_video">200dp</dimen>
+    <!-- fragment_venue_details.xml -->
+    <dimen name="img_venue_ht_venue_details">@dimen/img_artist_ht_artist_details</dimen>
+    <dimen name="rlt_lyt_txt_venue_title_pad_l_venue_details">@dimen/rlt_lyt_txt_artist_title_pad_l_artist_details</dimen>
+    <dimen name="rlt_lyt_txt_venue_title_pad_b_venue_details">@dimen/rlt_lyt_txt_artist_title_pad_b_artist_details</dimen>
+    <dimen name="rlt_lyt_txt_venue_title_pad_t_venue_details">@dimen/rlt_lyt_txt_artist_title_pad_t_artist_details</dimen>
+    <dimen name="txt_venue_title_ht_venue_details">@dimen/txt_artist_title_ht_artist_details</dimen>
+    <dimen name="txt_venue_title_txt_size_venue_details">@dimen/txt_artist_title_txt_size_artist_details</dimen>
+    <!-- rv_item_address_map_venue_details.xml -->
+    <dimen name="v_fab_separator_w_rv_item_address_map_venue_details">70dp</dimen>
+    <dimen name="v_fab_separator_h_rv_item_address_map_venue_details">1dp</dimen>
+    <dimen name="fab_margin_t_rv_item_address_map_venue_details">20dp</dimen>
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <!-- activity_bosch_main.xml -->
     <dimen name="b_root_navigation_drawer_w_main">210dp</dimen>

@@ -29,7 +29,6 @@
 	    	    android:layout_width="match_parent"
 	    	    android:layout_height="@dimen/txt_artist_title_ht_artist_details"
 	    	    android:textColor="@android:color/white"
-	    	    android:text="artist name"
 	    	    android:textSize="@dimen/txt_artist_title_txt_size_artist_details"
 	    	    android:gravity="center_vertical"
 	    	    android:singleLine="true"

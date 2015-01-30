@@ -185,6 +185,8 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			artist = (Artist) args.getSerializable(BundleKeys.ARTIST);
 			artist.getVideos().clear();
 			artist.getFriends().clear();
+			
+			updateShareIntent();
 		}
 		
 		Resources res = FragmentUtil.getResources(this);
@@ -252,9 +254,18 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
             }
         });
 		
-		if (isOnCreateViewCalledFirstTime && sharedElements != null) {
+		if (isOnCreateViewCalledFirstTime) {
 			isOnCreateViewCalledFirstTime = false;
-			animateSharedElements();
+			
+			if (sharedElements != null) {
+				animateSharedElements();
+				
+			} else {
+				rootView.setBackgroundColor(Color.WHITE);
+				
+				loadArtistDetails = new LoadArtistDetails(Api.OAUTH_TOKEN, artist, this, this);
+				AsyncTaskUtil.executeAsyncTask(loadArtistDetails, true);
+			}
 		}
 		
 		return rootView;
@@ -699,6 +710,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		allDetailsLoaded = true;
 		fabSave.setSelected(artist.getAttending() == Artist.Attending.Tracked);
 		artistRVAdapter.notifyDataSetChanged();
+		updateShareIntent();
 	}
 
 	@Override
@@ -1207,7 +1219,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 				break;
 				
 			case DESC:
-				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_desc_artist_details, 
+				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_desc, 
 						parent, false);
 				break;
 				

@@ -269,9 +269,16 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
                     }
                 });
 		
-		if (isOnCreateViewCalledFirstTime && sharedElements != null) {
+		if (isOnCreateViewCalledFirstTime) { 
 			isOnCreateViewCalledFirstTime = false;
-			animateSharedElements();
+			
+			if (sharedElements != null) {
+				animateSharedElements();
+				
+			} else {
+				loadEventDetails = new LoadEventDetails(Api.OAUTH_TOKEN, this, this, event);
+				AsyncTaskUtil.executeAsyncTask(loadEventDetails, true);
+			}
 		}
 		
 		return rootView;
@@ -850,6 +857,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		switch (v.getId()) {
 		
 		case R.id.txtEvtLoc:
+		case R.id.txtVenue:
 			((VenueListener)FragmentUtil.getActivity(this)).onVenueSelected(event.getSchedule().getVenue());
 			break;
 			

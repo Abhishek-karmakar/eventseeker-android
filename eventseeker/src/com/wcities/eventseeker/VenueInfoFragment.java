@@ -289,7 +289,7 @@ public class VenueInfoFragment extends Fragment implements OnClickListener, Asyn
 			updateImgVisibility();
 			updateDescVisibility();
 			updateAddress();
-			((VenueDetailsFragment)getParentFragment()).updateShareIntent();
+			((VenueDetailsFragment1)getParentFragment()).updateShareIntent();
 		}    	
     }
 

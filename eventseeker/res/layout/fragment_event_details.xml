@@ -206,6 +206,6 @@
         fab:fab_type="normal"
         fab:fab_colorNormal="@color/colorPrimary"
         fab:fab_colorPressed="@color/colorPrimaryDark"
-        fab:fab_colorRipple="@color/ripple_material_light" />
+        fab:fab_colorRipple="@android:color/white" />
 	
 </FrameLayout>

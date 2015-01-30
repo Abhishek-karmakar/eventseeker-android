@@ -129,7 +129,7 @@ public class BoschVenueDetailsFragment extends BoschFragmentLoadableFromBackStac
 		updateVenueImg();
 		
 		txtVenueName.setText(venue.getName());
-		txtAddress.setText(venue.getFormatedAddress());
+		txtAddress.setText(venue.getFormatedAddress(true));
 		
 		EventSeekr eventSeeker = FragmentUtil.getApplication(this);
 		

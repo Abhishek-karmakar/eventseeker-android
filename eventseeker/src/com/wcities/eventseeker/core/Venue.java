@@ -155,7 +155,7 @@ public class Venue implements Serializable, BitmapCacheable {
 		return new StringBuilder(getClass().getName()).append("_").append(id).append("_").append(imgResolution).toString();
 	}
 	
-	public String getFormatedAddress() {
+	public String getFormatedAddress(boolean includeCountry) {
 		String adrs = "";
 		if (address != null) {
 			if (address.getAddress1() != null) {
@@ -178,7 +178,7 @@ public class Venue implements Serializable, BitmapCacheable {
 				adrs += address.getZip();
 			}*/ 
 			
-			if (address.getCountry() != null) {
+			if (includeCountry && address.getCountry() != null) {
 				if (adrs.length() != 0) {
 					adrs += ", ";
 				}
