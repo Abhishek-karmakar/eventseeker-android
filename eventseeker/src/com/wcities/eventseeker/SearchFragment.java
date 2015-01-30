@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,10 +21,12 @@ import com.wcities.eventseeker.adapter.SwipeTabsAdapter;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
+import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
 
-public class SearchFragment extends FragmentLoadableFromBackStack implements OnClickListener {
+public class SearchFragment extends FragmentLoadableFromBackStack implements OnClickListener/*, 
+		CustomSharedElementTransitionSource*/ {
 	
 	private static final String TAG = SearchFragment.class.getName();
 
@@ -97,24 +100,21 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
     		args = getArguments();
     	}
 
-		TabBar.Tab tabArtists = new TabBar.Tab(btnArtists, FRAGMENT_TAG_ARTISTS, SearchArtistsFragment.class, 
-				args);
+		TabBar.Tab tabArtists = new TabBar.Tab(btnArtists, FRAGMENT_TAG_ARTISTS, SearchArtistsFragment.class, args);
 		mTabsAdapter.addTab(tabArtists, oldAdapter);
 
 		
 		TabBar.Tab tabEvents;
 		
 		if(((MainActivity)FragmentUtil.getActivity(this)).isTablet()) {
-			tabEvents = new TabBar.Tab(btnEvents, FRAGMENT_TAG_EVENTS, SearchEventsFragmentTab.class, 
-				args);
+			tabEvents = new TabBar.Tab(btnEvents, FRAGMENT_TAG_EVENTS, SearchEventsFragmentTab.class, args);
+			
 		} else {
-			tabEvents = new TabBar.Tab(btnEvents, FRAGMENT_TAG_EVENTS, SearchEventsFragment.class, 
-					args);			
+			tabEvents = new TabBar.Tab(btnEvents, FRAGMENT_TAG_EVENTS, SearchEventsFragment.class, args);			
 		}	
 		mTabsAdapter.addTab(tabEvents, oldAdapter);
 		
-		TabBar.Tab tabVenues = new TabBar.Tab(btnVenues, FRAGMENT_TAG_VENUES, SearchVenuesFragment.class, 
-				args);
+		TabBar.Tab tabVenues = new TabBar.Tab(btnVenues, FRAGMENT_TAG_VENUES, SearchVenuesFragment.class, args);
 		mTabsAdapter.addTab(tabVenues, oldAdapter);
 		
 		return v;
@@ -213,4 +213,32 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 	public String getScreenName() {
 		return "Search Screen";
 	}
+
+	/*@Override
+	public void addViewsToBeHidden(View... views) {
+		Log.d(TAG, "tabBar.getSelectedTabTag() : " + tabBar.getSelectedTabTag());
+		((CustomSharedElementTransitionSource) getChildFragmentManager()
+				.findFragmentByTag(tabBar.getSelectedTabTag())).addViewsToBeHidden(views);
+	}
+
+	@Override
+	public void hideSharedElements() {
+		Log.d(TAG, "tabBar.getSelectedTabTag() : " + tabBar.getSelectedTabTag());
+		((CustomSharedElementTransitionSource) getChildFragmentManager()
+				.findFragmentByTag(tabBar.getSelectedTabTag())).hideSharedElements();		
+	}
+
+	@Override
+	public void onPushedToBackStack() {
+		Log.d(TAG, "tabBar.getSelectedTabTag() : " + tabBar.getSelectedTabTag());
+		((CustomSharedElementTransitionSource) getChildFragmentManager()
+				.findFragmentByTag(tabBar.getSelectedTabTag())).onPushedToBackStack();
+	}
+
+	@Override
+	public void onPoppedFromBackStack() {
+		Log.d(TAG, "tabBar.getSelectedTabTag() : " + tabBar.getSelectedTabTag());
+		((CustomSharedElementTransitionSource) getChildFragmentManager()
+				.findFragmentByTag(tabBar.getSelectedTabTag())).onPoppedFromBackStack();		
+	}*/
 }

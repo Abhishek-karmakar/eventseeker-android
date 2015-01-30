@@ -219,6 +219,25 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	}
 	
 	@Override
+	public void onStart() {
+		super.onStart();
+		((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportActionBar().hide();
+
+		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		ma.setVStatusBarVisibility(View.GONE, AppConstants.INVALID_ID);
+	}
+	
+	@Override
+	public void onStop() {
+		super.onStop();
+		//Log.d(TAG, "onStop()");
+		((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportActionBar().show();
+		
+		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		ma.setVStatusBarVisibility(View.VISIBLE, R.color.colorPrimaryDark);
+	}
+	
+	@Override
 	public void onDestroy() {
 		super.onDestroy();
 		if (loadMyEventsCount != null && loadMyEventsCount.getStatus() != Status.FINISHED) {

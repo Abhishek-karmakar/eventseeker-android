@@ -19,7 +19,6 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
-import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
 public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 	
@@ -64,6 +63,17 @@ public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 			String wcitiesId, long venueId) {
 		this(oauthToken, eventList, eventListAdapter, wcitiesId);
 		this.venueId = venueId;
+	}
+	
+	public LoadEvents(String oauthToken, List<Event> eventList, DateWiseEventParentAdapterListener eventListAdapter, String query, 
+			double lat, double lon, int miles, String wcitiesId, String startDate, String endDate) {
+		this(oauthToken, eventList, eventListAdapter, wcitiesId);
+		this.lat = lat;
+		this.lon = lon;
+		this.query = query;
+		this.miles = miles;
+		this.startDate = startDate;
+		this.endDate = endDate;
 	}
 
 	@Override
