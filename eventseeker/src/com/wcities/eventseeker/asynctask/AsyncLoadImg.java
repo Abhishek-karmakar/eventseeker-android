@@ -344,6 +344,10 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 							imgDetails.imageView.setImageBitmap(imgDetails.bitmap);
 							//Log.i(TAG, "onProgressUpdate() bitmap set");
 						}
+						
+						if (imgDetails.listener != null) {
+							imgDetails.listener.onImageLoaded();
+						}
 					}
 					
 				} else {

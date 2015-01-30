@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 
 import com.wcities.eventseeker.api.EventApi;
+import com.wcities.eventseeker.api.EventApi.IdType;
 import com.wcities.eventseeker.api.EventApi.MoreInfo;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
@@ -35,30 +36,40 @@ public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 	private int miles;
 	private String wcitiesId, oauthToken;
 	
+	private long venueId;
+	
 	private DateWiseEventParentAdapterListener eventListAdapter;
 	
 	private LoadEvents(String oauthToken, List<Event> eventList, DateWiseEventParentAdapterListener eventListAdapter, 
-			double lat, double lon, String wcitiesId) {
+			String wcitiesId) {
 		this.oauthToken = oauthToken;
 		this.eventList = eventList;
 		this.eventListAdapter = eventListAdapter;
-		this.lat = lat;
-		this.lon = lon;
 		this.wcitiesId = wcitiesId;
 	}
 
 	public LoadEvents(String oauthToken, List<Event> eventList, DateWiseEventParentAdapterListener eventListAdapter, double lat, 
 			double lon, String startDate, String endDate, int categoryId, String wcitiesId, int miles) {
-		this(oauthToken, eventList, eventListAdapter, lat, lon, wcitiesId);
+		this(oauthToken, eventList, eventListAdapter, wcitiesId);
+		this.lat = lat;
+		this.lon = lon;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.categoryId = categoryId;
 		this.miles = miles;
 	}
 	
+	public LoadEvents(String oauthToken, List<Event> eventList, DateWiseEventParentAdapterListener eventListAdapter, 
+			String wcitiesId, long venueId) {
+		this(oauthToken, eventList, eventListAdapter, wcitiesId);
+		this.venueId = venueId;
+	}
+	
 	public LoadEvents(String oauthToken, List<Event> eventList, DateWiseEventParentAdapterListener eventListAdapter, String query, 
 			double lat, double lon, int miles, String wcitiesId, String startDate, String endDate) {
-		this(oauthToken, eventList, eventListAdapter, lat, lon, wcitiesId);
+		this(oauthToken, eventList, eventListAdapter, wcitiesId);
+		this.lat = lat;
+		this.lon = lon;
 		this.query = query;
 		this.miles = miles;
 		this.startDate = startDate;
@@ -71,13 +82,21 @@ public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 		int eventsAlreadyRequested = eventListAdapter.getEventsAlreadyRequested();
 		
 		EventApi eventApi;
-		eventApi = new EventApi(oauthToken, lat, lon);
+		if (venueId != 0) {
+			eventApi = new EventApi(oauthToken, venueId, IdType.VENUE);
+			
+		} else {
+			eventApi = new EventApi(oauthToken, lat, lon);
+		}
 		eventApi.setLimit(EVENTS_LIMIT);
 		eventApi.setAlreadyRequested(eventsAlreadyRequested);
 		eventApi.addMoreInfo(MoreInfo.fallbackimage);
-		eventApi.setUserId(wcitiesId);//it can be null also
-		eventApi.setStart(startDate);
-		eventApi.setEnd(endDate);
+		eventApi.setUserId(wcitiesId);
+		
+		if (startDate != null) {
+			eventApi.setStart(startDate);
+			eventApi.setEnd(endDate);
+		}
 
 		if (miles != 0) {
 			eventApi.setMiles(miles);
@@ -87,8 +106,7 @@ public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 			if (query != null) {
 				eventApi.setSearchFor(URLEncoder.encode(query, AppConstants.CHARSET_NAME));
 				
-			} else {
-				// in case if this AsyncTask is called from DiscoverByCategoryFragment.
+			} else if (categoryId != 0) {
 				eventApi.setCategory(categoryId);
 			}
 			
