@@ -55,6 +55,15 @@ public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 		this.categoryId = categoryId;
 		this.miles = miles;
 	}
+	
+	public LoadEvents(String oauthToken, List<Event> eventList, DateWiseEventParentAdapterListener eventListAdapter, String query, 
+			double lat, double lon, int miles, String wcitiesId, String startDate, String endDate) {
+		this(oauthToken, eventList, eventListAdapter, lat, lon, wcitiesId);
+		this.query = query;
+		this.miles = miles;
+		this.startDate = startDate;
+		this.endDate = endDate;
+	}
 
 	@Override
 	protected List<Event> doInBackground(Void... params) {
