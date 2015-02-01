@@ -214,13 +214,13 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 		private Event eventPendingPublish;
 		
 		private static enum ViewType {
-			PROGRESS, CONTENT
+			PROGRESS, CONTENT, NO_ITEMS
 		};
 		
 		private static class ViewHolder extends RecyclerView.ViewHolder {
 			
 			private View root, vHandle;
-		    private TextView txtEvtTitle, txtEvtTime, txtEvtLocation;
+		    private TextView txtEvtTitle, txtEvtTime, txtEvtLocation, txtNoItemsFound;
 		    private ImageView imgEvent, imgTicket, imgSave, imgShare;
 		    private LinearLayout lnrSliderContent;
 		    private RelativeLayout rltLytRoot, rltLytContent;
@@ -239,6 +239,7 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 		        imgTicket = (ImageView) root.findViewById(R.id.imgTicket);
 		        imgSave = (ImageView) root.findViewById(R.id.imgSave);
 		        imgShare = (ImageView) root.findViewById(R.id.imgShare);
+		        txtNoItemsFound = (TextView) root.findViewById(R.id.txtNoItemsFound);
 		    }
 		    
 		    private boolean isSliderClose(int rltLytContentInitialMarginL) {
@@ -265,6 +266,9 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 			//Log.d(TAG, "getItemViewType() - pos = " + position);
 			if (eventList.get(position) == null) {
 				return ViewType.PROGRESS.ordinal();
+			
+			} else if (eventList.get(position).getId() == AppConstants.INVALID_ID) {
+				return ViewType.NO_ITEMS.ordinal();				
 				
 			} else {
 				return ViewType.CONTENT.ordinal();
@@ -292,6 +296,10 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 				}
 				
 			} else {
+				if (event.getId() == AppConstants.INVALID_ID) {
+					holder.txtNoItemsFound.setText(R.string.no_event_found);
+					return;
+				}
 				/**
 				 * If user clicks on save & changes orientation before call to onPublishPermissionGranted(), 
 				 * then we need to update holderPendingPublish with right holder pointer in new orientation
@@ -662,6 +670,10 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 				
 			case 1:
 				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_search_event, parent, false);
+				break;
+
+			case 2:
+				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_no_items_found, parent, false);
 				break;
 				
 			default:

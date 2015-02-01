@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.wcities.eventseeker.api.EventApi;
 import com.wcities.eventseeker.api.EventApi.IdType;
@@ -144,6 +145,12 @@ public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 			}
 			
 		} else {
+			if (query != null) {
+				//This block is for Search Event
+				result.add(new Event(AppConstants.INVALID_ID, null));
+				eventList.addAll(eventList.size() - 1, result);
+			}
+			
 			eventListAdapter.setMoreDataAvailable(false);
 			
 			if (!isCancelled()) {
