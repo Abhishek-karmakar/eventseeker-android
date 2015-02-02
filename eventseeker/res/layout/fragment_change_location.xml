@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rootLnrLayout"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rltLytRoot"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/dark_gray"
-    android:padding="@dimen/lnr_layout_root_pad_fragment_change_location" >
+    android:layout_height="match_parent">
     
-</LinearLayout>
+	<LinearLayout android:id="@+id/lnrLytMap"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_marginTop="@dimen/common_t_mar_pad_for_all_layout"
+	    android:orientation="vertical"
+	    android:background="@color/dark_gray"
+	    android:padding="@dimen/lnr_lyt_map_pad_fragment_change_location" >
+	    
+	</LinearLayout>
+
+</RelativeLayout>

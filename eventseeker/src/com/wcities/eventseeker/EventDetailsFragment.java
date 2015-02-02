@@ -892,15 +892,15 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
     			updateFabSaveSrc(FragmentUtil.getResources(this));
 				
 			} else {
-				if (eventSeekr.getFbUserId() != null) {
+				if (eventSeekr.getGPlusUserId() != null) {
+					event.setNewAttending(Attending.SAVED);
+					handlePublishEvent();
+					
+				} else {
 					fbCallCountForSameEvt = 0;
 					event.setNewAttending(Attending.SAVED);
 					FbUtil.handlePublishEvent(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
 							AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
-					
-				} else if (eventSeekr.getGPlusUserId() != null) {
-					event.setNewAttending(Attending.SAVED);
-					handlePublishEvent();
 				}
 			}
 			break;

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.MenuItemCompat.OnActionExpandListener;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.util.Log;
@@ -80,7 +81,7 @@ public class ChangeLocationFragment extends FragmentLoadableFromBackStack implem
         args.putDouble(BundleKeys.LON, lon);
         mMapFragment.setArguments(args);
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.add(R.id.rootLnrLayout, mMapFragment, MAP_FRAGMENT_TAG).commit();
+        transaction.add(R.id.lnrLytMap, mMapFragment, MAP_FRAGMENT_TAG).commit();
         
         return v;
     }

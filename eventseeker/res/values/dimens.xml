@@ -385,7 +385,7 @@
     <dimen name="btn_continue_margin_l_r_fragment_connect_account">40dp</dimen>
     <!-- fragment_about_us.xml -->
     <dimen name="rlt_layout_root_pad_fragment_about_us">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="txt_app_name_margin_t_fragment_about_us">60dp</dimen>
+    <dimen name="txt_app_name_margin_t_fragment_about_us">30dp</dimen>
     <dimen name="txt_app_name_txt_size_fragment_about_us">34sp</dimen>
     <dimen name="txt_app_slogan_margin_t_fragment_about_us">8dp</dimen>
     <dimen name="txt_app_slogan_txt_size_fragment_about_us">20sp</dimen>
@@ -401,7 +401,7 @@
     <dimen name="txt_version_margin_b_fragment_about_us">20dp</dimen>
     <dimen name="txt_powered_by_txt_size_fragment_about_us">12sp</dimen>
     <!-- fragment_change_location.xml -->
-    <dimen name="lnr_layout_root_pad_fragment_change_location">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="lnr_lyt_map_pad_fragment_change_location">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <!-- fragment_eula.xml -->
     <dimen name="rlt_layout_root_pad_fragment_eula">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <!-- fragment_rep_code.xml -->

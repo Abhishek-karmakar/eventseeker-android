@@ -433,8 +433,10 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 					FragmentUtil.getResources(this).getString(R.string.error_unknown_error), "Ok", null, false);
 			generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), 
 					DIALOG_FRAGMENT_TAG_UNKNOWN_ERROR);
-			
 		}
+		
+		// to call onFragmentResumed(Fragment) of MainActivity (to update current fragment tag, etc.)
+		onResume();
 	}
 
 	@Override

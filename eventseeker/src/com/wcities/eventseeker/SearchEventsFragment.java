@@ -829,16 +829,16 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 						searchEventFragment.event = eventPendingPublish = event;
 						holderPendingPublish = holder;
 						
-						if (eventSeekr.getFbUserId() != null) {
+						if (eventSeekr.getGPlusUserId() != null) {
+							event.setNewAttending(Attending.SAVED);
+							searchEventFragment.handlePublishEvent();
+							
+						} else {
 							fbCallCountForSameEvt = 0;
 							event.setNewAttending(Attending.SAVED);
 							//NOTE: THIS CAN BE TESTED WITH PODUCTION BUILD ONLY
 							FbUtil.handlePublishEvent(searchEventFragment, searchEventFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
 									AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
-							
-						} else if (eventSeekr.getGPlusUserId() != null) {
-							event.setNewAttending(Attending.SAVED);
-							searchEventFragment.handlePublishEvent();
 						}
 					}
 				}

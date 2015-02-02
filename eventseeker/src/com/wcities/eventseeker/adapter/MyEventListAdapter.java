@@ -257,14 +257,7 @@ public class MyEventListAdapter extends BaseAdapter implements DateWiseEventPare
 				
 				@Override
 				public void onClick(View v) {
-					if (wcitiesId != null) {
-						onSaveClick(event, fabSave);
-						
-					} else {
-						updateAttendingFabSaved(event, fabSave);
-						Toast.makeText(mContext, 
-							mContext.getString(R.string.pls_login_to_track_evt), Toast.LENGTH_LONG).show();
-					}
+					onSaveClick(event, fabSave);
 				}
 			});
 			
@@ -300,14 +293,20 @@ public class MyEventListAdapter extends BaseAdapter implements DateWiseEventPare
 					event.getAttending().getValue(), UserTrackingType.Add).execute();
 			
 		} else {
-
 			/**
 			 * call to updateAttendingChkBoxes() to negate the click event for now on checkbox, 
 			 * since it's handled after checking fb/google publish permission
 			 */
 			updateAttendingFabSaved(event, fabSave);
 			
-			if (eventSeekr.getFbUserId() != null) {
+			if (eventSeekr.getGPlusUserId() != null) {
+				event.setNewAttending(attending);
+				eventPendingPublish = event;
+				eventPendingPublishFabSave = fabSave;
+				((PublishEventListFragment) mListener).setEvent(eventPendingPublish);
+				((PublishEventListFragment) mListener).handlePublishEvent();
+				
+			} else {
 				event.setNewAttending(attending);
 				eventPendingPublish = event;
 				eventPendingPublishFabSave = fabSave;
@@ -315,13 +314,6 @@ public class MyEventListAdapter extends BaseAdapter implements DateWiseEventPare
 				FbUtil.handlePublishEvent(fbPublishListener, (Fragment) mListener, 
 						AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
 						AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
-				
-			} else if (eventSeekr.getGPlusUserId() != null) {
-				event.setNewAttending(attending);
-				eventPendingPublish = event;
-				eventPendingPublishFabSave = fabSave;
-				((PublishEventListFragment) mListener).setEvent(eventPendingPublish);
-				((PublishEventListFragment) mListener).handlePublishEvent();
 			}
 		}
 	}

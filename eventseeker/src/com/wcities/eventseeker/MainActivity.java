@@ -237,6 +237,7 @@ public class MainActivity extends ActionBarActivity implements
 				//Log.d(TAG, "onBackStackChanged(), newBackStackEntryCount = " + newBackStackEntryCount);
 
 				if (newBackStackEntryCount < prevBackStackEntryCount) {
+					// pop action
 					Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
 					if (fragment instanceof CustomSharedElementTransitionSource) {
 						((CustomSharedElementTransitionSource) fragment).onPoppedFromBackStack();

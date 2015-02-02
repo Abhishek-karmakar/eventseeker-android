@@ -307,6 +307,9 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 			generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), 
 					DIALOG_FRAGMENT_TAG_UNKNOWN_ERROR);
 		}
+		
+		// to call onFragmentResumed(Fragment) of MainActivity (to update current fragment tag, etc.)
+		onResume();
 	}
 
 	@Override
