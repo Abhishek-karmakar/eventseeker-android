@@ -67,6 +67,7 @@ import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.asynctask.LoadEvents;
+import com.wcities.eventseeker.asynctask.LoadEvents.LoadEventsTaskListener;
 import com.wcities.eventseeker.asynctask.LoadVenueDetails;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg.AsyncLoadImageListener;
 import com.wcities.eventseeker.asynctask.LoadVenueDetails.OnVenueUpdatedListener;
@@ -100,7 +101,7 @@ import com.wcities.eventseeker.viewdata.SharedElementPosition;
 
 public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackStack implements DrawerListener, 
 		CustomSharedElementTransitionDestination, OnVenueUpdatedListener, LoadItemsInBackgroundListener, 
-		CustomSharedElementTransitionSource, AsyncLoadImageListener {
+		CustomSharedElementTransitionSource, AsyncLoadImageListener, LoadEventsTaskListener {
 
 	private static final String TAG = VenueDetailsFragment.class.getSimpleName();
 	
@@ -341,6 +342,20 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			totalScrolledDy = 0;
 		}
 		totalScrolledDy += dy;
+		
+		/**
+		 * this is required to prevent changes in scrolled value due to automatic corrections in recyclerview size
+		 * e.g.: 1) Due to event loading progressbar returning no events resulting in reduction of overall size
+		 * & hence totalScrolledDy value must be changed but we don't have good way to calculate it & hence
+		 * just update it to right value when position is 0 (when we are sure about exact totalScrolledDy value)
+		 * It's actually needed for changing toolbar color which we do only when 1st visible position is 0.
+		 * 2) When screen becomes scrollable after expanding description but not on collapsing, resulting in 
+		 * automatic scroll to settle recyclerview.
+		 */
+		if (((LinearLayoutManager)recyclerVVenues.getLayoutManager()).findFirstVisibleItemPosition() == 0) {
+			totalScrolledDy = -recyclerVVenues.getLayoutManager().findViewByPosition(0).getTop();
+			//Log.d(TAG, "totalScrolledDy corrected = " + totalScrolledDy);
+		}
 		
 		// Translate image
 		ViewHelper.setTranslationY(imgVenue, (0 - totalScrolledDy) / 2);
@@ -636,6 +651,12 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		        animatorSet.start();
 			}
 		});
+		/**
+		 * set visible to finish this screen even if user presses back button instantly even before animateSharedElements()
+		 * has finished it work; otherwise if recyclerVVenues is invisible, then user has to press back once more in such case
+		 * on instantly clicking back
+		 */
+		recyclerVVenues.setVisibility(View.VISIBLE);
 		recyclerVVenues.startAnimation(slideOutToBottom);
     }
 
@@ -1273,22 +1294,13 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 						 * height it automatically resettles itself such that recyclerview again becomes unscrollable.
 						 * Accordingly we need to reset scrolled amount, artist img & title
 						 */
-						holder.itemView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-				            @Override
-				            public void onGlobalLayout() {
-				            	//Log.d(TAG, "onGlobalLayout()");
-								if (VersionUtil.isApiLevelAbove15()) {
-									holder.itemView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-								} else {
-									holder.itemView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-								}
-								
-								//Log.d(TAG, "totalScrolled on global layout  = " + holder.itemView.getTop());
-								venueDetailsFragment.totalScrolledDy = venueDetailsFragment.imgVenueHt - holder.itemView.getTop();
+						venueDetailsFragment.handler.postDelayed(new Runnable() {
+							
+							@Override
+							public void run() {
 								venueDetailsFragment.onScrolled(0, true);
-				            }
-				        });
+							}
+						}, 100);
 						
 					} else {
 						expandVenueDesc(holder);
@@ -1637,7 +1649,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	@Override
 	public void loadItemsInBackground() {
 		loadEvents = new LoadEvents(Api.OAUTH_TOKEN, eventList, venueRVAdapter, ((EventSeekr)FragmentUtil
-				.getApplication(this)).getWcitiesId(), venue.getId());
+				.getApplication(this)).getWcitiesId(), venue.getId(), this);
 		venueRVAdapter.setLoadDateWiseEvents(loadEvents);
 		AsyncTaskUtil.executeAsyncTask(loadEvents, true);
 	}
@@ -1660,10 +1672,14 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	@Override
 	public void onPushedToBackStack() {
 		/**
-		 * set null listener, otherwise even for artist/venue details screen when selecting 
-		 * "add to calendar" option it calls this listener's onShareTargetSelected() method which in turn 
-		 * sets eventToAddToCalendar on EventSeekr class. This results in sharing event wrongly from 
-		 * artist/venue details screen.
+		 * to remove facebook callback. Not calling onStop() to prevent toolbar color changes occurring in between
+		 * the transition
+		 */
+		super.onStop();
+		
+		/**
+		 * set null listener, otherwise even for artist/event details screen when selecting 
+		 * share option it calls this listener's onShareTargetSelected() method.
 		 */
 		if (mShareActionProvider != null) {
 			mShareActionProvider.setOnShareTargetSelectedListener(null);
@@ -1708,5 +1724,16 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	@Override
 	public void onImageCouldNotBeLoaded() {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onEventsLoaded() {
+		handler.postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				onScrolled(0, true);
+			}
+		}, 100);
 	}
 }

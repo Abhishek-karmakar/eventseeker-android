@@ -32,6 +32,12 @@ public class LoadArtistEvents extends AsyncTask<Void, Void, List<Event>> {
 	private int artistId;
 	private String wcitiesId, oauthToken;
 	private List<Event> events;
+	
+	private LoadArtistEventsListener loadArtistEventsListener;
+	
+	public interface LoadArtistEventsListener {
+		public void onArtistEventsLoaded();
+	}
 
 	public LoadArtistEvents(String oauthToken, DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, int artistId, String wcitiesId) {
 		this.oauthToken = oauthToken;
@@ -41,12 +47,14 @@ public class LoadArtistEvents extends AsyncTask<Void, Void, List<Event>> {
 		this.wcitiesId = wcitiesId;
 	}
 	
-	public LoadArtistEvents(String oauthToken, List<Event> eventList, DateWiseEventParentAdapterListener eventListAdapter, int artistId, String wcitiesId) {
+	public LoadArtistEvents(String oauthToken, List<Event> eventList, DateWiseEventParentAdapterListener eventListAdapter, 
+			int artistId, String wcitiesId, LoadArtistEventsListener loadArtistEventsListener) {
 		this.oauthToken = oauthToken;
 		this.events = eventList;
 		this.eventListAdapter = eventListAdapter;
 		this.artistId = artistId;
 		this.wcitiesId = wcitiesId;
+		this.loadArtistEventsListener = loadArtistEventsListener;
 	}
 
 	@Override
@@ -131,6 +139,10 @@ public class LoadArtistEvents extends AsyncTask<Void, Void, List<Event>> {
 				}
 			}
 			((RecyclerView.Adapter)eventListAdapter).notifyDataSetChanged();
+			
+			if (loadArtistEventsListener != null) {
+				loadArtistEventsListener.onArtistEventsLoaded();
+			}
 		}
 	}    	
 

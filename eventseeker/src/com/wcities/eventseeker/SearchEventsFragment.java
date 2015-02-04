@@ -9,15 +9,15 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -69,7 +69,7 @@ import com.wcities.eventseeker.viewdata.SharedElement;
 import com.wcities.eventseeker.viewdata.SharedElementPosition;
 
 public class SearchEventsFragment extends PublishEventFragment implements LoadItemsInBackgroundListener, 
-		SearchFragmentChildListener/*, CustomSharedElementTransitionSource*/ {
+		SearchFragmentChildListener, CustomSharedElementTransitionSource {
 
 	private static final String TAG = SearchEventsFragment.class.getName();
 	private static final String FRAGMENT_TAG_SHARE_VIA_DIALOG = ShareViaDialogFragment.class.getSimpleName();
@@ -108,6 +108,8 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		calculateDimensions();
+		
 		View v = inflater.inflate(R.layout.fragment_search_events, null);
 		recyclerVEvents = (RecyclerView) v.findViewById(R.id.recyclerVEvents);
 
@@ -157,6 +159,14 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 				latLon[0], latLon[1], MILES_LIMIT, null, startDate, endDate);
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);
 		AsyncTaskUtil.executeAsyncTask(loadEvents, true);
+	}
+	
+	private void calculateDimensions() {
+		Resources res = FragmentUtil.getResources(this);
+		imgEventPadL = res.getDimensionPixelSize(R.dimen.img_event_pad_l_list_item_discover);
+		imgEventPadR = res.getDimensionPixelSize(R.dimen.img_event_pad_r_list_item_discover);
+		imgEventPadT = res.getDimensionPixelSize(R.dimen.img_event_pad_t_list_item_discover);
+		imgEventPadB = res.getDimensionPixelSize(R.dimen.img_event_pad_b_list_item_discover);
 	}
 
 	private void refresh(String newQuery) {
@@ -768,20 +778,22 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 				
 				@Override
 				public void run() {
-					//List<SharedElement> sharedElements = new ArrayList<SharedElement>();
+					List<SharedElement> sharedElements = new ArrayList<SharedElement>();
 					
-					/*SharedElementPosition sharedElementPosition = new SharedElementPosition(searchEventFragment.imgEventPadL, 
-							holder.itemView.getTop() + searchEventFragment.imgEventPadT, 
+					int[] loc = ViewUtil.getLocationOnScreen(holder.itemView, FragmentUtil.getResources(searchEventFragment));
+					
+					SharedElementPosition sharedElementPosition = new SharedElementPosition(searchEventFragment.imgEventPadL, 
+							loc[1] + searchEventFragment.imgEventPadT, 
 							holder.imgEvent.getWidth() - searchEventFragment.imgEventPadL - searchEventFragment.imgEventPadR, 
 							holder.imgEvent.getHeight() - searchEventFragment.imgEventPadT - searchEventFragment.imgEventPadB);
 					SharedElement sharedElement = new SharedElement(sharedElementPosition, holder.imgEvent);
 					sharedElements.add(sharedElement);
-					searchEventFragment.addViewsToBeHidden(holder.imgEvent);*/
+					searchEventFragment.addViewsToBeHidden(holder.imgEvent);
 					
 					//Log.d(TAG, "AT issue event = " + event);
-					((EventListener) FragmentUtil.getActivity(searchEventFragment)).onEventSelected(event, null/*sharedElements*/);
+					((EventListener) FragmentUtil.getActivity(searchEventFragment)).onEventSelected(event, sharedElements);
 					
-					//searchEventFragment.onPushedToBackStack();
+					searchEventFragment.onPushedToBackStack();
 					
 					holder.rltLytRoot.setPressed(false);
 				}
@@ -919,20 +931,18 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 		}
 	}
 
-	/*@Override
+	@Override
 	public void onPoppedFromBackStack() {
 		// to update statusbar visibility
-		onStart();
+		getParentFragment().onStart();
 		// to call onFragmentResumed(Fragment) of MainActivity (to update title, current fragment tag, etc.)
-		onResume();
+		getParentFragment().onResume();
 		
 		for (Iterator<View> iterator = hiddenViews.iterator(); iterator.hasNext();) {
 			View view = iterator.next();
 			view.setVisibility(View.VISIBLE);
 		}
 		hiddenViews.clear();
-		
-		setMenuVisibility(true);
 	}
 
 	@Override
@@ -945,7 +955,11 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 
 	@Override
 	public void onPushedToBackStack() {
-		setMenuVisibility(false);
+		/**
+		 * here, no need to call super.onStop() (to remove fb callback), since we are not calling onStart() 
+		 * on this fragment from onPoppedFromBackStack(), which would have added fb callback again
+		 */
+		//super.onStop();
 	}
 
 	@Override
@@ -953,6 +967,5 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 		for (int i = 0; i < views.length; i++) {
 			hiddenViews.add(views[i]);
 		}
-	}*/
-	
+	}
 }

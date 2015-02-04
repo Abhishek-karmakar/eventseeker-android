@@ -1517,9 +1517,17 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public void onVenueSelected(Venue venue) {
+		onVenueSelected(venue, null);
+	}
+	
+	@Override
+	public void onVenueSelected(Venue venue, List<SharedElement> sharedElements) {
 		VenueDetailsFragment venueDetailsFragment = new VenueDetailsFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(BundleKeys.VENUE, venue);
+		if (sharedElements != null) {
+			args.putSerializable(BundleKeys.SHARED_ELEMENTS, (Serializable) sharedElements);
+		}
 		venueDetailsFragment.setArguments(args);
 		selectNonDrawerItem(venueDetailsFragment, AppConstants.FRAGMENT_TAG_VENUE_DETAILS, "", true);
 	}

@@ -41,6 +41,12 @@ public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 	
 	private DateWiseEventParentAdapterListener eventListAdapter;
 	
+	private LoadEventsTaskListener loadEventsTaskListener;
+	
+	public interface LoadEventsTaskListener {
+		public void onEventsLoaded();
+	}
+	
 	private LoadEvents(String oauthToken, List<Event> eventList, DateWiseEventParentAdapterListener eventListAdapter, 
 			String wcitiesId) {
 		this.oauthToken = oauthToken;
@@ -50,7 +56,8 @@ public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 	}
 
 	public LoadEvents(String oauthToken, List<Event> eventList, DateWiseEventParentAdapterListener eventListAdapter, double lat, 
-			double lon, String startDate, String endDate, int categoryId, String wcitiesId, int miles) {
+			double lon, String startDate, String endDate, int categoryId, String wcitiesId, int miles, 
+			LoadEventsTaskListener loadEventsTaskListener) {
 		this(oauthToken, eventList, eventListAdapter, wcitiesId);
 		this.lat = lat;
 		this.lon = lon;
@@ -58,12 +65,15 @@ public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 		this.endDate = endDate;
 		this.categoryId = categoryId;
 		this.miles = miles;
+		
+		this.loadEventsTaskListener = loadEventsTaskListener;
 	}
 	
 	public LoadEvents(String oauthToken, List<Event> eventList, DateWiseEventParentAdapterListener eventListAdapter, 
-			String wcitiesId, long venueId) {
+			String wcitiesId, long venueId, LoadEventsTaskListener loadEventsTaskListener) {
 		this(oauthToken, eventList, eventListAdapter, wcitiesId);
 		this.venueId = venueId;
+		this.loadEventsTaskListener = loadEventsTaskListener;
 	}
 	
 	public LoadEvents(String oauthToken, List<Event> eventList, DateWiseEventParentAdapterListener eventListAdapter, String query, 
@@ -165,5 +175,9 @@ public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 		} else {*/
 			((RecyclerView.Adapter)eventListAdapter).notifyDataSetChanged();
 		//}
+			
+		if (loadEventsTaskListener != null) {
+			loadEventsTaskListener.onEventsLoaded();
+		}
 	}   
 }

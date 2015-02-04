@@ -938,6 +938,12 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	@Override
 	public void onPushedToBackStack() {
 		/**
+		 * to remove facebook callback. Not calling onStop() to prevent toolbar color changes occurring in between
+		 * the transition
+		 */
+		super.onStop();
+		
+		/**
 		 * set null listener, otherwise even for artist/venue details screen when selecting 
 		 * "add to calendar" option it calls this listener's onShareTargetSelected() method which in turn 
 		 * sets eventToAddToCalendar on EventSeekr class. This results in sharing event wrongly from 

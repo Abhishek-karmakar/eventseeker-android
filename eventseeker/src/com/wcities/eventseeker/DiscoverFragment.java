@@ -60,6 +60,7 @@ import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.asynctask.LoadEvents;
+import com.wcities.eventseeker.asynctask.LoadEvents.LoadEventsTaskListener;
 import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable;
@@ -89,7 +90,7 @@ import com.wcities.eventseeker.viewdata.SharedElement;
 import com.wcities.eventseeker.viewdata.SharedElementPosition;
 
 public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack implements LoadItemsInBackgroundListener, 
-		DiscoverSettingChangedListener, DrawerListener, CustomSharedElementTransitionSource {
+		DiscoverSettingChangedListener, DrawerListener, CustomSharedElementTransitionSource, LoadEventsTaskListener {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -98,7 +99,6 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	private static final String FRAGMENT_TAG_DISCOVER_SETTING_DIALOG = DiscoverSettingDialogFragment.class.getSimpleName();
 	private static final String FRAGMENT_TAG_SHARE_VIA_DIALOG = ShareViaDialogFragment.class.getSimpleName();
 	
-	private static final int TRANSLATION_Z_DP = 10;
 	private static final int UNSCROLLED = -1;
 	private static final int DEFAULT_SEARCH_RADIUS = 50;
 	
@@ -175,7 +175,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		setRetainInstance(true);
 		
 		Resources res = FragmentUtil.getResources(this);
-		translationZPx = ConversionUtil.toPx(res, TRANSLATION_Z_DP);
+		translationZPx = res.getDimensionPixelSize(R.dimen.action_bar_elevation);
 		handler = new Handler(Looper.getMainLooper());
 		
 		firstItemHtPort = res.getDimensionPixelSize(R.dimen.v_pager_cat_titles_margin_t_discover_port);
@@ -453,6 +453,18 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		}
 		totalScrolledDy += dy;
 		
+		/**
+		 * this is required to prevent changes in scrolled value due to automatic corrections in recyclerview size
+		 * e.g.: 1) Due to event loading progressbar returning no events resulting in reduction of overall size
+		 * & hence totalScrolledDy value must be changed but we don't have good way to calculate it & hence
+		 * just update it to right value when position is 0 (when we are sure about exact totalScrolledDy value)
+		 * It's actually needed for changing toolbar color which we do only when 1st visible position is 0.
+		 */
+		if (((LinearLayoutManager)recyclerVEvents.getLayoutManager()).findFirstVisibleItemPosition() == 0) {
+			totalScrolledDy = -recyclerVEvents.getLayoutManager().findViewByPosition(0).getTop();
+			//Log.d(TAG, "totalScrolledDy corrected = " + totalScrolledDy);
+		}
+		
 		// Translate image
 		ViewHelper.setTranslationY(imgCategory, (0 - totalScrolledDy) / 2);
 		
@@ -556,7 +568,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	public void loadItemsInBackground() {
 		loadEvents = new LoadEvents(Api.OAUTH_TOKEN, eventList, eventListAdapter, lat, lon, startDate, endDate, 
 				catTitlesAdapter.getSelectedCatId(), ((EventSeekr)FragmentUtil.getActivity(this)
-						.getApplicationContext()).getWcitiesId(), miles);
+						.getApplicationContext()).getWcitiesId(), miles, this);
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);
 		AsyncTaskUtil.executeAsyncTask(loadEvents, true);
 	}
@@ -1448,6 +1460,12 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 
 	@Override
 	public void onPushedToBackStack() {
+		/**
+		 * to remove facebook callback. Not calling onStop() to prevent toolbar color changes occurring in between
+		 * the transition
+		 */
+		super.onStop();
+		
 		setMenuVisibility(false);
 	}
 
@@ -1456,5 +1474,16 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		for (int i = 0; i < views.length; i++) {
 			hiddenViews.add(views[i]);
 		}
+	}
+
+	@Override
+	public void onEventsLoaded() {
+		handler.postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				onScrolled(0, true);
+			}
+		}, 100);
 	}
 }

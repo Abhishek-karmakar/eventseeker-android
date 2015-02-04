@@ -29,6 +29,7 @@ import android.support.v7.widget.ShareActionProvider.OnShareTargetSelectedListen
 import android.text.Html;
 import android.text.TextUtils.TruncateAt;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -71,6 +72,7 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.asynctask.LoadArtistDetails;
 import com.wcities.eventseeker.asynctask.LoadArtistDetails.OnArtistUpdatedListener;
+import com.wcities.eventseeker.asynctask.LoadArtistEvents.LoadArtistEventsListener;
 import com.wcities.eventseeker.asynctask.LoadArtistEvents;
 import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.cache.BitmapCache;
@@ -104,7 +106,7 @@ import com.wcities.eventseeker.viewdata.SharedElementPosition;
 public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackStack implements DrawerListener, 
 		CustomSharedElementTransitionDestination, OnArtistUpdatedListener, OnClickListener, 
 		LoadItemsInBackgroundListener, CustomSharedElementTransitionSource, ArtistTrackingListener, 
-		DialogBtnClickListener {
+		DialogBtnClickListener, LoadArtistEventsListener {
 	
 	private static final String TAG = ArtistDetailsFragment.class.getName();
 	
@@ -218,6 +220,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		txtArtistTitle.setSelected(true);
 		
 		fabSave = (FloatingActionButton) rootView.findViewById(R.id.fabSave);
+		fabSave.setSelected(artist.getAttending() == Artist.Attending.Tracked);
 		fabSave.setOnClickListener(this);
 		
 		recyclerVArtists = (RecyclerView) rootView.findViewById(R.id.recyclerVArtists);
@@ -255,6 +258,8 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
         });
 		
 		if (isOnCreateViewCalledFirstTime) {
+			fabSave.setVisibility(View.INVISIBLE);
+			
 			isOnCreateViewCalledFirstTime = false;
 			
 			if (sharedElements != null) {
@@ -362,13 +367,27 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	}
 	
 	private void onScrolled(int dy, boolean forceUpdate) {
+		//Log.d(TAG, "first visible pos = " + ((LinearLayoutManager)recyclerVArtists.getLayoutManager()).findFirstVisibleItemPosition());
 		//Log.d(TAG, "dy = " + dy);
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
-		
 		if (totalScrolledDy == UNSCROLLED) {
 			totalScrolledDy = 0;
 		}
 		totalScrolledDy += dy;
+		//Log.d(TAG, "totalScrolledDy = " + totalScrolledDy + ", top = " + recyclerVArtists.getLayoutManager().findViewByPosition(((LinearLayoutManager)recyclerVArtists.getLayoutManager()).findFirstVisibleItemPosition()).getTop());
+		/**
+		 * this is required to prevent changes in scrolled value due to automatic corrections in recyclerview size
+		 * e.g.: 1) Due to event loading progressbar returning no events resulting in reduction of overall size
+		 * & hence totalScrolledDy value must be changed but we don't have good way to calculate it & hence
+		 * just update it to right value when position is 0 (when we are sure about exact totalScrolledDy value)
+		 * It's actually needed for changing toolbar color which we do only when 1st visible position is 0.
+		 * 2) When screen becomes scrollable after expanding description but not on collapsing, resulting in 
+		 * automatic scroll to settle recyclerview.
+		 */
+		if (((LinearLayoutManager)recyclerVArtists.getLayoutManager()).findFirstVisibleItemPosition() == 0) {
+			totalScrolledDy = -recyclerVArtists.getLayoutManager().findViewByPosition(0).getTop();
+			//Log.d(TAG, "totalScrolledDy corrected = " + totalScrolledDy);
+		}
 		
 		// Translate image
 		ViewHelper.setTranslationY(imgArtist, (0 - totalScrolledDy) / 2);
@@ -702,6 +721,12 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		        animatorSet.start();
 			}
 		});
+		/**
+		 * set visible to finish this screen even if user presses back button instantly even before animateSharedElements()
+		 * has finished it work; otherwise if recyclerVVenues is invisible, then user has to press back once more in such case
+		 * on instantly clicking back
+		 */
+		recyclerVArtists.setVisibility(View.VISIBLE);
 		recyclerVArtists.startAnimation(slideOutToBottom);
     }
 
@@ -709,6 +734,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	public void onArtistUpdated() {
 		allDetailsLoaded = true;
 		fabSave.setSelected(artist.getAttending() == Artist.Attending.Tracked);
+		fabSave.setVisibility(View.VISIBLE);
 		artistRVAdapter.notifyDataSetChanged();
 		updateShareIntent();
 	}
@@ -1556,22 +1582,13 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 						 * height it automatically resettles itself such that recyclerview again becomes unscrollable.
 						 * Accordingly we need to reset scrolled amount, artist img & title
 						 */
-						holder.itemView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-				            @Override
-				            public void onGlobalLayout() {
-				            	//Log.d(TAG, "onGlobalLayout()");
-								if (VersionUtil.isApiLevelAbove15()) {
-									holder.itemView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-								} else {
-									holder.itemView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-								}
-								
-								//Log.d(TAG, "totalScrolled on global layout  = " + holder.itemView.getTop());
-								artistDetailsFragment.totalScrolledDy = artistDetailsFragment.imgArtistHt - holder.itemView.getTop();
+						artistDetailsFragment.handler.postDelayed(new Runnable() {
+							
+							@Override
+							public void run() {
 								artistDetailsFragment.onScrolled(0, true);
-				            }
-				        });
+							}
+						}, 100);
 						
 					} else {
 						expandArtistDesc(holder);
@@ -1676,7 +1693,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	@Override
 	public void loadItemsInBackground() {
 		loadArtistEvents = new LoadArtistEvents(Api.OAUTH_TOKEN, eventList, artistRVAdapter, artist.getId(),
-				((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).getWcitiesId());
+				((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).getWcitiesId(), this);
 
 		artistRVAdapter.setLoadDateWiseEvents(loadArtistEvents);
 		AsyncTaskUtil.executeAsyncTask(loadArtistEvents, true);
@@ -1700,10 +1717,14 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	@Override
 	public void onPushedToBackStack() {
 		/**
-		 * set null listener, otherwise even for artist/venue details screen when selecting 
-		 * "add to calendar" option it calls this listener's onShareTargetSelected() method which in turn 
-		 * sets eventToAddToCalendar on EventSeekr class. This results in sharing event wrongly from 
-		 * artist/venue details screen.
+		 * to remove facebook callback. Not calling onStop() to prevent toolbar color changes occurring in between
+		 * the transition
+		 */
+		super.onStop();
+		
+		/**
+		 * set null listener, otherwise even for event/venue details screen when selecting 
+		 * share option it calls this listener's onShareTargetSelected() method.
 		 */
 		if (mShareActionProvider != null) {
 			mShareActionProvider.setOnShareTargetSelectedListener(null);
@@ -1796,5 +1817,19 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			FbUtil.handlePublishArtist(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
 					AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, artist);
 		}
+	}
+
+	@Override
+	public void onArtistEventsLoaded() {
+		/*Log.d(TAG, "top = " + recyclerVArtists.getLayoutManager().findViewByPosition(1).getTop() 
+				+ ", totalScrolledDy = " + totalScrolledDy + ", diff = " + (imgArtistHt - recyclerVArtists.getLayoutManager().findViewByPosition(1).getTop()));*/
+		//totalScrolledDy = imgArtistHt - recyclerVArtists.getLayoutManager().getChildAt(0).getTop();
+		handler.postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				onScrolled(0, true);
+			}
+		}, 100);
 	}
 }

@@ -11,12 +11,11 @@
 
         <ImageView
             android:id="@+id/imgEvent"
-            android:layout_width="@dimen/img_event_w_fragment_discover_by_category_list_item_evt"
-            android:layout_height="@dimen/img_event_ht_fragment_discover_by_category_list_item_evt"
-            android:layout_centerVertical="true"
-            android:layout_marginBottom="@dimen/img_event_margin_b_fragment_discover_by_category_list_item_evt"
+            android:layout_width="@dimen/img_event_w_item_list_search_venue"
+            android:layout_height="@dimen/img_event_ht_item_list_search_venue"
+            android:paddingBottom="@dimen/img_event_pad_b_item_list_search_venue"
             android:layout_marginLeft="@dimen/img_event_margin_l_fragment_discover_by_category_list_item_evt"
-            android:layout_marginTop="@dimen/img_event_margin_t_fragment_discover_by_category_list_item_evt"
+            android:paddingTop="@dimen/img_event_pad_t_item_list_search_venue"
             android:scaleType="fitXY" />
 
         <LinearLayout

@@ -495,13 +495,13 @@ public class ArtistApiJSONParser {
 	}
 	
 	public List<Artist> getArtistList(JSONObject jsonObject) {
-		Log.d(TAG, "getArtistList()");
+		//Log.d(TAG, "getArtistList()");
 		List<Artist> artists = new ArrayList<Artist>();
 		
 		try {
 			JSONObject jObjArtistSearch = jsonObject.getJSONObject(KEY_ARTIST_SEARCH);
 			if (jObjArtistSearch.has(KEY_ARTISTS)) {
-				Log.d(TAG, "KEY_ARTISTS");
+				//Log.d(TAG, "KEY_ARTISTS");
 				Object jsonArtists = jObjArtistSearch.get(KEY_ARTISTS);
 
 				if (jsonArtists instanceof JSONArray) {
@@ -521,7 +521,7 @@ public class ArtistApiJSONParser {
 			e.printStackTrace();
 		}
 
-		Log.d(TAG, "return artists size = " + artists.size());
+		//Log.d(TAG, "return artists size = " + artists.size());
 		return artists;
 	}
 	

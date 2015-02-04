@@ -1,6 +1,7 @@
 package com.wcities.eventseeker;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import android.app.Activity;
@@ -33,14 +34,16 @@ import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.custom.fragment.PublishArtistListFragment;
 import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
+import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.interfaces.PublishListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class SearchArtistsFragment extends PublishArtistListFragment implements SearchFragmentChildListener, PublishListener,
-		LoadItemsInBackgroundListener, DialogBtnClickListener, ArtistTrackingListener {
+public class SearchArtistsFragment extends PublishArtistListFragment implements SearchFragmentChildListener, 
+		PublishListener, LoadItemsInBackgroundListener, DialogBtnClickListener, ArtistTrackingListener, 
+		CustomSharedElementTransitionSource {
 
 	private static final String TAG = SearchArtistsFragment.class.getName();
 
@@ -56,12 +59,21 @@ public class SearchArtistsFragment extends PublishArtistListFragment implements 
 
 	private Artist artistToBeSaved;
 	
+	private List<View> hiddenViews;
+	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		if (!(activity instanceof ArtistListener)) {
             throw new ClassCastException(activity.toString() + " must implement ArtistListener");
 		}
+	}
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		hiddenViews = new ArrayList<View>();
 	}
 	
 	@Override
@@ -84,7 +96,7 @@ public class SearchArtistsFragment extends PublishArtistListFragment implements 
 			artistList = new ArrayList<Artist>();
 			//artistListAdapter = new ArtistListAdapter<String>(FragmentUtil.getActivity(this), artistList, null, this);
 			artistListAdapter = new ArtistListAdapter<String>(FragmentUtil.getActivity(this), artistList, null, this, 
-					this, this);
+					this, this, this);
 	        Bundle args = getArguments();
 			if (args != null && args.containsKey(BundleKeys.QUERY)) {
 				artistList.add(null);
@@ -204,5 +216,43 @@ public class SearchArtistsFragment extends PublishArtistListFragment implements 
 	@Override
 	public void onPublishPermissionGranted() {
 		
+	}
+
+	@Override
+	public void addViewsToBeHidden(View... views) {
+		for (int i = 0; i < views.length; i++) {
+			hiddenViews.add(views[i]);
+		}
+	}
+
+	@Override
+	public void hideSharedElements() {
+		for (Iterator<View> iterator = hiddenViews.iterator(); iterator.hasNext();) {
+			View view = iterator.next();
+			view.setVisibility(View.INVISIBLE);
+		}
+	}
+
+	@Override
+	public void onPushedToBackStack() {
+		/**
+		 * here, no need to call super.onStop() (to remove fb callback), since we are not calling onStart() 
+		 * on this fragment from onPoppedFromBackStack(), which would have added fb callback again
+		 */
+		//super.onStop();
+	}
+
+	@Override
+	public void onPoppedFromBackStack() {
+		// to update statusbar visibility
+		getParentFragment().onStart();
+		// to call onFragmentResumed(Fragment) of MainActivity (to update title, current fragment tag, etc.)
+		getParentFragment().onResume();
+		
+		for (Iterator<View> iterator = hiddenViews.iterator(); iterator.hasNext();) {
+			View view = iterator.next();
+			view.setVisibility(View.VISIBLE);
+		}
+		hiddenViews.clear();
 	}
 }

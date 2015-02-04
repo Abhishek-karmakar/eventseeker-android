@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -16,17 +17,22 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.wcities.eventseeker.adapter.SwipeTabsAdapter;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.VersionUtil;
+import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
 
-public class SearchFragment extends FragmentLoadableFromBackStack implements OnClickListener/*, 
-		CustomSharedElementTransitionSource*/ {
+public class SearchFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
+		CustomSharedElementTransitionSource {
 	
 	private static final String TAG = SearchFragment.class.getName();
 
@@ -49,7 +55,6 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
-		setHasOptionsMenu(true);
 	}
 
 	@Override
@@ -61,10 +66,26 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 		ViewPager viewPager = (ViewPager) v.findViewById(R.id.tabContentFrame);
 		SwipeTabsAdapter oldAdapter = mTabsAdapter;
 		tabBar = new TabBar(getChildFragmentManager());
+		
 		mTabsAdapter = new SwipeTabsAdapter(this, viewPager, tabBar, orientation);
 		
-		View vTabBar;
+		/**
+		 * add extra top margin (equal to statusbar height) since we are removing vStatusBar from onStart() 
+		 * even though we want search screen to have this statusbar. We had to mark VStatusBar as GONE from 
+		 * onStart() so that on transition from any search child fragment (SearchArtists/SearchEvents/SearchVenues)
+		 * to corresponding details screen doesn't cause jumping effect on search screen, as we remove vStatusBar 
+		 * on detail screen when this search screen is visible in the background
+		 */
+		if (VersionUtil.isApiLevelAbove18()) {
+			Resources res = FragmentUtil.getResources(this);
+			LinearLayout lnrLytTabBar = (LinearLayout) v.findViewById(R.id.tabBar);
+			RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) lnrLytTabBar.getLayoutParams();
+			lp.topMargin = res.getDimensionPixelSize(R.dimen.common_t_mar_pad_for_all_layout) 
+					+ ViewUtil.getStatusBarHeight(res);
+			lnrLytTabBar.setLayoutParams(lp);
+		}
 		
+		View vTabBar;
 		if (orientation == Configuration.ORIENTATION_PORTRAIT) {
 			vTabBar = v;
 			
@@ -103,7 +124,6 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 		TabBar.Tab tabArtists = new TabBar.Tab(btnArtists, FRAGMENT_TAG_ARTISTS, SearchArtistsFragment.class, args);
 		mTabsAdapter.addTab(tabArtists, oldAdapter);
 
-		
 		TabBar.Tab tabEvents;
 		
 		if(((MainActivity)FragmentUtil.getActivity(this)).isTablet()) {
@@ -125,6 +145,13 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 		super.onStart();
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		ma.setToolbarElevation(0);
+		/**
+		 * Even though we want status bar in this case, mark it gone to have smoother transition to detail fragment
+		 * & prevent jumping effect on search screen, caused due to removal of status bar on detail screen when this 
+		 * search screen is visible in background.
+		 */
+		ma.setVStatusBarVisibility(View.GONE, AppConstants.INVALID_ID);
+		ma.setVStatusBarLayeredVisibility(View.VISIBLE, R.color.colorPrimaryDark);
 	}
 	
 	@Override
@@ -132,13 +159,8 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 		super.onStop();
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
-	}
-	
-	@Override
-	public void onDestroyView() {
-		super.onDestroyView();
-		ActionBar actionBar = ((ActionBarActivity)FragmentUtil.getActivity(this)).getSupportActionBar();
-		actionBar.setDisplayShowCustomEnabled(false);
+		ma.setVStatusBarVisibility(View.VISIBLE, R.color.colorPrimaryDark);
+		ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
 	}
 	
 	@Override
@@ -214,31 +236,23 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 		return "Search Screen";
 	}
 
-	/*@Override
+	@Override
 	public void addViewsToBeHidden(View... views) {
-		Log.d(TAG, "tabBar.getSelectedTabTag() : " + tabBar.getSelectedTabTag());
-		((CustomSharedElementTransitionSource) getChildFragmentManager()
-				.findFragmentByTag(tabBar.getSelectedTabTag())).addViewsToBeHidden(views);
+		((CustomSharedElementTransitionSource) mTabsAdapter.getSelectedFragment()).addViewsToBeHidden(views);
 	}
 
 	@Override
 	public void hideSharedElements() {
-		Log.d(TAG, "tabBar.getSelectedTabTag() : " + tabBar.getSelectedTabTag());
-		((CustomSharedElementTransitionSource) getChildFragmentManager()
-				.findFragmentByTag(tabBar.getSelectedTabTag())).hideSharedElements();		
+		((CustomSharedElementTransitionSource) mTabsAdapter.getSelectedFragment()).hideSharedElements();		
 	}
 
 	@Override
 	public void onPushedToBackStack() {
-		Log.d(TAG, "tabBar.getSelectedTabTag() : " + tabBar.getSelectedTabTag());
-		((CustomSharedElementTransitionSource) getChildFragmentManager()
-				.findFragmentByTag(tabBar.getSelectedTabTag())).onPushedToBackStack();
+		((CustomSharedElementTransitionSource) mTabsAdapter.getSelectedFragment()).onPushedToBackStack();
 	}
 
 	@Override
 	public void onPoppedFromBackStack() {
-		Log.d(TAG, "tabBar.getSelectedTabTag() : " + tabBar.getSelectedTabTag());
-		((CustomSharedElementTransitionSource) getChildFragmentManager()
-				.findFragmentByTag(tabBar.getSelectedTabTag())).onPoppedFromBackStack();		
-	}*/
+		((CustomSharedElementTransitionSource) mTabsAdapter.getSelectedFragment()).onPoppedFromBackStack();		
+	}
 }

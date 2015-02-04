@@ -1,6 +1,7 @@
 package com.wcities.eventseeker;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
@@ -16,7 +17,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.RelativeLayout.LayoutParams;
 
 import com.wcities.eventseeker.SearchFragment.SearchFragmentChildListener;
 import com.wcities.eventseeker.adapter.AbstractVenueListAdapter;
@@ -26,16 +29,20 @@ import com.wcities.eventseeker.asynctask.LoadVenues;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.core.Address;
 import com.wcities.eventseeker.core.Venue;
+import com.wcities.eventseeker.interfaces.ArtistListener;
+import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.ViewUtil;
+import com.wcities.eventseeker.viewdata.SharedElement;
+import com.wcities.eventseeker.viewdata.SharedElementPosition;
 
 public class SearchVenuesFragment extends ListFragment implements SearchFragmentChildListener, 
-	LoadItemsInBackgroundListener {
+		LoadItemsInBackgroundListener, CustomSharedElementTransitionSource {
 	
 	private static final String TAG = SearchVenuesFragment.class.getName();
 	
@@ -49,6 +56,15 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 	
 	private List<Venue> venueList;
 	private double[] latLng;
+	
+	private List<View> hiddenViews;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		hiddenViews = new ArrayList<View>();
+	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -158,14 +174,13 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 				((TextView)convertView.findViewById(R.id.txtVenueLocation)).setText(address[0]);
 				((TextView)convertView.findViewById(R.id.txtVenueCity)).setText(address[1]);
 				
+		    	final ImageView imgVenue = (ImageView)convertView.findViewById(R.id.imgEvent); 
 				String key = venue.getKey(ImgResolution.LOW);
 				Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
-				
 				if (bitmap != null) {
-			        ((ImageView)convertView.findViewById(R.id.imgEvent)).setImageBitmap(bitmap);
+			        imgVenue.setImageBitmap(bitmap);
 
 				} else {
-			    	ImageView imgVenue = (ImageView)convertView.findViewById(R.id.imgEvent); 
 			        imgVenue.setImageBitmap(null);
 			        
 			        //Log.i(TAG, "url = " + venue.getMobiResImgUrl());
@@ -177,7 +192,21 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 
 					@Override
 					public void onClick(View v) {
-						((VenueListener)FragmentUtil.getActivity(fragment)).onVenueSelected(venue);
+						List<SharedElement> sharedElements = new ArrayList<SharedElement>();
+
+						int[] loc = ViewUtil.getLocationOnScreen(v, FragmentUtil.getResources(fragment));
+						RelativeLayout.LayoutParams lp = (LayoutParams) imgVenue.getLayoutParams();
+						
+						SharedElementPosition sharedElementPosition = new SharedElementPosition(lp.leftMargin, 
+								loc[1] + imgVenue.getPaddingTop(), lp.width, lp.height - 
+								imgVenue.getPaddingTop() - imgVenue.getPaddingBottom());
+						SharedElement sharedElement = new SharedElement(sharedElementPosition, imgVenue);
+						sharedElements.add(sharedElement);
+						((CustomSharedElementTransitionSource) fragment).addViewsToBeHidden(imgVenue);
+						
+						((VenueListener)FragmentUtil.getActivity(fragment)).onVenueSelected(venue, sharedElements);
+
+						((CustomSharedElementTransitionSource) fragment).onPushedToBackStack();
 					}
 				});
 			}
@@ -218,5 +247,39 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 	@Override
 	public void onQueryTextSubmit(String query) {
 		refresh(query);
+	}
+
+	@Override
+	public void addViewsToBeHidden(View... views) {
+		for (int i = 0; i < views.length; i++) {
+			hiddenViews.add(views[i]);
+		}
+	}
+
+	@Override
+	public void hideSharedElements() {
+		for (Iterator<View> iterator = hiddenViews.iterator(); iterator.hasNext();) {
+			View view = iterator.next();
+			view.setVisibility(View.INVISIBLE);
+		}
+	}
+
+	@Override
+	public void onPushedToBackStack() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onPoppedFromBackStack() {
+		// to update statusbar visibility
+		getParentFragment().onStart();
+		// to call onFragmentResumed(Fragment) of MainActivity (to update title, current fragment tag, etc.)
+		getParentFragment().onResume();
+		
+		for (Iterator<View> iterator = hiddenViews.iterator(); iterator.hasNext();) {
+			View view = iterator.next();
+			view.setVisibility(View.VISIBLE);
+		}
+		hiddenViews.clear();
 	}
 }
