@@ -232,7 +232,8 @@ public class MyEventListAdapter extends BaseAdapter implements DateWiseEventPare
 			
 			FloatingActionButton fabTickets = (FloatingActionButton) convertView.findViewById(R.id.fabTickets);
 			fabTickets.setEnabled(doesBookingUrlExist);
-			fabTickets.setImageResource(doesBookingUrlExist ? R.drawable.tickets : R.drawable.tickets_disabled);
+			fabTickets.setImageResource(doesBookingUrlExist ? R.drawable.ic_ticket_available_floating_mini 
+					: R.drawable.ic_ticket_unavailable_floating_mini);
 			fabTickets.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -320,7 +321,7 @@ public class MyEventListAdapter extends BaseAdapter implements DateWiseEventPare
 	
 	private void updateAttendingFabSaved(Event event, FloatingActionButton fabSave) {
 		fabSave.setImageResource(event.getAttending() == Attending.SAVED ? 
-				R.drawable.checked_blue : R.drawable.calendar);
+				R.drawable.ic_saved_event_floating_mini : R.drawable.ic_unsaved_event_floating_mini);
 	}
 
 	@Override

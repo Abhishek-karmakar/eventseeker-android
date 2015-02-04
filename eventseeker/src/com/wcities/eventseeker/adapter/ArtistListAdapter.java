@@ -88,7 +88,7 @@ public class ArtistListAdapter<T> extends BaseAdapter {
 		//Log.d(TAG, "pos = " + position);
 		if (artistList.get(position) == null) {
 			if (convertView == null || !convertView.getTag().equals(AppConstants.TAG_PROGRESS_INDICATOR)) {
-				convertView = LayoutInflater.from(mContext).inflate(R.layout.list_progress_bar, null);
+				convertView = LayoutInflater.from(mContext).inflate(R.layout.progress_bar_eventseeker_fixed_ht, null);
 				convertView.setTag(AppConstants.TAG_PROGRESS_INDICATOR);
 			}
 			

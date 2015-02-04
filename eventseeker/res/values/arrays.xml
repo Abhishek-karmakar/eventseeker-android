@@ -13,8 +13,8 @@
 	  	<item>@string/navigation_drawer_item_logout</item>
 	</string-array>
 
-    <array name="navigation_drawer_item_icons">
-        <!-- <item>@null</item> -->
+<!--     <array name="navigation_drawer_item_icons">
+        <item>@null</item>
 	  	<item>@drawable/selector_discover</item>
 	  	<item>@drawable/selector_myevents</item>
 	  	<item>@drawable/selector_favorites</item>
@@ -23,6 +23,17 @@
 	  	<item>@null</item>
         <item>@drawable/selector_settings</item>
         <item>@drawable/selector_logout</item>
+    </array> -->
+    <array name="navigation_drawer_item_icons">
+        <!-- <item>@null</item> -->
+	  	<item>@drawable/discover</item>
+	  	<item>@drawable/myevents</item>
+	  	<item>@drawable/favorites</item>
+	  	<item>@drawable/latestnews</item>
+	  	<item>@drawable/friendsactivity</item>
+	  	<item>@null</item>
+        <item>@drawable/ic_settings_off</item>
+        <item>@drawable/ic_log_out_off</item>
     </array>
     
     <string-array name="connect_accounts_item_titles">

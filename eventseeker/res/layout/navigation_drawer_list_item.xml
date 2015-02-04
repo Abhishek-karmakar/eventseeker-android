@@ -2,22 +2,32 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" >
+
+   	<View android:id="@+id/vSelection"
+        android:layout_width="@dimen/v_selection_w_nav_drawer"
+        android:layout_marginRight="@dimen/v_selection_margin_r_nav_drawer"         
+        android:layout_height="match_parent" 
+        android:layout_alignParentLeft="true" 
+        android:layout_alignTop="@+id/rltLayoutContent" 
+        android:layout_alignBottom="@+id/rltLayoutContent"
+        android:elevation="@dimen/elevation_nav_drawer_row" 
+        android:background="@android:color/white" />
     
     <RelativeLayout android:id="@+id/rltLayoutContent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/rlt_content_margin_l_nav_drawer"
         android:paddingTop="@dimen/rlt_layout_content_pad_t_navigation_drawer_list_item"
         android:paddingBottom="@dimen/rlt_layout_content_pad_b_navigation_drawer_list_item"
-        android:layout_marginLeft="@dimen/rlt_layout_content_margin_l_navigation_drawer_list_item"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical" >
+        <!-- android:layout_marginLeft="@dimen/rlt_layout_content_margin_l_navigation_drawer_list_item" -->
     
-	    <ImageView android:id="@+id/imgIcon"
+    	<ImageView android:id="@+id/imgIcon"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_centerVertical="true"
-	        android:layout_alignParentLeft="true"
-	        android:layout_marginLeft="@dimen/img_icon_margin_l_navigation_drawer_list_item"
 	        android:contentDescription="icon" />    
+	        <!-- android:layout_marginLeft="@dimen/img_icon_margin_l_navigation_drawer_list_item" -->
 	        
 	    <TextView android:id="@+id/txtTitle"
 	        android:layout_width="wrap_content"

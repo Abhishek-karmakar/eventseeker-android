@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
@@ -25,7 +26,7 @@ import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
 
-public class MyEventsFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
+public class MyEventsFragment extends FragmentLoadableFromBackStack implements OnClickListener, DrawerListener,
 		SwipeTabsAdapterListener {
 
 	private static final String TAG = MyEventsFragment.class.getName();
@@ -183,5 +184,26 @@ public class MyEventsFragment extends FragmentLoadableFromBackStack implements O
 					label);
 			lastGaEventSentForPos = position;
 		}
+	}
+
+	@Override
+	public void onDrawerOpened(View arg0) {
+		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
+	}
+	
+	@Override
+	public void onDrawerClosed(View view) {
+		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		ma.setToolbarElevation(0);
+	}
+	
+	@Override
+	public void onDrawerSlide(View drawerView, float slideOffset) {
+		
+	}
+
+	@Override
+	public void onDrawerStateChanged(int arg0) {
 	}
 }

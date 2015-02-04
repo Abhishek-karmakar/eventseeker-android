@@ -160,6 +160,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 				holder.imgLink = (ImageView) rltLayoutNewsItemContainer.findViewById(R.id.imgLink);
 				holder.txtLinkTitle = (TextView) rltLayoutNewsItemContainer.findViewById(R.id.txtLinkTitle);
 				holder.txtDesc = (TextView) rltLayoutNewsItemContainer.findViewById(R.id.txtDesc);
+				holder.txtTrending = (TextView) rltLayoutNewsItemContainer.findViewById(R.id.txtTrending);
 				holder.imgTrending = (ImageView) rltLayoutNewsItemContainer.findViewById(R.id.imgTrending);
 				
 				RelativeLayout rltLayoutNewsItem2Container = holder.rltLayoutNewsItem2Container 
@@ -221,11 +222,13 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 	
 	public class ArtistNewsItemViewHolder {
 		
+
 		private LinearLayout rootLnrLayout;
 
 		private RelativeLayout rltLayoutNewsItemContainer;
 		private ImageView imgPhoto;
 		private TextView txtTitle, txtTime, txtLinkTitle, txtDesc;
+		public TextView txtTrending;
 		private ImageView imgLink, imgVideo, imgTrending;
 		
 		private RelativeLayout rltLayoutNewsItem2Container;
@@ -350,6 +353,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 			txtTime.setText(time);
 			txtDesc.setText(item.getPostDesc());
 			imgTrending.setVisibility(isTrending ? View.VISIBLE : View.GONE);
+			txtTrending.setVisibility(isTrending ? View.VISIBLE : View.GONE);
 			
 			rltLayoutNewsItemContainer.setOnClickListener(new OnClickListener() {
 				

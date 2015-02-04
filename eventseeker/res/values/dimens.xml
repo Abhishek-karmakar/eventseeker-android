@@ -11,6 +11,7 @@
     <dimen name="action_bar_tab_txt_size">17sp</dimen>
     <dimen name="action_bar_elevation">4dp</dimen>
     <dimen name="action_bar_title_margin_start">0dp</dimen>
+    <dimen name="event_listing_slider_items_size_w_h">25dp</dimen>
     <!-- fragment_discover.xml -->
     <dimen name="rlt_layout_featured_evts_parent_ht_discover">250dp</dimen>
     <dimen name="rlt_layout_featured_evts_parent_margin_discover">8dp</dimen>
@@ -194,6 +195,9 @@
     <dimen name="hor_divider_margin_b_venue_details">3dp</dimen>
     <!-- activity_main.xml -->
     <dimen name="root_navigation_drawer_w_main">240dp</dimen>
+	<dimen name="v_selection_w_nav_drawer">10dp</dimen>
+	<dimen name="v_selection_margin_r_nav_drawer">10dp</dimen>
+	<dimen name="rlt_content_margin_l_nav_drawer">20dp</dimen>
     <!-- navigation_drawer_section_header.xml -->
     <dimen name="txt_title_margin_l_navigation_drawer_section_header">10dp</dimen>
     <dimen name="txt_title_margin_t_navigation_drawer_section_header">10dp</dimen>
@@ -536,14 +540,15 @@
     <dimen name="lst_mar_fragment_settings">@dimen/divider_margin_l_fragment_discover_by_category_list_item_evt</dimen>
     <dimen name="lst_pad_l_r_fragment_settings">20dp</dimen>
     <!-- fragment_follow_more_artists.xml -->
-    <dimen name="v_dummy_wt_ht_fragment_follow_more_artists">10dp</dimen>
-    <dimen name="lnr_root_padding_fragment_follow_more_artists">10dp</dimen>
+    <dimen name="v_dummy_wt_ht_fragment_follow_more_artists">8dp</dimen>
+    <dimen name="lnr_root_padding_fragment_follow_more_artists">8dp</dimen>
     <!-- common -->
     <dimen name="txt_size_widget_eventSeeker_btn_white">16sp</dimen>
     <dimen name="txt_size_widget_eventSeeker_btn_alpha">18sp</dimen>
     <dimen name="elevation_widget_eventSeeker_btn_white">15dp</dimen>
     <dimen name="elevation_widget_eventSeeker_btn_white_blue_stroke">30dp</dimen>
     <dimen name="elevation_top_button">5dp</dimen>
+    <dimen name="elevation_nav_drawer_row">3dp</dimen>
     <!-- progress_bar_eventseeker_fixed_ht.xml -->
     <dimen name="rlt_lyt_root_ht_progress_bar_eventseeker_fixed_ht">70dp</dimen>
     <!-- list_item_discover.xml -->
@@ -566,7 +571,8 @@
     <dimen name="divider_margin_r_list_item_discover">@dimen/divider_margin_l_list_item_discover</dimen>
     <dimen name="rlt_lyt_content_margin_l_list_item_discover">@dimen/img_event_w_list_item_discover</dimen>
     <dimen name="rlt_lyt_content_pad_l_list_item_discover">7dp</dimen>
-    <dimen name="v_handle_w_list_item_discover">18dp</dimen>
+    <dimen name="v_handle_w_list_item_discover">30dp</dimen>
+    <dimen name="v_handle_margin_t_list_item_discover">10dp</dimen>
     <dimen name="v_handle_ht_list_item_discover">40dp</dimen>
     <dimen name="lnr_slider_content_w_list_item_discover">170dp</dimen>
     <dimen name="lnr_slider_content_ht_list_item_discover">@dimen/img_event_ht_list_item_discover</dimen>

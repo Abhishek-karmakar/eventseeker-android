@@ -719,14 +719,14 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			private View vHorLine;
 			
 			private TextView txtVenue;
-			private FloatingActionButton fabPhone, fabNavigate;
+			private ImageView/*FloatingActionButton*/ fabPhone, fabNavigate;
 			
 			// event item
 			private View vHandle;
 			private TextView txtEvtTitle, txtEvtTime, txtEvtLocation;
 			private ImageView imgEvent, imgTicket, imgSave, imgShare;
 	        private LinearLayout lnrSliderContent;
-	        private RelativeLayout rltLytRoot, rltLytContent;
+	        private RelativeLayout rltLytRoot, rltLytContent, rltTicket, rltSave, rltShare;
 
 			public ViewHolder(View itemView) {
 				super(itemView);
@@ -737,8 +737,8 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 				vHorLine = itemView.findViewById(R.id.vHorLine);
 				
 				txtVenue = (TextView) itemView.findViewById(R.id.txtVenue);
-				fabPhone = (FloatingActionButton) itemView.findViewById(R.id.fabPhone);
-				fabNavigate = (FloatingActionButton) itemView.findViewById(R.id.fabNavigate);
+				fabPhone = (ImageView/*FloatingActionButton*/) itemView.findViewById(R.id.fabPhone);
+				fabNavigate = (ImageView/*FloatingActionButton*/) itemView.findViewById(R.id.fabNavigate);
 				
 				// event item
 				txtEvtTitle = (TextView) itemView.findViewById(R.id.txtEvtTitle);
@@ -749,6 +749,9 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	            lnrSliderContent = (LinearLayout) itemView.findViewById(R.id.lnrSliderContent);
 	            rltLytRoot = (RelativeLayout) itemView.findViewById(R.id.rltLytRoot);
 	            rltLytContent = (RelativeLayout) itemView.findViewById(R.id.rltLytContent);
+	            rltTicket = (RelativeLayout) itemView.findViewById(R.id.rltTicket);
+	            rltSave = (RelativeLayout) itemView.findViewById(R.id.rltSave);
+	            rltShare = (RelativeLayout) itemView.findViewById(R.id.rltShare);
 	            imgTicket = (ImageView) itemView.findViewById(R.id.imgTicket);
 	            imgSave = (ImageView) itemView.findViewById(R.id.imgSave);
 	            imgShare = (ImageView) itemView.findViewById(R.id.imgShare);
@@ -925,11 +928,11 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 					
 					final Resources res = FragmentUtil.getResources(venueDetailsFragment);
 					if (event.getSchedule() == null || event.getSchedule().getBookingInfos().isEmpty()) {
-						holder.imgTicket.setImageDrawable(res.getDrawable(R.drawable.tickets_disabled));
+						holder.imgTicket.setImageDrawable(res.getDrawable(R.drawable.ic_tickets_unavailable_slider));
 						holder.imgTicket.setEnabled(false);
 						
 					} else {
-						holder.imgTicket.setImageDrawable(res.getDrawable(R.drawable.tic_blue));
+						holder.imgTicket.setImageDrawable(res.getDrawable(R.drawable.ic_tickets_available_slider));
 						holder.imgTicket.setEnabled(true);
 					}
 					
@@ -1090,13 +1093,13 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 											 * prevent event click on these positions even if slider is closed
 											 */
 											if (holder.imgTicket.isEnabled() && ViewUtil.isPointInsideView(
-													mEvent.getRawX(), mEvent.getRawY(), holder.imgTicket)) {
+													mEvent.getRawX(), mEvent.getRawY(), holder.rltTicket)) {
 												onImgTicketClick(holder, event);
 													
-											} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.imgSave)) {
+											} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltSave)) {
 												onImgSaveClick(holder, event);
 												
-											} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.imgShare)) {
+											} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltShare)) {
 												onImgShareClick(holder, event);
 												
 											} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltLytRoot)) {
@@ -1340,7 +1343,8 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		}
 		
 		private void updateImgSaveSrc(ViewHolder holder, Event event, Resources res) {
-			int drawableId = (event.getAttending() == Attending.SAVED) ? R.drawable.checked_blue : R.drawable.calendar;
+			int drawableId = (event.getAttending() == Attending.SAVED) ? R.drawable.ic_saved_event_slider 
+					: R.drawable.ic_unsaved_event_slider;
 			holder.imgSave.setImageDrawable(res.getDrawable(drawableId));
 		}
 		
@@ -1516,12 +1520,12 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		}
 		
 		private void onImgTicketClick(final ViewHolder holder, final Event event) {
-			holder.imgTicket.setPressed(true);
+			holder.rltTicket.setPressed(true);
 			venueDetailsFragment.handler.postDelayed(new Runnable() {
 				
 				@Override
 				public void run() {
-					holder.imgTicket.setPressed(false);
+					holder.rltTicket.setPressed(false);
 					Bundle args = new Bundle();
 					args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
 					((ReplaceFragmentListener)FragmentUtil.getActivity(venueDetailsFragment)).replaceByFragment(
@@ -1537,12 +1541,12 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		}
 		
 		private void onImgSaveClick(final ViewHolder holder, final Event event) {
-			holder.imgSave.setPressed(true);
+			holder.rltSave.setPressed(true);
 			venueDetailsFragment.handler.postDelayed(new Runnable() {
 				
 				@Override
 				public void run() {
-					holder.imgSave.setPressed(false);
+					holder.rltSave.setPressed(false);
 					
 					EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(venueDetailsFragment).getApplication();
 					if (event.getAttending() == Attending.SAVED) {
@@ -1572,12 +1576,12 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		}
 		
 		private void onImgShareClick(final ViewHolder holder, final Event event) {
-			holder.imgShare.setPressed(true);
+			holder.rltShare.setPressed(true);
 			venueDetailsFragment.handler.postDelayed(new Runnable() {
 				
 				@Override
 				public void run() {
-					holder.imgShare.setPressed(false);
+					holder.rltShare.setPressed(false);
 					
 					ShareViaDialogFragment shareViaDialogFragment = ShareViaDialogFragment.newInstance(event, 
 							venueDetailsFragment.getScreenName());

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/divider_section_ht_navigation_drawer_list_item"
-    android:background="@android:color/white">
+    android:background="@color/nav_drawer_divider" >
     
 	<!--<TextView android:id="@+id/txtTitle"
         android:layout_width="wrap_content"
@@ -17,9 +17,11 @@
         android:layout_below="@id/txtTitle"
         android:background="@drawable/side_nav_topic_divider" />-->    
     
-    <View android:id="@+id/vDivider"
-        android:layout_width="fill_parent"
+    <View
+        xmlns:android="http://schemas.android.com/apk/res/android" 
+        android:id="@+id/vDivider"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/divider_section_ht_navigation_drawer_list_item"
         android:layout_below="@id/txtTitle"
-        android:background="@android:color/white" />    
+        android:background="@color/nav_drawer_divider" />    
 </RelativeLayout>

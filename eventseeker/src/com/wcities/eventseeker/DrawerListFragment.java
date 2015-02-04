@@ -71,7 +71,7 @@ public class DrawerListFragment extends ListFragment {
         getListView().setDivider(null);
         getListView().setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
         //getListView().setBackgroundResource(R.drawable.side_nav_bg);
-        getListView().setBackgroundColor(FragmentUtil.getResources(this).getColor(R.color.bg_screen_dark_blue));
+        //getListView().setBackgroundColor(FragmentUtil.getResources(this).getColor(R.color.bg_screen_dark_blue));
         getListView().setVerticalScrollBarEnabled(false);
         getListView().setHorizontalScrollBarEnabled(false);
         getListView().setCacheColorHint(android.R.color.transparent);
@@ -213,6 +213,7 @@ public class DrawerListFragment extends ListFragment {
 					listItemViewHolder = new ListItemViewHolder();
 					listItemViewHolder.imgIcon = (ImageView) convertView.findViewById(R.id.imgIcon);
 					listItemViewHolder.txtTitle = (TextView) convertView.findViewById(R.id.txtTitle);
+					listItemViewHolder.vSelection = convertView.findViewById(R.id.vSelection);
 					/*listItemViewHolder.vDivider = convertView.findViewById(R.id.divider);
 					listItemViewHolder.vSectionDivider = convertView.findViewById(R.id.dividerSection);*/
 					listItemViewHolder.tag = LIST_ITEM_TYPE.ITEM;
@@ -234,14 +235,17 @@ public class DrawerListFragment extends ListFragment {
 				listItemViewHolder.imgIcon.setImageDrawable(drawerListItem.iconDrawable);
 
 				if (((ListView)parent).getCheckedItemPosition() == position) {
-					convertView.setBackgroundColor(mainActivity.get().getResources().getColor(android.R.color.white));
-					listItemViewHolder.txtTitle.setTextColor(mainActivity.get().getResources().getColor(R.color.bg_screen_dark_blue));
-					listItemViewHolder.imgIcon.setSelected(true);
-					
+					listItemViewHolder.vSelection.setVisibility(View.VISIBLE);
+					//listItemViewHolder.vSelection.setBackgroundColor(mainActivity.get().getResources().getColor(android.R.color.white));
+					//convertView.setBackgroundColor(mainActivity.get().getResources().getColor(android.R.color.white));
+					//listItemViewHolder.txtTitle.setTextColor(mainActivity.get().getResources().getColor(R.color.bg_screen_dark_blue));
+					//listItemViewHolder.imgIcon.setSelected(true);
 				} else {
-					convertView.setBackgroundResource(0);
-					listItemViewHolder.txtTitle.setTextColor(mainActivity.get().getResources().getColor(android.R.color.white));
-					listItemViewHolder.imgIcon.setSelected(false);
+					listItemViewHolder.vSelection.setVisibility(View.INVISIBLE);
+					//listItemViewHolder.vSelection.setBackgroundResource(0);
+					//convertView.setBackgroundResource(0);
+					//listItemViewHolder.txtTitle.setTextColor(mainActivity.get().getResources().getColor(android.R.color.white));
+					//listItemViewHolder.imgIcon.setSelected(false);
 				}
 			}
 			if (listItemViewHolder.tag != LIST_ITEM_TYPE.HEADER) {
@@ -264,6 +268,7 @@ public class DrawerListFragment extends ListFragment {
 		private static class ListItemViewHolder {
 			private ImageView imgIcon;
 			private TextView txtTitle;
+			private View vSelection;
 			//private View vDivider, vSectionDivider;
 			private Object tag;
 		}

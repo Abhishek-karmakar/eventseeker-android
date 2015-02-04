@@ -125,7 +125,7 @@ public class SearchArtistsFragment extends PublishArtistListFragment implements 
 		Log.d(TAG, "refresh()");
 		// if user selection has changed then only reset the list
 		if (query == null || !query.equals(newQuery)) {
-			Log.d(TAG, "query == null || !query.equals(newQuery)");
+			//Log.d(TAG, "query == null || !query.equals(newQuery)");
 
 			query = newQuery;
 			artistListAdapter.setArtistsAlreadyRequested(0);

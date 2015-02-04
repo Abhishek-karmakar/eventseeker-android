@@ -682,11 +682,11 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		
 		final Resources res = FragmentUtil.getResources(this);
 		if (event.getSchedule() == null || event.getSchedule().getBookingInfos().isEmpty()) {
-			fabTickets.setImageDrawable(res.getDrawable(R.drawable.tickets_disabled));
+			fabTickets.setImageDrawable(res.getDrawable(R.drawable.ic_ticket_unavailable_floating));
 			fabTickets.setEnabled(false);
 			
 		} else {
-			fabTickets.setImageDrawable(res.getDrawable(R.drawable.tickets));
+			fabTickets.setImageDrawable(res.getDrawable(R.drawable.ic_ticket_available_floating));
 			fabTickets.setEnabled(true);
 		}
 		
@@ -695,7 +695,8 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	
 	private void updateFabSaveSrc(Resources res) {
 		//Log.d(TAG, "AT issue event.getAttending() = " + event.getAttending().getValue());
-		int drawableId = (event.getAttending() == Attending.SAVED) ? R.drawable.checked : R.drawable.calendar;
+		int drawableId = (event.getAttending() == Attending.SAVED) ? R.drawable.ic_saved_event_floating 
+				: R.drawable.ic_unsaved_event_floating;
 		fabSave.setImageDrawable(res.getDrawable(drawableId));
 	}
 	

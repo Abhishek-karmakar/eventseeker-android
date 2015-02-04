@@ -233,7 +233,7 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 		    private TextView txtEvtTitle, txtEvtTime, txtEvtLocation, txtNoItemsFound;
 		    private ImageView imgEvent, imgTicket, imgSave, imgShare;
 		    private LinearLayout lnrSliderContent;
-		    private RelativeLayout rltLytRoot, rltLytContent;
+		    private RelativeLayout rltLytRoot, rltLytContent, rltTicket, rltSave, rltShare;
 		    
 		    public ViewHolder(View root) {
 		        super(root);
@@ -246,6 +246,9 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 		        lnrSliderContent = (LinearLayout) root.findViewById(R.id.lnrSliderContent);
 		        rltLytRoot = (RelativeLayout) root.findViewById(R.id.rltLytRoot);
 		        rltLytContent = (RelativeLayout) root.findViewById(R.id.rltLytContent);
+		        rltTicket = (RelativeLayout) root.findViewById(R.id.rltTicket);
+	            rltSave = (RelativeLayout) root.findViewById(R.id.rltSave);
+	            rltShare = (RelativeLayout) root.findViewById(R.id.rltShare);
 		        imgTicket = (ImageView) root.findViewById(R.id.imgTicket);
 		        imgSave = (ImageView) root.findViewById(R.id.imgSave);
 		        imgShare = (ImageView) root.findViewById(R.id.imgShare);
@@ -358,11 +361,11 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 				
 				final Resources res = FragmentUtil.getResources(searchEventFragment);
 				if (event.getSchedule() == null || event.getSchedule().getBookingInfos().isEmpty()) {
-					holder.imgTicket.setImageDrawable(res.getDrawable(R.drawable.tickets_disabled));
+					holder.imgTicket.setImageDrawable(res.getDrawable(R.drawable.ic_tickets_unavailable_slider));
 					holder.imgTicket.setEnabled(false);
 					
 				} else {
-					holder.imgTicket.setImageDrawable(res.getDrawable(R.drawable.tic_blue));
+					holder.imgTicket.setImageDrawable(res.getDrawable(R.drawable.ic_tickets_available_slider));
 					holder.imgTicket.setEnabled(true);
 				}
 				
@@ -537,13 +540,13 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 										 * prevent event click on these positions even if slider is closed
 										 */
 										if (holder.imgTicket.isEnabled() && ViewUtil.isPointInsideView(
-												mEvent.getRawX(), mEvent.getRawY(), holder.imgTicket)) {
+												mEvent.getRawX(), mEvent.getRawY(), holder.rltTicket)) {
 											onImgTicketClick(holder, event);
 												
-										} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.imgSave)) {
+										} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltSave)) {
 											onImgSaveClick(holder, event);
 											
-										} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.imgShare)) {
+										} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltShare)) {
 											onImgShareClick(holder, event);
 											
 										} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltLytRoot)) {
@@ -591,8 +594,10 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 		}
 		
 		private void updateImgSaveSrc(ViewHolder holder, Event event, Resources res) {
-			//Log.d(TAG, "updateImgSaveSrc() - event name = " + event.getName() + ", attending = " + event.getAttending().getValue());
-			int drawableId = (event.getAttending() == Attending.SAVED) ? R.drawable.checked_blue : R.drawable.calendar;
+			//Log.d(TAG, "updateImgSaveSrc() - event name = " + event.getName() + ", attending = " 
+				//+ event.getAttending().getValue());
+			int drawableId = (event.getAttending() == Attending.SAVED) ? R.drawable.ic_saved_event_slider 
+					: R.drawable.ic_unsaved_event_slider;
 			holder.imgSave.setImageDrawable(res.getDrawable(drawableId));
 		}
 		
@@ -801,12 +806,12 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 		}
 		
 		private void onImgTicketClick(final ViewHolder holder, final Event event) {
-			holder.imgTicket.setPressed(true);
+			holder.rltTicket.setPressed(true);
 			searchEventFragment.handler.postDelayed(new Runnable() {
 				
 				@Override
 				public void run() {
-					holder.imgTicket.setPressed(false);
+					holder.rltTicket.setPressed(false);
 					Bundle args = new Bundle();
 					args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
 					((ReplaceFragmentListener) FragmentUtil.getActivity(searchEventFragment)).replaceByFragment(
@@ -823,12 +828,12 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 		}
 		
 		private void onImgSaveClick(final ViewHolder holder, final Event event) {
-			holder.imgSave.setPressed(true);
+			holder.rltSave.setPressed(true);
 			searchEventFragment.handler.postDelayed(new Runnable() {
 				
 				@Override
 				public void run() {
-					holder.imgSave.setPressed(false);
+					holder.rltSave.setPressed(false);
 					
 					EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(searchEventFragment).getApplication();
 					if (event.getAttending() == Attending.SAVED) {
@@ -858,12 +863,12 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 		}
 		
 		private void onImgShareClick(final ViewHolder holder, final Event event) {
-			holder.imgShare.setPressed(true);
+			holder.rltShare.setPressed(true);
 			searchEventFragment.handler.postDelayed(new Runnable() {
 				
 				@Override
 				public void run() {
-					holder.imgShare.setPressed(false);
+					holder.rltShare.setPressed(false);
 					
 					ShareViaDialogFragment shareViaDialogFragment = ShareViaDialogFragment.newInstance(event, 
 							((SearchFragment) searchEventFragment.getParentFragment()).getScreenName());

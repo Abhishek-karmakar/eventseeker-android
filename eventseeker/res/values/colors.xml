@@ -5,6 +5,8 @@
 
     <color name="colorPrimaryAlpha">#880097ff</color>
     <color name="colorPrimaryDarkAlpha">#88006ab2</color>
+
+    <color name="nav_drawer_divider">#33ffffff</color>
 	
 	<color name="primary_text_default_material_light">#ffffffff</color>
 	<!-- 26% of default values -->
