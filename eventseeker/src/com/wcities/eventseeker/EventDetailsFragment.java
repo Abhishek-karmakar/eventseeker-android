@@ -104,7 +104,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	private FloatingActionButton fabTickets, fabSave;
 	
 	private int limitScrollAt, actionBarElevation, fabScrollThreshold, prevScrollY = UNSCROLLED;
-	private boolean isScrollLimitReached, isDrawerOpen;
+	private boolean isScrollLimitReached, isDrawerOpen, isOnPushedToBackStackCalled;
 	private String title = "";
 	private float minTitleScale;
 	
@@ -276,6 +276,8 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 				animateSharedElements();
 				
 			} else {
+				rootView.setBackgroundColor(Color.WHITE);
+				
 				loadEventDetails = new LoadEventDetails(Api.OAUTH_TOKEN, this, this, event);
 				AsyncTaskUtil.executeAsyncTask(loadEventDetails, true);
 			}
@@ -919,21 +921,25 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	
 	@Override
 	public void onPoppedFromBackStack() {
-		// to update statusbar visibility
-		onStart();
-		// to call onFragmentResumed(Fragment) of MainActivity (to update title, current fragment tag, etc.)
-		onResume();
-		
-		for (Iterator<View> iterator = hiddenViews.iterator(); iterator.hasNext();) {
-			View view = iterator.next();
-			view.setVisibility(View.VISIBLE);
+		if (isOnPushedToBackStackCalled) {
+			isOnPushedToBackStackCalled = false;
+			
+			// to update statusbar visibility
+			onStart();
+			// to call onFragmentResumed(Fragment) of MainActivity (to update title, current fragment tag, etc.)
+			onResume();
+			
+			for (Iterator<View> iterator = hiddenViews.iterator(); iterator.hasNext();) {
+				View view = iterator.next();
+				view.setVisibility(View.VISIBLE);
+			}
+			hiddenViews.clear();
+			
+			if (mShareActionProvider != null) {
+				mShareActionProvider.setOnShareTargetSelectedListener(onShareTargetSelectedListener);
+			}
+			setMenuVisibility(true);
 		}
-		hiddenViews.clear();
-		
-		if (mShareActionProvider != null) {
-			mShareActionProvider.setOnShareTargetSelectedListener(onShareTargetSelectedListener);
-		}
-		setMenuVisibility(true);
 	}
 
 	@Override
@@ -954,6 +960,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			mShareActionProvider.setOnShareTargetSelectedListener(null);
 		}
 		setMenuVisibility(false);
+		isOnPushedToBackStackCalled = true;
 	}
 
 	@Override

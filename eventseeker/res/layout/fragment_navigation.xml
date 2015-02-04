@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white"
+    android:gravity="center_horizontal"
+    android:paddingTop="@dimen/common_t_mar_pad_for_all_layout" >
+    
+    <TextView android:id="@+id/txtTitle"
+        android:layout_width="@dimen/txt_title_w_navigation"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/txt_title_margin_t_navigation"
+        android:text="@string/select_navigation_app"
+        android:gravity="center" />
+    
+    <ImageView android:id="@+id/imgGMaps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/twitter"
+        android:layout_marginTop="@dimen/img_margin_t_navigation" />
+    
+    <TextView android:id="@+id/txtGMaps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/google_maps"
+        android:layout_marginTop="@dimen/txt_margin_t_navigation" />
+    
+    <ImageView android:id="@+id/imgNaviBridge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/twitter"
+        android:layout_marginTop="@dimen/img_margin_t_navigation" />
+    
+    <TextView android:id="@+id/txtNaviBridge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/navi_bridge"
+        android:layout_marginTop="@dimen/txt_margin_t_navigation" />
+    
+    <ImageView android:id="@+id/imgScout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/twitter"
+        android:layout_marginTop="@dimen/img_margin_t_navigation" />
+    
+    <TextView android:id="@+id/txtScout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/scout_navigation"
+        android:layout_marginTop="@dimen/txt_margin_t_navigation" />
+
+</LinearLayout>

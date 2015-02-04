@@ -713,6 +713,11 @@
     <dimen name="img_event_ht_item_list_search_venue">100dp</dimen>
     <dimen name="img_event_pad_t_item_list_search_venue">8dp</dimen>
     <dimen name="img_event_pad_b_item_list_search_venue">8dp</dimen>
+    <!-- fragment_navigation.xml -->
+    <dimen name="txt_title_w_navigation">150dp</dimen>
+    <dimen name="txt_title_margin_t_navigation">20dp</dimen>
+    <dimen name="img_margin_t_navigation">30dp</dimen>
+    <dimen name="txt_margin_t_navigation">10dp</dimen>
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <!-- activity_bosch_main.xml -->
     <dimen name="b_root_navigation_drawer_w_main">210dp</dimen>

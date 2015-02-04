@@ -120,7 +120,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	private int limitScrollAt, screenHt, minRecyclerVHt, recyclerVDummyTopViewsHt, recyclerVPrgsBarHt, 
 		recyclerVContentRowHt, vPagerCatTitlesMarginT;
 	private float translationZPx;
-	private boolean isScrollLimitReached, isDrawerOpen;
+	private boolean isScrollLimitReached, isDrawerOpen, isOnPushedToBackStackCalled;
 	private String title = "";
 	private List<Category> evtCategories;
 	private int totalScrolledDy = UNSCROLLED; // indicates layout not yet created
@@ -1441,18 +1441,22 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 
 	@Override
 	public void onPoppedFromBackStack() {
-		// to update statusbar visibility
-		onStart();
-		// to call onFragmentResumed(Fragment) of MainActivity (to update title, current fragment tag, etc.)
-		onResume();
-		
-		for (Iterator<View> iterator = hiddenViews.iterator(); iterator.hasNext();) {
-			View view = iterator.next();
-			view.setVisibility(View.VISIBLE);
+		if (isOnPushedToBackStackCalled) {
+			isOnPushedToBackStackCalled = false;
+			
+			// to update statusbar visibility
+			onStart();
+			// to call onFragmentResumed(Fragment) of MainActivity (to update title, current fragment tag, etc.)
+			onResume();
+			
+			for (Iterator<View> iterator = hiddenViews.iterator(); iterator.hasNext();) {
+				View view = iterator.next();
+				view.setVisibility(View.VISIBLE);
+			}
+			hiddenViews.clear();
+			
+			setMenuVisibility(true);
 		}
-		hiddenViews.clear();
-		
-		setMenuVisibility(true);
 	}
 
 	@Override
@@ -1472,6 +1476,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		super.onStop();
 		
 		setMenuVisibility(false);
+		isOnPushedToBackStackCalled = true;
 	}
 
 	@Override
@@ -1483,12 +1488,12 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 
 	@Override
 	public void onEventsLoaded() {
-		handler.postDelayed(new Runnable() {
+		handler.post(new Runnable() {
 			
 			@Override
 			public void run() {
 				onScrolled(0, true);
 			}
-		}, 100);
+		});
 	}
 }

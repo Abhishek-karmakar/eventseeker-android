@@ -45,6 +45,8 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 	private String searchQuery;
 	private TabBar tabBar;
 	
+	private boolean isOnPushedToBackStackCalled;
+	
 	//private SearchView searchView;
 	
 	public interface SearchFragmentChildListener {
@@ -237,9 +239,7 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 	}
 
 	@Override
-	public void addViewsToBeHidden(View... views) {
-		((CustomSharedElementTransitionSource) mTabsAdapter.getSelectedFragment()).addViewsToBeHidden(views);
-	}
+	public void addViewsToBeHidden(View... views) {}
 
 	@Override
 	public void hideSharedElements() {
@@ -248,11 +248,14 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 
 	@Override
 	public void onPushedToBackStack() {
-		((CustomSharedElementTransitionSource) mTabsAdapter.getSelectedFragment()).onPushedToBackStack();
+		isOnPushedToBackStackCalled = true;
 	}
 
 	@Override
 	public void onPoppedFromBackStack() {
-		((CustomSharedElementTransitionSource) mTabsAdapter.getSelectedFragment()).onPoppedFromBackStack();		
+		if (isOnPushedToBackStackCalled) {
+			isOnPushedToBackStackCalled = false;
+			((CustomSharedElementTransitionSource) mTabsAdapter.getSelectedFragment()).onPoppedFromBackStack();
+		}
 	}
 }

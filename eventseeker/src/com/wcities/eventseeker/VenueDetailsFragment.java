@@ -126,6 +126,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	private boolean isOnCreateViewCalledFirstTime = true;
 	private int screenW, imgVenueHt;
 	private AnimatorSet animatorSet;
+	private boolean isOnPushedToBackStackCalled;
 	
 	private View rootView;
 	private ImageView imgVenue;
@@ -241,6 +242,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 				
 			} else {
 				rootView.setBackgroundColor(Color.WHITE);
+				
 				loadVenueDetails = new LoadVenueDetails(Api.OAUTH_TOKEN, venue, this);
 				AsyncTaskUtil.executeAsyncTask(loadVenueDetails, true);
 			}
@@ -854,6 +856,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		
 		@Override
 		public void onBindViewHolder(final ViewHolder holder, final int position) {
+			Log.d(TAG, "onBindViewHolder(), pos = " +  position);
 			if (position == ViewType.IMG.ordinal()) {
 				// nothing to do
 				
@@ -1151,7 +1154,9 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			holder.txtVenue.setText(venue.getFormatedAddress(false));
 			AddressMapFragment fragment = (AddressMapFragment) venueDetailsFragment.getChildFragmentManager()
 					.findFragmentByTag(AppConstants.FRAGMENT_TAG_ADDRESS_MAP);
+			//Log.d(TAG, "AddressMapFragment = " + fragment);
 	        if (fragment == null) {
+	        	//Log.d(TAG, "call addAddressMapFragment()");
 	        	addAddressMapFragment();
 	        }
 	        
@@ -1174,64 +1179,12 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 				
 				@Override
 				public void onClick(View v) {
-					/*AddressMapFragment fragment = (AddressMapFragment) venueDetailsFragment.getChildFragmentManager()
-							.findFragmentByTag(AppConstants.FRAGMENT_TAG_ADDRESS_MAP);
-			        if (fragment != null) {
-			        	fragment.displayDrivingDirection();
-			        }*/
-					Intent intent = null;
-					double lat, lon;
-					if (venue.getAddress() != null) {
-						lat = venue.getAddress().getLat();
-						lon = venue.getAddress().getLon();
-						
-						/*intent = new Intent(android.content.Intent.ACTION_VIEW, 
-							    Uri.parse("navicon://setPOI?ver=1.4&ll=" + lat + "," + lon 
-							    		+ "&appName=pb6Nlvh1&title=" + venue.getName() 
-							    		+ "&radKM=15&tel=" + venue.getPhone() + "&callURL=com.wcities.eventseekrapp://"));
-						Log.d(TAG, "uri = " + Uri.parse("navicon://setPOI?ver=1.4&ll=" + lat + "," + lon 
-					    		+ "&appName=pb6Nlvh1&title=" + venue.getName() 
-					    		+ "&radKM=15&tel=" + venue.getPhone() + "&callURL=com.wcities.eventseeker"));*/
-						
-						/*intent = new Intent(android.content.Intent.ACTION_VIEW, 
-							    Uri.parse("http://apps.scout.me/v1/driveto?dt=" + venue.getAddress().getAddress1() + "@" + 
-							    		lat + ", " + lon + "&title=" + venue.getName() 
-							    		+ "&token=6T5HI14ZzJdKRk-PUhWzT7Zn-enFiGsUYskrN5EnXENaQnBUE3GDalgi8SN0x2J4aTxvvZuTwDfGx9WHtdwmJeJpzFprUq79p4gf54Yiq9jM6wFwHaZSBp1k1AYtzdcfhlWvjLcKWCpqe9juykeaHSTsRr-cJde4uYeWGDSFerI"));
-						Log.d(TAG, "uri = " + Uri.parse("http://apps.scout.me/v1/driveto?dt=" + venue.getAddress().getAddress1() + "@" + 
-					    		lat + ", " + lon + "&title=" + venue.getName() 
-					    		+ "&token=6T5HI14ZzJdKRk-PUhWzT7Zn-enFiGsUYskrN5EnXENaQnBUE3GDalgi8SN0x2J4aTxvvZuTwDfGx9WHtdwmJeJpzFprUq79p4gf54Yiq9jM6wFwHaZSBp1k1AYtzdcfhlWvjLcKWCpqe9juykeaHSTsRr-cJde4uYeWGDSFerI"));*/
-						
-						if (lat == 0 && lon == 0) {
-							if (venue.getAddress().getAddress1() != null) {
-								//Log.d(TAG, "fabNavigate address - " + venue.getAddress().getAddress1());
-								intent = new Intent(android.content.Intent.ACTION_VIEW, 
-									    Uri.parse("google.navigation:q=" + venue.getAddress().getAddress1()));
-								
-							} else if (venue.getAddress().getCity() != null) {
-								//Log.d(TAG, "fabNavigate city - " + venue.getAddress().getCity());
-								intent = new Intent(android.content.Intent.ACTION_VIEW, 
-									    Uri.parse("google.navigation:q=" + venue.getAddress().getCity()));
-								
-							} else {
-								//Log.d(TAG, "fabNavigate name - " + venue.getName());
-								intent = new Intent(android.content.Intent.ACTION_VIEW, 
-									    Uri.parse("google.navigation:q=" + venue.getName()));
-							}
-							
-						} else {
-							//Log.d(TAG, "fabNavigate lat, lon - " + lat + "," + lon);
-							intent = new Intent(android.content.Intent.ACTION_VIEW, 
-								    Uri.parse("google.navigation:q=" + lat + "," + lon));
-						}
-						
-					} else {
-						//Log.d(TAG, "fabNavigate name - " + venue.getName());
-						intent = new Intent(android.content.Intent.ACTION_VIEW, 
-							    Uri.parse("google.navigation:q=" + venue.getName()));
-					}
-					
-					//intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
-					venueDetailsFragment.startActivity(intent);
+					// need to call onPushedToBackStack() since we are adding NavigationFragment instead of replacing 
+					venueDetailsFragment.onPushedToBackStack();
+					Bundle args = new Bundle();
+					args.putSerializable(BundleKeys.VENUE, venue);
+					((ReplaceFragmentListener)FragmentUtil.getActivity(venueDetailsFragment)).replaceByFragment(
+							AppConstants.FRAGMENT_TAG_NAVIGATION, args);
 				}
 			});
 		}
@@ -1297,13 +1250,13 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 						 * height it automatically resettles itself such that recyclerview again becomes unscrollable.
 						 * Accordingly we need to reset scrolled amount, artist img & title
 						 */
-						venueDetailsFragment.handler.postDelayed(new Runnable() {
+						venueDetailsFragment.handler.post(new Runnable() {
 							
 							@Override
 							public void run() {
 								venueDetailsFragment.onScrolled(0, true);
 							}
-						}, 100);
+						});
 						
 					} else {
 						expandVenueDesc(holder);
@@ -1530,6 +1483,8 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 					args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
 					((ReplaceFragmentListener)FragmentUtil.getActivity(venueDetailsFragment)).replaceByFragment(
 							AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
+					
+					venueDetailsFragment.onPushedToBackStack();
 					/**
 					 * added on 15-12-2014
 					 */
@@ -1689,25 +1644,30 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			mShareActionProvider.setOnShareTargetSelectedListener(null);
 		}
 		setMenuVisibility(false);
+		isOnPushedToBackStackCalled = true;
 	}
 
 	@Override
 	public void onPoppedFromBackStack() {
-		// to update statusbar visibility
-		onStart();
-		// to call onFragmentResumed(Fragment) of MainActivity (to update title, current fragment tag, etc.)
-		onResume();
-		
-		for (Iterator<View> iterator = hiddenViews.iterator(); iterator.hasNext();) {
-			View view = iterator.next();
-			view.setVisibility(View.VISIBLE);
+		if (isOnPushedToBackStackCalled) {
+			isOnPushedToBackStackCalled = false;
+			
+			// to update statusbar visibility
+			onStart();
+			// to call onFragmentResumed(Fragment) of MainActivity (to update title, current fragment tag, etc.)
+			onResume();
+			
+			for (Iterator<View> iterator = hiddenViews.iterator(); iterator.hasNext();) {
+				View view = iterator.next();
+				view.setVisibility(View.VISIBLE);
+			}
+			hiddenViews.clear();
+			
+			if (mShareActionProvider != null) {
+				mShareActionProvider.setOnShareTargetSelectedListener(onShareTargetSelectedListener);
+			}
+			setMenuVisibility(true);
 		}
-		hiddenViews.clear();
-		
-		if (mShareActionProvider != null) {
-			mShareActionProvider.setOnShareTargetSelectedListener(onShareTargetSelectedListener);
-		}
-		setMenuVisibility(true);
 	}
 
 	@Override
@@ -1732,12 +1692,12 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 
 	@Override
 	public void onEventsLoaded() {
-		handler.postDelayed(new Runnable() {
+		handler.post(new Runnable() {
 			
 			@Override
 			public void run() {
 				onScrolled(0, true);
 			}
-		}, 100);
+		});
 	}
 }

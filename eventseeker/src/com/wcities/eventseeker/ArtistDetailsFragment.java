@@ -72,8 +72,8 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.asynctask.LoadArtistDetails;
 import com.wcities.eventseeker.asynctask.LoadArtistDetails.OnArtistUpdatedListener;
-import com.wcities.eventseeker.asynctask.LoadArtistEvents.LoadArtistEventsListener;
 import com.wcities.eventseeker.asynctask.LoadArtistEvents;
+import com.wcities.eventseeker.asynctask.LoadArtistEvents.LoadArtistEventsListener;
 import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable;
@@ -141,6 +141,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	private boolean isOnCreateViewCalledFirstTime = true;
 	private int screenW, imgArtistHt;
 	private AnimatorSet animatorSet;
+	private boolean isOnPushedToBackStackCalled;
 	
 	private LoadArtistDetails loadArtistDetails;
 	private LoadArtistEvents loadArtistEvents;
@@ -200,6 +201,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		//Log.d(TAG, "onCreateView()");
 		/**
 		 * on orientation change we need to recalculate this due to different values of 
 		 * action_bar_ht on both orientations
@@ -1586,13 +1588,13 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 						 * height it automatically resettles itself such that recyclerview again becomes unscrollable.
 						 * Accordingly we need to reset scrolled amount, artist img & title
 						 */
-						artistDetailsFragment.handler.postDelayed(new Runnable() {
+						artistDetailsFragment.handler.post(new Runnable() {
 							
 							@Override
 							public void run() {
 								artistDetailsFragment.onScrolled(0, true);
 							}
-						}, 100);
+						});
 						
 					} else {
 						expandArtistDesc(holder);
@@ -1734,25 +1736,30 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			mShareActionProvider.setOnShareTargetSelectedListener(null);
 		}
 		setMenuVisibility(false);
+		isOnPushedToBackStackCalled = true;
 	}
 
 	@Override
 	public void onPoppedFromBackStack() {
-		// to update statusbar visibility
-		onStart();
-		// to call onFragmentResumed(Fragment) of MainActivity (to update title, current fragment tag, etc.)
-		onResume();
-		
-		for (Iterator<View> iterator = hiddenViews.iterator(); iterator.hasNext();) {
-			View view = iterator.next();
-			view.setVisibility(View.VISIBLE);
+		if (isOnPushedToBackStackCalled) {
+			isOnPushedToBackStackCalled = false;
+			
+			// to update statusbar visibility
+			onStart();
+			// to call onFragmentResumed(Fragment) of MainActivity (to update title, current fragment tag, etc.)
+			onResume();
+			
+			for (Iterator<View> iterator = hiddenViews.iterator(); iterator.hasNext();) {
+				View view = iterator.next();
+				view.setVisibility(View.VISIBLE);
+			}
+			hiddenViews.clear();
+			
+			if (mShareActionProvider != null) {
+				mShareActionProvider.setOnShareTargetSelectedListener(onShareTargetSelectedListener);
+			}
+			setMenuVisibility(true);
 		}
-		hiddenViews.clear();
-		
-		if (mShareActionProvider != null) {
-			mShareActionProvider.setOnShareTargetSelectedListener(onShareTargetSelectedListener);
-		}
-		setMenuVisibility(true);
 	}
 
 	@Override
@@ -1828,12 +1835,12 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		/*Log.d(TAG, "top = " + recyclerVArtists.getLayoutManager().findViewByPosition(1).getTop() 
 				+ ", totalScrolledDy = " + totalScrolledDy + ", diff = " + (imgArtistHt - recyclerVArtists.getLayoutManager().findViewByPosition(1).getTop()));*/
 		//totalScrolledDy = imgArtistHt - recyclerVArtists.getLayoutManager().getChildAt(0).getTop();
-		handler.postDelayed(new Runnable() {
+		handler.post(new Runnable() {
 			
 			@Override
 			public void run() {
 				onScrolled(0, true);
 			}
-		}, 100);
+		});
 	}
 }

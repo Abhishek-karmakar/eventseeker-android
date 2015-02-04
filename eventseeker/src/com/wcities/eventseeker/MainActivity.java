@@ -964,7 +964,7 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	private void onFragmentResumed(int position, String title, String fragmentTag) {
-		//Log.d(TAG, "onFragmentResumed() for title = " + title + ", position = " + position);
+		//Log.d(TAG, "onFragmentResumed() for title = " + title + ", position = " + position + ", fragmentTag = " + fragmentTag);
 		drawerItemSelectedPosition = position;
 		if (drawerItemSelectedPosition != AppConstants.INVALID_INDEX) {
 			setDrawerIndicatorEnabled(true);
@@ -1218,7 +1218,8 @@ public class MainActivity extends ActionBarActivity implements
 		}
 		
 		if (replaceByFragmentTag.equals(AppConstants.FRAGMENT_TAG_LOGIN_SYNCING) || 
-				((args != null && args.containsKey(BundleKeys.SHARED_ELEMENTS)))) {
+				((args != null && args.containsKey(BundleKeys.SHARED_ELEMENTS))) || 
+				AppConstants.FRAGMENT_TAG_VENUE_DETAILS.equals(currentContentFragmentTag)) {
 			if (args != null && args.containsKey(BundleKeys.SHARED_ELEMENTS)) {
 				prevCustomSharedElementTransitionSource = (CustomSharedElementTransitionSource) getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
 			}
@@ -1226,7 +1227,11 @@ public class MainActivity extends ActionBarActivity implements
 			/**
 			 * add fragment instead of replacing so that behind its transparent background 
 			 * a) sign in/sign up screen remains visible OR
-			 * b) screen transition executes intuitively when there are some shared elements 
+			 * b) screen transition executes intuitively when there are some shared elements
+			 * c) If we replace or remove-add anything on venue details fragment, it crashes with 
+			 * "IllegalArgumentException: no view found for id R.id.frmLayoutMapContainer for 
+			 * AddressMapFragment" on coming back to venue details screen. Couldn't find its solution. 
+			 * Probably it's happening with MapFragment within RecyclerView.
 			 */
 			fragmentTransaction.add(R.id.content_frame, replaceBy, replaceByFragmentTag);
 			
@@ -1454,6 +1459,12 @@ public class MainActivity extends ActionBarActivity implements
 			twitterSyncingFragment.setArguments(args);
 			selectNonDrawerItem(twitterSyncingFragment, fragmentTag, getResources().getString(
 					R.string.title_twitter), true);
+			
+		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_NAVIGATION)) {
+			NavigationFragment navigationFragment = new NavigationFragment();
+			navigationFragment.setArguments(args);
+			selectNonDrawerItem(navigationFragment, fragmentTag, getResources().getString(
+					R.string.title_navigation), true);
 		}
 	}
 
@@ -1897,6 +1908,10 @@ public class MainActivity extends ActionBarActivity implements
 			Bundle args = fragment.getArguments();
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(args.getInt(BundleKeys.SCREEN_TITLE)),
 					AppConstants.FRAGMENT_TAG_SELECTED_ARTIST_CATEGORY_FRAGMENT);
+			
+		} else if (fragment instanceof NavigationFragment) {
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_navigation), 
+					AppConstants.FRAGMENT_TAG_NAVIGATION);
 		}
 	}
 

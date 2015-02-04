@@ -240,6 +240,7 @@ public class SearchArtistsFragment extends PublishArtistListFragment implements 
 		 * on this fragment from onPoppedFromBackStack(), which would have added fb callback again
 		 */
 		//super.onStop();
+		((CustomSharedElementTransitionSource) getParentFragment()).onPushedToBackStack();
 	}
 
 	@Override

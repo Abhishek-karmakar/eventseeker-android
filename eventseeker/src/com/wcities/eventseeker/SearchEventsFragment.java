@@ -965,6 +965,7 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 		 * on this fragment from onPoppedFromBackStack(), which would have added fb callback again
 		 */
 		//super.onStop();
+		((CustomSharedElementTransitionSource) getParentFragment()).onPushedToBackStack();
 	}
 
 	@Override

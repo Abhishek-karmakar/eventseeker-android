@@ -266,7 +266,7 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 
 	@Override
 	public void onPushedToBackStack() {
-		// TODO Auto-generated method stub
+		((CustomSharedElementTransitionSource) getParentFragment()).onPushedToBackStack();
 	}
 
 	@Override
