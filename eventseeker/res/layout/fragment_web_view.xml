@@ -10,9 +10,12 @@ devices sometimes shows some other fragment available in backstack through this 
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent" />
 	
-	<ProgressBar android:id="@+id/progressBar"
+	<!-- <ProgressBar android:id="@+id/progressBar"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_centerInParent="true" />
+	    android:layout_centerInParent="true" /> -->
+	    
+	<include layout="@layout/progress_bar_eventseeker" 
+        android:id="@+id/rltProgressBar" />
 	
 </RelativeLayout>

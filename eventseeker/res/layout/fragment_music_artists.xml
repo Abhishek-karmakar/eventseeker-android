@@ -52,7 +52,7 @@
                     android:id="@+id/imgClassicRock"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_alternative_rock" />
+                    android:src="@drawable/ic_classic_rock" />
 
                 <Button
                     android:id="@+id/btnClassicRock"
@@ -82,7 +82,7 @@
                     android:id="@+id/imgIndieRock"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_alternative_rock" />
+                    android:src="@drawable/ic_indie_rock" />
 
                 <Button
                     android:id="@+id/btnIndieRock"
@@ -108,7 +108,7 @@
                     android:id="@+id/imgFolk"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_alternative_rock" />
+                    android:src="@drawable/ic_folk" />
 
                 <Button
                     android:id="@+id/btnFolk"
@@ -138,7 +138,7 @@
                     android:id="@+id/imgCountry"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_alternative_rock" />
+                    android:src="@drawable/ic_country" />
 
                 <Button
                     android:id="@+id/btnCountry"
@@ -164,7 +164,7 @@
                     android:id="@+id/imgElectronic"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_alternative_rock" />
+                    android:src="@drawable/ic_electronic" />
 
                 <Button
                     android:id="@+id/btnElectronic"
@@ -194,7 +194,7 @@
                     android:id="@+id/imgPop"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_alternative_rock" />
+                    android:src="@drawable/ic_pop" />
 
                 <Button
                     android:id="@+id/btnPop"
@@ -220,7 +220,7 @@
                     android:id="@+id/imgPunk"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_alternative_rock" />
+                    android:src="@drawable/ic_punk" />
 
                 <Button
                     android:id="@+id/btnPunk"
@@ -250,7 +250,7 @@
                     android:id="@+id/imgHardRockMetal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_alternative_rock" />
+                    android:src="@drawable/ic_hard_rock_metal" />
 
                 <Button
                     android:id="@+id/btnHardRockMetal"
@@ -276,7 +276,7 @@
                     android:id="@+id/imgWorldMusic"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_alternative_rock" />
+                    android:src="@drawable/ic_world_music" />
 
                 <Button
                     android:id="@+id/btnWorldMusic"
@@ -306,7 +306,7 @@
                     android:id="@+id/imgBluesJazz"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_alternative_rock" />
+                    android:src="@drawable/ic_blues_jazz" />
 
                 <Button
                     android:id="@+id/btnBluesJazz"
@@ -332,7 +332,7 @@
                     android:id="@+id/imgHipHop"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_alternative_rock" />
+                    android:src="@drawable/ic_hip_hop" />
 
                 <Button
                     android:id="@+id/btnHipHop"
@@ -363,7 +363,7 @@
                     android:id="@+id/imgSoulRAndBFunck"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_alternative_rock" />
+                    android:src="@drawable/ic_soul_r_and_b_funck" />
 
                 <Button
                     android:id="@+id/btnSoulRAndBFunck"
@@ -389,7 +389,7 @@
                     android:id="@+id/imgClassical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_alternative_rock" />
+                    android:src="@drawable/ic_classical" />
 
                 <Button
                     android:id="@+id/btnClassical"

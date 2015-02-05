@@ -15,7 +15,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_comedy" >
+            android:background="@drawable/ic_featured" >
 
             <Button
                 android:id="@+id/btnFeatured"
@@ -33,7 +33,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_comedy" >
+            android:background="@drawable/ic_music" >
 
             <Button
                 android:id="@+id/btnMusic"
@@ -69,7 +69,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_comedy" >
+            android:background="@drawable/ic_theater" >
 
             <Button
                 android:id="@+id/btnTheater"
@@ -87,7 +87,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_comedy" >
+            android:background="@drawable/ic_sports" >
 
             <Button
                 android:id="@+id/btnSports"

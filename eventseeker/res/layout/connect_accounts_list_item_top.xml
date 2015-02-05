@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/txt_sync_count_margin_t_connect_accounts_li_top"
-        android:background="@drawable/ic_launcher_d"
+        android:background="@drawable/ic_circle_bg"
         android:text="217"
         android:textColor="@android:color/white"
         android:textSize="@dimen/txt_sync_count_txt_size_connect_accounts_li_top"

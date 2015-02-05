@@ -96,6 +96,7 @@
 			        <View android:id="@+id/vHorLine1"
 			            android:layout_width="match_parent"
 			            android:layout_height="@dimen/v_hor_line_ht_event_details"
+			            android:layout_marginBottom="@dimen/v_hor_margin_b_event_details"
 			            android:background="@color/gray_shade_d"
 			            android:layout_gravity="bottom" />
 			        

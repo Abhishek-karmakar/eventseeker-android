@@ -1614,14 +1614,14 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		private void expandArtistDesc(ViewHolder holder) {
 			holder.txtDesc.setMaxLines(Integer.MAX_VALUE);
 			holder.txtDesc.setEllipsize(null);
-			holder.imgDown.setImageDrawable(FragmentUtil.getResources(artistDetailsFragment).getDrawable(R.drawable.less));
+			holder.imgDown.setImageDrawable(FragmentUtil.getResources(artistDetailsFragment).getDrawable(R.drawable.ic_description_collapse));
 			isArtistDescExpanded = true;
 		}
 		
 		private void collapseArtistDesc(ViewHolder holder) {
 			holder.txtDesc.setMaxLines(MAX_LINES_ARTIST_DESC);
 			holder.txtDesc.setEllipsize(TruncateAt.END);
-			holder.imgDown.setImageDrawable(FragmentUtil.getResources(artistDetailsFragment).getDrawable(R.drawable.down));
+			holder.imgDown.setImageDrawable(FragmentUtil.getResources(artistDetailsFragment).getDrawable(R.drawable.ic_description_expand));
 			isArtistDescExpanded = false;
 		}
 		

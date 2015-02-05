@@ -33,17 +33,17 @@ behind this layout-->
         android:layout_below="@id/rltLytAddress"
         android:layout_centerHorizontal="true" />
     
-    <!-- <com.melnykov.fab.FloatingActionButton android:id="@+id/fabPhone"
+    <com.melnykov.fab.FloatingActionButton android:id="@+id/fabPhone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/rltLytAddress"
         android:layout_marginTop="@dimen/fab_margin_t_rv_item_address_map_venue_details"
         android:layout_toLeftOf="@id/vFabSeparator"
-        android:src="@drawable/ic_phno_avail"
+        android:src="@drawable/ic_call_floating"
         fab:fab_type="normal"
         android:scaleType="fitXY"
-        fab:fab_colorNormal="@color/darker_gray"
-        fab:fab_colorPressed="@color/gray_shade_7"
+        fab:fab_colorNormal="@color/colorPrimary"
+        fab:fab_colorPressed="@color/darker_gray"
         fab:fab_colorRipple="@android:color/white"
         fab:fab_shadow="false"
         android:elevation="0dp" />
@@ -54,15 +54,15 @@ behind this layout-->
         android:layout_below="@id/rltLytAddress"
         android:layout_marginTop="@dimen/fab_margin_t_rv_item_address_map_venue_details"
         android:layout_toRightOf="@id/vFabSeparator"
-        android:src="@drawable/calendar"
+        android:src="@drawable/ic_car_floating"
         fab:fab_type="normal"
-        fab:fab_colorNormal="@color/darker_gray"
-        fab:fab_colorPressed="@color/gray_shade_7"
+        fab:fab_colorNormal="@color/colorPrimary"
+        fab:fab_colorPressed="@color/darker_gray"
         fab:fab_colorRipple="@android:color/white"
         fab:fab_shadow="false"
-        android:elevation="0dp" /> -->
+        android:elevation="0dp" />
         
-    <ImageView android:id="@+id/fabPhone"
+    <!-- <ImageView android:id="@+id/fabPhone"
         android:layout_width="@dimen/fab_size_normal"
         android:layout_height="@dimen/fab_size_normal"
         android:layout_below="@id/rltLytAddress"
@@ -78,7 +78,7 @@ behind this layout-->
         android:layout_marginTop="@dimen/fab_margin_t_rv_item_address_map_venue_details"
         android:layout_toRightOf="@id/vFabSeparator"
         android:src="@drawable/ic_drive_loc_avail"
-        android:elevation="0dp" />
+        android:elevation="0dp" /> -->
     
     <View android:id="@+id/vHorLine"
         android:layout_width="match_parent"

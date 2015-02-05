@@ -140,18 +140,18 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	
 	private final HashMap<Integer, Integer> categoryImgs = new HashMap<Integer, Integer>() {
 		{
-			put(AppConstants.CATEGORY_ID_START, R.drawable.cat_900);
-			put(AppConstants.CATEGORY_ID_START + 1, R.drawable.cat_901);
-			put(AppConstants.CATEGORY_ID_START + 2, R.drawable.cat_902);
-			put(AppConstants.CATEGORY_ID_START + 3, R.drawable.cat_903);
-			put(AppConstants.CATEGORY_ID_START + 4, R.drawable.cat_904);
-			put(AppConstants.CATEGORY_ID_START + 5, R.drawable.cat_905);
-			put(AppConstants.CATEGORY_ID_START + 6, R.drawable.cat_906);
-			put(AppConstants.CATEGORY_ID_START + 7, R.drawable.cat_907);
-			put(AppConstants.CATEGORY_ID_START + 8, R.drawable.cat_908);
-			put(AppConstants.CATEGORY_ID_START + 9, R.drawable.cat_909);
-			put(AppConstants.CATEGORY_ID_START + 10, R.drawable.cat_910);
-			put(AppConstants.CATEGORY_ID_START + 11, R.drawable.cat_911);
+			put(AppConstants.CATEGORY_ID_START, R.drawable.ic_concerts_cat);
+			put(AppConstants.CATEGORY_ID_START + 1, R.drawable.ic_theater_cat);
+			put(AppConstants.CATEGORY_ID_START + 2, R.drawable.ic_sports_cat);
+			put(AppConstants.CATEGORY_ID_START + 3, R.drawable.ic_art_and_museum_cat);
+			put(AppConstants.CATEGORY_ID_START + 4, R.drawable.ic_dance_cat);
+			put(AppConstants.CATEGORY_ID_START + 5, R.drawable.ic_night_life_cat);
+			put(AppConstants.CATEGORY_ID_START + 6, R.drawable.ic_educational_cat);
+			put(AppConstants.CATEGORY_ID_START + 7, R.drawable.ic_festivals_cat);
+			put(AppConstants.CATEGORY_ID_START + 8, R.drawable.ic_family_cat);
+			put(AppConstants.CATEGORY_ID_START + 9, R.drawable.ic_community_cat);
+			put(AppConstants.CATEGORY_ID_START + 10, R.drawable.ic_business_cat);
+			put(AppConstants.CATEGORY_ID_START + 11, R.drawable.ic_tour_cat);
 		}
 	};
 	

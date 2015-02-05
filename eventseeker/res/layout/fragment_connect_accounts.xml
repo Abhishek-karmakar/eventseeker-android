@@ -3,16 +3,16 @@
     android:id="@+id/rltLayoutRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ic_blue_app_bg"
-    android:padding="@dimen/rlt_layout_root_pad_fragment_connect_accounts_list" >
+    android:background="@drawable/ic_blue_app_bg" >
 
     <ListView
         android:id="@id/android:list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/common_t_mar_pad_for_all_layout" />
+        android:layout_marginTop="@dimen/common_t_mar_pad_for_all_layout" 
+        android:layout_margin="@dimen/rlt_layout_root_pad_fragment_connect_accounts_list" />
 
-    <LinearLayout
+    <!-- <LinearLayout
         android:id="@+id/lnrLayoutProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,6 +30,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="@string/loading" />
-    </LinearLayout>
+    </LinearLayout> -->
+    
+    <include layout="@layout/progress_bar_eventseeker"
+        android:id="@+id/rltLayoutProgress" 
+        android:visibility="gone" />"
 
 </RelativeLayout>

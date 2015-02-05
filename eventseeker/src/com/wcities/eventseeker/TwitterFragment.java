@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.ConnectAccountsFragment.ServiceAccount;
@@ -35,7 +36,7 @@ public class TwitterFragment extends FragmentLoadableFromBackStack {
 	private Bundle webViewBundle;
 
 	private WebView webView;
-	private ProgressBar progressBar;
+	private RelativeLayout rltProgressBar;
 	
 	private WebViewClient webViewClient = new WebViewClient() {
 		
@@ -85,13 +86,13 @@ public class TwitterFragment extends FragmentLoadableFromBackStack {
 		@Override
 		public void onPageStarted(WebView view, String url, Bitmap favicon) {
 			super.onPageStarted(view, url, favicon);
-			progressBar.setVisibility(View.VISIBLE);
+			rltProgressBar.setVisibility(View.VISIBLE);
 		}
 		
 		@Override
 		public void onPageFinished(WebView view, String url) {
 			super.onPageFinished(view, url);
-			progressBar.setVisibility(View.INVISIBLE);
+			rltProgressBar.setVisibility(View.INVISIBLE);
 		}
 	};
 	
@@ -116,7 +117,7 @@ public class TwitterFragment extends FragmentLoadableFromBackStack {
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_twitter_login, null);
 		webView = (WebView) v.findViewById(R.id.webView);
-		progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+		rltProgressBar = (RelativeLayout) v.findViewById(R.id.rltProgressBar);
 		
 		webView.setWebViewClient(webViewClient);
 		webView.getSettings().setUseWideViewPort(true);

@@ -161,7 +161,6 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 				holder.txtLinkTitle = (TextView) rltLayoutNewsItemContainer.findViewById(R.id.txtLinkTitle);
 				holder.txtDesc = (TextView) rltLayoutNewsItemContainer.findViewById(R.id.txtDesc);
 				holder.txtTrending = (TextView) rltLayoutNewsItemContainer.findViewById(R.id.txtTrending);
-				holder.imgTrending = (ImageView) rltLayoutNewsItemContainer.findViewById(R.id.imgTrending);
 				
 				RelativeLayout rltLayoutNewsItem2Container = holder.rltLayoutNewsItem2Container 
 						= (RelativeLayout) convertView.findViewById(R.id.rltLayoutNewsItemContainer2);
@@ -172,7 +171,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 				holder.imgLink2 = (ImageView) rltLayoutNewsItem2Container.findViewById(R.id.imgLink);
 				holder.txtLinkTitle2 = (TextView) rltLayoutNewsItem2Container.findViewById(R.id.txtLinkTitle);
 				holder.txtDesc2 = (TextView) rltLayoutNewsItem2Container.findViewById(R.id.txtDesc);
-				holder.imgTrending2 = (ImageView) rltLayoutNewsItem2Container.findViewById(R.id.imgTrending);
+				holder.txtTrending2 = (TextView) rltLayoutNewsItemContainer.findViewById(R.id.txtTrending);
 				
 				convertView.setTag(holder);
 				
@@ -227,14 +226,13 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 
 		private RelativeLayout rltLayoutNewsItemContainer;
 		private ImageView imgPhoto;
-		private TextView txtTitle, txtTime, txtLinkTitle, txtDesc;
-		public TextView txtTrending;
-		private ImageView imgLink, imgVideo, imgTrending;
+		private TextView txtTitle, txtTime, txtLinkTitle, txtDesc, txtTrending;
+		private ImageView imgLink, imgVideo;
 		
 		private RelativeLayout rltLayoutNewsItem2Container;
 		private ImageView imgPhoto2;
-		private TextView txtTitle2, txtTime2, txtLinkTitle2, txtDesc2;
-		private ImageView imgLink2, imgVideo2, imgTrending2;
+		private TextView txtTitle2, txtTime2, txtLinkTitle2, txtDesc2, txtTrending2;
+		private ImageView imgLink2, imgVideo2;
 		
 		public ImageView getImgPhoto() {
 			return imgPhoto;
@@ -352,7 +350,6 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 			txtTitle.setText(title);
 			txtTime.setText(time);
 			txtDesc.setText(item.getPostDesc());
-			imgTrending.setVisibility(isTrending ? View.VISIBLE : View.GONE);
 			txtTrending.setVisibility(isTrending ? View.VISIBLE : View.GONE);
 			
 			rltLayoutNewsItemContainer.setOnClickListener(new OnClickListener() {
@@ -427,7 +424,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 			txtTitle2.setText(title);
 			txtTime2.setText(time);
 			txtDesc2.setText(item.getPostDesc());
-			imgTrending2.setVisibility(isTrending ? View.VISIBLE : View.GONE);
+			txtTrending2.setVisibility(isTrending ? View.VISIBLE : View.GONE);
 			
 			rltLayoutNewsItem2Container.setOnClickListener(new OnClickListener() {
 				

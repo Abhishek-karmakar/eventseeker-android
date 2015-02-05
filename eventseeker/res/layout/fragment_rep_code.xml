@@ -52,12 +52,15 @@
 	        android:paddingRight="@dimen/btn_submit_pad_r_fragment_rep_code"
 	        android:layout_centerHorizontal="true" />
 	    
-	    <ProgressBar android:id="@+id/progressBar"
+	    <!-- <ProgressBar android:id="@+id/progressBar"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_below="@id/edtRepCode"
 	        android:layout_marginTop="@dimen/btn_submit_margin_t_fragment_rep_code"
 	        android:layout_centerHorizontal="true"
+	        android:visibility="invisible" /> -->
+	    <include android:id="@+id/rltProgressBar"
+	        layout="@layout/progress_bar_eventseeker" 
 	        android:visibility="invisible" />
     
     </RelativeLayout>

@@ -3,17 +3,21 @@
     android:id="@+id/rltLytRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent" >
-    
-    <ImageView android:id="@+id/imgPrgsCenter"
+    android:layout_centerInParent="true"
+    android:background="@color/semi_translucent" >
+
+    <ImageView
+        android:id="@+id/imgPrgsCenter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:src="@drawable/ic_notification" />
-    
-    <ProgressBar android:id="@+id/prgsBar"
+        android:src="@drawable/ic_progress_e" />
+
+    <ProgressBar
+        android:id="@+id/prgsBar"
+        style="@style/CustomProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
-    
+
 </RelativeLayout>

@@ -367,7 +367,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 			if (item == null || 
 					((item instanceof List) && ((List<FriendNewsItem>)item).get(0) == null)) {
 				if (convertView == null || convertView.getTag() instanceof FriendNewsItemViewHolder) {
-					convertView = mInflater.inflate(R.layout.list_progress_bar, null);
+					convertView = mInflater.inflate(R.layout.progress_bar_eventseeker_fixed_ht, null);
 					convertView.setTag(AppConstants.TAG_PROGRESS_INDICATOR);
 					convertView.setBackgroundColor(getResources().getColor(R.color.root_lnr_layout_bg_friends_activity_list_item));
 				}

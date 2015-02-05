@@ -21,7 +21,7 @@
     <ImageView android:id="@+id/imgDown"
     	android:layout_width="wrap_content"
     	android:layout_height="wrap_content"
-    	android:src="@drawable/down"
+    	android:src="@drawable/ic_description_expand"
     	android:layout_below="@id/txtDesc"
     	android:layout_marginLeft="@dimen/img_down_margin_l_rv_item_desc"
     	android:layout_marginRight="@dimen/img_down_margin_r_rv_item_desc"
@@ -33,7 +33,8 @@
         android:background="@color/gray_shade_d"
         android:layout_alignBottom="@id/imgDown"
         android:layout_toRightOf="@id/imgDown"
-        android:layout_marginRight="@dimen/txt_desc_margin_r_rv_item_desc" />
+        android:layout_marginRight="@dimen/txt_desc_margin_r_rv_item_desc" 
+        android:layout_marginBottom="@dimen/v_hor_margin_b_event_details" />
 	      
 </RelativeLayout>
 

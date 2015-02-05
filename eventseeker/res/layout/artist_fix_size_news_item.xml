@@ -33,22 +33,13 @@
 		android:textSize="@dimen/txt_time_txt_size_artist_news_item"
 		android:text="@string/trending"
 		android:layout_alignParentRight="true"
+		android:layout_alignTop="@+id/txtTime"
+		android:layout_alignBottom="@+id/txtTime"
+		android:drawableLeft="@drawable/ic_trending"
 		android:layout_marginRight="@dimen/txt_margin_r_artist_news_item" 
-		android:layout_marginLeft="@dimen/txt_margin_l_artist_news_item"
-		android:layout_marginBottom="@dimen/txt_time_margin_b_artist_news_item"
-		android:visibility="gone"
+		android:drawablePadding="@dimen/txt_margin_l_artist_news_item"
+		android:visibility="visible"
 		android:textColor="@color/colorPrimary" />
- 
-	<ImageView android:id="@+id/imgTrending"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_below="@id/txtTitle"
-		android:layout_marginBottom="@dimen/txt_time_margin_b_artist_news_item"
-		android:layout_alignBottom="@+id/txtTrending"
-		android:layout_alignTop="@+id/txtTrending"
-		android:layout_toLeftOf="@+id/txtTrending" 
-		android:visibility="gone"
-		android:src="@drawable/ic_trending" />
 	 
 	<ImageView android:id="@+id/imgPhoto"
 		android:layout_width="wrap_content"

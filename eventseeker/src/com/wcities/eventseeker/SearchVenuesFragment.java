@@ -144,7 +144,7 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 	    	
 			if (venueList.get(position) == null) {
 				if (convertView == null || !convertView.getTag().equals(AppConstants.TAG_PROGRESS_INDICATOR)) {
-					convertView = mInflater.inflate(R.layout.list_progress_bar, null);
+					convertView = mInflater.inflate(R.layout.progress_bar_eventseeker_fixed_ht, null);
 					convertView.setTag(AppConstants.TAG_PROGRESS_INDICATOR);
 				}
 				

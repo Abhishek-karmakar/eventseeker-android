@@ -30,6 +30,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.auth.GoogleAuthUtil;
@@ -140,7 +141,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	
 	private boolean isProgressVisible, isFirstTimeLaunch;
 	
-	private LinearLayout lnrLayoutProgress;
+	private RelativeLayout rltLayoutProgress;
 	
 	private Resources res;
 	
@@ -183,7 +184,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = LayoutInflater.from(FragmentUtil.getActivity(this)).inflate(R.layout.fragment_connect_accounts, null);
-		lnrLayoutProgress = (LinearLayout) v.findViewById(R.id.lnrLayoutProgress);
+		rltLayoutProgress = (RelativeLayout) v.findViewById(R.id.rltLayoutProgress);
 		return v;
 	}
 	
@@ -311,13 +312,13 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	
 	private void showProgress() {
 		getListView().setVisibility(View.GONE);
-    	lnrLayoutProgress.setVisibility(View.VISIBLE);
+    	rltLayoutProgress.setVisibility(View.VISIBLE);
 		isProgressVisible = true;
     }
 	
 	private void dismissProgress() {
 		getListView().setVisibility(View.VISIBLE);
-		lnrLayoutProgress.setVisibility(View.GONE);
+		rltLayoutProgress.setVisibility(View.GONE);
 		isProgressVisible = false;
 	}
 	

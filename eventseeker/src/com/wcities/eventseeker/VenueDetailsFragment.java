@@ -1277,7 +1277,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			holder.txtDesc.setMaxLines(Integer.MAX_VALUE);
 			holder.txtDesc.setEllipsize(null);
 			holder.imgDown.setImageDrawable(FragmentUtil.getResources(venueDetailsFragment).getDrawable(
-					R.drawable.less));
+					R.drawable.ic_description_collapse));
 			isVenueDescExpanded = true;
 		}
 		
@@ -1285,7 +1285,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			holder.txtDesc.setMaxLines(MAX_LINES_VENUE_DESC);
 			holder.txtDesc.setEllipsize(TruncateAt.END);
 			holder.imgDown.setImageDrawable(FragmentUtil.getResources(venueDetailsFragment).getDrawable(
-					R.drawable.down));
+					R.drawable.ic_description_expand));
 			isVenueDescExpanded = false;
 		}
 		

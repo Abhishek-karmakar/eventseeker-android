@@ -589,14 +589,14 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	
 	private void expandEvtDesc() {
 		txtEvtDesc.setVisibility(View.VISIBLE);
-		imgDown.setImageDrawable(FragmentUtil.getResources(this).getDrawable(R.drawable.less));
+		imgDown.setImageDrawable(FragmentUtil.getResources(this).getDrawable(R.drawable.ic_description_collapse));
 
 		isEvtDescExpanded = true;
 	}
 	
 	private void collapseEvtDesc() {
 		txtEvtDesc.setVisibility(View.GONE);
-		imgDown.setImageDrawable(FragmentUtil.getResources(this).getDrawable(R.drawable.down));
+		imgDown.setImageDrawable(FragmentUtil.getResources(this).getDrawable(R.drawable.ic_description_expand));
 		
 		isEvtDescExpanded = false;
 	}

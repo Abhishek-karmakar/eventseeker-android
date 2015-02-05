@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
@@ -33,20 +34,20 @@ public class WebViewFragment extends FragmentLoadableFromBackStack {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_web_view, null);
 		webView = (WebView) v.findViewById(R.id.webview);
-		final ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+		final RelativeLayout rltProgressBar = (RelativeLayout) v.findViewById(R.id.progressBar);
 		
 		webView.setWebViewClient(new WebViewClient() {
 			
 			@Override
 			public void onPageStarted(WebView view, String url, Bitmap favicon) {
 				super.onPageStarted(view, url, favicon);
-				progressBar.setVisibility(View.VISIBLE);
+				rltProgressBar.setVisibility(View.VISIBLE);
 			}
 			
 			@Override
 			public void onPageFinished(WebView view, String url) {
 				super.onPageFinished(view, url);
-				progressBar.setVisibility(View.INVISIBLE);
+				rltProgressBar.setVisibility(View.INVISIBLE);
 			}
 		});
 		

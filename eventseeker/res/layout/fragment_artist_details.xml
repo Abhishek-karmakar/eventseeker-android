@@ -53,7 +53,7 @@
         android:layout_marginBottom="@dimen/fab_margin_b_artist_details"
         android:layout_marginTop="@dimen/fab_margin_t_artist_details"
         android:layout_marginRight="@dimen/fab_margin_r_artist_details"
-        android:src="@drawable/slctr_following"
+        android:src="@drawable/slctr_following_artist_details"
         fab:fab_type="normal"
         fab:fab_colorNormal="@color/colorPrimary"
         fab:fab_colorPressed="@color/colorPrimaryDark"

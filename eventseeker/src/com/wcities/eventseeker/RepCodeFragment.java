@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
@@ -40,7 +41,7 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 	
 	private EditText edtRepCode;
 	private Button btnSubmit;
-	private ProgressBar progressBar;
+	private RelativeLayout rltProgressBar;
 	
 	private boolean isSubmitting;
 	
@@ -57,7 +58,7 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 		btnSubmit = (Button) v.findViewById(R.id.btnSubmit);
 		btnSubmit.setOnClickListener(this);
 		edtRepCode = (EditText) v.findViewById(R.id.edtRepCode);
-		progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+		rltProgressBar = (RelativeLayout) v.findViewById(R.id.rltProgressBar);
 		
 		setVisibility();
 		
@@ -125,11 +126,11 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 	private void setVisibility() {
 		if (isSubmitting) {
 			btnSubmit.setVisibility(View.INVISIBLE);
-			progressBar.setVisibility(View.VISIBLE);
+			rltProgressBar.setVisibility(View.VISIBLE);
 			
 		} else {
 			btnSubmit.setVisibility(View.VISIBLE);
-			progressBar.setVisibility(View.INVISIBLE);
+			rltProgressBar.setVisibility(View.INVISIBLE);
 		}
 	}
 
