@@ -44,6 +44,8 @@ public class ArtistListAdapter<T> extends BaseAdapter {
 	
 	private static final String TAG = ArtistListAdapter.class.getName();
 
+	private boolean addPadding;
+	
     private BitmapCache bitmapCache;
     private Context mContext;
     
@@ -111,6 +113,14 @@ public class ArtistListAdapter<T> extends BaseAdapter {
 			} else if (convertView == null || !convertView.getTag().equals(AppConstants.TAG_CONTENT)) {
 				convertView = LayoutInflater.from(mContext).inflate(R.layout.fragment_search_artists_list_item, null);
 				convertView.setTag(AppConstants.TAG_CONTENT);
+			}
+			
+			/**
+			 * For Search screen we are padding here
+			 */
+			if (addPadding) {
+				int pad = mContext.getResources().getDimensionPixelSize(R.dimen.tab_bar_margin_fragment_custom_tabs);
+				convertView.setPadding(pad, 0, pad, 0);
 			}
 			
 			((TextView)convertView.findViewById(R.id.txtArtistName)).setText(artist.getName());
@@ -228,4 +238,9 @@ public class ArtistListAdapter<T> extends BaseAdapter {
 	public void setMoreDataAvailable(boolean isMoreDataAvailable) {
 		this.isMoreDataAvailable = isMoreDataAvailable;
 	}
+
+	public void setAddPadding(boolean addPadding) {
+		this.addPadding = addPadding;
+	}
+	
 }

@@ -107,7 +107,9 @@
 		            android:layout_width="match_parent"
 	    			android:layout_height="@dimen/rlt_lyt_root_ht_progress_bar_eventseeker_fixed_ht"
 		            android:layout_below="@id/lnrLytExpandDesc"
-		            android:layout_marginTop="@dimen/prgs_bar_margin_t_event_details" />
+		            android:layout_marginTop="@dimen/prgs_bar_margin_t_event_details" 
+		            android:paddingTop="0dp" 
+		            android:paddingBottom="0dp" />
 			    
 		        <RelativeLayout android:id="@+id/rltLytFeaturing"
 		            android:layout_width="match_parent"

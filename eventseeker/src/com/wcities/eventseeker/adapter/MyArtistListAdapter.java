@@ -130,7 +130,7 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 					convertView = LayoutInflater.from(mContext).inflate(R.layout.grd_progress_bar, null);
 					
 				} else {
-					convertView = LayoutInflater.from(mContext).inflate(R.layout.list_progress_bar, null);
+					convertView = LayoutInflater.from(mContext).inflate(R.layout.progress_bar_eventseeker_fixed_ht, null);
 				}
 				convertView.setTag(AppConstants.TAG_PROGRESS_INDICATOR);
 			}

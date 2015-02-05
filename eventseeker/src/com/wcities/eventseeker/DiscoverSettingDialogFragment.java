@@ -69,6 +69,7 @@ public class DiscoverSettingDialogFragment extends DialogFragment {
 		View v = localInflater.inflate(R.layout.dialog_discover_setting, null);
 		
 		final TextView txtSelectedMiles = (TextView) v.findViewById(R.id.txtSelectedMiles);
+		txtSelectedMiles.setText("" + (miles - SEEKBAR_MIN_VAL));
 		
 		final SeekBar seekBar = (SeekBar) v.findViewById(R.id.seekBar);
 		seekBar.setProgress(miles - SEEKBAR_MIN_VAL);

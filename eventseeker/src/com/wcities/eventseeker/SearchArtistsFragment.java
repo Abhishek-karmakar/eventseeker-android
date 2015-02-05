@@ -107,7 +107,7 @@ public class SearchArtistsFragment extends PublishArtistListFragment implements 
 		} else {
 			artistListAdapter.updateContext(FragmentUtil.getActivity(this));
 		}
-
+		artistListAdapter.setAddPadding(true);
 		setListAdapter(artistListAdapter);
         getListView().setDivider(null);
         getListView().setBackgroundResource(R.drawable.story_space);

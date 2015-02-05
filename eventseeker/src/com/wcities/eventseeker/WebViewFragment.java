@@ -34,7 +34,7 @@ public class WebViewFragment extends FragmentLoadableFromBackStack {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_web_view, null);
 		webView = (WebView) v.findViewById(R.id.webview);
-		final RelativeLayout rltProgressBar = (RelativeLayout) v.findViewById(R.id.progressBar);
+		final RelativeLayout rltProgressBar = (RelativeLayout) v.findViewById(R.id.rltProgressBar);
 		
 		webView.setWebViewClient(new WebViewClient() {
 			

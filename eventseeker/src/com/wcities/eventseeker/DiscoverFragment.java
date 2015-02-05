@@ -103,18 +103,29 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	private static final int UNSCROLLED = -1;
 	private static final int DEFAULT_SEARCH_RADIUS = 50;
 	
-	private ImageView imgCategory;
-	private ViewPager vPagerCatTitles;
-	private RelativeLayout rltLytNoEvts;
+	/**
+	 * As the DiscoverFragment is passed as Serializable in DiscoverSettingDialogFragment.newInstance(), The 'CatTitlesAdapter'
+	 * and few other objects are not Serializable, So the app crashes with error:
+	 * java.lang.RuntimeException: Parcelable encountered IOException writing Serializable object 
+	 * 			(name = com.wcities.eventseeker.DiscoverFragment)
+	 * Caused by: java.io.NotSerializableException: android.support.v4.view.ViewPager
+	 * So, making it and other variables transient. To reproduce the crash, remove transient, 
+	 * then on discover screen press 'Preferences' button on action bar and when dialog appears long press the home button,
+	 * now you can see eventseeker and other apps in recent apps and eventseeker gets crashed.
+	 */
+	
+	private transient ImageView imgCategory;
+	private transient ViewPager vPagerCatTitles;
+	private transient RelativeLayout rltLytNoEvts;
 	 
 	/**
 	 * Used RecyclerViewInterceptingVerticalScroll in place of RecyclerView since we want to intercept only
 	 * vertical scroll events; otherwise horizontal must be handled by its child as done for child at 
 	 * position 0 (which is overlapping category image view)
 	 */
-	private RecyclerViewInterceptingVerticalScroll recyclerVEvents;
-	private EventListAdapter eventListAdapter;
-	private CatTitlesAdapter catTitlesAdapter;
+	private transient RecyclerViewInterceptingVerticalScroll recyclerVEvents;
+	private transient EventListAdapter eventListAdapter;
+	private transient CatTitlesAdapter catTitlesAdapter;
 	//private View vDummy;
 	
 	private int toolbarSize;
@@ -128,9 +139,9 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	private List<Event> eventList;
 	private double lat, lon;
 	
-	private LoadEvents loadEvents;
+	private transient LoadEvents loadEvents;
 	private int selectedCatId, currentItem = CatTitlesAdapter.FIRST_PAGE - 1;
-	private Handler handler;
+	private transient Handler handler;
 	private int firstItemHtDiff, firstItemHtPort, firstItemHtLand, prevOrientation = Configuration.ORIENTATION_UNDEFINED;
 	
 	private int year, month, day, miles = DEFAULT_SEARCH_RADIUS;
@@ -527,7 +538,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		if (eventListAdapter == null) {
 			return;
 		}
-		//Log.d(TAG, "resetEventList()");
+		Log.d(TAG, "resetEventList()");
 		eventListAdapter.reset();
 
 		if (loadEvents != null) {

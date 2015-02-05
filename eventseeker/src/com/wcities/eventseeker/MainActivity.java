@@ -2202,4 +2202,8 @@ public class MainActivity extends ActionBarActivity implements
 			prevCustomSharedElementTransitionSource = null;
 		}
 	}
+	
+	public void expandSearchView() {
+		searchView.setIconified(false);
+	}
 }

@@ -133,7 +133,7 @@ public class MyEventListAdapter extends BaseAdapter implements DateWiseEventPare
 		if (getItemViewType(position) == ViewType.PROGRESS.ordinal()) {
 
 			if (convertView == null	|| convertView.getTag() != ViewType.PROGRESS) {
-				convertView = LayoutInflater.from(mContext).inflate(R.layout.list_progress_bar, null);
+				convertView = LayoutInflater.from(mContext).inflate(R.layout.progress_bar_eventseeker_fixed_ht, null);
 				convertView.setTag(ViewType.PROGRESS);
 			}
 			

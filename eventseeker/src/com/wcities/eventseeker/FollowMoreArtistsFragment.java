@@ -52,6 +52,7 @@ public class FollowMoreArtistsFragment extends FragmentLoadableFromBackStack imp
 				break;
 				
 			case R.id.btnSearch:
+				((MainActivity) FragmentUtil.getActivity(this)).expandSearchView();
 				break;
 		}
 	}
