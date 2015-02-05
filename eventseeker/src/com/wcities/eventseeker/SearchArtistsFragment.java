@@ -245,11 +245,6 @@ public class SearchArtistsFragment extends PublishArtistListFragment implements 
 
 	@Override
 	public void onPoppedFromBackStack() {
-		// to update statusbar visibility
-		getParentFragment().onStart();
-		// to call onFragmentResumed(Fragment) of MainActivity (to update title, current fragment tag, etc.)
-		getParentFragment().onResume();
-		
 		for (Iterator<View> iterator = hiddenViews.iterator(); iterator.hasNext();) {
 			View view = iterator.next();
 			view.setVisibility(View.VISIBLE);

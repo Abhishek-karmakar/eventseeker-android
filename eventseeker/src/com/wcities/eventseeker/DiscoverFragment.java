@@ -25,6 +25,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutParams;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -355,6 +356,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	@Override
 	public void onStop() {
 		super.onStop();
+		//Log.d(TAG, "onStart()");
 		/**
 		 * Revert toolbar & layered status bar updates here itself.
 		 * We prefer reverting these changes here itself rather than applying updates for each screen 

@@ -144,6 +144,7 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 	
 	@Override
 	public void onStart() {
+		//Log.d(TAG, "onStart()");
 		super.onStart();
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		ma.setToolbarElevation(0);
@@ -248,6 +249,11 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 
 	@Override
 	public void onPushedToBackStack() {
+		/**
+		 * Not calling onStop() to prevent toolbar color changes occurring in between
+		 * the transition
+		 */
+		//onStop();
 		isOnPushedToBackStackCalled = true;
 	}
 
@@ -255,6 +261,12 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 	public void onPoppedFromBackStack() {
 		if (isOnPushedToBackStackCalled) {
 			isOnPushedToBackStackCalled = false;
+			
+			// to update statusbar visibility
+			onStart();
+			// to call onFragmentResumed(Fragment) of MainActivity (to update title, current fragment tag, etc.)
+			onResume();
+			
 			((CustomSharedElementTransitionSource) mTabsAdapter.getSelectedFragment()).onPoppedFromBackStack();
 		}
 	}

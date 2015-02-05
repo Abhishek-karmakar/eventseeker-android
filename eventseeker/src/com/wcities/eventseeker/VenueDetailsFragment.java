@@ -126,7 +126,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	private boolean isOnCreateViewCalledFirstTime = true;
 	private int screenW, imgVenueHt;
 	private AnimatorSet animatorSet;
-	private boolean isOnPushedToBackStackCalled;
+	private boolean isOnPushedToBackStackCalled, revertToolbarStatusBarChanges;
 	
 	private View rootView;
 	private ImageView imgVenue;
@@ -268,7 +268,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	@Override
 	public void onStart() {
 		super.onStart();
-		
+		//Log.d(TAG, "onStart()");
 		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.GONE, AppConstants.INVALID_ID);
 		if (totalScrolledDy != UNSCROLLED) {
 			onScrolled(0, true);
@@ -1179,7 +1179,14 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 				
 				@Override
 				public void onClick(View v) {
-					// need to call onPushedToBackStack() since we are adding NavigationFragment instead of replacing 
+					/**
+					 * need to call onPushedToBackStack() since we are adding any fragment instead of replacing on venue details screen.
+					 * Why adding? Answer: If we replace or remove-add anything on venue details fragment, it crashes with 
+					 * "IllegalArgumentException: no view found for id R.id.frmLayoutMapContainer for 
+					 * AddressMapFragment" on coming back to venue details screen. Couldn't find its solution. 
+					 * Probably it's happening with MapFragment within RecyclerView.
+					 */ 
+					venueDetailsFragment.revertToolbarStatusBarChanges = true;
 					venueDetailsFragment.onPushedToBackStack();
 					Bundle args = new Bundle();
 					args.putSerializable(BundleKeys.VENUE, venue);
@@ -1484,6 +1491,14 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 					((ReplaceFragmentListener)FragmentUtil.getActivity(venueDetailsFragment)).replaceByFragment(
 							AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
 					
+					/**
+					 * need to call onPushedToBackStack() since we are adding any fragment instead of replacing on venue details screen.
+					 * Why adding? Answer: If we replace or remove-add anything on venue details fragment, it crashes with 
+					 * "IllegalArgumentException: no view found for id R.id.frmLayoutMapContainer for 
+					 * AddressMapFragment" on coming back to venue details screen. Couldn't find its solution. 
+					 * Probably it's happening with MapFragment within RecyclerView.
+					 */ 
+					venueDetailsFragment.revertToolbarStatusBarChanges = true;
 					venueDetailsFragment.onPushedToBackStack();
 					/**
 					 * added on 15-12-2014
@@ -1630,11 +1645,17 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 
 	@Override
 	public void onPushedToBackStack() {
-		/**
-		 * to remove facebook callback. Not calling onStop() to prevent toolbar color changes occurring in between
-		 * the transition
-		 */
-		super.onStop();
+		if (revertToolbarStatusBarChanges) {
+			revertToolbarStatusBarChanges = false;
+			onStop();
+			
+		} else {
+			/**
+			 * to remove facebook callback. Not calling onStop() to prevent toolbar color changes occurring in between
+			 * the transition
+			 */
+			super.onStop();
+		}
 		
 		/**
 		 * set null listener, otherwise even for artist/event details screen when selecting 

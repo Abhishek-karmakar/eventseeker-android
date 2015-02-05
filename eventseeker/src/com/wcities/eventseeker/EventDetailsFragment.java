@@ -299,6 +299,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	
 	@Override
 	public void onStart() {
+		//Log.d(TAG, "onStart()");
 		super.onStart();
 		
 		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.GONE, AppConstants.INVALID_ID);

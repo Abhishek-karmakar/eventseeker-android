@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.MenuItemCompat.OnActionExpandListener;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.util.Log;
@@ -254,7 +253,7 @@ public class ChangeLocationFragment extends FragmentLoadableFromBackStack implem
 
 	@Override
 	public boolean onMenuItemActionCollapse(MenuItem arg0) {
-		Log.d(TAG, "onMenuItemActionCollapse()");
+		//Log.d(TAG, "onMenuItemActionCollapse()");
 		((ChangeLocationFragmentListener)FragmentUtil.getActivity(this)).onLocationChanged(getArguments());
 		return true;
 	}

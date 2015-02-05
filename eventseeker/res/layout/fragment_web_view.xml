@@ -4,7 +4,8 @@ devices sometimes shows some other fragment available in backstack through this 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white" >
+    android:background="@android:color/white"
+    android:paddingTop="@dimen/common_t_mar_pad_for_all_layout" >
     
 	<WebView android:id="@+id/webview"
 	    android:layout_width="match_parent"

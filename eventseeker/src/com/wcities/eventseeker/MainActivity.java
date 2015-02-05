@@ -775,45 +775,67 @@ public class MainActivity extends ActionBarActivity implements
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// Log.d(TAG, "onKeyDown()");
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			if (AppConstants.FRAGMENT_TAG_WEB_VIEW.equals(currentContentFragmentTag)) {
-				WebViewFragment webViewFragment = (WebViewFragment) getSupportFragmentManager()
-						.findFragmentByTag(AppConstants.FRAGMENT_TAG_WEB_VIEW);
-				if (webViewFragment.onKeyDown()) {
-					return true;
-					
-				} else {
-					return super.onKeyDown(keyCode, event);
-				}
-				
-			} else if (AppConstants.FRAGMENT_TAG_LOGIN_SYNCING.equals(currentContentFragmentTag)) {
+			if (AppConstants.FRAGMENT_TAG_LOGIN_SYNCING.equals(currentContentFragmentTag)) {
 				return true;
 				
 			} else {
-				if (isTabletAndInLandscapeMode && getSupportFragmentManager().getBackStackEntryCount() == 1) {
-					/**
-					 * Following line is to reset display options when coming back to initial screen.
-					 * This is required only in case of tablet in landscape orientation, since we don't 
-					 * have navigation drawer in this case resulting in different behavior observed for 
-					 * home_as_up icon.
-					 * DISPLAY_SHOW_CUSTOM is used for discover screen on tablet.
-					 * e.g. - Launch --> Discover --> Event Details --> hardware back. In this case tabs & 
-					 * back should disappear from actionbar.
-					 */
-					getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM);
-				}
-				
-				if (!isTabletAndInLandscapeMode && mDrawerLayout.isDrawerOpen(lnrLayoutRootNavDrawer)) {
-					/**
-					 * If user is on any screen apart from first level screens accessible from navigation drawer
-					 * & if user has opened drawer by swipe action (although drawer indicator is not enabled & 
-					 * back arrow is there on top left corner), then clicking on device back button should close 
-					 * drawer first instead of moving back to previous screen in the back stack.
-					 */
-					mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
-					return true;
+				if (isTabletAndInLandscapeMode) {
+					if (AppConstants.FRAGMENT_TAG_WEB_VIEW.equals(currentContentFragmentTag)) {
+						WebViewFragment webViewFragment = (WebViewFragment) getSupportFragmentManager()
+								.findFragmentByTag(AppConstants.FRAGMENT_TAG_WEB_VIEW);
+						if (webViewFragment.onKeyDown()) {
+							return true;
+							
+						} else {
+							return super.onKeyDown(keyCode, event);
+						}
+					}
+					
+					if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
+						/**
+						 * Following line is to reset display options when coming back to initial screen.
+						 * This is required only in case of tablet in landscape orientation, since we don't 
+						 * have navigation drawer in this case resulting in different behavior observed for 
+						 * home_as_up icon.
+						 * DISPLAY_SHOW_CUSTOM is used for discover screen on tablet.
+						 * e.g. - Launch --> Discover --> Event Details --> hardware back. In this case tabs & 
+						 * back should disappear from actionbar.
+						 */
+						getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM);
+					}
+					
+					return super.onKeyDown(keyCode, event);
 					
 				} else {
-					return super.onKeyDown(keyCode, event);
+					if (mDrawerLayout.isDrawerOpen(lnrLayoutRootNavDrawer)) {
+						/**
+						 * If user is on any screen apart from first level screens accessible from navigation drawer
+						 * & if user has opened drawer by swipe action (although drawer indicator is not enabled & 
+						 * back arrow is there on top left corner), then clicking on device back button should close 
+						 * drawer first instead of moving back to previous screen in the back stack.
+						 */
+						mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
+						return true;
+						
+					} else if (AppConstants.FRAGMENT_TAG_WEB_VIEW.equals(currentContentFragmentTag)) {
+						WebViewFragment webViewFragment = (WebViewFragment) getSupportFragmentManager()
+								.findFragmentByTag(AppConstants.FRAGMENT_TAG_WEB_VIEW);
+						if (webViewFragment.onKeyDown()) {
+							return true;
+							
+						} else {
+							return super.onKeyDown(keyCode, event);
+						}
+						
+					} else if (AppConstants.FRAGMENT_TAG_CHANGE_LOCATION.equals(currentContentFragmentTag)) {
+						ChangeLocationFragment changeLocationFragment = (ChangeLocationFragment) getSupportFragmentManager()
+								.findFragmentByTag(AppConstants.FRAGMENT_TAG_CHANGE_LOCATION);
+						onLocationChanged(changeLocationFragment.getArguments());
+						return true;
+						
+					} else {
+						return super.onKeyDown(keyCode, event);
+					}
 				}
 			}
 		}
@@ -1219,7 +1241,7 @@ public class MainActivity extends ActionBarActivity implements
 		
 		if (replaceByFragmentTag.equals(AppConstants.FRAGMENT_TAG_LOGIN_SYNCING) || 
 				((args != null && args.containsKey(BundleKeys.SHARED_ELEMENTS))) || 
-				AppConstants.FRAGMENT_TAG_VENUE_DETAILS.equals(currentContentFragmentTag)) {
+				(AppConstants.FRAGMENT_TAG_VENUE_DETAILS.equals(currentContentFragmentTag) && addToBackStack)) {
 			if (args != null && args.containsKey(BundleKeys.SHARED_ELEMENTS)) {
 				prevCustomSharedElementTransitionSource = (CustomSharedElementTransitionSource) getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
 			}
@@ -1605,7 +1627,7 @@ public class MainActivity extends ActionBarActivity implements
 					changeLocationFragment.setArguments(args);
 		    	}
 				selectNonDrawerItem(changeLocationFragment, AppConstants.FRAGMENT_TAG_CHANGE_LOCATION, 
-						getResources().getString(R.string.title_change_location), true);
+						getResources().getString(R.string.title_change_location), false);
 				break;
 
 			// TODO: comment following for disabling language
@@ -1912,6 +1934,10 @@ public class MainActivity extends ActionBarActivity implements
 		} else if (fragment instanceof NavigationFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_navigation), 
 					AppConstants.FRAGMENT_TAG_NAVIGATION);
+			
+		} else if (fragment instanceof WebViewFragment) {
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_web), 
+					AppConstants.FRAGMENT_TAG_WEB_VIEW);
 		}
 	}
 
@@ -2140,6 +2166,7 @@ public class MainActivity extends ActionBarActivity implements
 	 * @param colorRes Required only for viewVisibility = View.VISIBLE
 	 */
 	public void setVStatusBarLayeredVisibility(int viewVisibility, int colorRes) {
+		//Log.d(TAG, "setVStatusBarLayeredVisibility(), viewVisibility = " + viewVisibility);
 		if (VersionUtil.isApiLevelAbove18() && vStatusBarLayered != null) {
 			vStatusBarLayered.setVisibility(viewVisibility);
 			

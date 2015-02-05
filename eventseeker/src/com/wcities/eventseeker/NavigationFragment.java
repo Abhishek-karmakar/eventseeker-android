@@ -5,6 +5,7 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
+import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 import android.content.ActivityNotFoundException;
@@ -61,24 +62,6 @@ public class NavigationFragment extends FragmentLoadableFromBackStack implements
 		return view;
 	}
 	
-	@Override
-	public void onStart() {
-		super.onStart();
-		
-		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
-		ma.setToolbarBg(ma.getResources().getColor(R.color.colorPrimary));
-		ma.setVStatusBarVisibility(View.VISIBLE, R.color.colorPrimaryDark);
-	}
-	
-	@Override
-	public void onStop() {
-		super.onStop();
-		
-		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
-		ma.setToolbarBg(Color.TRANSPARENT);
-		ma.setVStatusBarVisibility(View.GONE, AppConstants.INVALID_ID);
-	}
-
 	@Override
 	public String getScreenName() {
 		return "Navigation Selection Screen";
@@ -173,8 +156,10 @@ public class NavigationFragment extends FragmentLoadableFromBackStack implements
 				}
 				uri += lat + ", " + lon + "&title=" + venue.getName() 
 			    		+ "&token=6T5HI14ZzJdKRk-PUhWzT7Zn-enFiGsUYskrN5EnXENaQnBUE3GDalgi8SN0x2J4aTxvvZuTwDfGx9WHtdwmJeJpzFprUq79p4gf54Yiq9jM6wFwHaZSBp1k1AYtzdcfhlWvjLcKWCpqe9juykeaHSTsRr-cJde4uYeWGDSFerI";
-				intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
-				startActivity(intent);
+				Bundle args = new Bundle();
+				args.putString(BundleKeys.URL, uri);
+				((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
+						AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
 				
 			} else {
 				Toast.makeText(FragmentUtil.getActivity(this), R.string.address_isnt_available, 
