@@ -179,7 +179,16 @@ public class MyEventsFragment extends FragmentLoadableFromBackStack implements O
 		 * in case if just orientation is changed when any tab other than first (index=0) is selected.
 		 */
 		if (position != lastGaEventSentForPos) {
-			String label = (position == 0) ? "My Events Tab" : "Recommended Events Tab";
+			String label;
+			if (position == 0) {
+				label = "My Events Tab";
+				
+			} else if (position == 1) {
+				label = "Recommended Events Tab";
+				
+			} else {
+				label = "My Saved Events Tab";
+			}
 			GoogleAnalyticsTracker.getInstance().sendEvent(FragmentUtil.getApplication(this), getScreenName(), 
 					label);
 			lastGaEventSentForPos = position;

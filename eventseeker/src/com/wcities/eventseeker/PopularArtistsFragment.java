@@ -29,8 +29,7 @@ public class PopularArtistsFragment extends FragmentLoadableFromBackStack implem
 	
 	@Override
 	public String getScreenName() {
-		// TODO Auto-generated method stub
-		return "";
+		return "Popular Artists Screen";
 	}
 
 	@Override

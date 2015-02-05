@@ -36,7 +36,7 @@ public class MusicArtistsFragment extends FragmentLoadableFromBackStack implemen
 	
 	@Override
 	public String getScreenName() {
-		return "";
+		return "Popular Artists Screen - Music";
 	}
 
 	@Override

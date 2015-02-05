@@ -141,8 +141,7 @@ public class AppConstants {
 		+ " " + Scopes.PLUS_LOGIN + " " + Scopes.PLUS_ME + " " + SCOPE_URI_USERINFO_PROFILE 
 		+ " " + SCOPE_URI_PLUS_PROFILE_EMAILS_READ;
 	
-	public static final String ACTION_GOING_TO = "eventseeker:going_to";
-	public static final String ACTION_WANTS_TO_GO_TO = "eventseeker:wants_to_go_to";
+	public static final String ACTION_ADD = "eventseeker:add";
 	
 	/************************   starts for bosch   *******************************/
 	

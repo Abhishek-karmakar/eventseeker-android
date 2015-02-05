@@ -140,7 +140,8 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 
 	@Override
 	public String getScreenName() {
-		return "";
+		return "Popular Artists Screen - " + FragmentUtil.getResources(this).getString(getArguments().getInt(
+				BundleKeys.SCREEN_TITLE));
 	}
 	
 

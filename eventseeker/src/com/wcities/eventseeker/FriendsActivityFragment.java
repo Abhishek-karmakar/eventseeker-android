@@ -20,11 +20,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -877,6 +878,10 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	    	LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 	    	lp.setMargins(0, ConversionUtil.toPx(getResources(), 50), 0, 0);
 	    	input.setLayoutParams(lp);
+	    	// w/o following line on samsung galaxy S it's showing black text on black background
+	    	input.setBackgroundColor(Color.WHITE);
+	    	// w/o following line on nexus 5 it's showing white text on almost white background
+	    	input.setTextColor(Color.BLACK);
 	    	
 	        return new AlertDialog.Builder(FragmentUtil.getActivity(this))
 	                .setTitle(getResources().getString(R.string.add_comment))

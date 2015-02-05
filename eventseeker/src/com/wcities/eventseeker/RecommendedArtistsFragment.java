@@ -365,7 +365,7 @@ public class RecommendedArtistsFragment extends PublishArtistFragmentLoadableFro
 
 	@Override
 	public String getScreenName() {
-		return "";
+		return "Recommended Artists Screen";
 	}
 
 	@Override

@@ -6,6 +6,9 @@
     android:background="@color/dark_gray"
     android:padding="@dimen/rlt_layout_root_pad_fragment_device_library" >
 
-    <include layout="@layout/include_sync_account" />
+    <include layout="@layout/include_sync_account"
+        android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+    	android:layout_marginTop="@dimen/common_t_mar_pad_for_all_layout" />
 
 </RelativeLayout>

@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Event;
@@ -233,6 +234,7 @@ public class AddressMapFragment extends SupportMapFragment implements GeoUtilLis
 		args.putDouble(BundleKeys.LON, lon);
 		args.putBoolean(BundleKeys.DRAW_DRIVING_DIRECTION, drawDrivingDirection);
 		((MapListener)FragmentUtil.getActivity(AddressMapFragment.this)).onMapClicked(args);
+		GoogleAnalyticsTracker.getInstance().sendScreenView(FragmentUtil.getApplication(this), "Venue Map Screen");
 	}
 	
 	private void setMarker() {

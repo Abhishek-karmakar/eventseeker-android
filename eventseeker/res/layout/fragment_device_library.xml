@@ -68,6 +68,9 @@
     
     <include
         layout="@layout/include_sync_account"
+        android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+    	android:layout_marginTop="@dimen/common_t_mar_pad_for_all_layout"
         android:visibility="gone" />
 
 </RelativeLayout>

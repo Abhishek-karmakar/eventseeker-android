@@ -35,7 +35,7 @@
     <dimen name="btn_chg_loc_pad_r_discover">@dimen/btn_chg_loc_pad_l_discover</dimen>
     <dimen name="btn_chg_loc_txt_size_discover">17sp</dimen>
     <!-- cat_title.xml -->
-    <dimen name="txt_title_txt_size_cat_titles">18sp</dimen>
+    <dimen name="txt_title_txt_size_cat_titles">17sp</dimen>
     <dimen name="v_hor_line_ht_cat_titles">4dp</dimen>
     <dimen name="v_hor_line_margin_b_cat_titles">3dp</dimen>
     <!-- fragment_featured_events.xml -->

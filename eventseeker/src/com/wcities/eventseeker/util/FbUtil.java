@@ -430,10 +430,7 @@ public class FbUtil {
         	link = "http://eventseeker.com/event/" + event.getId();
 	    }
 
-		String attendingAction = AppConstants.ACTION_GOING_TO;
-		if (event.getAttending() == Attending.WANTS_TO_GO) {
-			attendingAction = AppConstants.ACTION_WANTS_TO_GO_TO;
-		}
+		String attendingAction = AppConstants.ACTION_ADD;
         
 		OpenGraphAction post = OpenGraphAction.Factory.createForPost(attendingAction);
         post.setProperty("event", link);
@@ -493,10 +490,7 @@ public class FbUtil {
 
 		String link = "http://eventseeker.com/event/" + item.getTrackId();
 
-		String attendingAction = AppConstants.ACTION_GOING_TO;
-		if (item.getUserAttending() == Attending.WANTS_TO_GO) {
-			attendingAction = AppConstants.ACTION_WANTS_TO_GO_TO;
-		}
+		String attendingAction = AppConstants.ACTION_ADD;
         
 		OpenGraphAction post = OpenGraphAction.Factory.createForPost(attendingAction);
         post.setProperty("event", link);
