@@ -126,8 +126,8 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 					 * null to show progress dialog.
 					 */
 					String.format(res.getString(R.string.dialog_msg_follow_all), artistList.size() - 1),
-					res.getString(R.string.dialog_btn_no),
-					res.getString(R.string.dialog_btn_yes), false);
+					res.getString(R.string.my_events_al_no),
+					res.getString(R.string.yes), false);
 				generalDialogFragment.show(
 					((ActionBarActivity) FragmentUtil.getActivity(SelectedArtistCategoryFragment.this))
 					.getSupportFragmentManager(), DIALOG_FOLLOW_ALL);

@@ -353,6 +353,10 @@
     <string name="dialog_msg_follow_all">Do you want to follow %1$d artists?</string>
     <string name="dialog_btn_yes">yes</string>
     <string name="dialog_btn_no">no</string>
+    
+    <!-- LoginFragment -->
+    <string name="continue_with_facebook">Continua con Facebook</string>
+    <string name="continue_wiht_google">Continua con Google</string>
  
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>

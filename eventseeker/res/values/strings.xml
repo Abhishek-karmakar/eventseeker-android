@@ -39,14 +39,14 @@
     <string name="title_artist_details">Artist Details</string>
     <string name="title_venue_details">Venue Details</string>
     <string name="title_following">Following</string>
-    <string name="title_recommended">Recommended</string>
+    <string name="title_recommended">@string/btn_recommended</string>
     <string name="title_my_events">My Events</string>
     <string name="title_artists_news">Artist News</string>
     <string name="title_friends_activity">Friends\' Activity</string>
     <string name="title_connect_accounts">Connect Accounts</string>
     <string name="title_get_started">Get Started</string>
     <string name="title_login">Sign In</string>
-    <string name="title_signup">Sign Up</string>
+    <string name="title_signup">@string/sign_up</string>
     <string name="title_about_us">About Us</string>
     <string name="title_eula">EULA</string>
     <string name="title_rep_code">@string/rep_code</string>
@@ -398,6 +398,8 @@
     <string name="signing_in">Signing in...</string>
     <string name="sign_in">SIGN IN</string>
     <string name="forgot_your_password">Forgot your password?</string>
+    <string name="continue_with_facebook">Continue with Facebook</string>
+    <string name="continue_wiht_google">Continue with Google</string>
     
     <!-- LauncherFragment -->
     <string name="log_in">LOG IN</string>
@@ -441,11 +443,11 @@
     <string name="btn_electronic">Electronic</string>
     <string name="btn_pop">Pop</string>
     <string name="btn_punk">Punk</string>
-    <string name="btn_hard_rock_metal">Hard Rock \/ Metal</string>
+    <string name="btn_hard_rock_metal">Hard Rock / Metal</string>
     <string name="btn_world_music">World Music</string>
-    <string name="btn_blues_jazz">Blues \/ Jazz</string>
+    <string name="btn_blues_jazz">Blues / Jazz</string>
     <string name="btn_hip_hop">Hip Hop</string>
-    <string name="btn_soul_r_and_b_funck">Soul \/ R&amp;D \/ Funk</string>
+    <string name="btn_soul_r_and_b_funck">Soul / R&amp;B / Funk</string>
     <string name="btn_classical">Classical</string>
     
     <!-- DiscoverSettingDialogFragment -->

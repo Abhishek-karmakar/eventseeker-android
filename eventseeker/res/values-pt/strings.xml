@@ -354,6 +354,10 @@
     <string name="dialog_btn_yes">yes</string>
     <string name="dialog_btn_no">no</string>
     
+    <!-- LoginFragment -->
+    <string name="continue_with_facebook">Continuar con Facebook</string>
+    <string name="continue_wiht_google">Continuar con Google</string>
+    
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>
     

@@ -168,6 +168,8 @@
     <string name="posted_a_status">hat einen Status gepostet</string>
     <string name="follow_artists_for_updates">Künstler folgen für Echtzeit-Updates</string>
     <string name="search_artists">Künstler suchen</string>
+    <string name="sort_by">Sortieren nach : </string>
+    <string name="chronological">Chronologisch</string>
         
    	<!-- Connect Accounts Services -->
     <string name="service_google_play" >Google Play</string>
@@ -185,7 +187,7 @@
    	<!-- Connect Accounts -->
     <string name="fb_login">Facebook anmelden</string>
     <string name="fb_logout">Facebook abmelden</string>
-    <string name="btn_continue">Weiter</string>
+    <string name="btn_continue">Fortfahren</string>
     <string name="syncing_fb">Facebook synchronisieren</string>
 	<string name="syncing_google_plus">Google Plus synchronisieren</string>
 	<string name="syncing_google_play">Google Play synchronisieren</string>
@@ -330,6 +332,11 @@
     <string name="email">E-Mail</string>
     <string name="password">Passwort</string>
     <string name="confirm_password">Passwort wiederholen</string>
+    <string name="error_email_invalid">E-Mail Adresse ist nicht gültig</string>
+    <string name="error_pass_do_not_match">Passwörter unterschiedlich</string>
+    <string name="error_email_exists">Die E-Mail existiert bereits</string>
+    <string name="error_email_or_password_incorrect">E-Mail oder Passwort inkorrekt</string>
+    <string name="error_unknown_error">Unbekannter Fehler ist aufgetreten. Bitte versuchen Sie es später noch einmal.</string>
     
     <!-- FollowMoreArtistFragment -->
     <string name="btn_sync_accounts">Synchronisieren</string>
@@ -355,6 +362,60 @@
     <string name="dialog_btn_no">no</string>
     
     <!-- LoginFragment -->
+    <string name="sign_in_with_email">Mit E-Mail anmelden</string>
+    <string name="signing_in">Anmelden...</string>
+    <string name="dialog_msg_user_email_doesnt_exist">Benutzer mit dieser E-Mail ist noch nicht kreiert.</string>
+    <string name="continue_with_facebook">Mit Facebook weitermachen</string>
+    <string name="continue_wiht_google">Mit Google weitermachen</string>
+    
+    <!--  fragment_discover.xml -->
+    <string name="txt_no_events">Zur Zeit gibt es keine Veranstaltung in deiner Umgebung. Versuch eine andere Kategorie oder suche in einer neuen/weiteren Umgebung.</string>
+    <string name="btn_chg_loc_txt">Umgebung ändern</string>
+    
+    <!-- Following -->
+    <string name="remove_artist">Künstler entfernen</string>
+    <string name="follow_artist">Künstler folgen</string>
+    <string name="are_you_sure_you_want_to_remove_this_artist">Bist du sicher, dass du den Künstler entfernen möchtest?</string>
+    <string name="artist_saved">Künstler gesichert!</string>
+    
+    <!-- Following section screen names -->
+    <string name="title_popular">Beliebt</string>
+    <string name="title_featured_list">Featured-Liste</string>
+    
+    <string name="title_categories">Kategories</string>
+    <string name="title_alternative_rock">Alternativ-Rock</string>
+    <string name="title_classic_rock">Klassik-Rock</string>
+    <string name="title_indie_rock">Indie-Rock</string>
+    <string name="title_folk">Folk</string>
+    <string name="title_country">Country</string>
+    <string name="title_electronic">Elektro</string>
+    <string name="title_pop">Pop</string>
+    <string name="title_punk">Punk</string>
+    <string name="title_hard_rock_metal">Hard Rock / Metal</string>
+    <string name="title_world_music">World Music</string>
+    <string name="title_blues_jazz">Blues / Jazz</string>
+    <string name="title_hip_hop">Hip Hop</string>
+    <string name="title_soul_r_and_b_funk">Soul / RnB / Funk</string>
+    <string name="title_classical">Klassisch</string>
+    
+    <!-- DiscoverSettingDialogFragment -->
+    <string name="txt_select_date">Datum wählen</string>
+    
+    <!-- MusicArtistsFragment -->
+    <string name="btn_alternative_rock">Alternativ-Rock</string>
+    <string name="btn_classic_rock">Klassik-Rock</string>
+    <string name="btn_indie_rock">Indie-Rock</string>
+    <string name="btn_folk">Folk</string>
+    <string name="btn_country">Country</string>
+    <string name="btn_electronic">Elektro</string>
+    <string name="btn_pop">Pop</string>
+    <string name="btn_punk">Punk</string>
+    <string name="btn_hard_rock_metal">Hard Rock / Metal</string>
+    <string name="btn_world_music">World Music</string>
+    <string name="btn_blues_jazz">Blues / Jazz</string>
+    <string name="btn_hip_hop">Hip Hop</string>
+    <string name="btn_soul_r_and_b_funck">Soul / RnB / Funk</string>
+    <string name="btn_classical">Klassisch</string>
     
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>

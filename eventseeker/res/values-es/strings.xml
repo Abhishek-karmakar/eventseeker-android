@@ -185,7 +185,7 @@
    	<!-- Connect Accounts -->
     <string name="fb_login">Entrar en Facebook</string>
     <string name="fb_logout">Desconectar de Facebook</string>
-    <string name="btn_continue">Continuar</string>    
+    <string name="btn_continue">Continua</string>    
     <string name="syncing_fb">Sincronizando Facebook</string>
 	<string name="syncing_google_plus">Sincronizando Google Plus</string>
 	<string name="syncing_google_play">Sincronizando Google Play</string>
@@ -335,7 +335,7 @@
     <string name="btn_sync_accounts">Sync Accounts</string>
     <string name="btn_popular_artists">Popular</string>
     <string name="btn_recommended">Recomendada</string>
-    <string name="btn_search">Search</string>
+    <string name="btn_search">Busca</string>
     <string name="title_find_more_artist">Find More Artists</string>
     
     <!-- PopularArtistsFragment -->
@@ -353,6 +353,50 @@
     <string name="dialog_msg_follow_all">Do you want to follow %1$d artists?</string>
     <string name="dialog_btn_yes">yes</string>
     <string name="dialog_btn_no">no</string>
+    
+    <!-- Following -->
+    <string name="remove_artist">Retirez l\'artiste</string>
+    <string name="follow_artist">Sui</string>
+    <string name="chronological">Crónologicamente</string>
+    
+    <!-- Following section screen names -->
+    <string name="title_popular">Popular</string>
+    
+   	<string name="title_categories">Categorías</string>
+    <string name="title_alternative_rock">Rock Alternativo</string>
+    <string name="title_classic_rock">Rock Clásico</string>
+    <string name="title_indie_rock">Indie Rock</string>
+    <string name="title_folk">Folk</string>
+    <string name="title_country">Country</string>
+    <string name="title_electronic">Electrónica</string>
+    <string name="title_pop">Pop</string>
+    <string name="title_punk">Punk</string>
+    <string name="title_hard_rock_metal">Hard Rock / Metal</string>
+    <string name="title_world_music">Músicas del Mundo</string>
+    <string name="title_blues_jazz">Blues / Jazz</string>
+    <string name="title_hip_hop">Hip-Hop</string>
+    <string name="title_soul_r_and_b_funk">Soul / R&amp;B / Funk</string>
+    <string name="title_classical">Clásica</string>
+    
+    <!-- MusicArtistsFragment -->
+    <string name="btn_alternative_rock">Rock Alternativo</string>
+    <string name="btn_classic_rock">Rock Clásico</string>
+    <string name="btn_indie_rock">Indie Rock</string>
+    <string name="btn_folk">Folk</string>
+    <string name="btn_country">Country</string>
+    <string name="btn_electronic">Electrónica</string>
+    <string name="btn_pop">Pop</string>
+    <string name="btn_punk">Punk</string>
+    <string name="btn_hard_rock_metal">Hard Rock / Metal</string>
+    <string name="btn_world_music">Músicas del Mundo</string>
+    <string name="btn_blues_jazz">Blues / Jazz</string>
+    <string name="btn_hip_hop">Hip-Hop</string>
+    <string name="btn_soul_r_and_b_funck">Soul / R&amp;B / Funk</string>
+    <string name="btn_classical">Clásica</string>
+    
+    <!-- LoginFragment -->
+    <string name="continue_with_facebook">Continuar con Facebook</string>
+    <string name="continue_wiht_google">Continuar con Google</string>
     
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>
