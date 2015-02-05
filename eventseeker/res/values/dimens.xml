@@ -13,12 +13,7 @@
     <dimen name="action_bar_title_margin_start">0dp</dimen>
     <dimen name="event_listing_slider_items_size_w_h">25dp</dimen>
     <!-- fragment_discover.xml -->
-    <dimen name="rlt_layout_featured_evts_parent_ht_discover">250dp</dimen>
     <dimen name="rlt_layout_featured_evts_parent_margin_discover">8dp</dimen>
-    <dimen name="page_indicator_pad_discover">8dp</dimen>
-    <dimen name="page_indicator_radius_discover">5dp</dimen>
-    <dimen name="page_indicator_stroke_w_discover">1dp</dimen>
-    <dimen name="view_pager_pad_discover">8dp</dimen>
     <dimen name="grd_evt_categories_margin_b_discover">@dimen/rlt_layout_featured_evts_parent_margin_discover</dimen>
     <dimen name="grd_evt_categories_hor_space_discover">6dp</dimen>
     <dimen name="grd_evt_categories_ver_space_discover">@dimen/grd_evt_categories_hor_space_discover</dimen>
@@ -296,7 +291,6 @@
     <dimen name="frm_layout_map_container_ht_fragment_event_info">200dp</dimen>
     <!-- 10% of frm_layout_map_container_ht_fragment_event_info -->
     <dimen name="v_dummy_address_ht_fragment_event_info">20dp</dimen>
-    <dimen name="rlt_layout_evt_address_margin_t_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="rlt_layout_evt_address_pad_fragment_event_info">@dimen/txt_evt_desc_pad_fragment_evt_info</dimen>
     <dimen name="txt_address_margin_b_fragment_event_info">5dp</dimen>
     <dimen name="txt_address_txt_size_fragment_event_info">16sp</dimen>
@@ -307,7 +301,6 @@
     <dimen name="rlt_layout_friends_margin_t_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="rlt_layout_friends_pad_fragment_event_info">@dimen/txt_evt_desc_pad_fragment_evt_info</dimen>
     <dimen name="txt_friends_margin_b_fragment_event_info">@dimen/txt_address_margin_b_fragment_event_info</dimen>
-    <dimen name="txt_friends_txt_size_fragment_event_info">@dimen/txt_address_txt_size_fragment_event_info</dimen>
     <dimen name="v_divider_ht_fragment_event_info">1dp</dimen>
     <!-- grid_friend.xml -->
     <dimen name="img_friend_ht_grid_friend">@dimen/grd_v_friends_col_w_fragment_event_info</dimen>
@@ -431,9 +424,9 @@
     <dimen name="rlt_layout_videos_pad_fragment_artist_info">@dimen/txt_artist_desc_pad_fragment_artist_info</dimen>
     <dimen name="txt_videos_margin_b_fragment_artist_info">@dimen/txt_address_margin_b_fragment_event_info</dimen>
     <dimen name="txt_videos_txt_size_fragment_artist_info">16sp</dimen>
-    <dimen name="page_indicator_pad_fragment_artist_info">@dimen/page_indicator_pad_discover</dimen>
-    <dimen name="page_indicator_radius_fragment_artist_info">@dimen/page_indicator_radius_discover</dimen>
-    <dimen name="page_indicator_stroke_w_fragment_artist_info">@dimen/page_indicator_stroke_w_discover</dimen>
+    <dimen name="page_indicator_pad_fragment_artist_info">8dp</dimen>
+    <dimen name="page_indicator_radius_fragment_artist_info">5dp</dimen>
+    <dimen name="page_indicator_stroke_w_fragment_artist_info">1dp</dimen>
     <dimen name="view_pager_ht_fragment_artist_info">200dp</dimen>
     <!-- include_fragment_artist_details_footer.xml -->
     <dimen name="img_follow_margin_l_include_fragment_artist_details_footer">10dp</dimen>

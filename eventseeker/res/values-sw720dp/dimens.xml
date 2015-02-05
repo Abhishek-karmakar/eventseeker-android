@@ -52,11 +52,7 @@
     <dimen name="grd_evt_categories_pad_discover">20dp</dimen>
     <dimen name="grd_evt_categories_hor_space_discover">@dimen/grd_evt_categories_pad_discover</dimen>
     <dimen name="grd_evt_categories_ver_space_discover">@dimen/grd_evt_categories_pad_discover</dimen>
-    <dimen name="rlt_layout_featured_evts_parent_ht_discover">400dp</dimen>
     <dimen name="rlt_layout_featured_evts_parent_margin_discover">20dp</dimen>
-    <dimen name="page_indicator_pad_discover">8dp</dimen>
-    <dimen name="page_indicator_radius_discover">5dp</dimen>
-    <dimen name="page_indicator_stroke_w_discover">1dp</dimen>
     <dimen name="eco_glry_featured_evt_child_w_discover_gallery_item">535dp</dimen>
     <dimen name="eco_glry_featured_evt_child_ht_discover_gallery_item">400dp</dimen>
 
@@ -220,7 +216,6 @@
 
     <!-- include_friends.xml -->
     <dimen name="txt_friends_margin_b_fragment_event_info">10dp</dimen>
-    <dimen name="txt_friends_txt_size_fragment_event_info">22sp</dimen>
     <dimen name="rlt_layout_evt_address_pad_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="rlt_layout_evt_address_pad_t_fragment_event_info">10dp</dimen>
 

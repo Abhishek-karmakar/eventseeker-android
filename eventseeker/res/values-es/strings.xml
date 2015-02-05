@@ -152,6 +152,7 @@
     <string name="news">Noticias</string>
     <string name="videos">Videos</string>
     <string name="friends_who_like">Amigos a los que les gusta</string>
+    <string name="upcoming_events">Eventos próximos</string>
     <string name="no_artist_news_found">No Artist News Found.</string>
     <string name="facebook_link_unavailable">No hay un enlace Facebook disponible para este artista.</string>
     <string name="twitter_link_unavailable">No hay un enlace Twitter disponible para este artista.</string>
