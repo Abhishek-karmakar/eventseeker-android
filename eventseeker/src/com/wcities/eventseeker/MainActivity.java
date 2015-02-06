@@ -72,6 +72,7 @@ import com.wcities.eventseeker.interfaces.ConnectionFailureListener;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionDestination;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
 import com.wcities.eventseeker.interfaces.EventListener;
+import com.wcities.eventseeker.interfaces.FragmentHavingFragmentInRecyclerView;
 import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.interfaces.MapListener;
 import com.wcities.eventseeker.interfaces.OnLocaleChangedListener;
@@ -241,6 +242,9 @@ public class MainActivity extends ActionBarActivity implements
 					Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
 					if (fragment instanceof CustomSharedElementTransitionSource) {
 						((CustomSharedElementTransitionSource) fragment).onPoppedFromBackStack();
+						
+					} else if (fragment instanceof FragmentHavingFragmentInRecyclerView) {
+						((FragmentHavingFragmentInRecyclerView) fragment).onPoppedFromBackStackFHFIR();
 					}
 				}
 				prevBackStackEntryCount = newBackStackEntryCount;
@@ -611,21 +615,21 @@ public class MainActivity extends ActionBarActivity implements
 			} else if (!isTabletAndInLandscapeMode) {
 				if (mDrawerToggle.isDrawerIndicatorEnabled()) {
 					//Log.d(TAG, "isDrawerIndicatorEnabled");
-					if (mDrawerLayout.isDrawerOpen(lnrLayoutRootNavDrawer)) {
-						mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
+					if (isDrawerOpen()) {
+						closeDrawer();
 
 					} else {
 						mDrawerLayout.openDrawer(lnrLayoutRootNavDrawer);
 					}
 
-				} else if (mDrawerLayout.isDrawerOpen(lnrLayoutRootNavDrawer)) {
+				} else if (isDrawerOpen()) {
 					/**
 					 * If user is on any screen apart from first level screens accessible from navigation drawer
 					 * & if user has opened drawer by swipe action (although drawer indicator is not enabled & 
 					 * back arrow is there on top left corner), then clicking on toolbar back icon should close 
 					 * drawer first instead of moving back to previous screen in the back stack.
 					 */
-					mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
+					closeDrawer();
 					
 				} else if ((getSupportActionBar().getDisplayOptions() & ActionBar.DISPLAY_HOME_AS_UP) != 0) {
 					/**
@@ -674,6 +678,7 @@ public class MainActivity extends ActionBarActivity implements
 			 */
 
 		default:
+			closeDrawer();
 			break;
 		}
 
@@ -807,7 +812,7 @@ public class MainActivity extends ActionBarActivity implements
 					return super.onKeyDown(keyCode, event);
 					
 				} else {
-					if (mDrawerLayout.isDrawerOpen(lnrLayoutRootNavDrawer)) {
+					if (isDrawerOpen()) {
 						/**
 						 * If user is on any screen apart from first level screens accessible from navigation drawer
 						 * & if user has opened drawer by swipe action (although drawer indicator is not enabled & 
@@ -843,7 +848,7 @@ public class MainActivity extends ActionBarActivity implements
 		if (!isTabletAndInLandscapeMode) {
 			if (keyCode == KeyEvent.KEYCODE_MENU) {
 				if (mDrawerToggle.isDrawerIndicatorEnabled()) {
-					if (mDrawerLayout.isDrawerOpen(lnrLayoutRootNavDrawer)) {
+					if (isDrawerOpen()) {
 						mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
 
 					} else {
@@ -1241,7 +1246,9 @@ public class MainActivity extends ActionBarActivity implements
 		
 		if (replaceByFragmentTag.equals(AppConstants.FRAGMENT_TAG_LOGIN_SYNCING) || 
 				((args != null && args.containsKey(BundleKeys.SHARED_ELEMENTS))) || 
-				(AppConstants.FRAGMENT_TAG_VENUE_DETAILS.equals(currentContentFragmentTag) && addToBackStack)) {
+				((AppConstants.FRAGMENT_TAG_ARTIST_DETAILS.equals(currentContentFragmentTag) || 
+						AppConstants.FRAGMENT_TAG_VENUE_DETAILS.equals(currentContentFragmentTag)) 
+						&& addToBackStack)) {
 			if (args != null && args.containsKey(BundleKeys.SHARED_ELEMENTS)) {
 				prevCustomSharedElementTransitionSource = (CustomSharedElementTransitionSource) getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
 			}
@@ -1250,10 +1257,11 @@ public class MainActivity extends ActionBarActivity implements
 			 * add fragment instead of replacing so that behind its transparent background 
 			 * a) sign in/sign up screen remains visible OR
 			 * b) screen transition executes intuitively when there are some shared elements
-			 * c) If we replace or remove-add anything on venue details fragment, it crashes with 
-			 * "IllegalArgumentException: no view found for id R.id.frmLayoutMapContainer for 
-			 * AddressMapFragment" on coming back to venue details screen. Couldn't find its solution. 
-			 * Probably it's happening with MapFragment within RecyclerView.
+			 * c) If we replace or remove-add anything on artist/venue details fragment, it crashes with 
+			 * "IllegalArgumentException: no view found for id R.id.vPagerVideos/R.id.frmLayoutMapContainer for 
+			 * VideoFragment/AddressMapFragment" on coming back to artist/venue details screen. Couldn't find its solution. 
+			 * Probably it's happening with any Fragment within RecyclerView.
+			 * 'addToBackStack' is added to prevent addition when selecting any navigationDrawer item
 			 */
 			fragmentTransaction.add(R.id.content_frame, replaceBy, replaceByFragmentTag);
 			
@@ -1355,7 +1363,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	private void updateTitle() {
 		/*
-		 * if (mDrawerLayout.isDrawerOpen(lnrLayoutRootNavDrawer)) {
+		 * if (isDrawerOpen()) {
 		 * getSupportActionBar().setTitle(AppConstants.NAVIGATION_DRAWER_TITLE);
 		 * 
 		 * } else {
@@ -1954,7 +1962,8 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public boolean onQueryTextSubmit(String query) {
-		//Log.d(TAG, "onQueryTextSubmit(), query = " + query);
+		//Log.d(TAG, "onQueryTextSubmit(), query = " + query + ", currentContentFragmentTag = " + currentContentFragmentTag);
+		closeDrawer();
 		if (query == null || query.length() == 0) {
 			return true;
 		}
@@ -1964,6 +1973,14 @@ public class MainActivity extends ActionBarActivity implements
 
 		SearchFragment searchFragment;
 		if (!currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_SEARCH)) {
+			Fragment fragment = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
+			if (fragment instanceof FragmentHavingFragmentInRecyclerView) {
+				/**
+				 * to mark isOnPushedToBackStackCalled true so that onPoppedFromBackStack() can apply 
+				 * currentFragmentTag, title, etc changes
+				 */
+				((FragmentHavingFragmentInRecyclerView)fragment).onPushedToBackStackFHFIR();
+			}
 			searchFragment = new SearchFragment();
 			Bundle args = new Bundle();
 			args.putString(BundleKeys.QUERY, query);
@@ -2134,6 +2151,21 @@ public class MainActivity extends ActionBarActivity implements
 				: getResources().getString(R.string.title_login);
 		selectNonDrawerItem(loginSyncingFragment, AppConstants.FRAGMENT_TAG_LOGIN_SYNCING, title, addToBackStack);
 	}
+	
+	public boolean isDrawerOpen() {
+		if (mDrawerLayout != null) {
+			return mDrawerLayout.isDrawerOpen(lnrLayoutRootNavDrawer);
+			
+		} else {
+			return false;
+		}
+	}
+	
+	private void closeDrawer() {
+		if (isDrawerOpen() && mDrawerLayout != null) {
+			mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
+		}
+	}
 
 	public void hideDrawerList() {
 		lnrLayoutRootNavDrawer.setVisibility(View.GONE);
@@ -2177,6 +2209,7 @@ public class MainActivity extends ActionBarActivity implements
 	}
 	
 	public void setToolbarBg(int color) {
+		//Log.d(TAG, "setToolbarBg(), color = " + color);
 		toolbar.setBackgroundColor(color);
 	}
 	

@@ -91,6 +91,7 @@ import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionDestinati
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.EventListener;
+import com.wcities.eventseeker.interfaces.FragmentHavingFragmentInRecyclerView;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
@@ -106,7 +107,7 @@ import com.wcities.eventseeker.viewdata.SharedElementPosition;
 public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackStack implements DrawerListener, 
 		CustomSharedElementTransitionDestination, OnArtistUpdatedListener, OnClickListener, 
 		LoadItemsInBackgroundListener, CustomSharedElementTransitionSource, ArtistTrackingListener, 
-		DialogBtnClickListener, LoadArtistEventsListener {
+		DialogBtnClickListener, LoadArtistEventsListener, FragmentHavingFragmentInRecyclerView {
 	
 	private static final String TAG = ArtistDetailsFragment.class.getName();
 	
@@ -130,7 +131,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	private int totalScrolledDy = UNSCROLLED; // indicates layout not yet created
 	private int limitScrollAt, actionBarElevation, fabScrollThreshold;
 	private float minTitleScale;
-	private boolean isScrollLimitReached, isDrawerOpen;
+	private boolean isScrollLimitReached;
 	private String title = "";
 	private float translationZPx;
 	
@@ -252,7 +253,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 				}
 				
 				onScrolled(0, true);
-				if (isDrawerOpen) {
+				if (((MainActivity)FragmentUtil.getActivity(ArtistDetailsFragment.this)).isDrawerOpen()) {
 					// to maintain status bar & toolbar decorations after orientation change
 					onDrawerOpened();
 				}
@@ -302,7 +303,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		if (totalScrolledDy != UNSCROLLED) {
 			onScrolled(0, true);
 			
-			if (isDrawerOpen) {
+			if (((MainActivity)FragmentUtil.getActivity(ArtistDetailsFragment.this)).isDrawerOpen()) {
 				onDrawerOpened();
 			}
 		}
@@ -527,8 +528,6 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	}
 	
 	private void onDrawerOpened() {
-		isDrawerOpen = true;
-		
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		ma.setToolbarBg(ma.getResources().getColor(R.color.colorPrimary));
 		ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
@@ -548,7 +547,6 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 
 	@Override
 	public void onDrawerClosed(View arg0) {
-		isDrawerOpen = false;
 		onScrolled(0, true);
 	}
 
@@ -1484,6 +1482,16 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 					args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
 					((ReplaceFragmentListener)FragmentUtil.getActivity(artistDetailsFragment)).replaceByFragment(
 							AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
+					
+					/**
+					 * need to call onPushedToBackStack() since we are adding any fragment instead of replacing on artist details screen.
+					 * Why adding? Answer: If we replace or remove-add anything on artist details fragment, it crashes with 
+					 * "IllegalArgumentException: no view found for id R.id.vPagerVideos for 
+					 * VideoFragment" on coming back to artist details screen. Couldn't find its solution. 
+					 * Probably it's happening with any Fragment within RecyclerView.
+					 */ 
+					((FragmentHavingFragmentInRecyclerView)artistDetailsFragment).onPushedToBackStackFHFIR();
+					
 					/**
 					 * added on 15-12-2014
 					 */
@@ -1720,14 +1728,18 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			view.setVisibility(View.INVISIBLE);
 		}
 	}
-
-	@Override
-	public void onPushedToBackStack() {
-		/**
-		 * to remove facebook callback. Not calling onStop() to prevent toolbar color changes occurring in between
-		 * the transition
-		 */
-		super.onStop();
+	
+	private void onPushedToBackStack(boolean revertToolbarStatusBarChanges) {
+		if (revertToolbarStatusBarChanges) {
+			onStop();
+			
+		} else {
+			/**
+			 * to remove facebook callback. Not calling onStop() to prevent toolbar color changes occurring in between
+			 * the transition
+			 */
+			super.onStop();
+		}
 		
 		/**
 		 * set null listener, otherwise even for event/venue details screen when selecting 
@@ -1738,6 +1750,11 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		}
 		setMenuVisibility(false);
 		isOnPushedToBackStackCalled = true;
+	}
+
+	@Override
+	public void onPushedToBackStack() {
+		onPushedToBackStack(false);
 	}
 
 	@Override
@@ -1843,5 +1860,15 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 				onScrolled(0, true);
 			}
 		});
+	}
+
+	@Override
+	public void onPushedToBackStackFHFIR() {
+		onPushedToBackStack(true);
+	}
+
+	@Override
+	public void onPoppedFromBackStackFHFIR() {
+		onPoppedFromBackStack();
 	}
 }

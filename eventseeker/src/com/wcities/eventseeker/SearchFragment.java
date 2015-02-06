@@ -160,6 +160,7 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 	@Override
 	public void onStop() {
 		super.onStop();
+		//Log.d(TAG, "onStop()");
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
 		ma.setVStatusBarVisibility(View.VISIBLE, R.color.colorPrimaryDark);
