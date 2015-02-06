@@ -13,19 +13,19 @@ import android.widget.Button;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class GeneralDialogFragment extends DialogFragment {
+public class ShareOnFBDialogFragment extends DialogFragment {
 	
-	private static final String TAG = GeneralDialogFragment.class.getSimpleName();
+	private static final String TAG = ShareOnFBDialogFragment.class.getSimpleName();
 
 	private static DialogBtnClickListener dialogBtnClickListener;
 	
 	private static boolean isAlreadyShown;
 	
-	public static GeneralDialogFragment newInstance(DialogBtnClickListener dialogBtnClickListener, String title, 
+	public static ShareOnFBDialogFragment newInstance(DialogBtnClickListener dialogBtnClickListener, String title, 
 			String msg) {
-		GeneralDialogFragment.dialogBtnClickListener = dialogBtnClickListener;
+		ShareOnFBDialogFragment.dialogBtnClickListener = dialogBtnClickListener;
 		
-		GeneralDialogFragment frag = new GeneralDialogFragment();
+		ShareOnFBDialogFragment frag = new ShareOnFBDialogFragment();
 		Bundle args = new Bundle();
 		args.putString(BundleKeys.DIALOG_TITLE, title);
 		args.putString(BundleKeys.DIALOG_MSG, msg);
@@ -33,36 +33,6 @@ public class GeneralDialogFragment extends DialogFragment {
 		args.putBoolean(BundleKeys.DIALOG_FB_SHARE, true);
 		frag.setArguments(args);
 		
-		return frag;
-	}
-
-	public static GeneralDialogFragment newInstance(DialogBtnClickListener dialogBtnClickListener, String msg, 
-			String btn1Txt, boolean isCancellable) {
-		GeneralDialogFragment.dialogBtnClickListener = dialogBtnClickListener;
-		
-		GeneralDialogFragment frag = new GeneralDialogFragment();
-		Bundle args = new Bundle();
-		args.putString(BundleKeys.DIALOG_MSG, msg);
-		args.putString(BundleKeys.BTN1_TXT, btn1Txt);
-		args.putBoolean(BundleKeys.DIALOG_IS_CANCELLABLE, isCancellable);
-		frag.setArguments(args);
-		return frag;
-	}
-
-	public static GeneralDialogFragment newInstance(DialogBtnClickListener dialogBtnClickListener, 
-			String title, String msg, String btn1Txt, String btn2Txt, boolean isCancellable) {
-		GeneralDialogFragment.dialogBtnClickListener = dialogBtnClickListener;
-		
-		GeneralDialogFragment frag = new GeneralDialogFragment();
-		Bundle args = new Bundle();
-		args.putString(BundleKeys.DIALOG_TITLE, title);
-		args.putString(BundleKeys.DIALOG_MSG, msg);
-		args.putString(BundleKeys.BTN1_TXT, btn1Txt);
-		if (btn2Txt != null) {
-			args.putString(BundleKeys.BTN2_TXT, btn2Txt);
-		}
-		args.putBoolean(BundleKeys.DIALOG_IS_CANCELLABLE, isCancellable);
-		frag.setArguments(args);
 		return frag;
 	}
 

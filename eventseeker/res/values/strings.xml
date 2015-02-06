@@ -398,6 +398,7 @@
     <string name="signing_in">Signing in...</string>
     <string name="sign_in">SIGN IN</string>
     <string name="forgot_your_password">Forgot your password?</string>
+    <string name="share_on_facebook">Share On Facebook</string>
     <string name="continue_with_facebook">Continue with Facebook</string>
     <string name="continue_wiht_google">Continue with Google</string>
     

@@ -48,7 +48,7 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 	private boolean isEmailValid, isPasswordValid;
 	private Button btnLogin, btnForgotPassword;
 	
-	private ImageView imgFbSignUp, imgGPlusSignIn;
+	private Button imgFbSignUp, imgGPlusSignIn;
     private TextView txtGPlusSignInStatus;
     
     private RelativeLayout rltLytPrgsBar;
@@ -71,10 +71,10 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 		(btnLogin = (Button) v.findViewById(R.id.btnLogin)).setOnClickListener(this);
 		(btnForgotPassword = (Button) v.findViewById(R.id.btnForgotPassword)).setOnClickListener(this);
 		
-		imgFbSignUp = (ImageView) v.findViewById(R.id.imgFbSignUp);
+		imgFbSignUp = (Button) v.findViewById(R.id.imgFbSignUp);
 		imgFbSignUp.setOnClickListener(this);
 		
-		imgGPlusSignIn = (ImageView) v.findViewById(R.id.imgGPlusSignIn);
+		imgGPlusSignIn = (Button) v.findViewById(R.id.imgGPlusSignIn);
 		imgGPlusSignIn.setOnClickListener(this);
 		txtGPlusSignInStatus = (TextView) v.findViewById(R.id.txtGPlusSignInStatus);
 		

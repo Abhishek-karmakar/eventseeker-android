@@ -50,10 +50,9 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 	private static final String DIALOG_FRAGMENT_TAG_UNKNOWN_ERROR = "unknownError";
 	
 	private EditText edtFN, edtLN, edtEmail, edtPassword, edtConfirmPassword;
-	private ImageView imgFNIndicator, imgLNIndicator, imgEmailIndicator, imgPasswordIndicator, imgConfirmPasswordIndicator, 
-						imgFbSignUp, imgGPlusSignIn;
+	private ImageView imgFNIndicator, imgLNIndicator, imgEmailIndicator, imgPasswordIndicator, imgConfirmPasswordIndicator;
 	private TextView txtEmailInvalid, txtConfirmPasswordInvalid, txtGPlusSignInStatus;
-	private Button btnSignUp;
+	private Button btnSignUp, imgFbSignUp, imgGPlusSignIn;
 
 	private boolean isFNValid, isLNValid, isEmailValid, isConfirmPasswordValid;
 	private HashMap<String, ImgIndicatorState> imgIndicatorStateMap;
@@ -103,10 +102,10 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 		
 		(btnSignUp = (Button) v.findViewById(R.id.btnSignUp)).setOnClickListener(this);
 		
-		imgFbSignUp = (ImageView) v.findViewById(R.id.imgFbSignUp);
+		imgFbSignUp = (Button) v.findViewById(R.id.imgFbSignUp);
 		imgFbSignUp.setOnClickListener(this);
 		
-		imgGPlusSignIn = (ImageView) v.findViewById(R.id.imgGPlusSignIn);
+		imgGPlusSignIn = (Button) v.findViewById(R.id.imgGPlusSignIn);
 		imgGPlusSignIn.setOnClickListener(this);
 		txtGPlusSignInStatus = (TextView) v.findViewById(R.id.txtGPlusSignInStatus);
 		
