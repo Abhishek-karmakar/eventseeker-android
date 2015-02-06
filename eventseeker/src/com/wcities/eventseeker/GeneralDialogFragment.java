@@ -121,7 +121,7 @@ public class GeneralDialogFragment extends DialogFragment {
 			btnFBShare.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
 			btnFBShare.setSingleLine(true);
 			btnFBShare.setTextColor(getResources().getColor(android.R.color.white));
-			btnFBShare.setTextSize(getResources().getDimensionPixelSize(R.dimen.txt_size_fb_dialog_btn));
+			btnFBShare.setTextSize(getResources().getDimensionPixelSize(R.dimen.txt_size_fb_dialog));
 		}
 	}
 	

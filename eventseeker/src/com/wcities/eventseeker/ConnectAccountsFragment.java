@@ -381,7 +381,8 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 					holder = (AccountViewHolder) convertView.getTag();
 				}
 				
-				holder.imgService.setImageResource(serviceAccount.drawable);
+				//holder.imgService.setImageResource(serviceAccount.drawable);
+				holder.imgService.setBackgroundResource(serviceAccount.drawable);
 				holder.txtServiceName.setText(serviceAccount.name);
 				
 				/*if (serviceAccount.isInProgress) {

@@ -32,6 +32,7 @@ import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.RadioGroupDialogFragment.OnValueSelectedListener;
 import com.wcities.eventseeker.SettingsFragment.OnSettingsItemClickedListener;
 import com.wcities.eventseeker.SettingsFragment.SettingsItem;
+import com.wcities.eventseeker.ShareOnFBDialogFragment.OnFacebookShareClickedListener;
 import com.wcities.eventseeker.adapter.MyArtistListAdapter;
 import com.wcities.eventseeker.adapter.MyArtistListAdapter.AdapterFor;
 import com.wcities.eventseeker.api.Api;
@@ -52,7 +53,8 @@ import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class RecommendedArtistsFragment extends PublishArtistFragmentLoadableFromBackStack implements OnClickListener, 
-		LoadArtistsListener, LoadItemsInBackgroundListener, DialogBtnClickListener, ArtistTrackingListener {
+		LoadArtistsListener, LoadItemsInBackgroundListener, DialogBtnClickListener, ArtistTrackingListener,
+		OnFacebookShareClickedListener {
 
 	private static final String TAG = RecommendedArtistsFragment.class.getName();
 
@@ -402,7 +404,7 @@ public class RecommendedArtistsFragment extends PublishArtistFragmentLoadableFro
 			myArtistListAdapter.notifyDataSetChanged();
 		}*/
 		//Log.d(TAG, "doNegativeClick");
-		if (dialogTag.contains(DIALOG_ARTIST_SAVED)) {
+		/*if (dialogTag.contains(DIALOG_ARTIST_SAVED)) {
 			String strId = dialogTag.substring(dialogTag.indexOf(":") + 1);
 			//Log.d(TAG, "strId : " + strId);
 			for (Artist artist : artistList) {
@@ -414,7 +416,7 @@ public class RecommendedArtistsFragment extends PublishArtistFragmentLoadableFro
 					break;
 				}
 			}
-		}
+		}*/
 	}
 
 	@Override
@@ -426,9 +428,8 @@ public class RecommendedArtistsFragment extends PublishArtistFragmentLoadableFro
 			//The below notifyDataSetChange will change the status of following CheckBox for current Artist
 			myArtistListAdapter.notifyDataSetChanged();
 			
-			GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(this, 
-					res.getString(R.string.follow_artist), res.getString(R.string.artist_saved));
-			generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), 
+			ShareOnFBDialogFragment dialogFragment = ShareOnFBDialogFragment.newInstance(this);
+			dialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), 
 						DIALOG_ARTIST_SAVED + ":" + artist.getId());
 			
 		} else {			
@@ -459,6 +460,23 @@ public class RecommendedArtistsFragment extends PublishArtistFragmentLoadableFro
 		} else {
 			fbCallCountForSameArtist = 0;
 			setPendingAnnounce(false);
+		}
+	}
+
+	@Override
+	public void onFacebookShareClicked(String dialogTag) {
+		if (dialogTag.contains(DIALOG_ARTIST_SAVED)) {
+			String strId = dialogTag.substring(dialogTag.indexOf(":") + 1);
+			//Log.d(TAG, "strId : " + strId);
+			for (Artist artist : artistList) {
+				if (artist != null && artist.getId() == Integer.parseInt(strId)) {					
+					fbCallCountForSameArtist = 0;
+					artistToBeSaved = artist;
+					FbUtil.handlePublishArtist(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
+							AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, artist);
+					break;
+				}
+			}
 		}
 	}
 

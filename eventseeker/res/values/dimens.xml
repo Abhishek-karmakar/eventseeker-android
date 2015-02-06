@@ -231,7 +231,10 @@
     <dimen name="btn_fb_sign_up_ht_fb_login">35dp</dimen>
     <dimen name="all_components_margin_t_get_started">30dp</dimen>
     <dimen name="txt_size_fb_google_btn_get_started">16sp</dimen>
-    <dimen name="txt_size_fb_dialog_btn">12sp</dimen>
+    <dimen name="txt_size_msg_btn_fb_dialog">18sp</dimen>
+    <dimen name="txt_size_fb_dialog">@dimen/txt_size_fb_google_btn_get_started</dimen>
+    <dimen name="txt_mar_pad_t_b_fb_dialog">10dp</dimen>
+    <dimen name="txt_mar_pad_l_r_fb_dialog">5dp</dimen>
     <dimen name="txt_g_plus_sign_in_status_txt_size_get_started">18sp</dimen>
     <dimen name="btn_fb_sign_up_txt_size_fb_login">16sp</dimen>
     <dimen name="btn_fb_sign_up_pad_l_fb_login">10dp</dimen>

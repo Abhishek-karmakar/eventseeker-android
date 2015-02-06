@@ -1,87 +1,60 @@
 package com.wcities.eventseeker;
 
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.app.Dialog;
-import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
-import android.view.Gravity;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 
-import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class ShareOnFBDialogFragment extends DialogFragment {
 	
 	private static final String TAG = ShareOnFBDialogFragment.class.getSimpleName();
 
-	private static DialogBtnClickListener dialogBtnClickListener;
+	private static OnFacebookShareClickedListener onFacebookShareClickedListener;
 	
 	private static boolean isAlreadyShown;
 	
-	public static ShareOnFBDialogFragment newInstance(DialogBtnClickListener dialogBtnClickListener, String title, 
-			String msg) {
-		ShareOnFBDialogFragment.dialogBtnClickListener = dialogBtnClickListener;
-		
-		ShareOnFBDialogFragment frag = new ShareOnFBDialogFragment();
-		Bundle args = new Bundle();
-		args.putString(BundleKeys.DIALOG_TITLE, title);
-		args.putString(BundleKeys.DIALOG_MSG, msg);
-		args.putString(BundleKeys.BTN1_TXT, " ");
-		args.putBoolean(BundleKeys.DIALOG_FB_SHARE, true);
-		frag.setArguments(args);
-		
-		return frag;
+	public static ShareOnFBDialogFragment newInstance(OnFacebookShareClickedListener onFacebookShareClickedListener) {
+		ShareOnFBDialogFragment.onFacebookShareClickedListener = onFacebookShareClickedListener;
+		return new ShareOnFBDialogFragment();
 	}
 
+	private Button btnFBShare;  
+	  
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		Bundle args = getArguments();
-		String title = null;
-		if (args.containsKey(BundleKeys.DIALOG_TITLE)) {
-			title = args.getString(BundleKeys.DIALOG_TITLE);
-		}
-		String msg = args.getString(BundleKeys.DIALOG_MSG);
+		final Dialog dialog = new Dialog(FragmentUtil.getActivity(this));
+		dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+		dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		dialog.setCancelable(true);
+		dialog.setContentView(R.layout.fragment_share_on_fb_dialog);
+		//dialog.show();
+		
 		final String dialogTag = getTag();
 		
-		Builder builder = new Builder(FragmentUtil.getActivity(this));
-		if (title != null) {
-			builder.setTitle(title);
-		}
-        builder.setMessage(msg)
-        .setNegativeButton(args.getString(BundleKeys.BTN1_TXT), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-            	//isAlreadyShown = false;
-            	if (dialogBtnClickListener != null) {
-            		dialogBtnClickListener.doNegativeClick(dialogTag);
-            		
-            	} else {
-            		((DialogBtnClickListener) getParentFragment()).doNegativeClick(dialogTag);
-            	}
-            }
-        });
-        
-        if (args.containsKey(BundleKeys.BTN2_TXT)) {
-        	builder.setPositiveButton(args.getString(BundleKeys.BTN2_TXT), new DialogInterface.OnClickListener() {
-	            public void onClick(DialogInterface dialog, int whichButton) {
-	            	//isAlreadyShown = false;
-	            	if (dialogBtnClickListener != null) {
-	            		dialogBtnClickListener.doPositiveClick(dialogTag);
-	            		
-	            	} else {
-	            		((DialogBtnClickListener) getParentFragment()).doPositiveClick(dialogTag);
-					}
-	            }
-	        });
-        }
-        Dialog dialog = builder.create();
-        setCancelable(args.getBoolean(BundleKeys.DIALOG_IS_CANCELLABLE, true));
+		btnFBShare = (Button) dialog.findViewById(R.id.btnFbShare);
+		btnFBShare.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				onFacebookShareClickedListener.onFacebookShareClicked(dialogTag);
+				dismiss();
+			}
+		});
+		
 		return dialog;
 	}
 	
-	@Override
+	/*@Override
 	public void onStart() {
 		super.onStart();
 		if (getArguments().getBoolean(BundleKeys.DIALOG_FB_SHARE, false)) {
@@ -91,9 +64,9 @@ public class ShareOnFBDialogFragment extends DialogFragment {
 			btnFBShare.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
 			btnFBShare.setSingleLine(true);
 			btnFBShare.setTextColor(getResources().getColor(android.R.color.white));
-			btnFBShare.setTextSize(getResources().getDimensionPixelSize(R.dimen.txt_size_fb_dialog_btn));
+			btnFBShare.setTextSize(getResources().getDimensionPixelSize(R.dimen.txt_size_fb_dialog));
 		}
-	}
+	}*/
 	
 	@Override
 	public void onDestroyView() {
@@ -105,11 +78,6 @@ public class ShareOnFBDialogFragment extends DialogFragment {
 	}
 	
 	@Override
-	public void onDestroy() {
-		super.onDestroy();
-	}
-	
-	@Override
 	public void show(FragmentManager manager, String tag) {
 		if (!isAlreadyShown) {
 			super.show(manager, tag);
@@ -117,8 +85,7 @@ public class ShareOnFBDialogFragment extends DialogFragment {
 		}
 	}
 	
-	public interface DialogBtnClickListener {
-		public void doPositiveClick(String dialogTag);
-		public void doNegativeClick(String dialogTag);
+	public interface OnFacebookShareClickedListener {
+		public void  onFacebookShareClicked(String dialogTag);
 	}
 }

@@ -20,6 +20,7 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.SearchFragment.SearchFragmentChildListener;
+import com.wcities.eventseeker.ShareOnFBDialogFragment.OnFacebookShareClickedListener;
 import com.wcities.eventseeker.adapter.ArtistListAdapter;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
@@ -43,7 +44,7 @@ import com.wcities.eventseeker.util.FragmentUtil;
 
 public class SearchArtistsFragment extends PublishArtistListFragment implements SearchFragmentChildListener, 
 		PublishListener, LoadItemsInBackgroundListener, DialogBtnClickListener, ArtistTrackingListener, 
-		CustomSharedElementTransitionSource {
+		CustomSharedElementTransitionSource, OnFacebookShareClickedListener {
 
 	private static final String TAG = SearchArtistsFragment.class.getName();
 
@@ -159,9 +160,8 @@ public class SearchArtistsFragment extends PublishArtistListFragment implements 
 			artistListAdapter.notifyDataSetChanged();
 
 			Resources res = FragmentUtil.getResources(this);
-			GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(this, 
-					res.getString(R.string.follow_artist), res.getString(R.string.artist_saved));
-			generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), 
+			ShareOnFBDialogFragment dialogFragment = ShareOnFBDialogFragment.newInstance(this);
+			dialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), 
 						DIALOG_ARTIST_SAVED + ":" + artist.getId());
 			
 		} else {			
@@ -179,7 +179,7 @@ public class SearchArtistsFragment extends PublishArtistListFragment implements 
 
 	@Override
 	public void doNegativeClick(String dialogTag) {
-		if (dialogTag.contains(DIALOG_ARTIST_SAVED)) {
+		/*if (dialogTag.contains(DIALOG_ARTIST_SAVED)) {
 			String strId = dialogTag.substring(dialogTag.indexOf(":") + 1);
 			//Log.d(TAG, "strId : " + strId);
 			for (Artist artist : artistList) {
@@ -191,7 +191,7 @@ public class SearchArtistsFragment extends PublishArtistListFragment implements 
 					break;
 				}
 			}
-		}
+		}*/
 	}
 
 	@Override
@@ -250,5 +250,22 @@ public class SearchArtistsFragment extends PublishArtistListFragment implements 
 			view.setVisibility(View.VISIBLE);
 		}
 		hiddenViews.clear();
+	}
+
+	@Override
+	public void onFacebookShareClicked(String dialogTag) {
+		if (dialogTag.contains(DIALOG_ARTIST_SAVED)) {
+			String strId = dialogTag.substring(dialogTag.indexOf(":") + 1);
+			//Log.d(TAG, "strId : " + strId);
+			for (Artist artist : artistList) {
+				if (artist != null && artist.getId() == Integer.parseInt(strId)) {					
+					fbCallCountForSameArtist = 0;
+					artistToBeSaved = artist;
+					FbUtil.handlePublishArtist(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
+							AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, artist);
+					break;
+				}
+			}
+		}
 	}
 }

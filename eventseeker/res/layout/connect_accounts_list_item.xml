@@ -17,13 +17,13 @@
         android:layout_height="@dimen/rlt_layout_root_ht_connect_accounts_list_item"
         android:gravity="center" >
 
-        <ImageView
+        <ImageButton
             android:id="@+id/imgService"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:contentDescription="service image"
-            android:src="@drawable/facebook_colored" />
+            android:background="@android:color/transparent" />
 
         <TextView
             android:id="@+id/txtServiceName"
