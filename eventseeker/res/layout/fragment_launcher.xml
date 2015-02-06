@@ -42,7 +42,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="@string/log_in" />
+                android:text="@string/btn_log_in" />
 
             <Button
                 android:id="@+id/btnSignUp"
@@ -50,7 +50,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="@string/sign_up" />
+                android:text="@string/btn_sign_up" />
         </LinearLayout>
 
         <com.lianghanzhen.endless.viewpager.EndlessViewPager

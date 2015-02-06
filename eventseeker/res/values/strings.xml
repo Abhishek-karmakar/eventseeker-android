@@ -45,8 +45,6 @@
     <string name="title_friends_activity">Friends\' Activity</string>
     <string name="title_connect_accounts">Connect Accounts</string>
     <string name="title_get_started">Get Started</string>
-    <string name="title_login">Sign In</string>
-    <string name="title_signup">@string/sign_up</string>
     <string name="title_about_us">About Us</string>
     <string name="title_eula">EULA</string>
     <string name="title_rep_code">@string/rep_code</string>
@@ -61,6 +59,8 @@
     <string name="title_settings_mobile_app">Settings</string>
     <string name="title_logout">Logout</string>
     <string name="title_navigation">Navigation</string>
+    <string name="title_login">Sign In</string>
+    <string name="title_signup">Sign Up</string>
     
     <!-- Following section screen names -->
     <string name="title_find_more_artist">Find More Artists</string>
@@ -389,7 +389,7 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>
-    <string name="sign_up">Sign Up</string>
+    <string name="sign_up">@string/btn_sign_up</string>
     
     <!-- LoginFragment -->
     <string name="dialog_msg_chk_email_to_reset_pwd">Please check your email to reset the password.</string>
@@ -400,10 +400,6 @@
     <string name="forgot_your_password">Forgot your password?</string>
     <string name="continue_with_facebook">Continue with Facebook</string>
     <string name="continue_wiht_google">Continue with Google</string>
-    
-    <!-- LauncherFragment -->
-    <string name="log_in">LOG IN</string>
-    <string name="sign_up">SIGN UP</string>
     
     <!-- FollowMoreArtistFragment -->
     <string name="btn_sync_accounts">Sync Accounts</string>
@@ -470,11 +466,12 @@
     <string name="secondTitle">Discover</string>
     <string name="thirdTitle">Connect</string>
     <string name="forthTitle">Experience</string>
-    
     <string name="firstTitleDescription">Millions of events worldwide, just a click away. Concerts, Sports, Theater, Festivals, and more.</string>
     <string name="secondTitleDescription">After you sync, we\'ll recommend customized events. Receive alerts and find tickets in any city.</string>
     <string name="thirdTitleDescription">Get social with friends and family. We make sharing events easy.</string>
     <string name="forthTitleDescription">Minimize your search and maximise your discovery. Get out into the world, with eventseeker.</string>
+    <string name="btn_log_in">LOG IN</string>
+    <string name="btn_sign_up">SIGN UP</string>
     
     <!-- fragment_navigation.xml -->
     <string name="select_navigation_app">Select Your Navigation App For Directions</string>

@@ -40,6 +40,7 @@
     <string name="title_pandora">Pandora</string>
     <string name="title_settings_mobile_app">Règlages</string>
     <string name="title_web">Web</string>
+    <string name="title_signup">@string/btn_sign_up</string>
     
     <string name="no_items_found_pls_login">Please login with Facebook or Google from \'Sync Accounts\' page to see</string>
 	<string name="pls_login_to_see_all_events_you_are_following">Connectez-vous sur Facebook ou Google sur la page Synchroniser Les Comptes pour afficher tous les événements que vous suivez.</string>
@@ -320,8 +321,8 @@
     <string name="secondTitleDescription">Après la synchronisation, on vous recommandera des événements personnalisés. Recevez des alertes et trouvez des billets dans n\'importe quelle ville.</string>
     <string name="thirdTitleDescription">Gardez contact avec les amis et la famille. On facilite le partage d’événements.</string>
     <string name="forthTitleDescription">Minimisez votre recherche et optimisez votre découverte. Affronter le monde avec eventseeker.</string>
-    <string name="log_in">Connexion</string>
-    <string name="sign_up">S\'Inscrire</string>
+    <string name="btn_log_in">Connexion</string>
+    <string name="btn_sign_up">S\'Inscrire</string>
     
     <!-- SignUpFragment -->
     <string name="sign_up_with_email">Connecter avec email.</string>
