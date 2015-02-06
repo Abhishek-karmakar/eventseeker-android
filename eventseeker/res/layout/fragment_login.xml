@@ -21,13 +21,19 @@
             android:paddingLeft="@dimen/rlt_lyt_root_pad_l_r_b_get_started"
             android:paddingRight="@dimen/rlt_lyt_root_pad_l_r_b_get_started" >
 
-            <ImageView
+            <Button
                 android:id="@+id/imgFbSignUp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/all_components_margin_t_get_started"
-                android:src="@drawable/ic_fb_continue" />
+                android:background="@drawable/ic_fb_continue"
+                android:gravity="left|center_vertical"
+                android:singleLine="true"
+                android:text="@string/continue_with_facebook"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/txt_size_fb_google_btn_get_started" />
 
             <RelativeLayout
                 android:id="@+id/rltGPlus"
@@ -47,11 +53,18 @@
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/txt_g_plus_sign_in_status_txt_size_get_started" />
 
-                <ImageView
+                <Button
                     android:id="@+id/imgGPlusSignIn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_ggl_continue" />
+                    android:background="@drawable/ic_ggl_continue"
+                    android:gravity="left|center_vertical"
+                    android:singleLine="true"
+                    android:text="@string/continue_wiht_google"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/txt_size_fb_google_btn_get_started" />
+
             </RelativeLayout>
 
             <RelativeLayout
@@ -132,7 +145,7 @@
         </RelativeLayout>
     </ScrollView>
 
-    <RelativeLayout
+	<RelativeLayout
         android:id="@+id/rltLytPrgsBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
