@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.view.Gravity;
 import android.widget.Button;
 
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -116,6 +117,11 @@ public class GeneralDialogFragment extends DialogFragment {
 		if (getArguments().getBoolean(BundleKeys.DIALOG_FB_SHARE, false)) {
 			Button btnFBShare = ((AlertDialog) getDialog()).getButton(DialogInterface.BUTTON_NEGATIVE);
 			btnFBShare.setBackgroundResource(R.drawable.ic_fb_continue);
+			btnFBShare.setText(R.string.share_on_facebook);
+			btnFBShare.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+			btnFBShare.setSingleLine(true);
+			btnFBShare.setTextColor(getResources().getColor(android.R.color.white));
+			btnFBShare.setTextSize(getResources().getDimensionPixelSize(R.dimen.txt_size_fb_dialog));
 		}
 	}
 	

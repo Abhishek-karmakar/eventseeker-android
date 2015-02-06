@@ -190,7 +190,7 @@
     <dimen name="hor_divider_margin_b_venue_details">3dp</dimen>
     <!-- activity_main.xml -->
     <dimen name="root_navigation_drawer_w_main">240dp</dimen>
-	<dimen name="v_selection_w_nav_drawer">10dp</dimen>
+	<dimen name="v_selection_w_nav_drawer">3dp</dimen>
 	<dimen name="v_selection_margin_r_nav_drawer">10dp</dimen>
 	<dimen name="rlt_content_margin_l_nav_drawer">20dp</dimen>
     <!-- navigation_drawer_section_header.xml -->
@@ -230,6 +230,11 @@
     <dimen name="v_divider_ht_fb_login">1dp</dimen>
     <dimen name="btn_fb_sign_up_ht_fb_login">35dp</dimen>
     <dimen name="all_components_margin_t_get_started">30dp</dimen>
+    <dimen name="txt_size_fb_google_btn_get_started">16sp</dimen>
+    <dimen name="txt_size_msg_btn_fb_dialog">18sp</dimen>
+    <dimen name="txt_size_fb_dialog">@dimen/txt_size_fb_google_btn_get_started</dimen>
+    <dimen name="txt_mar_pad_t_b_fb_dialog">10dp</dimen>
+    <dimen name="txt_mar_pad_l_r_fb_dialog">5dp</dimen>
     <dimen name="txt_g_plus_sign_in_status_txt_size_get_started">18sp</dimen>
     <dimen name="btn_fb_sign_up_txt_size_fb_login">16sp</dimen>
     <dimen name="btn_fb_sign_up_pad_l_fb_login">10dp</dimen>
@@ -460,7 +465,7 @@
     <dimen name="btn_retrieve_artists_margin_t_fragment_device_library">@dimen/txt_service_desc_margin_t_fragment_device_library</dimen>
     <!-- left_most_tab_selected.xml -->
     <!-- top_left_most_tab_selected = (tab_bar_ht_fragment_custom_tabs - 6) -->
-    <dimen name="top_left_most_tab_selected">39dp</dimen>
+    <dimen name="top_left_most_tab_selected">42dp</dimen>
     <dimen name="corners_radius_left_most_tab_selected">6dp</dimen>
     <!-- fragment_rep_code.xml -->
     <dimen name="edt_rep_code_ht_fragment_rep_code">30dp</dimen>

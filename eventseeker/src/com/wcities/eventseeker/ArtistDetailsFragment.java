@@ -29,7 +29,6 @@ import android.support.v7.widget.ShareActionProvider.OnShareTargetSelectedListen
 import android.text.Html;
 import android.text.TextUtils.TruncateAt;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -61,6 +60,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
+import com.wcities.eventseeker.ShareOnFBDialogFragment.OnFacebookShareClickedListener;
 import com.wcities.eventseeker.adapter.FriendsRVAdapter;
 import com.wcities.eventseeker.adapter.VideoPagerAdapter;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
@@ -107,7 +107,8 @@ import com.wcities.eventseeker.viewdata.SharedElementPosition;
 public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackStack implements DrawerListener, 
 		CustomSharedElementTransitionDestination, OnArtistUpdatedListener, OnClickListener, 
 		LoadItemsInBackgroundListener, CustomSharedElementTransitionSource, ArtistTrackingListener, 
-		DialogBtnClickListener, LoadArtistEventsListener, FragmentHavingFragmentInRecyclerView {
+		DialogBtnClickListener, LoadArtistEventsListener, FragmentHavingFragmentInRecyclerView, 
+		OnFacebookShareClickedListener {
 	
 	private static final String TAG = ArtistDetailsFragment.class.getName();
 	
@@ -1817,9 +1818,12 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			fabSave.setSelected(artist.getAttending() == Artist.Attending.Tracked);
 			
 			Resources res = FragmentUtil.getResources(this);
-			GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(this, 
+			/*GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(this, 
 					res.getString(R.string.follow_artist), res.getString(R.string.artist_saved));
 			generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), 
+					FRAGMENT_TAG_ARTIST_SAVED_DIALOG);*/			
+			ShareOnFBDialogFragment shareOnFbDialog = ShareOnFBDialogFragment.newInstance(this);
+			shareOnFbDialog.show(((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), 
 						FRAGMENT_TAG_ARTIST_SAVED_DIALOG);
 			
 		} else {			
@@ -1840,12 +1844,12 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 
 	@Override
 	public void doNegativeClick(String dialogTag) {
-		if (dialogTag.equals(FRAGMENT_TAG_ARTIST_SAVED_DIALOG)) {
+		/*if (dialogTag.equals(FRAGMENT_TAG_ARTIST_SAVED_DIALOG)) {
 			isArtistSaveClicked = true;
 			fbCallCountForSameArtist = 0;
 			FbUtil.handlePublishArtist(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
 					AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, artist);
-		}
+		}*/
 	}
 
 	@Override
@@ -1870,5 +1874,14 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	@Override
 	public void onPoppedFromBackStackFHFIR() {
 		onPoppedFromBackStack();
+	}
+	
+	public void onFacebookShareClicked(String dialogTag) {
+		if (dialogTag.equals(FRAGMENT_TAG_ARTIST_SAVED_DIALOG)) {
+			isArtistSaveClicked = true;
+			fbCallCountForSameArtist = 0;
+			FbUtil.handlePublishArtist(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
+					AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, artist);
+		}
 	}
 }
