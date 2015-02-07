@@ -241,7 +241,9 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 	}
 
 	@Override
-	public void addViewsToBeHidden(View... views) {}
+	public void addViewsToBeHidden(View... views) {
+		// TODO Auto-generated method stub
+	}
 
 	@Override
 	public void hideSharedElements() {

@@ -1,6 +1,7 @@
 package com.wcities.eventseeker;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import android.content.res.Resources;
@@ -22,6 +23,7 @@ import com.wcities.eventseeker.asynctask.LoadMyEventsNewUI;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.custom.fragment.PublishEventListFragment;
+import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.interfaces.PublishListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
@@ -29,7 +31,7 @@ import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class MyEventsListFragment extends PublishEventListFragment implements LoadItemsInBackgroundListener, 
-		PublishListener, /*MyEventsLoadedListener, */OnClickListener {
+		PublishListener, /*MyEventsLoadedListener, */OnClickListener, CustomSharedElementTransitionSource {
 	
 	private static final String TAG = MyEventsListFragment.class.getSimpleName();
 	
@@ -50,6 +52,7 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 	 * then changed the orientation.
 	 */
 	private Resources res;
+	private List<View> hiddenViews;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,7 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 			wcitiesId = ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId();
 		}
 		res = getResources();
+		hiddenViews = new ArrayList<View>();
 	}
 	
 	@Override
@@ -73,7 +77,7 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 			eventList.add(null);
 			
 	        eventListAdapter = new MyEventListAdapter(FragmentUtil.getActivity(this),  
-	        		eventList, null, this, this, FragmentUtil.getScreenName(this));
+	        		eventList, null, this, this, FragmentUtil.getScreenName(this), this);
 
 			loadItemsInBackground();
 			
@@ -160,5 +164,39 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public void addViewsToBeHidden(View... views) {
+		for (int i = 0; i < views.length; i++) {
+			hiddenViews.add(views[i]);
+		}
+	}
+
+	@Override
+	public void hideSharedElements() {
+		for (Iterator<View> iterator = hiddenViews.iterator(); iterator.hasNext();) {
+			View view = iterator.next();
+			view.setVisibility(View.INVISIBLE);
+		}
+	}
+
+	@Override
+	public void onPushedToBackStack() {
+		/**
+		 * here, no need to call super.onStop() (to remove fb callback), since we are not calling onStart() 
+		 * on this fragment from onPoppedFromBackStack(), which would have added fb callback again
+		 */
+		//super.onStop();
+		((CustomSharedElementTransitionSource) getParentFragment()).onPushedToBackStack();
+	}
+
+	@Override
+	public void onPoppedFromBackStack() {
+		for (Iterator<View> iterator = hiddenViews.iterator(); iterator.hasNext();) {
+			View view = iterator.next();
+			view.setVisibility(View.VISIBLE);
+		}
+		hiddenViews.clear();
 	}	
 }

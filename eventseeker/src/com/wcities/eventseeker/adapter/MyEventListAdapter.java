@@ -1,5 +1,6 @@
 package com.wcities.eventseeker.adapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -17,8 +18,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.RelativeLayout.LayoutParams;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -44,6 +47,8 @@ import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.custom.fragment.PublishEventListFragment;
+import com.wcities.eventseeker.interfaces.ArtistListener;
+import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
@@ -52,6 +57,9 @@ import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.ViewUtil;
+import com.wcities.eventseeker.viewdata.SharedElement;
+import com.wcities.eventseeker.viewdata.SharedElementPosition;
 
 public class MyEventListAdapter extends BaseAdapter implements DateWiseEventParentAdapterListener {
 
@@ -74,13 +82,16 @@ public class MyEventListAdapter extends BaseAdapter implements DateWiseEventPare
 	private Event eventPendingPublish;
 	private FloatingActionButton eventPendingPublishFabSave;
 	
+	private CustomSharedElementTransitionSource customSharedElementTransitionSource;
+	
 	private static enum ViewType {
 		PROGRESS, NO_EVENTS, CONTENT
 	}
 	
 	public MyEventListAdapter(Context context, List<Event> eventList,
 			AsyncTask<Void, Void, List<Event>> loadMyEvents, LoadItemsInBackgroundListener mListener, 
-			PublishListener fbPublishListener, String googleAnalyticsScreenName) {
+			PublishListener fbPublishListener, String googleAnalyticsScreenName, CustomSharedElementTransitionSource 
+			customSharedElementTransitionSource) {
 		
 		mContext = context;
 		
@@ -92,6 +103,8 @@ public class MyEventListAdapter extends BaseAdapter implements DateWiseEventPare
 		this.fbPublishListener = fbPublishListener;
 		wcitiesId = ((EventSeekr)mContext.getApplicationContext()).getWcitiesId();
 		this.googleAnalyticsScreenName = googleAnalyticsScreenName;
+		
+		this.customSharedElementTransitionSource = customSharedElementTransitionSource;
 	}
 
 	@Override
@@ -197,7 +210,7 @@ public class MyEventListAdapter extends BaseAdapter implements DateWiseEventPare
 				}
 			}
 
-			ImageView imgEvent = (ImageView) convertView.findViewById(R.id.imgEvent);
+			final ImageView imgEvent = (ImageView) convertView.findViewById(R.id.imgEvent);
 
 			BitmapCacheable bitmapCacheable = null;
 			/**
@@ -275,7 +288,19 @@ public class MyEventListAdapter extends BaseAdapter implements DateWiseEventPare
 
 				@Override
 				public void onClick(View v) {
-					((EventListener) mContext).onEventSelected(event);
+					List<SharedElement> sharedElements = new ArrayList<SharedElement>();
+
+					int[] loc = ViewUtil.getLocationOnScreen(v, mContext.getResources());
+					SharedElementPosition sharedElementPosition = new SharedElementPosition(0, 
+							loc[1], imgEvent.getWidth(), imgEvent.getHeight());
+					
+					SharedElement sharedElement = new SharedElement(sharedElementPosition, imgEvent);
+					sharedElements.add(sharedElement);
+					customSharedElementTransitionSource.addViewsToBeHidden(imgEvent);
+					
+					((EventListener) mContext).onEventSelected(event, sharedElements);
+
+					customSharedElementTransitionSource.onPushedToBackStack();
 				}
 			});
 

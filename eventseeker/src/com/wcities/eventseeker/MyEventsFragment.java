@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -16,18 +17,24 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.wcities.eventseeker.adapter.SwipeTabsAdapter;
 import com.wcities.eventseeker.adapter.SwipeTabsAdapter.SwipeTabsAdapterListener;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.api.UserInfoApi;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
+import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.VersionUtil;
+import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
 
 public class MyEventsFragment extends FragmentLoadableFromBackStack implements OnClickListener, DrawerListener,
-		SwipeTabsAdapterListener {
+		SwipeTabsAdapterListener, CustomSharedElementTransitionSource {
 
 	private static final String TAG = MyEventsFragment.class.getName();
 
@@ -39,6 +46,8 @@ public class MyEventsFragment extends FragmentLoadableFromBackStack implements O
 	private TabBar tabBar;
 	
 	private int lastGaEventSentForPos;
+	
+	private boolean isOnPushedToBackStackCalled;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +66,22 @@ public class MyEventsFragment extends FragmentLoadableFromBackStack implements O
 		SwipeTabsAdapter oldAdapter = mTabsAdapter;
 		tabBar = new TabBar(getChildFragmentManager());
 		mTabsAdapter = new SwipeTabsAdapter(this, viewPager, tabBar, orientation, this);
+		
+		/**
+		 * add extra top margin (equal to statusbar height) since we are removing vStatusBar from onStart() 
+		 * even though we want search screen to have this statusbar. We had to mark VStatusBar as GONE from 
+		 * onStart() so that on transition from any search child fragment (SearchArtists/SearchEvents/SearchVenues)
+		 * to corresponding details screen doesn't cause jumping effect on search screen, as we remove vStatusBar 
+		 * on detail screen when this search screen is visible in the background
+		 */
+		if (VersionUtil.isApiLevelAbove18()) {
+			Resources res = FragmentUtil.getResources(this);
+			LinearLayout lnrLytTabBar = (LinearLayout) v.findViewById(R.id.tabBar);
+			RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) lnrLytTabBar.getLayoutParams();
+			lp.topMargin = res.getDimensionPixelSize(R.dimen.common_t_mar_pad_for_all_layout) 
+					+ ViewUtil.getStatusBarHeight(res);
+			lnrLytTabBar.setLayoutParams(lp);
+		}
 		
 		View vTabBar;
 		
@@ -120,6 +145,13 @@ public class MyEventsFragment extends FragmentLoadableFromBackStack implements O
 		super.onStart();
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		ma.setToolbarElevation(0);
+		/**
+		 * Even though we want status bar in this case, mark it gone to have smoother transition to detail fragment
+		 * & prevent jumping effect on search screen, caused due to removal of status bar on detail screen when this 
+		 * search screen is visible in background.
+		 */
+		ma.setVStatusBarVisibility(View.GONE, AppConstants.INVALID_ID);
+		ma.setVStatusBarLayeredVisibility(View.VISIBLE, R.color.colorPrimaryDark);
 	}
 	
 	@Override
@@ -127,6 +159,8 @@ public class MyEventsFragment extends FragmentLoadableFromBackStack implements O
 		super.onStop();
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
+		ma.setVStatusBarVisibility(View.VISIBLE, R.color.colorPrimaryDark);
+		ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
 	}
 	
 	@Override
@@ -214,5 +248,39 @@ public class MyEventsFragment extends FragmentLoadableFromBackStack implements O
 
 	@Override
 	public void onDrawerStateChanged(int arg0) {
+	}
+
+	@Override
+	public void addViewsToBeHidden(View... views) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void hideSharedElements() {
+		((CustomSharedElementTransitionSource) mTabsAdapter.getSelectedFragment()).hideSharedElements();
+	}
+
+	@Override
+	public void onPushedToBackStack() {
+		/**
+		 * Not calling onStop() to prevent toolbar color changes occurring in between
+		 * the transition
+		 */
+		//onStop();
+		isOnPushedToBackStackCalled = true;
+	}
+
+	@Override
+	public void onPoppedFromBackStack() {
+		if (isOnPushedToBackStackCalled) {
+			isOnPushedToBackStackCalled = false;
+			
+			// to update statusbar visibility
+			onStart();
+			// to call onFragmentResumed(Fragment) of MainActivity (to update title, current fragment tag, etc.)
+			onResume();
+			
+			((CustomSharedElementTransitionSource) mTabsAdapter.getSelectedFragment()).onPoppedFromBackStack();
+		}
 	}
 }

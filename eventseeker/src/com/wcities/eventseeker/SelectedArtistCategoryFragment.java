@@ -2,6 +2,7 @@ package com.wcities.eventseeker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
@@ -21,6 +22,7 @@ import android.widget.AbsListView.RecyclerListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -46,15 +48,18 @@ import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.core.Artist.Genre;
 import com.wcities.eventseeker.custom.fragment.PublishArtistFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
+import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
 import com.wcities.eventseeker.interfaces.LoadArtistsListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.VersionUtil;
+import com.wcities.eventseeker.util.ViewUtil;
 
 public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadableFromBackStack 
 		implements ArtistTrackingListener, OnClickListener, LoadArtistsListener, LoadItemsInBackgroundListener, 
-		DialogBtnClickListener, OnFacebookShareClickedListener {
+		DialogBtnClickListener, OnFacebookShareClickedListener, CustomSharedElementTransitionSource {
 
 	private static final String TAG = SelectedArtistCategoryFragment.class.getName();
 
@@ -85,6 +90,9 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 
 	private Artist artistToBeSaved;
 	
+	private List<View> hiddenViews;
+	private boolean isOnPushedToBackStackCalled;
+	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -104,11 +112,26 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 			wcitiesId = ((EventSeekr) FragmentUtil.getActivity(this).getApplication()).getWcitiesId();
 		}
 		res = getResources();
+		hiddenViews = new ArrayList<View>();
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_following, null);
+		/**
+		 * add extra top margin (equal to statusbar height) since we are removing vStatusBar from onStart() 
+		 * even though we want search screen to have this statusbar. We had to mark VStatusBar as GONE from 
+		 * onStart() so that on transition to details screen doesn't cause jumping effect on this screen, as we remove vStatusBar 
+		 * on detail screen when this screen is visible in the background
+		 */
+		if (VersionUtil.isApiLevelAbove18()) {
+			Resources res = FragmentUtil.getResources(this);
+			RelativeLayout rltFollowMoreArtist = (RelativeLayout) v.findViewById(R.id.rltFollowMoreArtist);
+			RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) rltFollowMoreArtist.getLayoutParams();
+			lp.topMargin = res.getDimensionPixelSize(R.dimen.common_t_mar_pad_for_all_layout) 
+					+ ViewUtil.getStatusBarHeight(res);
+			rltFollowMoreArtist.setLayoutParams(lp);
+		}
 		rltDummyLyt = v.findViewById(R.id.rltDummyLyt);
 		scrlVRootNoItemsFoundWithAction = (ScrollView) v.findViewById(R.id.scrlVRootNoItemsFoundWithAction);
 		
@@ -161,7 +184,7 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 			indices = new ArrayList<Character>();
 
 			myArtistListAdapter = new MyArtistListAdapter(FragmentUtil.getActivity(this), artistList, null, 
-					alphaNumIndexer, indices, this, this, this, AdapterFor.popular);
+					alphaNumIndexer, indices, this, this, this, AdapterFor.popular, this);
 
 			loadItemsInBackground();
 
@@ -205,6 +228,13 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 		super.onStart();
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		ma.setToolbarElevation(0);
+		/**
+		 * Even though we want status bar in this case, mark it gone to have smoother transition to detail fragment
+		 * & prevent jumping effect on search screen, caused due to removal of status bar on detail screen when this 
+		 * search screen is visible in background.
+		 */
+		ma.setVStatusBarVisibility(View.GONE, AppConstants.INVALID_ID);
+		ma.setVStatusBarLayeredVisibility(View.VISIBLE, R.color.colorPrimaryDark);
 	}
 	
 	@Override
@@ -212,6 +242,8 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 		super.onStop();
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
+		ma.setVStatusBarVisibility(View.VISIBLE, R.color.colorPrimaryDark);
+		ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
 	}
 	
 	@Override
@@ -386,6 +418,50 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 					break;
 				}
 			}
+		}
+	}
+
+	@Override
+	public void addViewsToBeHidden(View... views) {
+		for (int i = 0; i < views.length; i++) {
+			hiddenViews.add(views[i]);
+		}
+	}
+
+	@Override
+	public void hideSharedElements() {
+		for (Iterator<View> iterator = hiddenViews.iterator(); iterator.hasNext();) {
+			View view = iterator.next();
+			view.setVisibility(View.INVISIBLE);
+		}
+	}
+
+	@Override
+	public void onPushedToBackStack() {
+		/**
+		 * Not calling onStop() to prevent toolbar color changes occurring in between
+		 * the transition
+		 */
+		super.onStop();
+		
+		isOnPushedToBackStackCalled = true;
+	}
+
+	@Override
+	public void onPoppedFromBackStack() {
+		if (isOnPushedToBackStackCalled) {
+			isOnPushedToBackStackCalled = false;
+			
+			// to update statusbar visibility
+			onStart();
+			// to call onFragmentResumed(Fragment) of MainActivity (to update title, current fragment tag, etc.)
+			onResume();
+			
+			for (Iterator<View> iterator = hiddenViews.iterator(); iterator.hasNext();) {
+				View view = iterator.next();
+				view.setVisibility(View.VISIBLE);
+			}
+			hiddenViews.clear();
 		}
 	}
 }

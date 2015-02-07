@@ -1244,13 +1244,12 @@ public class MainActivity extends ActionBarActivity implements
 			fragmentTransaction.setCustomAnimations(anims[0], anims[1], anims[2], anims[3]);
 		}
 		
+		Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
 		if (replaceByFragmentTag.equals(AppConstants.FRAGMENT_TAG_LOGIN_SYNCING) || 
 				((args != null && args.containsKey(BundleKeys.SHARED_ELEMENTS))) || 
-				((AppConstants.FRAGMENT_TAG_ARTIST_DETAILS.equals(currentContentFragmentTag) || 
-						AppConstants.FRAGMENT_TAG_VENUE_DETAILS.equals(currentContentFragmentTag)) 
-						&& addToBackStack)) {
+				(currentFragment instanceof FragmentHavingFragmentInRecyclerView && addToBackStack)) {
 			if (args != null && args.containsKey(BundleKeys.SHARED_ELEMENTS)) {
-				prevCustomSharedElementTransitionSource = (CustomSharedElementTransitionSource) getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
+				prevCustomSharedElementTransitionSource = (CustomSharedElementTransitionSource) currentFragment;
 			}
 			//Log.d(TAG, "replaceContentFrameByFragment() add replaceByFragmentTag = " + replaceByFragmentTag);
 			/**
@@ -1266,7 +1265,6 @@ public class MainActivity extends ActionBarActivity implements
 			fragmentTransaction.add(R.id.content_frame, replaceBy, replaceByFragmentTag);
 			
 		} else {
-			Fragment currentFragment;
 			/**
 			 * currentFragment null check below is for signup scenario where after signup completion we start
 			 * settings screen which in turn starts sync accounts screen from its onCreate() itself & hence 
@@ -1274,7 +1272,7 @@ public class MainActivity extends ActionBarActivity implements
 			 * SettingsFragment which we can't pass to remove(), otherwise it will result in NullPointerException
 			 */
 			if (drawerItemSelectedPosition == AppConstants.INVALID_INDEX && currentContentFragmentTag != null
-					&& (currentFragment = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag)) != null) {
+					&& currentFragment != null) {
 				//Log.d(TAG, "replaceContentFrameByFragment() remove add replaceByFragmentTag = " + replaceByFragmentTag);
 				/**
 				 * Instead of using replace function, we use combination of remove & add, since we just want to 
