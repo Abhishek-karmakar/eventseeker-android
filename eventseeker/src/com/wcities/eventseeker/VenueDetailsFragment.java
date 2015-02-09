@@ -52,7 +52,6 @@ import android.widget.Toast;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
-import com.melnykov.fab.FloatingActionButton;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.Animator.AnimatorListener;
 import com.nineoldandroids.animation.AnimatorSet;
@@ -66,10 +65,10 @@ import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
+import com.wcities.eventseeker.asynctask.AsyncLoadImg.AsyncLoadImageListener;
 import com.wcities.eventseeker.asynctask.LoadEvents;
 import com.wcities.eventseeker.asynctask.LoadEvents.LoadEventsTaskListener;
 import com.wcities.eventseeker.asynctask.LoadVenueDetails;
-import com.wcities.eventseeker.asynctask.AsyncLoadImg.AsyncLoadImageListener;
 import com.wcities.eventseeker.asynctask.LoadVenueDetails.OnVenueUpdatedListener;
 import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.cache.BitmapCache;
@@ -87,6 +86,7 @@ import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionDestinati
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.EventListener;
+import com.wcities.eventseeker.interfaces.FragmentHavingFragmentInRecyclerView;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
@@ -101,7 +101,7 @@ import com.wcities.eventseeker.viewdata.SharedElementPosition;
 
 public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackStack implements DrawerListener, 
 		CustomSharedElementTransitionDestination, OnVenueUpdatedListener, LoadItemsInBackgroundListener, 
-		CustomSharedElementTransitionSource, AsyncLoadImageListener, LoadEventsTaskListener {
+		CustomSharedElementTransitionSource, AsyncLoadImageListener, LoadEventsTaskListener, FragmentHavingFragmentInRecyclerView {
 
 	private static final String TAG = VenueDetailsFragment.class.getSimpleName();
 	
@@ -118,7 +118,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	private int totalScrolledDy = UNSCROLLED; // indicates layout not yet created
 	private int limitScrollAt, actionBarElevation;
 	private float minTitleScale;
-	private boolean isScrollLimitReached, isDrawerOpen;
+	private boolean isScrollLimitReached;
 	private String title = "";
 	private float translationZPx;
 	
@@ -126,7 +126,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	private boolean isOnCreateViewCalledFirstTime = true;
 	private int screenW, imgVenueHt;
 	private AnimatorSet animatorSet;
-	private boolean isOnPushedToBackStackCalled, revertToolbarStatusBarChanges;
+	private boolean isOnPushedToBackStackCalled;
 	
 	private View rootView;
 	private ImageView imgVenue;
@@ -227,7 +227,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 				}
 				
 				onScrolled(0, true);
-				if (isDrawerOpen) {
+				if (((MainActivity)FragmentUtil.getActivity(VenueDetailsFragment.this)).isDrawerOpen()) {
 					// to maintain status bar & toolbar decorations after orientation change
 					onDrawerOpened();
 				}
@@ -273,7 +273,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		if (totalScrolledDy != UNSCROLLED) {
 			onScrolled(0, true);
 			
-			if (isDrawerOpen) {
+			if (((MainActivity)FragmentUtil.getActivity(VenueDetailsFragment.this)).isDrawerOpen()) {
 				onDrawerOpened();
 			}
 		}
@@ -453,8 +453,6 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	}
 	
 	private void onDrawerOpened() {
-		isDrawerOpen = true;
-		
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		ma.setToolbarBg(ma.getResources().getColor(R.color.colorPrimary));
 		ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
@@ -474,7 +472,6 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 
 	@Override
 	public void onDrawerClosed(View arg0) {
-		isDrawerOpen = false;
 		onScrolled(0, true);
 	}
 
@@ -856,7 +853,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		
 		@Override
 		public void onBindViewHolder(final ViewHolder holder, final int position) {
-			Log.d(TAG, "onBindViewHolder(), pos = " +  position);
+			//Log.d(TAG, "onBindViewHolder(), pos = " +  position);
 			if (position == ViewType.IMG.ordinal()) {
 				// nothing to do
 				
@@ -1186,8 +1183,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 					 * AddressMapFragment" on coming back to venue details screen. Couldn't find its solution. 
 					 * Probably it's happening with MapFragment within RecyclerView.
 					 */ 
-					venueDetailsFragment.revertToolbarStatusBarChanges = true;
-					venueDetailsFragment.onPushedToBackStack();
+					((FragmentHavingFragmentInRecyclerView)venueDetailsFragment).onPushedToBackStackFHFIR();
 					Bundle args = new Bundle();
 					args.putSerializable(BundleKeys.VENUE, venue);
 					((ReplaceFragmentListener)FragmentUtil.getActivity(venueDetailsFragment)).replaceByFragment(
@@ -1498,8 +1494,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 					 * AddressMapFragment" on coming back to venue details screen. Couldn't find its solution. 
 					 * Probably it's happening with MapFragment within RecyclerView.
 					 */ 
-					venueDetailsFragment.revertToolbarStatusBarChanges = true;
-					venueDetailsFragment.onPushedToBackStack();
+					((FragmentHavingFragmentInRecyclerView)venueDetailsFragment).onPushedToBackStackFHFIR();
 					/**
 					 * added on 15-12-2014
 					 */
@@ -1627,6 +1622,30 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		venueRVAdapter.setLoadDateWiseEvents(loadEvents);
 		AsyncTaskUtil.executeAsyncTask(loadEvents, true);
 	}
+	
+	private void onPushedToBackStack(boolean revertToolbarStatusBarChanges) {
+		if (revertToolbarStatusBarChanges) {
+			onStop();
+			
+		} else {
+			/**
+			 * to remove facebook callback. Not calling onStop() to prevent toolbar color changes occurring in between
+			 * the transition
+			 */
+			super.onStop();
+		}
+		
+		/**
+		 * set null listener, otherwise even for artist/event details screen when selecting 
+		 * share option it calls this listener's onShareTargetSelected() method.
+		 */
+		if (mShareActionProvider != null) {
+			mShareActionProvider.setOnShareTargetSelectedListener(null);
+		}
+		//Log.d(TAG, "onPushedToBackStack()");
+		setMenuVisibility(false);
+		isOnPushedToBackStackCalled = true;
+	}
 
 	@Override
 	public void addViewsToBeHidden(View... views) {
@@ -1645,27 +1664,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 
 	@Override
 	public void onPushedToBackStack() {
-		if (revertToolbarStatusBarChanges) {
-			revertToolbarStatusBarChanges = false;
-			onStop();
-			
-		} else {
-			/**
-			 * to remove facebook callback. Not calling onStop() to prevent toolbar color changes occurring in between
-			 * the transition
-			 */
-			super.onStop();
-		}
-		
-		/**
-		 * set null listener, otherwise even for artist/event details screen when selecting 
-		 * share option it calls this listener's onShareTargetSelected() method.
-		 */
-		if (mShareActionProvider != null) {
-			mShareActionProvider.setOnShareTargetSelectedListener(null);
-		}
-		setMenuVisibility(false);
-		isOnPushedToBackStackCalled = true;
+		onPushedToBackStack(false);
 	}
 
 	@Override
@@ -1720,5 +1719,15 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 				onScrolled(0, true);
 			}
 		});
+	}
+
+	@Override
+	public void onPushedToBackStackFHFIR() {
+		onPushedToBackStack(true);
+	}
+
+	@Override
+	public void onPoppedFromBackStackFHFIR() {
+		onPoppedFromBackStack();
 	}
 }

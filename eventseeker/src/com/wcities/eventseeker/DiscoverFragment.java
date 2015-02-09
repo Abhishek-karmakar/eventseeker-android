@@ -132,7 +132,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	private int limitScrollAt, screenHt, minRecyclerVHt, recyclerVDummyTopViewsHt, recyclerVPrgsBarHt, 
 		recyclerVContentRowHt, vPagerCatTitlesMarginT;
 	private float translationZPx;
-	private boolean isScrollLimitReached, isDrawerOpen, isOnPushedToBackStackCalled;
+	private boolean isScrollLimitReached, isOnPushedToBackStackCalled;
 	private String title = "";
 	private List<Category> evtCategories;
 	private int totalScrolledDy = UNSCROLLED; // indicates layout not yet created
@@ -318,7 +318,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 				prevOrientation = orientation;
 
 				onScrolled(0, true);
-				if (isDrawerOpen) {
+				if (((MainActivity)FragmentUtil.getActivity(DiscoverFragment.this)).isDrawerOpen()) {
 					// to maintain status bar & toolbar decorations after orientation change
 					onDrawerOpened();
 				}
@@ -358,7 +358,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		if (totalScrolledDy != UNSCROLLED) {
 			onScrolled(0, true);
 			
-			if (isDrawerOpen) {
+			if (((MainActivity)FragmentUtil.getActivity(DiscoverFragment.this)).isDrawerOpen()) {
 				onDrawerOpened();
 			}
 		}
@@ -367,7 +367,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	@Override
 	public void onStop() {
 		super.onStop();
-		//Log.d(TAG, "onStart()");
+		//Log.d(TAG, "onStop()");
 		/**
 		 * Revert toolbar & layered status bar updates here itself.
 		 * We prefer reverting these changes here itself rather than applying updates for each screen 
@@ -1418,7 +1418,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	}
 	
 	private void onDrawerOpened() {
-		isDrawerOpen = true;
+		//Log.d(TAG, "onDrawerOpened()");
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		ma.setToolbarBg(ma.getResources().getColor(R.color.colorPrimary));
 		ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
@@ -1435,7 +1435,6 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	@Override
 	public void onDrawerClosed(View view) {
 		//Log.d(TAG, "onDrawerClosed()");
-		isDrawerOpen = false;
 		onScrolled(0, true);
 	}
 	

@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
@@ -104,7 +105,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	private FloatingActionButton fabTickets, fabSave;
 	
 	private int limitScrollAt, actionBarElevation, fabScrollThreshold, prevScrollY = UNSCROLLED;
-	private boolean isScrollLimitReached, isDrawerOpen, isOnPushedToBackStackCalled;
+	private boolean isScrollLimitReached, isOnPushedToBackStackCalled;
 	private String title = "";
 	private float minTitleScale;
 	
@@ -262,7 +263,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
                         } else {
                         	obsrScrlV.scrollTo(0, prevScrollY);
                         	
-                        	if (isDrawerOpen) {
+                        	if (((MainActivity)FragmentUtil.getActivity(EventDetailsFragment.this)).isDrawerOpen()) {
                 				onDrawerOpened();
                 			}
                         }
@@ -306,7 +307,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		if (prevScrollY != UNSCROLLED) {
 			onScrollChanged(prevScrollY, true);
 			
-			if (isDrawerOpen) {
+			if (((MainActivity)FragmentUtil.getActivity(EventDetailsFragment.this)).isDrawerOpen()) {
 				onDrawerOpened();
 			}
 		}
@@ -343,7 +344,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	}
 	
 	private void updateShareIntent() {
-		//Log.d(TAG, "updateShareIntent()");
+		//Log.d(TAG, "updateShareIntent(), event name = " + event.getName());
 	    if (mShareActionProvider != null && event != null) {
 	    	Intent shareIntent = new Intent(Intent.ACTION_SEND);
 		    shareIntent.setType("image/*");
@@ -802,8 +803,6 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	}
 	
 	private void onDrawerOpened() {
-		isDrawerOpen = true;
-		
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		ma.setToolbarBg(ma.getResources().getColor(R.color.colorPrimary));
 		ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
@@ -835,7 +834,6 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 
 	@Override
 	public void onDrawerClosed(View arg0) {
-		isDrawerOpen = false;
 		onScrollChanged(prevScrollY, true);
 	}
 
@@ -960,6 +958,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		if (mShareActionProvider != null) {
 			mShareActionProvider.setOnShareTargetSelectedListener(null);
 		}
+		//Log.d("MainActivity - event details", "onPushedToBackStack(), " + this);
 		setMenuVisibility(false);
 		isOnPushedToBackStackCalled = true;
 	}

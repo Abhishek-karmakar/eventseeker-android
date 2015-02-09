@@ -1,5 +1,6 @@
 package com.wcities.eventseeker.adapter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,8 +20,10 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
+import android.widget.RelativeLayout.LayoutParams;
 
 import com.wcities.eventseeker.GeneralDialogFragment;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
@@ -34,7 +38,11 @@ import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.interfaces.ArtistAdapterListener;
 import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
+import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
+import com.wcities.eventseeker.util.ViewUtil;
+import com.wcities.eventseeker.viewdata.SharedElement;
+import com.wcities.eventseeker.viewdata.SharedElementPosition;
 
 // SectionIndexer is only required for 'FollowingFragment'.
 public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, ArtistAdapterListener<Void> {
@@ -63,6 +71,7 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 	private Handler handler;
 	
 	private AdapterFor currentAdapterIsFor;
+    private CustomSharedElementTransitionSource customSharedElementTransitionSource;
 	
 	public enum AdapterFor {
 		following,
@@ -72,7 +81,8 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 	
 	public MyArtistListAdapter(Context context, List<Artist> artistList, AsyncTask<Void, Void, List<Artist>> loadMyArtists, 
 			Map<Character, Integer> alphaNumIndexer, List<Character> indices, LoadItemsInBackgroundListener mListener, 
-			DialogBtnClickListener dialogBtnClickListener, ArtistTrackingListener artistTrackingListener, AdapterFor adapterFor) {
+			DialogBtnClickListener dialogBtnClickListener, ArtistTrackingListener artistTrackingListener, AdapterFor adapterFor, 
+		    CustomSharedElementTransitionSource customSharedElementTransitionSource) {
 		if (!(context instanceof ArtistListener)) {
 			throw new ClassCastException(context.toString() + " must implement ArtistListener");
 		}
@@ -91,6 +101,8 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 		this.mListener = mListener;
 		this.dialogBtnClickListener = dialogBtnClickListener;
 		this.artistTrackingListener = artistTrackingListener;
+		
+		this.customSharedElementTransitionSource = customSharedElementTransitionSource;
 		
 		handler = new Handler();
 	}
@@ -190,16 +202,16 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 					 */
 				}
 			});
-
+			
+			final ImageView imgArtist = (ImageView) convertView.findViewById(R.id.imgItem);
 			String key = artist.getKey(ImgResolution.LOW);
 			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 			if (bitmap != null) {
 				//Log.d(TAG, "bitmap != null");
-				((ImageView) convertView.findViewById(R.id.imgItem)).setImageBitmap(bitmap);
+				imgArtist.setImageBitmap(bitmap);
 
 			} else {
 				//Log.d(TAG, "bitmap = null");
-				ImageView imgArtist = (ImageView) convertView.findViewById(R.id.imgItem);
 				imgArtist.setImageBitmap(null);
 
 				AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
@@ -210,7 +222,20 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 
 				@Override
 				public void onClick(View v) {
-					((ArtistListener) mContext).onArtistSelected(artist);
+					List<SharedElement> sharedElements = new ArrayList<SharedElement>();
+
+					int[] loc = ViewUtil.getLocationOnScreen(v, mContext.getResources());
+					RelativeLayout.LayoutParams lp = (LayoutParams) imgArtist.getLayoutParams();
+					
+					SharedElementPosition sharedElementPosition = new SharedElementPosition(loc[0] + lp.leftMargin, 
+							loc[1] + lp.topMargin, lp.width, lp.height);
+					SharedElement sharedElement = new SharedElement(sharedElementPosition, imgArtist);
+					sharedElements.add(sharedElement);
+					customSharedElementTransitionSource.addViewsToBeHidden(imgArtist);
+					
+					((ArtistListener)mContext).onArtistSelected(artist, sharedElements);
+
+					customSharedElementTransitionSource.onPushedToBackStack();
 				}
 			});
 		}
