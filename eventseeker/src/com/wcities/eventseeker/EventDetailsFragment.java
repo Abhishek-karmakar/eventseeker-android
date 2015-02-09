@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
@@ -343,7 +344,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	}
 	
 	private void updateShareIntent() {
-		//Log.d(TAG, "updateShareIntent()");
+		//Log.d(TAG, "updateShareIntent(), event name = " + event.getName());
 	    if (mShareActionProvider != null && event != null) {
 	    	Intent shareIntent = new Intent(Intent.ACTION_SEND);
 		    shareIntent.setType("image/*");
@@ -957,6 +958,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		if (mShareActionProvider != null) {
 			mShareActionProvider.setOnShareTargetSelectedListener(null);
 		}
+		//Log.d("MainActivity - event details", "onPushedToBackStack(), " + this);
 		setMenuVisibility(false);
 		isOnPushedToBackStackCalled = true;
 	}

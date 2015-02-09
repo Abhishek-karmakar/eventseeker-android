@@ -853,7 +853,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		
 		@Override
 		public void onBindViewHolder(final ViewHolder holder, final int position) {
-			Log.d(TAG, "onBindViewHolder(), pos = " +  position);
+			//Log.d(TAG, "onBindViewHolder(), pos = " +  position);
 			if (position == ViewType.IMG.ordinal()) {
 				// nothing to do
 				
@@ -1642,6 +1642,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		if (mShareActionProvider != null) {
 			mShareActionProvider.setOnShareTargetSelectedListener(null);
 		}
+		//Log.d(TAG, "onPushedToBackStack()");
 		setMenuVisibility(false);
 		isOnPushedToBackStackCalled = true;
 	}

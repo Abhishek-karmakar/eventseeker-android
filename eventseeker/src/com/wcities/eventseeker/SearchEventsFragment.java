@@ -938,6 +938,11 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 
 	@Override
 	public void onPoppedFromBackStack() {
+		/**
+		 * to add facebook callback.
+		 */
+		onStart();
+		
 		for (Iterator<View> iterator = hiddenViews.iterator(); iterator.hasNext();) {
 			View view = iterator.next();
 			view.setVisibility(View.VISIBLE);
@@ -956,10 +961,9 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 	@Override
 	public void onPushedToBackStack() {
 		/**
-		 * here, no need to call super.onStop() (to remove fb callback), since we are not calling onStart() 
-		 * on this fragment from onPoppedFromBackStack(), which would have added fb callback again
+		 * to remove facebook callback.
 		 */
-		//super.onStop();
+		onStop();
 		((CustomSharedElementTransitionSource) getParentFragment()).onPushedToBackStack();
 	}
 
