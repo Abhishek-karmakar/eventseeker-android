@@ -155,7 +155,7 @@ public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 			}
 			
 		} else {
-			if (query != null && eventList.isEmpty()) {
+			if (query != null && eventList.size() == 1 && eventList.get(0) == null) {
 				//This block is for Search Event
 				result.add(new Event(AppConstants.INVALID_ID, null));
 				eventList.addAll(eventList.size() - 1, result);
