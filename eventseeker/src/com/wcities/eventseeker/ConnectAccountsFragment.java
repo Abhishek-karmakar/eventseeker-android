@@ -14,6 +14,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.StateListDrawable;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
@@ -29,7 +31,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -67,33 +68,45 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	private List<Service> listAvailableServices;
 	
     public static enum Service {
-    	Title(0, R.string.service_title, R.drawable.placeholder, false, null),
-    	GooglePlay(1, R.string.service_google_play, R.drawable.slctr_btn_google_play, true, "googleplay"),
-    	DeviceLibrary(2, R.string.service_device_library, R.drawable.slctr_btn_device_library, true, "devicelibrary"),
-    	Twitter(3, R.string.service_twitter, R.drawable.slctr_btn_twitter, true, "twitter"),
+    	Title(0, R.string.service_title, R.drawable.placeholder, 0, false, null),
+    	GooglePlay(1, R.string.service_google_play, R.drawable.ic_google_play, 
+    			R.drawable.ic_google_play_pressed, true, "googleplay"),
+    	DeviceLibrary(2, R.string.service_device_library, R.drawable.ic_device_library, 
+    			R.drawable.ic_device_library_pressed, true, "devicelibrary"),
+    	Twitter(3, R.string.service_twitter, R.drawable.ic_twitter, 
+    			R.drawable.ic_twitter_pressed, true, "twitter"),
     	//Spotify,
-    	Rdio(4, R.string.service_rdio, R.drawable.slctr_btn_rdio, true, "rdio"),
-    	Lastfm(5, R.string.service_last_fm, R.drawable.slctr_btn_lastfm, true, "lastfm"),
-    	Pandora(6, R.string.service_pandora, R.drawable.slctr_btn_pandora, true, "pandora"),
-    	Button(7, R.string.service_button, R.drawable.placeholder, false, null);
+    	Rdio(4, R.string.service_rdio, R.drawable.ic_rdio, 
+    			R.drawable.ic_rdio_pressed, true, "rdio"),
+    	Lastfm(5, R.string.service_last_fm, R.drawable.ic_lastfm, 
+    			R.drawable.ic_lastfm_pressed, true, "lastfm"),
+    	Pandora(6, R.string.service_pandora, R.drawable.ic_pandora, 
+    			R.drawable.ic_pandora_pressed, true, "pandora"),
+    	Button(7, R.string.service_button, R.drawable.placeholder, 0, false, null);
     	
     	private int intId;
     	private int strResId;
-    	private int drwResId;
+    	private int normalDrwResId;
+    	private int pressedDrwResId;
     	private boolean isService;
     	private String artistSource;
     	
-    	private Service(int intId, int strResId, int drwResId, boolean isService, String artistSource) {
+    	private Service(int intId, int strResId, int normalDrwResId, int pressedDrwResId, boolean isService, String artistSource) {
     		this.intId = intId;
     		this.strResId = strResId;
-    		this.drwResId = drwResId;
+    		this.normalDrwResId = normalDrwResId;
+    		this.pressedDrwResId = pressedDrwResId;
     		this.isService = isService;
     		this.artistSource = artistSource;
 		}
     	
-    	public int getDrwResId() {
-			return drwResId;
+    	public int getNormalDrwResId() {
+			return normalDrwResId;
 		}
+    	
+    	public int getPressedDrwResId() {
+    		return pressedDrwResId;
+    	}
     	
     	public String getStr(Fragment fragment) {
 			return fragment.getResources().getString(strResId);
@@ -301,7 +314,8 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
         		continue;
         	}
 			serviceAccount.name = service.getStr(this);
-			serviceAccount.drawable = service.getDrwResId();
+			serviceAccount.normalDrawable = service.getNormalDrwResId();
+			serviceAccount.pressedDrawable = service.getPressedDrwResId();
 			serviceAccounts.add(serviceAccount);
 		}
         
@@ -325,14 +339,24 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	private class AccountsListAdapter extends BaseAdapter {
 		
 		private LayoutInflater mInflater;
-
+		private Resources res;
+		
 	    public AccountsListAdapter(Context context) {
 	        mInflater = LayoutInflater.from(context);
+	        res = context.getResources();
 	    }
 	    
 	    public void setmInflater(Context context) {
 	        mInflater = LayoutInflater.from(context);
+	        res = context.getResources();
 		}
+	    
+	    private Drawable createStateListDrawableFrom(int normalStateDrawableResId, int pressedStateDrawableResId) {
+	    	StateListDrawable drawable = new StateListDrawable();
+	    	drawable.addState(new int[]{android.R.attr.state_pressed}, res.getDrawable(pressedStateDrawableResId));
+	    	drawable.addState(new int[]{}, res.getDrawable(normalStateDrawableResId));
+	    	return drawable;
+	    }
 
 		@Override
 		public View getView(final int position, View convertView, ViewGroup parent) {
@@ -364,12 +388,12 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				
 			} else {
 				//Log.d(TAG, "setting Title : " + serviceAccount.name);
-				AccountViewHolder holder;
+				final AccountViewHolder holder;
 				if (convertView == null || !(convertView.getTag() instanceof AccountViewHolder)) {
 					convertView = mInflater.inflate(R.layout.connect_accounts_list_item, null);
 					holder = new AccountViewHolder();
 					//holder.rltLayoutServiceDetails = (RelativeLayout) convertView.findViewById(R.id.rltLayoutServiceDetails);
-					holder.imgService = (ImageView) convertView.findViewById(R.id.imgService);
+					//holder.imgService = (ImageView) convertView.findViewById(R.id.imgService);
 					holder.txtServiceName = (TextView) convertView.findViewById(R.id.txtServiceName);
 					/*holder.txtCount = (TextView) convertView.findViewById(R.id.txtCount);
 					holder.imgPlus = (ImageView) convertView.findViewById(R.id.imgPlus);
@@ -382,8 +406,18 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				}
 				
 				//holder.imgService.setImageResource(serviceAccount.drawable);
-				holder.imgService.setBackgroundResource(serviceAccount.drawable);
+				//holder.imgService.setBackgroundResource(serviceAccount.drawable);
+				holder.txtServiceName.setCompoundDrawablesWithIntrinsicBounds(
+						createStateListDrawableFrom(serviceAccount.normalDrawable, serviceAccount.pressedDrawable), 
+						null, null, null);
 				holder.txtServiceName.setText(serviceAccount.name);
+				holder.txtServiceName.setOnClickListener(new TextView.OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						onItemClick(serviceAccount);
+					}
+				});
 				
 				/*if (serviceAccount.isInProgress) {
 					holder.imgProgressBar.setVisibility(View.VISIBLE);
@@ -416,7 +450,8 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 					
 					@Override
 					public void onClick(View v) {
-						onItemClick(serviceAccount);
+						holder.txtServiceName.performClick();
+						//onItemClick(serviceAccount);
 					}
 				});
 			}
@@ -511,13 +546,13 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		}
 		
 		private class AccountViewHolder {
-			private ImageView imgService, imgCorrect/*imgPlus, imgProgressBar*/;
+			private ImageView /*imgService,*/ imgCorrect/*imgPlus, imgProgressBar*/;
 			private TextView txtServiceName/*, txtCount*/;
 		}
 	}
 	
 	public static class ServiceAccount implements Serializable {
-		private int drawable;
+		private int normalDrawable, pressedDrawable;
 		private String name;
 		private int count;
 		public boolean isInProgress;

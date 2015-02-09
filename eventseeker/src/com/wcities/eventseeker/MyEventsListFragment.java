@@ -5,20 +5,28 @@ import java.util.List;
 
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.adapter.MyEventListAdapter;
+import com.wcities.eventseeker.adapter.MyEventListAdapter.OnNoEventsListener;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.app.EventSeekr;
-import com.wcities.eventseeker.asynctask.LoadMyEventsNewUI;
+import com.wcities.eventseeker.asynctask.LoadMyEvents;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.custom.fragment.PublishEventListFragment;
@@ -29,14 +37,14 @@ import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class MyEventsListFragment extends PublishEventListFragment implements LoadItemsInBackgroundListener, 
-		PublishListener, /*MyEventsLoadedListener, */OnClickListener {
+		PublishListener, OnClickListener, OnNoEventsListener {
 	
 	private static final String TAG = MyEventsListFragment.class.getSimpleName();
 	
 	private Type loadType;
 	private String wcitiesId;
 	
-	private LoadMyEventsNewUI loadEvents;
+	private LoadMyEvents loadEvents;
 	private MyEventListAdapter eventListAdapter;
 	private List<Event> eventList;
 	
@@ -50,6 +58,7 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 	 * then changed the orientation.
 	 */
 	private Resources res;
+	private Handler handler;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,12 +68,12 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 			wcitiesId = ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId();
 		}
 		res = getResources();
+		handler = new Handler(Looper.getMainLooper());
 	}
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		
 		if (eventList == null) {
 			Bundle args = getArguments();
 			loadType = (Type) args.getSerializable(BundleKeys.LOAD_TYPE);
@@ -73,7 +82,7 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 			eventList.add(null);
 			
 	        eventListAdapter = new MyEventListAdapter(FragmentUtil.getActivity(this),  
-	        		eventList, null, this, this, FragmentUtil.getScreenName(this));
+	        		eventList, null, this, this, FragmentUtil.getScreenName(this), this);
 
 			loadItemsInBackground();
 			
@@ -100,8 +109,8 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 		if (latLon == null) {
 			latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 		}
-		loadEvents = new LoadMyEventsNewUI(Api.OAUTH_TOKEN, eventList, eventListAdapter, wcitiesId, loadType, 
-				latLon[0], latLon[1], null);
+		loadEvents = new LoadMyEvents(Api.OAUTH_TOKEN, eventList, eventListAdapter, wcitiesId, loadType, 
+				latLon[0], latLon[1]);
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);
         AsyncTaskUtil.executeAsyncTask(loadEvents, true);
 	}
@@ -120,33 +129,46 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 		eventListAdapter.onPublishPermissionGranted();
 	}
 
-	/*@Override
-	public void onEventsLoaded() {
-		if (eventList.size() == 1 && eventList.getItemViewType(0) == LIST_ITEM_TYPE.NO_EVENTS 
-				&& eventList.getItem(0).getEvent().getId() == AppConstants.INVALID_ID 
+	@Override
+	public void onNoEventsFound() {
+		if (eventList.size() == 1 && eventList.get(0) != null && eventList.get(0).getId() == AppConstants.INVALID_ID 
 				&& wcitiesId != null) {
-			scrlVRootNoItemsFoundWithAction.setVisibility(View.VISIBLE);
-			((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsHeading)).setText(
-					R.string.search_artists);
-			((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsMsg)).setText(
-					R.string.no_events_in_your_area);
-			((Button)scrlVRootNoItemsFoundWithAction.findViewById(R.id.btnAction)).setText(
-					R.string.search_artists);
-			((ImageView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.imgNoItems)).setImageDrawable(
-					res.getDrawable(R.drawable.no_my_events));
-			*//**
-			 * try-catch is used to handle case where even before we get call back to this function, user leaves 
-			 * this screen.
-			 *//*
-			try {
-				getListView().setVisibility(View.GONE);
+			/**
+			 * The handler over here is used as this method will be called from the getView. So, there was an error
+			 * occurring, even though the 'scrlVRootNoItemsFoundWithAction.setVisibility(View.VISIBLE);' called then 
+			 * too that 'no events found' related layout wasn't appearing but using this post call on UI that started 
+			 * working as expected.
+			 */
+			handler.post(new Runnable() {
 				
-			} catch (IllegalStateException e) {
-				Log.e(TAG, "" + e.getMessage());
-				e.printStackTrace();
-			}
+				@Override
+				public void run() {
+					/**
+					 * try-catch is used to handle case where even before we get call back to this function, user leaves 
+					 * this screen.
+					 */
+					try {
+						getListView().setVisibility(View.GONE);
+						
+					} catch (IllegalStateException e) {
+						Log.e(TAG, "" + e.getMessage());
+						e.printStackTrace();
+					}
+					
+					((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsHeading)).setText(
+							R.string.search_artists);
+					((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsMsg)).setText(
+							R.string.no_events_in_your_area);
+					((Button)scrlVRootNoItemsFoundWithAction.findViewById(R.id.btnAction)).setText(
+							R.string.search_artists);
+					((ImageView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.imgNoItems)).setImageDrawable(
+							res.getDrawable(R.drawable.no_my_events));
+					scrlVRootNoItemsFoundWithAction.setVisibility(View.VISIBLE);					
+				}
+			});
+			
 		}	
-	}*/
+	}
 
 	@Override
 	public void onClick(View v) {
@@ -160,5 +182,5 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 		default:
 			break;
 		}
-	}	
+	}
 }

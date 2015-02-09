@@ -377,7 +377,7 @@
     <dimen name="img_plus_margin_r_connect_accounts_list_item">10dp</dimen>
     <dimen name="txt_count_margin_r_connect_accounts_list_item">20dp</dimen>
     <dimen name="divider_ht_connect_accounts_list_item">1dp</dimen>
-    <dimen name="txt_service_name_w_connect_accounts_list_item">150dp</dimen>
+    <dimen name="txt_service_name_w_connect_accounts_list_item">200dp</dimen>
     <!-- fragment_connect_accounts_list.xml -->
     <dimen name="rlt_layout_root_pad_fragment_connect_accounts_list">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="list_margin_t_b_fragment_connect_account_and_get_started">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>

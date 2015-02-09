@@ -18,7 +18,6 @@ import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.ItemsList;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
-import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
 public class LoadMyEvents extends AsyncTask<Void, Void, List<Event>> {
 	
@@ -30,31 +29,14 @@ public class LoadMyEvents extends AsyncTask<Void, Void, List<Event>> {
 	private Type loadType;
 	private double lat, lon;
 	
-	private DateWiseEventList dateWiseEventList;
 	private List<Event> eventList;
 	
 	private DateWiseEventParentAdapterListener dateWiseEventParentAdapterListener;
-	private MyEventsLoadedListener myEventsLoadedListener;
 	
-	public interface MyEventsLoadedListener {
-		public abstract void onEventsLoaded();
-	}
-	
-	public LoadMyEvents(String oauthToken, DateWiseEventList dateWiseEventList, DateWiseEventParentAdapterListener 
+	//For new UI
+	public LoadMyEvents(String oauthToken, List<Event> eventList, DateWiseEventParentAdapterListener 
 			dateWiseEventParentAdapterListener, String wcitiesId, 
-			Type loadType, double lat, double lon, MyEventsLoadedListener myEventsLoadedListener) {
-		this.oauthToken = oauthToken;
-		this.dateWiseEventList = dateWiseEventList;
-		this.dateWiseEventParentAdapterListener = dateWiseEventParentAdapterListener;
-		this.wcitiesId = wcitiesId;
-		this.loadType = loadType;
-		this.lat = lat;
-		this.lon = lon;
-		this.myEventsLoadedListener = myEventsLoadedListener;
-	}
-	
-	public LoadMyEvents(String oauthToken, List<Event> eventList, DateWiseEventParentAdapterListener dateWiseEventParentAdapterListener, 
-			String wcitiesId, Type loadType, double lat, double lon) {
+			Type loadType, double lat, double lon) {
 		this.oauthToken = oauthToken;
 		this.eventList = eventList;
 		this.dateWiseEventParentAdapterListener = dateWiseEventParentAdapterListener;
@@ -81,9 +63,12 @@ public class LoadMyEvents extends AsyncTask<Void, Void, List<Event>> {
 			UserInfoApiJSONParser jsonParser = new UserInfoApiJSONParser();
 			
 			ItemsList<Event> myEventsList;
-			if (loadType == Type.myevents) {
+			if (loadType == Type.myevents) { 
 				myEventsList = jsonParser.getEventList(jsonObject);
 				
+			} else if (loadType == Type.mysavedevents) {
+				myEventsList = jsonParser.getEventList(jsonObject);
+			
 			} else {
 				// loadType = Type.recommendedevent
 				myEventsList = jsonParser.getRecommendedEventList(jsonObject);
@@ -106,46 +91,25 @@ public class LoadMyEvents extends AsyncTask<Void, Void, List<Event>> {
 	
 	@Override
 	protected void onPostExecute(List<Event> tmpEvents) {
-		if (dateWiseEventList != null) {
-			if (tmpEvents.size() > 0) {
-				dateWiseEventList.addEventListItems(tmpEvents, this);
-				dateWiseEventParentAdapterListener.setEventsAlreadyRequested(dateWiseEventParentAdapterListener.getEventsAlreadyRequested() + tmpEvents.size());
-				
-				if (tmpEvents.size() < EVENTS_LIMIT) {
-					dateWiseEventParentAdapterListener.setMoreDataAvailable(false);
-					dateWiseEventList.removeProgressBarIndicator(this);
-				}
-				
-			} else {
+		// used for bosch & also in new Mobile app ui
+		if (tmpEvents.size() > 0) {
+			eventList.addAll(eventList.size() - 1, tmpEvents);
+			dateWiseEventParentAdapterListener.setEventsAlreadyRequested(
+					dateWiseEventParentAdapterListener.getEventsAlreadyRequested() + tmpEvents.size());
+			
+			if (tmpEvents.size() < EVENTS_LIMIT) {
 				dateWiseEventParentAdapterListener.setMoreDataAvailable(false);
-				dateWiseEventList.removeProgressBarIndicator(this);
-				// here 1 item is indicating no events message.
-				if (dateWiseEventList.getCount() == 1) {
-					myEventsLoadedListener.onEventsLoaded();
-				}
+				eventList.remove(eventList.size() - 1);
 			}
 			
 		} else {
-			// used for bosch
-			if (tmpEvents.size() > 0) {
-				eventList.addAll(eventList.size() - 1, tmpEvents);
-				dateWiseEventParentAdapterListener.setEventsAlreadyRequested(
-						dateWiseEventParentAdapterListener.getEventsAlreadyRequested() + tmpEvents.size());
-				
-				if (tmpEvents.size() < EVENTS_LIMIT) {
-					dateWiseEventParentAdapterListener.setMoreDataAvailable(false);
-					eventList.remove(eventList.size() - 1);
-				}
-				
-			} else {
-				dateWiseEventParentAdapterListener.setMoreDataAvailable(false);
-				eventList.remove(eventList.size() - 1);
-				// here 1 item is indicating no events message.
-				if (eventList.isEmpty()) {
-					eventList.add(new Event(AppConstants.INVALID_ID, null));
-				}
+			dateWiseEventParentAdapterListener.setMoreDataAvailable(false);
+			eventList.remove(eventList.size() - 1);
+			// here 1 item is indicating no events message.
+			if (eventList.isEmpty()) {
+				eventList.add(new Event(AppConstants.INVALID_ID, null));
 			}
 		}
-		((BaseAdapter)dateWiseEventParentAdapterListener).notifyDataSetChanged();
-	}    	
+		((BaseAdapter) dateWiseEventParentAdapterListener).notifyDataSetChanged();
+	}
 }

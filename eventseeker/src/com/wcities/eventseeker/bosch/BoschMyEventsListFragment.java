@@ -14,7 +14,7 @@ import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.app.EventSeekr;
-import com.wcities.eventseeker.asynctask.LoadMyEvents;
+import com.wcities.eventseeker.asynctask.LoadMyEvents1;
 import com.wcities.eventseeker.bosch.adapter.BoschLazyLoadingEventListAdapter;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Event;
@@ -29,7 +29,7 @@ public class BoschMyEventsListFragment extends ListFragment implements OnClickLi
 	
 	private String wcitiesId;
 	
-	private LoadMyEvents loadEvents;
+	private LoadMyEvents1 loadEvents;
 	private List<Event> eventList;
 	private BoschLazyLoadingEventListAdapter eventListAdapter;
 	
@@ -105,7 +105,7 @@ public class BoschMyEventsListFragment extends ListFragment implements OnClickLi
 		if (latLon == null) {
 			latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 		}
-		loadEvents = new LoadMyEvents(Api.OAUTH_TOKEN_BOSCH_APP, eventList, eventListAdapter, wcitiesId, loadType, latLon[0], 
+		loadEvents = new LoadMyEvents1(Api.OAUTH_TOKEN_BOSCH_APP, eventList, eventListAdapter, wcitiesId, loadType, latLon[0], 
 				latLon[1]);
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);
         AsyncTaskUtil.executeAsyncTask(loadEvents, true);

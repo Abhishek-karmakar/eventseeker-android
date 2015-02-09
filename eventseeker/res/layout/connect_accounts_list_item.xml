@@ -17,24 +17,25 @@
         android:layout_height="@dimen/rlt_layout_root_ht_connect_accounts_list_item"
         android:gravity="center" >
 
-        <ImageButton
+        <!-- <ImageButton
             android:id="@+id/imgService"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:contentDescription="service image"
-            android:background="@android:color/transparent" />
+            android:background="@android:color/transparent" /> -->
 
         <TextView
             android:id="@+id/txtServiceName"
             android:layout_width="@dimen/txt_service_name_w_connect_accounts_list_item"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/lst_item_v_margin_l_connect_accounts_list_item"
-            android:layout_toRightOf="@id/imgService"
-            android:text="Facebook"
+            android:layout_alignParentLeft="true"
+            android:drawablePadding="@dimen/lst_item_v_margin_l_connect_accounts_list_item"
+            android:text="Device Library"
             android:textColor="@android:color/white"
             android:textSize="@dimen/rlt_layout_service_details_txt_size_connect_accounts_list_item" />
+            <!-- android:layout_toRightOf="@id/imgService" -->
 
         <ImageView
             android:id="@+id/imgCorrect"

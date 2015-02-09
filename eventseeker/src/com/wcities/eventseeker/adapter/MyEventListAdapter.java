@@ -3,7 +3,6 @@ package com.wcities.eventseeker.adapter;
 import java.util.List;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
@@ -18,12 +17,10 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.melnykov.fab.FloatingActionButton;
-import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.MyEventsListFragment;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
@@ -33,6 +30,7 @@ import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
+import com.wcities.eventseeker.asynctask.LoadMyEvents;
 import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable;
@@ -51,7 +49,6 @@ import com.wcities.eventseeker.interfaces.PublishListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FbUtil;
-import com.wcities.eventseeker.util.FragmentUtil;
 
 public class MyEventListAdapter extends BaseAdapter implements DateWiseEventParentAdapterListener {
 
@@ -74,13 +71,19 @@ public class MyEventListAdapter extends BaseAdapter implements DateWiseEventPare
 	private Event eventPendingPublish;
 	private FloatingActionButton eventPendingPublishFabSave;
 	
+	private OnNoEventsListener onNoEventsListener;
+	
+	public interface OnNoEventsListener {
+		public void onNoEventsFound();
+	}
+	
 	private static enum ViewType {
 		PROGRESS, NO_EVENTS, CONTENT
 	}
 	
 	public MyEventListAdapter(Context context, List<Event> eventList,
 			AsyncTask<Void, Void, List<Event>> loadMyEvents, LoadItemsInBackgroundListener mListener, 
-			PublishListener fbPublishListener, String googleAnalyticsScreenName) {
+			PublishListener fbPublishListener, String googleAnalyticsScreenName, OnNoEventsListener onNoEventsListener) {
 		
 		mContext = context;
 		
@@ -88,12 +91,13 @@ public class MyEventListAdapter extends BaseAdapter implements DateWiseEventPare
 		this.eventList = eventList;
 		this.loadMyEvents = loadMyEvents;
 		this.mListener = mListener;
+		this.onNoEventsListener = onNoEventsListener;
 		
 		this.fbPublishListener = fbPublishListener;
 		wcitiesId = ((EventSeekr)mContext.getApplicationContext()).getWcitiesId();
 		this.googleAnalyticsScreenName = googleAnalyticsScreenName;
 	}
-
+	
 	@Override
 	public void updateContext(Context context) {
 		mContext = context;
@@ -126,7 +130,7 @@ public class MyEventListAdapter extends BaseAdapter implements DateWiseEventPare
 	public int getCount() {
 		return eventList.size();
 	}
-
+	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		//Log.d(TAG, "pos = " + position + ", item view type = " + getItemViewType(position));
@@ -142,7 +146,6 @@ public class MyEventListAdapter extends BaseAdapter implements DateWiseEventPare
 			}
 
 		} else if (getItemViewType(position) == ViewType.NO_EVENTS.ordinal()) {
-
 			final Event event = getItem(position);
 
 			if (event.getId() == AppConstants.INVALID_ID) {
@@ -165,6 +168,10 @@ public class MyEventListAdapter extends BaseAdapter implements DateWiseEventPare
 					((TextView)convertView).setText(mContext.getResources().getString(R.string.no_event_found));
 				}
 				convertView.setTag("");
+				
+				if (onNoEventsListener != null) {
+					onNoEventsListener.onNoEventsFound();
+				}
 			} 
 			
 		} else if (getItemViewType(position) == ViewType.CONTENT.ordinal()) {
