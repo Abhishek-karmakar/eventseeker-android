@@ -26,6 +26,10 @@ public class AppConstants {
 	public static String TWITTER_CONSUMER_SECRET;
 	public static final String TWITTER_CALLBACK_URL = "com.wcities.eventseeker://twitter_callback";
 	
+	public static String SPOTIFY_CLIENT_ID;
+	public static String SPOTIFY_CLIENT_SECRET;
+	public static final String SPOTIFY_REDIRECT_URI = "com.wcities.eventseeker://spotify_callback";
+	
 	public static String RDIO_KEY;
 	public static String RDIO_SECRET;
 	

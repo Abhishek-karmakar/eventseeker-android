@@ -52,6 +52,7 @@
     <string name="title_google_play">Google Play</string>
     <string name="title_device_library">@string/service_device_library</string>
     <string name="title_twitter">Twitter</string>
+    <string name="title_spotify">Spotify</string>
     <string name="title_rdio">Rdio</string>
     <string name="title_lastfm">last.fm</string>
     <string name="title_pandora">Pandora</string>
@@ -228,6 +229,7 @@
     <string name="service_google_play">Google Play</string>
     <string name="service_device_library">Device Library</string>
     <string name="service_twitter">Twitter</string>
+    <string name="service_spotify">Spotify</string>
     <string name="service_rdio">Rdio</string>
     <string name="service_last_fm">Last.fm</string>
     <string name="service_pandora">Pandora</string>

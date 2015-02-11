@@ -25,7 +25,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <!-- for twitter call back -->
+            <!-- for twitter & spotify call back -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -34,6 +34,9 @@
 
                 <data
                     android:host="twitter_callback"
+                    android:scheme="com.wcities.eventseeker" />
+                <data
+                    android:host="spotify_callback"
                     android:scheme="com.wcities.eventseeker" />
             </intent-filter>
         </activity>

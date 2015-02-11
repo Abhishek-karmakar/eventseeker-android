@@ -3,9 +3,13 @@ package com.wcities.eventseeker;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.ActivityNotFoundException;
@@ -45,6 +49,13 @@ import android.widget.Toast;
 
 import com.bosch.myspin.serversdk.MySpinException;
 import com.bosch.myspin.serversdk.MySpinServerSDK;
+import com.drivemode.spotify.SpotifyApi;
+import com.drivemode.spotify.SpotifyApi.AuthenticationListener;
+import com.drivemode.spotify.models.ArtistSimple;
+import com.drivemode.spotify.models.Pager;
+import com.drivemode.spotify.models.Playlist;
+import com.drivemode.spotify.models.PlaylistTrack;
+import com.drivemode.spotify.models.User;
 import com.ford.syncV4.proxy.SyncProxyALM;
 import com.ford.syncV4.transport.TransportType;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -91,7 +102,7 @@ public class MainActivity extends ActionBarActivity implements
 		ReplaceFragmentListener, EventListener, ArtistListener, VenueListener,
 		FragmentLoadedFromBackstackListener, MapListener, RegistrationListener, 
 		ConnectAccountsFragmentListener, SearchView.OnQueryTextListener,
-		ChangeLocationFragmentListener, ConnectionFailureListener, DialogBtnClickListener {
+		ChangeLocationFragmentListener, ConnectionFailureListener, DialogBtnClickListener, AuthenticationListener {
 
 	private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -152,13 +163,17 @@ public class MainActivity extends ActionBarActivity implements
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		//Log.d(TAG, "onCreate()");
 		super.onCreate(savedInstanceState);	
 		
 		if (!((EventSeekr)getApplication()).isTablet()) {
 			setRequestedOrientation(Configuration.ORIENTATION_PORTRAIT);
 		}
 		setContentView(R.layout.activity_main);
-		//Log.d(TAG, "onCreate()");
+		
+		if (getIntent().getData() != null && getIntent().getData().toString().contains(AppConstants.SPOTIFY_REDIRECT_URI)) {
+			SpotifyApi.getInstance().onCallback(getIntent().getData(), this);
+		}
 		vStatusBar = findViewById(R.id.vStatusBar);
 		
 		if (VersionUtil.isApiLevelAbove18()) {
@@ -441,6 +456,7 @@ public class MainActivity extends ActionBarActivity implements
 			instance = this;
 			startSyncProxyService();
 		}
+		
 		//Log.d(TAG, "onCreate done");
 	}
 	
@@ -481,6 +497,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	protected void onNewIntent(Intent intent) {
+		//Log.d(TAG, "onNewIntent()");
 		super.onNewIntent(intent);
 		if (intent.hasExtra(BundleKeys.EVENT)) {
 			onEventSelectedFromOtherTask((Event) intent.getSerializableExtra(BundleKeys.EVENT), true);
@@ -1772,6 +1789,13 @@ public class MainActivity extends ActionBarActivity implements
 					AppConstants.FRAGMENT_TAG_TWITTER, getResources()
 							.getString(R.string.title_twitter), addToBackStack);
 			break;
+			
+		case Spotify:
+			/*SpotifyFragment spotifyFragment = new SpotifyFragment();
+			spotifyFragment.setArguments(args);
+			selectNonDrawerItem(spotifyFragment, AppConstants.FRAGMENT_TAG_SPOTIFY, getResources()
+							.getString(R.string.title_spotify), addToBackStack);*/
+			break;
 
 		case Rdio:
 			RdioFragment rdioFragment = new RdioFragment();
@@ -1938,7 +1962,11 @@ public class MainActivity extends ActionBarActivity implements
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_twitter),
 					AppConstants.FRAGMENT_TAG_TWITTER);
 
-		} else if (fragment instanceof RdioFragment) {
+		} /*else if (fragment instanceof SpotifyFragment) {
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_spotify),
+					AppConstants.FRAGMENT_TAG_SPOTIFY);
+
+		}*/ else if (fragment instanceof RdioFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_rdio),
 					AppConstants.FRAGMENT_TAG_RDIO);
 
@@ -2282,5 +2310,66 @@ public class MainActivity extends ActionBarActivity implements
 	
 	public void expandSearchView() {
 		searchView.setIconified(false);
+	}
+
+	@Override
+	public void onReady() {
+		Log.d(TAG, "onReady()");
+		SpotifyApi.getInstance().getApiService().getMe(new Callback<User>() {
+			
+			@Override
+			public void success(final User user, Response arg1) {
+				Log.d(TAG, "success(), id = " + user.id);
+				SpotifyApi.getInstance().getApiService().getPlaylists(user.id, new Callback<Pager<Playlist>>() {
+					
+					@Override
+					public void success(Pager<Playlist> playLists, Response arg1) {
+						Log.d(TAG, "success(), playLists total = " + playLists.total);
+						for (Iterator<Playlist> iterator = playLists.items.iterator(); iterator.hasNext();) {
+							Playlist playlist = iterator.next();
+							Log.d(TAG, "owner id = " + playlist.owner.id);
+							
+							SpotifyApi.getInstance().getApiService().getPlaylistTracks(user.id, playlist.id, new Callback<Pager<PlaylistTrack>>() {
+								
+								@Override
+								public void success(Pager<PlaylistTrack> playlistTracks, Response arg1) {
+									Log.d(TAG, "success(), playlistTracks total = " + playlistTracks.total);
+									for (Iterator<PlaylistTrack> iterator2 = playlistTracks.items.iterator(); iterator2
+											.hasNext();) {
+										PlaylistTrack playlistTrack = iterator2.next();
+										
+										for (Iterator<ArtistSimple> iterator3 = playlistTrack.track.artists.iterator(); iterator3
+												.hasNext();) {
+											ArtistSimple artistSimple = iterator3.next();
+											Log.d(TAG, "artist name = " + artistSimple.name);
+										}
+									}
+								}
+								
+								@Override
+								public void failure(RetrofitError arg0) {
+									Log.d(TAG, "failure");
+								}
+							});
+						}
+					}
+					
+					@Override
+					public void failure(RetrofitError arg0) {
+						Log.d(TAG, "failure");
+					}
+				});
+			}
+			
+			@Override
+			public void failure(RetrofitError arg0) {
+				Log.d(TAG, "failure()");
+			}
+		});
+	}
+
+	@Override
+	public void onError() {
+		Log.d(TAG, "onError()");
 	}
 }

@@ -75,14 +75,15 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     			R.drawable.ic_device_library_pressed, true, "devicelibrary"),
     	Twitter(3, R.string.service_twitter, R.drawable.ic_twitter, 
     			R.drawable.ic_twitter_pressed, true, "twitter"),
-    	//Spotify,
-    	Rdio(4, R.string.service_rdio, R.drawable.ic_rdio, 
+    	Spotify(4, R.string.service_spotify, R.drawable.ic_spotify, 
+    			R.drawable.ic_spotify_pressed, true, "spotify"),
+    	Rdio(5, R.string.service_rdio, R.drawable.ic_rdio, 
     			R.drawable.ic_rdio_pressed, true, "rdio"),
-    	Lastfm(5, R.string.service_last_fm, R.drawable.ic_lastfm, 
+    	Lastfm(6, R.string.service_last_fm, R.drawable.ic_lastfm, 
     			R.drawable.ic_lastfm_pressed, true, "lastfm"),
-    	Pandora(6, R.string.service_pandora, R.drawable.ic_pandora, 
+    	Pandora(7, R.string.service_pandora, R.drawable.ic_pandora, 
     			R.drawable.ic_pandora_pressed, true, "pandora"),
-    	Button(7, R.string.service_button, R.drawable.placeholder, 0, false, null);
+    	Button(8, R.string.service_button, R.drawable.placeholder, 0, false, null);
     	
     	private int intId;
     	private int strResId;
@@ -132,15 +133,15 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			return FragmentUtil.getResources(fragment).getString(strResId);
 		}
     	
-    	public static int getValueOf(String s, Fragment fragment) {
+    	public static Service getService(String s, Fragment fragment) {
     		Service[] services = Service.values();
     		for (int i = 0; i < services.length; i++) {
     			Service service = services[i];
-    			if(service.isOf(s, fragment)) {
-					return service.getIntId();
+    			if (service.isOf(s, fragment)) {
+					return service;
 				}
 			}
-    		return -1;
+    		return null;
     	}
     	
     	public boolean isService() {
@@ -478,10 +479,8 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		private void onItemClick(final ServiceAccount serviceAccount) {
 			
 			//Log.d(TAG, "Service name = " + serviceAccount.name);
-			int serviceId = Service.getValueOf(serviceAccount.name, ConnectAccountsFragment.this);
+			Service service = Service.getService(serviceAccount.name, ConnectAccountsFragment.this);
 			//Log.d(TAG, "onItemClick(), serviceId = " + serviceId);
-			
-			final Service service = Service.values()[serviceId];
 			
 			if (service == Service.Title) {
 				return;
