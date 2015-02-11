@@ -22,17 +22,14 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.registration.Registration.RegistrationErrorListener;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
-import com.wcities.eventseeker.interfaces.OnFragmentAliveListener;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class LoginSyncingFragment extends FragmentLoadableFromBackStack implements OnFragmentAliveListener, 
-		AsyncTaskListener<Object> {
+public class LoginSyncingFragment extends FragmentLoadableFromBackStack implements AsyncTaskListener<Object> {
 
 	private static final String TAG = LoginSyncingFragment.class.getName();
 
 	private LoginType loginType;
-	private boolean isAlive;
 	private boolean isForSignUp; // indicates if this fragment is called after fb/g+ signup or login
 	
 	private LoadMyEventsCount loadMyEventsCount;
@@ -42,7 +39,6 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 		super.onCreate(savedInstanceState);
 		//Log.d(TAG, "onCreate()");
 		setRetainInstance(true);
-		isAlive = true;
 		
 		EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(this).getApplication();
 		
@@ -111,15 +107,9 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 	}
 	
 	@Override
-	public boolean isAlive() {
-		return isAlive;
-	}
-	
-	@Override
 	public void onDestroy() {
 		super.onDestroy();
 		//Log.d(TAG, "onDestroy()");
-		isAlive = false;
 		
 		if (loadMyEventsCount != null && loadMyEventsCount.getStatus() != Status.FINISHED) {
 			loadMyEventsCount.cancel(true);
@@ -129,48 +119,45 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 	@Override
 	public void onTaskCompleted(Object... params) {
 		//Log.d(TAG, "onTaskCompleted");
-		if (isAlive()) {
-			//Log.d(TAG, "isAlive");
-			String wcitiesId = ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId();
-			
-			if (wcitiesId != null) {
-				//Log.d(TAG, "wcitiesId != null");
-				double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
+		String wcitiesId = ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId();
+		
+		if (wcitiesId != null) {
+			//Log.d(TAG, "wcitiesId != null");
+			double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 
-				if (isForSignUp) {
-					Bundle args = new Bundle();
-					args.putSerializable(BundleKeys.SETTINGS_ITEM, SettingsItem.SYNC_ACCOUNTS);
-					((DrawerListFragmentListener) FragmentUtil.getActivity(this)).onDrawerItemSelected(
-							MainActivity.INDEX_NAV_ITEM_SETTINGS, args);
-					
-				} else {
-					loadMyEventsCount = new LoadMyEventsCount(Api.OAUTH_TOKEN, wcitiesId, latLon[0], latLon[1], new AsyncTaskListener<Integer>() {
-						
-						@Override
-						public void onTaskCompleted(Integer... params) {
-							Log.d(TAG, "params[0] = " + params[0]);
-							if (params[0] > 0) {
-								((DrawerListFragmentListener)FragmentUtil.getActivity(LoginSyncingFragment.this)).onDrawerItemSelected(
-										MainActivity.INDEX_NAV_ITEM_MY_EVENTS, null);
-								
-							} else {
-								((DrawerListFragmentListener)FragmentUtil.getActivity(LoginSyncingFragment.this)).onDrawerItemSelected(
-										MainActivity.INDEX_NAV_ITEM_DISCOVER, null);
-							}
-						}
-					});
-					loadMyEventsCount.execute();
-				}
+			if (isForSignUp) {
+				Bundle args = new Bundle();
+				args.putSerializable(BundleKeys.SETTINGS_ITEM, SettingsItem.SYNC_ACCOUNTS);
+				((DrawerListFragmentListener) FragmentUtil.getActivity(this)).onDrawerItemSelected(
+						MainActivity.INDEX_NAV_ITEM_SETTINGS, args);
 				
 			} else {
-				//Log.d(TAG, "wcitiesId = null");
-				//Log.d(TAG, "message code = " + params[0].toString());
-				((MainActivity)FragmentUtil.getActivity(this)).onBackPressed();
-				RegistrationErrorListener registrationErrorListener = (RegistrationErrorListener) 
-						((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager()
-						.findFragmentByTag(getArguments().getString(BundleKeys.REGISTER_ERROR_LISTENER));
-				registrationErrorListener.onErrorOccured((Integer)params[0]);
+				loadMyEventsCount = new LoadMyEventsCount(Api.OAUTH_TOKEN, wcitiesId, latLon[0], latLon[1], new AsyncTaskListener<Integer>() {
+					
+					@Override
+					public void onTaskCompleted(Integer... params) {
+						Log.d(TAG, "params[0] = " + params[0]);
+						if (params[0] > 0) {
+							((DrawerListFragmentListener)FragmentUtil.getActivity(LoginSyncingFragment.this)).onDrawerItemSelected(
+									MainActivity.INDEX_NAV_ITEM_MY_EVENTS, null);
+							
+						} else {
+							((DrawerListFragmentListener)FragmentUtil.getActivity(LoginSyncingFragment.this)).onDrawerItemSelected(
+									MainActivity.INDEX_NAV_ITEM_DISCOVER, null);
+						}
+					}
+				});
+				loadMyEventsCount.execute();
 			}
+			
+		} else {
+			//Log.d(TAG, "wcitiesId = null");
+			//Log.d(TAG, "message code = " + params[0].toString());
+			((MainActivity)FragmentUtil.getActivity(this)).onBackPressed();
+			RegistrationErrorListener registrationErrorListener = (RegistrationErrorListener) 
+					((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager()
+					.findFragmentByTag(getArguments().getString(BundleKeys.REGISTER_ERROR_LISTENER));
+			registrationErrorListener.onErrorOccured((Integer)params[0]);
 		}
 	}
 

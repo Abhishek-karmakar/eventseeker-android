@@ -13,9 +13,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.ConnectAccountsFragment.ServiceAccount;
@@ -24,80 +21,36 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.SyncArtists;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
-import com.wcities.eventseeker.interfaces.OnFragmentAliveListener;
+import com.wcities.eventseeker.interfaces.SyncArtistListener;
 import com.wcities.eventseeker.util.FragmentUtil;
-import com.wcities.eventseeker.util.ViewUtil.AnimationUtil;
 
-public class DeviceLibraryFragment extends FragmentLoadableFromBackStack implements OnClickListener, OnFragmentAliveListener {
+public class DeviceLibraryFragment extends FragmentLoadableFromBackStack implements OnClickListener {
 	
 	private static final String TAG = DeviceLibraryFragment.class.getName();
 	
-	private ImageView imgProgressBar;
-	private RelativeLayout rltMainView, rltSyncAccount;
-	private TextView txtLoading, txtServiceDesc;
-	private Button btnRetrieveArtists, btnConnectOtherAccounts;
-	private ImageView imgAccount;
-	
-	private boolean isLoading;
-
 	private ServiceAccount serviceAccount;
 
-	private boolean isAlive;
+	private SyncArtistListener syncArtistListener;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
 		serviceAccount = (ServiceAccount) getArguments().getSerializable(BundleKeys.SERVICE_ACCOUNTS);
-		isAlive = true;
+
+		syncArtistListener = (SyncArtistListener) getArguments().getSerializable(BundleKeys.SYNC_ARTIST_LISTENER);
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_device_library, null);
-		
-		rltMainView = (RelativeLayout) v.findViewById(R.id.rltMainView);
-		rltSyncAccount = (RelativeLayout) v.findViewById(R.id.rltSyncAccount);
-		
-		txtServiceDesc = (TextView) v.findViewById(R.id.txtServiceDesc);
-		btnRetrieveArtists = (Button) v.findViewById(R.id.btnRetrieveArtists);
-		
-		imgAccount = (ImageView) v.findViewById(R.id.imgAccount);
-		imgProgressBar = (ImageView) v.findViewById(R.id.progressBar);
-		txtLoading = (TextView) v.findViewById(R.id.txtLoading);
-		btnConnectOtherAccounts = (Button) v.findViewById(R.id.btnConnectOtherAccuonts);
-		
-		updateVisibility();
-		
-		btnRetrieveArtists.setOnClickListener(this);
-		btnConnectOtherAccounts.setOnClickListener(this);
-		
+		((Button) v.findViewById(R.id.btnRetrieveArtists)).setOnClickListener(this);
 		return v;
 	}
 	
-	private void updateVisibility() {
-		int visibilityDesc = isLoading ? View.GONE : View.VISIBLE;
-		/*txtServiceDesc.setVisibility(visibilityDesc);
-		btnRetrieveArtists.setVisibility(visibilityDesc);*/
-		rltMainView.setVisibility(visibilityDesc);
-		
-		int visibilityLoading = !isLoading ? View.GONE : View.VISIBLE;
-		/*progressBar.setVisibility(visibilityLoading);
-		txtLoading.setVisibility(visibilityLoading);*/
-		rltSyncAccount.setVisibility(visibilityLoading);
-		
-		if (isLoading) {
-			AnimationUtil.startRotationToView(imgProgressBar, 0f, 360f, 0.5f, 0.5f, 1000);
-			txtLoading.setText(R.string.syncing_device_lib);
-			imgAccount.setImageResource(R.drawable.devicelibrary_big);
-		} else {
-			AnimationUtil.stopRotationToView(imgProgressBar);			
-		}
-	}
 	
 	private void searchDeviceLirbary() {
-		isLoading = true;
-		updateVisibility();
+		syncArtistListener.onArtistSyncStarted();
 		new UpdateArtistsTask().execute();
 	}
 	
@@ -105,7 +58,7 @@ public class DeviceLibraryFragment extends FragmentLoadableFromBackStack impleme
 		if (artists != null) {
 			//Log.d(TAG, "artists size = " + artists.size());
 			new SyncArtists(Api.OAUTH_TOKEN, artists, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
-					Service.DeviceLibrary, this, Service.DeviceLibrary.getArtistSource()).execute();
+					Service.DeviceLibrary, /*this,*/ Service.DeviceLibrary.getArtistSource()).execute();
 			
 		} else {
 			FragmentUtil.getActivity(this).onBackPressed();
@@ -119,8 +72,6 @@ public class DeviceLibraryFragment extends FragmentLoadableFromBackStack impleme
 			try {
 				return getDeviceArtists();
 			} catch (Exception e) {
-				isLoading = false;
-				updateVisibility();
 				e.printStackTrace();
 				
 				EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(DeviceLibraryFragment.this).getApplicationContext();
@@ -181,24 +132,9 @@ public class DeviceLibraryFragment extends FragmentLoadableFromBackStack impleme
 			searchDeviceLirbary();
 			break;
 
-		case R.id.btnConnectOtherAccuonts:
-			FragmentUtil.getActivity(this).onBackPressed();
-			break;
-
 		default:
 			break;
 		}
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		isAlive = false;
-	}
-
-	@Override
-	public boolean isAlive() {
-		return isAlive;
 	}
 
 	@Override

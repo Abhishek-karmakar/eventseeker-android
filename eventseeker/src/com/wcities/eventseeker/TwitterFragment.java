@@ -55,6 +55,8 @@ public class TwitterFragment extends FragmentLoadableFromBackStack {
 					Bundle args = new Bundle();
 					args.putString(BundleKeys.OAUTH_VERIFIER, oauthVerifier);
 					args.putSerializable(BundleKeys.TWITTER, twitter);
+					args.putSerializable(BundleKeys.SYNC_ARTIST_LISTENER, 
+							getArguments().getSerializable(BundleKeys.SYNC_ARTIST_LISTENER));
 					
 					//Log.d(TAG, "twitter Syncying : oauthVerifier : " + oauthVerifier + ", twitter : " + twitter);
 					((ReplaceFragmentListener)FragmentUtil.getActivity(TwitterFragment.this))

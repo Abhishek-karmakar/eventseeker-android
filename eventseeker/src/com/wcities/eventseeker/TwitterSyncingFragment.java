@@ -14,13 +14,6 @@ import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
@@ -30,50 +23,32 @@ import com.wcities.eventseeker.asynctask.SyncArtists;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
-import com.wcities.eventseeker.interfaces.OnFragmentAliveListener;
+import com.wcities.eventseeker.interfaces.SyncArtistListener;
 import com.wcities.eventseeker.util.FragmentUtil;
-import com.wcities.eventseeker.util.ViewUtil.AnimationUtil;
 
-public class TwitterSyncingFragment extends FragmentLoadableFromBackStack implements OnClickListener, OnFragmentAliveListener {
+public class TwitterSyncingFragment extends FragmentLoadableFromBackStack {
 
 	private static final String TAG = TwitterSyncingFragment.class.getSimpleName();
 	
-	private ImageView imgProgressBar, imgAccount;
-	private TextView txtLoading;
-	private Button btnConnectOtherAccounts;
-
 	private Twitter twitter;
 	private Resources res;
-	private boolean isAlive;
+
+	private SyncArtistListener syncArtistListener;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
-		isAlive = true;
 		res = FragmentUtil.getResources(this);
-	}
-	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		//Log.d(TAG, "onCreateView()");
-		View v = inflater.inflate(R.layout.fragment_twitter_syncing, null);
-
-		imgProgressBar = (ImageView) v.findViewById(R.id.progressBar);
-		imgAccount = (ImageView) v.findViewById(R.id.imgAccount);
-		txtLoading = (TextView) v.findViewById(R.id.txtLoading);
-		btnConnectOtherAccounts = (Button) v.findViewById(R.id.btnConnectOtherAccuonts);
 		
-		updateVisibility();
-		
-		btnConnectOtherAccounts.setOnClickListener(this);
-		
-		return v;
+		syncArtistListener = (SyncArtistListener) getArguments().getSerializable(BundleKeys.SYNC_ARTIST_LISTENER);
 	}
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		syncArtistListener.onArtistSyncStarted();
+		
 		if (twitter == null) {
 			twitter = (Twitter) getArguments().getSerializable(BundleKeys.TWITTER);
 			final String oauthVerifier = getArguments().getString(BundleKeys.OAUTH_VERIFIER);
@@ -143,7 +118,7 @@ public class TwitterSyncingFragment extends FragmentLoadableFromBackStack implem
 			@Override
 			public void run() {
 				new SyncArtists(Api.OAUTH_TOKEN, artistNames, eventSeekr, 
-						Service.Twitter, TwitterSyncingFragment.this, Service.Twitter.getArtistSource()).execute();
+						Service.Twitter, /*TwitterSyncingFragment.this,*/ Service.Twitter.getArtistSource()).execute();
 			}
 		});
 	}
@@ -157,38 +132,6 @@ public class TwitterSyncingFragment extends FragmentLoadableFromBackStack implem
 				FragmentUtil.getActivity(TwitterSyncingFragment.this).onBackPressed();
 			}
 		});
-	}
-
-	private void updateVisibility() {
-		AnimationUtil.startRotationToView(imgProgressBar, 0f, 360f, 0.5f, 0.5f, 1000);
-		txtLoading.setText(R.string.syncing_twitter);
-		imgAccount.setImageResource(R.drawable.twitter_big);
-	}
-
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		
-		case R.id.btnConnectOtherAccuonts:
-			//Log.d(TAG, "btnConnectOtherAccuonts");
-			FragmentUtil.getActivity(this).onBackPressed();
-			break;
-
-		default:
-			break;
-		}
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		//Log.d(TAG, "onDestroy()");
-		isAlive = false;
-	}
-
-	@Override
-	public boolean isAlive() {
-		return isAlive;
 	}
 
 	@Override

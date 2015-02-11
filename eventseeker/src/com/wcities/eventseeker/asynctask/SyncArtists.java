@@ -8,15 +8,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
-import android.support.v4.app.Fragment;
 
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.api.ArtistApi;
 import com.wcities.eventseeker.api.ArtistApi.Method;
 import com.wcities.eventseeker.app.EventSeekr;
-import com.wcities.eventseeker.interfaces.OnFragmentAliveListener;
 import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
-import com.wcities.eventseeker.util.FragmentUtil;
 
 public class SyncArtists extends AsyncTask<Void, Void, Void> {
 	
@@ -27,17 +24,17 @@ public class SyncArtists extends AsyncTask<Void, Void, Void> {
 	private List<String> artistNames;
 	private EventSeekr eventSeekr;
 	private Service service;
-	private Fragment fragment;
+	//private Fragment fragment;
 	private String oauthToken;
 	private String artistSource;
 	
-	public SyncArtists(String oauthToken, List<String> artistNames, EventSeekr eventSeekr, Service service, Fragment fragment, 
-			String artistSource) {
+	public SyncArtists(String oauthToken, List<String> artistNames, EventSeekr eventSeekr, Service service, 
+			/*Fragment fragment, */ String artistSource) {
 		this.oauthToken = oauthToken;
 		this.artistNames = artistNames;
 		this.eventSeekr = eventSeekr;
 		this.service = service;
-		this.fragment = fragment;
+		//this.fragment = fragment;
 		this.artistSource = artistSource;
 	}
 	
@@ -78,16 +75,5 @@ public class SyncArtists extends AsyncTask<Void, Void, Void> {
 		eventSeekr.setSyncCount(service, synchedArtistsCount);
 
 		return null;
-	}
-	
-	@Override
-	protected void onPostExecute(Void result) {
-		super.onPostExecute(result);
-		if (fragment != null) {
-			if (fragment instanceof OnFragmentAliveListener && ((OnFragmentAliveListener)fragment).isAlive()) {
-				//Log.d(TAG, "isAlive = " + ((OnFragmentAliveListener)fragment).isAlive());
-				FragmentUtil.getActivity(fragment).onBackPressed();
-			}
-		}
 	}
 }

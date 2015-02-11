@@ -35,7 +35,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
@@ -47,64 +46,44 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.SyncArtists;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
-import com.wcities.eventseeker.interfaces.OnFragmentAliveListener;
+import com.wcities.eventseeker.interfaces.SyncArtistListener;
 import com.wcities.eventseeker.util.FragmentUtil;
-import com.wcities.eventseeker.util.ViewUtil.AnimationUtil;
 
-public class PandoraFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
-		OnFragmentAliveListener, DialogBtnClickListener {
+public class PandoraFragment extends FragmentLoadableFromBackStack implements OnClickListener, DialogBtnClickListener {
 
 	private static final String TAG = PandoraFragment.class.getName();
 	private static final String DIALOG_FRAGMENT_TAG_ERROR = "Error";
 	
-	//private ProgressBar progressBar;
-    private ImageView imgProgressBar, imgAccount;
-	private TextView txtLoading;
 	private EditText edtUserCredential;
-	private Button btnRetrieveArtists, btnConnectOtherAccounts;
+	private Button btnRetrieveArtists;
 	
-	private View rltMainView, rltSyncAccount;
-	
-	private boolean isLoading;
-
 	private ServiceAccount serviceAccount;
 
-	private boolean isAlive;
-	
+	private SyncArtistListener syncArtistListener;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
 		serviceAccount = (ServiceAccount) getArguments().getSerializable(BundleKeys.SERVICE_ACCOUNTS);
-		isAlive = true;
+
+		syncArtistListener = (SyncArtistListener) getArguments().getSerializable(BundleKeys.SYNC_ARTIST_LISTENER);
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.fragment_service_enter_credentials_layout, null);
-		
-
-		rltMainView = v.findViewById(R.id.rltMainView);
-		rltSyncAccount = v.findViewById(R.id.rltSyncAccount);
-		
-		edtUserCredential = (EditText) v.findViewById(R.id.edtUserCredential);
-		btnRetrieveArtists = (Button) v.findViewById(R.id.btnRetrieveArtists);
-		imgProgressBar = (ImageView) v.findViewById(R.id.progressBar);
-		//progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
-		txtLoading = (TextView) v.findViewById(R.id.txtLoading);
-		imgAccount = (ImageView) v.findViewById(R.id.imgAccount);
-		btnConnectOtherAccounts = (Button) v.findViewById(R.id.btnConnectOtherAccuonts);
+		View v = inflater.inflate(R.layout.fragment_service_enter_credentials_layout, null);		
 		
 		TextView txtServiceTitle = (TextView) v.findViewById(R.id.txtServiceTitle);
 		txtServiceTitle.setText(getResources().getString(R.string.title_pandora));
 		txtServiceTitle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.pandora, 0, 0, 0);
 		
-		updateVisibility();
-		
+		btnRetrieveArtists = (Button) v.findViewById(R.id.btnRetrieveArtists);
 		btnRetrieveArtists.setOnClickListener(this);
-		btnConnectOtherAccounts.setOnClickListener(this);
 		
+		edtUserCredential = (EditText) v.findViewById(R.id.edtUserCredential);
 		edtUserCredential.setOnEditorActionListener(new OnEditorActionListener() {
+			
 			@Override
 			public boolean onEditorAction(final TextView v, final int actionId, final KeyEvent event) {
 				if (event == null || event.getAction() == KeyEvent.ACTION_DOWN || actionId == EditorInfo.IME_NULL) {
@@ -119,43 +98,11 @@ public class PandoraFragment extends FragmentLoadableFromBackStack implements On
 		return v;
 	}
 	
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		isAlive = false;
-	}
-
-	
-	private void updateVisibility() {
-		/*int visibilityDesc = isLoading ? View.GONE : View.VISIBLE;
-		edtUserCredential.setVisibility(visibilityDesc);
-		btnRetrieveArtists.setVisibility(visibilityDesc);
-		
-		int visibilityLoading = !isLoading ? View.GONE : View.VISIBLE;
-		progressBar.setVisibility(visibilityLoading);
-		txtLoading.setVisibility(visibilityLoading);*/
-		
-		int visibilityDesc = isLoading ? View.GONE : View.VISIBLE;
-		rltMainView.setVisibility(visibilityDesc);
-		
-		int visibilityLoading = !isLoading ? View.GONE : View.VISIBLE;
-		rltSyncAccount.setVisibility(visibilityLoading);
-		if(isLoading) {
-			AnimationUtil.startRotationToView(imgProgressBar, 0f, 360f, 0.5f, 0.5f, 1000);
-			txtLoading.setText(R.string.syncing_pandora);
-			imgAccount.setImageResource(R.drawable.pandora_big);
-		} else {
-			AnimationUtil.stopRotationToView(imgProgressBar);
-		}
-	}
-	
 	private void searchUserId(String userId) {
+		syncArtistListener.onArtistSyncStarted();
 		if (userId == null || userId.length() == 0) {
 			return;
 		}
-		
-		isLoading = true;
-		updateVisibility();
 		
 		userId = userId.replaceAll("\\s", "");
 
@@ -266,8 +213,6 @@ public class PandoraFragment extends FragmentLoadableFromBackStack implements On
 		@Override
 		protected void onPostExecute(List<String> artistNames) {
 			if (artistNames == null) {
-				isLoading = false;
-				updateVisibility();
 
 				if (doesErrorExist) {
 					GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(PandoraFragment.this,
@@ -286,7 +231,8 @@ public class PandoraFragment extends FragmentLoadableFromBackStack implements On
 	private void apiCallFinished(List<String> artistNames, EventSeekr app) {
 		//Log.d(TAG, "artists size = " + artistNames.size());
 		if (artistNames != null) {
-			new SyncArtists(Api.OAUTH_TOKEN, artistNames, app, Service.Pandora, this, Service.Pandora.getArtistSource()).execute();
+			new SyncArtists(Api.OAUTH_TOKEN, artistNames, app, Service.Pandora, /*this,*/ 
+					Service.Pandora.getArtistSource()).execute();
 		} else {
 			Activity activity = FragmentUtil.getActivity(this);
 			if(activity != null) {
@@ -303,10 +249,6 @@ public class PandoraFragment extends FragmentLoadableFromBackStack implements On
 			serviceAccount.isInProgress = true;
 			searchUserId(edtUserCredential.getText().toString().trim());
 			break;
-
-		case R.id.btnConnectOtherAccuonts:
-			FragmentUtil.getActivity(this).onBackPressed();
-			break;
 		
 		case R.id.edtUserCredential:
 			edtUserCredential.selectAll();
@@ -315,11 +257,6 @@ public class PandoraFragment extends FragmentLoadableFromBackStack implements On
 		default:
 			break;
 		}
-	}
-	
-	@Override
-	public boolean isAlive() {
-		return isAlive;
 	}
 
 	@Override

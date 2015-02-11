@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
@@ -9,17 +9,32 @@
         android:id="@+id/txtSyncCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/txt_sync_count_margin_t_connect_accounts_li_top"
         android:background="@drawable/ic_circle_bg"
+        android:padding="@dimen/txt_sync_count_pad_connect_accounts_li_top"
         android:text="217"
         android:textColor="@android:color/white"
         android:textSize="@dimen/txt_sync_count_txt_size_connect_accounts_li_top"
         android:textStyle="bold" />
 
+    <ProgressBar
+        android:id="@+id/prgBrSyncArtist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/txtSyncCount"
+        android:layout_alignLeft="@+id/txtSyncCount"
+        android:layout_alignRight="@+id/txtSyncCount"
+        android:layout_alignTop="@+id/txtSyncCount"
+        android:layout_centerHorizontal="true"
+        android:indeterminateDrawable="@drawable/prg_br_sync_artist_count" />
+
     <TextView
         android:id="@+id/txtArtistSynced"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/txtSyncCount"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/txt_artist_synced_margin_t_connect_accounts_li_top"
         android:background="@drawable/bg_txt_artist_synced_white_rounded_corners_rect"
         android:paddingBottom="@dimen/txt_artist_synced_pad_t_b_connect_accounts_li_top"
@@ -35,6 +50,8 @@
         android:id="@+id/txtPersonalize"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/txtArtistSynced"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/txt_personalize_margin_t_connect_accounts_li_top"
         android:gravity="center"
         android:paddingBottom="@dimen/txt_personalize_pad_b_connect_accounts_li_top"
@@ -43,4 +60,4 @@
         android:text="@string/personalize_by_syncing"
         android:textColor="@android:color/white" />
 
-</LinearLayout>
+</RelativeLayout>
