@@ -62,6 +62,7 @@ public class BundleKeys {
 	public static final String URL = "url";
 	public static final String OAUTH_VERIFIER = "oauthVerifier";
 
+	public static final String SYNC_ARTIST_LISTENER = "syncArtistListner";
 	public static final String SERVICE_ACCOUNTS = "serviceAccounts";
 	public static final String FB_USER_ID = "fbUserId";
 	public static final String FB_USER_NAME = "fbUserName";

@@ -9,12 +9,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.gm.api.GoogleMusicApi;
@@ -26,84 +20,37 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.SyncArtists;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
-import com.wcities.eventseeker.interfaces.OnFragmentAliveListener;
+import com.wcities.eventseeker.interfaces.SyncArtistListener;
 import com.wcities.eventseeker.util.FragmentUtil;
-import com.wcities.eventseeker.util.ViewUtil.AnimationUtil;
 
-public class GooglePlayMusicFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
-		OnFragmentAliveListener {
+public class GooglePlayMusicFragment extends FragmentLoadableFromBackStack  {
 
 	private static final String TAG = GooglePlayMusicFragment.class.getSimpleName();
 	
-	private ImageView imgProgressBar;
-	
-	private boolean isAlive;
-	
+	private SyncArtistListener syncArtistListener;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
-		isAlive = true;
 
+		syncArtistListener = (SyncArtistListener) getArguments().getSerializable(BundleKeys.SYNC_ARTIST_LISTENER);
+		syncArtistListener.onArtistSyncStarted();
+		
 		String authToken = getArguments().getString(BundleKeys.AUTH_TOKEN);
-		GetArtists getArtists = new GetArtists(this);
+		GetArtists getArtists = new GetArtists(this, syncArtistListener);
 		getArtists.execute(authToken);
-	}
-	
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = inflater.inflate( R.layout.fragment_service_enter_credentials_layout, null);
-
-		v.findViewById(R.id.rltMainView).setVisibility(View.GONE);
-		v.findViewById(R.id.rltSyncAccount).setVisibility(View.VISIBLE);
-
-		imgProgressBar = (ImageView) v.findViewById(R.id.progressBar);
-		((ImageView) v.findViewById(R.id.imgAccount)).setImageResource(R.drawable.google_play_big);
-		
-		((TextView)v.findViewById(R.id.txtLoading)).setText(R.string.syncing_google_play);
-		v.findViewById(R.id.btnConnectOtherAccuonts).setOnClickListener(this);
-		
-		AnimationUtil.startRotationToView(imgProgressBar, 0f, 360f, 0.5f, 0.5f, 1000);
-		
-		return v;
-	}
-
-	@Override
-	public boolean isAlive() {
-		return isAlive;
-	}
-	
-	@Override
-	public void onDestroyView() {
-		super.onDestroyView();
-		AnimationUtil.stopRotationToView(imgProgressBar);
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		isAlive = false;
-	}
-	
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		
-		case R.id.btnConnectOtherAccuonts:
-			FragmentUtil.getActivity(this).onBackPressed();
-			break;
-
-		default:
-			break;
-		}
 	}
 	
 	private static class GetArtists extends AsyncTask<String, Void, List<String>> {
 
 		private Fragment fragment;
+		
+		private SyncArtistListener syncArtistListener;
 
-	    public GetArtists(Fragment fragment) {
+	    public GetArtists(Fragment fragment, SyncArtistListener syncArtistListener) {
 			this.fragment = fragment;
+			this.syncArtistListener = syncArtistListener;
 		}
 
 		@Override
@@ -155,14 +102,13 @@ public class GooglePlayMusicFragment extends FragmentLoadableFromBackStack imple
 	    	super.onPostExecute(artistNames);
 	    	if (artistNames != null) {
 				new SyncArtists(Api.OAUTH_TOKEN, artistNames, (EventSeekr) FragmentUtil.getActivity(fragment).getApplication(), 
-						Service.GooglePlay, fragment, Service.GooglePlay.getArtistSource()).execute();
+						Service.GooglePlay, /*fragment,*/ Service.GooglePlay.getArtistSource()).execute();
 				
 			} else {
 				Toast.makeText(FragmentUtil.getActivity(fragment).getApplication(), 
                 		R.string.couldnt_login_to_google_play_music, Toast.LENGTH_LONG).show();
 				((EventSeekr)FragmentUtil.getActivity(fragment).getApplication()).setSyncCount(
 						Service.GooglePlay, EventSeekr.UNSYNC_COUNT);
-				FragmentUtil.getActivity(fragment).onBackPressed();
 			}
 	    }
 	}

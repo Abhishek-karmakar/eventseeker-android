@@ -362,6 +362,7 @@
     <!-- connect_accounts_list_item_top.xml -->
     <dimen name="txt_sync_count_margin_t_connect_accounts_li_top">20dp</dimen>
     <dimen name="txt_sync_count_txt_size_connect_accounts_li_top">40sp</dimen>
+    <dimen name="txt_sync_count_pad_connect_accounts_li_top">20dp</dimen>
     <dimen name="txt_artist_synced_txt_size_connect_accounts_li_top">14sp</dimen>
     <dimen name="txt_artist_synced_margin_t_connect_accounts_li_top">15dp</dimen>
     <dimen name="txt_artist_synced_pad_l_r_connect_accounts_li_top">10dp</dimen>

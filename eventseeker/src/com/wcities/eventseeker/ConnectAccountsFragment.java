@@ -17,6 +17,8 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -48,13 +50,14 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
+import com.wcities.eventseeker.interfaces.SyncArtistListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack implements EventSeekrListener, 
-		AsyncTaskListener<Object>, DialogBtnClickListener {
+		AsyncTaskListener<Object>, DialogBtnClickListener, SyncArtistListener {
 	
     private static final String TAG = ConnectAccountsFragment.class.getName();
     
@@ -69,19 +72,13 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	
     public static enum Service {
     	Title(0, R.string.service_title, R.drawable.placeholder, 0, false, null),
-    	GooglePlay(1, R.string.service_google_play, R.drawable.ic_google_play, 
-    			R.drawable.ic_google_play_pressed, true, "googleplay"),
-    	DeviceLibrary(2, R.string.service_device_library, R.drawable.ic_device_library, 
-    			R.drawable.ic_device_library_pressed, true, "devicelibrary"),
-    	Twitter(3, R.string.service_twitter, R.drawable.ic_twitter, 
-    			R.drawable.ic_twitter_pressed, true, "twitter"),
+    	GooglePlay(1, R.string.service_google_play, R.drawable.ic_google_play, R.drawable.ic_google_play_pressed, true, "googleplay"),
+    	DeviceLibrary(2, R.string.service_device_library, R.drawable.ic_device_library, R.drawable.ic_device_library_pressed, true, "devicelibrary"),
+    	Twitter(3, R.string.service_twitter, R.drawable.ic_twitter, R.drawable.ic_twitter_pressed, true, "twitter"),
     	//Spotify,
-    	Rdio(4, R.string.service_rdio, R.drawable.ic_rdio, 
-    			R.drawable.ic_rdio_pressed, true, "rdio"),
-    	Lastfm(5, R.string.service_last_fm, R.drawable.ic_lastfm, 
-    			R.drawable.ic_lastfm_pressed, true, "lastfm"),
-    	Pandora(6, R.string.service_pandora, R.drawable.ic_pandora, 
-    			R.drawable.ic_pandora_pressed, true, "pandora"),
+    	Rdio(4, R.string.service_rdio, R.drawable.ic_rdio, R.drawable.ic_rdio_pressed, true, "rdio"),
+    	Lastfm(5, R.string.service_last_fm, R.drawable.ic_lastfm, R.drawable.ic_lastfm_pressed, true, "lastfm"),
+    	Pandora(6, R.string.service_pandora, R.drawable.ic_pandora, R.drawable.ic_pandora_pressed, true, "pandora"),
     	Button(7, R.string.service_button, R.drawable.placeholder, 0, false, null);
     	
     	private int intId;
@@ -158,6 +155,8 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	
 	private Resources res;
 	
+	private Handler handler;
+	
     public interface ConnectAccountsFragmentListener {
     	public void onServiceSelected(Service service, Bundle args, boolean addToBackStack);
     }
@@ -192,6 +191,8 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		
 		TXT_BTN_CONTINUE = res.getString(R.string.btn_continue);
 		TXT_BTN_SKIP = res.getString(R.string.skip);
+		
+		handler = new Handler(Looper.getMainLooper());
 	}
 	
 	@Override
@@ -382,9 +383,15 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				/*convertView = mInflater.inflate(R.layout.connect_accounts_txt_list_item, null);*/
 				convertView = mInflater.inflate(R.layout.connect_accounts_list_item_top, null);
 				convertView.setTag("");
-				((TextView)convertView.findViewById(R.id.txtSyncCount)).setText(
-						((EventSeekr) FragmentUtil.getActivity(ConnectAccountsFragment.this)
-								.getApplication()).getTotalSyncCount() + "");
+				
+				TextView txtSyncCount = (TextView) convertView.findViewById(R.id.txtSyncCount);
+				txtSyncCount.setText(((EventSeekr) FragmentUtil.getActivity(ConnectAccountsFragment.this)
+						.getApplication()).getTotalSyncCount() + "");
+				txtSyncCount.setBackgroundResource(serviceAccount.isInProgress ? 0 : R.drawable.ic_circle_bg);
+				
+				convertView.findViewById(R.id.prgBrSyncArtist)
+					.setVisibility(serviceAccount.isInProgress ? View.VISIBLE : View.GONE);
+				
 				
 			} else {
 				//Log.d(TAG, "setting Title : " + serviceAccount.name);
@@ -392,12 +399,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				if (convertView == null || !(convertView.getTag() instanceof AccountViewHolder)) {
 					convertView = mInflater.inflate(R.layout.connect_accounts_list_item, null);
 					holder = new AccountViewHolder();
-					//holder.rltLayoutServiceDetails = (RelativeLayout) convertView.findViewById(R.id.rltLayoutServiceDetails);
-					//holder.imgService = (ImageView) convertView.findViewById(R.id.imgService);
 					holder.txtServiceName = (TextView) convertView.findViewById(R.id.txtServiceName);
-					/*holder.txtCount = (TextView) convertView.findViewById(R.id.txtCount);
-					holder.imgPlus = (ImageView) convertView.findViewById(R.id.imgPlus);
-					holder.imgProgressBar = (ImageView) convertView.findViewById(R.id.progressBar);*/
 					holder.imgCorrect = (ImageView) convertView.findViewById(R.id.imgCorrect);
 					convertView.setTag(holder);
 					
@@ -405,8 +407,6 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 					holder = (AccountViewHolder) convertView.getTag();
 				}
 				
-				//holder.imgService.setImageResource(serviceAccount.drawable);
-				//holder.imgService.setBackgroundResource(serviceAccount.drawable);
 				holder.txtServiceName.setCompoundDrawablesWithIntrinsicBounds(
 						createStateListDrawableFrom(serviceAccount.normalDrawable, serviceAccount.pressedDrawable), 
 						null, null, null);
@@ -451,7 +451,6 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 					@Override
 					public void onClick(View v) {
 						holder.txtServiceName.performClick();
-						//onItemClick(serviceAccount);
 					}
 				});
 			}
@@ -489,9 +488,9 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			
 			switch (service) {
 
-			case Twitter:
+			/*case Twitter:
 				//Log.d(TAG, "twitter");
-				/*ConfigurationBuilder builder = new ConfigurationBuilder();
+				ConfigurationBuilder builder = new ConfigurationBuilder();
 	            builder.setOAuthConsumerKey(AppConstants.TWITTER_CONSUMER_KEY);
 	            builder.setOAuthConsumerSecret(AppConstants.TWITTER_CONSUMER_SECRET);
 	            twitter4j.conf.Configuration configuration = builder.build();
@@ -523,13 +522,13 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
                         }
                     }
                 });
-                thread.start();*/
+                thread.start();
                 
 				Bundle args = new Bundle();
                 args.putSerializable(BundleKeys.SERVICE_ACCOUNTS, serviceAccount);
 				((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
 						.onServiceSelected(service, args, true);
-				break;
+				break;*/
 				
 			case GooglePlay:
 				Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[] {GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE},
@@ -539,8 +538,10 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 
 			default:
 				Bundle bundle = new Bundle();
+				bundle.putSerializable(BundleKeys.SYNC_ARTIST_LISTENER, ConnectAccountsFragment.this);
 				bundle.putSerializable(BundleKeys.SERVICE_ACCOUNTS, serviceAccount);
-				((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this)).onServiceSelected(service, bundle, true);
+				((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
+					.onServiceSelected(service, bundle, true);
 				break;
 			}
 		}
@@ -625,14 +626,12 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 
 	@Override
 	public void onSyncCountUpdated(final Service service) {
-		Log.d(TAG, "onSyncCountUpdated");
+		//Log.d(TAG, "onSyncCountUpdated");
 		FragmentUtil.getActivity(this).runOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
-				
 				//Log.d(TAG, "run");
-				
 				if (serviceAccounts != null) {
 				
 					for (ServiceAccount serviceAccount : serviceAccounts) {
@@ -647,6 +646,11 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 						
 					}
 					
+				}
+				for (ServiceAccount serviceAcc : serviceAccounts) {
+					if (serviceAcc.name.equals(Service.Title.getStr(ConnectAccountsFragment.this))) {
+						serviceAcc.isInProgress = false;
+					}
 				}
 				if (listAdapter != null) {
 					listAdapter.notifyDataSetChanged();
@@ -686,7 +690,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 						break;
 					}
 				}
-				
+				args.putSerializable(BundleKeys.SYNC_ARTIST_LISTENER, ConnectAccountsFragment.this);
 				((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
             			.onServiceSelected(Service.GooglePlay, args, true);
 			}
@@ -702,5 +706,23 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	@Override
 	public String getScreenName() {
 		return isFirstTimeLaunch ? "Account Connect Screen" : "Settings Screen";
+	}
+
+	@Override
+	public void onArtistSyncStarted() {
+		handler.post(new Runnable() {
+			
+			@Override
+			public void run() {
+				FragmentUtil.getActivity(ConnectAccountsFragment.this).onBackPressed();
+			}
+		});
+		
+		for (ServiceAccount serviceAcc : serviceAccounts) {
+			if (serviceAcc.name.equals(Service.Title.getStr(ConnectAccountsFragment.this))) {
+				serviceAcc.isInProgress = true;
+			}
+		}
+		listAdapter.notifyDataSetChanged();
 	}
 }
