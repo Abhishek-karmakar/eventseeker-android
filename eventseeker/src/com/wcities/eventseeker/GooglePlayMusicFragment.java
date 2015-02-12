@@ -9,6 +9,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.android.gm.api.GoogleMusicApi;
@@ -33,24 +36,31 @@ public class GooglePlayMusicFragment extends FragmentLoadableFromBackStack  {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
-
-		syncArtistListener = (SyncArtistListener) getArguments().getSerializable(BundleKeys.SYNC_ARTIST_LISTENER);
-		syncArtistListener.onArtistSyncStarted(true);
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		return inflater.inflate( R.layout.fragment_google_play_music, null);
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
 		
 		String authToken = getArguments().getString(BundleKeys.AUTH_TOKEN);
-		GetArtists getArtists = new GetArtists(this, syncArtistListener);
+		GetArtists getArtists = new GetArtists(this);
 		getArtists.execute(authToken);
+		
+		syncArtistListener = (SyncArtistListener) getArguments().getSerializable(BundleKeys.SYNC_ARTIST_LISTENER);
+		syncArtistListener.onArtistSyncStarted(true);
 	}
 	
 	private static class GetArtists extends AsyncTask<String, Void, List<String>> {
 
 		private Fragment fragment;
-		
-		private SyncArtistListener syncArtistListener;
 
-	    public GetArtists(Fragment fragment, SyncArtistListener syncArtistListener) {
+	    public GetArtists(Fragment fragment) {
 			this.fragment = fragment;
-			this.syncArtistListener = syncArtistListener;
 		}
 
 		@Override

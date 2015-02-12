@@ -735,6 +735,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	@Override
 	public void onArtistUpdated() {
 		allDetailsLoaded = true;
+		updateArtistImg();
 		fabSave.setSelected(artist.getAttending() == Artist.Attending.Tracked);
 		fabSave.setVisibility(View.VISIBLE);
 		artistRVAdapter.notifyDataSetChanged();

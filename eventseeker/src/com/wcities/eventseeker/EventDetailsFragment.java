@@ -709,6 +709,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			updateShareIntent();
 			
 			rltLytPrgsBar.setVisibility(View.GONE);
+			updateEventImg();
 			updateFeaturingVisibility();
 			updateEventSchedule();
 			updateAddressMapVisibility();
