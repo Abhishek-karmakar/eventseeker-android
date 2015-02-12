@@ -86,6 +86,7 @@ public class LastfmFragment extends FragmentLoadableFromBackStack implements OnC
 	}
 	
 	private void searchUserId(final String userId) {
+		serviceAccount.isInProgress = true;
 		syncArtistListener.onArtistSyncStarted();
 
 		if (userId == null || userId.length() == 0) {
@@ -172,8 +173,11 @@ public class LastfmFragment extends FragmentLoadableFromBackStack implements OnC
 		switch (v.getId()) {
 		
 		case R.id.btnRetrieveArtists:
-			serviceAccount.isInProgress = true;
-			searchUserId(edtUserCredential.getText().toString().trim());
+			String userCredential = edtUserCredential.getText().toString().trim();
+			if(!userCredential.equals("")) {
+				//Log.d(TAG, "Setting in progress true");
+				searchUserId(userCredential);
+			}
 			break;
 
 		case R.id.edtUserCredential:
