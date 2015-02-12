@@ -149,11 +149,12 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 	
 	private void searchUserId(String userId) {
 		//Log.d(TAG, "searchUserId");
-		syncArtistListener.onArtistSyncStarted();
-		
 		if (userId == null || userId.length() == 0) {
 			return;
 		}
+		
+		serviceAccount.isInProgress = true;
+		syncArtistListener.onArtistSyncStarted(true);
 		
 		final List<String> artistNames = new ArrayList<String>();
 
@@ -274,7 +275,6 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 		case R.id.btnRetrieveArtists:
 			String userCredential = edtUserCredential.getText().toString().trim();
 			if(!userCredential.equals("")) {
-				serviceAccount.isInProgress = true;
 				//Log.d(TAG, "Setting in progress true");
 				searchUserId(userCredential);
 			}

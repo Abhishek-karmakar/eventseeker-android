@@ -113,7 +113,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     	}
     	
     	public String getStr(Fragment fragment) {
-			return fragment.getResources().getString(strResId);
+			return FragmentUtil.getResources(fragment).getString(strResId);
 		}
     	
     	public String getArtistSource() {
@@ -163,6 +163,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	private Resources res;
 	
 	private Handler handler;
+	private int syncInProgressCount;
 	
     public interface ConnectAccountsFragmentListener {
     	public void onServiceSelected(Service service, Bundle args, boolean addToBackStack);
@@ -175,7 +176,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     		throw new ClassCastException(activity.toString() + " must implement ConnectAccountsFragmentListener");
     	}
     	
-    	//Log.d(TAG, "onAttach()");
+    	//Log.d(TAG, "onAttach() - " + this);
     }
 	
 	@Override
@@ -188,7 +189,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		isFirstTimeLaunch = eventSeekr.getFirstTimeLaunch();
 		
 		super.onCreate(savedInstanceState);
-		//Log.d(TAG, "onCreate()");
+		//Log.d(TAG, "onCreate() - " + this);
 		setRetainInstance(true);
 		
 		eventSeekr.registerListener(this);
@@ -204,6 +205,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		//Log.d(TAG, "onCreateView() - " + this);
 		View v = LayoutInflater.from(FragmentUtil.getActivity(this)).inflate(R.layout.fragment_connect_accounts, null);
 		rltLayoutProgress = (RelativeLayout) v.findViewById(R.id.rltLayoutProgress);
 		return v;
@@ -242,6 +244,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	
 	@Override
 	public void onDestroy() {
+		//Log.d(TAG, "onDestroy()");
 		super.onDestroy();
 		if (loadMyEventsCount != null && loadMyEventsCount.getStatus() != Status.FINISHED) {
 			loadMyEventsCount.cancel(true);
@@ -540,9 +543,24 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				         true, null, null, null, null);
 				startActivityForResult(intent, AppConstants.REQ_CODE_GOOGLE_ACCOUNT_CHOOSER_FOR_GOOGLE_MUSIC);
 				break;
+				
+			case Spotify:
+				/**
+				 * Not passing ConnectAccountsFragment.this as serializable in bundle, 
+				 * because passing it as serializable to SpotifyActivity changes the actual fragment address, it 
+				 * requires marking many instance variables as transient & then on call to onArtistSyncStarted()
+				 * it throws exception (NullPointer). It's unable to find activity for this changed fragment address
+				 * in FragmentUtil's getResources() called from getStr() of service enum which in turn is called from
+				 * onArtistSyncStarted(). Hence for this case we are using startActivityForResult() from onServiceSelected().
+				 */
+				Bundle bundle = new Bundle();
+				bundle.putSerializable(BundleKeys.SERVICE_ACCOUNTS, serviceAccount);
+				((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
+					.onServiceSelected(service, bundle, true);
+				break;
 
 			default:
-				Bundle bundle = new Bundle();
+				bundle = new Bundle();
 				bundle.putSerializable(BundleKeys.SYNC_ARTIST_LISTENER, ConnectAccountsFragment.this);
 				bundle.putSerializable(BundleKeys.SERVICE_ACCOUNTS, serviceAccount);
 				((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
@@ -632,31 +650,37 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	@Override
 	public void onSyncCountUpdated(final Service service) {
 		//Log.d(TAG, "onSyncCountUpdated");
+		syncInProgressCount = (syncInProgressCount > 0) ? syncInProgressCount - 1 : 0;
 		FragmentUtil.getActivity(this).runOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
 				//Log.d(TAG, "run");
 				if (serviceAccounts != null) {
-				
 					for (ServiceAccount serviceAccount : serviceAccounts) {
-						
-						if(serviceAccount != null && service.isOf(serviceAccount.name, ConnectAccountsFragment.this)) { 
+						if (serviceAccount != null && service.isOf(serviceAccount.name, ConnectAccountsFragment.this)) { 
 							serviceAccount.isInProgress = false;
 							serviceAccount.count = 
 								((EventSeekr)FragmentUtil.getActivity(ConnectAccountsFragment.this).getApplication())
 								.getSyncCount(service);
 							break;
 						}
-						
-					}
-					
-				}
-				for (ServiceAccount serviceAcc : serviceAccounts) {
-					if (serviceAcc.name.equals(Service.Title.getStr(ConnectAccountsFragment.this))) {
-						serviceAcc.isInProgress = false;
 					}
 				}
+				
+				/**
+				 * syncInProgressCount check added to handle case where user syncs more than 1 service
+				 * one by one in quick succession & suppose if 1st service syncing is in progress, but 
+				 * 2nd has finished. In this case then progress should still display.
+				 */
+				if (syncInProgressCount == 0) {
+					for (ServiceAccount serviceAcc : serviceAccounts) {
+						if (serviceAcc.name.equals(Service.Title.getStr(ConnectAccountsFragment.this))) {
+							serviceAcc.isInProgress = false;
+						}
+					}
+				}
+				
 				if (listAdapter != null) {
 					listAdapter.notifyDataSetChanged();
 				}
@@ -671,8 +695,10 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		if (requestCode == AppConstants.REQ_CODE_GOOGLE_ACCOUNT_CHOOSER_FOR_GOOGLE_MUSIC && resultCode == Activity.RESULT_OK) {
 			String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
 			new GetAuthToken(this, this).execute(accountName);
-
-		} 
+			
+		} else if (requestCode == AppConstants.REQ_CODE_SPOTIFY && resultCode == Activity.RESULT_OK) {
+			onArtistSyncStarted(false);
+		}
 	}
 
 	@Override
@@ -714,15 +740,21 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	}
 
 	@Override
-	public void onArtistSyncStarted() {
-		handler.post(new Runnable() {
-			
-			@Override
-			public void run() {
-				FragmentUtil.getActivity(ConnectAccountsFragment.this).onBackPressed();
-			}
-		});
+	public void onArtistSyncStarted(boolean doBackPress) {
+		syncInProgressCount++;
 		
+		if (doBackPress) {
+			// Without using handler back pressed call is not working, hence using handler here.
+			handler.post(new Runnable() {
+				
+				@Override
+				public void run() {
+					FragmentUtil.getActivity(ConnectAccountsFragment.this).onBackPressed();
+				}
+			});
+		}
+		
+		//Log.d(TAG, "onArtistSyncStarted() - " + this);
 		for (ServiceAccount serviceAcc : serviceAccounts) {
 			if (serviceAcc.name.equals(Service.Title.getStr(ConnectAccountsFragment.this))) {
 				serviceAcc.isInProgress = true;

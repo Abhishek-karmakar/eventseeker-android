@@ -118,6 +118,7 @@ public class UserInfoApiJSONParser {
 	private static final String KEY_SERVICE_RDIO = "4";
 	private static final String KEY_SERVICE_LAST_FM = "5";
 	private static final String KEY_SERVICE_PANDORA = "6";
+	private static final String KEY_SERVICE_SPOTIFY = "7";
 	
 	public static final int MSG_CODE_SUCCESS = -1;
 	public static final int MSG_CODE_UNSUCCESS = -2;
@@ -712,6 +713,9 @@ public class UserInfoApiJSONParser {
 			}
 			if (jsonSyncService.has(KEY_SERVICE_TWITTER)) {
 				list.add(Service.Twitter);
+			}
+			if (jsonSyncService.has(KEY_SERVICE_SPOTIFY)) {
+				list.add(Service.Spotify);
 			}
 			if (jsonSyncService.has(KEY_SERVICE_RDIO)) {
 				list.add(Service.Rdio);

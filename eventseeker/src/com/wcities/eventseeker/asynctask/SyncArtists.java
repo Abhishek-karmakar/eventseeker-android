@@ -24,17 +24,15 @@ public class SyncArtists extends AsyncTask<Void, Void, Void> {
 	private List<String> artistNames;
 	private EventSeekr eventSeekr;
 	private Service service;
-	//private Fragment fragment;
 	private String oauthToken;
 	private String artistSource;
 	
 	public SyncArtists(String oauthToken, List<String> artistNames, EventSeekr eventSeekr, Service service, 
-			/*Fragment fragment, */ String artistSource) {
+			String artistSource) {
 		this.oauthToken = oauthToken;
 		this.artistNames = artistNames;
 		this.eventSeekr = eventSeekr;
 		this.service = service;
-		//this.fragment = fragment;
 		this.artistSource = artistSource;
 	}
 	

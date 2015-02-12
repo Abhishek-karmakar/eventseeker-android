@@ -107,6 +107,7 @@ public class AppConstants {
 	public static final int REQ_CODE_INVITE_FRIENDS = 1001;
 	public static final int REQ_CODE_RATE_APP = 1002;
 	public static final int REQ_CODE_GOOGLE_ACCOUNT_CHOOSER_FOR_GOOGLE_MUSIC = 1003;
+	public static final int REQ_CODE_SPOTIFY = 1004;
 	
 	public static final int MUSIC_NOTIFICATION_ID = 1;
 	public static final int UNIQUE_GCM_NOTIFICATION_ID_START = 100;

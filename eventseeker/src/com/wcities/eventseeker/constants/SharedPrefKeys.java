@@ -23,6 +23,7 @@ public class SharedPrefKeys {
 	public static final String SYNC_COUNT_GOOGLE_PLAY_MUSIC = "syncCountGooglePlayMusic";
 	public static final String SYNC_COUNT_DEVICE_LIB = "syncCountDeviceLib";
 	public static final String SYNC_COUNT_TWITTER = "syncCountTwitter";
+	public static final String SYNC_COUNT_SPOTIFY = "syncCountSpotify";
 	public static final String SYNC_COUNT_RDIO = "syncCountRdio";
 	public static final String SYNC_COUNT_LASTFM = "syncCountLastfm";
 	public static final String SYNC_COUNT_PANDORA = "syncCountPandora";

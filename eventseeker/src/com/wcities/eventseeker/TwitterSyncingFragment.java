@@ -47,7 +47,7 @@ public class TwitterSyncingFragment extends FragmentLoadableFromBackStack {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		syncArtistListener.onArtistSyncStarted();
+		syncArtistListener.onArtistSyncStarted(true);
 		
 		if (twitter == null) {
 			twitter = (Twitter) getArguments().getSerializable(BundleKeys.TWITTER);

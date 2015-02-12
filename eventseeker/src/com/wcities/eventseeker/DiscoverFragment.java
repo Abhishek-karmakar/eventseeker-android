@@ -392,7 +392,6 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		switch (item.getItemId()) {
 
 		case R.id.action_setting:
-			//SpotifyApi.getInstance().authorize(FragmentUtil.getActivity(this), new String[] {}, true);
 			DiscoverSettingDialogFragment discoverSettingDialogFragment = DiscoverSettingDialogFragment
 					.newInstance(this, year, month, day, miles);
 			/**

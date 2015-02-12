@@ -99,10 +99,12 @@ public class PandoraFragment extends FragmentLoadableFromBackStack implements On
 	}
 	
 	private void searchUserId(String userId) {
-		syncArtistListener.onArtistSyncStarted();
 		if (userId == null || userId.length() == 0) {
 			return;
 		}
+		
+		serviceAccount.isInProgress = true;
+		syncArtistListener.onArtistSyncStarted(true);
 		
 		userId = userId.replaceAll("\\s", "");
 
@@ -246,7 +248,6 @@ public class PandoraFragment extends FragmentLoadableFromBackStack implements On
 		switch (v.getId()) {
 		
 		case R.id.btnRetrieveArtists:
-			serviceAccount.isInProgress = true;
 			searchUserId(edtUserCredential.getText().toString().trim());
 			break;
 		

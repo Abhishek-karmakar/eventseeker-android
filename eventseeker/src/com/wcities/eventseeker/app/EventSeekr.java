@@ -23,6 +23,7 @@ import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Logger.LogLevel;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.wcities.eventseeker.ConnectAccountsFragment;
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.LanguageFragment.Locales;
 import com.wcities.eventseeker.R;
@@ -90,6 +91,7 @@ public class EventSeekr extends Application {
 	private int syncCountGooglePlayMusic = NOT_INITIALIZED;
 	private int syncCountDeviceLib = NOT_INITIALIZED;
 	private int syncCountTwitter = NOT_INITIALIZED;
+	private int syncCountSpotify = NOT_INITIALIZED;
 	private int syncCountRdio = NOT_INITIALIZED;
 	private int syncCountLastfm = NOT_INITIALIZED;
 	private int syncCountPandora = NOT_INITIALIZED;
@@ -813,6 +815,13 @@ public class EventSeekr extends Application {
 						SharedPrefKeys.SYNC_COUNT_TWITTER, UNSYNC_COUNT);
 			}
 			return syncCountTwitter;
+			
+		case Spotify:
+			if (syncCountSpotify == NOT_INITIALIZED) {
+				syncCountSpotify = pref.getInt(
+						SharedPrefKeys.SYNC_COUNT_SPOTIFY, UNSYNC_COUNT);
+			}
+			return syncCountSpotify;
 
 		case Rdio:
 			if (syncCountRdio == NOT_INITIALIZED) {
@@ -863,6 +872,11 @@ public class EventSeekr extends Application {
 			syncCountTwitter = count;
 			editor.putInt(SharedPrefKeys.SYNC_COUNT_TWITTER, syncCountTwitter);
 			break;
+			
+		case Spotify:
+			syncCountSpotify = count;
+			editor.putInt(SharedPrefKeys.SYNC_COUNT_SPOTIFY, syncCountSpotify);
+			break;
 
 		case Rdio:
 			syncCountRdio = count;
@@ -896,8 +910,8 @@ public class EventSeekr extends Application {
 	 * @return
 	 */
 	public boolean isAnyAccountSynced() {
-		return ((syncCountGooglePlayMusic + syncCountDeviceLib + syncCountTwitter + syncCountRdio + 
-				syncCountLastfm + syncCountPandora) == ALL_UNSYNCED_COUNT) ? false : true;
+		return ((syncCountGooglePlayMusic + syncCountDeviceLib + syncCountTwitter + syncCountSpotify 
+				+ syncCountRdio + syncCountLastfm + syncCountPandora) == ALL_UNSYNCED_COUNT) ? false : true;
 	}
 	
 	public int getTotalSyncCount() {

@@ -50,7 +50,7 @@ public class DeviceLibraryFragment extends FragmentLoadableFromBackStack impleme
 	
 	
 	private void searchDeviceLirbary() {
-		syncArtistListener.onArtistSyncStarted();
+		syncArtistListener.onArtistSyncStarted(true);
 		new UpdateArtistsTask().execute();
 	}
 	
