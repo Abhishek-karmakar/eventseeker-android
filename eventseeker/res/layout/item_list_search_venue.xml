@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rltLayoutRoot"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_slctr_rlt_lyt_root_list_item_discover" >
 
     <RelativeLayout
         android:id="@+id/rltContent"

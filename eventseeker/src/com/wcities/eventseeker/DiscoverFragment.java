@@ -590,9 +590,16 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	public void onCatChanged(int selectedCatId) {
 		//Log.d(TAG, "onCatChanged(), selectedCatId = " + selectedCatId);
 		currentItem = vPagerCatTitles.getCurrentItem();
+		/**
+		 * when on Discover screen, a Notification comes and user taps on it then he will be Navigated to 
+		 * Corresponding screen, then from there if he presses back then he will come back to Discover 
+		 * Screen and here the 'imgCategory' will be blank, because then onCreateView will get a call 
+		 * So to set the same Category Image again we have added the below line before the 'if' block
+		 * even though this.selectedCatId & selectedCatId are matching.
+		 */
+		imgCategory.setImageResource(categoryImgs.get(selectedCatId));
 		if (this.selectedCatId != selectedCatId) {
 			this.selectedCatId = selectedCatId;
-			imgCategory.setImageResource(categoryImgs.get(selectedCatId));
 			resetEventList();
 		}
 	}
