@@ -315,6 +315,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	
 	@Override
 	public void onStop() {
+		//Log.d(TAG, "onStop()");
 		super.onStop();
 		
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
@@ -752,6 +753,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		}
 		
 		if ((!isScrollLimitReached || forceUpdate) && scrollY >= limitScrollAt) {
+			//Log.d(TAG, "if");
 			ma.animateToolbarElevation(0.0f, actionBarElevation);
 			
 			ma.setVStatusBarLayeredVisibility(View.VISIBLE, R.color.colorPrimaryDark);
@@ -763,6 +765,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			isScrollLimitReached = true;
 			
 		} else if ((isScrollLimitReached || forceUpdate) && scrollY < limitScrollAt) {
+			//Log.d(TAG, "else if");
 			ma.animateToolbarElevation(actionBarElevation, 0.0f);
 			
 			ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
@@ -804,6 +807,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	}
 	
 	private void onDrawerOpened() {
+		//Log.d(TAG, "onDrawerOpened()");
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		ma.setToolbarBg(ma.getResources().getColor(R.color.colorPrimary));
 		ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));

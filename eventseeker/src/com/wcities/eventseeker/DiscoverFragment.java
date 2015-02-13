@@ -132,7 +132,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	private int limitScrollAt, screenHt, minRecyclerVHt, recyclerVDummyTopViewsHt, recyclerVPrgsBarHt, 
 		recyclerVContentRowHt, vPagerCatTitlesMarginT;
 	private float translationZPx;
-	private boolean isScrollLimitReached, isOnPushedToBackStackCalled;
+	private boolean isScrollLimitReached, isOnPushedToBackStackCalled, isGlobalLayoutListenerValid, isOnStopCalled;
 	private String title = "";
 	private List<Category> evtCategories;
 	private int totalScrolledDy = UNSCROLLED; // indicates layout not yet created
@@ -211,6 +211,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// calculating here instead of onCreate() since it needs to be recalculated on orientation change
 		//Log.d(TAG, "onCreateView()");
+		isOnStopCalled = false;
 		calculateDimensions();
 		final int orientation = FragmentUtil.getResources(this).getConfiguration().orientation;
 		
@@ -282,10 +283,32 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	    	}
 		});
 	    
+	    isGlobalLayoutListenerValid = true;
 	    recyclerVEvents.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
             	//Log.d(TAG, "onGlobalLayout()");
+            	/**
+            	 * 1) following isGlobalLayoutListenerValid based check is added since removal of global 
+            	 * listener is not working.
+            	 * W/o this check discover -> widget click -> following results in toolbar with transparent color
+            	 * due to continuous calls to this onGlobalLayout().
+            	 * 2) isOnStopCalled based check is added because due to onCreateView() being called even if this
+            	 * fragment is in backstack then onStop() is also called, but onGlobalLayout() is called after some time.
+            	 * This onGlobalLayout() call executes after onResume() of actual screen resulting in setting 
+            	 * wrong discover screen title
+            	 * e.g. - discover -> widget click -> following results in toolbar title Discover, since 
+            	 * this onGlobalLayout() of discover is called after onResume() of 'following' screen
+            	 */
+            	if (!isGlobalLayoutListenerValid || isOnStopCalled) {
+            		//Log.d(TAG, "return");
+            		return;
+            		
+            	} else {
+            		//Log.d(TAG, "continue");
+            		isGlobalLayoutListenerValid = false;
+            	}
+            	
 				if (VersionUtil.isApiLevelAbove15()) {
 					recyclerVEvents.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
@@ -353,6 +376,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	public void onStart() {
 		super.onStart();
 		//Log.d(TAG, "onStart()");
+		isOnStopCalled = false;
 		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.GONE, AppConstants.INVALID_ID);
 		
 		if (totalScrolledDy != UNSCROLLED) {
@@ -368,6 +392,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	public void onStop() {
 		super.onStop();
 		//Log.d(TAG, "onStop()");
+		isOnStopCalled = true;
 		/**
 		 * Revert toolbar & layered status bar updates here itself.
 		 * We prefer reverting these changes here itself rather than applying updates for each screen 
@@ -502,6 +527,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		vDummy.setLayoutParams(frameLParams);*/
 		
 		if ((!isScrollLimitReached || forceUpdate) && totalScrolledDy >= limitScrollAt) {
+			//Log.d(TAG, "if");
 			ObjectAnimator elevateAnim = ObjectAnimator.ofFloat(vPagerCatTitles, "translationZ", 0.0f, translationZPx);
 			elevateAnim.setDuration(100);
 			elevateAnim.start();
@@ -517,6 +543,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 			isScrollLimitReached = true;
 			
 		} else if ((isScrollLimitReached || forceUpdate) && totalScrolledDy < limitScrollAt) {
+			//Log.d(TAG, "else if");
 			//Log.d(TAG, "totalScrolledDy < limitScrollAt");
 			ObjectAnimator elevateAnim = ObjectAnimator.ofFloat(vPagerCatTitles, "translationZ", translationZPx, 0.0f);
 			elevateAnim.setDuration(100);
@@ -1511,6 +1538,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 			
 			@Override
 			public void run() {
+				//Log.d(TAG, "onEventsLoaded()");
 				onScrolled(0, true);
 			}
 		});

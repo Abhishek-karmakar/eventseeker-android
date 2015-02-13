@@ -46,6 +46,9 @@
     </RelativeLayout>
     
     <include layout="@layout/include_no_items_found_with_action"
+        android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+    	android:layout_below="@+id/rltFollowMoreArtist" 
         android:visibility="gone"/>
 	
 </RelativeLayout>

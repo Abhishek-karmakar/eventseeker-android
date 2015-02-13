@@ -1084,11 +1084,14 @@ public class MainActivity extends ActionBarActivity implements
 	}
 	
 	private void onFragmentCalledFromOtherTaskResumed(int position, String title, String fragmentTag) {
-		//Log.d(TAG, "onFragmentResumed() - " + fragmentTag);
+		//Log.d(TAG, "onFragmentCalledFromOtherTaskResumed() - " + fragmentTag);
 		drawerItemSelectedPosition = position;
 		if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
 			setDrawerIndicatorEnabled(true);
-		} 
+			
+		} else {
+			setDrawerIndicatorEnabled(false);
+		}
 		mTitle = title;
 		updateTitle();
 
@@ -1424,6 +1427,7 @@ public class MainActivity extends ActionBarActivity implements
 		 * 
 		 * } else {
 		 */
+		//Log.d(TAG, "title = " + mTitle);
 		getSupportActionBar().setTitle(mTitle);
 		// }
 	}

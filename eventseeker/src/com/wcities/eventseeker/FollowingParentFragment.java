@@ -238,9 +238,6 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 		 */
 		try {
 			absListView.setVisibility(View.GONE);
-			if (btnFollowMoreArtists != null) {
-				btnFollowMoreArtists.setVisibility(View.GONE);
-			}
 			
 		} catch (IllegalStateException e) {
 			Log.e(TAG, "" + e.getMessage());
