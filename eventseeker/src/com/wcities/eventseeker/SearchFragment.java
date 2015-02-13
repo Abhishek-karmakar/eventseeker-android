@@ -153,6 +153,7 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 		 * & prevent jumping effect on search screen, caused due to removal of status bar on detail screen when this 
 		 * search screen is visible in background.
 		 */
+		ma.setToolbarBg(ma.getResources().getColor(R.color.colorPrimary));
 		ma.setVStatusBarVisibility(View.GONE, AppConstants.INVALID_ID);
 		ma.setVStatusBarLayeredVisibility(View.VISIBLE, R.color.colorPrimaryDark);
 	}
