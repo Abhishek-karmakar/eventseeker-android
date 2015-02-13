@@ -1,19 +1,9 @@
 package com.wcities.eventseeker;
 
-import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
-import com.wcities.eventseeker.constants.AppConstants;
-import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.core.Venue;
-import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
-import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
-import com.wcities.eventseeker.util.FragmentUtil;
-
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -22,6 +12,14 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
+import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.core.Venue;
+import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
+import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
+import com.wcities.eventseeker.util.FragmentUtil;
 
 public class NavigationFragment extends FragmentLoadableFromBackStack implements IGoogleAnalyticsTracker, OnClickListener {
 	
@@ -45,6 +43,7 @@ public class NavigationFragment extends FragmentLoadableFromBackStack implements
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		//Log.d(TAG, "onCreateView()");
 		View view = inflater.inflate(R.layout.fragment_navigation, container, false);
 		
 		view.findViewById(R.id.imgGMaps).setOnClickListener(this);
@@ -60,6 +59,16 @@ public class NavigationFragment extends FragmentLoadableFromBackStack implements
 			}
 		});
 		return view;
+	}
+	
+	@Override
+	public void onStart() {
+		//Log.d(TAG, "onStart()");
+		super.onStart();
+		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		ma.setToolbarBg(ma.getResources().getColor(R.color.colorPrimary));
+		ma.setVStatusBarVisibility(View.VISIBLE, R.color.colorPrimaryDark);
+		ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
 	}
 	
 	@Override

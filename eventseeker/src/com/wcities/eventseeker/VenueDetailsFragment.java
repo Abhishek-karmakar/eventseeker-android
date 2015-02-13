@@ -126,7 +126,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	private boolean isOnCreateViewCalledFirstTime = true;
 	private int screenW, imgVenueHt;
 	private AnimatorSet animatorSet;
-	private boolean isOnPushedToBackStackCalled;
+	private boolean isOnPushedToBackStackCalled, isGlobalLayoutListenerValid;
 	
 	private View rootView;
 	private ImageView imgVenue;
@@ -181,6 +181,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		//Log.d(TAG, "onCreateView()");
 		/**
 		 * on orientation change we need to recalculate this due to different values of 
 		 * action_bar_ht on both orientations
@@ -215,10 +216,20 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	    	}
 		});
 		
+		isGlobalLayoutListenerValid = true;
 		recyclerVVenues.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
             	//Log.d(TAG, "onGlobalLayout()");
+            	if (!isGlobalLayoutListenerValid) {
+            		//Log.d(TAG, "return");
+            		return;
+            		
+            	} else {
+            		//Log.d(TAG, "continue");
+            		isGlobalLayoutListenerValid = false;
+            	}
+            	
 				if (VersionUtil.isApiLevelAbove15()) {
 					recyclerVVenues.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
@@ -281,6 +292,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	
 	@Override
 	public void onStop() {
+		//Log.d(TAG, "onStop()");
 		super.onStop();
 		
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
