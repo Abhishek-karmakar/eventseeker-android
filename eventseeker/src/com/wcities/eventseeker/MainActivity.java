@@ -409,7 +409,11 @@ public class MainActivity extends ActionBarActivity implements
 			 * as it has been called from widget, due to its bundle having event
 			 * clicked.
 			 */
-			if (getIntent().hasExtra(BundleKeys.EVENT)) {
+			if (eventSeekr.getWcitiesId() == null) {
+				selectNonDrawerItem(new LauncherFragment(), AppConstants.FRAGMENT_TAG_LAUNCHER, 
+						getResources().getString(R.string.title_launcher), false);
+				
+			} else if (getIntent().hasExtra(BundleKeys.EVENT)) {
 				// this can be from notification click or widget click
 				onEventSelectedFromOtherTask((Event) getIntent().getSerializableExtra(BundleKeys.EVENT), false);
 				
@@ -425,13 +429,7 @@ public class MainActivity extends ActionBarActivity implements
 				onNotificationClicked((NotificationType) getIntent().getSerializableExtra(BundleKeys.NOTIFICATION_TYPE));
 
 			} else {
-				if (eventSeekr.getWcitiesId() == null) {
-					selectNonDrawerItem(new LauncherFragment(), AppConstants.FRAGMENT_TAG_LAUNCHER, 
-							getResources().getString(R.string.title_launcher), false);
-					
-				} else {
-					selectItem(INDEX_NAV_ITEM_DISCOVER, null);
-				}
+				selectItem(INDEX_NAV_ITEM_DISCOVER, null);
 			}
 			
 		} else {
@@ -485,7 +483,11 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onNewIntent(Intent intent) {
 		//Log.d(TAG, "onNewIntent()");
 		super.onNewIntent(intent);
-		if (intent.hasExtra(BundleKeys.EVENT)) {
+		
+		EventSeekr eventSeekr = (EventSeekr) getApplication();
+		if (eventSeekr.getWcitiesId() == null) {
+			
+		} else if (intent.hasExtra(BundleKeys.EVENT)) {
 			onEventSelectedFromOtherTask((Event) intent.getSerializableExtra(BundleKeys.EVENT), true);
 			
 		} else if (intent.hasExtra(BundleKeys.ARTIST)) {

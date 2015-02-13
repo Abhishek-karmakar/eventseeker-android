@@ -86,7 +86,8 @@ public class NotificationUtil {
 				notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
-		        .setSmallIcon(R.drawable.ic_notification)
+		        .setSmallIcon(R.drawable.ic_notification_white)
+		        .setColor(context.getResources().getColor(R.color.colorPrimary))
 		        .setContentTitle(title)
 		        .setContentText(message);
 		mBuilder.setContentIntent(pendingIntent);

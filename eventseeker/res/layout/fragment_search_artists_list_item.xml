@@ -33,7 +33,8 @@
 		    android:textSize="@dimen/txt_artist_name_txt_size_fragment_search_artists_list_item"
 		    android:maxLines="2"
 		    android:ellipsize="end"
-		    android:layout_alignParentTop="true" />
+		    android:layout_alignParentTop="true"
+		    android:layout_toLeftOf="@+id/chkFollow" />
 	    
 	    <TextView android:id="@+id/txtOnTour"
 	        android:layout_width="wrap_content"

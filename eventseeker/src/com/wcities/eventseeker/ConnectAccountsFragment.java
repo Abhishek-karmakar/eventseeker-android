@@ -449,7 +449,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 					AnimationUtil.stopRotationToView(holder.imgProgressBar);
 				}*/
 			
-				if (serviceAccount.count != EventSeekr.UNSYNC_COUNT) {
+				if (serviceAccount.count != EventSeekr.UNSYNC_COUNT && !serviceAccount.isInProgress) {
 					holder.imgCorrect.setVisibility(View.VISIBLE);
 				
 				} else {

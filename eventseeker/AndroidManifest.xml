@@ -61,7 +61,7 @@
         
         <activity android:name="com.wcities.eventseeker.CalendarActivity"
             android:label="@string/add_to_calender"
-            android:icon="@drawable/calendar"
+            android:icon="@drawable/ic_calendar"
             android:exported="false">
 		    <intent-filter>
 		        <action android:name="android.intent.action.SEND"/>
