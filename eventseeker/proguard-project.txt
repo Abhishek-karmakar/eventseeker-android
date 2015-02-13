@@ -21,7 +21,10 @@
 -dontwarn org.apache.commons.logging.**
 -dontwarn org.slf4j.**
 -dontwarn org.json.*
+# 2 libraries signost-commonshttp & signpost-core having package initials oauth.signpost are required by rdio api.
 -dontwarn oauth.signpost.**
+-dontwarn retrofit.**
+-dontwarn okio.**
 
 -keep class javax.** { *; }
 -keep class org.** { *; }
@@ -29,6 +32,9 @@
 -keep class oauth.signpost.** { *; }
 -keep class com.facebook.** { *; }
 -keep class android.support.v7.widget.ShareActionProvider
+-keep class com.drivemode.spotify.** { *; }
+-keep class retrofit.** { *; }
+
 # Required for facebook publish permission
 -keepattributes Signature
 

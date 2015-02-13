@@ -272,8 +272,8 @@ public class EventSeekr extends Application {
 			
 			AppConstants.LASTFM_API_KEY = "dce45347e8ec4ce36c107d9d12549907";
 			
-			AppConstants.SPOTIFY_CLIENT_ID = "";
-			AppConstants.SPOTIFY_CLIENT_SECRET = "";
+			AppConstants.SPOTIFY_CLIENT_ID = "f875bc46fc284a31af776cedf8076bc8";
+			AppConstants.SPOTIFY_CLIENT_SECRET = "0c1e396da5a54fa18fa849bd4e8a14b9";
 			
 			AppConstants.GCM_SENDER_ID = "972660105461";
 			
