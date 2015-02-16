@@ -44,6 +44,7 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 	protected ConnectionResult mConnectionResult;
 
 	private boolean isPublishPermissionDisplayed;
+	protected boolean callOnlySuperOnStart;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -53,9 +54,15 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 	
 	@Override
 	public void onStart() {
-		Session session = Session.getActiveSession();
-		if (session != null) {
-			session.addCallback(this);
+		//Log.d(TAG, "onStart()");
+		if (callOnlySuperOnStart) {
+			callOnlySuperOnStart = false;
+			
+		} else {
+			Session session = Session.getActiveSession();
+			if (session != null) {
+				session.addCallback(this);
+			}
 		}
 		super.onStart();
 	}

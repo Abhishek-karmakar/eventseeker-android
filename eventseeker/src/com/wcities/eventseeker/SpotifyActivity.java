@@ -41,7 +41,7 @@ public class SpotifyActivity extends Activity implements AuthenticationListener 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		//Log.d(TAG, "onCreate() - " + this);
+		Log.d(TAG, "onCreate() - " + this);
 		super.onCreate(savedInstanceState);
 		
 		if (!((EventSeekr)getApplication()).isTablet()) {
@@ -63,7 +63,7 @@ public class SpotifyActivity extends Activity implements AuthenticationListener 
 	
 	@Override
 	protected void onResume() {
-		//Log.d(TAG, "onResume()");
+		Log.d(TAG, "onResume()");
 		super.onResume();
 		if (!isOnCreateOrOnNewIntentCalled) {
 			finish();
@@ -75,7 +75,7 @@ public class SpotifyActivity extends Activity implements AuthenticationListener 
 	
 	@Override
 	protected void onNewIntent(Intent intent) {
-		//Log.d(TAG, "onNewIntent() - " + this);
+		Log.d(TAG, "onNewIntent() - " + this);
 		super.onNewIntent(intent);
 		isOnCreateOrOnNewIntentCalled = true;
 		if (intent.getData() != null && intent.getData().toString().contains(AppConstants.SPOTIFY_REDIRECT_URI)) {
@@ -87,6 +87,14 @@ public class SpotifyActivity extends Activity implements AuthenticationListener 
 	@Override
 	public void onReady() {
 		//Log.d(TAG, "onReady()");
+		/**
+		 * If user clicks again on spotify authentication screen & if by that time this activity has finished, 
+		 * it might start new activity where serviceAccount won't be available, so just return from here
+		 */
+		if (serviceAccount == null) {
+			finish();
+			return;
+		}
 		serviceAccount.isInProgress = true;
 		setResult(RESULT_OK);
 		finish();

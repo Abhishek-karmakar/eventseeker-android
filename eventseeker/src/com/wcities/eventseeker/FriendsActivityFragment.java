@@ -234,6 +234,12 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	
 	@Override
 	public void onStart() {
+		if (!isOnTop()) {
+			callOnlySuperOnStart = true;
+			super.onStart();
+			return;
+		}
+		
 		super.onStart();
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		ma.setToolbarElevation(0);
@@ -244,6 +250,16 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 		 */
 		ma.setVStatusBarVisibility(View.GONE, AppConstants.INVALID_ID);
 		ma.setVStatusBarLayeredVisibility(View.VISIBLE, R.color.colorPrimaryDark);
+	}
+	
+	@Override
+	public void onStop() {
+		super.onStop();
+		//Log.d(TAG, "onStop()");
+		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
+		ma.setVStatusBarVisibility(View.VISIBLE, R.color.colorPrimaryDark);
+		ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
 	}
 	
 	@Override
@@ -709,16 +725,6 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	    }
 	    
 	    @Override
-		public void onStop() {
-			super.onStop();
-			//Log.d(TAG, "onStop()");
-			MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
-			ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
-			ma.setVStatusBarVisibility(View.VISIBLE, R.color.colorPrimaryDark);
-			ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
-		}
-	    
-	    @Override
 	    public void onDestroyView() {
 	    	//Log.d(TAG, "dialog retain instance = " + getRetainInstance());
 	    	/**
@@ -964,24 +970,15 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 
 	@Override
 	public void onPushedToBackStack() {
-		onPushedToBackStack(true);
-	}
-
-	private void onPushedToBackStack(boolean revertToolbarStatusBarChanges) {
-		if (revertToolbarStatusBarChanges) {
-			onStop();
-			
-		} else {
-			/**
-			 * to remove facebook callback. Not calling onStop() to prevent toolbar color changes occurring in between
-			 * the transition
-			 */
-			super.onStop();
-		}
+		/**
+		 * to remove facebook callback. Not calling onStop() to prevent toolbar color changes occurring in between
+		 * the transition
+		 */
+		super.onStop();
 		
 		isOnPushedToBackStackCalled = true;
 	}
-	
+
 	@Override
 	public void onPoppedFromBackStack() {
 		if (isOnPushedToBackStackCalled) {
@@ -998,6 +995,10 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 			}
 			hiddenViews.clear();
 		}
+	}
+
+	@Override
+	public boolean isOnTop() {
+		return !isOnPushedToBackStackCalled;
 	}	
-	
 }
