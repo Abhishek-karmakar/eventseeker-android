@@ -366,6 +366,29 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	public void onStop() {
 		super.onStop();
 		//Log.d(TAG, "onStop()");
+		
+		/**
+		 * Following call is required to prevent non-removal of onGlobalLayoutListener. If onGlobalLayout() 
+		 * is not called yet & screen gets destroyed, then removal of onGlobalLayoutListener will not happen ever 
+		 * since fragment won't be able to find its view tree observer. So, better to make sure
+		 * that it gets removed at the end from onDestroyView()
+		 * e.g.: discover -> widget click (redirecting to event details) -> following, results in very fast calls
+		 * to onCreateView()-onDestroyView()-onDestroy() of this fragment due to which onGlobalLayout() doesn't get a 
+		 * chance to remove global layout listener before fragment gets destroyed. 
+		 * 
+		 * Although we are adding listener in onCreateView(), cannot keep this code in onDestroyView() 
+		 * because then after applying toolbar color changes from onStop(), it's possible that onGlobalLayout()
+		 * can revert these changes just before onDestroyView() removes this listener.
+		 * e.g. - Moving very quickly from discover -> following/artists news sometimes produces this issue, if 
+		 * we remove listener from onDestroyView() instead of onStop()
+		 */
+		if (VersionUtil.isApiLevelAbove15()) {
+			recyclerVEvents.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
+
+		} else {
+			recyclerVEvents.getViewTreeObserver().removeGlobalOnLayoutListener(onGlobalLayoutListener);
+		}
+		
 		/**
 		 * Revert toolbar & layered status bar updates here itself.
 		 * We prefer reverting these changes here itself rather than applying updates for each screen 
@@ -377,27 +400,6 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
 		ma.setVStatusBarVisibility(View.VISIBLE, R.color.colorPrimaryDark);
 		ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
-	}
-	
-	@Override
-	public void onDestroyView() {
-		/**
-		 * Following call is required to prevent non-removal of onGlobalLayoutListener. If onGlobalLayout() 
-		 * is not called yet & screen gets destroyed, then removal of onGlobalLayoutListener will not happen ever 
-		 * since fragment won't be able to find its view tree observer. So, better to make sure
-		 * that it gets removed at the end from onDestroyView()
-		 * e.g.: discover -> widget click (redirecting to event details) -> following, results in very fast calls
-		 * to onCreateView()-onDestroyView()-onDestroy() of this fragment due to which onGlobalLayout() doesn't get a 
-		 * chance to remove global layout listener before fragment gets destroyed. 
-		 */
-		if (VersionUtil.isApiLevelAbove15()) {
-			recyclerVEvents.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
-
-		} else {
-			recyclerVEvents.getViewTreeObserver().removeGlobalOnLayoutListener(onGlobalLayoutListener);
-		}
-		super.onDestroyView();
-		//Log.d(TAG, "onDestroyView()");
 	}
 	
 	@Override
@@ -559,7 +561,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		if (eventListAdapter == null) {
 			return;
 		}
-		Log.d(TAG, "resetEventList()");
+		//Log.d(TAG, "resetEventList()");
 		eventListAdapter.reset();
 
 		if (loadEvents != null) {

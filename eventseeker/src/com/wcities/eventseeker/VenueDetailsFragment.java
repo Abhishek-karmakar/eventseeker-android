@@ -297,19 +297,15 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		//Log.d(TAG, "onStop()");
 		super.onStop();
 		
-		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
-		ma.setToolbarBg(ma.getResources().getColor(R.color.colorPrimary));
-		ma.setVStatusBarVisibility(View.VISIBLE, R.color.colorPrimaryDark);
-		ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
-	}
-	
-	@Override
-	public void onDestroyView() {
 		/**
 		 * Following call is required to prevent non-removal of onGlobalLayoutListener. If onGlobalLayout() 
 		 * is not called yet & screen gets destroyed, then removal of onGlobalLayoutListener will not happen ever 
 		 * since fragment won't be able to find its view tree observer. So, better to make sure
 		 * that it gets removed at the end from onDestroyView()
+		 * 
+		 * Although we are adding listener in onCreateView(), cannot keep this code in onDestroyView() 
+		 * because then after applying toolbar color changes from onStop(), it's possible that onGlobalLayout()
+		 * can revert these changes just before onDestroyView() removes this listener.
 		 */
 		if (VersionUtil.isApiLevelAbove15()) {
 			recyclerVVenues.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
@@ -317,8 +313,11 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		} else {
 			recyclerVVenues.getViewTreeObserver().removeGlobalOnLayoutListener(onGlobalLayoutListener);
 		}
-		super.onDestroyView();
-		//Log.d(TAG, "onDestroyView()");
+		
+		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		ma.setToolbarBg(ma.getResources().getColor(R.color.colorPrimary));
+		ma.setVStatusBarVisibility(View.VISIBLE, R.color.colorPrimaryDark);
+		ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
 	}
 	
 	@Override
