@@ -12,6 +12,7 @@
     <dimen name="action_bar_elevation">4dp</dimen>
     <dimen name="action_bar_title_margin_start">0dp</dimen>
     <dimen name="event_listing_slider_items_size_w_h">25dp</dimen>
+    <dimen name="event_listing_slider_items_outer_size_w_h">45dp</dimen>
     <!-- fragment_discover.xml -->
     <dimen name="rlt_layout_featured_evts_parent_margin_discover">8dp</dimen>
     <dimen name="grd_evt_categories_margin_b_discover">@dimen/rlt_layout_featured_evts_parent_margin_discover</dimen>
