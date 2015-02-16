@@ -285,8 +285,14 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		super.onActivityCreated(savedInstanceState);
 		if (artistRVAdapter == null) {
 			eventList = new ArrayList<Event>();
-			eventList.add(null);
-			
+			/**
+			 * 16-02-2015
+			 * This check is added as per discussion with Amir Sir, the upcoming events should be shown
+			 * only if Artist is on Tour.
+			 */
+			if (artist.isOntour()) {
+				eventList.add(null);
+			}
 			artistRVAdapter = new ArtistRVAdapter(this, eventList, null, this);
 			
 		} else {
