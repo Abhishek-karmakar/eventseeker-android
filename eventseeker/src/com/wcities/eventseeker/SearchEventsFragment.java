@@ -424,10 +424,9 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 					
 					int MIN_SWIPE_DISTANCE_X = ConversionUtil.toPx(res, 50);
 					int MAX_CLICK_DISTANCE = ConversionUtil.toPx(res, 4);
-					int pointerX = 0, initX = 0, pointerY = 0, initY = 0;
+					int pointerX = 0, initX = 0, pointerY = 0, initY = 0, maxMovedOnX = 0, maxMovedOnY = 0;
 					boolean isSliderOpenInititally;
 					boolean letParentHandleTouchEvent = false;
-					int actionMoveCount = 0;
 					
 					@Override
 					public boolean onTouch(View v, MotionEvent mEvent) {
@@ -442,7 +441,7 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 							initX = pointerX = (int) mEvent.getRawX();
 							initY = pointerY = (int) mEvent.getRawY();
 							isSliderOpenInititally = !holder.isSliderClose(rltLytContentInitialMarginL);
-							actionMoveCount = 0;
+							maxMovedOnX = maxMovedOnY = 0;
 							return true;
 						
 						case MotionEvent.ACTION_MOVE:
@@ -457,7 +456,6 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 							//Log.d(TAG, "move");
 							holder.rltLytRoot.setPressed(true);
 							
-							actionMoveCount++;
 							holder.lnrSliderContent.setVisibility(View.VISIBLE);
 							
 							int newX = (int) mEvent.getRawX();
@@ -479,6 +477,8 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 								pointerX = newX;
 							}
 							pointerY = (int) mEvent.getRawY();
+							maxMovedOnX = Math.abs(initX - newX) > maxMovedOnX ? Math.abs(initX - newX) : maxMovedOnX;
+							maxMovedOnY = Math.abs(initY - pointerY) > maxMovedOnY ? Math.abs(initY - pointerY) : maxMovedOnY;
 							break;
 							
 						case MotionEvent.ACTION_UP:
@@ -514,53 +514,49 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 									closeSlider(holder, position, true);
 								}
 								
-								// consider click event
-								if (actionMoveCount <= 2) {
-									if (mEvent.getAction() == MotionEvent.ACTION_CANCEL) {
-										break;
-									}
-									
-									if (Math.abs(initX - pointerX) > MAX_CLICK_DISTANCE || 
-											Math.abs(initY - pointerY) > MAX_CLICK_DISTANCE) {
-										break;
-									}
-									
+								if (mEvent.getAction() == MotionEvent.ACTION_CANCEL) {
+									break;
+								}
+								
+								if (maxMovedOnX > MAX_CLICK_DISTANCE || maxMovedOnY > MAX_CLICK_DISTANCE) {
+									break;
+								}
+								
+								/**
+								 * Handle click event.
+								 * We do it here instead of implementing onClick listener because then onClick listener
+								 * of child element would block onTouch event on its parent (rltLytRoot) 
+								 * if this onTouch starts from such a child view 
+								 */
+								if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.vHandle)) {
+									onHandleClick(holder, position);
+	
+								} else if (openPos == position) { 
 									/**
-									 * Handle click event.
-									 * We do it here instead of implementing onClick listener because then onClick listener
-									 * of child element would block onTouch event on its parent (rltLytRoot) 
-									 * if this onTouch starts from such a child view 
+									 * above condition is required, because otherwise these 3 conditions
+									 * prevent event click on these positions even if slider is closed
 									 */
-									if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.vHandle)) {
-										onHandleClick(holder, position);
-		
-									} else if (openPos == position) { 
-										/**
-										 * above condition is required, because otherwise these 3 conditions
-										 * prevent event click on these positions even if slider is closed
-										 */
-										if (holder.imgTicket.isEnabled() && ViewUtil.isPointInsideView(
-												mEvent.getRawX(), mEvent.getRawY(), holder.rltTicket)) {
-											onImgTicketClick(holder, event);
-												
-										} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltSave)) {
-											onImgSaveClick(holder, event);
+									if (holder.imgTicket.isEnabled() && ViewUtil.isPointInsideView(
+											mEvent.getRawX(), mEvent.getRawY(), holder.rltTicket)) {
+										onImgTicketClick(holder, event);
 											
-										} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltShare)) {
-											onImgShareClick(holder, event);
-											
-										} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltLytRoot)) {
-											/**
-											 * This block is added to consider row click as event click even when
-											 * slider is open (openPos == position); otherwise it won't do anything 
-											 * on clicking outside the slider when it's open
-											 */
-											onEventClick(holder, event, position);
-										}
+									} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltSave)) {
+										onImgSaveClick(holder, event);
+										
+									} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltShare)) {
+										onImgShareClick(holder, event);
 										
 									} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltLytRoot)) {
+										/**
+										 * This block is added to consider row click as event click even when
+										 * slider is open (openPos == position); otherwise it won't do anything 
+										 * on clicking outside the slider when it's open
+										 */
 										onEventClick(holder, event, position);
 									}
+									
+								} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltLytRoot)) {
+									onEventClick(holder, event, position);
 								}
 							}
 							

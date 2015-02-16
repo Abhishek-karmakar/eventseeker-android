@@ -36,6 +36,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
@@ -182,7 +183,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		//Log.d(TAG, "onCreate()");
+		//Log.d(TAG, "onCreate(), " + this);
 		setHasOptionsMenu(true);
 		setRetainInstance(true);
 		
@@ -213,7 +214,6 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		//Log.d(TAG, "onCreateView()");
 		isOnStopCalled = false;
 		calculateDimensions();
-		final int orientation = FragmentUtil.getResources(this).getConfiguration().orientation;
 		
 		if (year == 0) {
         	// initialize year, month, day values for setting action item
@@ -285,30 +285,30 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	    
 	    isGlobalLayoutListenerValid = true;
 	    recyclerVEvents.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-            	//Log.d(TAG, "onGlobalLayout()");
-            	/**
-            	 * 1) following isGlobalLayoutListenerValid based check is added since removal of global 
-            	 * listener is not working.
-            	 * W/o this check discover -> widget click -> following results in toolbar with transparent color
-            	 * due to continuous calls to this onGlobalLayout().
-            	 * 2) isOnStopCalled based check is added because due to onCreateView() being called even if this
-            	 * fragment is in backstack then onStop() is also called, but onGlobalLayout() is called after some time.
-            	 * This onGlobalLayout() call executes after onResume() of actual screen resulting in setting 
-            	 * wrong discover screen title
-            	 * e.g. - discover -> widget click -> following results in toolbar title Discover, since 
-            	 * this onGlobalLayout() of discover is called after onResume() of 'following' screen
-            	 */
-            	if (!isGlobalLayoutListenerValid || isOnStopCalled) {
-            		//Log.d(TAG, "return");
-            		return;
-            		
-            	} else {
-            		//Log.d(TAG, "continue");
-            		isGlobalLayoutListenerValid = false;
-            	}
-            	
+	        @Override
+	        public void onGlobalLayout() {
+	        	//Log.d(TAG, "onGlobalLayout() - " + onGlobalLayoutListener);
+	        	/**
+	        	 * 1) following isGlobalLayoutListenerValid based check is added since removal of global 
+	        	 * listener is not working in following case.
+	        	 * W/o this check discover -> widget click -> following results in toolbar with transparent color
+	        	 * due to continuous calls to this onGlobalLayout().
+	        	 * 2) isOnStopCalled based check is added because due to onCreateView() being called even if this
+	        	 * fragment is in backstack then onStop() is also called, but onGlobalLayout() is called after some time.
+	        	 * This onGlobalLayout() call executes after onResume() of actual screen resulting in setting 
+	        	 * wrong discover screen title
+	        	 * e.g. - discover -> widget click -> following results in toolbar title Discover, since 
+	        	 * this onGlobalLayout() of discover is called after onResume() of 'following' screen
+	        	 */
+	        	if (!isGlobalLayoutListenerValid || isOnStopCalled) {
+	        		//Log.d(TAG, "return");
+	        		return;
+	        		
+	        	} else {
+	        		//Log.d(TAG, "continue");
+	        		isGlobalLayoutListenerValid = false;
+	        	}
+	        	
 				if (VersionUtil.isApiLevelAbove15()) {
 					recyclerVEvents.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
@@ -316,6 +316,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 					recyclerVEvents.getViewTreeObserver().removeGlobalOnLayoutListener(this);
 				}
 				
+				int orientation = FragmentUtil.getResources(DiscoverFragment.this).getConfiguration().orientation;
 				if (prevOrientation != Configuration.ORIENTATION_UNDEFINED) {
 					// screen was already present before
 					if (prevOrientation != orientation) {
@@ -345,8 +346,8 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 					// to maintain status bar & toolbar decorations after orientation change
 					onDrawerOpened();
 				}
-            }
-        });
+	        }
+	    });
 	    
 		return v;
 	}
@@ -405,6 +406,20 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		ma.setVStatusBarVisibility(View.VISIBLE, R.color.colorPrimaryDark);
 		ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
 	}
+	
+	/*@Override
+	public void onDestroy() {
+		super.onDestroy();
+		if (VersionUtil.isApiLevelAbove15()) {
+			recyclerVEvents.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
+
+		} else {
+			recyclerVEvents.getViewTreeObserver().removeGlobalOnLayoutListener(onGlobalLayoutListener);
+		}
+		onGlobalLayoutListener = null;
+		recyclerVEvents = null;
+		Log.d(TAG, "onDestroy(), " + this);
+	}*/
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -915,9 +930,8 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 						
 						int MIN_SWIPE_DISTANCE_X = ConversionUtil.toPx(res, 50);
 						int MAX_CLICK_DISTANCE = ConversionUtil.toPx(res, 4);
-						int pointerX = 0, initX = 0, pointerY = 0, initY = 0;
+						int pointerX = 0, initX = 0, pointerY = 0, initY = 0, maxMovedOnX = 0, maxMovedOnY = 0;
 						boolean isSliderOpenInititally;
-						int actionMoveCount = 0;
 						
 						@Override
 						public boolean onTouch(View v, MotionEvent mEvent) {
@@ -931,14 +945,13 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 								initX = pointerX = (int) mEvent.getRawX();
 								initY = pointerY = (int) mEvent.getRawY();
 								isSliderOpenInititally = !holder.isSliderClose(rltLytContentInitialMarginL);
-								actionMoveCount = 0;
+								maxMovedOnX = maxMovedOnY = 0;
 								return true;
 							
 							case MotionEvent.ACTION_MOVE:
 								//Log.d(TAG, "move");
 								holder.rltLytRoot.setPressed(true);
 								
-								actionMoveCount++;
 								holder.lnrSliderContent.setVisibility(View.VISIBLE);
 								
 								int newX = (int) mEvent.getRawX();
@@ -960,6 +973,9 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 									pointerX = newX;
 								}
 								pointerY = (int) mEvent.getRawY();
+								maxMovedOnX = Math.abs(initX - newX) > maxMovedOnX ? Math.abs(initX - newX) : maxMovedOnX;
+								maxMovedOnY = Math.abs(initY - pointerY) > maxMovedOnY ? Math.abs(initY - pointerY) : maxMovedOnY;
+								//Log.d(TAG, "maxMovedOnX = " + maxMovedOnX + ", maxMovedOnY = " + maxMovedOnY);
 								break;
 								
 							case MotionEvent.ACTION_UP:
@@ -991,53 +1007,52 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 										closeSlider(holder, position, true);
 									}
 									
-									// consider click event
-									if (actionMoveCount <= 2) {
-										if (mEvent.getAction() == MotionEvent.ACTION_CANCEL) {
-											break;
-										}
-										
-										if (Math.abs(initX - pointerX) > MAX_CLICK_DISTANCE || 
-												Math.abs(initY - pointerY) > MAX_CLICK_DISTANCE) {
-											break;
-										}
-										
-										/**
-										 * Handle click event.
-										 * We do it here instead of implementing onClick listener because then onClick listener
-										 * of child element would block onTouch event on its parent (rltLytRoot) 
-										 * if this onTouch starts from such a child view 
-										 */
-										if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.vHandle)) {
-											onHandleClick(holder, position);
+									if (mEvent.getAction() == MotionEvent.ACTION_CANCEL) {
+										//Log.d(TAG, "ACTION_CANCEL");
+										break;
+									}
+									
+									//Log.d(TAG, "maxMovedOnX = " + maxMovedOnX + ", maxMovedOnY = " + maxMovedOnY);
+									if (maxMovedOnX > MAX_CLICK_DISTANCE || maxMovedOnY > MAX_CLICK_DISTANCE) {
+										//Log.d(TAG, "< max click distance");
+										break;
+									}
+									
+									/**
+									 * Handle click event.
+									 * We do it here instead of implementing onClick listener because then onClick listener
+									 * of child element would block onTouch event on its parent (rltLytRoot) 
+									 * if this onTouch starts from such a child view 
+									 */
+									if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.vHandle)) {
+										onHandleClick(holder, position);
 
-										} else if (openPos == position) { 
-											/**
-											 * above condition is required, because otherwise these 3 conditions
-											 * prevent event click on these positions even if slider is closed
-											 */
-											if (holder.imgTicket.isEnabled() && ViewUtil.isPointInsideView(
-													mEvent.getRawX(), mEvent.getRawY(), holder.rltTicket)) {
-												onImgTicketClick(holder, event);
-													
-											} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltSave)) {
-												onImgSaveClick(holder, event);
+									} else if (openPos == position) { 
+										/**
+										 * above condition is required, because otherwise these 3 conditions
+										 * prevent event click on these positions even if slider is closed
+										 */
+										if (holder.imgTicket.isEnabled() && ViewUtil.isPointInsideView(
+												mEvent.getRawX(), mEvent.getRawY(), holder.rltTicket)) {
+											onImgTicketClick(holder, event);
 												
-											} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltShare)) {
-												onImgShareClick(holder, event);
-												
-											} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltLytRoot)) {
-												/**
-												 * This block is added to consider row click as event click even when
-												 * slider is open (openPos == position); otherwise it won't do anything 
-												 * on clicking outside the slider when it's open
-												 */
-												onEventClick(holder, event, position);
-											}
+										} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltSave)) {
+											onImgSaveClick(holder, event);
+											
+										} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltShare)) {
+											onImgShareClick(holder, event);
 											
 										} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltLytRoot)) {
+											/**
+											 * This block is added to consider row click as event click even when
+											 * slider is open (openPos == position); otherwise it won't do anything 
+											 * on clicking outside the slider when it's open
+											 */
 											onEventClick(holder, event, position);
 										}
+										
+									} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltLytRoot)) {
+										onEventClick(holder, event, position);
 									}
 								}
 								
