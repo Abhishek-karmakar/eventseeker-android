@@ -17,12 +17,17 @@
             android:layout_margin="@dimen/lnr_root_padding_fragment_follow_more_artists"
             android:orientation="horizontal" >
 
+            <!--
+            In every RelativeLayout a BUTTON is used and the Text is represented in a TextView
+			because if we write text in Button only then except for Galaxy S5 device in every 
+			device it works fin but in S5, the text appears at the top. So used 2 different widget            -->
+
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" >
 
-                <com.wcities.eventseeker.custom.view.ResizableImageView
+                <ImageView
                     android:id="@+id/imgAlternativeRock"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -32,10 +37,18 @@
                     android:id="@+id/btnAlternativeRock"
                     style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_alignBottom="@+id/imgAlternativeRock"
-                    android:layout_alignTop="@+id/imgAlternativeRock"
-                    android:text="@string/btn_alternative_rock" />
+                    android:layout_alignTop="@+id/imgAlternativeRock" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/btn_alternative_rock"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/txt_size_widget_eventSeeker_btn_alpha"
+                    android:textStyle="bold" />
             </RelativeLayout>
 
             <View
@@ -48,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" >
 
-                <com.wcities.eventseeker.custom.view.ResizableImageView
+                <ImageView
                     android:id="@+id/imgClassicRock"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -58,10 +71,18 @@
                     android:id="@+id/btnClassicRock"
                     style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_alignBottom="@+id/imgClassicRock"
-                    android:layout_alignTop="@+id/imgClassicRock"
-                    android:text="@string/btn_classic_rock" />
+                    android:layout_alignTop="@+id/imgClassicRock" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/btn_classic_rock"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/txt_size_widget_eventSeeker_btn_alpha"
+                    android:textStyle="bold" />
             </RelativeLayout>
         </LinearLayout>
 
@@ -78,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" >
 
-                <com.wcities.eventseeker.custom.view.ResizableImageView
+                <ImageView
                     android:id="@+id/imgIndieRock"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -88,10 +109,18 @@
                     android:id="@+id/btnIndieRock"
                     style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_alignBottom="@+id/imgIndieRock"
-                    android:layout_alignTop="@+id/imgIndieRock"
-                    android:text="@string/btn_indie_rock" />
+                    android:layout_alignTop="@+id/imgIndieRock" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/btn_indie_rock"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/txt_size_widget_eventSeeker_btn_alpha"
+                    android:textStyle="bold" />
             </RelativeLayout>
 
             <View
@@ -104,7 +133,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" >
 
-                <com.wcities.eventseeker.custom.view.ResizableImageView
+                <ImageView
                     android:id="@+id/imgFolk"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -114,10 +143,18 @@
                     android:id="@+id/btnFolk"
                     style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_alignBottom="@+id/imgFolk"
-                    android:layout_alignTop="@+id/imgFolk"
-                    android:text="@string/btn_folk" />
+                    android:layout_alignTop="@+id/imgFolk" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/btn_folk"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/txt_size_widget_eventSeeker_btn_alpha"
+                    android:textStyle="bold" />
             </RelativeLayout>
         </LinearLayout>
 
@@ -134,7 +171,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" >
 
-                <com.wcities.eventseeker.custom.view.ResizableImageView
+                <ImageView
                     android:id="@+id/imgCountry"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -144,10 +181,18 @@
                     android:id="@+id/btnCountry"
                     style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_alignBottom="@+id/imgCountry"
-                    android:layout_alignTop="@+id/imgCountry"
-                    android:text="@string/btn_country" />
+                    android:layout_alignTop="@+id/imgCountry" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/btn_country"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/txt_size_widget_eventSeeker_btn_alpha"
+                    android:textStyle="bold" />
             </RelativeLayout>
 
             <View
@@ -160,7 +205,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" >
 
-                <com.wcities.eventseeker.custom.view.ResizableImageView
+                <ImageView
                     android:id="@+id/imgElectronic"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -172,8 +217,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignBottom="@+id/imgElectronic"
-                    android:layout_alignTop="@+id/imgElectronic"
-                    android:text="@string/btn_electronic" />
+                    android:layout_alignTop="@+id/imgElectronic" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/btn_electronic"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/txt_size_widget_eventSeeker_btn_alpha"
+                    android:textStyle="bold" />
             </RelativeLayout>
         </LinearLayout>
 
@@ -190,7 +243,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" >
 
-                <com.wcities.eventseeker.custom.view.ResizableImageView
+                <ImageView
                     android:id="@+id/imgPop"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -202,8 +255,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignBottom="@+id/imgPop"
-                    android:layout_alignTop="@+id/imgPop"
-                    android:text="@string/btn_pop" />
+                    android:layout_alignTop="@+id/imgPop" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/btn_pop"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/txt_size_widget_eventSeeker_btn_alpha"
+                    android:textStyle="bold" />
             </RelativeLayout>
 
             <View
@@ -216,7 +277,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" >
 
-                <com.wcities.eventseeker.custom.view.ResizableImageView
+                <ImageView
                     android:id="@+id/imgPunk"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -228,8 +289,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignBottom="@+id/imgPunk"
-                    android:layout_alignTop="@+id/imgPunk"
-                    android:text="@string/btn_punk" />
+                    android:layout_alignTop="@+id/imgPunk" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/btn_punk"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/txt_size_widget_eventSeeker_btn_alpha"
+                    android:textStyle="bold" />
             </RelativeLayout>
         </LinearLayout>
 
@@ -246,7 +315,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" >
 
-                <com.wcities.eventseeker.custom.view.ResizableImageView
+                <ImageView
                     android:id="@+id/imgHardRockMetal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -258,8 +327,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignBottom="@+id/imgHardRockMetal"
-                    android:layout_alignTop="@+id/imgHardRockMetal"
-                    android:text="@string/btn_hard_rock_metal" />
+                    android:layout_alignTop="@+id/imgHardRockMetal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/btn_hard_rock_metal"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/txt_size_widget_eventSeeker_btn_alpha"
+                    android:textStyle="bold" />
             </RelativeLayout>
 
             <View
@@ -272,7 +349,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" >
 
-                <com.wcities.eventseeker.custom.view.ResizableImageView
+                <ImageView
                     android:id="@+id/imgWorldMusic"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -284,8 +361,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignBottom="@+id/imgWorldMusic"
-                    android:layout_alignTop="@+id/imgWorldMusic"
-                    android:text="@string/btn_world_music" />
+                    android:layout_alignTop="@+id/imgWorldMusic" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/btn_world_music"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/txt_size_widget_eventSeeker_btn_alpha"
+                    android:textStyle="bold" />
             </RelativeLayout>
         </LinearLayout>
 
@@ -302,7 +387,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" >
 
-                <com.wcities.eventseeker.custom.view.ResizableImageView
+                <ImageView
                     android:id="@+id/imgBluesJazz"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -314,8 +399,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignBottom="@+id/imgBluesJazz"
-                    android:layout_alignTop="@+id/imgBluesJazz"
-                    android:text="@string/btn_blues_jazz" />
+                    android:layout_alignTop="@+id/imgBluesJazz" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/btn_blues_jazz"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/txt_size_widget_eventSeeker_btn_alpha"
+                    android:textStyle="bold" />
             </RelativeLayout>
 
             <View
@@ -328,7 +421,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" >
 
-                <com.wcities.eventseeker.custom.view.ResizableImageView
+                <ImageView
                     android:id="@+id/imgHipHop"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -340,8 +433,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignBottom="@+id/imgHipHop"
-                    android:layout_alignTop="@+id/imgHipHop"
-                    android:text="@string/btn_hip_hop" />
+                    android:layout_alignTop="@+id/imgHipHop" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/btn_hip_hop"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/txt_size_widget_eventSeeker_btn_alpha"
+                    android:textStyle="bold" />
             </RelativeLayout>
         </LinearLayout>
 
@@ -359,7 +460,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" >
 
-                <com.wcities.eventseeker.custom.view.ResizableImageView
+                <ImageView
                     android:id="@+id/imgSoulRAndBFunck"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -371,8 +472,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignBottom="@+id/imgSoulRAndBFunck"
-                    android:layout_alignTop="@+id/imgSoulRAndBFunck"
-                    android:text="@string/btn_soul_r_and_b_funck" />
+                    android:layout_alignTop="@+id/imgSoulRAndBFunck" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/btn_soul_r_and_b_funck"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/txt_size_widget_eventSeeker_btn_alpha"
+                    android:textStyle="bold" />
             </RelativeLayout>
 
             <View
@@ -385,7 +494,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" >
 
-                <com.wcities.eventseeker.custom.view.ResizableImageView
+                <ImageView
                     android:id="@+id/imgClassical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -397,8 +506,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignBottom="@+id/imgClassical"
-                    android:layout_alignTop="@+id/imgClassical"
-                    android:text="@string/btn_classical" />
+                    android:layout_alignTop="@+id/imgClassical" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/btn_classical"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/txt_size_widget_eventSeeker_btn_alpha"
+                    android:textStyle="bold" />
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
