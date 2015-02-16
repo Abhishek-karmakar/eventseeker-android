@@ -143,6 +143,11 @@ public class MyEventsFragment extends FragmentLoadableFromBackStack implements O
 	@Override
 	public void onStart() {
 		super.onStart();
+
+		if (!isOnTop()) {
+			return;
+		}
+		
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		ma.setToolbarElevation(0);
 		/**
@@ -282,5 +287,10 @@ public class MyEventsFragment extends FragmentLoadableFromBackStack implements O
 			
 			((CustomSharedElementTransitionSource) mTabsAdapter.getSelectedFragment()).onPoppedFromBackStack();
 		}
+	}
+
+	@Override
+	public boolean isOnTop() {
+		return !isOnPushedToBackStackCalled;
 	}
 }

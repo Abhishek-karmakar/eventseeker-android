@@ -13,7 +13,6 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
@@ -38,6 +37,7 @@ public abstract class PublishEventFragment extends Fragment implements PublishLi
 	protected ConnectionResult mConnectionResult;
 
 	private boolean isPublishPermissionDisplayed;
+	protected boolean callOnlySuperOnStart;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -48,9 +48,14 @@ public abstract class PublishEventFragment extends Fragment implements PublishLi
 	@Override
 	public void onStart() {
 		//Log.d(TAG, "onStart()");
-		Session session = Session.getActiveSession();
-		if (session != null) {
-			session.addCallback(this);
+		if (callOnlySuperOnStart) {
+			callOnlySuperOnStart = false;
+			
+		} else {
+			Session session = Session.getActiveSession();
+			if (session != null) {
+				session.addCallback(this);
+			}
 		}
 		super.onStart();
 	}

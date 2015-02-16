@@ -273,4 +273,9 @@ public class SearchArtistsFragment extends PublishArtistListFragment implements 
 			}
 		}
 	}
+
+	@Override
+	public boolean isOnTop() {
+		return false;
+	}
 }

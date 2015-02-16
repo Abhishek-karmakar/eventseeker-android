@@ -133,7 +133,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	private int limitScrollAt, screenHt, minRecyclerVHt, recyclerVDummyTopViewsHt, recyclerVPrgsBarHt, 
 		recyclerVContentRowHt, vPagerCatTitlesMarginT;
 	private float translationZPx;
-	private boolean isScrollLimitReached, isOnPushedToBackStackCalled, isGlobalLayoutListenerValid, isOnStopCalled;
+	private boolean isScrollLimitReached, isOnPushedToBackStackCalled;
 	private String title = "";
 	private List<Category> evtCategories;
 	private int totalScrolledDy = UNSCROLLED; // indicates layout not yet created
@@ -168,16 +168,49 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		}
 	};
 	
-	/*View.OnTouchListener vDummyOnTouchListener = new OnTouchListener() {
-		
-		@Override
-		public boolean onTouch(View v, MotionEvent event) {
-			Log.d(TAG, "onTouch() - event = " + event.getAction());
-			vPagerCatTitles.onTouchEvent(event);
-			recyclerVEvents.onTouchEvent(event);
-	        return true;
-		}
-	};*/
+	private OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+        @Override
+        public void onGlobalLayout() {
+        	//Log.d(TAG, "onGlobalLayout() - " + this);
+			if (VersionUtil.isApiLevelAbove15()) {
+				recyclerVEvents.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+			} else {
+				recyclerVEvents.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+			}
+			
+			int orientation = FragmentUtil.getResources(DiscoverFragment.this).getConfiguration().orientation;
+			if (prevOrientation != Configuration.ORIENTATION_UNDEFINED) {
+				// screen was already present before
+				if (prevOrientation != orientation) {
+					/**
+					 * Since orientation is changed & user has scrolled past first dummy item 
+					 * (list_child_cat_title_top), we need to update totalScrolledDy value depending 
+					 * on current orientation, because first item height is different in both 
+					 * orientations & recyclerview by default will just retain first visible position
+					 * number & its offset
+					 */
+					if (prevOrientation == Configuration.ORIENTATION_PORTRAIT && 
+							totalScrolledDy >= firstItemHtPort) {
+						totalScrolledDy -= firstItemHtDiff;
+						//Log.d(TAG, "update totalScrolledDy = " + totalScrolledDy);
+						
+					} else if (prevOrientation == Configuration.ORIENTATION_LANDSCAPE && 
+							totalScrolledDy >= firstItemHtLand) {
+						totalScrolledDy += firstItemHtDiff;
+						//Log.d(TAG, "update totalScrolledDy = " + totalScrolledDy);
+					}
+				}
+			}
+			prevOrientation = orientation;
+
+			onScrolled(0, true);
+			if (((MainActivity)FragmentUtil.getActivity(DiscoverFragment.this)).isDrawerOpen()) {
+				// to maintain status bar & toolbar decorations after orientation change
+				onDrawerOpened();
+			}
+        }
+    };
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -212,7 +245,6 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// calculating here instead of onCreate() since it needs to be recalculated on orientation change
 		//Log.d(TAG, "onCreateView()");
-		isOnStopCalled = false;
 		calculateDimensions();
 		
 		if (year == 0) {
@@ -283,71 +315,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	    	}
 		});
 	    
-	    isGlobalLayoutListenerValid = true;
-	    recyclerVEvents.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-	        @Override
-	        public void onGlobalLayout() {
-	        	//Log.d(TAG, "onGlobalLayout() - " + onGlobalLayoutListener);
-	        	/**
-	        	 * 1) following isGlobalLayoutListenerValid based check is added since removal of global 
-	        	 * listener is not working in following case.
-	        	 * W/o this check discover -> widget click -> following results in toolbar with transparent color
-	        	 * due to continuous calls to this onGlobalLayout().
-	        	 * 2) isOnStopCalled based check is added because due to onCreateView() being called even if this
-	        	 * fragment is in backstack then onStop() is also called, but onGlobalLayout() is called after some time.
-	        	 * This onGlobalLayout() call executes after onResume() of actual screen resulting in setting 
-	        	 * wrong discover screen title
-	        	 * e.g. - discover -> widget click -> following results in toolbar title Discover, since 
-	        	 * this onGlobalLayout() of discover is called after onResume() of 'following' screen
-	        	 */
-	        	if (!isGlobalLayoutListenerValid || isOnStopCalled) {
-	        		//Log.d(TAG, "return");
-	        		return;
-	        		
-	        	} else {
-	        		//Log.d(TAG, "continue");
-	        		isGlobalLayoutListenerValid = false;
-	        	}
-	        	
-				if (VersionUtil.isApiLevelAbove15()) {
-					recyclerVEvents.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-				} else {
-					recyclerVEvents.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-				}
-				
-				int orientation = FragmentUtil.getResources(DiscoverFragment.this).getConfiguration().orientation;
-				if (prevOrientation != Configuration.ORIENTATION_UNDEFINED) {
-					// screen was already present before
-					if (prevOrientation != orientation) {
-						/**
-						 * Since orientation is changed & user has scrolled past first dummy item 
-						 * (list_child_cat_title_top), we need to update totalScrolledDy value depending 
-						 * on current orientation, because first item height is different in both 
-						 * orientations & recyclerview by default will just retain first visible position
-						 * number & its offset
-						 */
-						if (prevOrientation == Configuration.ORIENTATION_PORTRAIT && 
-								totalScrolledDy >= firstItemHtPort) {
-							totalScrolledDy -= firstItemHtDiff;
-							//Log.d(TAG, "update totalScrolledDy = " + totalScrolledDy);
-							
-						} else if (prevOrientation == Configuration.ORIENTATION_LANDSCAPE && 
-								totalScrolledDy >= firstItemHtLand) {
-							totalScrolledDy += firstItemHtDiff;
-							//Log.d(TAG, "update totalScrolledDy = " + totalScrolledDy);
-						}
-					}
-				}
-				prevOrientation = orientation;
-
-				onScrolled(0, true);
-				if (((MainActivity)FragmentUtil.getActivity(DiscoverFragment.this)).isDrawerOpen()) {
-					// to maintain status bar & toolbar decorations after orientation change
-					onDrawerOpened();
-				}
-	        }
-	    });
+	    recyclerVEvents.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
 	    
 		return v;
 	}
@@ -375,9 +343,14 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	
 	@Override
 	public void onStart() {
-		super.onStart();
 		//Log.d(TAG, "onStart()");
-		isOnStopCalled = false;
+		if (!isOnTop()) {
+			callOnlySuperOnStart = true;
+			super.onStart();
+			return;
+		}
+		
+		super.onStart();
 		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.GONE, AppConstants.INVALID_ID);
 		
 		if (totalScrolledDy != UNSCROLLED) {
@@ -393,7 +366,6 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	public void onStop() {
 		super.onStop();
 		//Log.d(TAG, "onStop()");
-		isOnStopCalled = true;
 		/**
 		 * Revert toolbar & layered status bar updates here itself.
 		 * We prefer reverting these changes here itself rather than applying updates for each screen 
@@ -407,19 +379,26 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
 	}
 	
-	/*@Override
-	public void onDestroy() {
-		super.onDestroy();
+	@Override
+	public void onDestroyView() {
+		/**
+		 * Following call is required to prevent non-removal of onGlobalLayoutListener. If onGlobalLayout() 
+		 * is not called yet & screen gets destroyed, then removal of onGlobalLayoutListener will not happen ever 
+		 * since fragment won't be able to find its view tree observer. So, better to make sure
+		 * that it gets removed at the end from onDestroyView()
+		 * e.g.: discover -> widget click (redirecting to event details) -> following, results in very fast calls
+		 * to onCreateView()-onDestroyView()-onDestroy() of this fragment due to which onGlobalLayout() doesn't get a 
+		 * chance to remove global layout listener before fragment gets destroyed. 
+		 */
 		if (VersionUtil.isApiLevelAbove15()) {
 			recyclerVEvents.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
 
 		} else {
 			recyclerVEvents.getViewTreeObserver().removeGlobalOnLayoutListener(onGlobalLayoutListener);
 		}
-		onGlobalLayoutListener = null;
-		recyclerVEvents = null;
-		Log.d(TAG, "onDestroy(), " + this);
-	}*/
+		super.onDestroyView();
+		//Log.d(TAG, "onDestroyView()");
+	}
 	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -1502,6 +1481,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 
 	@Override
 	public void onPoppedFromBackStack() {
+		//Log.d(TAG, "onPoppedFromBackStack()");
 		if (isOnPushedToBackStackCalled) {
 			isOnPushedToBackStackCalled = false;
 			
@@ -1538,6 +1518,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		
 		setMenuVisibility(false);
 		isOnPushedToBackStackCalled = true;
+		//Log.d(TAG, "onPushedToBackStack()");
 	}
 
 	@Override
@@ -1557,5 +1538,10 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 				onScrolled(0, true);
 			}
 		});
+	}
+
+	@Override
+	public boolean isOnTop() {
+		return !isOnPushedToBackStackCalled;
 	}
 }

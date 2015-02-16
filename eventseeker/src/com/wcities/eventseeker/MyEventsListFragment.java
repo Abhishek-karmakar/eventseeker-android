@@ -224,5 +224,11 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 			view.setVisibility(View.VISIBLE);
 		}
 		hiddenViews.clear();
+	}
+
+	@Override
+	public boolean isOnTop() {
+		// TODO Auto-generated method stub
+		return false;
 	}	
 }

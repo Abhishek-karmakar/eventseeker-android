@@ -23,6 +23,7 @@ public abstract class PublishArtistFragment extends Fragment implements PublishL
 	//protected ConnectionResult mConnectionResult;
 
 	private boolean isPublishPermissionDisplayed;
+	protected boolean callOnlySuperOnStart;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -33,9 +34,14 @@ public abstract class PublishArtistFragment extends Fragment implements PublishL
 	@Override
 	public void onStart() {
 		//Log.d(TAG, "onStart()");
-		Session session = Session.getActiveSession();
-		if (session != null) {
-			session.addCallback(this);
+		if (callOnlySuperOnStart) {
+			callOnlySuperOnStart = false;
+			
+		} else {
+			Session session = Session.getActiveSession();
+			if (session != null) {
+				session.addCallback(this);
+			}
 		}
 		super.onStart();
 	}

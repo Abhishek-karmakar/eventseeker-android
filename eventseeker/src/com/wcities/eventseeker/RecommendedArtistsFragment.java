@@ -239,6 +239,12 @@ public class RecommendedArtistsFragment extends PublishArtistFragmentLoadableFro
 	
 	@Override
 	public void onStart() {
+		if (!isOnTop()) {
+			callOnlySuperOnStart = true;
+			super.onStart();
+			return;
+		}
+		
 		super.onStart();
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		ma.setToolbarElevation(0);
@@ -557,6 +563,11 @@ public class RecommendedArtistsFragment extends PublishArtistFragmentLoadableFro
 			
 			setMenuVisibility(true);
 		}
+	}
+
+	@Override
+	public boolean isOnTop() {
+		return !isOnPushedToBackStackCalled;
 	}
 
 }

@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -59,20 +58,6 @@ public class NavigationFragment extends FragmentLoadableFromBackStack implements
 			}
 		});
 		return view;
-	}
-	
-	@Override
-	public void onStart() {
-		//Log.d(TAG, "onStart()");
-		super.onStart();
-		/**
-		 * W/o this navigate to google maps/navi bridge & then back results in transparent 
-		 * toolbar
-		 */
-		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
-		ma.setToolbarBg(ma.getResources().getColor(R.color.colorPrimary));
-		ma.setVStatusBarVisibility(View.VISIBLE, R.color.colorPrimaryDark);
-		ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
 	}
 	
 	@Override

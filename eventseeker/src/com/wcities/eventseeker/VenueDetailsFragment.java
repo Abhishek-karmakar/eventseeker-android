@@ -38,6 +38,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
@@ -126,7 +127,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	private boolean isOnCreateViewCalledFirstTime = true;
 	private int screenW, imgVenueHt;
 	private AnimatorSet animatorSet;
-	private boolean isOnPushedToBackStackCalled, isGlobalLayoutListenerValid;
+	private boolean isOnPushedToBackStackCalled;
 	
 	private View rootView;
 	private ImageView imgVenue;
@@ -153,6 +154,26 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			return false;
 		}
 	};
+	
+	private OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+        @Override
+        public void onGlobalLayout() {
+        	//Log.d(TAG, "onGlobalLayout()");
+        	
+			if (VersionUtil.isApiLevelAbove15()) {
+				recyclerVVenues.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+			} else {
+				recyclerVVenues.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+			}
+			
+			onScrolled(0, true);
+			if (((MainActivity)FragmentUtil.getActivity(VenueDetailsFragment.this)).isDrawerOpen()) {
+				// to maintain status bar & toolbar decorations after orientation change
+				onDrawerOpened();
+			}
+        }
+    };
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -216,34 +237,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	    	}
 		});
 		
-		isGlobalLayoutListenerValid = true;
-		recyclerVVenues.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-            	//Log.d(TAG, "onGlobalLayout()");
-            	if (!isGlobalLayoutListenerValid) {
-            		//Log.d(TAG, "return");
-            		return;
-            		
-            	} else {
-            		//Log.d(TAG, "continue");
-            		isGlobalLayoutListenerValid = false;
-            	}
-            	
-				if (VersionUtil.isApiLevelAbove15()) {
-					recyclerVVenues.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-				} else {
-					recyclerVVenues.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-				}
-				
-				onScrolled(0, true);
-				if (((MainActivity)FragmentUtil.getActivity(VenueDetailsFragment.this)).isDrawerOpen()) {
-					// to maintain status bar & toolbar decorations after orientation change
-					onDrawerOpened();
-				}
-            }
-        });
+		recyclerVVenues.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
 		
 		if (isOnCreateViewCalledFirstTime) {
 			isOnCreateViewCalledFirstTime = false;
@@ -278,8 +272,16 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	
 	@Override
 	public void onStart() {
-		super.onStart();
 		//Log.d(TAG, "onStart()");
+
+		if (!isOnTopFHFIR()) {
+			callOnlySuperOnStart = true;
+			super.onStart();
+			return;
+		}
+		
+		super.onStart();
+		
 		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.GONE, AppConstants.INVALID_ID);
 		if (totalScrolledDy != UNSCROLLED) {
 			onScrolled(0, true);
@@ -299,6 +301,24 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		ma.setToolbarBg(ma.getResources().getColor(R.color.colorPrimary));
 		ma.setVStatusBarVisibility(View.VISIBLE, R.color.colorPrimaryDark);
 		ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
+	}
+	
+	@Override
+	public void onDestroyView() {
+		/**
+		 * Following call is required to prevent non-removal of onGlobalLayoutListener. If onGlobalLayout() 
+		 * is not called yet & screen gets destroyed, then removal of onGlobalLayoutListener will not happen ever 
+		 * since fragment won't be able to find its view tree observer. So, better to make sure
+		 * that it gets removed at the end from onDestroyView()
+		 */
+		if (VersionUtil.isApiLevelAbove15()) {
+			recyclerVVenues.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
+
+		} else {
+			recyclerVVenues.getViewTreeObserver().removeGlobalOnLayoutListener(onGlobalLayoutListener);
+		}
+		super.onDestroyView();
+		//Log.d(TAG, "onDestroyView()");
 	}
 	
 	@Override
@@ -1737,5 +1757,15 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	@Override
 	public void onPoppedFromBackStackFHFIR() {
 		onPoppedFromBackStack();
+	}
+
+	@Override
+	public boolean isOnTop() {
+		return !isOnPushedToBackStackCalled;
+	}
+
+	@Override
+	public boolean isOnTopFHFIR() {
+		return !isOnPushedToBackStackCalled;
 	}
 }

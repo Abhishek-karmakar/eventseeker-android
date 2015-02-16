@@ -969,4 +969,9 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 			hiddenViews.add(views[i]);
 		}
 	}
+
+	@Override
+	public boolean isOnTop() {
+		return false;
+	}
 }

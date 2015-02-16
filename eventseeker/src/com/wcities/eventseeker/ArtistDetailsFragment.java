@@ -39,6 +39,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
@@ -172,6 +173,25 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		}
 	};
 	
+	private OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+        @Override
+        public void onGlobalLayout() {
+        	//Log.d(TAG, "onGlobalLayout()");
+			if (VersionUtil.isApiLevelAbove15()) {
+				recyclerVArtists.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+			} else {
+				recyclerVArtists.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+			}
+			
+			onScrolled(0, true);
+			if (((MainActivity)FragmentUtil.getActivity(ArtistDetailsFragment.this)).isDrawerOpen()) {
+				// to maintain status bar & toolbar decorations after orientation change
+				onDrawerOpened();
+			}
+        }
+    };
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -243,24 +263,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	    	}
 		});
 		
-		recyclerVArtists.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-            	//Log.d(TAG, "onGlobalLayout()");
-				if (VersionUtil.isApiLevelAbove15()) {
-					recyclerVArtists.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-				} else {
-					recyclerVArtists.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-				}
-				
-				onScrolled(0, true);
-				if (((MainActivity)FragmentUtil.getActivity(ArtistDetailsFragment.this)).isDrawerOpen()) {
-					// to maintain status bar & toolbar decorations after orientation change
-					onDrawerOpened();
-				}
-            }
-        });
+		recyclerVArtists.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
 		
 		if (isOnCreateViewCalledFirstTime) {
 			fabSave.setVisibility(View.INVISIBLE);
@@ -305,6 +308,12 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	@Override
 	public void onStart() {
 		//Log.d(TAG, "onStart()");
+		if (!isOnTopFHFIR()) {
+			callOnlySuperOnStart = true;
+			super.onStart();
+			return;
+		}
+		
 		super.onStart();
 		
 		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.GONE, AppConstants.INVALID_ID);
@@ -325,6 +334,24 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		ma.setToolbarBg(ma.getResources().getColor(R.color.colorPrimary));
 		ma.setVStatusBarVisibility(View.VISIBLE, R.color.colorPrimaryDark);
 		ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
+	}
+	
+	@Override
+	public void onDestroyView() {
+		/**
+		 * Following call is required to prevent non-removal of onGlobalLayoutListener. If onGlobalLayout() 
+		 * is not called yet & screen gets destroyed, then removal of onGlobalLayoutListener will not happen ever 
+		 * since fragment won't be able to find its view tree observer. So, better to make sure
+		 * that it gets removed at the end from onDestroyView()
+		 */
+		if (VersionUtil.isApiLevelAbove15()) {
+			recyclerVArtists.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
+
+		} else {
+			recyclerVArtists.getViewTreeObserver().removeGlobalOnLayoutListener(onGlobalLayoutListener);
+		}
+		super.onDestroyView();
+		//Log.d(TAG, "onDestroyView()");
 	}
 	
 	@Override
@@ -1887,5 +1914,15 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			FbUtil.handlePublishArtist(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
 					AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, artist);
 		}
+	}
+
+	@Override
+	public boolean isOnTopFHFIR() {
+		return !isOnPushedToBackStackCalled;
+	}
+
+	@Override
+	public boolean isOnTop() {
+		return !isOnPushedToBackStackCalled;
 	}
 }

@@ -225,6 +225,12 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 	
 	@Override
 	public void onStart() {
+		if (!isOnTop()) {
+			callOnlySuperOnStart = true;
+			super.onStart();
+			return;
+		}
+		
 		super.onStart();
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		ma.setToolbarElevation(0);
@@ -463,5 +469,10 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 			}
 			hiddenViews.clear();
 		}
+	}
+
+	@Override
+	public boolean isOnTop() {
+		return !isOnPushedToBackStackCalled;
 	}
 }

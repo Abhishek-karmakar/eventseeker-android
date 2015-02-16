@@ -31,6 +31,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
@@ -97,6 +98,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	private static final int TRANSITION_ANIM_DURATION = 400, FAB_SCROLL_THRESHOLD_IN_DP = 4;
 	
 	private View rootView;
+	private ObservableScrollView obsrScrlV;
 	private ImageView imgEvent, imgDown;
 	private TextView txtEvtTitle, txtEvtDesc, txtEvtLoc, txtVenue, txtEvtTime;
 	private RelativeLayout rltLytContent, rltLytFeaturing, rltLytPrgsBar, rltLytVenue, rltLytFriends;
@@ -144,6 +146,30 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			return false;
 		}
 	};
+	
+	private OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+        @Override
+        public void onGlobalLayout() {
+        	//Log.d(TAG, "onGlobalLayout()");
+			if (VersionUtil.isApiLevelAbove15()) {
+				obsrScrlV.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+			} else {
+				obsrScrlV.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+			}
+			
+            if (prevScrollY == UNSCROLLED) {
+            	onScrollChanged(obsrScrlV.getScrollY(), true);
+            	
+            } else {
+            	obsrScrlV.scrollTo(0, prevScrollY);
+            	
+            	if (((MainActivity)FragmentUtil.getActivity(EventDetailsFragment.this)).isDrawerOpen()) {
+    				onDrawerOpened();
+    			}
+            }
+        }
+    };
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -204,7 +230,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		
 		updateEventImg();
 		
-		final ObservableScrollView obsrScrlV = (ObservableScrollView) rootView.findViewById(R.id.obsrScrlV);
+		obsrScrlV = (ObservableScrollView) rootView.findViewById(R.id.obsrScrlV);
 		obsrScrlV.setListener(this);
 		
 		rltLytPrgsBar = (RelativeLayout) rootView.findViewById(R.id.rltLytPrgsBar);
@@ -246,29 +272,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		vPagerFeaturing.setPageMargin(FragmentUtil.getResources(this).getDimensionPixelSize(
 				R.dimen.rlt_lyt_root_w_featuring_artist) - screenW);
 		
-		obsrScrlV.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                    	//Log.d(TAG, "onGlobalLayout()");
-						if (VersionUtil.isApiLevelAbove15()) {
-							obsrScrlV.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-						} else {
-							obsrScrlV.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-						}
-						
-                        if (prevScrollY == UNSCROLLED) {
-                        	onScrollChanged(obsrScrlV.getScrollY(), true);
-                        	
-                        } else {
-                        	obsrScrlV.scrollTo(0, prevScrollY);
-                        	
-                        	if (((MainActivity)FragmentUtil.getActivity(EventDetailsFragment.this)).isDrawerOpen()) {
-                				onDrawerOpened();
-                			}
-                        }
-                    }
-                });
+		obsrScrlV.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
 		
 		if (isOnCreateViewCalledFirstTime) { 
 			isOnCreateViewCalledFirstTime = false;
@@ -301,6 +305,13 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	@Override
 	public void onStart() {
 		//Log.d(TAG, "onStart()");
+
+		if (!isOnTop()) {
+			callOnlySuperOnStart = true;
+			super.onStart();
+			return;
+		}
+		
 		super.onStart();
 		
 		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.GONE, AppConstants.INVALID_ID);
@@ -322,6 +333,23 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		ma.setToolbarBg(ma.getResources().getColor(R.color.colorPrimary));
 		ma.setVStatusBarVisibility(View.VISIBLE, R.color.colorPrimaryDark);
 		ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
+	}
+	
+	@Override
+	public void onDestroyView() {
+		/**
+		 * Following call is required to prevent non-removal of onGlobalLayoutListener. If onGlobalLayout() 
+		 * is not called yet & screen gets destroyed, then removal of onGlobalLayoutListener will not happen ever 
+		 * since fragment won't be able to find its view tree observer. So, better to make sure
+		 * that it gets removed at the end from onDestroyView()
+		 */
+		if (VersionUtil.isApiLevelAbove15()) {
+			obsrScrlV.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
+
+		} else {
+			obsrScrlV.getViewTreeObserver().removeGlobalOnLayoutListener(onGlobalLayoutListener);
+		}
+		super.onDestroyView();
 	}
 	
 	@Override
@@ -1002,5 +1030,10 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			fbCallCountForSameEvt = 0;
 			setPendingAnnounce(false);
 		}
+	}
+
+	@Override
+	public boolean isOnTop() {
+		return !isOnPushedToBackStackCalled;
 	}
 }

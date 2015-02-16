@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -146,13 +145,13 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 	public void onStart() {
 		//Log.d(TAG, "onStart()");
 		super.onStart();
+		
+		if (!isOnTop()) {
+			return;
+		}
+		
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		ma.setToolbarElevation(0);
-		/**
-		 * W/o this search from artist/venue details screen followed by lock-unlock results in transparent 
-		 * toolbar
-		 */
-		ma.setToolbarBg(ma.getResources().getColor(R.color.colorPrimary));
 
 		/**
 		 * Even though we want status bar in this case, mark it gone to have smoother transition to detail fragment
@@ -278,5 +277,10 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 			
 			((CustomSharedElementTransitionSource) mTabsAdapter.getSelectedFragment()).onPoppedFromBackStack();
 		}
+	}
+
+	@Override
+	public boolean isOnTop() {
+		return !isOnPushedToBackStackCalled;
 	}
 }

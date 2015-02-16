@@ -277,4 +277,9 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 		}
 		hiddenViews.clear();
 	}
+
+	@Override
+	public boolean isOnTop() {
+		return false;
+	}
 }

@@ -186,6 +186,11 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 	@Override
 	public void onStart() {
 		super.onStart();
+
+		if (!isOnTop()) {
+			return;
+		}
+		
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		ma.setToolbarElevation(0);
 		/**
@@ -349,6 +354,11 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 			}
 			hiddenViews.clear();
 		}
+	}
+	
+	@Override
+	public boolean isOnTop() {
+		return !isOnPushedToBackStackCalled;
 	}
 	
 	protected abstract AbsListView getScrollableView();
