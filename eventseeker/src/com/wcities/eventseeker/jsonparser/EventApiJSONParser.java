@@ -110,6 +110,7 @@ public class EventApiJSONParser {
 				fillArtists(event, jObjEvent);
 				
 			} else {
+				event.setHasArtists(false);
 				//Log.i(TAG, "No artist found belonging to this event.");
 			}
 			

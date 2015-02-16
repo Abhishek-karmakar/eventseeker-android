@@ -21,7 +21,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
@@ -74,6 +73,7 @@ import com.wcities.eventseeker.custom.fragment.PublishEventListFragment;
 import com.wcities.eventseeker.custom.fragment.PublishEventListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.custom.view.CircleImageView;
 import com.wcities.eventseeker.custom.view.ResizableImageView;
+import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.interfaces.PublishListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
@@ -82,9 +82,13 @@ import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.VersionUtil;
+import com.wcities.eventseeker.util.ViewUtil;
+import com.wcities.eventseeker.viewdata.SharedElement;
+import com.wcities.eventseeker.viewdata.SharedElementPosition;
 
 public class FriendsActivityFragment extends PublishEventListFragmentLoadableFromBackStack implements 
-		StatusCallback, OnClickListener, PublishListener {
+		StatusCallback, OnClickListener, PublishListener, CustomSharedElementTransitionSource {
 	
 	private static final String TAG = FriendsActivityFragment.class.getName();
 	
@@ -127,6 +131,8 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	 * then changed the orientation.
 	 */
 	private Resources res;
+	private List<View> hiddenViews;
+	private boolean isOnPushedToBackStackCalled;
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -145,17 +151,33 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 			wcitiesId = ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId();
 		}
 		
-		//isTablet = ((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).isTablet();
 		res = FragmentUtil.getResources(this);
+		hiddenViews = new ArrayList<View>();
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-		/*is7InchTabletInPortrait = ((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext())
-				.is7InchTabletAndInPortraitMode();*/
-		//orientation = getResources().getConfiguration().orientation;
 		View v = inflater.inflate(R.layout.fragment_friends_activity_list, null);
+		
+		/**
+		 * add extra top margin (equal to statusbar height) since we are removing vStatusBar from onStart() 
+		 * even though we want search screen to have this statusbar. We had to mark VStatusBar as GONE from 
+		 * onStart() so that on transition from any search child fragment (SearchArtists/SearchEvents/SearchVenues)
+		 * to corresponding details screen doesn't cause jumping effect on search screen, as we remove vStatusBar 
+		 * on detail screen when this search screen is visible in the background
+		 */
+		if (VersionUtil.isApiLevelAbove18()) {
+			Resources res = FragmentUtil.getResources(this);
+			RelativeLayout rltLayoutRoot = (RelativeLayout) v.findViewById(R.id.rltLayoutRoot);
+			/*RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) rltLayoutRoot.getLayoutParams();
+			lp.topMargin = res.getDimensionPixelSize(R.dimen.common_t_mar_pad_for_all_layout) 
+					+ ViewUtil.getStatusBarHeight(res);
+			rltLayoutRoot.setLayoutParams(lp);*/
+			rltLayoutRoot.setPadding(0, res.getDimensionPixelSize(R.dimen.common_t_mar_pad_for_all_layout) 
+					+ ViewUtil.getStatusBarHeight(res), 0, 0);
+		}
+		
 		rltDummyLyt = v.findViewById(R.id.rltDummyLyt);
 		scrlVRootNoItemsFoundWithAction = (ScrollView) v.findViewById(R.id.scrlVRootNoItemsFoundWithAction);
 		v.findViewById(R.id.btnAction).setOnClickListener(this);
@@ -168,7 +190,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 		
 		if (friendNewsItems == null) {
 			friendNewsItems = new ArrayList<FriendNewsItem>();
-			friendActivityListAdapter = new FriendActivityListAdapter(FragmentUtil.getActivity(this));
+			friendActivityListAdapter = new FriendActivityListAdapter(FragmentUtil.getActivity(this), this);
 	        
 			friendNewsItems.add(null);
 			loadFriendsNewsInBackground();
@@ -185,13 +207,6 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 		getListView().setScrollingCacheEnabled(false);
 		
 		final int pos = firstVisibleActivityItemPosition;
-		/*if(is7InchTabletInPortrait) {
-			pos = firstVisibleActivityItemPosition;
-		} else if (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) {
-			pos = firstVisibleActivityItemPosition;			
-		} else {
-			pos = (int)Math.floor(firstVisibleActivityItemPosition / 2.0);
-		}*/
 		
 		getListView().post(new Runnable() {
 			
@@ -218,17 +233,24 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	}
 	
 	@Override
+	public void onStart() {
+		super.onStart();
+		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+		ma.setToolbarElevation(0);
+		/**
+		 * Even though we want status bar in this case, mark it gone to have smoother transition to detail fragment
+		 * & prevent jumping effect on search screen, caused due to removal of status bar on detail screen when this 
+		 * search screen is visible in background.
+		 */
+		ma.setVStatusBarVisibility(View.GONE, AppConstants.INVALID_ID);
+		ma.setVStatusBarLayeredVisibility(View.VISIBLE, R.color.colorPrimaryDark);
+	}
+	
+	@Override
 	public void onDestroyView() {
 		//Log.d(TAG, "onDestroyView()");
 		
 		firstVisibleActivityItemPosition = getListView().getFirstVisiblePosition();
-		/*if(is7InchTabletInPortrait) {
-			firstVisibleActivityItemPosition = getListView().getFirstVisiblePosition();
-		} else if (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) {
-			firstVisibleActivityItemPosition = getListView().getFirstVisiblePosition();			
-		} else {
-			firstVisibleActivityItemPosition = getListView().getFirstVisiblePosition() * 2;;
-		}*/
 		
 		for (int i = getListView().getFirstVisiblePosition(), j = 0; 
 				i <= getListView().getLastVisiblePosition(); i++, j++) {
@@ -260,7 +282,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.d(TAG, "onActivityResult(), requestCode = " + requestCode);
+		//Log.d(TAG, "onActivityResult(), requestCode = " + requestCode);
 		if (isPendingAnnounce()) {
 			super.onActivityResult(requestCode, resultCode, data);
 			
@@ -352,13 +374,21 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	    private FriendNewsItem newsItemPendingPublish;
 		private CheckBox newsItemPendingPublishChkBoxSave;
 		private int fbCallCountForSameEvt = 0;
+		private Context mContext;
+		
+		private CustomSharedElementTransitionSource customSharedElementTransitionSource;
 
-	    public FriendActivityListAdapter(Context context) {
+	    public FriendActivityListAdapter(Context context, 
+	    		CustomSharedElementTransitionSource customSharedElementTransitionSource) {
+	    	mContext = context;
 	        mInflater = LayoutInflater.from(context);
 	        eventSeekr = (EventSeekr)context.getApplicationContext();
+	        
+			this.customSharedElementTransitionSource = customSharedElementTransitionSource;
 	    }
 	    
 	    public void setmInflater(Context context) {
+	    	mContext = context;
 	        mInflater = LayoutInflater.from(context);
 		}
 
@@ -380,18 +410,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 				
 			} else {
 				FriendNewsItemViewHolder holder;
-				
-				/*if ((item instanceof List)
-						&& ((List<FriendNewsItem>)item).get(0).getFriendId().equals(AppConstants.INVALID_STR_ID) 
-					|| (item instanceof FriendNewsItem)
-						&& ((FriendNewsItem)item).getFriendId().equals(AppConstants.INVALID_STR_ID)) {
-					
-					convertView = mInflater.inflate(R.layout.list_no_items_found, null);
-					((TextView)convertView).setText("No Friends Activity Found.");
-					convertView.setTag("");
-					return convertView;
-					
-				} else */if (convertView == null || !(convertView.getTag() instanceof FriendNewsItemViewHolder)) {
+				if (convertView == null || !(convertView.getTag() instanceof FriendNewsItemViewHolder)) {
 					convertView = mInflater.inflate(R.layout.item_list_friends_activity, null);
 					holder = new FriendNewsItemViewHolder();
 					
@@ -407,23 +426,6 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 					holder.lnrTickets = (LinearLayout) rltLayoutNewsItemContainer.findViewById(R.id.lnrTickets);
 					holder.chkSave = (CheckBox) rltLayoutNewsItemContainer.findViewById(R.id.chkSave);
 					holder.chkBtnBuy = (CheckBox) rltLayoutNewsItemContainer.findViewById(R.id.chkBuyTickets);
-					
-					/*RelativeLayout rltLayoutNewsItem2Container = holder.rltLayoutNewsItem2Container 
-							= (RelativeLayout) convertView.findViewById(R.id.rltLayoutNewsItemContainer2);
-					holder.txtTitle2 = (TextView) rltLayoutNewsItem2Container.findViewById(R.id.txtTitle);
-					holder.imgEvt2 = (ResizableImageView) rltLayoutNewsItem2Container.findViewById(R.id.imgEvt);
-					holder.lnrLayoutEvtInfo2 = (RelativeLayout) rltLayoutNewsItem2Container.findViewById(R.id.lnrLayoutEvtInfo);
-					holder.lnrLayoutBtns2 = (LinearLayout) rltLayoutNewsItem2Container.findViewById(R.id.lnrLayoutBtns);
-					holder.lnrLayoutBtnLike2 = (LinearLayout) rltLayoutNewsItem2Container.findViewById(R.id.lnrLayoutBtnLike);
-					holder.lnrLayoutBtnComment2 = (LinearLayout) rltLayoutNewsItem2Container.findViewById(R.id.lnrLayoutBtnComment);
-					holder.txtEvtTime2 = (TextView) rltLayoutNewsItem2Container.findViewById(R.id.txtEvtTime);
-					holder.txtVenueTitle2 = (TextView) rltLayoutNewsItem2Container.findViewById(R.id.txtVenueTitle);
-					holder.lnrLytTrackBtns2 = (LinearLayout) rltLayoutNewsItem2Container.findViewById(R.id.lnrLayoutTrackBtns);
-					holder.btnBuyTickets2 = (Button) rltLayoutNewsItem2Container.findViewById(R.id.btnBuyTickets);
-					holder.lnrLayoutTickets2 = (LinearLayout) rltLayoutNewsItem2Container.findViewById(R.id.lnrLayoutTickets);
-					holder.chkBoxGoing2 = (CheckBox) rltLayoutNewsItem2Container.findViewById(R.id.chkBoxGoing);
-					holder.chkBoxWantToGo2 = (CheckBox) rltLayoutNewsItem2Container.findViewById(R.id.chkBoxWantToGo);
-					holder.progressBar2 = (ProgressBar) rltLayoutNewsItem2Container.findViewById(R.id.progressBar);*/
 					
 					convertView.setTag(holder);
 					
@@ -441,17 +443,6 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 		public Object getItem(int position) {
 
 			return friendNewsItems.get(position); // returning an object of FriendNewsItem, NOT A LIST 
-			/*if (is7InchTabletInPortrait || (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet)) {
-				return friendNewsItems.get(position); // returning an object of FriendNewsItem, NOT A LIST 
-				
-			} else {
-				List<FriendNewsItem> friendsNewsItemList = new ArrayList<FriendNewsItem>();
-				friendsNewsItemList.add(friendNewsItems.get(position * 2));
-				if (friendNewsItems.size() > position * 2 + 1) {
-					friendsNewsItemList.add(friendNewsItems.get(position * 2 + 1));
-				}
-				return friendsNewsItemList; // returning an object of List<FriendNewsItem>
-			}*/
 		}
 
 		@Override
@@ -462,12 +453,6 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 		@Override
 		public int getCount() {
 			return friendNewsItems.size();
-			//Mithil: In tablet we have to show two elements in both the cases
-			/*if (is7InchTabletInPortrait || (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet)) {
-				return friendNewsItems.size();
-			} else {
-				return (int) Math.ceil(friendNewsItems.size() / 2.0);
-			}*/
 		}
 		
 		private class FriendNewsItemViewHolder {
@@ -479,89 +464,11 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 			private LinearLayout lnrSave, lnrLike, lnrComment, lnrTickets;
 			private CheckBox chkSave, chkBtnBuy;
 			
-			/*private RelativeLayout rltLayoutNewsItemContainer;
-			private ResizableImageView imgEvt;
-			private TextView txtTitle, txtEvtTime, txtVenueTitle;
-			private LinearLayout lnrLayoutBtns, lnrLayoutBtnLike, lnrLayoutBtnComment;
-			private LinearLayout lnrLytTrackBtns, lnrLayoutTickets;
-			private Button btnBuyTickets;
-			private CheckBox chkSave, chkBoxWantToGo;*/
-			
-			/*private RelativeLayout rltLayoutNewsItem2Container, lnrLayoutEvtInfo2;
-			private ResizableImageView imgEvt2;
-			private TextView txtTitle2, txtEvtTime2, txtVenueTitle2;
-			private LinearLayout lnrLayoutBtns2, lnrLayoutBtnLike2, lnrLayoutBtnComment2;
-			private LinearLayout lnrLytTrackBtns2, lnrLayoutTickets2;
-			private Button btnBuyTickets2;
-			private CheckBox chkBoxGoing2, chkBoxWantToGo2;
-			private ProgressBar progressBar2;*/
-			
 			private void setContent(Object listItem, ViewGroup parent, int pos) {
 				setNewsItemContent((FriendNewsItem) listItem, parent, pos);
-				/*if (listItem instanceof FriendNewsItem) {
-					//Log.d(TAG, "ArtistNewsItem");
-					rltLayoutNewsItem2Container.setVisibility(View.GONE);
-					setNewsItemContent((FriendNewsItem) listItem, parent, pos);
-					
-				} else {
-					List<FriendNewsItem> friendNewsItemList = (List<FriendNewsItem>) listItem;
-					setNewsItemContent((FriendNewsItem) friendNewsItemList.get(0), parent, pos);
-					
-					// Check if we have 2nd non-null item
-					if (friendNewsItemList.size() == 2 && friendNewsItemList.get(1) != null) {
-						//Log.d(TAG, "not ArtistNewsItem, size = 2");
-						rltLayoutNewsItem2Container.setVisibility(View.VISIBLE);
-						setProgressBar2Visibility(false);
-						setNewsItem2Content((FriendNewsItem) friendNewsItemList.get(1), parent, pos);
-						
-					} else if ((loadFriendsNews == null || loadFriendsNews.getStatus() == Status.FINISHED) && 
-							isMoreDataAvailable) {
-						rltLayoutNewsItem2Container.setVisibility(View.VISIBLE);
-						setProgressBar2Visibility(true);
-						loadFriendsNewsInBackground();
-						
-					} else {
-						//Log.d(TAG, "not ArtistNewsItem, size = 1");
-						rltLayoutNewsItem2Container.setVisibility(View.INVISIBLE);
-					}
-				}*/
 			}
 			
-			/*private void setProgressBar2Visibility(boolean isProgress) {
-				int progressVisibility, othersVisibility;
-				if (isProgress) {
-					progressVisibility = View.VISIBLE;
-					othersVisibility = View.INVISIBLE;
-					
-				} else {
-					progressVisibility = View.INVISIBLE;
-					othersVisibility = View.VISIBLE;
-				}
-				
-				progressBar2.setVisibility(progressVisibility);
-				txtTitle2.setVisibility(othersVisibility);
-				imgEvt2.setVisibility(othersVisibility);
-				lnrLayoutEvtInfo2.setVisibility(othersVisibility);
-				lnrLayoutBtns2.setVisibility(othersVisibility);
-			}*/
-			
 			private void setNewsItemContent(final FriendNewsItem item, ViewGroup parent, int pos) {
-				/*switch (item.getAttending()) {
-				case GOING:
-					txtTitle.setText(res.getString(R.string.is_going_to, item.getFriend().getName(), item.getTrackName()));
-					break;
-					
-				case WANTS_TO_GO:
-					txtTitle.setText(res.getString(R.string.wants_to_go_to, item.getFriend().getName(), item.getTrackName()));
-					break;
-
-				case SAVED:
-					txtTitle.setText(res.getString(R.string.saved, item.getFriend().getName(), item.getTrackName()));
-					break;
-
-				default:
-					break;
-				}*/
 				txtTitle.setText(res.getString(R.string.saved, item.getFriend().getName(), item.getTrackName()));
 				
 				String key = item.getFriend().getKey(ImgResolution.LOW);
@@ -605,7 +512,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 						
 						@Override
 						public void onClick(View v) {
-							Log.d(TAG, "like onClick()");
+							//Log.d(TAG, "like onClick()");
 							fbPostId = item.getFbPostId();
 							publishRequest = PublishRequest.LIKE;
 							handlePublish();
@@ -634,105 +541,34 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 					
 					@Override
 					public void onClick(View v) {
-						((EventListener)FragmentUtil.getActivity(FriendsActivityFragment.this)).onEventSelected(item.toEvent());
+						/*((EventListener)FragmentUtil.getActivity(FriendsActivityFragment.this))
+							.onEventSelected(item.toEvent());*/
+						List<SharedElement> sharedElements = new ArrayList<SharedElement>();
+
+						int[] loc = ViewUtil.getLocationOnScreen(imgEvt, mContext.getResources());
+						SharedElementPosition sharedElementPosition = new SharedElementPosition(loc[0], 
+								loc[1], imgEvt.getWidth(), imgEvt.getHeight());
+						
+						SharedElement sharedElement = new SharedElement(sharedElementPosition, imgEvt);
+						sharedElements.add(sharedElement);
+						customSharedElementTransitionSource.addViewsToBeHidden(imgEvt);
+						
+						((EventListener) mContext).onEventSelected(item.toEvent(), sharedElements);
+
+						customSharedElementTransitionSource.onPushedToBackStack();
 					}
 				});
 			}
-			
-			/*private void setNewsItem2Content(final FriendNewsItem item, ViewGroup parent, int pos) {
-				switch (item.getAttending()) {
-				case GOING:
-					txtTitle2.setText(res.getString(R.string.is_going_to, item.getFriendName(), item.getTrackName()));
-					break;
-					
-				case WANTS_TO_GO:
-					txtTitle2.setText(res.getString(R.string.wants_to_go_to, item.getFriendName(), item.getTrackName()));
-					break;
-
-				default:
-					break;
-				}
-				
-				String key = item.getKey(ImgResolution.HIGH);
-		        BitmapCache bitmapCache = BitmapCache.getInstance();
-				Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
-				if (bitmap != null) {
-					imgEvt2.setImageBitmap(bitmap);
-			        
-			    } else {
-					imgEvt2.setImageResource(R.drawable.placeholder);
-			        AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-			        asyncLoadImg.loadImg(imgEvt2, ImgResolution.HIGH, (AdapterView) parent, 
-			        		pos, item);
-			    }
-				
-				txtVenueTitle2.setText(item.getVenueName());
-				
-				Date date = item.getStartTime();
-				if (date == null) {
-					txtEvtTime2.setVisibility(View.INVISIBLE);
-					
-				} else {
-					txtEvtTime2.setVisibility(View.VISIBLE);
-					
-					DateFormat dateFormat = new SimpleDateFormat("EEE MMMM dd, yyyy");
-					txtEvtTime2.setText(dateFormat.format(date.getStartDate()));
-				}
-				
-				if (item.getFbPostId() != null) {
-					lnrLytTrackBtns2.setVisibility(View.INVISIBLE);
-					lnrLayoutBtns2.setVisibility(View.VISIBLE);
-					rltLayoutNewsItem2Container.setPadding(0, 0, 0, 0);
-					
-					lnrLayoutBtnLike2.setOnClickListener(new View.OnClickListener() {
-						
-						@Override
-						public void onClick(View v) {
-							Log.d(TAG, "like onClick()");
-							fbPostId = item.getFbPostId();
-							publishRequest = PublishRequest.LIKE;
-							handlePublish();
-						}
-					});
-					
-					lnrLayoutBtnComment2.setOnClickListener(new View.OnClickListener() {
-						
-						@Override
-						public void onClick(View v) {
-							fbPostId = item.getFbPostId();
-							publishRequest = PublishRequest.COMMENT;
-							handlePublish();
-						}
-					});
-					
-				} else {
-					lnrLayoutBtns2.setVisibility(View.INVISIBLE);
-					lnrLytTrackBtns2.setVisibility(View.VISIBLE);
-					setBuyTickets(item, btnBuyTickets2, lnrLayoutTickets2);
-					setChkBoxes(item, chkBoxGoing2, chkBoxWantToGo2);
-				}
-				rltLayoutNewsItem2Container.setOnClickListener(new OnClickListener() {
-					
-					@Override
-					public void onClick(View v) {
-						((EventListener)FragmentUtil.getActivity(FriendsActivityFragment.this)).onEventSelected(item.toEvent());
-					}
-				});
-			}*/
 			
 			private void setBuyTickets(final FriendNewsItem item) {
 				
 				if (item.getBookingUrl() != null) {
 					chkBtnBuy.setEnabled(true);
 					chkBtnBuy.setTextColor(res.getColor(color.black));
-					/*btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(res.getDrawable(
-							R.drawable.tickets_grey), null, null, null);*/
 
 				} else {
 					chkBtnBuy.setEnabled(false);
 					chkBtnBuy.setTextColor(res.getColor(R.color.btn_buy_tickets_disabled_txt_color));
-					/*btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(res.getDrawable(
-							R.drawable.tickets_disabled), null, null, null);*/
 				}
 				
 				lnrTickets.setOnClickListener(new OnClickListener() {
@@ -800,38 +636,12 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 						((PublishEventListFragment)FriendsActivityFragment.this).setFriendNewsItem(newsItemPendingPublish);
 						((PublishEventListFragment)FriendsActivityFragment.this).handlePublishEvent();
 					}
-					
-					/*
-					 EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(discoverFragment).getApplication();
-						if (event.getAttending() == Attending.SAVED) {
-							event.setAttending(Attending.NOT_GOING);
-							new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.event, event.getId(), 
-									event.getAttending().getValue(), UserTrackingType.Add).execute();
-							updateImgSaveSrc(holder, event, FragmentUtil.getResources(discoverFragment));
-							
-						} else {
-							discoverFragment.event = eventPendingPublish = event;
-							holderPendingPublish = holder;
-							
-							if (eventSeekr.getFbUserId() != null) {
-								fbCallCountForSameEvt = 0;
-								event.setNewAttending(Attending.SAVED);
-								FbUtil.handlePublishEvent(discoverFragment, discoverFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-										AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
-								
-							} else if (eventSeekr.getGPlusUserId() != null) {
-								event.setNewAttending(Attending.SAVED);
-								discoverFragment.handlePublishEvent();
-							}
-						}
-					 */
-					
 				}
 			}
 		}
 		
 		public void call(Session session, SessionState state, Exception exception) {
-			Log.d(TAG, "call()");
+			//Log.d(TAG, "call()");
 			fbCallCountForSameEvt++;
 			/**
 			 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
@@ -899,6 +709,16 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	    }
 	    
 	    @Override
+		public void onStop() {
+			super.onStop();
+			//Log.d(TAG, "onStop()");
+			MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
+			ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
+			ma.setVStatusBarVisibility(View.VISIBLE, R.color.colorPrimaryDark);
+			ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
+		}
+	    
+	    @Override
 	    public void onDestroyView() {
 	    	//Log.d(TAG, "dialog retain instance = " + getRetainInstance());
 	    	/**
@@ -926,7 +746,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	    
 	    //Log.d(TAG, "active session, state=" + session.getState().name());
 	    if (!session.isOpened()) {
-	    	Log.d(TAG, "session is not opened");
+	    	//Log.d(TAG, "session is not opened");
 	    	pendingLikeOrComment = true; // Mark that we are currently waiting for opening of session
     		Session.openActiveSession(FragmentUtil.getActivity(this), this, true, this);
     		return false;
@@ -944,7 +764,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	}
 	
 	private void handlePublish() {
-		Log.i(TAG, "handlePublish()");
+		//Log.i(TAG, "handlePublish()");
 		if (canPublishNow()) {
 			if (publishRequest == PublishRequest.LIKE) {
 				postLikeRequest();
@@ -956,7 +776,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	}
 	
 	private boolean hasPublishPermission() {
-		Log.d(TAG, "hasPublishPermission()");
+		//Log.d(TAG, "hasPublishPermission()");
         Session session = Session.getActiveSession();
         /*List<String> permissions = session.getPermissions();
         for (Iterator<String> iterator = permissions.iterator(); iterator.hasNext();) {
@@ -1016,7 +836,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	 * Called when additional permission request is completed successfully.
 	 */
 	private void tokenUpdated() {
-		Log.d(TAG, "tokenUpdated()");
+		//Log.d(TAG, "tokenUpdated()");
 	    // Check if a publish action is in progress
 	    // awaiting a successful reauthorization
 	    if (pendingLikeOrComment) {
@@ -1033,7 +853,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	}
 	
 	private void sessionOpened() {
-		Log.d(TAG, "sessionOpened()");
+		//Log.d(TAG, "sessionOpened()");
 		// Check if a publish action is in progress
 	    // awaiting a successful reauthorization
 	    if (pendingLikeOrComment) {
@@ -1043,9 +863,9 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	}
 	
 	protected void onSessionStateChange(final Session session, SessionState state, Exception exception) {
-		Log.d(TAG, "onSessionStateChange() state = " + state.name());
+		//Log.d(TAG, "onSessionStateChange() state = " + state.name());
 	    if (session != null && session.isOpened()) {
-	    	Log.d(TAG, "session != null && session.isOpened(), state = " + state.name());
+	    	//Log.d(TAG, "session != null && session.isOpened(), state = " + state.name());
 	    	if (state.equals(SessionState.OPENED)) {
 	    		Log.d(TAG, "OPENED");
 	    		// Session opened 
@@ -1063,7 +883,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 
 	@Override
 	public void call(Session session, SessionState state, Exception exception) {
-		Log.d(TAG, "call()");
+		//Log.d(TAG, "call()");
 		if (pendingLikeOrComment) {
 			onSessionStateChange(session, state, exception);
 			
@@ -1125,6 +945,59 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	@Override
 	public String getScreenName() {
 		return "Friend News Screen";
-	}    	
+	}
+
+	@Override
+	public void addViewsToBeHidden(View... views) {
+		for (int i = 0; i < views.length; i++) {
+			hiddenViews.add(views[i]);
+		}
+	}
+
+	@Override
+	public void hideSharedElements() {
+		for (Iterator<View> iterator = hiddenViews.iterator(); iterator.hasNext();) {
+			View view = iterator.next();
+			view.setVisibility(View.INVISIBLE);
+		}
+	}
+
+	@Override
+	public void onPushedToBackStack() {
+		onPushedToBackStack(true);
+	}
+
+	private void onPushedToBackStack(boolean revertToolbarStatusBarChanges) {
+		if (revertToolbarStatusBarChanges) {
+			onStop();
+			
+		} else {
+			/**
+			 * to remove facebook callback. Not calling onStop() to prevent toolbar color changes occurring in between
+			 * the transition
+			 */
+			super.onStop();
+		}
+		
+		isOnPushedToBackStackCalled = true;
+	}
+	
+	@Override
+	public void onPoppedFromBackStack() {
+		if (isOnPushedToBackStackCalled) {
+			isOnPushedToBackStackCalled = false;
+			
+			// to update statusbar visibility
+			onStart();
+			// to call onFragmentResumed(Fragment) of MainActivity (to update title, current fragment tag, etc.)
+			onResume();
+			
+			for (Iterator<View> iterator = hiddenViews.iterator(); iterator.hasNext();) {
+				View view = iterator.next();
+				view.setVisibility(View.VISIBLE);
+			}
+			hiddenViews.clear();
+		}
+	}	
 	
 }
