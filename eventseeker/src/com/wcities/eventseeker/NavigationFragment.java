@@ -65,6 +65,10 @@ public class NavigationFragment extends FragmentLoadableFromBackStack implements
 	public void onStart() {
 		//Log.d(TAG, "onStart()");
 		super.onStart();
+		/**
+		 * W/o this navigate to google maps/navi bridge & then back results in transparent 
+		 * toolbar
+		 */
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		ma.setToolbarBg(ma.getResources().getColor(R.color.colorPrimary));
 		ma.setVStatusBarVisibility(View.VISIBLE, R.color.colorPrimaryDark);
