@@ -41,7 +41,7 @@ public class SpotifyActivity extends Activity implements AuthenticationListener 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		Log.d(TAG, "onCreate() - " + this);
+		//Log.d(TAG, "onCreate() - " + this);
 		super.onCreate(savedInstanceState);
 		
 		if (!((EventSeekr)getApplication()).isTablet()) {
@@ -63,7 +63,7 @@ public class SpotifyActivity extends Activity implements AuthenticationListener 
 	
 	@Override
 	protected void onResume() {
-		Log.d(TAG, "onResume()");
+		//Log.d(TAG, "onResume()");
 		super.onResume();
 		if (!isOnCreateOrOnNewIntentCalled) {
 			finish();
@@ -75,7 +75,7 @@ public class SpotifyActivity extends Activity implements AuthenticationListener 
 	
 	@Override
 	protected void onNewIntent(Intent intent) {
-		Log.d(TAG, "onNewIntent() - " + this);
+		//Log.d(TAG, "onNewIntent() - " + this);
 		super.onNewIntent(intent);
 		isOnCreateOrOnNewIntentCalled = true;
 		if (intent.getData() != null && intent.getData().toString().contains(AppConstants.SPOTIFY_REDIRECT_URI)) {

@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -83,6 +84,7 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 	private ScrollView scrlVRootNoItemsFoundWithAction;
 	private Button btnFollowAll;	
 	private ListView listView;
+	private RelativeLayout rltFollowMoreArtist;
 
 	private Resources res;
 
@@ -137,6 +139,7 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 		
 		listView = (ListView) v.findViewById(android.R.id.list);
 
+		rltFollowMoreArtist = (RelativeLayout) v.findViewById(R.id.rltFollowMoreArtist);
 		btnFollowAll = (Button) v.findViewById(R.id.btnFollowMoreArtists);
 		btnFollowAll.setText(R.string.btn_follow_all);
 		btnFollowAll.setOnClickListener(new View.OnClickListener() {
@@ -270,8 +273,8 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 		 */
 		try {
 			listView.setVisibility(View.GONE);
-			if (btnFollowAll != null) {
-				btnFollowAll.setVisibility(View.GONE);
+			if (rltFollowMoreArtist != null) {
+				rltFollowMoreArtist.setVisibility(View.GONE);
 			}
 			
 		} catch (IllegalStateException e) {
@@ -286,6 +289,11 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 			
 		} else {
 			scrlVRootNoItemsFoundWithAction.setVisibility(View.VISIBLE);
+			
+			RelativeLayout.LayoutParams lp = (LayoutParams) scrlVRootNoItemsFoundWithAction.getLayoutParams();
+			lp.topMargin = FragmentUtil.getResources(this).getDimensionPixelSize(R.dimen.common_t_mar_pad_for_all_layout);
+			scrlVRootNoItemsFoundWithAction.setLayoutParams(lp);
+			
 			((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsHeading)).setText(
 					res.getString(R.string.personalize_your_experience));
 			((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsMsg)).setText(
