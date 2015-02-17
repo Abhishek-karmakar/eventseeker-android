@@ -111,7 +111,7 @@ public class SearchArtistsFragment extends PublishArtistListFragment implements 
 		artistListAdapter.setAddPadding(true);
 		setListAdapter(artistListAdapter);
         getListView().setDivider(null);
-        getListView().setBackgroundResource(R.drawable.story_space);
+        //getListView().setBackgroundResource(R.drawable.story_space);
 	}
 	
 	@Override

@@ -204,11 +204,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 			}
 			prevOrientation = orientation;
 
-			onScrolled(0, true);
-			if (((MainActivity)FragmentUtil.getActivity(DiscoverFragment.this)).isDrawerOpen()) {
-				// to maintain status bar & toolbar decorations after orientation change
-				onDrawerOpened();
-			}
+			onScrolled(0, true, true);
         }
     };
 	
@@ -311,7 +307,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	    	public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 	    		super.onScrolled(recyclerView, dx, dy);
 	    		//Log.d(TAG, "onScrolled - dx = " + dx + ", dy = " + dy);
-	    		DiscoverFragment.this.onScrolled(dy, false);
+	    		DiscoverFragment.this.onScrolled(dy, false, false);
 	    	}
 		});
 	    
@@ -354,11 +350,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.GONE, AppConstants.INVALID_ID);
 		
 		if (totalScrolledDy != UNSCROLLED) {
-			onScrolled(0, true);
-			
-			if (((MainActivity)FragmentUtil.getActivity(DiscoverFragment.this)).isDrawerOpen()) {
-				onDrawerOpened();
-			}
+			onScrolled(0, true, true);
 		}
 	}
 	
@@ -400,6 +392,15 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
 		ma.setVStatusBarVisibility(View.VISIBLE, R.color.colorPrimaryDark);
 		ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		//Log.d(TAG, "onDestroy()");
+		if (loadEvents != null && loadEvents.getStatus() != Status.FINISHED) {
+			loadEvents.cancel(true);
+		}
 	}
 	
 	@Override
@@ -478,7 +479,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		//Log.d(TAG, "screenHt = " + screenHt + ", limitScrollAt = " + limitScrollAt);
 	}
 	
-	private void onScrolled(int dy, boolean forceUpdate) {
+	private void onScrolled(int dy, boolean forceUpdate, boolean chkForOpenDrawer) {
 		//Log.d(TAG, "totalScrolledDy = " + totalScrolledDy);
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		
@@ -492,7 +493,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		 * e.g.: 1) Due to event loading progressbar returning no events resulting in reduction of overall size
 		 * & hence totalScrolledDy value must be changed but we don't have good way to calculate it & hence
 		 * just update it to right value when position is 0 (when we are sure about exact totalScrolledDy value)
-		 * It's actually needed for changing toolbar color which we do only when 1st visible position is 0.
+		 * It's actually needed for changing toolbar color (to transparent) which we do only when 1st visible position is 0.
 		 */
 		if (((LinearLayoutManager)recyclerVEvents.getLayoutManager()).findFirstVisibleItemPosition() == 0) {
 			totalScrolledDy = -recyclerVEvents.getLayoutManager().findViewByPosition(0).getTop();
@@ -554,6 +555,11 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 			ma.updateTitle(title);
 			
 			isScrollLimitReached = false;
+		}
+		
+		if (chkForOpenDrawer && ((MainActivity)FragmentUtil.getActivity(DiscoverFragment.this)).isDrawerOpen()) {
+			// to maintain status bar & toolbar decorations
+			onDrawerOpened();
 		}
 	}
 	
@@ -1465,7 +1471,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	@Override
 	public void onDrawerClosed(View view) {
 		//Log.d(TAG, "onDrawerClosed()");
-		onScrolled(0, true);
+		onScrolled(0, true, false);
 	}
 	
 	@Override
@@ -1537,7 +1543,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 			@Override
 			public void run() {
 				//Log.d(TAG, "onEventsLoaded()");
-				onScrolled(0, true);
+				onScrolled(0, true, true);
 			}
 		});
 	}

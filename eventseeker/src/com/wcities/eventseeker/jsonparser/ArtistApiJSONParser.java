@@ -177,6 +177,10 @@ public class ArtistApiJSONParser {
 						Attending.getAttending(jObjArtist.getInt(KEY_ATTENDING)) : Attending.NotTracked;
 				artist.setAttending(attending);
 				
+				if (jObjArtist.has(KEY_ONTOUR)) {
+					artist.setOntour(true);
+				}
+				
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}

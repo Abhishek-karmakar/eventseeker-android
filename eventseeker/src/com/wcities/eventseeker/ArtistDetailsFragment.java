@@ -291,7 +291,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			eventList = new ArrayList<Event>();
 			/**
 			 * 16-02-2015
-			 * This check is added as per discussion with Amir Sir, the upcoming events should be shown
+			 * This check is added as per discussion with Amir Sir, the upcoming events should be queried
 			 * only if Artist is on Tour.
 			 */
 			if (artist.isOntour()) {
@@ -771,6 +771,9 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		updateArtistImg();
 		fabSave.setSelected(artist.getAttending() == Artist.Attending.Tracked);
 		fabSave.setVisibility(View.VISIBLE);
+		if (artist.isOntour() && eventList != null && eventList.isEmpty()) {
+			eventList.add(null);
+		}
 		artistRVAdapter.notifyDataSetChanged();
 		updateShareIntent();
 	}
