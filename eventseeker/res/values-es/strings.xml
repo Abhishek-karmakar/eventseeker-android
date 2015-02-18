@@ -153,8 +153,8 @@
     <string name="news">Noticias</string>
     <string name="videos">Videos</string>
     <string name="friends_who_like">Amigos a los que les gusta</string>
-    <string name="upcoming_events">Eventos próximos</string>
-    <string name="no_artist_news_found">No Artist News Found.</string>
+    <string name="upcoming_events">Próximos eventos</string>
+    <string name="no_artist_news_found">No se ha encontrado noticias del artista.</string>
     <string name="facebook_link_unavailable">No hay un enlace Facebook disponible para este artista.</string>
     <string name="twitter_link_unavailable">No hay un enlace Twitter disponible para este artista.</string>
     <string name="web_link_unavailable">No hay un enlace Web disponible para este artista.</string>
@@ -169,6 +169,9 @@
     <string name="posted_a_status">Colocó un estatus </string>
     <string name="follow_artists_for_updates">Sigue los artistas para recibir las últimas noticias en tiempo real</string>
     <string name="search_artists">Búsqueda de artistas</string>
+    <string name="sort_by">Clasificar por: </string>
+    <string name="chronological">Cronológico</string>
+    <string name="trending">Tendencias</string>
         
    	<!-- Connect Accounts Services -->
     <string name="service_google_play">Google Play</string>
@@ -186,7 +189,7 @@
    	<!-- Connect Accounts -->
     <string name="fb_login">Entrar en Facebook</string>
     <string name="fb_logout">Desconectar de Facebook</string>
-    <string name="btn_continue">Continua</string>    
+    <string name="btn_continue">Continuar</string>    
     <string name="syncing_fb">Sincronizando Facebook</string>
 	<string name="syncing_google_plus">Sincronizando Google Plus</string>
 	<string name="syncing_google_play">Sincronizando Google Play</string>
@@ -195,7 +198,8 @@
 	<string name="syncing_rdio">Sincronizando Rdio</string>
 	<string name="syncing_last_fm">Sincronizando Last.fm</string>
 	<string name="syncing_pandora">Sincronizando Pandora</string>
-	<string name="artist_synced">Artistas Sincronizados</string>
+	<string name="artist_synced">Artista sincronizada</string>
+	<string name="personalize_by_syncing">Personalizar sus cuentas aun más con la sincronización y di nos a quienes son tus favoritos.</string>
 	
 	<!-- Following -->
     <string name="follow_more_artists">Sigue más artistas +</string>
@@ -331,13 +335,18 @@
     <string name="email">email</string>
     <string name="password">contraseña</string>
     <string name="confirm_password">Confirmar la contraseña</string>
+    <string name="error_email_invalid">ESTE EMAIL ES INVALIDA</string>
+    <string name="error_pass_do_not_match">LAS CONTRASEÑAS NO CORRESPONDEN</string>
+    <string name="error_email_exists">ESTE EMAIL YA EXISTE</string>
+    <string name="error_email_or_password_incorrect">Email o Contraseña no es correcta</string>
+    <string name="error_unknown_error">Se ha producido un error desconocido. Vuelva a intentarlo más tarde.</string>
     
     <!-- FollowMoreArtistFragment -->
-    <string name="btn_sync_accounts">Sync Accounts</string>
-    <string name="btn_popular_artists">Popular</string>
+    <string name="btn_sync_accounts">Sincronizar cuentas</string>
+    <string name="btn_popular_artists">Artistas populares</string>
     <string name="btn_recommended">Recomendada</string>
     <string name="btn_search">Busca</string>
-    <string name="title_find_more_artist">Find More Artists</string>
+    <string name="title_find_more_artist">Busca por más artistas</string>
     
     <!-- PopularArtistsFragment -->
     <string name="btn_featured">Destacada</string>
@@ -351,7 +360,7 @@
     <string name="a_z">A - Z</string>
     <string name="recommendation_score">Recommendation Score</string>
     <string name="dialog_title_follow_all">Sigue todos</string>
-    <string name="dialog_msg_follow_all">Do you want to follow %1$d artists?</string>
+    <string name="dialog_msg_follow_all">¿Quieres seguir %1$d artistas?</string>
     <string name="dialog_btn_yes">yes</string>
     <string name="dialog_btn_no">no</string>
     
@@ -362,6 +371,7 @@
     
     <!-- Following section screen names -->
     <string name="title_popular">Popular</string>
+    <string name="title_featured_list">Lista destacada</string>
     
    	<string name="title_categories">Categorías</string>
     <string name="title_alternative_rock">Rock Alternativo</string>
@@ -378,6 +388,11 @@
     <string name="title_hip_hop">Hip-Hop</string>
     <string name="title_soul_r_and_b_funk">Soul / R&amp;B / Funk</string>
     <string name="title_classical">Clásica</string>
+    
+    <!-- DiscoverSettingDialogFragment -->
+	<string name="txt_search_radius">Buscar por radio (Miles)</string>
+    <string name="txt_select_date">Elija la fecha</string>
+    <string name="title_dialog_discover_setting">@string/title_settings_mobile_app</string>
     
     <!-- MusicArtistsFragment -->
     <string name="btn_alternative_rock">Rock Alternativo</string>
@@ -398,6 +413,27 @@
     <!-- LoginFragment -->
     <string name="continue_with_facebook">Continuar con Facebook</string>
     <string name="continue_wiht_google">Continuar con Google</string>
+    <string name="sign_in_with_email">Inicie sesión con tu email</string>
+    <string name="signing_in">Iniciando la sesión...</string>
+    <string name="sign_in">Inicie sesión...</string>
+    <string name="dialog_msg_user_email_doesnt_exist">El usuario con este email no existe</string>
+    <string name="share_on_facebook">Compartir en Facebook</string>
+    
+    <!--  fragment_discover.xml -->
+    <string name="txt_no_events">No hay eventos actualmente en el lugar. Prueba otra categoría o busca un lugar nuevo / Radio.</string>
+    <string name="btn_chg_loc_txt">CAMBIA UBICACIÓN</string>
+    
+    <!-- Following -->
+    <string name="remove_artist">Retire Artista</string>
+    <string name="follow_artist">Sigue Artista</string>
+    <string name="are_you_sure_you_want_to_remove_this_artist">¿Está seguro de que desea eliminar el artista?</string>
+    <string name="artist_saved">¡Artista Guardada!</string>
+    
+    <!-- NavigationFragment -->
+    <string name="address_isnt_available">Dirección no disponible para este lugar.</string>
+    
+    <!-- fragment_navigation.xml -->
+    <string name="select_navigation_app">Elija su aplicación de navegación para direcciones.</string>
     
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>

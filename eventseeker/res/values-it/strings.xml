@@ -154,7 +154,7 @@
     <string name="videos">Video</string>
     <string name="friends_who_like">A chi piace</string>
     <string name="upcoming_events">prossimi eventi</string>
-    <string name="no_artist_news_found">No Artist News Found.</string>
+    <string name="no_artist_news_found">notizie di artista non trovate.</string>
     <string name="facebook_link_unavailable">Un link Facebook non è disponibile per questo artista.</string>
     <string name="twitter_link_unavailable">Un link Twitter non è disponibile per questo artista.</string>
     <string name="web_link_unavailable">Un link Web non è disponibile per questo artista.</string>
@@ -169,6 +169,9 @@
     <string name="posted_a_status">ha impostato un status</string>
     <string name="follow_artists_for_updates">Segue gli artisti per ricevere le ultime notizie in tempo reale</string>
     <string name="search_artists">Cerca artisti</string>
+    <string name="sort_by">ordina per:</string>
+    <string name="chronological">cronologia</string>
+    <string name="trending">tendenze</string>
            
    	<!-- Connect Accounts Services -->
     <string name="service_google_play" >Google Play</string>
@@ -186,7 +189,7 @@
    	<!-- Connect Accounts -->
     <string name="fb_login">Accedi facebook</string>
     <string name="fb_logout">Esci facebook</string>
-    <string name="btn_continue">Continue</string>
+    <string name="btn_continue">avanti</string>
     <string name="syncing_fb">Sincronizzando Facebook</string>
 	<string name="syncing_google_plus">Sincronizzando Google Plus</string>
 	<string name="syncing_google_play">Sincronizzando Google Play</string>
@@ -195,7 +198,7 @@
 	<string name="syncing_rdio">Sincronizzando Rdio</string>
 	<string name="syncing_last_fm">Sincronizzando Last.fm</string>
 	<string name="syncing_pandora">Sincronizzando Pandora</string>
-	<string name="artist_synced">Artisti sincronizzati</string>
+	<string name="artist_synced">Artista sincronizzato</string>
     
 	<!-- Following -->
     <string name="follow_more_artists">segui più artisti +</string>
@@ -331,33 +334,100 @@
     <string name="email">email</string>
     <string name="password">password</string>
     <string name="confirm_password">Hai dimenticato la tua password?</string>
+    <string name="error_email_invalid">Questo indirizzo email è non valido</string>
+    <string name="error_pass_do_not_match">le password non corrispondono</string>
+    <string name="error_email_exists">Questo indirizzo email esiste già</string>
+    <string name="error_email_or_password_incorrect">L\'indirizzo email o la password non è corretta</string>
+    <string name="error_unknown_error">Si è verificato un errore sconosciuto. Si prega di riprovare più tardi.</string>
     
     <!-- FollowMoreArtistFragment -->
     <string name="btn_sync_accounts">Sincronizzazione</string>
-    <string name="btn_popular_artists">Artisti Popolari</string>
+    <string name="btn_popular_artists">artisti popolari</string>
     <string name="btn_recommended">Racommandati</string>
     <string name="btn_search">Cerca</string>
     <string name="title_find_more_artist">Trovi altri artisti</string>
     
     <!-- PopularArtistsFragment -->
-    <string name="btn_featured">Featured</string>
-    <string name="btn_music">Musica</string>
-    <string name="btn_comedy">Commedia</string>
-    <string name="btn_theater">Teatro</string>
-    <string name="btn_sports">Sport</string>
+    <string name="btn_featured">Presentando</string>
+    <string name="btn_music">musica</string>
+    <string name="btn_comedy">commedia</string>
+    <string name="btn_theater">teatro</string>
+    <string name="btn_sports">sport</string>
     
     <!-- RecommendedArtistsFragment -->
-    <string name="btn_follow_all">Follow All</string>
+    <string name="btn_follow_all">Segui tutti</string>
     <string name="a_z">A - Z</string>
     <string name="recommendation_score">Recommendation Score</string>
     <string name="dialog_title_follow_all">Follow All</string>
-    <string name="dialog_msg_follow_all">Do you want to follow %1$d artists?</string>
+    <string name="dialog_msg_follow_all">Vuoi seguire %1$d artisti?</string>
     <string name="dialog_btn_yes">yes</string>
     <string name="dialog_btn_no">no</string>
     
     <!-- LoginFragment -->
-    <string name="continue_with_facebook">Continua con Facebook</string>
-    <string name="continue_wiht_google">Continua con Google</string>
+    <string name="continue_with_facebook">continua con facebook</string>
+    <string name="continue_wiht_google">continua con google</string>
+    <string name="sign_in_with_email">Accedi con il tuo indirizzo email</string>
+    <string name="signing_in">accesso in corso</string>
+    <string name="sign_in">accedi</string>
+    <string name="dialog_msg_user_email_doesnt_exist">un utente con questo indirizzo email non esiste</string>
+    <string name="share_on_facebook">condividi su facebook</string>
+    
+    <!--  fragment_discover.xml -->
+    <string name="txt_no_events">Non ci sono eventi presenti nella tua posizione. Cerca con un\'altra categoria o cambia posizione.</string>
+    <string name="btn_chg_loc_txt">Cambia posizione</string>
+    
+    <!-- Following -->
+    <string name="remove_artist">Rimuovi artista</string>
+    <string name="follow_artist">Segui artista</string>
+    <string name="are_you_sure_you_want_to_remove_this_artist">Sei sicuro di voler rimuovere questo artista?</string>
+    <string name="artist_saved">Artista salvato!</string>
+    
+    <!-- Following section screen names -->
+    <string name="title_popular">popolare</string>
+    <string name="title_featured_list">presentando</string>
+    
+    <!-- DiscoverSettingDialogFragment -->
+	<string name="txt_search_radius">raggio di ricerca (miglia)</string>
+    <string name="txt_select_date">seleziona la data</string>
+    <string name="title_dialog_discover_setting">@string/title_settings_mobile_app</string>
+    
+    <!-- MusicArtistsFragment -->
+    <string name="btn_alternative_rock">rock alternativo</string>
+    <string name="btn_classic_rock">rock classico</string>
+    <string name="btn_indie_rock">indie rock</string>
+    <string name="btn_folk">folk</string>
+    <string name="btn_country">country</string>
+    <string name="btn_electronic">elettronica</string>
+    <string name="btn_pop">popolare</string>
+    <string name="btn_punk">punk</string>
+    <string name="btn_hard_rock_metal">hard rock \/ metal</string>
+    <string name="btn_world_music">Musica Etnica</string>
+    <string name="btn_blues_jazz">blues \/ jazz</string>
+    <string name="btn_hip_hop">hip hop</string>
+    <string name="btn_soul_r_and_b_funck">Soul \/ R&amp;B \/ Funk</string>
+    <string name="btn_classical">classica</string>
+    
+    <string name="title_categories">categorie</string>
+    <string name="title_alternative_rock">rock alternativo</string>
+    <string name="title_classic_rock">rock classico</string>
+    <string name="title_indie_rock">indie rock</string>
+    <string name="title_folk">folk</string>
+    <string name="title_country">country</string>
+    <string name="title_electronic">elettronica</string>
+    <string name="title_pop">popolare</string>
+    <string name="title_punk">punk</string>
+    <string name="title_hard_rock_metal">hard rock \/ metal</string>
+    <string name="title_world_music">Musica Etnica</string>
+    <string name="title_blues_jazz">blues \/ jazz</string>
+    <string name="title_hip_hop">hip hop</string>
+    <string name="title_soul_r_and_b_funk">Soul \/ R&amp;B \/ Funk</string>
+    <string name="title_classical">classica</string>
+    
+    <!-- NavigationFragment -->
+    <string name="address_isnt_available">questo indirizzo non è disponibile.</string>
+    
+    <!-- fragment_navigation.xml -->
+    <string name="select_navigation_app">seleziona la app di navigazione per direzioni.</string>
  
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>

@@ -153,8 +153,8 @@
     <string name="news">Nouvelles</string>
     <string name="videos">Vidéos</string>
     <string name="friends_who_like">Amis qui aiment</string>
-    <string name="upcoming_events">Événements À Venir</string>
-    <string name="no_artist_news_found">No Artist News Found.</string>
+    <string name="upcoming_events">Évènements a l\'avenir</string>
+    <string name="no_artist_news_found">Il n\'y a pas des nouvelles d\'artiste.</string>
     <string name="facebook_link_unavailable">Un lien Facebook n\'est pas disponible pour cet artiste</string>
     <string name="twitter_link_unavailable">Un lien Twitter n\'est pas disponible pour cet artiste</string>
     <string name="web_link_unavailable">Un lien Internaute n\'est pas disponible pour cet artiste</string>
@@ -169,6 +169,9 @@
     <string name="posted_a_status">a partagé un statut</string>
     <string name="follow_artists_for_updates">Suivez les artistes pour recevoir les dernières nouvelles en temps réel</string>
     <string name="search_artists">Recherche d\'artistes</string>
+    <string name="sort_by">Catégoriser par : </string>
+    <string name="chronological">Chronologique</string>
+    <string name="trending">Tendances</string>
         
    	<!-- Connect Accounts Services -->
     <string name="service_google_play" >Google Play</string>
@@ -195,7 +198,8 @@
 	<string name="syncing_rdio">Synchroniser Rdio</string>
 	<string name="syncing_last_fm">Synchroniser Last.fm</string>
 	<string name="syncing_pandora">Synchroniser Pandora</string>
-	<string name="artist_synced">Artist Synced</string>
+	<string name="artist_synced">L’artiste synchronisé</string>
+	<string name="personalize_by_syncing">Personnaliser encore plus avec la synchronisation de vos comptes et laisse nous qui sont les préférées.</string>
 	
 	<!-- Following -->
     <string name="follow_more_artists">Suivre d\'avantage d\'artistes +</string>
@@ -331,10 +335,15 @@
     <string name="email">Adresse électronique</string>
     <string name="password">mot de passe</string>
     <string name="confirm_password">Confirmez le mot de passe</string>
+    <string name="error_email_invalid">CETTE ADDRESSE ÉLECTRONIQUE N’EST PAS VALIDE</string>
+    <string name="error_pass_do_not_match">LES PASSE-MOTS NE CORRESPONDENT PAS</string>
+    <string name="error_email_exists">CETTE ADDRESSE ELECTRONIQUE DEJA EXISTE</string>
+    <string name="error_email_or_password_incorrect">L’adresse électronique ou passé-mot n’est pas correcte</string>
+    <string name="error_unknown_error">Une erreur inconnue s’est produite. Essayez plus tard.</string>
     
     <!-- FollowMoreArtistFragment -->
     <string name="btn_sync_accounts">Syncroniser les comptes</string>
-    <string name="btn_popular_artists">Artistes Tendances</string>
+    <string name="btn_popular_artists">Artistes populaires</string>
     <string name="btn_recommended">Suggérés</string>
     <string name="btn_search">Rechercher</string>
     <string name="title_find_more_artist">Trouver d\'autres artists</string>
@@ -351,7 +360,7 @@
     <string name="a_z">A - Z</string>
     <string name="recommendation_score">Recommendation Score</string>
     <string name="dialog_title_follow_all">Les Suivre Tous</string>
-    <string name="dialog_msg_follow_all">Do you want to follow %1$d artists?</string>
+    <string name="dialog_msg_follow_all">Voulez-vous suivre %1$d artistes?</string>
     <string name="dialog_btn_yes">yes</string>
     <string name="dialog_btn_no">no</string>
     
@@ -360,6 +369,7 @@
     
     <!-- Following section screen names -->
     <string name="title_popular">Populaire</string>
+    <string name="title_featured_list">Liste Présenté</string>
     
     <string name="title_categories">Catégories</string>
     <string name="title_alternative_rock">Rock Alternatif</string>
@@ -376,6 +386,11 @@
     <string name="title_hip_hop">Hip-Hop</string>
     <string name="title_soul_r_and_b_funk">Soul / R&amp;B / Funk</string>
     <string name="title_classical">Musique Classique</string>
+    
+    <!-- DiscoverSettingDialogFragment -->
+	<string name="txt_search_radius">Cherchez pour rayon (milles)</string>
+    <string name="txt_select_date">Sélectionnez la date</string>
+    <string name="title_dialog_discover_setting">@string/title_settings_mobile_app</string>
     
     <!-- MusicArtistsFragment -->
     <string name="btn_alternative_rock">Rock Alternatif</string>
@@ -399,6 +414,27 @@
     <!-- LoginFragment -->
     <string name="continue_with_facebook">Continuer avec Facebook</string>
     <string name="continue_wiht_google">Continuer avec Google</string>
+    <string name="sign_in_with_email">Ouvrez une session avec votre adresse électronique</string>
+    <string name="signing_in">L’ouverture de session...</string>
+    <string name="sign_in">Ouvrez une session</string>
+    <string name="dialog_msg_user_email_doesnt_exist">L’utilisateur avec cette adresse électronique n’existe pas</string>
+    <string name="share_on_facebook">Partagez sur Facebook</string>
+    
+    <!--  fragment_discover.xml -->
+    <string name="txt_no_events">Il n’y a pas des évènements actuellement dans votre localité. Essayez une autre categorie ou cherchez une localité nouvelle / Rayon.</string>
+    <string name="btn_chg_loc_txt">CHANGEZ LOCALITÉ</string>
+    
+    <!-- Following -->
+    <string name="remove_artist">Retirez l’artiste</string>
+    <string name="follow_artist">Suivez l’artiste</string>
+    <string name="are_you_sure_you_want_to_remove_this_artist">Vous-êtes sûr que voulez vous retirer cet artiste?</string>
+    <string name="artist_saved">L’artiste sauvegardé!</string>
+    
+    <!-- NavigationFragment -->
+    <string name="address_isnt_available">L\'adresse n\'est pas disponible pour cet endroit.</string>
+    
+    <!-- fragment_navigation.xml -->
+    <string name="select_navigation_app">Sélectionnez votre application de navigation et demander le chemin.</string>
     
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>

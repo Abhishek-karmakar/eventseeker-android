@@ -67,8 +67,8 @@
     <string name="title_find_more_artist">Find More Artists</string>
     <string name="title_popular">Popular</string>
     <string name="title_featured_list">Featured List</string>
-    <string name="title_comedy">Comedy</string>
-    <string name="title_theater">Theater</string>
+    <string name="title_comedy">@string/btn_comedy</string>
+    <string name="title_theater">@string/btn_theater</string>
     
     <string name="title_categories">Categories</string>
     <string name="title_alternative_rock">Alternative Rock</string>
@@ -253,7 +253,7 @@
     <string name="syncing_last_fm">Syncing Last.fm</string>
     <string name="syncing_pandora">Syncing Pandora</string>
 	<string name="artist_synced">ARTIST SYNCED</string>
-	<string name="personalize_by_syncing">Further Personalize by syncing your other accounts and letting us know who your favorites are.</string>
+	<string name="personalize_by_syncing">Sync your accounts and let eventseeker know about your favorite artists.</string>
 	
     <!-- My Events -->
     <string name="following">FOLLOWING</string>
@@ -266,7 +266,7 @@
     <string name="follow_artist">Follow Artist</string>
     <string name="are_you_sure_you_want_to_remove_this_artist">Are you sure you want to remove this Artist?</string>
     <string name="artist_saved">Artist Saved!</string>
-    <string name="btn_cancel">Cancel</string>
+    <string name="btn_cancel">@string/cancel</string>
     <string name="btn_Ok">OK</string>
 
     <!-- Search Results -->
@@ -410,6 +410,8 @@
     <string name="btn_recommended">Recommended</string>
     <string name="btn_search">Search</string>
 
+    <!-- Sync your accounts and let eventseeker know about your favorite artists.  --> 
+    
     <!-- PopularArtistsFragment -->
     <string name="btn_featured">Featured</string>
     <string name="btn_music">Music</string>
