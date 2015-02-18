@@ -21,9 +21,13 @@
         <item name="android:paddingBottom">10dp</item>
     </style>
     
-    <style name="edtTxtWhiteColor" parent="@android:style/TextAppearance.DeviceDefault.Widget.EditText">
-        <item name="android:textColor">@android:color/white</item>
+    <style name="edtTxtSingleLineWhiteColor" parent="@style/Widget.AppCompat.EditText">
         <item name="android:textColorHint">@android:color/white</item>
+        <!-- to have white cursor color (Ref - stackOverflow: Setting the android:textCursorDrawable attribute 
+        to @null should result in the use of android:textColor as the cursor color.) -->
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:background">@drawable/bg_edit_text_holo_light_white_border</item>
     </style>
     
     <style name="Widget.EventSeeker.Button" parent="@android:style/Widget.Button">

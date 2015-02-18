@@ -67,16 +67,12 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
+            <RelativeLayout android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/rltGPlus"
-                android:layout_marginLeft="@dimen/mar_l_r_get_started_fragment"
-                android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginTop="@dimen/lyt_mar_t_get_started_fragment" >
 
-                <TextView
-                    android:id="@+id/txtLoginLabel"
+                <TextView android:id="@+id/txtLoginLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
@@ -85,34 +81,60 @@
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/txt_login_label_txt_size_get_started_fragment" />
 
-                <EditText
-                    android:id="@+id/edtEmail"
+                <EditText android:id="@+id/edtEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txtLoginLabel"
+                    android:layout_marginLeft="@dimen/mar_l_r_get_started_fragment"
+                	android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
                     android:layout_marginTop="@dimen/mar_t_get_started_fragment"
                     android:hint="@string/email"
                     android:inputType="textEmailAddress"
-                    android:singleLine="true"
-                    android:textColorHint="@android:color/white" />
+                    style="@style/edtTxtSingleLineWhiteColor" />
+                
+                <ImageView android:id="@+id/imgEmailIndicator"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_alignBottom="@+id/edtEmail"
+	                android:layout_alignParentRight="true"
+	                android:layout_alignTop="@+id/edtEmail"
+	                android:layout_marginRight="@dimen/rlt_register_details_mar_r_get_started_fragment" />
+                
+                <TextView android:id="@+id/txtEmailInvalid"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_below="@+id/edtEmail"
+	                android:gravity="center"
+	                android:text="@string/error_email_invalid"
+	                android:textColor="@android:color/white"
+	                android:visibility="invisible" />
 
-                <EditText
-                    android:id="@+id/edtPassword"
+                <EditText android:id="@+id/edtPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/edtEmail"
+                    android:layout_marginLeft="@dimen/mar_l_r_get_started_fragment"
+                	android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
                     android:layout_marginTop="@dimen/mar_t_get_started_fragment"
                     android:hint="@string/password"
                     android:password="true"
-                    android:singleLine="true"
-                    android:textColorHint="@android:color/white" />
+                    style="@style/edtTxtSingleLineWhiteColor" />
+                
+                <ImageView android:id="@+id/imgPasswordIndicator"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_alignBottom="@+id/edtPassword"
+	                android:layout_alignParentRight="true"
+	                android:layout_alignTop="@+id/edtPassword"
+	                android:layout_marginRight="@dimen/rlt_register_details_mar_r_get_started_fragment" />
 
-                <Button
-                    android:id="@+id/btnLogin"
+                <Button android:id="@+id/btnLogin"
                     style="@style/Widget.EventSeeker.Button.White"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/btn_default_ht"
                     android:layout_below="@+id/edtPassword"
+                    android:layout_marginLeft="@dimen/mar_l_r_get_started_fragment"
+                	android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
                     android:layout_marginTop="@dimen/mar_t_get_started_fragment"
                     android:enabled="false"
                     android:text="@string/sign_in" />

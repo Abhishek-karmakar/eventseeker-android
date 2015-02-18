@@ -57,7 +57,6 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 	private boolean isFNValid, isLNValid, isEmailValid, isConfirmPasswordValid;
 	private HashMap<String, ImgIndicatorState> imgIndicatorStateMap;
 	private int errorMsgEmail, errorMsgPassword;
-	
 
 	private enum ImgIndicatorState {
 		IMG_INVISIBLE,
@@ -411,6 +410,7 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 			} else {
 				isEmailValid = true;
 				imgEmailIndicator.setImageResource(R.drawable.ic_valid_check);
+				imgIndicatorStateMap.put(IMG_EMAIL, ImgIndicatorState.IMG_CHECK);
 				toggleSignUpBtnState();
 			}
 		}

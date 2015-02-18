@@ -17,10 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/rlt_content_margin_l_nav_drawer"
-        android:paddingTop="@dimen/rlt_layout_content_pad_t_navigation_drawer_list_item"
-        android:paddingBottom="@dimen/rlt_layout_content_pad_b_navigation_drawer_list_item"
         android:gravity="center_vertical" >
-        <!-- android:layout_marginLeft="@dimen/rlt_layout_content_margin_l_navigation_drawer_list_item" -->
     
     	<ImageView android:id="@+id/imgIcon"
 	        android:layout_width="wrap_content"

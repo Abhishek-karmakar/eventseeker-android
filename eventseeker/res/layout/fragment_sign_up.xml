@@ -86,13 +86,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtLoginLabel"
-                android:layout_centerHorizontal="true"
                 android:layout_marginLeft="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginTop="@dimen/mar_t_get_started_fragment"
                 android:hint="@string/first_name"
-                android:singleLine="true"
-                android:textColorHint="@android:color/white" />
+                style="@style/edtTxtSingleLineWhiteColor" />
 
             <ImageView
                 android:id="@+id/imgFNIndicator"
@@ -112,8 +110,7 @@
                 android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
                 android:layout_marginTop="@dimen/mar_t_get_started_fragment"
                 android:hint="@string/last_name"
-                android:singleLine="true"
-                android:textColorHint="@android:color/white" />
+                style="@style/edtTxtSingleLineWhiteColor" />
 
             <ImageView
                 android:id="@+id/imgLNIndicator"
@@ -134,8 +131,7 @@
                 android:layout_marginTop="@dimen/mar_t_get_started_fragment"
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"
-                android:singleLine="true"
-                android:textColorHint="@android:color/white" />
+                style="@style/edtTxtSingleLineWhiteColor" />
 
             <ImageView
                 android:id="@+id/imgEmailIndicator"
@@ -166,8 +162,7 @@
                 android:layout_marginTop="@dimen/mar_t_below_error_get_started_fragment"
                 android:hint="@string/password"
                 android:password="true"
-                android:singleLine="true"
-                android:textColorHint="@android:color/white" />
+                style="@style/edtTxtSingleLineWhiteColor" />
 
             <ImageView
                 android:id="@+id/imgPasswordIndicator"
@@ -188,8 +183,7 @@
                 android:layout_marginTop="@dimen/mar_t_get_started_fragment"
                 android:hint="@string/confirm_password"
                 android:password="true"
-                android:singleLine="true"
-                android:textColorHint="@android:color/white" />
+                style="@style/edtTxtSingleLineWhiteColor" />
 
             <ImageView
                 android:id="@+id/imgConfirmPasswordIndicator"

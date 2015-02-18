@@ -55,4 +55,11 @@
 	
 	</RelativeLayout>
 	
+	<include layout="@layout/progress_bar_eventseeker_fixed_ht"
+	    android:id="@+id/rltLytProgressBar"
+	    android:layout_width="match_parent"
+    	android:layout_height="@dimen/rlt_lyt_root_ht_progress_bar_eventseeker_fixed_ht"
+    	android:layout_marginTop="@dimen/rlt_lyt_progress_bar_margin_t_fragment_discover"
+    	android:visibility="invisible" />
+	
  </FrameLayout>

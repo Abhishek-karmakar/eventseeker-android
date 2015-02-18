@@ -6,14 +6,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AbsListView.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -22,6 +25,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.VersionUtil;
+import com.wcities.eventseeker.util.ViewUtil;
 
 public class DrawerListFragment extends ListFragment {
 
@@ -31,12 +36,9 @@ public class DrawerListFragment extends ListFragment {
 	private List<DrawerListItem> drawerListItems;
 	private DrawerListAdapter drawerListAdapter;
 	
-	public static final int SECT_1_HEADER_POS = -1;
-	public static final int SECT_2_HEADER_POS = 5;//6;
-	// TODO: make it 9 for disabling language
-	public static final int SECT_3_HEADER_POS = 10;
+	public static final int DIVIDER_POS = 5;
 	
-    private List<Integer> sectionHeaderIndices = new ArrayList<Integer>(Arrays.asList(SECT_1_HEADER_POS, SECT_2_HEADER_POS, SECT_3_HEADER_POS));
+    private int htForDrawerList;
 	
 	public interface DrawerListFragmentListener {
 		public void onDrawerListFragmentViewCreated();
@@ -55,13 +57,27 @@ public class DrawerListFragment extends ListFragment {
 	}
 	
 	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		Resources res = FragmentUtil.getResources(this);
+		DisplayMetrics displaymetrics = new DisplayMetrics();
+		FragmentUtil.getActivity(this).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+		htForDrawerList = displaymetrics.heightPixels - ViewUtil.getStatusBarHeight(FragmentUtil.getResources(this))
+				- res.getDimensionPixelSize(R.dimen.action_bar_ht) 
+				// subtracting divider height
+				- res.getDimensionPixelSize(R.dimen.divider_section_ht_navigation_drawer_list_item);
+	}
+	
+	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		if (drawerListItems == null) {
 			drawerListItems = new ArrayList<DrawerListItem>();
 			loadDrawerListItems();
 			
-	        drawerListAdapter = new DrawerListAdapter((Activity) FragmentUtil.getActivity(this), drawerListItems);
+	        drawerListAdapter = new DrawerListAdapter((Activity) FragmentUtil.getActivity(this), drawerListItems, 
+	        		htForDrawerList);
 			
 		} else {
 			drawerListAdapter.setmInflater((Activity) FragmentUtil.getActivity(this));
@@ -83,7 +99,7 @@ public class DrawerListFragment extends ListFragment {
 			@Override
 			public void onItemClick(AdapterView parent, View view, int position, long id) {
 				//Log.d(TAG, "onItemClick(), pos = " + position);
-				if (!sectionHeaderIndices.contains(position)) {
+				if (position != DIVIDER_POS) {
 					mListener.onDrawerItemSelected(position, null);
 				}
 	        }
@@ -159,13 +175,14 @@ public class DrawerListFragment extends ListFragment {
 		private WeakReference<Activity> mainActivity;
 	    private LayoutInflater mInflater;
 	    private List<DrawerListItem> drawerListItems;
+	    private int rowHt;
 	    
-	    private static final ArrayList<Integer> sectionEndsOnIndices = new ArrayList<Integer>(Arrays.asList(SECT_2_HEADER_POS - 1, SECT_3_HEADER_POS - 1));
-
-	    public DrawerListAdapter(Activity mainActivity, List<DrawerListItem> drawerListItems) {
+	    public DrawerListAdapter(Activity mainActivity, List<DrawerListItem> drawerListItems, int htForDrawerList) {
 	    	this.mainActivity = new WeakReference<Activity>(mainActivity);
 	        mInflater = LayoutInflater.from(this.mainActivity.get());
 	        this.drawerListItems = drawerListItems;
+	        // 1 subtracted since that item is just the section divider
+	        rowHt = htForDrawerList / (drawerListItems.size() - 1);
 	    }
 	    
 	    public void setmInflater(Activity mainActivity) {
@@ -209,6 +226,10 @@ public class DrawerListFragment extends ListFragment {
 			} else {
 				if (convertView == null || !((ListItemViewHolder)convertView.getTag()).tag.equals(LIST_ITEM_TYPE.ITEM)) {
 					convertView = mInflater.inflate(R.layout.navigation_drawer_list_item, null);
+					
+					// set custom height to fit entire list exactly within the available screen height  
+					AbsListView.LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, rowHt);
+					convertView.setLayoutParams(lp);
 
 					listItemViewHolder = new ListItemViewHolder();
 					listItemViewHolder.imgIcon = (ImageView) convertView.findViewById(R.id.imgIcon);

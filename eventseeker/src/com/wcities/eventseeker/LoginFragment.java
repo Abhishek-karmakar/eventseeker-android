@@ -1,10 +1,12 @@
 package com.wcities.eventseeker;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -15,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -36,7 +39,7 @@ import com.wcities.eventseeker.util.FieldValidationUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class LoginFragment extends FbGPlusRegisterFragment implements OnClickListener, TextWatcher, 
-		RegistrationErrorListener, DialogBtnClickListener {
+		RegistrationErrorListener, DialogBtnClickListener, OnFocusChangeListener {
 	
 	private static final String TAG = LoginFragment.class.getName();
 
@@ -44,8 +47,13 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 	private static final String DIALOG_FRAGMENT_TAG_UNKNOWN_ERROR = "unknownError";
 	private static final String DIALOG_FRAGMENT_TAG_CHK_EMAIL = "dialogChkEmail";
 	
+	private static final String IMG_EMAIL = "email";
+	private static final String IMG_PASSWORD = "password";
+	
 	private EditText edtEmail, edtPassword;
+	private ImageView imgEmailIndicator, imgPasswordIndicator;
 	private boolean isEmailValid, isPasswordValid;
+	private TextView txtEmailInvalid;
 	private Button btnLogin, btnForgotPassword;
 	
 	private Button imgFbSignUp, imgGPlusSignIn;
@@ -54,10 +62,22 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
     private RelativeLayout rltLytPrgsBar;
     private int progressBarVisibility = View.INVISIBLE;
     
+    private HashMap<String, ImgIndicatorState> imgIndicatorStateMap;
+    
+    private enum ImgIndicatorState {
+		IMG_INVISIBLE,
+		IMG_CROSS,
+		IMG_CHECK;
+	}
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
     	setRetainInstance(true);
+    	
+    	imgIndicatorStateMap = new HashMap<String, ImgIndicatorState>();
+		imgIndicatorStateMap.put(IMG_EMAIL, ImgIndicatorState.IMG_INVISIBLE);
+		imgIndicatorStateMap.put(IMG_PASSWORD, ImgIndicatorState.IMG_INVISIBLE);
     }
     
 	@Override
@@ -67,6 +87,14 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 		
 		(edtEmail = (EditText) v.findViewById(R.id.edtEmail)).addTextChangedListener(this);
 		(edtPassword = (EditText) v.findViewById(R.id.edtPassword)).addTextChangedListener(this);
+		
+		imgEmailIndicator = (ImageView) v.findViewById(R.id.imgEmailIndicator);
+		imgPasswordIndicator = (ImageView) v.findViewById(R.id.imgPasswordIndicator);
+		
+		txtEmailInvalid = (TextView) v.findViewById(R.id.txtEmailInvalid);
+		
+		edtEmail.setOnFocusChangeListener(this);
+		edtPassword.setOnFocusChangeListener(this);
 
 		(btnLogin = (Button) v.findViewById(R.id.btnLogin)).setOnClickListener(this);
 		(btnForgotPassword = (Button) v.findViewById(R.id.btnForgotPassword)).setOnClickListener(this);
@@ -91,6 +119,32 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 		updateProgressBarVisibility();
 		
 		return v;
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		
+		if (imgIndicatorStateMap.get(IMG_EMAIL) != ImgIndicatorState.IMG_INVISIBLE) {
+			try {
+				if (imgIndicatorStateMap.get(IMG_EMAIL) == ImgIndicatorState.IMG_CHECK) {
+					imgEmailIndicator.setImageResource(R.drawable.ic_valid_check);
+					txtEmailInvalid.setVisibility(View.INVISIBLE);
+					
+				} else {
+					imgEmailIndicator.setImageResource(R.drawable.ic_invalid_cross);
+					txtEmailInvalid.setVisibility(View.VISIBLE);
+				}
+				
+			} catch (Resources.NotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		if (imgIndicatorStateMap.get(IMG_PASSWORD) != ImgIndicatorState.IMG_INVISIBLE) {
+			imgPasswordIndicator.setImageResource(imgIndicatorStateMap.get(IMG_PASSWORD) == ImgIndicatorState.IMG_CHECK ?
+					R.drawable.ic_valid_check : 0);			
+		}
 	}
     
 	@Override
@@ -268,11 +322,27 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 		
 		switch (v.getId()) {
 			case R.id.edtEmail:
+				// to remove the error icon if any present on it.
+				imgEmailIndicator.setImageResource(0);
+				txtEmailInvalid.setVisibility(View.INVISIBLE);
+				imgIndicatorStateMap.put(IMG_EMAIL, ImgIndicatorState.IMG_INVISIBLE);
+				
 				isEmailValid = FieldValidationUtil.isValidEmail(edtEmail.getText().toString());
+				if (isEmailValid) {
+					imgEmailIndicator.setImageResource(R.drawable.ic_valid_check);
+					imgIndicatorStateMap.put(IMG_EMAIL, ImgIndicatorState.IMG_CHECK);
+				}
 				break;
 				
 			case R.id.edtPassword:
+				imgPasswordIndicator.setImageResource(0);
+				imgIndicatorStateMap.put(IMG_PASSWORD, ImgIndicatorState.IMG_INVISIBLE);
+				
 				isPasswordValid = edtPassword.getText().toString().length() > 0;
+				if (isPasswordValid) {
+					imgPasswordIndicator.setImageResource(R.drawable.ic_valid_check);
+					imgIndicatorStateMap.put(IMG_PASSWORD, ImgIndicatorState.IMG_CHECK);
+				}
 				break;			
 		}
 		
@@ -317,4 +387,28 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 
 	@Override
 	public void doNegativeClick(String dialogTag) {}
+
+	@Override
+	public void onFocusChange(View v, boolean hasFocus) {
+		//Log.d(TAG, "onFocusChange(), hasFocus = " + hasFocus);
+		if (hasFocus) {
+			//We need to show the cross icon(if value is improper) at the end when focus is gone from this EditText.
+			return;
+		}
+		switch (v.getId()) {
+			case R.id.edtEmail:
+				if (edtEmail.getText().toString().length() > 0) {
+					if (!isEmailValid) {
+						imgEmailIndicator.setImageResource(R.drawable.ic_invalid_cross);
+						txtEmailInvalid.setVisibility(View.VISIBLE);
+						imgIndicatorStateMap.put(IMG_EMAIL, ImgIndicatorState.IMG_CROSS);
+						
+					} else {
+						imgEmailIndicator.setImageResource(R.drawable.ic_valid_check);
+						imgIndicatorStateMap.put(IMG_EMAIL, ImgIndicatorState.IMG_CHECK);
+					}
+				}
+				break;
+		}
+	}
 }

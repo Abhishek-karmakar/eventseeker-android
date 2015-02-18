@@ -28,6 +28,7 @@
     <!-- txt_no_events_margin_t_discover = img_category_ht_discover (220dp) + actual margin (40dp) -->
     <dimen name="txt_no_events_margin_t_discover">260dp</dimen>
     <dimen name="txt_no_events_txt_size_discover">17sp</dimen>
+    <dimen name="rlt_lyt_progress_bar_margin_t_fragment_discover">280dp</dimen>
     <!-- img_category_ht_discover = v_pager_cat_titles_ht_discover + v_pager_cat_titles_margin_t_discover -->
     <dimen name="img_category_ht_discover">220dp</dimen>
     <dimen name="btn_chg_loc_ht_discover">45dp</dimen>
@@ -690,6 +691,7 @@
     <dimen name="fab_margin_b_artist_details">16dp</dimen>
     <dimen name="fab_margin_r_artist_details">@dimen/fab_margin_b_artist_details</dimen>
     <!-- rv_item_desc.xml -->
+    <dimen name="prgs_bar_ht_rv_item_desc">200dp</dimen>
     <dimen name="prgs_bar_margin_t_rv_item_desc">@dimen/txt_desc_margin_t_rv_item_desc</dimen>
     <dimen name="txt_desc_margin_l_rv_item_desc">16dp</dimen>
     <dimen name="txt_desc_margin_r_rv_item_desc">16dp</dimen>

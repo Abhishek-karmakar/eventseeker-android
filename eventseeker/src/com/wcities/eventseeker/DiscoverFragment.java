@@ -25,7 +25,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutParams;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,6 +43,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -117,7 +117,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	
 	private transient ImageView imgCategory;
 	private transient ViewPager vPagerCatTitles;
-	private transient RelativeLayout rltLytNoEvts;
+	private transient RelativeLayout rltLytNoEvts, rltLytProgressBar;
 	 
 	/**
 	 * Used RecyclerViewInterceptingVerticalScroll in place of RecyclerView since we want to intercept only
@@ -257,6 +257,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		imgCategory = (ImageView) v.findViewById(R.id.imgCategory);
 		vPagerCatTitles = (ViewPager) v.findViewById(R.id.vPagerCatTitles);
 		rltLytNoEvts = (RelativeLayout) v.findViewById(R.id.rltLytNoEvts);
+		rltLytProgressBar = (RelativeLayout) v.findViewById(R.id.rltLytProgressBar);
 		((Button) v.findViewById(R.id.btnChgLoc)).setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -711,6 +712,10 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	        private LinearLayout lnrSliderContent;
 	        private RelativeLayout rltLytRoot, rltLytContent, rltTicket, rltSave, rltShare;
 	        
+	        // progress bar
+	        private ImageView imgPrgsCenter;
+	        private ProgressBar prgsBar;
+	        
 	        public ViewHolder(View root) {
 	            super(root);
 	            this.root = root;
@@ -728,6 +733,9 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	            imgTicket = (ImageView) root.findViewById(R.id.imgTicket);
 	            imgSave = (ImageView) root.findViewById(R.id.imgSave);
 	            imgShare = (ImageView) root.findViewById(R.id.imgShare);
+	            
+	            imgPrgsCenter = (ImageView) root.findViewById(R.id.imgPrgsCenter);
+	            prgsBar = (ProgressBar) root.findViewById(R.id.prgsBar);
 	        }
 	        
 	        private boolean isSliderClose(int rltLytContentInitialMarginL) {
@@ -798,6 +806,17 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 				
 				if (event == null) {
 					// progress indicator
+					
+					if (eventList.size() == 1) {
+						// no events loaded yet
+						discoverFragment.rltLytProgressBar.setVisibility(View.VISIBLE);
+						holder.imgPrgsCenter.setVisibility(View.INVISIBLE);
+						holder.prgsBar.setVisibility(View.INVISIBLE);
+						
+					} else {
+						holder.imgPrgsCenter.setVisibility(View.VISIBLE);
+						holder.prgsBar.setVisibility(View.VISIBLE);
+					}
 					
 					if ((loadDateWiseEvents == null || loadDateWiseEvents.getStatus() == Status.FINISHED) && 
 							isMoreDataAvailable) {
@@ -1543,6 +1562,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 			@Override
 			public void run() {
 				//Log.d(TAG, "onEventsLoaded()");
+				rltLytProgressBar.setVisibility(View.INVISIBLE);
 				onScrolled(0, true, true);
 			}
 		});

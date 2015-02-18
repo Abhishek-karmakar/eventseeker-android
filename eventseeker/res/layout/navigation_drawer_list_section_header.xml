@@ -17,11 +17,9 @@
         android:layout_below="@id/txtTitle"
         android:background="@drawable/side_nav_topic_divider" />-->    
     
-    <View
-        xmlns:android="http://schemas.android.com/apk/res/android" 
-        android:id="@+id/vDivider"
+    <View android:id="@+id/vDivider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/divider_section_ht_navigation_drawer_list_item"
-        android:layout_below="@id/txtTitle"
-        android:background="@color/nav_drawer_divider" />    
+        android:background="@color/nav_drawer_divider" />
+        
 </RelativeLayout>

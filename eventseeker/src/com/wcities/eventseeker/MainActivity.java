@@ -95,12 +95,12 @@ public class MainActivity extends ActionBarActivity implements
 
 	private static final String TAG = MainActivity.class.getSimpleName();
 
-	public static final int INDEX_NAV_ITEM_DISCOVER = DrawerListFragment.SECT_1_HEADER_POS + 1;
+	public static final int INDEX_NAV_ITEM_DISCOVER = 0;
 	public static final int INDEX_NAV_ITEM_MY_EVENTS = INDEX_NAV_ITEM_DISCOVER + 1;
 	public static final int INDEX_NAV_ITEM_FOLLOWING = INDEX_NAV_ITEM_MY_EVENTS + 1;
 	public static final int INDEX_NAV_ITEM_ARTISTS_NEWS = INDEX_NAV_ITEM_FOLLOWING + 1;
 	public static final int INDEX_NAV_ITEM_FRIENDS_ACTIVITY = INDEX_NAV_ITEM_ARTISTS_NEWS + 1;
-	public static final int INDEX_NAV_ITEM_SETTINGS = DrawerListFragment.SECT_2_HEADER_POS + 1;
+	public static final int INDEX_NAV_ITEM_SETTINGS = DrawerListFragment.DIVIDER_POS + 1;
 	public static final int INDEX_NAV_ITEM_LOG_OUT = INDEX_NAV_ITEM_SETTINGS + 1;
 	
 	private static final String DRAWER_LIST_FRAGMENT_TAG = "drawerListFragment";
