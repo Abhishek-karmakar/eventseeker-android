@@ -17,7 +17,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -53,6 +53,7 @@ import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.custom.fragment.PublishEventFragment;
+import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.EventListener;
@@ -69,9 +70,9 @@ import com.wcities.eventseeker.viewdata.SharedElement;
 import com.wcities.eventseeker.viewdata.SharedElementPosition;
 
 public class SearchEventsFragment extends PublishEventFragment implements LoadItemsInBackgroundListener, 
-		SearchFragmentChildListener, CustomSharedElementTransitionSource {
+		SearchFragmentChildListener, CustomSharedElementTransitionSource, AsyncTaskListener<Void> {
 
-	private static final String TAG = SearchEventsFragment.class.getName();
+	private static final String TAG = SearchEventsFragment.class.getSimpleName();
 	private static final String FRAGMENT_TAG_SHARE_VIA_DIALOG = ShareViaDialogFragment.class.getSimpleName();
 
 	private static final int TRANSLATION_Z_DP = 10;
@@ -80,12 +81,12 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 	private EventListAdapter eventListAdapter;
 	private double[] latLon;
 
-
 	private String query;
 	private List<Event> eventList;
 	private LoadEvents loadEvents;
 	
 	private RecyclerView recyclerVEvents;
+	private RelativeLayout rltLytPrgsBar;
 	
 	private float translationZPx;
 
@@ -117,6 +118,7 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 		RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(FragmentUtil.getActivity(this));
 		recyclerVEvents.setLayoutManager(layoutManager);
 		
+		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
 		return v;
 	}
 
@@ -156,7 +158,7 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 		String endDate = ConversionUtil.getDay(c);
 		
 		loadEvents = new LoadEvents(Api.OAUTH_TOKEN, eventList, eventListAdapter, query,
-				latLon[0], latLon[1], MILES_LIMIT, null, startDate, endDate);
+				latLon[0], latLon[1], MILES_LIMIT, null, startDate, endDate, this);
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);
 		AsyncTaskUtil.executeAsyncTask(loadEvents, true);
 	}
@@ -301,6 +303,14 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 			
 			if (event == null) {
 				// progress indicator
+				
+				if (eventList.size() == 1) {
+					searchEventFragment.rltLytPrgsBar.setVisibility(View.VISIBLE);
+					holder.itemView.setVisibility(View.INVISIBLE);
+					
+				} else {
+					holder.itemView.setVisibility(View.VISIBLE);
+				}
 				
 				if ((loadDateWiseEvents == null || loadDateWiseEvents.getStatus() == Status.FINISHED) && 
 						isMoreDataAvailable) {
@@ -973,5 +983,11 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 	@Override
 	public boolean isOnTop() {
 		return false;
+	}
+
+	@Override
+	public void onTaskCompleted(Void... params) {
+		// to remove full screen progressbar
+		rltLytPrgsBar.setVisibility(View.INVISIBLE);
 	}
 }

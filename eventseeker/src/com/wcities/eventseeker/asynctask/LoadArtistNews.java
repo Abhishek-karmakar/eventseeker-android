@@ -23,6 +23,7 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.ArtistNewsItem;
 import com.wcities.eventseeker.core.ArtistNewsItem.PostType;
+import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 
 public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> {
@@ -38,6 +39,7 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 	private List<ArtistNewsListItem> artistsNewsListItems;
 	private int count;
 	private OnNewsLoadedListener newsLoadedListener;
+	private AsyncTaskListener<Void> asyncTaskListener;
 
 	private SortArtistNewsBy sortBy;
 	
@@ -47,13 +49,14 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 	
 	public LoadArtistNews(String oauthToken, ArtistNewsListAdapter artistNewsListAdapter, String wcitiesId, 
 			List<ArtistNewsListItem> artistsNewsListItems, Artist artist, OnNewsLoadedListener newsLoadedListener, 
-			SortArtistNewsBy sortBy) {
+			SortArtistNewsBy sortBy, AsyncTaskListener<Void> asyncTaskListener) {
 		this.oauthToken = oauthToken;
 		this.artistNewsListAdapter = artistNewsListAdapter;
 		this.wcitiesId = wcitiesId;
 		this.artist = artist;
 		this.artistsNewsListItems = artistsNewsListItems;
 		this.newsLoadedListener = newsLoadedListener;
+		this.asyncTaskListener = asyncTaskListener;
 		this.sortBy = sortBy;
 		
 		batchLoaded = new ArrayList<ArtistNewsListItem>();
@@ -133,7 +136,7 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 					ArtistNewsItem artistNewsItem = new ArtistNewsItem();
 					artistNewsItem.setArtistName(AppConstants.INVALID_STR_ID);
 					artistsNewsListItems.add(new ArtistNewsListItem(artistNewsItem, this));
-					if(newsLoadedListener != null) {
+					if (newsLoadedListener != null) {
 						newsLoadedListener.onNewsLoaded();
 					}
 				}
@@ -143,6 +146,9 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 			batchLoaded.clear();
 			artistNewsListAdapter.setMoreDataAvailable(true);
 			artistNewsListAdapter.notifyDataSetChanged();
+			if (asyncTaskListener != null) {
+				asyncTaskListener.onTaskCompleted();
+			}
 		}
 	}
 	

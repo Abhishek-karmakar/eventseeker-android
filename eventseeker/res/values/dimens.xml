@@ -620,7 +620,6 @@
     <dimen name="img_down_margin_r_event_details">@dimen/txt_desc_margin_l_event_details</dimen>
     <dimen name="v_hor_line_ht_event_details">1dp</dimen>
     <dimen name="v_hor_margin_b_event_details">5dp</dimen>
-    <dimen name="prgs_bar_margin_t_event_details">@dimen/txt_desc_margin_t_event_details</dimen>
     <dimen name="txt_featuring_margin_t_event_details">@dimen/txt_desc_margin_t_event_details</dimen>
     <dimen name="v_pager_featuring_ht_event_details">150dp</dimen>
     <dimen name="v_pager_featuring_margin_t_event_details">@dimen/txt_desc_margin_t_event_details</dimen>

@@ -20,6 +20,7 @@ import android.widget.AbsListView.RecyclerListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -34,12 +35,13 @@ import com.wcities.eventseeker.asynctask.LoadArtistNews.OnNewsLoadedListener;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.ArtistNewsItem;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
+import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack implements 
-		LoadItemsInBackgroundListener, OnNewsLoadedListener, OnClickListener {
+		LoadItemsInBackgroundListener, OnNewsLoadedListener, OnClickListener, AsyncTaskListener<Void> {
 	
 	protected static final String TAG = ArtistsNewsListFragment.class.getName();
 
@@ -56,8 +58,9 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	private boolean isTablet;
 	private boolean is7InchTabletInPortrait;
 
-	private View rltDummyLyt;
 	private ScrollView scrlVRootNoItemsFoundWithAction;
+	private RelativeLayout rltLytPrgsBar;
+	
 	private SortArtistNewsBy sortBy = SortArtistNewsBy.chronological;
 	
 	public enum SortArtistNewsBy {
@@ -150,9 +153,10 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 		
 		super.onCreateView(inflater, container, savedInstanceState);
 		View v = inflater.inflate(R.layout.fragment_artists_news_list, null);
-		rltDummyLyt = v.findViewById(R.id.rltDummyLyt);
 		scrlVRootNoItemsFoundWithAction = (ScrollView) v.findViewById(R.id.scrlVRootNoItemsFoundWithAction);
 		v.findViewById(R.id.btnAction).setOnClickListener(this);
+		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
+		
 		return v;
 	}
 	
@@ -299,8 +303,12 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	
 	@Override
 	public void loadItemsInBackground() {
+		if (artistsNewsListItems.size() == 1) {
+			// display full screen progress bar
+			rltLytPrgsBar.setVisibility(View.VISIBLE);
+		}
 		loadArtistsNews = new LoadArtistNews(Api.OAUTH_TOKEN, artistNewsListAdapter, wcitiesId, artistsNewsListItems, 
-				null, this, sortBy);
+				null, this, sortBy, this);
 		artistNewsListAdapter.setLoadArtistNews(loadArtistsNews);
 		AsyncTaskUtil.executeAsyncTask(loadArtistsNews, true);
 	}
@@ -312,28 +320,22 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 
 	private void changeRltDummyLytVisibility() {
 		if (artistsNewsListItems.size() == 1 && artistsNewsListItems.get(0) != null
-				&& ((ArtistNewsItem)((ArtistNewsListItem)artistsNewsListItems.get(0))
-						.getItem()).getArtistName().equals(AppConstants.INVALID_STR_ID)) {
-			if (wcitiesId == null) {
-				rltDummyLyt.setVisibility(View.VISIBLE);
+			&& ((ArtistNewsItem)((ArtistNewsListItem)artistsNewsListItems.get(0))
+					.getItem()).getArtistName().equals(AppConstants.INVALID_STR_ID)) {
+			setNoItemsLayout();
+			/**
+			 * try-catch is used to handle case where even before we get call back to this function, user leaves 
+			 * this screen.
+			 */
+			try {
+				getListView().setVisibility(View.GONE);
 				
-			} else {
-				setNoItemsLayout();
-				/**
-				 * try-catch is used to handle case where even before we get call back to this function, user leaves 
-				 * this screen.
-				 */
-				try {
-					getListView().setVisibility(View.GONE);
-					
-				} catch (IllegalStateException e) {
-					Log.e(TAG, "" + e.getMessage());
-					e.printStackTrace();
-				}
+			} catch (IllegalStateException e) {
+				Log.e(TAG, "" + e.getMessage());
+				e.printStackTrace();
 			}
 			
 		} else {
-			rltDummyLyt.setVisibility(View.GONE);
 			scrlVRootNoItemsFoundWithAction.setVisibility(View.GONE);
 		}				
 	}
@@ -369,4 +371,9 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 		return "Artist News Screen";
 	}
 
+	@Override
+	public void onTaskCompleted(Void... params) {
+		// remove full screen progressbar
+		rltLytPrgsBar.setVisibility(View.INVISIBLE);
+	}
 }

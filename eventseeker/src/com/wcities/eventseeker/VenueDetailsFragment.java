@@ -38,9 +38,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
@@ -68,7 +68,6 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg.AsyncLoadImageListener;
 import com.wcities.eventseeker.asynctask.LoadEvents;
-import com.wcities.eventseeker.asynctask.LoadEvents.LoadEventsTaskListener;
 import com.wcities.eventseeker.asynctask.LoadVenueDetails;
 import com.wcities.eventseeker.asynctask.LoadVenueDetails.OnVenueUpdatedListener;
 import com.wcities.eventseeker.asynctask.UserTracker;
@@ -83,6 +82,7 @@ import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.custom.fragment.PublishEventFragmentLoadableFromBackStack;
+import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionDestination;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
@@ -102,7 +102,7 @@ import com.wcities.eventseeker.viewdata.SharedElementPosition;
 
 public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackStack implements DrawerListener, 
 		CustomSharedElementTransitionDestination, OnVenueUpdatedListener, LoadItemsInBackgroundListener, 
-		CustomSharedElementTransitionSource, AsyncLoadImageListener, LoadEventsTaskListener, FragmentHavingFragmentInRecyclerView {
+		CustomSharedElementTransitionSource, AsyncLoadImageListener, AsyncTaskListener<Void>, FragmentHavingFragmentInRecyclerView {
 
 	private static final String TAG = VenueDetailsFragment.class.getSimpleName();
 	
@@ -167,11 +167,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 				recyclerVVenues.getViewTreeObserver().removeGlobalOnLayoutListener(this);
 			}
 			
-			onScrolled(0, true);
-			if (((MainActivity)FragmentUtil.getActivity(VenueDetailsFragment.this)).isDrawerOpen()) {
-				// to maintain status bar & toolbar decorations after orientation change
-				onDrawerOpened();
-			}
+			onScrolled(0, true, true);
         }
     };
 	
@@ -233,7 +229,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	    	public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 	    		super.onScrolled(recyclerView, dx, dy);
 	    		//Log.d(TAG, "onScrolled - dx = " + dx + ", dy = " + dy);
-	    		VenueDetailsFragment.this.onScrolled(dy, false);
+	    		VenueDetailsFragment.this.onScrolled(dy, false, false);
 	    	}
 		});
 		
@@ -284,11 +280,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		
 		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.GONE, AppConstants.INVALID_ID);
 		if (totalScrolledDy != UNSCROLLED) {
-			onScrolled(0, true);
-			
-			if (((MainActivity)FragmentUtil.getActivity(VenueDetailsFragment.this)).isDrawerOpen()) {
-				onDrawerOpened();
-			}
+			onScrolled(0, true, true);
 		}
 	}
 	
@@ -367,7 +359,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	    }
 	}
 	
-	private void onScrolled(int dy, boolean forceUpdate) {
+	private void onScrolled(int dy, boolean forceUpdate, boolean chkForOpenDrawer) {
 		//Log.d(TAG, "dy = " + dy);
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		
@@ -436,6 +428,11 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	        ViewHelper.setScaleX(txtVenueTitle, scale);
 	        ViewHelper.setScaleY(txtVenueTitle, scale);
 		}
+		
+		if (chkForOpenDrawer && ((MainActivity)FragmentUtil.getActivity(this)).isDrawerOpen()) {
+			// to maintain status bar & toolbar decorations
+			onDrawerOpened();
+		}
 	}
 	
 	private void calculateScrollLimit() {
@@ -503,7 +500,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 
 	@Override
 	public void onDrawerClosed(View arg0) {
-		onScrolled(0, true);
+		onScrolled(0, true, false);
 	}
 
 	@Override
@@ -1284,7 +1281,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 							
 							@Override
 							public void run() {
-								venueDetailsFragment.onScrolled(0, true);
+								venueDetailsFragment.onScrolled(0, true, false);
 							}
 						});
 						
@@ -1738,17 +1735,6 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	}
 
 	@Override
-	public void onEventsLoaded() {
-		handler.post(new Runnable() {
-			
-			@Override
-			public void run() {
-				onScrolled(0, true);
-			}
-		});
-	}
-
-	@Override
 	public void onPushedToBackStackFHFIR() {
 		onPushedToBackStack(true);
 	}
@@ -1766,5 +1752,16 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	@Override
 	public boolean isOnTopFHFIR() {
 		return !isOnPushedToBackStackCalled;
+	}
+
+	@Override
+	public void onTaskCompleted(Void... params) {
+		handler.post(new Runnable() {
+			
+			@Override
+			public void run() {
+				onScrolled(0, true, true);
+			}
+		});
 	}
 }

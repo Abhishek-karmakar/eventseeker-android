@@ -2,18 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-
-    <com.wcities.eventseeker.custom.view.RecyclerViewInterceptingVerticalScroll
-        android:id="@+id/recyclerVEvents"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:scrollbars="vertical" />
+    
+    <ListView android:id="@id/android:list"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent" />
     
     <include layout="@layout/progress_bar_eventseeker_fixed_ht"
         android:id="@+id/rltLytPrgsBar"
         android:layout_width="match_parent"
     	android:layout_height="match_parent"
-    	android:visibility="invisible" />
+    	android:visibility="invisible" />    
 
 </RelativeLayout>

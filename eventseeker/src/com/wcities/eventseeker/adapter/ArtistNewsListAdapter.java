@@ -123,6 +123,14 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 				convertView.setBackgroundColor(mContext.getResources().getColor(R.color.root_lnr_layout_bg_artists_news_list_item));
 			}
 			
+			if (artistsNewsListItems.size() == 1) {
+				// Instead of this limited height progress bar, we display full screen progress bar from fragment
+				convertView.setVisibility(View.INVISIBLE);
+				
+			} else {
+				convertView.setVisibility(View.VISIBLE);
+			}
+			
 			if ((loadArtistNews == null || loadArtistNews.getStatus() == Status.FINISHED) && 
 					isMoreDataAvailable && batchLoaded.isEmpty()) {
 				mListener.loadItemsInBackground();

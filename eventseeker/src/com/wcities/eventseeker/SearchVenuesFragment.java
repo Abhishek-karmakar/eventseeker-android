@@ -11,6 +11,7 @@ import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,8 +19,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.TextView;
 
 import com.wcities.eventseeker.SearchFragment.SearchFragmentChildListener;
 import com.wcities.eventseeker.adapter.AbstractVenueListAdapter;
@@ -30,7 +31,7 @@ import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Venue;
-import com.wcities.eventseeker.interfaces.ArtistListener;
+import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
@@ -42,9 +43,9 @@ import com.wcities.eventseeker.viewdata.SharedElement;
 import com.wcities.eventseeker.viewdata.SharedElementPosition;
 
 public class SearchVenuesFragment extends ListFragment implements SearchFragmentChildListener, 
-		LoadItemsInBackgroundListener, CustomSharedElementTransitionSource {
+		LoadItemsInBackgroundListener, CustomSharedElementTransitionSource, AsyncTaskListener<Void> {
 	
-	private static final String TAG = SearchVenuesFragment.class.getName();
+	private static final String TAG = SearchVenuesFragment.class.getSimpleName();
 	
 	protected static final String VENUE_LIST_FRAGMENT_TAG = "venueListFragment";
 
@@ -52,6 +53,7 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 
 	private LoadVenues loadVenues;
 
+	private RelativeLayout rltLytPrgsBar;
 	private VenueListAdapter venueListAdapter;
 	
 	private List<Venue> venueList;
@@ -68,17 +70,21 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = super.onCreateView(inflater, container, savedInstanceState);
+		//Log.d(TAG, "onCreateView()");
+		View v = inflater.inflate(R.layout.list_with_centered_progress, null);
 
 		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
 			int pad = getResources().getDimensionPixelSize(R.dimen.tab_bar_margin_fragment_custom_tabs);
-			v.setPadding(pad, 0, pad, 0);
+			v.findViewById(android.R.id.list).setPadding(pad, 0, pad, 0);
 		}
+		
+		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
 		return v;
 	}
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
+		//Log.d(TAG, "onActivityCreated()");
 		super.onActivityCreated(savedInstanceState);
 		
 		if (venueList == null) {
@@ -107,7 +113,7 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 		if (latLng == null) {
 			latLng = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 		}
-		loadVenues = new LoadVenues(Api.OAUTH_TOKEN, this, venueListAdapter, venueList, latLng);
+		loadVenues = new LoadVenues(Api.OAUTH_TOKEN, this, venueListAdapter, venueList, latLng, this);
 		venueListAdapter.setLoadVenues(loadVenues);
         AsyncTaskUtil.executeAsyncTask(loadVenues, true, query);
 	}
@@ -141,6 +147,7 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 	    
 	    @Override
 		public View getView(int position, View convertView, ViewGroup parent) {
+	    	final Venue venue = getItem(position);
 	    	
 			if (venueList.get(position) == null) {
 				if (convertView == null || !convertView.getTag().equals(AppConstants.TAG_PROGRESS_INDICATOR)) {
@@ -148,14 +155,19 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 					convertView.setTag(AppConstants.TAG_PROGRESS_INDICATOR);
 				}
 				
-				if ((loadVenues == null || loadVenues.getStatus() == Status.FINISHED) && 
-						isMoreDataAvailable) {
+				if (venueList.size() == 1) {
+					((SearchVenuesFragment) fragment).rltLytPrgsBar.setVisibility(View.VISIBLE);
+					convertView.setVisibility(View.INVISIBLE);
+					
+				} else {
+					convertView.setVisibility(View.VISIBLE);
+				}
+				
+				if ((loadVenues == null || loadVenues.getStatus() == Status.FINISHED) && isMoreDataAvailable) {
 					listener.loadItemsInBackground();
 				}
 				
 			} else {
-				
-				final Venue venue = getItem(position);
 				
 				if (venue.getId() == AppConstants.INVALID_ID) {
 					convertView = mInflater.inflate(R.layout.list_no_items_found, null);
@@ -281,5 +293,11 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 	@Override
 	public boolean isOnTop() {
 		return false;
+	}
+
+	@Override
+	public void onTaskCompleted(Void... params) {
+		// remove full screen progressbar
+		rltLytPrgsBar.setVisibility(View.INVISIBLE);
 	}
 }

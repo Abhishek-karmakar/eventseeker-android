@@ -32,5 +32,11 @@
     	android:layout_height="match_parent"
     	android:layout_margin="@dimen/include_no_items_found_with_action_margin_fragment_artists_news_list"
         android:visibility="gone"/>
+    
+    <include layout="@layout/progress_bar_eventseeker_fixed_ht"
+        android:id="@+id/rltLytPrgsBar"
+        android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+    	android:visibility="invisible" />
 
 </RelativeLayout>
