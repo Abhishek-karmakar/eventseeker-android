@@ -13,7 +13,7 @@ import com.wcities.eventseeker.util.FragmentUtil;
 
 public class FollowingFragment extends FollowingParentFragment {
 
-	private static final String TAG = FollowingFragment.class.getName();
+	private static final String TAG = FollowingFragment.class.getSimpleName();
 	private ListView listFollowing;
 
 	@Override

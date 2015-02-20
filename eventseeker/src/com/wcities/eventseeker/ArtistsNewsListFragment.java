@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView.RecyclerListener;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -36,12 +35,14 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.ArtistNewsItem;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
+import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack implements 
-		LoadItemsInBackgroundListener, OnNewsLoadedListener, OnClickListener, AsyncTaskListener<Void> {
+		LoadItemsInBackgroundListener, OnNewsLoadedListener, OnClickListener, AsyncTaskListener<Void>, 
+		FullScrnProgressListener {
 	
 	protected static final String TAG = ArtistsNewsListFragment.class.getName();
 
@@ -117,6 +118,7 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		//Log.d(TAG, "doIn onCreateView()");
 		orientation = getResources().getConfiguration().orientation;
 		is7InchTabletInPortrait = ((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext())
 				.is7InchTabletAndInPortraitMode();
@@ -303,12 +305,8 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	
 	@Override
 	public void loadItemsInBackground() {
-		if (artistsNewsListItems.size() == 1) {
-			// display full screen progress bar
-			rltLytPrgsBar.setVisibility(View.VISIBLE);
-		}
 		loadArtistsNews = new LoadArtistNews(Api.OAUTH_TOKEN, artistNewsListAdapter, wcitiesId, artistsNewsListItems, 
-				null, this, sortBy, this);
+				null, this, sortBy);
 		artistNewsListAdapter.setLoadArtistNews(loadArtistsNews);
 		AsyncTaskUtil.executeAsyncTask(loadArtistsNews, true);
 	}
@@ -375,5 +373,10 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	public void onTaskCompleted(Void... params) {
 		// remove full screen progressbar
 		rltLytPrgsBar.setVisibility(View.INVISIBLE);
+	}
+
+	@Override
+	public void displayFullScrnProgress() {
+		rltLytPrgsBar.setVisibility(View.VISIBLE);
 	}
 }

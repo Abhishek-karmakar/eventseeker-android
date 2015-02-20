@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
+import com.wcities.eventseeker.ArtistsNewsListFragment;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
@@ -32,6 +33,7 @@ import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.ArtistNewsItem;
 import com.wcities.eventseeker.core.ArtistNewsItem.PostType;
+import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.ConversionUtil;
 
@@ -126,6 +128,9 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 			if (artistsNewsListItems.size() == 1) {
 				// Instead of this limited height progress bar, we display full screen progress bar from fragment
 				convertView.setVisibility(View.INVISIBLE);
+				if (mListener instanceof FullScrnProgressListener) {
+					((FullScrnProgressListener) mListener).displayFullScrnProgress();
+				}
 				
 			} else {
 				convertView.setVisibility(View.VISIBLE);
@@ -350,6 +355,15 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 				title += " " + res.getString(R.string.posted_a_video);
 				updateImageView(artistsNewsListItem, imgPhoto, parent, pos);
 				break;
+				
+			case event:
+				imgPhoto.setVisibility(View.GONE);
+				imgVideo.setVisibility(View.GONE);
+				txtLinkTitle.setVisibility(View.GONE);
+				imgLink.setVisibility(View.GONE);
+				
+				title = res.getString(R.string.latest_from) + " " + title;
+				break;
 
 			default:
 				break;
@@ -424,6 +438,15 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 				title += " " + res.getString(R.string.posted_a_video);
 				updateImageView(artistsNewsListItem, imgPhoto2, parent, pos);
 				break;
+				
+			case event:
+				imgPhoto.setVisibility(View.GONE);
+				imgVideo.setVisibility(View.GONE);
+				txtLinkTitle.setVisibility(View.GONE);
+				imgLink.setVisibility(View.GONE);
+				
+				title = res.getString(R.string.latest_from) + " " + title;
+				break;
 
 			default:
 				break;
@@ -447,7 +470,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 		private void updateImageView(ArtistNewsListItem artistsNewsListItem, ImageView imageView, 
 				ViewGroup parent, int pos) {
 			ArtistNewsItem item = artistsNewsListItem.getItem();
-			if (item.getPostType() != PostType.link) {
+			if (item.getPostType() != PostType.link && item.getPostType() != PostType.event) {
 				updateLayoutParams(imageView, artistsNewsListItem);
 			}
 			String key = item.getKey(ImgResolution.DEFAULT);

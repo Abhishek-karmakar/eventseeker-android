@@ -2,7 +2,6 @@ package com.wcities.eventseeker.asynctask;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -18,9 +17,9 @@ import android.widget.BaseAdapter;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Artist.Genre;
-import com.wcities.eventseeker.core.FollowingList;
 import com.wcities.eventseeker.core.ItemsList;
 import com.wcities.eventseeker.interfaces.ArtistAdapterListener;
+import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.LoadArtistsListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 
@@ -104,9 +103,13 @@ public class LoadArtistsByCategory extends AsyncTask<Void, Void, List<Artist>> {
 		}
 		
 		((BaseAdapter) artistAdapterListener).notifyDataSetChanged();
+		if (loadArtistsListener instanceof AsyncTaskListener) {
+			((AsyncTaskListener<Void>) loadArtistsListener).onTaskCompleted();
+		}
 	}
 	
 	private void handleLoadedArtists(List<Artist> tmpArtists) {
+		//Log.d(TAG, "handleLoadedArtists()");
 		int prevArtistListSize = artistList.size();
 		
 		artistList.addAll(artistList.size() - 1, tmpArtists);
@@ -117,9 +120,11 @@ public class LoadArtistsByCategory extends AsyncTask<Void, Void, List<Artist>> {
 		for (Iterator<Artist> iterator = tmpArtists.iterator(); iterator.hasNext();) {
 			Artist artist = iterator.next();
 			if (!artistIds.contains(artist.getId())) {
+				//Log.d(TAG, "handleLoadedArtists() add - " + artist.getId());
 				artistIds.add(artist.getId());
 				
 			} else {
+				//Log.d(TAG, "handleLoadedArtists() remove - " + artist.getId());
 				artistList.remove(artist);
 				continue;
 			}

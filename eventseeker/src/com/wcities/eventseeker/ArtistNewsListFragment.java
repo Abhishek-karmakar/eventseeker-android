@@ -208,7 +208,7 @@ public class ArtistNewsListFragment extends ListFragment implements LoadItemsInB
 	@Override
 	public void loadItemsInBackground() {
 		loadArtistNews = new LoadArtistNews(Api.OAUTH_TOKEN, artistNewsListAdapter, wcitiesId, artistNewsListItems, 
-				artist, this, SortArtistNewsBy.chronological, null);
+				artist, this, SortArtistNewsBy.chronological);
 		artistNewsListAdapter.setLoadArtistNews(loadArtistNews);
 		AsyncTaskUtil.executeAsyncTask(loadArtistNews, true);
 	}

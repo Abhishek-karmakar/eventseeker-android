@@ -219,6 +219,7 @@
     <string name="shared_a_link">shared a link</string>
     <string name="posted_a_video">posted a video</string>
     <string name="posted_a_status">posted a status</string>
+    <string name="latest_from">Latest from</string>
     <string name="follow_artists_for_updates">Follow artists to receive real time updates.</string>
     <string name="search_artists">Search Artists</string>
     <string name="sort_by">Sort By : </string>

@@ -11,7 +11,8 @@ public class ArtistNewsItem implements BitmapCacheable {
 		link,
 		photo,
 		video,
-		swf
+		swf,
+		event
 	}
 
 	private String artistName;

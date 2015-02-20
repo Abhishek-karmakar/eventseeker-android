@@ -113,7 +113,7 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 		if (latLng == null) {
 			latLng = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 		}
-		loadVenues = new LoadVenues(Api.OAUTH_TOKEN, this, venueListAdapter, venueList, latLng, this);
+		loadVenues = new LoadVenues(Api.OAUTH_TOKEN, venueListAdapter, venueList, latLng, this);
 		venueListAdapter.setLoadVenues(loadVenues);
         AsyncTaskUtil.executeAsyncTask(loadVenues, true, query);
 	}

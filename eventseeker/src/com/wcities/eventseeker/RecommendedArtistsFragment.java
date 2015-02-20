@@ -48,7 +48,9 @@ import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.custom.fragment.PublishArtistFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
+import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
+import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadArtistsListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
@@ -59,7 +61,8 @@ import com.wcities.eventseeker.util.ViewUtil;
 
 public class RecommendedArtistsFragment extends PublishArtistFragmentLoadableFromBackStack implements OnClickListener, 
 		LoadArtistsListener, LoadItemsInBackgroundListener, DialogBtnClickListener, ArtistTrackingListener,
-		OnFacebookShareClickedListener, CustomSharedElementTransitionSource {
+		OnFacebookShareClickedListener, CustomSharedElementTransitionSource, FullScrnProgressListener,
+		AsyncTaskListener<Void> {
 
 	private static final String TAG = RecommendedArtistsFragment.class.getName();
 
@@ -104,6 +107,7 @@ public class RecommendedArtistsFragment extends PublishArtistFragmentLoadableFro
 
 	private View rltDummyLyt;
 	private ScrollView scrlVRootNoItemsFoundWithAction;
+	private RelativeLayout rltLytPrgsBar;
 
 	/**
 	 * Using its instance variable since otherwise calling getResources()
@@ -190,6 +194,9 @@ public class RecommendedArtistsFragment extends PublishArtistFragmentLoadableFro
 		});
 
 		v.findViewById(R.id.btnAction).setOnClickListener(this);
+		
+		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
+		
 		return v;
 	}
 
@@ -313,14 +320,6 @@ public class RecommendedArtistsFragment extends PublishArtistFragmentLoadableFro
 	
 	@Override
 	public void loadItemsInBackground() {
-		/**
-		 * 05-01-2015:
-		 * NOTE:
-		 * The Caching Logic is commented for the future, if it is required in future. Although, it needs
-		 * some modification as per the Recommended Artist screen, as in this screen the artist list could 
-		 * be sorted as per the artist similarity score(default) or as per artist name. So, the logic crashes.
-		 * The logic has been taken from Following screen.
-		 */
 		loadRecommendedArtists = new LoadRecommendedArtists(Api.OAUTH_TOKEN, wcitiesId, artistList, myArtistListAdapter, 
 				this, sortBy);
 		myArtistListAdapter.setLoadArtists(loadRecommendedArtists);
@@ -570,4 +569,13 @@ public class RecommendedArtistsFragment extends PublishArtistFragmentLoadableFro
 		return !isOnPushedToBackStackCalled;
 	}
 
+	@Override
+	public void displayFullScrnProgress() {
+		rltLytPrgsBar.setVisibility(View.VISIBLE);
+	}
+
+	@Override
+	public void onTaskCompleted(Void... params) {
+		rltLytPrgsBar.setVisibility(View.INVISIBLE);
+	}
 }

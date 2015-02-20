@@ -34,6 +34,7 @@ import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
+import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.viewdata.SharedElement;
@@ -96,6 +97,9 @@ public class ArtistListAdapter<T> extends BaseAdapter {
 			if (artistList.size() == 1) {
 				// Instead of this limited height progress bar, we display full screen progress bar from fragment
 				convertView.setVisibility(View.INVISIBLE);
+				if (mListener instanceof FullScrnProgressListener) {
+					((FullScrnProgressListener) mListener).displayFullScrnProgress();
+				}
 				
 			} else {
 				convertView.setVisibility(View.VISIBLE);

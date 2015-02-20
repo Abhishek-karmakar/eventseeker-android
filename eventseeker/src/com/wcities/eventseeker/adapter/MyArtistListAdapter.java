@@ -11,7 +11,6 @@ import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,9 +20,9 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
-import android.widget.RelativeLayout.LayoutParams;
 
 import com.wcities.eventseeker.GeneralDialogFragment;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
@@ -39,6 +38,7 @@ import com.wcities.eventseeker.interfaces.ArtistAdapterListener;
 import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
+import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.viewdata.SharedElement;
@@ -138,13 +138,24 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 		final Artist artist = getItem(position);
 		if (artist == null) {
 			if (convertView == null || !convertView.getTag().equals(AppConstants.TAG_PROGRESS_INDICATOR)) {
-				if(isTablet) {
+				if (isTablet) {
 					convertView = LayoutInflater.from(mContext).inflate(R.layout.grd_progress_bar, null);
 					
 				} else {
 					convertView = LayoutInflater.from(mContext).inflate(R.layout.progress_bar_eventseeker_fixed_ht, null);
 				}
 				convertView.setTag(AppConstants.TAG_PROGRESS_INDICATOR);
+			}
+			
+			if (artistList.size() == 1) {
+				// Instead of this limited height progress bar, we display full screen progress bar from fragment
+				convertView.setVisibility(View.INVISIBLE);
+				if (mListener instanceof FullScrnProgressListener) {
+					((FullScrnProgressListener) mListener).displayFullScrnProgress();
+				}
+				
+			} else {
+				convertView.setVisibility(View.VISIBLE);
 			}
 
 			if ((loadMyArtists == null || loadMyArtists.getStatus() == Status.FINISHED) && isMoreDataAvailable) {

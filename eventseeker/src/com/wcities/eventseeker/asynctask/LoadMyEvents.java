@@ -16,6 +16,7 @@ import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.ItemsList;
+import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 
@@ -32,11 +33,11 @@ public class LoadMyEvents extends AsyncTask<Void, Void, List<Event>> {
 	private List<Event> eventList;
 	
 	private DateWiseEventParentAdapterListener dateWiseEventParentAdapterListener;
+	private AsyncTaskListener<Void> asyncTaskListener;
 	
-	//For new UI
 	public LoadMyEvents(String oauthToken, List<Event> eventList, DateWiseEventParentAdapterListener 
-			dateWiseEventParentAdapterListener, String wcitiesId, 
-			Type loadType, double lat, double lon) {
+			dateWiseEventParentAdapterListener, String wcitiesId, Type loadType, double lat, double lon, 
+			AsyncTaskListener<Void> asyncTaskListener) {
 		this.oauthToken = oauthToken;
 		this.eventList = eventList;
 		this.dateWiseEventParentAdapterListener = dateWiseEventParentAdapterListener;
@@ -44,6 +45,7 @@ public class LoadMyEvents extends AsyncTask<Void, Void, List<Event>> {
 		this.loadType = loadType;
 		this.lat = lat;
 		this.lon = lon;
+		this.asyncTaskListener = asyncTaskListener;
 	}
 	
 	@Override
@@ -111,5 +113,8 @@ public class LoadMyEvents extends AsyncTask<Void, Void, List<Event>> {
 			}
 		}
 		((BaseAdapter) dateWiseEventParentAdapterListener).notifyDataSetChanged();
+		if (asyncTaskListener != null) {
+			asyncTaskListener.onTaskCompleted();
+		}
 	}
 }

@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -31,7 +32,9 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.custom.fragment.PublishEventListFragment;
+import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
+import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.interfaces.PublishListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
@@ -39,7 +42,8 @@ import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class MyEventsListFragment extends PublishEventListFragment implements LoadItemsInBackgroundListener, 
-		PublishListener, OnClickListener, OnNoEventsListener, CustomSharedElementTransitionSource {
+		PublishListener, OnClickListener, OnNoEventsListener, CustomSharedElementTransitionSource, 
+		FullScrnProgressListener, AsyncTaskListener<Void> {
 	
 	private static final String TAG = MyEventsListFragment.class.getSimpleName();
 	
@@ -51,6 +55,7 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 	private List<Event> eventList;
 	
 	private ScrollView scrlVRootNoItemsFoundWithAction;
+	private RelativeLayout rltLytPrgsBar;
 	private double[] latLon;
 	
 	/**
@@ -105,6 +110,7 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 		View v = inflater.inflate(R.layout.fragment_my_events_list, null);
 		scrlVRootNoItemsFoundWithAction = (ScrollView) v.findViewById(R.id.scrlVRootNoItemsFoundWithAction);
 		v.findViewById(R.id.btnAction).setOnClickListener(this);
+		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
 		return v;
 	}
 	
@@ -114,7 +120,7 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 			latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 		}
 		loadEvents = new LoadMyEvents(Api.OAUTH_TOKEN, eventList, eventListAdapter, wcitiesId, loadType, 
-				latLon[0], latLon[1]);
+				latLon[0], latLon[1], this);
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);
         AsyncTaskUtil.executeAsyncTask(loadEvents, true);
 	}
@@ -230,5 +236,15 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 	public boolean isOnTop() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void onTaskCompleted(Void... params) {
+		rltLytPrgsBar.setVisibility(View.INVISIBLE);
+	}
+
+	@Override
+	public void displayFullScrnProgress() {
+		rltLytPrgsBar.setVisibility(View.VISIBLE);
 	}	
 }

@@ -22,7 +22,6 @@ import android.widget.AbsListView.RecyclerListener;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -46,7 +45,9 @@ import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.core.FollowingList;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
+import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
+import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadArtistsListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
@@ -55,7 +56,8 @@ import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
 
 public abstract class FollowingParentFragment extends FragmentLoadableFromBackStack implements ArtistTrackingListener,
-		OnClickListener, LoadArtistsListener, LoadItemsInBackgroundListener, DialogBtnClickListener, CustomSharedElementTransitionSource {
+		OnClickListener, LoadArtistsListener, LoadItemsInBackgroundListener, DialogBtnClickListener, 
+		CustomSharedElementTransitionSource, FullScrnProgressListener, AsyncTaskListener<Void> {
 
 	private static final String TAG = FollowingParentFragment.class.getName();
 
@@ -75,6 +77,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 
 	private View rltDummyLyt;
 	private ScrollView scrlVRootNoItemsFoundWithAction;
+	private RelativeLayout rltLytPrgsBar;
 	
 	/**
 	 * Using its instance variable since otherwise calling getResources() directly from fragment from 
@@ -130,6 +133,8 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 		rltDummyLyt = v.findViewById(R.id.rltDummyLyt);
 		scrlVRootNoItemsFoundWithAction = (ScrollView) v.findViewById(R.id.scrlVRootNoItemsFoundWithAction);
 		v.findViewById(R.id.btnAction).setOnClickListener(this);
+		
+		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
 		return v;
 	}
 
@@ -359,6 +364,16 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 	@Override
 	public boolean isOnTop() {
 		return !isOnPushedToBackStackCalled;
+	}
+	
+	@Override
+	public void displayFullScrnProgress() {
+		rltLytPrgsBar.setVisibility(View.VISIBLE);
+	}
+	
+	@Override
+	public void onTaskCompleted(Void... params) {
+		rltLytPrgsBar.setVisibility(View.INVISIBLE);
 	}
 	
 	protected abstract AbsListView getScrollableView();

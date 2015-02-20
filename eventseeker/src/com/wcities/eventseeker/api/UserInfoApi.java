@@ -1,6 +1,7 @@
 package com.wcities.eventseeker.api;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
@@ -604,7 +605,7 @@ public class UserInfoApi extends Api {
 		
 		//For Featured Artist List Genre's URL form will be 'null'.
 		if (genre.getUrlForm() != null) {
-			uriBuilder.append("&genre=").append(genre.getUrlForm());
+			uriBuilder.append("&genre=").append(URLEncoder.encode(genre.getUrlForm(), AppConstants.CHARSET_NAME));
 		}
 		
 		if (limit != NOT_INITIALIZED) {

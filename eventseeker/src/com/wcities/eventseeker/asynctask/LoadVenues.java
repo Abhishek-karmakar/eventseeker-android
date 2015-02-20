@@ -27,8 +27,6 @@ public class LoadVenues extends AsyncTask<String, Void, List<Venue>> {
 
 	private static final String TAG = LoadVenues.class.getName();
 	
-	private Fragment fragment;
-	
 	private AbstractVenueListAdapter venueListAdapter;
 	
 	private List<Venue> venueList;
@@ -37,19 +35,17 @@ public class LoadVenues extends AsyncTask<String, Void, List<Venue>> {
 	
 	private AsyncTaskListener<Void> asyncTaskListener;
 	
-	public LoadVenues(String oauthToken, Fragment fragment, AbstractVenueListAdapter venueListAdapter, List<Venue> venueList, 
+	public LoadVenues(String oauthToken, AbstractVenueListAdapter venueListAdapter, List<Venue> venueList, 
 			double[] latLon) {
 		this.oauthToken = oauthToken;
-		this.fragment = fragment;
 		this.venueListAdapter = venueListAdapter;
 		this.venueList = venueList;
 		this.latLon = latLon;
 	}
 	
-	public LoadVenues(String oauthToken, Fragment fragment, AbstractVenueListAdapter venueListAdapter, List<Venue> venueList, 
+	public LoadVenues(String oauthToken, AbstractVenueListAdapter venueListAdapter, List<Venue> venueList, 
 			double[] latLon, AsyncTaskListener<Void> asyncTaskListener) {
 		this.oauthToken = oauthToken;
-		this.fragment = fragment;
 		this.venueListAdapter = venueListAdapter;
 		this.venueList = venueList;
 		this.latLon = latLon;

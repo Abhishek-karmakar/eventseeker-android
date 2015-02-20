@@ -38,6 +38,7 @@ import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
+import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.interfaces.PublishListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
@@ -46,7 +47,8 @@ import com.wcities.eventseeker.util.FragmentUtil;
 
 public class SearchArtistsFragment extends PublishArtistListFragment implements SearchFragmentChildListener, 
 		PublishListener, LoadItemsInBackgroundListener, DialogBtnClickListener, ArtistTrackingListener, 
-		CustomSharedElementTransitionSource, OnFacebookShareClickedListener, AsyncTaskListener<Void> {
+		CustomSharedElementTransitionSource, OnFacebookShareClickedListener, AsyncTaskListener<Void>,
+		FullScrnProgressListener {
 
 	private static final String TAG = SearchArtistsFragment.class.getSimpleName();
 
@@ -122,10 +124,6 @@ public class SearchArtistsFragment extends PublishArtistListFragment implements 
 	
 	@Override
 	public void loadItemsInBackground() {
-		if (artistList.size() == 1) {
-			// display full screen progress bar
-			rltLytPrgsBar.setVisibility(View.VISIBLE);
-		}
 		loadArtists = new LoadArtists(Api.OAUTH_TOKEN, artistList, artistListAdapter, 
 				FragmentUtil.getApplication(this).getWcitiesId(), this);
 		artistListAdapter.setLoadArtists(loadArtists);
@@ -293,5 +291,10 @@ public class SearchArtistsFragment extends PublishArtistListFragment implements 
 	public void onTaskCompleted(Void... params) {
 		// remove full screen progressbar
 		rltLytPrgsBar.setVisibility(View.INVISIBLE);
+	}
+
+	@Override
+	public void displayFullScrnProgress() {
+		rltLytPrgsBar.setVisibility(View.VISIBLE);
 	}
 }

@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.wcities.eventseeker.ArtistsNewsListFragment.SortArtistNewsBy;
 import com.wcities.eventseeker.adapter.ArtistNewsListAdapter;
@@ -30,7 +31,7 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 	
 	private static final int ARTISTS_NEWS_LIMIT = 10;
 
-	private static final String TAG = LoadArtistNews.class.getName();
+	private static final String TAG = LoadArtistNews.class.getSimpleName();
 	
 	private ArtistNewsListAdapter artistNewsListAdapter;
 	private String wcitiesId, oauthToken;
@@ -39,7 +40,6 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 	private List<ArtistNewsListItem> artistsNewsListItems;
 	private int count;
 	private OnNewsLoadedListener newsLoadedListener;
-	private AsyncTaskListener<Void> asyncTaskListener;
 
 	private SortArtistNewsBy sortBy;
 	
@@ -49,14 +49,13 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 	
 	public LoadArtistNews(String oauthToken, ArtistNewsListAdapter artistNewsListAdapter, String wcitiesId, 
 			List<ArtistNewsListItem> artistsNewsListItems, Artist artist, OnNewsLoadedListener newsLoadedListener, 
-			SortArtistNewsBy sortBy, AsyncTaskListener<Void> asyncTaskListener) {
+			SortArtistNewsBy sortBy) {
 		this.oauthToken = oauthToken;
 		this.artistNewsListAdapter = artistNewsListAdapter;
 		this.wcitiesId = wcitiesId;
 		this.artist = artist;
 		this.artistsNewsListItems = artistsNewsListItems;
 		this.newsLoadedListener = newsLoadedListener;
-		this.asyncTaskListener = asyncTaskListener;
 		this.sortBy = sortBy;
 		
 		batchLoaded = new ArrayList<ArtistNewsListItem>();
@@ -146,8 +145,8 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 			batchLoaded.clear();
 			artistNewsListAdapter.setMoreDataAvailable(true);
 			artistNewsListAdapter.notifyDataSetChanged();
-			if (asyncTaskListener != null) {
-				asyncTaskListener.onTaskCompleted();
+			if (newsLoadedListener instanceof AsyncTaskListener) {
+				((AsyncTaskListener<Void>) newsLoadedListener).onTaskCompleted();
 			}
 		}
 	}
@@ -161,7 +160,7 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 		public ArtistNewsListItem(ArtistNewsItem item, LoadArtistNews loadArtistNews) {
 			this.loadArtistNews = loadArtistNews;
 			this.item = item;
-			if (item.getImgUrl() != null && item.getPostType() != PostType.link) {
+			if (item.getImgUrl() != null && item.getPostType() != PostType.link && item.getPostType() != PostType.event) {
 				loadImgDimension();
 				
 			} else {
