@@ -45,6 +45,7 @@ import com.wcities.eventseeker.custom.fragment.PublishEventListFragment;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.EventListener;
+import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.interfaces.PublishListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
@@ -148,6 +149,17 @@ public class MyEventListAdapter extends BaseAdapter implements DateWiseEventPare
 			if (convertView == null	|| convertView.getTag() != ViewType.PROGRESS) {
 				convertView = LayoutInflater.from(mContext).inflate(R.layout.progress_bar_eventseeker_fixed_ht, null);
 				convertView.setTag(ViewType.PROGRESS);
+			}
+			
+			if (eventList.size() == 1) {
+				// Instead of this limited height progress bar, we display full screen progress bar from fragment
+				convertView.setVisibility(View.INVISIBLE);
+				if (mListener instanceof FullScrnProgressListener) {
+					((FullScrnProgressListener) mListener).displayFullScrnProgress();
+				}
+				
+			} else {
+				convertView.setVisibility(View.VISIBLE);
 			}
 			
 			if ((loadMyEvents == null || loadMyEvents.getStatus() == Status.FINISHED) && isMoreDataAvailable) {

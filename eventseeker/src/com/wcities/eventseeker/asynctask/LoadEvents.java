@@ -11,13 +11,13 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import com.wcities.eventseeker.api.EventApi;
 import com.wcities.eventseeker.api.EventApi.IdType;
 import com.wcities.eventseeker.api.EventApi.MoreInfo;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
 
@@ -40,12 +40,7 @@ public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 	private long venueId;
 	
 	private DateWiseEventParentAdapterListener eventListAdapter;
-	
-	private LoadEventsTaskListener loadEventsTaskListener;
-	
-	public interface LoadEventsTaskListener {
-		public void onEventsLoaded();
-	}
+	private AsyncTaskListener<Void> asyncTaskListener;
 	
 	private LoadEvents(String oauthToken, List<Event> eventList, DateWiseEventParentAdapterListener eventListAdapter, 
 			String wcitiesId) {
@@ -57,7 +52,7 @@ public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 
 	public LoadEvents(String oauthToken, List<Event> eventList, DateWiseEventParentAdapterListener eventListAdapter, double lat, 
 			double lon, String startDate, String endDate, int categoryId, String wcitiesId, int miles, 
-			LoadEventsTaskListener loadEventsTaskListener) {
+			AsyncTaskListener<Void> asyncTaskListener) {
 		this(oauthToken, eventList, eventListAdapter, wcitiesId);
 		this.lat = lat;
 		this.lon = lon;
@@ -65,19 +60,19 @@ public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 		this.endDate = endDate;
 		this.categoryId = categoryId;
 		this.miles = miles;
-		
-		this.loadEventsTaskListener = loadEventsTaskListener;
+		this.asyncTaskListener = asyncTaskListener;
 	}
 	
 	public LoadEvents(String oauthToken, List<Event> eventList, DateWiseEventParentAdapterListener eventListAdapter, 
-			String wcitiesId, long venueId, LoadEventsTaskListener loadEventsTaskListener) {
+			String wcitiesId, long venueId, AsyncTaskListener<Void> asyncTaskListener) {
 		this(oauthToken, eventList, eventListAdapter, wcitiesId);
 		this.venueId = venueId;
-		this.loadEventsTaskListener = loadEventsTaskListener;
+		this.asyncTaskListener = asyncTaskListener;
 	}
 	
 	public LoadEvents(String oauthToken, List<Event> eventList, DateWiseEventParentAdapterListener eventListAdapter, String query, 
-			double lat, double lon, int miles, String wcitiesId, String startDate, String endDate) {
+			double lat, double lon, int miles, String wcitiesId, String startDate, String endDate, 
+			AsyncTaskListener<Void> asyncTaskListener) {
 		this(oauthToken, eventList, eventListAdapter, wcitiesId);
 		this.lat = lat;
 		this.lon = lon;
@@ -85,6 +80,7 @@ public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 		this.miles = miles;
 		this.startDate = startDate;
 		this.endDate = endDate;
+		this.asyncTaskListener = asyncTaskListener;
 	}
 
 	@Override
@@ -176,8 +172,8 @@ public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 			((RecyclerView.Adapter)eventListAdapter).notifyDataSetChanged();
 		//}
 			
-		if (loadEventsTaskListener != null) {
-			loadEventsTaskListener.onEventsLoaded();
+		if (asyncTaskListener != null) {
+			asyncTaskListener.onTaskCompleted();
 		}
 	}   
 }

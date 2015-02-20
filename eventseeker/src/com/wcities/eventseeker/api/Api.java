@@ -22,7 +22,7 @@ import com.wcities.eventseeker.constants.AppConstants;
 
 public abstract class Api {
 	
-	private static final String TAG = Api.class.getName();
+	private static final String TAG = Api.class.getSimpleName();
 	
 	// provided by Samir after attaching italic tags with description
 	public static final String OAUTH_TOKEN = "a82d32bd99044507417055f66c1a614c"; 

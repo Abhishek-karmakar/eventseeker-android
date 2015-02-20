@@ -1036,7 +1036,7 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	private void onFragmentResumed(int position, String title, String fragmentTag) {
-		Log.d(TAG, "onFragmentResumed() for title = " + title + ", position = " + position + ", fragmentTag = " + fragmentTag);
+		//Log.d(TAG, "onFragmentResumed() for title = " + title + ", position = " + position + ", fragmentTag = " + fragmentTag);
 		drawerItemSelectedPosition = position;
 		if (drawerItemSelectedPosition != AppConstants.INVALID_INDEX) {
 			setDrawerIndicatorEnabled(true);

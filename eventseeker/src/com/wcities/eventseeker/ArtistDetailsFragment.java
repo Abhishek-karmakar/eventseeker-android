@@ -183,11 +183,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 				recyclerVArtists.getViewTreeObserver().removeGlobalOnLayoutListener(this);
 			}
 			
-			onScrolled(0, true);
-			if (((MainActivity)FragmentUtil.getActivity(ArtistDetailsFragment.this)).isDrawerOpen()) {
-				// to maintain status bar & toolbar decorations after orientation change
-				onDrawerOpened();
-			}
+			onScrolled(0, true, true);
         }
     };
 	
@@ -258,7 +254,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	    	public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 	    		super.onScrolled(recyclerView, dx, dy);
 	    		//Log.d(TAG, "onScrolled - dx = " + dx + ", dy = " + dy);
-	    		ArtistDetailsFragment.this.onScrolled(dy, false);
+	    		ArtistDetailsFragment.this.onScrolled(dy, false, false);
 	    	}
 		});
 		
@@ -317,11 +313,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		
 		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.GONE, AppConstants.INVALID_ID);
 		if (totalScrolledDy != UNSCROLLED) {
-			onScrolled(0, true);
-			
-			if (((MainActivity)FragmentUtil.getActivity(ArtistDetailsFragment.this)).isDrawerOpen()) {
-				onDrawerOpened();
-			}
+			onScrolled(0, true, true);
 		}
 	}
 	
@@ -403,7 +395,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	    }
 	}
 	
-	private void onScrolled(int dy, boolean forceUpdate) {
+	private void onScrolled(int dy, boolean forceUpdate, boolean chkForOpenDrawer) {
 		//Log.d(TAG, "first visible pos = " + ((LinearLayoutManager)recyclerVArtists.getLayoutManager()).findFirstVisibleItemPosition());
 		//Log.d(TAG, "dy = " + dy);
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
@@ -507,6 +499,11 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	            }
 	        }
 		}
+		
+		if (chkForOpenDrawer && ((MainActivity)FragmentUtil.getActivity(this)).isDrawerOpen()) {
+			// to maintain status bar & toolbar decorations
+			onDrawerOpened();
+		}
 	}
 	
 	private void updateArtistImg() {
@@ -580,7 +577,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 
 	@Override
 	public void onDrawerClosed(View arg0) {
-		onScrolled(0, true);
+		onScrolled(0, true, false);
 	}
 
 	@Override
@@ -1634,7 +1631,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 							
 							@Override
 							public void run() {
-								artistDetailsFragment.onScrolled(0, true);
+								artistDetailsFragment.onScrolled(0, true, false);
 							}
 						});
 						
@@ -1893,7 +1890,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			
 			@Override
 			public void run() {
-				onScrolled(0, true);
+				onScrolled(0, true, true);
 			}
 		});
 	}

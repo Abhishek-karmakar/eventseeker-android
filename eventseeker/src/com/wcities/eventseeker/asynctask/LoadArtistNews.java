@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.wcities.eventseeker.ArtistsNewsListFragment.SortArtistNewsBy;
 import com.wcities.eventseeker.adapter.ArtistNewsListAdapter;
@@ -23,13 +24,14 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.ArtistNewsItem;
 import com.wcities.eventseeker.core.ArtistNewsItem.PostType;
+import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 
 public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> {
 	
 	private static final int ARTISTS_NEWS_LIMIT = 10;
 
-	private static final String TAG = LoadArtistNews.class.getName();
+	private static final String TAG = LoadArtistNews.class.getSimpleName();
 	
 	private ArtistNewsListAdapter artistNewsListAdapter;
 	private String wcitiesId, oauthToken;
@@ -133,7 +135,7 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 					ArtistNewsItem artistNewsItem = new ArtistNewsItem();
 					artistNewsItem.setArtistName(AppConstants.INVALID_STR_ID);
 					artistsNewsListItems.add(new ArtistNewsListItem(artistNewsItem, this));
-					if(newsLoadedListener != null) {
+					if (newsLoadedListener != null) {
 						newsLoadedListener.onNewsLoaded();
 					}
 				}
@@ -143,6 +145,9 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 			batchLoaded.clear();
 			artistNewsListAdapter.setMoreDataAvailable(true);
 			artistNewsListAdapter.notifyDataSetChanged();
+			if (newsLoadedListener instanceof AsyncTaskListener) {
+				((AsyncTaskListener<Void>) newsLoadedListener).onTaskCompleted();
+			}
 		}
 	}
 	
@@ -155,7 +160,7 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 		public ArtistNewsListItem(ArtistNewsItem item, LoadArtistNews loadArtistNews) {
 			this.loadArtistNews = loadArtistNews;
 			this.item = item;
-			if (item.getImgUrl() != null && item.getPostType() != PostType.link) {
+			if (item.getImgUrl() != null && item.getPostType() != PostType.link && item.getPostType() != PostType.event) {
 				loadImgDimension();
 				
 			} else {

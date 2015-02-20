@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -35,6 +34,7 @@ import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
+import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.viewdata.SharedElement;
@@ -92,6 +92,17 @@ public class ArtistListAdapter<T> extends BaseAdapter {
 			if (convertView == null || !convertView.getTag().equals(AppConstants.TAG_PROGRESS_INDICATOR)) {
 				convertView = LayoutInflater.from(mContext).inflate(R.layout.progress_bar_eventseeker_fixed_ht, null);
 				convertView.setTag(AppConstants.TAG_PROGRESS_INDICATOR);
+			}
+			
+			if (artistList.size() == 1) {
+				// Instead of this limited height progress bar, we display full screen progress bar from fragment
+				convertView.setVisibility(View.INVISIBLE);
+				if (mListener instanceof FullScrnProgressListener) {
+					((FullScrnProgressListener) mListener).displayFullScrnProgress();
+				}
+				
+			} else {
+				convertView.setVisibility(View.VISIBLE);
 			}
 			
 			if ((loadArtists == null || loadArtists.getStatus() == Status.FINISHED) && 

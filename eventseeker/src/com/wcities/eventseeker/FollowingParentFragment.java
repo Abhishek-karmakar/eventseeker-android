@@ -30,7 +30,6 @@ import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.adapter.MyArtistListAdapter;
 import com.wcities.eventseeker.adapter.MyArtistListAdapter.AdapterFor;
 import com.wcities.eventseeker.api.Api;
-import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -42,7 +41,9 @@ import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.core.FollowingList;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
+import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
+import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadArtistsListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
@@ -51,7 +52,9 @@ import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
 
 public abstract class FollowingParentFragment extends FragmentLoadableFromBackStack implements ArtistTrackingListener,
-		LoadArtistsListener, LoadItemsInBackgroundListener, DialogBtnClickListener, CustomSharedElementTransitionSource {
+		LoadArtistsListener, LoadItemsInBackgroundListener, DialogBtnClickListener, 
+		CustomSharedElementTransitionSource, FullScrnProgressListener, AsyncTaskListener<Void> {
+
 
 	private static final String TAG = FollowingParentFragment.class.getName();
 
@@ -70,6 +73,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 	private AbsListView absListView;
 
 	private View rltRootNoContentFound;
+	private RelativeLayout rltLytPrgsBar;
 	
 	/**
 	 * Using its instance variable since otherwise calling getResources() directly from fragment from 
@@ -122,7 +126,9 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 					+ ViewUtil.getStatusBarHeight(res);
 			rltFollowMoreArtist.setLayoutParams(lp);
 		}
+
 		rltRootNoContentFound = v.findViewById(R.id.rltRootNoContentFound);
+		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
 		return v;
 	}
 
@@ -325,6 +331,16 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 	@Override
 	public boolean isOnTop() {
 		return !isOnPushedToBackStackCalled;
+	}
+	
+	@Override
+	public void displayFullScrnProgress() {
+		rltLytPrgsBar.setVisibility(View.VISIBLE);
+	}
+	
+	@Override
+	public void onTaskCompleted(Void... params) {
+		rltLytPrgsBar.setVisibility(View.INVISIBLE);
 	}
 	
 	protected abstract AbsListView getScrollableView();

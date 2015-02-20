@@ -16,6 +16,7 @@ import com.wcities.eventseeker.api.ArtistApi;
 import com.wcities.eventseeker.api.ArtistApi.Method;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
+import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
 
 public class LoadArtists extends AsyncTask<String, Void, List<Artist>> {
@@ -26,12 +27,15 @@ public class LoadArtists extends AsyncTask<String, Void, List<Artist>> {
 	private final int ARTISTS_LIMIT = 10;
 	private String userId;
 	
+	private AsyncTaskListener<Void> asyncTaskListener;
+	
 	public LoadArtists(String oauthToken, List<Artist> artistList, ArtistListAdapter<String> artistListAdapter, 
-			String userId) {
+			String userId, AsyncTaskListener<Void> asyncTaskListener) {
 		this.oauthToken = oauthToken;
 		this.artistList = artistList;
 		this.artistListAdapter = artistListAdapter;
 		this.userId = userId;
+		this.asyncTaskListener = asyncTaskListener;
 	}
 
 	@Override
@@ -80,10 +84,13 @@ public class LoadArtists extends AsyncTask<String, Void, List<Artist>> {
 		} else {
 			artistListAdapter.setMoreDataAvailable(false);
 			artistList.remove(artistList.size() - 1);
-			if(artistList.isEmpty()) {
+			if (artistList.isEmpty()) {
 				artistList.add(new Artist(AppConstants.INVALID_ID, null));
 			}
 		}
 		artistListAdapter.notifyDataSetChanged();
+		if (asyncTaskListener != null) {
+			asyncTaskListener.onTaskCompleted();
+		}
 	}    	
 }

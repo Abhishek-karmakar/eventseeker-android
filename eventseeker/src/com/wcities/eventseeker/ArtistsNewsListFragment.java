@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView.RecyclerListener;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
@@ -30,12 +31,15 @@ import com.wcities.eventseeker.asynctask.LoadArtistNews.OnNewsLoadedListener;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.ArtistNewsItem;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
+import com.wcities.eventseeker.interfaces.AsyncTaskListener;
+import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack implements 
-		LoadItemsInBackgroundListener, OnNewsLoadedListener {
+		LoadItemsInBackgroundListener, OnNewsLoadedListener, AsyncTaskListener<Void>, 
+		FullScrnProgressListener {
 	
 	protected static final String TAG = ArtistsNewsListFragment.class.getName();
 
@@ -53,6 +57,8 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	private boolean is7InchTabletInPortrait;
 
 	private View rltRootNoContentFound;
+	private RelativeLayout rltLytPrgsBar;
+	
 	private SortArtistNewsBy sortBy = SortArtistNewsBy.chronological;
 	
 	public enum SortArtistNewsBy {
@@ -109,6 +115,7 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		//Log.d(TAG, "doIn onCreateView()");
 		orientation = getResources().getConfiguration().orientation;
 		is7InchTabletInPortrait = ((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext())
 				.is7InchTabletAndInPortraitMode();
@@ -146,6 +153,7 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 		super.onCreateView(inflater, container, savedInstanceState);
 		View v = inflater.inflate(R.layout.fragment_artists_news_list, null);
 		rltRootNoContentFound = v.findViewById(R.id.rltRootNoContentFound);
+		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
 		return v;
 	}
 	
@@ -305,8 +313,8 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 
 	private void changeRltDummyLytVisibility() {
 		if (artistsNewsListItems.size() == 1 && artistsNewsListItems.get(0) != null
-				&& ((ArtistNewsItem)((ArtistNewsListItem)artistsNewsListItems.get(0))
-						.getItem()).getArtistName().equals(AppConstants.INVALID_STR_ID)) {
+			&& ((ArtistNewsItem)((ArtistNewsListItem)artistsNewsListItems.get(0))
+					.getItem()).getArtistName().equals(AppConstants.INVALID_STR_ID)) {
 			setNoItemsLayout();
 			/**
 			 * try-catch is used to handle case where even before we get call back to this function, user leaves 
@@ -353,4 +361,14 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 		return "Artist News Screen";
 	}
 
+	@Override
+	public void onTaskCompleted(Void... params) {
+		// remove full screen progressbar
+		rltLytPrgsBar.setVisibility(View.INVISIBLE);
+	}
+
+	@Override
+	public void displayFullScrnProgress() {
+		rltLytPrgsBar.setVisibility(View.VISIBLE);
+	}
 }

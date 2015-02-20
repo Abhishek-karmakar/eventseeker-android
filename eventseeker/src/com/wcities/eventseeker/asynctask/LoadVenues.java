@@ -16,6 +16,7 @@ import com.wcities.eventseeker.adapter.AbstractVenueListAdapter;
 import com.wcities.eventseeker.api.RecordApi;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Venue;
+import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.jsonparser.RecordApiJSONParser;
 
 public class LoadVenues extends AsyncTask<String, Void, List<Venue>> {
@@ -26,23 +27,31 @@ public class LoadVenues extends AsyncTask<String, Void, List<Venue>> {
 
 	private static final String TAG = LoadVenues.class.getName();
 	
-	private Fragment fragment;
-	
 	private AbstractVenueListAdapter venueListAdapter;
 	
 	private List<Venue> venueList;
 	private double[] latLon;
 	private String oauthToken;
 	
-	public LoadVenues(String oauthToken, Fragment fragment, AbstractVenueListAdapter venueListAdapter, List<Venue> venueList, 
+	private AsyncTaskListener<Void> asyncTaskListener;
+	
+	public LoadVenues(String oauthToken, AbstractVenueListAdapter venueListAdapter, List<Venue> venueList, 
 			double[] latLon) {
 		this.oauthToken = oauthToken;
-		this.fragment = fragment;
 		this.venueListAdapter = venueListAdapter;
 		this.venueList = venueList;
 		this.latLon = latLon;
 	}
 	
+	public LoadVenues(String oauthToken, AbstractVenueListAdapter venueListAdapter, List<Venue> venueList, 
+			double[] latLon, AsyncTaskListener<Void> asyncTaskListener) {
+		this.oauthToken = oauthToken;
+		this.venueListAdapter = venueListAdapter;
+		this.venueList = venueList;
+		this.latLon = latLon;
+		this.asyncTaskListener = asyncTaskListener;
+	}
+
 	@Override
 	protected List<Venue> doInBackground(String... params) {
 		RecordApi recordApi = new RecordApi(oauthToken, latLon[0], latLon[1]);
@@ -86,11 +95,14 @@ public class LoadVenues extends AsyncTask<String, Void, List<Venue>> {
 		} else {
 			venueListAdapter.setMoreDataAvailable(false);
 			venueList.remove(venueList.size() - 1);
-			if(venueList.isEmpty()) {
+			if (venueList.isEmpty()) {
 				venueList.add(new Venue(AppConstants.INVALID_ID));
 			}
 		}
 		
 		venueListAdapter.notifyDataSetChanged();
+		if (asyncTaskListener != null) {
+			asyncTaskListener.onTaskCompleted();
+		}
 	}    	
 }

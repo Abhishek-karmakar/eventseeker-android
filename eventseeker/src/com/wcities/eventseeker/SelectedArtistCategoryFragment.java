@@ -44,7 +44,9 @@ import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.core.Artist.Genre;
 import com.wcities.eventseeker.custom.fragment.PublishArtistFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
+import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
+import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadArtistsListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
@@ -55,7 +57,8 @@ import com.wcities.eventseeker.util.ViewUtil;
 
 public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadableFromBackStack 
 		implements ArtistTrackingListener, LoadArtistsListener, LoadItemsInBackgroundListener, 
-		DialogBtnClickListener, OnFacebookShareClickedListener, CustomSharedElementTransitionSource {
+		DialogBtnClickListener, OnFacebookShareClickedListener, CustomSharedElementTransitionSource, 
+		FullScrnProgressListener, AsyncTaskListener<Void> {
 
 	private static final String TAG = SelectedArtistCategoryFragment.class.getName();
 
@@ -78,7 +81,9 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 	private TextView txtNoItemsFound;
 	private Button btnFollowAll;	
 	private ListView listView;
+
 	private RelativeLayout rltFollowAll;
+	private RelativeLayout rltLytPrgsBar;
 
 	private Resources res;
 
@@ -156,6 +161,8 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 					.getSupportFragmentManager(), DIALOG_FOLLOW_ALL);
 			}
 		});
+
+		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
 		return v;
 	}
 
@@ -436,5 +443,15 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 	@Override
 	public boolean isOnTop() {
 		return !isOnPushedToBackStackCalled;
+	}
+
+	@Override
+	public void onTaskCompleted(Void... params) {
+		rltLytPrgsBar.setVisibility(View.INVISIBLE);
+	}
+
+	@Override
+	public void displayFullScrnProgress() {
+		rltLytPrgsBar.setVisibility(View.VISIBLE);
 	}
 }

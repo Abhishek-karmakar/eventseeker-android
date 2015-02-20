@@ -120,6 +120,8 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	/*private boolean isTablet;
 	private boolean is7InchTabletInPortrait;*/
 	private View rltRootNoContentFound;	
+	private RelativeLayout rltLytPrgsBar;
+
 	/**
 	 * Using its instance variable since otherwise calling getResources() directly from fragment from 
 	 * callback methods is dangerous in a sense that it may throw java.lang.IllegalStateException: 
@@ -166,15 +168,12 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 		if (VersionUtil.isApiLevelAbove18()) {
 			Resources res = FragmentUtil.getResources(this);
 			RelativeLayout rltLayoutRoot = (RelativeLayout) v.findViewById(R.id.rltLayoutRoot);
-			/*RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) rltLayoutRoot.getLayoutParams();
-			lp.topMargin = res.getDimensionPixelSize(R.dimen.common_t_mar_pad_for_all_layout) 
-					+ ViewUtil.getStatusBarHeight(res);
-			rltLayoutRoot.setLayoutParams(lp);*/
 			rltLayoutRoot.setPadding(0, res.getDimensionPixelSize(R.dimen.common_t_mar_pad_for_all_layout) 
 					+ ViewUtil.getStatusBarHeight(res), 0, 0);
 		}
 		
 		rltRootNoContentFound = v.findViewById(R.id.rltRootNoContentFound);
+		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
 		return v;
 	}
 	
@@ -371,6 +370,8 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 			}
 			
 			friendActivityListAdapter.notifyDataSetChanged();
+			// to remove full screen progressbar
+			rltLytPrgsBar.setVisibility(View.INVISIBLE);
 		}
     }
 	
@@ -404,13 +405,20 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			Object item = getItem(position);
-			if (item == null || 
-					((item instanceof List) && ((List<FriendNewsItem>)item).get(0) == null)) {
+			FriendNewsItem item = getItem(position);
+			if (item == null) {
 				if (convertView == null || convertView.getTag() instanceof FriendNewsItemViewHolder) {
 					convertView = mInflater.inflate(R.layout.progress_bar_eventseeker_fixed_ht, null);
 					convertView.setTag(AppConstants.TAG_PROGRESS_INDICATOR);
 					convertView.setBackgroundColor(getResources().getColor(R.color.root_lnr_layout_bg_friends_activity_list_item));
+				}
+				
+				if (friendNewsItems.size() == 1) {
+					rltLytPrgsBar.setVisibility(View.VISIBLE);
+					convertView.setVisibility(View.INVISIBLE);
+					
+				} else {
+					convertView.setVisibility(View.VISIBLE);
 				}
 				
 				if ((loadFriendsNews == null || loadFriendsNews.getStatus() == Status.FINISHED) && 
@@ -450,9 +458,8 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 		}
 
 		@Override
-		public Object getItem(int position) {
-
-			return friendNewsItems.get(position); // returning an object of FriendNewsItem, NOT A LIST 
+		public FriendNewsItem getItem(int position) {
+			return friendNewsItems.get(position);
 		}
 
 		@Override

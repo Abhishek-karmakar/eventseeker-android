@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -35,7 +36,9 @@ import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.custom.fragment.PublishArtistListFragment;
 import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
+import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
+import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.interfaces.PublishListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
@@ -44,15 +47,18 @@ import com.wcities.eventseeker.util.FragmentUtil;
 
 public class SearchArtistsFragment extends PublishArtistListFragment implements SearchFragmentChildListener, 
 		PublishListener, LoadItemsInBackgroundListener, DialogBtnClickListener, ArtistTrackingListener, 
-		CustomSharedElementTransitionSource, OnFacebookShareClickedListener {
+		CustomSharedElementTransitionSource, OnFacebookShareClickedListener, AsyncTaskListener<Void>,
+		FullScrnProgressListener {
 
-	private static final String TAG = SearchArtistsFragment.class.getName();
+	private static final String TAG = SearchArtistsFragment.class.getSimpleName();
 
 	private static final String DIALOG_ARTIST_SAVED = "dialogArtistSaved";
 
 	private String query;
 	private LoadArtists loadArtists;
 	private ArtistListAdapter<String> artistListAdapter;
+	
+	private RelativeLayout rltLytPrgsBar;
 	
 	private List<Artist> artistList;
 
@@ -79,12 +85,14 @@ public class SearchArtistsFragment extends PublishArtistListFragment implements 
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = super.onCreateView(inflater, container, savedInstanceState);
+		View v = inflater.inflate(R.layout.list_with_centered_progress, null);
 
 		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
 			int pad = getResources().getDimensionPixelSize(R.dimen.tab_bar_margin_fragment_custom_tabs);
-			v.setPadding(pad, 0, pad, 0);
+			v.findViewById(android.R.id.list).setPadding(pad, 0, pad, 0);
 		}
+		
+		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
 		return v;
 	}
 	
@@ -117,7 +125,7 @@ public class SearchArtistsFragment extends PublishArtistListFragment implements 
 	@Override
 	public void loadItemsInBackground() {
 		loadArtists = new LoadArtists(Api.OAUTH_TOKEN, artistList, artistListAdapter, 
-				FragmentUtil.getApplication(this).getWcitiesId());
+				FragmentUtil.getApplication(this).getWcitiesId(), this);
 		artistListAdapter.setLoadArtists(loadArtists);
 		AsyncTaskUtil.executeAsyncTask(loadArtists, true, query);
 	}
@@ -277,5 +285,16 @@ public class SearchArtistsFragment extends PublishArtistListFragment implements 
 	@Override
 	public boolean isOnTop() {
 		return false;
+	}
+
+	@Override
+	public void onTaskCompleted(Void... params) {
+		// remove full screen progressbar
+		rltLytPrgsBar.setVisibility(View.INVISIBLE);
+	}
+
+	@Override
+	public void displayFullScrnProgress() {
+		rltLytPrgsBar.setVisibility(View.VISIBLE);
 	}
 }

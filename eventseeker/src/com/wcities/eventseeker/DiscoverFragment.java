@@ -62,7 +62,6 @@ import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.asynctask.LoadEvents;
-import com.wcities.eventseeker.asynctask.LoadEvents.LoadEventsTaskListener;
 import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable;
@@ -76,6 +75,7 @@ import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.custom.fragment.PublishEventFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.custom.view.RecyclerViewInterceptingVerticalScroll;
+import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.EventListener;
@@ -92,7 +92,7 @@ import com.wcities.eventseeker.viewdata.SharedElement;
 import com.wcities.eventseeker.viewdata.SharedElementPosition;
 
 public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack implements LoadItemsInBackgroundListener, 
-		DiscoverSettingChangedListener, DrawerListener, CustomSharedElementTransitionSource, LoadEventsTaskListener {
+		DiscoverSettingChangedListener, DrawerListener, CustomSharedElementTransitionSource, AsyncTaskListener<Void> {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -558,7 +558,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 			isScrollLimitReached = false;
 		}
 		
-		if (chkForOpenDrawer && ((MainActivity)FragmentUtil.getActivity(DiscoverFragment.this)).isDrawerOpen()) {
+		if (chkForOpenDrawer && ((MainActivity)FragmentUtil.getActivity(this)).isDrawerOpen()) {
 			// to maintain status bar & toolbar decorations
 			onDrawerOpened();
 		}
@@ -1556,13 +1556,18 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	}
 
 	@Override
-	public void onEventsLoaded() {
+	public void onTaskCompleted(Void... params) {
 		handler.post(new Runnable() {
 			
 			@Override
 			public void run() {
 				//Log.d(TAG, "onEventsLoaded()");
+				// to remove full screen progressbar
 				rltLytProgressBar.setVisibility(View.INVISIBLE);
+				/**
+				 * to update toolbar color since totalScrolledDy might have changed due to automatic scroll
+				 * (e.g. - progressbar removal)
+				 */
 				onScrolled(0, true, true);
 			}
 		});

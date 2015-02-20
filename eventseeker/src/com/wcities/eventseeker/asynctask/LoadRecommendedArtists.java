@@ -17,6 +17,7 @@ import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.ItemsList;
 import com.wcities.eventseeker.interfaces.ArtistAdapterListener;
+import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.LoadArtistsListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 
@@ -108,6 +109,9 @@ public class LoadRecommendedArtists extends AsyncTask<Void, Void, List<Artist>> 
 		}
 		
 		((BaseAdapter) artistAdapterListener).notifyDataSetChanged();
+		if (loadArtistsListener instanceof AsyncTaskListener) {
+			((AsyncTaskListener<Void>) loadArtistsListener).onTaskCompleted();
+		}
 	}
 	
 }
