@@ -81,7 +81,7 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 			UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
 			try {
 				JSONObject jsonObject = null;
-				if (eventSeekr.getFbUserId() != null) {
+				/*if (eventSeekr.getFbUserId() != null) {
 					jsonObject = userInfoApi.syncAccount(repCode, eventSeekr.getFbUserId(), eventSeekr.getFbEmailId(), 
 							UserType.fb, eventSeekr.getWcitiesId());
 					
@@ -89,9 +89,16 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 					jsonObject = userInfoApi.syncAccount(repCode, eventSeekr.getGPlusUserId(), eventSeekr.getGPlusEmailId(), 
 							UserType.google, eventSeekr.getWcitiesId());
 				
-				} else {
-					jsonObject = userInfoApi.updateRepcodeWithWcitiesId(repCode, eventSeekr.getWcitiesId());
-				}
+				} else {*/
+				/**
+				 * 20-02-2015:
+				 * as per discussion with Samir, now onwards whatever will be the user login type(fb, google, 
+				 * wcities email). We have to make this new repcode api call. So, commented above checks and 
+				 * SyncAccount repcode Api call.
+				 * 
+				 */
+				jsonObject = userInfoApi.updateRepcodeWithWcitiesId(repCode, eventSeekr.getWcitiesId());
+				/*}*/
 				//Log.d(TAG, "response = " + jsonObject);
 				UserInfoApiJSONParser userInfoApiJSONParser = new UserInfoApiJSONParser();
 				repCodeResponse = userInfoApiJSONParser.getRepCodeResponse(jsonObject);

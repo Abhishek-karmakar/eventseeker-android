@@ -24,10 +24,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     
-    <include layout="@layout/include_no_items_found_with_action"
+    <include layout="@layout/include_no_content_with_phone"
         android:layout_width="match_parent"
     	android:layout_height="match_parent"
-    	android:layout_margin="@dimen/include_no_items_found_with_action_margin_fragment_artists_news_list"
         android:visibility="gone"/>
+    	<!-- android:layout_margin="@dimen/include_no_items_found_with_action_margin_fragment_artists_news_list" -->
     
 </RelativeLayout>

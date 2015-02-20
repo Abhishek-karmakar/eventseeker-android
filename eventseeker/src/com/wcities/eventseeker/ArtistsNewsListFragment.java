@@ -14,13 +14,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView.RecyclerListener;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RadioGroup;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
@@ -39,7 +35,7 @@ import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack implements 
-		LoadItemsInBackgroundListener, OnNewsLoadedListener, OnClickListener {
+		LoadItemsInBackgroundListener, OnNewsLoadedListener {
 	
 	protected static final String TAG = ArtistsNewsListFragment.class.getName();
 
@@ -56,8 +52,7 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	private boolean isTablet;
 	private boolean is7InchTabletInPortrait;
 
-	private View rltDummyLyt;
-	private ScrollView scrlVRootNoItemsFoundWithAction;
+	private View rltRootNoContentFound;
 	private SortArtistNewsBy sortBy = SortArtistNewsBy.chronological;
 	
 	public enum SortArtistNewsBy {
@@ -150,9 +145,7 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 		
 		super.onCreateView(inflater, container, savedInstanceState);
 		View v = inflater.inflate(R.layout.fragment_artists_news_list, null);
-		rltDummyLyt = v.findViewById(R.id.rltDummyLyt);
-		scrlVRootNoItemsFoundWithAction = (ScrollView) v.findViewById(R.id.scrlVRootNoItemsFoundWithAction);
-		v.findViewById(R.id.btnAction).setOnClickListener(this);
+		rltRootNoContentFound = v.findViewById(R.id.rltRootNoContentFound);
 		return v;
 	}
 	
@@ -314,54 +307,45 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 		if (artistsNewsListItems.size() == 1 && artistsNewsListItems.get(0) != null
 				&& ((ArtistNewsItem)((ArtistNewsListItem)artistsNewsListItems.get(0))
 						.getItem()).getArtistName().equals(AppConstants.INVALID_STR_ID)) {
-			if (wcitiesId == null) {
-				rltDummyLyt.setVisibility(View.VISIBLE);
+			setNoItemsLayout();
+			/**
+			 * try-catch is used to handle case where even before we get call back to this function, user leaves 
+			 * this screen.
+			 */
+			try {
+				getListView().setVisibility(View.GONE);
 				
-			} else {
-				setNoItemsLayout();
-				/**
-				 * try-catch is used to handle case where even before we get call back to this function, user leaves 
-				 * this screen.
-				 */
-				try {
-					getListView().setVisibility(View.GONE);
-					
-				} catch (IllegalStateException e) {
-					Log.e(TAG, "" + e.getMessage());
-					e.printStackTrace();
-				}
+			} catch (IllegalStateException e) {
+				Log.e(TAG, "" + e.getMessage());
+				e.printStackTrace();
 			}
 			
 		} else {
-			rltDummyLyt.setVisibility(View.GONE);
-			scrlVRootNoItemsFoundWithAction.setVisibility(View.GONE);
+			rltRootNoContentFound.setVisibility(View.GONE);
 		}				
 	}
 	
 	private void setNoItemsLayout() {
-		scrlVRootNoItemsFoundWithAction.setVisibility(View.VISIBLE);
-		((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsHeading)).setText(
-				R.string.search_artists);
-		((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsMsg)).setText(
-				R.string.follow_artists_for_updates);
-		((Button)scrlVRootNoItemsFoundWithAction.findViewById(R.id.btnAction)).setText(
-				R.string.search_artists);
-		((ImageView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.imgNoItems)).setImageDrawable(
-				res.getDrawable(R.drawable.no_artists_news));
-	}
-
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		
-		case R.id.btnAction:
-			((DrawerListFragmentListener)FragmentUtil.getActivity(this)).onDrawerItemSelected(
-					MainActivity.INDEX_NAV_ITEM_FOLLOWING, null);
-			break;
-
-		default:
-			break;
+		/**
+		 * try-catch is used to handle case where even before we get call back to this function, user leaves 
+		 * this screen.
+		 */
+		try {
+			getListView().setVisibility(View.GONE);
+			
+		} catch (IllegalStateException e) {
+			Log.e(TAG, "" + e.getMessage());
+			e.printStackTrace();
 		}
+		
+		TextView txtNoContentMsg = (TextView) rltRootNoContentFound.findViewById(R.id.txtNoItemsMsg);
+		txtNoContentMsg.setText(R.string.artists_news_no_content);
+		txtNoContentMsg.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_list_follow, 0, 0);
+		
+		((ImageView) rltRootNoContentFound.findViewById(R.id.imgPhone))
+			.setImageDrawable(res.getDrawable(R.drawable.ic_artist_news_no_content));
+		
+		rltRootNoContentFound.setVisibility(View.VISIBLE);		
 	}
 
 	@Override

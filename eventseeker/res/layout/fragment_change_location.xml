@@ -2,14 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rltLytRoot"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent" 
+	android:background="@drawable/ic_blue_app_bg">
     
 	<LinearLayout android:id="@+id/lnrLytMap"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
 	    android:layout_marginTop="@dimen/common_t_mar_pad_for_all_layout"
 	    android:orientation="vertical"
-	    android:background="@color/dark_gray"
 	    android:padding="@dimen/lnr_lyt_map_pad_fragment_change_location" >
 	    
 	</LinearLayout>

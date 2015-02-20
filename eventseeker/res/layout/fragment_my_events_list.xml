@@ -11,7 +11,7 @@
 	    android:layout_height="match_parent"
 	    android:background="@drawable/story_space" />
     
-    <include layout="@layout/include_no_items_found_with_action"
+    <include layout="@layout/include_no_content_with_phone"
         android:visibility="gone"/>
 
 </RelativeLayout>

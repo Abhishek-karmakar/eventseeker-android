@@ -39,7 +39,7 @@ import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class MyEventsListFragment extends PublishEventListFragment implements LoadItemsInBackgroundListener, 
-		PublishListener, OnClickListener, OnNoEventsListener, CustomSharedElementTransitionSource {
+		PublishListener, OnNoEventsListener, CustomSharedElementTransitionSource {
 	
 	private static final String TAG = MyEventsListFragment.class.getSimpleName();
 	
@@ -50,7 +50,7 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 	private MyEventListAdapter eventListAdapter;
 	private List<Event> eventList;
 	
-	private ScrollView scrlVRootNoItemsFoundWithAction;
+	private View rltRootNoContentFound;
 	private double[] latLon;
 	
 	/**
@@ -103,8 +103,7 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_my_events_list, null);
-		scrlVRootNoItemsFoundWithAction = (ScrollView) v.findViewById(R.id.scrlVRootNoItemsFoundWithAction);
-		v.findViewById(R.id.btnAction).setOnClickListener(this);
+		rltRootNoContentFound = v.findViewById(R.id.rltRootNoContentFound);
 		return v;
 	}
 	
@@ -159,33 +158,34 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 						e.printStackTrace();
 					}
 					
-					((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsHeading)).setText(
-							R.string.search_artists);
-					((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsMsg)).setText(
-							R.string.no_events_in_your_area);
-					((Button)scrlVRootNoItemsFoundWithAction.findViewById(R.id.btnAction)).setText(
-							R.string.search_artists);
-					((ImageView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.imgNoItems)).setImageDrawable(
-							res.getDrawable(R.drawable.no_my_events));
-					scrlVRootNoItemsFoundWithAction.setVisibility(View.VISIBLE);					
+					int txtres, imgNoItemsRes, imgPhoneRes;
+					if (loadType == Type.mysavedevents) {
+						txtres = R.string.saved_events_no_content; 
+						imgNoItemsRes = R.drawable.ic_unsaved_event_slider; 
+						imgPhoneRes = R.drawable.ic_saved_events_no_content;	
+						
+					} else {
+						txtres = R.string.my_events_events_no_content; 
+						imgNoItemsRes = R.drawable.ic_list_follow; 
+						imgPhoneRes = (loadType == Type.myevents) ?
+								R.drawable.ic_my_events_no_content : R.drawable.ic_recommended_events_no_content;							
+					}
+					
+					/*((ImageView) rltRootNoContentFound.findViewById(R.id.imgNoItems))
+						.setImageDrawable(res.getDrawable(imgNoItemsRes));*/
+
+					TextView txtNoContentMsg = (TextView) rltRootNoContentFound.findViewById(R.id.txtNoItemsMsg);
+					txtNoContentMsg.setText(txtres);
+					txtNoContentMsg.setCompoundDrawablesWithIntrinsicBounds(0, imgNoItemsRes, 0, 0);
+					
+					((ImageView) rltRootNoContentFound.findViewById(R.id.imgPhone))
+						.setImageDrawable(res.getDrawable(imgPhoneRes));
+					
+					rltRootNoContentFound.setVisibility(View.VISIBLE);					
 				}
 			});
 			
 		}	
-	}
-
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		
-		case R.id.btnAction:
-			((DrawerListFragmentListener)FragmentUtil.getActivity(this)).onDrawerItemSelected(
-					MainActivity.INDEX_NAV_ITEM_FOLLOWING, null);
-			break;
-
-		default:
-			break;
-		}
 	}
 
 	@Override

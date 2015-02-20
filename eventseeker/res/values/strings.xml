@@ -224,6 +224,10 @@
     <string name="sort_by">Sort By : </string>
     <string name="chronological">Chronological</string>
     <string name="trending">Trending</string>
+    <string name="saved_events_no_content">Select the calendar icon to save events.</string>
+    <string name="my_events_events_no_content">Follow your favorite artists to receive alerts on upcoming events..</string>
+    <string name="following_no_content">Start following your favorite artists to personalize your experience.</string>
+    <string name="artists_news_no_content">Follow your favorite artists to start your news feed.</string>
 
     <!-- Connect Accounts Services -->
     <string name="service_google_play">Google Play</string>

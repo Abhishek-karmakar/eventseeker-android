@@ -116,11 +116,11 @@ public class ArtistListAdapter<T> extends BaseAdapter {
 			}
 			
 			/**
-			 * For Search screen we are padding here
+			 * For Search Artist screen we are adding padding for right side here
 			 */
 			if (addPadding) {
 				int pad = mContext.getResources().getDimensionPixelSize(R.dimen.tab_bar_margin_fragment_custom_tabs);
-				convertView.setPadding(pad, 0, pad, 0);
+				convertView.setPadding(0, 0, pad, 0);
 			}
 			
 			((TextView)convertView.findViewById(R.id.txtArtistName)).setText(artist.getName());

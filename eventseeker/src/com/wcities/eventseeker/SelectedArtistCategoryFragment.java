@@ -16,23 +16,18 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView.RecyclerListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
-import com.wcities.eventseeker.SettingsFragment.OnSettingsItemClickedListener;
-import com.wcities.eventseeker.SettingsFragment.SettingsItem;
 import com.wcities.eventseeker.ShareOnFBDialogFragment.OnFacebookShareClickedListener;
 import com.wcities.eventseeker.adapter.MyArtistListAdapter;
 import com.wcities.eventseeker.adapter.MyArtistListAdapter.AdapterFor;
@@ -59,7 +54,7 @@ import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
 
 public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadableFromBackStack 
-		implements ArtistTrackingListener, OnClickListener, LoadArtistsListener, LoadItemsInBackgroundListener, 
+		implements ArtistTrackingListener, LoadArtistsListener, LoadItemsInBackgroundListener, 
 		DialogBtnClickListener, OnFacebookShareClickedListener, CustomSharedElementTransitionSource {
 
 	private static final String TAG = SelectedArtistCategoryFragment.class.getName();
@@ -80,11 +75,10 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 	private List<Artist> artistList;
 	private List<Character> indices;
 
-	private View rltDummyLyt;
-	private ScrollView scrlVRootNoItemsFoundWithAction;
+	private TextView txtNoItemsFound;
 	private Button btnFollowAll;	
 	private ListView listView;
-	private RelativeLayout rltFollowMoreArtist;
+	private RelativeLayout rltFollowAll;
 
 	private Resources res;
 
@@ -120,6 +114,7 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_following, null);
+		rltFollowAll = (RelativeLayout) v.findViewById(R.id.rltFollowMoreArtist);
 		/**
 		 * add extra top margin (equal to statusbar height) since we are removing vStatusBar from onStart() 
 		 * even though we want search screen to have this statusbar. We had to mark VStatusBar as GONE from 
@@ -128,24 +123,24 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 		 */
 		if (VersionUtil.isApiLevelAbove18()) {
 			Resources res = FragmentUtil.getResources(this);
-			RelativeLayout rltFollowMoreArtist = (RelativeLayout) v.findViewById(R.id.rltFollowMoreArtist);
-			RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) rltFollowMoreArtist.getLayoutParams();
+			RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) rltFollowAll.getLayoutParams();
 			lp.topMargin = res.getDimensionPixelSize(R.dimen.common_t_mar_pad_for_all_layout) 
 					+ ViewUtil.getStatusBarHeight(res);
-			rltFollowMoreArtist.setLayoutParams(lp);
+			rltFollowAll.setLayoutParams(lp);
 		}
-		rltDummyLyt = v.findViewById(R.id.rltDummyLyt);
-		scrlVRootNoItemsFoundWithAction = (ScrollView) v.findViewById(R.id.scrlVRootNoItemsFoundWithAction);
+		txtNoItemsFound = (TextView) v.findViewById(R.id.txtNoItemsFound);
 		
 		listView = (ListView) v.findViewById(android.R.id.list);
 
-		rltFollowMoreArtist = (RelativeLayout) v.findViewById(R.id.rltFollowMoreArtist);
 		btnFollowAll = (Button) v.findViewById(R.id.btnFollowMoreArtists);
 		btnFollowAll.setText(R.string.btn_follow_all);
 		btnFollowAll.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
+				if (artistList.isEmpty()) {
+					return;
+				}
 				GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
 					SelectedArtistCategoryFragment.this,
 					res.getString(R.string.dialog_title_follow_all),  
@@ -161,8 +156,6 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 					.getSupportFragmentManager(), DIALOG_FOLLOW_ALL);
 			}
 		});
-
-		v.findViewById(R.id.btnAction).setOnClickListener(this);
 		return v;
 	}
 
@@ -273,58 +266,19 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 		 */
 		try {
 			listView.setVisibility(View.GONE);
-			if (rltFollowMoreArtist != null) {
-				rltFollowMoreArtist.setVisibility(View.GONE);
+			if (rltFollowAll != null) {
+				rltFollowAll.setVisibility(View.GONE);
 			}
 			
 		} catch (IllegalStateException e) {
 			Log.e(TAG, "" + e.getMessage());
 			e.printStackTrace();
 		}
-
-		if (wcitiesId == null) {
-			rltDummyLyt.setVisibility(View.VISIBLE);
-			TextView txtNoItemsFound = (TextView)rltDummyLyt.findViewById(R.id.txtNoItemsFound);
-			txtNoItemsFound.setText(res.getString(R.string.no_items_found_pls_login) + " the list of artists you are following.");
-			
-		} else {
-			scrlVRootNoItemsFoundWithAction.setVisibility(View.VISIBLE);
-			
-			RelativeLayout.LayoutParams lp = (LayoutParams) scrlVRootNoItemsFoundWithAction.getLayoutParams();
-			lp.topMargin = FragmentUtil.getResources(this).getDimensionPixelSize(R.dimen.common_t_mar_pad_for_all_layout);
-			scrlVRootNoItemsFoundWithAction.setLayoutParams(lp);
-			
-			((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsHeading)).setText(
-					res.getString(R.string.personalize_your_experience));
-			((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsMsg)).setText(
-					res.getString(R.string.sync_accounts_or_search_for_artists));
-			((Button)scrlVRootNoItemsFoundWithAction.findViewById(R.id.btnAction)).setText(
-					res.getString(R.string.navigation_drawer_item_sync_accounts));
-			((ImageView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.imgNoItems)).setImageDrawable(
-					res.getDrawable(R.drawable.no_artists_following));
-		}
-	}
-
-	/**
-	 * TODO: if it is required
-	 */
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
 		
-		case R.id.btnAction:
-			// set firstTimeLaunch=false so as to keep facebook & google sign in rows visible.
-			((EventSeekr)FragmentUtil.getActivity(this).getApplication()).updateFirstTimeLaunch(false);
-			/*((DrawerListFragmentListener)FragmentUtil.getActivity(this)).onDrawerItemSelected(
-					MainActivity.INDEX_NAV_ITEM_CONNECT_ACCOUNTS, null);*/
-			((OnSettingsItemClickedListener) FragmentUtil.getActivity(this)).onSettingsItemClicked(SettingsItem.SYNC_ACCOUNTS, null);
-			break;
-
-		default:
-			break;
-		}
+		txtNoItemsFound.setText(R.string.no_artist_found);
+		txtNoItemsFound.setVisibility(View.VISIBLE);		
 	}
-	
+
 
 	@Override
 	public void doPositiveClick(String dialogTag) {

@@ -33,14 +33,12 @@ import android.view.ViewGroup;
 import android.widget.AbsListView.RecyclerListener;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -121,9 +119,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	
 	/*private boolean isTablet;
 	private boolean is7InchTabletInPortrait;*/
-	private View rltDummyLyt;
-	private ScrollView scrlVRootNoItemsFoundWithAction;
-	
+	private View rltRootNoContentFound;	
 	/**
 	 * Using its instance variable since otherwise calling getResources() directly from fragment from 
 	 * callback methods is dangerous in a sense that it may throw java.lang.IllegalStateException: 
@@ -178,9 +174,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 					+ ViewUtil.getStatusBarHeight(res), 0, 0);
 		}
 		
-		rltDummyLyt = v.findViewById(R.id.rltDummyLyt);
-		scrlVRootNoItemsFoundWithAction = (ScrollView) v.findViewById(R.id.scrlVRootNoItemsFoundWithAction);
-		v.findViewById(R.id.btnAction).setOnClickListener(this);
+		rltRootNoContentFound = v.findViewById(R.id.rltRootNoContentFound);
 		return v;
 	}
 	
@@ -899,34 +893,26 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	}
 	
 	private void showNoFriendsActivityFound() {
-		if (wcitiesId == null) {
-			rltDummyLyt.setVisibility(View.VISIBLE);
-			TextView txtNoItemsFound = (TextView)rltDummyLyt.findViewById(R.id.txtNoItemsFound);
-			txtNoItemsFound.setText(res.getString(R.string.pls_login_to_see_friends_activity));
-			
-		} else {
-			scrlVRootNoItemsFoundWithAction.setVisibility(View.VISIBLE);
-			((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsHeading)).setText(
-					res.getString(R.string.invite_friends));
-			((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsMsg)).setText(
-					res.getString(R.string.events_are_better_with_friends));
-			((Button)scrlVRootNoItemsFoundWithAction.findViewById(R.id.btnAction)).setText(
-					res.getString(R.string.invite_friends));
-			((ImageView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.imgNoItems)).setImageDrawable(
-					res.getDrawable(R.drawable.no_friends_activity));
-		}
-		
 		/**
-		 * try-catch is used to handle case where even before we get call back to this function, user leaves 
-		 * this screen.
+		 * try-catch is used to handle case where even before we get call back
+		 * to this function, user leaves this screen.
 		 */
 		try {
 			getListView().setVisibility(View.GONE);
-			
+
 		} catch (IllegalStateException e) {
 			Log.e(TAG, "" + e.getMessage());
 			e.printStackTrace();
 		}
+
+		TextView txtNoContentMsg = (TextView) rltRootNoContentFound.findViewById(R.id.txtNoItemsMsg);
+		txtNoContentMsg.setText(R.string.events_are_better_with_friends);
+		txtNoContentMsg.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_list_follow, 0, 0);
+
+		((ImageView) rltRootNoContentFound.findViewById(R.id.imgPhone))
+			.setImageDrawable(res.getDrawable(R.drawable.ic_friends_activity_no_content));
+
+		rltRootNoContentFound.setVisibility(View.VISIBLE);
 	}
 
 	@Override

@@ -15,26 +15,22 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.RecyclerListener;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
-import com.wcities.eventseeker.SettingsFragment.OnSettingsItemClickedListener;
-import com.wcities.eventseeker.SettingsFragment.SettingsItem;
 import com.wcities.eventseeker.adapter.MyArtistListAdapter;
 import com.wcities.eventseeker.adapter.MyArtistListAdapter.AdapterFor;
 import com.wcities.eventseeker.api.Api;
+import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -55,7 +51,7 @@ import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
 
 public abstract class FollowingParentFragment extends FragmentLoadableFromBackStack implements ArtistTrackingListener,
-		OnClickListener, LoadArtistsListener, LoadItemsInBackgroundListener, DialogBtnClickListener, CustomSharedElementTransitionSource {
+		LoadArtistsListener, LoadItemsInBackgroundListener, DialogBtnClickListener, CustomSharedElementTransitionSource {
 
 	private static final String TAG = FollowingParentFragment.class.getName();
 
@@ -65,7 +61,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 	private LoadMyArtists loadMyArtists;
 	protected MyArtistListAdapter myArtistListAdapter;
 
-	private List<Artist> artistList;
+	protected List<Artist> artistList;
 	private SortedSet<Integer> artistIds;
 	
 	private Map<Character, Integer> alphaNumIndexer;
@@ -73,8 +69,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 
 	private AbsListView absListView;
 
-	private View rltDummyLyt;
-	private ScrollView scrlVRootNoItemsFoundWithAction;
+	private View rltRootNoContentFound;
 	
 	/**
 	 * Using its instance variable since otherwise calling getResources() directly from fragment from 
@@ -127,9 +122,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 					+ ViewUtil.getStatusBarHeight(res);
 			rltFollowMoreArtist.setLayoutParams(lp);
 		}
-		rltDummyLyt = v.findViewById(R.id.rltDummyLyt);
-		scrlVRootNoItemsFoundWithAction = (ScrollView) v.findViewById(R.id.scrlVRootNoItemsFoundWithAction);
-		v.findViewById(R.id.btnAction).setOnClickListener(this);
+		rltRootNoContentFound = v.findViewById(R.id.rltRootNoContentFound);
 		return v;
 	}
 
@@ -172,6 +165,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 		// So, that 'absListView.setAdapter(myArtistListAdapter);' was throwing java.lang.NoSuchMethodError
 		if (absListView instanceof ListView) {
 			((ListView) absListView).setAdapter(myArtistListAdapter);
+			
 		} else {			
 			((GridView) absListView).setAdapter(myArtistListAdapter);
 		}
@@ -248,43 +242,15 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 			Log.e(TAG, "" + e.getMessage());
 			e.printStackTrace();
 		}
-
-		if (wcitiesId == null) {
-			rltDummyLyt.setVisibility(View.VISIBLE);
-			TextView txtNoItemsFound = (TextView)rltDummyLyt.findViewById(R.id.txtNoItemsFound);
-			txtNoItemsFound.setText(res.getString(R.string.no_items_found_pls_login) + " the list of artists you are following.");
-			
-		} else {
-			scrlVRootNoItemsFoundWithAction.setVisibility(View.VISIBLE);
-			((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsHeading)).setText(
-					res.getString(R.string.personalize_your_experience));
-			((TextView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.txtNoItemsMsg)).setText(
-					res.getString(R.string.sync_accounts_or_search_for_artists));
-			((Button)scrlVRootNoItemsFoundWithAction.findViewById(R.id.btnAction)).setText(
-					res.getString(R.string.navigation_drawer_item_sync_accounts));
-			((ImageView)scrlVRootNoItemsFoundWithAction.findViewById(R.id.imgNoItems)).setImageDrawable(
-					res.getDrawable(R.drawable.no_artists_following));
-		}
-	}
-
-	/**
-	 * TODO: if it is required
-	 */
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
 		
-		case R.id.btnAction:
-			// set firstTimeLaunch=false so as to keep facebook & google sign in rows visible.
-			((EventSeekr)FragmentUtil.getActivity(this).getApplication()).updateFirstTimeLaunch(false);
-			/*((DrawerListFragmentListener)FragmentUtil.getActivity(this)).onDrawerItemSelected(
-					MainActivity.INDEX_NAV_ITEM_CONNECT_ACCOUNTS, null);*/
-			((OnSettingsItemClickedListener) FragmentUtil.getActivity(this)).onSettingsItemClicked(SettingsItem.SYNC_ACCOUNTS, null);
-			break;
-
-		default:
-			break;
-		}
+		TextView txtNoContentMsg = (TextView) rltRootNoContentFound.findViewById(R.id.txtNoItemsMsg);
+		txtNoContentMsg.setText(R.string.following_no_content);
+		txtNoContentMsg.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_list_follow, 0, 0);
+		
+		((ImageView) rltRootNoContentFound.findViewById(R.id.imgPhone))
+			.setImageDrawable(res.getDrawable(R.drawable.ic_following_no_content));
+		
+		rltRootNoContentFound.setVisibility(View.VISIBLE);		
 	}
 	
 	@Override
