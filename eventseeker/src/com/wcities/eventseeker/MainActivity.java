@@ -2105,6 +2105,12 @@ public class MainActivity extends ActionBarActivity implements
 		 */
 		if (isTabletAndInLandscapeMode && currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_LOGIN_SYNCING)) {
 			getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
+		} 
+		
+		if (currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_CHANGE_LOCATION)) {
+			onLocationChanged(getSupportFragmentManager()
+				.findFragmentByTag(currentContentFragmentTag).getArguments());
+			return;
 		}
 		
 		if (getSupportFragmentManager().getBackStackEntryCount() > 0) {

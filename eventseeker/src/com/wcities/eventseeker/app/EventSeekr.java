@@ -23,7 +23,6 @@ import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Logger.LogLevel;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.wcities.eventseeker.ConnectAccountsFragment;
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.LanguageFragment.Locales;
 import com.wcities.eventseeker.R;
@@ -86,7 +85,7 @@ public class EventSeekr extends Application {
 	private static final int NOT_INITIALIZED = -1;
 	public static final int UNSYNC_COUNT = -2;
 	
-	private static final int ALL_UNSYNCED_COUNT = UNSYNC_COUNT * 6;
+	private static final int ALL_UNSYNCED_COUNT = UNSYNC_COUNT * Service.getServiceCount();
 
 	private int syncCountGooglePlayMusic = NOT_INITIALIZED;
 	private int syncCountDeviceLib = NOT_INITIALIZED;

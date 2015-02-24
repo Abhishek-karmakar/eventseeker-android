@@ -150,6 +150,16 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
     	public boolean isService() {
 			return isService;
 		}
+    	
+    	public static int getServiceCount() {
+    		int count = 0;
+    		for (Service service : Service.values()) {
+				if (service.isService()) {
+					++count;
+				}
+			}
+    		return count;
+    	}
     }
     
 	private AccountsListAdapter listAdapter;
