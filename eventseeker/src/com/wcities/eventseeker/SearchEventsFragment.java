@@ -233,7 +233,7 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 			
 			private View root, vHandle;
 		    private TextView txtEvtTitle, txtEvtTime, txtEvtLocation, txtNoItemsFound;
-		    private ImageView imgEvent, imgTicket, imgSave, imgShare;
+		    private ImageView imgEvent, imgTicket, imgSave, imgShare, imgHandle;
 		    private LinearLayout lnrSliderContent;
 		    private RelativeLayout rltLytRoot, rltLytContent, rltTicket, rltSave, rltShare;
 		    
@@ -245,6 +245,7 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 		        txtEvtLocation = (TextView) root.findViewById(R.id.txtEvtLocation);
 		        imgEvent = (ImageView) root.findViewById(R.id.imgEvent);
 		        vHandle = root.findViewById(R.id.vHandle);
+		        imgHandle = (ImageView) root.findViewById(R.id.imgHandle);
 		        lnrSliderContent = (LinearLayout) root.findViewById(R.id.lnrSliderContent);
 		        rltLytRoot = (RelativeLayout) root.findViewById(R.id.rltLytRoot);
 		        rltLytContent = (RelativeLayout) root.findViewById(R.id.rltLytContent);
@@ -474,6 +475,7 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 							int scrollX = rltLytContentLP.leftMargin - rltLytContentInitialMarginL + dx;
 							//Log.d(TAG, "move, rltLytContentLP.leftMargin = " + rltLytContentLP.leftMargin + ", lnrDrawerContentW = " + lnrDrawerContentW);
 							if (scrollX >= (0 - lnrSliderContentW) && scrollX <= 0) {
+								holder.imgHandle.setImageResource(R.drawable.ic_more_slider_pressed);
 								ViewCompat.setElevation(holder.imgEvent, searchEventFragment.translationZPx);
 								
 								rltLytContentLP.leftMargin = rltLytContentInitialMarginL + scrollX;
@@ -620,6 +622,8 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 			holder.rltLytContent.setLayoutParams(lp);
 			//Log.d(TAG, "openSlider()");
 			
+			holder.imgHandle.setImageResource(R.drawable.ic_more_slider_pressed);
+			
 			if (isUserInitiated) {
 				updateOpenPos(position, recyclerView);
 			}
@@ -638,6 +642,8 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 			//Log.d(TAG, "closeSlider()");
 			
 			ViewCompat.setElevation(holder.imgEvent, 0);
+			
+			holder.imgHandle.setImageResource(R.drawable.ic_more_slider);
 			
 			if (isUserInitiated) {
 				if (openPos == position) {
@@ -708,7 +714,7 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 		
 		private void onHandleClick(final ViewHolder holder, final int position) {
 			//Log.d(TAG, "onHandleClick()");
-			holder.vHandle.setPressed(true);
+			holder.imgHandle.setImageResource(R.drawable.ic_more_slider_pressed);
 			
 			if (holder.isSliderClose(rltLytContentInitialMarginL)) {
 				// slider is close, so open it
@@ -733,8 +739,6 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 					
 					@Override
 					public void onAnimationEnd(Animation animation) {
-						holder.vHandle.setPressed(false);
-						
 						RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) 
 								holder.rltLytContent.getLayoutParams();
 						lp.leftMargin -= holder.lnrSliderContent.getWidth();
@@ -763,7 +767,7 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 					public void onAnimationEnd(Animation animation) {
 						ViewCompat.setElevation(holder.imgEvent, 0);
 						
-						holder.vHandle.setPressed(false);
+						holder.imgHandle.setImageResource(R.drawable.ic_more_slider);
 						
 						holder.lnrSliderContent.setVisibility(View.INVISIBLE);
 						RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) holder.lnrSliderContent.getLayoutParams();

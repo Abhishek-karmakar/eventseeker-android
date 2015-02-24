@@ -4,6 +4,10 @@
 		<item name="colorPrimary">@color/colorPrimary</item>
 		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
 		<item name="android:textColorPrimary">@color/text_color_primary</item>
+		<!-- to remove highlight & ripple effect from hamburger icon -->
+    	<item name="toolbarNavigationButtonStyle">@style/Widget.EventSeeker.Toolbar.Button.Navigation</item>
+    	<!-- to have white underline & white cursor for searchview -->
+    	<item name="searchViewStyle">@style/Widget.EventSeeker.Light.SearchView</item>
 	</style>
 
 	<style name="Theme.EventSeekr" parent="@style/Theme.EventSeekr.Base"></style>

@@ -814,17 +814,29 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	        ViewHelper.setScaleY(txtEvtTitle, scale);
 		}
         
-		boolean isSignificantDelta = Math.abs(scrollY - prevScrollY) > fabScrollThreshold;
-        if (isSignificantDelta) {
-            if (scrollY > prevScrollY) {
-                fabTickets.hide(true);
-                fabSave.hide(true);
-                
-            } else {
-                fabTickets.show(true);
-                fabSave.show(true);
-            }
-        }
+		// We take the last child in the scrollview
+	    View lastChild = (View) obsrScrlV.getChildAt(obsrScrlV.getChildCount() - 1);
+	    int diff = (lastChild.getBottom() - (obsrScrlV.getHeight() + obsrScrlV.getScrollY()));
+	    /*Log.d(TAG, "btm = " + view.getBottom() + ", ht = " + obsrScrlV.getHeight() + ", scrollY = " 
+	    		+ obsrScrlV.getScrollY() + ", diff = " + diff);*/
+	    if (diff == 0) {
+		    // if diff is zero, then the bottom has been reached, where we need to show floating action buttons
+	    	fabTickets.show(true);
+            fabSave.show(true);
+            
+	    } else {
+			boolean isSignificantDelta = Math.abs(scrollY - prevScrollY) > fabScrollThreshold;
+	        if (isSignificantDelta) {
+	            if (scrollY > prevScrollY) {
+	                fabTickets.hide(true);
+	                fabSave.hide(true);
+	                
+	            } else {
+	                fabTickets.show(true);
+	                fabSave.show(true);
+	            }
+	        }
+	    }
         
 		prevScrollY = scrollY;
 	}

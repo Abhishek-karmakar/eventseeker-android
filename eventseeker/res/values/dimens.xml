@@ -642,8 +642,8 @@
     <dimen name="txt_artist_name_txt_size_featuring_artist">20sp</dimen>
     <dimen name="txt_artist_name_pad_l_featuring_artist">5dp</dimen>
     <dimen name="txt_artist_name_pad_r_featuring_artist">@dimen/txt_artist_name_pad_l_featuring_artist</dimen>
-    <dimen name="txt_artist_name_pad_b_featuring_artist">12dp</dimen>
-    <dimen name="txt_artist_name_pad_t_featuring_artist">@dimen/txt_artist_name_pad_b_featuring_artist</dimen>
+    <dimen name="txt_artist_name_pad_b_featuring_artist">6dp</dimen>
+    <dimen name="txt_artist_name_pad_t_featuring_artist">18dp</dimen>
     <!-- include_friends.xml -->
     <dimen name="txt_friends_margin_t_include_friends">@dimen/txt_desc_margin_t_event_details</dimen>
     <dimen name="txt_friends_txt_size_include_friends">@dimen/txt_evt_details_txt_size_event_details</dimen>

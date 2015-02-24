@@ -102,7 +102,7 @@ public class ViewUtil {
 		}
 	}
 	
-	public static boolean isPointInsideView(float x, float y, View view){
+	public static boolean isPointInsideView(float x, float y, View view) {
 	    int location[] = new int[2];
 	    view.getLocationOnScreen(location);
 	    int viewX = location[0];
