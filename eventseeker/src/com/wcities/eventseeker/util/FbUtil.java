@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.facebook.FacebookRequestError;
 import com.facebook.HttpMethod;
@@ -24,6 +25,7 @@ import com.facebook.Session.StatusCallback;
 import com.facebook.SessionState;
 import com.facebook.model.GraphObject;
 import com.facebook.model.OpenGraphAction;
+import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
@@ -160,8 +162,15 @@ public class FbUtil {
 		Log.d(TAG, "handlePublishEvent()");
 		if (canPublishNow(fbPublishListener, fragment, permissions, requestCode)) {
 			event.updateAttendingToNewAttending();
-			fbPublishListener.onPublishPermissionGranted();
-			publishEvent(event, fragment);
+			/**
+			 * Call onPublishPermissionGranted() afterwards, because for my events screen if user is saving
+			 * event from following/recommended tab then we want to refresh saved events tab which we are doing from
+			 * onPublishPermissionGranted() call sequence. If we call onPublishPermissionGranted() before actually
+			 * sending updated usertracker value to eventseeker server, refreshed saved events call might not generate
+			 * newly saved event since usertracker call might not have finished yet.
+			 */
+			Toast.makeText(FragmentUtil.getActivity(fragment), R.string.saving_event, Toast.LENGTH_SHORT).show();
+			publishEvent(event, fragment, fbPublishListener);
 		}
 	}
 	
@@ -421,7 +430,7 @@ public class FbUtil {
 	 * @param event
 	 * @param fragment
 	 */
-	private static void publishEvent(final Event event, final Fragment fragment) {
+	private static void publishEvent(final Event event, final Fragment fragment, final PublishListener fbPublishListener) {
 		
 		RequestBatch requestBatch = new RequestBatch();
 
@@ -463,8 +472,14 @@ public class FbUtil {
                    }
                    
                    new UserTracker(Api.OAUTH_TOKEN, (EventSeekr) FragmentUtil.getActivity(fragment).getApplication(),
-                    UserTrackingItemType.event, event.getId(), event.getAttending().getValue(), postId,
-                    UserTrackingType.Add).execute();
+                		   UserTrackingItemType.event, event.getId(), event.getAttending().getValue(), postId,
+                		   UserTrackingType.Add) {
+                	   
+                	   protected void onPostExecute(Void result) {
+               				fbPublishListener.onPublishPermissionGranted();
+                	   }
+                	   
+                   }.execute();
             }
         };
 

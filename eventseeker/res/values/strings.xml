@@ -492,6 +492,9 @@
     <!-- NavigationFragment -->
     <string name="address_isnt_available">Address is not available for this venue.</string>
     
+    <!-- FbUtil -->
+    <string name="saving_event">Saving the event...</string>
+    
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     
     <!-- Common -->

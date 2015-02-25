@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.facebook.Session;
 import com.google.android.gms.common.ConnectionResult;
@@ -14,6 +15,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.SettingsFragment.OnSettingsItemClickedListener;
 import com.wcities.eventseeker.SettingsFragment.SettingsItem;
@@ -100,12 +102,21 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 	        	if (resultCode == Activity.RESULT_OK) {
 	        		if (event != null) {
 	        			event.updateAttendingToNewAttending();
+	        			/**
+	        			 * Call onPublishPermissionGranted() afterwards, because for my events screen if user is saving
+	        			 * event from following/recommended tab then we want to refresh saved events tab which we are doing from
+	        			 * onPublishPermissionGranted() call sequence. If we call onPublishPermissionGranted() before actually
+	        			 * sending updated usertracker value to eventseeker server, refreshed saved events call might not generate
+	        			 * newly saved event since usertracker call might not have finished yet.
+	        			 */
+	        			Toast.makeText(FragmentUtil.getActivity(this), R.string.saving_event, Toast.LENGTH_SHORT).show();
+	        			trackEvent();
 	        			
 	        		} else {
 	        			friendNewsItem.updateUserAttendingToNewUserAttending();
+	        			onPublishPermissionGranted();
+		        		trackFriendNewsItem();
 	        		}
-	    			onPublishPermissionGranted();
-	        		trackEvent();
 	        	}
 	        	
 	        } else {
@@ -137,17 +148,23 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 		this.friendNewsItem = friendNewsItem;
 	}
 
-	protected void trackEvent() {
-		long id;
-		int attending;
-		if (event != null) {
-			id = event.getId();
-			attending = event.getAttending().getValue();
+	private void trackEvent() {
+		long id = event.getId();
+		int	attending = event.getAttending().getValue();
+		new UserTracker(Api.OAUTH_TOKEN, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
+        		UserTrackingItemType.event, id, attending, null, 
+        		UserTrackingType.Add) {
 			
-		} else {
-			id = friendNewsItem.getTrackId();
-			attending = friendNewsItem.getUserAttending().getValue();
-		}
+			protected void onPostExecute(Void result) {
+				onPublishPermissionGranted();
+			}
+			
+		}.execute();
+	}
+	
+	private void trackFriendNewsItem() {
+		long id = friendNewsItem.getTrackId();
+		int attending = friendNewsItem.getUserAttending().getValue();
 		new UserTracker(Api.OAUTH_TOKEN, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
         		UserTrackingItemType.event, id, attending, null, 
         		UserTrackingType.Add).execute();

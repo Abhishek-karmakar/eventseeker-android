@@ -293,4 +293,12 @@ public class MyEventsFragment extends FragmentLoadableFromBackStack implements O
 	public boolean isOnTop() {
 		return !isOnPushedToBackStackCalled;
 	}
+	
+	public void onEventAttendingUpdated() {
+		List<Fragment> pageFragments = mTabsAdapter.getTabFragments();
+		for (Iterator<Fragment> iterator = pageFragments.iterator(); iterator.hasNext();) {
+			MyEventsListFragment myEventsListFragment = (MyEventsListFragment) iterator.next();
+			myEventsListFragment.onEventAttendingUpdated();
+		}
+	}
 }

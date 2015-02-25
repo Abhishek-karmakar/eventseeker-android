@@ -97,24 +97,7 @@ public class GPlusUtil {
         if (userName == null) {
         	return;
         }
-		String text = userName + " is going to ";
-		/**
-		 * Using getNewAttending() instead of getAttending() since we update right value on event only 
-		 * after successfully sharing on google+
-		 */
-        if (event.getNewAttending() == Attending.WANTS_TO_GO) {
-        	text = userName + " wants to go to ";
-        }
-        text += event.getName();
-        if (event.getSchedule() != null) {
-        	if (event.getSchedule().getVenue().getAddress() != null) {
-        		text += " at " + event.getSchedule().getVenue().getAddress().getCity();
-        	}
-        	if (event.getSchedule().getDates().size() > 0) {
-        		text += " on " + new SimpleDateFormat("EEEE, MMM d").format(event.getSchedule().getDates().get(0).getStartDate());
-        	}
-        }
-        text += ".";
+		String text = userName + " added an event " + event.getName() + " on eventseeker.";
         
         String link = event.getEventUrl();
         if (link == null) {
@@ -128,43 +111,6 @@ public class GPlusUtil {
           	.setContentUrl(Uri.parse(link))
           	.getIntent();
         
-        /**
-         * 16-12-2014:
-         * Above code is commented and used below one because it was crashing after GooglePlayLib & support libs update.
-           Exception:
-           12-16 11:28:27.632: E/AndroidRuntime(10358): FATAL EXCEPTION: main
-		   12-16 11:28:27.632: E/AndroidRuntime(10358): Process: com.google.android.gms.ui, PID: 10358
-	       12-16 11:28:27.632: E/AndroidRuntime(10358): java.lang.IllegalArgumentException
-		   12-16 11:28:27.632: E/AndroidRuntime(10358): 	at com.google.k.a.aj.a(SourceFile:72)
-		   12-16 11:28:27.632: E/AndroidRuntime(10358): 	at com.google.android.gms.plus.audience.a.e.<init>(SourceFile:63)
-		   12-16 11:28:27.632: E/AndroidRuntime(10358): 	at com.google.android.gms.plus.audience.a.e.<init>(SourceFile:53)
-		   12-16 11:28:27.632: E/AndroidRuntime(10358): 	at com.google.android.gms.plus.audience.a.d.<init>(SourceFile:28)
-		   12-16 11:28:27.632: E/AndroidRuntime(10358): 	at com.google.android.gms.plus.sharebox.al.a(SourceFile:213)
-         */
-        
-        /*String key = event.getKey(ImgResolution.LOW);
-        BitmapCache bitmapCache = BitmapCache.getInstance();
-		Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
-		Uri uri = null;
-		if (bitmap != null) {
-			File tmpFile = FileUtil.createTempShareImgFile(FragmentUtil.getActivity(fragment).getApplication(), bitmap);
-			if (tmpFile != null) {
-				uri = Uri.fromFile(tmpFile);
-			}
-		}
-
-		IntentBuilder shareIntentbuBuilder = ShareCompat.IntentBuilder.from(FragmentUtil.getActivity(fragment));
-		if (uri != null) {
-			shareIntentbuBuilder.setStream(uri).setType("image/jpg");
-
-		} else {
-			shareIntentbuBuilder.setType("text/plain");	
-		}
-        Intent shareIntent = shareIntentbuBuilder
-                .setText(text + " " + link)
-                .getIntent()
-                .setPackage("com.google.android.apps.plus");*/
-
 		fragment.startActivityForResult(shareIntent, AppConstants.REQ_CODE_GOOGLE_PLUS_PUBLISH_EVT);
 	}
 	
@@ -175,23 +121,7 @@ public class GPlusUtil {
         if (userName == null) {
         	return;
         }
-		String text = userName + " is going to ";
-		/**
-		 * Using getNewAttending() instead of getAttending() since we update right value on event only 
-		 * after successfully sharing on google+
-		 */
-        if (item.getNewUserAttending() == Attending.WANTS_TO_GO) {
-        	text = userName + " wants to go to ";
-        }
-        text += item.getTrackName();
-        
-        if (item.getVenueName() != null) {
-        	text += " at " + item.getVenueName();
-    	}
-    	if (item.getStartTime() != null) {
-    		text += " on " + new SimpleDateFormat("EEEE, MMM d").format(item.getStartTime().getStartDate());
-    	}
-        text += ".";
+		String text = userName + " added an event " + item.getTrackName() + " on eventseeker.";
         
         String link = "http://eventseeker.com/event/" + item.getTrackId();
         
@@ -202,43 +132,6 @@ public class GPlusUtil {
           	.setContentUrl(Uri.parse(link))
           	.getIntent();
 
-        /**
-         * 16-12-2014:
-         * Above code is commented and used below one because it was crashing after GooglePlayLib & support libs update.
-           Exception:
-           12-16 11:28:27.632: E/AndroidRuntime(10358): FATAL EXCEPTION: main
-		   12-16 11:28:27.632: E/AndroidRuntime(10358): Process: com.google.android.gms.ui, PID: 10358
-	       12-16 11:28:27.632: E/AndroidRuntime(10358): java.lang.IllegalArgumentException
-		   12-16 11:28:27.632: E/AndroidRuntime(10358): 	at com.google.k.a.aj.a(SourceFile:72)
-		   12-16 11:28:27.632: E/AndroidRuntime(10358): 	at com.google.android.gms.plus.audience.a.e.<init>(SourceFile:63)
-		   12-16 11:28:27.632: E/AndroidRuntime(10358): 	at com.google.android.gms.plus.audience.a.e.<init>(SourceFile:53)
-		   12-16 11:28:27.632: E/AndroidRuntime(10358): 	at com.google.android.gms.plus.audience.a.d.<init>(SourceFile:28)
-		   12-16 11:28:27.632: E/AndroidRuntime(10358): 	at com.google.android.gms.plus.sharebox.al.a(SourceFile:213)
-         */
-        
-        /*String key = event.getKey(ImgResolution.LOW);
-        BitmapCache bitmapCache = BitmapCache.getInstance();
-		Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
-		Uri uri = null;
-		if (bitmap != null) {
-			File tmpFile = FileUtil.createTempShareImgFile(FragmentUtil.getActivity(fragment).getApplication(), bitmap);
-			if (tmpFile != null) {
-				uri = Uri.fromFile(tmpFile);
-			}
-		}
-
-		IntentBuilder shareIntentbuBuilder = ShareCompat.IntentBuilder.from(FragmentUtil.getActivity(fragment));
-		if (uri != null) {
-			shareIntentbuBuilder.setStream(uri).setType("image/jpg");
-
-		} else {
-			shareIntentbuBuilder.setType("text/plain");	
-		}
-        Intent shareIntent = shareIntentbuBuilder
-                .setText(text + " " + link)
-                .getIntent()
-                .setPackage("com.google.android.apps.plus");*/
-        
 		fragment.startActivityForResult(shareIntent, AppConstants.REQ_CODE_GOOGLE_PLUS_PUBLISH_EVT);
 	}
 	

@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import android.content.res.Resources;
+import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -132,6 +133,7 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 	@Override
 	public void onPublishPermissionGranted() {
 		eventListAdapter.onPublishPermissionGranted();
+		((MyEventsFragment) getParentFragment()).onEventAttendingUpdated();
 	}
 
 	@Override
@@ -242,5 +244,26 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 	@Override
 	public void displayFullScrnProgress() {
 		rltLytPrgsBar.setVisibility(View.VISIBLE);
-	}	
+	}
+	
+	private void resetEventList() {
+		if (loadEvents != null && loadEvents.getStatus() != Status.FINISHED) {
+			loadEvents.cancel(true);
+		}
+		eventListAdapter.setMoreDataAvailable(true);
+		eventListAdapter.setEventsAlreadyRequested(0);
+		eventList.clear();
+		eventList.add(null);
+		eventListAdapter.notifyDataSetChanged();
+	}
+	
+	public void onEventAttendingUpdated() {
+		/**
+		 * we will get this notification only while saving events. If user is saving event from following/recommended
+		 * tab then saved events should refresh to display updated list
+		 */
+		if (loadType == Type.mysavedevents) {
+			resetEventList();
+		}
+	}
 }
