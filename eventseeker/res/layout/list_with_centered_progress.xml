@@ -5,7 +5,8 @@
     
     <ListView android:id="@id/android:list"
 	    android:layout_width="match_parent"
-	    android:layout_height="match_parent" />
+	    android:layout_height="match_parent"
+	    android:background="@android:color/white" />
     
     <include layout="@layout/progress_bar_eventseeker_fixed_ht"
         android:id="@+id/rltLytPrgsBar"

@@ -79,6 +79,7 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 		}
 		
 		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
+		rltLytPrgsBar.setBackgroundResource(R.drawable.bg_no_content_overlay);
 		return v;
 	}
 	
@@ -101,11 +102,13 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 			
 		} else {
 			venueListAdapter.setmInflater(FragmentUtil.getActivity(this));
+			if (!venueList.isEmpty() && venueList.get(0) != null && venueList.get(0).getId() == AppConstants.INVALID_ID) {
+				getListView().setBackgroundResource(R.drawable.bg_no_content_overlay);
+			}
 		}
 
 		setListAdapter(venueListAdapter);
         getListView().setDivider(null);
-        getListView().setBackgroundResource(R.drawable.story_space);
 	}
 	
 	@Override
@@ -299,5 +302,8 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 	public void onTaskCompleted(Void... params) {
 		// remove full screen progressbar
 		rltLytPrgsBar.setVisibility(View.INVISIBLE);
+		if (!venueList.isEmpty() && venueList.get(0).getId() == AppConstants.INVALID_ID) {
+			getListView().setBackgroundResource(R.drawable.bg_no_content_overlay);
+		}
 	}
 }

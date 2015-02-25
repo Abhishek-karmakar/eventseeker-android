@@ -17,7 +17,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -119,6 +118,7 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 		recyclerVEvents.setLayoutManager(layoutManager);
 		
 		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
+		rltLytPrgsBar.setBackgroundResource(R.drawable.bg_no_content_overlay);
 		return v;
 	}
 
@@ -141,6 +141,9 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 		} else {
 			// to update values which should change on orientation change
 			eventListAdapter.onActivityCreated();
+			if (!eventList.isEmpty() && eventList.get(0) != null && eventList.get(0).getId() == AppConstants.INVALID_ID) {
+				recyclerVEvents.setBackgroundResource(R.drawable.bg_no_content_overlay);
+			}
 		}
 		
 		recyclerVEvents.setAdapter(eventListAdapter);
@@ -993,5 +996,8 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 	public void onTaskCompleted(Void... params) {
 		// to remove full screen progressbar
 		rltLytPrgsBar.setVisibility(View.INVISIBLE);
+		if (!eventList.isEmpty() && eventList.get(0).getId() == AppConstants.INVALID_ID) {
+			recyclerVEvents.setBackgroundResource(R.drawable.bg_no_content_overlay);
+		}
 	}
 }

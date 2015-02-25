@@ -93,6 +93,7 @@ public class SearchArtistsFragment extends PublishArtistListFragment implements 
 		}
 		
 		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
+		rltLytPrgsBar.setBackgroundResource(R.drawable.bg_no_content_overlay);
 		return v;
 	}
 	
@@ -115,11 +116,13 @@ public class SearchArtistsFragment extends PublishArtistListFragment implements 
 			
 		} else {
 			artistListAdapter.updateContext(FragmentUtil.getActivity(this));
+			if (!artistList.isEmpty() && artistList.get(0) != null && artistList.get(0).getId() == AppConstants.INVALID_ID) {
+				getListView().setBackgroundResource(R.drawable.bg_no_content_overlay);
+			}
 		}
 		artistListAdapter.setAddPadding(true);
 		setListAdapter(artistListAdapter);
         getListView().setDivider(null);
-        //getListView().setBackgroundResource(R.drawable.story_space);
 	}
 	
 	@Override
@@ -291,6 +294,9 @@ public class SearchArtistsFragment extends PublishArtistListFragment implements 
 	public void onTaskCompleted(Void... params) {
 		// remove full screen progressbar
 		rltLytPrgsBar.setVisibility(View.INVISIBLE);
+		if (!artistList.isEmpty() && artistList.get(0).getId() == AppConstants.INVALID_ID) {
+			getListView().setBackgroundResource(R.drawable.bg_no_content_overlay);
+		}
 	}
 
 	@Override
