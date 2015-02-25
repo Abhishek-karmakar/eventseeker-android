@@ -11,6 +11,7 @@ import java.util.TreeSet;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -88,6 +89,8 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 	private List<View> hiddenViews;
 	private boolean isOnPushedToBackStackCalled;
 
+	private View rltLayoutRoot;
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -127,6 +130,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 			rltFollowMoreArtist.setLayoutParams(lp);
 		}
 
+		rltLayoutRoot = v.findViewById(R.id.rltLayoutRoot);
 		rltRootNoContentFound = v.findViewById(R.id.rltRootNoContentFound);
 		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
 		return v;
@@ -214,7 +218,16 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 	@Override
 	public void loadItemsInBackground() {
 		loadMyArtists = new LoadMyArtists(Api.OAUTH_TOKEN, wcitiesId, artistList, myArtistListAdapter, 
-				cachedFollowingList, artistIds, indices, alphaNumIndexer, this);
+				cachedFollowingList, artistIds, indices, alphaNumIndexer, this) {
+			
+			@Override
+			protected void onPreExecute() {
+				super.onPreExecute();
+				if (!artistList.isEmpty() && artistList.get(0) == null) {
+					rltLayoutRoot.setBackgroundResource(R.drawable.bg_no_content_overlay);
+				}
+			}
+		};
 		myArtistListAdapter.setLoadArtists(loadMyArtists);
 		AsyncTaskUtil.executeAsyncTask(loadMyArtists, true);
 	}
@@ -341,6 +354,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 	@Override
 	public void onTaskCompleted(Void... params) {
 		rltLytPrgsBar.setVisibility(View.INVISIBLE);
+		rltLayoutRoot.setBackgroundColor(Color.WHITE);
 	}
 	
 	protected abstract AbsListView getScrollableView();

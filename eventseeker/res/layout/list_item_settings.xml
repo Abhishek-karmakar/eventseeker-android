@@ -3,19 +3,8 @@
     style="@style/CustomListViewItemSelector"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_horizontal" >
-
-    <View
-        android:id="@+id/vSelection"
-        android:layout_width="@dimen/v_selection_w_nav_drawer"
-        android:layout_height="match_parent"
-        android:layout_alignBottom="@+id/rltLayoutContent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignTop="@+id/rltLayoutContent"
-        android:layout_marginRight="@dimen/v_selection_margin_r_nav_drawer"
-        android:background="@android:color/white"
-        android:elevation="@dimen/elevation_nav_drawer_row"
-        android:visibility="invisible" />
+    android:gravity="center_horizontal" 
+    android:background="@drawable/bg_item_lst_settings" >
 
     <RelativeLayout
         android:id="@+id/rltLayoutContent"

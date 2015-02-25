@@ -11,6 +11,7 @@ import java.util.TreeSet;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -85,6 +86,8 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 	private RelativeLayout rltFollowAll;
 	private RelativeLayout rltLytPrgsBar;
 
+	private View rltLayoutRoot;
+	
 	private Resources res;
 
 	private int fbCallCountForSameArtist = 0;
@@ -161,7 +164,8 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 					.getSupportFragmentManager(), DIALOG_FOLLOW_ALL);
 			}
 		});
-
+		
+		rltLayoutRoot = v.findViewById(R.id.rltLayoutRoot);
 		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
 		return v;
 	}
@@ -215,7 +219,16 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 	@Override
 	public void loadItemsInBackground() {
 		loadCategorialArtists = new LoadArtistsByCategory(Api.OAUTH_TOKEN, wcitiesId, artistList, 
-				myArtistListAdapter, artistIds, indices, alphaNumIndexer, this, genre);
+				myArtistListAdapter, artistIds, indices, alphaNumIndexer, this, genre) {
+			
+			@Override
+			protected void onPreExecute() {
+				super.onPreExecute();
+				if (!artistList.isEmpty() && artistList.get(0) == null) {
+					rltLayoutRoot.setBackgroundResource(R.drawable.bg_no_content_overlay);
+				}
+			}
+		};
 		myArtistListAdapter.setLoadArtists(loadCategorialArtists);
 		AsyncTaskUtil.executeAsyncTask(loadCategorialArtists, true);
 	}
@@ -448,6 +461,7 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 	@Override
 	public void onTaskCompleted(Void... params) {
 		rltLytPrgsBar.setVisibility(View.INVISIBLE);
+		rltLayoutRoot.setBackgroundColor(Color.WHITE);
 	}
 
 	@Override

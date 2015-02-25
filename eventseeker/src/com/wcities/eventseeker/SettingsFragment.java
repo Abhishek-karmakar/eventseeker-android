@@ -8,9 +8,7 @@ import java.util.List;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -169,7 +167,6 @@ public class SettingsFragment extends ListFragmentLoadableFromBackStack {
 				listItemViewHolder = new ListItemViewHolder();
 				listItemViewHolder.imgIcon = (ImageView) convertView.findViewById(R.id.imgIcon);
 				listItemViewHolder.txtTitle = (TextView) convertView.findViewById(R.id.txtTitle);
-				listItemViewHolder.vSelection = convertView.findViewById(R.id.vSelection);
 				convertView.setTag(listItemViewHolder);
 
 			} else {
@@ -180,20 +177,6 @@ public class SettingsFragment extends ListFragmentLoadableFromBackStack {
 				.getDrawable(settingsItem.getIcon()));
 
 			listItemViewHolder.txtTitle.setText(settingsItem.getTitle());
-
-			/*convertView.setOnTouchListener(new OnTouchListener() {
-				
-				@Override
-				public boolean onTouch(View v, MotionEvent event) {
-					if (event.getAction() == MotionEvent.ACTION_DOWN) {					
-						listItemViewHolder.vSelection.setVisibility(View.VISIBLE);						
-
-					} else {
-						listItemViewHolder.vSelection.setVisibility(View.INVISIBLE);				
-					}
-					return false;
-				}
-			});*/
 			
 			return convertView;
 		}
@@ -204,7 +187,6 @@ public class SettingsFragment extends ListFragmentLoadableFromBackStack {
 		}
 		
 		private static class ListItemViewHolder {
-			private View vSelection;
 			private ImageView imgIcon;
 			private TextView txtTitle;
 			private Object tag;

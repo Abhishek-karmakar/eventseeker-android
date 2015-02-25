@@ -9,6 +9,7 @@ import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -125,7 +126,8 @@ public class RecommendedArtistsFragment extends PublishArtistFragmentLoadableFro
 	private boolean isOnPushedToBackStackCalled;
 
 	private View rltFollowAll;
-
+	private View rltLayoutRoot;
+	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -192,6 +194,7 @@ public class RecommendedArtistsFragment extends PublishArtistFragmentLoadableFro
 			}
 		});
 
+		rltLayoutRoot = v.findViewById(R.id.rltLayoutRoot);
 		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
 		return v;
 	}
@@ -317,7 +320,16 @@ public class RecommendedArtistsFragment extends PublishArtistFragmentLoadableFro
 	@Override
 	public void loadItemsInBackground() {
 		loadRecommendedArtists = new LoadRecommendedArtists(Api.OAUTH_TOKEN, wcitiesId, artistList, myArtistListAdapter, 
-				this, sortBy);
+				this, sortBy) {
+			
+			@Override
+			protected void onPreExecute() {
+				super.onPreExecute();
+				if (!artistList.isEmpty() && artistList.get(0) == null) {
+					rltLayoutRoot.setBackgroundResource(R.drawable.bg_no_content_overlay);
+				}
+			}
+		};
 		myArtistListAdapter.setLoadArtists(loadRecommendedArtists);
 		AsyncTaskUtil.executeAsyncTask(loadRecommendedArtists, true);
 	}
@@ -534,5 +546,6 @@ public class RecommendedArtistsFragment extends PublishArtistFragmentLoadableFro
 	@Override
 	public void onTaskCompleted(Void... params) {
 		rltLytPrgsBar.setVisibility(View.INVISIBLE);
+		rltLayoutRoot.setBackgroundColor(Color.WHITE);
 	}
 }
