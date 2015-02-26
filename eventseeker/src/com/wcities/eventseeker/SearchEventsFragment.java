@@ -1000,4 +1000,13 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 			recyclerVEvents.setBackgroundResource(R.drawable.bg_no_content_overlay);
 		}
 	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		//Log.d(TAG, "onDestroy()");
+		if (loadEvents != null && loadEvents.getStatus() != Status.FINISHED) {
+			loadEvents.cancel(true);
+		}
+	}
 }

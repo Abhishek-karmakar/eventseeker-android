@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.AsyncTask.Status;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,8 +90,6 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 	private List<View> hiddenViews;
 	private boolean isOnPushedToBackStackCalled;
 
-	private View rltLayoutRoot;
-
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -130,9 +129,9 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 			rltFollowMoreArtist.setLayoutParams(lp);
 		}
 
-		rltLayoutRoot = v.findViewById(R.id.rltLayoutRoot);
 		rltRootNoContentFound = v.findViewById(R.id.rltRootNoContentFound);
 		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
+		rltLytPrgsBar.setBackgroundResource(R.drawable.bg_no_content_overlay);
 		return v;
 	}
 
@@ -218,16 +217,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 	@Override
 	public void loadItemsInBackground() {
 		loadMyArtists = new LoadMyArtists(Api.OAUTH_TOKEN, wcitiesId, artistList, myArtistListAdapter, 
-				cachedFollowingList, artistIds, indices, alphaNumIndexer, this) {
-			
-			@Override
-			protected void onPreExecute() {
-				super.onPreExecute();
-				if (!artistList.isEmpty() && artistList.get(0) == null) {
-					rltLayoutRoot.setBackgroundResource(R.drawable.bg_no_content_overlay);
-				}
-			}
-		};
+				cachedFollowingList, artistIds, indices, alphaNumIndexer, this);
 		myArtistListAdapter.setLoadArtists(loadMyArtists);
 		AsyncTaskUtil.executeAsyncTask(loadMyArtists, true);
 	}
@@ -354,7 +344,15 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 	@Override
 	public void onTaskCompleted(Void... params) {
 		rltLytPrgsBar.setVisibility(View.INVISIBLE);
-		rltLayoutRoot.setBackgroundColor(Color.WHITE);
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		//Log.d(TAG, "onDestroy()");
+		if (loadMyArtists != null && loadMyArtists.getStatus() != Status.FINISHED) {
+			loadMyArtists.cancel(true);
+		}
 	}
 	
 	protected abstract AbsListView getScrollableView();

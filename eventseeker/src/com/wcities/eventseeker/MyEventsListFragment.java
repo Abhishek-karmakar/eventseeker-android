@@ -107,6 +107,7 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 		View v = inflater.inflate(R.layout.fragment_my_events_list, null);
 		rltRootNoContentFound = v.findViewById(R.id.rltRootNoContentFound);
 		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
+		rltLytPrgsBar.setBackgroundResource(R.drawable.bg_no_content_overlay);
 		return v;
 	}
 	
@@ -255,6 +256,15 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 		eventList.clear();
 		eventList.add(null);
 		eventListAdapter.notifyDataSetChanged();
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		//Log.d(TAG, "onDestroy()");
+		if (loadEvents != null && loadEvents.getStatus() != Status.FINISHED) {
+			loadEvents.cancel(true);
+		}
 	}
 	
 	public void onEventAttendingUpdated() {

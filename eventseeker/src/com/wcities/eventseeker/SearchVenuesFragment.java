@@ -306,4 +306,13 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 			getListView().setBackgroundResource(R.drawable.bg_no_content_overlay);
 		}
 	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		//Log.d(TAG, "onDestroy()");
+		if (loadVenues != null && loadVenues.getStatus() != Status.FINISHED) {
+			loadVenues.cancel(true);
+		}
+	}
 }

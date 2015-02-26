@@ -174,6 +174,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 		
 		rltRootNoContentFound = v.findViewById(R.id.rltRootNoContentFound);
 		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
+		rltLytPrgsBar.setBackgroundResource(R.drawable.bg_no_content_overlay);
 		return v;
 	}
 	
@@ -994,4 +995,13 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	public boolean isOnTop() {
 		return !isOnPushedToBackStackCalled;
 	}	
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		//Log.d(TAG, "onDestroy()");
+		if (loadFriendsNews != null && loadFriendsNews.getStatus() != Status.FINISHED) {
+			loadFriendsNews.cancel(true);
+		}
+	}
 }

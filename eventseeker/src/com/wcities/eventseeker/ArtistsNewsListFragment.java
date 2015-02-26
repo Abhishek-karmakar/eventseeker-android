@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.AsyncTask.Status;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -154,6 +155,7 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 		View v = inflater.inflate(R.layout.fragment_artists_news_list, null);
 		rltRootNoContentFound = v.findViewById(R.id.rltRootNoContentFound);
 		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
+		rltLytPrgsBar.setBackgroundResource(R.drawable.bg_no_content_overlay);
 		return v;
 	}
 	
@@ -164,6 +166,10 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	}
 	
 	private void initListView() {
+		if (getListView().getVisibility() != View.VISIBLE) {
+			getListView().setVisibility(View.VISIBLE);
+			rltRootNoContentFound.setVisibility(View.GONE);
+		}
 		if (artistsNewsListItems == null) {
 			artistsNewsListItems = new ArrayList<ArtistNewsListItem>();
 			artistNewsListAdapter = new ArtistNewsListAdapter(FragmentUtil.getActivity(this), null, 
@@ -370,5 +376,15 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	@Override
 	public void displayFullScrnProgress() {
 		rltLytPrgsBar.setVisibility(View.VISIBLE);
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		// Log.d(TAG, "onDestroy()");
+		if (loadArtistsNews != null
+				&& loadArtistsNews.getStatus() != Status.FINISHED) {
+			loadArtistsNews.cancel(true);
+		}
 	}
 }

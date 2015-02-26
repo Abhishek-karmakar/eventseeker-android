@@ -300,6 +300,15 @@ public class SearchArtistsFragment extends PublishArtistListFragment implements 
 	}
 
 	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		//Log.d(TAG, "onDestroy()");
+		if (loadArtists != null && loadArtists.getStatus() != Status.FINISHED) {
+			loadArtists.cancel(true);
+		}
+	}
+	
+	@Override
 	public void displayFullScrnProgress() {
 		rltLytPrgsBar.setVisibility(View.VISIBLE);
 	}

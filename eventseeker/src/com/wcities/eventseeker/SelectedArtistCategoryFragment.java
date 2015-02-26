@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.AsyncTask.Status;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -86,8 +87,6 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 	private RelativeLayout rltFollowAll;
 	private RelativeLayout rltLytPrgsBar;
 
-	private View rltLayoutRoot;
-	
 	private Resources res;
 
 	private int fbCallCountForSameArtist = 0;
@@ -96,6 +95,8 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 	
 	private List<View> hiddenViews;
 	private boolean isOnPushedToBackStackCalled;
+
+	private View rltLayoutRoot;
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -167,6 +168,7 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 		
 		rltLayoutRoot = v.findViewById(R.id.rltLayoutRoot);
 		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
+		rltLytPrgsBar.setBackgroundResource(R.drawable.bg_no_content_overlay);
 		return v;
 	}
 
@@ -219,16 +221,7 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 	@Override
 	public void loadItemsInBackground() {
 		loadCategorialArtists = new LoadArtistsByCategory(Api.OAUTH_TOKEN, wcitiesId, artistList, 
-				myArtistListAdapter, artistIds, indices, alphaNumIndexer, this, genre) {
-			
-			@Override
-			protected void onPreExecute() {
-				super.onPreExecute();
-				if (!artistList.isEmpty() && artistList.get(0) == null) {
-					rltLayoutRoot.setBackgroundResource(R.drawable.bg_no_content_overlay);
-				}
-			}
-		};
+				myArtistListAdapter, artistIds, indices, alphaNumIndexer, this, genre);
 		myArtistListAdapter.setLoadArtists(loadCategorialArtists);
 		AsyncTaskUtil.executeAsyncTask(loadCategorialArtists, true);
 	}
@@ -279,6 +272,15 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 	}
 	
 	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		//Log.d(TAG, "onDestroy()");
+		if (loadCategorialArtists != null && loadCategorialArtists.getStatus() != Status.FINISHED) {
+			loadCategorialArtists.cancel(true);
+		}
+	}
+	
+	@Override
 	public void showNoArtistFound() {
 		/**
 		 * try-catch is used to handle case where even before we get call back to this function, user leaves 
@@ -295,6 +297,7 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 			e.printStackTrace();
 		}
 		
+		rltLayoutRoot.setBackgroundResource(R.drawable.bg_no_content_overlay);
 		txtNoItemsFound.setText(R.string.no_artist_found);
 		txtNoItemsFound.setVisibility(View.VISIBLE);		
 	}
@@ -461,7 +464,6 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 	@Override
 	public void onTaskCompleted(Void... params) {
 		rltLytPrgsBar.setVisibility(View.INVISIBLE);
-		rltLayoutRoot.setBackgroundColor(Color.WHITE);
 	}
 
 	@Override
