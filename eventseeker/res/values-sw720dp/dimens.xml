@@ -375,6 +375,9 @@
     <!-- fragment_my_events_list.xml -->    
     <dimen name="txt_desc_txt_size_fragment_launcher">39sp</dimen>
     
+    <!-- fragment_launcher.xml -->
+    <dimen name="txt_desc_pad_l_r_fragment_text">160dp</dimen>
+    
     <!-- login/register fragment -->    
     <dimen name="mar_l_r_get_started_fragment">60dp</dimen>
         

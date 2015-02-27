@@ -1,7 +1,7 @@
 package com.wcities.eventseeker;
 
 import android.content.Context;
-import android.content.pm.ActivityInfo;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
@@ -12,8 +12,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
@@ -21,6 +20,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lianghanzhen.endless.viewpager.BannerHandler;
@@ -44,7 +44,7 @@ public class LauncherFragmentTab extends Fragment implements OnClickListener, Ca
 
 	private int videoDuration;
 
-	private View rltLayoutRoot;
+	private ImageView imgProxy;
 	
 	private static enum PagerTitle {
 		firstTitle,
@@ -86,7 +86,7 @@ public class LauncherFragmentTab extends Fragment implements OnClickListener, Ca
 		View view = inflater.inflate(R.layout.fragment_launcher, null);
 		
 		srfvVideo = (SurfaceView) view.findViewById(R.id.srfvVideo);
-		rltLayoutRoot = view.findViewById(R.id.rltLayoutRoot);
+		imgProxy = (ImageView) view.findViewById(R.id.imgProxy);
 		
 		view.findViewById(R.id.btnLogin).setOnClickListener(this);
 		view.findViewById(R.id.btnSignUp).setOnClickListener(this);
@@ -128,7 +128,8 @@ public class LauncherFragmentTab extends Fragment implements OnClickListener, Ca
 		switch (v.getId()) {
 		
 		case R.id.btnLogin:
-			//((MainActivity) FragmentUtil.getActivity(this)).replaceByFragment(AppConstants.FRAGMENT_TAG_LOGIN, null);
+			Intent intent = new Intent(FragmentUtil.getActivity(this).getApplicationContext(), LoginActivityTab.class);
+			startActivity(intent);
 			break;
 
 		case R.id.btnSignUp:
@@ -228,6 +229,7 @@ public class LauncherFragmentTab extends Fragment implements OnClickListener, Ca
 					public void onPrepared(MediaPlayer mediaplayer) {
 						int width = mdPlyr.getVideoWidth();
 						int height = mdPlyr.getVideoHeight();
+						//Log.d(TAG, "width = " + width + ", height = " + height);
 						
 						if (width != 0 && height != 0) {
 							srfcHldr.setFixedSize(width, height);
@@ -267,7 +269,7 @@ public class LauncherFragmentTab extends Fragment implements OnClickListener, Ca
 	}
 
 	protected void hideVideoViewAndShowBG() {
-		rltLayoutRoot.setBackgroundResource(R.drawable.ic_loading_page_img_bg);
+		imgProxy.setVisibility(View.VISIBLE);
 		srfvVideo.setVisibility(View.GONE);
 	}
 
