@@ -36,6 +36,14 @@
 	    	    android:ellipsize="marquee" />
 	    	
 	    </RelativeLayout>
+	     
+	    <View
+	        android:id="@+id/vNoContentBG"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_below="@+id/rltLytTxtVenueTitle"
+	        android:background="@drawable/bg_no_content_overlay"
+	        android:visibility="invisible" />
 	    
 	</RelativeLayout>
 	

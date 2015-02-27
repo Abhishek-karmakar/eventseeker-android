@@ -134,7 +134,8 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	private TextView txtVenueTitle;
 	private RecyclerView recyclerVVenues;
 	private RelativeLayout rltLytTxtVenueTitle;
-	
+	private View vNoContentBG;
+
 	private VenueRVAdapter venueRVAdapter;
 	
 	private int imgEventPadL, imgEventPadR, imgEventPadT, imgEventPadB;
@@ -217,6 +218,8 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		txtVenueTitle.setText(venue.getName());
 		// for marquee to work
 		txtVenueTitle.setSelected(true);
+
+		vNoContentBG = rootView.findViewById(R.id.vNoContentBG);
 		
 		recyclerVVenues = (RecyclerView) rootView.findViewById(R.id.recyclerVVenues);
 		// use a linear layout manager
@@ -742,7 +745,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			
 			private TextView txtDesc;
 			private ImageView imgDown;
-			private RelativeLayout rltLytPrgsBar;
+			private RelativeLayout rltLytPrgsBar, rltRootDesc;
 			private View vHorLine;
 			
 			private TextView txtVenue;
@@ -760,6 +763,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 				
 				txtDesc = (TextView) itemView.findViewById(R.id.txtDesc);
 				imgDown = (ImageView) itemView.findViewById(R.id.imgDown);
+				rltRootDesc = (RelativeLayout) itemView.findViewById(R.id.rltRootDesc);
 				rltLytPrgsBar = (RelativeLayout) itemView.findViewById(R.id.rltLytPrgsBar);
 				vHorLine = itemView.findViewById(R.id.vHorLine);
 				
@@ -1243,6 +1247,8 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		private void updateDescVisibility(ViewHolder holder) {
 			if (venueDetailsFragment.allDetailsLoaded) {
 				if (venueDetailsFragment.venue.getLongDesc() != null) {
+					venueDetailsFragment.vNoContentBG.setVisibility(View.INVISIBLE);
+					holder.rltRootDesc.setBackgroundColor(Color.WHITE);
 					holder.rltLytPrgsBar.setVisibility(View.GONE);
 					holder.txtDesc.setVisibility(View.VISIBLE);
 					holder.imgDown.setVisibility(View.VISIBLE);
@@ -1255,6 +1261,8 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 				}
 				
 			} else {
+				venueDetailsFragment.vNoContentBG.setVisibility(View.VISIBLE);
+				holder.rltRootDesc.setBackgroundColor(Color.TRANSPARENT);
 				holder.rltLytPrgsBar.setVisibility(View.VISIBLE);
 				holder.txtDesc.setVisibility(View.GONE);
 				holder.imgDown.setVisibility(View.GONE);

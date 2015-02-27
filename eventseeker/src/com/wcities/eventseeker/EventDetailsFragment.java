@@ -233,6 +233,8 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		obsrScrlV.setListener(this);
 		
 		rltLytPrgsBar = (RelativeLayout) rootView.findViewById(R.id.rltLytPrgsBar);
+		rltLytPrgsBar.setBackgroundResource(R.drawable.bg_no_content_overlay);
+		
 		rltLytFeaturing = (RelativeLayout) rootView.findViewById(R.id.rltLytFeaturing);
 		rltLytVenue = (RelativeLayout) rootView.findViewById(R.id.rltLytVenue);
 		rltLytFriends = (RelativeLayout) rootView.findViewById(R.id.rltLytFriends);

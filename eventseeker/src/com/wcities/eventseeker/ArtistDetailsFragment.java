@@ -161,6 +161,8 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	
 	private boolean isArtistSaveClicked;
 	
+	private View vNoContentBG;
+	
 	private OnShareTargetSelectedListener onShareTargetSelectedListener = new OnShareTargetSelectedListener() {
 		
 		@Override
@@ -238,6 +240,8 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		txtArtistTitle.setText(artist.getName());
 		// for marquee to work
 		txtArtistTitle.setSelected(true);
+		
+		vNoContentBG = rootView.findViewById(R.id.vNoContentBG);
 		
 		fabSave = (FloatingActionButton) rootView.findViewById(R.id.fabSave);
 		fabSave.setSelected(artist.getAttending() == Artist.Attending.Tracked);
@@ -851,7 +855,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			
 			private TextView txtDesc;
 			private ImageView imgDown;
-			private RelativeLayout rltLytPrgsBar;
+			private RelativeLayout rltLytPrgsBar, rltRootDesc;
 			private View vHorLine;
 			private ViewPager vPagerVideos;
 			private RecyclerView recyclerVFriends;
@@ -867,6 +871,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 				super(itemView);
 				txtDesc = (TextView) itemView.findViewById(R.id.txtDesc);
 				imgDown = (ImageView) itemView.findViewById(R.id.imgDown);
+				rltRootDesc = (RelativeLayout) itemView.findViewById(R.id.rltRootDesc);
 				rltLytPrgsBar = (RelativeLayout) itemView.findViewById(R.id.rltLytPrgsBar);
 				vHorLine = itemView.findViewById(R.id.vHorLine);
 				vPagerVideos = (ViewPager) itemView.findViewById(R.id.vPagerVideos);
@@ -1595,6 +1600,8 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		private void updateDescVisibility(ViewHolder holder) {
 			if (artistDetailsFragment.allDetailsLoaded) {
 				if (artistDetailsFragment.artist.getDescription() != null) {
+					artistDetailsFragment.vNoContentBG.setVisibility(View.INVISIBLE);
+					holder.rltRootDesc.setBackgroundColor(Color.WHITE);
 					holder.rltLytPrgsBar.setVisibility(View.GONE);
 					holder.txtDesc.setVisibility(View.VISIBLE);
 					holder.imgDown.setVisibility(View.VISIBLE);
@@ -1607,6 +1614,8 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 				}
 				
 			} else {
+				artistDetailsFragment.vNoContentBG.setVisibility(View.VISIBLE);
+				holder.rltRootDesc.setBackgroundColor(Color.TRANSPARENT);
 				holder.rltLytPrgsBar.setVisibility(View.VISIBLE);
 				holder.txtDesc.setVisibility(View.GONE);
 				holder.imgDown.setVisibility(View.GONE);

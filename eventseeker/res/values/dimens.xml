@@ -22,6 +22,9 @@
     <dimen name="v_pager_cat_titles_margin_t_discover_port">160dp</dimen>
     <dimen name="v_pager_cat_titles_margin_t_discover_land">152dp</dimen>
     <dimen name="v_pager_cat_titles_margin_t_discover">@dimen/v_pager_cat_titles_margin_t_discover_port</dimen>
+    <!-- v_no_content_bg_margin_t_discover = v_pager_cat_titles_ht_discover 
+    									   + v_pager_cat_titles_margin_t_discover -->
+    <dimen name="v_no_content_bg_margin_t_discover">220dp</dimen>
     <dimen name="v_pager_cat_titles_ht_discover">60dp</dimen>
     <dimen name="txt_no_events_pad_l_discover">30dp</dimen>
     <dimen name="txt_no_events_pad_r_discover">@dimen/txt_no_events_pad_l_discover</dimen>

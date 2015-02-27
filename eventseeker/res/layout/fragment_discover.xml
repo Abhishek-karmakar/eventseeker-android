@@ -24,6 +24,14 @@
 	    android:layout_marginTop="@dimen/v_pager_cat_titles_margin_t_discover"
 	    android:layout_gravity="top"
 	    android:background="@drawable/bg_v_pager_cat_titles" />
+
+	<View
+	    android:id="@+id/vNoContentBgImg"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_marginTop="@dimen/v_no_content_bg_margin_t_discover"
+	    android:background="@drawable/bg_no_content_overlay"
+	    android:visibility="invisible" />
 	
 	<RelativeLayout android:id="@+id/rltLytNoEvts"
 	    android:layout_width="match_parent"

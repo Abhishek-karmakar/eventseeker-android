@@ -150,6 +150,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	
 	private int imgEventPadL, imgEventPadR, imgEventPadT, imgEventPadB;
 	private List<View> hiddenViews;
+	private View vNoContentBgImg;
 	
 	private final HashMap<Integer, Integer> categoryImgs = new HashMap<Integer, Integer>() {
 		{
@@ -207,8 +208,8 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 			onScrolled(0, true, true);
         }
     };
-	
-	@Override
+
+    @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
@@ -313,6 +314,8 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		});
 	    
 	    recyclerVEvents.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
+	    
+	    vNoContentBgImg = v.findViewById(R.id.vNoContentBgImg);
 	    
 		return v;
 	}
@@ -810,6 +813,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 					
 					if (eventList.size() == 1) {
 						// no events loaded yet
+						discoverFragment.vNoContentBgImg.setVisibility(View.VISIBLE);
 						discoverFragment.rltLytProgressBar.setVisibility(View.VISIBLE);
 						holder.imgPrgsCenter.setVisibility(View.INVISIBLE);
 						holder.prgsBar.setVisibility(View.INVISIBLE);
@@ -1568,6 +1572,9 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 				//Log.d(TAG, "onEventsLoaded()");
 				// to remove full screen progressbar
 				rltLytProgressBar.setVisibility(View.INVISIBLE);
+				if (!eventList.isEmpty()) {
+					vNoContentBgImg.setVisibility(View.INVISIBLE);
+				}
 				/**
 				 * to update toolbar color since totalScrolledDy might have changed due to automatic scroll
 				 * (e.g. - progressbar removal)
