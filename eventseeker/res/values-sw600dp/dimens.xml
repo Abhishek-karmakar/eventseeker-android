@@ -379,5 +379,9 @@
 	
 	<!-- fragment_settings.xml -->
     <dimen name="lst_pad_l_r_fragment_settings">100dp</dimen>
+    
+    <!-- activity_splash.xml -->
+    <dimen name="txt_app_name_margin_t_activity_splash">50dp</dimen>
+    <dimen name="txt_app_name_txt_size_activity_splash">50sp</dimen>
                 
 </resources>

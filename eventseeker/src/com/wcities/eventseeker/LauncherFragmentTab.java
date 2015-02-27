@@ -8,6 +8,7 @@ import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -25,13 +26,11 @@ import android.widget.TextView;
 import com.lianghanzhen.endless.viewpager.BannerHandler;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.wcities.eventseeker.constants.AppConstants;
-import com.wcities.eventseeker.constants.ScreenNames;
-import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class LauncherFragment extends FragmentLoadableFromBackStack implements OnClickListener, Callback {
+public class LauncherFragmentTab extends Fragment implements OnClickListener, Callback {
 
-	private static final String TAG = LauncherFragment.class.getSimpleName();
+	private static final String TAG = LauncherFragmentTab.class.getSimpleName();
 
 	private static final int PAGE_DELAY_TIME = 5000;
 	
@@ -60,24 +59,11 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 		public String getDescription(Context context) {
 			return context.getResources().getStringArray(R.array.pagerTitleDescArray)[ordinal()];
 		}
-		
 	}
-
 	
 	@Override
 	public void onStart() {
 		super.onStart();
-		//Log.d(TAG, "onStart()");
-		((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportActionBar().hide();
-
-		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
-		ma.setVStatusBarVisibility(View.GONE, AppConstants.INVALID_ID);
-		ma.setDrawerLockMode(true);
-		ma.setDrawerIndicatorEnabled(false);
-		ma.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME);
-		if (ma.isTabletAndInLandscapeMode()) {
-			ma.hideDrawerList();
-		}
 		/**
 		 * Start the video
 		 */
@@ -105,7 +91,7 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 		view.findViewById(R.id.btnLogin).setOnClickListener(this);
 		view.findViewById(R.id.btnSignUp).setOnClickListener(this);
 
-		ActionBarActivity activity = (ActionBarActivity) FragmentUtil.getActivity(this);
+		FragmentActivity activity = (FragmentActivity) FragmentUtil.getActivity(this);
 
 		ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewPager);
 		viewPager.setAdapter(new TextViewPagerAdapter(activity, getChildFragmentManager()));
@@ -137,50 +123,16 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 	}
 	
 	@Override
-	public void onStop() {
-		super.onStop();
-		//Log.d(TAG, "onStop()");
-		((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportActionBar().show();
-		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
-		ma.setVStatusBarVisibility(View.VISIBLE, R.color.colorPrimaryDark);
-		if (ma.isTabletAndInLandscapeMode()) {
-			ma.unHideDrawerList();
-		}
-	}
-	
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		//Log.d(TAG, "onDestroy()");
-		/**
-		 * This is required to unlock drawer after login/sign up process completes, because user is navigated 
-		 * to my events or discover screen. At this point first we clear back stack from selectItem()
-		 * of MainActivity followed by replacing the fragment. After all these calls in main activity, in the end
-		 * onStart(), onStop(), onDestroy() of this fragment are called. Hence to negate the effect of onStart()
-		 * above which locks the drawer & indicator, we need to unlock these features again below.
-		 */
-		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
-		ma.setDrawerLockMode(false);
-		
-		/**
-		 * Order of below 2 lines is important. If it's reversed then in above case mentioned, toolbar shows
-		 * back arrow even when it should be hamburger icon.
-		 */
-		ma.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_HOME_AS_UP);
-		ma.setDrawerIndicatorEnabled(true);
-	}
-	
-	@Override
 	public void onClick(View v) {
 		
 		switch (v.getId()) {
 		
 		case R.id.btnLogin:
-			((MainActivity) FragmentUtil.getActivity(this)).replaceByFragment(AppConstants.FRAGMENT_TAG_LOGIN, null);
+			//((MainActivity) FragmentUtil.getActivity(this)).replaceByFragment(AppConstants.FRAGMENT_TAG_LOGIN, null);
 			break;
 
 		case R.id.btnSignUp:
-			((MainActivity) FragmentUtil.getActivity(this)).replaceByFragment(AppConstants.FRAGMENT_TAG_SIGN_UP, null);			
+			//((MainActivity) FragmentUtil.getActivity(this)).replaceByFragment(AppConstants.FRAGMENT_TAG_SIGN_UP, null);			
 			break;
 
 		default:
@@ -188,11 +140,6 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 		}
 	}
 
-	@Override
-	public String getScreenName() {
-		return ScreenNames.LAUNCHER;
-	}
-	
 	private class TextViewPagerAdapter extends FragmentStatePagerAdapter {
 
 		private Context context;
@@ -216,7 +163,6 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 		public int getCount() {
 			return PagerTitle.values().length;
 		}
-		
 	}
 	
 	public static class TextFragment extends Fragment {
@@ -321,8 +267,6 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 	}
 
 	protected void hideVideoViewAndShowBG() {
-		/*rltLayoutRoot.setBackgroundColor(
-			FragmentUtil.getResources(LauncherFragment.this).getColor(R.color.bg_screen_dark_blue));*/		
 		rltLayoutRoot.setBackgroundResource(R.drawable.ic_loading_page_img_bg);
 		srfvVideo.setVisibility(View.GONE);
 	}

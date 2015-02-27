@@ -50,6 +50,20 @@ public class FragmentUtil {
 		}
 	}
 	
+	public static Activity getActivity(android.app.Fragment fragment) {
+		while (fragment.getParentFragment() != null) {
+			fragment = fragment.getParentFragment();
+		}
+		
+		if (fragment instanceof ActivityImmediateFragmentLoadableFromBackStack) {
+			//Log.d(TAG, "ActivityImmediateFragmentLoadableFromBackStack for " + fragment.getTag());
+			return ((ActivityImmediateFragmentLoadableFromBackStack)fragment).getActivityRef();
+			
+		} else {
+			return fragment.getActivity();
+		}
+	}
+	
 	public static Resources getResources(Fragment fragment) {
 		return getActivity(fragment).getResources();
 	}
@@ -91,5 +105,21 @@ public class FragmentUtil {
 			return ((IGoogleAnalyticsTracker)fragment).getScreenName();
 		}
 		return null;
+	}
+	
+	public static String getTag(Fragment fragment) {
+		return fragment.getClass().getSimpleName();
+	}
+	
+	public static String getSupportTag(Class<? extends Fragment> fragmentClass) {
+		return fragmentClass.getSimpleName();
+	}
+	
+	public static String getTag(android.app.Fragment fragment) {
+		return fragment.getClass().getSimpleName();
+	}
+	
+	public static String getTag(Class<? extends android.app.Fragment> fragmentClass) {
+		return fragmentClass.getSimpleName();
 	}
 }

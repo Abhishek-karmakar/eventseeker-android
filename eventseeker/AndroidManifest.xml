@@ -11,19 +11,22 @@
     <supports-screens android:largeScreens="true"
         android:xlargeScreens="true" />
     
-    <application
-        android:name="com.wcities.eventseeker.app.EventSeekr"
+    <application android:name="com.wcities.eventseeker.app.EventSeekr"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.EventSeekr" >        
-        <activity
-            android:name="com.wcities.eventseeker.MainActivity"
-            android:windowSoftInputMode="adjustResize" >
+        android:theme="@style/Theme.EventSeekr" >  
+        
+        <activity android:name="com.wcities.eventseeker.SplashActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        
+        <activity android:name="com.wcities.eventseeker.MainActivity"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize" >
             <!-- for twitter call back -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -36,6 +39,9 @@
                     android:scheme="com.wcities.eventseeker" />
             </intent-filter>
         </activity>
+        
+        <activity android:name="com.wcities.eventseeker.MainActivityTab" />
+        <activity android:name="com.wcities.eventseeker.LauncherActivityTab" />
         
         <activity android:name="com.wcities.eventseeker.SpotifyActivity" 
             android:theme="@style/Theme.Transparent"
