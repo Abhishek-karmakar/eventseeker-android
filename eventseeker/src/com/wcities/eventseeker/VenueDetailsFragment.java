@@ -1246,8 +1246,8 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		
 		private void updateDescVisibility(ViewHolder holder) {
 			if (venueDetailsFragment.allDetailsLoaded) {
+				venueDetailsFragment.vNoContentBG.setVisibility(View.INVISIBLE);
 				if (venueDetailsFragment.venue.getLongDesc() != null) {
-					venueDetailsFragment.vNoContentBG.setVisibility(View.INVISIBLE);
 					holder.rltRootDesc.setBackgroundColor(Color.WHITE);
 					holder.rltLytPrgsBar.setVisibility(View.GONE);
 					holder.txtDesc.setVisibility(View.VISIBLE);

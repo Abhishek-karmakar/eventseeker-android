@@ -1599,8 +1599,8 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		
 		private void updateDescVisibility(ViewHolder holder) {
 			if (artistDetailsFragment.allDetailsLoaded) {
+				artistDetailsFragment.vNoContentBG.setVisibility(View.INVISIBLE);
 				if (artistDetailsFragment.artist.getDescription() != null) {
-					artistDetailsFragment.vNoContentBG.setVisibility(View.INVISIBLE);
 					holder.rltRootDesc.setBackgroundColor(Color.WHITE);
 					holder.rltLytPrgsBar.setVisibility(View.GONE);
 					holder.txtDesc.setVisibility(View.VISIBLE);
