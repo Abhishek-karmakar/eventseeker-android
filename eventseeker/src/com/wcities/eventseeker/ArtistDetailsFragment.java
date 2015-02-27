@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import android.animation.Animator;
+import android.animation.Animator.AnimatorListener;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -54,12 +59,6 @@ import android.widget.TextView;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.melnykov.fab.FloatingActionButton;
-import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.Animator.AnimatorListener;
-import com.nineoldandroids.animation.AnimatorSet;
-import com.nineoldandroids.animation.ObjectAnimator;
-import com.nineoldandroids.animation.ValueAnimator;
-import com.nineoldandroids.view.ViewHelper;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.ShareOnFBDialogFragment.OnFacebookShareClickedListener;
 import com.wcities.eventseeker.adapter.FriendsRVAdapter;
@@ -132,6 +131,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	
 	private int totalScrolledDy = UNSCROLLED; // indicates layout not yet created
 	private int limitScrollAt, actionBarElevation, fabScrollThreshold;
+	private int txtArtistTitleSourceX, txtArtistTitleDiffX;
 	private float minTitleScale;
 	private boolean isScrollLimitReached;
 	private String title = "";
@@ -188,7 +188,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			onScrolled(0, true, true);
         }
     };
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -423,7 +423,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		}
 		
 		// Translate image
-		ViewHelper.setTranslationY(imgArtist, (0 - totalScrolledDy) / 2);
+		imgArtist.setTranslationY((0 - totalScrolledDy) / 2);
 		
 		if (limitScrollAt == 0) {
 			calculateScrollLimit();
@@ -433,7 +433,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		int scrollY = (totalScrolledDy >= limitScrollAt) ? limitScrollAt : totalScrolledDy;
 		//Log.d(TAG, "totalScrolledDy = " + totalScrolledDy + ", limitScrollAt = " + limitScrollAt + ", scrollY = " + scrollY);
 		
-		ViewHelper.setTranslationY(rltLytTxtArtistTitle, -totalScrolledDy);
+		rltLytTxtArtistTitle.setTranslationY(-totalScrolledDy);
 		
 		if ((!isScrollLimitReached || forceUpdate) && totalScrolledDy >= limitScrollAt) {
 			ma.animateToolbarElevation(0.0f, actionBarElevation);
@@ -487,11 +487,13 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			float scale = 1 - (((1 - minTitleScale) / limitScrollAt) * scrollY);
 			//Log.d(TAG, "scale = " + scale);
 			
-			ViewHelper.setPivotX(txtArtistTitle, 0);
-	        ViewHelper.setPivotY(txtArtistTitle, txtArtistTitle.getHeight() / 2);
-	        ViewHelper.setScaleX(txtArtistTitle, scale);
-	        ViewHelper.setScaleY(txtArtistTitle, scale);
+			txtArtistTitle.setPivotX(0);
+			txtArtistTitle.setPivotY(txtArtistTitle.getHeight() / 2);
+			txtArtistTitle.setScaleX(scale);
+			txtArtistTitle.setScaleY(scale);
 	        
+			txtArtistTitle.setTranslationX(scrollY * txtArtistTitleDiffX / (float) limitScrollAt);
+			
 		} else {
 			boolean isSignificantDelta = Math.abs(dy) > fabScrollThreshold;
 	        if (isSignificantDelta) {
@@ -559,6 +561,11 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		int actionBarTitleTextSize = res.getDimensionPixelSize(R.dimen.abc_text_size_title_material_toolbar);
 		int txtArtistTitleTextSize = res.getDimensionPixelSize(R.dimen.txt_artist_title_txt_size_artist_details);
 		minTitleScale = actionBarTitleTextSize / (float) txtArtistTitleTextSize;
+		
+		int txtArtistTitleDestinationX = res.getDimensionPixelSize(R.dimen.txt_toolbar_title_pos_all_details);
+		txtArtistTitleSourceX = res.getDimensionPixelSize(R.dimen.rlt_lyt_txt_artist_title_pad_l_artist_details);
+		
+		txtArtistTitleDiffX = txtArtistTitleDestinationX - txtArtistTitleSourceX;
 	}
 	
 	private void onDrawerOpened() {

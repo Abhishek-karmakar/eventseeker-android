@@ -601,15 +601,16 @@
     <dimen name="v_dummy_ht_dialog_discover_setting">6dp</dimen>
     <!-- fragment_event_details.xml -->
     <dimen name="img_event_ht_event_details">230dp</dimen>
-    <!-- rlt_lyt_txt_evt_title_pad_l_event_details = 56dp to keep it left aligned with toolbar title 
+    <dimen name="rlt_lyt_txt_evt_title_pad_l_event_details">16dp</dimen>
+    <dimen name="rlt_lyt_txt_evt_title_pad_b_event_details">8dp</dimen>
+    <dimen name="rlt_lyt_txt_evt_title_pad_t_event_details">30dp</dimen>
+    <dimen name="txt_evt_title_txt_size_event_details">24sp</dimen>
+    <!-- txt_toolbar_title_pos_event_details = 56dp to keep it left aligned with toolbar title 
     Ref: http://www.google.com/design/spec/layout/metrics-keylines.html#metrics-keylines-keylines-spacing, where
     72dp is specified as actionbar title margin from screen left edge, but if we skip 16dp margin just before title,
     then it comes out to be 56dp. Also note that we have set titleMarginStart for toolbar to 0 under styles.xml
     for style="ThemeOverlay.EventSeeker.Dark.ActionBar" -->
-    <dimen name="rlt_lyt_txt_evt_title_pad_l_event_details">56dp</dimen>
-    <dimen name="rlt_lyt_txt_evt_title_pad_b_event_details">8dp</dimen>
-    <dimen name="rlt_lyt_txt_evt_title_pad_t_event_details">30dp</dimen>
-    <dimen name="txt_evt_title_txt_size_event_details">24sp</dimen>
+    <dimen name="txt_toolbar_title_pos_all_details">56dp</dimen>
     <!-- After scrolling to top, txtEvtTitle text must be in center vertical position exactly aligned with 
     toolbar title (for good looking transition effect), hence following calculation is used to derive txt_evt_title_ht_event_details. 
     Here, rlt_lyt_txt_evt_title_pad_b_event_details is fixed to 8dp, so to keep txtEvtTitle textview
@@ -640,6 +641,7 @@
     <dimen name="rlt_lyt_address_margin_l_event_details">@dimen/v_hor_line_margin_l_event_details</dimen>
     <dimen name="rlt_lyt_address_margin_r_event_details">@dimen/v_hor_line_margin_r_event_details</dimen>
     <dimen name="txt_venue_drawable_pad_event_details">10dp</dimen>
+    <dimen name="actionbar_title_margin_l_event_details">56dp</dimen>
     <dimen name="fab_margin_b_event_details">16dp</dimen>
     <dimen name="fab_margin_l_r_event_details">60dp</dimen>
     <!-- featuring_artist.xml -->
@@ -678,6 +680,7 @@
     <dimen name="rlt_lyt_txt_artist_title_pad_b_artist_details">8dp</dimen>
     <dimen name="rlt_lyt_txt_artist_title_pad_t_artist_details">30dp</dimen>
     <dimen name="txt_artist_title_txt_size_artist_details">24sp</dimen>
+    <dimen name="rlt_lyt_txt_artist_title_pad_l_artist_details">@dimen/rlt_lyt_txt_evt_title_pad_l_event_details</dimen>
     <!-- After scrolling to top, txtArtistTitle text must be in center vertical position exactly aligned with 
     toolbar title (for good looking transition effect), hence following calculation is used to derive txt_artist_title_ht_artist_details. 
     Here, rlt_lyt_txt_artist_title_pad_b_artist_details is fixed to 8dp, so to keep txtArtistTitle textview

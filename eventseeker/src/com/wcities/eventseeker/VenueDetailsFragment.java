@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import android.animation.Animator;
+import android.animation.Animator.AnimatorListener;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -53,12 +58,6 @@ import android.widget.Toast;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
-import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.Animator.AnimatorListener;
-import com.nineoldandroids.animation.AnimatorSet;
-import com.nineoldandroids.animation.ObjectAnimator;
-import com.nineoldandroids.animation.ValueAnimator;
-import com.nineoldandroids.view.ViewHelper;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker.Type;
 import com.wcities.eventseeker.api.Api;
@@ -122,6 +121,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	private boolean isScrollLimitReached;
 	private String title = "";
 	private float translationZPx;
+	private int txtVenueTitleSourceX, txtVenueTitleDiffX;
 	
 	private List<SharedElement> sharedElements;
 	private boolean isOnCreateViewCalledFirstTime = true;
@@ -171,7 +171,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			onScrolled(0, true, true);
         }
     };
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -386,7 +386,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		}
 		
 		// Translate image
-		ViewHelper.setTranslationY(imgVenue, (0 - totalScrolledDy) / 2);
+		imgVenue.setTranslationY((0 - totalScrolledDy) / 2);
 		
 		if (limitScrollAt == 0) {
 			calculateScrollLimit();
@@ -396,7 +396,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		int scrollY = (totalScrolledDy >= limitScrollAt) ? limitScrollAt : totalScrolledDy;
 		//Log.d(TAG, "totalScrolledDy = " + totalScrolledDy + ", limitScrollAt = " + limitScrollAt + ", scrollY = " + scrollY);
 		
-		ViewHelper.setTranslationY(rltLytTxtVenueTitle, -totalScrolledDy);
+		rltLytTxtVenueTitle.setTranslationY(-totalScrolledDy);
 		
 		if ((!isScrollLimitReached || forceUpdate) && totalScrolledDy >= limitScrollAt) {
 			ma.animateToolbarElevation(0.0f, actionBarElevation);
@@ -426,10 +426,12 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			float scale = 1 - (((1 - minTitleScale) / limitScrollAt) * scrollY);
 			//Log.d(TAG, "scale = " + scale);
 			
-			ViewHelper.setPivotX(txtVenueTitle, 0);
-	        ViewHelper.setPivotY(txtVenueTitle, txtVenueTitle.getHeight() / 2);
-	        ViewHelper.setScaleX(txtVenueTitle, scale);
-	        ViewHelper.setScaleY(txtVenueTitle, scale);
+			txtVenueTitle.setPivotX(0);
+			txtVenueTitle.setPivotY(txtVenueTitle.getHeight() / 2);
+			txtVenueTitle.setScaleX(scale);
+			txtVenueTitle.setScaleY(scale);
+			
+			txtVenueTitle.setTranslationX(scrollY * txtVenueTitleDiffX / (float) limitScrollAt);
 		}
 		
 		if (chkForOpenDrawer && ((MainActivity)FragmentUtil.getActivity(this)).isDrawerOpen()) {
@@ -450,6 +452,11 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		int actionBarTitleTextSize = res.getDimensionPixelSize(R.dimen.abc_text_size_title_material_toolbar);
 		int txtVenueTitleTextSize = res.getDimensionPixelSize(R.dimen.txt_venue_title_txt_size_venue_details);
 		minTitleScale = actionBarTitleTextSize / (float) txtVenueTitleTextSize;
+
+		int txtVenueTitleDestinationX = res.getDimensionPixelSize(R.dimen.txt_toolbar_title_pos_all_details);
+		txtVenueTitleSourceX = res.getDimensionPixelSize(R.dimen.rlt_lyt_txt_artist_title_pad_l_artist_details);
+		
+		txtVenueTitleDiffX = txtVenueTitleDestinationX - txtVenueTitleSourceX;
 	}
 	
 	private void calculateDimensions() {

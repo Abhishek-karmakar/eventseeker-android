@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import android.animation.Animator;
+import android.animation.Animator.AnimatorListener;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -44,12 +49,6 @@ import android.widget.TextView;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.melnykov.fab.FloatingActionButton;
-import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.Animator.AnimatorListener;
-import com.nineoldandroids.animation.AnimatorSet;
-import com.nineoldandroids.animation.ObjectAnimator;
-import com.nineoldandroids.animation.ValueAnimator;
-import com.nineoldandroids.view.ViewHelper;
 import com.wcities.eventseeker.adapter.FeaturingArtistPagerAdapter;
 import com.wcities.eventseeker.adapter.FriendsRVAdapter;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
@@ -106,6 +105,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	private FloatingActionButton fabTickets, fabSave;
 	
 	private int limitScrollAt, actionBarElevation, fabScrollThreshold, prevScrollY = UNSCROLLED;
+	private int txtEvtTitleDiffX, txtEvtTitleSourceX;;
 	private boolean isScrollLimitReached, isOnPushedToBackStackCalled;
 	private String title = "";
 	private float minTitleScale;
@@ -169,7 +169,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
             }
         }
     };
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -768,12 +768,17 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		int actionBarTitleTextSize = res.getDimensionPixelSize(R.dimen.abc_text_size_title_material_toolbar);
 		int txtEvtTitleTextSize = res.getDimensionPixelSize(R.dimen.txt_evt_title_txt_size_event_details);
 		minTitleScale = actionBarTitleTextSize / (float) txtEvtTitleTextSize;
+		
+		int txtEvtTitleDestinationX = res.getDimensionPixelSize(R.dimen.txt_toolbar_title_pos_all_details);
+		txtEvtTitleSourceX = res.getDimensionPixelSize(R.dimen.rlt_lyt_txt_evt_title_pad_l_event_details);
+		
+		txtEvtTitleDiffX = txtEvtTitleDestinationX - txtEvtTitleSourceX;
 	}
 	
 	private void onScrollChanged(int scrollY, boolean forceUpdate) {
 		//Log.d(TAG, "scrollY = " + scrollY);
 		// Translate image
-		ViewHelper.setTranslationY(imgEvent, scrollY / 2);
+		imgEvent.setTranslationY(scrollY / 2);
         
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
 		
@@ -810,10 +815,12 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			float scale = 1 - (((1 - minTitleScale) / limitScrollAt) * scrollY);
 			//Log.d(TAG, "scale = " + scale);
 			
-			ViewHelper.setPivotX(txtEvtTitle, 0);
-	        ViewHelper.setPivotY(txtEvtTitle, txtEvtTitle.getHeight() / 2);
-	        ViewHelper.setScaleX(txtEvtTitle, scale);
-	        ViewHelper.setScaleY(txtEvtTitle, scale);
+			txtEvtTitle.setPivotX(0);
+			txtEvtTitle.setPivotY(txtEvtTitle.getHeight() / 2);
+			txtEvtTitle.setScaleX(scale);
+			txtEvtTitle.setScaleY(scale);
+	        
+			txtEvtTitle.setTranslationX(scrollY * txtEvtTitleDiffX / (float) limitScrollAt);
 		}
         
 		// We take the last child in the scrollview

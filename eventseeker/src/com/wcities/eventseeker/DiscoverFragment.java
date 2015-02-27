@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -49,8 +50,6 @@ import android.widget.TextView;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
-import com.nineoldandroids.animation.ObjectAnimator;
-import com.nineoldandroids.view.ViewHelper;
 import com.wcities.eventseeker.DiscoverSettingDialogFragment.DiscoverSettingChangedListener;
 import com.wcities.eventseeker.SettingsFragment.OnSettingsItemClickedListener;
 import com.wcities.eventseeker.SettingsFragment.SettingsItem;
@@ -505,7 +504,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		}
 		
 		// Translate image
-		ViewHelper.setTranslationY(imgCategory, (0 - totalScrolledDy) / 2);
+		imgCategory.setTranslationY((0 - totalScrolledDy) / 2);
 		
 		// Translate tabs
 		if (limitScrollAt == 0) {
