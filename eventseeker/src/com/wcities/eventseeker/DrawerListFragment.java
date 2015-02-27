@@ -2,7 +2,6 @@ package com.wcities.eventseeker;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import android.app.Activity;
@@ -25,7 +24,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wcities.eventseeker.util.FragmentUtil;
-import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
 
 public class DrawerListFragment extends ListFragment {

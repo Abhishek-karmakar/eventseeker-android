@@ -96,6 +96,8 @@ public class BundleKeys {
 	public static final String FRAGMENT_TRANSACTION_ANIM_IDS = "fragmentTransactionAnimIds";
 	
 	public static final String SHARED_ELEMENTS = "sharedElements";
+	
+	public static final String IS_ON_CREATE_CALLED_FIRST_TIME = "isOnCreateCalledFirstTime";
 
 	/**-------------------- starts for bosch ---------------------------**/
 	

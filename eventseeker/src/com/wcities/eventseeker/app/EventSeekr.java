@@ -23,6 +23,7 @@ import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Logger.LogLevel;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.wcities.eventseeker.BaseActivity;
 import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.LanguageFragment.Locales;
 import com.wcities.eventseeker.R;
@@ -114,6 +115,7 @@ public class EventSeekr extends Application {
 	private ProximityUnit savedProximityUnit;
 	
 	public static GoogleApiClient mGoogleApiClient;
+	private static BaseActivity currentBaseActivity;
 	
 	static {
 		ACTUAL_SYSTEM_LOCALE = Locale.getDefault();
@@ -222,6 +224,28 @@ public class EventSeekr extends Application {
 		return MySpinServerSDK.sharedInstance().isConnected();
 	}
 	
+	public static BaseActivity getCurrentBaseActivity() {
+		return currentBaseActivity;
+	}
+
+	public static void setCurrentBaseActivity(BaseActivity currentBaseActivity) {
+		EventSeekr.currentBaseActivity = currentBaseActivity;
+	}
+	
+	public static void resetCurrentBaseActivityFor(BaseActivity currentBaseActivity) {
+		/**
+		 * reset to null only if it's called by same activity which had called setCurrentBaseActivity() last
+		 * time, because otherwise it's possible that activity A starts activity B where onStart() of B gets 
+		 * called up first followed by onStop() of A, resulting in first currentBaseActivity set to B & then
+		 * to null by A, which we don't want, since B is right value in this case; whereas if last activity's 
+		 * onStop() is getting called up then in that case this method will rightly set currentBaseActivity
+		 * to null.
+		 */
+		if (currentBaseActivity == EventSeekr.currentBaseActivity) {
+			EventSeekr.currentBaseActivity = null;
+		}
+	}
+
 	@Override
 	public void onCreate() {
 		// StrictMode testing

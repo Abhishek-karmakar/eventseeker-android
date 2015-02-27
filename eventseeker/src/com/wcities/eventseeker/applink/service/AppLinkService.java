@@ -70,6 +70,7 @@ import com.ford.syncV4.proxy.rpc.enums.Language;
 import com.ford.syncV4.proxy.rpc.enums.VehicleDataResultCode;
 import com.ford.syncV4.transport.TCPTransportConfig;
 import com.wcities.eventseeker.LanguageFragment.Locales;
+import com.wcities.eventseeker.BaseActivity;
 import com.wcities.eventseeker.LockScreenActivity;
 import com.wcities.eventseeker.MainActivity;
 import com.wcities.eventseeker.R;
@@ -98,7 +99,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 	//variable to contain the current state of the service
 	private static AppLinkService instance = null;
 	//variable to contain the current state of the main UI ACtivity
-	private MainActivity currentUIActivity;
+	private BaseActivity currentUIActivity;
 	//variable to access the BluetoothAdapter
 	private BluetoothAdapter mBtAdapter;
 	//variable to create and call functions of the SyncProxy
@@ -120,12 +121,26 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 		return proxy;
 	}
 	
-	public MainActivity getCurrentActivity() {
+	public BaseActivity getCurrentActivity() {
 		return currentUIActivity;
 	}
 	
-	public void setCurrentActivity(MainActivity currentActivity) {
+	public void setCurrentActivity(BaseActivity currentActivity) {
 		this.currentUIActivity = currentActivity;
+	}
+	
+	public void resetCurrentActivityFor(BaseActivity currentActivity) {
+		/**
+		 * reset to null only if it's called by same activity which had called setCurrentBaseActivity() last
+		 * time, because otherwise it's possible that activity A starts activity B where onStart() of B gets 
+		 * called up first followed by onStop() of A, resulting in first currentBaseActivity set to B & then
+		 * to null by A, which we don't want, since B is right value in this case; whereas if last activity's 
+		 * onStop() is getting called up then in that case this method will rightly set currentBaseActivity
+		 * to null.
+		 */
+		if (currentActivity == this.currentUIActivity) {
+			this.currentUIActivity = null;
+		}
 	}
 	
 	public ESIProxyALM getESIProxyListener() {
@@ -162,8 +177,8 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 			}
 		}
 		
-        if (MainActivity.getInstance() != null) {
-        	setCurrentActivity(MainActivity.getInstance());
+        if (EventSeekr.getCurrentBaseActivity() != null) {
+        	setCurrentActivity(EventSeekr.getCurrentBaseActivity());
         }
 			
         return START_STICKY;
@@ -334,8 +349,8 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 				Command.reset();
 				InteractionChoiceSetUtil.createInteractionChoiceSets();
 				
-				if (MainActivity.getInstance() != null) {
-					setCurrentActivity(MainActivity.getInstance());
+				if (EventSeekr.getCurrentBaseActivity() != null) {
+					setCurrentActivity(EventSeekr.getCurrentBaseActivity());
 				}
 				
 				/**

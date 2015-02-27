@@ -3,7 +3,6 @@
     <!-- activity_main.xml -->
     <dimen name="root_navigation_drawer_w_main">240dp</dimen>
     
-    
     <!-- navigation_drawer_list_section_header.xml -->
     <dimen name="txt_title_margin_l_navigation_drawer_list_section_header">17dp</dimen>
     <dimen name="txt_title_txt_size_navigation_drawer_list_section_header">15sp</dimen>
@@ -374,5 +373,15 @@
     <dimen name="rlt_register_details_mar_r_get_started_fragment">22dp</dimen>
     <dimen name="txt_login_label_txt_size_get_started_fragment">30sp</dimen>
     <dimen name="btn_forgot_pass_txt_size_get_started_fragment">22sp</dimen>
-        
+    
+    <!-- list_item_settings.xml -->
+	<dimen name="rlt_layout_content_pad_t_b_list_item_settings">10dp</dimen>
+	
+	<!-- fragment_settings.xml -->
+    <dimen name="lst_pad_l_r_fragment_settings">100dp</dimen>
+    
+    <!-- activity_splash.xml -->
+    <dimen name="txt_app_name_margin_t_activity_splash">50dp</dimen>
+    <dimen name="txt_app_name_txt_size_activity_splash">50sp</dimen>
+                
 </resources>

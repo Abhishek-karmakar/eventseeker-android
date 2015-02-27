@@ -1,19 +1,6 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- MainTheme -->
-    <style name="Theme.EventSeekr" parent="@style/Theme.AppCompat.Light.NoActionBar">
-        <item name="android:actionBarStyle">@style/Widget.EventSeekr.ActionBar</item>
-        <item name="actionBarStyle">@style/Widget.EventSeekr.ActionBar</item>
-        <item name="android:actionOverflowButtonStyle">@style/Widget.EventSeekr.ActionButton.Overflow</item>
-        <item name="actionOverflowButtonStyle">@style/Widget.EventSeekr.ActionButton.Overflow</item>
-        <item name="actionModeShareDrawable">@drawable/share</item>
-    	<item name="android:homeAsUpIndicator">@drawable/back_actionbar</item>
-    	<item name="homeAsUpIndicator">@drawable/back_actionbar</item>
-        <!-- <item name="android:homeAsUpIndicator">@drawable/sidenav</item>
-        <item name="homeAsUpIndicator">@drawable/sidenav</item> -->
-
-    </style>
-
     <style name="Widget.EventSeekr.ActionButton.Overflow" parent="Widget.AppCompat.ActionButton.Overflow">
         <item name="android:src">@drawable/more</item>
     </style>
