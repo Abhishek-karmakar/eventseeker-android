@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:app1="http://schemas.android.com/apk/res/com.wcities.eventseeker"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/darker_gray" >
@@ -12,6 +11,15 @@
         android:layout_height="match_parent"
         android:layout_gravity="center" >
     </SurfaceView>
+    
+    <!-- used only for tablet, since we want to maintain aspect ratio of image we can't use it as 
+    background of rltLayoutRoot -->
+    <ImageView android:id="@+id/imgProxy"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_loading_page_img_bg"
+        android:scaleType="centerCrop"
+        android:visibility="gone" />
 
     <RelativeLayout
         android:id="@+id/rltLayoutRoot"
@@ -42,7 +50,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="@string/btn_log_in" />
+                android:text="@string/btn_log_in"
+                android:textSize="@dimen/btn_txt_size_launcher" />
 
             <Button
                 android:id="@+id/btnSignUp"
@@ -50,7 +59,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="@string/btn_sign_up" />
+                android:text="@string/btn_sign_up"
+                android:textSize="@dimen/btn_txt_size_launcher" />
         </LinearLayout>
 
         <com.lianghanzhen.endless.viewpager.EndlessViewPager

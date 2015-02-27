@@ -61,6 +61,13 @@
     <!-- fragment_sync_account.xml -->
     <dimen name="v_dummy_ht_fragment_sync_account">20dp</dimen>
     
+    <!-- fragment_launcher.xml -->
+    <dimen name="txt_desc_pad_l_r_fragment_text">240dp</dimen>
+    
     <!-- login/register fragment -->
     <dimen name="mar_l_r_get_started_fragment">200dp</dimen>
+    
+	<!-- fragment_settings.xml -->
+    <dimen name="lst_pad_l_r_fragment_settings">175dp</dimen>
+        
 </resources>

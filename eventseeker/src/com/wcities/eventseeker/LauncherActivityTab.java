@@ -1,16 +1,15 @@
 package com.wcities.eventseeker;
 
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
+
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.util.FragmentUtil;
-
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 
 public class LauncherActivityTab extends FragmentActivity implements IGoogleAnalyticsTracker {
 	

@@ -48,7 +48,7 @@ public class SplashActivity extends Activity implements IGoogleAnalyticsTracker 
 						intent = new Intent(getApplicationContext(), LauncherActivityTab.class);
 						
 					} else {
-						intent = new Intent(getApplicationContext(), MainActivityTab.class);
+						intent = new Intent(getApplicationContext(), DiscoverActivityTab.class);
 					}
 					
 				} else {

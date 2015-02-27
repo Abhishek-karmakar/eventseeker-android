@@ -67,6 +67,7 @@ import com.wcities.eventseeker.cache.BitmapCacheable;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.core.Category;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
@@ -606,7 +607,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	
 	@Override
 	public String getScreenName() {
-		return "Discover Screen";
+		return ScreenNames.DISCOVER;
 	}
 	
 	@Override

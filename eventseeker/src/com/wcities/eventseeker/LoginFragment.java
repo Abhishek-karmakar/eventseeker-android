@@ -30,6 +30,7 @@ import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.core.registration.ForgotPassword;
 import com.wcities.eventseeker.core.registration.Registration.RegistrationErrorListener;
 import com.wcities.eventseeker.core.registration.Registration.RegistrationListener;
@@ -222,7 +223,7 @@ public class LoginFragment extends FbGPlusRegisterFragment implements OnClickLis
 
 	@Override
 	public String getScreenName() {
-		return "Account Login Screen";
+		return ScreenNames.ACCOUNT_LOGIN;
 	}
 	
 	private class ResetPassword extends AsyncTask<Void, Void, Integer> {

@@ -31,7 +31,9 @@
             android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="@dimen/txt_desc_view_pager_launcher_fragment"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:paddingLeft="@dimen/txt_desc_pad_l_r_fragment_text"
+            android:paddingRight="@dimen/txt_desc_pad_l_r_fragment_text" />
     </LinearLayout>
 
 </RelativeLayout>
