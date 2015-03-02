@@ -6,18 +6,23 @@ import java.util.Arrays;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AbsListView.LayoutParams;
 
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.util.ViewUtil;
 
 public class SettingsFragment extends ListFragmentLoadableFromBackStack {
 	
@@ -25,6 +30,8 @@ public class SettingsFragment extends ListFragmentLoadableFromBackStack {
 	
 	private List<SettingsItem> settingsItems;
 	private SettingsListAdapter settingsListAdapter;
+
+	private int htForSettingsList;
 	
 	public enum SettingsItem {
 		SYNC_ACCOUNTS(R.drawable.selector_sync, R.string.navigation_drawer_item_sync_accounts),	  	
@@ -81,6 +88,12 @@ public class SettingsFragment extends ListFragmentLoadableFromBackStack {
 			//Log.d(TAG, "settings item = " + settingsItem.name());
 			((OnSettingsItemClickedListener) FragmentUtil.getActivity(this)).onSettingsItemClicked(settingsItem, null);
 		}
+		
+		Resources res = FragmentUtil.getResources(this);
+		DisplayMetrics displaymetrics = new DisplayMetrics();
+		FragmentUtil.getActivity(this).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+		htForSettingsList = displaymetrics.heightPixels - ViewUtil.getStatusBarHeight(FragmentUtil.getResources(this))
+				- res.getDimensionPixelSize(R.dimen.action_bar_ht);
 	}
 
 	@Override
@@ -94,7 +107,7 @@ public class SettingsFragment extends ListFragmentLoadableFromBackStack {
 		super.onActivityCreated(savedInstanceState);
 		if (settingsItems == null) {
 			settingsItems = new ArrayList<SettingsItem>(Arrays.asList(SettingsItem.values()));
-			settingsListAdapter = new SettingsListAdapter((Activity) FragmentUtil.getActivity(this), settingsItems);
+			settingsListAdapter = new SettingsListAdapter((Activity) FragmentUtil.getActivity(this), settingsItems, htForSettingsList);
 			
 		} else {
 			settingsListAdapter.setInflater((Activity) FragmentUtil.getActivity(this));
@@ -134,11 +147,13 @@ public class SettingsFragment extends ListFragmentLoadableFromBackStack {
 		private List<SettingsItem> settingsItems;
 		private WeakReference<Activity> mainActivity;
 		private LayoutInflater inflater;
+		private int rowHt;
 
-		public SettingsListAdapter(Activity activity, List<SettingsItem> settingsMenuListItems) {
+		public SettingsListAdapter(Activity activity, List<SettingsItem> settingsMenuListItems, int htForSettingsList) {
 			this.mainActivity = new WeakReference<Activity>(activity);
 	        inflater = LayoutInflater.from(this.mainActivity.get());
 	        this.settingsItems = settingsMenuListItems;
+	        this.rowHt = htForSettingsList / settingsMenuListItems.size();
 		}
 
 		@Override
@@ -163,6 +178,9 @@ public class SettingsFragment extends ListFragmentLoadableFromBackStack {
 
 			if (convertView == null) {
 				convertView = inflater.inflate(R.layout.list_item_settings, null);
+				
+				AbsListView.LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, rowHt);
+				convertView.setLayoutParams(lp);
 
 				listItemViewHolder = new ListItemViewHolder();
 				listItemViewHolder.imgIcon = (ImageView) convertView.findViewById(R.id.imgIcon);

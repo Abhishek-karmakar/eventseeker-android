@@ -1,6 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -14,14 +13,13 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
@@ -79,7 +77,6 @@ import com.wcities.eventseeker.interfaces.VenueListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FbUtil;
-import com.wcities.eventseeker.util.FileUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
@@ -94,6 +91,8 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	
 	private static final int UNSCROLLED = -1;
 	private static final int TRANSITION_ANIM_DURATION = 400, FAB_SCROLL_THRESHOLD_IN_DP = 4;
+
+	private static final String FRAGMENT_TAG_SHARE_VIA_DIALOG = ShareViaDialogFragment.class.getSimpleName();
 	
 	private View rootView;
 	private ObservableScrollView obsrScrlV;
@@ -189,8 +188,6 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			event = (Event) args.getSerializable(BundleKeys.EVENT);
 			
 			event.getFriends().clear();
-
-			updateShareIntent();
 		}
 		//Log.d(TAG, "AT issue event = " + event);
 		fabScrollThreshold = ConversionUtil.toPx(FragmentUtil.getResources(this), FAB_SCROLL_THRESHOLD_IN_DP);
@@ -361,48 +358,32 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			loadEventDetails.cancel(true);
 		}
 	}
-	
+
+	/**
+	 * 03-02-2015:
+	 * Added same dialog for The toolbar 'Share-Action' as that of the event-list screens' event 'share' btn, as per
+	 * the issue mentioned in the mail sent by Zach.
+	 */
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.fragment_event_details, menu);
-		
-		MenuItem item = (MenuItem) menu.findItem(R.id.action_share);
-	    mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
-	    updateShareIntent();
-	    
     	super.onCreateOptionsMenu(menu, inflater);
 	}
 	
-	private void updateShareIntent() {
-		//Log.d(TAG, "updateShareIntent(), event name = " + event.getName());
-	    if (mShareActionProvider != null && event != null) {
-	    	Intent shareIntent = new Intent(Intent.ACTION_SEND);
-		    shareIntent.setType("image/*");
-		    shareIntent.putExtra(Intent.EXTRA_SUBJECT, FragmentUtil.getResources(this).getString(
-		    		R.string.title_event_details));
-		    String message = "Checkout " + event.getName();
-		    if (event.getSchedule() != null && event.getSchedule().getVenue() != null) {
-		    	message += " @ " + event.getSchedule().getVenue().getName();
-		    }
-		    if (event.getEventUrl() != null) {
-		    	message += ": " + event.getEventUrl();
-		    }
-		    shareIntent.putExtra(Intent.EXTRA_TEXT, message);
-			
-			String key = event.getKey(ImgResolution.LOW);
-	        BitmapCache bitmapCache = BitmapCache.getInstance();
-			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
-			if (bitmap != null) {
-				File tmpFile = FileUtil.createTempShareImgFile(FragmentUtil.getActivity(this).getApplication(), bitmap);
-				if (tmpFile != null) {
-					shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(tmpFile));
-				}
-			}
-		    
-	        mShareActionProvider.setShareIntent(shareIntent);
-	        
-	        mShareActionProvider.setOnShareTargetSelectedListener(onShareTargetSelectedListener);
-	    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_share:
+			ShareViaDialogFragment shareViaDialogFragment = ShareViaDialogFragment.newInstance(event, getScreenName());
+			/**
+			 * Passing activity fragment manager, since using this fragment's child fragment manager 
+			 * doesn't retain dialog on orientation change
+			 */
+			shareViaDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(EventDetailsFragment.this))
+				.getSupportFragmentManager(), FRAGMENT_TAG_SHARE_VIA_DIALOG);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 	
 	private void calculateDimensions() {
@@ -736,7 +717,6 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	
 	private void updateDetailsVisibility() {
 		if (allDetailsLoaded) {
-			updateShareIntent();
 			
 			rltLytPrgsBar.setVisibility(View.GONE);
 			updateEventImg();

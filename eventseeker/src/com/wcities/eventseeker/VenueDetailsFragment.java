@@ -1,6 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -24,9 +23,9 @@ import android.os.Looper;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
@@ -92,7 +91,6 @@ import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FbUtil;
-import com.wcities.eventseeker.util.FileUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
@@ -104,6 +102,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		CustomSharedElementTransitionSource, AsyncLoadImageListener, AsyncTaskListener<Void>, FragmentHavingFragmentInRecyclerView {
 
 	private static final String TAG = VenueDetailsFragment.class.getSimpleName();
+	private static final String FRAGMENT_TAG_SHARE_VIA_DIALOG = ShareViaDialogFragment.class.getSimpleName();
 	
 	private static final int UNSCROLLED = -1;
 	private static final int TRANSITION_ANIM_DURATION = 400;
@@ -326,40 +325,32 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			loadEvents.cancel(true);
 		}
 	}
-	
+
+	/**
+	 * 03-02-2015:
+	 * Added same dialog for The toolbar 'Share-Action' as that of the event-list screens' event 'share' btn, as per
+	 * the issue mentioned in the mail sent by Zach.
+	 */
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.fragment_venue_details, menu);
-		
-		MenuItem item = (MenuItem) menu.findItem(R.id.action_share);
-	    mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
-	    updateShareIntent();
-	    
     	super.onCreateOptionsMenu(menu, inflater);
 	}
 	
-	protected void updateShareIntent() {
-	    if (mShareActionProvider != null && venue != null) {
-	    	Intent shareIntent = new Intent(Intent.ACTION_SEND);
-		    shareIntent.setType("image/*");
-		    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Venue Details");
-		    shareIntent.putExtra(Intent.EXTRA_TEXT, venue.getName());
-			
-			String key = venue.getKey(ImgResolution.LOW);
-	        BitmapCache bitmapCache = BitmapCache.getInstance();
-			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
-			if (bitmap != null) {
-				//Log.d(TAG, "bitmap != null");
-				File tmpFile = FileUtil.createTempShareImgFile(FragmentUtil.getActivity(this).getApplication(), bitmap);
-				if (tmpFile != null) {
-					shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(tmpFile));
-				}
-			}
-		    
-	        mShareActionProvider.setShareIntent(shareIntent);
-	        
-	        mShareActionProvider.setOnShareTargetSelectedListener(onShareTargetSelectedListener);
-	    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_share:
+			ShareViaDialogFragment shareViaDialogFragment = ShareViaDialogFragment.newInstance(venue, getScreenName());
+			/**
+			 * Passing activity fragment manager, since using this fragment's child fragment manager 
+			 * doesn't retain dialog on orientation change
+			 */
+			shareViaDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(VenueDetailsFragment.this))
+				.getSupportFragmentManager(), FRAGMENT_TAG_SHARE_VIA_DIALOG);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 	
 	private void onScrolled(int dy, boolean forceUpdate, boolean chkForOpenDrawer) {
@@ -702,13 +693,10 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		allDetailsLoaded = true;
 		updateVenueImg();
 		venueRVAdapter.notifyDataSetChanged();
-		updateShareIntent();
 	}
 	
 	private static class VenueRVAdapter extends RecyclerView.Adapter<VenueRVAdapter.ViewHolder> implements 
 			DateWiseEventParentAdapterListener {
-		
-		private static final String FRAGMENT_TAG_SHARE_VIA_DIALOG = ShareViaDialogFragment.class.getSimpleName();
 		
 		private static final int EXTRA_TOP_DUMMY_ITEM_COUNT = 2;
 		private static final int EXTRA_TOP_DUMMY_ITEM_COUNT_AFTER_DETAILS_LOADED = 4;
@@ -1745,7 +1733,6 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 
 	@Override
 	public void onImageLoaded() {
-		updateShareIntent();
 	}
 
 	@Override

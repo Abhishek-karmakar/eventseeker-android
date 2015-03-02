@@ -1,6 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -15,14 +14,12 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
@@ -97,7 +94,6 @@ import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FbUtil;
-import com.wcities.eventseeker.util.FileUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
@@ -208,8 +204,6 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			artist = (Artist) args.getSerializable(BundleKeys.ARTIST);
 			artist.getVideos().clear();
 			artist.getFriends().clear();
-			
-			updateShareIntent();
 		}
 		
 		Resources res = FragmentUtil.getResources(this);
@@ -359,44 +353,32 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			loadArtistEvents.cancel(true);
 		}
 	}
-	
+
+	/**
+	 * 03-02-2015:
+	 * Added same dialog for The toolbar 'Share-Action' as that of the event-list screens' event 'share' btn, as per
+	 * the issue mentioned in the mail sent by Zach.
+	 */
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.fragment_artist_details, menu);
-		
-		MenuItem item = (MenuItem) menu.findItem(R.id.action_share);
-	    mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
-	    updateShareIntent();
-	    
     	super.onCreateOptionsMenu(menu, inflater);
 	}
 	
-	private void updateShareIntent() {
-	    if (mShareActionProvider != null && artist != null) {
-			//Log.d(TAG, "updateShareIntent()");
-	    	Intent shareIntent = new Intent(Intent.ACTION_SEND);
-		    shareIntent.setType("image/*");
-		    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Artist Details");
-		    String message = "Checkout " + artist.getName() + " on eventseeker";
-		    if (artist.getArtistUrl() != null) {
-		    	message += ": " + artist.getArtistUrl();
-		    }
-		    shareIntent.putExtra(Intent.EXTRA_TEXT, message);
-			
-			String key = artist.getKey(ImgResolution.LOW);
-	        BitmapCache bitmapCache = BitmapCache.getInstance();
-			Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
-			if (bitmap != null) {
-				File tmpFile = FileUtil.createTempShareImgFile(FragmentUtil.getActivity(this).getApplication(), bitmap);
-				if (tmpFile != null) {
-					shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(tmpFile));
-				}
-			}
-		    
-	        mShareActionProvider.setShareIntent(shareIntent);
-	        
-	        mShareActionProvider.setOnShareTargetSelectedListener(onShareTargetSelectedListener);
-	    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_share:
+			ShareViaDialogFragment shareViaDialogFragment = ShareViaDialogFragment.newInstance(artist, getScreenName());
+			/**
+			 * Passing activity fragment manager, since using this fragment's child fragment manager 
+			 * doesn't retain dialog on orientation change
+			 */
+			shareViaDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(ArtistDetailsFragment.this))
+				.getSupportFragmentManager(), FRAGMENT_TAG_SHARE_VIA_DIALOG);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 	
 	private void onScrolled(int dy, boolean forceUpdate, boolean chkForOpenDrawer) {
@@ -782,7 +764,6 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			eventList.add(null);
 		}
 		artistRVAdapter.notifyDataSetChanged();
-		updateShareIntent();
 	}
 
 	@Override

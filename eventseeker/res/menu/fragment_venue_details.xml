@@ -5,7 +5,12 @@
     <item android:id="@+id/action_share"
     	app:showAsAction="ifRoom"
         android:title="Share"
+        android:icon="@drawable/ic_share" />
+    
+    <!-- <item android:id="@+id/action_share"
+    	app:showAsAction="ifRoom"
+        android:title="Share"
         android:icon="@drawable/ic_share"
-        app:actionProviderClass="android.support.v7.widget.ShareActionProvider" />
+        app:actionProviderClass="android.support.v7.widget.ShareActionProvider" /> -->
 
 </menu>

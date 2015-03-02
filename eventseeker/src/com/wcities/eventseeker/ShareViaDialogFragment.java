@@ -1,6 +1,7 @@
 package com.wcities.eventseeker;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +28,12 @@ import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker.Type;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.cache.BitmapCache;
+import com.wcities.eventseeker.cache.BitmapCacheable;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.util.FileUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
@@ -39,11 +43,11 @@ public class ShareViaDialogFragment extends DialogFragment {
 	
 	private List<ShareDropdownItem> shareDropdownItems;
 	
-	public static ShareViaDialogFragment newInstance(Event event, String screenName) {
+	public static ShareViaDialogFragment newInstance(Serializable serializable, String screenName) {
 		ShareViaDialogFragment frag = new ShareViaDialogFragment();
 		Bundle args = new Bundle();
-		args.putSerializable(BundleKeys.EVENT, event);
-		args.putSerializable(BundleKeys.SCREEN_NAME, screenName);
+		args.putSerializable(BundleKeys.SERIALIZABLE, serializable);
+		args.putString(BundleKeys.SCREEN_NAME, screenName);
 		frag.setArguments(args);
 		return frag;
 	}
@@ -53,28 +57,48 @@ public class ShareViaDialogFragment extends DialogFragment {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle(R.string.share_via)
 		.setAdapter(new ShareDropdownAdapter(this), new OnClickListener() {
-			
+
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				//Log.d(TAG, "onClick()");
-				Event event = (Event) getArguments().getSerializable(BundleKeys.EVENT);
-				Resources res = FragmentUtil.getResources(ShareViaDialogFragment.this);
-				EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(ShareViaDialogFragment.this).getApplication();
+				long id;
+				Type type;
 				
+				EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(ShareViaDialogFragment.this).getApplication();
 				ShareDropdownItem shareDropdownItem = shareDropdownItems.get(which);
+
 				Intent intent = new Intent(Intent.ACTION_SEND);
 				intent.setType("image/*");
+				
+				Serializable serializable = getArguments().getSerializable(BundleKeys.SERIALIZABLE);
+				if (serializable instanceof Event) {
+					Event event = (Event) serializable;
+					id = event.getId();
+					
+					type = Type.Event;
+					
+					shareEvent(event, intent, which, eventSeekr, shareDropdownItem);
+				
+				} else if (serializable instanceof Artist) {
+					Artist artist = (Artist) serializable;
+					id = artist.getId();
+					
+					type = Type.Artist;
+					
+					shareArtist(artist, intent, which);
+					
+				} else {
+					Venue venue = (Venue) serializable;
+					id = venue.getId();
+					
+					type = Type.Venue;
+					
+					shareVenue(venue, intent, which);
+				}
+				
 				intent.setClassName(shareDropdownItem.pkgName, shareDropdownItem.clsName);
-				intent.putExtra(Intent.EXTRA_SUBJECT, res.getString(R.string.title_event_details));
-				String message = "Checkout " + event.getName();
-			    if (event.getSchedule() != null && event.getSchedule().getVenue() != null) {
-			    	message += " @ " + event.getSchedule().getVenue().getName();
-			    }
-			    if (event.getEventUrl() != null) {
-			    	message += ": " + event.getEventUrl();
-			    }
-			    intent.putExtra(Intent.EXTRA_TEXT, message);
-			    String key = event.getKey(ImgResolution.LOW);
+				
+				String key = ((BitmapCacheable) serializable).getKey(ImgResolution.LOW);
 		        BitmapCache bitmapCache = BitmapCache.getInstance();
 				Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 				if (bitmap != null) {
@@ -84,23 +108,55 @@ public class ShareViaDialogFragment extends DialogFragment {
 					}
 				}
 				
-				//Log.d(TAG, "shareTarget = " + shareTarget);
-				if (eventSeekr.getPackageName().equals(shareDropdownItem.pkgName)) {
-					//Log.d(TAG, "shareTarget = " + shareTarget);
-					// required to handle "add to calendar" action
-					eventSeekr.setEventToAddToCalendar(event);
-				}
-				
 				GoogleAnalyticsTracker.getInstance().sendShareEvent(eventSeekr, getArguments().getString(
-						BundleKeys.SCREEN_NAME), shareDropdownItem.pkgName, Type.Event, event.getId());
+						BundleKeys.SCREEN_NAME), shareDropdownItem.pkgName, type, id);
 				
-	            startActivity(intent);
+				startActivity(intent);
 			}
+
 		});
 		
         // Create the AlertDialog object and return it
         Dialog dialog = builder.create();
 		return dialog;
+	}
+
+	private void shareEvent(Event event, Intent intent,int which, EventSeekr eventSeekr, 
+			ShareDropdownItem shareDropdownItem) {
+		Resources res = FragmentUtil.getResources(ShareViaDialogFragment.this);
+		
+		intent.putExtra(Intent.EXTRA_SUBJECT, res.getString(R.string.title_event_details));
+		String message = "Checkout " + event.getName();
+	    if (event.getSchedule() != null && event.getSchedule().getVenue() != null) {
+	    	message += " @ " + event.getSchedule().getVenue().getName();
+	    }
+	    if (event.getEventUrl() != null) {
+	    	message += ": " + event.getEventUrl();
+	    }
+	    intent.putExtra(Intent.EXTRA_TEXT, message);
+		
+		//Log.d(TAG, "shareTarget = " + shareTarget);
+		if (eventSeekr.getPackageName().equals(shareDropdownItem.pkgName)) {
+			//Log.d(TAG, "shareTarget = " + shareTarget);
+			// required to handle "add to calendar" action
+			eventSeekr.setEventToAddToCalendar(event);
+		}
+	}
+
+	private void shareArtist(Artist artist, Intent intent, int which) {
+		intent.putExtra(Intent.EXTRA_SUBJECT, "Artist Details");
+	    String message = "Checkout " + artist.getName() + " on eventseeker";
+	    if (artist.getArtistUrl() != null) {
+	    	message += ": " + artist.getArtistUrl();
+	    }
+	    intent.putExtra(Intent.EXTRA_TEXT, message);
+	}
+
+	private void shareVenue(Venue venue, Intent intent, int which) {
+		if (venue != null) {
+			intent.putExtra(Intent.EXTRA_SUBJECT, "Venue Details");
+			intent.putExtra(Intent.EXTRA_TEXT, venue.getName());
+	    }
 	}
 	
 	private void buildShareListItems() {
