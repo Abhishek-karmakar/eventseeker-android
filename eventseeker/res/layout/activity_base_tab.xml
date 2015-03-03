@@ -7,8 +7,7 @@
     android:orientation="vertical"
     tools:context=".DiscoverActivityTab" >
     
-    <LinearLayout
-        android:id="@+id/lnrLytRoot"
+    <LinearLayout android:id="@+id/lnrLytRoot"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical" >

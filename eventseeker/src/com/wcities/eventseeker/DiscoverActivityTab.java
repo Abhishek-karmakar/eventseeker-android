@@ -29,4 +29,9 @@ public class DiscoverActivityTab extends BaseActivityTab {
 	protected String getScrnTitle() {
 		return getResources().getString(R.string.title_discover);
 	}
+	
+	@Override
+	protected int getDrawerItemPos() {
+		return INDEX_NAV_ITEM_DISCOVER;
+	}
 }

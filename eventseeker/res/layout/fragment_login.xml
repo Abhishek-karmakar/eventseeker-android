@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/common_t_mar_pad_for_all_layout"
         android:fillViewport="true"
-        android:padding="@dimen/rlt_layout_root_pad_fragment_connect_accounts_list"
+        android:padding="@dimen/scrl_v_pad_fragment_login"
         android:scrollbars="none" >
 
         <RelativeLayout
@@ -17,9 +17,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:paddingBottom="@dimen/rlt_lyt_root_pad_l_r_b_get_started"
-            android:paddingLeft="@dimen/rlt_lyt_root_pad_l_r_b_get_started"
-            android:paddingRight="@dimen/rlt_lyt_root_pad_l_r_b_get_started" >
+            android:paddingBottom="@dimen/rlt_lyt_root_pad_b_get_started"
+            android:paddingLeft="@dimen/rlt_lyt_root_pad_l_r_get_started"
+            android:paddingRight="@dimen/rlt_lyt_root_pad_l_r_get_started" >
 
             <Button
                 android:id="@+id/imgFbSignUp"
@@ -67,10 +67,15 @@
 
             </RelativeLayout>
 
+            <!-- In nexus 7 this screen opens up soft keypad automatically on launch with focus on edtEmail. 
+            To prevent this we have used focusableInTouchMode on this parent layout. Haven't checked on other
+            devices w/o this parameter focusableInTouchMode, but same case must be there with all devices, 
+            although it was not observed on nexus 5. -->
             <RelativeLayout android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/rltGPlus"
-                android:layout_marginTop="@dimen/lyt_mar_t_get_started_fragment" >
+                android:layout_marginTop="@dimen/lyt_mar_t_get_started_fragment"
+                android:focusableInTouchMode="true" >
 
                 <TextView android:id="@+id/txtLoginLabel"
                     android:layout_width="match_parent"
@@ -150,19 +155,8 @@
                     android:gravity="center"
                     android:text="@string/forgot_your_password"
                     android:textSize="@dimen/btn_forgot_pass_txt_size_get_started_fragment"
-                    android:visibility="invisible" />
+                    android:visibility="gone" />
 
-                <!--
-                    The below Dummy view and its margin top is added to ignore the issue of above button getting clipped
-		            as it is last view in scrollview. This issue was seen in Samsung Galaxy Tab.                -->
-
-                <View
-                    android:id="@+id/vDummy"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/btnForgotPassword"
-                    android:layout_marginTop="@dimen/mar_t_below_error_get_started_fragment"
-                    android:enabled="false" />
             </RelativeLayout>
         </RelativeLayout>
     </ScrollView>

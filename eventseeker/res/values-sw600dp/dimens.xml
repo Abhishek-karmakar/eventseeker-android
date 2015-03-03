@@ -334,8 +334,11 @@
     <dimen name="txt_no_items_msg_txt_size_include_no_items_found_with_action">22sp</dimen>
     
    	<!-- fragment_get_started.xml -->
-    <dimen name="rlt_lyt_root_pad_l_r_b_get_started">60dp</dimen>
+   	<dimen name="scrl_v_pad_fragment_login">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+   	<dimen name="rlt_lyt_root_pad_b_get_started">60dp</dimen>
+    <dimen name="rlt_lyt_root_pad_l_r_get_started">60dp</dimen>
     <dimen name="all_components_margin_t_get_started">50dp</dimen>
+    <dimen name="txt_size_fb_google_btn_get_started">18sp</dimen>
     <dimen name="txt_g_plus_sign_in_status_txt_size_get_started">18sp</dimen>
     <dimen name="btn_fb_sign_up_pad_l_fb_login">10dp</dimen>
     <dimen name="btn_fb_sign_up_pad_r_fb_login">@dimen/btn_fb_sign_up_pad_l_fb_login</dimen>
@@ -375,7 +378,7 @@
     <dimen name="btn_forgot_pass_mar_t_get_started_fragment">15dp</dimen>
     <dimen name="mar_l_r_get_started_fragment">50dp</dimen>
     <dimen name="rlt_register_details_mar_r_get_started_fragment">22dp</dimen>
-    <dimen name="txt_login_label_txt_size_get_started_fragment">30sp</dimen>
+    <dimen name="txt_login_label_txt_size_get_started_fragment">24sp</dimen>
     <dimen name="btn_forgot_pass_txt_size_get_started_fragment">22sp</dimen>
     
     <!-- list_item_settings.xml -->

@@ -12,9 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:paddingBottom="@dimen/rlt_lyt_root_pad_l_r_b_get_started"
-        android:paddingLeft="@dimen/rlt_lyt_root_pad_l_r_b_get_started"
-        android:paddingRight="@dimen/rlt_lyt_root_pad_l_r_b_get_started"
+        android:paddingBottom="@dimen/rlt_lyt_root_pad_b_get_started"
+        android:paddingLeft="@dimen/rlt_lyt_root_pad_l_r_get_started"
+        android:paddingRight="@dimen/rlt_lyt_root_pad_l_r_get_started"
         android:paddingTop="@dimen/common_t_mar_pad_for_all_layout" >
 
         <Button

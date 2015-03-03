@@ -1,17 +1,5 @@
 package com.wcities.eventseeker;
 
-import android.os.AsyncTask.Status;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.SettingsFragment.SettingsItem;
 import com.wcities.eventseeker.api.Api;
@@ -20,14 +8,28 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadMyEventsCount;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.registration.Registration.RegistrationErrorListener;
-import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class LoginSyncingFragment extends FragmentLoadableFromBackStack implements AsyncTaskListener<Object> {
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.AsyncTask.Status;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnTouchListener;
+import android.widget.RelativeLayout;
 
-	private static final String TAG = LoginSyncingFragment.class.getSimpleName();
+public class LoginSyncingFragmentTab extends Fragment implements AsyncTaskListener<Object> {
+
+	private static final String TAG = LoginSyncingFragmentTab.class.getSimpleName();
 
 	private LoginType loginType;
 	private boolean isForSignUp; // indicates if this fragment is called after fb/g+ signup or login
@@ -86,7 +88,7 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 				
 				@Override
 				public void run() {
-					((MainActivity)FragmentUtil.getActivity(LoginSyncingFragment.this)).onBackPressed();
+					((Activity)FragmentUtil.getActivity(LoginSyncingFragmentTab.this)).onBackPressed();
 				}
 			}, 1000);
 		}
@@ -128,8 +130,13 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 			if (isForSignUp) {
 				Bundle args = new Bundle();
 				args.putSerializable(BundleKeys.SETTINGS_ITEM, SettingsItem.SYNC_ACCOUNTS);
-				((DrawerListFragmentListener) FragmentUtil.getActivity(this)).onDrawerItemSelected(
-						MainActivity.INDEX_NAV_ITEM_SETTINGS, args);
+				Intent intent = new Intent(FragmentUtil.getActivity(this).getApplicationContext(), DiscoverActivityTab.class);
+				// clear all activities in back stack
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+				intent.putExtras(args);
+				startActivity(intent);
+				/*((DrawerListFragmentListener) FragmentUtil.getActivity(this)).onDrawerItemSelected(
+						MainActivity.INDEX_NAV_ITEM_SETTINGS, args);*/
 				
 			} else {
 				loadMyEventsCount = new LoadMyEventsCount(Api.OAUTH_TOKEN, wcitiesId, latLon[0], latLon[1], new AsyncTaskListener<Integer>() {
@@ -138,12 +145,22 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 					public void onTaskCompleted(Integer... params) {
 						Log.d(TAG, "params[0] = " + params[0]);
 						if (params[0] > 0) {
-							((DrawerListFragmentListener)FragmentUtil.getActivity(LoginSyncingFragment.this)).onDrawerItemSelected(
-									MainActivity.INDEX_NAV_ITEM_MY_EVENTS, null);
+							Intent intent = new Intent(FragmentUtil.getActivity(LoginSyncingFragmentTab.this)
+									.getApplicationContext(), DiscoverActivityTab.class);
+							// clear all activities in back stack
+							intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+							startActivity(intent);
+							/*((DrawerListFragmentListener)FragmentUtil.getActivity(LoginSyncingFragmentTab.this)).onDrawerItemSelected(
+									MainActivity.INDEX_NAV_ITEM_MY_EVENTS, null);*/
 							
 						} else {
-							((DrawerListFragmentListener)FragmentUtil.getActivity(LoginSyncingFragment.this)).onDrawerItemSelected(
-									MainActivity.INDEX_NAV_ITEM_DISCOVER, null);
+							Intent intent = new Intent(FragmentUtil.getActivity(LoginSyncingFragmentTab.this)
+									.getApplicationContext(), DiscoverActivityTab.class);
+							// clear all activities in back stack
+							intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+							startActivity(intent);
+							/*((DrawerListFragmentListener)FragmentUtil.getActivity(LoginSyncingFragmentTab.this)).onDrawerItemSelected(
+									MainActivity.INDEX_NAV_ITEM_DISCOVER, null);*/
 						}
 					}
 				});
@@ -153,16 +170,12 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 		} else {
 			//Log.d(TAG, "wcitiesId = null");
 			//Log.d(TAG, "message code = " + params[0].toString());
-			((MainActivity)FragmentUtil.getActivity(this)).onBackPressed();
+			Activity activity = (Activity)FragmentUtil.getActivity(this);
+			activity.onBackPressed();
 			RegistrationErrorListener registrationErrorListener = (RegistrationErrorListener) 
-					((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager()
+					((ActionBarActivity) activity).getSupportFragmentManager()
 					.findFragmentByTag(getArguments().getString(BundleKeys.REGISTER_ERROR_LISTENER));
 			registrationErrorListener.onErrorOccured((Integer)params[0]);
 		}
-	}
-
-	@Override
-	public String getScreenName() {
-		return null;
 	}
 }
