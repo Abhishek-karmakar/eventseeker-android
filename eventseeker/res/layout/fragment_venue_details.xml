@@ -11,6 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
     
+	    <View
+	        android:id="@+id/vNoContentBG"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_below="@+id/rltLytTxtVenueTitle"
+	        android:background="@drawable/bg_no_content_overlay"
+	        android:visibility="invisible" />
+	    
 	    <ImageView android:id="@+id/imgVenue"
 	      	android:layout_width="match_parent"
 	      	android:layout_height="@dimen/img_venue_ht_venue_details"
@@ -37,13 +45,6 @@
 	    	
 	    </RelativeLayout>
 	     
-	    <View
-	        android:id="@+id/vNoContentBG"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-	        android:layout_below="@+id/rltLytTxtVenueTitle"
-	        android:background="@drawable/bg_no_content_overlay"
-	        android:visibility="invisible" />
 	    
 	</RelativeLayout>
 	
