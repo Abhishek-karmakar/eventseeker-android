@@ -91,8 +91,6 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	 * Fragment not attached to Activity, if user has already left this onSortTypeSelectedListener & 
 	 * then changed the orientation.
 	 */
-	private Resources res;
-	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -111,7 +109,6 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
         if (wcitiesId == null) {
         	wcitiesId = ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId();
         }
-        res = getResources();
     }
 	
 	@Override
@@ -357,7 +354,7 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 		txtNoContentMsg.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_list_follow, 0, 0);
 		
 		((ImageView) rltRootNoContentFound.findViewById(R.id.imgPhone))
-			.setImageDrawable(res.getDrawable(R.drawable.ic_artist_news_no_content));
+			.setImageDrawable(FragmentUtil.getResources(this).getDrawable(R.drawable.ic_artist_news_no_content));
 		
 		rltRootNoContentFound.setVisibility(View.VISIBLE);		
 	}

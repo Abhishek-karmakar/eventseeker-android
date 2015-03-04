@@ -31,7 +31,6 @@ import android.support.v7.widget.ShareActionProvider.OnShareTargetSelectedListen
 import android.text.Html;
 import android.text.TextUtils.TruncateAt;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -46,7 +45,6 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -121,7 +119,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	private TextView txtArtistTitle;
 	private RecyclerView recyclerVArtists;
 	private RelativeLayout rltLytTxtArtistTitle;
-	private FloatingActionButton fabSave;
+	private FloatingActionButton fabSave, fabArtistNews;
 	
 	private ArtistRVAdapter artistRVAdapter;
 	
@@ -241,6 +239,9 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		fabSave.setSelected(artist.getAttending() == Artist.Attending.Tracked);
 		fabSave.setOnClickListener(this);
 		
+		fabArtistNews = (FloatingActionButton) rootView.findViewById(R.id.fabArtistNews);
+		fabArtistNews.setOnClickListener(this);
+		
 		recyclerVArtists = (RecyclerView) rootView.findViewById(R.id.recyclerVArtists);
 		// use a linear layout manager
 		RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(FragmentUtil.getActivity(this));
@@ -260,6 +261,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		
 		if (isOnCreateViewCalledFirstTime) {
 			fabSave.setVisibility(View.INVISIBLE);
+			fabArtistNews.setVisibility(View.INVISIBLE);
 			
 			isOnCreateViewCalledFirstTime = false;
 			
@@ -426,9 +428,9 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			title = artist.getName();
 			ma.updateTitle(title);
 			
-			FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) fabSave.getLayoutParams();
+			/*FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) fabSave.getLayoutParams();
 			lp.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-			fabSave.setLayoutParams(lp);
+			fabSave.setLayoutParams(lp);*/
 			
 			isScrollLimitReached = true;
 			
@@ -447,7 +449,8 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			 * anytime after call to hide().
 			 */
 			fabSave.show();
-			FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) fabSave.getLayoutParams();
+			fabArtistNews.show();
+			/*FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) fabSave.getLayoutParams();
 			lp.gravity = Gravity.TOP | Gravity.RIGHT;
 			//Log.d(TAG, "fabSaveMarginT top margin = " + lp.topMargin);
 			if (fabSaveMarginT == 0) {
@@ -455,15 +458,15 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 				//Log.d(TAG, "fabSaveMarginT = " + fabSaveMarginT);
 			}
 			lp.topMargin = fabSaveMarginT - totalScrolledDy;
-			fabSave.setLayoutParams(lp);
+			fabSave.setLayoutParams(lp);*/
 			
 			isScrollLimitReached = false;
 			
-		} else if (totalScrolledDy < limitScrollAt) {
+		} /*else if (totalScrolledDy < limitScrollAt) {
 			FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) fabSave.getLayoutParams();
 			lp.topMargin = fabSaveMarginT - totalScrolledDy;
 			fabSave.setLayoutParams(lp);
-		}
+		}*/
 		
 		if (scrollY < limitScrollAt) {
 			float scale = 1 - (((1 - minTitleScale) / limitScrollAt) * scrollY);
@@ -476,16 +479,32 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	        
 			txtArtistTitle.setTranslationX(scrollY * txtArtistTitleDiffX / (float) limitScrollAt);
 			
-		} else {
-			boolean isSignificantDelta = Math.abs(dy) > fabScrollThreshold;
-	        if (isSignificantDelta) {
-	            if (dy > 0) {
-	                fabSave.hide(true);
-	                
-	            } else {
-	                fabSave.show(true);
-	            }
-	        }
+		} 
+		
+		if (artistRVAdapter != null) {
+			// We take the last child in the scrollview
+			View lastChild = (View) recyclerVArtists.getLayoutManager().getChildAt(recyclerVArtists.getChildCount() - 1);
+		    int diff = (lastChild.getBottom() - (recyclerVArtists.getHeight() + recyclerVArtists.getScrollY()));
+		    /*Log.d(TAG, "btm = " + view.getBottom() + ", ht = " + obsrScrlV.getHeight() + ", scrollY = " 
+		    		+ obsrScrlV.getScrollY() + ", diff = " + diff);*/
+		    if (diff == 0) {
+			    // if diff is zero, then the bottom has been reached, where we need to show floating action buttons
+		    	fabArtistNews.show(true);
+		        fabSave.show(true);
+		        
+		    } else {
+				boolean isSignificantDelta = Math.abs(dy) > fabScrollThreshold;
+		        if (isSignificantDelta) {
+		            if (dy > 0) {
+		                fabSave.hide(true);
+		                fabArtistNews.hide(true);
+		                
+		            } else {
+		                fabSave.show(true);
+		                fabArtistNews.show(true);
+		            }
+		        }
+			}
 		}
 		
 		if (chkForOpenDrawer && ((MainActivity)FragmentUtil.getActivity(this)).isDrawerOpen()) {
@@ -760,6 +779,9 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		updateArtistImg();
 		fabSave.setSelected(artist.getAttending() == Artist.Attending.Tracked);
 		fabSave.setVisibility(View.VISIBLE);
+		
+		fabArtistNews.setVisibility(View.VISIBLE);
+		
 		if (artist.isOntour() && eventList != null && eventList.isEmpty()) {
 			eventList.add(null);
 		}
@@ -790,6 +812,21 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			}
 			break;
 			
+		case R.id.fabArtistNews:
+			Bundle args = new Bundle();
+			args.putSerializable(BundleKeys.ARTIST, artist);
+			((ReplaceFragmentListener) FragmentUtil.getActivity(this))
+				.replaceByFragment(AppConstants.FRAGMENT_TAG_ARTIST_NEWS_LIST, args);
+			
+			/**
+			 * need to call onPushedToBackStack() since we are adding any fragment instead of replacing on artist details screen.
+			 * Why adding? Answer: If we replace or remove-add anything on artist details fragment, it crashes with 
+			 * "IllegalArgumentException: no view found for id R.id.vPagerVideos for 
+			 * VideoFragment" on coming back to artist details screen. Couldn't find its solution. 
+			 * Probably it's happening with any Fragment within RecyclerView.
+			 */ 
+			((FragmentHavingFragmentInRecyclerView) this).onPushedToBackStackFHFIR();
+			break;
 		default:
 			break;
 		}

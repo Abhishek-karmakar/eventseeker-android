@@ -25,7 +25,7 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent" 
 	    android:layout_below="@+id/rltFollowMoreArtist" 
-	    android:padding="@dimen/rlt_layout_root_pad_fragment_connect_accounts_list"/>
+	    android:padding="@dimen/rlt_layout_root_pad_fragment_connect_accounts_list" />
 	    <!-- android:layout_marginTop="@dimen/list_margin_t_b_fragment_connect_account_and_get_started" --> 
 	    
     <!-- <RelativeLayout android:id="@+id/rltDummyLyt" 

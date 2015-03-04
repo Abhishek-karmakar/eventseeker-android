@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -393,7 +394,8 @@ public class UserInfoApiJSONParser {
 		List<ArtistNewsItem> artistNewsItems = new ArrayList<ArtistNewsItem>();
 		
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
+		format.setTimeZone(TimeZone.getTimeZone("GMT"));
+		
 		try {
 			JSONObject jObjArtistfeed = jsonObject.getJSONObject(KEY_ARTISTFEED);
 			if (jObjArtistfeed.has(KEY_ARTIST)) {

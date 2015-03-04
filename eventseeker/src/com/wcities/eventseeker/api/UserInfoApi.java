@@ -580,15 +580,15 @@ public class UserInfoApi extends Api {
 			uriBuilder.append("&artistId=").append(artistId);
 		}
 		
-		if (type == Type.myevents || type == Type.recommendedevent) {
+		if (type == Type.myevents || type == Type.recommendedevent || type == Type.mysavedevents) {
 			uriBuilder.append("&link=enable");
 		}
 		
-		if (type == Type.mysavedevents) {
+		/*if (type == Type.mysavedevents) {
 			uriBuilder.append("&link=enable");
 			uriBuilder.append("&moreInfo=fallbackimage");
 			uriBuilder.append("&strip_html=name,description");
-		}
+		}*/
 		
 		setUri(uriBuilder.toString());
 		addLangParam = true;

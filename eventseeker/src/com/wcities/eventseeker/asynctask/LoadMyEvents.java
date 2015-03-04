@@ -65,15 +65,12 @@ public class LoadMyEvents extends AsyncTask<Void, Void, List<Event>> {
 			UserInfoApiJSONParser jsonParser = new UserInfoApiJSONParser();
 			
 			ItemsList<Event> myEventsList;
-			if (loadType == Type.myevents) { 
-				myEventsList = jsonParser.getEventList(jsonObject);
-				
-			} else if (loadType == Type.mysavedevents) {
-				myEventsList = jsonParser.getEventList(jsonObject);
-			
-			} else {
-				// loadType = Type.recommendedevent
+			if (loadType == Type.recommendedevent) { 
 				myEventsList = jsonParser.getRecommendedEventList(jsonObject);
+				
+			} else {
+				/*loadType.myevents, loadType.mysavedevents*/
+				myEventsList = jsonParser.getEventList(jsonObject);
 			}
 
 			tmpEvents = myEventsList.getItems();

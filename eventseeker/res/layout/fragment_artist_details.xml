@@ -54,10 +54,10 @@
 	    android:layout_height="match_parent"
 	    android:background="@android:color/transparent" />
     
-    <com.melnykov.fab.FloatingActionButton android:id="@+id/fabSave"
+   <!--  <com.melnykov.fab.FloatingActionButton android:id="@+id/fabSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|right"
+        android:layout_gravity="bottom|right"
         android:layout_marginBottom="@dimen/fab_margin_b_artist_details"
         android:layout_marginTop="@dimen/fab_margin_t_artist_details"
         android:layout_marginRight="@dimen/fab_margin_r_artist_details"
@@ -65,6 +65,42 @@
         fab:fab_type="normal"
         fab:fab_colorNormal="@color/colorPrimary"
         fab:fab_colorPressed="@color/colorPrimaryDark"
-        fab:fab_colorRipple="@color/ripple_material_light" />
+        fab:fab_colorRipple="@color/ripple_material_light" /> -->
     
+    	
+	<com.melnykov.fab.FloatingActionButton android:id="@+id/fabSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="@dimen/fab_margin_b_event_details"
+        android:layout_marginRight="@dimen/fab_margin_l_r_event_details"
+        android:src="@drawable/slctr_following_artist_details"
+        fab:fab_type="normal"
+        fab:fab_colorNormal="@color/colorPrimary"
+        fab:fab_colorPressed="@color/colorPrimaryDark"
+        fab:fab_colorRipple="@android:color/white" />
+	
+	<com.melnykov.fab.FloatingActionButton
+	    android:id="@+id/fabArtistNews"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="bottom|center_horizontal"
+	    android:layout_marginBottom="@dimen/fab_margin_b_artist_details"
+	    android:layout_marginLeft="@dimen/fab_margin_l_r_artist_details"
+	    android:cropToPadding="true"
+	    android:padding="@dimen/fab_artist_news_pad_artist_details"
+	    android:scaleType="centerInside"
+	    android:src="@drawable/latestnews"
+	    fab:fab_colorNormal="@color/colorPrimary"
+	    fab:fab_colorPressed="@color/colorPrimaryDark"
+	    fab:fab_colorRipple="@android:color/white"
+	    fab:fab_type="normal" />
+    	<!-- 
+    	NOTE:
+    	android:cropToPadding="true"
+	    android:padding="@dimen/fab_artist_news_pad_artist_details"
+	    android:scaleType="centerInside"
+	    - will resize the latestnews icon of Navigation drawer for the FAB
+    	-->
+	
 </FrameLayout>

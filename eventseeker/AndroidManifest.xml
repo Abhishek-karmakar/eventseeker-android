@@ -23,8 +23,17 @@
             </intent-filter>
         </activity>
         
+        <!-- 03-03-2015: in below activity tag 'android:windowSoftInputMode=adjustResize' 
+        is changed to 'android:windowSoftInputMode="adjustPan"', because Zach filed bug regarding 
+        the Login and Signup screens that while filling the last fields in the form the keyboard hides 
+        the EditText where data is filled. So, user is unable to see the details what is getting filled 
+        while the keyboard is on-screen. So, by adding 'adjustPan' value the screen moves up when the
+        keyboard is on-screen and user can see the data being filled. 
+        
+        NOTE: even tested the combination of 'adjustPan|adjustResize' on 'Api 11 emulator' & 
+        'Nexus 5 with 21 Api' which was not working as expected. So, we are using just 'adjustPan' -->
         <activity android:name="com.wcities.eventseeker.MainActivity"
-            android:windowSoftInputMode="adjustResize"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation|screenSize" >
             <!-- for twitter call back -->

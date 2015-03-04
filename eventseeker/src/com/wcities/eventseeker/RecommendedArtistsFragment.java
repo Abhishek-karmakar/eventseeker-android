@@ -210,7 +210,7 @@ public class RecommendedArtistsFragment extends PublishArtistFragmentLoadableFro
 	private void initListView() {
 		if (lstView.getVisibility() != View.VISIBLE) {
 			lstView.setVisibility(View.VISIBLE);
-			rltLayoutRoot.setBackgroundResource(Color.WHITE);
+			rltLayoutRoot.setBackgroundColor(Color.WHITE);
 			txtNoItemsFound.setVisibility(View.GONE);
 		}
 		if (artistList == null) {

@@ -70,6 +70,7 @@ public class AppConstants {
 	public static final String FRAGMENT_TAG_RECOMMENDED_ARTISTS = "RecommendedArtistsFragment";
 	public static final String FRAGMENT_TAG_SELECTED_ARTIST_CATEGORY_FRAGMENT = "selectedArtistCategoryFragment";
 	public static final String FRAGMENT_TAG_ARTISTS_NEWS_LIST = "artistsNewsFragment";
+	public static final String FRAGMENT_TAG_ARTIST_NEWS_LIST = "artistNewsFragment";
 	public static final String FRAGMENT_TAG_FRIEND_LIST = "friendListFragment";
 	public static final String FRAGMENT_TAG_MY_EVENTS = "myEventsFragment";
 	public static final String FRAGMENT_TAG_FRIENDS_ACTIVITY = "friendsActivityFragment";

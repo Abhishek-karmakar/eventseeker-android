@@ -1283,6 +1283,12 @@ public class MainActivity extends BaseActivity implements
 			navigationFragment.setArguments(args);
 			selectNonDrawerItem(navigationFragment, fragmentTag, getResources().getString(
 					R.string.title_navigation), true);
+			
+		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_ARTIST_NEWS_LIST)) {
+			ArtistNewsListFragment artistNewsListFragment = new ArtistNewsListFragment();
+			artistNewsListFragment.setArguments(args);
+			selectNonDrawerItem(artistNewsListFragment, fragmentTag, getResources().getString(
+					R.string.title_artists_news), true);
 		}
 	}
 
@@ -1744,6 +1750,10 @@ public class MainActivity extends BaseActivity implements
 		} else if (fragment instanceof WebViewFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_web), 
 					AppConstants.FRAGMENT_TAG_WEB_VIEW);
+			
+		} else if (fragment instanceof ArtistNewsListFragment) {
+			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_artists_news), 
+					AppConstants.FRAGMENT_TAG_ARTIST_NEWS_LIST);
 		}
 	}
 

@@ -631,7 +631,7 @@
     <dimen name="lnr_lyt_expand_desc_margin_t_event_details">@dimen/txt_desc_margin_t_event_details</dimen>
     <dimen name="img_down_margin_r_event_details">@dimen/txt_desc_margin_l_event_details</dimen>
     <dimen name="v_hor_line_ht_event_details">1dp</dimen>
-    <dimen name="v_hor_margin_b_event_details">5dp</dimen>
+    <dimen name="v_hor_margin_b_event_details">10dp</dimen>
     <dimen name="txt_featuring_margin_t_event_details">@dimen/txt_desc_margin_t_event_details</dimen>
     <dimen name="v_pager_featuring_ht_event_details">150dp</dimen>
     <dimen name="v_pager_featuring_margin_t_event_details">@dimen/txt_desc_margin_t_event_details</dimen>
@@ -698,19 +698,21 @@
     <dimen name="v_hor_line_margin_l_artist_details">16dp</dimen>
     <dimen name="v_hor_line_margin_r_artist_details">@dimen/v_hor_line_margin_l_artist_details</dimen>
     <dimen name="v_hor_line_margin_t_artist_details">@dimen/txt_desc_margin_t_rv_item_desc</dimen>
-    <!-- fab_margin_t_artist_details = (img_artist_ht_artist_details - fab_ht(56 for normal size)*2/3)
-    = 230 - 37 = 193 -->
-    <dimen name="fab_margin_t_artist_details">193dp</dimen>
-    <dimen name="fab_margin_b_artist_details">16dp</dimen>
-    <dimen name="fab_margin_r_artist_details">@dimen/fab_margin_b_artist_details</dimen>
+    <dimen name="fab_margin_l_r_artist_details">@dimen/fab_margin_l_r_event_details</dimen>
+    <dimen name="fab_artist_news_pad_artist_details">16dp</dimen>
+    <dimen name="fab_margin_b_artist_details">@dimen/fab_margin_b_event_details</dimen>
     <!-- rv_item_desc.xml -->
     <dimen name="prgs_bar_ht_rv_item_desc">200dp</dimen>
     <dimen name="prgs_bar_margin_t_rv_item_desc">@dimen/txt_desc_margin_t_rv_item_desc</dimen>
     <dimen name="txt_desc_margin_l_rv_item_desc">16dp</dimen>
     <dimen name="txt_desc_margin_r_rv_item_desc">16dp</dimen>
     <dimen name="txt_desc_margin_t_rv_item_desc">20dp</dimen>
-    <dimen name="img_down_margin_l_rv_item_desc">16dp</dimen>
-    <dimen name="img_down_margin_r_rv_item_desc">@dimen/txt_desc_margin_l_rv_item_desc</dimen>
+    <!-- <dimen name="img_down_margin_l_rv_item_desc">16dp</dimen>
+    <dimen name="img_down_margin_r_rv_item_desc">@dimen/txt_desc_margin_l_rv_item_desc</dimen> -->
+    <!-- As the 'img down' icon size in mdpi is of '16*16' and previous margin l & r was 16dp. Sp, 
+    	 refering this sizes calculated the wt & ht of the icon as 48dp (i.e.lmargin + width + rmargin) -->
+    <dimen name="img_down_wt_rv_item_desc">48dp</dimen>
+    <dimen name="img_down_ht_rv_item_desc">32dp</dimen>
     <dimen name="img_down_margin_t_rv_item_desc">@dimen/txt_desc_margin_t_rv_item_desc</dimen>
     <!-- fragment_video.xml -->
     <dimen name="rlt_lyt_root_w_video">200dp</dimen>
