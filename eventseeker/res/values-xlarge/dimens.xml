@@ -334,8 +334,7 @@
     <dimen name="txt_no_items_msg_txt_size_include_no_items_found_with_action">22sp</dimen>
     
    	<!-- fragment_get_started.xml -->
-   	<dimen name="scrl_v_pad_fragment_login">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-   	<dimen name="rlt_lyt_root_pad_b_get_started">60dp</dimen>
+   	<dimen name="rlt_lyt_root_pad_b_get_started">0dp</dimen>
     <dimen name="rlt_lyt_root_pad_l_r_get_started">60dp</dimen>
     <dimen name="all_components_margin_t_get_started">50dp</dimen>
     <dimen name="txt_size_fb_google_btn_get_started">18sp</dimen>
@@ -380,6 +379,19 @@
     <dimen name="rlt_register_details_mar_r_get_started_fragment">22dp</dimen>
     <dimen name="txt_login_label_txt_size_get_started_fragment">24sp</dimen>
     <dimen name="btn_forgot_pass_txt_size_get_started_fragment">22sp</dimen>
+    
+    <!-- fragment_login.xml -->
+    <dimen name="scrl_v_margin_t_fragment_login">0dp</dimen>
+    <dimen name="scrl_v_pad_fragment_login">0dp</dimen>
+    <dimen name="img_fb_sign_up_margin_t_login">0dp</dimen>
+    
+    <!-- fragment_sign_up.xml -->
+    <dimen name="scrl_v_pad_sign_up">0dp</dimen>
+    <dimen name="rlt_lyt_root_pad_t_sign_up">0dp</dimen>
+    <dimen name="img_fb_sign_up_margin_t_sign_up">0dp</dimen>
+    <dimen name="rlt_g_plus_margin_t_sign_up">40dp</dimen>
+    <dimen name="rlt_register_details_margin_t_sign_up">40dp</dimen>
+    <dimen name="rlt_register_details_pad_b_sign_up">30dp</dimen>
     
     <!-- list_item_settings.xml -->
 	<dimen name="rlt_layout_content_pad_t_b_list_item_settings">10dp</dimen>

@@ -7,7 +7,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/common_t_mar_pad_for_all_layout"
+        android:layout_marginTop="@dimen/scrl_v_margin_t_fragment_login"
         android:fillViewport="true"
         android:padding="@dimen/scrl_v_pad_fragment_login"
         android:scrollbars="none" >
@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/all_components_margin_t_get_started"
+                android:layout_marginTop="@dimen/img_fb_sign_up_margin_t_login"
                 android:background="@drawable/ic_fb_continue"
                 android:gravity="left|center_vertical"
                 android:singleLine="true"

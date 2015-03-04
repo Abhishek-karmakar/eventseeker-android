@@ -65,7 +65,7 @@ public abstract class FbGPlusRegisterFragmentTab extends Fragment implements Con
 		EventSeekr.mGoogleApiClient = mGoogleApiClient = GPlusUtil.createPlusClientInstance(this, this, this);
     	//Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
 		
-		//isForSignUp = (this instanceof SignUpFragment) ? true : false;
+		isForSignUp = (this instanceof SignUpFragmentTab) ? true : false;
 	}
 	
 	@Override

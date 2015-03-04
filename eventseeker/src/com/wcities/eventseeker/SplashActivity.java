@@ -12,7 +12,6 @@ import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
 import com.wcities.eventseeker.app.EventSeekr;
-import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.ScreenNames;
 
 public class SplashActivity extends Activity implements IGoogleAnalyticsTracker {
@@ -71,6 +70,7 @@ public class SplashActivity extends Activity implements IGoogleAnalyticsTracker 
 		 */
 		handler.removeCallbacksAndMessages(null);
 		super.onDestroy();
+		((EventSeekr)getApplication()).onActivityDestroyed();
 	}
 
 	@Override

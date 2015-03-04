@@ -533,7 +533,6 @@
     <dimen name="btn_txt_size_launcher">18sp</dimen>
     <dimen name="txt_desc_pad_l_r_fragment_text">0dp</dimen>
     <!-- login/register fragment -->
-    <dimen name="scrl_v_pad_fragment_login">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="lyt_mar_t_get_started_fragment">40dp</dimen>
     <dimen name="mar_t_get_started_fragment">25dp</dimen>
     <dimen name="mar_t_below_error_get_started_fragment">12dp</dimen>
@@ -542,6 +541,17 @@
     <dimen name="rlt_register_details_mar_r_get_started_fragment">2dp</dimen>
     <dimen name="txt_login_label_txt_size_get_started_fragment">20sp</dimen>
     <dimen name="btn_forgot_pass_txt_size_get_started_fragment">18sp</dimen>
+    <!-- fragment_login.xml -->
+    <dimen name="scrl_v_margin_t_fragment_login">@dimen/action_bar_ht</dimen>
+    <dimen name="scrl_v_pad_fragment_login">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="img_fb_sign_up_margin_t_login">30dp</dimen>
+    <!-- fragment_sign_up.xml -->
+    <dimen name="scrl_v_pad_sign_up">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="rlt_lyt_root_pad_t_sign_up">@dimen/action_bar_ht</dimen>
+    <dimen name="img_fb_sign_up_margin_t_sign_up">30dp</dimen>
+    <dimen name="rlt_g_plus_margin_t_sign_up">30dp</dimen>
+    <dimen name="rlt_register_details_margin_t_sign_up">40dp</dimen>
+    <dimen name="rlt_register_details_pad_b_sign_up">0dp</dimen>
     <!-- list_item_settings.xml -->
     <dimen name="rlt_layout_content_pad_t_b_list_item_settings">15dp</dimen>
     <dimen name="rlt_layout_content_pad_l_r_list_item_settings">40dp</dimen>

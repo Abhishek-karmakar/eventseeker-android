@@ -133,7 +133,8 @@ public class LauncherFragmentTab extends Fragment implements OnClickListener, Ca
 			break;
 
 		case R.id.btnSignUp:
-			//((MainActivity) FragmentUtil.getActivity(this)).replaceByFragment(AppConstants.FRAGMENT_TAG_SIGN_UP, null);			
+			intent = new Intent(FragmentUtil.getActivity(this).getApplicationContext(), SignUpActivityTab.class);
+			startActivity(intent);			
 			break;
 
 		default:

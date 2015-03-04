@@ -1,18 +1,18 @@
 package com.wcities.eventseeker;
 
-import android.os.Bundle;
-import android.view.KeyEvent;
-import android.view.MenuItem;
-
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.core.registration.Registration.RegistrationListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class LoginActivityTab extends BaseActivityTab implements RegistrationListener {
-	
-	private static final String TAG = LoginActivityTab.class.getSimpleName();
+import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.MenuItem;
 
+public class SignUpActivityTab extends BaseActivityTab implements RegistrationListener {
+
+	private static final String TAG = SignUpActivityTab.class.getSimpleName();
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -23,8 +23,8 @@ public class LoginActivityTab extends BaseActivityTab implements RegistrationLis
 		
 		if (isOnCreateCalledFirstTime) {
 			//Log.d(TAG, "add login fragment tab");
-			LoginFragmentTab loginFragmentTab = new LoginFragmentTab();
-			addFragment(R.id.content_frame, loginFragmentTab, FragmentUtil.getTag(loginFragmentTab), false);
+			SignUpFragmentTab signUpFragmentTab = new SignUpFragmentTab();
+			addFragment(R.id.content_frame, signUpFragmentTab, FragmentUtil.getTag(signUpFragmentTab), false);
 		}
 	}
 	
@@ -69,15 +69,15 @@ public class LoginActivityTab extends BaseActivityTab implements RegistrationLis
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-
+	
 	@Override
 	public String getScreenName() {
-		return ScreenNames.ACCOUNT_LOGIN;
+		return ScreenNames.ACCOUNT_SIGN_UP;
 	}
 
 	@Override
 	protected String getScrnTitle() {
-		return getResources().getString(R.string.title_login);
+		return getResources().getString(R.string.title_signup);
 	}
 
 	@Override

@@ -46,6 +46,12 @@ public class LauncherActivityTab extends FragmentActivity implements IGoogleAnal
 		super.onSaveInstanceState(outState);
 		outState.putBoolean(BundleKeys.IS_ON_CREATE_CALLED_FIRST_TIME, isOnCreateCalledFirstTime);
 	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		((EventSeekr)getApplication()).onActivityDestroyed();
+	}
 
 	@Override
 	public String getScreenName() {

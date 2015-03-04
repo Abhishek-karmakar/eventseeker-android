@@ -1,6 +1,20 @@
 package com.wcities.eventseeker;
 
-import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.AsyncTask.Status;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+
 import com.wcities.eventseeker.SettingsFragment.SettingsItem;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
@@ -11,21 +25,6 @@ import com.wcities.eventseeker.core.registration.Registration.RegistrationErrorL
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
-
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.AsyncTask.Status;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.View.OnTouchListener;
-import android.widget.RelativeLayout;
 
 public class LoginSyncingFragmentTab extends Fragment implements AsyncTaskListener<Object> {
 

@@ -48,6 +48,10 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
 		 */
 		((EventSeekr) getApplication()).setDefaultLocale();
 		
+		if (((EventSeekr) getApplication()).getWcitiesId() == null) {
+			return;
+		}
+		
 		if (EventSeekr.isConnectedWithBosch()) {
 			startBoschMainActivity();
 		}
@@ -59,6 +63,10 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
 		
 		EventSeekr.setConnectionFailureListener(this);
 		DeviceUtil.registerLocationListener(this);
+		if (((EventSeekr) getApplication()).getWcitiesId() == null) {
+			return;
+		}
+		
 		/**
 		 * Due to myspin bug sometimes it doesn't detect connected state instantly. To compensate for this 
 		 * we run a delayed task to recheck on connected state & refresh UI.
@@ -96,6 +104,10 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
 	protected void onResume() {
 		super.onResume();
 		//Log.d(TAG, "onResume()");
+		if (((EventSeekr) getApplication()).getWcitiesId() == null) {
+			return;
+		}
+		
 		boolean isLockscreenVisible = false;
 		if (AppConstants.FORD_SYNC_APP) {
 			activityOnTop = true;
@@ -128,10 +140,15 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
 	@Override
 	protected void onPause() {
 		//Log.d(TAG, "onPause()");
+		super.onPause();
+
+		if (((EventSeekr) getApplication()).getWcitiesId() == null) {
+			return;
+		}
+		
 		if (AppConstants.FORD_SYNC_APP) {
 			activityOnTop = false;
 		}
-		super.onPause();
 	}
 	
 	@Override
@@ -142,7 +159,18 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
 		EventSeekr.resetConnectionFailureListener(this);
 		DeviceUtil.unregisterLocationListener((EventSeekr) getApplication());
 		
-		handler.removeCallbacks(periodicCheckForBoschConnection);
+		if (((EventSeekr) getApplication()).getWcitiesId() == null) {
+			return;
+		}
+		
+		if (handler != null) {
+			/**
+			 * handler is null when starting login or signup activity but after signing in/up when onStop() 
+			 * is called wcitiesId won't be null & hence execution will reach this statement even though 
+			 * wcitiesId was null when activity was initiated 
+			 */
+			handler.removeCallbacks(periodicCheckForBoschConnection);
+		}
 		
 		if (AppConstants.FORD_SYNC_APP) {
 			//Log.v(TAG, "onDestroy main");

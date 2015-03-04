@@ -29,7 +29,6 @@ import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.core.registration.Registration.RegistrationErrorListener;
 import com.wcities.eventseeker.core.registration.Registration.RegistrationListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
@@ -37,10 +36,10 @@ import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser.SignupResponse;
 import com.wcities.eventseeker.util.FieldValidationUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickListener, TextWatcher, OnFocusChangeListener,
-		RegistrationErrorListener, DialogBtnClickListener {
+public class SignUpFragmentTab extends FbGPlusRegisterFragmentTab implements TextWatcher, OnFocusChangeListener, 
+		OnClickListener, RegistrationErrorListener, DialogBtnClickListener {
 
-	private static final String TAG = SignUpFragment.class.getSimpleName();
+	private static final String TAG = SignUpFragmentTab.class.getSimpleName();
 
 	private static final String IMG_FIRST_NAME = "firstName";
 	private static final String IMG_LAST_NAME = "lastName";
@@ -164,29 +163,13 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
 			} catch (Resources.NotFoundException e) {
 				e.printStackTrace();
 			}
-			
 		}
 	}
 	
 	@Override
 	public void onStart() {
 		super.onStart();
-		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
-		ma.setDrawerLockMode(true);
-		ma.setDrawerIndicatorEnabled(false);
-		if (ma.isTabletAndInLandscapeMode()) {
-			ma.hideDrawerList();
-		}
 		toggleSignUpBtnState();
-	}
-	
-	@Override
-	public void onStop() {
-		super.onStop();
-		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
-		if (ma.isTabletAndInLandscapeMode()) {
-			ma.unHideDrawerList();
-		}
 	}
 	
 	@Override
@@ -201,11 +184,6 @@ public class SignUpFragment extends FbGPlusRegisterFragment implements OnClickLi
         	txtGPlusSignInStatus.setVisibility(View.INVISIBLE);
         	imgGPlusSignIn.setVisibility(View.VISIBLE);
 		}
-	}
-
-	@Override
-	public String getScreenName() {
-		return ScreenNames.ACCOUNT_SIGN_UP;
 	}
 
 	@Override

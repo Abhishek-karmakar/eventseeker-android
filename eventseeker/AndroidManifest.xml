@@ -53,7 +53,13 @@
         <activity android:name="com.wcities.eventseeker.LauncherActivityTab"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="com.wcities.eventseeker.LoginActivityTab" />
+        <!-- windowSoftInputMode="stateUnchanged" is used to retain soft keypad status (open/close) on 
+        orientation change & "adjustResize" is to allow access to entire layout when keypad is open & to keep
+        toolbar as it is which used to scroll up (becoming invisible) in absence of this "adjustResize" value -->
+        <activity android:name="com.wcities.eventseeker.LoginActivityTab"
+            android:windowSoftInputMode="stateUnchanged|adjustResize" />
+        <activity android:name="com.wcities.eventseeker.SignUpActivityTab"
+            android:windowSoftInputMode="stateUnchanged|adjustResize" />
         <activity android:name="com.wcities.eventseeker.DiscoverActivityTab" />
         
         <activity android:name="com.wcities.eventseeker.SpotifyActivity" 

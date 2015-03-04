@@ -21,7 +21,8 @@
 
             <FrameLayout android:id="@+id/content_frame"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:paddingTop="@dimen/action_bar_ht" />
 
             <!-- The navigation drawer -->
 

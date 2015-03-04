@@ -57,4 +57,13 @@
 	<!-- fragment_settings.xml -->
     <dimen name="lst_pad_l_r_fragment_settings">250dp</dimen>
     
+    <!-- fragment_get_started.xml -->
+   	<dimen name="mar_l_r_get_started_fragment">380dp</dimen>
+   	<dimen name="rlt_register_details_mar_r_get_started_fragment">330dp</dimen>
+   	<dimen name="mar_t_get_started_fragment">45dp</dimen>
+   	<dimen name="lyt_mar_t_get_started_fragment">60dp</dimen>
+   	
+   	<!-- fragment_login.xml -->
+    <dimen name="img_fb_sign_up_margin_t_login">0dp</dimen>
+    
 </resources>

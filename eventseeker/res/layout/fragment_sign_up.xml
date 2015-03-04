@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/ic_blue_app_bg"
     android:fillViewport="true"
-    android:padding="@dimen/rlt_layout_root_pad_fragment_connect_accounts_list"
+    android:padding="@dimen/scrl_v_pad_sign_up"
     android:scrollbars="none" >
 
     <RelativeLayout
@@ -15,14 +15,14 @@
         android:paddingBottom="@dimen/rlt_lyt_root_pad_b_get_started"
         android:paddingLeft="@dimen/rlt_lyt_root_pad_l_r_get_started"
         android:paddingRight="@dimen/rlt_lyt_root_pad_l_r_get_started"
-        android:paddingTop="@dimen/common_t_mar_pad_for_all_layout" >
+        android:paddingTop="@dimen/rlt_lyt_root_pad_t_sign_up" >
 
         <Button
             android:id="@+id/imgFbSignUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/all_components_margin_t_get_started"
+            android:layout_marginTop="@dimen/img_fb_sign_up_margin_t_sign_up"
             android:text="@string/continue_with_facebook"
             android:textSize="@dimen/txt_size_fb_google_btn_get_started"
             android:textAllCaps="false"
@@ -39,7 +39,7 @@
             android:layout_alignLeft="@+id/imgFbSignUp"
             android:layout_alignRight="@+id/imgFbSignUp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/all_components_margin_t_get_started" >
+            android:layout_marginTop="@dimen/rlt_g_plus_margin_t_sign_up" >
 
             <TextView
                 android:id="@+id/txtGPlusSignInStatus"
@@ -64,12 +64,18 @@
                 android:background="@drawable/ic_ggl_continue" />
         </RelativeLayout>
 
+        <!-- In nexus 7 this screen opens up soft keypad automatically on launch with focus on edtEmail. 
+        To prevent this we have used focusableInTouchMode on this parent layout. Haven't checked on other
+        devices w/o this parameter focusableInTouchMode, but same case must be there with all devices, 
+        although it was not observed on nexus 5. -->
         <RelativeLayout
             android:id="@+id/rltRegisterDetails"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/rltGPlus"
-            android:layout_marginTop="@dimen/lyt_mar_t_get_started_fragment" >
+            android:layout_marginTop="@dimen/rlt_register_details_margin_t_sign_up"
+            android:paddingBottom="@dimen/rlt_register_details_pad_b_sign_up"
+            android:focusableInTouchMode="true" >
 
             <TextView
                 android:id="@+id/txtLoginLabel"
@@ -216,15 +222,6 @@
                 android:enabled="false"
                 android:text="@string/sign_up" />
 
-            <!-- The below Dummy view and its margin top is added to ignore the issue of above button getting clipped	            as it is last view in scrollview. This issue was seen in ASUS Nexus 7. -->
-
-            <View
-                android:id="@+id/vDummy"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/btnSignUp"
-                android:layout_marginTop="@dimen/common_t_mar_pad_for_all_layout"
-                android:enabled="false" />
         </RelativeLayout>
     </RelativeLayout>
 

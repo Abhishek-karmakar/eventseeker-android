@@ -65,7 +65,6 @@
     <dimen name="txt_desc_pad_l_r_fragment_text">240dp</dimen>
     
     <!-- login/register fragment -->
-    <dimen name="scrl_v_pad_fragment_login">0dp</dimen>
     <dimen name="rlt_lyt_root_pad_b_get_started">0dp</dimen>
     <dimen name="mar_l_r_get_started_fragment">200dp</dimen>
     <dimen name="all_components_margin_t_get_started">20dp</dimen>
@@ -74,6 +73,13 @@
     <dimen name="mar_t_below_error_get_started_fragment">10dp</dimen>
     <dimen name="mar_t_get_started_fragment">20dp</dimen>
     <dimen name="rlt_register_details_mar_r_get_started_fragment">150dp</dimen>
+    
+    <!-- fragment_login.xml -->
+    <dimen name="scrl_v_pad_fragment_login">0dp</dimen>
+    <dimen name="img_fb_sign_up_margin_t_login">20dp</dimen>
+    
+    <!-- fragment_sign_up.xml -->
+    <dimen name="img_fb_sign_up_margin_t_sign_up">20dp</dimen>
     
 	<!-- fragment_settings.xml -->
     <dimen name="lst_pad_l_r_fragment_settings">175dp</dimen>

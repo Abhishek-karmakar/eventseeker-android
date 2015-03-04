@@ -15,6 +15,8 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.StrictMode;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -36,6 +38,7 @@ import com.wcities.eventseeker.core.FollowingList;
 import com.wcities.eventseeker.core.registration.Registration;
 import com.wcities.eventseeker.exception.DefaultUncaughtExceptionHandler;
 import com.wcities.eventseeker.gcm.GcmUtil;
+import com.wcities.eventseeker.interfaces.ActivityDestroyedListener;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.ConnectionFailureListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
@@ -114,7 +117,11 @@ public class EventSeekr extends Application {
 
 	private ProximityUnit savedProximityUnit;
 	
+	private Handler handler;
+	private ActivityDestroyedListener activityDestroyedListener;
+	
 	public static GoogleApiClient mGoogleApiClient;
+	// for ford
 	private static BaseActivity currentBaseActivity;
 	
 	static {
@@ -275,6 +282,8 @@ public class EventSeekr extends Application {
 		is7InchTablet = getResources().getBoolean(R.bool.is_7_inch_tablet);
 		//Log.d(TAG, "isTablet = " + isTablet);
 		FileUtil.deleteShareImgCacheInBackground(this);
+		
+		handler = new Handler(Looper.getMainLooper());
 		
 		if (!AppConstants.SEND_GOOGLE_ANALYTICS) {
 			// When dry run is set, hits will not be dispatched, but will still be logged as
@@ -1001,6 +1010,33 @@ public class EventSeekr extends Application {
 	 */
 	public void resetDefaultLocale() {
 		defaultLocale = null;
+	}
+
+	public void onActivityDestroyed() {
+		if (activityDestroyedListener != null) {
+			/**
+			 * We call onOtherActivityDestroyed() on activityDestroyedListener because without this sometimes
+			 * back arrow is set instead of drawer indicator due to more activities found in back stack. This 
+			 * happens because onStart() of new activity executes first where we set drawer indicator/back arrow
+			 * based on isTaskRoot() call and onDestroy() of previous activity gets called up in the end after 
+			 * which it's possible that isTaskRoot() call for new activity might return true if that is the only 
+			 * activity in stack. In this case we should update drawer indicator icon from back arrow to hamburger.
+			 * 
+			 * We use handler here to post in the message queue so that onDestroy() which has called this 
+			 * function completes first & then only we check for isTaskRoot() from onOtherActivityDestroyed().
+			 */
+			handler.post(new Runnable() {
+				
+				@Override
+				public void run() {
+					activityDestroyedListener.onOtherActivityDestroyed();
+				}
+			});
+		}
+	}
+
+	public void setActivityDestroyedListener(ActivityDestroyedListener activityDestroyedListener) {
+		this.activityDestroyedListener = activityDestroyedListener;
 	}
 
 	private class GetWcitiesId extends AsyncTask<Void, Void, Integer> {

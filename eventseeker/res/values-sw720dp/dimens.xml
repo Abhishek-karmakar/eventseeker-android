@@ -360,6 +360,11 @@
     <dimen name="txt_no_items_msg_txt_size_include_no_items_found_with_action">22sp</dimen>
     
    	<!-- fragment_get_started.xml -->
+   	<dimen name="mar_l_r_get_started_fragment">150dp</dimen>
+   	<dimen name="all_components_margin_t_get_started">60dp</dimen>
+   	<dimen name="lyt_mar_t_get_started_fragment">70dp</dimen>
+   	<dimen name="mar_t_get_started_fragment">55dp</dimen>
+   	<dimen name="rlt_register_details_mar_r_get_started_fragment">100dp</dimen>
     <dimen name="txt_g_plus_sign_in_status_txt_size_get_started">18sp</dimen>
     <dimen name="txt_fb_login_desc_pad_r_fb_login">@dimen/txt_fb_login_desc_pad_l_fb_login</dimen>
     <dimen name="v_dummy_ht_fb_login">0dp</dimen>
@@ -377,5 +382,8 @@
     
 	<!-- fragment_settings.xml -->
     <dimen name="lst_pad_l_r_fragment_settings">175dp</dimen>
+    
+    <!-- common -->
+    <dimen name="txt_size_widget_eventSeeker_btn_white">20sp</dimen>
     
 </resources>

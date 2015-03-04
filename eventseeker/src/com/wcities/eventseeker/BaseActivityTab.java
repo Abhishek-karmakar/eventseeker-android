@@ -3,6 +3,8 @@ package com.wcities.eventseeker;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
@@ -19,6 +21,7 @@ import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.interfaces.ActivityDestroyedListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GPlusUtil;
 
@@ -26,7 +29,7 @@ import com.wcities.eventseeker.util.GPlusUtil;
  * Using ActionBarActivity (extended by BaseActivity) instead of Activity so as to use support library toolbar as actionbar even for lower apis
  * by calling setSupportActionBar(toolbar) & also there is common code to both mobile & tablet which can be kept in BaseActivity
  */
-public abstract class BaseActivityTab extends BaseActivity implements IGoogleAnalyticsTracker {
+public abstract class BaseActivityTab extends BaseActivity implements IGoogleAnalyticsTracker, ActivityDestroyedListener {
 	
 	private static final String TAG = BaseActivityTab.class.getSimpleName(); 
 	
@@ -48,6 +51,7 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		// check whether the current device is Tablet and if it is in Landscape mode
 		EventSeekr eventSeekr = ((EventSeekr) getApplication());
 		eventSeekr.checkAndSetIfInLandscapeMode();
+		eventSeekr.setActivityDestroyedListener(this);
 		
 		if (savedInstanceState != null) {
 			isOnCreateCalledFirstTime = savedInstanceState.getBoolean(BundleKeys.IS_ON_CREATE_CALLED_FIRST_TIME);
@@ -67,12 +71,13 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		isOnCreateCalledFirstTime = false;
 
 		getSupportActionBar().setTitle(getScrnTitle());
-		//Log.d(TAG, "is root = " + isTaskRoot());
+		
 		/**
 		 * Use isTaskRoot() instead of navigation drawer item index to set hamburger/back icon, because it's possible that
 		 * notification comes for some valid navigation drawer item but other activity is already open in which case we should 
 		 * have back icon & not hamburger. 
 		 */
+		//Log.d(TAG, "is root = " + isTaskRoot());
 		mDrawerToggle.setDrawerIndicatorEnabled(isTaskRoot());
 	}
 	
@@ -83,6 +88,12 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 			// Sync the toggle state after onRestoreInstanceState has occurred.
 			mDrawerToggle.syncState();
 		}
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		((EventSeekr)getApplication()).onActivityDestroyed();
 	}
 	
 	@Override
@@ -233,6 +244,12 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		}
 		fragmentTransaction.commit();
 		currentContentFragmentTag = tag;
+	}
+	
+	@Override
+	public void onOtherActivityDestroyed() {
+		//Log.d(TAG, "is root onOtherActivityDestroyed = " + isTaskRoot());
+		mDrawerToggle.setDrawerIndicatorEnabled(isTaskRoot());
 	}
 	
 	protected abstract String getScrnTitle();
