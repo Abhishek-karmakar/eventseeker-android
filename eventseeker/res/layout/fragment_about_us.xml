@@ -14,7 +14,7 @@
 	    <RelativeLayout
 	        android:id="@+id/rltLayoutContent"
 	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
+	        android:layout_height="match_parent"
 	        android:layout_marginTop="@dimen/common_t_mar_pad_for_all_layout"
 	        android:background="@drawable/story_space" >
 	

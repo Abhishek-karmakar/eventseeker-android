@@ -243,6 +243,7 @@ public class RecommendedArtistsFragment extends PublishArtistFragmentLoadableFro
 		lstView.setAdapter(myArtistListAdapter);
 		lstView.setScrollingCacheEnabled(false);
 		lstView.setFastScrollEnabled(true);
+		lstView.setDivider(null);
 		/*
 		 * if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 		 * lstView.setFastScrollAlwaysVisible(false); }

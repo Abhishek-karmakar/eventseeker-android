@@ -50,6 +50,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentRight="true"
 	        android:layout_centerVertical="true"
+	        android:layout_marginRight="@dimen/chk_follow_mar_r_fragment_search_artists_list_item"
 	        android:button="@drawable/slctr_following" />
         
 	</RelativeLayout>
