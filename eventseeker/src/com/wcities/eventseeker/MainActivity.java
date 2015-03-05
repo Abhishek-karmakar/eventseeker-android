@@ -149,8 +149,6 @@ public class MainActivity extends BaseActivity implements
 			vStatusBar.setVisibility(View.GONE);
 		}
 		
-		VersionUtil.updateCheckes((EventSeekr) getApplication());
-
 		/**
 		 * check whether the current device is Tablet and if it is in Landscape
 		 * mode

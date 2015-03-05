@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import com.bosch.myspin.serversdk.MySpinException;
 import com.bosch.myspin.serversdk.MySpinServerSDK;
@@ -13,6 +12,7 @@ import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.ScreenNames;
+import com.wcities.eventseeker.util.VersionUtil;
 
 public class SplashActivity extends Activity implements IGoogleAnalyticsTracker {
 
@@ -33,6 +33,7 @@ public class SplashActivity extends Activity implements IGoogleAnalyticsTracker 
 		
 		setContentView(R.layout.activity_splash);
 		
+		VersionUtil.updateCheckes((EventSeekr) getApplication());
 		GoogleAnalyticsTracker.getInstance().sendScreenView((EventSeekr) getApplication(), getScreenName());
 		
 		handler = new Handler(Looper.getMainLooper());

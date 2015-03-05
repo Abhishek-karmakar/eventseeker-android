@@ -26,19 +26,19 @@ import android.widget.TextView;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.ViewUtil;
 
-public class DrawerListFragment extends ListFragment {
+public class DrawerListFragmentTab extends ListFragment {
 
-	private static final String TAG = DrawerListFragment.class.getSimpleName();
-
+	private static final String TAG = DrawerListFragmentTab.class.getSimpleName();
+	
 	public static final int DIVIDER_POS = 5;
 
-	private DrawerListFragmentListener mListener;
+	private DrawerListFragmentTabListener mListener;
 	private List<DrawerListItem> drawerListItems;
 	private DrawerListAdapter drawerListAdapter;
 	
-    private int htForDrawerList;
+	private int htForDrawerList;
 	
-	public interface DrawerListFragmentListener {
+	public interface DrawerListFragmentTabListener {
 		public void onDrawerListFragmentViewCreated();
 		public void onDrawerItemSelected(int pos, Bundle args);
 	}
@@ -47,10 +47,10 @@ public class DrawerListFragment extends ListFragment {
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		try {
-			mListener = (DrawerListFragmentListener) activity;
+			mListener = (DrawerListFragmentTabListener) activity;
 			
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement DrawerListFragmentListener");
+            throw new ClassCastException(activity.toString() + " must implement DrawerListFragmentTabListener");
         }
 	}
 	
@@ -58,6 +58,7 @@ public class DrawerListFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		//Log.d(TAG, "onCreate()");
 		Resources res = FragmentUtil.getResources(this);
 		DisplayMetrics displaymetrics = new DisplayMetrics();
 		FragmentUtil.getActivity(this).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
@@ -124,68 +125,28 @@ public class DrawerListFragment extends ListFragment {
 		drawerListAdapter.notifyDataSetChanged();
 	}
 	
-	/*public void setMyEventsCount(int count) {
-		String myEvents = getResources().getString(R.string.navigation_drawer_item_my_events);
-		
-		for (Iterator<DrawerListItem> iterator = drawerListItems.iterator(); iterator.hasNext();) {
-			DrawerListItem drawerListItem = iterator.next();
-			
-			if (drawerListItem.title.equals(myEvents)) {
-				
-				FragmentUtil.getActivity(this).runOnUiThread(new Runnable() {
-					
-					@Override
-					public void run() {
-						drawerListAdapter.notifyDataSetChanged();
-					}
-				});
-				break;
-			}
-		}
-	}
-	
-	public void setMyArtistsCount(int count) {
-		String myArtists = getResources().getString(R.string.navigation_drawer_item_following);
-		
-		for (Iterator<DrawerListItem> iterator = drawerListItems.iterator(); iterator.hasNext();) {
-			DrawerListItem drawerListItem = iterator.next();
-			
-			if (drawerListItem.title.equals(myArtists)) {
-				
-				FragmentUtil.getActivity(this).runOnUiThread(new Runnable() {
-					
-					@Override
-					public void run() {
-						drawerListAdapter.notifyDataSetChanged();
-					}
-				});
-				break;
-			}
-		}
-	}*/
-	
 	private static class DrawerListAdapter extends BaseAdapter {
 		
 		public static enum LIST_ITEM_TYPE {
 			HEADER, ITEM;
 		};
 
-		private WeakReference<Activity> mainActivity;
+		private WeakReference<Activity> baseActivityTab;
 	    private LayoutInflater mInflater;
 	    private List<DrawerListItem> drawerListItems;
 	    private int rowHt;
 	    
-	    public DrawerListAdapter(Activity mainActivity, List<DrawerListItem> drawerListItems, int htForDrawerList) {
-	    	this.mainActivity = new WeakReference<Activity>(mainActivity);
-	        mInflater = LayoutInflater.from(this.mainActivity.get());
+	    public DrawerListAdapter(Activity baseActivityTab, List<DrawerListItem> drawerListItems, int htForDrawerList) {
+	    	this.baseActivityTab = new WeakReference<Activity>(baseActivityTab);
+	        mInflater = LayoutInflater.from(this.baseActivityTab.get());
 	        this.drawerListItems = drawerListItems;
 	        // 1 subtracted since that item is just the section divider
 	        rowHt = htForDrawerList / (drawerListItems.size() - 1);
 	    }
 	    
-	    public void setmInflater(Activity mainActivity) {
-	    	this.mainActivity = new WeakReference<Activity>(mainActivity);
-	        mInflater = LayoutInflater.from(this.mainActivity.get());
+	    public void setmInflater(Activity baseActivityTab) {
+	    	this.baseActivityTab = new WeakReference<Activity>(baseActivityTab);
+	        mInflater = LayoutInflater.from(this.baseActivityTab.get());
 		}
 
 	    @Override
@@ -228,7 +189,7 @@ public class DrawerListFragment extends ListFragment {
 					// set custom height to fit entire list exactly within the available screen height  
 					AbsListView.LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, rowHt);
 					convertView.setLayoutParams(lp);
-
+					
 					listItemViewHolder = new ListItemViewHolder();
 					listItemViewHolder.imgIcon = (ImageView) convertView.findViewById(R.id.imgIcon);
 					listItemViewHolder.txtTitle = (TextView) convertView.findViewById(R.id.txtTitle);
@@ -259,6 +220,7 @@ public class DrawerListFragment extends ListFragment {
 					//convertView.setBackgroundColor(mainActivity.get().getResources().getColor(android.R.color.white));
 					//listItemViewHolder.txtTitle.setTextColor(mainActivity.get().getResources().getColor(R.color.bg_screen_dark_blue));
 					//listItemViewHolder.imgIcon.setSelected(true);
+					
 				} else {
 					listItemViewHolder.vSelection.setVisibility(View.INVISIBLE);
 					//listItemViewHolder.vSelection.setBackgroundResource(0);

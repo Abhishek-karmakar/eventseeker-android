@@ -204,9 +204,10 @@
     <dimen name="txt_title_margin_t_navigation_drawer_section_header">10dp</dimen>
     <dimen name="txt_title_txt_size_navigation_drawer_section_header">14sp</dimen>
     <!-- navigation_drawer_list_item.xml -->
-    <dimen name="rlt_layout_content_pad_t_navigation_drawer_list_item">20dp</dimen>
+    <dimen name="rlt_layout_content_pad_t_navigation_drawer_list_item">0dp</dimen>
     <dimen name="rlt_layout_content_pad_b_navigation_drawer_list_item">@dimen/rlt_layout_content_pad_t_navigation_drawer_list_item</dimen>
     <dimen name="rlt_layout_content_margin_l_navigation_drawer_list_item">@dimen/txt_title_margin_l_navigation_drawer_section_header</dimen>
+    <dimen name="rlt_layout_content_pad_t_b_navigation_drawer_list_item">0dp</dimen>
     <dimen name="img_icon_margin_l_navigation_drawer_list_item">20dp</dimen>
     <dimen name="txt_title_margin_l_navigation_drawer_list_item">20dp</dimen>
     <dimen name="txt_title_txt_size_navigation_drawer_list_item">18sp</dimen>

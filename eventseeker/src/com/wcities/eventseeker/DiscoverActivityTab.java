@@ -2,9 +2,8 @@ package com.wcities.eventseeker;
 
 import android.os.Bundle;
 
-import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.ScreenNames;
-import com.wcities.eventseeker.util.VersionUtil;
+import com.wcities.eventseeker.util.FragmentUtil;
 
 public class DiscoverActivityTab extends BaseActivityTab {
 	
@@ -17,7 +16,12 @@ public class DiscoverActivityTab extends BaseActivityTab {
 		setContentView(R.layout.activity_base_tab);
 		
 		setCommonUI();
-		VersionUtil.updateCheckes((EventSeekr) getApplication());
+		
+		if (isOnCreateCalledFirstTime) {
+			//Log.d(TAG, "add login fragment tab");
+			DiscoverFragmentTab discoverFragmentTab = new DiscoverFragmentTab();
+			addFragment(R.id.content_frame, discoverFragmentTab, FragmentUtil.getTag(discoverFragmentTab), false);
+		}
 	}
 
 	@Override

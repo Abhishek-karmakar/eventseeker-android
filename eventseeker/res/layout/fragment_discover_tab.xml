@@ -1,50 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.wcities.eventseeker.custom.view.ScrollViewContainingViewPager xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res/com.wcities.eventseeker"
-    android:id="@+id/scrlVRoot"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rltLytRoot"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/dark_gray" >
+    android:layout_height="match_parent" >
+    
+    <android.support.v7.widget.RecyclerView
+	    android:id="@+id/recyclerVCategories"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:scrollbars="none" />
 
-    <RelativeLayout
-        android:id="@+id/rootRelLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <us.feras.ecogallery.EcoGallery
-            android:id="@+id/ecoglryFeaturedEvt"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/eco_glry_featured_evt_child_ht_discover_gallery_item"
-            android:layout_alignParentTop="true"
-            app:childHeight="@dimen/eco_glry_featured_evt_child_ht_discover_gallery_item"
-            app:childWidth="@dimen/eco_glry_featured_evt_child_w_discover_gallery_item" />
-        
-        <RelativeLayout android:id="@+id/rltLayoutProgressWrapper"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/eco_glry_featured_evt_child_ht_discover_gallery_item">
-        
-	        <ProgressBar android:id="@+id/progressBar"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_centerInParent="true"
-		       	android:visibility="gone" />
-        
-        </RelativeLayout>
-
-        <com.wcities.eventseeker.custom.view.ExpandableGridView
-            android:id="@+id/grdEvtCategories"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/ecoglryFeaturedEvt"
-            android:layout_alignRight="@id/ecoglryFeaturedEvt"
-            android:layout_below="@id/ecoglryFeaturedEvt"
-            android:layout_marginBottom="@dimen/grd_evt_categories_margin_b_discover"
-            android:background="@drawable/story_space"
-            android:horizontalSpacing="@dimen/grd_evt_categories_hor_space_discover"
-            android:numColumns="4"
-            android:padding="@dimen/grd_evt_categories_pad_discover"
-            android:verticalSpacing="@dimen/grd_evt_categories_ver_space_discover" />
-    </RelativeLayout>
-
-</com.wcities.eventseeker.custom.view.ScrollViewContainingViewPager>
+</RelativeLayout>

@@ -3,25 +3,28 @@ package com.wcities.eventseeker;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.wcities.eventseeker.DrawerListFragmentTab.DrawerListFragmentTabListener;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.interfaces.ActivityDestroyedListener;
+import com.wcities.eventseeker.interfaces.OnLocaleChangedListener;
+import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GPlusUtil;
 
@@ -29,7 +32,8 @@ import com.wcities.eventseeker.util.GPlusUtil;
  * Using ActionBarActivity (extended by BaseActivity) instead of Activity so as to use support library toolbar as actionbar even for lower apis
  * by calling setSupportActionBar(toolbar) & also there is common code to both mobile & tablet which can be kept in BaseActivity
  */
-public abstract class BaseActivityTab extends BaseActivity implements IGoogleAnalyticsTracker, ActivityDestroyedListener {
+public abstract class BaseActivityTab extends BaseActivity implements IGoogleAnalyticsTracker, ActivityDestroyedListener, 
+		DrawerListFragmentTabListener, OnLocaleChangedListener {
 	
 	private static final String TAG = BaseActivityTab.class.getSimpleName(); 
 	
@@ -170,6 +174,20 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 	}
 	
 	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			if (mDrawerLayout.isDrawerOpen(lnrLayoutRootNavDrawer)) {
+				mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
+				return true;
+				
+			} else {
+				return super.onKeyDown(keyCode, event);
+			}
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+	
+	@Override
 	public void onBackPressed() {
 		if (isTaskRoot()) {
 			/**
@@ -186,6 +204,34 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		} else {
 			super.onBackPressed();
 		}
+	}
+	
+	private void addDrawerListFragment() {
+		//Log.d(TAG, "addDrawerListFragment");
+		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+		DrawerListFragmentTab drawerListFragmentTab = new DrawerListFragmentTab();
+		fragmentTransaction.add(R.id.rootNavigationDrawer, drawerListFragmentTab, FragmentUtil.getTag(drawerListFragmentTab));
+		fragmentTransaction.commit();
+	}
+	
+	private void selectItem(int position, Bundle args) {
+		//Log.d(TAG, "selectItem() + pos : " + position);
+	    switch (position) {
+	    
+		case INDEX_NAV_ITEM_DISCOVER:
+			//DiscoverParentFragment discoverFragment;
+			Intent intent = new Intent(getApplicationContext(), DiscoverActivityTab.class);
+			if (args != null) {
+				intent.putExtras(args);
+			}
+			startActivity(intent);
+			break;
+
+		default:
+			break;
+		}
+	    
+	    mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
 	}
 	
 	protected void setCommonUI() {
@@ -217,6 +263,14 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 		getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_HOME_AS_UP);
+		
+		DrawerListFragmentTab drawerListFragmentTab = (DrawerListFragmentTab) getSupportFragmentManager()
+				.findFragmentByTag(FragmentUtil.getSupportTag(DrawerListFragmentTab.class));
+		//Log.d(TAG, "drawerListFragmentTab : " + drawerListFragmentTab);
+		if (drawerListFragmentTab == null) {
+			addDrawerListFragment();
+		}
+		getSupportFragmentManager().executePendingTransactions();
 	}
 	
 	/**
@@ -250,6 +304,52 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 	public void onOtherActivityDestroyed() {
 		//Log.d(TAG, "is root onOtherActivityDestroyed = " + isTaskRoot());
 		mDrawerToggle.setDrawerIndicatorEnabled(isTaskRoot());
+	}
+	
+	@Override
+	public void onDrawerListFragmentViewCreated() {
+		if (getDrawerItemPos() != AppConstants.INVALID_INDEX) {
+			DrawerListFragmentTab drawerListFragmentTab = (DrawerListFragmentTab) getSupportFragmentManager()
+					.findFragmentByTag(FragmentUtil.getSupportTag(DrawerListFragmentTab.class));
+			drawerListFragmentTab.getListView().setItemChecked(getDrawerItemPos(), true);
+		}
+	}
+	
+	@Override
+	public void onDrawerItemSelected(int pos, Bundle args) {
+		/**
+		 * process only if 
+		 * 1) different selection is made or 
+		 * 2) recommended tab is supposed to be selected by default;
+		 * otherwise just close the drawer
+		 */
+		if (getDrawerItemPos() != pos || (args != null && args.containsKey(BundleKeys.SELECT_RECOMMENDED_EVENTS))) {
+			selectItem(pos, args);
+
+		} else {
+			mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
+		}
+	}
+	
+	@Override
+	public void onLocaleChanged() {
+		DrawerListFragmentTab drawerListFragmentTab = (DrawerListFragmentTab) getSupportFragmentManager()
+				.findFragmentByTag(FragmentUtil.getSupportTag(DrawerListFragmentTab.class));
+		if (drawerListFragmentTab != null) {
+			drawerListFragmentTab.refreshDrawerList();
+		}
+		// TODO: shift these lines into language settings activity
+		/**
+		 * refresh the current screen's title only if it is Language fragment.
+		 */
+		/*if (currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_LANGUAGE)) {
+			mTitle = getResources().getString(R.string.title_language);
+			updateTitle();
+		}*/
+		/**
+		 * 	refresh the SearchView	
+		 */
+		//searchView.setQueryHint(getResources().getString(R.string.menu_search));
 	}
 	
 	protected abstract String getScrnTitle();

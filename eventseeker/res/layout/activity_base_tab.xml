@@ -32,7 +32,8 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
                 android:background="@drawable/bg_list_nav_drawer"
-                android:orientation="vertical" >
+                android:orientation="vertical"
+                android:paddingTop="@dimen/action_bar_ht" >
                 
             </LinearLayout>
             
