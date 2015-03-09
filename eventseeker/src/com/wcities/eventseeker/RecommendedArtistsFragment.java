@@ -1,17 +1,15 @@
 package com.wcities.eventseeker;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.os.AsyncTask.Status;
+import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,8 +31,7 @@ import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.RadioGroupDialogFragment.OnValueSelectedListener;
 import com.wcities.eventseeker.ShareOnFBDialogFragment.OnFacebookShareClickedListener;
-import com.wcities.eventseeker.adapter.MyArtistListAdapter;
-import com.wcities.eventseeker.adapter.MyArtistListAdapter.AdapterFor;
+import com.wcities.eventseeker.adapter.ArtistListAdapterWithoutIndexer;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
@@ -94,12 +91,9 @@ public class RecommendedArtistsFragment extends PublishArtistFragmentLoadableFro
 	private String wcitiesId;
 
 	private LoadRecommendedArtists loadRecommendedArtists;
-	protected MyArtistListAdapter myArtistListAdapter;
+	protected ArtistListAdapterWithoutIndexer myArtistListAdapter;
 
 	private List<Artist> artistList;
-
-	private Map<Character, Integer> alphaNumIndexer;
-	private List<Character> indices;
 
 	private ListView lstView;
 
@@ -217,11 +211,8 @@ public class RecommendedArtistsFragment extends PublishArtistFragmentLoadableFro
 			artistList = new ArrayList<Artist>();
 			artistList.add(null);
 
-			alphaNumIndexer = new HashMap<Character, Integer>();
-			indices = new ArrayList<Character>();
-
-			myArtistListAdapter = new MyArtistListAdapter(FragmentUtil.getActivity(this), artistList, null,
-					alphaNumIndexer, indices, this, this, this, AdapterFor.recommended, this);
+			myArtistListAdapter = new ArtistListAdapterWithoutIndexer(FragmentUtil.getActivity(this), artistList, 
+					null,  this, this, this, this);
 
 			loadItemsInBackground();
 

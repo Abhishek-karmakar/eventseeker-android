@@ -11,9 +11,8 @@ import java.util.TreeSet;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
-import android.os.Bundle;
 import android.os.AsyncTask.Status;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +29,6 @@ import android.widget.TextView;
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.adapter.MyArtistListAdapter;
-import com.wcities.eventseeker.adapter.MyArtistListAdapter.AdapterFor;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
@@ -151,7 +149,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 			indices = new ArrayList<Character>();
 
 			myArtistListAdapter = new MyArtistListAdapter(FragmentUtil.getActivity(this), artistList, null, 
-					alphaNumIndexer, indices, this, this, this, AdapterFor.following, this);
+					alphaNumIndexer, indices, this, this, this, this);
 
 			loadItemsInBackground();
 

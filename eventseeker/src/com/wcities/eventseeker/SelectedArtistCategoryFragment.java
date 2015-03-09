@@ -1,19 +1,14 @@
 package com.wcities.eventseeker;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
-import android.os.Bundle;
 import android.os.AsyncTask.Status;
+import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,8 +26,7 @@ import com.facebook.SessionState;
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.ShareOnFBDialogFragment.OnFacebookShareClickedListener;
-import com.wcities.eventseeker.adapter.MyArtistListAdapter;
-import com.wcities.eventseeker.adapter.MyArtistListAdapter.AdapterFor;
+import com.wcities.eventseeker.adapter.ArtistListAdapterWithoutIndexer;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
@@ -72,13 +66,9 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 	private Genre genre;
 
 	private LoadArtistsByCategory loadCategorialArtists;
-	private MyArtistListAdapter myArtistListAdapter;
+	private ArtistListAdapterWithoutIndexer myArtistListAdapter;
 
-	private Map<Character, Integer> alphaNumIndexer;
-	private SortedSet<Integer> artistIds;
-	
 	private List<Artist> artistList;
-	private List<Character> indices;
 
 	private TextView txtNoItemsFound;
 	private Button btnFollowAll;	
@@ -187,13 +177,9 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 		if (artistList == null) {
 			artistList = new ArrayList<Artist>();
 			artistList.add(null);
-			artistIds = new TreeSet<Integer>();
 			
-			alphaNumIndexer = new HashMap<Character, Integer>();
-			indices = new ArrayList<Character>();
-
-			myArtistListAdapter = new MyArtistListAdapter(FragmentUtil.getActivity(this), artistList, null, 
-					alphaNumIndexer, indices, this, this, this, AdapterFor.popular, this);
+			myArtistListAdapter = new ArtistListAdapterWithoutIndexer(FragmentUtil.getActivity(this), artistList, 
+					null, this, this, this, this);
 
 			loadItemsInBackground();
 
@@ -221,7 +207,7 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 	@Override
 	public void loadItemsInBackground() {
 		loadCategorialArtists = new LoadArtistsByCategory(Api.OAUTH_TOKEN, wcitiesId, artistList, 
-				myArtistListAdapter, artistIds, indices, alphaNumIndexer, this, genre);
+				myArtistListAdapter, this, genre);
 		myArtistListAdapter.setLoadArtists(loadCategorialArtists);
 		AsyncTaskUtil.executeAsyncTask(loadCategorialArtists, true);
 	}

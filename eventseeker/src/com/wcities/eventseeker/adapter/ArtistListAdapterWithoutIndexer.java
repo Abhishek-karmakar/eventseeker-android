@@ -9,7 +9,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
-import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +20,6 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
-import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.wcities.eventseeker.GeneralDialogFragment;
@@ -45,16 +43,16 @@ import com.wcities.eventseeker.viewdata.SharedElement;
 import com.wcities.eventseeker.viewdata.SharedElementPosition;
 
 /**
- * This Adapter is only required for 'FollowingParentFragment'. As, the 'SectionIndexer' is required
- * only for FollowingParentFragment. So, removed implementation for the Recommended and 
- * SelectedArtistCategory Screens. The issue in the indexer was that, the fast scrolling thumb was 
- * getting disappeared in between of scrolling.
+ * This Adapter is required for 'Recommended and SelectedArtistCategory' Screens. As, the 
+ * 'SectionIndexer' is not required for these fragments. So, removed implementation for the 
+ * Recommended and SelectedArtistCategory Screens from MyArtistListAdapter and created this adapter. 
+ * The issue in the indexer was that, the fast scrolling thumb was getting disappeared in between 
+ * of scrolling.
  * @author win2
  */
-public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, ArtistAdapterListener<Void> {
+public class ArtistListAdapterWithoutIndexer extends BaseAdapter implements ArtistAdapterListener<Void> {
 
-	private static final String TAG = MyArtistListAdapter.class.getSimpleName();
-	private static final long DELAY_REMOVE_ARTIST = 500;
+	private static final String TAG = ArtistListAdapterWithoutIndexer.class.getSimpleName();
 	
 	private Context mContext;
 	private BitmapCache bitmapCache;
@@ -63,10 +61,7 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 	private boolean isMoreDataAvailable = true;
 	
 	private List<Artist> artistList;
-	private AsyncTask<Void, Void, List<Artist>> loadMyArtists;
-	
-	private Map<Character, Integer> alphaNumIndexer;
-	private List<Character> indices;
+	private AsyncTask<Void, Void, List<Artist>> loadArtists;
 	
 	private boolean isTablet;
 	
@@ -74,13 +69,12 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 	private DialogBtnClickListener dialogBtnClickListener;
 	private ArtistTrackingListener artistTrackingListener;
 
-	private Handler handler;
-	
     private CustomSharedElementTransitionSource customSharedElementTransitionSource;
 	
-	public MyArtistListAdapter(Context context, List<Artist> artistList, AsyncTask<Void, Void, List<Artist>> loadMyArtists, 
-			Map<Character, Integer> alphaNumIndexer, List<Character> indices, LoadItemsInBackgroundListener mListener, 
-			DialogBtnClickListener dialogBtnClickListener, ArtistTrackingListener artistTrackingListener, 
+	public ArtistListAdapterWithoutIndexer(Context context, List<Artist> artistList, 
+			AsyncTask<Void, Void, List<Artist>> loadArtists, 
+			LoadItemsInBackgroundListener mListener, DialogBtnClickListener 
+			dialogBtnClickListener, ArtistTrackingListener artistTrackingListener, 
 			CustomSharedElementTransitionSource customSharedElementTransitionSource) {
 		if (!(context instanceof ArtistListener)) {
 			throw new ClassCastException(context.toString() + " must implement ArtistListener");
@@ -90,18 +84,13 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 		isTablet = ((EventSeekr)mContext.getApplicationContext()).isTablet();
 		
 		this.artistList = artistList;
-		this.loadMyArtists = loadMyArtists;
-		
-		this.alphaNumIndexer = alphaNumIndexer;
-		this.indices = indices;
+		this.loadArtists = loadArtists;
 		
 		this.mListener = mListener;
 		this.dialogBtnClickListener = dialogBtnClickListener;
 		this.artistTrackingListener = artistTrackingListener;
 		
 		this.customSharedElementTransitionSource = customSharedElementTransitionSource;
-		
-		handler = new Handler();
 	}
 
 	@Override
@@ -126,7 +115,7 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 
 	@Override
 	public void setLoadArtists(AsyncTask<Void, Void, List<Artist>> loadMyArtists) {
-		this.loadMyArtists = loadMyArtists;
+		this.loadArtists = loadMyArtists;
 	}
 
 	@Override
@@ -155,7 +144,7 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 				convertView.setVisibility(View.VISIBLE);
 			}
 
-			if ((loadMyArtists == null || loadMyArtists.getStatus() == Status.FINISHED) && isMoreDataAvailable) {
+			if ((loadArtists == null || loadArtists.getStatus() == Status.FINISHED) && isMoreDataAvailable) {
 				mListener.loadItemsInBackground();
 			}
 
@@ -270,44 +259,5 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 		if (artistTrackingListener != null) {
 			artistTrackingListener.onArtistTracking(mContext, getItem(position));
 		}
-		
-		/**
-		 * Delay is just for the list item removal effect.
-		 */
-		handler.postDelayed(new Runnable() {
-			
-			@Override
-			public void run() {
-				artistList.remove(position);
-				notifyDataSetChanged();		
-			}
-		}, DELAY_REMOVE_ARTIST);
-	}
-	
-	@Override
-	public int getPositionForSection(int sectionIndex) {
-		//Log.d(TAG, "index = " + alphaNumIndexer.get(indices.get(sectionIndex)));
-		if (indices.size() > sectionIndex) {
-			/**
-			 * for some devices it has wrong sectionIndex (out of bounds). To prevent this we 
-			 * have this if clause
-			 * e.g. For Galaxy S3 4.3.1 (with custom OS) it throws ArrayIndexOutOfBoundsException, 
-			 * because though indices size is 1, this function is called with sectionIndex=1.
-			 */
-			return alphaNumIndexer.get(indices.get(sectionIndex));
-			
-		} else {
-			return -1;
-		}
-	}
-
-	@Override
-	public int getSectionForPosition(int position) {
-		return 0;
-	}
-
-	@Override
-	public Object[] getSections() {
-		return indices.toArray();
 	}
 }

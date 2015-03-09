@@ -2,10 +2,7 @@ package com.wcities.eventseeker.asynctask;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.SortedSet;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
@@ -36,21 +33,12 @@ public class LoadArtistsByCategory extends AsyncTask<Void, Void, List<Artist>> {
 	private LoadArtistsListener loadArtistsListener;
 	private Genre genre;
 
-	private SortedSet<Integer> artistIds;
-	
-	private List<Character> indices;
-	private Map<Character, Integer> alphaNumIndexer;
-	
 	public LoadArtistsByCategory(String oauthToken, String wcitiesId, List<Artist> artistList, ArtistAdapterListener<Void> artistAdapterListener,
-			SortedSet<Integer> artistIds, List<Character> indices, 
-			Map<Character, Integer> alphaNumIndexer, LoadArtistsListener loadArtistsListener, Genre genre) {
+			LoadArtistsListener loadArtistsListener, Genre genre) {
 		this.oauthToken = oauthToken;
 		this.wcitiesId = wcitiesId;
 		this.artistList = artistList;
 		this.artistAdapterListener = artistAdapterListener;
-		this.artistIds = artistIds;
-		this.indices = indices;
-		this.alphaNumIndexer = alphaNumIndexer;
 		this.loadArtistsListener = loadArtistsListener;
 		this.genre = genre;
 	}
@@ -85,7 +73,8 @@ public class LoadArtistsByCategory extends AsyncTask<Void, Void, List<Artist>> {
 	@Override
 	protected void onPostExecute(List<Artist> tmpArtists) {
 		if (!tmpArtists.isEmpty()) {
-			handleLoadedArtists(tmpArtists);
+			artistList.addAll(artistList.size() - 1, tmpArtists);		
+			artistAdapterListener.setArtistsAlreadyRequested(artistList.size() - 1);
 
 			if (tmpArtists.size() < ARTISTS_LIMIT) {
 				artistAdapterListener.setMoreDataAvailable(false);
@@ -93,10 +82,16 @@ public class LoadArtistsByCategory extends AsyncTask<Void, Void, List<Artist>> {
 			}
 			
 		} else {
-			handleLoadedArtists(tmpArtists);
+			/**
+			 * 05-01-2015:
+			 * NOTE: Commented below line as not required in modified implementation
+			 * 
+			 * handleLoadedArtists(tmpArtists);
+			 **/
 			
 			artistAdapterListener.setMoreDataAvailable(false);
 			artistList.remove(artistList.size() - 1);
+			
 			if (artistList.isEmpty() && loadArtistsListener != null) {
 				loadArtistsListener.showNoArtistFound();
 			}
@@ -107,41 +102,4 @@ public class LoadArtistsByCategory extends AsyncTask<Void, Void, List<Artist>> {
 			((AsyncTaskListener<Void>) loadArtistsListener).onTaskCompleted();
 		}
 	}
-	
-	private void handleLoadedArtists(List<Artist> tmpArtists) {
-		//Log.d(TAG, "handleLoadedArtists()");
-		int prevArtistListSize = artistList.size();
-		
-		artistList.addAll(artistList.size() - 1, tmpArtists);
-		artistAdapterListener.setArtistsAlreadyRequested(artistAdapterListener.getArtistsAlreadyRequested() 
-				+ tmpArtists.size());
-		
-		int i = 0;
-		for (Iterator<Artist> iterator = tmpArtists.iterator(); iterator.hasNext();) {
-			Artist artist = iterator.next();
-			if (!artistIds.contains(artist.getId())) {
-				//Log.d(TAG, "handleLoadedArtists() add - " + artist.getId());
-				artistIds.add(artist.getId());
-				
-			} else {
-				//Log.d(TAG, "handleLoadedArtists() remove - " + artist.getId());
-				artistList.remove(artist);
-				continue;
-			}
-			
-			if (indices != null) {
-				char key = artist.getName().charAt(0);
-				if (!indices.contains(key)) {
-					indices.add(key);
-					/**
-					 * subtract 1 from prevArtistListSize to compensate for progressbar null item 
-					 * counted in prevArtistListSize
-					 */
-					alphaNumIndexer.put(key, prevArtistListSize - 1 + i);
-				}
-				i++;
-			}
-		}
-	}
-	
 }
