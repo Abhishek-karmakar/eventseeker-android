@@ -4,26 +4,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
     
-    <ImageView android:id="@+id/imgPrev"
-        android:layout_width="@dimen/img_prev_w_discover_tab"
-        android:layout_height="@dimen/rv_categories_ht_discover_tab"
-        android:src="@drawable/less"
-        android:scaleType="centerInside" />
+    <RelativeLayout android:id="@+id/rltLytCatTitles"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rlt_lyt_cat_titles_ht_discover_tab"
+        android:background="@android:color/white"
+        android:elevation="@dimen/rlt_lyt_cat_titles_elevation_discover_tab" >
     
-    <ImageView android:id="@+id/imgNext"
-        android:layout_width="@dimen/img_next_w_discover_tab"
-        android:layout_height="@dimen/rv_categories_ht_discover_tab"
-        android:src="@drawable/more"
-        android:scaleType="centerInside"
-        android:layout_alignParentRight="true" />
+	    <ImageView android:id="@+id/imgPrev"
+	        android:layout_width="@dimen/img_prev_w_discover_tab"
+	        android:layout_height="match_parent"
+	        android:src="@drawable/less"
+	        android:scaleType="centerInside" />
     
-    <android.support.v7.widget.RecyclerView
-	    android:id="@+id/recyclerVCategories"
-	    android:layout_width="match_parent"
-	    android:layout_height="@dimen/rv_categories_ht_discover_tab"
-	    android:layout_toRightOf="@id/imgPrev"
-	    android:layout_toLeftOf="@id/imgNext"
-	    android:scrollbars="none"
-	    android:elevation="@dimen/rv_categories_elevation_discover_tab" />
+	    <ImageView android:id="@+id/imgNext"
+	        android:layout_width="@dimen/img_next_w_discover_tab"
+	        android:layout_height="match_parent"
+	        android:src="@drawable/more"
+	        android:scaleType="centerInside"
+	        android:layout_alignParentRight="true" />
+    
+	    <android.support.v7.widget.RecyclerView
+		    android:id="@+id/recyclerVCategories"
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent"
+		    android:layout_toRightOf="@id/imgPrev"
+		    android:layout_toLeftOf="@id/imgNext"
+		    android:scrollbars="none" />
+    
+    </RelativeLayout>
 
 </RelativeLayout>

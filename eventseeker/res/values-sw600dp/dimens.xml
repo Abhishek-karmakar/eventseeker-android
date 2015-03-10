@@ -407,10 +407,10 @@
     <dimen name="action_bar_ht">64dp</dimen>
     
     <!-- fragment_discover_tab.xml -->
-    <dimen name="img_prev_w_discover_tab">60dp</dimen>
+    <dimen name="img_prev_w_discover_tab">70dp</dimen>
     <dimen name="img_next_w_discover_tab">@dimen/img_prev_w_discover_tab</dimen>
-    <dimen name="rv_categories_ht_discover_tab">60dp</dimen>
-    <dimen name="rv_categories_elevation_discover_tab">4dp</dimen>
+    <dimen name="rlt_lyt_cat_titles_ht_discover_tab">60dp</dimen>
+    <dimen name="rlt_lyt_cat_titles_elevation_discover_tab">4dp</dimen>
     
     <!-- cat_title_tab.xml -->
     <dimen name="txt_title_pad_l_r_cat_title_tab">15dp</dimen>

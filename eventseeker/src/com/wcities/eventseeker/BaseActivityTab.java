@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -289,6 +290,10 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		} else {
 			mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 		}
+	}
+	
+	protected void removeToolbarElevation() {
+		ViewCompat.setElevation(toolbar, 0);
 	}
 	
 	protected void addFragment(int containerViewId, Fragment fragment, String tag, boolean addToBackStack) {
