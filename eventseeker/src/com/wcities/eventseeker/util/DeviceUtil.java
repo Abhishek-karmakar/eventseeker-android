@@ -32,7 +32,7 @@ import com.wcities.eventseeker.jsonparser.IPToCityApiJSONParser;
 
 public class DeviceUtil {
 
-	private static final String TAG = DeviceUtil.class.getName();
+	private static final String TAG = DeviceUtil.class.getSimpleName();
 	
 	private static final double SAN_FRANCISCO_LAT = 37.7749295;
 	private static final double SAN_FRANCISCO_LON = -122.4194155;

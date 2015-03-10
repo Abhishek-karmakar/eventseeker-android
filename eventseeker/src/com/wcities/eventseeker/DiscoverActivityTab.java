@@ -1,6 +1,11 @@
 package com.wcities.eventseeker;
 
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
+import android.view.Window;
 
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.util.FragmentUtil;

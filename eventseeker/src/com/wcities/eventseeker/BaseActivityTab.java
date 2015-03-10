@@ -51,7 +51,7 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+		//Log.d(TAG, "onCreate()");
 		// check whether the current device is Tablet and if it is in Landscape mode
 		EventSeekr eventSeekr = ((EventSeekr) getApplication());
 		eventSeekr.checkAndSetIfInLandscapeMode();
@@ -235,6 +235,7 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 	}
 	
 	protected void setCommonUI() {
+		//Log.d(TAG, "setCommonUI()");
 		toolbar = (Toolbar) findViewById(R.id.toolbarForActionbar);
 	    setSupportActionBar(toolbar);
 	    

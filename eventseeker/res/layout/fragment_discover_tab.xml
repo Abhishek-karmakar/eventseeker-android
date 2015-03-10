@@ -4,10 +4,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
     
+    <ImageView android:id="@+id/imgPrev"
+        android:layout_width="@dimen/img_prev_w_discover_tab"
+        android:layout_height="@dimen/rv_categories_ht_discover_tab"
+        android:src="@drawable/less"
+        android:scaleType="centerInside" />
+    
+    <ImageView android:id="@+id/imgNext"
+        android:layout_width="@dimen/img_next_w_discover_tab"
+        android:layout_height="@dimen/rv_categories_ht_discover_tab"
+        android:src="@drawable/more"
+        android:scaleType="centerInside"
+        android:layout_alignParentRight="true" />
+    
     <android.support.v7.widget.RecyclerView
 	    android:id="@+id/recyclerVCategories"
 	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:scrollbars="none" />
+	    android:layout_height="@dimen/rv_categories_ht_discover_tab"
+	    android:layout_toRightOf="@id/imgPrev"
+	    android:layout_toLeftOf="@id/imgNext"
+	    android:scrollbars="none"
+	    android:elevation="@dimen/rv_categories_elevation_discover_tab" />
 
 </RelativeLayout>

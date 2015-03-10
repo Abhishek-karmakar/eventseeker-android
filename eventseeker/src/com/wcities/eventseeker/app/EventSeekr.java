@@ -49,7 +49,7 @@ import com.wcities.eventseeker.util.FileUtil;
 
 public class EventSeekr extends Application {
 
-	private static final String TAG = EventSeekr.class.getName();
+	private static final String TAG = EventSeekr.class.getSimpleName();
 	
 	/**
 	 * This will hold the value of Device specific Locale. Reason to create :- after setting the default locale 
@@ -339,11 +339,12 @@ public class EventSeekr extends Application {
 		return isTablet;
 	}
 
-	public boolean isIs7InchTablet() {
+	public boolean is7InchTablet() {
 		return is7InchTablet;
 	}
 
 	public void checkAndSetIfInLandscapeMode() {
+		//Log.d(TAG, "checkAndSetIfInLandscapeMode()");
 		DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
 		int width = displayMetrics.widthPixels;
 		int height = displayMetrics.heightPixels;
@@ -360,6 +361,10 @@ public class EventSeekr extends Application {
 
 	public boolean is7InchTabletAndInPortraitMode() {
 		return (is7InchTablet && !isInLandscapeMode);
+	}
+	
+	public boolean is10InchTabletAndInPortraitMode() {
+		return (isTablet && !is7InchTablet && !isInLandscapeMode);
 	}
 
 	public void unregisterListener(EventSeekrListener eventSeekrListener) {

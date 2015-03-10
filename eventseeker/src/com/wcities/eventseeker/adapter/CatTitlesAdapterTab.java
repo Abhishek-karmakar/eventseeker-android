@@ -4,7 +4,6 @@ import java.util.List;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +49,6 @@ public class CatTitlesAdapterTab extends Adapter<CatTitlesAdapterTab.ViewHolder>
 
 	@Override
 	public void onBindViewHolder(CatTitlesAdapterTab.ViewHolder holder, int pos) {
-		//Log.d(TAG, "onBindViewHolder(), pos = " + pos);
 		holder.txtTitle.setText(evtCategories.get(pos % AppConstants.TOTAL_CATEGORIES).getName());
 	}
 }

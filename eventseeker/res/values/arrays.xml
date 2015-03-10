@@ -13,17 +13,6 @@
 	  	<item>@string/navigation_drawer_item_logout</item>
 	</string-array>
 
-<!--     <array name="navigation_drawer_item_icons">
-        <item>@null</item>
-	  	<item>@drawable/selector_discover</item>
-	  	<item>@drawable/selector_myevents</item>
-	  	<item>@drawable/selector_favorites</item>
-	  	<item>@drawable/selector_latestnews</item>
-	  	<item>@drawable/selector_friendsactivity</item>
-	  	<item>@null</item>
-        <item>@drawable/selector_settings</item>
-        <item>@drawable/selector_logout</item>
-    </array> -->
     <array name="navigation_drawer_item_icons">
         <!-- <item>@null</item> -->
 	  	<item>@drawable/discover</item>
@@ -106,7 +95,6 @@
 	  	<item>@drawable/slctr_btn_side_nav_change_city</item>
 	  	<item>@drawable/slctr_btn_side_nav_search</item>
 	  	<item>@drawable/slctr_btn_side_nav_favorites</item>
-	  	<!-- <item>@drawable/slctr_btn_side_nav_settings</item> -->
     </array>
     <!-- ends for bosch -->
     

@@ -1,32 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@android:color/transparent"
-    android:gravity="bottom" >
+    android:layout_height="match_parent" >
     
-    <LinearLayout android:id="@+id/lnrLytRoot"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:orientation="vertical"
-	    android:gravity="center" >
-	    
-	    <TextView android:id="@+id/txtTitle"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:textSize="@dimen/txt_title_txt_size_cat_titles"
-	        android:text="AAAAAAAAA"
-	        android:lines="2"
-	        android:maxLines="2"
-	        android:gravity="center" />
-	    
-	    <View android:id="@+id/vHorLine"
-	        android:layout_width="match_parent"
-	        android:layout_height="@dimen/v_hor_line_ht_cat_titles"
-	        android:background="@android:color/white"
-	        android:layout_marginBottom="@dimen/v_hor_line_margin_b_cat_titles"
-	        android:visibility="invisible" />
-	    
-	</LinearLayout>
+    <TextView android:id="@+id/txtTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/txt_title_txt_size_cat_title_tab"
+        android:text="AAAAAAAAA"
+        android:lines="1"
+        android:maxLines="1"
+        android:layout_centerInParent="true"
+        android:paddingLeft="@dimen/txt_title_pad_l_r_cat_title_tab"
+        android:paddingRight="@dimen/txt_title_pad_l_r_cat_title_tab" />
+    
+    <View android:id="@+id/vHorLine"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/v_hor_line_ht_cat_titles"
+        android:background="@color/colorPrimary"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@id/txtTitle"
+        android:layout_alignRight="@id/txtTitle" />
 	
-</LinearLayout>
+</RelativeLayout>

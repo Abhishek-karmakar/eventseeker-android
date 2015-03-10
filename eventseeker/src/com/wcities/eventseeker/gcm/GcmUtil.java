@@ -19,7 +19,7 @@ import com.wcities.eventseeker.constants.AppConstants;
 
 public class GcmUtil {
 
-	private static final String TAG = GcmUtil.class.getName();
+	private static final String TAG = GcmUtil.class.getSimpleName();
 	
 	private EventSeekr eventSeekr;
 	private GoogleCloudMessaging gcm;
