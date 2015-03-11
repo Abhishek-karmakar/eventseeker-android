@@ -411,6 +411,10 @@
     <dimen name="img_next_w_discover_tab">@dimen/img_prev_w_discover_tab</dimen>
     <dimen name="rlt_lyt_cat_titles_ht_discover_tab">60dp</dimen>
     <dimen name="rlt_lyt_cat_titles_elevation_discover_tab">4dp</dimen>
+    <dimen name="rv_events_padding_discover_tab">@dimen/rv_item_offset_discover_tab</dimen>
+    
+    <!--  DiscoverFragmentTab.java -->
+    <dimen name="rv_item_offset_discover_tab">3dp</dimen>
     
     <!-- cat_title_tab.xml -->
     <dimen name="txt_title_pad_l_r_cat_title_tab">15dp</dimen>

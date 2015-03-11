@@ -32,5 +32,14 @@
 		    android:scrollbars="none" />
     
     </RelativeLayout>
+    
+    <android.support.v7.widget.RecyclerView
+	    android:id="@+id/recyclerVEvents"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_below="@id/rltLytCatTitles"
+	    android:scrollbars="none"
+	    android:background="@color/bg_rv_events_discover_tab"
+	    android:padding="@dimen/rv_events_padding_discover_tab" />
 
 </RelativeLayout>

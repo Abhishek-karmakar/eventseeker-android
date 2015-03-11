@@ -50,20 +50,6 @@ public class FragmentUtil {
 		}
 	}
 	
-	public static Activity getActivity(android.app.Fragment fragment) {
-		while (fragment.getParentFragment() != null) {
-			fragment = fragment.getParentFragment();
-		}
-		
-		if (fragment instanceof ActivityImmediateFragmentLoadableFromBackStack) {
-			//Log.d(TAG, "ActivityImmediateFragmentLoadableFromBackStack for " + fragment.getTag());
-			return ((ActivityImmediateFragmentLoadableFromBackStack)fragment).getActivityRef();
-			
-		} else {
-			return fragment.getActivity();
-		}
-	}
-	
 	public static Resources getResources(Fragment fragment) {
 		return getActivity(fragment).getResources();
 	}
