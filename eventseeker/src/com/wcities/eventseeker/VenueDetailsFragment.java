@@ -64,7 +64,6 @@ import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
-import com.wcities.eventseeker.asynctask.AsyncLoadImg.AsyncLoadImageListener;
 import com.wcities.eventseeker.asynctask.LoadEvents;
 import com.wcities.eventseeker.asynctask.LoadVenueDetails;
 import com.wcities.eventseeker.asynctask.LoadVenueDetails.OnVenueUpdatedListener;
@@ -99,7 +98,7 @@ import com.wcities.eventseeker.viewdata.SharedElementPosition;
 
 public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackStack implements DrawerListener, 
 		CustomSharedElementTransitionDestination, OnVenueUpdatedListener, LoadItemsInBackgroundListener, 
-		CustomSharedElementTransitionSource, AsyncLoadImageListener, AsyncTaskListener<Void>, FragmentHavingFragmentInRecyclerView {
+		CustomSharedElementTransitionSource, AsyncTaskListener<Void>, FragmentHavingFragmentInRecyclerView {
 
 	private static final String TAG = VenueDetailsFragment.class.getSimpleName();
 	private static final String FRAGMENT_TAG_SHARE_VIA_DIALOG = ShareViaDialogFragment.class.getSimpleName();
@@ -476,7 +475,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		    } else {
 		    	imgVenue.setImageBitmap(null);
 		    	AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-		        asyncLoadImg.loadImg(imgVenue, ImgResolution.LOW, venue, this);
+		        asyncLoadImg.loadImg(imgVenue, ImgResolution.LOW, venue, null);
 		    }
 		}
 	}
@@ -1729,15 +1728,6 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	@Override
 	public void call(Session session, SessionState state, Exception exception) {
 		venueRVAdapter.call(session, state, exception);
-	}
-
-	@Override
-	public void onImageLoaded() {
-	}
-
-	@Override
-	public void onImageCouldNotBeLoaded() {
-		// TODO Auto-generated method stub
 	}
 
 	@Override

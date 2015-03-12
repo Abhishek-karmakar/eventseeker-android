@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.adapter.RVCatEventsAdapterTab.ViewHolder;
@@ -20,9 +21,12 @@ import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
+import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
+import com.wcities.eventseeker.util.ConversionUtil;
 
 public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWiseEventParentAdapterListener {
 
@@ -50,10 +54,14 @@ public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWi
 	static class ViewHolder extends RecyclerView.ViewHolder {
 		
 		private ImageView imgEvt;
+		private TextView txtEvtTitle, txtEvtLoc, txtEvtTime;
 			
 		public ViewHolder(View itemView) {
 			super(itemView);
 			imgEvt = (ImageView) itemView.findViewById(R.id.imgEvt);
+			txtEvtTitle = (TextView) itemView.findViewById(R.id.txtEvtTitle);
+			txtEvtLoc = (TextView) itemView.findViewById(R.id.txtEvtLoc);
+			txtEvtTime = (TextView) itemView.findViewById(R.id.txtEvtTime);
 		}
 	}
 
@@ -68,7 +76,7 @@ public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWi
 
 	@Override
 	public int getItemCount() {
-		Log.d(TAG, "getItemCount() - " + eventList.size());
+		//Log.d(TAG, "getItemCount() - " + eventList.size());
 		return eventList.size();
 	}
 	
@@ -122,6 +130,17 @@ public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWi
 			
 		} else {
 			//Log.d(TAG, "else");
+			holder.txtEvtTitle.setText(event.getName());
+			
+			if (event.getSchedule() != null) {
+				Schedule schedule = event.getSchedule();
+				Date date = schedule.getDates().get(0);
+				holder.txtEvtTime.setText(ConversionUtil.getDateTime(date.getStartDate(), date.isStartTimeAvailable()));
+				
+				String venueName = (schedule.getVenue() != null) ? schedule.getVenue().getName() : "";
+				holder.txtEvtLoc.setText(venueName);
+			}
+
 			BitmapCacheable bitmapCacheable = null;
 			/**
 			 * added this try catch as if event will not have valid url and schedule object then
@@ -137,6 +156,8 @@ public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWi
 			
 			if (bitmapCacheable != null) {
 				String key = bitmapCacheable.getKey(ImgResolution.LOW);
+		    	holder.imgEvt.setTag(key);
+
 				Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
 				if (bitmap != null) {
 			        holder.imgEvt.setImageBitmap(bitmap);

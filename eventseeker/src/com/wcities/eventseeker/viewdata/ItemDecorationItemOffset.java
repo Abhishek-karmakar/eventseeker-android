@@ -7,17 +7,18 @@ import android.view.View;
 
 public class ItemDecorationItemOffset extends ItemDecoration {
 
-	private int offset;
+	private int lrOffset, tbOffset;
 
-    public ItemDecorationItemOffset(int offset) {
-        this.offset = offset;
+    public ItemDecorationItemOffset(int lrOffset, int tbOffset) {
+        this.lrOffset = lrOffset;
+        this.tbOffset = tbOffset;
     }
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-        outRect.left = offset;
-        outRect.right = offset;
-        outRect.bottom = offset;
-        outRect.top = offset;
+        outRect.left = lrOffset;
+        outRect.right = lrOffset;
+        outRect.bottom = tbOffset;
+        outRect.top = tbOffset;
     }
 }

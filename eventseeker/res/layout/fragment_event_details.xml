@@ -28,7 +28,7 @@
 		        android:paddingLeft="@dimen/rlt_lyt_txt_evt_title_pad_l_event_details"
 		    	android:paddingBottom="@dimen/rlt_lyt_txt_evt_title_pad_b_event_details"
 		    	android:paddingTop="@dimen/rlt_lyt_txt_evt_title_pad_t_event_details"
-		    	android:background="@drawable/bg_rlt_lyt_txt_evt_title_event_details" >
+		    	android:background="@drawable/bg_lnr_gradient_top_transparent_btm_black" >
 		    
 		    	<TextView android:id="@+id/txtEvtTitle"
 		    	    android:layout_width="match_parent"

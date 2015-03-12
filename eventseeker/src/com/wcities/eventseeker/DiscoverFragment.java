@@ -552,7 +552,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 			
 			ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
 			ma.setToolbarBg(Color.TRANSPARENT);
-			vPagerCatTitles.setBackgroundResource(R.drawable.bg_v_pager_cat_titles);
+			vPagerCatTitles.setBackgroundResource(R.drawable.bg_lnr_gradient_top_transparent_btm_black);
 			ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
 			
 			title = "";

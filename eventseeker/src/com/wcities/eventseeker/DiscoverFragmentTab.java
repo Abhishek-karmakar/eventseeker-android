@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -23,7 +24,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 
-import com.wcities.eventseeker.adapter.CatTitlesAdapterTab;
+import com.wcities.eventseeker.adapter.RVCatTitlesAdapterTab;
 import com.wcities.eventseeker.adapter.RVCatEventsAdapterTab;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -59,7 +60,7 @@ public class DiscoverFragmentTab extends Fragment implements OnClickListener, Lo
 	private RecyclerView recyclerVCategories, recyclerVEvents;
 	private LinearLayoutManager layoutManager;
 	
-	private CatTitlesAdapterTab catTitlesAdapterTab;
+	private RVCatTitlesAdapterTab catTitlesAdapterTab;
 	private RVCatEventsAdapterTab rvCatEventsAdapterTab;
 	private boolean isScrollStateIdle;
 	
@@ -81,7 +82,7 @@ public class DiscoverFragmentTab extends Fragment implements OnClickListener, Lo
 				recyclerVCategories.getViewTreeObserver().removeGlobalOnLayoutListener(this);
 			}
         	
-        	centerPosition(CatTitlesAdapterTab.FIRST_PAGE, true);
+        	centerPosition(RVCatTitlesAdapterTab.FIRST_PAGE, true);
         }
     };
     
@@ -169,7 +170,7 @@ public class DiscoverFragmentTab extends Fragment implements OnClickListener, Lo
 		
 		if (evtCategories == null) {
 			buildEvtCategories();
-			catTitlesAdapterTab = new CatTitlesAdapterTab(evtCategories, this);
+			catTitlesAdapterTab = new RVCatTitlesAdapterTab(evtCategories, this);
 			
 			recyclerVCategories.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListenerCatTitlesInit);
 			
@@ -188,8 +189,9 @@ public class DiscoverFragmentTab extends Fragment implements OnClickListener, Lo
 		
 		recyclerVCategories.setAdapter(catTitlesAdapterTab);
 		
-		recyclerVEvents.addItemDecoration(new ItemDecorationItemOffset(FragmentUtil.getResources(this)
-				.getDimensionPixelSize(R.dimen.rv_item_offset_discover_tab)));
+		Resources res = FragmentUtil.getResources(this);
+		recyclerVEvents.addItemDecoration(new ItemDecorationItemOffset(res.getDimensionPixelSize(
+				R.dimen.rv_item_l_r_offset_discover_tab), res.getDimensionPixelSize(R.dimen.rv_item_t_b_offset_discover_tab)));
 		recyclerVEvents.setAdapter(rvCatEventsAdapterTab);
 	}
 	

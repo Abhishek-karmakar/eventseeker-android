@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutManager;
@@ -332,21 +333,25 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 				}
 				
 			} else {
-				/*Log.i(TAG, "onProgressUpdate() else, pos="+imgDetails.pos + ", lastPos=" + imgDetails.adapterView.getLastVisiblePosition()
-						+ ", firstPos=" + imgDetails.adapterView.getFirstVisiblePosition());*/
+				//Log.i(TAG, "onProgressUpdate() else");
 				if (imgDetails.recyclerView != null) {
 					LayoutManager lm = imgDetails.recyclerView.getLayoutManager();
 					
-					if (lm instanceof LinearLayoutManager) {
+					if (lm instanceof GridLayoutManager) {
+						GridLayoutManager glm = (GridLayoutManager) lm;
+						if (imgDetails.pos <= glm.findLastVisibleItemPosition() && 
+								imgDetails.pos >= glm.findFirstVisibleItemPosition() &&
+								imgDetails.key.equals(imgDetails.imageView.getTag())) {
+							imgDetails.imageView.setImageBitmap(imgDetails.bitmap);
+							//Log.i(TAG, "onProgressUpdate() bitmap set, " + imgDetails.imageView.getTag() + ", " + imgDetails.key);
+						}
+						
+					} else if (lm instanceof LinearLayoutManager) {
 						LinearLayoutManager llm = (LinearLayoutManager) lm;
 						if (imgDetails.pos <= llm.findLastVisibleItemPosition() && 
 								imgDetails.pos >= llm.findFirstVisibleItemPosition()) {
 							imgDetails.imageView.setImageBitmap(imgDetails.bitmap);
 							//Log.i(TAG, "onProgressUpdate() bitmap set");
-						}
-						
-						if (imgDetails.listener != null) {
-							imgDetails.listener.onImageLoaded();
 						}
 					}
 					

@@ -23,7 +23,7 @@
 	    android:layout_height="@dimen/v_pager_cat_titles_ht_discover"
 	    android:layout_marginTop="@dimen/v_pager_cat_titles_margin_t_discover"
 	    android:layout_gravity="top"
-	    android:background="@drawable/bg_v_pager_cat_titles" />
+	    android:background="@drawable/bg_lnr_gradient_top_transparent_btm_black" />
 
 	<View
 	    android:id="@+id/vNoContentBgImg"

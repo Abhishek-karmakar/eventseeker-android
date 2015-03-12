@@ -3,17 +3,86 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cvRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white" >
+    android:background="@android:color/white"
+    card_view:cardCornerRadius="@dimen/cv_root_corner_rad_rv_item_event_tab"
+    card_view:cardElevation="@dimen/cv_root_elevation_rv_item_event_tab" >
     
-    <!-- centerCrop scaletype is used to maintain aspect ratio and fill entire imageview width & height -->
-    <com.wcities.eventseeker.custom.view.ResizableImageView 
-        android:id="@+id/imgEvt"
+    <RelativeLayout android:id="@+id/rltLytContainer"
         android:layout_width="match_parent"
-    	android:layout_height="wrap_content"
-    	android:contentDescription="event image"
-    	app:compressAsPerWidth="true"
-    	android:scaleType="centerCrop" />
-
+        android:layout_height="wrap_content" >
+    
+	    <!-- centerCrop scaletype is used to maintain aspect ratio and fill entire imageview width & height -->
+	    <com.wcities.eventseeker.custom.view.ResizableImageView 
+	        android:id="@+id/imgEvt"
+	        android:layout_width="match_parent"
+	    	android:layout_height="wrap_content"
+	    	android:contentDescription="event image"
+	    	app:compressAsPerWidth="true"
+	    	android:scaleType="centerCrop" />
+	    
+	    <RelativeLayout android:id="@+id/rltLytTxtEvtTitle"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignBottom="@id/imgEvt"
+	        android:paddingLeft="@dimen/rlt_lyt_txt_evt_title_pad_l_rv_item_event_tab"
+	        android:paddingRight="@dimen/rlt_lyt_txt_evt_title_pad_r_rv_item_event_tab"
+	    	android:paddingBottom="@dimen/rlt_lyt_txt_evt_title_pad_b_rv_item_event_tab"
+	    	android:paddingTop="@dimen/rlt_lyt_txt_evt_title_pad_t_rv_item_event_tab"
+	    	android:background="@drawable/bg_lnr_gradient_top_transparent_btm_black" >
+	    
+	    	<TextView android:id="@+id/txtEvtTitle"
+	    	    android:layout_width="match_parent"
+	    	    android:layout_height="wrap_content"
+	    	    android:textColor="@android:color/white"
+	    	    android:textSize="@dimen/txt_evt_title_txt_size_rv_item_event_tab"
+	    	    android:gravity="center_vertical"
+	    	    android:maxLines="2"
+	    	    android:ellipsize="end" />
+	    	
+	    </RelativeLayout>
+	    
+	    <ImageView android:id="@+id/imgHandle"
+            android:layout_width="@dimen/img_handle_w_rv_item_event_tab"
+            android:layout_height="wrap_content"
+			android:layout_alignParentRight="true"
+            android:contentDescription="handle image"
+            android:src="@drawable/ic_more_slider"
+            android:scaleType="centerInside"
+            android:layout_alignTop="@id/txtEvtLoc"
+            android:layout_alignBottom="@id/txtEvtTime" />
+	    
+	    <TextView android:id="@+id/txtEvtLoc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imgEvt"
+            android:layout_toLeftOf="@id/imgHandle"
+            android:drawableLeft="@drawable/ic_event_location"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="@dimen/txt_evt_details_margin_l_rv_item_event_tab"
+            android:layout_marginRight="@dimen/txt_evt_details_margin_r_rv_item_event_tab"
+            android:paddingTop="@dimen/txt_evt_loc_pad_t_rv_item_event_tab"
+            android:drawablePadding="@dimen/txt_evt_details_drawable_pad_rv_item_event_tab"
+            android:textSize="@dimen/txt_evt_details_txt_size_rv_item_event_tab"
+            android:lines="2"
+            android:ellipsize="end" />
+    
+	    <TextView android:id="@+id/txtEvtTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtEvtLoc"
+            android:layout_toLeftOf="@id/imgHandle"
+            android:drawableLeft="@drawable/ic_event_time"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="@dimen/txt_evt_details_margin_l_rv_item_event_tab"
+            android:layout_marginRight="@dimen/txt_evt_details_margin_r_rv_item_event_tab"
+            android:layout_marginTop="@dimen/txt_evt_time_margin_t_rv_item_event_tab"
+            android:drawablePadding="@dimen/txt_evt_details_drawable_pad_rv_item_event_tab"
+            android:textSize="@dimen/txt_evt_details_txt_size_rv_item_event_tab"
+            android:paddingBottom="@dimen/txt_evt_time_pad_b_rv_item_event_tab" />
+	    
+	</RelativeLayout>
+	
 </android.support.v7.widget.CardView>
