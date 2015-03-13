@@ -81,7 +81,8 @@
             android:layout_marginTop="@dimen/txt_evt_time_margin_t_rv_item_event_tab"
             android:drawablePadding="@dimen/txt_evt_details_drawable_pad_rv_item_event_tab"
             android:textSize="@dimen/txt_evt_details_txt_size_rv_item_event_tab"
-            android:paddingBottom="@dimen/txt_evt_time_pad_b_rv_item_event_tab" />
+            android:paddingBottom="@dimen/txt_evt_time_pad_b_rv_item_event_tab"
+            android:lines="@integer/txt_evt_time_lines_rv_item_event_tab" />
 	    
 	</RelativeLayout>
 	

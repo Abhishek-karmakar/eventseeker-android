@@ -182,6 +182,7 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 				return true;
 				
 			} else {
+				//Log.d(TAG, "super.onKeyDown()");
 				return super.onKeyDown(keyCode, event);
 			}
 		}

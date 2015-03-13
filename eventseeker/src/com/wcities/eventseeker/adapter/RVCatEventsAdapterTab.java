@@ -2,31 +2,46 @@ package com.wcities.eventseeker.adapter;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.AsyncTask.Status;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.wcities.eventseeker.DiscoverActivityTab;
+import com.wcities.eventseeker.DiscoverFragmentTab;
+import com.wcities.eventseeker.EventDetailsActivityTab;
+import com.wcities.eventseeker.LauncherActivityTab;
+import com.wcities.eventseeker.MainActivity;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.adapter.RVCatEventsAdapterTab.ViewHolder;
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
+import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.ConversionUtil;
+import com.wcities.eventseeker.util.FragmentUtil;
 
 public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWiseEventParentAdapterListener {
 
@@ -34,6 +49,7 @@ public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWi
 
 	private static final int INVALID = -1;
 	
+	private DiscoverFragmentTab discoverFragmentTab;
 	private List<Event> eventList;
 	
 	private int eventsAlreadyRequested;
@@ -66,10 +82,11 @@ public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWi
 	}
 
 	public RVCatEventsAdapterTab(List<Event> eventList, AsyncTask<Void, Void, List<Event>> loadDateWiseEvents,
-			LoadItemsInBackgroundListener mListener) {
+			LoadItemsInBackgroundListener mListener, DiscoverFragmentTab discoverFragmentTab) {
 		this.eventList = eventList;
 		this.loadDateWiseEvents = loadDateWiseEvents;
 		this.mListener = mListener;
+		this.discoverFragmentTab = discoverFragmentTab;
 		
 		bitmapCache = BitmapCache.getInstance();
 	}
@@ -117,9 +134,9 @@ public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWi
 	}
 
 	@Override
-	public void onBindViewHolder(ViewHolder holder, int position) {
+	public void onBindViewHolder(final ViewHolder holder, int position) {
 		//Log.d(TAG, "onBindViewHolder() - pos = " + position);
-		Event event = eventList.get(position);
+		final Event event = eventList.get(position);
 		if (event == null) {
 			// progress indicator
 			if ((loadDateWiseEvents == null || loadDateWiseEvents.getStatus() == Status.FINISHED) && 
@@ -156,6 +173,7 @@ public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWi
 			
 			if (bitmapCacheable != null) {
 				String key = bitmapCacheable.getKey(ImgResolution.LOW);
+				// set tag to compare it in AsyncLoadImg before setting bitmap to imageview
 		    	holder.imgEvt.setTag(key);
 
 				Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
@@ -168,6 +186,25 @@ public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWi
 			        asyncLoadImg.loadImg(holder.imgEvt, ImgResolution.LOW, recyclerView, position, bitmapCacheable);
 			    }
 			}
+			
+			ViewCompat.setTransitionName(holder.imgEvt, "imageTransition" + position);
+			
+			holder.itemView.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Activity activity = FragmentUtil.getActivity(discoverFragmentTab);
+					Intent intent = new Intent(FragmentUtil.getApplication(discoverFragmentTab), 
+							EventDetailsActivityTab.class);
+					intent.putExtra(BundleKeys.EVENT, event);
+					intent.putExtra("SharedName", ViewCompat.getTransitionName(holder.imgEvt));
+					//FragmentUtil.getActivity(discoverFragmentTab).startActivity(intent);
+					
+					ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, 
+							Pair.create((View)holder.imgEvt, ViewCompat.getTransitionName(holder.imgEvt)));
+                    ActivityCompat.startActivity(activity, intent, options.toBundle());
+				}
+			});
 		}
 	}
 	

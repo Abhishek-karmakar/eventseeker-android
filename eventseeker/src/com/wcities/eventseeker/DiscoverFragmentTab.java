@@ -81,7 +81,7 @@ public class DiscoverFragmentTab extends Fragment implements OnClickListener, Lo
 			} else {
 				recyclerVCategories.getViewTreeObserver().removeGlobalOnLayoutListener(this);
 			}
-        	
+        	//Log.d(TAG, "from onGlobalLayoutListenerCatTitlesInit");
         	centerPosition(RVCatTitlesAdapterTab.FIRST_PAGE, true);
         }
     };
@@ -97,7 +97,7 @@ public class DiscoverFragmentTab extends Fragment implements OnClickListener, Lo
 			} else {
 				recyclerVCategories.getViewTreeObserver().removeGlobalOnLayoutListener(this);
 			}
-        	
+        	//Log.d(TAG, "from onGlobalLayoutListenerCatTitles");
         	centerPosition(catTitlesAdapterTab.getSelectedPos(), false);
         }
     };
@@ -181,7 +181,7 @@ public class DiscoverFragmentTab extends Fragment implements OnClickListener, Lo
 			eventList = new ArrayList<Event>();
 			eventList.add(null);
 			
-			rvCatEventsAdapterTab = new RVCatEventsAdapterTab(eventList, null, this);
+			rvCatEventsAdapterTab = new RVCatEventsAdapterTab(eventList, null, this, this);
 
 		} else {
 			recyclerVCategories.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListenerCatTitles);
@@ -240,6 +240,9 @@ public class DiscoverFragmentTab extends Fragment implements OnClickListener, Lo
 			@Override
 			public void run() {
 				int selectedCenteredCategoryPos = updateCenteredPosition();
+				if (selectedCenteredCategoryPos < 0) {
+					return;
+				}
 				
 				/**
 				 * Sometimes it goes on looping continuously with same value for selectedCenteredCategory.
@@ -311,7 +314,12 @@ public class DiscoverFragmentTab extends Fragment implements OnClickListener, Lo
 	private int updateCenteredPosition() {
 		int selectedPos = layoutManager.findFirstVisibleItemPosition() + ((layoutManager.findLastVisibleItemPosition() 
 						- layoutManager.findFirstVisibleItemPosition()) / 2);
-		catTitlesAdapterTab.setSelectedPos(selectedPos);
+		/**
+		 * selectedPos is -1 sometimes when called from onGlobalLayoutListenerCatTitles() ->  centerPosition()
+		 */
+		if (selectedPos < 0) {
+			catTitlesAdapterTab.setSelectedPos(selectedPos);
+		}
 		return selectedPos;
 	}
 	
@@ -359,6 +367,7 @@ public class DiscoverFragmentTab extends Fragment implements OnClickListener, Lo
 	}
 	
 	public void onCatTitleClicked(int pos) {
+		//Log.d(TAG, "onCatTitleClicked - pos = " + pos);
 		centerPosition(pos, true);
 	}
 	
@@ -373,10 +382,12 @@ public class DiscoverFragmentTab extends Fragment implements OnClickListener, Lo
 		switch (v.getId()) {
 		
 		case R.id.imgPrev:
+			//Log.d(TAG, "onClick imgPrev - catTitlesAdapterTab.getSelectedPos() = " + catTitlesAdapterTab.getSelectedPos());
 			centerPosition(catTitlesAdapterTab.getSelectedPos() - 1, true);
 			break;
 			
 		case R.id.imgNext:
+			//Log.d(TAG, "onClick imgNext - catTitlesAdapterTab.getSelectedPos() = " + catTitlesAdapterTab.getSelectedPos());
 			centerPosition(catTitlesAdapterTab.getSelectedPos() + 1, true);
 			break;
 

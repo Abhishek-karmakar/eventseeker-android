@@ -339,6 +339,13 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 					
 					if (lm instanceof GridLayoutManager) {
 						GridLayoutManager glm = (GridLayoutManager) lm;
+						/**
+						 * Added one more check using key & tag, because otherwise with usage of ViewHolder it
+						 * sometimes replaces valid image with new one which user had browsed earlier but which
+						 * is loaded now, since position would be still in visible range but category/event is changed.
+						 * e.g. - On tablet discover screen switch category instantly, it would load latest correct images
+						 * first & then replace these by images for previous category events if we don't add key & tag check. 
+						 */
 						if (imgDetails.pos <= glm.findLastVisibleItemPosition() && 
 								imgDetails.pos >= glm.findFirstVisibleItemPosition() &&
 								imgDetails.key.equals(imgDetails.imageView.getTag())) {
