@@ -38,21 +38,21 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-import com.wcities.eventseeker.ConnectAccountsFragment.ServiceAccount;
+import com.wcities.eventseeker.ConnectAccountsFragmentTab.ServiceAccount;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.SyncArtists;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.constants.Enums.Service;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
-import com.wcities.eventseeker.interfaces.SyncArtistListener;
+import com.wcities.eventseeker.interfaces.SyncArtistListenerTab;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class PandoraFragment extends FragmentLoadableFromBackStack implements OnClickListener, DialogBtnClickListener {
+public class PandoraFragmentTab extends FragmentLoadableFromBackStack implements OnClickListener, DialogBtnClickListener {
 
-	private static final String TAG = PandoraFragment.class.getName();
+	private static final String TAG = PandoraFragmentTab.class.getName();
 	private static final String DIALOG_FRAGMENT_TAG_ERROR = "Error";
 	
 	private EditText edtUserCredential;
@@ -60,7 +60,7 @@ public class PandoraFragment extends FragmentLoadableFromBackStack implements On
 	
 	private ServiceAccount serviceAccount;
 
-	private SyncArtistListener syncArtistListener;
+	private SyncArtistListenerTab syncArtistListener;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -68,7 +68,9 @@ public class PandoraFragment extends FragmentLoadableFromBackStack implements On
 		setRetainInstance(true);
 		serviceAccount = (ServiceAccount) getArguments().getSerializable(BundleKeys.SERVICE_ACCOUNTS);
 
-		syncArtistListener = (SyncArtistListener) getArguments().getSerializable(BundleKeys.SYNC_ARTIST_LISTENER);
+		String tag = getArguments().getString(BundleKeys.SYNC_ARTIST_LISTENER);
+		syncArtistListener = (SyncArtistListenerTab) 
+				((BaseActivityTab) FragmentUtil.getActivity(this)).getFragmentByTag(tag);
 	}
 	
 	@Override
@@ -98,6 +100,11 @@ public class PandoraFragment extends FragmentLoadableFromBackStack implements On
 		
 		return v;
 	}
+
+	@Override
+	public void onResume(int drawerPosition, String actionBarTitle) {
+		super.onResume(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_pandora));
+	}
 	
 	private void searchUserId(String userId) {
 		if (userId == null || userId.length() == 0) {
@@ -122,7 +129,7 @@ public class PandoraFragment extends FragmentLoadableFromBackStack implements On
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			eventSeekr = (EventSeekr) FragmentUtil.getActivity(PandoraFragment.this).getApplicationContext();
+			eventSeekr = (EventSeekr) FragmentUtil.getApplication(PandoraFragmentTab.this);
 		}
 		
 		@Override
@@ -218,13 +225,14 @@ public class PandoraFragment extends FragmentLoadableFromBackStack implements On
 			if (artistNames == null) {
 
 				if (doesErrorExist) {
-					GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(PandoraFragment.this,
+					GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(PandoraFragmentTab.this,
 							"Error", errorMsg, "Ok", null, false);
-					generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(PandoraFragment.this))
+					generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(PandoraFragmentTab.this))
 							.getSupportFragmentManager(), DIALOG_FRAGMENT_TAG_ERROR);
 				}
 				
 				eventSeekr.setSyncCount(Service.Pandora, EventSeekr.UNSYNC_COUNT);
+				
 			} else {
 				apiCallFinished(artistNames, eventSeekr);
 			}
@@ -274,6 +282,6 @@ public class PandoraFragment extends FragmentLoadableFromBackStack implements On
 
 	@Override
 	public String getScreenName() {
-		return ScreenNames.PANDORA_SYNC;
+		return "Pandora Sync Screen";
 	}
 }

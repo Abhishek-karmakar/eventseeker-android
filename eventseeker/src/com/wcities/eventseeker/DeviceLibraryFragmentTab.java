@@ -14,24 +14,25 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.wcities.eventseeker.ConnectAccountsFragment.ServiceAccount;
+import com.wcities.eventseeker.ConnectAccountsFragmentTab.ServiceAccount;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.SyncArtists;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.constants.Enums.Service;
+import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
-import com.wcities.eventseeker.interfaces.SyncArtistListener;
+import com.wcities.eventseeker.interfaces.SyncArtistListenerTab;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class DeviceLibraryFragment extends FragmentLoadableFromBackStack implements OnClickListener {
+public class DeviceLibraryFragmentTab extends FragmentLoadableFromBackStack implements OnClickListener {
 	
-	private static final String TAG = DeviceLibraryFragment.class.getName();
+	private static final String TAG = DeviceLibraryFragmentTab.class.getName();
 	
 	private ServiceAccount serviceAccount;
 
-	private SyncArtistListener syncArtistListener;
+	private SyncArtistListenerTab syncArtistListener;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,9 @@ public class DeviceLibraryFragment extends FragmentLoadableFromBackStack impleme
 		setRetainInstance(true);
 		serviceAccount = (ServiceAccount) getArguments().getSerializable(BundleKeys.SERVICE_ACCOUNTS);
 
-		syncArtistListener = (SyncArtistListener) getArguments().getSerializable(BundleKeys.SYNC_ARTIST_LISTENER);
+		String tag = getArguments().getString(BundleKeys.SYNC_ARTIST_LISTENER);
+		syncArtistListener = (SyncArtistListenerTab) 
+				((BaseActivityTab) FragmentUtil.getActivity(this)).getFragmentByTag(tag);
 	}
 	
 	@Override
@@ -49,6 +52,11 @@ public class DeviceLibraryFragment extends FragmentLoadableFromBackStack impleme
 		return v;
 	}
 	
+	@Override
+	public void onResume() {
+		super.onResume(AppConstants.INVALID_INDEX, 
+				FragmentUtil.getResources(this).getString(R.string.title_device_library));
+	}
 	
 	private void searchDeviceLirbary() {
 		syncArtistListener.onArtistSyncStarted(true);
@@ -75,7 +83,7 @@ public class DeviceLibraryFragment extends FragmentLoadableFromBackStack impleme
 			} catch (Exception e) {
 				e.printStackTrace();
 				
-				EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(DeviceLibraryFragment.this).getApplicationContext();
+				EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(DeviceLibraryFragmentTab.this).getApplicationContext();
 				eventSeekr.setSyncCount(Service.DeviceLibrary, EventSeekr.UNSYNC_COUNT);
 			} 
 			return null;
@@ -87,7 +95,7 @@ public class DeviceLibraryFragment extends FragmentLoadableFromBackStack impleme
 		}
 		
 		private List<String> getDeviceArtists() {
-			ContentResolver contentResolver = FragmentUtil.getActivity(DeviceLibraryFragment.this).getContentResolver();
+			ContentResolver contentResolver = FragmentUtil.getActivity(DeviceLibraryFragmentTab.this).getContentResolver();
 			
 			List<String> artists = new ArrayList<String>();
 

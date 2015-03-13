@@ -57,17 +57,13 @@ public abstract class ListFragmentLoadableFromBackStack extends ListFragment imp
 	
 	public void onResume(int drawerPosition, String actionBarTitle) {
 		super.onResume();
-		
 		Activity activity = FragmentUtil.getActivity(this);
-		
+		/**
+		 * Currently this is been implemented for ConnectAccountsActivity
+		 */
 		if (activity instanceof FragmentLoadedFromBackstackListener) {
-			if (activity instanceof BoschMainActivity) {
-				((FragmentLoadedFromBackstackListener)activity).onFragmentResumed(this, drawerPosition, 
-						actionBarTitle);
-				
-			} else if (activity instanceof MainActivity) {
-				// not yet called for this case ever
-			}
+			((FragmentLoadedFromBackstackListener)activity).onFragmentResumed(this, drawerPosition, 
+				actionBarTitle);
 		}
 	}
 	

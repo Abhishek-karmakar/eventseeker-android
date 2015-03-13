@@ -32,7 +32,7 @@ import android.widget.Toast;
 import com.rdio.android.api.Rdio;
 import com.rdio.android.api.RdioApiCallback;
 import com.rdio.android.api.RdioListener;
-import com.wcities.eventseeker.ConnectAccountsFragment.ServiceAccount;
+import com.wcities.eventseeker.ConnectAccountsFragmentTab.ServiceAccount;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.SyncArtists;
@@ -41,12 +41,12 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.Enums.Service;
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
-import com.wcities.eventseeker.interfaces.SyncArtistListener;
+import com.wcities.eventseeker.interfaces.SyncArtistListenerTab;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class RdioFragment extends FragmentLoadableFromBackStack implements OnClickListener, RdioListener {
+public class RdioFragmentTab extends FragmentLoadableFromBackStack implements OnClickListener, RdioListener {
 
-	private static final String TAG = RdioFragment.class.getName();
+	private static final String TAG = RdioFragmentTab.class.getName();
 	
 	private static final String PREF_ACCESSTOKEN = "prefs.accesstoken";
     private static final String PREF_ACCESSTOKENSECRET = "prefs.accesstokensecret";
@@ -61,7 +61,7 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 	
 	private ServiceAccount serviceAccount;
 
-	private SyncArtistListener syncArtistListener;
+	private SyncArtistListenerTab syncArtistListener;
 	
 	private static Rdio rdio;
 	
@@ -79,8 +79,9 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 		serviceAccount = (ServiceAccount) getArguments().getSerializable(BundleKeys.SERVICE_ACCOUNTS);
 		//Log.d(TAG, "onCreate : SerciveAccount" + serviceAccount);
 
-		syncArtistListener = (SyncArtistListener) getArguments().getSerializable(BundleKeys.SYNC_ARTIST_LISTENER);
-		
+		String tag = getArguments().getString(BundleKeys.SYNC_ARTIST_LISTENER);
+		syncArtistListener = (SyncArtistListenerTab) 
+				((BaseActivityTab) FragmentUtil.getActivity(this)).getFragmentByTag(tag);
 		/**
 		 * this is because when orientation got change, before that syncing might be in progress, so the value of
 		 * 'serviceAccount.isInProgress' will be true. But now if user doesn't sync again and he goes back then then
@@ -136,6 +137,11 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 		edtUserCredential.setOnClickListener(this);
 		
 		return v;
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume(AppConstants.INVALID_INDEX, FragmentUtil.getResources(this).getString(R.string.title_rdio));
 	}
 	
 	@Override
@@ -221,14 +227,14 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 				} catch (Exception e) {
 					//Log.d(TAG, "3");
 
-					Toast toast = Toast.makeText(FragmentUtil.getActivity(RdioFragment.this), 
+					Toast toast = Toast.makeText(FragmentUtil.getActivity(RdioFragmentTab.this), 
 							R.string.user_name_could_not_be_found, Toast.LENGTH_SHORT);
 					if(toast != null) {
 						toast.setGravity(Gravity.CENTER, 0, -100);
 						toast.show();
 					}
 					
-					EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(RdioFragment.this).getApplicationContext();
+					EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(RdioFragmentTab.this).getApplicationContext();
 					eventSeekr.setSyncCount(Service.Rdio, EventSeekr.UNSYNC_COUNT);
 					Log.e(TAG, "Failed to handle JSONObject: " + e.toString());
 				}
@@ -242,14 +248,14 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 			public void onApiFailure(String methodName, Exception e) {
 				//Log.d(TAG, "onApiFailure");
 				
-				Toast toast = Toast.makeText(FragmentUtil.getActivity(RdioFragment.this), R.string.connection_lost, 
+				Toast toast = Toast.makeText(FragmentUtil.getActivity(RdioFragmentTab.this), R.string.connection_lost, 
 						Toast.LENGTH_SHORT);
 				if(toast != null) {
 					toast.setGravity(Gravity.CENTER, 0, -100);
 					toast.show();
 				}
 
-				EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(RdioFragment.this).getApplicationContext();
+				EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(RdioFragmentTab.this).getApplicationContext();
 				eventSeekr.setSyncCount(Service.Rdio, EventSeekr.UNSYNC_COUNT);
 				Log.e(TAG, "Failed to handle JSONObject: ", e);
 				Log.e(TAG, "getHeavyRotation failed. ", e);

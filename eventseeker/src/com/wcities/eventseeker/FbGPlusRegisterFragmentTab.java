@@ -191,7 +191,7 @@ public abstract class FbGPlusRegisterFragmentTab extends Fragment implements Con
         	bundle.putString(BundleKeys.GOOGLE_PLUS_USER_NAME, currentPerson.getDisplayName());
         	bundle.putString(BundleKeys.GOOGLE_PLUS_EMAIL_ID, Plus.AccountApi.getAccountName(mGoogleApiClient));
         	String registerErrorListener = isForSignUp ? AppConstants.FRAGMENT_TAG_SIGN_UP 
-        			: FragmentUtil.getSupportTag(LoginFragmentTab.class);
+        			: FragmentUtil.getTag(LoginFragmentTab.class);
         	bundle.putString(BundleKeys.REGISTER_ERROR_LISTENER, registerErrorListener);
         	
         	RegistrationListener listener = (RegistrationListener)FragmentUtil.getActivity(FbGPlusRegisterFragmentTab.this);

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -17,11 +16,13 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.wcities.eventseeker.DrawerListFragmentTab.DrawerListFragmentTabListener;
+import com.wcities.eventseeker.SettingsFragmentTab.OnSettingsItemClickedListener;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.constants.Enums.SettingsItem;
 import com.wcities.eventseeker.interfaces.ActivityDestroyedListener;
 import com.wcities.eventseeker.interfaces.OnLocaleChangedListener;
 import com.wcities.eventseeker.util.FbUtil;
@@ -33,11 +34,17 @@ import com.wcities.eventseeker.util.GPlusUtil;
  * by calling setSupportActionBar(toolbar) & also there is common code to both mobile & tablet which can be kept in BaseActivity
  */
 public abstract class BaseActivityTab extends BaseActivity implements IGoogleAnalyticsTracker, ActivityDestroyedListener, 
-		DrawerListFragmentTabListener, OnLocaleChangedListener {
+		DrawerListFragmentTabListener, OnLocaleChangedListener, OnSettingsItemClickedListener {
 	
 	private static final String TAG = BaseActivityTab.class.getSimpleName(); 
 	
 	protected static final int INDEX_NAV_ITEM_DISCOVER = 0;
+	protected static final int INDEX_NAV_ITEM_MY_EVENTS = INDEX_NAV_ITEM_DISCOVER + 1;
+	protected static final int INDEX_NAV_ITEM_FOLLOWING = INDEX_NAV_ITEM_MY_EVENTS + 1;
+	protected static final int INDEX_NAV_ITEM_ARTISTS_NEWS = INDEX_NAV_ITEM_FOLLOWING + 1;
+	protected static final int INDEX_NAV_ITEM_FRIENDS_ACTIVITY = INDEX_NAV_ITEM_ARTISTS_NEWS + 1;
+	protected static final int INDEX_NAV_ITEM_SETTINGS = DrawerListFragment.DIVIDER_POS + 1;
+	protected static final int INDEX_NAV_ITEM_LOG_OUT = INDEX_NAV_ITEM_SETTINGS + 1;
 
 	private Toolbar toolbar;
 	private LinearLayout lnrLayoutRootNavDrawer;
@@ -216,22 +223,48 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 	
 	private void selectItem(int position, Bundle args) {
 		//Log.d(TAG, "selectItem() + pos : " + position);
-	    switch (position) {
+		Intent intent = null;
+		switch (position) {
 	    
 		case INDEX_NAV_ITEM_DISCOVER:
 			//DiscoverParentFragment discoverFragment;
-			Intent intent = new Intent(getApplicationContext(), DiscoverActivityTab.class);
-			if (args != null) {
-				intent.putExtras(args);
-			}
-			startActivity(intent);
+			intent = new Intent(getApplicationContext(), DiscoverActivityTab.class);
+			break;			
+			
+		case INDEX_NAV_ITEM_SETTINGS:
+			//SettingsFragment SettingsFragment;
+			intent = new Intent(getApplicationContext(), SettingsActivityTab.class);
 			break;
+			
+		case INDEX_NAV_ITEM_LOG_OUT:
+			EventSeekr eventSeekr = (EventSeekr) getApplication();
+			if (eventSeekr.getFbUserId() != null) {
+				FbUtil.callFacebookLogout(eventSeekr);
+				
+			} else if (eventSeekr.getGPlusUserId() != null) {
+				GPlusUtil.callGPlusLogout(EventSeekr.mGoogleApiClient, eventSeekr);
+				
+			} else if (eventSeekr.getFirstName() != null) {
+				eventSeekr.removeEmailSignupInfo();
+				
+			} else if (eventSeekr.getEmailId() != null) {
+				eventSeekr.removeEmailLoginInfo();
+			}
 
+			intent = new Intent(getApplicationContext(), LauncherActivityTab.class);
+			break;
 		default:
 			break;
 		}
-	    
-	    mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
+		if (intent != null) {
+			if (args != null) {
+				intent.putExtras(args);
+			}
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+			startActivity(intent);
+		    
+		    mDrawerLayout.closeDrawer(lnrLayoutRootNavDrawer);
+		}
 	}
 	
 	protected void setCommonUI() {
@@ -266,7 +299,7 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_HOME_AS_UP);
 		
 		DrawerListFragmentTab drawerListFragmentTab = (DrawerListFragmentTab) getSupportFragmentManager()
-				.findFragmentByTag(FragmentUtil.getSupportTag(DrawerListFragmentTab.class));
+				.findFragmentByTag(FragmentUtil.getTag(DrawerListFragmentTab.class));
 		//Log.d(TAG, "drawerListFragmentTab : " + drawerListFragmentTab);
 		if (drawerListFragmentTab == null) {
 			addDrawerListFragment();
@@ -297,7 +330,31 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		if (addToBackStack) {
 			fragmentTransaction.addToBackStack(null);
 		}
-		fragmentTransaction.commit();
+		/**
+		 * 10-03-2015:
+		 * 'commitAllowingStateLoss()' is called instead of 'commit()' as if this call gets triggered at 
+		 * the same moment if user presses 'Home' button of device then the app crashes with 
+		 * 'IllegalStateException'. This happened once but since that this wasn't getting reproduced. So,
+		 * avoid such scenarios used 'commitAllowingStateLoss()'
+		 */
+		fragmentTransaction.commitAllowingStateLoss();
+		currentContentFragmentTag = tag;
+	}
+	
+	protected void replaceFragment(int containerViewId, Fragment fragment, String tag, boolean addToBackStack) {
+		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+		fragmentTransaction.replace(containerViewId, fragment, tag);
+		if (addToBackStack) {
+			fragmentTransaction.addToBackStack(null);
+		}
+		/**
+		 * 10-03-2015:
+		 * 'commitAllowingStateLoss()' is called instead of 'commit()' as if this call gets triggered at 
+		 * the same moment if user presses 'Home' button of device then the app crashes with 
+		 * 'IllegalStateException'. This happened once but since that this wasn't getting reproduced. So,
+		 * avoid such scenarios used 'commitAllowingStateLoss()'
+		 */
+		fragmentTransaction.commitAllowingStateLoss();
 		currentContentFragmentTag = tag;
 	}
 	
@@ -311,7 +368,7 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 	public void onDrawerListFragmentViewCreated() {
 		if (getDrawerItemPos() != AppConstants.INVALID_INDEX) {
 			DrawerListFragmentTab drawerListFragmentTab = (DrawerListFragmentTab) getSupportFragmentManager()
-					.findFragmentByTag(FragmentUtil.getSupportTag(DrawerListFragmentTab.class));
+					.findFragmentByTag(FragmentUtil.getTag(DrawerListFragmentTab.class));
 			drawerListFragmentTab.getListView().setItemChecked(getDrawerItemPos(), true);
 		}
 	}
@@ -335,7 +392,7 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 	@Override
 	public void onLocaleChanged() {
 		DrawerListFragmentTab drawerListFragmentTab = (DrawerListFragmentTab) getSupportFragmentManager()
-				.findFragmentByTag(FragmentUtil.getSupportTag(DrawerListFragmentTab.class));
+				.findFragmentByTag(FragmentUtil.getTag(DrawerListFragmentTab.class));
 		if (drawerListFragmentTab != null) {
 			drawerListFragmentTab.refreshDrawerList();
 		}
@@ -354,4 +411,30 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 	}
 	
 	protected abstract String getScrnTitle();
+	
+	@Override
+	public void onSettingsItemClicked(SettingsItem settingsItem, Bundle args) {
+		switch (settingsItem) {
+		
+			case SYNC_ACCOUNTS:
+		    	Intent intent = new Intent(getApplicationContext(), ConnectAccountsActivityTab.class);
+		    	startActivity(intent);
+		    	break;
+		
+			case INVITE_FRIENDS:
+				inviteFriends();
+				break;
+				
+			case RATE_APP:
+				rateApp();
+				break;
+			
+			default:
+				break;
+		}
+	}
+
+	public Fragment getFragmentByTag(String fragmentTag) {
+		return getSupportFragmentManager().findFragmentByTag(fragmentTag);
+	}
 }

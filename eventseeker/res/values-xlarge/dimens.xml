@@ -270,7 +270,10 @@
     <dimen name="rlt_layout_root_pad_l_connect_accounts_list_item">30dp</dimen>
     <dimen name="rlt_layout_root_pad_r_connect_accounts_list_item">@dimen/rlt_layout_root_pad_l_connect_accounts_list_item</dimen>
     <dimen name="img_service_margin_l_r_connect_accounts_list_item">15dp</dimen>
-	<dimen name="rlt_layout_service_details_txt_size_connect_accounts_list_item">19sp</dimen>
+    <dimen name="btn_continue_wt_fragment_connect_account">300dp</dimen>
+    
+    <!-- connect_accounts_list_item_top.xml -->
+    <dimen name="txt_personalize_wt_connect_accounts_li_top">400dp</dimen>
     
     <!-- fragment_rep_code.xml -->
     <dimen name="edt_rep_code_ht_fragment_rep_code">33dp</dimen>
@@ -317,7 +320,6 @@
 
     <!-- fragment_connect_accounts_list.xml -->
     <dimen name="rlt_layout_root_pad_fragment_connect_accounts_list">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="list_margin_t_b_fragment_connect_account_and_get_started">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="txt_connect_accounts_txt_size_fragment_connect_account">19sp</dimen>
     <dimen name="txt_connect_accounts_margin_t_b_fragment_connect_account">35dp</dimen>
     <dimen name="txt_connect_accounts_margin_l_r_fragment_connect_account">45dp</dimen>
@@ -395,7 +397,8 @@
     
     <!-- list_item_settings.xml -->
 	<dimen name="rlt_layout_content_pad_t_b_list_item_settings">10dp</dimen>
-	
+	<dimen name="rlt_layout_content_wt_list_item_settings">250dp</dimen>
+
 	<!-- fragment_settings.xml -->
     <dimen name="lst_pad_l_r_fragment_settings">100dp</dimen>
     
@@ -405,7 +408,8 @@
     
     <!-- toolbar.xml -->
     <dimen name="action_bar_ht">64dp</dimen>
-    
+    <dimen name="common_t_mar_pad_for_all_layout">0dp</dimen>
+        
     <!-- fragment_discover_tab.xml -->
     <dimen name="img_prev_w_discover_tab">60dp</dimen>
     <dimen name="img_next_w_discover_tab">@dimen/img_prev_w_discover_tab</dimen>

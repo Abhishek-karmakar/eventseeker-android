@@ -35,18 +35,17 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.Toast;
 
 import com.wcities.eventseeker.ChangeLocationFragment.ChangeLocationFragmentListener;
 import com.wcities.eventseeker.ConnectAccountsFragment.ConnectAccountsFragmentListener;
-import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.SettingsFragment.OnSettingsItemClickedListener;
-import com.wcities.eventseeker.SettingsFragment.SettingsItem;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.constants.Enums.Service;
+import com.wcities.eventseeker.constants.Enums.SettingsItem;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Category;
 import com.wcities.eventseeker.core.Event;
@@ -963,34 +962,17 @@ public class MainActivity extends BaseActivity implements
 		return isTablet;
 	}
 
-	private void inviteFriends() {
+	@Override
+	protected void inviteFriends() {
 		//Log.d(TAG, "inviteFriends()");
 		hasOtherActivityFinished = false;
-		String url = "https://play.google.com/store/apps/details?id=" + getPackageName();
-		Intent intent = new Intent(android.content.Intent.ACTION_SEND);
-		intent.setType("text/plain");
-		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-		intent.putExtra(Intent.EXTRA_TEXT, "Checkout eventseeker" + " " + url);
-		try {
-			startActivityForResult(intent, AppConstants.REQ_CODE_INVITE_FRIENDS);
-
-		} catch (ActivityNotFoundException e) {
-			Toast.makeText(getApplicationContext(), "Error, this action cannot be completed at this time.",
-					Toast.LENGTH_SHORT).show();
-		}
+		super.inviteFriends();
 	}
 
-	private void rateApp() {
+	@Override
+	protected void rateApp() {
 		hasOtherActivityFinished = false;
-		Uri uri = Uri.parse("market://details?id=" + getPackageName());
-		Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-		try {
-			startActivityForResult(goToMarket, AppConstants.REQ_CODE_RATE_APP);
-
-		} catch (ActivityNotFoundException e) {
-			Toast.makeText(getApplicationContext(), R.string.error_this_action_couldnt_be_completed_at_this_time,
-					Toast.LENGTH_SHORT).show();
-		}
+		super.rateApp();
 	}
 
 	private void replaceContentFrameByFragment(Fragment replaceBy, String replaceByFragmentTag, 

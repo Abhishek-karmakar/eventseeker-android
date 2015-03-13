@@ -22,13 +22,12 @@ import android.widget.Toast;
 
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.SettingsFragment.OnSettingsItemClickedListener;
-import com.wcities.eventseeker.SettingsFragment.SettingsItem;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.RepCodeResponse;
-import com.wcities.eventseeker.api.UserInfoApi.UserType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.constants.Enums.SettingsItem;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.util.AsyncTaskUtil;

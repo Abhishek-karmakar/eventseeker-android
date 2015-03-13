@@ -20,18 +20,19 @@ import com.google.android.gms.auth.GoogleAuthUtil;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.SyncArtists;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.constants.Enums.Service;
+import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
-import com.wcities.eventseeker.interfaces.SyncArtistListener;
+import com.wcities.eventseeker.interfaces.SyncArtistListenerTab;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class GooglePlayMusicFragment extends FragmentLoadableFromBackStack  {
+public class GooglePlayMusicFragmentTab extends FragmentLoadableFromBackStack  {
 
-	private static final String TAG = GooglePlayMusicFragment.class.getSimpleName();
+	private static final String TAG = GooglePlayMusicFragmentTab.class.getSimpleName();
 	
-	private SyncArtistListener syncArtistListener;
+	private SyncArtistListenerTab syncArtistListener;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -52,8 +53,16 @@ public class GooglePlayMusicFragment extends FragmentLoadableFromBackStack  {
 		GetArtists getArtists = new GetArtists(this);
 		getArtists.execute(authToken);
 		
-		syncArtistListener = (SyncArtistListener) getArguments().getSerializable(BundleKeys.SYNC_ARTIST_LISTENER);
+		String tag = getArguments().getString(BundleKeys.SYNC_ARTIST_LISTENER);
+		syncArtistListener = (SyncArtistListenerTab) 
+				((BaseActivityTab) FragmentUtil.getActivity(this)).getFragmentByTag(tag);
 		syncArtistListener.onArtistSyncStarted(true);
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume(AppConstants.INVALID_INDEX, 
+				FragmentUtil.getResources(this).getString(R.string.title_google_play));
 	}
 	
 	private static class GetArtists extends AsyncTask<String, Void, List<String>> {

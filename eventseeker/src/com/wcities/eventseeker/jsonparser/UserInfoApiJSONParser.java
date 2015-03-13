@@ -13,9 +13,8 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-import com.wcities.eventseeker.ConnectAccountsFragment;
-import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.api.UserInfoApi.RepCodeResponse;
+import com.wcities.eventseeker.constants.Enums.Service;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.ArtistNewsItem;
 import com.wcities.eventseeker.core.ArtistNewsItem.PostType;
@@ -702,7 +701,7 @@ public class UserInfoApiJSONParser {
 	}
 	
 	public List<Service> getAvailableSyncServiceList(JSONObject jsonObject) throws JSONException {
-		List<Service> list = new ArrayList<ConnectAccountsFragment.Service>();
+		List<Service> list = new ArrayList<Service>();
 		
 		if (jsonObject.has(KEY_SYNC_SERVICE)) {
 			JSONObject jsonSyncService = jsonObject.getJSONObject(KEY_SYNC_SERVICE);

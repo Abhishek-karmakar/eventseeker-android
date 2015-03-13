@@ -61,6 +61,8 @@
         <activity android:name="com.wcities.eventseeker.SignUpActivityTab"
             android:windowSoftInputMode="stateUnchanged|adjustResize" />
         <activity android:name="com.wcities.eventseeker.DiscoverActivityTab" />
+        <activity android:name="com.wcities.eventseeker.SettingsActivityTab" />
+        <activity android:name="com.wcities.eventseeker.ConnectAccountsActivityTab" />
         
         <activity android:name="com.wcities.eventseeker.SpotifyActivity" 
             android:theme="@style/Theme.Transparent"

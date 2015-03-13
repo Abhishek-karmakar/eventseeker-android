@@ -20,7 +20,7 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
-import com.wcities.eventseeker.ConnectAccountsFragment.ServiceAccount;
+import com.wcities.eventseeker.ConnectAccountsFragmentTab.ServiceAccount;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.SyncArtists;
@@ -29,7 +29,7 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.Enums.Service;
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
-import com.wcities.eventseeker.interfaces.SyncArtistListener;
+import com.wcities.eventseeker.interfaces.SyncArtistListenerTab;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 import de.umass.lastfm.Artist;
@@ -37,16 +37,16 @@ import de.umass.lastfm.Caller;
 import de.umass.lastfm.Result;
 import de.umass.lastfm.User;
 
-public class LastfmFragment extends FragmentLoadableFromBackStack implements OnClickListener {
+public class LastfmFragmentTab extends FragmentLoadableFromBackStack implements OnClickListener {
 
-	private static final String TAG = LastfmFragment.class.getName();
+	private static final String TAG = LastfmFragmentTab.class.getName();
 	
 	private EditText edtUserCredential;
 	private Button btnRetrieveArtists;
 	
 	private ServiceAccount serviceAccount;
 
-	private SyncArtistListener syncArtistListener;
+	private SyncArtistListenerTab syncArtistListener;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,9 @@ public class LastfmFragment extends FragmentLoadableFromBackStack implements OnC
 		setRetainInstance(true);
 		serviceAccount = (ServiceAccount) getArguments().getSerializable(BundleKeys.SERVICE_ACCOUNTS);
 
-		syncArtistListener = (SyncArtistListener) getArguments().getSerializable(BundleKeys.SYNC_ARTIST_LISTENER);
+		String tag = getArguments().getString(BundleKeys.SYNC_ARTIST_LISTENER);
+		syncArtistListener = (SyncArtistListenerTab) 
+				((BaseActivityTab) FragmentUtil.getActivity(this)).getFragmentByTag(tag);
 	}
 	
 	@Override
@@ -86,6 +88,11 @@ public class LastfmFragment extends FragmentLoadableFromBackStack implements OnC
 		return v;
 	}
 	
+	@Override
+	public void onResume(int drawerPosition, String actionBarTitle) {
+		super.onResume(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_lastfm));
+	}
+	
 	private void searchUserId(final String userId) {
 		if (userId == null || userId.length() == 0) {
 			return;
@@ -106,6 +113,7 @@ public class LastfmFragment extends FragmentLoadableFromBackStack implements OnC
 				try {
 					lastFmArtists = User.getTopArtists(userId, AppConstants.LASTFM_API_KEY);
 					result = Caller.getInstance().getLastResult();
+					
 				} catch (Exception e) {
 					/**
 					 * If Initially the error was due to User not found and then after internet failure occurs.
@@ -121,7 +129,7 @@ public class LastfmFragment extends FragmentLoadableFromBackStack implements OnC
 				if (result == null || !result.isSuccessful()) {
 					final Result rslt = result;
 
-					FragmentUtil.getActivity(LastfmFragment.this).runOnUiThread(new Runnable() {
+					FragmentUtil.getActivity(LastfmFragmentTab.this).runOnUiThread(new Runnable() {
 						
 						@Override
 						public void run() {
@@ -131,13 +139,13 @@ public class LastfmFragment extends FragmentLoadableFromBackStack implements OnC
 								msg = R.string.user_name_could_not_be_found;
 							}
 
-							Toast toast = Toast.makeText(FragmentUtil.getActivity(LastfmFragment.this), msg, Toast.LENGTH_SHORT);
+							Toast toast = Toast.makeText(FragmentUtil.getActivity(LastfmFragmentTab.this), msg, Toast.LENGTH_SHORT);
 							if(toast != null) {
 								toast.setGravity(Gravity.CENTER, 0, -100);
 								toast.show();
 							}
 
-							EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(LastfmFragment.this).getApplicationContext();
+							EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getApplication(LastfmFragmentTab.this);
 							eventSeekr.setSyncCount(Service.Lastfm, EventSeekr.UNSYNC_COUNT);
 						}
 					});
@@ -147,7 +155,7 @@ public class LastfmFragment extends FragmentLoadableFromBackStack implements OnC
 					//Log.d(TAG, "name = " + obj.getName());
 					artistNames.add(obj.getName());
 				}
-				FragmentUtil.getActivity(LastfmFragment.this).runOnUiThread(new Runnable() {
+				FragmentUtil.getActivity(LastfmFragmentTab.this).runOnUiThread(new Runnable() {
 					
 					@Override
 					public void run() {
@@ -161,7 +169,7 @@ public class LastfmFragment extends FragmentLoadableFromBackStack implements OnC
 	private void apiCallFinished(List<String> artistNames) {
 		//Log.d(TAG, "artists size = " + artistNames.size());
 		if (artistNames != null) {
-			new SyncArtists(Api.OAUTH_TOKEN, artistNames, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
+			new SyncArtists(Api.OAUTH_TOKEN, artistNames, (EventSeekr) FragmentUtil.getApplication(this), 
 					Service.Lastfm, /*this,*/ Service.Lastfm.getArtistSource()).execute();
 			
 		} else {

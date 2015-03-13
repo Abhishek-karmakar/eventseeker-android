@@ -16,14 +16,14 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.SyncArtists;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.constants.Enums.Service;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
-import com.wcities.eventseeker.interfaces.SyncArtistListener;
+import com.wcities.eventseeker.interfaces.SyncArtistListenerTab;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class TwitterSyncingFragment extends FragmentLoadableFromBackStack {
@@ -33,7 +33,7 @@ public class TwitterSyncingFragment extends FragmentLoadableFromBackStack {
 	private Twitter twitter;
 	private Resources res;
 
-	private SyncArtistListener syncArtistListener;
+	private SyncArtistListenerTab syncArtistListener;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -41,7 +41,9 @@ public class TwitterSyncingFragment extends FragmentLoadableFromBackStack {
 		setRetainInstance(true);
 		res = FragmentUtil.getResources(this);
 		
-		syncArtistListener = (SyncArtistListener) getArguments().getSerializable(BundleKeys.SYNC_ARTIST_LISTENER);
+		String tag = getArguments().getString(BundleKeys.SYNC_ARTIST_LISTENER);
+		syncArtistListener = (SyncArtistListenerTab) 
+				((BaseActivityTab) FragmentUtil.getActivity(this)).getFragmentByTag(tag);
 	}
 	
 	@Override

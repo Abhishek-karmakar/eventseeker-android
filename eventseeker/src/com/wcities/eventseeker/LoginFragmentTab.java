@@ -188,7 +188,7 @@ public class LoginFragmentTab extends FbGPlusRegisterFragmentTab implements Text
         	bundle.putSerializable(BundleKeys.LOGIN_TYPE, LoginType.emailLogin);
         	bundle.putString(BundleKeys.EMAIL_ID, edtEmail.getText().toString());
         	bundle.putString(BundleKeys.PASSWORD, edtPassword.getText().toString());
-        	bundle.putString(BundleKeys.REGISTER_ERROR_LISTENER, FragmentUtil.getSupportTag(LoginFragmentTab.class));
+        	bundle.putString(BundleKeys.REGISTER_ERROR_LISTENER, FragmentUtil.getTag(LoginFragmentTab.class));
         	
         	((RegistrationListener)FragmentUtil.getActivity(this)).onRegistration(LoginType.emailLogin, bundle, 
         			true);

@@ -8,8 +8,8 @@ import android.support.v4.app.NotificationCompat;
 
 import com.wcities.eventseeker.MainActivity;
 import com.wcities.eventseeker.R;
-import com.wcities.eventseeker.SettingsFragment.SettingsItem;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.constants.Enums.SettingsItem;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.gcm.GcmBroadcastReceiver.NotificationType;
