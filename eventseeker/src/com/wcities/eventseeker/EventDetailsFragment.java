@@ -63,6 +63,7 @@ import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
@@ -846,7 +847,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	
 	@Override
 	public String getScreenName() {
-		return "Event Detail Screen";
+		return ScreenNames.EVENT_DETAILS;
 	}
 
 	@Override

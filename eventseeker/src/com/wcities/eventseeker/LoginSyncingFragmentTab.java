@@ -126,6 +126,7 @@ public class LoginSyncingFragmentTab extends Fragment implements AsyncTaskListen
 			//Log.d(TAG, "wcitiesId != null");
 			double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 
+			// TODO: Update activities to be redirected to
 			if (isForSignUp) {
 				Bundle args = new Bundle();
 				args.putSerializable(BundleKeys.SETTINGS_ITEM, SettingsItem.SYNC_ACCOUNTS);

@@ -15,4 +15,5 @@ public class ScreenNames {
 	public static final String RDIO_SYNC = "Rdio Sycn Screen";
 	public static final String LAST_FM_SYNC = "LastFM Sync Screen";
 	public static final String PANDORA_SYNC = "Pandora Sync Screen";
+	public static final String EVENT_DETAILS = "Event Detail Screen";
 }

@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/imgEvent"
-        android:background="@drawable/bg_rlt_lyt_txt_evt_title_event_details"
+        android:background="@drawable/bg_lnr_gradient_top_transparent_btm_black"
         android:paddingBottom="@dimen/rlt_lyt_txt_evt_title_pad_b_event_details"
         android:paddingLeft="@dimen/rlt_lyt_txt_evt_title_pad_l_item_list_my_events"
         android:paddingTop="@dimen/rlt_lyt_txt_evt_title_pad_t_event_details" >

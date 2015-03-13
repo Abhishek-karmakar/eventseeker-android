@@ -7,44 +7,38 @@ import android.transition.TransitionInflater;
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class DiscoverActivityTab extends BaseActivityTab {
+public class EventDetailsActivityTab extends BaseActivityTab {
 	
-	private static final String TAG = DiscoverActivityTab.class.getSimpleName();
-
+	private String title = "";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		getWindow().requestFeature(android.view.Window.FEATURE_CONTENT_TRANSITIONS);
-        getWindow().requestFeature(android.view.Window.FEATURE_ACTIVITY_TRANSITIONS);
-        Transition transition = TransitionInflater.from(this).inflateTransition(R.transition.change_image_transform);
+	    getWindow().requestFeature(android.view.Window.FEATURE_ACTIVITY_TRANSITIONS);
+	    Transition transition = TransitionInflater.from(this).inflateTransition(R.transition.change_image_transform);
 		getWindow().setSharedElementEnterTransition(transition);
 		getWindow().setSharedElementExitTransition(transition);
-        
+		
 		super.onCreate(savedInstanceState);
-		//Log.d(TAG, "onCreate()");
 		setContentView(R.layout.activity_base_tab);
 		
 		setCommonUI();
-		removeToolbarElevation();
 		
 		if (isOnCreateCalledFirstTime) {
 			//Log.d(TAG, "add login fragment tab");
-			DiscoverFragmentTab discoverFragmentTab = new DiscoverFragmentTab();
-			addFragment(R.id.content_frame, discoverFragmentTab, FragmentUtil.getTag(discoverFragmentTab), false);
+			EventDetailsFragmentTab eventDetailsFragmentTab = new EventDetailsFragmentTab();
+			eventDetailsFragmentTab.setArguments(getIntent().getExtras());
+			addFragment(R.id.content_frame, eventDetailsFragmentTab, FragmentUtil.getTag(eventDetailsFragmentTab), false);
 		}
 	}
-
+	
 	@Override
 	public String getScreenName() {
-		return ScreenNames.DISCOVER;
+		return ScreenNames.EVENT_DETAILS;
 	}
 
 	@Override
 	protected String getScrnTitle() {
-		return getResources().getString(R.string.title_discover);
-	}
-	
-	@Override
-	protected int getDrawerItemPos() {
-		return INDEX_NAV_ITEM_DISCOVER;
+		return title;
 	}
 }

@@ -165,12 +165,7 @@ public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 			}
 		}
 		
-		/*if (eventListAdapter instanceof BaseAdapter) {
-			((BaseAdapter)eventListAdapter).notifyDataSetChanged();
-			
-		} else {*/
-			((RecyclerView.Adapter)eventListAdapter).notifyDataSetChanged();
-		//}
+		((RecyclerView.Adapter)eventListAdapter).notifyDataSetChanged();
 			
 		if (asyncTaskListener != null) {
 			asyncTaskListener.onTaskCompleted();

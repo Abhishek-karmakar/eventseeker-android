@@ -32,7 +32,7 @@
 	        android:paddingLeft="@dimen/rlt_lyt_txt_artist_title_pad_l_artist_details"
 	    	android:paddingBottom="@dimen/rlt_lyt_txt_artist_title_pad_b_artist_details"
 	    	android:paddingTop="@dimen/rlt_lyt_txt_artist_title_pad_t_artist_details"
-	    	android:background="@drawable/bg_rlt_lyt_txt_artist_title_artist_details" >
+	    	android:background="@drawable/bg_lnr_gradient_top_transparent_btm_black" >
 	    
 	    	<TextView android:id="@+id/txtArtistTitle"
 	    	    android:layout_width="match_parent"

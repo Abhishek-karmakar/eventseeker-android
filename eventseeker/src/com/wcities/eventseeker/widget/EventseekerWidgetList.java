@@ -10,7 +10,7 @@ import com.wcities.eventseeker.core.Event;
 
 public class EventseekerWidgetList {
 
-	private static final String TAG = EventseekerWidgetList.class.getName();
+	private static final String TAG = EventseekerWidgetList.class.getSimpleName();
 	
 	private static EventseekerWidgetList eventseekerWidgetList;
 	private List<EventseekerWidget> widgetList;	

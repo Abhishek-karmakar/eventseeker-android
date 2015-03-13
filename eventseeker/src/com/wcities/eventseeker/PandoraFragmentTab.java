@@ -46,6 +46,7 @@ import com.wcities.eventseeker.asynctask.SyncArtists;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.Enums.Service;
+import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.SyncArtistListenerTab;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -282,6 +283,6 @@ public class PandoraFragmentTab extends FragmentLoadableFromBackStack implements
 
 	@Override
 	public String getScreenName() {
-		return "Pandora Sync Screen";
+		return ScreenNames.PANDORA_SYNC;
 	}
 }

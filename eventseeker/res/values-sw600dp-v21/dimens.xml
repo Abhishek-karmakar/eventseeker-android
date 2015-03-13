@@ -1,0 +1,10 @@
+<resources>
+
+    <!-- fragment_discover_tab.xml -->
+    <dimen name="rv_events_padding_discover_tab">@dimen/rv_item_l_r_offset_discover_tab</dimen>
+    
+    <!--  DiscoverFragmentTab.java -->
+    <dimen name="rv_item_l_r_offset_discover_tab">4dp</dimen>
+    <dimen name="rv_item_t_b_offset_discover_tab">@dimen/rv_item_l_r_offset_discover_tab</dimen>
+    
+</resources>

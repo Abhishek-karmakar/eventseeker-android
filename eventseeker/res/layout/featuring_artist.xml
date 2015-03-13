@@ -33,7 +33,7 @@
 	        android:paddingRight="@dimen/txt_artist_name_pad_r_featuring_artist"
 	        android:paddingTop="@dimen/txt_artist_name_pad_t_featuring_artist"
 	        android:paddingBottom="@dimen/txt_artist_name_pad_b_featuring_artist"
-	        android:background="@drawable/bg_txt_artist_name_featuring_artist"
+	        android:background="@drawable/bg_lnr_gradient_top_transparent_btm_black"
 	        android:singleLine="true"
 	        android:ellipsize="end" />
 	

@@ -102,7 +102,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	private static final String FRAGMENT_TAG_SHARE_VIA_DIALOG = ShareViaDialogFragment.class.getSimpleName();
 	
 	private static final int UNSCROLLED = -1;
-	private static final int DEFAULT_SEARCH_RADIUS = 50;
+	protected static final int DEFAULT_SEARCH_RADIUS = 50;
 	
 	/**
 	 * As the DiscoverFragment is passed as Serializable in DiscoverSettingDialogFragment.newInstance(), The 'CatTitlesAdapter'
@@ -552,7 +552,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 			
 			ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
 			ma.setToolbarBg(Color.TRANSPARENT);
-			vPagerCatTitles.setBackgroundResource(R.drawable.bg_v_pager_cat_titles);
+			vPagerCatTitles.setBackgroundResource(R.drawable.bg_lnr_gradient_top_transparent_btm_black);
 			ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
 			
 			title = "";
