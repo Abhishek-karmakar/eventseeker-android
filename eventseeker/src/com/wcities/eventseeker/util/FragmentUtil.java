@@ -97,15 +97,7 @@ public class FragmentUtil {
 		return fragment.getClass().getSimpleName();
 	}
 	
-	public static String getSupportTag(Class<? extends Fragment> fragmentClass) {
-		return fragmentClass.getSimpleName();
-	}
-	
-	public static String getTag(android.app.Fragment fragment) {
-		return fragment.getClass().getSimpleName();
-	}
-	
-	public static String getTag(Class<? extends android.app.Fragment> fragmentClass) {
+	public static String getTag(Class<? extends Fragment> fragmentClass) {
 		return fragmentClass.getSimpleName();
 	}
 }

@@ -51,16 +51,16 @@ import com.wcities.eventseeker.constants.Enums.Service;
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
-import com.wcities.eventseeker.interfaces.SyncArtistListener;
+import com.wcities.eventseeker.interfaces.SyncArtistListenerTab;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack implements EventSeekrListener, 
-		AsyncTaskListener<Object>, DialogBtnClickListener, SyncArtistListener {
+public class ConnectAccountsFragmentTab extends ListFragmentLoadableFromBackStack implements EventSeekrListener, 
+		AsyncTaskListener<Object>, DialogBtnClickListener, SyncArtistListenerTab {
 	
-    private static final String TAG = ConnectAccountsFragment.class.getName();
+    private static final String TAG = ConnectAccountsFragmentTab.class.getName();
     
     private static final String TXT_BTN_SKIP_DIALOG = "Skip";
     protected static final String TXT_BTN_CANCEL_DIALOG = "Cancel";
@@ -75,7 +75,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	private List<ServiceAccount> serviceAccounts;
 	private LoadMyEventsCount loadMyEventsCount;
 	
-	private boolean isProgressVisible, isFirstTimeLaunch;
+	private boolean isProgressVisible;
 	
 	private RelativeLayout rltLayoutProgress;
 	
@@ -83,6 +83,8 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	
 	private Handler handler;
 	private int syncInProgressCount;
+
+	private boolean isFirstTimeLaunch;
 	
     public interface ConnectAccountsFragmentListener {
     	public void onServiceSelected(Service service, Bundle args, boolean addToBackStack);
@@ -104,7 +106,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		 * need to get isFirstTimeLaunch value before calling super.onCreate() since we need it to 
 		 * decide on screenName to be sent to google analytics 
 		 */
-		EventSeekr eventSeekr = ((EventSeekr)FragmentUtil.getActivity(this).getApplication());
+		EventSeekr eventSeekr = ((EventSeekr) FragmentUtil.getActivity(this).getApplication());
 		isFirstTimeLaunch = eventSeekr.getFirstTimeLaunch();
 		
 		super.onCreate(savedInstanceState);
@@ -159,6 +161,12 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
         if (isProgressVisible) {
 			showProgress();
 		}
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume(AppConstants.INVALID_INDEX, 
+				FragmentUtil.getResources(this).getString(R.string.navigation_drawer_item_sync_accounts));
 	}
 	
 	@Override
@@ -227,10 +235,6 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
         for (int i = 0; i < connectAccountsItemTitles.length; i++) {
         		
         	Service service = connectAccountsItemTitles[i];
-
-        	/*if (!isFirstTimeLaunch && service.equals(Service.Title, this)) {
-        		continue;
-        	}*/
         		
         	/**
         	 * the following two lines are written above the 'if' condition of Google Play Music Service
@@ -294,12 +298,12 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			
 			final ServiceAccount serviceAccount = getItem(position);
 			
-			if (serviceAccount.name.equals(Service.Button.getStr(ConnectAccountsFragment.this))) {
+			if (serviceAccount.name.equals(Service.Button.getStr(ConnectAccountsFragmentTab.this))) {
 				
 				// it's for Continue button
 				convertView = mInflater.inflate(R.layout.connect_accounts_continue, null);
 				Button btnContinue = (Button) convertView.findViewById(R.id.btnContinue);
-				if (((EventSeekr)FragmentUtil.getActivity(ConnectAccountsFragment.this).getApplication())
+				if (((EventSeekr)FragmentUtil.getActivity(ConnectAccountsFragmentTab.this).getApplication())
 						.isAnyAccountSynced()) {
 					btnContinue.setText(TXT_BTN_CONTINUE);
 					
@@ -308,13 +312,13 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				}
 				btnContinue.setOnClickListener(onBtnContinueClickListener);
 				
-			} else if(serviceAccount.name.equals(Service.Title.getStr(ConnectAccountsFragment.this))) {
+			} else if(serviceAccount.name.equals(Service.Title.getStr(ConnectAccountsFragmentTab.this))) {
 				/*convertView = mInflater.inflate(R.layout.connect_accounts_txt_list_item, null);*/
 				convertView = mInflater.inflate(R.layout.connect_accounts_list_item_top, null);
 				convertView.setTag("");
 				
 				TextView txtSyncCount = (TextView) convertView.findViewById(R.id.txtSyncCount);
-				txtSyncCount.setText(((EventSeekr) FragmentUtil.getActivity(ConnectAccountsFragment.this)
+				txtSyncCount.setText(((EventSeekr) FragmentUtil.getActivity(ConnectAccountsFragmentTab.this)
 						.getApplication()).getTotalSyncCount() + "");
 				txtSyncCount.setBackgroundResource(serviceAccount.isInProgress ? 0 : R.drawable.ic_circle_bg);
 				
@@ -348,26 +352,6 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 					}
 				});
 				
-				/*if (serviceAccount.isInProgress) {
-					holder.imgProgressBar.setVisibility(View.VISIBLE);
-					holder.imgPlus.setVisibility(View.INVISIBLE);
-					holder.txtCount.setVisibility(View.INVISIBLE);
-					AnimationUtil.startRotationToView(holder.imgProgressBar, 0f, 360f, 0.5f, 0.5f, 1000);
-					
-				} else if (serviceAccount.count != EventSeekr.UNSYNC_COUNT) {
-					holder.txtCount.setText(serviceAccount.count + "");
-					holder.txtCount.setVisibility(View.VISIBLE);
-					holder.imgPlus.setVisibility(View.INVISIBLE);
-					holder.imgProgressBar.setVisibility(View.INVISIBLE);
-					AnimationUtil.stopRotationToView(holder.imgProgressBar);
-					
-				} else {
-					holder.txtCount.setVisibility(View.INVISIBLE);
-					holder.imgPlus.setVisibility(View.VISIBLE);
-					holder.imgProgressBar.setVisibility(View.INVISIBLE);
-					AnimationUtil.stopRotationToView(holder.imgProgressBar);
-				}*/
-			
 				if (serviceAccount.count != EventSeekr.UNSYNC_COUNT && !serviceAccount.isInProgress) {
 					holder.imgCorrect.setVisibility(View.VISIBLE);
 				
@@ -404,9 +388,8 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 		}
 		
 		private void onItemClick(final ServiceAccount serviceAccount) {
-			
 			//Log.d(TAG, "Service name = " + serviceAccount.name);
-			Service service = Service.getService(serviceAccount.name, ConnectAccountsFragment.this);
+			Service service = Service.getService(serviceAccount.name, ConnectAccountsFragmentTab.this);
 			//Log.d(TAG, "onItemClick(), serviceId = " + serviceId);
 			
 			if (service == Service.Title) {
@@ -414,48 +397,6 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			}
 			
 			switch (service) {
-
-			/*case Twitter:
-				//Log.d(TAG, "twitter");
-				ConfigurationBuilder builder = new ConfigurationBuilder();
-	            builder.setOAuthConsumerKey(AppConstants.TWITTER_CONSUMER_KEY);
-	            builder.setOAuthConsumerSecret(AppConstants.TWITTER_CONSUMER_SECRET);
-	            twitter4j.conf.Configuration configuration = builder.build();
-
-	            TwitterFactory factory = new TwitterFactory(configuration);
-	            final Twitter twitter = factory.getInstance();
-
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                        	//Log.d(TAG, "twitter run");
-                            final RequestToken requestToken = twitter.getOAuthRequestToken(AppConstants.TWITTER_CALLBACK_URL);
-                            
-                            FragmentUtil.getActivity(ConnectAccountsFragment.this).runOnUiThread(new Runnable() {
-								
-								@Override
-								public void run() {
-									 Bundle args = new Bundle();
-			                         args.putString(BundleKeys.URL, requestToken.getAuthenticationURL());
-			                         args.putSerializable(BundleKeys.TWITTER, twitter);
-			                         args.putSerializable(BundleKeys.SERVICE_ACCOUNTS, serviceAccount);
-			                         ((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this)).onServiceSelected(service, args, true);
-								}
-							});
-                           
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-                thread.start();
-                
-				Bundle args = new Bundle();
-                args.putSerializable(BundleKeys.SERVICE_ACCOUNTS, serviceAccount);
-				((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
-						.onServiceSelected(service, args, true);
-				break;*/
 				
 			case GooglePlay:
 				Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[] {GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE},
@@ -474,15 +415,15 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				 */
 				Bundle bundle = new Bundle();
 				bundle.putSerializable(BundleKeys.SERVICE_ACCOUNTS, serviceAccount);
-				((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
+				((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragmentTab.this))
 					.onServiceSelected(service, bundle, true);
 				break;
 
 			default:
 				bundle = new Bundle();
-				bundle.putSerializable(BundleKeys.SYNC_ARTIST_LISTENER, ConnectAccountsFragment.this);
+				bundle.putString(BundleKeys.SYNC_ARTIST_LISTENER, FragmentUtil.getTag(ConnectAccountsFragmentTab.this));
 				bundle.putSerializable(BundleKeys.SERVICE_ACCOUNTS, serviceAccount);
-				((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
+				((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragmentTab.this))
 					.onServiceSelected(service, bundle, true);
 				break;
 			}
@@ -510,10 +451,10 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				
 			} else {
 				GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
-						ConnectAccountsFragment.this,
+						ConnectAccountsFragmentTab.this,
 						res.getString(R.string.are_you_sure), res.getString(R.string.connecting_account_allow_us), 
 						TXT_BTN_CANCEL_DIALOG, TXT_BTN_SKIP_DIALOG, false);
-				generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(ConnectAccountsFragment.this))
+				generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(ConnectAccountsFragmentTab.this))
 						.getSupportFragmentManager(), DIALOG_FRAGMENT_TAG_SKIP);
 			}
 		}
@@ -532,11 +473,11 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				public void onTaskCompleted(Integer... params) {
 					Log.d(TAG, "params[0] = " + params[0]);
 					if (params[0] > 0) {
-						((DrawerListFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
+						((DrawerListFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragmentTab.this))
 							.onDrawerItemSelected(MainActivity.INDEX_NAV_ITEM_MY_EVENTS, null);
 						
 					} else {
-						((DrawerListFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
+						((DrawerListFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragmentTab.this))
 							.onDrawerItemSelected(MainActivity.INDEX_NAV_ITEM_DISCOVER, null);
 					}
 				}
@@ -544,7 +485,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			loadMyEventsCount.execute();
 			
 		} else {
-			((DrawerListFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
+			((DrawerListFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragmentTab.this))
 				.onDrawerItemSelected(MainActivity.INDEX_NAV_ITEM_DISCOVER, null);
 		}
 	}
@@ -577,10 +518,10 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				//Log.d(TAG, "run");
 				if (serviceAccounts != null) {
 					for (ServiceAccount serviceAccount : serviceAccounts) {
-						if (serviceAccount != null && service.isOf(serviceAccount.name, ConnectAccountsFragment.this)) { 
+						if (serviceAccount != null && service.isOf(serviceAccount.name, ConnectAccountsFragmentTab.this)) { 
 							serviceAccount.isInProgress = false;
 							serviceAccount.count = 
-								((EventSeekr)FragmentUtil.getActivity(ConnectAccountsFragment.this).getApplication())
+								((EventSeekr)FragmentUtil.getActivity(ConnectAccountsFragmentTab.this).getApplication())
 								.getSyncCount(service);
 							break;
 						}
@@ -594,7 +535,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				 */
 				if (syncInProgressCount == 0) {
 					for (ServiceAccount serviceAcc : serviceAccounts) {
-						if (serviceAcc.name.equals(Service.Title.getStr(ConnectAccountsFragment.this))) {
+						if (serviceAcc.name.equals(Service.Title.getStr(ConnectAccountsFragmentTab.this))) {
 							serviceAcc.isInProgress = false;
 						}
 					}
@@ -640,8 +581,8 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 						break;
 					}
 				}
-				args.putSerializable(BundleKeys.SYNC_ARTIST_LISTENER, ConnectAccountsFragment.this);
-				((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
+				args.putString(BundleKeys.SYNC_ARTIST_LISTENER, FragmentUtil.getTag(ConnectAccountsFragmentTab.this));
+				((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragmentTab.this))
             			.onServiceSelected(Service.GooglePlay, args, true);
 			}
 			
@@ -654,11 +595,6 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	}
 
 	@Override
-	public String getScreenName() {
-		return isFirstTimeLaunch ? ScreenNames.SYNC_ACCOUNTS : ScreenNames.SYNC_ACCOUNTS_SETTINGS;
-	}
-
-	@Override
 	public void onArtistSyncStarted(boolean doBackPress) {
 		syncInProgressCount++;
 		
@@ -668,17 +604,22 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				
 				@Override
 				public void run() {
-					FragmentUtil.getActivity(ConnectAccountsFragment.this).onBackPressed();
+					FragmentUtil.getActivity(ConnectAccountsFragmentTab.this).onBackPressed();
 				}
 			});
 		}
 		
 		//Log.d(TAG, "onArtistSyncStarted() - " + this);
 		for (ServiceAccount serviceAcc : serviceAccounts) {
-			if (serviceAcc.name.equals(Service.Title.getStr(ConnectAccountsFragment.this))) {
+			if (serviceAcc.name.equals(Service.Title.getStr(ConnectAccountsFragmentTab.this))) {
 				serviceAcc.isInProgress = true;
 			}
 		}
 		listAdapter.notifyDataSetChanged();
+	}
+
+	@Override
+	public String getScreenName() {
+		return isFirstTimeLaunch ? ScreenNames.SYNC_ACCOUNTS : ScreenNames.SYNC_ACCOUNTS_SETTINGS;
 	}
 }

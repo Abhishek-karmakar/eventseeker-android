@@ -57,17 +57,13 @@ public abstract class FragmentLoadableFromBackStack extends Fragment implements 
 	
 	public void onResume(int drawerPosition, String actionBarTitle) {
 		super.onResume();
-		
+		/**
+		 * Currently this is been implemented for ConnectAccountsActivity
+		 */
 		Activity activity = FragmentUtil.getActivity(this);
-		
 		if (activity instanceof FragmentLoadedFromBackstackListener) {
-			if (activity instanceof BoschMainActivity) {
-				((FragmentLoadedFromBackstackListener)activity).onFragmentResumed(this, drawerPosition, 
-						actionBarTitle);
-				
-			} else if (activity instanceof MainActivity) {
-				// not yet called for this case ever
-			}
+			((FragmentLoadedFromBackstackListener)activity).onFragmentResumed(this, drawerPosition, 
+				actionBarTitle);
 		}
 	}
 	

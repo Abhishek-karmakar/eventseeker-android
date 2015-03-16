@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<integer name="no_icon_navigation_drawer_section_header">0</integer>
+    <!-- referred link:
+    	 http://stackoverflow.com/questions/16478808/value-equals-to-match-parent-or-fill-parent-in-dimens-xml/19043952#19043952 -->
+	<integer name="match_parent">-1</integer>
+	<integer name="wrap_content">-2</integer>
 </resources>

@@ -9,10 +9,10 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 
-import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.api.ArtistApi;
 import com.wcities.eventseeker.api.ArtistApi.Method;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.constants.Enums.Service;
 import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
 
 public class SyncArtists extends AsyncTask<Void, Void, Void> {

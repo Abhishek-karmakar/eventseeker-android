@@ -15,13 +15,16 @@ import com.wcities.eventseeker.util.DeviceUtil;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 public abstract class BaseActivity extends ActionBarActivity implements ConnectionFailureListener, DialogBtnClickListener {
 
@@ -316,5 +319,33 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
 	@Override
 	public void doNegativeClick(String dialogTag) {
 		// TODO Auto-generated method stub
+	}
+	
+	protected void inviteFriends() {
+		//Log.d(TAG, "inviteFriends()");
+		String url = "https://play.google.com/store/apps/details?id=" + getPackageName();
+		Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+		intent.setType("text/plain");
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+		intent.putExtra(Intent.EXTRA_TEXT, "Checkout eventseeker" + " " + url);
+		try {
+			startActivityForResult(intent, AppConstants.REQ_CODE_INVITE_FRIENDS);
+
+		} catch (ActivityNotFoundException e) {
+			Toast.makeText(getApplicationContext(), "Error, this action cannot be completed at this time.",
+					Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	protected void rateApp() {
+		Uri uri = Uri.parse("market://details?id=" + getPackageName());
+		Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+		try {
+			startActivityForResult(goToMarket, AppConstants.REQ_CODE_RATE_APP);
+
+		} catch (ActivityNotFoundException e) {
+			Toast.makeText(getApplicationContext(), R.string.error_this_action_couldnt_be_completed_at_this_time,
+					Toast.LENGTH_SHORT).show();
+		}
 	}
 }

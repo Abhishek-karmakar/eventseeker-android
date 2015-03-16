@@ -130,9 +130,11 @@ public class ShareViaDialogFragment extends DialogFragment {
 	    if (event.getSchedule() != null && event.getSchedule().getVenue() != null) {
 	    	message += " @ " + event.getSchedule().getVenue().getName();
 	    }
-	    if (event.getEventUrl() != null) {
-	    	message += ": " + event.getEventUrl();
+	    String link = event.getEventUrl();
+        if (link == null) {
+        	link = "http://eventseeker.com/event/" + event.getId();
 	    }
+        message += ": " + link;
 	    intent.putExtra(Intent.EXTRA_TEXT, message);
 		
 		//Log.d(TAG, "shareTarget = " + shareTarget);
@@ -146,9 +148,11 @@ public class ShareViaDialogFragment extends DialogFragment {
 	private void shareArtist(Artist artist, Intent intent, int which) {
 		intent.putExtra(Intent.EXTRA_SUBJECT, "Artist Details");
 	    String message = "Checkout " + artist.getName() + " on eventseeker";
-	    if (artist.getArtistUrl() != null) {
-	    	message += ": " + artist.getArtistUrl();
+	    String link = artist.getArtistUrl();
+        if (link == null) {
+        	link = "http://eventseeker.com/artist/" + artist.getId();
 	    }
+        message += ": " + link;
 	    intent.putExtra(Intent.EXTRA_TEXT, message);
 	}
 
@@ -156,6 +160,13 @@ public class ShareViaDialogFragment extends DialogFragment {
 		if (venue != null) {
 			intent.putExtra(Intent.EXTRA_SUBJECT, "Venue Details");
 			intent.putExtra(Intent.EXTRA_TEXT, venue.getName());
+			String message = "Checkout " + venue.getName() + " on eventseeker";
+			String link = venue.getUrl();
+		    if (link == null) {
+		    	link += ": " + "http://eventseeker.com/venue/" + venue.getId();    	
+		    }
+		    message += ": " + link;
+		    intent.putExtra(Intent.EXTRA_TEXT, message);
 	    }
 	}
 	

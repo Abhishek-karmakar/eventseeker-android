@@ -33,7 +33,7 @@ public class LauncherActivityTab extends FragmentActivity implements IGoogleAnal
 			isOnCreateCalledFirstTime = false;
 		}
 		
-		if (getFragmentManager().findFragmentByTag(FragmentUtil.getSupportTag(LauncherFragmentTab.class)) == null) {
+		if (getFragmentManager().findFragmentByTag(FragmentUtil.getTag(LauncherFragmentTab.class)) == null) {
 			FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 			LauncherFragmentTab launcherFragmentTab = new LauncherFragmentTab();
 			fragmentTransaction.add(R.id.lnrLytRoot, launcherFragmentTab, FragmentUtil.getTag(launcherFragmentTab));

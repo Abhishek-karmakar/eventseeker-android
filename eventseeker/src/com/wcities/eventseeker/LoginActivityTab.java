@@ -39,7 +39,7 @@ public class LoginActivityTab extends BaseActivityTab implements RegistrationLis
 		switch (item.getItemId()) {
 
 		case android.R.id.home:
-			if (getSupportFragmentManager().findFragmentByTag(FragmentUtil.getSupportTag(LoginSyncingFragmentTab.class)) 
+			if (getSupportFragmentManager().findFragmentByTag(FragmentUtil.getTag(LoginSyncingFragmentTab.class)) 
 					!= null) {
 				return true;
 				
@@ -59,7 +59,7 @@ public class LoginActivityTab extends BaseActivityTab implements RegistrationLis
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// Log.d(TAG, "onKeyDown()");
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			if (getSupportFragmentManager().findFragmentByTag(FragmentUtil.getSupportTag(LoginSyncingFragmentTab.class)) 
+			if (getSupportFragmentManager().findFragmentByTag(FragmentUtil.getTag(LoginSyncingFragmentTab.class)) 
 					!= null) {
 				return true;
 				

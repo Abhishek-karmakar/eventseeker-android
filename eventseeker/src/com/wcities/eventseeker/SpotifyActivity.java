@@ -11,7 +11,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.drivemode.spotify.ClientConfig;
 import com.drivemode.spotify.SpotifyApi;
@@ -21,13 +20,13 @@ import com.drivemode.spotify.models.Pager;
 import com.drivemode.spotify.models.Playlist;
 import com.drivemode.spotify.models.PlaylistTrack;
 import com.drivemode.spotify.models.User;
-import com.wcities.eventseeker.ConnectAccountsFragment.Service;
 import com.wcities.eventseeker.ConnectAccountsFragment.ServiceAccount;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.SyncArtists;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.constants.Enums.Service;
 
 public class SpotifyActivity extends Activity implements AuthenticationListener {
 	

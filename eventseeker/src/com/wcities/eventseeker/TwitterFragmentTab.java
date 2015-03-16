@@ -17,26 +17,31 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
 
-import com.wcities.eventseeker.ConnectAccountsFragment.ServiceAccount;
+import com.wcities.eventseeker.ConnectAccountsFragmentTab.ServiceAccount;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.constants.Enums.Service;
+import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class TwitterFragment extends FragmentLoadableFromBackStack {
+public class TwitterFragmentTab extends FragmentLoadableFromBackStack {
 	
-	private static final String TAG = TwitterFragment.class.getSimpleName();
+	private static final String TAG = TwitterFragmentTab.class.getSimpleName();
 	
 	private Twitter twitter;
-	private String url;
-	private Bundle webViewBundle;
 
+	private String url;
+	
 	private WebView webView;
+
 	private RelativeLayout rltProgressBar;
+	
+	private Bundle webViewBundle;
+	
+	private boolean isURLLoadedInWebView;
 	
 	private WebViewClient webViewClient = new WebViewClient() {
 		
@@ -46,8 +51,8 @@ public class TwitterFragment extends FragmentLoadableFromBackStack {
 			if (url.contains(AppConstants.TWITTER_CALLBACK_URL)) {
 				if (url.contains("oauth_token")) {
 					//Log.d(TAG, "twitter url2 = " + url);
-					ServiceAccount serviceAccount = (ServiceAccount) getArguments().getSerializable(
-							BundleKeys.SERVICE_ACCOUNTS);
+					ServiceAccount serviceAccount = (ServiceAccount) getArguments()
+							.getSerializable(BundleKeys.SERVICE_ACCOUNTS);
 					serviceAccount.isInProgress = true;
 					
 					Uri uri = Uri.parse(url);
@@ -55,20 +60,20 @@ public class TwitterFragment extends FragmentLoadableFromBackStack {
 					Bundle args = new Bundle();
 					args.putString(BundleKeys.OAUTH_VERIFIER, oauthVerifier);
 					args.putSerializable(BundleKeys.TWITTER, twitter);
-					args.putSerializable(BundleKeys.SYNC_ARTIST_LISTENER, 
-							getArguments().getSerializable(BundleKeys.SYNC_ARTIST_LISTENER));
+					args.putString(BundleKeys.SYNC_ARTIST_LISTENER, 
+							getArguments().getString(BundleKeys.SYNC_ARTIST_LISTENER));
 					
 					//Log.d(TAG, "twitter Syncying : oauthVerifier : " + oauthVerifier + ", twitter : " + twitter);
-					((ReplaceFragmentListener)FragmentUtil.getActivity(TwitterFragment.this))
-						.replaceByFragment(AppConstants.FRAGMENT_TAG_TWITTER_SYNCING, args);
+					((ReplaceFragmentListener) FragmentUtil.getActivity(TwitterFragmentTab.this))
+						.replaceByFragment(FragmentUtil.getTag(TwitterSyncingFragment.class), args);
 					
 					return true;
 					
 				} else {
 					//Log.d(TAG, "twitter else");
-					EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(TwitterFragment.this).getApplicationContext();
+					EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getApplication(TwitterFragmentTab.this);
 					eventSeekr.setSyncCount(Service.Twitter, EventSeekr.UNSYNC_COUNT);
-					FragmentUtil.getActivity(TwitterFragment.this).onBackPressed();
+					FragmentUtil.getActivity(TwitterFragmentTab.this).onBackPressed();
 					return false;
 				}
 				
@@ -79,7 +84,7 @@ public class TwitterFragment extends FragmentLoadableFromBackStack {
 				 * this call back for sign in page.
 				 */
 				//Log.d(TAG, "twitter last else");
-				EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(TwitterFragment.this).getApplicationContext();
+				EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(TwitterFragmentTab.this).getApplicationContext();
 				eventSeekr.setSyncCount(Service.Twitter, EventSeekr.UNSYNC_COUNT);
 				return false;
 			}
@@ -94,7 +99,13 @@ public class TwitterFragment extends FragmentLoadableFromBackStack {
 		@Override
 		public void onPageFinished(WebView view, String url) {
 			super.onPageFinished(view, url);
-			rltProgressBar.setVisibility(View.INVISIBLE);
+			if (view == webView) {
+				isURLLoadedInWebView = true;
+				rltProgressBar.setVisibility(View.INVISIBLE);
+			
+			} else {
+				webView.loadUrl(url);
+			}
 		}
 	};
 	
@@ -110,20 +121,24 @@ public class TwitterFragment extends FragmentLoadableFromBackStack {
         
         TwitterFactory factory = new TwitterFactory(configuration);
         twitter = factory.getInstance();
-        
-        new LoadRequestToken().execute();
 	}
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		if (webView != null && isURLLoadedInWebView) {
+			webViewBundle = new Bundle();
+			webView.saveState(webViewBundle);
+		}
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_twitter_login, null);
-		webView = (WebView) v.findViewById(R.id.webView);
-		rltProgressBar = (RelativeLayout) v.findViewById(R.id.rltProgressBar);
 		
+		webView = (WebView) v.findViewById(R.id.webView);
 		webView.setWebViewClient(webViewClient);
 		webView.getSettings().setUseWideViewPort(true);
-		
 		/**
 		 * The below onTouch listener has been added as in Samsung Galaxy S(Android 2.3.3) device,
 		 * the Soft Keyboard wasn't appearing when pressed on EditText inside WebView 
@@ -140,24 +155,29 @@ public class TwitterFragment extends FragmentLoadableFromBackStack {
 		        }
 		        return false;
 		    }
-		});  
+		}); 
 		
-		if (webViewBundle != null) {
-			webView.restoreState(webViewBundle);
+		rltProgressBar = (RelativeLayout) v.findViewById(R.id.rltProgressBar);
+		if (isURLLoadedInWebView) {
+			rltProgressBar.setVisibility(View.INVISIBLE);
 		}
 		
+		if (url == null) {
+			new LoadRequestToken().execute();
+        	
+        } else if (webViewBundle != null) {
+			webView.restoreState(webViewBundle);
+		
+        }
 		return v;
 	}
 	
 	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		if (webView != null) {
-			webViewBundle = new Bundle();
-			webView.saveState(webViewBundle);
-		}
+	public void onResume() {
+		super.onResume(AppConstants.INVALID_INDEX, 
+				FragmentUtil.getResources(this).getString(R.string.title_twitter));
 	}
-
+	
 	@Override
 	public String getScreenName() {
 		return ScreenNames.TWITTER_SYNC;

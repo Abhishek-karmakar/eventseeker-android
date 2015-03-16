@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <dimen name="padding_small">8dp</dimen>
     <dimen name="padding_medium">8dp</dimen>
     <dimen name="padding_large">16dp</dimen>
@@ -377,6 +376,7 @@
     <dimen name="txt_artist_synced_pad_t_b_connect_accounts_li_top">1dp</dimen>
     <dimen name="txt_personalize_margin_t_connect_accounts_li_top">20dp</dimen>
     <dimen name="txt_personalize_pad_b_connect_accounts_li_top">20dp</dimen>
+    <dimen name="txt_personalize_wt_connect_accounts_li_top">@integer/wrap_content</dimen>
     <!-- connect_accounts_list_item.xml -->
     <dimen name="rlt_layout_root_ht_connect_accounts_list_item">@dimen/action_bar_ht</dimen>
     <dimen name="rlt_layout_root_pad_l_connect_accounts_list_item">14dp</dimen>
@@ -389,11 +389,11 @@
     <dimen name="txt_service_name_w_connect_accounts_list_item">200dp</dimen>
     <!-- fragment_connect_accounts_list.xml -->
     <dimen name="rlt_layout_root_pad_fragment_connect_accounts_list">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="list_margin_t_b_fragment_connect_account_and_get_started">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="txt_connect_accounts_txt_size_fragment_connect_account">17sp</dimen>
     <dimen name="txt_connect_accounts_margin_t_b_fragment_connect_account">30dp</dimen>
     <dimen name="txt_connect_accounts_margin_l_r_fragment_connect_account">40dp</dimen>
     <dimen name="btn_continue_margin_l_r_fragment_connect_account">40dp</dimen>
+    <dimen name="btn_continue_wt_fragment_connect_account">@integer/match_parent</dimen>
     <!-- fragment_about_us.xml -->
     <dimen name="rlt_layout_root_pad_fragment_about_us">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="txt_app_name_margin_t_fragment_about_us">30dp</dimen>
@@ -557,6 +557,9 @@
     <!-- list_item_settings.xml -->
     <dimen name="rlt_layout_content_pad_t_b_list_item_settings">15dp</dimen>
     <dimen name="rlt_layout_content_pad_l_r_list_item_settings">40dp</dimen>
+    <!-- below 2 directions are on basis of 'v_selection_w_nav_drawer' -->
+    <dimen name="indicator_wt_lyr_bg_item_lst_settings_pressed">3dp</dimen>
+    <dimen name="indicator_pad_lyr_bg_item_lst_settings_pressed">-4dp</dimen><!-- -3-1 to avoid white stroke in nexus 7 -->
     <dimen name="txt_title_mar_l_list_item_settings">20dp</dimen>
     <dimen name="txt_title_txt_size_list_item_settings">20sp</dimen>
     <dimen name="divider_ht_list_item_settings">1dp</dimen>
