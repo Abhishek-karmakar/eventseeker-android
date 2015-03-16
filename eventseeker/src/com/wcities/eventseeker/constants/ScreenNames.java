@@ -7,4 +7,5 @@ public class ScreenNames {
 	public static final String ACCOUNT_SIGN_UP = "Account Sign Up Screen";
 	public static final String DISCOVER = "Discover Screen";
 	public static final String EVENT_DETAILS = "Event Detail Screen";
+	public static final String WEB_VIEW = "Website Browser Screen";
 }

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -25,7 +24,6 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.interfaces.ActivityDestroyedListener;
 import com.wcities.eventseeker.interfaces.OnLocaleChangedListener;
-import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GPlusUtil;
 
@@ -118,22 +116,22 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 			break;
 			
 		default:
-			/*if (GPlusUtil.isGPlusPublishPending) {
-				*//**
-				 * This check is required to direct onActivityResult() calls from MainActivity & handle it at right 
+			if (GPlusUtil.isGPlusPublishPending) {
+				/**
+				 * This check is required to direct onActivityResult() calls from this activity & handle it at right 
 				 * place, because google plus share intent doesn't return right request code in onActivityResult() 
 				 * method.
-				 *//*
+				 */
 				Log.d(TAG, "current frag tag = " + currentContentFragmentTag);
-				fragment = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
+				Fragment fragment = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
 				if (fragment != null) {
 					fragment.onActivityResult(requestCode, resultCode, data);
 				}
 				
-			} else {*/
+			} else {
 				// pass it to the fragments
 				super.onActivityResult(requestCode, resultCode, data);
-			//}
+			}
 			break;
 		}
 	}
@@ -357,6 +355,10 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		 * 	refresh the SearchView	
 		 */
 		//searchView.setQueryHint(getResources().getString(R.string.menu_search));
+	}
+	
+	protected boolean isDrawerOpen() {
+		return mDrawerLayout.isDrawerOpen(lnrLayoutRootNavDrawer);
 	}
 	
 	protected abstract String getScrnTitle();

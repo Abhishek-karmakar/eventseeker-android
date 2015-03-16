@@ -2,6 +2,7 @@ package com.wcities.eventseeker;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,12 +12,10 @@ import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
 
 import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.constants.ScreenNames;
-import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 
-public class WebViewFragment extends FragmentLoadableFromBackStack {
+public class WebViewFragmentTab extends Fragment {
 
-	private static final String TAG = WebViewFragment.class.getName();
+	private static final String TAG = WebViewFragmentTab.class.getName();
 	
 	private WebView webView;
 	private String url;
@@ -32,7 +31,7 @@ public class WebViewFragment extends FragmentLoadableFromBackStack {
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.fragment_web_view, null);
+		View v = inflater.inflate(R.layout.fragment_web_view_tab, null);
 		webView = (WebView) v.findViewById(R.id.webview);
 		final RelativeLayout rltProgressBar = (RelativeLayout) v.findViewById(R.id.rltProgressBar);
 		
@@ -100,10 +99,5 @@ public class WebViewFragment extends FragmentLoadableFromBackStack {
 			return true;
 		}
 		return false;
-	}
-
-	@Override
-	public String getScreenName() {
-		return ScreenNames.WEB_VIEW;
 	}
 }

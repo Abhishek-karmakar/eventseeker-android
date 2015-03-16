@@ -62,6 +62,7 @@
             android:windowSoftInputMode="stateUnchanged|adjustResize" />
         <activity android:name="com.wcities.eventseeker.DiscoverActivityTab" />
         <activity android:name="com.wcities.eventseeker.EventDetailsActivityTab" />
+        <activity android:name="com.wcities.eventseeker.WebViewActivityTab" />
         
         <activity android:name="com.wcities.eventseeker.SpotifyActivity" 
             android:theme="@style/Theme.Transparent"

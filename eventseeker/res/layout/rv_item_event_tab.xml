@@ -10,7 +10,7 @@
     card_view:cardCornerRadius="@dimen/cv_root_corner_rad_rv_item_event_tab"
     card_view:cardElevation="@dimen/cv_root_elevation_rv_item_event_tab" >
     
-    <RelativeLayout android:id="@+id/rltLytContainer"
+    <RelativeLayout android:id="@+id/rltLytRoot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
     
@@ -44,45 +44,93 @@
 	    	
 	    </RelativeLayout>
 	    
-	    <ImageView android:id="@+id/imgHandle"
-            android:layout_width="@dimen/img_handle_w_rv_item_event_tab"
-            android:layout_height="wrap_content"
-			android:layout_alignParentRight="true"
-            android:contentDescription="handle image"
-            android:src="@drawable/ic_more_slider"
-            android:scaleType="centerInside"
-            android:layout_alignTop="@id/txtEvtLoc"
-            android:layout_alignBottom="@id/txtEvtTime" />
+	    <RelativeLayout android:id="@+id/rltLytBtm"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/imgEvt" >
 	    
-	    <TextView android:id="@+id/txtEvtLoc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/imgEvt"
-            android:layout_toLeftOf="@id/imgHandle"
-            android:drawableLeft="@drawable/ic_event_location"
-            android:gravity="center_vertical"
-            android:layout_marginLeft="@dimen/txt_evt_details_margin_l_rv_item_event_tab"
-            android:layout_marginRight="@dimen/txt_evt_details_margin_r_rv_item_event_tab"
-            android:paddingTop="@dimen/txt_evt_loc_pad_t_rv_item_event_tab"
-            android:drawablePadding="@dimen/txt_evt_details_drawable_pad_rv_item_event_tab"
-            android:textSize="@dimen/txt_evt_details_txt_size_rv_item_event_tab"
-            android:lines="2"
-            android:ellipsize="end" />
-    
-	    <TextView android:id="@+id/txtEvtTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtEvtLoc"
-            android:layout_toLeftOf="@id/imgHandle"
-            android:drawableLeft="@drawable/ic_event_time"
-            android:gravity="center_vertical"
-            android:layout_marginLeft="@dimen/txt_evt_details_margin_l_rv_item_event_tab"
-            android:layout_marginRight="@dimen/txt_evt_details_margin_r_rv_item_event_tab"
-            android:layout_marginTop="@dimen/txt_evt_time_margin_t_rv_item_event_tab"
-            android:drawablePadding="@dimen/txt_evt_details_drawable_pad_rv_item_event_tab"
-            android:textSize="@dimen/txt_evt_details_txt_size_rv_item_event_tab"
-            android:paddingBottom="@dimen/txt_evt_time_pad_b_rv_item_event_tab"
-            android:lines="@integer/txt_evt_time_lines_rv_item_event_tab" />
+		    <RelativeLayout android:id="@+id/rltLytDetails"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content">
+		    
+			    <ImageView android:id="@+id/imgHandle"
+		            android:layout_width="@dimen/img_handle_w_rv_item_event_tab"
+		            android:layout_height="match_parent"
+					android:layout_alignParentRight="true"
+		            android:contentDescription="handle image"
+		            android:src="@drawable/ic_more_slider"
+		            android:scaleType="centerInside"
+		            android:layout_centerVertical="true" />
+			    
+			    <TextView android:id="@+id/txtEvtLoc"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:layout_toLeftOf="@id/imgHandle"
+		            android:drawableLeft="@drawable/ic_event_location"
+		            android:gravity="center_vertical"
+		            android:layout_marginLeft="@dimen/txt_evt_details_margin_l_rv_item_event_tab"
+		            android:layout_marginRight="@dimen/txt_evt_details_margin_r_rv_item_event_tab"
+		            android:paddingTop="@dimen/txt_evt_loc_pad_t_rv_item_event_tab"
+		            android:drawablePadding="@dimen/txt_evt_details_drawable_pad_rv_item_event_tab"
+		            android:textSize="@dimen/txt_evt_details_txt_size_rv_item_event_tab"
+		            android:lines="2"
+		            android:ellipsize="end" />
+		    
+			    <TextView android:id="@+id/txtEvtTime"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:layout_below="@id/txtEvtLoc"
+		            android:layout_toLeftOf="@id/imgHandle"
+		            android:drawableLeft="@drawable/ic_event_time"
+		            android:gravity="center_vertical"
+		            android:layout_marginLeft="@dimen/txt_evt_details_margin_l_rv_item_event_tab"
+		            android:layout_marginRight="@dimen/txt_evt_details_margin_r_rv_item_event_tab"
+		            android:layout_marginTop="@dimen/txt_evt_time_margin_t_rv_item_event_tab"
+		            android:drawablePadding="@dimen/txt_evt_details_drawable_pad_rv_item_event_tab"
+		            android:textSize="@dimen/txt_evt_details_txt_size_rv_item_event_tab"
+		            android:paddingBottom="@dimen/txt_evt_time_pad_b_rv_item_event_tab"
+		            android:lines="@integer/txt_evt_time_lines_rv_item_event_tab" />
+		    
+		    </RelativeLayout>
+		    
+		    <LinearLayout android:id="@+id/lnrSliderContent"
+		        android:layout_width="@dimen/lnr_slider_content_w_rv_item_event_tab"
+		        android:layout_height="wrap_content"
+		        android:layout_alignTop="@id/rltLytDetails"
+		        android:layout_alignBottom="@id/rltLytDetails"
+		        android:layout_alignParentRight="true"
+		        android:background="@drawable/bg_slctr_lnr_slider_content_rv_item_event_tab"
+		        android:gravity="center_vertical"
+		        android:orientation="horizontal"
+		        android:visibility="invisible" >
+			    
+		        <ImageView android:id="@+id/imgTicket"
+	                android:layout_width="0dp"
+	                android:layout_height="@dimen/lnr_slider_content_img_ht_rv_item_event_tab"
+	                android:layout_weight="1"
+	                android:scaleType="centerInside"
+	                android:src="@drawable/ic_tickets_available_slider"
+	                android:background="@drawable/bg_slctr_lnr_slider_content_rv_item_event_tab" />
+		        
+		        <ImageView android:id="@+id/imgSave"
+	                android:layout_width="0dp"
+	                android:layout_height="@dimen/lnr_slider_content_img_ht_rv_item_event_tab"
+	                android:layout_weight="1"
+	                android:scaleType="centerInside"
+	                android:src="@drawable/ic_unsaved_event_slider"
+	                android:background="@drawable/bg_slctr_lnr_slider_content_rv_item_event_tab" />
+		        
+		        <ImageView android:id="@+id/imgShare"
+	                android:layout_width="0dp"
+	                android:layout_height="@dimen/lnr_slider_content_img_ht_rv_item_event_tab"
+	                android:layout_weight="1"
+	                android:scaleType="centerInside"
+	                android:src="@drawable/ic_share_slider"
+	                android:background="@drawable/bg_slctr_lnr_slider_content_rv_item_event_tab" />
+		
+		    </LinearLayout>
+	    
+	    </RelativeLayout>
 	    
 	</RelativeLayout>
 	

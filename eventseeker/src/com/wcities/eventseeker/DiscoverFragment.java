@@ -913,6 +913,12 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 									}
 								}
 								
+								/**
+								 * we change rltLytContent width from MATCH_PARENT to fixed value, because 
+								 * otherwise on sliding the row, its width goes on increasing (extra width 
+								 * added due to negative left margin on sliding the row) hence text starts expanding
+								 * along the width while sliding which looks weird.
+								 */
 								rltLytContentW = lp.width = (holder.rltLytRoot.getWidth() - imgEventW);
 								holder.rltLytContent.setLayoutParams(lp);
 				            	/*Log.d(TAG, "onGlobalLayout(), rltLytContentW = " + rltLytContentW + 
@@ -920,7 +926,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 
 								if (openPos == position) {
 									/**
-									 * Now since we know fixed height of rltLytContent, we can update its 
+									 * Now since we know fixed width of rltLytContent, we can update its 
 									 * left margin in layoutParams by calling openSlider() which was delayed 
 									 * until now [by condition if (rltLytContentW != INVALID) at end of 
 									 * onBindViewHolder()].
@@ -931,6 +937,12 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 				        });
 						
 					} else {
+						/**
+						 * we change rltLytContent width from MATCH_PARENT to fixed value, because 
+						 * otherwise on sliding the row, its width goes on increasing (extra width 
+						 * added due to negative left margin on sliding the row) hence text starts expanding
+						 * along the width while sliding which looks weird.
+						 */
 						RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) holder.rltLytContent.getLayoutParams();
 						lp.width = rltLytContentW;
 						//Log.d(TAG, "else, rltLytContentW = " + rltLytContentW);

@@ -438,5 +438,7 @@
     <dimen name="txt_evt_details_txt_size_rv_item_event_tab">16sp</dimen>
     <dimen name="txt_evt_time_margin_t_rv_item_event_tab">@dimen/txt_evt_loc_pad_t_rv_item_event_tab</dimen>
     <dimen name="txt_evt_time_pad_b_rv_item_event_tab">@dimen/txt_evt_loc_pad_t_rv_item_event_tab</dimen>
+    <dimen name="lnr_slider_content_w_rv_item_event_tab">200dp</dimen>
+    <dimen name="lnr_slider_content_img_ht_rv_item_event_tab">70dp</dimen>
     
 </resources>

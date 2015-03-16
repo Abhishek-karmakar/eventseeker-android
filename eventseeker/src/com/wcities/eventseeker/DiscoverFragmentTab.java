@@ -7,16 +7,14 @@ import java.util.List;
 
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.AsyncTask.Status;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,14 +22,17 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 
-import com.wcities.eventseeker.adapter.RVCatTitlesAdapterTab;
+import com.facebook.Session;
+import com.facebook.SessionState;
 import com.wcities.eventseeker.adapter.RVCatEventsAdapterTab;
+import com.wcities.eventseeker.adapter.RVCatTitlesAdapterTab;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadEvents;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Category;
 import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.custom.fragment.PublishEventFragment;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
@@ -41,7 +42,7 @@ import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.viewdata.ItemDecorationItemOffset;
 
-public class DiscoverFragmentTab extends Fragment implements OnClickListener, LoadItemsInBackgroundListener, 
+public class DiscoverFragmentTab extends PublishEventFragment implements OnClickListener, LoadItemsInBackgroundListener, 
 		AsyncTaskListener<Void> {
 	
 	private static final String TAG = DiscoverFragmentTab.class.getSimpleName();
@@ -185,6 +186,8 @@ public class DiscoverFragmentTab extends Fragment implements OnClickListener, Lo
 
 		} else {
 			recyclerVCategories.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListenerCatTitles);
+			// to update values which should change on orientation change
+			rvCatEventsAdapterTab.onActivityCreated();
 		}
 		
 		recyclerVCategories.setAdapter(catTitlesAdapterTab);
@@ -317,7 +320,7 @@ public class DiscoverFragmentTab extends Fragment implements OnClickListener, Lo
 		/**
 		 * selectedPos is -1 sometimes when called from onGlobalLayoutListenerCatTitles() ->  centerPosition()
 		 */
-		if (selectedPos < 0) {
+		if (selectedPos >= 0) {
 			catTitlesAdapterTab.setSelectedPos(selectedPos);
 		}
 		return selectedPos;
@@ -372,9 +375,17 @@ public class DiscoverFragmentTab extends Fragment implements OnClickListener, Lo
 	}
 	
 	private void onCatChanged() {
-		//Log.d(TAG, "onCatChanged(), pos = " + pos + ", selectedCatId = " + selectedCatId);
+		//Log.d(TAG, "onCatChanged()");
 		//currentItem = pos;
 		resetEventList();
+	}
+	
+	public void setEvent(Event event) {
+		this.event = event;
+	}
+	
+	public void handlePublishEvent() {
+		super.handlePublishEvent();
 	}
 
 	@Override
@@ -417,5 +428,15 @@ public class DiscoverFragmentTab extends Fragment implements OnClickListener, Lo
 	@Override
 	public void onTaskCompleted(Void... params) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onPublishPermissionGranted() {
+		rvCatEventsAdapterTab.onPublishPermissionGranted();
+	}
+
+	@Override
+	public void call(Session session, SessionState state, Exception exception) {
+		rvCatEventsAdapterTab.call(session, state, exception);
 	}
 }

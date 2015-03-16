@@ -1,8 +1,6 @@
 package com.wcities.eventseeker;
 
 import android.os.Bundle;
-import android.transition.Transition;
-import android.transition.TransitionInflater;
 
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -15,9 +13,6 @@ public class DiscoverActivityTab extends BaseActivityTab {
 	protected void onCreate(Bundle savedInstanceState) {
 		getWindow().requestFeature(android.view.Window.FEATURE_CONTENT_TRANSITIONS);
         getWindow().requestFeature(android.view.Window.FEATURE_ACTIVITY_TRANSITIONS);
-        Transition transition = TransitionInflater.from(this).inflateTransition(R.transition.change_image_transform);
-		getWindow().setSharedElementEnterTransition(transition);
-		getWindow().setSharedElementExitTransition(transition);
         
 		super.onCreate(savedInstanceState);
 		//Log.d(TAG, "onCreate()");
