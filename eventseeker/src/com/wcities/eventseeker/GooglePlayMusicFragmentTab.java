@@ -25,14 +25,14 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.Enums.Service;
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
-import com.wcities.eventseeker.interfaces.SyncArtistListenerTab;
+import com.wcities.eventseeker.interfaces.SyncArtistListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class GooglePlayMusicFragmentTab extends FragmentLoadableFromBackStack  {
 
 	private static final String TAG = GooglePlayMusicFragmentTab.class.getSimpleName();
 	
-	private SyncArtistListenerTab syncArtistListener;
+	private SyncArtistListener syncArtistListener;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,8 +54,8 @@ public class GooglePlayMusicFragmentTab extends FragmentLoadableFromBackStack  {
 		getArtists.execute(authToken);
 		
 		String tag = getArguments().getString(BundleKeys.SYNC_ARTIST_LISTENER);
-		syncArtistListener = (SyncArtistListenerTab) 
-				((BaseActivityTab) FragmentUtil.getActivity(this)).getFragmentByTag(tag);
+		syncArtistListener = (SyncArtistListener) 
+				((BaseActivity) FragmentUtil.getActivity(this)).getFragmentByTag(tag);
 		syncArtistListener.onArtistSyncStarted(true);
 	}
 	

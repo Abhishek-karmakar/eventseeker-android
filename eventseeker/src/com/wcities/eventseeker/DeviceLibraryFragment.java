@@ -14,16 +14,16 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.wcities.eventseeker.ConnectAccountsFragment.ServiceAccount;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.SyncArtists;
 import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.constants.Enums.Service;
+import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.SyncArtistListener;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.viewdata.ServiceAccount;
 
 public class DeviceLibraryFragment extends FragmentLoadableFromBackStack implements OnClickListener {
 	
@@ -39,7 +39,9 @@ public class DeviceLibraryFragment extends FragmentLoadableFromBackStack impleme
 		setRetainInstance(true);
 		serviceAccount = (ServiceAccount) getArguments().getSerializable(BundleKeys.SERVICE_ACCOUNTS);
 
-		syncArtistListener = (SyncArtistListener) getArguments().getSerializable(BundleKeys.SYNC_ARTIST_LISTENER);
+		String tag = getArguments().getString(BundleKeys.SYNC_ARTIST_LISTENER);
+		syncArtistListener = (SyncArtistListener) 
+				((BaseActivity) FragmentUtil.getActivity(this)).getFragmentByTag(tag);
 	}
 	
 	@Override

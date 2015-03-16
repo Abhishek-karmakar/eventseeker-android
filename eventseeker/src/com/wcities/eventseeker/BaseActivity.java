@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.widget.Toast;
@@ -347,5 +348,9 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
 			Toast.makeText(getApplicationContext(), R.string.error_this_action_couldnt_be_completed_at_this_time,
 					Toast.LENGTH_SHORT).show();
 		}
+	}
+
+	public Fragment getFragmentByTag(String fragmentTag) {
+		return getSupportFragmentManager().findFragmentByTag(fragmentTag);
 	}
 }

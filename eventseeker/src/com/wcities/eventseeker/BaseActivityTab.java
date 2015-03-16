@@ -442,8 +442,4 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 				break;
 		}
 	}
-
-	public Fragment getFragmentByTag(String fragmentTag) {
-		return getSupportFragmentManager().findFragmentByTag(fragmentTag);
-	}
 }

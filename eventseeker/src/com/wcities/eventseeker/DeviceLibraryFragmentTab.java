@@ -14,7 +14,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.wcities.eventseeker.ConnectAccountsFragmentTab.ServiceAccount;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.SyncArtists;
@@ -23,8 +22,9 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.Enums.Service;
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
-import com.wcities.eventseeker.interfaces.SyncArtistListenerTab;
+import com.wcities.eventseeker.interfaces.SyncArtistListener;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.viewdata.ServiceAccount;
 
 public class DeviceLibraryFragmentTab extends FragmentLoadableFromBackStack implements OnClickListener {
 	
@@ -32,7 +32,7 @@ public class DeviceLibraryFragmentTab extends FragmentLoadableFromBackStack impl
 	
 	private ServiceAccount serviceAccount;
 
-	private SyncArtistListenerTab syncArtistListener;
+	private SyncArtistListener syncArtistListener;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -41,8 +41,8 @@ public class DeviceLibraryFragmentTab extends FragmentLoadableFromBackStack impl
 		serviceAccount = (ServiceAccount) getArguments().getSerializable(BundleKeys.SERVICE_ACCOUNTS);
 
 		String tag = getArguments().getString(BundleKeys.SYNC_ARTIST_LISTENER);
-		syncArtistListener = (SyncArtistListenerTab) 
-				((BaseActivityTab) FragmentUtil.getActivity(this)).getFragmentByTag(tag);
+		syncArtistListener = (SyncArtistListener) 
+				((BaseActivity) FragmentUtil.getActivity(this)).getFragmentByTag(tag);
 	}
 	
 	@Override

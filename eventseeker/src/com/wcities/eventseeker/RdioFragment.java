@@ -32,7 +32,6 @@ import android.widget.Toast;
 import com.rdio.android.api.Rdio;
 import com.rdio.android.api.RdioApiCallback;
 import com.rdio.android.api.RdioListener;
-import com.wcities.eventseeker.ConnectAccountsFragment.ServiceAccount;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.SyncArtists;
@@ -43,6 +42,7 @@ import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.SyncArtistListener;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.viewdata.ServiceAccount;
 
 public class RdioFragment extends FragmentLoadableFromBackStack implements OnClickListener, RdioListener {
 
@@ -79,8 +79,10 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 		serviceAccount = (ServiceAccount) getArguments().getSerializable(BundleKeys.SERVICE_ACCOUNTS);
 		//Log.d(TAG, "onCreate : SerciveAccount" + serviceAccount);
 
-		syncArtistListener = (SyncArtistListener) getArguments().getSerializable(BundleKeys.SYNC_ARTIST_LISTENER);
-		
+
+		String tag = getArguments().getString(BundleKeys.SYNC_ARTIST_LISTENER);
+		syncArtistListener = (SyncArtistListener) 
+				((BaseActivity) FragmentUtil.getActivity(this)).getFragmentByTag(tag);
 		/**
 		 * this is because when orientation got change, before that syncing might be in progress, so the value of
 		 * 'serviceAccount.isInProgress' will be true. But now if user doesn't sync again and he goes back then then

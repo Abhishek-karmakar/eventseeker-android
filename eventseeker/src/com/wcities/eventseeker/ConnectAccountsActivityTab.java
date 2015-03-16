@@ -72,39 +72,16 @@ public class ConnectAccountsActivityTab extends BaseActivityTab implements Conne
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
-		case AppConstants.REQ_CODE_GOOGLE_PLUS_RESOLVE_ERR:
-		case AppConstants.REQ_CODE_GET_GOOGLE_PLAY_SERVICES:
-			//Log.d(TAG, "current frag tag = " + currentContentFragmentTag);
-			Fragment fragment = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
-			if (fragment != null) {
-				fragment.onActivityResult(requestCode, resultCode, data);
-			}
-			break;
 			
 		case AppConstants.REQ_CODE_SPOTIFY:
-			fragment = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
+			Fragment fragment = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
 			if (fragment instanceof ConnectAccountsFragment) {
 				fragment.onActivityResult(requestCode, resultCode, data);
 			}
 			break;
 			
 		default:
-			if (GPlusUtil.isGPlusPublishPending) {
-				/**
-				 * This check is required to direct onActivityResult() calls from MainActivity & handle it at right 
-				 * place, because google plus share intent doesn't return right request code in onActivityResult() 
-				 * method.
-				 */
-				fragment = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
-				if (fragment != null) {
-					fragment.onActivityResult(requestCode, resultCode, data);
-				}
-				
-			} else {
-				// pass it to the fragments
-				super.onActivityResult(requestCode, resultCode, data);
-			}
-			break;
+			super.onActivityResult(requestCode, resultCode, data);
 		}
 	}
 	
@@ -146,11 +123,11 @@ public class ConnectAccountsActivityTab extends BaseActivityTab implements Conne
 							FragmentUtil.getTag(twitterFragmentTab), addToBackStack);
 			break;
 			
-		/*case Spotify:
+		case Spotify:
 			Intent intent = new Intent(getApplicationContext(), SpotifyActivity.class);
 			intent.putExtras(args);
 			startActivityForResult(intent, AppConstants.REQ_CODE_SPOTIFY);
-			break;*/
+			break;
 
 		case Rdio:
 			RdioFragmentTab rdioFragmentTab = new RdioFragmentTab();

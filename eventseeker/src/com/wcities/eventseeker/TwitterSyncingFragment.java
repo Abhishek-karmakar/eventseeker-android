@@ -23,7 +23,7 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.Enums.Service;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
-import com.wcities.eventseeker.interfaces.SyncArtistListenerTab;
+import com.wcities.eventseeker.interfaces.SyncArtistListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class TwitterSyncingFragment extends FragmentLoadableFromBackStack {
@@ -33,7 +33,7 @@ public class TwitterSyncingFragment extends FragmentLoadableFromBackStack {
 	private Twitter twitter;
 	private Resources res;
 
-	private SyncArtistListenerTab syncArtistListener;
+	private SyncArtistListener syncArtistListener;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -42,8 +42,8 @@ public class TwitterSyncingFragment extends FragmentLoadableFromBackStack {
 		res = FragmentUtil.getResources(this);
 		
 		String tag = getArguments().getString(BundleKeys.SYNC_ARTIST_LISTENER);
-		syncArtistListener = (SyncArtistListenerTab) 
-				((BaseActivityTab) FragmentUtil.getActivity(this)).getFragmentByTag(tag);
+		syncArtistListener = (SyncArtistListener) 
+				((BaseActivity) FragmentUtil.getActivity(this)).getFragmentByTag(tag);
 	}
 	
 	@Override

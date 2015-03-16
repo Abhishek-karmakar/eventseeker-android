@@ -52,7 +52,9 @@ public class GooglePlayMusicFragment extends FragmentLoadableFromBackStack  {
 		GetArtists getArtists = new GetArtists(this);
 		getArtists.execute(authToken);
 		
-		syncArtistListener = (SyncArtistListener) getArguments().getSerializable(BundleKeys.SYNC_ARTIST_LISTENER);
+		String tag = getArguments().getString(BundleKeys.SYNC_ARTIST_LISTENER);
+		syncArtistListener = (SyncArtistListener) 
+				((BaseActivity) FragmentUtil.getActivity(this)).getFragmentByTag(tag);
 		syncArtistListener.onArtistSyncStarted(true);
 	}
 	

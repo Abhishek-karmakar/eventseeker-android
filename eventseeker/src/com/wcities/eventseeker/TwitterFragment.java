@@ -17,15 +17,15 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
 
-import com.wcities.eventseeker.ConnectAccountsFragment.ServiceAccount;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.constants.Enums.Service;
+import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.viewdata.ServiceAccount;
 
 public class TwitterFragment extends FragmentLoadableFromBackStack {
 	
@@ -55,8 +55,8 @@ public class TwitterFragment extends FragmentLoadableFromBackStack {
 					Bundle args = new Bundle();
 					args.putString(BundleKeys.OAUTH_VERIFIER, oauthVerifier);
 					args.putSerializable(BundleKeys.TWITTER, twitter);
-					args.putSerializable(BundleKeys.SYNC_ARTIST_LISTENER, 
-							getArguments().getSerializable(BundleKeys.SYNC_ARTIST_LISTENER));
+					args.putString(BundleKeys.SYNC_ARTIST_LISTENER, 
+							getArguments().getString(BundleKeys.SYNC_ARTIST_LISTENER));
 					
 					//Log.d(TAG, "twitter Syncying : oauthVerifier : " + oauthVerifier + ", twitter : " + twitter);
 					((ReplaceFragmentListener)FragmentUtil.getActivity(TwitterFragment.this))

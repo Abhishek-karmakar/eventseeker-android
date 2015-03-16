@@ -377,6 +377,7 @@
     <dimen name="txt_personalize_margin_t_connect_accounts_li_top">20dp</dimen>
     <dimen name="txt_personalize_pad_b_connect_accounts_li_top">20dp</dimen>
     <dimen name="txt_personalize_wt_connect_accounts_li_top">@integer/wrap_content</dimen>
+    <dimen name="txt_personalize_txt_size_connect_accounts_li_top">13sp</dimen>
     <!-- connect_accounts_list_item.xml -->
     <dimen name="rlt_layout_root_ht_connect_accounts_list_item">@dimen/action_bar_ht</dimen>
     <dimen name="rlt_layout_root_pad_l_connect_accounts_list_item">14dp</dimen>

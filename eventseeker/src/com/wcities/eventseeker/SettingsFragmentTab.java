@@ -66,7 +66,8 @@ public class SettingsFragmentTab extends ListFragment {
 			 */
         	htForSettingsList = getListView().getHeight()
 					// subtracting divider height
-					- FragmentUtil.getResources(SettingsFragmentTab.this).getDimensionPixelSize(R.dimen.divider_section_ht_navigation_drawer_list_item);
+					- FragmentUtil.getResources(SettingsFragmentTab.this)
+					.getDimensionPixelSize(R.dimen.divider_section_ht_navigation_drawer_list_item);
 			settingsListAdapter.setHtForSettingsList(htForSettingsList);
         }
     };
@@ -94,28 +95,6 @@ public class SettingsFragmentTab extends ListFragment {
 			//Log.d(TAG, "settings item = " + settingsItem.name());
 			((OnSettingsItemClickedListener) FragmentUtil.getActivity(this)).onSettingsItemClicked(settingsItem, null);
 		}
-		
-		EventSeekr eventSeekr = FragmentUtil.getApplication(this);
-		/**
-		 * In addition to calling checkAndSetIfInLandscapeMode() from BaseActivityTab, we need to call it from 
-		 * here as well, because otherwise on orientation change this fragment's onCreate() is called even 
-		 * before its activity's onCreate() & we are using is10InchTabletAndInPortraitMode() below for 10" tablet
-		 * which requires updated isInLandscape value before onCreate() of activity in above case.
-		 */
-		eventSeekr.checkAndSetIfInLandscapeMode();
-		Resources res = FragmentUtil.getResources(this);
-
-		if (eventSeekr.is10InchTabletAndInPortraitMode()) {
-			htForSettingsList = res.getDimensionPixelSize(R.dimen.ht_navigation_drawer_list);
-			
-		} else {
-			DisplayMetrics displaymetrics = new DisplayMetrics();
-			FragmentUtil.getActivity(this).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-			htForSettingsList = displaymetrics.heightPixels - ViewUtil.getStatusBarHeight(res)
-					- res.getDimensionPixelSize(R.dimen.action_bar_ht) 
-					// subtracting divider height
-					- res.getDimensionPixelSize(R.dimen.divider_section_ht_navigation_drawer_list_item);
-		}
 	}
 	
 	@Override
@@ -127,6 +106,20 @@ public class SettingsFragmentTab extends ListFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		Resources res = FragmentUtil.getResources(this);
+		EventSeekr eventSeekr = FragmentUtil.getApplication(this);
+		if (eventSeekr.is10InchTabletAndInPortraitMode()) {
+			htForSettingsList = res.getDimensionPixelSize(R.dimen.ht_navigation_drawer_list);
+			
+		} else {
+			DisplayMetrics displaymetrics = new DisplayMetrics();
+			FragmentUtil.getActivity(this).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+			htForSettingsList = displaymetrics.heightPixels - ViewUtil.getStatusBarHeight(res)
+					- res.getDimensionPixelSize(R.dimen.action_bar_ht) 
+					// subtracting divider height
+					- res.getDimensionPixelSize(R.dimen.divider_section_ht_navigation_drawer_list_item);
+		}
+		
 		if (settingsItems == null) {
 			settingsItems = new ArrayList<SettingsItem>(Arrays.asList(SettingsItem.values()));
 			settingsListAdapter = new SettingsListAdapter((Activity) FragmentUtil.getActivity(this), 
@@ -134,6 +127,9 @@ public class SettingsFragmentTab extends ListFragment {
 			
 		} else {
 			settingsListAdapter.setInflater((Activity) FragmentUtil.getActivity(this));
+			if (FragmentUtil.getApplication(this).is10InchTabletAndInPortraitMode()) {
+				settingsListAdapter.setHtForSettingsList(htForSettingsList);
+			}
 		}
 		
 		setListAdapter(settingsListAdapter);
@@ -143,8 +139,6 @@ public class SettingsFragmentTab extends ListFragment {
         getListView().setCacheColorHint(android.R.color.transparent);
         getListView().setScrollingCacheEnabled(false);
         
-        
-        EventSeekr eventSeekr = FragmentUtil.getApplication(this);
         if (eventSeekr.isTablet() && !eventSeekr.is10InchTabletAndInPortraitMode()) {
         	// for 10" tablet portrait orientation we are using fix height, hence this is not needed
         	getListView().getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);

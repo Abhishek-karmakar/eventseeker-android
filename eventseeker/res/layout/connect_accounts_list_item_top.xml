@@ -58,6 +58,7 @@
         android:paddingLeft="@dimen/txt_artist_synced_pad_l_r_connect_accounts_li_top"
         android:paddingRight="@dimen/txt_artist_synced_pad_l_r_connect_accounts_li_top"
         android:text="@string/personalize_by_syncing"
+        android:textSize="@dimen/txt_personalize_txt_size_connect_accounts_li_top"
         android:textColor="@android:color/white" />
 
 </RelativeLayout>

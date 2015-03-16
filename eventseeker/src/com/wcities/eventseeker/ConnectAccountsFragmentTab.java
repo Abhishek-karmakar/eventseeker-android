@@ -1,7 +1,6 @@
 package com.wcities.eventseeker;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,14 +50,15 @@ import com.wcities.eventseeker.constants.Enums.Service;
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
-import com.wcities.eventseeker.interfaces.SyncArtistListenerTab;
+import com.wcities.eventseeker.interfaces.SyncArtistListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.viewdata.ServiceAccount;
 
 public class ConnectAccountsFragmentTab extends ListFragmentLoadableFromBackStack implements EventSeekrListener, 
-		AsyncTaskListener<Object>, DialogBtnClickListener, SyncArtistListenerTab {
+		AsyncTaskListener<Object>, DialogBtnClickListener, SyncArtistListener {
 	
     private static final String TAG = ConnectAccountsFragmentTab.class.getName();
     
@@ -433,13 +433,6 @@ public class ConnectAccountsFragmentTab extends ListFragmentLoadableFromBackStac
 			private ImageView /*imgService,*/ imgCorrect/*imgPlus, imgProgressBar*/;
 			private TextView txtServiceName/*, txtCount*/;
 		}
-	}
-	
-	public static class ServiceAccount implements Serializable {
-		private int normalDrawable, pressedDrawable;
-		private String name;
-		private int count;
-		public boolean isInProgress;
 	}
 	
 	private OnClickListener onBtnContinueClickListener = new OnClickListener() {

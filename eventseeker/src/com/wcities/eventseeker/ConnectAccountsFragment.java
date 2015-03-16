@@ -1,7 +1,6 @@
 package com.wcities.eventseeker;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +55,7 @@ import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.viewdata.ServiceAccount;
 
 public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack implements EventSeekrListener, 
 		AsyncTaskListener<Object>, DialogBtnClickListener, SyncArtistListener {
@@ -480,7 +480,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 
 			default:
 				bundle = new Bundle();
-				bundle.putSerializable(BundleKeys.SYNC_ARTIST_LISTENER, ConnectAccountsFragment.this);
+				bundle.putString(BundleKeys.SYNC_ARTIST_LISTENER, AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS);
 				bundle.putSerializable(BundleKeys.SERVICE_ACCOUNTS, serviceAccount);
 				((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
 					.onServiceSelected(service, bundle, true);
@@ -492,13 +492,6 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			private ImageView /*imgService,*/ imgCorrect/*imgPlus, imgProgressBar*/;
 			private TextView txtServiceName/*, txtCount*/;
 		}
-	}
-	
-	public static class ServiceAccount implements Serializable {
-		private int normalDrawable, pressedDrawable;
-		private String name;
-		private int count;
-		public boolean isInProgress;
 	}
 	
 	private OnClickListener onBtnContinueClickListener = new OnClickListener() {
@@ -640,7 +633,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 						break;
 					}
 				}
-				args.putSerializable(BundleKeys.SYNC_ARTIST_LISTENER, ConnectAccountsFragment.this);
+				args.putSerializable(BundleKeys.SYNC_ARTIST_LISTENER, AppConstants.FRAGMENT_TAG_CONNECT_ACCOUNTS);
 				((ConnectAccountsFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragment.this))
             			.onServiceSelected(Service.GooglePlay, args, true);
 			}
