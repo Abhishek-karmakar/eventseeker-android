@@ -65,6 +65,7 @@
         <activity android:name="com.wcities.eventseeker.ConnectAccountsActivityTab" />
         <activity android:name="com.wcities.eventseeker.EventDetailsActivityTab" />
         <activity android:name="com.wcities.eventseeker.WebViewActivityTab" />
+        <activity android:name="com.wcities.eventseeker.ChangeLocationActivityTab" />
         
         <activity android:name="com.wcities.eventseeker.SpotifyActivity" 
             android:theme="@style/Theme.Transparent"

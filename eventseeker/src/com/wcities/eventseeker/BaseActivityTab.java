@@ -26,6 +26,7 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.Enums.SettingsItem;
 import com.wcities.eventseeker.interfaces.ActivityDestroyedListener;
 import com.wcities.eventseeker.interfaces.OnLocaleChangedListener;
+import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GPlusUtil;
 
@@ -423,13 +424,19 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 	
 	@Override
 	public void onSettingsItemClicked(SettingsItem settingsItem, Bundle args) {
+		Intent intent;
 		switch (settingsItem) {
 		
 			case SYNC_ACCOUNTS:
-		    	Intent intent = new Intent(getApplicationContext(), ConnectAccountsActivityTab.class);
+		    	intent = new Intent(getApplicationContext(), ConnectAccountsActivityTab.class);
 		    	startActivity(intent);
 		    	break;
 		
+			case CHANGE_LOCATION:
+				intent = new Intent(getApplicationContext(), ChangeLocationActivityTab.class);
+				startActivity(intent);
+				break;
+
 			case INVITE_FRIENDS:
 				inviteFriends();
 				break;

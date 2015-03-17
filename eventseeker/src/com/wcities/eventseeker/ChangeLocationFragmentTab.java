@@ -3,11 +3,11 @@ package com.wcities.eventseeker;
 import java.io.IOException;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
@@ -30,19 +30,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.constants.ScreenNames;
-import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GeoUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
 
-public class ChangeLocationFragment extends FragmentLoadableFromBackStack implements OnQueryTextListener, 
-		GeoUtilListener, OnClickListener {
+public class ChangeLocationFragmentTab extends Fragment implements OnQueryTextListener, GeoUtilListener, OnClickListener {
 	
-	private static final String TAG = ChangeLocationFragment.class.getName();
-
-	private static final String MAP_FRAGMENT_TAG = "mapFragment";
+	private static final String TAG = ChangeLocationFragmentTab.class.getSimpleName();
 
 	private SearchView searchView;
 	private GoogleMap mMap;
@@ -52,18 +47,6 @@ public class ChangeLocationFragment extends FragmentLoadableFromBackStack implem
 
 	private boolean isMyLocationClicked;
 
-	public interface ChangeLocationFragmentListener {
-		public void onLocationChanged(Bundle args);
-	}
-	
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		if (!(activity instanceof ChangeLocationFragmentListener)) {
-            throw new ClassCastException(activity.toString() + " must implement ChangeLocationFragmentListener");
-		}
-	}
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -87,7 +70,7 @@ public class ChangeLocationFragment extends FragmentLoadableFromBackStack implem
         args.putDouble(BundleKeys.LON, lon);
         mMapFragment.setArguments(args);
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.add(R.id.lnrLytMap, mMapFragment, MAP_FRAGMENT_TAG).commit();
+        transaction.add(R.id.lnrLytMap, mMapFragment, FragmentUtil.getTag(MapFragment.class)).commit();
         
         return v;
     }
@@ -100,18 +83,20 @@ public class ChangeLocationFragment extends FragmentLoadableFromBackStack implem
     	searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setQueryHint(getResources().getString(R.string.menu_search));
         searchView.setOnQueryTextListener(this);
-        /**
-         * 23-02-2015:
-         * A bug was filed in the 'Edit' sheet mailed by Amir Sir on Feb 18. It says - 'When 
-         * on the map, to change your location the keyboard pops up before you have time too 
-         * look at map or set a marker. The keyboard should no pop up until search has been 
-         * selected.'. So, to avoid expansion of SearchView on beginning the below line is commented
-         */
-        //MenuItemCompat.setOnActionExpandListener(searchItem, this);
-        //MenuItemCompat.expandActionView(searchItem);
-        
-    	super.onCreateOptionsMenu(menu, inflater);
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
+    
+    /*@Override
+    public void onDestroyView() {
+    	super.onDestroyView();
+    	*//**
+    	 * 17-03-2015:
+    	 * mMap instance is made null. So, that after the orientation change it can be reinitialized
+    	 * with the new Map 
+    	 *//*
+    	mMap = null;
+    }*/
     
     private void updateStrAddress(Address address) {
     	strAddress = "";
@@ -144,14 +129,13 @@ public class ChangeLocationFragment extends FragmentLoadableFromBackStack implem
     	boolean mapSetUp = true;
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
-        	MapFragment mMapFragment = (MapFragment) getChildFragmentManager().findFragmentByTag(MAP_FRAGMENT_TAG);
+        	MapFragment mMapFragment = (MapFragment) getChildFragmentManager().findFragmentByTag(FragmentUtil.getTag(MapFragment.class));
             mMap = mMapFragment.getMap();
             
             // Check if we were successful in obtaining the map.
             if (mMap == null) {
                 // Map is not verified. Hence we cannot manipulate the map.
             	mapSetUp = false;
-            	
             }
         }
         return mapSetUp;
@@ -179,7 +163,7 @@ public class ChangeLocationFragment extends FragmentLoadableFromBackStack implem
     			if (addresses != null && !addresses.isEmpty()) {
     				Address address = addresses.get(0);
     				//Log.i(TAG, "address=" + address);
-    				((ChangeLocationFragment) getParentFragment()).updateStrAddress(address);
+    				((ChangeLocationFragmentTab) getParentFragment()).updateStrAddress(address);
     				
     			} else {
             		Log.w(TAG, "No relevant address found.");
@@ -194,11 +178,11 @@ public class ChangeLocationFragment extends FragmentLoadableFromBackStack implem
     			GeoUtil.getAddressFromLocation(lat, lon, (GeoUtilListener) getParentFragment());
     		}
 
-            boolean mapSetUp = ((ChangeLocationFragment) getParentFragment()).setUpMapIfNeeded();
+            boolean mapSetUp = ((ChangeLocationFragmentTab) getParentFragment()).setUpMapIfNeeded();
             Log.d(TAG, "map set up = " + mapSetUp);
             if (mapSetUp) {
             	 // The Map is verified. It is now safe to manipulate the map.
-            	((ChangeLocationFragment) getParentFragment()).setMarker(lat, lon);
+            	((ChangeLocationFragmentTab) getParentFragment()).setMarker(lat, lon);
             }
     	}
     }
@@ -215,7 +199,6 @@ public class ChangeLocationFragment extends FragmentLoadableFromBackStack implem
 
 	@Override
 	public boolean onQueryTextSubmit(String query) {
-		//Log.i(TAG, "onQueryTextSubmit()");
 		isMyLocationClicked = false;
 		Geocoder geocoder = new Geocoder(FragmentUtil.getActivity(this));
 		List<Address> addresses = null;
@@ -248,6 +231,7 @@ public class ChangeLocationFragment extends FragmentLoadableFromBackStack implem
 
 	@Override
 	public void onAddressSearchCompleted(String address) {
+		Log.d(TAG, "onAddressSearchCompleted");
 		if (address != null && address.length() != 0) {
 			strAddress = address;
 			setMarker(lat, lon);
@@ -271,45 +255,29 @@ public class ChangeLocationFragment extends FragmentLoadableFromBackStack implem
 	}
 
 	@Override
-	public String getScreenName() {
-		return ScreenNames.CHANGE_LOCATION;
-	}
-
-	@Override
 	public void onClick(View v) {
+		Log.d(TAG, "onClick");
 		switch (v.getId()) {
 		case R.id.btnMyLocation:
 			isMyLocationClicked = true;
 			
 			if (mMap != null) {
-				/**
-				 * Below lines are commented as it was giving error with:
-				 * java.lang.IllegalStateException: MyLocation layer not enabled
-				 * 
-				 * 
-				 */
-				/*Location location = mMap.getMyLocation();
-				if (location != null) {
-					lat = location.getLatitude();
-					lon = location.getLongitude();
-
-				} else {*/
 				AppConstants.lat = AppConstants.NOT_ALLOWED_LAT;
 				AppConstants.lon = AppConstants.NOT_ALLOWED_LON;
 				
-				EventSeekr eventSeekr = FragmentUtil.getApplication(ChangeLocationFragment.this);
+				EventSeekr eventSeekr = FragmentUtil.getApplication(ChangeLocationFragmentTab.this);
 				double latLon[] = DeviceUtil.getLatLon(eventSeekr);
 				lat = latLon[0];
 				lon = latLon[1];
-				//}
+
 				List<Address> addresses = null;
-				Geocoder geocoder = new Geocoder(FragmentUtil.getActivity(ChangeLocationFragment.this));
+				Geocoder geocoder = new Geocoder(FragmentUtil.getActivity(ChangeLocationFragmentTab.this));
 				try {
 					addresses = geocoder.getFromLocation(lat, lon, 1);
 
 					if (addresses != null && !addresses.isEmpty()) {
 						Address address = addresses.get(0);
-						ChangeLocationFragment.this.updateStrAddress(address);
+						ChangeLocationFragmentTab.this.updateStrAddress(address);
 						onAddressUpdated(address);
 
 					} else {
@@ -322,7 +290,7 @@ public class ChangeLocationFragment extends FragmentLoadableFromBackStack implem
 
 				// Alternative way to find String Address
 				if (addresses == null || addresses.isEmpty()) {
-					GeoUtil.getAddressFromLocation(lat, lon, ChangeLocationFragment.this);
+					GeoUtil.getAddressFromLocation(lat, lon, ChangeLocationFragmentTab.this);
 				}
 			}
 			break;

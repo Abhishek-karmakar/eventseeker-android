@@ -41,7 +41,7 @@ public class WebViewActivityTab extends BaseActivityTab {
 				
 			} else {
 				WebViewFragmentTab webViewFragmentTab = (WebViewFragmentTab) getSupportFragmentManager()
-						.findFragmentByTag(FragmentUtil.getSupportTag(WebViewFragmentTab.class));
+						.findFragmentByTag(FragmentUtil.getTag(WebViewFragmentTab.class));
 				if (webViewFragmentTab.onKeyDown()) {
 					return true;
 					

@@ -443,4 +443,8 @@
     <dimen name="lnr_slider_content_w_rv_item_event_tab">200dp</dimen>
     <dimen name="lnr_slider_content_img_ht_rv_item_event_tab">70dp</dimen>
     
+    <!-- fragment_change_location.xml -->
+    <dimen name="btn_my_location_margin_l_r_fragment_change_location">30dp</dimen>
+    <dimen name="btn_my_location_margin_t_b_fragment_change_location">@dimen/btn_my_location_margin_l_r_fragment_change_location</dimen>
+    
 </resources>

@@ -17,4 +17,5 @@ public class ScreenNames {
 	public static final String PANDORA_SYNC = "Pandora Sync Screen";
 	public static final String EVENT_DETAILS = "Event Detail Screen";
 	public static final String WEB_VIEW = "Website Browser Screen";
+	public static final String CHANGE_LOCATION = "Select Location Screen";
 }
