@@ -415,6 +415,17 @@
     <dimen name="rlt_lyt_cat_titles_elevation_discover_tab">4dp</dimen>
     <!-- rv_events_padding_discover_tab = rv_item_l_r_offset_discover_tab + 2 -->
     <dimen name="rv_events_padding_discover_tab">3dp</dimen>
+    <dimen name="v_rlt_lyt_cat_titles_shadow_ht_discover_tab">4dp</dimen>
+    <dimen name="txt_no_events_w_discover_tab">380dp</dimen>
+    <dimen name="txt_no_events_txt_size_discover_tab">18sp</dimen>
+    <dimen name="txt_no_events_margin_t_discover_tab">220dp</dimen>
+    <dimen name="txt_no_events_drawable_pad_discover_tab">10dp</dimen>
+    <dimen name="btn_chg_loc_ht_discover_tab">50dp</dimen>
+    <dimen name="btn_chg_loc_txt_size_discover_tab">17sp</dimen>
+    <dimen name="btn_chg_loc_margin_b_discover_tab">80dp</dimen>
+    <dimen name="btn_chg_loc_pad_l_discover_tab">50dp</dimen>
+    <dimen name="btn_chg_loc_pad_r_discover_tab">@dimen/btn_chg_loc_pad_l_discover_tab</dimen>
+    <dimen name="rlt_lyt_no_evts_margin_t_discover_tab">@dimen/v_rlt_lyt_cat_titles_shadow_ht_discover_tab</dimen>
     
     <!--  DiscoverFragmentTab.java -->
     <dimen name="rv_item_l_r_offset_discover_tab">1dp</dimen>

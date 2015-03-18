@@ -1,11 +1,18 @@
 package com.wcities.eventseeker;
 
+import java.util.List;
+
 import android.os.Bundle;
+import android.widget.ImageView;
 
 import com.wcities.eventseeker.constants.ScreenNames;
+import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.interfaces.EventListener;
+import com.wcities.eventseeker.interfaces.EventListenerTab;
 import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.viewdata.SharedElement;
 
-public class DiscoverActivityTab extends BaseActivityTab {
+public class DiscoverActivityTab extends BaseActivityTab implements EventListenerTab {
 	
 	private static final String TAG = DiscoverActivityTab.class.getSimpleName();
 
@@ -41,5 +48,10 @@ public class DiscoverActivityTab extends BaseActivityTab {
 	@Override
 	protected int getDrawerItemPos() {
 		return INDEX_NAV_ITEM_DISCOVER;
+	}
+
+	@Override
+	public void onEventSelected(Event event, ImageView imageView) {
+		super.onEventSelected(event, imageView);
 	}
 }

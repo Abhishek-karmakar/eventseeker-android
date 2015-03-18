@@ -21,6 +21,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.widget.RelativeLayout;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -60,6 +61,7 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 	
 	private RecyclerView recyclerVCategories, recyclerVEvents;
 	private LinearLayoutManager layoutManager;
+	private RelativeLayout rltLytProgressBar, rltLytNoEvts;
 	
 	private RVCatTitlesAdapterTab catTitlesAdapterTab;
 	private RVCatEventsAdapterTab rvCatEventsAdapterTab;
@@ -161,6 +163,16 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 		GridLayoutManager gridLayoutManager = new GridLayoutManager(FragmentUtil.getActivity(this), spanCount);
 		recyclerVEvents.setHasFixedSize(true);
 		recyclerVEvents.setLayoutManager(gridLayoutManager);
+		
+		rltLytProgressBar = (RelativeLayout) v.findViewById(R.id.rltLytProgressBar);
+		// Applying background here since overriding background doesn't work from xml with <include> layout
+		rltLytProgressBar.setBackgroundResource(R.drawable.bg_no_content_overlay_tab);
+		
+		rltLytNoEvts = (RelativeLayout) v.findViewById(R.id.rltLytNoEvts);
+		if (eventList != null && eventList.isEmpty()) {
+			// retain no events layout visibility on orientation change
+			rltLytNoEvts.setVisibility(View.VISIBLE);
+		}
 		
 		return v;
 	}
@@ -387,6 +399,14 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 	public void handlePublishEvent() {
 		super.handlePublishEvent();
 	}
+	
+	public void setCenterProgressBarVisibility(int visibility) {
+		rltLytProgressBar.setVisibility(visibility);
+		
+		if (visibility == View.VISIBLE) {
+			rltLytNoEvts.setVisibility(View.INVISIBLE);
+		}
+	}
 
 	@Override
 	public void onClick(View v) {
@@ -427,7 +447,18 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 
 	@Override
 	public void onTaskCompleted(Void... params) {
-		// TODO Auto-generated method stub
+		handler.post(new Runnable() {
+			
+			@Override
+			public void run() {
+				//Log.d(TAG, "onEventsLoaded()");
+				// to remove full screen progressbar
+				setCenterProgressBarVisibility(View.INVISIBLE);
+				if (eventList.isEmpty()) {
+					rltLytNoEvts.setVisibility(View.VISIBLE);
+				}
+			}
+		});
 	}
 
 	@Override

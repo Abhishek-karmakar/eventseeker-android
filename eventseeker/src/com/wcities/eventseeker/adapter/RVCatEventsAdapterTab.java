@@ -1,20 +1,25 @@
 package com.wcities.eventseeker.adapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -29,8 +34,10 @@ import android.widget.TextView;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.wcities.eventseeker.BaseActivityTab;
+import com.wcities.eventseeker.DiscoverActivityTab;
 import com.wcities.eventseeker.DiscoverFragmentTab;
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.ShareViaDialogFragment;
 import com.wcities.eventseeker.WebViewActivityTab;
 import com.wcities.eventseeker.adapter.RVCatEventsAdapterTab.ViewHolder;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
@@ -45,17 +52,22 @@ import com.wcities.eventseeker.cache.BitmapCacheable;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
+import com.wcities.eventseeker.interfaces.EventListener;
+import com.wcities.eventseeker.interfaces.EventListenerTab;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
+import com.wcities.eventseeker.viewdata.SharedElement;
+import com.wcities.eventseeker.viewdata.SharedElementPosition;
 
 public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWiseEventParentAdapterListener {
 
@@ -83,18 +95,20 @@ public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWi
 	private Event eventPendingPublish;
 	
 	private static enum ViewType {
-		PROGRESS, EVENT;
+		EVENT;
 	};
 	
 	static class ViewHolder extends RecyclerView.ViewHolder {
 		
 		private ImageView imgEvt, imgHandle, imgTicket, imgSave, imgShare;
 		private TextView txtEvtTitle, txtEvtLoc, txtEvtTime;
-		private RelativeLayout rltLytDetails, rltLytBtm;
+		private RelativeLayout rltLytRoot, rltLytDetails, rltLytBtm, rltLytRootPrgs;
 		private LinearLayout lnrSliderContent;
 			
 		public ViewHolder(View itemView) {
 			super(itemView);
+			rltLytRootPrgs = (RelativeLayout) itemView.findViewById(R.id.rltLytRootPrgs);
+			
 			imgEvt = (ImageView) itemView.findViewById(R.id.imgEvt);
 			imgHandle = (ImageView) itemView.findViewById(R.id.imgHandle);
 			
@@ -102,6 +116,7 @@ public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWi
 			txtEvtLoc = (TextView) itemView.findViewById(R.id.txtEvtLoc);
 			txtEvtTime = (TextView) itemView.findViewById(R.id.txtEvtTime);
 			
+			rltLytRoot = (RelativeLayout) itemView.findViewById(R.id.rltLytRoot);
 			rltLytBtm = (RelativeLayout) itemView.findViewById(R.id.rltLytBtm);
 			rltLytDetails = (RelativeLayout) itemView.findViewById(R.id.rltLytDetails);
 			lnrSliderContent = (LinearLayout) itemView.findViewById(R.id.lnrSliderContent);
@@ -139,12 +154,7 @@ public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWi
 	
 	@Override
 	public int getItemViewType(int position) {
-		if (eventList.get(position) == null) {
-			return ViewType.PROGRESS.ordinal();
-			
-		} else {
-			return ViewType.EVENT.ordinal();
-		}
+		return ViewType.EVENT.ordinal();
 	}
 	
 	@Override
@@ -156,11 +166,6 @@ public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWi
 		ViewType vType = ViewType.values()[viewType];
 		switch (vType) {
 		
-		case PROGRESS:
-			v = LayoutInflater.from(parent.getContext()).inflate(R.layout.progress_bar_eventseeker_fixed_ht, parent, 
-					false);
-			break;
-			
 		case EVENT:
 			v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_event_tab, parent, false);
 			break;
@@ -179,6 +184,18 @@ public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWi
 		final Event event = eventList.get(position);
 		if (event == null) {
 			// progress indicator
+			
+			if (eventList.size() == 1) {
+				// no events loaded yet
+				discoverFragmentTab.setCenterProgressBarVisibility(View.VISIBLE);
+				holder.itemView.setVisibility(View.INVISIBLE);
+				
+			} else {
+				holder.itemView.setVisibility(View.VISIBLE);
+				holder.rltLytRootPrgs.setVisibility(View.VISIBLE);
+				holder.rltLytRoot.setVisibility(View.INVISIBLE);
+			}
+			
 			if ((loadDateWiseEvents == null || loadDateWiseEvents.getStatus() == Status.FINISHED) && 
 					isMoreDataAvailable) {
 				//Log.d(TAG, "onBindViewHolder(), pos = " + position);
@@ -187,6 +204,10 @@ public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWi
 			
 		} else {
 			//Log.d(TAG, "else");
+			holder.itemView.setVisibility(View.VISIBLE);
+			holder.rltLytRootPrgs.setVisibility(View.INVISIBLE);
+			holder.rltLytRoot.setVisibility(View.VISIBLE);
+			
 			/**
 			 * If user clicks on save & changes orientation before call to onPublishPermissionGranted(), 
 			 * then we need to update holderPendingPublish with right holder pointer in new orientation
@@ -235,6 +256,8 @@ public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWi
 			    }
 			}
 			
+			ViewCompat.setTransitionName(holder.imgEvt, "imageTransition" + position);
+
 			final Resources res = FragmentUtil.getResources(discoverFragmentTab);
 			if (event.getSchedule() == null || event.getSchedule().getBookingInfos().isEmpty()) {
 				holder.imgTicket.setImageDrawable(res.getDrawable(R.drawable.ic_tickets_unavailable_slider));
@@ -411,7 +434,7 @@ public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWi
 									onImgSaveClick(holder, event);
 									
 								} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.imgShare)) {
-									//onImgShareClick(holder, event);
+									onImgShareClick(holder, event);
 									
 								} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltLytBtm)) {
 									/**
@@ -419,11 +442,11 @@ public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWi
 									 * slider is open (openPos == position); otherwise it won't do anything 
 									 * on clicking outside the slider when it's open
 									 */
-									//onEventClick(holder, event, position);
+									onEventClick(holder, event);
 								}
 								
 							} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltLytBtm)) {
-								//onEventClick(holder, event, position);
+								onEventClick(holder, event);
 							}
 						}
 						
@@ -454,24 +477,13 @@ public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWi
 				}
 			}
 			
-			/*ViewCompat.setTransitionName(holder.imgEvt, "imageTransition" + position);
-			
-			holder.itemView.setOnClickListener(new OnClickListener() {
+			holder.imgEvt.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
-					Activity activity = FragmentUtil.getActivity(discoverFragmentTab);
-					Intent intent = new Intent(FragmentUtil.getApplication(discoverFragmentTab), 
-							EventDetailsActivityTab.class);
-					intent.putExtra(BundleKeys.EVENT, event);
-					intent.putExtra("SharedName", ViewCompat.getTransitionName(holder.imgEvt));
-					//FragmentUtil.getActivity(discoverFragmentTab).startActivity(intent);
-					
-					ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, 
-							Pair.create((View)holder.imgEvt, ViewCompat.getTransitionName(holder.imgEvt)));
-                    ActivityCompat.startActivity(activity, intent, options.toBundle());
+					onEventClick(holder, event);
 				}
-			});*/
+			});
 		}
 	}
 	
@@ -540,6 +552,39 @@ public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWi
 								AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
 					}
 				}
+			}
+		}, 200);
+	}
+	
+	private void onImgShareClick(final ViewHolder holder, final Event event) {
+		holder.imgShare.setPressed(true);
+		handler.postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				holder.imgShare.setPressed(false);
+				
+				ShareViaDialogFragment shareViaDialogFragment = ShareViaDialogFragment.newInstance(event, 
+						ScreenNames.DISCOVER);
+				/**
+				 * Passing activity fragment manager, since using this fragment's child fragment manager 
+				 * doesn't retain dialog on orientation change
+				 */
+				shareViaDialogFragment.show(((DiscoverActivityTab)FragmentUtil.getActivity(discoverFragmentTab))
+						.getSupportFragmentManager(), FragmentUtil.getTag(ShareViaDialogFragment.class));
+			}
+		}, 200);
+	}
+	
+	private void onEventClick(final ViewHolder holder, final Event event) {
+		holder.rltLytBtm.setPressed(true);
+		handler.postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				//Log.d(TAG, "AT issue event = " + event);
+				((EventListenerTab) FragmentUtil.getActivity(discoverFragmentTab)).onEventSelected(event, holder.imgEvt);
+				holder.rltLytBtm.setPressed(false);
 			}
 		}, 200);
 	}

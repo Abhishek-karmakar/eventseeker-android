@@ -100,6 +100,8 @@ public class BundleKeys {
 	public static final String IS_ON_CREATE_CALLED_FIRST_TIME = "isOnCreateCalledFirstTime";
 	
 	public static final String SERIALIZABLE = "serializable";
+	
+	public static final String TRANSITION_NAME_SHARED_IMAGE = "transitionNameSharedImage";
 
 	/**-------------------- starts for bosch ---------------------------**/
 	

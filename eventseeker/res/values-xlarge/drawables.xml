@@ -2,5 +2,7 @@
 <resources>
 
     <drawable name="bg_slctr_lnr_slider_content_rv_item_event_tab">@drawable/bg_slctr_lnr_slider_content_list_item_discover</drawable>
+    <drawable name="bg_slctr_rlt_lyt_btm_rv_item_event_tab">@drawable/bg_slctr_rlt_lyt_root_list_item_discover</drawable>
+    <drawable name="bg_no_content_overlay_tab">@drawable/bg_no_content_overlay</drawable>
     
 </resources>

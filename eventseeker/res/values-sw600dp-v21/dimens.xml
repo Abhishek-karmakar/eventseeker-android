@@ -2,6 +2,7 @@
 
     <!-- fragment_discover_tab.xml -->
     <dimen name="rv_events_padding_discover_tab">@dimen/rv_item_l_r_offset_discover_tab</dimen>
+    <dimen name="v_rlt_lyt_cat_titles_shadow_ht_discover_tab">0dp</dimen>
     
     <!--  DiscoverFragmentTab.java -->
     <dimen name="rv_item_l_r_offset_discover_tab">4dp</dimen>

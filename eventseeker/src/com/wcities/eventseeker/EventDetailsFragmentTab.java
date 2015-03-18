@@ -38,7 +38,7 @@ public class EventDetailsFragmentTab extends Fragment {
 		View rootView = inflater.inflate(R.layout.fragment_event_details_tab, container, false);
 		imgEvt = (ImageView) rootView.findViewById(R.id.imgEvt);
 		updateEventImg();
-		ViewCompat.setTransitionName(imgEvt, getArguments().getString("SharedName"));
+		ViewCompat.setTransitionName(imgEvt, getArguments().getString(BundleKeys.TRANSITION_NAME_SHARED_IMAGE));
 		return rootView;
 	}
 	

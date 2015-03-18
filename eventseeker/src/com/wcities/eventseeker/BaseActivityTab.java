@@ -1,10 +1,15 @@
 package com.wcities.eventseeker;
 
+import java.util.List;
+
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -14,6 +19,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.wcities.eventseeker.DrawerListFragmentTab.DrawerListFragmentTabListener;
@@ -24,11 +30,13 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.Enums.SettingsItem;
+import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.interfaces.ActivityDestroyedListener;
 import com.wcities.eventseeker.interfaces.OnLocaleChangedListener;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GPlusUtil;
+import com.wcities.eventseeker.viewdata.SharedElement;
 
 /**
  * Using ActionBarActivity (extended by BaseActivity) instead of Activity so as to use support library toolbar as actionbar even for lower apis
@@ -414,6 +422,20 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		 * 	refresh the SearchView	
 		 */
 		//searchView.setQueryHint(getResources().getString(R.string.menu_search));
+	}
+	
+	protected void onEventSelected(Event event, ImageView imageView) {
+		Intent intent = new Intent(getApplication(), EventDetailsActivityTab.class);
+		intent.putExtra(BundleKeys.EVENT, event);
+		intent.putExtra(BundleKeys.TRANSITION_NAME_SHARED_IMAGE, ViewCompat.getTransitionName(imageView));
+		
+		/**
+		 * ActivityOptionsCompat is used since it's helper for accessing features in ActivityOptions 
+		 * introduced in API level 16 in a backwards compatible fashion.
+		 */
+		ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, 
+				Pair.create((View)imageView, ViewCompat.getTransitionName(imageView)));
+        ActivityCompat.startActivity(this, intent, options.toBundle());
 	}
 	
 	protected boolean isDrawerOpen() {

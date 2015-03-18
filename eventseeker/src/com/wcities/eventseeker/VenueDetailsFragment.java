@@ -1133,11 +1133,11 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 											 * slider is open (openPos == position); otherwise it won't do anything 
 											 * on clicking outside the slider when it's open
 											 */
-											onEventClick(holder, event, position);
+											onEventClick(holder, event);
 										}
 										
 									} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltLytRoot)) {
-										onEventClick(holder, event, position);
+										onEventClick(holder, event);
 									}
 								}
 								
@@ -1479,7 +1479,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			}
 		}
 		
-		private void onEventClick(final ViewHolder holder, final Event event, final int position) {
+		private void onEventClick(final ViewHolder holder, final Event event) {
 			holder.rltLytRoot.setPressed(true);
 			venueDetailsFragment.handler.postDelayed(new Runnable() {
 				
