@@ -415,6 +415,7 @@
     <dimen name="rlt_lyt_cat_titles_elevation_discover_tab">4dp</dimen>
     <!-- rv_events_padding_discover_tab = rv_item_l_r_offset_discover_tab + 2 -->
     <dimen name="rv_events_padding_discover_tab">3dp</dimen>
+    <dimen name="rv_events_margin_t_discover_tab">@dimen/v_rlt_lyt_cat_titles_shadow_ht_discover_tab</dimen>
     <dimen name="v_rlt_lyt_cat_titles_shadow_ht_discover_tab">4dp</dimen>
     <dimen name="txt_no_events_w_discover_tab">380dp</dimen>
     <dimen name="txt_no_events_txt_size_discover_tab">18sp</dimen>
@@ -453,5 +454,9 @@
     <dimen name="txt_evt_time_pad_b_rv_item_event_tab">@dimen/txt_evt_loc_pad_t_rv_item_event_tab</dimen>
     <dimen name="lnr_slider_content_w_rv_item_event_tab">200dp</dimen>
     <dimen name="lnr_slider_content_img_ht_rv_item_event_tab">70dp</dimen>
+    
+    <!-- fragment_change_location.xml -->
+    <dimen name="btn_my_location_margin_l_r_fragment_change_location">30dp</dimen>
+    <dimen name="btn_my_location_margin_t_b_fragment_change_location">@dimen/btn_my_location_margin_l_r_fragment_change_location</dimen>
     
 </resources>
