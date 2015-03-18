@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.MenuItemCompat.OnActionExpandListener;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.util.Log;
@@ -35,13 +36,15 @@ import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GeoUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
 
-public class ChangeLocationFragmentTab extends Fragment implements OnQueryTextListener, GeoUtilListener, OnClickListener {
+public class ChangeLocationFragmentTab extends Fragment implements OnQueryTextListener, GeoUtilListener, 
+		OnClickListener {
 	
 	private static final String TAG = ChangeLocationFragmentTab.class.getSimpleName();
 
 	private SearchView searchView;
 	private GoogleMap mMap;
 	private String strAddress = "";
+	private CharSequence query = null;
 	
 	private double lat, lon;
 
@@ -62,7 +65,7 @@ public class ChangeLocationFragmentTab extends Fragment implements OnQueryTextLi
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_change_location, null);
         
-        v.findViewById(R.id.btnMyLocation).setOnClickListener(this);;
+        v.findViewById(R.id.btnMyLocation).setOnClickListener(this);
         
         MapFragment mMapFragment = new MapFragment();
         Bundle args = new Bundle();
@@ -83,20 +86,24 @@ public class ChangeLocationFragmentTab extends Fragment implements OnQueryTextLi
     	searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setQueryHint(getResources().getString(R.string.menu_search));
         searchView.setOnQueryTextListener(this);
-
+        if (query != null && !query.equals("")) {
+        	searchView.setQuery(query, false);
+        }
         super.onCreateOptionsMenu(menu, inflater);
     }
     
-    /*@Override
+    @Override
     public void onDestroyView() {
     	super.onDestroyView();
-    	*//**
+    	/**
     	 * 17-03-2015:
-    	 * mMap instance is made null. So, that after the orientation change it can be reinitialized
-    	 * with the new Map 
-    	 *//*
+    	 * mMap instance is made null. So, that after the orientation change it can be reinitialized with the new Map 
+    	 */
     	mMap = null;
-    }*/
+    	if (searchView != null) {
+    		query = searchView.getQuery();
+    	}
+    }
     
     private void updateStrAddress(Address address) {
     	strAddress = "";
@@ -120,8 +127,7 @@ public class ChangeLocationFragmentTab extends Fragment implements OnQueryTextLi
 	    	LatLng latLng = new LatLng(lat, lon);
 	    	mMap.addMarker(new MarkerOptions().position(latLng).title(strAddress));
 	    	
-	    	mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-	    	mMap.animateCamera(CameraUpdateFactory.zoomTo(8), 2000, null);
+	    	mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 8));
     	}
     }
     
