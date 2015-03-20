@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toolbarForActionbar"
+    style="@style/ThemeOverlay.EventSeeker.Dark.ActionBar"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/floating_double_line_toolbar_ht"
+    android:elevation="@dimen/action_bar_elevation">
+    
+    <RelativeLayout android:id="@+id/rltLytCustomToolbar"
+        android:layout_width="match_parent"
+    	android:layout_height="match_parent">
+    
+	    <TextView android:id="@+id/txtToolbarTitle"
+	        android:layout_width="match_parent"
+	    	android:layout_height="@dimen/txt_evt_title_ht_event_details_tab"
+	    	android:gravity="center_vertical"
+	    	android:text="txt title fbd dzvSXDvx dzvvfDZv"
+	    	android:textColor="#f00" />
+    
+	    <TextView android:id="@+id/txtToolbarTitle2"
+	        android:layout_width="match_parent"
+	    	android:layout_height="@dimen/txt_evt_time_ht_event_details_tab"
+	    	android:gravity="center_vertical"
+	    	android:text="txt title fbd"
+	    	android:textColor="#fff"
+	    	android:layout_below="@id/txtToolbarTitle" />
+    
+    </RelativeLayout>
+    
+</android.support.v7.widget.Toolbar>

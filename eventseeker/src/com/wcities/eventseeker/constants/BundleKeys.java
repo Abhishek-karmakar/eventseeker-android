@@ -102,6 +102,7 @@ public class BundleKeys {
 	public static final String SERIALIZABLE = "serializable";
 	
 	public static final String TRANSITION_NAME_SHARED_IMAGE = "transitionNameSharedImage";
+	public static final String TRANSITION_NAME_SHARED_TEXT = "transitionNameSharedText";
 
 	/**-------------------- starts for bosch ---------------------------**/
 	

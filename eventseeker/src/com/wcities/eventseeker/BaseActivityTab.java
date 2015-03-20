@@ -22,8 +22,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.wcities.eventseeker.DrawerListFragmentTab.DrawerListFragmentTabListener;
 import com.wcities.eventseeker.SettingsFragmentTab.OnSettingsItemClickedListener;
@@ -228,6 +231,17 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		}
 	}
 	
+	public void updateTitle(String title) {
+		//Log.d(TAG, "updateTitle()");
+		getSupportActionBar().setTitle(title);
+	}
+	
+	public void updateSubTitle(String subTitle) {
+		//Log.d(TAG, "updateSubTitle()");
+		//getSupportActionBar().setSubtitle(subTitle);
+		//((TextView)toolbar.findViewById(R.id.txtToolbarTitle)).setText(subTitle);
+	}
+	
 	private void addDrawerListFragment() {
 		//Log.d(TAG, "addDrawerListFragment");
 		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -354,6 +368,12 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		getSupportFragmentManager().executePendingTransactions();
 	}
 	
+	protected void updateToobarHt(int toolbarHt) {
+		FrameLayout.LayoutParams flp = (LayoutParams) toolbar.getLayoutParams();
+        flp.height = toolbarHt;
+        toolbar.setLayoutParams(flp);
+	}
+	
 	/**
 	 * Activities corresponding to navigation drawer items should override this method to return valid position.
 	 * @return
@@ -461,17 +481,21 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		//searchView.setQueryHint(getResources().getString(R.string.menu_search));
 	}
 	
-	protected void onEventSelected(Event event, ImageView imageView) {
+	protected void onEventSelected(Event event, ImageView imageView, TextView textView) {
 		Intent intent = new Intent(getApplication(), EventDetailsActivityTab.class);
 		intent.putExtra(BundleKeys.EVENT, event);
 		intent.putExtra(BundleKeys.TRANSITION_NAME_SHARED_IMAGE, ViewCompat.getTransitionName(imageView));
+		if (textView != null) {
+			intent.putExtra(BundleKeys.TRANSITION_NAME_SHARED_TEXT, ViewCompat.getTransitionName(textView));
+		}
 		
 		/**
 		 * ActivityOptionsCompat is used since it's helper for accessing features in ActivityOptions 
 		 * introduced in API level 16 in a backwards compatible fashion.
 		 */
 		ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, 
-				Pair.create((View)imageView, ViewCompat.getTransitionName(imageView)));
+				Pair.create((View)imageView, ViewCompat.getTransitionName(imageView)),
+				Pair.create((View)textView, ViewCompat.getTransitionName(textView)));
         ActivityCompat.startActivity(this, intent, options.toBundle());
 	}
 	

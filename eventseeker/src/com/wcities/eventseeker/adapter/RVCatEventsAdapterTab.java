@@ -212,6 +212,7 @@ public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWi
 			}
 			
 			holder.txtEvtTitle.setText(event.getName());
+			ViewCompat.setTransitionName(holder.txtEvtTitle, "txtTransition" + position);
 			
 			if (event.getSchedule() != null) {
 				Schedule schedule = event.getSchedule();
@@ -579,7 +580,8 @@ public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWi
 			@Override
 			public void run() {
 				//Log.d(TAG, "AT issue event = " + event);
-				((EventListenerTab) FragmentUtil.getActivity(discoverFragmentTab)).onEventSelected(event, holder.imgEvt);
+				((EventListenerTab) FragmentUtil.getActivity(discoverFragmentTab)).onEventSelected(event, 
+						holder.imgEvt, holder.txtEvtTitle);
 				holder.rltLytBtm.setPressed(false);
 			}
 		}, 200);
