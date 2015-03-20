@@ -30,6 +30,8 @@ public class AppConstants {
 	public static String SPOTIFY_CLIENT_SECRET;
 	public static final String SPOTIFY_REDIRECT_URI = "com.wcities.eventseeker://spotify_callback";
 	
+	public static final String BEATS_MUSIC_REDIRECT_URI = "com.wcities.eventseeker://beats_music_callback";
+	
 	public static String RDIO_KEY;
 	public static String RDIO_SECRET;
 	
@@ -86,6 +88,7 @@ public class AppConstants {
 	public static final String FRAGMENT_TAG_RDIO = "rdioFragment";
 	public static final String FRAGMENT_TAG_LASTFM = "lastfmFragment";
 	public static final String FRAGMENT_TAG_PANDORA = "pandoraFragment";
+	public static final String FRAGMENT_TAG_BEATS_MUSIC = "beatsMusicFragment";
 	public static final String FRAGMENT_TAG_TICKET_PROVIDER_DIALOG = "ticketProviderDialogFragment";
 	public static final String FRAGMENT_TAG_WEB_VIEW = "webViewFragment";
 	public static final String FRAGMENT_TAG_TWITTER_SYNCING = "twitterSyncingFragment";
@@ -110,6 +113,7 @@ public class AppConstants {
 	public static final int REQ_CODE_RATE_APP = 1002;
 	public static final int REQ_CODE_GOOGLE_ACCOUNT_CHOOSER_FOR_GOOGLE_MUSIC = 1003;
 	public static final int REQ_CODE_SPOTIFY = 1004;
+	public static final int REQ_CODE_BEATS = 1005;
 	
 	public static final int MUSIC_NOTIFICATION_ID = 1;
 	public static final int UNIQUE_GCM_NOTIFICATION_ID_START = 100;
@@ -128,6 +132,8 @@ public class AppConstants {
 
 	public static final String LAUNCHER_FRAGMENT_TITLE = "launcherFragmentTitle";
 	public static final String LAUNCHER_FRAGMENT_DESC = "launcherFragmentDesc";
+	
+	public static final String LIST_OF_ARTISTS_NAMES = "ListArtistsNames";
 
 	/**
 	 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.

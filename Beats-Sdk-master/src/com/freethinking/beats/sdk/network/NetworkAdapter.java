@@ -21,6 +21,13 @@ public class NetworkAdapter extends AsyncTask<String, Void, String> {
         parts = new NetworkParts(context, mapper, type, headers, json);
         parts.setAuthRequired(authRequired());
     }
+    
+    public NetworkAdapter(Context context, CommonMapper mapper, NetworkParts.RequestType type, Map<String, String> headers, BaseJson json, String redirectUri) {
+    	super();
+    	this.context = context;
+    	parts = new NetworkParts(context, mapper, type, headers, json, redirectUri);
+    	parts.setAuthRequired(authRequired());
+    }
 
     public NetworkAdapter(Context context, CommonMapper mapper, NetworkParts.RequestType type, Map<String, String> headers, String body, BaseJson response) {
         super();

@@ -13,6 +13,11 @@
     <string name="map_v2_android_key">AIzaSyDUaOHXTK9bv4-JhQ3h_1M0iew07JqTb9I</string>
     <string name="map_v3_browser_key">AIzaSyBOTuIbME9QmZsfoBFFLa38zjTGJ-jWT-k</string> -->
     
+    <!-- beats music credentials are given by Samir on 20-03-2015 -->
+    <string name="api_key">9tv4fx82y43skf9yqk4djgmj</string> <!-- beats sample production key -->
+    <string name="shared_secret">8cRj9S7V3eCeqC7PRUqeDeFt</string> <!-- beats sample production key -->
+    <string name="shared_preference_key">beats_sdk_user</string>
+
     <!-- Languages -->
     <string name="lang_english">English</string>
     <!-- <string name="lang_french">French</string> -->
@@ -56,6 +61,7 @@
     <string name="title_rdio">Rdio</string>
     <string name="title_lastfm">last.fm</string>
     <string name="title_pandora">Pandora</string>
+    <string name="title_beats_music">Beats Music</string>
     <string name="title_web">Web</string>
     <string name="title_settings_mobile_app">Settings</string>
     <string name="title_logout">Logout</string>

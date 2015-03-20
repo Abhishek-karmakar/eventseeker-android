@@ -14,6 +14,7 @@ public class ScreenNames {
 	public static final String TWITTER_SYNC = "Twitter Sync Screen";
 	public static final String RDIO_SYNC = "Rdio Sycn Screen";
 	public static final String LAST_FM_SYNC = "LastFM Sync Screen";
+	public static final String BEATS_MUSIC = "Beats Music Sync Screen";
 	public static final String PANDORA_SYNC = "Pandora Sync Screen";
 	public static final String EVENT_DETAILS = "Event Detail Screen";
 	public static final String WEB_VIEW = "Website Browser Screen";

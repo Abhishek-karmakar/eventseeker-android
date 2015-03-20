@@ -47,6 +47,7 @@ public class NetworkParts {
     protected CommonMapper mapper;
     protected Context context;
     protected boolean canceled;
+    protected String redirectUri;
 
     /**
      * This is used only by the HTTP Client. Do not modify this.
@@ -63,6 +64,11 @@ public class NetworkParts {
         headers.put("Content-Type", "application/json");
         this.response = json;
         this.context = context;
+    }
+
+    public NetworkParts(Context context, CommonMapper mapper, RequestType type, Map<String, String> headers, BaseJson json, String redirectUri) {
+    	this(context, mapper, type, headers, json);
+    	this.redirectUri = redirectUri;
     }
 
     public NetworkParts(Context context, CommonMapper mapper, RequestType type, Map<String, String> headers, String body, BaseJson response) {
@@ -168,7 +174,7 @@ public class NetworkParts {
                 if (accessExpires < System.currentTimeMillis()) {
                     String code = context.getSharedPreferences(preferencesKey, Context.MODE_PRIVATE).getString("refresh_token", "");
                     AuthorizationRequest body = new AuthorizationRequest(UrlFactory.clientSecret(context), UrlFactory.clientID(context), 
-                    		LoginActivity.BEATS_MUSIC_CALLBACK, code, "refresh_token", true);
+                    		redirectUri, code, "refresh_token", true);
                     makeRefreshRequest(body);
                 }
 

@@ -596,6 +596,12 @@ public class MainActivity extends BaseActivity implements
 			}
 			break;
 			
+		case AppConstants.REQ_CODE_BEATS:
+			fragment = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
+			if (fragment instanceof BeatsMusicFragment) {
+				fragment.onActivityResult(requestCode, resultCode, data);
+			}
+			break;
 		/*case REQ_CODE_GOOGLE_ACCOUNT_CHOOSER:
 			if (resultCode == RESULT_OK) {
 				final String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
@@ -1512,16 +1518,17 @@ public class MainActivity extends BaseActivity implements
 		case Rdio:
 			RdioFragment rdioFragment = new RdioFragment();
 			rdioFragment.setArguments(args);
-			selectNonDrawerItem(rdioFragment, AppConstants.FRAGMENT_TAG_RDIO,
-					getResources().getString(R.string.title_rdio), addToBackStack);
+			selectNonDrawerItem(rdioFragment, 
+					AppConstants.FRAGMENT_TAG_RDIO, getResources()
+							.getString(R.string.title_rdio), addToBackStack);
 			break;
 
 		case Lastfm:
 			LastfmFragment lastfmFragment = new LastfmFragment();
 			lastfmFragment.setArguments(args);
 			selectNonDrawerItem(lastfmFragment,
-					AppConstants.FRAGMENT_TAG_LASTFM,
-					getResources().getString(R.string.title_lastfm), addToBackStack);
+					AppConstants.FRAGMENT_TAG_LASTFM, getResources()
+							.getString(R.string.title_lastfm), addToBackStack);
 			break;
 
 		case Pandora:
@@ -1531,6 +1538,15 @@ public class MainActivity extends BaseActivity implements
 					AppConstants.FRAGMENT_TAG_PANDORA, getResources()
 							.getString(R.string.title_pandora), addToBackStack);
 			break;
+			
+		case Beats:
+			BeatsMusicFragment beatsMusicFragment = new BeatsMusicFragment();
+			beatsMusicFragment.setArguments(args);
+			selectNonDrawerItem(beatsMusicFragment,
+					AppConstants.FRAGMENT_TAG_BEATS_MUSIC, getResources()
+							.getString(R.string.title_beats_music), addToBackStack);			
+			break;
+
 
 		default:
 			break;

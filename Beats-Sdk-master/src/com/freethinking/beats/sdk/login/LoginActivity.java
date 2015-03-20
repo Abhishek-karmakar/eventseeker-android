@@ -24,9 +24,9 @@ import com.freethinking.beats.sdk.utility.ApplicationData;
 
 public class LoginActivity extends Activity {
 
-	public static final String CALLBACK_URI = "CallBackUri";
+	/*public static final String CALLBACK_URI = "CallBackUri";*/
 
-	public static String BEATS_MUSIC_CALLBACK;
+	public final static String BEATS_MUSIC_CALLBACK = "beatsmusiccallback://com.example.beatsmusicsampleapp;";
 
 	protected WebView webView;
 
@@ -40,7 +40,7 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        BEATS_MUSIC_CALLBACK = getIntent().getExtras().getString(CALLBACK_URI);
+        //BEATS_MUSIC_CALLBACK = getIntent().getExtras().getString(CALLBACK_URI);
         
         me = new Me();
         authorization = new Authorization();
@@ -134,7 +134,7 @@ public class LoginActivity extends Activity {
     protected class MeNetworkRequest extends NetworkAdapter {
 
         public MeNetworkRequest(Context context) {
-            super(context, new MeMapper(), NetworkParts.RequestType.GET, new HashMap<String, String>(), me);
+            super(context, new MeMapper(), NetworkParts.RequestType.GET, new HashMap<String, String>(), me, BEATS_MUSIC_CALLBACK);
         }
 
         @Override
