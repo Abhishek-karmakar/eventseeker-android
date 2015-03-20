@@ -417,13 +417,13 @@
     <dimen name="rv_events_padding_discover_tab">3dp</dimen>
     <dimen name="rv_events_margin_t_discover_tab">@dimen/v_rlt_lyt_cat_titles_shadow_ht_discover_tab</dimen>
     <dimen name="v_rlt_lyt_cat_titles_shadow_ht_discover_tab">4dp</dimen>
-    <dimen name="txt_no_events_w_discover_tab">380dp</dimen>
+    <dimen name="txt_no_events_w_discover_tab">400dp</dimen>
     <dimen name="txt_no_events_txt_size_discover_tab">18sp</dimen>
-    <dimen name="txt_no_events_margin_t_discover_tab">220dp</dimen>
+    <dimen name="txt_no_events_margin_t_discover_tab">170dp</dimen>
     <dimen name="txt_no_events_drawable_pad_discover_tab">10dp</dimen>
     <dimen name="btn_chg_loc_ht_discover_tab">50dp</dimen>
     <dimen name="btn_chg_loc_txt_size_discover_tab">17sp</dimen>
-    <dimen name="btn_chg_loc_margin_b_discover_tab">80dp</dimen>
+    <dimen name="btn_chg_loc_margin_b_discover_tab">70dp</dimen>
     <dimen name="btn_chg_loc_pad_l_discover_tab">50dp</dimen>
     <dimen name="btn_chg_loc_pad_r_discover_tab">@dimen/btn_chg_loc_pad_l_discover_tab</dimen>
     <dimen name="rlt_lyt_no_evts_margin_t_discover_tab">@dimen/v_rlt_lyt_cat_titles_shadow_ht_discover_tab</dimen>
@@ -458,5 +458,9 @@
     <!-- fragment_change_location.xml -->
     <dimen name="btn_my_location_margin_l_r_fragment_change_location">30dp</dimen>
     <dimen name="btn_my_location_margin_t_b_fragment_change_location">@dimen/btn_my_location_margin_l_r_fragment_change_location</dimen>
+    
+    <!-- BaseActivityTab.java -->
+    <dimen name="floating_window_w">450dp</dimen>
+    <dimen name="floating_window_ht">700dp</dimen>
     
 </resources>

@@ -66,4 +66,7 @@
    	<!-- fragment_login.xml -->
     <dimen name="img_fb_sign_up_margin_t_login">0dp</dimen>
     
+    <!-- fragment_discover_tab.xml -->
+    <dimen name="txt_no_events_margin_t_discover_tab">120dp</dimen>
+    
 </resources>

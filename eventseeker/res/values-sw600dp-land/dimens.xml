@@ -85,6 +85,11 @@
     <dimen name="lst_pad_l_r_fragment_settings">175dp</dimen>
     
     <!-- fragment_discover_tab.xml -->
-    <dimen name="txt_no_events_margin_t_discover_tab">120dp</dimen>
+    <dimen name="txt_no_events_margin_t_discover_tab">80dp</dimen>
+    <dimen name="btn_chg_loc_margin_b_discover_tab">40dp</dimen>
+    
+    <!-- BaseActivityTab.java -->
+    <dimen name="floating_window_w">450dp</dimen>
+    <dimen name="floating_window_ht">500dp</dimen>
         
 </resources>

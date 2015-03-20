@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<style name="Theme.EventSeekr" parent="@style/Theme.EventSeekr.Base"></style>
+	
+	<style name="Theme.EventSeeker.EventDetails" parent="@style/Theme.EventSeekr">
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- not using windowElevation, since it darkens the shadow color on orientation change -->
+        <!-- <item name="android:windowElevation">8dp</item> -->
+    </style>
+    
 </resources>

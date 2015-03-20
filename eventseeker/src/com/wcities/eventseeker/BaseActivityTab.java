@@ -1,7 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.List;
-
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -10,15 +8,20 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.util.Pair;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -36,14 +39,13 @@ import com.wcities.eventseeker.interfaces.OnLocaleChangedListener;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GPlusUtil;
-import com.wcities.eventseeker.viewdata.SharedElement;
 
 /**
  * Using ActionBarActivity (extended by BaseActivity) instead of Activity so as to use support library toolbar as actionbar even for lower apis
  * by calling setSupportActionBar(toolbar) & also there is common code to both mobile & tablet which can be kept in BaseActivity
  */
 public abstract class BaseActivityTab extends BaseActivity implements IGoogleAnalyticsTracker, ActivityDestroyedListener, 
-		DrawerListFragmentTabListener, OnLocaleChangedListener, OnSettingsItemClickedListener {
+		DrawerListFragmentTabListener, OnLocaleChangedListener, OnSettingsItemClickedListener, OnQueryTextListener {
 	
 	private static final String TAG = BaseActivityTab.class.getSimpleName(); 
 	
@@ -63,6 +65,9 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 	protected String currentContentFragmentTag;
 	
 	protected boolean isOnCreateCalledFirstTime = true;
+	
+	private MenuItem searchItem;
+	private SearchView searchView;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -277,6 +282,38 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		}
 	}
 	
+	protected void setupFloatingWindow() {
+        // configure this Activity as a floating window, dimming the background
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.width = getResources().getDimensionPixelSize(R.dimen.floating_window_w);
+        params.height = getResources().getDimensionPixelSize(R.dimen.floating_window_ht);
+        params.dimAmount = 0.5f;
+        params.flags |= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        getWindow().setAttributes(params);
+    }
+	
+	protected void setSearchView(Menu menu) {
+		searchItem = menu.findItem(R.id.action_search);
+		searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+		searchView.setQueryHint(getResources().getString(R.string.menu_search));
+		searchView.setOnQueryTextListener(this);
+		
+		ImageView v = (ImageView) searchView.findViewById(R.id.search_button);
+		// null check is for safety purpose
+		if (v != null) {
+			v.setImageResource(R.drawable.search);
+		}
+		
+		// TODO: Uncomment following after creating SearchActivityTab class
+		/*if (this instanceof SearchActivityTab) {
+			*//**
+			 * on some devices onCreateOptionsMenu is called after onFragmentResumed, 
+			 * so we need to expand actionview here after initializing the searchItem
+			 *//*
+			MenuItemCompat.expandActionView(searchItem);
+		}*/
+	}
+	
 	protected void setCommonUI() {
 		//Log.d(TAG, "setCommonUI()");
 		toolbar = (Toolbar) findViewById(R.id.toolbarForActionbar);
@@ -456,6 +493,9 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		
 			case CHANGE_LOCATION:
 				intent = new Intent(getApplicationContext(), ChangeLocationActivityTab.class);
+				if (args != null) {
+					intent.putExtras(args);
+		    	}
 				startActivity(intent);
 				break;
 
@@ -470,5 +510,17 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 			default:
 				break;
 		}
+	}
+	
+	@Override
+	public boolean onQueryTextChange(String arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean onQueryTextSubmit(String arg0) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

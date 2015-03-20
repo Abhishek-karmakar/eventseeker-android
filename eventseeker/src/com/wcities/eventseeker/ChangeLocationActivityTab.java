@@ -37,7 +37,11 @@ public class ChangeLocationActivityTab extends BaseActivityTab {
 
 	@Override
 	public void onBackPressed() {
-		onDrawerItemSelected(INDEX_NAV_ITEM_DISCOVER, null);
+		/**
+		 * Args are used on going back to discover screen from here after no events been found
+		 * earlier on discover screen showing change location button.
+		 */
+		onDrawerItemSelected(INDEX_NAV_ITEM_DISCOVER, getIntent().getExtras());
 		finish();
 	}
 	

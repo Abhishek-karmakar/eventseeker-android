@@ -38,6 +38,17 @@ public class DiscoverSettingDialogFragment extends DialogFragment {
 		return frag;
 	}
 	
+	public static DiscoverSettingDialogFragment newInstance(int year, int month, int day, int miles) {
+		DiscoverSettingDialogFragment frag = new DiscoverSettingDialogFragment();
+		Bundle args = new Bundle();
+		args.putInt(BundleKeys.YEAR, year);
+		args.putInt(BundleKeys.MONTH, month);
+		args.putInt(BundleKeys.DAY, day);
+		args.putInt(BundleKeys.MILES, miles);
+		frag.setArguments(args);
+		return frag;
+	}
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -99,8 +110,15 @@ public class DiscoverSettingDialogFragment extends DialogFragment {
 		builder.setPositiveButton(R.string.ok,
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
-						listener.onSettingChanged(datePicker.getYear(), datePicker.getMonth(), 
-								datePicker.getDayOfMonth(), seekBar.getProgress() + SEEKBAR_MIN_VAL);
+						if (listener != null) {
+							listener.onSettingChanged(datePicker.getYear(), datePicker.getMonth(), 
+									datePicker.getDayOfMonth(), seekBar.getProgress() + SEEKBAR_MIN_VAL);
+							
+						} else if (FragmentUtil.getActivity(DiscoverSettingDialogFragment.this) instanceof DiscoverSettingChangedListenerTab) {
+							((DiscoverSettingChangedListenerTab) FragmentUtil.getActivity(DiscoverSettingDialogFragment.this))
+									.onSettingChanged(datePicker.getYear(), datePicker.getMonth(), 
+											datePicker.getDayOfMonth(), seekBar.getProgress() + SEEKBAR_MIN_VAL);
+						}
 						//dismiss();
 					}
 				});
@@ -122,6 +140,10 @@ public class DiscoverSettingDialogFragment extends DialogFragment {
 	}
 	
 	public interface DiscoverSettingChangedListener extends Serializable {
+		public void onSettingChanged(int year, int month, int day, int miles);
+	}
+	
+	public interface DiscoverSettingChangedListenerTab {
 		public void onSettingChanged(int year, int month, int day, int miles);
 	}
 }

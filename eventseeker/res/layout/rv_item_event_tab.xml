@@ -17,13 +17,16 @@
 	    <!-- 1) centerCrop scaletype is used to maintain aspect ratio and fill entire imageview width & height 
 	    2) Setting some default src so that this cardview gets proper height even when only progressbar is present
 	    in which case we are not setting any image on imgEvt from runtime; otherwise cardview height becomes smaller
-	    since it would consider image height as 0 initially on just starting the screen  -->
+	    since it would consider image height as 0 initially on just starting the screen
+	    3) blockSetAlpha is set to true to prevent android shared element transition api from making imageview
+	    transparent by calling setAlpha() -->
 	    <com.wcities.eventseeker.custom.view.ResizableImageView 
 	        android:id="@+id/imgEvt"
 	        android:layout_width="match_parent"
 	    	android:layout_height="wrap_content"
 	    	android:contentDescription="event image"
 	    	app:compressAsPerWidth="true"
+	    	app:blockSetAlpha="true"
 	    	android:scaleType="centerCrop"
 	    	android:src="@drawable/ic_electronic" />
 	    

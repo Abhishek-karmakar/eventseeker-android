@@ -406,4 +406,8 @@
     <!-- common -->
     <dimen name="txt_size_widget_eventSeeker_btn_white">20sp</dimen>
     
+    <!-- fragment_discover_tab.xml -->
+    <dimen name="txt_no_events_margin_t_discover_tab">220dp</dimen>
+    <dimen name="btn_chg_loc_margin_b_discover_tab">80dp</dimen>
+    
 </resources>

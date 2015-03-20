@@ -102,7 +102,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	private static final String FRAGMENT_TAG_SHARE_VIA_DIALOG = ShareViaDialogFragment.class.getSimpleName();
 	
 	private static final int UNSCROLLED = -1;
-	protected static final int DEFAULT_SEARCH_RADIUS = 50;
+	private static final int DEFAULT_SEARCH_RADIUS = 50;
 	
 	/**
 	 * As the DiscoverFragment is passed as Serializable in DiscoverSettingDialogFragment.newInstance(), The 'CatTitlesAdapter'

@@ -25,12 +25,15 @@ import android.widget.RelativeLayout;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
+import com.wcities.eventseeker.SettingsFragmentTab.OnSettingsItemClickedListener;
 import com.wcities.eventseeker.adapter.RVCatEventsAdapterTab;
 import com.wcities.eventseeker.adapter.RVCatTitlesAdapterTab;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadEvents;
 import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.constants.Enums.SettingsItem;
 import com.wcities.eventseeker.core.Category;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.custom.fragment.PublishEventFragment;
@@ -48,6 +51,7 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 	
 	private static final String TAG = DiscoverFragmentTab.class.getSimpleName();
 	
+	private static final int DEFAULT_SEARCH_RADIUS = 50;
 	private static final int GRID_COLUMNS_PORTRAIT = 2;
 	private static final int GRID_COLUMNS_LANDSCAPE = 3;
 
@@ -56,7 +60,7 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 	private List<Event> eventList;
 	private double lat, lon;
 	
-	private int year, month, day, miles = DiscoverFragment.DEFAULT_SEARCH_RADIUS;
+	private int year, month, day, miles = DEFAULT_SEARCH_RADIUS;
 	private String startDate, endDate;
 	
 	private RecyclerView recyclerVCategories, recyclerVEvents;
@@ -111,6 +115,16 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 		setRetainInstance(true);
 		
 		handler = new Handler(Looper.getMainLooper());
+		
+		if (getArguments() != null) {
+			//Log.d(TAG, "onCreate()");
+			Bundle args = getArguments();
+			year = args.getInt(BundleKeys.YEAR);
+			month = args.getInt(BundleKeys.MONTH);
+			day = args.getInt(BundleKeys.DAY);
+			miles = args.getInt(BundleKeys.MILES);
+			updateStartEndDates();
+		}
 	}
 	
 	@Override
@@ -173,6 +187,8 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 			// retain no events layout visibility on orientation change
 			rltLytNoEvts.setVisibility(View.VISIBLE);
 		}
+		
+		v.findViewById(R.id.btnChgLoc).setOnClickListener(this);
 		
 		return v;
 	}
@@ -407,6 +423,33 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 			rltLytNoEvts.setVisibility(View.INVISIBLE);
 		}
 	}
+	
+	public void onActionItemSettingsSelected() {
+		DiscoverSettingDialogFragment discoverSettingDialogFragment = DiscoverSettingDialogFragment
+				.newInstance(year, month, day, miles);
+		/**
+		 * Passing activity fragment manager, since using this fragment's child fragment manager 
+		 * doesn't retain dialog on orientation change
+		 */
+		discoverSettingDialogFragment.show(((BaseActivityTab)FragmentUtil.getActivity(this))
+				.getSupportFragmentManager(), FragmentUtil.getTag(discoverSettingDialogFragment));
+	}
+	
+	public void onSettingChanged(int year, int month, int day, int miles) {
+		String prevStartDate = startDate;
+		int prevMiles = this.miles;
+		
+		this.year = year;
+		this.month = month;
+		this.day = day;
+		this.miles = miles;
+		
+		updateStartEndDates();
+		
+	    if (!startDate.equals(prevStartDate) || this.miles != prevMiles) {
+			resetEventList();
+		}
+	}
 
 	@Override
 	public void onClick(View v) {
@@ -420,6 +463,16 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 		case R.id.imgNext:
 			//Log.d(TAG, "onClick imgNext - catTitlesAdapterTab.getSelectedPos() = " + catTitlesAdapterTab.getSelectedPos());
 			centerPosition(catTitlesAdapterTab.getSelectedPos() + 1, true);
+			break;
+			
+		case R.id.btnChgLoc:
+			Bundle args = new Bundle();
+			args.putInt(BundleKeys.YEAR, year);
+			args.putInt(BundleKeys.MONTH, month);
+			args.putInt(BundleKeys.DAY, day);
+			args.putInt(BundleKeys.MILES, miles);
+			((OnSettingsItemClickedListener) FragmentUtil.getActivity(this)).onSettingsItemClicked(
+					SettingsItem.CHANGE_LOCATION, args);
 			break;
 
 		default:

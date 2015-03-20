@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.wcities.eventseeker.R;
@@ -12,7 +13,7 @@ public class ResizableImageView extends ImageView {
 
 	private static final String TAG = ResizableImageView.class.getName();
 	
-	private boolean mRemoveXtraHeight, mCompressAsPerWidth;
+	private boolean mRemoveXtraHeight, mCompressAsPerWidth, mBlockSetAlpha;
 	
 	public ResizableImageView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -23,6 +24,14 @@ public class ResizableImageView extends ImageView {
 		super(context, attrs);
 		initCustomParams(attrs);
 	}
+	
+	@Override
+	public void setAlpha(float alpha) {
+		if (mBlockSetAlpha) {
+			return;
+		}
+		super.setAlpha(alpha);
+	}
 
 	private void initCustomParams(AttributeSet attrs) { 
 	    TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ResizableImageView, 
@@ -30,6 +39,7 @@ public class ResizableImageView extends ImageView {
 	    try {
 	    	mRemoveXtraHeight = a.getBoolean(R.styleable.ResizableImageView_removeXtraHeight, false);
 	    	mCompressAsPerWidth = a.getBoolean(R.styleable.ResizableImageView_compressAsPerWidth, false);
+	    	mBlockSetAlpha = a.getBoolean(R.styleable.ResizableImageView_blockSetAlpha, false);
 	    	
 	    } finally {
 		    //Don't forget this

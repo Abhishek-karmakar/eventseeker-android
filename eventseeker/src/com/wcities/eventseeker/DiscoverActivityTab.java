@@ -1,24 +1,22 @@
 package com.wcities.eventseeker;
 
-import java.util.List;
-
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.wcities.eventseeker.DiscoverSettingDialogFragment.DiscoverSettingChangedListenerTab;
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.core.Event;
-import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.interfaces.EventListenerTab;
 import com.wcities.eventseeker.util.FragmentUtil;
-import com.wcities.eventseeker.viewdata.SharedElement;
 
-public class DiscoverActivityTab extends BaseActivityTab implements EventListenerTab {
+public class DiscoverActivityTab extends BaseActivityTab implements EventListenerTab, DiscoverSettingChangedListenerTab {
 	
 	private static final String TAG = DiscoverActivityTab.class.getSimpleName();
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		getWindow().requestFeature(android.view.Window.FEATURE_CONTENT_TRANSITIONS);
         getWindow().requestFeature(android.view.Window.FEATURE_ACTIVITY_TRANSITIONS);
         
 		super.onCreate(savedInstanceState);
@@ -31,8 +29,38 @@ public class DiscoverActivityTab extends BaseActivityTab implements EventListene
 		if (isOnCreateCalledFirstTime) {
 			//Log.d(TAG, "add login fragment tab");
 			DiscoverFragmentTab discoverFragmentTab = new DiscoverFragmentTab();
+			/**
+			 * Args are used on coming back to this screen from change location due to no events found
+			 * earlier on this screen showing change location button.
+			 */
+			discoverFragmentTab.setArguments(getIntent().getExtras());
 			addFragment(R.id.content_frame, discoverFragmentTab, FragmentUtil.getTag(discoverFragmentTab), false);
 		}
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.activity_discover_tab, menu);
+		setSearchView(menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+
+		case R.id.action_setting:
+			DiscoverFragmentTab discoverFragmentTab = (DiscoverFragmentTab) getSupportFragmentManager()
+					.findFragmentByTag(FragmentUtil.getTag(DiscoverFragmentTab.class));
+			if (discoverFragmentTab != null) {
+				discoverFragmentTab.onActionItemSettingsSelected();
+			}
+			return true;
+
+		default:
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -53,5 +81,14 @@ public class DiscoverActivityTab extends BaseActivityTab implements EventListene
 	@Override
 	public void onEventSelected(Event event, ImageView imageView) {
 		super.onEventSelected(event, imageView);
+	}
+
+	@Override
+	public void onSettingChanged(int year, int month, int day, int miles) {
+		DiscoverFragmentTab discoverFragmentTab = (DiscoverFragmentTab) getSupportFragmentManager()
+				.findFragmentByTag(FragmentUtil.getTag(DiscoverFragmentTab.class));
+		if (discoverFragmentTab != null) {
+			discoverFragmentTab.onSettingChanged(year, month, day, miles);
+		}
 	}
 }
