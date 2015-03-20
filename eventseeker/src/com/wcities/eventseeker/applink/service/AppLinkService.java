@@ -69,10 +69,8 @@ import com.ford.syncV4.proxy.rpc.enums.DriverDistractionState;
 import com.ford.syncV4.proxy.rpc.enums.Language;
 import com.ford.syncV4.proxy.rpc.enums.VehicleDataResultCode;
 import com.ford.syncV4.transport.TCPTransportConfig;
-import com.wcities.eventseeker.LanguageFragment.Locales;
 import com.wcities.eventseeker.BaseActivity;
 import com.wcities.eventseeker.LockScreenActivity;
-import com.wcities.eventseeker.MainActivity;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.applink.handler.DiscoverAL;
@@ -84,6 +82,7 @@ import com.wcities.eventseeker.applink.util.ALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil.Command;
 import com.wcities.eventseeker.applink.util.InteractionChoiceSetUtil;
 import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.constants.Enums.Locales;
 import com.wcities.eventseeker.util.DeviceUtil;
 
 public class AppLinkService extends Service implements IProxyListenerALM {

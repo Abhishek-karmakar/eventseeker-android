@@ -15,10 +15,10 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-import com.wcities.eventseeker.LanguageFragment.Locales;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.constants.Enums.Locales;
 
 public abstract class Api {
 	

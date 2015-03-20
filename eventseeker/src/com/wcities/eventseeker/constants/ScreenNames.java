@@ -19,4 +19,5 @@ public class ScreenNames {
 	public static final String EVENT_DETAILS = "Event Detail Screen";
 	public static final String WEB_VIEW = "Website Browser Screen";
 	public static final String CHANGE_LOCATION = "Select Location Screen";
+	public static final String LANGUAGE_SCREEN = "Language Screen";
 }

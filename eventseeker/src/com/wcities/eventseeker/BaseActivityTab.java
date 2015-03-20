@@ -499,6 +499,14 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 				startActivity(intent);
 				break;
 
+			case LANGUAGE:
+				intent = new Intent(getApplicationContext(), LanguageActivityTab.class);
+				if (args != null) {
+					intent.putExtras(args);
+		    	}
+				startActivity(intent);
+				break;
+
 			case INVITE_FRIENDS:
 				inviteFriends();
 				break;
