@@ -55,8 +55,10 @@ public class BeatsMusicFragment extends FragmentLoadableFromBackStack {
 		
 		Log.d(TAG, "artists size = " + artistNames.size());
 		if (artistNames != null) {
-			new SyncArtists(Api.OAUTH_TOKEN, artistNames, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
-					Service.Beats, /*this,*/ Service.Beats.getArtistSource()).execute();
+			/**
+			 * TODO: Uncomment this for Syncing the Beats Music Artist
+			  new SyncArtists(Api.OAUTH_TOKEN, artistNames, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
+					Service.Beats, this, Service.Beats.getArtistSource()).execute();*/
 			
 		} else {
 			FragmentUtil.getActivity(this).onBackPressed();

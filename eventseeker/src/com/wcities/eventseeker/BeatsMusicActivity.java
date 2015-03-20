@@ -16,7 +16,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
-import com.freethinking.beats.sdk.data.Artist;
+/*import com.freethinking.beats.sdk.data.Artist;
 import com.freethinking.beats.sdk.data.Artists;
 import com.freethinking.beats.sdk.data.Me;
 import com.freethinking.beats.sdk.mappers.ArtistsMapper;
@@ -25,20 +25,20 @@ import com.freethinking.beats.sdk.network.NetworkAdapter;
 import com.freethinking.beats.sdk.network.NetworkParts;
 import com.freethinking.beats.sdk.network.UrlFactory;
 import com.freethinking.beats.sdk.utility.ApplicationData;
-import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.constants.AppConstants;*/
 
 public class BeatsMusicActivity extends Activity {
 
 	private WebView webView;
 	private View prgBrLogin;
 
-    protected Me me;
+    /*protected Me me;
     protected Artists artists;
 
     private MyArtistsNetworkRequest myArtistsNetworkRequest;
     private MeNetworkRequest meNetworkRequest;
 
-    @Override
+    /*@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_beats_music);
@@ -67,17 +67,17 @@ public class BeatsMusicActivity extends Activity {
             		String expiresIn = uri.getQueryParameter("expires_in");
             		int accessExpiresAt = expiresIn == null ? 0 : Integer.parseInt(expiresIn);
             				
-            		/**
+            		*//**
             		 * All these data is being updated to SharedPreference as the sdk is using these info by directly 
             		 * accessing it from SharePreference
-            		 */
+            		 *//*
             		String preferencesKey = ApplicationData.getStorePreferencesKey(getApplicationContext());
             		getSharedPreferences(preferencesKey, MODE_PRIVATE).edit().putString("access_token", accessToken).commit();
 					getSharedPreferences(preferencesKey, MODE_PRIVATE).edit().putLong("access_expires_at", System.currentTimeMillis() + (1000 * accessExpiresAt)).commit();
 
-					/**
+					*//**
 					 * Getting the UserId
-					 */
+					 *//*
             		meNetworkRequest = new MeNetworkRequest(getApplicationContext(), accessToken);
             		meNetworkRequest.execute(UrlFactory.me());
             	}
@@ -141,16 +141,16 @@ public class BeatsMusicActivity extends Activity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             String userId = me.getResult().getUserContext();
-            /**
+            *//**
     		 * All these data is being updated to SharedPreference as the sdk is using these info by directly 
     		 * accessing it from SharePreference
-    		 */
+    		 *//*
             String preferencesKey = ApplicationData.getStorePreferencesKey(getApplicationContext());
 			getSharedPreferences(preferencesKey, MODE_PRIVATE).edit().putString("user_id", userId).commit();
 
-    		/**
+    		*//**
     		 * Getting the User's Music Artists
-    		 */
+    		 *//*
     		myArtistsNetworkRequest = new MyArtistsNetworkRequest(getApplicationContext());
     		myArtistsNetworkRequest.execute(UrlFactory.usersMusicLibraryArtists(userId, accessToken));
         }
@@ -168,10 +168,10 @@ public class BeatsMusicActivity extends Activity {
     	protected void onPostExecute(String result) {
     		super.onPostExecute(result);
     		ArrayList<String> artistNameLst = new ArrayList<String>();
-    		/**
+    		*//**
     		 * before adding it to List check if the Artist is already present in the list because sometimes it 
     		 * gives duplicates in a list. And this the SDK's bug
-    		 */
+    		 *//*
     		List<Artist> artistsLst = artists.getArtists();
     		for (Artist artist : artistsLst) {
     			String name = artist.getName();
@@ -182,5 +182,5 @@ public class BeatsMusicActivity extends Activity {
     		
     		onComplete(artistNameLst);
     	}
-    }
+    }*/
 }

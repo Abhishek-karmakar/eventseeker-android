@@ -1539,14 +1539,13 @@ public class MainActivity extends BaseActivity implements
 							.getString(R.string.title_pandora), addToBackStack);
 			break;
 			
-		case Beats:
+		/*case Beats:
 			BeatsMusicFragment beatsMusicFragment = new BeatsMusicFragment();
 			beatsMusicFragment.setArguments(args);
 			selectNonDrawerItem(beatsMusicFragment,
 					AppConstants.FRAGMENT_TAG_BEATS_MUSIC, getResources()
-							.getString(R.string.title_beats_music), addToBackStack);			
-			break;
-
+							.getString(R.string.title_beats_music), addToBackStack);		
+			break;*/
 
 		default:
 			break;

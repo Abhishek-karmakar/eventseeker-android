@@ -23,8 +23,8 @@ public class Enums {
     			R.drawable.ic_lastfm_pressed, true, "lastfm", 5),
     	Pandora(7, R.string.service_pandora, R.drawable.ic_pandora, 
     			R.drawable.ic_pandora_pressed, true, "pandora", 6),
-    	Beats(8, R.string.service_beats, R.drawable.ic_beats, 
-    			R.drawable.ic_beats_pressed, true, "beatsmusic", 8),
+    	/*Beats(8, R.string.service_beats, R.drawable.ic_beats, 
+    			R.drawable.ic_beats_pressed, true, "beatsmusic", 8),*/
     	Button(9, R.string.service_button, R.drawable.placeholder, 0, false, null, AppConstants.INVALID_ID);
     	
     	private int intId;

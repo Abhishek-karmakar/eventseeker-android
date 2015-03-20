@@ -757,6 +757,8 @@
     <!-- activity_splash.xml -->
     <dimen name="txt_app_name_margin_t_activity_splash">30dp</dimen>
     <dimen name="txt_app_name_txt_size_activity_splash">40sp</dimen>
+    <!-- activity_beats_music.xml -->
+    <dimen name="abc_action_bar_title_text_size">15sp</dimen>
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <!-- activity_bosch_main.xml -->
     <dimen name="b_root_navigation_drawer_w_main">210dp</dimen>
