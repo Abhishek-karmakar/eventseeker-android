@@ -407,6 +407,7 @@
     <!-- toolbar.xml -->
     <dimen name="action_bar_ht">64dp</dimen>
     <dimen name="common_t_mar_pad_for_all_layout">0dp</dimen>
+    <dimen name="floating_double_line_toolbar_ht">96dp</dimen>
         
     <!-- fragment_discover_tab.xml -->
     <dimen name="img_prev_w_discover_tab">70dp</dimen>
@@ -462,5 +463,17 @@
     <!-- BaseActivityTab.java -->
     <dimen name="floating_window_w">450dp</dimen>
     <dimen name="floating_window_ht">700dp</dimen>
+    
+    <!-- fragment_event_details_tab.xml -->
+    <dimen name="img_evt_ht_event_details_tab">230dp</dimen>
+    <dimen name="rlt_lyt_txt_evt_title_pad_l_event_details_tab">16dp</dimen>
+    <!-- floating_double_line_toolbar_ht = rlt_lyt_txt_evt_title_pad_b_event_details_tab + rlt_lyt_txt_evt_title_pad_t_event_details_tab
+    + txt_evt_title_ht_event_details_tab -->
+    <dimen name="rlt_lyt_txt_evt_title_pad_b_event_details_tab">8dp</dimen>
+    <dimen name="rlt_lyt_txt_evt_title_pad_t_event_details_tab">12dp</dimen>
+    <dimen name="txt_evt_title_ht_event_details_tab">48dp</dimen>
+    <dimen name="txt_evt_time_ht_event_details_tab">28dp</dimen>
+    <dimen name="txt_evt_title_txt_size_event_details_tab">24sp</dimen>
+    <dimen name="txt_evt_time_txt_size_event_details_tab">18sp</dimen>
     
 </resources>

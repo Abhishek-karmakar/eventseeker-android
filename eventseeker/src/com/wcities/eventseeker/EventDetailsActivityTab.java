@@ -19,9 +19,10 @@ public class EventDetailsActivityTab extends BaseActivityTab {
 
 	    //Log.d(TAG, "onCreate()");
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_base_tab);
+		setContentView(R.layout.activity_base_tab_floating);
 		
 		setCommonUI();
+		updateToobarHt(getResources().getDimensionPixelSize(R.dimen.floating_double_line_toolbar_ht));
 		
 		if (isOnCreateCalledFirstTime) {
 			//Log.d(TAG, "add event details fragment tab");
@@ -29,6 +30,12 @@ public class EventDetailsActivityTab extends BaseActivityTab {
 			eventDetailsFragmentTab.setArguments(getIntent().getExtras());
 			addFragment(R.id.content_frame, eventDetailsFragmentTab, FragmentUtil.getTag(eventDetailsFragmentTab), false);
 		}
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		setDrawerLockMode(true);
 	}
 	
 	@Override

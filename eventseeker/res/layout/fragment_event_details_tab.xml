@@ -17,9 +17,45 @@
 	  	
 		    <ImageView android:id="@+id/imgEvt"
 		      	android:layout_width="match_parent"
-		      	android:layout_height="@dimen/img_event_ht_event_details"
+		      	android:layout_height="@dimen/img_evt_ht_event_details_tab"
 		      	android:scaleType="centerCrop"
 		      	android:contentDescription="Event Image" />
+		    
+		    <RelativeLayout android:id="@+id/rltLytTxtEvtTitle"
+		        android:layout_width="match_parent"
+		        android:layout_height="@dimen/floating_double_line_toolbar_ht"
+		        android:layout_alignBottom="@id/imgEvt"
+		        android:paddingLeft="@dimen/rlt_lyt_txt_evt_title_pad_l_event_details_tab"
+		    	android:paddingBottom="@dimen/rlt_lyt_txt_evt_title_pad_b_event_details_tab"
+		    	android:paddingTop="@dimen/rlt_lyt_txt_evt_title_pad_t_event_details_tab"
+		    	android:background="@drawable/bg_lnr_gradient_top_transparent_btm_black" >
+		    
+		    	<TextView android:id="@+id/txtEvtTitle"
+		    	    android:layout_width="match_parent"
+		    	    android:layout_height="@dimen/txt_evt_title_ht_event_details_tab"
+		    	    android:textColor="@android:color/white"
+		    	    android:textSize="@dimen/txt_evt_title_txt_size_event_details_tab"
+		    	    android:gravity="center_vertical"
+		    	    android:singleLine="true"
+		    	    android:ellipsize="marquee" />
+		    	
+		    	<TextView android:id="@+id/txtEvtTime"
+		            android:layout_width="match_parent"
+		            android:layout_height="@dimen/txt_evt_time_ht_event_details_tab"
+		            android:layout_below="@id/txtEvtTitle"
+		            android:gravity="center_vertical"
+		            android:textColor="@android:color/white"
+		    	    android:textSize="@dimen/txt_evt_time_txt_size_event_details_tab"
+		    	    android:singleLine="true"
+		    	    android:ellipsize="marquee" />
+		    	
+		    </RelativeLayout>
+		    
+		    <RelativeLayout android:id="@+id/rltLytDummy"
+		        android:layout_width="match_parent"
+		        android:layout_height="800dp"
+		        android:background="#f00"
+		        android:layout_below="@id/rltLytTxtEvtTitle" />
 		   
 		</RelativeLayout>
 		

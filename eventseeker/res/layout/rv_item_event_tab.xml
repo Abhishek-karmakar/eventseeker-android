@@ -40,7 +40,7 @@
 	    	android:paddingTop="@dimen/rlt_lyt_txt_evt_title_pad_t_rv_item_event_tab"
 	    	android:background="@drawable/bg_lnr_gradient_top_transparent_btm_black" >
 	    
-	    	<TextView android:id="@+id/txtEvtTitle"
+	    	<com.wcities.eventseeker.custom.view.TextViewBlockingSetAlpha android:id="@+id/txtEvtTitle"
 	    	    android:layout_width="match_parent"
 	    	    android:layout_height="wrap_content"
 	    	    android:textColor="@android:color/white"

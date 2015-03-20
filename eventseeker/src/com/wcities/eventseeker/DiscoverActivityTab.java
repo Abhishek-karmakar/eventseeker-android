@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.wcities.eventseeker.DiscoverSettingDialogFragment.DiscoverSettingChangedListenerTab;
 import com.wcities.eventseeker.constants.ScreenNames;
@@ -79,8 +80,8 @@ public class DiscoverActivityTab extends BaseActivityTab implements EventListene
 	}
 
 	@Override
-	public void onEventSelected(Event event, ImageView imageView) {
-		super.onEventSelected(event, imageView);
+	public void onEventSelected(Event event, ImageView imageView, TextView textView) {
+		super.onEventSelected(event, imageView, textView);
 	}
 
 	@Override
