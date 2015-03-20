@@ -6,24 +6,26 @@ import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class Enums {
-	
+
 	public static enum Service {
-    	Title(0, R.string.service_title, R.drawable.placeholder, 0, false, null),
+    	Title(0, R.string.service_title, R.drawable.placeholder, 0, false, null, AppConstants.INVALID_ID),
     	GooglePlay(1, R.string.service_google_play, R.drawable.ic_google_play, 
-    			R.drawable.ic_google_play_pressed, true, "googleplay"),
+    			R.drawable.ic_google_play_pressed, true, "googleplay", 1),
     	DeviceLibrary(2, R.string.service_device_library, R.drawable.ic_device_library, 
-    			R.drawable.ic_device_library_pressed, true, "devicelibrary"),
+    			R.drawable.ic_device_library_pressed, true, "devicelibrary", 2),
     	Twitter(3, R.string.service_twitter, R.drawable.ic_twitter, 
-    			R.drawable.ic_twitter_pressed, true, "twitter"),
+    			R.drawable.ic_twitter_pressed, true, "twitter", 3),
     	Spotify(4, R.string.service_spotify, R.drawable.ic_spotify, 
-    			R.drawable.ic_spotify_pressed, true, "spotify"),
+    			R.drawable.ic_spotify_pressed, true, "spotify", 7),
     	Rdio(5, R.string.service_rdio, R.drawable.ic_rdio, 
-    			R.drawable.ic_rdio_pressed, true, "rdio"),
+    			R.drawable.ic_rdio_pressed, true, "rdio", 4),
     	Lastfm(6, R.string.service_last_fm, R.drawable.ic_lastfm, 
-    			R.drawable.ic_lastfm_pressed, true, "lastfm"),
+    			R.drawable.ic_lastfm_pressed, true, "lastfm", 5),
     	Pandora(7, R.string.service_pandora, R.drawable.ic_pandora, 
-    			R.drawable.ic_pandora_pressed, true, "pandora"),
-    	Button(8, R.string.service_button, R.drawable.placeholder, 0, false, null);
+    			R.drawable.ic_pandora_pressed, true, "pandora", 6),
+    	Beats(8, R.string.service_beats, R.drawable.ic_beats, 
+    			R.drawable.ic_beats_pressed, true, "beatsmusic", 8),
+    	Button(9, R.string.service_button, R.drawable.placeholder, 0, false, null, AppConstants.INVALID_ID);
     	
     	private int intId;
     	private int strResId;
@@ -31,14 +33,21 @@ public class Enums {
     	private int pressedDrwResId;
     	private boolean isService;
     	private String artistSource;
+    	/**
+    	 * 20-03-2015:
+    	 * This stores the Server-side id for the corresponding Service.
+    	 */
+    	private int serverMappingId;
     	
-    	private Service(int intId, int strResId, int normalDrwResId, int pressedDrwResId, boolean isService, String artistSource) {
+    	private Service(int intId, int strResId, int normalDrwResId, int pressedDrwResId, boolean isService, 
+    			String artistSource, int serverMappingId) {
     		this.intId = intId;
     		this.strResId = strResId;
     		this.normalDrwResId = normalDrwResId;
     		this.pressedDrwResId = pressedDrwResId;
     		this.isService = isService;
     		this.artistSource = artistSource;
+    		this.serverMappingId = serverMappingId;
 		}
     	
     	public int getNormalDrwResId() {
@@ -61,7 +70,11 @@ public class Enums {
 			return intId;
 		}
     	
-    	public boolean equals(Service s, Fragment fragment) {
+    	public int getServerMappingId() {
+			return serverMappingId;
+		}
+
+		public boolean equals(Service s, Fragment fragment) {
     		return getStringFromResId(strResId, fragment).equals(s.getStr(fragment));
 		}
     	

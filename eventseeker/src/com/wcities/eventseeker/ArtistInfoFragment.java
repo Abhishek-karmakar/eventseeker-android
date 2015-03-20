@@ -28,9 +28,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.scvngr.levelup.views.gallery.AdapterView;
+/*import com.scvngr.levelup.views.gallery.AdapterView;
 import com.scvngr.levelup.views.gallery.AdapterView.OnItemClickListener;
-import com.scvngr.levelup.views.gallery.Gallery;
+import com.scvngr.levelup.views.gallery.Gallery;*/
 import com.viewpagerindicator.CirclePageIndicator;
 import com.wcities.eventseeker.ArtistDetailsFragment1.ArtistDetailsFragmentListener;
 import com.wcities.eventseeker.ArtistDetailsFragment1.FooterTxt;
@@ -78,7 +78,7 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 	private TextView txtArtistDesc;
 	private ImageView imgDown, imgArtist, imgRight;
 	private ViewPager viewPager;
-	private Gallery glryVideo;
+	//private Gallery glryVideo;
 	private CirclePageIndicator indicator;
 	private RelativeLayout rltLayoutFriends;
 	private ExpandableGridView grdVFriends;
@@ -146,25 +146,25 @@ public class ArtistInfoFragment extends Fragment implements OnClickListener,
 
 		if (isTabletInPortraitMode) {
 
-			glryVideo = (Gallery) v.findViewById(R.id.glryVideo);
+			//glryVideo = (Gallery) v.findViewById(R.id.glryVideo);
 			videoGalleryAdapter = new VideoGalleryAdapter(videos, FragmentUtil.getActivity(this));
-			glryVideo.setAdapter(videoGalleryAdapter);
-			glryVideo.setOnItemClickListener(new OnItemClickListener() {
+			//glryVideo.setAdapter(videoGalleryAdapter);
+			/*glryVideo.setOnItemClickListener(new OnItemClickListener() {
 
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 					Video video = (Video) parent.getItemAtPosition(position);
 					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(video.getVideoUrl()));
 					startActivity(Intent.createChooser(intent, ""));
-					/**
+					*//**
 					 * 15-12-2014: added Google Analytics tracker code.
-					 */
+					 *//*
 					GoogleAnalyticsTracker.getInstance().sendEvent(FragmentUtil.getApplication(ArtistInfoFragment.this), 
 						FragmentUtil.getScreenName(ArtistInfoFragment.this), GoogleAnalyticsTracker.ARTIST_VIDEO_CLICK,
 						GoogleAnalyticsTracker.Type.Artist.name(), video.getVideoUrl(), 
 						artist.getId());
 				}
-			});
+			});*/
 
 		} else {
 

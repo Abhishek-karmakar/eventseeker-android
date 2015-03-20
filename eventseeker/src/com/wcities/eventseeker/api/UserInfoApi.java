@@ -628,7 +628,7 @@ public class UserInfoApi extends Api {
 	}
 	
 	public JSONObject getAvailableSyncServices() throws ClientProtocolException, IOException, JSONException {
-		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append("syncService.php");
+		StringBuilder uriBuilder = new StringBuilder(COMMON_URL).append(API).append("syncService.php?deviceType=android");
 		setUri(uriBuilder.toString());
 		Log.i(TAG, "uri=" + getUri());
 		return execute(RequestMethod.GET, null, null); 

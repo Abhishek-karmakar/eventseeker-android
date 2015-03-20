@@ -4,10 +4,10 @@ import java.lang.ref.WeakReference;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-import us.feras.ecogallery.EcoGallery;
+/*import us.feras.ecogallery.EcoGallery;
 import us.feras.ecogallery.EcoGalleryAdapterView;
 import us.feras.ecogallery.EcoGalleryAdapterView.OnItemClickListener;
-import us.feras.ecogallery.EcoGalleryAdapterView.OnItemSelectedListener;
+import us.feras.ecogallery.EcoGalleryAdapterView.OnItemSelectedListener;*/
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -33,11 +33,11 @@ import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class DiscoverFragmentTab1 extends DiscoverParentFragment implements OnItemClickListener {
+public class DiscoverFragmentTab1 extends DiscoverParentFragment /*implements OnItemClickListener*/ {
 
 	public static final String TAG = DiscoverFragmentTab1.class.getName();
 
-	private EcoGallery ecoGallery;
+	//private EcoGallery ecoGallery;
 	private FeaturedEventsEcoGalleryAdapter featuredEventsEcoGalleryAdapter;
 
 	private String cityName;
@@ -64,8 +64,8 @@ public class DiscoverFragmentTab1 extends DiscoverParentFragment implements OnIt
 
 		featuredEventsEcoGalleryAdapter = new FeaturedEventsEcoGalleryAdapter(this, FragmentUtil.getActivity(this));
 		
-		ecoGallery = (EcoGallery) v.findViewById(R.id.ecoglryFeaturedEvt);
-		ecoGallery.setAdapter(featuredEventsEcoGalleryAdapter);
+		//ecoGallery = (EcoGallery) v.findViewById(R.id.ecoglryFeaturedEvt);
+		/*ecoGallery.setAdapter(featuredEventsEcoGalleryAdapter);
 		int numOfFeaturedImages = featuredEventsEcoGalleryAdapter.getCount(); 
 		if(numOfFeaturedImages > 0) {
 			ecoGallery.setSelection(numOfFeaturedImages / 2);
@@ -88,7 +88,7 @@ public class DiscoverFragmentTab1 extends DiscoverParentFragment implements OnIt
 			public void onNothingSelected(EcoGalleryAdapterView<?> parent) {
 				
 			}
-		});
+		});*/
 
 		/*if (featuredEventsEcoGalleryAdapter.getCount() > DEFAULT_SELECTED_FEATURED_EVENT_POSITION) {
 			ecoGallery.setSelection(DEFAULT_SELECTED_FEATURED_EVENT_POSITION);
@@ -271,7 +271,7 @@ public class DiscoverFragmentTab1 extends DiscoverParentFragment implements OnIt
 		}*/
 		int numOfFeaturedImages = featuredEventsEcoGalleryAdapter.getCount(); 
 		if(numOfFeaturedImages > 0) {
-			ecoGallery.setSelection(numOfFeaturedImages / 2);
+			//ecoGallery.setSelection(numOfFeaturedImages / 2);
 		}
 		/*if (!featuredEvts.isEmpty()) {
 			cityName = featuredEvts.get(0).getCityName();
@@ -279,9 +279,9 @@ public class DiscoverFragmentTab1 extends DiscoverParentFragment implements OnIt
 		}*/
 	}
 
-	@Override
+	/*@Override
 	public void onItemClick(EcoGalleryAdapterView<?> parent, View view, int position, long id) {
 		Event event = (Event) parent.getItemAtPosition(position);
 		((EventListener)FragmentUtil.getActivity(this)).onEventSelected(event);
-	}
+	}*/
 }

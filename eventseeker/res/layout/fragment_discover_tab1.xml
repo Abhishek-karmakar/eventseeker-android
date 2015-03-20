@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res/com.wcities.eventseeker"
+    android:id="@+id/rootRelLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+</RelativeLayout>
+<!--
 <com.wcities.eventseeker.custom.view.ScrollViewContainingViewPager xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res/com.wcities.eventseeker"
@@ -47,4 +56,6 @@
             android:verticalSpacing="@dimen/grd_evt_categories_ver_space_discover" />
     </RelativeLayout>
 
-</com.wcities.eventseeker.custom.view.ScrollViewContainingViewPager>
+</com.wcities.eventseeker.custom.view.ScrollViewContainingViewPager>
+-->
+
