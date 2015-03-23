@@ -34,4 +34,13 @@
         <item name="android:textSize">@dimen/txt_size_custom_actionbar_tabs</item>
     </style>
     
+    <style name="Widget.EventSeeker.DoubleLineToolbar" parent="@style/ThemeOverlay.EventSeeker.Dark.ActionBar">
+    	<item name="maxButtonHeight">@dimen/max_btn_ht_toolbar_floating_window_double_line</item>
+    	<item name="android:minHeight">@dimen/min_ht_toolbar_floating_window_double_line</item>
+    </style>
+    
+    <style name="Widget.EventSeeker.DoubleLineToolbar.Button.Navigation" parent="@style/Widget.EventSeeker.Toolbar.Button.Navigation">
+    	<item name="android:minWidth">@dimen/min_nav_btn_w_toolbar_floating_window_double_line</item>
+    </style>
+    
 </resources>

@@ -69,4 +69,12 @@
     <!-- fragment_discover_tab.xml -->
     <dimen name="txt_no_events_margin_t_discover_tab">120dp</dimen>
     
+    <!-- BaseActivityTab.java -->
+    <dimen name="floating_window_w">550dp</dimen>
+    <dimen name="floating_window_ht">600dp</dimen>
+    
+    <!-- fragment_event_details_tab.xml -->
+    <!-- img_evt_ht_event_details_tab = floating_window_w * 3/4 -->
+    <dimen name="img_evt_ht_event_details_tab">413dp</dimen>
+    
 </resources>

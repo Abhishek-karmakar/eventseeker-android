@@ -91,5 +91,9 @@
     <!-- BaseActivityTab.java -->
     <dimen name="floating_window_w">450dp</dimen>
     <dimen name="floating_window_ht">500dp</dimen>
+    
+    <!-- fragment_event_details_tab.xml -->
+    <!-- img_evt_ht_event_details_tab = floating_window_w * 3/4 -->
+    <dimen name="img_evt_ht_event_details_tab">338dp</dimen>
         
 </resources>

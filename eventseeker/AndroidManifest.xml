@@ -65,7 +65,7 @@
         <activity android:name="com.wcities.eventseeker.SettingsActivityTab" />
         <activity android:name="com.wcities.eventseeker.ConnectAccountsActivityTab" />
         <activity android:name="com.wcities.eventseeker.EventDetailsActivityTab"
-            android:theme="@style/Theme.EventSeeker.EventDetails" />
+            android:theme="@style/Theme.EventSeeker.TranslucentWindow" />
         <activity android:name="com.wcities.eventseeker.WebViewActivityTab" />
         <activity android:name="com.wcities.eventseeker.LanguageActivityTab" />
         

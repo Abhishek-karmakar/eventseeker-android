@@ -407,8 +407,7 @@
     <!-- toolbar.xml -->
     <dimen name="action_bar_ht">64dp</dimen>
     <dimen name="common_t_mar_pad_for_all_layout">0dp</dimen>
-    <dimen name="floating_double_line_toolbar_ht">96dp</dimen>
-        
+    
     <!-- fragment_discover_tab.xml -->
     <dimen name="img_prev_w_discover_tab">70dp</dimen>
     <dimen name="img_next_w_discover_tab">@dimen/img_prev_w_discover_tab</dimen>
@@ -464,16 +463,43 @@
     <dimen name="floating_window_w">450dp</dimen>
     <dimen name="floating_window_ht">700dp</dimen>
     
+    <!-- toolbar_floating_window_double_line.xml -->
+    <dimen name="floating_double_line_toolbar_ht">76dp</dimen>
+    <dimen name="max_btn_ht_toolbar_floating_window_double_line">44dp</dimen>
+    <dimen name="min_ht_toolbar_floating_window_double_line">@dimen/max_btn_ht_toolbar_floating_window_double_line</dimen>
+    <dimen name="min_nav_btn_w_toolbar_floating_window_double_line">@dimen/max_btn_ht_toolbar_floating_window_double_line</dimen>
+    <!-- floating_double_line_toolbar_ht = txt_toolbar_title_ht_toolbar_floating_window_double_line 
+    + txt_toolbar_sub_title_ht_toolbar_floating_window_double_line -->
+    <dimen name="txt_toolbar_title_ht_toolbar_floating_window_double_line">@dimen/max_btn_ht_toolbar_floating_window_double_line</dimen>
+    <dimen name="txt_toolbar_sub_title_ht_toolbar_floating_window_double_line">32dp</dimen>
+    <dimen name="txt_toolbar_title_txt_size_toolbar_floating_window_double_line">22sp</dimen>
+    <dimen name="txt_toolbar_sub_title_txt_size_toolbar_floating_window_double_line">16sp</dimen>
+    
     <!-- fragment_event_details_tab.xml -->
-    <dimen name="img_evt_ht_event_details_tab">230dp</dimen>
+    <!-- img_evt_ht_event_details_tab = floating_window_w * 3/4 -->
+    <dimen name="img_evt_ht_event_details_tab">338dp</dimen>
+    <dimen name="rlt_lyt_txt_evt_title_ht_event_details_tab">@dimen/floating_double_line_toolbar_ht</dimen>
     <dimen name="rlt_lyt_txt_evt_title_pad_l_event_details_tab">16dp</dimen>
-    <!-- floating_double_line_toolbar_ht = rlt_lyt_txt_evt_title_pad_b_event_details_tab + rlt_lyt_txt_evt_title_pad_t_event_details_tab
-    + txt_evt_title_ht_event_details_tab -->
-    <dimen name="rlt_lyt_txt_evt_title_pad_b_event_details_tab">8dp</dimen>
-    <dimen name="rlt_lyt_txt_evt_title_pad_t_event_details_tab">12dp</dimen>
-    <dimen name="txt_evt_title_ht_event_details_tab">48dp</dimen>
-    <dimen name="txt_evt_time_ht_event_details_tab">28dp</dimen>
-    <dimen name="txt_evt_title_txt_size_event_details_tab">24sp</dimen>
-    <dimen name="txt_evt_time_txt_size_event_details_tab">18sp</dimen>
+    <dimen name="txt_evt_title_ht_event_details_tab">@dimen/txt_toolbar_title_ht_toolbar_floating_window_double_line</dimen>
+    <dimen name="txt_evt_time_ht_event_details_tab">@dimen/txt_toolbar_sub_title_ht_toolbar_floating_window_double_line</dimen>
+    <dimen name="txt_evt_title_txt_size_event_details_tab">@dimen/txt_toolbar_title_txt_size_toolbar_floating_window_double_line</dimen>
+    <dimen name="txt_evt_time_txt_size_event_details_tab">@dimen/txt_toolbar_sub_title_txt_size_toolbar_floating_window_double_line</dimen>
+    <dimen name="txt_desc_margin_l_event_details_tab">16dp</dimen>
+    <dimen name="txt_desc_margin_r_event_details_tab">@dimen/txt_desc_margin_l_event_details_tab</dimen>
+    <dimen name="txt_desc_margin_t_event_details_tab">25dp</dimen>
+    <dimen name="txt_desc_txt_size_event_details_tab">16sp</dimen>
+    <dimen name="lnr_lyt_expand_desc_margin_t_event_details_tab">15dp</dimen>
+    <dimen name="img_down_w_rv_item_desc_tab">48dp</dimen>
+    <dimen name="img_down_ht_rv_item_desc_tab">32dp</dimen>
+    <dimen name="v_hor_line_ht_event_details_tab">1dp</dimen>
+    <dimen name="v_hor_line_margin_b_event_details_tab">10dp</dimen>
+    <dimen name="v_hor_line_margin_r_event_details_tab">@dimen/txt_desc_margin_r_event_details_tab</dimen>
+    
+    <!-- EventDetailsFragmentTab.java -->
+    <!-- txt_toolbar_double_line_title_pos_all_details = 44dp to keep it left aligned with toolbar title.
+    min_nav_btn_w_toolbar_floating_window_double_line is 44dp which is amount of space consumed by back arrow.
+    Also we have set titleMarginStart for toolbar to 0 under styles.xml for 
+    style="ThemeOverlay.EventSeeker.Dark.ActionBar". After this we can start with other content placement. -->
+    <dimen name="txt_toolbar_double_line_title_pos_all_details">@dimen/min_nav_btn_w_toolbar_floating_window_double_line</dimen>
     
 </resources>
