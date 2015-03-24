@@ -11,16 +11,17 @@ import org.json.JSONObject;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.util.Log;
+import android.widget.BaseAdapter;
 
-import com.wcities.eventseeker.ArtistsNewsListFragment.SortArtistNewsBy;
 import com.wcities.eventseeker.adapter.ArtistNewsListAdapter;
+import com.wcities.eventseeker.adapter.ArtistNewsListAdapterTab;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg.AsyncLoadImageListener;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.constants.Enums.SortArtistNewsBy;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.ArtistNewsItem;
 import com.wcities.eventseeker.core.ArtistNewsItem.PostType;
@@ -33,7 +34,7 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 
 	private static final String TAG = LoadArtistNews.class.getSimpleName();
 	
-	private ArtistNewsListAdapter artistNewsListAdapter;
+	private BaseAdapter artistNewsListAdapter;
 	private String wcitiesId, oauthToken;
 	private Artist artist;
 	private List<ArtistNewsListItem> batchLoaded;
@@ -47,7 +48,7 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 		public abstract void onNewsLoaded();
 	}
 	
-	public LoadArtistNews(String oauthToken, ArtistNewsListAdapter artistNewsListAdapter, String wcitiesId, 
+	public LoadArtistNews(String oauthToken, BaseAdapter artistNewsListAdapter, String wcitiesId, 
 			List<ArtistNewsListItem> artistsNewsListItems, Artist artist, OnNewsLoadedListener newsLoadedListener, 
 			SortArtistNewsBy sortBy) {
 		this.oauthToken = oauthToken;
@@ -59,7 +60,13 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 		this.sortBy = sortBy;
 		
 		batchLoaded = new ArrayList<ArtistNewsListItem>();
-		artistNewsListAdapter.setBatchLoaded(batchLoaded);
+		
+		if (artistNewsListAdapter instanceof ArtistNewsListAdapter) {
+			((ArtistNewsListAdapter) artistNewsListAdapter).setBatchLoaded(batchLoaded);
+		
+		} else {
+			((ArtistNewsListAdapterTab) artistNewsListAdapter).setBatchLoaded(batchLoaded);
+		}
 	}
 
 	@Override
@@ -67,9 +74,15 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 		List<ArtistNewsItem> tmpArtistNewsItems = new ArrayList<ArtistNewsItem>();
 		UserInfoApi userInfoApi = new UserInfoApi(oauthToken);
 		userInfoApi.setLimit(ARTISTS_NEWS_LIMIT);
-		userInfoApi.setAlreadyRequested(artistNewsListAdapter.getItemsAlreadyRequested());
 		userInfoApi.setUserId(wcitiesId);
 		userInfoApi.setSortBy(sortBy);
+		if (artistNewsListAdapter instanceof ArtistNewsListAdapter) {
+			userInfoApi.setAlreadyRequested(((ArtistNewsListAdapter) artistNewsListAdapter).getItemsAlreadyRequested());
+		
+		} else {
+			userInfoApi.setAlreadyRequested(((ArtistNewsListAdapterTab) artistNewsListAdapter).getItemsAlreadyRequested());
+		}
+		
 		if (artist != null) {
 			userInfoApi.setArtistId(artist.getId());
 		}
@@ -98,20 +111,35 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 		count = 0;
 		
 		if (result.size() > 0) {
-			artistNewsListAdapter.setItemsAlreadyRequested(artistNewsListAdapter.getItemsAlreadyRequested() 
-					+ result.size());
-
+			if (artistNewsListAdapter instanceof ArtistNewsListAdapter) {
+				((ArtistNewsListAdapter) artistNewsListAdapter).setItemsAlreadyRequested(((ArtistNewsListAdapter) 
+						artistNewsListAdapter).getItemsAlreadyRequested() + result.size());
+			
+			} else {
+				((ArtistNewsListAdapterTab) artistNewsListAdapter).setItemsAlreadyRequested(((ArtistNewsListAdapterTab) 
+						artistNewsListAdapter).getItemsAlreadyRequested() + result.size());
+			}
 			for (Iterator<ArtistNewsItem> iterator = result.iterator(); iterator.hasNext();) {
 				ArtistNewsItem artistNewsItem = iterator.next();
 				batchLoaded.add(new ArtistNewsListItem(artistNewsItem, this));
 			}
 			
 			if (result.size() < ARTISTS_NEWS_LIMIT) {
-				artistNewsListAdapter.setMoreDataAvailable(false);
+				if (artistNewsListAdapter instanceof ArtistNewsListAdapter) {
+					((ArtistNewsListAdapter) artistNewsListAdapter).setMoreDataAvailable(false);
+				
+				} else {
+					((ArtistNewsListAdapterTab) artistNewsListAdapter).setMoreDataAvailable(false);
+				}
 			}
 			
 		} else {
-			artistNewsListAdapter.setMoreDataAvailable(false);
+			if (artistNewsListAdapter instanceof ArtistNewsListAdapter) {
+				((ArtistNewsListAdapter) artistNewsListAdapter).setMoreDataAvailable(false);
+			
+			} else {
+				((ArtistNewsListAdapterTab) artistNewsListAdapter).setMoreDataAvailable(false);
+			}
 		}
 		chkCount();
 	}    	
@@ -121,8 +149,15 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 			//Log.d(TAG, "chkCount() addAll for count = " + count);
 			artistsNewsListItems.addAll(artistsNewsListItems.size() - 1, batchLoaded);
 			
+			boolean isMoreDataAvailable;
+			if (artistNewsListAdapter instanceof ArtistNewsListAdapter) {
+				isMoreDataAvailable = ((ArtistNewsListAdapter) artistNewsListAdapter).isMoreDataAvailable();
+			
+			} else {
+				isMoreDataAvailable = ((ArtistNewsListAdapterTab) artistNewsListAdapter).isMoreDataAvailable();
+			}
 			//artistNewsListAdapter.setMoreDataAvailable(false);
-			if (!artistNewsListAdapter.isMoreDataAvailable()) {
+			if (!isMoreDataAvailable) {
 				//Log.d(TAG, "!artistNewsListAdapter.isMoreDataAvailable");
 				/**
 				 * Remove null item indicating progressbar if we have finished loading all items,
@@ -133,7 +168,7 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 				//artistsNewsListItems.clear();
 				if (artistsNewsListItems.isEmpty()) {
 					ArtistNewsItem artistNewsItem = new ArtistNewsItem();
-					artistNewsItem.setArtistName(AppConstants.INVALID_STR_ID);
+					artistNewsItem.createArtist(AppConstants.INVALID_ID, AppConstants.INVALID_STR_ID);
 					artistsNewsListItems.add(new ArtistNewsListItem(artistNewsItem, this));
 					if (newsLoadedListener != null) {
 						newsLoadedListener.onNewsLoaded();
@@ -143,7 +178,12 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 			
 			count = 0;
 			batchLoaded.clear();
-			artistNewsListAdapter.setMoreDataAvailable(true);
+			if (artistNewsListAdapter instanceof ArtistNewsListAdapter) {
+				((ArtistNewsListAdapter) artistNewsListAdapter).setMoreDataAvailable(true);
+			
+			} else {
+				((ArtistNewsListAdapterTab) artistNewsListAdapter).setMoreDataAvailable(true);
+			}
 			artistNewsListAdapter.notifyDataSetChanged();
 			if (newsLoadedListener instanceof AsyncTaskListener) {
 				((AsyncTaskListener<Void>) newsLoadedListener).onTaskCompleted();

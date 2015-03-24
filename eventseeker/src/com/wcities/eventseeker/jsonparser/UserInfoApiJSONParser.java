@@ -48,6 +48,7 @@ public class UserInfoApiJSONParser {
 	private static final String KEY_PHOTO = "photo";
 	private static final String KEY_VIDEO = "video";
 	private static final String KEY_LINK = "link";
+	private static final String KEY_ARTIST_IMAGE = "artist_image";
 
 	private static final String KEY_FRIENDSFEED = "friendsfeed";
 	private static final String KEY_TRACK_INFO = "trackInfo";
@@ -421,7 +422,13 @@ public class UserInfoApiJSONParser {
 	private ArtistNewsItem getArtistNewsItem(JSONObject jsonObject, SimpleDateFormat format) 
 			throws JSONException {
 		ArtistNewsItem artistNewsItem = new ArtistNewsItem();
-		artistNewsItem.setArtistName(jsonObject.getString(KEY_NAME));
+		artistNewsItem.createArtist(jsonObject.getInt(KEY_ID), jsonObject.getString(KEY_NAME));
+		/**
+		 * ImageAttibution needs to be initialized else it would be null.
+		 */
+		artistNewsItem.getArtist().setImageAttribution(new ImageAttribution());
+		artistNewsItem.getArtist().setImageName(jsonObject.getString(KEY_ARTIST_IMAGE));
+		
 		String postType = jsonObject.getString(KEY_POST_TYPE);
 		/*if (postType.equals("swf")) {
 			return null;

@@ -5,9 +5,8 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.os.Bundle;
 import android.os.AsyncTask.Status;
+import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +29,8 @@ import com.wcities.eventseeker.asynctask.LoadArtistNews;
 import com.wcities.eventseeker.asynctask.LoadArtistNews.ArtistNewsListItem;
 import com.wcities.eventseeker.asynctask.LoadArtistNews.OnNewsLoadedListener;
 import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.constants.Enums.SortArtistNewsBy;
+import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.core.ArtistNewsItem;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
@@ -61,29 +62,6 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	private RelativeLayout rltLytPrgsBar;
 	
 	private SortArtistNewsBy sortBy = SortArtistNewsBy.chronological;
-	
-	public enum SortArtistNewsBy {
-		chronological(0),
-		trending(1);
-		
-		int value;
-		private SortArtistNewsBy(int value) {
-			this.value = value;
-		}
-
-		public int getValue() {
-			return value;
-		}
-		
-		public static SortArtistNewsBy getSortTypeBy(int value) {
-			for (SortArtistNewsBy sortBy : values()) {
-				if (sortBy.getValue() == value) {
-					return sortBy;
-				}
-			}
-			return null;
-		}
-	}
 	
 	/**
 	 * Using its instance variable since otherwise calling getResources() directly from onSortTypeSelectedListener from 
@@ -317,7 +295,7 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	private void changeRltDummyLytVisibility() {
 		if (artistsNewsListItems.size() == 1 && artistsNewsListItems.get(0) != null
 			&& ((ArtistNewsItem)((ArtistNewsListItem)artistsNewsListItems.get(0))
-					.getItem()).getArtistName().equals(AppConstants.INVALID_STR_ID)) {
+					.getItem()).getArtist().getName().equals(AppConstants.INVALID_STR_ID)) {
 			setNoItemsLayout();
 			/**
 			 * try-catch is used to handle case where even before we get call back to this function, user leaves 
@@ -361,7 +339,7 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 
 	@Override
 	public String getScreenName() {
-		return "Artist News Screen";
+		return ScreenNames.ARTISTS_NEWS_SCREEN;
 	}
 
 	@Override

@@ -23,7 +23,6 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
-import com.wcities.eventseeker.ArtistsNewsListFragment;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
@@ -143,8 +142,8 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 			
 		} else {
 			ArtistNewsItemViewHolder holder;
-			if (((item instanceof List) && ((List<ArtistNewsListItem>)item).get(0).getItem().getArtistName().equals(AppConstants.INVALID_STR_ID)) 
-					|| ((item instanceof ArtistNewsListItem) && ((ArtistNewsListItem)item).getItem().getArtistName().equals(AppConstants.INVALID_STR_ID))) {
+			if (((item instanceof List) && ((List<ArtistNewsListItem>)item).get(0).getItem().getArtist().getName().equals(AppConstants.INVALID_STR_ID)) 
+					|| ((item instanceof ArtistNewsListItem) && ((ArtistNewsListItem)item).getItem().getArtist().getName().equals(AppConstants.INVALID_STR_ID))) {
 				
 				convertView = mInflater.inflate(R.layout.list_no_items_found, null);
 				convertView.setTag("");
@@ -162,7 +161,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 				convertView = mInflater.inflate(R.layout.artists_fix_size_news_list_item, null);
 				
 				holder = new ArtistNewsItemViewHolder();
-				holder.rootLnrLayout = (LinearLayout) convertView.findViewById(R.id.rootLnrLayout);
+				holder.rootLnrLayout = (LinearLayout) convertView.findViewById(R.id.rltRootLayout);
 
 				RelativeLayout rltLayoutNewsItemContainer =  holder.rltLayoutNewsItemContainer 
 						= (RelativeLayout) convertView.findViewById(R.id.rltLayoutNewsItemContainer);
@@ -303,7 +302,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 		
 		private void setNewsItemContent(ArtistNewsListItem artistsNewsListItem, ViewGroup parent, int pos) {
 			final ArtistNewsItem item = artistsNewsListItem.getItem();
-			String title = item.getArtistName();
+			String title = item.getArtist().getName();
 			//String time = ConversionUtil.getTimeDiffFromCurrentTime(item.getTimestamp());
 			String time = ConversionUtil.getTimeDiffFromCurrentTime(item.getTimestamp(), res);
 			
@@ -386,7 +385,7 @@ public class ArtistNewsListAdapter extends BaseAdapter {
 		
 		private void setNewsItem2Content(ArtistNewsListItem artistsNewsListItem, ViewGroup parent, int pos) {
 			final ArtistNewsItem item = artistsNewsListItem.getItem();
-			String title = item.getArtistName();
+			String title = item.getArtist().getName();
 			//String time = ConversionUtil.getTimeDiffFromCurrentTime(item.getTimestamp());
 			String time = ConversionUtil.getTimeDiffFromCurrentTime(item.getTimestamp(), res);
 			

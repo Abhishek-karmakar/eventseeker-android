@@ -1,13 +1,14 @@
 package com.wcities.eventseeker;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -20,10 +21,8 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.Enums.SettingsItem;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -59,16 +58,19 @@ public class SettingsFragmentTab extends ListFragment {
     			}
         	}
         	
-			/**
-			 * this is required because some tablets don't have statusbar (eg - samsung galaxy 10") where our calculation
-			 * for htForDrawerList in onCreate() won't return right value since we are subtracting statusbar height
-			 * as well.
-			 */
-        	htForSettingsList = getListView().getHeight()
-					// subtracting divider height
-					- FragmentUtil.getResources(SettingsFragmentTab.this)
-					.getDimensionPixelSize(R.dimen.divider_section_ht_navigation_drawer_list_item);
-			settingsListAdapter.setHtForSettingsList(htForSettingsList);
+    		Resources res = FragmentUtil.getResources(SettingsFragmentTab.this);
+    		DisplayMetrics displaymetrics = new DisplayMetrics();
+    		FragmentUtil.getActivity(SettingsFragmentTab.this).getWindowManager().getDefaultDisplay()
+    			.getMetrics(displaymetrics);
+    		
+    		int lstHt = displaymetrics.heightPixels;
+    		htForSettingsList = lstHt - res.getDimensionPixelSize(R.dimen.action_bar_ht)
+    				/**
+    				 * subtracting the StatusBar height
+    				 */
+    				- ViewUtil.getStatusBarHeight(res);
+    		
+    		settingsListAdapter.setHtForSettingsList(htForSettingsList);
         }
     };
 	
@@ -99,64 +101,38 @@ public class SettingsFragmentTab extends ListFragment {
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_settings, null);
-		return view;
+		return inflater.inflate(R.layout.fragment_settings_tab, null);
 	}
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		Resources res = FragmentUtil.getResources(this);
-		EventSeekr eventSeekr = FragmentUtil.getApplication(this);
-		if (eventSeekr.is10InchTabletAndInPortraitMode()) {
-			htForSettingsList = res.getDimensionPixelSize(R.dimen.ht_navigation_drawer_list);
-			
-		} else {
-			DisplayMetrics displaymetrics = new DisplayMetrics();
-			FragmentUtil.getActivity(this).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-			htForSettingsList = displaymetrics.heightPixels - ViewUtil.getStatusBarHeight(res)
-					- res.getDimensionPixelSize(R.dimen.action_bar_ht) 
-					// subtracting divider height
-					- res.getDimensionPixelSize(R.dimen.divider_section_ht_navigation_drawer_list_item);
-		}
-		
 		if (settingsItems == null) {
 			settingsItems = new ArrayList<SettingsItem>(Arrays.asList(SettingsItem.values()));
-			settingsListAdapter = new SettingsListAdapter((Activity) FragmentUtil.getActivity(this), 
-					settingsItems, htForSettingsList);
-			
-		} else {
-			settingsListAdapter.setInflater((Activity) FragmentUtil.getActivity(this));
-			if (FragmentUtil.getApplication(this).is10InchTabletAndInPortraitMode()) {
-				settingsListAdapter.setHtForSettingsList(htForSettingsList);
-			}
+			settingsListAdapter = new SettingsListAdapter(this, settingsItems);
 		}
-		
 		setListAdapter(settingsListAdapter);
+		
         getListView().setDivider(null);
-        getListView().setVerticalScrollBarEnabled(false);
-        getListView().setHorizontalScrollBarEnabled(false);
-        getListView().setCacheColorHint(android.R.color.transparent);
-        getListView().setScrollingCacheEnabled(false);
-        
-        if (eventSeekr.isTablet() && !eventSeekr.is10InchTabletAndInPortraitMode()) {
-        	// for 10" tablet portrait orientation we are using fix height, hence this is not needed
-        	getListView().getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
-        }
+        getListView().getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
 	}
 	
 	private static class SettingsListAdapter extends BaseAdapter {
 
 		private List<SettingsItem> settingsItems;
-		private WeakReference<Activity> activity;
 		private LayoutInflater inflater;
 		private int rowHt;
-
-		public SettingsListAdapter(Activity activity, List<SettingsItem> settingsMenuListItems, int htForSettingsList) {
-			this.activity = new WeakReference<Activity>(activity);
-	        inflater = LayoutInflater.from(this.activity.get());
+		private OnSettingsItemClickedListener onSettingsItemClickedListener;
+		private Fragment fragment;
+		private Handler handler;
+		
+		public SettingsListAdapter(Fragment fragment, List<SettingsItem> settingsMenuListItems) {
+	        inflater = LayoutInflater.from(FragmentUtil.getActivity(fragment));
 	        this.settingsItems = settingsMenuListItems;
-	        this.rowHt = htForSettingsList / settingsMenuListItems.size();
+	        this.fragment = fragment;
+	        this.onSettingsItemClickedListener = (OnSettingsItemClickedListener) FragmentUtil.getActivity(fragment);
+	        
+	        handler = new Handler(Looper.getMainLooper());
 		}
 
 		public void setHtForSettingsList(int htForSettingsList) {
@@ -180,13 +156,12 @@ public class SettingsFragmentTab extends ListFragment {
 		}
 
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
+		public View getView(final int position, View convertView, ViewGroup parent) {
 			final ListItemViewHolder listItemViewHolder;
 			SettingsItem settingsItem = (SettingsItem) getItem(position);
 
 			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.list_item_settings, null);
-				
+				convertView = inflater.inflate(R.layout.list_item_settings_tab, null);
 
 				listItemViewHolder = new ListItemViewHolder();
 				listItemViewHolder.imgIcon = (ImageView) convertView.findViewById(R.id.imgIcon);
@@ -200,32 +175,42 @@ public class SettingsFragmentTab extends ListFragment {
 			AbsListView.LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, rowHt);
 			convertView.setLayoutParams(lp);
 
-			listItemViewHolder.imgIcon.setImageDrawable(activity.get().getResources()
+			listItemViewHolder.imgIcon.setImageDrawable(FragmentUtil.getResources(fragment)
 				.getDrawable(settingsItem.getIcon()));
 
 			listItemViewHolder.txtTitle.setText(settingsItem.getTitle());
 			
+			/**
+			 * This onClickListener is added as in Samsung Galaxy Tab, the If Settings screen is Started in
+			 * Landscape mode then onListItemClick was not getting called. After that if change the Orientation 
+			 * then it was working fine. So, resolved this issue by implementation.
+			 */
+			convertView.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					SettingsItem settingsItem = (SettingsItem) getItem(position);
+					onSettingsItemClickedListener.onSettingsItemClicked(settingsItem, null);
+				}
+			});
+			
 			return convertView;
 		}
-		
-		public void setInflater(Activity activity) {
-			this.activity = new WeakReference<Activity>(activity);
-			inflater = LayoutInflater.from(this.activity.get());
-		}
-		
+				
 		private static class ListItemViewHolder {
 			private ImageView imgIcon;
 			private TextView txtTitle;
 			private Object tag;
 		}
 	}
-	
-	@Override
+
+	/*@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
+		Log.d(TAG, "onListItemClick");
 		SettingsItem settingsItem = (SettingsItem) l.getAdapter().getItem(position);
 		((OnSettingsItemClickedListener) FragmentUtil.getActivity(this)).onSettingsItemClicked(settingsItem, null);
-	}
+	}*/
 	
 	@Override
 	public void onStop() {

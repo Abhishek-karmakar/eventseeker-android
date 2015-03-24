@@ -12,13 +12,11 @@ public class SettingsActivityTab extends BaseActivityTab {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//Log.d(TAG, "onCreate()");
 		setContentView(R.layout.activity_base_tab);
 		
 		setCommonUI();
 		
 		if (isOnCreateCalledFirstTime) {
-			//Log.d(TAG, "add settings fragment tab");
 			SettingsFragmentTab settingsFragmentTab = new SettingsFragmentTab();
 			addFragment(R.id.content_frame, settingsFragmentTab, FragmentUtil.getTag(settingsFragmentTab), false);
 		}

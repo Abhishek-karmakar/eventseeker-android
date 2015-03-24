@@ -15,7 +15,8 @@ public class ArtistNewsItem implements BitmapCacheable {
 		event
 	}
 
-	private String artistName;
+	private Artist artist;
+	//private String artistName;
 	private PostType postType;
 	private String postTitle;
 	private String postDesc;
@@ -28,15 +29,23 @@ public class ArtistNewsItem implements BitmapCacheable {
 	 * 3) first frame url for postType=video
 	 */
 	private String imgUrl;
-
-	public String getArtistName() {
+	
+	/*public String getArtistName() {
 		return artistName;
 	}
 
 	public void setArtistName(String artistName) {
 		this.artistName = artistName;
+	}*/
+	
+	public Artist getArtist() {
+		return artist;
 	}
 
+	public void createArtist(int id, String name) {
+		this.artist = new Artist(id, name);
+	}
+	
 	public PostType getPostType() {
 		return postType;
 	}

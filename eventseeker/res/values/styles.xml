@@ -105,6 +105,10 @@
    <style name="CustomProgressBar" parent="@android:style/Widget.ProgressBar">
 		<item name="android:indeterminateDrawable">@drawable/app_progress_bar</item>
     </style>
+   
+    <style name="SettingsListViewItemSelector">
+        <item name="android:background">@drawable/bg_item_lst_settings</item>
+    </style>
 	
     <!-- Used this style at runtime for discover settings dialog font color. Without this, since we have overwritten
     textColorPrimary in application base theme to white color, texts in datepicker are not visible on same white background -->

@@ -68,6 +68,8 @@
             android:theme="@style/Theme.EventSeeker.EventDetails" />
         <activity android:name="com.wcities.eventseeker.WebViewActivityTab" />
         <activity android:name="com.wcities.eventseeker.LanguageActivityTab" />
+        <activity android:name="com.wcities.eventseeker.ArtistsNewsActivityTab" />
+        <activity android:name="com.wcities.eventseeker.FriendsActivityActivityTab" />
         
         <activity android:name="com.wcities.eventseeker.SpotifyActivity" 
             android:theme="@style/Theme.Transparent"

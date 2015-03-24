@@ -272,4 +272,33 @@ public class Enums {
 			return mobileLocales;
 		}
 	}
+	
+	public enum SortArtistNewsBy {
+		chronological(0),
+		trending(1);
+		
+		int value;
+		private SortArtistNewsBy(int value) {
+			this.value = value;
+		}
+
+		public int getValue() {
+			return value;
+		}
+		
+		public static SortArtistNewsBy getSortTypeBy(int value) {
+			for (SortArtistNewsBy sortBy : values()) {
+				if (sortBy.getValue() == value) {
+					return sortBy;
+				}
+			}
+			return null;
+		}
+	}
+
+	public static enum PublishRequest {
+		LIKE,
+		COMMENT;
+	}
+
 }

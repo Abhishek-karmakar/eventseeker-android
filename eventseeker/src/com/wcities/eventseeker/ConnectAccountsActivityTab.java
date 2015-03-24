@@ -11,7 +11,6 @@ import com.wcities.eventseeker.constants.Enums.Service;
 import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
-import com.wcities.eventseeker.util.GPlusUtil;
 
 public class ConnectAccountsActivityTab extends BaseActivityTab implements ConnectAccountsFragmentListener,
 		FragmentLoadedFromBackstackListener, ReplaceFragmentListener {

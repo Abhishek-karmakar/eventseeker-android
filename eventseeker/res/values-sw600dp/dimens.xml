@@ -212,12 +212,12 @@
     <dimen name="lnr_layout_btns_margin_l_friends_activity_item">0dp</dimen>
     <dimen name="lnr_layout_btns_margin_r_friends_activity_item">@dimen/lnr_layout_btns_margin_l_friends_activity_item</dimen>
     <dimen name="img_evt_margin_friends_activity_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="txt_title_txt_size_friends_activity_item">22sp</dimen>
     <dimen name="txt_title_margin_t_b_friends_activity_item">7dp</dimen>
     <dimen name="txt_title_margin_l_r_friends_activity_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="btn_txt_size_friends_activity_item">13sp</dimen>
     <dimen name="txt_evt_title_margin_l_include_fragment_event_details_img_evt">7dp</dimen>
     <dimen name="v_divider_lnr_ht_friends_activity_item">22dp</dimen>
+	<dimen name="img_crcl_friend_w_h_friends_activity_item">50dp</dimen>
 
     <!-- fragment_artist_info.xml -->
     <dimen name="lnr_btn_social_networking_links_margin_t_b_fragment_artist_info">@dimen/txt_margin_t_b_rlt_evt_info_fragment_event_details_img_evt</dimen>
@@ -274,6 +274,9 @@
     
     <!-- connect_accounts_list_item_top.xml -->
     <dimen name="txt_personalize_wt_connect_accounts_li_top">400dp</dimen>
+    
+    <!-- artist_news_item.xml -->
+    <dimen name="txt_margin_l_r_artist_news_item_tab">2dp</dimen>
     
     <!-- fragment_rep_code.xml -->
     <dimen name="edt_rep_code_ht_fragment_rep_code">33dp</dimen>
@@ -476,4 +479,15 @@
     <dimen name="txt_evt_title_txt_size_event_details_tab">24sp</dimen>
     <dimen name="txt_evt_time_txt_size_event_details_tab">18sp</dimen>
     
+    <!-- fragment_language_tab -->
+    <dimen name="list_view_w_language_fragment_tab">200dp</dimen>
+    <dimen name="list_view_m_t_b_language_fragment_tab">90dp</dimen>
+    <dimen name="txt_language_txt_size_list_item_language_tab">22sp</dimen>
+    
+    <!-- artist_fix_size_news_list_item.xml -->
+    <dimen name="v_dummy_margin_l_r_artist_fix_size_news_list_item">25dp</dimen>
+    <dimen name="root_lnr_lyt_w_artist_fix_size_news_list_item">400dp</dimen>
+    
+    <!-- friends_activity_item_tab.xml -->
+    <dimen name="rlt_root_padding_friends_activity_item_tab">12dp</dimen>
 </resources>

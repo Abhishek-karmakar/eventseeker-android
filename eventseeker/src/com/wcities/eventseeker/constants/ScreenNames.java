@@ -20,4 +20,6 @@ public class ScreenNames {
 	public static final String WEB_VIEW = "Website Browser Screen";
 	public static final String CHANGE_LOCATION = "Select Location Screen";
 	public static final String LANGUAGE_SCREEN = "Language Screen";
+	public static final String ARTISTS_NEWS_SCREEN = "Artist News Screen";
+	public static final String FRIENDS_NEWS_SCREEN = "Friend News Screen";
 }

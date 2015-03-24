@@ -275,6 +275,7 @@
     <dimen name="txt_time_txt_size_artist_news_item">10sp</dimen>
     <dimen name="txt_desc_txt_size_artist_news_item">12sp</dimen>
     <dimen name="img_photo_margin_b_artist_news_item">@dimen/txt_time_margin_b_artist_news_item</dimen>
+    <dimen name="img_photo_margin_t_artist_news_item">@dimen/txt_time_margin_b_artist_news_item</dimen>
     <dimen name="img_link_w_artist_news_item">50dp</dimen>
     <dimen name="img_link_ht_artist_news_item">@dimen/img_link_w_artist_news_item</dimen>
     <dimen name="img_link_margin_r_artist_news_item">5dp</dimen>
@@ -524,10 +525,6 @@
     <dimen name="common_margin_padding_t_list_item_language">25dp</dimen>
     <dimen name="common_margin_padding_b_list_item_language">10dp</dimen>
     <dimen name="txt_language_txt_size_list_item_language">18sp</dimen>
-    <!-- fragment_language_tab -->
-    <dimen name="list_view_w_language_fragment_tab">250dp</dimen>
-    <dimen name="list_view_m_t_b_language_fragment_tab">150dp</dimen>
-    <dimen name="txt_language_txt_size_list_item_language_tab">25sp</dimen>    
     <!-- fragment_launcher.xml -->
     <dimen name="txt_desc_txt_size_fragment_launcher">40sp</dimen>
     <dimen name="btn_default_ht">50dp</dimen>
@@ -763,6 +760,10 @@
     <dimen name="txt_app_name_txt_size_activity_splash">40sp</dimen>
     <!-- activity_beats_music.xml -->
     <dimen name="abc_action_bar_title_text_size">15sp</dimen>
+    <!-- friends_activity_item_tab.xml -->
+    <dimen name="rlt_root_padding_friends_activity_item_tab">12dp</dimen>
+    <!-- artist_fix_size_news_list_item.xml -->
+    <dimen name="root_lnr_lyt_w_artist_fix_size_news_list_item">300dp</dimen>
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <!-- activity_bosch_main.xml -->
     <dimen name="b_root_navigation_drawer_w_main">210dp</dimen>

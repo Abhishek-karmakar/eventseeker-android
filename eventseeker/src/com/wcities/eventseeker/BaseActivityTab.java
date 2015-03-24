@@ -232,9 +232,15 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 	}
 	
 	public void updateTitle(String title) {
-		//Log.d(TAG, "updateTitle()");
-		getSupportActionBar().setTitle(title);
-	}
+        //Log.d(TAG, "updateTitle()");
+        /*if (txtToolbarTitle != null) {
+                // for double line toolbar used on some floating windows like event details
+                txtToolbarTitle.setText(title);
+                
+        } else {*/
+                getSupportActionBar().setTitle(title);
+        //}
+}
 	
 	public void updateSubTitle(String subTitle) {
 		//Log.d(TAG, "updateSubTitle()");
@@ -260,6 +266,14 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 			intent = new Intent(getApplicationContext(), DiscoverActivityTab.class);
 			break;			
 			
+		case INDEX_NAV_ITEM_FRIENDS_ACTIVITY:
+			intent = new Intent(getApplicationContext(), FriendsActivityActivityTab.class);
+			break;
+			
+		case INDEX_NAV_ITEM_ARTISTS_NEWS:
+			intent = new Intent(getApplicationContext(), ArtistsNewsActivityTab.class);
+			break;
+
 		case INDEX_NAV_ITEM_SETTINGS:
 			//SettingsFragment SettingsFragment;
 			intent = new Intent(getApplicationContext(), SettingsActivityTab.class);
@@ -469,12 +483,12 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		}
 		// TODO: shift these lines into language settings activity
 		/**
-		 * refresh the current screen's title only if it is Language fragment.
+		 * refresh the current screen's title only if it is Language Activity.
 		 */
-		/*if (currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_LANGUAGE)) {
-			mTitle = getResources().getString(R.string.title_language);
-			updateTitle();
-		}*/
+		if (currentContentFragmentTag.equals(FragmentUtil.getTag(LanguageFragmentTab.class))) {
+			String title = getResources().getString(R.string.title_language);
+			updateTitle(title);
+		}
 		/**
 		 * 	refresh the SearchView	
 		 */

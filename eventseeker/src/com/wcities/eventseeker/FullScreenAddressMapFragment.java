@@ -75,7 +75,7 @@ public class FullScreenAddressMapFragment extends FragmentLoadableFromBackStack 
         args.putDouble(BundleKeys.LON, lon);
         mMapFragment.setArguments(args);
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.add(R.id.rootLnrLayout, mMapFragment, MAP_FRAGMENT_TAG).commit();
+        transaction.add(R.id.rltRootLayout, mMapFragment, MAP_FRAGMENT_TAG).commit();
         
         return v;
     }

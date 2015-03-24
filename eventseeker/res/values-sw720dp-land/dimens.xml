@@ -68,5 +68,7 @@
     
     <!-- fragment_discover_tab.xml -->
     <dimen name="txt_no_events_margin_t_discover_tab">120dp</dimen>
-    
+        
+    <!-- fragment_language_tab -->
+    <dimen name="list_view_m_t_b_language_fragment_tab">100dp</dimen>
 </resources>
