@@ -71,4 +71,13 @@
         
     <!-- fragment_language_tab -->
     <dimen name="list_view_m_t_b_language_fragment_tab">100dp</dimen>
+    
+    <!-- BaseActivityTab.java -->
+    <dimen name="floating_window_w">550dp</dimen>
+    <dimen name="floating_window_ht">600dp</dimen>
+    
+    <!-- fragment_event_details_tab.xml -->
+    <!-- img_evt_ht_event_details_tab = floating_window_w * 3/4 -->
+    <dimen name="img_evt_ht_event_details_tab">413dp</dimen>
+
 </resources>

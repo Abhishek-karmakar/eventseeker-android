@@ -105,7 +105,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	private FloatingActionButton fabTickets, fabSave;
 	
 	private int limitScrollAt, actionBarElevation, fabScrollThreshold, prevScrollY = UNSCROLLED;
-	private int txtEvtTitleDiffX, txtEvtTitleSourceX;;
+	private int txtEvtTitleDiffX, txtEvtTitleSourceX;
 	private boolean isScrollLimitReached, isOnPushedToBackStackCalled;
 	private String title = "";
 	private float minTitleScale;

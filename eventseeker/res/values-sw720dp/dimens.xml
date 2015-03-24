@@ -411,7 +411,7 @@
     <dimen name="txt_no_events_margin_t_discover_tab">220dp</dimen>
     <dimen name="btn_chg_loc_margin_b_discover_tab">80dp</dimen>
     
-     <!-- fragment_language_tab -->
+    <!-- fragment_language_tab -->
     <dimen name="list_view_w_language_fragment_tab">250dp</dimen>
     <dimen name="list_view_m_t_b_language_fragment_tab">200dp</dimen>
     <dimen name="txt_language_txt_size_list_item_language_tab">25sp</dimen>    
@@ -422,4 +422,12 @@
     
     <!-- friends_activity_item_tab.xml -->
     <dimen name="rlt_root_padding_friends_activity_item_tab">15dp</dimen>
+
+    <!-- BaseActivityTab.java -->
+    <dimen name="floating_window_w">500dp</dimen>
+    <dimen name="floating_window_ht">950dp</dimen>
+    
+    <!-- fragment_event_details_tab.xml -->
+    <!-- img_evt_ht_event_details_tab = floating_window_w * 3/4 -->
+    <dimen name="img_evt_ht_event_details_tab">375dp</dimen>
 </resources>

@@ -10,8 +10,6 @@ public class EventDetailsActivityTab extends BaseActivityTab {
 	
 	private static final String TAG = EventDetailsActivityTab.class.getSimpleName();
 	
-	private String title = "";
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 	    getWindow().requestFeature(android.view.Window.FEATURE_ACTIVITY_TRANSITIONS);
@@ -22,7 +20,6 @@ public class EventDetailsActivityTab extends BaseActivityTab {
 		setContentView(R.layout.activity_base_tab_floating);
 		
 		setCommonUI();
-		updateToobarHt(getResources().getDimensionPixelSize(R.dimen.floating_double_line_toolbar_ht));
 		
 		if (isOnCreateCalledFirstTime) {
 			//Log.d(TAG, "add event details fragment tab");
@@ -45,6 +42,10 @@ public class EventDetailsActivityTab extends BaseActivityTab {
 
 	@Override
 	protected String getScrnTitle() {
-		return title;
+		EventDetailsFragmentTab eventDetailsFragmentTab = (EventDetailsFragmentTab) getSupportFragmentManager().findFragmentByTag(FragmentUtil.getTag(EventDetailsFragmentTab.class));
+		if (eventDetailsFragmentTab != null) {
+			return eventDetailsFragmentTab.getTitle();
+		}
+		return "";
 	}
 }

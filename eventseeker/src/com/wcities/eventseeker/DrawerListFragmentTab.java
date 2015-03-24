@@ -158,7 +158,7 @@ public class DrawerListFragmentTab extends ListFragment {
 		});
         
         EventSeekr eventSeekr = FragmentUtil.getApplication(this);
-        if (eventSeekr.isTablet() && !eventSeekr.is10InchTabletAndInPortraitMode()) {
+        if (!eventSeekr.is10InchTabletAndInPortraitMode()) {
         	// for 10" tablet portrait orientation we are using fix height, hence this is not needed
         	getListView().getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
         }

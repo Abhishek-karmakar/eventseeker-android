@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".DiscoverActivityTab" >
+    tools:context=".EventDetailsActivityTab" >
     
     <LinearLayout android:id="@+id/lnrLytRoot"
         android:layout_width="match_parent"
@@ -21,8 +21,7 @@
 
             <FrameLayout android:id="@+id/content_frame"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="@dimen/action_bar_ht" />
+                android:layout_height="match_parent" />
 
             <!-- The navigation drawer -->
 
@@ -41,6 +40,6 @@
         
     </LinearLayout>
     
-    <include layout="@layout/floating_window_double_line_toolbar" />
+    <include layout="@layout/toolbar_floating_window_double_line" />
 
 </FrameLayout>

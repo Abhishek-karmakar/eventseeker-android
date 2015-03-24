@@ -625,7 +625,7 @@
     <dimen name="rlt_lyt_txt_evt_title_pad_b_event_details">8dp</dimen>
     <dimen name="rlt_lyt_txt_evt_title_pad_t_event_details">30dp</dimen>
     <dimen name="txt_evt_title_txt_size_event_details">24sp</dimen>
-    <!-- txt_toolbar_title_pos_event_details = 56dp to keep it left aligned with toolbar title 
+    <!-- txt_toolbar_title_pos_all_details = 56dp to keep it left aligned with toolbar title 
     Ref: http://www.google.com/design/spec/layout/metrics-keylines.html#metrics-keylines-keylines-spacing, where
     72dp is specified as actionbar title margin from screen left edge, but if we skip 16dp margin just before title,
     then it comes out to be 56dp. Also note that we have set titleMarginStart for toolbar to 0 under styles.xml

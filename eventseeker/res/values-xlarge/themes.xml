@@ -2,10 +2,16 @@
 <resources>
 	<style name="Theme.EventSeekr" parent="@style/Theme.EventSeekr.Base"></style>
 	
-	<style name="Theme.EventSeeker.EventDetails" parent="@style/Theme.EventSeekr">
+	<style name="Theme.EventSeeker.TranslucentWindow" parent="@style/Theme.EventSeekr">
         <item name="android:windowIsTranslucent">true</item>
         <!-- not using windowElevation, since it darkens the shadow color on orientation change -->
         <!-- <item name="android:windowElevation">8dp</item> -->
+        <!-- Toolbar styles -->
+        <!-- To reduce back & action buttons' height -->
+     	<item name="toolbarStyle">@style/Widget.EventSeeker.DoubleLineToolbar</item>
+     	<!-- 1) to remove highlight & ripple effect from hamburger icon
+     	2) To match back & action buttons' width to its height -->
+    	<item name="toolbarNavigationButtonStyle">@style/Widget.EventSeeker.DoubleLineToolbar.Button.Navigation</item>
     </style>
     
 </resources>

@@ -1,5 +1,6 @@
 package com.wcities.eventseeker;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -64,6 +65,7 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 	private LinearLayout lnrLayoutRootNavDrawer;
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
+	private TextView txtToolbarTitle, txtToolbarSubTitle;
 	
 	protected String currentContentFragmentTag;
 	
@@ -98,7 +100,7 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		// mark it false here instead of from onCreate() so that child class can use it from its onCreate()
 		isOnCreateCalledFirstTime = false;
 
-		getSupportActionBar().setTitle(getScrnTitle());
+		updateTitle(getScrnTitle());
 		
 		/**
 		 * Use isTaskRoot() instead of navigation drawer item index to set hamburger/back icon, because it's possible that
@@ -232,20 +234,25 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 	}
 	
 	public void updateTitle(String title) {
-        //Log.d(TAG, "updateTitle()");
-        /*if (txtToolbarTitle != null) {
-                // for double line toolbar used on some floating windows like event details
-                txtToolbarTitle.setText(title);
-                
-        } else {*/
-                getSupportActionBar().setTitle(title);
-        //}
-}
+		//Log.d(TAG, "updateTitle()");
+		if (txtToolbarTitle != null) {
+			// for double line toolbar used on some floating windows like event details
+			txtToolbarTitle.setText(title);
+			
+		} else {
+			getSupportActionBar().setTitle(title);
+		}
+	}
 	
 	public void updateSubTitle(String subTitle) {
 		//Log.d(TAG, "updateSubTitle()");
-		//getSupportActionBar().setSubtitle(subTitle);
-		//((TextView)toolbar.findViewById(R.id.txtToolbarTitle)).setText(subTitle);
+		if (txtToolbarSubTitle != null) {
+			// for double line toolbar used on some floating windows like event details
+			txtToolbarSubTitle.setText(subTitle);
+			
+		} else {
+			getSupportActionBar().setSubtitle(subTitle);
+		}
 	}
 	
 	private void addDrawerListFragment() {
@@ -347,6 +354,9 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		toolbar = (Toolbar) findViewById(R.id.toolbarForActionbar);
 	    setSupportActionBar(toolbar);
 	    
+	    txtToolbarTitle = (TextView) toolbar.findViewById(R.id.txtToolbarTitle);
+	    txtToolbarSubTitle = (TextView) toolbar.findViewById(R.id.txtToolbarSubTitle);
+	    
 	    lnrLayoutRootNavDrawer = (LinearLayout) findViewById(R.id.rootNavigationDrawer);
 	    mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 	    mDrawerToggle = new ActionBarDrawerToggle(this, // host Activity
@@ -382,12 +392,6 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		getSupportFragmentManager().executePendingTransactions();
 	}
 	
-	protected void updateToobarHt(int toolbarHt) {
-		FrameLayout.LayoutParams flp = (LayoutParams) toolbar.getLayoutParams();
-        flp.height = toolbarHt;
-        toolbar.setLayoutParams(flp);
-	}
-	
 	/**
 	 * Activities corresponding to navigation drawer items should override this method to return valid position.
 	 * @return
@@ -407,6 +411,17 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 	
 	protected void removeToolbarElevation() {
 		ViewCompat.setElevation(toolbar, 0);
+	}
+	
+	protected void animateToolbarElevation(float start, float end) {
+		ObjectAnimator elevateAnim = ObjectAnimator.ofFloat(toolbar, "elevation", start, end);
+		elevateAnim.setDuration(100);
+		elevateAnim.start();
+	}
+	
+	protected void setToolbarBg(int color) {
+		//Log.d(TAG, "setToolbarBg(), color = " + color);
+		toolbar.setBackgroundColor(color);
 	}
 	
 	protected void addFragment(int containerViewId, Fragment fragment, String tag, boolean addToBackStack) {
