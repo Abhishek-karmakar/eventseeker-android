@@ -261,7 +261,6 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		vPagerFeaturing.setAdapter(featuringArtistPagerAdapter);
 		vPagerFeaturing.setOnPageChangeListener(featuringArtistPagerAdapter);
 		
-		// Set current item to the middle page so we can fling to both directions left and right
 		vPagerFeaturing.setCurrentItem(featuringArtistPagerAdapter.getCurrentPosition());
 		
 		// Necessary or the pager will only have one extra page to show make this at least however many pages you can see

@@ -5,8 +5,12 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils.TruncateAt;
 import android.util.Log;
@@ -20,6 +24,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.wcities.eventseeker.adapter.FeaturingArtistPagerAdapterTab;
+import com.wcities.eventseeker.adapter.FriendsRVAdapter;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.asynctask.LoadEventDetails;
@@ -30,6 +36,7 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Schedule;
+import com.wcities.eventseeker.custom.fragment.NestingFragmentReatiningChildFragmentManager;
 import com.wcities.eventseeker.custom.view.ObservableScrollView;
 import com.wcities.eventseeker.custom.view.ObservableScrollView.ObservableScrollViewListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
@@ -37,8 +44,8 @@ import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 
-public class EventDetailsFragmentTab extends Fragment implements ObservableScrollViewListener, OnEventUpdatedListner, 
-		OnClickListener {
+public class EventDetailsFragmentTab extends NestingFragmentReatiningChildFragmentManager implements 
+		ObservableScrollViewListener, OnEventUpdatedListner, OnClickListener {
 
 	private static final String TAG = EventDetailsFragmentTab.class.getSimpleName();
 	private static final int UNSCROLLED = -1;
@@ -46,8 +53,12 @@ public class EventDetailsFragmentTab extends Fragment implements ObservableScrol
 	
 	private ObservableScrollView obsrScrlV;
 	private ImageView imgEvt, imgDown;
-	private TextView txtEvtTitle, txtEvtTime, txtEvtDesc;
-	private RelativeLayout rltLytPrgsBar;
+	private TextView txtEvtTitle, txtEvtTime, txtEvtDesc, txtVenue;
+	private RelativeLayout rltLytPrgsBar, rltLytFeaturing, rltLytVenue, rltLytFriends;
+	private RecyclerView recyclerVFriends;
+	
+	private FeaturingArtistPagerAdapterTab featuringArtistPagerAdapterTab;
+	private FriendsRVAdapter friendsRVAdapter;
 	
 	private Event event;
 	private String title = "", subTitle = "";
@@ -57,7 +68,7 @@ public class EventDetailsFragmentTab extends Fragment implements ObservableScrol
 	private boolean isScrollLimitReached;
 	
 	private LoadEventDetails loadEventDetails;
-	private boolean allDetailsLoaded, isEvtDescExpanded;;
+	private boolean allDetailsLoaded, isEvtDescExpanded;
 	
 	private OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
         @Override
@@ -77,12 +88,8 @@ public class EventDetailsFragmentTab extends Fragment implements ObservableScrol
             	//Log.d(TAG, "scrollTo");
             	obsrScrlV.scrollTo(0, prevScrollY);
             	/**
-            	 * Following call is required to prevent wrong scroll amount usage on orientation change in following case.
-            	 * User opens event details screen in landscape where it's scrollable by some amount & hence
-            	 * user scrolls it. Now on changing orientation, same scrollY is applied from onStart() 
-            	 * due to prevScrollY's stored value. But suppose if screen is not scrollable in portrait, then 
-            	 * we need to revert these wrong alterations by following call by passing obsrScrlV.getScrollY()
-            	 * which is 0 in this case & forceUpdate=true as second argument.
+            	 * On orientation change forcefully (forceUpdate = true is passed) reset toolbar bg, title & subtitle
+            	 * as per the scrolling position.
             	 */
             	onScrollChanged(obsrScrlV.getScrollY(), true);
             }
@@ -92,8 +99,6 @@ public class EventDetailsFragmentTab extends Fragment implements ObservableScrol
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		setRetainInstance(true);
 		
 		actionBarElevation = FragmentUtil.getResources(this).getDimensionPixelSize(R.dimen.action_bar_elevation);
 		
@@ -122,6 +127,7 @@ public class EventDetailsFragmentTab extends Fragment implements ObservableScrol
 		ViewCompat.setTransitionName(txtEvtTitle, getArguments().getString(BundleKeys.TRANSITION_NAME_SHARED_TEXT));
 		
 		txtEvtTime = (TextView) rootView.findViewById(R.id.txtEvtTime);
+		txtVenue = (TextView) rootView.findViewById(R.id.txtVenue);
 		updateEventSchedule();
 		
 		txtEvtDesc = (TextView) rootView.findViewById(R.id.txtDesc);
@@ -140,18 +146,49 @@ public class EventDetailsFragmentTab extends Fragment implements ObservableScrol
 		rltLytPrgsBar.setBackgroundResource(R.drawable.bg_no_content_overlay_tab);
 		updateProgressBarVisibility();
 		
+		rltLytFeaturing = (RelativeLayout) rootView.findViewById(R.id.rltLytFeaturing);
+		rltLytVenue = (RelativeLayout) rootView.findViewById(R.id.rltLytVenue);
+		rltLytFriends = (RelativeLayout) rootView.findViewById(R.id.rltLytFriends);
+		
+		updateDetailsVisibility();
+		
+		recyclerVFriends = (RecyclerView) rootView.findViewById(R.id.recyclerVFriends);
+		// use a linear layout manager
+		RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(FragmentUtil.getActivity(this), 
+				LinearLayoutManager.HORIZONTAL, false);
+		recyclerVFriends.setLayoutManager(layoutManager);
+		
+		ViewPager vPagerFeaturing = (ViewPager) rootView.findViewById(R.id.vPagerFeaturing);
+		if (featuringArtistPagerAdapterTab == null) {
+			featuringArtistPagerAdapterTab = new FeaturingArtistPagerAdapterTab(childFragmentManager(), event.getArtists());
+		} 
+		vPagerFeaturing.setAdapter(featuringArtistPagerAdapterTab);
+		vPagerFeaturing.setOnPageChangeListener(featuringArtistPagerAdapterTab);
+		
+		vPagerFeaturing.setCurrentItem(featuringArtistPagerAdapterTab.getCurrentPosition());
+		
+		// Necessary or the pager will only have one extra page to show make this at least however many pages you can see
+		vPagerFeaturing.setOffscreenPageLimit(7);
+		
+		// Set margin for pages as a negative number, so a part of next and previous pages will be showed
+		Resources res = FragmentUtil.getResources(this);
+		vPagerFeaturing.setPageMargin(res.getDimensionPixelSize(R.dimen.rlt_lyt_root_w_featuring_artist) - 
+				res.getDimensionPixelSize(R.dimen.floating_window_w) + res.getDimensionPixelSize(R.dimen.v_pager_featuring_margin_l_event_details_tab)
+				+ res.getDimensionPixelSize(R.dimen.v_pager_featuring_margin_r_event_details_tab));
+		
 		return rootView;
 	}
 	
-	/*@Override
-	public void onStart() {
-		//Log.d(TAG, "onStart()");
-		super.onStart();
-		// to apply screen changes based on last scroll state on orientation change
-		if (prevScrollY != UNSCROLLED) {
-			onScrollChanged(prevScrollY, true);
-		}
-	}*/
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		
+		if (friendsRVAdapter == null) {
+			friendsRVAdapter = new FriendsRVAdapter(event.getFriends());
+		} 
+		
+		recyclerVFriends.setAdapter(friendsRVAdapter);
+	}
 	
 	@Override
 	public void onDestroyView() {
@@ -173,6 +210,7 @@ public class EventDetailsFragmentTab extends Fragment implements ObservableScrol
 	
 	@Override
 	public void onDestroy() {
+		//Log.d(TAG, "onDestroy()");
 		super.onDestroy();
 		
 		if (loadEventDetails != null && loadEventDetails.getStatus() != Status.FINISHED) {
@@ -187,7 +225,7 @@ public class EventDetailsFragmentTab extends Fragment implements ObservableScrol
 	public String getSubTitle() {
 		return subTitle;
 	}
-
+	
 	private void calculateScrollLimit() {
 		Resources res = FragmentUtil.getResources(this);
 		limitScrollAt = res.getDimensionPixelSize(R.dimen.img_evt_ht_event_details_tab) - res.getDimensionPixelSize(
@@ -262,6 +300,65 @@ public class EventDetailsFragmentTab extends Fragment implements ObservableScrol
 		}
 	}
 	
+	private void updateFeaturingVisibility() {
+		if (event.hasArtists()) {
+			rltLytFeaturing.setVisibility(View.VISIBLE);
+			featuringArtistPagerAdapterTab.notifyDataSetChanged();
+			
+		} else {
+			rltLytFeaturing.setVisibility(View.GONE);
+		}
+	}
+	
+	private void updateAddressMapVisibility() {
+		if (event.getSchedule() == null || event.getSchedule().getVenue() == null) {
+			/**
+			 * set again to gone since it won't be set from updateDetailsVisibility() in case user has moved to
+			 * say tickets screen & comes back to this. 
+			 */
+			rltLytVenue.setVisibility(View.GONE);
+			
+		} else {
+			rltLytVenue.setVisibility(View.VISIBLE);
+			AddressMapFragment fragment = (AddressMapFragment) childFragmentManager().findFragmentByTag(
+					FragmentUtil.getTag(AddressMapFragment.class));
+	        if (fragment == null) {
+	        	addAddressMapFragment();
+	        }
+		}
+	}
+	
+	private void updateFriendsVisibility() {
+		if (!event.getFriends().isEmpty()) {
+			//Log.d(TAG, "event.getFriends() = " + event.getFriends());
+			rltLytFriends.setVisibility(View.VISIBLE);
+			friendsRVAdapter.notifyDataSetChanged();
+			
+		} else {
+			rltLytFriends.setVisibility(View.GONE);
+		}
+	}
+	
+	private void addAddressMapFragment() {
+    	FragmentManager fragmentManager = childFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        
+        AddressMapFragment fragment = new AddressMapFragment();
+        fragment.setArguments(getArguments());
+        fragmentTransaction.add(R.id.frmLayoutMapContainer, fragment, FragmentUtil.getTag(fragment));
+        try {
+        	fragmentTransaction.commit();
+        	
+        } catch (IllegalStateException e) {
+        	/**
+        	 * This catch is to prevent possible "java.lang.IllegalStateException: Can not perform this action after onSaveInstanceState"
+        	 * when it's called from callback method updateDetailsVisibility() & if user has already left this screen.
+        	 */
+			Log.e(TAG, "IllegalStateException: " + e.getMessage());
+			e.printStackTrace();
+		}
+    }
+	
 	private String getEvtTimeIfAvailable() {
 		Schedule schedule = event.getSchedule();
 		if (schedule != null) {
@@ -277,10 +374,8 @@ public class EventDetailsFragmentTab extends Fragment implements ObservableScrol
 		Schedule schedule = event.getSchedule();
 		if (schedule != null) {
 			if (schedule.getVenue() != null) {
-				/*txtEvtLoc.setText(event.getSchedule().getVenue().getName());
-				txtEvtLoc.setOnClickListener(this);
 				txtVenue.setText(event.getSchedule().getVenue().getName());
-				txtVenue.setOnClickListener(this);*/
+				txtVenue.setOnClickListener(this);
 			}
 		}
 		txtEvtTime.setText(getEvtTimeIfAvailable());
@@ -291,17 +386,17 @@ public class EventDetailsFragmentTab extends Fragment implements ObservableScrol
 		
 		if (allDetailsLoaded) {
 			updateEventImg();
-			//updateFeaturingVisibility();
 			updateEventSchedule();
-			/*updateAddressMapVisibility();
+			updateFeaturingVisibility();
+			updateAddressMapVisibility();
 			updateFriendsVisibility();
-			updateFabs();*/
+			//updateFabs();
 			
 		} else {
-			/*rltLytFeaturing.setVisibility(View.GONE);
+			rltLytFeaturing.setVisibility(View.GONE);
 			rltLytVenue.setVisibility(View.GONE);
 			rltLytFriends.setVisibility(View.GONE);
-			fabTickets.setVisibility(View.GONE);
+			/*fabTickets.setVisibility(View.GONE);
 			fabSave.setVisibility(View.GONE);*/
 		}
 	}

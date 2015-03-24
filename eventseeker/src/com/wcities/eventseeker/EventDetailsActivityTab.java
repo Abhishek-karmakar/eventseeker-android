@@ -1,12 +1,20 @@
 package com.wcities.eventseeker;
 
-import android.os.Bundle;
-import android.util.Log;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+
+import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
+import com.wcities.eventseeker.interfaces.MapListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class EventDetailsActivityTab extends BaseActivityTab {
+public class EventDetailsActivityTab extends BaseActivityTab implements MapListener {
 	
 	private static final String TAG = EventDetailsActivityTab.class.getSimpleName();
 	
@@ -47,5 +55,26 @@ public class EventDetailsActivityTab extends BaseActivityTab {
 			return eventDetailsFragmentTab.getTitle();
 		}
 		return "";
+	}
+
+	@Override
+	public void onMapClicked(Bundle args) {
+		String uri;
+		try {
+			uri = "geo:"+ args.getDouble(BundleKeys.LAT) + "," + args.getDouble(BundleKeys.LON) + "?q=" 
+					+ URLEncoder.encode(args.getString(BundleKeys.VENUE_NAME), AppConstants.CHARSET_NAME);
+			startActivity(new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri)));
+
+		} catch (UnsupportedEncodingException e) {
+			// venue name could not be encoded, hence instead search on lat-lon.
+			e.printStackTrace();
+			uri = "geo:"+ args.getDouble(BundleKeys.LAT) + "," + args.getDouble(BundleKeys.LON) + "?q=" 
+					+ args.getDouble(BundleKeys.LAT) + "," + args.getDouble(BundleKeys.LON);
+			startActivity(new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri)));
+			
+		} catch (ActivityNotFoundException e) {
+			// if user has uninstalled the google maps app
+			e.printStackTrace();
+		}
 	}
 }

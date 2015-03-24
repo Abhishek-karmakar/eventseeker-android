@@ -497,6 +497,21 @@
     <dimen name="v_hor_line_ht_event_details_tab">1dp</dimen>
     <dimen name="v_hor_line_margin_b_event_details_tab">10dp</dimen>
     <dimen name="v_hor_line_margin_r_event_details_tab">@dimen/txt_desc_margin_r_event_details_tab</dimen>
+    <dimen name="txt_featuring_margin_t_event_details_tab">@dimen/lnr_lyt_expand_desc_margin_t_event_details_tab</dimen>
+    <dimen name="txt_evt_details_txt_size_event_details_tab">16sp</dimen>
+    <dimen name="v_pager_featuring_ht_event_details_tab">150dp</dimen>
+    <dimen name="v_pager_featuring_margin_l_event_details_tab">@dimen/txt_desc_margin_l_event_details_tab</dimen>
+    <dimen name="v_pager_featuring_margin_r_event_details_tab">@dimen/v_pager_featuring_margin_l_event_details_tab</dimen>
+    <dimen name="v_pager_featuring_margin_t_event_details_tab">@dimen/lnr_lyt_expand_desc_margin_t_event_details_tab</dimen>
+    <dimen name="v_hor_line_margin_l_event_details_tab">@dimen/v_hor_line_margin_r_event_details_tab</dimen>
+    <dimen name="v_hor_line_margin_t_event_details_tab">@dimen/lnr_lyt_expand_desc_margin_t_event_details_tab</dimen>
+    <dimen name="rlt_lyt_address_margin_l_event_details_tab">@dimen/txt_desc_margin_l_event_details_tab</dimen>
+    <dimen name="rlt_lyt_address_margin_r_event_details_tab">@dimen/txt_desc_margin_l_event_details_tab</dimen>
+    <dimen name="txt_venue_margin_t_event_details_tab">@dimen/lnr_lyt_expand_desc_margin_t_event_details_tab</dimen>
+    <dimen name="txt_venue_drawable_pad_event_details_tab">10dp</dimen>
+    <dimen name="rlt_lyt_address_margin_t_event_details_tab">@dimen/lnr_lyt_expand_desc_margin_t_event_details_tab</dimen>
+    <dimen name="rlt_lyt_address_margin_l_event_details_tab">@dimen/txt_desc_margin_l_event_details_tab</dimen>
+    <dimen name="rlt_lyt_address_margin_r_event_details_tab">@dimen/txt_desc_margin_l_event_details_tab</dimen>
     
     <!-- EventDetailsFragmentTab.java -->
     <!-- txt_toolbar_double_line_title_pos_all_details = 44dp to keep it left aligned with toolbar title.

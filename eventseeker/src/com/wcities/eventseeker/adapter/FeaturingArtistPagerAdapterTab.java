@@ -5,49 +5,37 @@ import java.util.List;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.wcities.eventseeker.FeaturingArtistFragment;
+import com.wcities.eventseeker.FeaturingArtistFragmentTab;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.custom.view.RelativeLayoutCenterScale;
 
-public class FeaturingArtistPagerAdapter extends FragmentStatePagerAdapter implements ViewPager.OnPageChangeListener {
+public class FeaturingArtistPagerAdapterTab extends FragmentStatePagerAdapter implements ViewPager.OnPageChangeListener {
 	
-	private static final String TAG = FeaturingArtistPagerAdapter.class.getSimpleName();
+	private static final String TAG = FeaturingArtistPagerAdapterTab.class.getSimpleName();
 	
 	private final static float BIG_SCALE = 1.0f;
 	private final static float DIFF_SCALE = BIG_SCALE - RelativeLayoutCenterScale.SMALL_SCALE;
 	
-	private FragmentManager fm;
-	private ViewPager viewPager;
 	private float scale;
 	private List<Artist> artists;
 	private int currentPosition = 0;
 
-	public FeaturingArtistPagerAdapter(FragmentManager fm, List<Artist> artists, ViewPager viewPager) {
+	public FeaturingArtistPagerAdapterTab(FragmentManager fm, List<Artist> artists) {
 		super(fm);
-		this.fm = fm;
-		this.viewPager = viewPager;
 		this.artists = (artists != null) ? artists : new ArrayList<Artist>();
-	}
-
-	public void setViewPager(ViewPager viewPager) {
-		this.viewPager = viewPager;
 	}
 
 	@Override
 	public Fragment getItem(int position) {
 		//Log.d(TAG, "getItem(), pos = " + position);
         scale = RelativeLayoutCenterScale.SMALL_SCALE;
-        return FeaturingArtistFragment.newInstance(artists.get(position), scale);
+        return FeaturingArtistFragmentTab.newInstance(artists.get(position), scale);
 	}
 
 	@Override
@@ -155,8 +143,4 @@ public class FeaturingArtistPagerAdapter extends FragmentStatePagerAdapter imple
 		}
 		return null;
 	}
-	
-	/*private String getFragmentTag(int position) {
-	    return "android:switcher:" + viewPager.getId() + ":" + position;
-	}*/
 }

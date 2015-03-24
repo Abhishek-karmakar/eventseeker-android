@@ -233,7 +233,7 @@ public class AddressMapFragment extends SupportMapFragment implements GeoUtilLis
 		args.putDouble(BundleKeys.LAT, lat);
 		args.putDouble(BundleKeys.LON, lon);
 		args.putBoolean(BundleKeys.DRAW_DRIVING_DIRECTION, drawDrivingDirection);
-		((MapListener)FragmentUtil.getActivity(AddressMapFragment.this)).onMapClicked(args);
+		((MapListener)FragmentUtil.getActivity(this)).onMapClicked(args);
 		GoogleAnalyticsTracker.getInstance().sendScreenView(FragmentUtil.getApplication(this), "Venue Map Screen");
 	}
 	

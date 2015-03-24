@@ -8,8 +8,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,18 +27,18 @@ import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.viewdata.SharedElement;
 import com.wcities.eventseeker.viewdata.SharedElementPosition;
 
-public class FeaturingArtistFragment extends Fragment {
+public class FeaturingArtistFragmentTab extends Fragment {
 	
-	protected static final String TAG = FeaturingArtistFragment.class.getSimpleName();
+	protected static final String TAG = FeaturingArtistFragmentTab.class.getSimpleName();
 
-	public static final FeaturingArtistFragment newInstance(Artist artist, float scale) {
+	public static final FeaturingArtistFragmentTab newInstance(Artist artist, float scale) {
 		//Log.d(TAG, "newInstance()");
-		FeaturingArtistFragment featuringArtistFragment = new FeaturingArtistFragment();
+		FeaturingArtistFragmentTab featuringArtistFragmentTab = new FeaturingArtistFragmentTab();
 		Bundle b = new Bundle();
 		b.putSerializable(BundleKeys.ARTIST, artist);
 		b.putFloat(BundleKeys.SCALE, scale);
-		featuringArtistFragment.setArguments(b);
-		return featuringArtistFragment;
+		featuringArtistFragmentTab.setArguments(b);
+		return featuringArtistFragmentTab;
 	}
 	
 	@Override
@@ -76,7 +76,7 @@ public class FeaturingArtistFragment extends Fragment {
 			
 			@Override
 			public void onClick(View v) {
-				int[] loc = ViewUtil.getLocationOnScreen(featuringArtistRelativeLayout, FragmentUtil.getResources(FeaturingArtistFragment.this));
+				/*int[] loc = ViewUtil.getLocationOnScreen(featuringArtistRelativeLayout, FragmentUtil.getResources(FeaturingArtistFragmentTab.this));
 				int scaledW = (int) (featuringArtistRelativeLayout.getWidth() * featuringArtistRelativeLayout.getScale());
 				int scaledHt = (int) (featuringArtistRelativeLayout.getHeight() * featuringArtistRelativeLayout.getScale());
 				List<SharedElement> sharedElements = new ArrayList<SharedElement>();
@@ -90,10 +90,11 @@ public class FeaturingArtistFragment extends Fragment {
 				//Log.d(TAG, "AT issue event = " + event);
 				((ArtistListener)FragmentUtil.getActivity(FeaturingArtistFragment.this)).onArtistSelected(artist, sharedElements);
 				
-				((CustomSharedElementTransitionSource)getParentFragment()).onPushedToBackStack();
+				((CustomSharedElementTransitionSource)getParentFragment()).onPushedToBackStack();*/
 			}
 		});
 		
 		return l;
 	}
 }
+
