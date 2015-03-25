@@ -80,6 +80,13 @@
         fab:fab_colorPressed="@color/colorPrimaryDark"
         fab:fab_colorRipple="@android:color/white" />
 	
+	<!-- 
+    	NOTE:
+    	android:cropToPadding="true"
+	    android:padding="@dimen/fab_artist_news_pad_artist_details"
+	    android:scaleType="centerInside"
+	    - will resize the latestnews icon of Navigation drawer for the FAB
+    -->
 	<com.melnykov.fab.FloatingActionButton
 	    android:id="@+id/fabArtistNews"
 	    android:layout_width="wrap_content"
@@ -95,12 +102,5 @@
 	    fab:fab_colorPressed="@color/colorPrimaryDark"
 	    fab:fab_colorRipple="@android:color/white"
 	    fab:fab_type="normal" />
-    	<!-- 
-    	NOTE:
-    	android:cropToPadding="true"
-	    android:padding="@dimen/fab_artist_news_pad_artist_details"
-	    android:scaleType="centerInside"
-	    - will resize the latestnews icon of Navigation drawer for the FAB
-    	-->
 	
 </FrameLayout>

@@ -97,4 +97,9 @@
         
     <!-- fragment_language_tab -->
     <dimen name="list_view_m_t_b_language_fragment_tab">70dp</dimen>
+    
+    <!-- activity_base_tab_floating.xml -->
+    <!-- fab_margin_t_base_tab_floating = img_evt_ht_event_details_tab - fab standard height(56dp)/2 -->
+    <dimen name="fab_margin_t_base_tab_floating">310dp</dimen>
+    
 </resources>

@@ -101,7 +101,6 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	private TextView txtEvtTitle, txtEvtDesc, txtEvtLoc, txtVenue, txtEvtTime;
 	private RelativeLayout rltLytContent, rltLytFeaturing, rltLytPrgsBar, rltLytVenue, rltLytFriends;
 	private RecyclerView recyclerVFriends;
-	private ShareActionProvider mShareActionProvider;
 	private FloatingActionButton fabTickets, fabSave;
 	
 	private int limitScrollAt, actionBarElevation, fabScrollThreshold, prevScrollY = UNSCROLLED;
@@ -126,25 +125,6 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	private int fbCallCountForSameEvt = 0;
 	
 	private List<View> hiddenViews;
-	
-	private OnShareTargetSelectedListener onShareTargetSelectedListener = new OnShareTargetSelectedListener() {
-		
-		@Override
-		public boolean onShareTargetSelected(ShareActionProvider source, Intent intent) {
-			EventSeekr eventSeekr = FragmentUtil.getApplication(EventDetailsFragment.this);
-			String shareTarget = intent.getComponent().getPackageName();
-			//Log.d(TAG, "shareTarget = " + shareTarget);
-			if (eventSeekr.getPackageName().equals(shareTarget)) {
-				//Log.d(TAG, "shareTarget = " + shareTarget);
-				// required to handle "add to calendar" action
-				eventSeekr.setEventToAddToCalendar(event);
-			}
-			
-			GoogleAnalyticsTracker.getInstance().sendShareEvent(eventSeekr, getScreenName(), 
-					shareTarget, Type.Event, event.getId());
-			return false;
-		}
-	};
 	
 	private OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
         @Override
@@ -379,7 +359,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			 * Passing activity fragment manager, since using this fragment's child fragment manager 
 			 * doesn't retain dialog on orientation change
 			 */
-			shareViaDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(EventDetailsFragment.this))
+			shareViaDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this))
 				.getSupportFragmentManager(), FRAGMENT_TAG_SHARE_VIA_DIALOG);
 			return true;
 		}
@@ -967,9 +947,6 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			}
 			hiddenViews.clear();
 			
-			if (mShareActionProvider != null) {
-				mShareActionProvider.setOnShareTargetSelectedListener(onShareTargetSelectedListener);
-			}
 			setMenuVisibility(true);
 		}
 	}
@@ -982,15 +959,6 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		 */
 		super.onStop();
 		
-		/**
-		 * set null listener, otherwise even for artist/venue details screen when selecting 
-		 * "add to calendar" option it calls this listener's onShareTargetSelected() method which in turn 
-		 * sets eventToAddToCalendar on EventSeekr class. This results in sharing event wrongly from 
-		 * artist/venue details screen.
-		 */
-		if (mShareActionProvider != null) {
-			mShareActionProvider.setOnShareTargetSelectedListener(null);
-		}
 		//Log.d("MainActivity - event details", "onPushedToBackStack(), " + this);
 		setMenuVisibility(false);
 		isOnPushedToBackStackCalled = true;

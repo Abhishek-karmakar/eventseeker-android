@@ -12,7 +12,7 @@ import android.support.v4.app.FragmentManager;
  * left over bug. Ref: http://ideaventure.blogspot.com.au/2014/10/nested-retained-fragment-lost-state.html
  * https://code.google.com/p/android/issues/detail?id=74222
  */
-public abstract class NestingFragmentReatiningChildFragmentManager extends Fragment {
+public abstract class PublishEventFragmentReatiningChildFragmentManager extends PublishEventFragment {
 
     //As we setRetainInstanceState(true), this field will hold 
     //the reference of the old ChildFragmentManager

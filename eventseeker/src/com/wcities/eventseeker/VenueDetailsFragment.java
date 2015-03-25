@@ -73,6 +73,7 @@ import com.wcities.eventseeker.cache.BitmapCacheable;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
@@ -140,19 +141,6 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	private List<View> hiddenViews;
 	
 	private Handler handler;
-	
-	private ShareActionProvider mShareActionProvider;
-	
-	private OnShareTargetSelectedListener onShareTargetSelectedListener = new OnShareTargetSelectedListener() {
-		
-		@Override
-		public boolean onShareTargetSelected(ShareActionProvider source, Intent intent) {
-			String shareTarget = intent.getComponent().getPackageName();
-			GoogleAnalyticsTracker.getInstance().sendShareEvent(FragmentUtil.getApplication(VenueDetailsFragment.this), 
-					getScreenName(), shareTarget, Type.Venue, venue.getId());
-			return false;
-		}
-	};
 	
 	private OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
         @Override
@@ -495,7 +483,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	
 	@Override
 	public String getScreenName() {
-		return "Venue Detail Screen";
+		return ScreenNames.VENUE_DETAILS;
 	}
 
 	@Override
@@ -1665,13 +1653,6 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			super.onStop();
 		}
 		
-		/**
-		 * set null listener, otherwise even for artist/event details screen when selecting 
-		 * share option it calls this listener's onShareTargetSelected() method.
-		 */
-		if (mShareActionProvider != null) {
-			mShareActionProvider.setOnShareTargetSelectedListener(null);
-		}
 		//Log.d(TAG, "onPushedToBackStack()");
 		setMenuVisibility(false);
 		isOnPushedToBackStackCalled = true;
@@ -1713,9 +1694,6 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			}
 			hiddenViews.clear();
 			
-			if (mShareActionProvider != null) {
-				mShareActionProvider.setOnShareTargetSelectedListener(onShareTargetSelectedListener);
-			}
 			setMenuVisibility(true);
 		}
 	}

@@ -38,6 +38,7 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.Enums.SettingsItem;
 import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.interfaces.ActivityDestroyedListener;
 import com.wcities.eventseeker.interfaces.OnLocaleChangedListener;
 import com.wcities.eventseeker.util.FbUtil;
@@ -526,6 +527,43 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 				Pair.create((View)imageView, ViewCompat.getTransitionName(imageView)),
 				Pair.create((View)textView, ViewCompat.getTransitionName(textView)));
         ActivityCompat.startActivity(this, intent, options.toBundle());
+	}
+	
+	protected void onVenueSelected(Venue venue, ImageView imageView, TextView textView) {
+		Intent intent = new Intent(getApplication(), VenueDetailsActivityTab.class);
+		intent.putExtra(BundleKeys.VENUE, venue);
+		Pair<View, String> pairImg = null, pairTxt = null;
+		
+		if (imageView != null) {
+			intent.putExtra(BundleKeys.TRANSITION_NAME_SHARED_IMAGE, ViewCompat.getTransitionName(imageView));
+			pairImg = Pair.create((View)imageView, ViewCompat.getTransitionName(imageView));
+		}
+		if (textView != null) {
+			intent.putExtra(BundleKeys.TRANSITION_NAME_SHARED_TEXT, ViewCompat.getTransitionName(textView));
+			pairTxt = Pair.create((View)textView, ViewCompat.getTransitionName(textView));
+		}
+		
+		/**
+		 * ActivityOptionsCompat is used since it's helper for accessing features in ActivityOptions 
+		 * introduced in API level 16 in a backwards compatible fashion.
+		 */
+		ActivityOptionsCompat options = null;
+		if (pairImg != null && pairTxt != null) {
+			options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, pairImg, pairTxt);
+			
+		} else if (pairImg != null) {
+			options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, pairImg);
+			
+		} else if (pairTxt != null) {
+			options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, pairTxt);
+		} 
+		
+		if (options != null) {
+			ActivityCompat.startActivity(this, intent, options.toBundle());
+			
+		} else {
+			startActivity(intent);
+		}
 	}
 	
 	protected boolean isDrawerOpen() {

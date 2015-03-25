@@ -50,4 +50,8 @@ public class VersionUtil {
 	public static boolean isApiLevelAbove18() {
 		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 	}
+	
+	public static boolean isApiLevelAbove20() {
+		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
+	}
 }

@@ -7,14 +7,19 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
+import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.interfaces.MapListener;
+import com.wcities.eventseeker.interfaces.VenueListenerTab;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class EventDetailsActivityTab extends BaseActivityTab implements MapListener {
+public class EventDetailsActivityTab extends BaseActivityTab implements MapListener, VenueListenerTab {
 	
 	private static final String TAG = EventDetailsActivityTab.class.getSimpleName();
 	
@@ -43,6 +48,10 @@ public class EventDetailsActivityTab extends BaseActivityTab implements MapListe
 		setDrawerLockMode(true);
 	}
 	
+	protected View getViewById(int id) {
+		return findViewById(id);
+	}
+	
 	@Override
 	public String getScreenName() {
 		return ScreenNames.EVENT_DETAILS;
@@ -50,7 +59,8 @@ public class EventDetailsActivityTab extends BaseActivityTab implements MapListe
 
 	@Override
 	protected String getScrnTitle() {
-		EventDetailsFragmentTab eventDetailsFragmentTab = (EventDetailsFragmentTab) getSupportFragmentManager().findFragmentByTag(FragmentUtil.getTag(EventDetailsFragmentTab.class));
+		EventDetailsFragmentTab eventDetailsFragmentTab = (EventDetailsFragmentTab) getSupportFragmentManager()
+				.findFragmentByTag(FragmentUtil.getTag(EventDetailsFragmentTab.class));
 		if (eventDetailsFragmentTab != null) {
 			return eventDetailsFragmentTab.getTitle();
 		}
@@ -76,5 +86,10 @@ public class EventDetailsActivityTab extends BaseActivityTab implements MapListe
 			// if user has uninstalled the google maps app
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void onVenueSelected(Venue venue, ImageView imageView, TextView textView) {
+		super.onVenueSelected(venue, imageView, textView);
 	}
 }

@@ -149,24 +149,11 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	private int imgEventPadL, imgEventPadR, imgEventPadT, imgEventPadB, fabSaveMarginT;
 	private List<View> hiddenViews;
 	
-	private ShareActionProvider mShareActionProvider;
-	
 	private int fbCallCountForSameArtist = 0;
 	
 	private boolean isArtistSaveClicked;
 	
 	private View vNoContentBG;
-	
-	private OnShareTargetSelectedListener onShareTargetSelectedListener = new OnShareTargetSelectedListener() {
-		
-		@Override
-		public boolean onShareTargetSelected(ShareActionProvider source, Intent intent) {
-			String shareTarget = intent.getComponent().getPackageName();
-			GoogleAnalyticsTracker.getInstance().sendShareEvent(FragmentUtil.getApplication(ArtistDetailsFragment.this), 
-					getScreenName(), shareTarget, Type.Artist, artist.getId());
-			return false;
-		}
-	};
 	
 	private OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
         @Override
@@ -1809,13 +1796,6 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			super.onStop();
 		}
 		
-		/**
-		 * set null listener, otherwise even for event/venue details screen when selecting 
-		 * share option it calls this listener's onShareTargetSelected() method.
-		 */
-		if (mShareActionProvider != null) {
-			mShareActionProvider.setOnShareTargetSelectedListener(null);
-		}
 		setMenuVisibility(false);
 		isOnPushedToBackStackCalled = true;
 	}
@@ -1841,9 +1821,6 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			}
 			hiddenViews.clear();
 			
-			if (mShareActionProvider != null) {
-				mShareActionProvider.setOnShareTargetSelectedListener(onShareTargetSelectedListener);
-			}
 			setMenuVisibility(true);
 		}
 	}

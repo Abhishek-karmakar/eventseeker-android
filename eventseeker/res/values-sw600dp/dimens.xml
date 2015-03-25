@@ -531,4 +531,11 @@
     
     <!-- friends_activity_item_tab.xml -->
     <dimen name="rlt_root_padding_friends_activity_item_tab">12dp</dimen>
+    
+    <!-- activity_base_tab_floating.xml -->
+    <!-- fab_margin_t_base_tab_floating = img_evt_ht_event_details_tab - fab standard height(56dp)/2 -->
+    <dimen name="fab_margin_t_base_tab_floating">310dp</dimen>
+    <dimen name="fab_1_margin_r_base_tab_floating">30dp</dimen>
+    <dimen name="fab_2_margin_r_base_tab_floating">120dp</dimen>
+    
 </resources>

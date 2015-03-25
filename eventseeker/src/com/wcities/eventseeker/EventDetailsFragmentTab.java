@@ -1,5 +1,6 @@
 package com.wcities.eventseeker;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -9,42 +10,60 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils.TruncateAt;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.melnykov.fab.FloatingActionButton;
 import com.wcities.eventseeker.adapter.FeaturingArtistPagerAdapterTab;
 import com.wcities.eventseeker.adapter.FriendsRVAdapter;
+import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.api.Api;
+import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
+import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.asynctask.LoadEventDetails;
 import com.wcities.eventseeker.asynctask.LoadEventDetails.OnEventUpdatedListner;
+import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Schedule;
-import com.wcities.eventseeker.custom.fragment.NestingFragmentReatiningChildFragmentManager;
+import com.wcities.eventseeker.core.Event.Attending;
+import com.wcities.eventseeker.custom.fragment.PublishEventFragmentReatiningChildFragmentManager;
 import com.wcities.eventseeker.custom.view.ObservableScrollView;
 import com.wcities.eventseeker.custom.view.ObservableScrollView.ObservableScrollViewListener;
+import com.wcities.eventseeker.interfaces.VenueListener;
+import com.wcities.eventseeker.interfaces.VenueListenerTab;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.ConversionUtil;
+import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 
-public class EventDetailsFragmentTab extends NestingFragmentReatiningChildFragmentManager implements 
+public class EventDetailsFragmentTab extends PublishEventFragmentReatiningChildFragmentManager implements 
 		ObservableScrollViewListener, OnEventUpdatedListner, OnClickListener {
 
 	private static final String TAG = EventDetailsFragmentTab.class.getSimpleName();
@@ -56,19 +75,21 @@ public class EventDetailsFragmentTab extends NestingFragmentReatiningChildFragme
 	private TextView txtEvtTitle, txtEvtTime, txtEvtDesc, txtVenue;
 	private RelativeLayout rltLytPrgsBar, rltLytFeaturing, rltLytVenue, rltLytFriends;
 	private RecyclerView recyclerVFriends;
+	private FloatingActionButton fabTickets, fabSave;
 	
 	private FeaturingArtistPagerAdapterTab featuringArtistPagerAdapterTab;
 	private FriendsRVAdapter friendsRVAdapter;
 	
-	private Event event;
 	private String title = "", subTitle = "";
 	
-	private int txtEvtTitleDiffX, txtEvtTitleSourceX;
+	private int txtEvtTitleDiffX, txtEvtTitleSourceX, fabMarginT;
 	private int limitScrollAt, actionBarElevation, prevScrollY = UNSCROLLED;
 	private boolean isScrollLimitReached;
 	
 	private LoadEventDetails loadEventDetails;
 	private boolean allDetailsLoaded, isEvtDescExpanded;
+	
+	private int fbCallCountForSameEvt = 0;
 	
 	private OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
         @Override
@@ -100,6 +121,8 @@ public class EventDetailsFragmentTab extends NestingFragmentReatiningChildFragme
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		setHasOptionsMenu(true);
+		
 		actionBarElevation = FragmentUtil.getResources(this).getDimensionPixelSize(R.dimen.action_bar_elevation);
 		
 		Bundle args = getArguments();
@@ -128,6 +151,7 @@ public class EventDetailsFragmentTab extends NestingFragmentReatiningChildFragme
 		
 		txtEvtTime = (TextView) rootView.findViewById(R.id.txtEvtTime);
 		txtVenue = (TextView) rootView.findViewById(R.id.txtVenue);
+		ViewCompat.setTransitionName(txtVenue, "txtVenueEventDetails");
 		updateEventSchedule();
 		
 		txtEvtDesc = (TextView) rootView.findViewById(R.id.txtDesc);
@@ -149,6 +173,12 @@ public class EventDetailsFragmentTab extends NestingFragmentReatiningChildFragme
 		rltLytFeaturing = (RelativeLayout) rootView.findViewById(R.id.rltLytFeaturing);
 		rltLytVenue = (RelativeLayout) rootView.findViewById(R.id.rltLytVenue);
 		rltLytFriends = (RelativeLayout) rootView.findViewById(R.id.rltLytFriends);
+		
+		EventDetailsActivityTab eventDetailsActivityTab = (EventDetailsActivityTab) FragmentUtil.getActivity(this);
+		fabSave = (FloatingActionButton) eventDetailsActivityTab.getViewById(R.id.fab1);
+		fabTickets = (FloatingActionButton) eventDetailsActivityTab.getViewById(R.id.fab2);
+		fabSave.setOnClickListener(this);
+		fabTickets.setOnClickListener(this);
 		
 		updateDetailsVisibility();
 		
@@ -218,6 +248,29 @@ public class EventDetailsFragmentTab extends NestingFragmentReatiningChildFragme
 		}
 	}
 	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.fragment_event_details, menu);
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_share:
+			ShareViaDialogFragment shareViaDialogFragment = ShareViaDialogFragment.newInstance(event, 
+					((BaseActivityTab)FragmentUtil.getActivity(this)).getScreenName());
+			/**
+			 * Passing activity fragment manager, since using this fragment's child fragment manager 
+			 * doesn't retain dialog on orientation change
+			 */
+			shareViaDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this))
+				.getSupportFragmentManager(), FragmentUtil.getTag(shareViaDialogFragment));
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	
 	public String getTitle() {
 		return title;
 	}
@@ -234,6 +287,12 @@ public class EventDetailsFragmentTab extends NestingFragmentReatiningChildFragme
 		int txtEvtTitleDestinationX = res.getDimensionPixelSize(R.dimen.txt_toolbar_double_line_title_pos_all_details);
 		txtEvtTitleSourceX = res.getDimensionPixelSize(R.dimen.rlt_lyt_txt_evt_title_pad_l_event_details_tab);
 		txtEvtTitleDiffX = txtEvtTitleDestinationX - txtEvtTitleSourceX;
+		
+		fabMarginT = res.getDimensionPixelSize(R.dimen.fab_margin_t_base_tab_floating);
+		if (!VersionUtil.isApiLevelAbove20()) {
+			fabMarginT -= res.getDimensionPixelSize(R.dimen.fab_shadow_size);
+		}
+		//Log.d(TAG, "fabMarginT = " + fabMarginT);
 	}
 	
 	private void updateProgressBarVisibility() {
@@ -359,6 +418,30 @@ public class EventDetailsFragmentTab extends NestingFragmentReatiningChildFragme
 		}
     }
 	
+	private void updateFabs() {
+		fabTickets.setVisibility(View.VISIBLE);
+		fabSave.setVisibility(View.VISIBLE);
+		
+		final Resources res = FragmentUtil.getResources(this);
+		if (event.getSchedule() == null || event.getSchedule().getBookingInfos().isEmpty()) {
+			fabTickets.setImageDrawable(res.getDrawable(R.drawable.ic_ticket_unavailable_floating));
+			fabTickets.setEnabled(false);
+			
+		} else {
+			fabTickets.setImageDrawable(res.getDrawable(R.drawable.ic_ticket_available_floating));
+			fabTickets.setEnabled(true);
+		}
+		
+		updateFabSaveSrc(res);
+	}
+	
+	private void updateFabSaveSrc(Resources res) {
+		//Log.d(TAG, "event.getAttending() = " + event.getAttending().getValue());
+		int drawableId = (event.getAttending() == Attending.SAVED) ? R.drawable.ic_saved_event_floating 
+				: R.drawable.ic_unsaved_event_floating;
+		fabSave.setImageDrawable(res.getDrawable(drawableId));
+	}
+	
 	private String getEvtTimeIfAvailable() {
 		Schedule schedule = event.getSchedule();
 		if (schedule != null) {
@@ -390,14 +473,14 @@ public class EventDetailsFragmentTab extends NestingFragmentReatiningChildFragme
 			updateFeaturingVisibility();
 			updateAddressMapVisibility();
 			updateFriendsVisibility();
-			//updateFabs();
+			updateFabs();
 			
 		} else {
 			rltLytFeaturing.setVisibility(View.GONE);
 			rltLytVenue.setVisibility(View.GONE);
 			rltLytFriends.setVisibility(View.GONE);
-			/*fabTickets.setVisibility(View.GONE);
-			fabSave.setVisibility(View.GONE);*/
+			fabTickets.setVisibility(View.INVISIBLE);
+			fabSave.setVisibility(View.INVISIBLE);
 		}
 	}
 	
@@ -407,10 +490,6 @@ public class EventDetailsFragmentTab extends NestingFragmentReatiningChildFragme
 		imgEvt.setTranslationY(scrollY / 2);
         
 		BaseActivityTab baseActivityTab = (BaseActivityTab) FragmentUtil.getActivity(this);
-		
-		/*if (limitScrollAt == 0) {
-			calculateScrollLimit();
-		}*/
 		
 		if ((!isScrollLimitReached || forceUpdate) && scrollY >= limitScrollAt) {
 			//Log.d(TAG, "if");
@@ -422,7 +501,7 @@ public class EventDetailsFragmentTab extends NestingFragmentReatiningChildFragme
 
 			subTitle = getEvtTimeIfAvailable();
 			baseActivityTab.updateSubTitle(subTitle);
-
+			
 			isScrollLimitReached = true;
 			
 		} else if ((isScrollLimitReached || forceUpdate) && scrollY < limitScrollAt) {
@@ -439,36 +518,23 @@ public class EventDetailsFragmentTab extends NestingFragmentReatiningChildFragme
 			isScrollLimitReached = false;
 		}
 		
-		if (scrollY < limitScrollAt) {
+		if (scrollY <= limitScrollAt) {
 			float translationX = scrollY * txtEvtTitleDiffX / (float) limitScrollAt;
 			txtEvtTitle.setTranslationX(translationX);
 			txtEvtTime.setTranslationX(translationX);
 		}
-        
-		// We take the last child in the scrollview
-	    /*View lastChild = (View) obsrScrlV.getChildAt(obsrScrlV.getChildCount() - 1);
-	    int diff = (lastChild.getBottom() - (obsrScrlV.getHeight() + obsrScrlV.getScrollY()));
-	    Log.d(TAG, "btm = " + view.getBottom() + ", ht = " + obsrScrlV.getHeight() + ", scrollY = " 
-	    		+ obsrScrlV.getScrollY() + ", diff = " + diff);
-	    if (diff == 0) {
-		    // if diff is zero, then the bottom has been reached, where we need to show floating action buttons
-	    	fabTickets.show(true);
-            fabSave.show(true);
-            
-	    } else {
-			boolean isSignificantDelta = Math.abs(scrollY - prevScrollY) > fabScrollThreshold;
-	        if (isSignificantDelta) {
-	            if (scrollY > prevScrollY) {
-	                fabTickets.hide(true);
-	                fabSave.hide(true);
-	                
-	            } else {
-	                fabTickets.show(true);
-	                fabSave.show(true);
-	            }
-	        }
-	    }*/
-        
+		
+		int topMargin = (scrollY <= limitScrollAt) ? scrollY : limitScrollAt;
+		FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) fabSave.getLayoutParams();
+		//Log.d(TAG, "lp.topMargin = " + lp.topMargin);
+		lp.topMargin = fabMarginT - topMargin;
+		fabSave.setLayoutParams(lp);
+		
+		lp = (FrameLayout.LayoutParams) fabTickets.getLayoutParams();
+		lp.topMargin = fabMarginT - topMargin;
+		fabTickets.setLayoutParams(lp);
+		//Log.d(TAG, "lp.topMargin = " + lp.topMargin);
+
 		prevScrollY = scrollY;
 	}
 
@@ -498,10 +564,10 @@ public class EventDetailsFragmentTab extends NestingFragmentReatiningChildFragme
 	public void onClick(View v) {
 		switch (v.getId()) {
 		
-		/*case R.id.txtEvtLoc:
 		case R.id.txtVenue:
-			((VenueListener)FragmentUtil.getActivity(this)).onVenueSelected(event.getSchedule().getVenue());
-			break;*/
+			((VenueListenerTab) FragmentUtil.getActivity(this)).onVenueSelected(event.getSchedule().getVenue(), 
+					null, txtVenue);
+			break;
 			
 		case R.id.imgDown:
 			if (isEvtDescExpanded) {
@@ -512,18 +578,21 @@ public class EventDetailsFragmentTab extends NestingFragmentReatiningChildFragme
 			}
 			break;
 			
-		/*case R.id.fabTickets:
-			Bundle args = new Bundle();
-			args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
-			((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
-					AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
-			GoogleAnalyticsTracker.getInstance().sendEvent(FragmentUtil.getApplication(this), 
-					getScreenName(), GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON, 
+		case R.id.fab2:
+			EventSeekr eventSeekr = FragmentUtil.getApplication(this);
+			BaseActivityTab baseActivityTab = (BaseActivityTab) FragmentUtil.getActivity(this);
+					
+			Intent intent = new Intent(eventSeekr, WebViewActivityTab.class);
+			intent.putExtra(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
+			baseActivityTab.startActivity(intent);
+			
+			GoogleAnalyticsTracker.getInstance().sendEvent(eventSeekr, 
+					baseActivityTab.getScreenName(), GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON, 
 					GoogleAnalyticsTracker.Type.Event.name(), null, event.getId());
 			break;
 			
-		case R.id.fabSave:
-			EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getApplication(this);
+		case R.id.fab1:
+			eventSeekr = (EventSeekr) FragmentUtil.getApplication(this);
 			if (event.getAttending() == Attending.SAVED) {
 				event.setAttending(Attending.NOT_GOING);
 				new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.event, event.getId(), 
@@ -542,10 +611,31 @@ public class EventDetailsFragmentTab extends NestingFragmentReatiningChildFragme
 							AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
 				}
 			}
-			break;*/
+			break;
 			
 		default:
 			break;
+		}
+	}
+
+	@Override
+	public void onPublishPermissionGranted() {
+		updateFabSaveSrc(FragmentUtil.getResources(this));
+	}
+
+	@Override
+	public void call(Session session, SessionState state, Exception exception) {
+		fbCallCountForSameEvt++;
+		/**
+		 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
+		 */
+		if (fbCallCountForSameEvt < AppConstants.MAX_FB_CALL_COUNT_FOR_SAME_EVT_OR_ART) {
+			FbUtil.call(session, state, exception, this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
+					AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
+			
+		} else {
+			fbCallCountForSameEvt = 0;
+			setPendingAnnounce(false);
 		}
 	}
 }
