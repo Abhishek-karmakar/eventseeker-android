@@ -753,7 +753,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		});
 		/**
 		 * set visible to finish this screen even if user presses back button instantly even before animateSharedElements()
-		 * has finished it work; otherwise if recyclerVVenues is invisible, then user has to press back once more in such case
+		 * has finished it work; otherwise if recyclerVArtists is invisible, then user has to press back once more in such case
 		 * on instantly clicking back
 		 */
 		recyclerVArtists.setVisibility(View.VISIBLE);

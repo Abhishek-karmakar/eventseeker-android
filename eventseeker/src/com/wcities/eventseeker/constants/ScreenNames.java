@@ -23,4 +23,5 @@ public class ScreenNames {
 	public static final String ARTISTS_NEWS_SCREEN = "Artist News Screen";
 	public static final String FRIENDS_NEWS_SCREEN = "Friend News Screen";
 	public static final String VENUE_DETAILS = "Venue Detail Screen";
+	public static final String NAVIGATION_SELECTION = "Navigation Selection Screen";
 }

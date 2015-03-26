@@ -6,9 +6,13 @@
         <item name="android:windowIsTranslucent">true</item>
         <!-- not using windowElevation, since it darkens the shadow color on orientation change -->
         <!-- <item name="android:windowElevation">8dp</item> -->
+        
+        <!-- Toolbar styles -->
+        <!-- To reduce back & action buttons' height -->
+     	<item name="toolbarStyle">@style/ThemeOverlay.EventSeeker.Dark.ActionBar.TranslucentWindow</item>
     </style>
 	
-	<style name="Theme.EventSeeker.TranslucentWindow.DoubleLineToolbar" parent="@style/Theme.EventSeeker.TranslucentWindow">
+	<style name="Theme.EventSeeker.TranslucentWindow.DoubleLineToolbar">
         <!-- Toolbar styles -->
         <!-- To reduce back & action buttons' height -->
      	<item name="toolbarStyle">@style/Widget.EventSeeker.DoubleLineToolbar</item>

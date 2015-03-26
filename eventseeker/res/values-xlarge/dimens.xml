@@ -538,4 +538,22 @@
     <dimen name="fab_1_margin_r_base_tab_floating">30dp</dimen>
     <dimen name="fab_2_margin_r_base_tab_floating">120dp</dimen>
     
+    <!-- fragment_venue_details_tab.xml -->
+    <dimen name="img_venue_ht_venue_details_tab">@dimen/img_evt_ht_event_details_tab</dimen>
+    <dimen name="rlt_lyt_txt_venue_title_pad_l_venue_details_tab">@dimen/rlt_lyt_txt_evt_title_pad_l_event_details_tab</dimen>
+    <dimen name="rlt_lyt_txt_venue_title_pad_b_venue_details_tab">8dp</dimen>
+    <dimen name="rlt_lyt_txt_venue_title_pad_t_venue_details_tab">@dimen/rlt_lyt_txt_venue_title_pad_b_venue_details_tab</dimen>
+    <!-- After scrolling to top, txtVenueTitle text must be in center vertical position exactly aligned with 
+    toolbar title (for good looking transition effect), hence following calculation is used to derive txt_venue_title_ht_venue_details_tab. 
+    Here, rlt_lyt_txt_venue_title_pad_b_venue_details_tab is fixed to 8dp, so to keep txtVenueTitle textview
+    in center vertical position, we leave aside 8dp more (for top). Hence ht comes out as 64 - 2*8 = 48dp 
+    txt_venue_title_ht_venue_details_tab = action_bar_ht - 2*rlt_lyt_txt_venue_title_pad_b_venue_details_tab -->
+    <dimen name="txt_venue_title_ht_venue_details_tab">48dp</dimen>
+    <dimen name="txt_venue_title_txt_size_venue_details_tab">@dimen/abc_text_size_title_material_toolbar</dimen>
+    <dimen name="img_venue_ht_venue_details">@dimen/img_venue_ht_venue_details_tab</dimen>
+    
+    <!-- rv_item_desc_tab.xml -->
+    <dimen name="txt_desc_txt_size_rv_item_desc_tab">@dimen/txt_desc_txt_size_event_details_tab</dimen>
+    <dimen name="img_down_margin_t_rv_item_desc_tab">10dp</dimen>
+    
 </resources>

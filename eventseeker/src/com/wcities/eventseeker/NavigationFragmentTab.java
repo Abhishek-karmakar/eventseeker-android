@@ -1,33 +1,28 @@
 package com.wcities.eventseeker;
 
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
-import android.widget.Toast;
-
-import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.core.Venue;
-import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class NavigationFragment extends FragmentLoadableFromBackStack implements IGoogleAnalyticsTracker, OnClickListener {
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.View.OnTouchListener;
+import android.widget.Toast;
+
+public class NavigationFragmentTab extends Fragment implements OnClickListener {
 	
-	private static final String TAG = NavigationFragment.class.getSimpleName();
-	
-	// navicon
-	protected static final String NAVICON_VERSION = "1.4";
-	protected static final String NAVICON_PKG = "jp.co.denso.navicon.view";
+	private static final String TAG = NavigationFragmentTab.class.getSimpleName();
 	
 	private Venue venue;
 
@@ -50,22 +45,9 @@ public class NavigationFragment extends FragmentLoadableFromBackStack implements
 		view.findViewById(R.id.imgNaviBridge).setOnClickListener(this);
 		view.findViewById(R.id.imgScout).setOnClickListener(this);
 		
-		// add touch listener, otherwise touch events are rendered by previous screen in backstack (venue details)
-		view.setOnTouchListener(new OnTouchListener() {
-			
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				return true;
-			}
-		});
 		return view;
 	}
 	
-	@Override
-	public String getScreenName() {
-		return ScreenNames.NAVIGATION_SELECTION;
-	}
-
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -116,7 +98,7 @@ public class NavigationFragment extends FragmentLoadableFromBackStack implements
 			if (venue.getAddress() != null) {
 				lat = venue.getAddress().getLat();
 				lon = venue.getAddress().getLon();
-				String uri = "navicon://setPOI?ver=" + NAVICON_VERSION + "&ll=" + lat + "," + lon 
+				String uri = "navicon://setPOI?ver=" + NavigationFragment.NAVICON_VERSION + "&ll=" + lat + "," + lon 
 			    		+ "&appName=pb6Nlvh1&title=" + venue.getName() 
 			    		+ "&radKM=15";
 				if (venue.getPhone() != null) {
@@ -128,7 +110,7 @@ public class NavigationFragment extends FragmentLoadableFromBackStack implements
 					startActivity(intent);
 					
 				} catch (ActivityNotFoundException e) {
-					uri = "market://details?id=" + NAVICON_PKG;
+					uri = "market://details?id=" + NavigationFragment.NAVICON_PKG;
 					intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
 					try {
 						startActivity(intent);
@@ -155,10 +137,10 @@ public class NavigationFragment extends FragmentLoadableFromBackStack implements
 				}
 				uri += lat + ", " + lon + "&title=" + venue.getName() 
 			    		+ "&token=6T5HI14ZzJdKRk-PUhWzT7Zn-enFiGsUYskrN5EnXENaQnBUE3GDalgi8SN0x2J4aTxvvZuTwDfGx9WHtdwmJeJpzFprUq79p4gf54Yiq9jM6wFwHaZSBp1k1AYtzdcfhlWvjLcKWCpqe9juykeaHSTsRr-cJde4uYeWGDSFerI";
-				Bundle args = new Bundle();
-				args.putString(BundleKeys.URL, uri);
-				((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
-						AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
+				
+				intent = new Intent(FragmentUtil.getApplication(this), WebViewActivityTab.class);
+				intent.putExtra(BundleKeys.URL, uri);
+				startActivity(intent);
 				
 			} else {
 				Toast.makeText(FragmentUtil.getActivity(this), R.string.address_isnt_available, 

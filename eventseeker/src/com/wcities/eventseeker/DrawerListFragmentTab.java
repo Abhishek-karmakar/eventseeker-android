@@ -293,7 +293,8 @@ public class DrawerListFragmentTab extends ListFragment {
 			
 				/**
 				 * Can't set this only if convertView is null, because we are updating height afterwards as well
-				 * from onHtForDrawerListUpdated()
+				 * from onHtForDrawerListUpdated() due to which we need to update layout params even if convertview 
+				 * is not null. 
 				 */
 				// set custom height to fit entire list exactly within the available screen height  
 				AbsListView.LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, rowHt);

@@ -19,6 +19,7 @@
 	   	android:layout_marginLeft="@dimen/txt_desc_margin_l_rv_item_desc"
 	   	android:layout_marginRight="@dimen/txt_desc_margin_r_rv_item_desc"
 	   	android:layout_marginTop="@dimen/txt_desc_margin_t_rv_item_desc"
+	   	android:textSize="@dimen/txt_desc_txt_size_rv_item_desc_tab"
 	   	android:ellipsize="end" />
     
     <View android:id="@+id/vHorLine"
@@ -36,7 +37,7 @@
     	android:src="@drawable/ic_description_expand"
     	android:layout_below="@id/txtDesc"
     	android:scaleType="centerInside"
-    	android:layout_marginTop="@dimen/img_down_margin_t_rv_item_desc"
+    	android:layout_marginTop="@dimen/img_down_margin_t_rv_item_desc_tab"
     	android:background="@android:color/white" />
       
 </RelativeLayout>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@android:color/white" >
+    
+    <TextView android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:gravity="center_horizontal"
+	    android:text="@string/upcoming_events"
+	    android:paddingTop="@dimen/txt_videos_margin_t_artist_details"
+	    android:paddingBottom="@dimen/txt_videos_margin_t_artist_details"
+	    android:textSize="@dimen/txt_artist_details_txt_size_artist_details" />
+    
+    <View android:id="@+id/vHorLine"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/v_hor_line_ht_event_details_tab"
+        android:background="@color/gray_shade_d"
+        android:layout_marginLeft="@dimen/v_hor_line_margin_l_event_details_tab"
+        android:layout_marginRight="@dimen/v_hor_line_margin_r_event_details_tab" />
+
+</LinearLayout>

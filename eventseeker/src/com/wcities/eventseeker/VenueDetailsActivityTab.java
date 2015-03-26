@@ -3,9 +3,10 @@ package com.wcities.eventseeker;
 import android.os.Bundle;
 
 import com.wcities.eventseeker.constants.ScreenNames;
+import com.wcities.eventseeker.interfaces.MapListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class VenueDetailsActivityTab extends BaseActivityTab {
+public class VenueDetailsActivityTab extends BaseActivityTab implements MapListener {
 	
 	private static final String TAG = VenueDetailsActivityTab.class.getSimpleName();
 
@@ -19,6 +20,7 @@ public class VenueDetailsActivityTab extends BaseActivityTab {
 		setContentView(R.layout.activity_base_tab);
 		
 		setCommonUI();
+		allowContentBehindToolbar();
 		
 		if (isOnCreateCalledFirstTime) {
 			//Log.d(TAG, "add event details fragment tab");
@@ -47,5 +49,10 @@ public class VenueDetailsActivityTab extends BaseActivityTab {
 			return venueDetailsFragmentTab.getTitle();
 		}
 		return "";
+	}
+
+	@Override
+	public void onMapClicked(Bundle args) {
+		super.onMapClicked(args);
 	}
 }

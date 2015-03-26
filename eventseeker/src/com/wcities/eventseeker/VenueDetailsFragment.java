@@ -131,7 +131,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	private View rootView;
 	private ImageView imgVenue;
 	private TextView txtVenueTitle;
-	private RecyclerView recyclerVVenues;
+	private RecyclerView recyclerVVenue;
 	private RelativeLayout rltLytTxtVenueTitle;
 	private View vNoContentBG;
 
@@ -148,10 +148,10 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
         	//Log.d(TAG, "onGlobalLayout()");
         	
 			if (VersionUtil.isApiLevelAbove15()) {
-				recyclerVVenues.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+				recyclerVVenue.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
 			} else {
-				recyclerVVenues.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+				recyclerVVenue.getViewTreeObserver().removeGlobalOnLayoutListener(this);
 			}
 			
 			onScrolled(0, true, true);
@@ -207,12 +207,12 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 
 		vNoContentBG = rootView.findViewById(R.id.vNoContentBG);
 		
-		recyclerVVenues = (RecyclerView) rootView.findViewById(R.id.recyclerVVenues);
+		recyclerVVenue = (RecyclerView) rootView.findViewById(R.id.recyclerVVenue);
 		// use a linear layout manager
 		RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(FragmentUtil.getActivity(this));
-		recyclerVVenues.setLayoutManager(layoutManager);
+		recyclerVVenue.setLayoutManager(layoutManager);
 		
-		recyclerVVenues.setOnScrollListener(new RecyclerView.OnScrollListener() {
+		recyclerVVenue.setOnScrollListener(new RecyclerView.OnScrollListener() {
 	    	
 	    	@Override
 	    	public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -222,7 +222,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	    	}
 		});
 		
-		recyclerVVenues.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
+		recyclerVVenue.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
 		
 		if (isOnCreateViewCalledFirstTime) {
 			isOnCreateViewCalledFirstTime = false;
@@ -252,7 +252,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		} else {
 			venueRVAdapter.onActivityCreated();
 		}
-		recyclerVVenues.setAdapter(venueRVAdapter);
+		recyclerVVenue.setAdapter(venueRVAdapter);
 	}
 	
 	@Override
@@ -289,10 +289,10 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		 * can revert these changes just before onDestroyView() removes this listener.
 		 */
 		if (VersionUtil.isApiLevelAbove15()) {
-			recyclerVVenues.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
+			recyclerVVenue.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
 
 		} else {
-			recyclerVVenues.getViewTreeObserver().removeGlobalOnLayoutListener(onGlobalLayoutListener);
+			recyclerVVenue.getViewTreeObserver().removeGlobalOnLayoutListener(onGlobalLayoutListener);
 		}
 		
 		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
@@ -358,8 +358,8 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		 * 2) When screen becomes scrollable after expanding description but not on collapsing, resulting in 
 		 * automatic scroll to settle recyclerview.
 		 */
-		if (((LinearLayoutManager)recyclerVVenues.getLayoutManager()).findFirstVisibleItemPosition() == 0) {
-			totalScrolledDy = -recyclerVVenues.getLayoutManager().findViewByPosition(0).getTop();
+		if (((LinearLayoutManager)recyclerVVenue.getLayoutManager()).findFirstVisibleItemPosition() == 0) {
+			totalScrolledDy = -recyclerVVenue.getLayoutManager().findViewByPosition(0).getTop();
 			//Log.d(TAG, "totalScrolledDy corrected = " + totalScrolledDy);
 		}
 		
@@ -549,7 +549,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			
 			@Override
 			public void onAnimationStart(Animator arg0) {
-				recyclerVVenues.setVisibility(View.INVISIBLE);
+				recyclerVVenue.setVisibility(View.INVISIBLE);
 				((MainActivity)FragmentUtil.getActivity(VenueDetailsFragment.this)).onSharedElementAnimStart();
 			}
 			
@@ -561,7 +561,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 				//Log.d(TAG, "onAnimationEnd()");
 				if (!isCancelled) {
 					//Log.d(TAG, "!isCancelled");
-					recyclerVVenues.setVisibility(View.VISIBLE);
+					recyclerVVenue.setVisibility(View.VISIBLE);
 					Animation slideInFromBottom = AnimationUtils.loadAnimation(FragmentUtil.getApplication(
 							VenueDetailsFragment.this), R.anim.slide_in_from_bottom);
 					slideInFromBottom.setAnimationListener(new AnimationListener() {
@@ -582,7 +582,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 							AsyncTaskUtil.executeAsyncTask(loadVenueDetails, true);
 						}
 					});
-					recyclerVVenues.startAnimation(slideInFromBottom);
+					recyclerVVenue.startAnimation(slideInFromBottom);
 				}
 			}
 			
@@ -599,7 +599,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	@Override
 	public void exitAnimation() {
 		animatorSet.cancel();
-		recyclerVVenues.clearAnimation();
+		recyclerVVenue.clearAnimation();
 		
 		Animation slideOutToBottom = AnimationUtils.loadAnimation(FragmentUtil.getApplication(
 				VenueDetailsFragment.this), R.anim.slide_out_to_bottom);
@@ -613,7 +613,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			
 			@Override
 			public void onAnimationEnd(Animation animation) {
-				recyclerVVenues.setVisibility(View.INVISIBLE);
+				recyclerVVenue.setVisibility(View.INVISIBLE);
 				
 				animatorSet = new AnimatorSet();
 				
@@ -668,11 +668,11 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		});
 		/**
 		 * set visible to finish this screen even if user presses back button instantly even before animateSharedElements()
-		 * has finished it work; otherwise if recyclerVVenues is invisible, then user has to press back once more in such case
+		 * has finished it work; otherwise if recyclerVVenue is invisible, then user has to press back once more in such case
 		 * on instantly clicking back
 		 */
-		recyclerVVenues.setVisibility(View.VISIBLE);
-		recyclerVVenues.startAnimation(slideOutToBottom);
+		recyclerVVenue.setVisibility(View.VISIBLE);
+		recyclerVVenue.startAnimation(slideOutToBottom);
     }
 
 	@Override

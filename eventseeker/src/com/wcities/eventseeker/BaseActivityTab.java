@@ -1,8 +1,13 @@
 package com.wcities.eventseeker;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import android.animation.ObjectAnimator;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -24,7 +29,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -401,6 +405,10 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		return AppConstants.INVALID_INDEX;
 	}
 	
+	protected void allowContentBehindToolbar() {
+		findViewById(R.id.content_frame).setPadding(0, 0, 0, 0);
+	}
+	
 	protected void setDrawerLockMode(boolean lock) {
 		if (lock) {
 			mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
@@ -563,6 +571,26 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 			
 		} else {
 			startActivity(intent);
+		}
+	}
+	
+	protected void onMapClicked(Bundle args) {
+		String uri;
+		try {
+			uri = "geo:"+ args.getDouble(BundleKeys.LAT) + "," + args.getDouble(BundleKeys.LON) + "?q=" 
+					+ URLEncoder.encode(args.getString(BundleKeys.VENUE_NAME), AppConstants.CHARSET_NAME);
+			startActivity(new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri)));
+
+		} catch (UnsupportedEncodingException e) {
+			// venue name could not be encoded, hence instead search on lat-lon.
+			e.printStackTrace();
+			uri = "geo:"+ args.getDouble(BundleKeys.LAT) + "," + args.getDouble(BundleKeys.LON) + "?q=" 
+					+ args.getDouble(BundleKeys.LAT) + "," + args.getDouble(BundleKeys.LON);
+			startActivity(new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri)));
+			
+		} catch (ActivityNotFoundException e) {
+			// if user has uninstalled the google maps app
+			e.printStackTrace();
 		}
 	}
 	
