@@ -50,6 +50,14 @@
         <item name="android:elevation">@dimen/elevation_widget_eventSeeker_btn_white</item>
         <item name="android:textAllCaps">false</item>
     </style>
+
+    <style name="Widget.EventSeeker.Button.Transparent" parent="@android:style/Widget.Material.Button">
+        <item name="android:background">@drawable/bg_btn_transparent_normal_clr_prmry_drk_pressed_material</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/txt_size_category_popular_artist_fragment_popular_artist_tab</item>
+        <item name="android:elevation">@dimen/elevation_widget_eventSeeker_btn_white</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
     
     <!-- <style name="Widget.EventSeeker.DatePicker" parent="@android:style/Widget.Material.DatePicker">
         <item name="android:headerMonthTextAppearance">@style/TextAppearance.EventSeeker.DatePicker.MonthLabel</item>

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.core.Artist.Genre;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -29,7 +30,7 @@ public class SportsArtistsFragment extends FragmentLoadableFromBackStack impleme
 	
 	@Override
 	public String getScreenName() {
-		return "Popular Artists Screen - Sports";
+		return ScreenNames.POPULAR_SPORTS_ARTISTS;
 	}
 
 	@Override

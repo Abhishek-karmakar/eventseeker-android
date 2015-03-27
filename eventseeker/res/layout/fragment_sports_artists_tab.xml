@@ -91,39 +91,106 @@
         android:layout_below="@+id/lnrFollowMoreArtist"
         android:background="@drawable/bg_shadow" />
 
-    <GridView
-        android:id="@+id/grdvFollowing"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/lnrFollowMoreArtist"
         android:layout_marginTop="@dimen/grdv_following_margin_t_fragment_following_tab"
         android:background="@android:color/white"
-        android:fastScrollAlwaysVisible="true"
-        android:fastScrollEnabled="true"
-        android:horizontalSpacing="@dimen/grd_v_h_space_fragment_following_tab"
-        android:padding="@dimen/grd_v_padding_fragment_following_tab"
-        android:scrollbarStyle="outsideOverlay"
-        android:verticalSpacing="@dimen/grd_v_v_space_fragment_following_tab" />
+        android:fillViewport="true"
+        android:paddingTop="@dimen/common_t_mar_pad_for_all_layout" >
 
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/lnrFollowMoreArtist"
-        layout="@layout/include_no_content_with_phone"
-        android:visibility="gone" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/lnr_root_padding_fragment_follow_more_artists" >
 
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/lnrFollowMoreArtist"
-        layout="@layout/list_no_items_found"
-        android:visibility="gone" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_nfl" >
 
-    <include
-        android:id="@+id/rltLytPrgsBar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        layout="@layout/progress_bar_eventseeker_fixed_ht"
-        android:visibility="gone" />
+                <Button
+                    android:id="@+id/btnNFL"
+                    style="@style/Widget.EventSeeker.Button.Transparent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/btn_nfl" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
+                android:background="@android:color/transparent" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_nba" >
+
+                <Button
+                    android:id="@+id/btnNBA"
+                    style="@style/Widget.EventSeeker.Button.Transparent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/btn_nba" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
+                android:background="@android:color/transparent" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_nhl" >
+
+                <Button
+                    android:id="@+id/btnNHL"
+                    style="@style/Widget.EventSeeker.Button.Transparent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/btn_nhl" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
+                android:background="@android:color/transparent" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_mlb" >
+
+                <Button
+                    android:id="@+id/btnMLB"
+                    style="@style/Widget.EventSeeker.Button.Transparent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/btn_mlb" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
+                android:background="@android:color/transparent" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_mls" >
+
+                <Button
+                    android:id="@+id/btnMLS"
+                    style="@style/Widget.EventSeeker.Button.Transparent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/btn_mls" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

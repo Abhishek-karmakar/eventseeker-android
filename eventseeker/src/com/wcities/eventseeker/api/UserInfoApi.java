@@ -13,10 +13,10 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import com.wcities.eventseeker.R;
-import com.wcities.eventseeker.RecommendedArtistsFragment.SortRecommendedArtist;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.Enums.SortArtistNewsBy;
+import com.wcities.eventseeker.constants.Enums.SortRecommendedArtist;
 import com.wcities.eventseeker.core.Artist.Genre;
 import com.wcities.eventseeker.core.registration.EmailLogin;
 import com.wcities.eventseeker.core.registration.EmailSignup;

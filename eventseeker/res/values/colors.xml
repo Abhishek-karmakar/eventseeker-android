@@ -7,6 +7,8 @@
     <color name="colorPrimaryDarkAlpha">#88006ab2</color>
 
     <color name="nav_drawer_divider">#33ffffff</color>
+
+    <color name="tabs_seperator">#CBCBCB</color>
 	
 	<color name="primary_text_default_material_light">#ffffffff</color>
 	<!-- 26% of default values -->
@@ -96,6 +98,9 @@
 	
 	<!-- featuring_artist.xml -->
 	<color name="bg_v_translucent_layer_featuring_artist">#80ffffff</color>
+
+	<!-- following_fragment_tab.xml -->
+	<color name="btn_tabs_txt_color">#666666</color>
 	
 	<!-- starts for bosch -->
 	<color name="b_bg_navigation_drawer">#666</color>

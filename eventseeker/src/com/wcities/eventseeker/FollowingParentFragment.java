@@ -36,6 +36,7 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadMyArtists;
 import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.core.FollowingList;
@@ -169,7 +170,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 		});
 		
 		// this is because setAdapter method on 'absListView' is added from api level 11. 
-		// So, that 'absListView.setAdapter(myArtistListAdapter);' was throwing java.lang.NoSuchMethodError
+		// So, that 'absListView.setAdapter(artistListAdapter);' was throwing java.lang.NoSuchMethodError
 		if (absListView instanceof ListView) {
 			((ListView) absListView).setAdapter(myArtistListAdapter);
 			
@@ -262,7 +263,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 	
 	@Override
 	public String getScreenName() {
-		return "Following Screen";
+		return ScreenNames.FOLLOWING_SCREEN;
 	}
 	
 	@Override
@@ -283,7 +284,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 
 	@Override
 	public void doNegativeClick(String dialogTag) {
-		/*myArtistListAdapter.notifyDataSetChanged();*/
+		/*artistListAdapter.notifyDataSetChanged();*/
 	}
 	
 	@Override

@@ -70,6 +70,9 @@
         <activity android:name="com.wcities.eventseeker.LanguageActivityTab" />
         <activity android:name="com.wcities.eventseeker.ArtistsNewsActivityTab" />
         <activity android:name="com.wcities.eventseeker.FriendsActivityActivityTab" />
+        <activity android:name="com.wcities.eventseeker.FollowingActivityTab" />
+        <activity android:name="com.wcities.eventseeker.RecommendedArtistsActivityTab" />
+        <activity android:name="com.wcities.eventseeker.PopularArtistsActivityTab" />
         
         <activity android:name="com.wcities.eventseeker.SpotifyActivity" 
             android:theme="@style/Theme.Transparent"

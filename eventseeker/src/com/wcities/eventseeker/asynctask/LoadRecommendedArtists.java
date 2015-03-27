@@ -11,9 +11,9 @@ import org.json.JSONObject;
 import android.os.AsyncTask;
 import android.widget.BaseAdapter;
 
-import com.wcities.eventseeker.RecommendedArtistsFragment.SortRecommendedArtist;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
+import com.wcities.eventseeker.constants.Enums.SortRecommendedArtist;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.ItemsList;
 import com.wcities.eventseeker.interfaces.ArtistAdapterListener;

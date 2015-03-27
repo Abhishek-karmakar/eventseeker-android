@@ -23,8 +23,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
-import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -273,6 +271,10 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 			intent = new Intent(getApplicationContext(), DiscoverActivityTab.class);
 			break;			
 			
+		case INDEX_NAV_ITEM_FOLLOWING:
+			intent = new Intent(getApplicationContext(), FollowingActivityTab.class);
+			break;
+			
 		case INDEX_NAV_ITEM_FRIENDS_ACTIVITY:
 			intent = new Intent(getApplicationContext(), FriendsActivityActivityTab.class);
 			break;
@@ -282,7 +284,6 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 			break;
 
 		case INDEX_NAV_ITEM_SETTINGS:
-			//SettingsFragment SettingsFragment;
 			intent = new Intent(getApplicationContext(), SettingsActivityTab.class);
 			break;
 			

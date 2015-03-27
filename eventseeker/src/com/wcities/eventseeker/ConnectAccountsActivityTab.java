@@ -65,7 +65,7 @@ public class ConnectAccountsActivityTab extends BaseActivityTab implements Conne
 	
 	@Override
 	protected int getDrawerItemPos() {
-		return INDEX_NAV_ITEM_SETTINGS;
+		return AppConstants.INVALID_INDEX;
 	}
 
 	@Override

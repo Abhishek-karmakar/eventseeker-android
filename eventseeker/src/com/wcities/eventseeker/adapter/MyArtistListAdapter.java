@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.os.Looper;
 import android.os.AsyncTask.Status;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
@@ -101,7 +102,7 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 		
 		this.customSharedElementTransitionSource = customSharedElementTransitionSource;
 		
-		handler = new Handler();
+		handler = new Handler(Looper.getMainLooper());
 	}
 
 	@Override

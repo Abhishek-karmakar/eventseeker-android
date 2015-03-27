@@ -6,8 +6,6 @@ import java.util.List;
 
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.util.DisplayMetrics;
@@ -124,15 +122,12 @@ public class SettingsFragmentTab extends ListFragment {
 		private int rowHt;
 		private OnSettingsItemClickedListener onSettingsItemClickedListener;
 		private Fragment fragment;
-		private Handler handler;
 		
 		public SettingsListAdapter(Fragment fragment, List<SettingsItem> settingsMenuListItems) {
 	        inflater = LayoutInflater.from(FragmentUtil.getActivity(fragment));
 	        this.settingsItems = settingsMenuListItems;
 	        this.fragment = fragment;
 	        this.onSettingsItemClickedListener = (OnSettingsItemClickedListener) FragmentUtil.getActivity(fragment);
-	        
-	        handler = new Handler(Looper.getMainLooper());
 		}
 
 		public void setHtForSettingsList(int htForSettingsList) {

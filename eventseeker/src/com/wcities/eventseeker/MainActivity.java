@@ -876,11 +876,11 @@ public class MainActivity extends BaseActivity implements
 			
 		case INDEX_NAV_ITEM_FOLLOWING:
 			FollowingParentFragment followingFragment;
-			if(!isTablet) {
+			/*if(!isTablet) {*/
 				followingFragment = new FollowingFragment();
-			} else {
-				followingFragment = new FollowingFragmentTab();
-			}
+			/*} else {
+				followingFragment = new FollowingFragmentTab1();
+			}*/
 			replaceContentFrameByFragment(followingFragment, AppConstants.FRAGMENT_TAG_FOLLOWING, 
 					getResources().getString(R.string.title_following), false);
 			break;

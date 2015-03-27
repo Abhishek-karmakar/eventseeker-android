@@ -130,13 +130,11 @@ public class LoginSyncingFragmentTab extends Fragment implements AsyncTaskListen
 			if (isForSignUp) {
 				Bundle args = new Bundle();
 				args.putSerializable(BundleKeys.SETTINGS_ITEM, SettingsItem.SYNC_ACCOUNTS);
-				Intent intent = new Intent(FragmentUtil.getActivity(this).getApplicationContext(), DiscoverActivityTab.class);
+				Intent intent = new Intent(FragmentUtil.getActivity(this).getApplicationContext(), SettingsActivityTab.class);
 				// clear all activities in back stack
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 				intent.putExtras(args);
 				startActivity(intent);
-				/*((DrawerListFragmentListener) FragmentUtil.getActivity(this)).onDrawerItemSelected(
-						MainActivity.INDEX_NAV_ITEM_SETTINGS, args);*/
 				
 			} else {
 				loadMyEventsCount = new LoadMyEventsCount(Api.OAUTH_TOKEN, wcitiesId, latLon[0], latLon[1], new AsyncTaskListener<Integer>() {
@@ -159,8 +157,6 @@ public class LoginSyncingFragmentTab extends Fragment implements AsyncTaskListen
 							// clear all activities in back stack
 							intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 							startActivity(intent);
-							/*((DrawerListFragmentListener)FragmentUtil.getActivity(LoginSyncingFragmentTab.this)).onDrawerItemSelected(
-									MainActivity.INDEX_NAV_ITEM_DISCOVER, null);*/
 						}
 					}
 				});

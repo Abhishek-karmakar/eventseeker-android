@@ -1,56 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cvRoot"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    card_view:cardCornerRadius="@dimen/cv_root_corner_rad_rv_item_event_tab"
+    card_view:cardElevation="@dimen/cv_root_elevation_rv_item_event_tab" >
 
-    <ImageView
-        android:id="@+id/imgItem"
+    <RelativeLayout
+        android:id="@+id/rltLytRoot"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/img_item_h_fragment_search_artists_list_item"
-        android:scaleType="fitXY" />
+        android:layout_height="wrap_content" >
 
-    <TextView
-        android:id="@+id/txtArtistName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imgItem"
-        android:layout_alignLeft="@+id/imgItem"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/imgItem"
-        android:background="@color/bg_black_transparent_strip"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:padding="@dimen/txt_artist_name_pad_fragment_search_artists_list_item"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/txt_artist_name_txt_size_fragment_search_artists_list_item"
-        android:textStyle="bold" />
+        <com.wcities.eventseeker.custom.view.ResizableImageView
+            android:id="@+id/imgItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="event image"
+            android:scaleType="centerCrop"
+            app:blockSetAlpha="true"
+            app:compressAsPerWidth="true"
+	    	android:src="@drawable/ic_electronic" />
 
-    <ImageView
-        android:id="@+id/txtOnTour"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:gravity="center"
-		android:src="@drawable/on_tour"/>
+        <RelativeLayout
+            android:id="@+id/rltArtistName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/imgItem"
+            android:layout_alignParentBottom="true"
+            android:paddingLeft="@dimen/rlt_artist_name_padding_l_r_fragment_following_artists_list_item_tab"
+            android:paddingRight="@dimen/rlt_artist_name_padding_l_r_fragment_following_artists_list_item_tab"
+            android:background="@drawable/bg_lnr_gradient_top_transparent_btm_black" >
 
-</RelativeLayout>
+            <CheckBox
+                android:id="@+id/chkFollow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true" 
+                android:button="@drawable/slctr_following" />
 
-<!--     <TextView
-        android:id="@+id/txtOnTour"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="@dimen/txt_on_tour_margin_r_fragment_search_artists_list_item"
-        android:layout_marginTop="@dimen/txt_on_tour_margin_t_fragment_search_artists_list_item"
-        android:background="@drawable/txt_on_tour_rounded_corners"
-        android:gravity="center"
-        android:paddingBottom="@dimen/txt_on_tour_pad_t_b_fragment_search_artists_list_item"
-        android:paddingLeft="@dimen/txt_on_tour_pad_l_r_fragment_search_artists_list_item"
-        android:paddingRight="@dimen/txt_on_tour_pad_l_r_fragment_search_artists_list_item"
-        android:paddingTop="@dimen/txt_on_tour_pad_t_b_fragment_search_artists_list_item"
-        android:rotation="45"
-        android:text="@string/artist_on_tour"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/txt_on_tour_txt_size_fragment_search_artists_list_item" /> -->
+            <com.wcities.eventseeker.custom.view.TextViewBlockingSetAlpha
+                android:id="@+id/txtArtistName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/txt_artist_name_margin_t_b_fragment_following_artists_list_item_tab"
+                android:layout_marginTop="@dimen/txt_artist_name_margin_t_b_fragment_following_artists_list_item_tab"
+                android:layout_toLeftOf="@+id/chkFollow"
+                android:ellipsize="end"
+                android:layout_centerVertical="true"
+				android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/txt_evt_title_txt_size_rv_item_event_tab" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <include
+        android:id="@+id/rltLytRootPrgs"
+        layout="@layout/progress_bar_eventseeker_transparent" />
+
+</android.support.v7.widget.CardView>

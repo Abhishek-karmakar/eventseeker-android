@@ -516,4 +516,28 @@
     
     <!-- friends_activity_item_tab.xml -->
     <dimen name="rlt_root_padding_friends_activity_item_tab">12dp</dimen>
+    
+    <!-- fragment_following_artists_list_item_tab.xml -->
+    <dimen name="txt_artist_name_margin_t_b_fragment_following_artists_list_item_tab">10dp</dimen>
+    <dimen name="rlt_artist_name_padding_l_r_fragment_following_artists_list_item_tab">10dp</dimen>
+    
+    <!-- fragment_following_tab.xml -->
+    <dimen name="grd_v_padding_fragment_following_tab">8dp</dimen>
+    <dimen name="grd_v_h_space_fragment_following_tab">4dp</dimen>
+    <dimen name="grd_v_v_space_fragment_following_tab">2dp</dimen>
+    <dimen name="grdv_following_margin_t_fragment_following_tab">5dp</dimen>
+    <dimen name="v_divider_t_b_fragment_following_tab">10dp</dimen>
+    <dimen name="v_divider_w_fragment_following_tab">1dp</dimen>
+    <dimen name="v_shadow_h_fragment_following_tab">5dp</dimen>
+    <dimen name="lnr_tabs_ht_fragment_following_tab">80dp</dimen>
+    <dimen name="elevation_lnr_follow_more_artist_fragment_following_tab">5dp</dimen>
+    <dimen name="btn_tabs_txt_size_fragment_following_tab">16sp</dimen>
+
+    <!-- fragment_popular_artist_tab.xml -->
+    <dimen name="txt_size_category_popular_artist_fragment_popular_artist_tab">20sp</dimen>
+
+    <!-- fragment_follow_more_artists_tab.xml -->
+    <dimen name="v_dummy_wt_ht_fragment_follow_more_artists">5dp</dimen>
+    <dimen name="lnr_root_padding_fragment_follow_more_artists">5dp</dimen>
+    <!-- <dimen name="v_dummy_margin_t_b_fragment_follow_more_artists">10dp</dimen> -->
 </resources>

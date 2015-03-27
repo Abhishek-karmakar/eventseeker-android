@@ -3,9 +3,15 @@
     <!-- fragment_discover_tab.xml -->
     <dimen name="rv_events_padding_discover_tab">@dimen/rv_item_l_r_offset_discover_tab</dimen>
     <dimen name="v_rlt_lyt_cat_titles_shadow_ht_discover_tab">0dp</dimen>
-    
-    <!--  DiscoverFragmentTab.java -->
+
+    <!-- DiscoverFragmentTab.java -->
     <dimen name="rv_item_l_r_offset_discover_tab">4dp</dimen>
     <dimen name="rv_item_t_b_offset_discover_tab">@dimen/rv_item_l_r_offset_discover_tab</dimen>
-    
+
+    <!-- fragment_following_tab.xml -->
+    <dimen name="grd_v_padding_fragment_following_tab">@dimen/grd_v_v_space_fragment_following_tab</dimen>
+    <dimen name="grd_v_h_space_fragment_following_tab">@dimen/grd_v_v_space_fragment_following_tab</dimen>
+    <dimen name="grd_v_v_space_fragment_following_tab">8dp</dimen>
+    <dimen name="v_shadow_h_fragment_following_tab">0dp</dimen>
+
 </resources>

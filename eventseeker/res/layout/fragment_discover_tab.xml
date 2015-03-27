@@ -47,7 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/v_rlt_lyt_cat_titles_shadow_ht_discover_tab"
         android:layout_below="@id/rltLytCatTitles"
-        android:background="@drawable/bg_v_rlt_lyt_cat_titles_shadow" />
+        android:background="@drawable/bg_shadow" />
 	
 	<include layout="@layout/progress_bar_eventseeker_transparent"
 	    android:id="@+id/rltLytProgressBar"

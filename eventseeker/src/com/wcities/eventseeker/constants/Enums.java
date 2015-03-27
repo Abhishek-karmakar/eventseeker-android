@@ -301,4 +301,26 @@ public class Enums {
 		COMMENT;
 	}
 
+	public static enum SortRecommendedArtist {
+		name(0),
+		score(1);
+		
+		int value;
+		private SortRecommendedArtist(int value) {
+			this.value = value;
+		}
+
+		public int getValue() {
+			return value;
+		}
+		
+		public static SortRecommendedArtist getSortTypeBy(int value) {
+			for (SortRecommendedArtist sortBy : values()) {
+				if (sortBy.getValue() == value) {
+					return sortBy;
+				}
+			}
+			return null;
+		}
+	}
 }

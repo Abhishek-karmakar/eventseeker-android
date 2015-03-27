@@ -22,4 +22,10 @@ public class ScreenNames {
 	public static final String LANGUAGE_SCREEN = "Language Screen";
 	public static final String ARTISTS_NEWS_SCREEN = "Artist News Screen";
 	public static final String FRIENDS_NEWS_SCREEN = "Friend News Screen";
+	public static final String FOLLOWING_SCREEN = "Following Screen";
+	public static final String RECOMMENDED_ARTISTS_SCREEN = "Recommended Artists Screen";
+	public static final String POPULAR_ARTISTS_SCREEN = "Popular Artists Screen";
+	public static final String POPULAR_MUSIC_ARTISTS = "Popular Artists Screen - Music";
+	public static final String POPULAR_SPORTS_ARTISTS = "Popular Artists Screen - Sports";
+	public static final String POPULAR_ARTISTS_CATEGORIES_SCREEN = "Popular Artists Screen - ";
 }
