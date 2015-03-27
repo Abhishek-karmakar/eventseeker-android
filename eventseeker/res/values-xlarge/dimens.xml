@@ -305,10 +305,6 @@
     <!-- action_bar_custom_view_item.xml -->
     <dimen name="txt_city_name_txt_size_action_bar_custom_view_item">@dimen/action_bar_title_txt_size</dimen>
 
-    <!-- include_friends_tab.xml -->
-    <dimen name="txt_friends_txt_size_include_friends">18sp</dimen>
-    <dimen name="txt_friends_txt_size_include_friends">18sp</dimen>
-
     <!-- friends_activity_item_tab.xml -->
     <dimen name="lnr_layout_btns_ht_friends_activity_item">50dp</dimen>
 
@@ -497,6 +493,21 @@
     <dimen name="v_hor_line_ht_event_details_tab">1dp</dimen>
     <dimen name="v_hor_line_margin_b_event_details_tab">10dp</dimen>
     <dimen name="v_hor_line_margin_r_event_details_tab">@dimen/txt_desc_margin_r_event_details_tab</dimen>
+    <dimen name="txt_featuring_margin_t_event_details_tab">@dimen/lnr_lyt_expand_desc_margin_t_event_details_tab</dimen>
+    <dimen name="txt_evt_details_txt_size_event_details_tab">16sp</dimen>
+    <dimen name="v_pager_featuring_ht_event_details_tab">150dp</dimen>
+    <dimen name="v_pager_featuring_margin_l_event_details_tab">@dimen/txt_desc_margin_l_event_details_tab</dimen>
+    <dimen name="v_pager_featuring_margin_r_event_details_tab">@dimen/v_pager_featuring_margin_l_event_details_tab</dimen>
+    <dimen name="v_pager_featuring_margin_t_event_details_tab">@dimen/lnr_lyt_expand_desc_margin_t_event_details_tab</dimen>
+    <dimen name="v_hor_line_margin_l_event_details_tab">@dimen/v_hor_line_margin_r_event_details_tab</dimen>
+    <dimen name="v_hor_line_margin_t_event_details_tab">@dimen/lnr_lyt_expand_desc_margin_t_event_details_tab</dimen>
+    <dimen name="rlt_lyt_address_margin_l_event_details_tab">@dimen/txt_desc_margin_l_event_details_tab</dimen>
+    <dimen name="rlt_lyt_address_margin_r_event_details_tab">@dimen/txt_desc_margin_l_event_details_tab</dimen>
+    <dimen name="txt_venue_margin_t_event_details_tab">@dimen/lnr_lyt_expand_desc_margin_t_event_details_tab</dimen>
+    <dimen name="txt_venue_drawable_pad_event_details_tab">10dp</dimen>
+    <dimen name="rlt_lyt_address_margin_t_event_details_tab">@dimen/lnr_lyt_expand_desc_margin_t_event_details_tab</dimen>
+    <dimen name="rlt_lyt_address_margin_l_event_details_tab">@dimen/txt_desc_margin_l_event_details_tab</dimen>
+    <dimen name="rlt_lyt_address_margin_r_event_details_tab">@dimen/txt_desc_margin_l_event_details_tab</dimen>
     
     <!-- EventDetailsFragmentTab.java -->
     <!-- txt_toolbar_double_line_title_pos_all_details = 44dp to keep it left aligned with toolbar title.
@@ -516,4 +527,49 @@
     
     <!-- friends_activity_item_tab.xml -->
     <dimen name="rlt_root_padding_friends_activity_item_tab">12dp</dimen>
+    
+    <!-- activity_base_tab_floating.xml -->
+    <!-- fab_margin_t_base_tab_floating = img_evt_ht_event_details_tab - fab standard height(56dp)/2 -->
+    <dimen name="fab_margin_t_base_tab_floating">310dp</dimen>
+    <dimen name="fab_1_margin_r_base_tab_floating">30dp</dimen>
+    <dimen name="fab_2_margin_r_base_tab_floating">120dp</dimen>
+    
+    <!-- fragment_venue_details_tab.xml -->
+    <dimen name="img_venue_ht_venue_details_tab">@dimen/img_evt_ht_event_details_tab</dimen>
+    <dimen name="rlt_lyt_txt_venue_title_pad_l_venue_details_tab">@dimen/rlt_lyt_txt_evt_title_pad_l_event_details_tab</dimen>
+    <dimen name="rlt_lyt_txt_venue_title_pad_b_venue_details_tab">8dp</dimen>
+    <dimen name="rlt_lyt_txt_venue_title_pad_t_venue_details_tab">@dimen/rlt_lyt_txt_venue_title_pad_b_venue_details_tab</dimen>
+    <!-- After scrolling to top, txtVenueTitle text must be in center vertical position exactly aligned with 
+    toolbar title (for good looking transition effect), hence following calculation is used to derive txt_venue_title_ht_venue_details_tab. 
+    Here, rlt_lyt_txt_venue_title_pad_b_venue_details_tab is fixed to 8dp, so to keep txtVenueTitle textview
+    in center vertical position, we leave aside 8dp more (for top). Hence ht comes out as 64 - 2*8 = 48dp 
+    txt_venue_title_ht_venue_details_tab = action_bar_ht - 2*rlt_lyt_txt_venue_title_pad_b_venue_details_tab -->
+    <dimen name="txt_venue_title_ht_venue_details_tab">48dp</dimen>
+    <dimen name="txt_venue_title_txt_size_venue_details_tab">@dimen/abc_text_size_title_material_toolbar</dimen>
+    <dimen name="img_venue_ht_venue_details">@dimen/img_venue_ht_venue_details_tab</dimen>
+    
+    <!-- rv_item_desc_tab.xml -->
+    <dimen name="txt_desc_txt_size_rv_item_desc_tab">@dimen/txt_desc_txt_size_event_details_tab</dimen>
+    <dimen name="img_down_margin_t_rv_item_desc_tab">10dp</dimen>
+    
+    <!-- fragment_navigation.xml -->
+    <dimen name="txt_title_w_navigation">210dp</dimen>
+    <dimen name="txt_txt_size_navigation">18sp</dimen>
+    <dimen name="img_margin_t_navigation">100dp</dimen>
+    <dimen name="txt_margin_t_navigation">15dp</dimen>
+    
+    <!-- rv_item_upcoming_event.xml -->
+    <dimen name="img_evt_w_rv_item_upcoming_event">160dp</dimen>
+    <dimen name="img_evt_ht_rv_item_upcoming_event">120dp</dimen>
+    <dimen name="img_evt_margin_l_rv_item_upcoming_event">@dimen/txt_desc_margin_l_rv_item_desc</dimen>
+    <dimen name="img_evt_margin_t_rv_item_upcoming_event">10dp</dimen>
+    <dimen name="img_evt_margin_b_rv_item_upcoming_event">@dimen/img_evt_margin_t_rv_item_upcoming_event</dimen>
+    <dimen name="img_action_margin_r_rv_item_upcoming_event">30dp</dimen>
+    <dimen name="txt_evt_title_margin_l_rv_item_upcoming_event">10dp</dimen>
+    <dimen name="txt_evt_title_margin_r_rv_item_upcoming_event">4dp</dimen>
+    <dimen name="txt_evt_title_txt_size_rv_item_upcoming_event">16sp</dimen>
+    <dimen name="txt_detail_txt_size_rv_item_upcoming_event">14sp</dimen>
+    <dimen name="v_hor_line_ht_rv_item_upcoming_event">1dp</dimen>
+    <dimen name="v_hor_line_margin_l_r_rv_item_upcoming_event">@dimen/txt_desc_margin_l_rv_item_desc</dimen>
+    
 </resources>

@@ -15,6 +15,8 @@
 	    	android:gravity="center_vertical"
 	    	android:textColor="@color/text_color_primary"
 	    	android:textSize="@dimen/txt_toolbar_title_txt_size_toolbar_floating_window_double_line"
+	    	android:singleLine="true"
+		    android:ellipsize="end"
 	    	android:textStyle="bold" />
     
 	    <TextView android:id="@+id/txtToolbarSubTitle"

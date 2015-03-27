@@ -7,9 +7,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.wcities.eventseeker.FeaturingArtistFragment;
@@ -50,9 +52,10 @@ public class FeaturingArtistPagerAdapter extends FragmentStatePagerAdapter imple
 
 	@Override
 	public int getCount() {
+		//Log.d(TAG, "getCount() - " + artists.size());
 		return artists.size();
 	}
-
+	
 	@Override
 	public void onPageScrollStateChanged(int arg0) {}
 
@@ -135,8 +138,9 @@ public class FeaturingArtistPagerAdapter extends FragmentStatePagerAdapter imple
 	public int getCurrentPosition() {
 		return currentPosition;
 	}
-
+	
 	private RelativeLayoutCenterScale getRootView(int position) {
+		//Log.d(TAG, "getRootView()");
 		Fragment fragment = (Fragment) instantiateItem(null, position);//fm.findFragmentByTag(getFragmentTag(position));
 		/**
 		 * fragment is null in case if artists size is 0. In such case onPageScrolled() is still called which

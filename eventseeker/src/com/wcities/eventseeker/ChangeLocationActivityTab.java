@@ -2,6 +2,7 @@ package com.wcities.eventseeker;
 
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.Menu;
 
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -23,6 +24,11 @@ public class ChangeLocationActivityTab extends BaseActivityTab {
 			ChangeLocationFragmentTab changeLocationFragmentTab = new ChangeLocationFragmentTab();
 			addFragment(R.id.content_frame, changeLocationFragmentTab, FragmentUtil.getTag(changeLocationFragmentTab), false);
 		}
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		return true;
 	}
 
 	@Override

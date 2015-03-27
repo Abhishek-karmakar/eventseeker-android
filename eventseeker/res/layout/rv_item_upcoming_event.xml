@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rltLytRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_rlt_lyt_root_rv_item_upcoming_event" >
+    
+    <ImageView android:id="@+id/imgEvt"
+        android:layout_width="@dimen/img_evt_w_rv_item_upcoming_event"
+        android:layout_height="@dimen/img_evt_ht_rv_item_upcoming_event"
+        android:layout_marginLeft="@dimen/img_evt_margin_l_rv_item_upcoming_event"
+        android:layout_marginTop="@dimen/img_evt_margin_t_rv_item_upcoming_event"
+        android:layout_marginBottom="@dimen/img_evt_margin_b_rv_item_upcoming_event"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_launcher" />
+    
+    <ImageView android:id="@+id/imgTicket"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_tickets_available_slider"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/imgEvt"
+        android:layout_marginRight="@dimen/img_action_margin_r_rv_item_upcoming_event"
+        android:background="@drawable/bg_slctr_img_action_rv_item_upcoming_evt" />
+    
+    <ImageView android:id="@+id/imgSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_unsaved_event_slider"
+        android:layout_alignRight="@id/imgTicket"
+        android:background="@drawable/bg_slctr_img_action_rv_item_upcoming_evt"
+        android:layout_centerVertical="true" />
+    
+    <ImageView android:id="@+id/imgShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_share_slider"
+        android:layout_alignRight="@id/imgTicket"
+        android:layout_alignBottom="@id/imgEvt"
+        android:background="@drawable/bg_slctr_img_action_rv_item_upcoming_evt" />
+    
+    <TextView android:id="@+id/txtEvtTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/imgEvt"
+        android:layout_alignTop="@id/imgEvt"
+        android:layout_toLeftOf="@id/imgTicket"
+        android:layout_marginLeft="@dimen/txt_evt_title_margin_l_rv_item_upcoming_event"
+        android:layout_marginRight="@dimen/txt_evt_title_margin_r_rv_item_upcoming_event"
+        android:textSize="@dimen/txt_evt_title_txt_size_rv_item_upcoming_event"
+        android:textColor="@android:color/black"
+        android:lines="2"
+		android:ellipsize="end" />
+    
+    <TextView android:id="@+id/txtEvtTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/txtEvtTitle"
+        android:layout_centerVertical="true"
+        android:layout_alignRight="@id/txtEvtTitle"
+        android:textSize="@dimen/txt_detail_txt_size_rv_item_upcoming_event"
+        android:singleLine="true"
+		android:ellipsize="end"
+		android:drawableLeft="@drawable/time"
+		android:gravity="center_vertical" />
+    
+    <TextView android:id="@+id/txtEvtLoc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/txtEvtTitle"
+        android:layout_alignBottom="@id/imgEvt"
+        android:layout_alignRight="@id/txtEvtTitle"
+        android:textSize="@dimen/txt_detail_txt_size_rv_item_upcoming_event"
+        android:singleLine="true"
+		android:ellipsize="end"
+		android:drawableLeft="@drawable/location"
+		android:gravity="center_vertical" />
+    
+    <View android:id="@+id/vHorLine"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/v_hor_line_ht_rv_item_upcoming_event"
+        android:background="@color/gray_shade_d"
+        android:layout_below="@id/imgEvt"
+        android:layout_marginLeft="@dimen/v_hor_line_margin_l_r_rv_item_upcoming_event"
+        android:layout_marginRight="@dimen/v_hor_line_margin_l_r_rv_item_upcoming_event" />
+
+</RelativeLayout>

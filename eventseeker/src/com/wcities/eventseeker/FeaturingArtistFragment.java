@@ -43,10 +43,10 @@ public class FeaturingArtistFragment extends Fragment {
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		//Log.d(TAG, "onCreateView()");
 		Bundle args = getArguments();
 		final Artist artist = (Artist) args.getSerializable(BundleKeys.ARTIST);
 		
+		//Log.d(TAG, "onCreateView() - artist = " + artist.getName());
 		final LinearLayout l = (LinearLayout) inflater.inflate(R.layout.featuring_artist, container, false);
 		
 		final RelativeLayoutCenterScale featuringArtistRelativeLayout = (RelativeLayoutCenterScale) l.findViewById(R.id.rltLytRoot);

@@ -1,8 +1,13 @@
 package com.wcities.eventseeker;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import android.animation.ObjectAnimator;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -36,8 +41,11 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.Enums.SettingsItem;
 import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.interfaces.ActivityDestroyedListener;
+import com.wcities.eventseeker.interfaces.EventListenerTab;
 import com.wcities.eventseeker.interfaces.OnLocaleChangedListener;
+import com.wcities.eventseeker.interfaces.VenueListenerTab;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GPlusUtil;
@@ -47,7 +55,8 @@ import com.wcities.eventseeker.util.GPlusUtil;
  * by calling setSupportActionBar(toolbar) & also there is common code to both mobile & tablet which can be kept in BaseActivity
  */
 public abstract class BaseActivityTab extends BaseActivity implements IGoogleAnalyticsTracker, ActivityDestroyedListener, 
-		DrawerListFragmentTabListener, OnLocaleChangedListener, OnSettingsItemClickedListener, OnQueryTextListener {
+		DrawerListFragmentTabListener, OnLocaleChangedListener, OnSettingsItemClickedListener, OnQueryTextListener, 
+		EventListenerTab, VenueListenerTab {
 	
 	private static final String TAG = BaseActivityTab.class.getSimpleName(); 
 	
@@ -122,6 +131,21 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 	protected void onDestroy() {
 		super.onDestroy();
 		((EventSeekr)getApplication()).onActivityDestroyed();
+	}
+	
+	/**
+	 * To disable search action item 
+	 * 1) override onCreateOptionsMenu() from child activity 
+	 * 2) return true.  (returning false will not call onOptionsItemSelected() of extending activity. e.g.
+	 * in case of LoginActivityTab & SignUpActivityTab, we have overridden onOptionsItemSelected() which
+	 * won't get called up if we return false from their onCreateOptionsMenu().
+	 * 3) Don't call super.onCreateOptionsMenu().
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.activity_base_tab, menu);
+		setSearchView(menu);
+		return super.onCreateOptionsMenu(menu);
 	}
 	
 	@Override
@@ -328,7 +352,7 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
         getWindow().setAttributes(params);
     }
 	
-	protected void setSearchView(Menu menu) {
+	private void setSearchView(Menu menu) {
 		searchItem = menu.findItem(R.id.action_search);
 		searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 		searchView.setQueryHint(getResources().getString(R.string.menu_search));
@@ -399,6 +423,10 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 	 */
 	protected int getDrawerItemPos() {
 		return AppConstants.INVALID_INDEX;
+	}
+	
+	protected void allowContentBehindToolbar() {
+		findViewById(R.id.content_frame).setPadding(0, 0, 0, 0);
 	}
 	
 	protected void setDrawerLockMode(boolean lock) {
@@ -511,7 +539,8 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		//searchView.setQueryHint(getResources().getString(R.string.menu_search));
 	}
 	
-	protected void onEventSelected(Event event, ImageView imageView, TextView textView) {
+	@Override
+	public void onEventSelected(Event event, ImageView imageView, TextView textView) {
 		Intent intent = new Intent(getApplication(), EventDetailsActivityTab.class);
 		intent.putExtra(BundleKeys.EVENT, event);
 		intent.putExtra(BundleKeys.TRANSITION_NAME_SHARED_IMAGE, ViewCompat.getTransitionName(imageView));
@@ -527,6 +556,64 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 				Pair.create((View)imageView, ViewCompat.getTransitionName(imageView)),
 				Pair.create((View)textView, ViewCompat.getTransitionName(textView)));
         ActivityCompat.startActivity(this, intent, options.toBundle());
+	}
+	
+	@Override
+	public void onVenueSelected(Venue venue, ImageView imageView, TextView textView) {
+		Intent intent = new Intent(getApplication(), VenueDetailsActivityTab.class);
+		intent.putExtra(BundleKeys.VENUE, venue);
+		Pair<View, String> pairImg = null, pairTxt = null;
+		
+		if (imageView != null) {
+			intent.putExtra(BundleKeys.TRANSITION_NAME_SHARED_IMAGE, ViewCompat.getTransitionName(imageView));
+			pairImg = Pair.create((View)imageView, ViewCompat.getTransitionName(imageView));
+		}
+		if (textView != null) {
+			intent.putExtra(BundleKeys.TRANSITION_NAME_SHARED_TEXT, ViewCompat.getTransitionName(textView));
+			pairTxt = Pair.create((View)textView, ViewCompat.getTransitionName(textView));
+		}
+		
+		/**
+		 * ActivityOptionsCompat is used since it's helper for accessing features in ActivityOptions 
+		 * introduced in API level 16 in a backwards compatible fashion.
+		 */
+		ActivityOptionsCompat options = null;
+		if (pairImg != null && pairTxt != null) {
+			options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, pairImg, pairTxt);
+			
+		} else if (pairImg != null) {
+			options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, pairImg);
+			
+		} else if (pairTxt != null) {
+			options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, pairTxt);
+		} 
+		
+		if (options != null) {
+			ActivityCompat.startActivity(this, intent, options.toBundle());
+			
+		} else {
+			startActivity(intent);
+		}
+	}
+	
+	protected void onMapClicked(Bundle args) {
+		String uri;
+		try {
+			uri = "geo:"+ args.getDouble(BundleKeys.LAT) + "," + args.getDouble(BundleKeys.LON) + "?q=" 
+					+ URLEncoder.encode(args.getString(BundleKeys.VENUE_NAME), AppConstants.CHARSET_NAME);
+			startActivity(new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri)));
+
+		} catch (UnsupportedEncodingException e) {
+			// venue name could not be encoded, hence instead search on lat-lon.
+			e.printStackTrace();
+			uri = "geo:"+ args.getDouble(BundleKeys.LAT) + "," + args.getDouble(BundleKeys.LON) + "?q=" 
+					+ args.getDouble(BundleKeys.LAT) + "," + args.getDouble(BundleKeys.LON);
+			startActivity(new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri)));
+			
+		} catch (ActivityNotFoundException e) {
+			// if user has uninstalled the google maps app
+			e.printStackTrace();
+		}
 	}
 	
 	protected boolean isDrawerOpen() {

@@ -12,7 +12,7 @@ import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.interfaces.EventListenerTab;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class DiscoverActivityTab extends BaseActivityTab implements EventListenerTab, DiscoverSettingChangedListenerTab {
+public class DiscoverActivityTab extends BaseActivityTab implements DiscoverSettingChangedListenerTab {
 	
 	private static final String TAG = DiscoverActivityTab.class.getSimpleName();
 	
@@ -42,7 +42,6 @@ public class DiscoverActivityTab extends BaseActivityTab implements EventListene
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_discover_tab, menu);
-		setSearchView(menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 	
@@ -77,11 +76,6 @@ public class DiscoverActivityTab extends BaseActivityTab implements EventListene
 	@Override
 	protected int getDrawerItemPos() {
 		return INDEX_NAV_ITEM_DISCOVER;
-	}
-
-	@Override
-	public void onEventSelected(Event event, ImageView imageView, TextView textView) {
-		super.onEventSelected(event, imageView, textView);
 	}
 
 	@Override

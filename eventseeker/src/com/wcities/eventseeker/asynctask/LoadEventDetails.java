@@ -50,7 +50,7 @@ public class LoadEventDetails extends AsyncTask<Void, Void, Void> {
 		
 		try {
 			JSONObject jsonObject = eventApi.getEvents();
-			//Log.d(TAG, "AT issue res = " + jsonObject.toString());
+			//Log.d(TAG, "res = " + jsonObject.toString());
 			EventApiJSONParser jsonParser = new EventApiJSONParser();
 			jsonParser.fillEventDetails(event, jsonObject);
 			

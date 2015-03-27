@@ -28,4 +28,6 @@ public class ScreenNames {
 	public static final String POPULAR_MUSIC_ARTISTS = "Popular Artists Screen - Music";
 	public static final String POPULAR_SPORTS_ARTISTS = "Popular Artists Screen - Sports";
 	public static final String POPULAR_ARTISTS_CATEGORIES_SCREEN = "Popular Artists Screen - ";
+	public static final String VENUE_DETAILS = "Venue Detail Screen";
+	public static final String NAVIGATION_SELECTION = "Navigation Selection Screen";
 }

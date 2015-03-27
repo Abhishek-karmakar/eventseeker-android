@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
@@ -25,8 +26,8 @@ public class NavigationFragment extends FragmentLoadableFromBackStack implements
 	private static final String TAG = NavigationFragment.class.getSimpleName();
 	
 	// navicon
-	private static final String NAVICON_VERSION = "1.4";
-	private static final String NAVICON_PKG = "jp.co.denso.navicon.view";
+	protected static final String NAVICON_VERSION = "1.4";
+	protected static final String NAVICON_PKG = "jp.co.denso.navicon.view";
 	
 	private Venue venue;
 
@@ -62,7 +63,7 @@ public class NavigationFragment extends FragmentLoadableFromBackStack implements
 	
 	@Override
 	public String getScreenName() {
-		return "Navigation Selection Screen";
+		return ScreenNames.NAVIGATION_SELECTION;
 	}
 
 	@Override

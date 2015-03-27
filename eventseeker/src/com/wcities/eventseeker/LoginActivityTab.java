@@ -2,6 +2,7 @@ package com.wcities.eventseeker;
 
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
@@ -32,6 +33,11 @@ public class LoginActivityTab extends BaseActivityTab implements RegistrationLis
 	protected void onStart() {
 		super.onStart();
 		setDrawerLockMode(true);
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		return true;
 	}
 	
 	@Override

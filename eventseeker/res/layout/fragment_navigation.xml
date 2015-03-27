@@ -12,8 +12,9 @@
         android:layout_height="wrap_content"
         android:text="@string/select_navigation_app"
         android:textStyle="bold"
-        android:gravity="center" />
-        <!-- android:layout_marginTop="@dimen/txt_title_margin_t_navigation" -->
+        android:textSize="@dimen/txt_txt_size_navigation"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/txt_title_margin_t_navigation" />
     
     <ImageView android:id="@+id/imgGMaps"
         android:layout_width="wrap_content"
@@ -26,6 +27,7 @@
         android:layout_height="wrap_content" 
         android:textStyle="bold"
         android:text="@string/google_maps"
+        android:textSize="@dimen/txt_txt_size_navigation"
         android:layout_marginTop="@dimen/txt_margin_t_navigation" />
     
     <ImageView android:id="@+id/imgNaviBridge"
@@ -39,6 +41,7 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:text="@string/navi_bridge"
+        android:textSize="@dimen/txt_txt_size_navigation"
         android:layout_marginTop="@dimen/txt_margin_t_navigation" />
     
     <ImageView android:id="@+id/imgScout"
@@ -52,6 +55,7 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:text="@string/scout_navigation"
+        android:textSize="@dimen/txt_txt_size_navigation"
         android:layout_marginTop="@dimen/txt_margin_t_navigation" />
 
 </LinearLayout>

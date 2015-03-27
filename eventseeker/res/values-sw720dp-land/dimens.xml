@@ -79,5 +79,14 @@
     <!-- fragment_event_details_tab.xml -->
     <!-- img_evt_ht_event_details_tab = floating_window_w * 3/4 -->
     <dimen name="img_evt_ht_event_details_tab">413dp</dimen>
+    
+    <!-- activity_base_tab_floating.xml -->
+    <!-- fab_margin_t_base_tab_floating = img_evt_ht_event_details_tab - fab standard height(56dp)/2 -->
+    <dimen name="fab_margin_t_base_tab_floating">385dp</dimen>
+    
+    <!-- fragment_navigation.xml -->
+    <dimen name="txt_title_margin_t_navigation">0dp</dimen>
+    <dimen name="img_margin_t_navigation">60dp</dimen>
+    <dimen name="txt_margin_t_navigation">15dp</dimen>
 
 </resources>

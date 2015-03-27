@@ -843,7 +843,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 					if (event.getSchedule() != null) {
 						Schedule schedule = event.getSchedule();
 						Date date = schedule.getDates().get(0);
-						holder.txtEvtTime.setText(ConversionUtil.getDateTime(date.getStartDate(), date.isStartTimeAvailable()));
+						holder.txtEvtTime.setText(ConversionUtil.getDateTime(date.getStartDate(), date.isStartTimeAvailable(), true, false, false));
 						
 						String venueName = (schedule.getVenue() != null) ? schedule.getVenue().getName() : "";
 						holder.txtEvtLocation.setText(venueName);

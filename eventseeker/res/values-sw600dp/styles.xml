@@ -43,4 +43,12 @@
     	<item name="android:minWidth">@dimen/min_nav_btn_w_toolbar_floating_window_double_line</item>
     </style>
     
+    <style name="ThemeOverlay.EventSeeker.Dark.ActionBar.TranslucentWindow">
+    	<item name="titleTextAppearance">@style/TextAppearance.Widget.EventSeeker.TranslucentWindow.Toolbar.Title</item>
+    </style>
+    
+    <style name="TextAppearance.Widget.EventSeeker.TranslucentWindow.Toolbar.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textStyle">bold</item>
+    </style>
+    
 </resources>

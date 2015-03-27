@@ -346,9 +346,6 @@
     <dimen name="txt_service_desc_margin_t_fragment_device_library">20dp</dimen>
     <dimen name="btn_retrieve_artists_margin_t_fragment_device_library">@dimen/txt_service_desc_margin_t_fragment_device_library</dimen>
 
-    <!-- include_friends_tab.xml -->
-    <dimen name="txt_friends_txt_size_include_friends">20sp</dimen>
-
     <!-- friends_activity_item_tab -->
     <dimen name="lnr_layout_btns_ht_friends_activity_item">40dp</dimen>
 
@@ -430,4 +427,12 @@
     <!-- fragment_event_details_tab.xml -->
     <!-- img_evt_ht_event_details_tab = floating_window_w * 3/4 -->
     <dimen name="img_evt_ht_event_details_tab">375dp</dimen>
+    
+    <!-- activity_base_tab_floating.xml -->
+    <!-- fab_margin_t_base_tab_floating = img_evt_ht_event_details_tab - fab standard height(56dp)/2 -->
+    <dimen name="fab_margin_t_base_tab_floating">347dp</dimen>
+    
+    <!-- fragment_navigation.xml -->
+    <dimen name="txt_title_margin_t_navigation">-100dp</dimen>
+    
 </resources>

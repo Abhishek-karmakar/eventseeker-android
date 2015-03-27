@@ -20,6 +20,15 @@
 	   	android:layout_marginRight="@dimen/txt_desc_margin_r_rv_item_desc"
 	   	android:layout_marginTop="@dimen/txt_desc_margin_t_rv_item_desc"
 	   	android:ellipsize="end" />
+    
+    <View android:id="@+id/vHorLine"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/v_hor_line_ht_artist_details"
+        android:background="@color/gray_shade_d"
+        android:layout_alignBottom="@+id/imgDown"
+        android:layout_marginRight="@dimen/txt_desc_margin_r_rv_item_desc" 
+        android:layout_marginLeft="@dimen/txt_desc_margin_l_rv_item_desc"
+        android:layout_marginBottom="@dimen/v_hor_margin_b_event_details" />
 	     
     <ImageView android:id="@+id/imgDown"
     	android:layout_width="@dimen/img_down_wt_rv_item_desc"
@@ -27,19 +36,9 @@
     	android:src="@drawable/ic_description_expand"
     	android:layout_below="@id/txtDesc"
     	android:scaleType="centerInside"
-    	android:layout_marginTop="@dimen/img_down_margin_t_rv_item_desc" />
-    	<!-- android:layout_marginLeft="@dimen/img_down_margin_l_rv_item_desc"
-    	android:layout_marginRight="@dimen/img_down_margin_r_rv_item_desc" -->
+    	android:layout_marginTop="@dimen/img_down_margin_t_rv_item_desc"
+    	android:background="@android:color/white" />
       
-    <View android:id="@+id/vHorLine"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/v_hor_line_ht_artist_details"
-        android:background="@color/gray_shade_d"
-        android:layout_alignBottom="@id/imgDown"
-        android:layout_toRightOf="@id/imgDown"
-        android:layout_marginRight="@dimen/txt_desc_margin_r_rv_item_desc" 
-        android:layout_marginBottom="@dimen/v_hor_margin_b_event_details" />
-	      
 </RelativeLayout>
 
 

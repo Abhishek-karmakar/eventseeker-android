@@ -1,12 +1,14 @@
 package com.wcities.eventseeker;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Menu;
+import android.view.View;
 
 import com.wcities.eventseeker.constants.ScreenNames;
+import com.wcities.eventseeker.interfaces.MapListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class EventDetailsActivityTab extends BaseActivityTab {
+public class EventDetailsActivityTab extends BaseActivityTab implements MapListener {
 	
 	private static final String TAG = EventDetailsActivityTab.class.getSimpleName();
 	
@@ -36,16 +38,31 @@ public class EventDetailsActivityTab extends BaseActivityTab {
 	}
 	
 	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		return true;
+	}
+	
+	protected View getViewById(int id) {
+		return findViewById(id);
+	}
+	
+	@Override
 	public String getScreenName() {
 		return ScreenNames.EVENT_DETAILS;
 	}
 
 	@Override
 	protected String getScrnTitle() {
-		EventDetailsFragmentTab eventDetailsFragmentTab = (EventDetailsFragmentTab) getSupportFragmentManager().findFragmentByTag(FragmentUtil.getTag(EventDetailsFragmentTab.class));
+		EventDetailsFragmentTab eventDetailsFragmentTab = (EventDetailsFragmentTab) getSupportFragmentManager()
+				.findFragmentByTag(FragmentUtil.getTag(EventDetailsFragmentTab.class));
 		if (eventDetailsFragmentTab != null) {
 			return eventDetailsFragmentTab.getTitle();
 		}
 		return "";
+	}
+
+	@Override
+	public void onMapClicked(Bundle args) {
+		super.onMapClicked(args);
 	}
 }

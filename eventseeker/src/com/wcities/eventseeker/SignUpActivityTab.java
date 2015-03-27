@@ -7,6 +7,7 @@ import com.wcities.eventseeker.util.FragmentUtil;
 
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 
 public class SignUpActivityTab extends BaseActivityTab implements RegistrationListener {
@@ -32,6 +33,11 @@ public class SignUpActivityTab extends BaseActivityTab implements RegistrationLi
 	protected void onStart() {
 		super.onStart();
 		setDrawerLockMode(true);
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		return true;
 	}
 	
 	@Override

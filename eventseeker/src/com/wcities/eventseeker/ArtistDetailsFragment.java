@@ -149,24 +149,11 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	private int imgEventPadL, imgEventPadR, imgEventPadT, imgEventPadB, fabSaveMarginT;
 	private List<View> hiddenViews;
 	
-	private ShareActionProvider mShareActionProvider;
-	
 	private int fbCallCountForSameArtist = 0;
 	
 	private boolean isArtistSaveClicked;
 	
 	private View vNoContentBG;
-	
-	private OnShareTargetSelectedListener onShareTargetSelectedListener = new OnShareTargetSelectedListener() {
-		
-		@Override
-		public boolean onShareTargetSelected(ShareActionProvider source, Intent intent) {
-			String shareTarget = intent.getComponent().getPackageName();
-			GoogleAnalyticsTracker.getInstance().sendShareEvent(FragmentUtil.getApplication(ArtistDetailsFragment.this), 
-					getScreenName(), shareTarget, Type.Artist, artist.getId());
-			return false;
-		}
-	};
 	
 	private OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
         @Override
@@ -766,7 +753,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		});
 		/**
 		 * set visible to finish this screen even if user presses back button instantly even before animateSharedElements()
-		 * has finished it work; otherwise if recyclerVVenues is invisible, then user has to press back once more in such case
+		 * has finished it work; otherwise if recyclerVArtists is invisible, then user has to press back once more in such case
 		 * on instantly clicking back
 		 */
 		recyclerVArtists.setVisibility(View.VISIBLE);
@@ -1046,7 +1033,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 					if (event.getSchedule() != null) {
 						Schedule schedule = event.getSchedule();
 						Date date = schedule.getDates().get(0);
-						holder.txtEvtTime.setText(ConversionUtil.getDateTime(date.getStartDate(), date.isStartTimeAvailable()));
+						holder.txtEvtTime.setText(ConversionUtil.getDateTime(date.getStartDate(), date.isStartTimeAvailable(), true, false, false));
 						
 						String venueName = (schedule.getVenue() != null) ? schedule.getVenue().getName() : "";
 						holder.txtEvtLocation.setText(venueName);
@@ -1809,13 +1796,6 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			super.onStop();
 		}
 		
-		/**
-		 * set null listener, otherwise even for event/venue details screen when selecting 
-		 * share option it calls this listener's onShareTargetSelected() method.
-		 */
-		if (mShareActionProvider != null) {
-			mShareActionProvider.setOnShareTargetSelectedListener(null);
-		}
 		setMenuVisibility(false);
 		isOnPushedToBackStackCalled = true;
 	}
@@ -1841,9 +1821,6 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			}
 			hiddenViews.clear();
 			
-			if (mShareActionProvider != null) {
-				mShareActionProvider.setOnShareTargetSelectedListener(onShareTargetSelectedListener);
-			}
 			setMenuVisibility(true);
 		}
 	}

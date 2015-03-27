@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white" >
@@ -62,7 +61,6 @@
 			     	android:layout_marginLeft="@dimen/txt_desc_margin_l_event_details_tab"
 			     	android:layout_marginRight="@dimen/txt_desc_margin_r_event_details_tab"
 			     	android:layout_marginTop="@dimen/txt_desc_margin_t_event_details_tab"
-			     	android:layout_below="@id/rltLytTxtEvtTitle"
 			     	android:textSize="@dimen/txt_desc_txt_size_event_details_tab" />
 		        
 		        <RelativeLayout android:id="@+id/lnrLytExpandDesc"
@@ -71,20 +69,21 @@
 		            android:layout_below="@id/txtDesc"
 		            android:layout_marginTop="@dimen/lnr_lyt_expand_desc_margin_t_event_details_tab" >
 	
+		            <View android:id="@+id/vHorLine"
+		                android:layout_width="match_parent"
+		                android:layout_height="@dimen/v_hor_line_ht_event_details_tab"
+		                android:layout_alignBottom="@+id/imgDown"
+		                android:layout_marginBottom="@dimen/v_hor_line_margin_b_event_details_tab"
+		                android:layout_marginRight="@dimen/v_hor_line_margin_r_event_details_tab"
+		                android:layout_marginLeft="@dimen/v_hor_line_margin_l_event_details_tab"
+		                android:background="@color/gray_shade_d" />
+		            
 		            <ImageView android:id="@+id/imgDown"
 		                android:layout_width="@dimen/img_down_w_rv_item_desc_tab"
 		                android:layout_height="@dimen/img_down_ht_rv_item_desc_tab"
 		                android:scaleType="center"
-		                android:src="@drawable/ic_description_expand" />
-	
-		            <View android:id="@+id/vHorLine"
-		                android:layout_width="match_parent"
-		                android:layout_height="@dimen/v_hor_line_ht_event_details_tab"
-		                android:layout_alignBottom="@id/imgDown"
-		                android:layout_marginBottom="@dimen/v_hor_line_margin_b_event_details_tab"
-		                android:layout_marginRight="@dimen/v_hor_line_margin_r_event_details_tab"
-		                android:layout_toRightOf="@id/imgDown"
-		                android:background="@color/gray_shade_d" />
+		                android:src="@drawable/ic_description_expand"
+		                android:background="@android:color/white" />
 		            
 		        </RelativeLayout>
 		        
@@ -94,13 +93,81 @@
 	    			android:layout_height="match_parent"
 		            android:layout_below="@id/lnrLytExpandDesc" />
 		        
+		        <RelativeLayout android:id="@+id/rltLytFeaturing"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:layout_below="@id/lnrLytExpandDesc">
+			    
+			        <TextView android:id="@+id/txtFeaturing"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:layout_centerHorizontal="true"
+			            android:text="@string/featuring"
+			            android:layout_marginTop="@dimen/txt_featuring_margin_t_event_details_tab"
+			            android:textSize="@dimen/txt_evt_details_txt_size_event_details_tab" />
+			        
+			        <android.support.v4.view.ViewPager android:id="@+id/vPagerFeaturing"
+					    android:layout_width="match_parent"
+					    android:layout_height="@dimen/v_pager_featuring_ht_event_details_tab"
+					    android:layout_marginLeft="@dimen/v_pager_featuring_margin_l_event_details_tab"
+					    android:layout_marginRight="@dimen/v_pager_featuring_margin_r_event_details_tab"
+					    android:layout_marginTop="@dimen/v_pager_featuring_margin_t_event_details_tab"
+					    android:layout_below="@id/txtFeaturing" />
+			        
+			        <View android:id="@+id/vHorLine2"
+			            android:layout_width="match_parent"
+			            android:layout_height="@dimen/v_hor_line_ht_event_details_tab"
+			            android:background="@color/gray_shade_d"
+			            android:layout_below="@id/vPagerFeaturing"
+			            android:layout_marginLeft="@dimen/v_hor_line_margin_l_event_details_tab"
+			            android:layout_marginRight="@dimen/v_hor_line_margin_r_event_details_tab"
+			            android:layout_marginTop="@dimen/v_hor_line_margin_t_event_details_tab" />
+		        
+		        </RelativeLayout>
+		        
+		        <RelativeLayout android:id="@+id/rltLytVenue"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:layout_below="@id/rltLytFeaturing">
+			    
+			        <TextView android:id="@+id/txtVenue"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:layout_centerHorizontal="true"
+			            android:layout_marginLeft="@dimen/rlt_lyt_address_margin_l_event_details_tab"
+			            android:layout_marginRight="@dimen/rlt_lyt_address_margin_r_event_details_tab"
+			            android:layout_marginTop="@dimen/txt_venue_margin_t_event_details_tab"
+			            android:textSize="@dimen/txt_evt_details_txt_size_event_details_tab"
+			            android:drawableLeft="@drawable/ic_event_location"
+			            android:drawablePadding="@dimen/txt_venue_drawable_pad_event_details_tab"
+			            android:gravity="center" />
+			        
+			        <include layout="@layout/include_address_map"
+			            android:id="@+id/rltLytAddress"
+			            android:layout_width="match_parent"
+			            android:layout_height="wrap_content"
+			            android:layout_below="@id/txtVenue"
+			            android:layout_marginTop="@dimen/rlt_lyt_address_margin_t_event_details_tab"
+			            android:layout_marginLeft="@dimen/rlt_lyt_address_margin_l_event_details_tab"
+			            android:layout_marginRight="@dimen/rlt_lyt_address_margin_r_event_details_tab" />
+			        
+			        <View android:id="@+id/vHorLine3"
+			            android:layout_width="match_parent"
+			            android:layout_height="@dimen/v_hor_line_ht_event_details_tab"
+			            android:background="@color/gray_shade_d"
+			            android:layout_below="@id/rltLytAddress"
+			            android:layout_marginLeft="@dimen/v_hor_line_margin_l_event_details_tab"
+			            android:layout_marginRight="@dimen/v_hor_line_margin_r_event_details_tab"
+			            android:layout_marginTop="@dimen/v_hor_line_margin_t_event_details_tab" />
+		        
+		        </RelativeLayout>
+		        
+		        <include layout="@layout/include_friends"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:layout_below="@id/rltLytVenue" />
+		        
 		    </RelativeLayout>
-		    
-		    <RelativeLayout android:id="@+id/rltLytDummy"
-		        android:layout_width="match_parent"
-		        android:layout_height="100dp"
-		        android:background="#f00"
-		        android:layout_below="@id/rltLytContent" />
 		   
 		</RelativeLayout>
 		
