@@ -447,7 +447,7 @@ public class EventDetailsFragmentTab extends PublishEventFragmentReatiningChildF
 		if (schedule != null) {
 			if (schedule.getDates().size() > 0) {
 				Date date = schedule.getDates().get(0);
-				return ConversionUtil.getDateTime(date.getStartDate(), date.isStartTimeAvailable());
+				return ConversionUtil.getDateTime(date.getStartDate(), date.isStartTimeAvailable(), true, false, false);
 			}
 		}
 		return "";

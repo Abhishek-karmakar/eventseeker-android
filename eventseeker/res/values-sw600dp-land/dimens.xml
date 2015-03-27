@@ -102,4 +102,8 @@
     <!-- fab_margin_t_base_tab_floating = img_evt_ht_event_details_tab - fab standard height(56dp)/2 -->
     <dimen name="fab_margin_t_base_tab_floating">310dp</dimen>
     
+    <!-- fragment_navigation.xml -->
+    <dimen name="img_margin_t_navigation">40dp</dimen>
+    <dimen name="txt_margin_t_navigation">10dp</dimen>
+    
 </resources>

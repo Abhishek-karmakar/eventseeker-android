@@ -1,24 +1,19 @@
 package com.wcities.eventseeker;
 
-import com.wcities.eventseeker.constants.AppConstants;
-import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.constants.ScreenNames;
-import com.wcities.eventseeker.core.Venue;
-import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
-import com.wcities.eventseeker.util.FragmentUtil;
-
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.View.OnTouchListener;
 import android.widget.Toast;
+
+import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.core.Venue;
+import com.wcities.eventseeker.util.FragmentUtil;
 
 public class NavigationFragmentTab extends Fragment implements OnClickListener {
 	

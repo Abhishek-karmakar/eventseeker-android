@@ -1,25 +1,14 @@
 package com.wcities.eventseeker;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.wcities.eventseeker.constants.AppConstants;
-import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
-import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.interfaces.MapListener;
-import com.wcities.eventseeker.interfaces.VenueListenerTab;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class EventDetailsActivityTab extends BaseActivityTab implements MapListener, VenueListenerTab {
+public class EventDetailsActivityTab extends BaseActivityTab implements MapListener {
 	
 	private static final String TAG = EventDetailsActivityTab.class.getSimpleName();
 	
@@ -48,6 +37,11 @@ public class EventDetailsActivityTab extends BaseActivityTab implements MapListe
 		setDrawerLockMode(true);
 	}
 	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		return true;
+	}
+	
 	protected View getViewById(int id) {
 		return findViewById(id);
 	}
@@ -70,10 +64,5 @@ public class EventDetailsActivityTab extends BaseActivityTab implements MapListe
 	@Override
 	public void onMapClicked(Bundle args) {
 		super.onMapClicked(args);
-	}
-
-	@Override
-	public void onVenueSelected(Venue venue, ImageView imageView, TextView textView) {
-		super.onVenueSelected(venue, imageView, textView);
 	}
 }

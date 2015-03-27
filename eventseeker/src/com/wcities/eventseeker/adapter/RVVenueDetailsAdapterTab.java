@@ -4,11 +4,13 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.os.AsyncTask.Status;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
@@ -25,19 +27,40 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.Session;
+import com.facebook.SessionState;
 import com.wcities.eventseeker.AddressMapFragment;
+import com.wcities.eventseeker.BaseActivityTab;
+import com.wcities.eventseeker.DiscoverActivityTab;
 import com.wcities.eventseeker.NavigationActivityTab;
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.ShareViaDialogFragment;
 import com.wcities.eventseeker.VenueDetailsFragmentTab;
+import com.wcities.eventseeker.WebViewActivityTab;
+import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
+import com.wcities.eventseeker.api.Api;
+import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
+import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
+import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.asynctask.LoadEvents;
+import com.wcities.eventseeker.asynctask.UserTracker;
+import com.wcities.eventseeker.cache.BitmapCache;
+import com.wcities.eventseeker.cache.BitmapCacheable;
+import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.constants.ScreenNames;
+import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.core.Event.Attending;
+import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
-import com.wcities.eventseeker.interfaces.FragmentHavingFragmentInRecyclerView;
+import com.wcities.eventseeker.interfaces.EventListenerTab;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
-import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
+import com.wcities.eventseeker.util.ConversionUtil;
+import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.ViewHolder> implements 
@@ -59,6 +82,12 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 	private LoadEvents loadEvents;
 	private boolean isMoreDataAvailable = true;
 	private int eventsAlreadyRequested;
+	
+	private BitmapCache bitmapCache;
+	
+	private int fbCallCountForSameEvt = 0;
+	private RVVenueDetailsAdapterTab.ViewHolder holderPendingPublish;
+	private Event eventPendingPublish;
 	
 	private static enum ViewType {
 		IMG, DESC, ADDRESS_MAP, UPCOMING_EVENTS_TITLE, PROGRESS, EVENT;
@@ -83,6 +112,10 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 		
 		private TextView txtVenue;
 		private ImageView fabPhone, fabNavigate;
+		
+		private ImageView imgEvt;
+		private TextView txtEvtTitle, txtEvtTime, txtEvtLoc;
+		private ImageView imgTicket, imgSave, imgShare;
 
 		public ViewHolder(View itemView) {
 			super(itemView);
@@ -96,6 +129,14 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 			txtVenue = (TextView) itemView.findViewById(R.id.txtVenue);
 			fabPhone = (ImageView) itemView.findViewById(R.id.fabPhone);
 			fabNavigate = (ImageView) itemView.findViewById(R.id.fabNavigate);
+			
+			imgEvt = (ImageView) itemView.findViewById(R.id.imgEvt);
+			txtEvtTitle = (TextView) itemView.findViewById(R.id.txtEvtTitle);
+            txtEvtTime = (TextView) itemView.findViewById(R.id.txtEvtTime);
+            txtEvtLoc = (TextView) itemView.findViewById(R.id.txtEvtLoc);
+            imgTicket = (ImageView) itemView.findViewById(R.id.imgTicket);
+            imgSave = (ImageView) itemView.findViewById(R.id.imgSave);
+            imgShare = (ImageView) itemView.findViewById(R.id.imgShare);
 		}
 	}
 
@@ -103,6 +144,8 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 		this.venueDetailsFragmentTab = venueDetailsFragmentTab;
 		eventList = venueDetailsFragmentTab.getEventList();
 		venue = venueDetailsFragmentTab.getVenue();
+		
+		bitmapCache = BitmapCache.getInstance();
 	}
 
 	@Override
@@ -167,7 +210,7 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 			break;
 			
 		case EVENT:
-			v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_discover, parent, false);
+			v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_upcoming_event, parent, false);
 			break;
 			
 		default:
@@ -204,8 +247,145 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 					//Log.d(TAG, "onBindViewHolder(), pos = " + position);
 					((LoadItemsInBackgroundListener) venueDetailsFragmentTab).loadItemsInBackground();
 				}
+				
+			} else {
+				/**
+				 * If user clicks on save & changes orientation before call to onPublishPermissionGranted(), 
+				 * then we need to update holderPendingPublish with right holder pointer in new orientation
+				 */
+				if (eventPendingPublish == event) {
+					holderPendingPublish = holder;
+				}
+				
+				holder.txtEvtTitle.setText(event.getName());
+				
+				if (event.getSchedule() != null) {
+					Schedule schedule = event.getSchedule();
+					Date date = schedule.getDates().get(0);
+					holder.txtEvtTime.setText(ConversionUtil.getDateTime(date.getStartDate(), date.isStartTimeAvailable(), 
+							false, true, true));
+					
+					String venueName = (schedule.getVenue() != null) ? schedule.getVenue().getName() : "";
+					holder.txtEvtLoc.setText(venueName);
+				}
+				
+				BitmapCacheable bitmapCacheable = null;
+				/**
+				 * added this try catch as if event will not have valid url and schedule object then
+				 * the below line may cause NullPointerException. So, added the try-catch and added the
+				 * null check for bitmapCacheable on following statements.
+				 */
+				try {
+					bitmapCacheable = event.doesValidImgUrlExist() ? event : event.getSchedule().getVenue();
+					
+				} catch (NullPointerException e) {
+					e.printStackTrace();
+				}
+				
+				if (bitmapCacheable != null) {
+					String key = bitmapCacheable.getKey(ImgResolution.LOW);
+					Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
+					if (bitmap != null) {
+				        holder.imgEvt.setImageBitmap(bitmap);
+				        
+				    } else {
+				    	holder.imgEvt.setImageBitmap(null);
+				    	AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
+				        asyncLoadImg.loadImg(holder.imgEvt, ImgResolution.LOW, recyclerView, position, bitmapCacheable);
+				    }
+				}
+				
+				holder.itemView.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						((EventListenerTab) FragmentUtil.getActivity(venueDetailsFragmentTab)).onEventSelected(event, 
+								holder.imgEvt, holder.txtEvtTitle);
+					}
+				});
+				
+				Resources res = FragmentUtil.getResources(venueDetailsFragmentTab);
+				if (event.getSchedule() == null || event.getSchedule().getBookingInfos().isEmpty()) {
+					holder.imgTicket.setImageDrawable(res.getDrawable(R.drawable.ic_tickets_unavailable_slider));
+					holder.imgTicket.setEnabled(false);
+					
+				} else {
+					holder.imgTicket.setImageDrawable(res.getDrawable(R.drawable.ic_tickets_available_slider));
+					holder.imgTicket.setEnabled(true);
+				}
+				
+				updateImgSaveSrc(holder, event, res);
+				
+				holder.imgTicket.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						EventSeekr eventSeekr = FragmentUtil.getApplication(venueDetailsFragmentTab);
+								
+						Intent intent = new Intent(eventSeekr, WebViewActivityTab.class);
+						intent.putExtra(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
+						venueDetailsFragmentTab.startActivity(intent);
+						
+						GoogleAnalyticsTracker.getInstance().sendEvent(eventSeekr, ((BaseActivityTab) 
+								FragmentUtil.getActivity(venueDetailsFragmentTab)).getScreenName(), 
+								GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON, 
+								GoogleAnalyticsTracker.Type.Event.name(), null, event.getId());
+					}
+				});
+				
+				holder.imgSave.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(venueDetailsFragmentTab).getApplication();
+						if (event.getAttending() == Attending.SAVED) {
+							event.setAttending(Attending.NOT_GOING);
+							new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.event, event.getId(), 
+									event.getAttending().getValue(), UserTrackingType.Add).execute();
+			    			updateImgSaveSrc(holder, event, FragmentUtil.getResources(venueDetailsFragmentTab));
+							
+						} else {
+							venueDetailsFragmentTab.setEvent(event);
+							eventPendingPublish = event;
+							holderPendingPublish = holder;
+							
+							if (eventSeekr.getGPlusUserId() != null) {
+								event.setNewAttending(Attending.SAVED);
+								venueDetailsFragmentTab.handlePublishEvent();
+								
+							} else {
+								fbCallCountForSameEvt = 0;
+								event.setNewAttending(Attending.SAVED);
+								//NOTE: THIS CAN BE TESTED WITH PODUCTION BUILD ONLY
+								FbUtil.handlePublishEvent(venueDetailsFragmentTab, venueDetailsFragmentTab, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
+										AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
+							}
+						}
+					}
+				});
+				
+				holder.imgShare.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						ShareViaDialogFragment shareViaDialogFragment = ShareViaDialogFragment.newInstance(event, 
+								ScreenNames.VENUE_DETAILS);
+						/**
+						 * Passing activity fragment manager, since using this fragment's child fragment manager 
+						 * doesn't retain dialog on orientation change
+						 */
+						shareViaDialogFragment.show(((BaseActivityTab)FragmentUtil.getActivity(venueDetailsFragmentTab))
+								.getSupportFragmentManager(), FragmentUtil.getTag(ShareViaDialogFragment.class));
+					}
+				});
 			}
 		}
+	}
+	
+	private void updateImgSaveSrc(ViewHolder holder, Event event, Resources res) {
+		int drawableId = (event.getAttending() == Attending.SAVED) ? R.drawable.ic_saved_event_slider 
+				: R.drawable.ic_unsaved_event_slider;
+		holder.imgSave.setImageDrawable(res.getDrawable(drawableId));
 	}
 	
 	private void updateAddressMap(ViewHolder holder) {
@@ -377,5 +557,26 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 	@Override
 	public void setLoadDateWiseEvents(AsyncTask<Void, Void, List<Event>> loadDateWiseEvents) {
 		this.loadEvents = (LoadEvents) loadDateWiseEvents;
+	}
+	
+	public void call(Session session, SessionState state, Exception exception) {
+		//Log.i(TAG, "call()");
+		fbCallCountForSameEvt++;
+		/**
+		 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
+		 */
+		if (fbCallCountForSameEvt < AppConstants.MAX_FB_CALL_COUNT_FOR_SAME_EVT_OR_ART) {
+			FbUtil.call(session, state, exception, venueDetailsFragmentTab, venueDetailsFragmentTab, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
+					AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, eventPendingPublish);
+			
+		} else {
+			fbCallCountForSameEvt = 0;
+			venueDetailsFragmentTab.setPendingAnnounce(false);
+		}
+	}
+
+	public void onPublishPermissionGranted() {
+		//Log.d(TAG, "onPublishPermissionGranted()");
+		updateImgSaveSrc(holderPendingPublish, eventPendingPublish, FragmentUtil.getResources(venueDetailsFragmentTab));
 	}
 }

@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -86,6 +87,13 @@ public class ChangeLocationFragmentTab extends Fragment implements OnQueryTextLi
     	searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setQueryHint(getResources().getString(R.string.menu_search));
         searchView.setOnQueryTextListener(this);
+        
+        ImageView v = (ImageView) searchView.findViewById(R.id.search_button);
+		// null check is for safety purpose
+		if (v != null) {
+			v.setImageResource(R.drawable.search);
+		}
+		
         if (query != null && !query.equals("")) {
         	searchView.setQuery(query, false);
         }

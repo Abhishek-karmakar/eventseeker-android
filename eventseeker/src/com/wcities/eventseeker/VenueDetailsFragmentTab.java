@@ -11,9 +11,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -42,7 +46,6 @@ import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
-import com.wcities.eventseeker.util.ViewUtil;
 
 public class VenueDetailsFragmentTab extends PublishEventFragmentReatiningChildFragmentManager implements 
 		OnVenueUpdatedListener, LoadItemsInBackgroundListener, AsyncTaskListener<Void> {
@@ -185,6 +188,29 @@ public class VenueDetailsFragmentTab extends PublishEventFragmentReatiningChildF
 		}
 	}
 	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.fragment_venue_details, menu);
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_share:
+			ShareViaDialogFragment shareViaDialogFragment = ShareViaDialogFragment.newInstance(venue, 
+					((BaseActivityTab)FragmentUtil.getActivity(this)).getScreenName());
+			/**
+			 * Passing activity fragment manager, since using this fragment's child fragment manager 
+			 * doesn't retain dialog on orientation change
+			 */
+			shareViaDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this))
+				.getSupportFragmentManager(), FragmentUtil.getTag(shareViaDialogFragment));
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	
 	public boolean isAllDetailsLoaded() {
 		return allDetailsLoaded;
 	}
@@ -203,6 +229,14 @@ public class VenueDetailsFragmentTab extends PublishEventFragmentReatiningChildF
 
 	public List<Event> getEventList() {
 		return eventList;
+	}
+	
+	public void setEvent(Event event) {
+		this.event = event;
+	}
+	
+	public void handlePublishEvent() {
+		super.handlePublishEvent();
 	}
 
 	public void setVNoContentBgVisibility(int visibility) {

@@ -305,10 +305,6 @@
     <!-- action_bar_custom_view_item.xml -->
     <dimen name="txt_city_name_txt_size_action_bar_custom_view_item">@dimen/action_bar_title_txt_size</dimen>
 
-    <!-- include_friends_tab.xml -->
-    <dimen name="txt_friends_txt_size_include_friends">18sp</dimen>
-    <dimen name="txt_friends_txt_size_include_friends">18sp</dimen>
-
     <!-- friends_activity_item_tab.xml -->
     <dimen name="lnr_layout_btns_ht_friends_activity_item">50dp</dimen>
 
@@ -555,5 +551,25 @@
     <!-- rv_item_desc_tab.xml -->
     <dimen name="txt_desc_txt_size_rv_item_desc_tab">@dimen/txt_desc_txt_size_event_details_tab</dimen>
     <dimen name="img_down_margin_t_rv_item_desc_tab">10dp</dimen>
+    
+    <!-- fragment_navigation.xml -->
+    <dimen name="txt_title_w_navigation">210dp</dimen>
+    <dimen name="txt_txt_size_navigation">18sp</dimen>
+    <dimen name="img_margin_t_navigation">100dp</dimen>
+    <dimen name="txt_margin_t_navigation">15dp</dimen>
+    
+    <!-- rv_item_upcoming_event.xml -->
+    <dimen name="img_evt_w_rv_item_upcoming_event">160dp</dimen>
+    <dimen name="img_evt_ht_rv_item_upcoming_event">120dp</dimen>
+    <dimen name="img_evt_margin_l_rv_item_upcoming_event">@dimen/txt_desc_margin_l_rv_item_desc</dimen>
+    <dimen name="img_evt_margin_t_rv_item_upcoming_event">10dp</dimen>
+    <dimen name="img_evt_margin_b_rv_item_upcoming_event">@dimen/img_evt_margin_t_rv_item_upcoming_event</dimen>
+    <dimen name="img_action_margin_r_rv_item_upcoming_event">30dp</dimen>
+    <dimen name="txt_evt_title_margin_l_rv_item_upcoming_event">10dp</dimen>
+    <dimen name="txt_evt_title_margin_r_rv_item_upcoming_event">4dp</dimen>
+    <dimen name="txt_evt_title_txt_size_rv_item_upcoming_event">16sp</dimen>
+    <dimen name="txt_detail_txt_size_rv_item_upcoming_event">14sp</dimen>
+    <dimen name="v_hor_line_ht_rv_item_upcoming_event">1dp</dimen>
+    <dimen name="v_hor_line_margin_l_r_rv_item_upcoming_event">@dimen/txt_desc_margin_l_rv_item_desc</dimen>
     
 </resources>

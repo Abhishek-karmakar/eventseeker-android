@@ -100,19 +100,31 @@ public class ConversionUtil {
 	/**
 	 * 
 	 * @param date
-	 * @return datetime in format Friday October 10, 2015 10:00pm
+	 * @param parseTime
+	 * @param parseYear TODO
+	 * @param amPmCaps TODO
+	 * @param spaceBeforeAmPm TODO
+	 * @return datetime in format Friday October 10, 2015 10:00pm. It's configurable based on arguments passed.
 	 */
-	public static String getDateTime(Date date, boolean parseTime) {
+	public static String getDateTime(Date date, boolean parseTime, boolean parseYear, boolean amPmCaps, 
+			boolean spaceBeforeAmPm) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		
 		DateFormatSymbols dateFormatSymbols = new DateFormatSymbols();
 		String time = dateFormatSymbols.getWeekdays()[calendar.get(Calendar.DAY_OF_WEEK)] 
 				+ " " + dateFormatSymbols.getMonths()[calendar.get(Calendar.MONTH)] 
-				+ " " + calendar.get(Calendar.DATE)
-				+ ", " + calendar.get(Calendar.YEAR);
+				+ " " + calendar.get(Calendar.DATE);
+				
+		if (parseYear) {
+			time += ", " + calendar.get(Calendar.YEAR);
+		}
 		
 		if (parseTime) {
+			if (!parseYear) {
+				time += ",";
+			}
+			
 			int hr = calendar.get(Calendar.HOUR);
 			if (hr == 0) {
 				hr = 12;
@@ -121,8 +133,15 @@ public class ConversionUtil {
 			int min = calendar.get(Calendar.MINUTE);
 			String strMin = (min < 10) ? "0" + min : min + "";
 			
+			time += " " + hr + ":" + strMin;
+			if (spaceBeforeAmPm) {
+				time += " ";
+			}
 			String am_pm = ((calendar.get(Calendar.AM_PM) == Calendar.AM) ? "am" : "pm");
-			time += " " + hr + ":" + strMin + am_pm;
+			if (amPmCaps) {
+				am_pm = am_pm.toUpperCase();
+			}
+			time += am_pm;
 		}
 		
 		return time;

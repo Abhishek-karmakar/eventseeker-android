@@ -217,7 +217,7 @@ public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWi
 			if (event.getSchedule() != null) {
 				Schedule schedule = event.getSchedule();
 				Date date = schedule.getDates().get(0);
-				holder.txtEvtTime.setText(ConversionUtil.getDateTime(date.getStartDate(), date.isStartTimeAvailable()));
+				holder.txtEvtTime.setText(ConversionUtil.getDateTime(date.getStartDate(), date.isStartTimeAvailable(), true, false, false));
 				
 				String venueName = (schedule.getVenue() != null) ? schedule.getVenue().getName() : "";
 				holder.txtEvtLoc.setText(venueName);
@@ -567,7 +567,7 @@ public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWi
 				 * Passing activity fragment manager, since using this fragment's child fragment manager 
 				 * doesn't retain dialog on orientation change
 				 */
-				shareViaDialogFragment.show(((DiscoverActivityTab)FragmentUtil.getActivity(discoverFragmentTab))
+				shareViaDialogFragment.show(((BaseActivityTab)FragmentUtil.getActivity(discoverFragmentTab))
 						.getSupportFragmentManager(), FragmentUtil.getTag(ShareViaDialogFragment.class));
 			}
 		}, 200);

@@ -1,6 +1,7 @@
 package com.wcities.eventseeker;
 
 import android.os.Bundle;
+import android.view.Menu;
 
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.interfaces.MapListener;
@@ -34,6 +35,11 @@ public class VenueDetailsActivityTab extends BaseActivityTab implements MapListe
 	protected void onStart() {
 		super.onStart();
 		setDrawerLockMode(true);
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		return true;
 	}
 	
 	@Override

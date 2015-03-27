@@ -217,7 +217,7 @@ public class MyEventListAdapter extends BaseAdapter implements DateWiseEventPare
 				if (schedule.getDates().size() > 0) {
 					Date date = schedule.getDates().get(0);
 					txtEvtTime.setVisibility(View.VISIBLE);
-					txtEvtTime.setText(ConversionUtil.getDateTime(date.getStartDate(), date.isStartTimeAvailable()));
+					txtEvtTime.setText(ConversionUtil.getDateTime(date.getStartDate(), date.isStartTimeAvailable(), true, false, false));
 				
 				} else {
 					txtEvtTime.setVisibility(View.GONE);
