@@ -3,7 +3,7 @@
 
     <item android:state_pressed="false"><color android:color="@android:color/transparent" />
     </item>
-    <item android:state_pressed="true"><color android:color="@color/colorPrimaryDarkAlpha" />
+    <item android:state_pressed="true"><color android:color="@color/colorPrimaryAlpha" />
     </item>
 
 </selector>

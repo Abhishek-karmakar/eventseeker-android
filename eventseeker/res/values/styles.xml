@@ -72,6 +72,8 @@
         <item name="android:textSize">@dimen/txt_size_category_popular_artist_fragment_popular_artist_tab</item>
         <item name="android:elevation">@dimen/elevation_widget_eventSeeker_btn_white</item>
         <item name="android:textAllCaps">false</item>
+        <!-- In Nexus 10 with api 15 the button text were getting aligned towards left, So added gravity='center' -->
+        <item name="android:gravity">center</item>
     </style>
     
     <style name="Widget.EventSeekr.ActionButton.Overflow" parent="Widget.AppCompat.ActionButton.Overflow">

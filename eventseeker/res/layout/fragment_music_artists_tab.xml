@@ -17,8 +17,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/bg_transparent_material"
-            android:drawableTop="@drawable/ic_sync_account"
+            style="@style/Widget.EventSeeker.Button.Transparent"
+            android:drawableTop="@drawable/ic_sync_account" 
             android:text="@string/btn_sync_accounts"
             android:textAllCaps="false"
             android:textColor="@color/slctr_clr_primary_on_tabs_txt_clr_off"
@@ -36,7 +36,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/bg_transparent_material"
+            style="@style/Widget.EventSeeker.Button.Transparent"
             android:drawableTop="@drawable/ic_sync_account"
             android:text="@string/btn_popular_artists"
             android:textAllCaps="false"
@@ -55,7 +55,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/bg_transparent_material"
+            style="@style/Widget.EventSeeker.Button.Transparent"
             android:drawableTop="@drawable/ic_sync_account"
             android:text="@string/btn_recommended"
             android:textAllCaps="false"
@@ -74,7 +74,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/bg_transparent_material"
+            style="@style/Widget.EventSeeker.Button.Transparent"
             android:drawableTop="@drawable/ic_sync_account"
             android:text="@string/btn_search"
             android:textAllCaps="false"
@@ -113,7 +113,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" >
 
-                    <ImageView
+                    <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgAlternativeRock"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -121,11 +121,11 @@
 
                     <View
                         android:id="@+id/btnAlternativeRock"
+                        style="@style/Widget.EventSeeker.Button.Transparent"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignBottom="@+id/imgAlternativeRock"
-                        android:layout_alignTop="@+id/imgAlternativeRock"
-                        android:background="@android:color/transparent" />
+                        android:layout_alignTop="@+id/imgAlternativeRock" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -148,7 +148,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" >
 
-                    <ImageView
+                    <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgClassicRock"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -156,11 +156,11 @@
 
                     <Button
                         android:id="@+id/btnClassicRock"
+                        style="@style/Widget.EventSeeker.Button.Transparent"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignBottom="@+id/imgClassicRock"
-                        android:layout_alignTop="@+id/imgClassicRock"
-                        android:background="@android:color/transparent" />
+                        android:layout_alignTop="@+id/imgClassicRock" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -183,7 +183,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" >
 
-                    <ImageView
+                    <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgIndieRock"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -191,11 +191,11 @@
 
                     <Button
                         android:id="@+id/btnIndieRock"
+                        style="@style/Widget.EventSeeker.Button.Transparent"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignBottom="@+id/imgIndieRock"
-                        android:layout_alignTop="@+id/imgIndieRock"
-                        android:background="@android:color/transparent" />
+                        android:layout_alignTop="@+id/imgIndieRock" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -222,7 +222,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" >
 
-                    <ImageView
+                    <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgFolk"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -230,11 +230,11 @@
 
                     <Button
                         android:id="@+id/btnFolk"
+                        style="@style/Widget.EventSeeker.Button.Transparent"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignBottom="@+id/imgFolk"
-                        android:layout_alignTop="@+id/imgFolk"
-                        android:background="@android:color/transparent" />
+                        android:layout_alignTop="@+id/imgFolk" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -257,7 +257,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" >
 
-                    <ImageView
+                    <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgCountry"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -265,11 +265,11 @@
 
                     <Button
                         android:id="@+id/btnCountry"
+                        style="@style/Widget.EventSeeker.Button.Transparent"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignBottom="@+id/imgCountry"
-                        android:layout_alignTop="@+id/imgCountry"
-                        android:background="@android:color/transparent" />
+                        android:layout_alignTop="@+id/imgCountry" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -292,7 +292,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" >
 
-                    <ImageView
+                    <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgElectronic"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -300,11 +300,11 @@
 
                     <Button
                         android:id="@+id/btnElectronic"
+                        style="@style/Widget.EventSeeker.Button.Transparent"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignBottom="@+id/imgElectronic"
-                        android:layout_alignTop="@+id/imgElectronic"
-                        android:background="@android:color/transparent" />
+                        android:layout_alignTop="@+id/imgElectronic" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -325,22 +325,13 @@
                 android:layout_marginLeft="@dimen/lnr_root_padding_fragment_follow_more_artists"
                 android:layout_marginRight="@dimen/lnr_root_padding_fragment_follow_more_artists"
                 android:orientation="horizontal" >
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/lnr_root_padding_fragment_follow_more_artists"
-                android:layout_marginLeft="@dimen/lnr_root_padding_fragment_follow_more_artists"
-                android:layout_marginRight="@dimen/lnr_root_padding_fragment_follow_more_artists"
-                android:orientation="horizontal" >
 
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" >
 
-                    <ImageView
+                    <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgPop"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -348,11 +339,11 @@
 
                     <Button
                         android:id="@+id/btnPop"
+                        style="@style/Widget.EventSeeker.Button.Transparent"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignBottom="@+id/imgPop"
-                        android:layout_alignTop="@+id/imgPop"
-                        android:background="@android:color/transparent" />
+                        android:layout_alignTop="@+id/imgPop" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -375,7 +366,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" >
 
-                    <ImageView
+                    <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgPunk"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -383,11 +374,11 @@
 
                     <Button
                         android:id="@+id/btnPunk"
+                        style="@style/Widget.EventSeeker.Button.Transparent"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignBottom="@+id/imgPunk"
-                        android:layout_alignTop="@+id/imgPunk"
-                        android:background="@android:color/transparent" />
+                        android:layout_alignTop="@+id/imgPunk" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -410,7 +401,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" >
 
-                    <ImageView
+                    <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgHardRockMetal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -418,11 +409,11 @@
 
                     <Button
                         android:id="@+id/btnHardRockMetal"
+                        style="@style/Widget.EventSeeker.Button.Transparent"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignBottom="@+id/imgHardRockMetal"
-                        android:layout_alignTop="@+id/imgHardRockMetal"
-                        android:background="@android:color/transparent" />
+                        android:layout_alignTop="@+id/imgHardRockMetal" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -449,7 +440,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" >
 
-                    <ImageView
+                    <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgWorldMusic"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -457,11 +448,11 @@
 
                     <Button
                         android:id="@+id/btnWorldMusic"
+                        style="@style/Widget.EventSeeker.Button.Transparent"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignBottom="@+id/imgWorldMusic"
-                        android:layout_alignTop="@+id/imgWorldMusic"
-                        android:background="@android:color/transparent" />
+                        android:layout_alignTop="@+id/imgWorldMusic" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -484,7 +475,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" >
 
-                    <ImageView
+                    <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgBluesJazz"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -492,11 +483,11 @@
 
                     <Button
                         android:id="@+id/btnBluesJazz"
+                        style="@style/Widget.EventSeeker.Button.Transparent"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignBottom="@+id/imgBluesJazz"
-                        android:layout_alignTop="@+id/imgBluesJazz"
-                        android:background="@android:color/transparent" />
+                        android:layout_alignTop="@+id/imgBluesJazz" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -519,7 +510,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" >
 
-                    <ImageView
+                    <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgHipHop"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -527,11 +518,11 @@
 
                     <Button
                         android:id="@+id/btnHipHop"
+                        style="@style/Widget.EventSeeker.Button.Transparent"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignBottom="@+id/imgHipHop"
-                        android:layout_alignTop="@+id/imgHipHop"
-                        android:background="@android:color/transparent" />
+                        android:layout_alignTop="@+id/imgHipHop" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -543,15 +534,6 @@
                         android:textSize="@dimen/txt_size_widget_eventSeeker_btn_alpha"
                         android:textStyle="bold" />
                 </RelativeLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/lnr_root_padding_fragment_follow_more_artists"
-                android:layout_marginLeft="@dimen/lnr_root_padding_fragment_follow_more_artists"
-                android:layout_marginRight="@dimen/lnr_root_padding_fragment_follow_more_artists"
-                android:orientation="horizontal" >
             </LinearLayout>
 
             <LinearLayout
@@ -568,7 +550,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" >
 
-                    <ImageView
+                    <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgSoulRAndBFunck"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -576,11 +558,11 @@
 
                     <Button
                         android:id="@+id/btnSoulRAndBFunck"
+                        style="@style/Widget.EventSeeker.Button.Transparent"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignBottom="@+id/imgSoulRAndBFunck"
-                        android:layout_alignTop="@+id/imgSoulRAndBFunck"
-                        android:background="@android:color/transparent" />
+                        android:layout_alignTop="@+id/imgSoulRAndBFunck" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -603,7 +585,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" >
 
-                    <ImageView
+                    <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgClassical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -611,11 +593,11 @@
 
                     <Button
                         android:id="@+id/btnClassical"
+                        style="@style/Widget.EventSeeker.Button.Transparent"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignBottom="@+id/imgClassical"
-                        android:layout_alignTop="@+id/imgClassical"
-                        android:background="@android:color/transparent" />
+                        android:layout_alignTop="@+id/imgClassical" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -633,34 +615,11 @@
                     android:layout_height="match_parent"
                     android:background="@android:color/transparent" />
 
-                <RelativeLayout
+                <View
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:visibility="invisible" >
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_classical" />
-
-                    <Button
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_alignBottom="@+id/imgClassical"
-                        android:layout_alignTop="@+id/imgClassical"
-                        android:background="@android:color/transparent" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:gravity="center"
-                        android:text="@string/btn_classical"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/txt_size_widget_eventSeeker_btn_alpha"
-                        android:textStyle="bold" />
-                </RelativeLayout>
+                    android:visibility="invisible" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

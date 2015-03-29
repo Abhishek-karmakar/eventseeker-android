@@ -104,7 +104,6 @@ public class ArtistListAdapterWithoutIndexerTab extends BaseAdapter implements A
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
-		Log.d(TAG, "getView");
 		final Artist artist = getItem(position);
 		if (artist == null) {
 			if (convertView == null || !convertView.getTag().equals(AppConstants.TAG_PROGRESS_INDICATOR)) {
@@ -116,10 +115,8 @@ public class ArtistListAdapterWithoutIndexerTab extends BaseAdapter implements A
 			convertView.findViewById(R.id.rltLytRoot).setVisibility(View.INVISIBLE);
 			convertView.findViewById(R.id.rltLytRootPrgs).setVisibility(View.VISIBLE);
 			if (artistList.size() == 1) {
-				Log.d(TAG, "artistList.size() == 1");
 				// Instead of this limited height progress bar, we display full screen progress bar from fragment
 				if (mListener instanceof FullScrnProgressListener) {
-					Log.d(TAG, "display full screen progress");
 					((FullScrnProgressListener) mListener).displayFullScrnProgress();
 				}
 			}

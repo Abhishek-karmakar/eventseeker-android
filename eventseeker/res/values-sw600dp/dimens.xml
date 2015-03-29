@@ -111,7 +111,6 @@
     <dimen name="txt_artist_name_txt_size_fragment_search_artists_list_item">15sp</dimen>
     <dimen name="img_item_h_fragment_search_artists_list_item">140dp</dimen>
     <dimen name="txt_artist_name_pad_fragment_search_artists_list_item">3dp</dimen>
-    <dimen name="img_item_h_fragment_search_artists_list_item">140dp</dimen>
     <dimen name="txt_on_tour_margin_t_fragment_search_artists_list_item">23dp</dimen>
     <dimen name="txt_on_tour_margin_r_fragment_search_artists_list_item">-20dp</dimen>
     <dimen name="txt_on_tour_txt_size_fragment_search_artists_list_item">14sp</dimen>
@@ -139,7 +138,6 @@
     <dimen name="img_evt_time_w_include_evt_details">12dp</dimen>
     <dimen name="img_evt_time_ht_include_evt_details">12dp</dimen>
     <dimen name="txt_evt_time_txt_size_include_evt_details">15sp</dimen>
-    <dimen name="img_evt_location_ht_include_evt_details">@dimen/img_evt_location_w_include_evt_details</dimen>
 
     <!-- include_fragment_event_details_footer.xml -->
     <dimen name="divider_lnr_layout_btns_w_include_fragment_event_details_footer">2dp</dimen>
@@ -147,9 +145,6 @@
     <dimen name="lnr_layout_btns_txt_size_include_fragment_event_details_footer">15sp</dimen>
     <dimen name="lnr_layout_btns_margin_b_include_fragment_event_details_footer">10dp</dimen>
     <dimen name="chk_box_drawable_pad_include_fragment_event_details_footer">6dp</dimen>
-
-    <!-- fragment_custom_tabs.xml -->
-    <dimen name="tab_bar_margin_fragment_custom_tabs">15dp</dimen>
 
     <!-- fragment_event_info.xml -->
     <dimen name="lnr_layout_top_margin_l_r_fragment_event_info">0dp</dimen>
@@ -548,7 +543,7 @@
     <dimen name="txt_size_category_popular_artist_fragment_popular_artist_tab">20sp</dimen>
 
     <!-- fragment_follow_more_artists_tab.xml -->
-    <dimen name="v_dummy_wt_ht_fragment_follow_more_artists">5dp</dimen>
+    <dimen name="v_dummy_wt_ht_fragment_follow_more_artists">5dp</dimen> 
     <dimen name="lnr_root_padding_fragment_follow_more_artists">5dp</dimen>
     <!-- <dimen name="v_dummy_margin_t_b_fragment_follow_more_artists">10dp</dimen> -->
 
