@@ -36,6 +36,12 @@ public class SportsArtistsFragmentTab extends FragmentLoadableFromBackStack impl
 		btnPopularArtists.setSelected(true);
 		return view;
 	}
+
+	@Override
+	public void onResume() {
+		super.onResume(AppConstants.INVALID_INDEX, 
+				FragmentUtil.getResources(this).getString(R.string.title_popular_sports));
+	}
 	
 	@Override
 	public String getScreenName() {
