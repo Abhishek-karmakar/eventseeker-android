@@ -40,14 +40,14 @@ import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Venue;
-import com.wcities.eventseeker.custom.fragment.PublishEventFragmentReatiningChildFragmentManager;
+import com.wcities.eventseeker.custom.fragment.PublishEventFragmentRetainingChildFragmentManager;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 
-public class VenueDetailsFragmentTab extends PublishEventFragmentReatiningChildFragmentManager implements 
+public class VenueDetailsFragmentTab extends PublishEventFragmentRetainingChildFragmentManager implements 
 		OnVenueUpdatedListener, LoadItemsInBackgroundListener, AsyncTaskListener<Void> {
 
 	private static final int UNSCROLLED = -1;
@@ -100,10 +100,9 @@ public class VenueDetailsFragmentTab extends PublishEventFragmentReatiningChildF
 		
 		actionBarElevation = FragmentUtil.getResources(this).getDimensionPixelSize(R.dimen.action_bar_elevation);
 		
-		Bundle args = getArguments();
 		if (venue == null) {
 			//Log.d(TAG, "event = null");
-			venue = (Venue) args.getSerializable(BundleKeys.VENUE);
+			venue = (Venue) getArguments().getSerializable(BundleKeys.VENUE);
 			
 			loadVenueDetails = new LoadVenueDetails(Api.OAUTH_TOKEN, venue, this);
 			AsyncTaskUtil.executeAsyncTask(loadVenueDetails, true);

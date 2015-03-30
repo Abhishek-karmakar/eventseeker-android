@@ -591,4 +591,22 @@
     <dimen name="v_hor_line_ht_rv_item_upcoming_event">1dp</dimen>
     <dimen name="v_hor_line_margin_l_r_rv_item_upcoming_event">@dimen/txt_desc_margin_l_rv_item_desc</dimen>
     
+    <!-- fragment_artist_details_tab.xml -->
+    <dimen name="img_artist_ht_artist_details_tab">@dimen/img_evt_ht_event_details_tab</dimen>
+    <dimen name="rlt_lyt_txt_artist_title_pad_l_artist_details_tab">@dimen/rlt_lyt_txt_evt_title_pad_l_event_details_tab</dimen>
+    <dimen name="rlt_lyt_txt_artist_title_pad_b_artist_details_tab">@dimen/rlt_lyt_txt_venue_title_pad_b_venue_details_tab</dimen>
+    <dimen name="rlt_lyt_txt_artist_title_pad_t_artist_details_tab">@dimen/rlt_lyt_txt_artist_title_pad_b_artist_details_tab</dimen>
+    <!-- After scrolling to top, txtArtistTitle text must be in center vertical position exactly aligned with 
+    toolbar title (for good looking transition effect), hence following calculation is used to derive txt_artist_title_ht_artist_details_tab. 
+    Here, rlt_lyt_txt_artist_title_pad_b_artist_details_tab is fixed to 8dp, so to keep txtArtistTitle textview
+    in center vertical position, we leave aside 8dp more (for top). Hence ht comes out as 64 - 2*8 = 48dp 
+    txt_artist_title_ht_artist_details_tab = action_bar_ht - 2*rlt_lyt_txt_artist_title_pad_b_artist_details_tab -->
+    <dimen name="txt_artist_title_ht_artist_details_tab">48dp</dimen>
+    <dimen name="txt_artist_title_txt_size_artist_details_tab">@dimen/abc_text_size_title_material_toolbar</dimen>
+    <dimen name="img_artist_ht_artist_details">@dimen/img_artist_ht_artist_details_tab</dimen>
+    
+    <!-- rv_item_videos_artist_details.xml -->
+    <dimen name="v_pager_videos_margin_l_rv_item_videos_artist_details">@dimen/txt_desc_margin_l_rv_item_desc</dimen>
+    <dimen name="v_pager_videos_margin_r_rv_item_videos_artist_details">@dimen/v_pager_videos_margin_l_rv_item_videos_artist_details</dimen>
+    
 </resources>

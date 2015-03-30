@@ -13,6 +13,7 @@ import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.text.Html;
@@ -258,6 +259,7 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 				}
 				
 				holder.txtEvtTitle.setText(event.getName());
+				ViewCompat.setTransitionName(holder.txtEvtTitle, "txtEvtTitleVenueDetails" + position);
 				
 				if (event.getSchedule() != null) {
 					Schedule schedule = event.getSchedule();
@@ -294,11 +296,13 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 				        asyncLoadImg.loadImg(holder.imgEvt, ImgResolution.LOW, recyclerView, position, bitmapCacheable);
 				    }
 				}
+				ViewCompat.setTransitionName(holder.imgEvt, "imgEvtVenueDetails" + position);
 				
 				holder.itemView.setOnClickListener(new OnClickListener() {
 					
 					@Override
 					public void onClick(View v) {
+						
 						((EventListenerTab) FragmentUtil.getActivity(venueDetailsFragmentTab)).onEventSelected(event, 
 								holder.imgEvt, holder.txtEvtTitle);
 					}
@@ -390,7 +394,7 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 	
 	private void updateAddressMap(ViewHolder holder) {
 		holder.txtVenue.setText(venue.getFormatedAddress(false));
-		AddressMapFragment fragment = (AddressMapFragment) venueDetailsFragmentTab.getChildFragmentManager()
+		AddressMapFragment fragment = (AddressMapFragment) venueDetailsFragmentTab.childFragmentManager()
 				.findFragmentByTag(FragmentUtil.getTag(AddressMapFragment.class));
 		//Log.d(TAG, "AddressMapFragment = " + fragment);
         if (fragment == null) {
@@ -425,7 +429,7 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 	}
 	
 	private void addAddressMapFragment() {
-    	FragmentManager fragmentManager = venueDetailsFragmentTab.getChildFragmentManager();
+    	FragmentManager fragmentManager = venueDetailsFragmentTab.childFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         
         AddressMapFragment fragment = new AddressMapFragment();
@@ -487,7 +491,7 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 					 * update scrolled distance after collapse, because sometimes it can happen that view becamse scrollable only
 					 * due to expanded description after which if user collapses it, then based on recyclerview
 					 * height it automatically resettles itself such that recyclerview again becomes unscrollable.
-					 * Accordingly we need to reset scrolled amount, artist img & title
+					 * Accordingly we need to reset scrolled amount, venue img & title
 					 */
 					venueDetailsFragmentTab.getHandler().post(new Runnable() {
 						

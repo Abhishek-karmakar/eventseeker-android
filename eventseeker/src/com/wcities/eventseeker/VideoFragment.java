@@ -1,6 +1,8 @@
 package com.wcities.eventseeker;
 
+import com.wcities.eventseeker.adapter.VideoPagerAdapter;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
+import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
@@ -15,6 +17,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +57,15 @@ public class VideoFragment extends Fragment {
     	RelativeLayoutCenterScale relativeLayoutCenterScale = (RelativeLayoutCenterScale) v.findViewById(R.id.rltLytRoot);
 		float scale = getArguments().getFloat(BundleKeys.SCALE);
 		relativeLayoutCenterScale.setScaleBoth(scale);
+		if (scale == VideoPagerAdapter.BIG_SCALE) {
+			/**
+			 * We get BIG_SCALE only after orientation change for current centered position.
+			 * Reset it to small scale again otherwise changing orientation for some other centered position
+			 * will result into multiple fragments having scale value = BIG_SCALE which we don't want
+			 * as there can be only single centered page.
+			 */
+			getArguments().putFloat(BundleKeys.SCALE, RelativeLayoutCenterScale.SMALL_SCALE);
+		}
     	
     	ImageView imgVideo = (ImageView) v.findViewById(R.id.imgVideo);
     	
@@ -77,10 +89,16 @@ public class VideoFragment extends Fragment {
     			/**
 				 * 15-12-2014: added Google Analytics tracker code.
 				 */
-				GoogleAnalyticsTracker.getInstance().sendEvent(FragmentUtil.getApplication(VideoFragment.this), 
-					FragmentUtil.getScreenName(VideoFragment.this), GoogleAnalyticsTracker.ARTIST_VIDEO_CLICK,
-					GoogleAnalyticsTracker.Type.Artist.name(), video.getVideoUrl(), 
-					getArguments().getInt(BundleKeys.ARTIST_ID));
+    			String screenName; 
+    			if (FragmentUtil.getActivity(VideoFragment.this) instanceof IGoogleAnalyticsTracker) {
+    				screenName = ((IGoogleAnalyticsTracker) FragmentUtil.getActivity(VideoFragment.this)).getScreenName();
+    				
+    			} else {
+    				screenName = FragmentUtil.getScreenName(VideoFragment.this);
+    			}
+    			GoogleAnalyticsTracker.getInstance().sendEvent(FragmentUtil.getApplication(VideoFragment.this), 
+						screenName, GoogleAnalyticsTracker.ARTIST_VIDEO_CLICK, GoogleAnalyticsTracker.Type.Artist.name(), 
+						video.getVideoUrl(), getArguments().getInt(BundleKeys.ARTIST_ID));
     		}
     	});
     	

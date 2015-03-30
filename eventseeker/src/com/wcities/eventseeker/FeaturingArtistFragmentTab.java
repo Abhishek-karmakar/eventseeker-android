@@ -6,6 +6,7 @@ import java.util.List;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.custom.view.RelativeLayoutCenterScale;
 import com.wcities.eventseeker.interfaces.ArtistListener;
+import com.wcities.eventseeker.interfaces.ArtistListenerTab;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.ViewUtil;
@@ -53,7 +55,7 @@ public class FeaturingArtistFragmentTab extends Fragment {
 		float scale = getArguments().getFloat(BundleKeys.SCALE);
 		featuringArtistRelativeLayout.setScaleBoth(scale);
 		
-		ImageView imgArtist = (ImageView) l.findViewById(R.id.imgArtist);
+		final ImageView imgArtist = (ImageView) l.findViewById(R.id.imgArtist);
 		String key = artist.getKey(ImgResolution.LOW);
 		BitmapCache bitmapCache = BitmapCache.getInstance();
 		Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
@@ -66,31 +68,21 @@ public class FeaturingArtistFragmentTab extends Fragment {
 	        AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
 	        asyncLoadImg.loadImg(imgArtist, ImgResolution.LOW, artist);
 	    }
+		ViewCompat.setTransitionName(imgArtist, "imgArtistFeaturingArtist" + artist.getId());
 		
-		TextView txtArtistName = (TextView) l.findViewById(R.id.txtArtistName);
+		final TextView txtArtistName = (TextView) l.findViewById(R.id.txtArtistName);
 		if (txtArtistName != null) {
 			txtArtistName.setText(artist.getName());
 		}
+		ViewCompat.setTransitionName(txtArtistName, "txtArtistNameFeaturingArtist" + artist.getId());
 		
 		featuringArtistRelativeLayout.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				/*int[] loc = ViewUtil.getLocationOnScreen(featuringArtistRelativeLayout, FragmentUtil.getResources(FeaturingArtistFragmentTab.this));
-				int scaledW = (int) (featuringArtistRelativeLayout.getWidth() * featuringArtistRelativeLayout.getScale());
-				int scaledHt = (int) (featuringArtistRelativeLayout.getHeight() * featuringArtistRelativeLayout.getScale());
-				List<SharedElement> sharedElements = new ArrayList<SharedElement>();
-				
-				SharedElementPosition sharedElementPosition = new SharedElementPosition(loc[0] + ((featuringArtistRelativeLayout.getWidth() - scaledW) / 2), 
-						loc[1] + ((featuringArtistRelativeLayout.getHeight() - scaledHt) / 2), scaledW, scaledHt);
-				SharedElement sharedElement = new SharedElement(sharedElementPosition, featuringArtistRelativeLayout);
-				sharedElements.add(sharedElement);
-				((CustomSharedElementTransitionSource)getParentFragment()).addViewsToBeHidden(featuringArtistRelativeLayout);
-				
 				//Log.d(TAG, "AT issue event = " + event);
-				((ArtistListener)FragmentUtil.getActivity(FeaturingArtistFragment.this)).onArtistSelected(artist, sharedElements);
-				
-				((CustomSharedElementTransitionSource)getParentFragment()).onPushedToBackStack();*/
+				((ArtistListenerTab)FragmentUtil.getActivity(FeaturingArtistFragmentTab.this))
+					.onArtistSelected(artist, imgArtist, txtArtistName);
 			}
 		});
 		

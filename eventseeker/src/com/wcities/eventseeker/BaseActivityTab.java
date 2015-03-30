@@ -40,9 +40,11 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.Enums.SettingsItem;
+import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.interfaces.ActivityDestroyedListener;
+import com.wcities.eventseeker.interfaces.ArtistListenerTab;
 import com.wcities.eventseeker.interfaces.EventListenerTab;
 import com.wcities.eventseeker.interfaces.OnLocaleChangedListener;
 import com.wcities.eventseeker.interfaces.VenueListenerTab;
@@ -56,7 +58,7 @@ import com.wcities.eventseeker.util.GPlusUtil;
  */
 public abstract class BaseActivityTab extends BaseActivity implements IGoogleAnalyticsTracker, ActivityDestroyedListener, 
 		DrawerListFragmentTabListener, OnLocaleChangedListener, OnSettingsItemClickedListener, OnQueryTextListener, 
-		EventListenerTab, VenueListenerTab {
+		EventListenerTab, VenueListenerTab, ArtistListenerTab {
 	
 	private static final String TAG = BaseActivityTab.class.getSimpleName(); 
 	
@@ -544,9 +546,7 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		Intent intent = new Intent(getApplication(), EventDetailsActivityTab.class);
 		intent.putExtra(BundleKeys.EVENT, event);
 		intent.putExtra(BundleKeys.TRANSITION_NAME_SHARED_IMAGE, ViewCompat.getTransitionName(imageView));
-		if (textView != null) {
-			intent.putExtra(BundleKeys.TRANSITION_NAME_SHARED_TEXT, ViewCompat.getTransitionName(textView));
-		}
+		intent.putExtra(BundleKeys.TRANSITION_NAME_SHARED_TEXT, ViewCompat.getTransitionName(textView));
 		
 		/**
 		 * ActivityOptionsCompat is used since it's helper for accessing features in ActivityOptions 
@@ -594,6 +594,23 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		} else {
 			startActivity(intent);
 		}
+	}
+	
+	@Override
+	public void onArtistSelected(Artist artist, ImageView imageView, TextView textView) {
+		Intent intent = new Intent(getApplication(), ArtistDetailsActivityTab.class);
+		intent.putExtra(BundleKeys.ARTIST, artist);
+		intent.putExtra(BundleKeys.TRANSITION_NAME_SHARED_IMAGE, ViewCompat.getTransitionName(imageView));
+		intent.putExtra(BundleKeys.TRANSITION_NAME_SHARED_TEXT, ViewCompat.getTransitionName(textView));
+		
+		/**
+		 * ActivityOptionsCompat is used since it's helper for accessing features in ActivityOptions 
+		 * introduced in API level 16 in a backwards compatible fashion.
+		 */
+		ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, 
+				Pair.create((View)imageView, ViewCompat.getTransitionName(imageView)),
+				Pair.create((View)textView, ViewCompat.getTransitionName(textView)));
+        ActivityCompat.startActivity(this, intent, options.toBundle());
 	}
 	
 	protected void onMapClicked(Bundle args) {

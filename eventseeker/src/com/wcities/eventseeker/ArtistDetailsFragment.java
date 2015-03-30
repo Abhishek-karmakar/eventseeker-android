@@ -75,6 +75,7 @@ import com.wcities.eventseeker.cache.BitmapCacheable;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
@@ -571,7 +572,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	
 	@Override
 	public String getScreenName() {
-		return "Artist Detail Screen";
+		return ScreenNames.ARTIST_DETAILS;
 	}
 
 	@Override

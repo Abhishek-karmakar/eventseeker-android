@@ -765,6 +765,11 @@
     <dimen name="rlt_root_padding_friends_activity_item_tab">12dp</dimen>
     <!-- artist_fix_size_news_list_item.xml -->
     <dimen name="root_lnr_lyt_w_artist_fix_size_news_list_item">300dp</dimen>
+    
+    <!-- rv_item_videos_artist_details.xml -->
+    <dimen name="v_pager_videos_margin_l_rv_item_videos_artist_details">0dp</dimen>
+    <dimen name="v_pager_videos_margin_r_rv_item_videos_artist_details">@dimen/v_pager_videos_margin_l_rv_item_videos_artist_details</dimen>
+    
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <!-- activity_bosch_main.xml -->
     <dimen name="b_root_navigation_drawer_w_main">210dp</dimen>

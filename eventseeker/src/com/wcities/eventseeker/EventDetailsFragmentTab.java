@@ -52,7 +52,7 @@ import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.core.Event.Attending;
-import com.wcities.eventseeker.custom.fragment.PublishEventFragmentReatiningChildFragmentManager;
+import com.wcities.eventseeker.custom.fragment.PublishEventFragmentRetainingChildFragmentManager;
 import com.wcities.eventseeker.custom.view.ObservableScrollView;
 import com.wcities.eventseeker.custom.view.ObservableScrollView.ObservableScrollViewListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
@@ -63,7 +63,7 @@ import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 
-public class EventDetailsFragmentTab extends PublishEventFragmentReatiningChildFragmentManager implements 
+public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildFragmentManager implements 
 		ObservableScrollViewListener, OnEventUpdatedListner, OnClickListener {
 
 	private static final String TAG = EventDetailsFragmentTab.class.getSimpleName();
