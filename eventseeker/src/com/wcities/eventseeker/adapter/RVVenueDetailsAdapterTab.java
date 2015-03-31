@@ -1,5 +1,7 @@
 package com.wcities.eventseeker.adapter;
 
+import java.lang.ref.WeakReference;
+import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
@@ -11,6 +13,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
@@ -37,6 +40,7 @@ import com.wcities.eventseeker.NavigationActivityTab;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.ShareViaDialogFragment;
 import com.wcities.eventseeker.VenueDetailsFragmentTab;
+import com.wcities.eventseeker.VideoFragment;
 import com.wcities.eventseeker.WebViewActivityTab;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.api.Api;
@@ -78,7 +82,7 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 	private VenueDetailsFragmentTab venueDetailsFragmentTab;
 	private List<Event> eventList;
 	private Venue venue;
-	private boolean isVenueDescExpanded;
+	private boolean isVenueDescExpanded, fragmentDetached;
 	
 	private LoadEvents loadEvents;
 	private boolean isMoreDataAvailable = true;
@@ -302,7 +306,6 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 					
 					@Override
 					public void onClick(View v) {
-						
 						((EventListenerTab) FragmentUtil.getActivity(venueDetailsFragmentTab)).onEventSelected(event, 
 								holder.imgEvt, holder.txtEvtTitle);
 					}
@@ -400,6 +403,9 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
         if (fragment == null) {
         	//Log.d(TAG, "call addAddressMapFragment()");
         	addAddressMapFragment();
+        	
+        } else if (fragmentDetached) {
+        	attachFragments();
         }
         
         holder.fabPhone.setOnClickListener(new OnClickListener() {
@@ -497,7 +503,7 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 						
 						@Override
 						public void run() {
-							venueDetailsFragmentTab.onScrolled(0, true, false);
+							venueDetailsFragmentTab.onScrolled(0, true);
 						}
 					});
 					
@@ -582,5 +588,28 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 	public void onPublishPermissionGranted() {
 		//Log.d(TAG, "onPublishPermissionGranted()");
 		updateImgSaveSrc(holderPendingPublish, eventPendingPublish, FragmentUtil.getResources(venueDetailsFragmentTab));
+	}
+	
+	public void detachFragments() {
+		AddressMapFragment fragment = (AddressMapFragment) venueDetailsFragmentTab.childFragmentManager()
+				.findFragmentByTag(FragmentUtil.getTag(AddressMapFragment.class));
+		if (fragment != null) {
+			FragmentManager fragmentManager = venueDetailsFragmentTab.childFragmentManager();
+			fragmentManager.beginTransaction().detach(fragment).commit();
+			fragmentManager.executePendingTransactions();
+		}
+		fragmentDetached = true;
+	}
+	
+	public void attachFragments() {
+		//Log.d(TAG, "attachFragments()");
+		AddressMapFragment fragment = (AddressMapFragment) venueDetailsFragmentTab.childFragmentManager()
+				.findFragmentByTag(FragmentUtil.getTag(AddressMapFragment.class));
+		
+		if (fragment != null) {
+			FragmentManager fragmentManager = venueDetailsFragmentTab.childFragmentManager();
+			fragmentManager.beginTransaction().attach(fragment).commit();
+		}
+		fragmentDetached = false;
 	}
 }

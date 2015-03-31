@@ -43,6 +43,12 @@
 	    	
 	    </RelativeLayout>
 	    
+	    <View android:id="@+id/vDummy"
+	        android:layout_width="match_parent"
+	        android:layout_height="0dp"
+	        android:layout_below="@id/rltLytTxtVenueTitle"
+	        android:background="@android:color/white" />
+	    
 	</RelativeLayout>
 	
     <com.wcities.eventseeker.custom.view.RecyclerViewInterceptingVerticalScroll

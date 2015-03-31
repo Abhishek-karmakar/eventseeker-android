@@ -24,11 +24,10 @@
         
         <RelativeLayout android:id="@+id/rltLytTxtArtistTitle"
 	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
+	        android:layout_height="@dimen/rlt_lyt_txt_artist_title_ht_artist_details_tab"
 	        android:layout_alignBottom="@id/imgArtist"
 	        android:paddingLeft="@dimen/rlt_lyt_txt_artist_title_pad_l_artist_details_tab"
 	    	android:paddingBottom="@dimen/rlt_lyt_txt_artist_title_pad_b_artist_details_tab"
-	    	android:paddingTop="@dimen/rlt_lyt_txt_artist_title_pad_t_artist_details_tab"
 	    	android:background="@drawable/bg_lnr_gradient_top_transparent_btm_black" >
 	    
 	    	<TextView android:id="@+id/txtArtistTitle"
@@ -39,9 +38,16 @@
 	    	    android:gravity="center_vertical"
 	    	    android:singleLine="true"
 	    	    android:ellipsize="marquee"
-	    	    android:textStyle="bold" />
+	    	    android:textStyle="bold"
+	    	    android:layout_alignParentBottom="true" />
 	    	
 	    </RelativeLayout>
+	    
+        <View android:id="@+id/vDummy"
+	        android:layout_width="match_parent"
+	        android:layout_height="0dp"
+	        android:layout_below="@id/rltLytTxtArtistTitle"
+	        android:background="@android:color/white" />
         
     </RelativeLayout>
     

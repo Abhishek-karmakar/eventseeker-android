@@ -152,8 +152,8 @@ public abstract class ArtistEventsParentFragment extends PublishEventListFragmen
 
 	@Override
 	public void loadItemsInBackground() {
-		loadArtistEvents = new LoadArtistEvents(Api.OAUTH_TOKEN, dateWiseEventList, adapter, artist.getId(),
-				((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).getWcitiesId());
+		/*loadArtistEvents = new LoadArtistEvents(Api.OAUTH_TOKEN, dateWiseEventList, adapter, artist.getId(),
+				((EventSeekr)FragmentUtil.getActivity(this).getApplicationContext()).getWcitiesId());*/
 
 		adapter.setLoadDateWiseEvents(loadArtistEvents);
 		AsyncTaskUtil.executeAsyncTask(loadArtistEvents, true);
