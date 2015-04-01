@@ -1857,8 +1857,8 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			new UserTracker(Api.OAUTH_TOKEN, eventseekr, UserTrackingItemType.artist, artist.getId()).execute();
 			fabSave.setSelected(artist.getAttending() == Artist.Attending.Tracked);
 			
-			Resources res = FragmentUtil.getResources(this);
-			/*GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(this, 
+			/*Resources res = FragmentUtil.getResources(this);
+			GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(this, 
 					res.getString(R.string.follow_artist), res.getString(R.string.artist_saved));
 			generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), 
 					FRAGMENT_TAG_ARTIST_SAVED_DIALOG);*/			

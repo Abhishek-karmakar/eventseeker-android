@@ -2,6 +2,7 @@ package com.wcities.eventseeker;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -38,6 +39,10 @@ public class ArtistDetailsActivityTab extends BaseActivityTab {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		return true;
+	}
+	
+	protected View getViewById(int id) {
+		return findViewById(id);
 	}
 	
 	@Override

@@ -50,12 +50,11 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
-import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.core.Event.Attending;
+import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.custom.fragment.PublishEventFragmentRetainingChildFragmentManager;
 import com.wcities.eventseeker.custom.view.ObservableScrollView;
 import com.wcities.eventseeker.custom.view.ObservableScrollView.ObservableScrollViewListener;
-import com.wcities.eventseeker.interfaces.VenueListener;
 import com.wcities.eventseeker.interfaces.VenueListenerTab;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.ConversionUtil;
@@ -315,6 +314,7 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 	}
 	
 	private void makeDescVisible() {
+		txtEvtDesc.setVisibility(View.VISIBLE);
 		txtEvtDesc.setText(Html.fromHtml(event.getDescription()));
 		imgDown.setVisibility(View.VISIBLE);
 		imgDown.setOnClickListener(this);
@@ -468,6 +468,7 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 		updateProgressBarVisibility();
 		
 		if (allDetailsLoaded) {
+			updateDescVisibility();
 			updateEventImg();
 			updateEventSchedule();
 			updateFeaturingVisibility();

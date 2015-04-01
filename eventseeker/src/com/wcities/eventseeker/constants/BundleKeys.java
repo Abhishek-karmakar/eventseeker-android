@@ -98,6 +98,8 @@ public class BundleKeys {
 	public static final String SHARED_ELEMENTS = "sharedElements";
 	
 	public static final String IS_ON_CREATE_CALLED_FIRST_TIME = "isOnCreateCalledFirstTime";
+	public static final String IS_SEARCHVIEW_ICONIFIED = "isSearchViewIconified";
+	public static final String SEARCH_QUERY = "searchQuery";
 	
 	public static final String SERIALIZABLE = "serializable";
 	

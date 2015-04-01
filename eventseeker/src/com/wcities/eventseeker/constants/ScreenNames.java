@@ -31,4 +31,5 @@ public class ScreenNames {
 	public static final String VENUE_DETAILS = "Venue Detail Screen";
 	public static final String NAVIGATION_SELECTION = "Navigation Selection Screen";
 	public static final String ARTIST_DETAILS = "Artist Detail Screen";
+	public static final String SEARCH = "Search Screen";
 }

@@ -568,6 +568,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	}
 	
 	private void makeDescVisible() {
+		txtEvtDesc.setVisibility(View.VISIBLE);
 		txtEvtDesc.setText(Html.fromHtml(event.getDescription()));
 		imgDown.setVisibility(View.VISIBLE);
 		imgDown.setOnClickListener(this);
@@ -697,8 +698,8 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	
 	private void updateDetailsVisibility() {
 		if (allDetailsLoaded) {
-			
 			rltLytPrgsBar.setVisibility(View.GONE);
+			updateDescVisibility();
 			updateEventImg();
 			updateFeaturingVisibility();
 			updateEventSchedule();

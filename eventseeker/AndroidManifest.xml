@@ -78,6 +78,7 @@
         <activity android:name="com.wcities.eventseeker.RecommendedArtistsActivityTab" />
         <activity android:name="com.wcities.eventseeker.PopularArtistsActivityTab" />
         <activity android:name="com.wcities.eventseeker.NavigationActivityTab" />
+        <activity android:name="com.wcities.eventseeker.SearchActivityTab" />
         
         <activity android:name="com.wcities.eventseeker.SpotifyActivity" 
             android:theme="@style/Theme.Transparent"

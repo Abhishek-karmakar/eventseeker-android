@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 
 import android.animation.ObjectAnimator;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -28,6 +29,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -76,9 +78,9 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 	private ActionBarDrawerToggle mDrawerToggle;
 	private TextView txtToolbarTitle, txtToolbarSubTitle;
 	
-	protected String currentContentFragmentTag;
+	protected String currentContentFragmentTag, searchQuery = "";
 	
-	protected boolean isOnCreateCalledFirstTime = true;
+	protected boolean isOnCreateCalledFirstTime = true, isSearchViewIconified = true;
 	
 	private MenuItem searchItem;
 	private SearchView searchView;
@@ -95,6 +97,8 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		if (savedInstanceState != null) {
 			isOnCreateCalledFirstTime = savedInstanceState.getBoolean(BundleKeys.IS_ON_CREATE_CALLED_FIRST_TIME);
 			currentContentFragmentTag = savedInstanceState.getString(BundleKeys.CURRENT_CONTENT_FRAGMENT_TAG);
+			isSearchViewIconified = savedInstanceState.getBoolean(BundleKeys.IS_SEARCHVIEW_ICONIFIED);
+			searchQuery = savedInstanceState.getString(BundleKeys.SEARCH_QUERY);
 		}
 		
 		//Log.d(TAG, "isOnCreateCalledFirstTime = " + isOnCreateCalledFirstTime);
@@ -198,6 +202,8 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		super.onSaveInstanceState(outState);
 		outState.putBoolean(BundleKeys.IS_ON_CREATE_CALLED_FIRST_TIME, isOnCreateCalledFirstTime);
 		outState.putString(BundleKeys.CURRENT_CONTENT_FRAGMENT_TAG, currentContentFragmentTag);
+		outState.putBoolean(BundleKeys.IS_SEARCHVIEW_ICONIFIED, searchView.isIconified());
+		outState.putString(BundleKeys.SEARCH_QUERY, searchQuery);
 	}
 	
 	@Override
@@ -355,6 +361,7 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
     }
 	
 	private void setSearchView(Menu menu) {
+		Log.d(TAG, "setSearchView()");
 		searchItem = menu.findItem(R.id.action_search);
 		searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 		searchView.setQueryHint(getResources().getString(R.string.menu_search));
@@ -366,14 +373,12 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 			v.setImageResource(R.drawable.search);
 		}
 		
-		// TODO: Uncomment following after creating SearchActivityTab class
-		/*if (this instanceof SearchActivityTab) {
-			*//**
-			 * on some devices onCreateOptionsMenu is called after onFragmentResumed, 
-			 * so we need to expand actionview here after initializing the searchItem
-			 *//*
-			MenuItemCompat.expandActionView(searchItem);
-		}*/
+		if (!isSearchViewIconified) {
+			Log.d(TAG, "!isSearchViewIconified");
+			// retain searchQuery & softkeypad's open status on orientation change
+			searchView.setQuery(searchQuery, false);
+			searchView.setIconified(false);
+		}
 	}
 	
 	protected void setCommonUI() {
@@ -679,14 +684,37 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 	}
 	
 	@Override
-	public boolean onQueryTextChange(String arg0) {
-		// TODO Auto-generated method stub
+	public boolean onQueryTextChange(String query) {
+		searchQuery = query;
 		return false;
 	}
 
 	@Override
-	public boolean onQueryTextSubmit(String arg0) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean onQueryTextSubmit(String query) {
+		if (query == null || query.length() == 0) {
+			return true;
+		}
+		
+		if (!(this instanceof SearchActivityTab)) {
+			/**
+			 * Clear searchView content & collapse searchView so that soft keypad doesn't pop-up on coming
+			 * back to this screen from search & on user trying to search again on this screen he doesn't see 
+			 * the old searched query again
+			 */
+			searchQuery = "";
+			searchView.setQuery(searchQuery, false);
+			
+			Intent intent = new Intent(getApplicationContext(), SearchActivityTab.class);
+			intent.putExtra(BundleKeys.QUERY, query);
+			startActivity(intent);
+			
+		} else {
+			Log.d(TAG, "else");
+			((SearchActivityTab) this).onQueryTextUpdated(query);
+		}
+		searchView.setIconified(true);
+		Log.d(TAG, "return");
+		
+		return true;
 	}
 }

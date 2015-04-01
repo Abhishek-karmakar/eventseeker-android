@@ -3,6 +3,7 @@ package com.wcities.eventseeker;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -14,15 +15,16 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
@@ -30,38 +32,52 @@ import android.widget.TextView;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
+import com.melnykov.fab.FloatingActionButton;
+import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
+import com.wcities.eventseeker.ShareOnFBDialogFragment.OnFacebookShareClickedListener;
 import com.wcities.eventseeker.adapter.RVArtistDetailsAdapterTab;
 import com.wcities.eventseeker.api.Api;
+import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
+import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.asynctask.LoadArtistDetails;
+import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.asynctask.LoadArtistDetails.OnArtistUpdatedListener;
 import com.wcities.eventseeker.asynctask.LoadArtistEvents;
 import com.wcities.eventseeker.asynctask.LoadArtistEvents.LoadArtistEventsListener;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.custom.fragment.PublishEventFragmentRetainingChildFragmentManager;
+import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
+import com.wcities.eventseeker.interfaces.FragmentHavingFragmentInRecyclerView;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
+import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
+import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 
 public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChildFragmentManager implements 
-		OnArtistUpdatedListener, AsyncTaskListener<Void>, LoadItemsInBackgroundListener, LoadArtistEventsListener {
+		OnArtistUpdatedListener, AsyncTaskListener<Void>, LoadItemsInBackgroundListener, LoadArtistEventsListener, 
+		OnClickListener, DialogBtnClickListener, ArtistTrackingListener, OnFacebookShareClickedListener {
 	
 	private static final String TAG = ArtistDetailsFragmentTab.class.getSimpleName();
 	
 	private static final int UNSCROLLED = -1;
+	private static final String FRAGMENT_TAG_REMOVE_ARTIST_DIALOG = "RemoveArtist";
+	private static final String FRAGMENT_TAG_ARTIST_SAVED_DIALOG = "ArtistSaved";
 	
 	private String title = "", subTitle = "";
 	
 	private int totalScrolledDy = UNSCROLLED; // indicates layout not yet created
 	private int actionBarElevation, limitScrollAt;
-	private int txtArtistTitleDiffX, txtArtistTitleDiffCenterY;
+	private int txtArtistTitleDiffX, txtArtistTitleDiffCenterY, fabMarginT;
 	private boolean isScrollLimitReached;
 	
 	private Artist artist;
@@ -74,6 +90,7 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 	private View vNoContentBG;
 	private RecyclerView recyclerVArtists;
 	private View vDummy;
+	private FloatingActionButton fabSave;
 	
 	private RVArtistDetailsAdapterTab rvArtistDetailsAdapterTab;
 	
@@ -81,6 +98,9 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 	
 	private LoadArtistDetails loadArtistDetails;
 	private LoadArtistEvents loadArtistEvents;
+	
+	private boolean isArtistSaveClicked;
+	private int fbCallCountForSameArtist = 0;
 	
 	private OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
         @Override
@@ -161,6 +181,12 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 		
 		recyclerVArtists.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
 		
+		ArtistDetailsActivityTab artistDetailsActivityTab = (ArtistDetailsActivityTab) FragmentUtil.getActivity(this);
+		fabSave = (FloatingActionButton) artistDetailsActivityTab.getViewById(R.id.fab1);
+		fabSave.setOnClickListener(this);
+		fabSave.setImageDrawable(FragmentUtil.getResources(this).getDrawable(R.drawable.slctr_following_artist_details));
+		
+		updateFabVisibility();
 		return rootView;
 	}
 	
@@ -241,6 +267,11 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 				- res.getDimensionPixelSize(R.dimen.rlt_lyt_txt_artist_title_pad_b_artist_details_tab) 
 				- (res.getDimensionPixelSize(R.dimen.txt_artist_title_ht_artist_details_tab) / 2);
 		txtArtistTitleDiffCenterY = txtArtistTitleDestinationCenterY - txtArtistTitleSourceCenterY;
+		
+		fabMarginT = res.getDimensionPixelSize(R.dimen.fab_margin_t_base_tab_floating);
+		if (!VersionUtil.isApiLevelAbove20()) {
+			fabMarginT -= res.getDimensionPixelSize(R.dimen.fab_shadow_size);
+		}
 	}
 	
 	public void onScrolled(int dy, boolean forceUpdate) {
@@ -334,6 +365,12 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 			txtArtistTitle.setTranslationX(scrollY * txtArtistTitleDiffX / (float) limitScrollAt);
 			txtArtistTitle.setTranslationY(scrollY * txtArtistTitleDiffCenterY / (float) limitScrollAt);
 		}
+		
+		int topMargin = (scrollY <= limitScrollAt) ? scrollY : limitScrollAt;
+		FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) fabSave.getLayoutParams();
+		//Log.d(TAG, "lp.topMargin = " + lp.topMargin);
+		lp.topMargin = fabMarginT - topMargin;
+		fabSave.setLayoutParams(lp);
 	}
 
 	public String getTitle() {
@@ -388,15 +425,22 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 		    }
 		}
 	}
+	
+	private void updateFabVisibility() {
+		if (allDetailsLoaded) {
+			fabSave.setSelected(artist.getAttending() == Artist.Attending.Tracked);
+			fabSave.setVisibility(View.VISIBLE);
+			
+		} else {
+			fabSave.setVisibility(View.INVISIBLE);
+		}
+	}
 
 	@Override
 	public void onArtistUpdated() {
 		allDetailsLoaded = true;
 		updateArtistImg();
-		/*fabSave.setSelected(artist.getAttending() == Artist.Attending.Tracked);
-		fabSave.setVisibility(View.VISIBLE);
-		
-		fabArtistNews.setVisibility(View.VISIBLE);*/
+		updateFabVisibility();
 		
 		if (artist.isOntour() && eventList != null && eventList.isEmpty()) {
 			eventList.add(null);
@@ -406,12 +450,30 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 
 	@Override
 	public void onPublishPermissionGranted() {
-		rvArtistDetailsAdapterTab.onPublishPermissionGranted();
+		if (!isArtistSaveClicked) {
+			rvArtistDetailsAdapterTab.onPublishPermissionGranted();
+		}
 	}
 
 	@Override
 	public void call(Session session, SessionState state, Exception exception) {
-		rvArtistDetailsAdapterTab.call(session, state, exception);
+		if (isArtistSaveClicked) {
+			fbCallCountForSameArtist++;
+			/**
+			 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
+			 */
+			if (fbCallCountForSameArtist < AppConstants.MAX_FB_CALL_COUNT_FOR_SAME_EVT_OR_ART) {
+				FbUtil.call(session, state, exception, this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
+						AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, artist);
+				
+			} else {
+				fbCallCountForSameArtist = 0;
+				setPendingAnnounce(false);
+			}
+			
+		} else {
+			rvArtistDetailsAdapterTab.call(session, state, exception);
+		}
 	}
 
 	@Override
@@ -443,5 +505,77 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 				onScrolled(0, true);
 			}
 		});
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		
+		case R.id.fab1:
+			if (artist.getAttending() == Artist.Attending.Tracked) {
+				Resources res = FragmentUtil.getResources(this);
+				GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
+						this,						
+						res.getString(R.string.remove_artist),  
+						res.getString(R.string.are_you_sure_you_want_to_remove_this_artist),  
+						res.getString(R.string.btn_cancel),  
+						res.getString(R.string.btn_Ok), false);
+				generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), 
+						FRAGMENT_TAG_REMOVE_ARTIST_DIALOG);
+				
+			} else {
+				/**
+				 * This is the case, where user wants to Track an Artist. So, no dialog here.
+				 */
+				onArtistTracking(FragmentUtil.getApplication(this), artist);
+			}
+			break;
+			
+		default:
+			break;
+		}
+	}
+
+	@Override
+	public void doPositiveClick(String dialogTag) {
+		//This is for Remove Artist Dialog
+		if (dialogTag.equals(FRAGMENT_TAG_REMOVE_ARTIST_DIALOG)) {
+			onArtistTracking(FragmentUtil.getApplication(this), artist);
+			fabSave.setSelected(artist.getAttending() == Artist.Attending.Tracked);
+		}
+	}
+
+	@Override
+	public void doNegativeClick(String dialogTag) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onArtistTracking(Context context, Artist artist) {
+		EventSeekr eventseekr = FragmentUtil.getApplication(this);
+		if (artist.getAttending() == Artist.Attending.NotTracked) {
+			artist.updateAttending(Artist.Attending.Tracked, eventseekr);
+			new UserTracker(Api.OAUTH_TOKEN, eventseekr, UserTrackingItemType.artist, artist.getId()).execute();
+			fabSave.setSelected(artist.getAttending() == Artist.Attending.Tracked);
+			
+			ShareOnFBDialogFragment shareOnFbDialog = ShareOnFBDialogFragment.newInstance(this);
+			shareOnFbDialog.show(((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), 
+						FRAGMENT_TAG_ARTIST_SAVED_DIALOG);
+			
+		} else {			
+			artist.updateAttending(Artist.Attending.NotTracked, eventseekr);
+			new UserTracker(Api.OAUTH_TOKEN, eventseekr, UserTrackingItemType.artist, artist.getId(), 
+					Artist.Attending.NotTracked.getValue(), UserTrackingType.Edit).execute();
+		}
+	}
+
+	@Override
+	public void onFacebookShareClicked(String dialogTag) {
+		if (dialogTag.equals(FRAGMENT_TAG_ARTIST_SAVED_DIALOG)) {
+			isArtistSaveClicked = true;
+			fbCallCountForSameArtist = 0;
+			FbUtil.handlePublishArtist(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
+					AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, artist);
+		}
 	}
 }

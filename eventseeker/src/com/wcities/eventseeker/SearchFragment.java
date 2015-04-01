@@ -23,6 +23,7 @@ import com.wcities.eventseeker.adapter.SwipeTabsAdapter;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -242,7 +243,7 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 
 	@Override
 	public String getScreenName() {
-		return "Search Screen";
+		return ScreenNames.SEARCH;
 	}
 
 	@Override

@@ -3,13 +3,9 @@ package com.wcities.eventseeker;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.wcities.eventseeker.DiscoverSettingDialogFragment.DiscoverSettingChangedListenerTab;
 import com.wcities.eventseeker.constants.ScreenNames;
-import com.wcities.eventseeker.core.Event;
-import com.wcities.eventseeker.interfaces.EventListenerTab;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class DiscoverActivityTab extends BaseActivityTab implements DiscoverSettingChangedListenerTab {
