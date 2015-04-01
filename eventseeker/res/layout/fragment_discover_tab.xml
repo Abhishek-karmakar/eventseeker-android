@@ -74,7 +74,7 @@
 		    android:gravity="center"
 		    android:layout_centerHorizontal="true"
 		    android:layout_marginTop="@dimen/txt_no_events_margin_t_discover_tab"
-		    android:drawableTop="@drawable/ic_save_on"
+		    android:drawableTop="@drawable/ic_discover_settings"
 		    android:drawablePadding="@dimen/txt_no_events_drawable_pad_discover_tab" />
 		
 		<Button android:id="@+id/btnChgLoc"
