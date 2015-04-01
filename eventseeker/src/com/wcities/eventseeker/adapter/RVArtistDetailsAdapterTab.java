@@ -1,7 +1,5 @@
 package com.wcities.eventseeker.adapter;
 
-import java.lang.ref.WeakReference;
-import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
@@ -9,14 +7,11 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.text.Html;
@@ -29,26 +24,22 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
-import com.wcities.eventseeker.AddressMapFragment;
+import com.wcities.eventseeker.ArtistDetailsFragmentTab;
 import com.wcities.eventseeker.BaseActivityTab;
-import com.wcities.eventseeker.DiscoverActivityTab;
-import com.wcities.eventseeker.NavigationActivityTab;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.ShareViaDialogFragment;
-import com.wcities.eventseeker.VenueDetailsFragmentTab;
-import com.wcities.eventseeker.VideoFragment;
 import com.wcities.eventseeker.WebViewActivityTab;
+import com.wcities.eventseeker.adapter.RVVenueDetailsAdapterTab.ViewHolder;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
-import com.wcities.eventseeker.asynctask.LoadEvents;
+import com.wcities.eventseeker.asynctask.LoadArtistEvents;
 import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable;
@@ -56,11 +47,11 @@ import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
+import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
-import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
-import com.wcities.eventseeker.core.Venue;
+import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.EventListenerTab;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
@@ -68,34 +59,37 @@ import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.ViewHolder> implements 
+public class RVArtistDetailsAdapterTab extends Adapter<RVArtistDetailsAdapterTab.ViewHolder> implements 
 		DateWiseEventParentAdapterListener {
 	
-	private static final String TAG = RVVenueDetailsAdapterTab.class.getSimpleName();
-
+	private static final String TAG = RVArtistDetailsAdapterTab.class.getSimpleName();
+	
 	private static final int EXTRA_TOP_DUMMY_ITEM_COUNT = 2;
-	private static final int EXTRA_TOP_DUMMY_ITEM_COUNT_AFTER_DETAILS_LOADED = 4;
-	private static final int MAX_LINES_VENUE_DESC = 3;
+	private static final int MAX_LINES_ARTIST_DESC = 3;
+	private static final int EXTRA_TOP_DUMMY_ITEM_COUNT_AFTER_DETAILS_LOADED = 5;
 	
 	private RecyclerView recyclerView;
 	
-	private VenueDetailsFragmentTab venueDetailsFragmentTab;
-	private List<Event> eventList;
-	private Venue venue;
-	private boolean isVenueDescExpanded, fragmentDetached;
+	private ArtistDetailsFragmentTab artistDetailsFragmentTab;
+	private Artist artist;
+	private boolean isArtistDescExpanded;
 	
-	private LoadEvents loadEvents;
+	private VideoPagerAdapter videoPagerAdapter;
+	private FriendsRVAdapter friendsRVAdapter;
+	
+	private List<Event> eventList;
+	private LoadArtistEvents loadArtistEvents;
 	private boolean isMoreDataAvailable = true;
 	private int eventsAlreadyRequested;
 	
 	private BitmapCache bitmapCache;
 	
 	private int fbCallCountForSameEvt = 0;
-	private RVVenueDetailsAdapterTab.ViewHolder holderPendingPublish;
+	private RVArtistDetailsAdapterTab.ViewHolder holderPendingPublish;
 	private Event eventPendingPublish;
 	
 	private static enum ViewType {
-		IMG, DESC, ADDRESS_MAP, UPCOMING_EVENTS_TITLE, PROGRESS, EVENT;
+		IMG, DESC, VIDEOS, FRIENDS, UPCOMING_EVENTS_TITLE, PROGRESS, EVENT;
 		
 		private static ViewType getViewType(int type) {
 			ViewType[] viewTypes = ViewType.values();
@@ -115,8 +109,9 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 		private ImageView imgDown;
 		private View vHorLine;
 		
-		private TextView txtVenue;
-		private ImageView fabPhone, fabNavigate;
+		private ViewPager vPagerVideos;
+		
+		private RecyclerView recyclerVFriends;
 		
 		private ImageView imgEvt;
 		private TextView txtEvtTitle, txtEvtTime, txtEvtLoc;
@@ -131,9 +126,9 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 			imgDown = (ImageView) itemView.findViewById(R.id.imgDown);
 			vHorLine = itemView.findViewById(R.id.vHorLine);
 			
-			txtVenue = (TextView) itemView.findViewById(R.id.txtVenue);
-			fabPhone = (ImageView) itemView.findViewById(R.id.fabPhone);
-			fabNavigate = (ImageView) itemView.findViewById(R.id.fabNavigate);
+			vPagerVideos = (ViewPager) itemView.findViewById(R.id.vPagerVideos);
+			
+			recyclerVFriends = (RecyclerView) itemView.findViewById(R.id.recyclerVFriends);
 			
 			imgEvt = (ImageView) itemView.findViewById(R.id.imgEvt);
 			txtEvtTitle = (TextView) itemView.findViewById(R.id.txtEvtTitle);
@@ -144,21 +139,14 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
             imgShare = (ImageView) itemView.findViewById(R.id.imgShare);
 		}
 	}
-
-	public RVVenueDetailsAdapterTab(VenueDetailsFragmentTab venueDetailsFragmentTab) {
-		this.venueDetailsFragmentTab = venueDetailsFragmentTab;
-		eventList = venueDetailsFragmentTab.getEventList();
-		venue = venueDetailsFragmentTab.getVenue();
-		
+	
+	public RVArtistDetailsAdapterTab(ArtistDetailsFragmentTab artistDetailsFragmentTab) {
+		this.artistDetailsFragmentTab = artistDetailsFragmentTab;
+		artist = artistDetailsFragmentTab.getArtist();
+		eventList = artistDetailsFragmentTab.getEventList();
 		bitmapCache = BitmapCache.getInstance();
 	}
 
-	@Override
-	public int getItemCount() {
-		return venueDetailsFragmentTab.isAllDetailsLoaded() ? (EXTRA_TOP_DUMMY_ITEM_COUNT_AFTER_DETAILS_LOADED + 
-				eventList.size()) : EXTRA_TOP_DUMMY_ITEM_COUNT;
-	}
-	
 	@Override
 	public int getItemViewType(int position) {
 		if (position == ViewType.IMG.ordinal()) {
@@ -167,8 +155,11 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 		} else if (position == ViewType.DESC.ordinal()) {
 			return ViewType.DESC.ordinal();
 			
-		} else if (position == ViewType.ADDRESS_MAP.ordinal()) {
-			return ViewType.ADDRESS_MAP.ordinal();
+		} else if (position == ViewType.VIDEOS.ordinal()) {
+			return ViewType.VIDEOS.ordinal();
+			
+		} else if (position == ViewType.FRIENDS.ordinal()) {
+			return ViewType.FRIENDS.ordinal();
 			
 		} else if (position == ViewType.UPCOMING_EVENTS_TITLE.ordinal()) {
 			return ViewType.UPCOMING_EVENTS_TITLE.ordinal();
@@ -179,6 +170,12 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 		} else {
 			return ViewType.EVENT.ordinal();
 		}
+	}
+
+	@Override
+	public int getItemCount() {
+		return artistDetailsFragmentTab.isAllDetailsLoaded() ? (EXTRA_TOP_DUMMY_ITEM_COUNT_AFTER_DETAILS_LOADED + 
+				eventList.size()) : EXTRA_TOP_DUMMY_ITEM_COUNT;
 	}
 	
 	@Override
@@ -191,7 +188,7 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 		switch (ViewType.getViewType(viewType)) {
 		
 		case IMG:
-			v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_img_venue_venue_details, 
+			v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_img_artist_artist_details, 
 					parent, false);
 			break;
 			
@@ -199,9 +196,13 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 			v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_desc_tab, parent, false);
 			break;
 			
-		case ADDRESS_MAP:
-			v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_address_map_venue_details, 
+		case VIDEOS:
+			v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_videos_artist_details, 
 					parent, false);
+			break;
+			
+		case FRIENDS:
+			v = LayoutInflater.from(parent.getContext()).inflate(R.layout.include_friends, parent, false);
 			break;
 			
 		case UPCOMING_EVENTS_TITLE:
@@ -228,15 +229,56 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 	}
 
 	@Override
-	public void onBindViewHolder(final ViewHolder holder, final int position) {
+	public void onBindViewHolder(final ViewHolder holder, int position) {
 		if (position == ViewType.IMG.ordinal()) {
 			// nothing to do
 			
-		}  else if (position == ViewType.DESC.ordinal()) {
+		} else if (position == ViewType.DESC.ordinal()) {
 			updateDescVisibility(holder);
 			
-		} else if (position == ViewType.ADDRESS_MAP.ordinal()) {
-			updateAddressMap(holder);
+		} else if (position == ViewType.VIDEOS.ordinal()) {
+			//Log.d(TAG, "onBindViewHolder(), pos = " + position);
+			if (videoPagerAdapter == null) {
+				videoPagerAdapter = new VideoPagerAdapter(artistDetailsFragmentTab.childFragmentManager(), 
+						artist.getVideos(), artist.getId());
+				
+			} else {
+				if (videoPagerAdapter.areFragmentsDetached()) {
+					videoPagerAdapter.attachFragments();
+				}
+			}
+			
+			holder.vPagerVideos.setAdapter(videoPagerAdapter);
+			holder.vPagerVideos.setOnPageChangeListener(videoPagerAdapter);
+			
+			// Necessary or the pager will only have one extra page to show make this at least however many pages you can see
+			holder.vPagerVideos.setOffscreenPageLimit(7);
+			
+			// Set margin for pages as a negative number, so a part of next and previous pages will be showed
+			Resources res = FragmentUtil.getResources(artistDetailsFragmentTab);
+			holder.vPagerVideos.setPageMargin(res.getDimensionPixelSize(R.dimen.rlt_lyt_root_w_video) - res
+					.getDimensionPixelSize(R.dimen.floating_window_w) + res.getDimensionPixelSize(
+					R.dimen.v_pager_videos_margin_l_rv_item_videos_artist_details) + res.getDimensionPixelSize(
+							R.dimen.v_pager_videos_margin_r_rv_item_videos_artist_details));
+			
+			// Set current item to the middle page so we can fling to both directions left and right
+			holder.vPagerVideos.setCurrentItem(videoPagerAdapter.getCurrentPosition());
+			
+			updateVideosVisibility(holder);
+			
+		} else if (position == ViewType.FRIENDS.ordinal()) {
+			if (friendsRVAdapter == null) {
+				friendsRVAdapter = new FriendsRVAdapter(artist.getFriends());
+			} 
+			
+			// use a linear layout manager
+			RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(FragmentUtil.getActivity(artistDetailsFragmentTab), 
+					LinearLayoutManager.HORIZONTAL, false);
+			holder.recyclerVFriends.setLayoutManager(layoutManager);
+			
+			holder.recyclerVFriends.setAdapter(friendsRVAdapter);
+			
+			updateFriendsVisibility(holder);
 			
 		} else if (position == ViewType.UPCOMING_EVENTS_TITLE.ordinal()) {
 			if (eventList.isEmpty()) {
@@ -248,9 +290,10 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 			if (event == null) {
 				// progress indicator
 				
-				if ((loadEvents == null || loadEvents.getStatus() == Status.FINISHED) && isMoreDataAvailable) {
+				if ((loadArtistEvents == null || loadArtistEvents.getStatus() == Status.FINISHED) && 
+						isMoreDataAvailable) {
 					//Log.d(TAG, "onBindViewHolder(), pos = " + position);
-					((LoadItemsInBackgroundListener) venueDetailsFragmentTab).loadItemsInBackground();
+					((LoadItemsInBackgroundListener) artistDetailsFragmentTab).loadItemsInBackground();
 				}
 				
 			} else {
@@ -263,7 +306,7 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 				}
 				
 				holder.txtEvtTitle.setText(event.getName());
-				ViewCompat.setTransitionName(holder.txtEvtTitle, "txtEvtTitleVenueDetails" + position);
+				ViewCompat.setTransitionName(holder.txtEvtTitle, "txtEvtTitleArtistDetails" + position);
 				
 				if (event.getSchedule() != null) {
 					Schedule schedule = event.getSchedule();
@@ -300,18 +343,18 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 				        asyncLoadImg.loadImg(holder.imgEvt, ImgResolution.LOW, recyclerView, position, bitmapCacheable);
 				    }
 				}
-				ViewCompat.setTransitionName(holder.imgEvt, "imgEvtVenueDetails" + position);
+				ViewCompat.setTransitionName(holder.imgEvt, "imgEvtArtistDetails" + position);
 				
 				holder.itemView.setOnClickListener(new OnClickListener() {
 					
 					@Override
 					public void onClick(View v) {
-						((EventListenerTab) FragmentUtil.getActivity(venueDetailsFragmentTab)).onEventSelected(event, 
+						((EventListenerTab) FragmentUtil.getActivity(artistDetailsFragmentTab)).onEventSelected(event, 
 								holder.imgEvt, holder.txtEvtTitle);
 					}
 				});
 				
-				Resources res = FragmentUtil.getResources(venueDetailsFragmentTab);
+				Resources res = FragmentUtil.getResources(artistDetailsFragmentTab);
 				if (event.getSchedule() == null || event.getSchedule().getBookingInfos().isEmpty()) {
 					holder.imgTicket.setImageDrawable(res.getDrawable(R.drawable.ic_tickets_unavailable_slider));
 					holder.imgTicket.setEnabled(false);
@@ -327,14 +370,14 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 					
 					@Override
 					public void onClick(View v) {
-						EventSeekr eventSeekr = FragmentUtil.getApplication(venueDetailsFragmentTab);
+						EventSeekr eventSeekr = FragmentUtil.getApplication(artistDetailsFragmentTab);
 								
 						Intent intent = new Intent(eventSeekr, WebViewActivityTab.class);
 						intent.putExtra(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
-						venueDetailsFragmentTab.startActivity(intent);
+						artistDetailsFragmentTab.startActivity(intent);
 						
 						GoogleAnalyticsTracker.getInstance().sendEvent(eventSeekr, ((BaseActivityTab) 
-								FragmentUtil.getActivity(venueDetailsFragmentTab)).getScreenName(), 
+								FragmentUtil.getActivity(artistDetailsFragmentTab)).getScreenName(), 
 								GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON, 
 								GoogleAnalyticsTracker.Type.Event.name(), null, event.getId());
 					}
@@ -344,27 +387,27 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 					
 					@Override
 					public void onClick(View v) {
-						EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(venueDetailsFragmentTab).getApplication();
+						EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(artistDetailsFragmentTab).getApplication();
 						if (event.getAttending() == Attending.SAVED) {
 							event.setAttending(Attending.NOT_GOING);
 							new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.event, event.getId(), 
 									event.getAttending().getValue(), UserTrackingType.Add).execute();
-			    			updateImgSaveSrc(holder, event, FragmentUtil.getResources(venueDetailsFragmentTab));
+			    			updateImgSaveSrc(holder, event, FragmentUtil.getResources(artistDetailsFragmentTab));
 							
 						} else {
-							venueDetailsFragmentTab.setEvent(event);
+							artistDetailsFragmentTab.setEvent(event);
 							eventPendingPublish = event;
 							holderPendingPublish = holder;
 							
 							if (eventSeekr.getGPlusUserId() != null) {
 								event.setNewAttending(Attending.SAVED);
-								venueDetailsFragmentTab.handlePublishEvent();
+								artistDetailsFragmentTab.handlePublishEvent();
 								
 							} else {
 								fbCallCountForSameEvt = 0;
 								event.setNewAttending(Attending.SAVED);
 								//NOTE: THIS CAN BE TESTED WITH PODUCTION BUILD ONLY
-								FbUtil.handlePublishEvent(venueDetailsFragmentTab, venueDetailsFragmentTab, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
+								FbUtil.handlePublishEvent(artistDetailsFragmentTab, artistDetailsFragmentTab, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
 										AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
 							}
 						}
@@ -376,12 +419,12 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 					@Override
 					public void onClick(View v) {
 						ShareViaDialogFragment shareViaDialogFragment = ShareViaDialogFragment.newInstance(event, 
-								ScreenNames.VENUE_DETAILS);
+								ScreenNames.ARTIST_DETAILS);
 						/**
 						 * Passing activity fragment manager, since using this fragment's child fragment manager 
 						 * doesn't retain dialog on orientation change
 						 */
-						shareViaDialogFragment.show(((BaseActivityTab)FragmentUtil.getActivity(venueDetailsFragmentTab))
+						shareViaDialogFragment.show(((BaseActivityTab)FragmentUtil.getActivity(artistDetailsFragmentTab))
 								.getSupportFragmentManager(), FragmentUtil.getTag(ShareViaDialogFragment.class));
 					}
 				});
@@ -391,75 +434,14 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 	
 	private void updateImgSaveSrc(ViewHolder holder, Event event, Resources res) {
 		int drawableId = (event.getAttending() == Attending.SAVED) ? R.drawable.ic_saved_event_slider 
-				: R.drawable.ic_unsaved_event;
+				: R.drawable.ic_unsaved_event_slider;
 		holder.imgSave.setImageDrawable(res.getDrawable(drawableId));
 	}
 	
-	private void updateAddressMap(ViewHolder holder) {
-		holder.txtVenue.setText(venue.getFormatedAddress(false));
-		AddressMapFragment fragment = (AddressMapFragment) venueDetailsFragmentTab.childFragmentManager()
-				.findFragmentByTag(FragmentUtil.getTag(AddressMapFragment.class));
-		//Log.d(TAG, "AddressMapFragment = " + fragment);
-        if (fragment == null) {
-        	//Log.d(TAG, "call addAddressMapFragment()");
-        	addAddressMapFragment();
-        	
-        } else if (fragmentDetached) {
-        	attachFragments();
-        }
-        
-        holder.fabPhone.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				if (venue.getPhone() != null) {
-					Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + venue.getPhone()));
-					venueDetailsFragmentTab.startActivity(Intent.createChooser(intent, "Call..."));
-					
-				} else {
-					Toast.makeText(FragmentUtil.getActivity(venueDetailsFragmentTab), R.string.phone_number_not_available, 
-							Toast.LENGTH_SHORT).show();
-				}
-			}
-		});
-        
-        holder.fabNavigate.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(FragmentUtil.getApplication(venueDetailsFragmentTab), NavigationActivityTab.class);
-				intent.putExtra(BundleKeys.VENUE, venue);
-				venueDetailsFragmentTab.startActivity(intent);
-			}
-		});
-	}
-	
-	private void addAddressMapFragment() {
-    	FragmentManager fragmentManager = venueDetailsFragmentTab.childFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        
-        AddressMapFragment fragment = new AddressMapFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(BundleKeys.VENUE, venue);
-        fragment.setArguments(args);
-        fragmentTransaction.add(R.id.frmLayoutMapContainer, fragment, FragmentUtil.getTag(fragment));
-        try {
-        	fragmentTransaction.commit();
-        	
-        } catch (IllegalStateException e) {
-        	/**
-        	 * This catch is to prevent possible "java.lang.IllegalStateException: Can not perform this action after onSaveInstanceState"
-        	 * when it's called from callback method updateDetailsVisibility() & if user has already left this screen.
-        	 */
-			Log.e(TAG, "IllegalStateException: " + e.getMessage());
-			e.printStackTrace();
-		}
-    }
-	
 	private void updateDescVisibility(ViewHolder holder) {
-		if (venueDetailsFragmentTab.isAllDetailsLoaded()) {
-			venueDetailsFragmentTab.setVNoContentBgVisibility(View.INVISIBLE);
-			if (venue.getLongDesc() != null) {
+		if (artistDetailsFragmentTab.isAllDetailsLoaded()) {
+			artistDetailsFragmentTab.setVNoContentBgVisibility(View.INVISIBLE);
+			if (artist.getDescription() != null) {
 				holder.rltRootDesc.setBackgroundColor(Color.WHITE);
 				holder.rltLytPrgsBar.setVisibility(View.GONE);
 				holder.txtDesc.setVisibility(View.VISIBLE);
@@ -473,7 +455,7 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 			}
 			
 		} else {
-			venueDetailsFragmentTab.setVNoContentBgVisibility(View.VISIBLE);
+			artistDetailsFragmentTab.setVNoContentBgVisibility(View.VISIBLE);
 			holder.rltRootDesc.setBackgroundColor(Color.TRANSPARENT);
 			holder.rltLytPrgsBar.setVisibility(View.VISIBLE);
 			holder.txtDesc.setVisibility(View.GONE);
@@ -483,65 +465,87 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 	}
 	
 	private void makeDescVisible(final ViewHolder holder) {
-		holder.txtDesc.setText(Html.fromHtml(venue.getLongDesc()));
+		holder.txtDesc.setText(Html.fromHtml(artist.getDescription()));
 		holder.imgDown.setVisibility(View.VISIBLE);
 		holder.imgDown.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				//Log.d(TAG, "totalScrolled  = " + holder.itemView.getTop());
-				if (isVenueDescExpanded) {
-					collapseVenueDesc(holder);
+				if (isArtistDescExpanded) {
+					collapseArtistDesc(holder);
 					
 					/**
 					 * update scrolled distance after collapse, because sometimes it can happen that view becamse scrollable only
 					 * due to expanded description after which if user collapses it, then based on recyclerview
 					 * height it automatically resettles itself such that recyclerview again becomes unscrollable.
-					 * Accordingly we need to reset scrolled amount, venue img & title
+					 * Accordingly we need to reset scrolled amount, artist img & title
 					 */
-					venueDetailsFragmentTab.getHandler().post(new Runnable() {
+					artistDetailsFragmentTab.getHandler().post(new Runnable() {
 						
 						@Override
 						public void run() {
-							venueDetailsFragmentTab.onScrolled(0, true);
+							artistDetailsFragmentTab.onScrolled(0, true);
 						}
 					});
 					
 				} else {
-					expandVenueDesc(holder);
+					expandArtistDesc(holder);
 				}
 				//Log.d(TAG, "totalScrolled after  = " + holder.itemView.getTop());
 			}
 		});
 		
-		if (isVenueDescExpanded) {
-			expandVenueDesc(holder);
+		if (isArtistDescExpanded) {
+			expandArtistDesc(holder);
 			
 		} else {
-			collapseVenueDesc(holder);
+			collapseArtistDesc(holder);
 		}
 	}
 	
-	private void collapseVenueDesc(ViewHolder holder) {
-		holder.txtDesc.setMaxLines(MAX_LINES_VENUE_DESC);
+	private void collapseArtistDesc(ViewHolder holder) {
+		holder.txtDesc.setMaxLines(MAX_LINES_ARTIST_DESC);
 		holder.txtDesc.setEllipsize(TruncateAt.END);
-		holder.imgDown.setImageDrawable(FragmentUtil.getResources(venueDetailsFragmentTab).getDrawable(
+		holder.imgDown.setImageDrawable(FragmentUtil.getResources(artistDetailsFragmentTab).getDrawable(
 				R.drawable.ic_description_expand));
-		isVenueDescExpanded = false;
+		isArtistDescExpanded = false;
 	}
 	
-	private void expandVenueDesc(ViewHolder holder) {
+	private void expandArtistDesc(ViewHolder holder) {
 		holder.txtDesc.setMaxLines(Integer.MAX_VALUE);
 		holder.txtDesc.setEllipsize(null);
-		holder.imgDown.setImageDrawable(FragmentUtil.getResources(venueDetailsFragmentTab).getDrawable(
+		holder.imgDown.setImageDrawable(FragmentUtil.getResources(artistDetailsFragmentTab).getDrawable(
 				R.drawable.ic_description_collapse));
-		isVenueDescExpanded = true;
+		isArtistDescExpanded = true;
 	}
 	
 	private void setViewGone(ViewHolder holder) {
 		RecyclerView.LayoutParams lp = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
 		lp.height = 0;
 		holder.itemView.setLayoutParams(lp);
+	}
+	
+	private void updateVideosVisibility(ViewHolder holder) {
+		if (!artist.getVideos().isEmpty()) {
+			videoPagerAdapter.notifyDataSetChanged();
+			
+		} else {
+			setViewGone(holder);
+		}
+	}
+	
+	private void updateFriendsVisibility(ViewHolder holder) {
+		if (!artist.getFriends().isEmpty()) {
+			friendsRVAdapter.notifyDataSetChanged();
+			
+		} else {
+			setViewGone(holder);
+		}
+	}
+	
+	public void detachFragments() {
+		videoPagerAdapter.detachFragments();
 	}
 
 	@Override
@@ -561,12 +565,12 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 
 	@Override
 	public void updateContext(Context context) {
-		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	public void setLoadDateWiseEvents(AsyncTask<Void, Void, List<Event>> loadDateWiseEvents) {
-		this.loadEvents = (LoadEvents) loadDateWiseEvents;
+		this.loadArtistEvents = (LoadArtistEvents) loadDateWiseEvents;
 	}
 	
 	public void call(Session session, SessionState state, Exception exception) {
@@ -576,40 +580,17 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 		 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
 		 */
 		if (fbCallCountForSameEvt < AppConstants.MAX_FB_CALL_COUNT_FOR_SAME_EVT_OR_ART) {
-			FbUtil.call(session, state, exception, venueDetailsFragmentTab, venueDetailsFragmentTab, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
+			FbUtil.call(session, state, exception, artistDetailsFragmentTab, artistDetailsFragmentTab, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
 					AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, eventPendingPublish);
 			
 		} else {
 			fbCallCountForSameEvt = 0;
-			venueDetailsFragmentTab.setPendingAnnounce(false);
+			artistDetailsFragmentTab.setPendingAnnounce(false);
 		}
 	}
 
 	public void onPublishPermissionGranted() {
 		//Log.d(TAG, "onPublishPermissionGranted()");
-		updateImgSaveSrc(holderPendingPublish, eventPendingPublish, FragmentUtil.getResources(venueDetailsFragmentTab));
-	}
-	
-	public void detachFragments() {
-		AddressMapFragment fragment = (AddressMapFragment) venueDetailsFragmentTab.childFragmentManager()
-				.findFragmentByTag(FragmentUtil.getTag(AddressMapFragment.class));
-		if (fragment != null) {
-			FragmentManager fragmentManager = venueDetailsFragmentTab.childFragmentManager();
-			fragmentManager.beginTransaction().detach(fragment).commit();
-			fragmentManager.executePendingTransactions();
-		}
-		fragmentDetached = true;
-	}
-	
-	public void attachFragments() {
-		//Log.d(TAG, "attachFragments()");
-		AddressMapFragment fragment = (AddressMapFragment) venueDetailsFragmentTab.childFragmentManager()
-				.findFragmentByTag(FragmentUtil.getTag(AddressMapFragment.class));
-		
-		if (fragment != null) {
-			FragmentManager fragmentManager = venueDetailsFragmentTab.childFragmentManager();
-			fragmentManager.beginTransaction().attach(fragment).commit();
-		}
-		fragmentDetached = false;
+		updateImgSaveSrc(holderPendingPublish, eventPendingPublish, FragmentUtil.getResources(artistDetailsFragmentTab));
 	}
 }

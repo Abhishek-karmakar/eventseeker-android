@@ -10,7 +10,6 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -26,8 +25,6 @@ import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.ShareActionProvider;
-import android.support.v7.widget.ShareActionProvider.OnShareTargetSelectedListener;
 import android.text.Html;
 import android.text.TextUtils.TruncateAt;
 import android.util.DisplayMetrics;
@@ -59,7 +56,6 @@ import com.wcities.eventseeker.ShareOnFBDialogFragment.OnFacebookShareClickedLis
 import com.wcities.eventseeker.adapter.FriendsRVAdapter;
 import com.wcities.eventseeker.adapter.VideoPagerAdapter;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
-import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker.Type;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
@@ -75,6 +71,7 @@ import com.wcities.eventseeker.cache.BitmapCacheable;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
@@ -571,7 +568,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	
 	@Override
 	public String getScreenName() {
-		return "Artist Detail Screen";
+		return ScreenNames.ARTIST_DETAILS;
 	}
 
 	@Override
@@ -1019,7 +1016,6 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 					}
 					
 				} else {
-
 					/**
 					 * If user clicks on save & changes orientation before call to onPublishPermissionGranted(), 
 					 * then we need to update holderPendingPublish with right holder pointer in new orientation

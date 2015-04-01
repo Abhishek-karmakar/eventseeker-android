@@ -212,7 +212,7 @@ public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWi
 			}
 			
 			holder.txtEvtTitle.setText(event.getName());
-			ViewCompat.setTransitionName(holder.txtEvtTitle, "txtTransition" + position);
+			ViewCompat.setTransitionName(holder.txtEvtTitle, "txtEvtTitleDiscover" + position);
 			
 			if (event.getSchedule() != null) {
 				Schedule schedule = event.getSchedule();
@@ -253,7 +253,7 @@ public class RVCatEventsAdapterTab extends Adapter<ViewHolder> implements DateWi
 			    }
 			}
 			
-			ViewCompat.setTransitionName(holder.imgEvt, "imageTransition" + position);
+			ViewCompat.setTransitionName(holder.imgEvt, "imgEvtDiscover" + position);
 
 			final Resources res = FragmentUtil.getResources(discoverFragmentTab);
 			if (event.getSchedule() == null || event.getSchedule().getBookingInfos().isEmpty()) {

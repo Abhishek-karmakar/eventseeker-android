@@ -68,6 +68,8 @@
             android:theme="@style/Theme.EventSeeker.TranslucentWindow.DoubleLineToolbar" />
         <activity android:name="com.wcities.eventseeker.VenueDetailsActivityTab"
             android:theme="@style/Theme.EventSeeker.TranslucentWindow" />
+        <activity android:name="com.wcities.eventseeker.ArtistDetailsActivityTab"
+            android:theme="@style/Theme.EventSeeker.TranslucentWindow.DoubleLineToolbar" />
         <activity android:name="com.wcities.eventseeker.WebViewActivityTab" />
         <activity android:name="com.wcities.eventseeker.LanguageActivityTab" />
         <activity android:name="com.wcities.eventseeker.ArtistsNewsActivityTab" />

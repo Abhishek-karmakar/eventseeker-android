@@ -597,5 +597,20 @@
     <!-- top_left_most_tab_selected = (tab_bar_ht_fragment_custom_tabs - 6) -->
     <dimen name="top_left_most_tab_selected">59dp</dimen>
     <dimen name="corners_radius_left_most_tab_selected">5dp</dimen>
+  
+    <!-- fragment_artist_details_tab.xml -->
+    <dimen name="img_artist_ht_artist_details_tab">@dimen/img_evt_ht_event_details_tab</dimen>
+    <dimen name="rlt_lyt_txt_artist_title_pad_l_artist_details_tab">@dimen/rlt_lyt_txt_evt_title_pad_l_event_details_tab</dimen>
+    <dimen name="rlt_lyt_txt_artist_title_pad_b_artist_details_tab">@dimen/rlt_lyt_txt_venue_title_pad_b_venue_details_tab</dimen>
+    <dimen name="rlt_lyt_txt_artist_title_ht_artist_details_tab">@dimen/floating_double_line_toolbar_ht</dimen>
+    <!-- txt_artist_title_ht_artist_details_tab = floating_double_line_toolbar_ht - rlt_lyt_txt_artist_title_pad_b_artist_details_tab 
+    - rlt_lyt_txt_artist_title_pad_t_artist_details_tab -->
+    <dimen name="txt_artist_title_ht_artist_details_tab">48dp</dimen>
+    <dimen name="txt_artist_title_txt_size_artist_details_tab">@dimen/txt_toolbar_title_txt_size_toolbar_floating_window_double_line</dimen>
+    <dimen name="img_artist_ht_artist_details">@dimen/img_artist_ht_artist_details_tab</dimen>
+    
+    <!-- rv_item_videos_artist_details.xml -->
+    <dimen name="v_pager_videos_margin_l_rv_item_videos_artist_details">@dimen/txt_desc_margin_l_rv_item_desc</dimen>
+    <dimen name="v_pager_videos_margin_r_rv_item_videos_artist_details">@dimen/v_pager_videos_margin_l_rv_item_videos_artist_details</dimen>
     
 </resources>

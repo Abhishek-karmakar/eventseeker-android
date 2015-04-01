@@ -25,6 +25,7 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.RelativeLayout.LayoutParams;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -40,14 +41,14 @@ import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Venue;
-import com.wcities.eventseeker.custom.fragment.PublishEventFragmentReatiningChildFragmentManager;
+import com.wcities.eventseeker.custom.fragment.PublishEventFragmentRetainingChildFragmentManager;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 
-public class VenueDetailsFragmentTab extends PublishEventFragmentReatiningChildFragmentManager implements 
+public class VenueDetailsFragmentTab extends PublishEventFragmentRetainingChildFragmentManager implements 
 		OnVenueUpdatedListener, LoadItemsInBackgroundListener, AsyncTaskListener<Void> {
 
 	private static final int UNSCROLLED = -1;
@@ -56,12 +57,12 @@ public class VenueDetailsFragmentTab extends PublishEventFragmentReatiningChildF
 	
 	private int totalScrolledDy = UNSCROLLED; // indicates layout not yet created
 	private int actionBarElevation, limitScrollAt;
-	private int txtVenueTitleSourceX, txtVenueTitleDiffX;
+	private int txtVenueTitleDiffX;
 	private boolean isScrollLimitReached;
 	
 	private Venue venue;
 	private LoadVenueDetails loadVenueDetails;
-	private boolean allDetailsLoaded;
+	private boolean allDetailsLoaded, isVDummyHtIncreased;
 
 	private LoadEvents loadEvents;
 	private List<Event> eventList;
@@ -71,6 +72,7 @@ public class VenueDetailsFragmentTab extends PublishEventFragmentReatiningChildF
 	private TextView txtVenueTitle;
 	private View vNoContentBG;
 	private RecyclerView recyclerVVenue;
+	private View vDummy;
 	
 	private RVVenueDetailsAdapterTab rvVenueDetailsAdapterTab;
 	
@@ -88,7 +90,7 @@ public class VenueDetailsFragmentTab extends PublishEventFragmentReatiningChildF
 				recyclerVVenue.getViewTreeObserver().removeGlobalOnLayoutListener(this);
 			}
 			
-			onScrolled(0, true, true);
+			onScrolled(0, true);
         }
     };
 	
@@ -100,10 +102,9 @@ public class VenueDetailsFragmentTab extends PublishEventFragmentReatiningChildF
 		
 		actionBarElevation = FragmentUtil.getResources(this).getDimensionPixelSize(R.dimen.action_bar_elevation);
 		
-		Bundle args = getArguments();
 		if (venue == null) {
 			//Log.d(TAG, "event = null");
-			venue = (Venue) args.getSerializable(BundleKeys.VENUE);
+			venue = (Venue) getArguments().getSerializable(BundleKeys.VENUE);
 			
 			loadVenueDetails = new LoadVenueDetails(Api.OAUTH_TOKEN, venue, this);
 			AsyncTaskUtil.executeAsyncTask(loadVenueDetails, true);
@@ -114,6 +115,12 @@ public class VenueDetailsFragmentTab extends PublishEventFragmentReatiningChildF
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		/**
+		 * on orientation change we need to recalculate this due to different values of 
+		 * img ht on both orientations
+		 */
+		calculateScrollLimit();
+		
 		View rootView = inflater.inflate(R.layout.fragment_venue_details_tab, container, false);
 		
 		imgVenue = (ImageView) rootView.findViewById(R.id.imgVenue);
@@ -131,6 +138,7 @@ public class VenueDetailsFragmentTab extends PublishEventFragmentReatiningChildF
 		ViewCompat.setTransitionName(txtVenueTitle, getArguments().getString(BundleKeys.TRANSITION_NAME_SHARED_TEXT));
 
 		vNoContentBG = rootView.findViewById(R.id.vNoContentBG);
+		vDummy = rootView.findViewById(R.id.vDummy);
 		
 		recyclerVVenue = (RecyclerView) rootView.findViewById(R.id.recyclerVVenue);
 		// use a linear layout manager
@@ -143,7 +151,7 @@ public class VenueDetailsFragmentTab extends PublishEventFragmentReatiningChildF
 	    	public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 	    		super.onScrolled(recyclerView, dx, dy);
 	    		//Log.d(TAG, "onScrolled - dx = " + dx + ", dy = " + dy);
-	    		VenueDetailsFragmentTab.this.onScrolled(dy, false, false);
+	    		VenueDetailsFragmentTab.this.onScrolled(dy, false);
 	    	}
 		});
 		
@@ -160,6 +168,15 @@ public class VenueDetailsFragmentTab extends PublishEventFragmentReatiningChildF
 			eventList.add(null);
 			
 			rvVenueDetailsAdapterTab = new RVVenueDetailsAdapterTab(this);
+			
+		} else {
+			/**
+			 * To prevent "java.lang.IllegalArgumentException: No view found for id 0x7f1101d8 
+			 * (com.wcities.eventseeker:id/frmLayoutMapContainer) for fragment AddressMapFragment{41ce1d78 #0 
+			 * id=0x7f1101d8 AddressMapFragment}" on orientation change
+			 * Ref: http://stackoverflow.com/questions/28366612/on-back-press-coming-back-to-recyclerview-having-fragments-causes-illegalargume
+			 */
+			rvVenueDetailsAdapterTab.detachFragments();
 		}
 		recyclerVVenue.setAdapter(rvVenueDetailsAdapterTab);
 	}
@@ -260,7 +277,7 @@ public class VenueDetailsFragmentTab extends PublishEventFragmentReatiningChildF
 		}
 	}
 	
-	public void onScrolled(int dy, boolean forceUpdate, boolean chkForOpenDrawer) {
+	public void onScrolled(int dy, boolean forceUpdate) {
 		//Log.d(TAG, "dy = " + dy);
 		BaseActivityTab baseActivityTab = (BaseActivityTab) FragmentUtil.getActivity(this);
 		
@@ -286,12 +303,44 @@ public class VenueDetailsFragmentTab extends PublishEventFragmentReatiningChildF
 		// Translate image
 		imgVenue.setTranslationY((0 - totalScrolledDy) / 2);
 		
-		calculateScrollLimit();
+		if (limitScrollAt == 0) {
+			calculateScrollLimit();
+		}
 		
 		int scrollY = (totalScrolledDy >= limitScrollAt) ? limitScrollAt : totalScrolledDy;
 		//Log.d(TAG, "totalScrolledDy = " + totalScrolledDy + ", limitScrollAt = " + limitScrollAt + ", scrollY = " + scrollY);
 		
 		rltLytTxtVenueTitle.setTranslationY(-totalScrolledDy);
+		
+		/**
+		 * Following if-else is to prevent venue image's part being displayed after venue title ends in following case.
+		 * e.g. - In landscape mode when net is low, & all details are not loaded yet, we display progressbar.
+		 * But if we scroll when progress bar is being displayed then part of image after the title becomes 
+		 * visible due to half scrolling amount used for image & since background for progressbar is transparent
+		 * (Changed to transparent at runtime from rvVenueDetailsAdapterTab when progress is ON).
+		 * Why progressbar background is transparent? To keep "no content bg" visible behind recyclerview.
+		 * Hence we just have a dummy view with white background to fill up the scroll difference amount
+		 * between image & venue title when progress bar is there & set its height to 0 when all details are loaded.
+		 */
+		if (!allDetailsLoaded) {
+			RelativeLayout.LayoutParams lp = (LayoutParams) vDummy.getLayoutParams();
+			/**
+			 * +1 is done to prevent thin line of image visible at the end after vDummy (probably due to odd value
+			 * for totalScrolledDy
+			 */
+			lp.height = totalScrolledDy / 2 + 1;
+			vDummy.setLayoutParams(lp);
+			vDummy.setTranslationY(-totalScrolledDy);
+			isVDummyHtIncreased = true;
+			//Log.d(TAG, "lp.height = " + lp.height + ", totalScrolledDy = " + totalScrolledDy);
+			
+		} else if (isVDummyHtIncreased) {
+			RelativeLayout.LayoutParams lp = (LayoutParams) vDummy.getLayoutParams();
+			lp.height = 0;
+			vDummy.setLayoutParams(lp);
+			vDummy.setTranslationY(0);
+			isVDummyHtIncreased = false;
+		}
 		
 		if ((!isScrollLimitReached || forceUpdate) && totalScrolledDy >= limitScrollAt) {
 			baseActivityTab.animateToolbarElevation(0.0f, actionBarElevation);
@@ -324,21 +373,19 @@ public class VenueDetailsFragmentTab extends PublishEventFragmentReatiningChildF
 				R.dimen.action_bar_ht);
 		
 		int txtVenueTitleDestinationX = res.getDimensionPixelSize(R.dimen.txt_toolbar_title_pos_all_details);
-		txtVenueTitleSourceX = res.getDimensionPixelSize(R.dimen.rlt_lyt_txt_venue_title_pad_l_venue_details_tab);
+		int txtVenueTitleSourceX = res.getDimensionPixelSize(R.dimen.rlt_lyt_txt_venue_title_pad_l_venue_details_tab);
 		
 		txtVenueTitleDiffX = txtVenueTitleDestinationX - txtVenueTitleSourceX;
 	}
 	
 	@Override
 	public void onPublishPermissionGranted() {
-		// TODO Auto-generated method stub
-
+		rvVenueDetailsAdapterTab.onPublishPermissionGranted();
 	}
 
 	@Override
 	public void call(Session session, SessionState state, Exception exception) {
-		// TODO Auto-generated method stub
-
+		rvVenueDetailsAdapterTab.call(session, state, exception);
 	}
 	
 	@Override
@@ -362,7 +409,7 @@ public class VenueDetailsFragmentTab extends PublishEventFragmentReatiningChildF
 			
 			@Override
 			public void run() {
-				onScrolled(0, true, true);
+				onScrolled(0, true);
 			}
 		});
 	}

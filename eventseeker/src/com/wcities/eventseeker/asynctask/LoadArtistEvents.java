@@ -27,7 +27,6 @@ public class LoadArtistEvents extends AsyncTask<Void, Void, List<Event>> {
 	private static final int EVENTS_LIMIT = 10;
 	private static final int TIME_LIMIT_IN_YEARS = 1;
 
-	private DateWiseEventList eventList;
 	private DateWiseEventParentAdapterListener eventListAdapter;
 	private int artistId;
 	private String wcitiesId, oauthToken;
@@ -39,14 +38,6 @@ public class LoadArtistEvents extends AsyncTask<Void, Void, List<Event>> {
 		public void onArtistEventsLoaded();
 	}
 
-	public LoadArtistEvents(String oauthToken, DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, int artistId, String wcitiesId) {
-		this.oauthToken = oauthToken;
-		this.eventList = eventList;
-		this.eventListAdapter = eventListAdapter;
-		this.artistId = artistId;
-		this.wcitiesId = wcitiesId;
-	}
-	
 	public LoadArtistEvents(String oauthToken, List<Event> eventList, DateWiseEventParentAdapterListener eventListAdapter, 
 			int artistId, String wcitiesId, LoadArtistEventsListener loadArtistEventsListener) {
 		this.oauthToken = oauthToken;
@@ -102,47 +93,29 @@ public class LoadArtistEvents extends AsyncTask<Void, Void, List<Event>> {
 	
 	@Override
 	protected void onPostExecute(List<Event> result) {
-		if (eventList != null) {
-			if (result.size() > 0) {
-				eventList.addEventListItems(result, this);
-				eventListAdapter.setEventsAlreadyRequested(eventListAdapter.getEventsAlreadyRequested() + result.size());
-				
-				if (result.size() < EVENTS_LIMIT) {
-					eventListAdapter.setMoreDataAvailable(false);
-					eventList.removeProgressBarIndicator(this);
-				}
-				
-			} else {
-				eventListAdapter.setMoreDataAvailable(false);
-				eventList.removeProgressBarIndicator(this);
-			}
-			((BaseAdapter)eventListAdapter).notifyDataSetChanged();
+		if (result.size() > 0) {
+			events.addAll(events.size() - 1, result);
+			eventListAdapter.setEventsAlreadyRequested(eventListAdapter.getEventsAlreadyRequested() + result.size());
 			
-		} else {
-			if (result.size() > 0) {
-				events.addAll(events.size() - 1, result);
-				eventListAdapter.setEventsAlreadyRequested(eventListAdapter.getEventsAlreadyRequested() + result.size());
-				
-				if (result.size() < EVENTS_LIMIT) {
-					eventListAdapter.setMoreDataAvailable(false);
-					
-					if (!isCancelled()) {
-						events.remove(events.size() - 1);
-					}
-				}
-				
-			} else {
+			if (result.size() < EVENTS_LIMIT) {
 				eventListAdapter.setMoreDataAvailable(false);
 				
 				if (!isCancelled()) {
 					events.remove(events.size() - 1);
 				}
 			}
-			((RecyclerView.Adapter)eventListAdapter).notifyDataSetChanged();
 			
-			if (loadArtistEventsListener != null) {
-				loadArtistEventsListener.onArtistEventsLoaded();
+		} else {
+			eventListAdapter.setMoreDataAvailable(false);
+			
+			if (!isCancelled()) {
+				events.remove(events.size() - 1);
 			}
+		}
+		((RecyclerView.Adapter)eventListAdapter).notifyDataSetChanged();
+		
+		if (loadArtistEventsListener != null) {
+			loadArtistEventsListener.onArtistEventsLoaded();
 		}
 	}    	
 
