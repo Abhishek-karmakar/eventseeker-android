@@ -17,7 +17,7 @@
     <ImageView android:id="@+id/imgTicket"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_tickets_available_slider"
+        android:src="@drawable/ic_tickets_available"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@id/imgEvt"
         android:layout_marginRight="@dimen/img_action_margin_r_rv_item_upcoming_event"
@@ -34,7 +34,7 @@
     <ImageView android:id="@+id/imgShare"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_share"
+        android:src="@drawable/ic_share_blue"
         android:layout_alignRight="@id/imgTicket"
         android:layout_alignBottom="@id/imgEvt"
         android:background="@drawable/bg_slctr_img_action_rv_item_upcoming_evt" />

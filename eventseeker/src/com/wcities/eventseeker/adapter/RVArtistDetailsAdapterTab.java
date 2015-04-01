@@ -356,11 +356,11 @@ public class RVArtistDetailsAdapterTab extends Adapter<RVArtistDetailsAdapterTab
 				
 				Resources res = FragmentUtil.getResources(artistDetailsFragmentTab);
 				if (event.getSchedule() == null || event.getSchedule().getBookingInfos().isEmpty()) {
-					holder.imgTicket.setImageDrawable(res.getDrawable(R.drawable.ic_tickets_unavailable_slider));
+					holder.imgTicket.setImageDrawable(res.getDrawable(R.drawable.ic_tickets_unavailable));
 					holder.imgTicket.setEnabled(false);
 					
 				} else {
-					holder.imgTicket.setImageDrawable(res.getDrawable(R.drawable.ic_tickets_available_slider));
+					holder.imgTicket.setImageDrawable(res.getDrawable(R.drawable.ic_tickets_available));
 					holder.imgTicket.setEnabled(true);
 				}
 				
@@ -433,8 +433,8 @@ public class RVArtistDetailsAdapterTab extends Adapter<RVArtistDetailsAdapterTab
 	}
 	
 	private void updateImgSaveSrc(ViewHolder holder, Event event, Resources res) {
-		int drawableId = (event.getAttending() == Attending.SAVED) ? R.drawable.ic_saved_event_slider 
-				: R.drawable.ic_unsaved_event_slider;
+		int drawableId = (event.getAttending() == Attending.SAVED) ? R.drawable.ic_saved_event
+				: R.drawable.ic_unsaved_event;
 		holder.imgSave.setImageDrawable(res.getDrawable(drawableId));
 	}
 	

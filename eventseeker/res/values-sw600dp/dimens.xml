@@ -540,6 +540,7 @@
     <dimen name="lnr_tabs_ht_fragment_following_tab">80dp</dimen>
     <dimen name="elevation_lnr_follow_more_artist_fragment_following_tab">5dp</dimen>
     <dimen name="btn_tabs_txt_size_fragment_following_tab">16sp</dimen>
+    <dimen name="btn_tabs_pad_t_fragment_following_tab">10dp</dimen>
 
     <!-- fragment_popular_artist_tab.xml -->
     <dimen name="txt_size_category_popular_artist_fragment_popular_artist_tab">20sp</dimen>

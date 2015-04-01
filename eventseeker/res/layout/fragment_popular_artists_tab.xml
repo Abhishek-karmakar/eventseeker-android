@@ -16,11 +16,12 @@
 
         <Button
             android:id="@+id/btnSyncAccounts"
+            style="@style/Widget.EventSeeker.Button.Transparent"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            style="@style/Widget.EventSeeker.Button.Transparent"
             android:drawableTop="@drawable/ic_sync_account"
+            android:paddingTop="@dimen/btn_tabs_pad_t_fragment_following_tab"
             android:text="@string/btn_sync_accounts"
             android:textAllCaps="false"
             android:textColor="@color/slctr_clr_primary_on_tabs_txt_clr_off"
@@ -35,11 +36,12 @@
 
         <Button
             android:id="@+id/btnPopularArtists"
+            style="@style/Widget.EventSeeker.Button.Transparent"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            style="@style/Widget.EventSeeker.Button.Transparent"
             android:drawableTop="@drawable/ic_sync_account"
+            android:paddingTop="@dimen/btn_tabs_pad_t_fragment_following_tab"
             android:text="@string/btn_popular_artists"
             android:textAllCaps="false"
             android:textColor="@color/slctr_clr_primary_on_tabs_txt_clr_off"
@@ -54,11 +56,12 @@
 
         <Button
             android:id="@+id/btnRecommended"
+            style="@style/Widget.EventSeeker.Button.Transparent"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            style="@style/Widget.EventSeeker.Button.Transparent"
             android:drawableTop="@drawable/ic_sync_account"
+            android:paddingTop="@dimen/btn_tabs_pad_t_fragment_following_tab"
             android:text="@string/btn_recommended"
             android:textAllCaps="false"
             android:textColor="@color/slctr_clr_primary_on_tabs_txt_clr_off"
@@ -73,11 +76,12 @@
 
         <Button
             android:id="@+id/btnSearch"
+            style="@style/Widget.EventSeeker.Button.Transparent"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            style="@style/Widget.EventSeeker.Button.Transparent"
             android:drawableTop="@drawable/ic_sync_account"
+            android:paddingTop="@dimen/btn_tabs_pad_t_fragment_following_tab"
             android:text="@string/btn_search"
             android:textAllCaps="false"
             android:textColor="@color/slctr_clr_primary_on_tabs_txt_clr_off"
