@@ -297,6 +297,18 @@
     <dimen name="tab_bar_ht_fragment_custom_tabs">45dp</dimen>
     <dimen name="tab_bar_margin_fragment_custom_tabs">8dp</dimen>
     <dimen name="txt_size_btn_tab_bar_fragment_custom_tabs">13sp</dimen>
+    <dimen name="btn_tab_pad_l_r_bar_fragment_custom_tabs">0dp</dimen>
+    
+    <!-- fragment_custom_tabs_tab.xml -->
+    <dimen name="tab_content_frame_margin_t_fragment_custom_tabs">10dp</dimen>
+    
+    <!-- custom_actionbar_tabs.xml -->
+    <dimen name="v_divider_w_custom_actionbar_tabs">20dp</dimen>
+    <dimen name="v_divider_margin_t_custom_actionbar_tabs">8dp</dimen>
+    <dimen name="v_divider_margin_b_custom_actionbar_tabs">@dimen/v_divider_margin_t_custom_actionbar_tabs</dimen>
+    <dimen name="btn_pad_l_custom_actionbar_tabs">15dp</dimen>
+    <dimen name="btn_pad_r_custom_actionbar_tabs">@dimen/btn_pad_l_custom_actionbar_tabs</dimen>
+    
     <!-- fragment_event_info.xml -->
     <dimen name="txt_evt_desc_pad_fragment_evt_info">8dp</dimen>
     <dimen name="img_down_margin_r_fragment_evt_info">8dp</dimen>

@@ -26,6 +26,7 @@ import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -208,7 +209,7 @@ public class MyEventsFragment extends FragmentLoadableFromBackStack implements O
 
 	@Override
 	public String getScreenName() {
-		return "My Events Screen";
+		return ScreenNames.MY_EVENTS_SCREEN;
 	}
 
 	@Override

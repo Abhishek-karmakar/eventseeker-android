@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
+import android.support.v7.widget.RecyclerView;
 import android.widget.BaseAdapter;
 
 import com.wcities.eventseeker.api.UserInfoApi;
@@ -109,7 +110,12 @@ public class LoadMyEvents extends AsyncTask<Void, Void, List<Event>> {
 				eventList.add(new Event(AppConstants.INVALID_ID, null));
 			}
 		}
-		((BaseAdapter) dateWiseEventParentAdapterListener).notifyDataSetChanged();
+		if (dateWiseEventParentAdapterListener instanceof RecyclerView.Adapter) {
+			((RecyclerView.Adapter) dateWiseEventParentAdapterListener).notifyDataSetChanged();
+		
+		} else {
+			((BaseAdapter) dateWiseEventParentAdapterListener).notifyDataSetChanged();			
+		}
 		if (asyncTaskListener != null) {
 			asyncTaskListener.onTaskCompleted();
 		}

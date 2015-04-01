@@ -1,11 +1,11 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<!-- Custom actionbar tabs style for landscape -->
-	<style name="CustomTabBar" parent="@android:style/Widget.Button">
+	<!-- <style name="CustomTabBar" parent="@android:style/Widget.Button">
         <item name="android:background">@drawable/tab_indicator_holo</item>
         <item name="android:textAppearance">@style/CustomTabBarTextAppearance</item>
         <item name="android:paddingLeft">@dimen/btn_pad_l_custom_actionbar_tabs</item>
         <item name="android:paddingRight">@dimen/btn_pad_r_custom_actionbar_tabs</item>
-    </style>
+    </style> -->
     
 </resources>

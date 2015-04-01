@@ -91,9 +91,11 @@
     <dimen name="action_bar_title_txt_size">23sp</dimen>
 
     <!-- custom_actionbar_tabs.xml -->
-    <dimen name="btn_pad_l_custom_actionbar_tabs">25dp</dimen>
+    <dimen name="btn_pad_l_custom_actionbar_tabs">20dp</dimen>
     <dimen name="btn_pad_r_custom_actionbar_tabs">@dimen/btn_pad_l_custom_actionbar_tabs</dimen>
-    <dimen name="txt_size_custom_actionbar_tabs">16sp</dimen>
+    <dimen name="txt_size_custom_actionbar_tabs">14sp</dimen>
+    <dimen name="txt_size_btn_tab_bar_fragment_custom_tabs">@dimen/txt_size_custom_actionbar_tabs</dimen>
+    <dimen name="btn_tab_pad_l_r_bar_fragment_custom_tabs">10dp</dimen>
 
     <!-- fragment_custom_tabs.xml -->
     <dimen name="tab_bar_margin_fragment_custom_tabs">15dp</dimen>
@@ -591,6 +593,11 @@
     <dimen name="v_hor_line_ht_rv_item_upcoming_event">1dp</dimen>
     <dimen name="v_hor_line_margin_l_r_rv_item_upcoming_event">@dimen/txt_desc_margin_l_rv_item_desc</dimen>
     
+    <!-- left_most_tab_selected.xml -->
+    <!-- top_left_most_tab_selected = (tab_bar_ht_fragment_custom_tabs - 6) -->
+    <dimen name="top_left_most_tab_selected">59dp</dimen>
+    <dimen name="corners_radius_left_most_tab_selected">5dp</dimen>
+  
     <!-- fragment_artist_details_tab.xml -->
     <dimen name="img_artist_ht_artist_details_tab">@dimen/img_evt_ht_event_details_tab</dimen>
     <dimen name="rlt_lyt_txt_artist_title_pad_l_artist_details_tab">@dimen/rlt_lyt_txt_evt_title_pad_l_event_details_tab</dimen>

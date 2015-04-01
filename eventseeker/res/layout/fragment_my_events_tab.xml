@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rltLytRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <com.wcities.eventseeker.custom.view.RecyclerViewInterceptingVerticalScroll
+	    android:id="@+id/recyclerVEvents"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_below="@id/rltLytCatTitles"
+	    android:scrollbars="none"
+	    android:background="@android:color/white"
+	    android:layout_marginTop="@dimen/rv_events_margin_t_discover_tab"
+	    android:padding="@dimen/rv_events_padding_discover_tab" />
+    
+	<View android:id="@+id/vRltLytCatTitlesShadow"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/v_rlt_lyt_cat_titles_shadow_ht_discover_tab"
+        android:layout_below="@id/rltLytCatTitles"
+        android:background="@drawable/bg_shadow" />
+	
+	<!-- <include layout="@layout/progress_bar_eventseeker_transparent"
+	    android:id="@+id/rltLytProgressBar"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_alignTop="@+id/rltLytNoEvts"
+	    android:layout_alignBottom="@+id/rltLytNoEvts"
+	    android:background="@drawable/bg_no_content_overlay_tab"
+    	android:visibility="invisible" /> -->
+	
+	<!-- <RelativeLayout android:id="@+id/rltLytNoEvts"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_below="@id/rltLytCatTitles"
+	    android:layout_marginTop="@dimen/rlt_lyt_no_evts_margin_t_discover_tab"
+	    android:background="@drawable/bg_no_content_overlay_tab"
+	    android:visibility="invisible" >
+	
+		<TextView android:id="@+id/txtNoEvents"
+		    android:layout_width="@dimen/txt_no_events_w_discover_tab"
+		    android:layout_height="wrap_content"
+		    android:text="@string/txt_no_events"
+		    android:textSize="@dimen/txt_no_events_txt_size_discover_tab"
+		    android:gravity="center"
+		    android:layout_centerHorizontal="true"
+		    android:layout_marginTop="@dimen/txt_no_events_margin_t_discover_tab"
+		    android:drawableTop="@drawable/ic_save_on"
+		    android:drawablePadding="@dimen/txt_no_events_drawable_pad_discover_tab" />
+	
+	</RelativeLayout> -->
+	
+    <include
+        android:id="@+id/rltLytNoEvts"
+        layout="@layout/include_no_content_with_phone"
+        android:visibility="invisible" />
+
+    <include
+        android:id="@+id/rltLytProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/progress_bar_eventseeker_fixed_ht"
+        android:visibility="invisible" />
+
+</RelativeLayout>

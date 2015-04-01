@@ -102,6 +102,8 @@
         <item name="android:textAppearance">@style/CustomTabBarTextAppearance</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">@dimen/txt_size_btn_tab_bar_fragment_custom_tabs</item>
+        <item name="android:paddingLeft">@dimen/btn_tab_pad_l_r_bar_fragment_custom_tabs</item>
+        <item name="android:paddingRight">@dimen/btn_tab_pad_l_r_bar_fragment_custom_tabs</item>
     </style>
     
 	<style name="CustomTabBarTextAppearance" parent="@android:style/TextAppearance.Widget.TabWidget">
