@@ -118,9 +118,9 @@
     <dimen name="action_bar_title_txt_size">25sp</dimen>
 
     <!-- custom_actionbar_tabs.xml -->
-    <dimen name="btn_pad_l_custom_actionbar_tabs">30dp</dimen>
+    <dimen name="btn_pad_l_custom_actionbar_tabs">25dp</dimen>
     <dimen name="btn_pad_r_custom_actionbar_tabs">@dimen/btn_pad_l_custom_actionbar_tabs</dimen>
-    <dimen name="txt_size_custom_actionbar_tabs">18sp</dimen>
+    <dimen name="txt_size_custom_actionbar_tabs">16sp</dimen>
 
     <!-- fragment_custom_tabs.xml -->
     <dimen name="tab_bar_margin_fragment_custom_tabs">20dp</dimen>

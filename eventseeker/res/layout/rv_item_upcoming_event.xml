@@ -26,7 +26,7 @@
     <ImageView android:id="@+id/imgSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_unsaved_event_slider"
+        android:src="@drawable/ic_unsaved_event"
         android:layout_alignRight="@id/imgTicket"
         android:background="@drawable/bg_slctr_img_action_rv_item_upcoming_evt"
         android:layout_centerVertical="true" />
@@ -34,47 +34,52 @@
     <ImageView android:id="@+id/imgShare"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_share_slider"
+        android:src="@drawable/ic_share"
         android:layout_alignRight="@id/imgTicket"
         android:layout_alignBottom="@id/imgEvt"
         android:background="@drawable/bg_slctr_img_action_rv_item_upcoming_evt" />
     
-    <TextView android:id="@+id/txtEvtTitle"
+    <TextView
+        android:id="@+id/txtEvtTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/imgEvt"
         android:layout_alignTop="@id/imgEvt"
-        android:layout_toLeftOf="@id/imgTicket"
         android:layout_marginLeft="@dimen/txt_evt_title_margin_l_rv_item_upcoming_event"
         android:layout_marginRight="@dimen/txt_evt_title_margin_r_rv_item_upcoming_event"
-        android:textSize="@dimen/txt_evt_title_txt_size_rv_item_upcoming_event"
-        android:textColor="@android:color/black"
+        android:layout_toLeftOf="@id/imgTicket"
+        android:layout_toRightOf="@id/imgEvt"
+        android:ellipsize="end"
         android:lines="2"
-		android:ellipsize="end" />
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/txt_evt_title_txt_size_rv_item_upcoming_event" />
     
-    <TextView android:id="@+id/txtEvtTime"
+    <TextView
+        android:id="@+id/txtEvtTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/txtEvtTitle"
+        android:layout_alignRight="@id/txtEvtTitle"
         android:layout_centerVertical="true"
-        android:layout_alignRight="@id/txtEvtTitle"
-        android:textSize="@dimen/txt_detail_txt_size_rv_item_upcoming_event"
+        android:drawableLeft="@drawable/ic_event_time"
+        android:drawablePadding="@dimen/txt_evt_drawable_padding_rv_item_upcoming_event"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
         android:singleLine="true"
-		android:ellipsize="end"
-		android:drawableLeft="@drawable/time"
-		android:gravity="center_vertical" />
+        android:textSize="@dimen/txt_detail_txt_size_rv_item_upcoming_event" />
     
-    <TextView android:id="@+id/txtEvtLoc"
+    <TextView
+        android:id="@+id/txtEvtLoc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/txtEvtTitle"
         android:layout_alignBottom="@id/imgEvt"
+        android:layout_alignLeft="@id/txtEvtTitle"
         android:layout_alignRight="@id/txtEvtTitle"
-        android:textSize="@dimen/txt_detail_txt_size_rv_item_upcoming_event"
+        android:drawableLeft="@drawable/ic_event_location"
+        android:drawablePadding="@dimen/txt_evt_drawable_padding_rv_item_upcoming_event"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
         android:singleLine="true"
-		android:ellipsize="end"
-		android:drawableLeft="@drawable/location"
-		android:gravity="center_vertical" />
+        android:textSize="@dimen/txt_detail_txt_size_rv_item_upcoming_event" />
     
     <View android:id="@+id/vHorLine"
         android:layout_width="match_parent"

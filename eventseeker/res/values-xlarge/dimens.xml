@@ -91,9 +91,11 @@
     <dimen name="action_bar_title_txt_size">23sp</dimen>
 
     <!-- custom_actionbar_tabs.xml -->
-    <dimen name="btn_pad_l_custom_actionbar_tabs">25dp</dimen>
+    <dimen name="btn_pad_l_custom_actionbar_tabs">20dp</dimen>
     <dimen name="btn_pad_r_custom_actionbar_tabs">@dimen/btn_pad_l_custom_actionbar_tabs</dimen>
-    <dimen name="txt_size_custom_actionbar_tabs">16sp</dimen>
+    <dimen name="txt_size_custom_actionbar_tabs">14sp</dimen>
+    <dimen name="txt_size_btn_tab_bar_fragment_custom_tabs">@dimen/txt_size_custom_actionbar_tabs</dimen>
+    <dimen name="btn_tab_pad_l_r_bar_fragment_custom_tabs">10dp</dimen>
 
     <!-- fragment_custom_tabs.xml -->
     <dimen name="tab_bar_margin_fragment_custom_tabs">15dp</dimen>
@@ -111,7 +113,6 @@
     <dimen name="txt_artist_name_txt_size_fragment_search_artists_list_item">15sp</dimen>
     <dimen name="img_item_h_fragment_search_artists_list_item">140dp</dimen>
     <dimen name="txt_artist_name_pad_fragment_search_artists_list_item">3dp</dimen>
-    <dimen name="img_item_h_fragment_search_artists_list_item">140dp</dimen>
     <dimen name="txt_on_tour_margin_t_fragment_search_artists_list_item">23dp</dimen>
     <dimen name="txt_on_tour_margin_r_fragment_search_artists_list_item">-20dp</dimen>
     <dimen name="txt_on_tour_txt_size_fragment_search_artists_list_item">14sp</dimen>
@@ -139,7 +140,6 @@
     <dimen name="img_evt_time_w_include_evt_details">12dp</dimen>
     <dimen name="img_evt_time_ht_include_evt_details">12dp</dimen>
     <dimen name="txt_evt_time_txt_size_include_evt_details">15sp</dimen>
-    <dimen name="img_evt_location_ht_include_evt_details">@dimen/img_evt_location_w_include_evt_details</dimen>
 
     <!-- include_fragment_event_details_footer.xml -->
     <dimen name="divider_lnr_layout_btns_w_include_fragment_event_details_footer">2dp</dimen>
@@ -147,9 +147,6 @@
     <dimen name="lnr_layout_btns_txt_size_include_fragment_event_details_footer">15sp</dimen>
     <dimen name="lnr_layout_btns_margin_b_include_fragment_event_details_footer">10dp</dimen>
     <dimen name="chk_box_drawable_pad_include_fragment_event_details_footer">6dp</dimen>
-
-    <!-- fragment_custom_tabs.xml -->
-    <dimen name="tab_bar_margin_fragment_custom_tabs">15dp</dimen>
 
     <!-- fragment_event_info.xml -->
     <dimen name="lnr_layout_top_margin_l_r_fragment_event_info">0dp</dimen>
@@ -528,6 +525,30 @@
     <!-- friends_activity_item_tab.xml -->
     <dimen name="rlt_root_padding_friends_activity_item_tab">12dp</dimen>
     
+    <!-- fragment_following_artists_list_item_tab.xml -->
+    <dimen name="txt_artist_name_margin_t_b_fragment_following_artists_list_item_tab">10dp</dimen>
+    <dimen name="rlt_artist_name_padding_l_r_fragment_following_artists_list_item_tab">10dp</dimen>
+    
+    <!-- fragment_following_tab.xml -->
+    <dimen name="grd_v_padding_fragment_following_tab">8dp</dimen>
+    <dimen name="grd_v_h_space_fragment_following_tab">4dp</dimen>
+    <dimen name="grd_v_v_space_fragment_following_tab">2dp</dimen>
+    <dimen name="grdv_following_margin_t_fragment_following_tab">5dp</dimen>
+    <dimen name="v_divider_t_b_fragment_following_tab">10dp</dimen>
+    <dimen name="v_divider_w_fragment_following_tab">1dp</dimen>
+    <dimen name="v_shadow_h_fragment_following_tab">5dp</dimen>
+    <dimen name="lnr_tabs_ht_fragment_following_tab">80dp</dimen>
+    <dimen name="elevation_lnr_follow_more_artist_fragment_following_tab">5dp</dimen>
+    <dimen name="btn_tabs_txt_size_fragment_following_tab">16sp</dimen>
+
+    <!-- fragment_popular_artist_tab.xml -->
+    <dimen name="txt_size_category_popular_artist_fragment_popular_artist_tab">20sp</dimen>
+
+    <!-- fragment_follow_more_artists_tab.xml -->
+    <dimen name="v_dummy_wt_ht_fragment_follow_more_artists">5dp</dimen> 
+    <dimen name="lnr_root_padding_fragment_follow_more_artists">5dp</dimen>
+    <!-- <dimen name="v_dummy_margin_t_b_fragment_follow_more_artists">10dp</dimen> -->
+
     <!-- activity_base_tab_floating.xml -->
     <!-- fab_margin_t_base_tab_floating = img_evt_ht_event_details_tab - fab standard height(56dp)/2 -->
     <dimen name="fab_margin_t_base_tab_floating">310dp</dimen>
@@ -571,5 +592,10 @@
     <dimen name="txt_detail_txt_size_rv_item_upcoming_event">14sp</dimen>
     <dimen name="v_hor_line_ht_rv_item_upcoming_event">1dp</dimen>
     <dimen name="v_hor_line_margin_l_r_rv_item_upcoming_event">@dimen/txt_desc_margin_l_rv_item_desc</dimen>
+    
+    <!-- left_most_tab_selected.xml -->
+    <!-- top_left_most_tab_selected = (tab_bar_ht_fragment_custom_tabs - 6) -->
+    <dimen name="top_left_most_tab_selected">59dp</dimen>
+    <dimen name="corners_radius_left_most_tab_selected">5dp</dimen>
     
 </resources>

@@ -412,10 +412,6 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 		this.event = event;
 	}
 	
-	public void handlePublishEvent() {
-		super.handlePublishEvent();
-	}
-	
 	public void setCenterProgressBarVisibility(int visibility) {
 		rltLytProgressBar.setVisibility(visibility);
 		

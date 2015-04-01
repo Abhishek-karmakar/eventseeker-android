@@ -125,7 +125,7 @@ public abstract class PublishEventFragment extends Fragment implements PublishLi
         		UserTrackingType.Add).execute();
 	}
 	
-	protected void handlePublishEvent() {
+	public void handlePublishEvent() {
 		//Log.d(TAG, "handlePublish()");
 		int available = GooglePlayServicesUtil.isGooglePlayServicesAvailable(FragmentUtil.getActivity(this));
 		if (available != ConnectionResult.SUCCESS) {

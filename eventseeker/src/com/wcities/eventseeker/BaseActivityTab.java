@@ -2,6 +2,8 @@ package com.wcities.eventseeker;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.animation.ObjectAnimator;
 import android.content.ActivityNotFoundException;
@@ -28,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -73,6 +76,8 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private TextView txtToolbarTitle, txtToolbarSubTitle;
+
+	private List<Button> tabBarBtn;
 	
 	protected String currentContentFragmentTag;
 	
@@ -295,6 +300,10 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 			intent = new Intent(getApplicationContext(), DiscoverActivityTab.class);
 			break;			
 			
+		case INDEX_NAV_ITEM_MY_EVENTS:
+			intent = new Intent(getApplicationContext(), MyEventsActivityTab.class);
+			break;
+
 		case INDEX_NAV_ITEM_FOLLOWING:
 			intent = new Intent(getApplicationContext(), FollowingActivityTab.class);
 			break;
@@ -382,6 +391,8 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 	    txtToolbarTitle = (TextView) toolbar.findViewById(R.id.txtToolbarTitle);
 	    txtToolbarSubTitle = (TextView) toolbar.findViewById(R.id.txtToolbarSubTitle);
 	    
+	    initTabBar();
+	    
 	    lnrLayoutRootNavDrawer = (LinearLayout) findViewById(R.id.rootNavigationDrawer);
 	    mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 	    mDrawerToggle = new ActionBarDrawerToggle(this, // host Activity
@@ -415,6 +426,20 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 			addDrawerListFragment();
 		}
 		getSupportFragmentManager().executePendingTransactions();
+	}
+	
+	private void initTabBar() {
+		LinearLayout tabBar = (LinearLayout) toolbar.findViewById(R.id.tabBar);
+		if (tabBar != null) {
+			tabBarBtn = new ArrayList<Button>();
+			tabBarBtn.add((Button) tabBar.findViewById(R.id.btnTab1));
+			tabBarBtn.add((Button) tabBar.findViewById(R.id.btnTab2));
+			tabBarBtn.add((Button) tabBar.findViewById(R.id.btnTab3));
+		}
+	}
+
+	public List<Button> getTabBarButtons() {
+		return tabBarBtn;
 	}
 	
 	/**

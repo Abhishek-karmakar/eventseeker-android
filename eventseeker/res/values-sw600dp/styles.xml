@@ -22,18 +22,6 @@
         <item name="android:textColor">@color/actionbar_title_color</item>
     </style>
 
-    <!-- Custom actionbar tabs style for landscape -->
-    <style name="CustomTabBar" parent="@android:style/Widget.Button">
-        <item name="android:background">@drawable/tab_indicator_holo</item>
-        <item name="android:textAppearance">@style/CustomTabBarTextAppearance</item>
-        <item name="android:paddingLeft">@dimen/btn_pad_l_custom_actionbar_tabs</item>
-        <item name="android:paddingRight">@dimen/btn_pad_r_custom_actionbar_tabs</item>
-    </style>
-
-    <style name="CustomTabBarTextAppearance" parent="@android:style/TextAppearance.Widget.TabWidget">
-        <item name="android:textSize">@dimen/txt_size_custom_actionbar_tabs</item>
-    </style>
-    
     <style name="Widget.EventSeeker.DoubleLineToolbar" parent="@style/ThemeOverlay.EventSeeker.Dark.ActionBar">
     	<item name="maxButtonHeight">@dimen/max_btn_ht_toolbar_floating_window_double_line</item>
     	<item name="android:minHeight">@dimen/min_ht_toolbar_floating_window_double_line</item>

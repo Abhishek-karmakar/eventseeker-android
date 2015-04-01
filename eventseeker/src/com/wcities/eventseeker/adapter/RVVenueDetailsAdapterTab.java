@@ -384,7 +384,7 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 	
 	private void updateImgSaveSrc(ViewHolder holder, Event event, Resources res) {
 		int drawableId = (event.getAttending() == Attending.SAVED) ? R.drawable.ic_saved_event_slider 
-				: R.drawable.ic_unsaved_event_slider;
+				: R.drawable.ic_unsaved_event;
 		holder.imgSave.setImageDrawable(res.getDrawable(drawableId));
 	}
 	
