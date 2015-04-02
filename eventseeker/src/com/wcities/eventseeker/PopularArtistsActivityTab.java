@@ -53,14 +53,8 @@ public class PopularArtistsActivityTab extends BaseActivityTab implements Fragme
 	
 	@Override
 	public void onFragmentResumed(Fragment fragment, int drawerPosition, String actionBarTitle) {
-		updateTitleForFragment(actionBarTitle, currentContentFragmentTag);
+		updateTitle(actionBarTitle);
 		// Log.d(TAG, "got the current tag as : " + fragmentTag);
-	}
-	
-	public void updateTitleForFragment(String newTitle, String fragmentTag) {
-		if (newTitle != null) {
-			getSupportActionBar().setTitle(newTitle);
-		}
 	}
 	
 	@Override

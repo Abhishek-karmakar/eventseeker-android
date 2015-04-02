@@ -20,12 +20,11 @@ import com.wcities.eventseeker.adapter.SwipeTabsAdapter.SwipeTabsAdapterListener
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.constants.ScreenNames;
-import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
+import com.wcities.eventseeker.custom.fragment.FragmentRetainingChildFragmentManager;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
 
-public class MyEventsFragmentTab extends FragmentLoadableFromBackStack implements OnClickListener,
+public class MyEventsFragmentTab extends FragmentRetainingChildFragmentManager implements OnClickListener,
 		SwipeTabsAdapterListener {
 
 	private static final String TAG = MyEventsFragmentTab.class.getName();
@@ -59,7 +58,7 @@ public class MyEventsFragmentTab extends FragmentLoadableFromBackStack implement
 		
 		ViewPager viewPager = (ViewPager) v.findViewById(R.id.tabContentFrame);
 		SwipeTabsAdapter oldAdapter = mTabsAdapter;
-		tabBar = new TabBar(getChildFragmentManager());
+		tabBar = new TabBar(childFragmentManager());
 		mTabsAdapter = new SwipeTabsAdapter(this, viewPager, tabBar, this);
 		
 		tabBarButtons = ((MyEventsActivityTab) FragmentUtil.getActivity(this)).getTabBarButtons();
@@ -147,11 +146,6 @@ public class MyEventsFragmentTab extends FragmentLoadableFromBackStack implement
 	}
 
 	@Override
-	public String getScreenName() {
-		return ScreenNames.MY_EVENTS_SCREEN;
-	}
-
-	@Override
 	public void onSwipeTabSelected(int position) {
 		/**
 		 * Following condition is required to prevent multiple event sending for same tab selection 
@@ -169,16 +163,16 @@ public class MyEventsFragmentTab extends FragmentLoadableFromBackStack implement
 				label = LABEL_SAVED_EVENTS_TAB;
 			}
 			GoogleAnalyticsTracker.getInstance().sendEvent(FragmentUtil.getApplication(this), 
-					getScreenName(), label);
+					((BaseActivityTab) FragmentUtil.getActivity(this)).getScreenName(), label);
 			lastGaEventSentForPos = position;
 		}
 	}
 
-	public void onEventAttendingUpdated() {
+	/*public void onEventAttendingUpdated() {
 		List<Fragment> pageFragments = mTabsAdapter.getTabFragments();
 		for (Iterator<Fragment> iterator = pageFragments.iterator(); iterator.hasNext();) {
 			MyEventsGridFragmentTab myEventsGridFragmentTab = (MyEventsGridFragmentTab) iterator.next();
 			myEventsGridFragmentTab.onEventAttendingUpdated();
 		}
-	}
+	}*/
 }

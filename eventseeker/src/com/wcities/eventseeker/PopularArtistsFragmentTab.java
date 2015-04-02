@@ -34,7 +34,7 @@ public class PopularArtistsFragmentTab extends FragmentLoadableFromBackStack imp
 		Button btnPopularArtists = (Button) view.findViewById(R.id.btnPopularArtists);
 		btnPopularArtists.setOnClickListener(this);
 		btnPopularArtists.setSelected(true);
-		
+		btnPopularArtists.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_popular_artists_link_pressed, 0, 0);		
 		return view;
 	}
 

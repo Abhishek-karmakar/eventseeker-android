@@ -141,6 +141,7 @@ public class RecommendedArtistsFragmentTab extends PublishArtistFragment impleme
 		Button btnRecommended = (Button) v.findViewById(R.id.btnRecommended);
 		btnRecommended.setOnClickListener(this);
 		btnRecommended.setSelected(true);
+		btnRecommended.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_recommended_link_pressed, 0, 0);
 		return v;
 	}
 
