@@ -10,30 +10,34 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
+import android.support.v7.widget.RecyclerView.Adapter;
+import android.widget.BaseAdapter;
 
 import com.wcities.eventseeker.adapter.ArtistListAdapter;
+import com.wcities.eventseeker.adapter.RVSearchArtistsAdapterTab;
 import com.wcities.eventseeker.api.ArtistApi;
 import com.wcities.eventseeker.api.ArtistApi.Method;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
+import com.wcities.eventseeker.interfaces.ArtistAdapterListener;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
 
 public class LoadArtists extends AsyncTask<String, Void, List<Artist>> {
 	
 	private List<Artist> artistList;
-	private ArtistListAdapter<String> artistListAdapter;
+	private ArtistAdapterListener<String> artistAdapterListener;
 	private String oauthToken;
 	private final int ARTISTS_LIMIT = 10;
 	private String userId;
 	
 	private AsyncTaskListener<Void> asyncTaskListener;
 	
-	public LoadArtists(String oauthToken, List<Artist> artistList, ArtistListAdapter<String> artistListAdapter, 
+	public LoadArtists(String oauthToken, List<Artist> artistList, ArtistAdapterListener<String> artistAdapterListener, 
 			String userId, AsyncTaskListener<Void> asyncTaskListener) {
 		this.oauthToken = oauthToken;
 		this.artistList = artistList;
-		this.artistListAdapter = artistListAdapter;
+		this.artistAdapterListener = artistAdapterListener;
 		this.userId = userId;
 		this.asyncTaskListener = asyncTaskListener;
 	}
@@ -43,7 +47,7 @@ public class LoadArtists extends AsyncTask<String, Void, List<Artist>> {
 		List<Artist> tmpArtists = new ArrayList<Artist>();
 		ArtistApi artistApi = new ArtistApi(oauthToken);
 		artistApi.setLimit(ARTISTS_LIMIT);
-		artistApi.setAlreadyRequested(artistListAdapter.getArtistsAlreadyRequested());
+		artistApi.setAlreadyRequested(artistAdapterListener.getArtistsAlreadyRequested());
 		artistApi.setMethod(Method.artistSearch);
 		artistApi.setTrackingEnabled(true);
 		artistApi.setUserId(userId);
@@ -73,22 +77,29 @@ public class LoadArtists extends AsyncTask<String, Void, List<Artist>> {
 	protected void onPostExecute(List<Artist> tmpArtists) {
 		if (!tmpArtists.isEmpty()) {
 			artistList.addAll(artistList.size() - 1, tmpArtists);
-			artistListAdapter.setArtistsAlreadyRequested(artistListAdapter.getArtistsAlreadyRequested() 
+			artistAdapterListener.setArtistsAlreadyRequested(artistAdapterListener.getArtistsAlreadyRequested() 
 					+ tmpArtists.size());
 			
 			if (tmpArtists.size() < ARTISTS_LIMIT) {
-				artistListAdapter.setMoreDataAvailable(false);
+				artistAdapterListener.setMoreDataAvailable(false);
 				artistList.remove(artistList.size() - 1);
 			}
 			
 		} else {
-			artistListAdapter.setMoreDataAvailable(false);
+			artistAdapterListener.setMoreDataAvailable(false);
 			artistList.remove(artistList.size() - 1);
 			if (artistList.isEmpty()) {
 				artistList.add(new Artist(AppConstants.INVALID_ID, null));
 			}
 		}
-		artistListAdapter.notifyDataSetChanged();
+		
+		if (artistAdapterListener instanceof BaseAdapter) {
+			((BaseAdapter) artistAdapterListener).notifyDataSetChanged();
+			
+		} else {
+			((Adapter<RVSearchArtistsAdapterTab.ViewHolder>) artistAdapterListener).notifyDataSetChanged();
+		}
+		
 		if (asyncTaskListener != null) {
 			asyncTaskListener.onTaskCompleted();
 		}

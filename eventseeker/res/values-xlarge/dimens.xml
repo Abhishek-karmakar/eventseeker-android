@@ -540,6 +540,7 @@
     <dimen name="lnr_tabs_ht_fragment_following_tab">80dp</dimen>
     <dimen name="elevation_lnr_follow_more_artist_fragment_following_tab">5dp</dimen>
     <dimen name="btn_tabs_txt_size_fragment_following_tab">16sp</dimen>
+    <dimen name="btn_tabs_pad_t_fragment_following_tab">10dp</dimen>
 
     <!-- fragment_popular_artist_tab.xml -->
     <dimen name="txt_size_category_popular_artist_fragment_popular_artist_tab">20sp</dimen>
@@ -589,15 +590,16 @@
     <dimen name="txt_evt_title_margin_l_rv_item_upcoming_event">10dp</dimen>
     <dimen name="txt_evt_title_margin_r_rv_item_upcoming_event">4dp</dimen>
     <dimen name="txt_evt_title_txt_size_rv_item_upcoming_event">16sp</dimen>
+    <dimen name="txt_evt_drawable_padding_rv_item_upcoming_event">10dp</dimen>
     <dimen name="txt_detail_txt_size_rv_item_upcoming_event">14sp</dimen>
     <dimen name="v_hor_line_ht_rv_item_upcoming_event">1dp</dimen>
     <dimen name="v_hor_line_margin_l_r_rv_item_upcoming_event">@dimen/txt_desc_margin_l_rv_item_desc</dimen>
     
     <!-- left_most_tab_selected.xml -->
     <!-- top_left_most_tab_selected = (tab_bar_ht_fragment_custom_tabs - 6) -->
-    <dimen name="top_left_most_tab_selected">59dp</dimen>
-    <dimen name="corners_radius_left_most_tab_selected">5dp</dimen>
-  
+    <dimen name="top_left_most_tab_selected">58dp</dimen>
+    <dimen name="corners_radius_left_most_tab_selected">6dp</dimen>
+
     <!-- fragment_artist_details_tab.xml -->
     <dimen name="img_artist_ht_artist_details_tab">@dimen/img_evt_ht_event_details_tab</dimen>
     <dimen name="rlt_lyt_txt_artist_title_pad_l_artist_details_tab">@dimen/rlt_lyt_txt_evt_title_pad_l_event_details_tab</dimen>
@@ -612,5 +614,13 @@
     <!-- rv_item_videos_artist_details.xml -->
     <dimen name="v_pager_videos_margin_l_rv_item_videos_artist_details">@dimen/txt_desc_margin_l_rv_item_desc</dimen>
     <dimen name="v_pager_videos_margin_r_rv_item_videos_artist_details">@dimen/v_pager_videos_margin_l_rv_item_videos_artist_details</dimen>
+    
+    <!-- fragment_search_artists_tab.xml -->
+    <dimen name="rv_artists_margin_t_search_artists_tab">@dimen/rv_events_margin_t_discover_tab</dimen>
+    <dimen name="rv_artists_pad_search_artists_tab">@dimen/rv_events_padding_discover_tab</dimen>
+    
+    <!--  SearchArtistsFragmentTab.java -->
+    <dimen name="rv_item_l_r_offset_search_artists_tab">@dimen/rv_item_l_r_offset_discover_tab</dimen>
+    <dimen name="rv_item_t_b_offset_search_artists_tab">@dimen/rv_item_t_b_offset_discover_tab</dimen>
     
 </resources>

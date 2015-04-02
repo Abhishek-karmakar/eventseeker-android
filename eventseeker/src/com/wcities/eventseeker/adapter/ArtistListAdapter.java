@@ -31,6 +31,7 @@ import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Artist.Attending;
+import com.wcities.eventseeker.interfaces.ArtistAdapterListener;
 import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
@@ -40,7 +41,7 @@ import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.viewdata.SharedElement;
 import com.wcities.eventseeker.viewdata.SharedElementPosition;
 
-public class ArtistListAdapter<T> extends BaseAdapter {
+public class ArtistListAdapter<T> extends BaseAdapter implements ArtistAdapterListener<T> {
 	
 	private static final String TAG = ArtistListAdapter.class.getName();
 
@@ -77,14 +78,11 @@ public class ArtistListAdapter<T> extends BaseAdapter {
         this.mListener = listener;
     }
     
+    @Override
     public void updateContext(Context context) {
     	mContext = context;
 	}
     
-    public void setLoadArtists(AsyncTask<T, Void, List<Artist>> loadArtists) {
-		this.loadArtists = loadArtists;
-	}
-
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		//Log.d(TAG, "pos = " + position);
@@ -238,14 +236,17 @@ public class ArtistListAdapter<T> extends BaseAdapter {
 		return artistList.size();
 	}
 	
+	@Override
 	public int getArtistsAlreadyRequested() {
 		return artistsAlreadyRequested;
 	}
 
+	@Override
 	public void setArtistsAlreadyRequested(int artistsAlreadyRequested) {
 		this.artistsAlreadyRequested = artistsAlreadyRequested;
 	}
 
+	@Override
 	public void setMoreDataAvailable(boolean isMoreDataAvailable) {
 		this.isMoreDataAvailable = isMoreDataAvailable;
 	}
@@ -253,5 +254,9 @@ public class ArtistListAdapter<T> extends BaseAdapter {
 	public void setAddPadding(boolean addPadding) {
 		this.addPadding = addPadding;
 	}
-	
+
+	@Override
+	public void setLoadArtists(AsyncTask<T, Void, List<Artist>> loadArtists) {
+		this.loadArtists = loadArtists;
+	}
 }

@@ -615,4 +615,12 @@
     <dimen name="v_pager_videos_margin_l_rv_item_videos_artist_details">@dimen/txt_desc_margin_l_rv_item_desc</dimen>
     <dimen name="v_pager_videos_margin_r_rv_item_videos_artist_details">@dimen/v_pager_videos_margin_l_rv_item_videos_artist_details</dimen>
     
+    <!-- fragment_search_artists_tab.xml -->
+    <dimen name="rv_artists_margin_t_search_artists_tab">@dimen/rv_events_margin_t_discover_tab</dimen>
+    <dimen name="rv_artists_pad_search_artists_tab">@dimen/rv_events_padding_discover_tab</dimen>
+    
+    <!--  SearchArtistsFragmentTab.java -->
+    <dimen name="rv_item_l_r_offset_search_artists_tab">@dimen/rv_item_l_r_offset_discover_tab</dimen>
+    <dimen name="rv_item_t_b_offset_search_artists_tab">@dimen/rv_item_t_b_offset_discover_tab</dimen>
+    
 </resources>

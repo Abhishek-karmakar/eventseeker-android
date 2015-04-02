@@ -10,7 +10,14 @@
 	    android:layout_height="match_parent"
 	    android:scrollbars="none"
 	    android:background="@android:color/white"
-	    android:layout_marginTop="@dimen/rv_events_margin_t_discover_tab"
-	    android:padding="@dimen/rv_events_padding_discover_tab" />
+	    android:layout_marginTop="@dimen/rv_artists_margin_t_search_artists_tab"
+	    android:padding="@dimen/rv_artists_pad_search_artists_tab" />
+    
+    <include layout="@layout/progress_bar_eventseeker_transparent"
+	    android:id="@+id/rltLytProgressBar"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:background="@drawable/bg_no_content_overlay_tab"
+    	android:visibility="invisible" />
 
 </RelativeLayout>

@@ -52,8 +52,8 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 	private static final String TAG = DiscoverFragmentTab.class.getSimpleName();
 	
 	private static final int DEFAULT_SEARCH_RADIUS = 50;
-	private static final int GRID_COLUMNS_PORTRAIT = 2;
-	private static final int GRID_COLUMNS_LANDSCAPE = 3;
+	private static final int GRID_COLS_PORTRAIT = 2;
+	private static final int GRID_COLS_LANDSCAPE = 3;
 
 	private List<Category> evtCategories;
 	private LoadEvents loadEvents;
@@ -173,7 +173,7 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 		
 		recyclerVEvents = (RecyclerView) v.findViewById(R.id.recyclerVEvents);
 		int spanCount = (FragmentUtil.getResources(this).getConfiguration().orientation == 
-				Configuration.ORIENTATION_PORTRAIT) ? GRID_COLUMNS_PORTRAIT : GRID_COLUMNS_LANDSCAPE;
+				Configuration.ORIENTATION_PORTRAIT) ? GRID_COLS_PORTRAIT : GRID_COLS_LANDSCAPE;
 		GridLayoutManager gridLayoutManager = new GridLayoutManager(FragmentUtil.getActivity(this), spanCount);
 		recyclerVEvents.setHasFixedSize(true);
 		recyclerVEvents.setLayoutManager(gridLayoutManager);
