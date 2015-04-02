@@ -129,7 +129,7 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 		TabBar.Tab tabEvents;
 		
 		if(((MainActivity)FragmentUtil.getActivity(this)).isTablet()) {
-			tabEvents = new TabBar.Tab(btnEvents, FRAGMENT_TAG_EVENTS, SearchEventsFragmentTab.class, args);
+			tabEvents = new TabBar.Tab(btnEvents, FRAGMENT_TAG_EVENTS, SearchEventsFragmentTab1.class, args);
 			
 		} else {
 			tabEvents = new TabBar.Tab(btnEvents, FRAGMENT_TAG_EVENTS, SearchEventsFragment.class, args);			
@@ -180,7 +180,7 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 			List<Fragment> pageFragments = mTabsAdapter.getTabFragments();
 			for (Iterator<Fragment> iterator = pageFragments.iterator(); iterator.hasNext();) {
 				Fragment fragment = iterator.next();
-				if (fragment instanceof SearchEventsFragmentTab) {
+				if (fragment instanceof SearchEventsFragmentTab1) {
 					fragment.onActivityResult(requestCode, resultCode, data);
 				}
 			}

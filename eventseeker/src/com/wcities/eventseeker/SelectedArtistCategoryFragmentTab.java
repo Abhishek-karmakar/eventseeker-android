@@ -39,7 +39,6 @@ import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.core.Artist.Genre;
 import com.wcities.eventseeker.custom.fragment.PublishArtistFragmentLoadableFromBackStack;
-import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
@@ -48,10 +47,9 @@ import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
-import com.wcities.eventseeker.viewdata.SharedElement;
 
 public class SelectedArtistCategoryFragmentTab extends PublishArtistFragmentLoadableFromBackStack implements ArtistTrackingListener, 
-		LoadArtistsListener, LoadItemsInBackgroundListener, DialogBtnClickListener, OnFacebookShareClickedListener, ArtistListener,
+		LoadArtistsListener, LoadItemsInBackgroundListener, DialogBtnClickListener, OnFacebookShareClickedListener,
 		FullScrnProgressListener, AsyncTaskListener<Void>, OnClickListener {
 
 	private static final String TAG = SelectedArtistCategoryFragmentTab.class.getName();
@@ -389,13 +387,5 @@ public class SelectedArtistCategoryFragmentTab extends PublishArtistFragmentLoad
 	public String getScreenName() {
 		return ScreenNames.POPULAR_ARTISTS_CATEGORIES_SCREEN + FragmentUtil.getResources(this)
 				.getString(getArguments().getInt(BundleKeys.SCREEN_TITLE));
-	}
-
-	@Override
-	public void onArtistSelected(Artist artist) {
-	}
-
-	@Override
-	public void onArtistSelected(Artist artist, List<SharedElement> sharedElements) {
 	}
 }

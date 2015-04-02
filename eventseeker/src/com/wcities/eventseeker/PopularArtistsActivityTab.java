@@ -9,6 +9,7 @@ import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class PopularArtistsActivityTab extends BaseActivityTab implements FragmentLoadedFromBackstackListener {
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -34,10 +35,6 @@ public class PopularArtistsActivityTab extends BaseActivityTab implements Fragme
 			PopularArtistsFragmentTab popularArtistsFragmentTab = new PopularArtistsFragmentTab();
 			addFragment(R.id.content_frame, popularArtistsFragmentTab, FragmentUtil.getTag(popularArtistsFragmentTab), false);
 		}
-		
-		if (savedInstanceState != null) {
-			currentContentFragmentTag = savedInstanceState.getString(BundleKeys.CURRENT_CONTENT_FRAGMENT_TAG);
-		}
 	}
 
 	@Override
@@ -55,11 +52,6 @@ public class PopularArtistsActivityTab extends BaseActivityTab implements Fragme
 	}
 	
 	@Override
-	protected int getDrawerItemPos() {
-		return AppConstants.INVALID_INDEX;
-	}
-	
-	@Override
 	public void onFragmentResumed(Fragment fragment, int drawerPosition, String actionBarTitle) {
 		updateTitleForFragment(actionBarTitle, currentContentFragmentTag);
 		// Log.d(TAG, "got the current tag as : " + fragmentTag);
@@ -69,12 +61,6 @@ public class PopularArtistsActivityTab extends BaseActivityTab implements Fragme
 		if (newTitle != null) {
 			getSupportActionBar().setTitle(newTitle);
 		}
-	}
-	
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		outState.putString(BundleKeys.CURRENT_CONTENT_FRAGMENT_TAG, currentContentFragmentTag);
-		super.onSaveInstanceState(outState);
 	}
 	
 	@Override

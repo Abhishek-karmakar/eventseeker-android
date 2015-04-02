@@ -57,12 +57,10 @@ public class MyEventsFragmentTab extends FragmentLoadableFromBackStack implement
 		//Log.d(TAG, "onCreateView()");
 		View v = inflater.inflate(R.layout.fragment_custom_tabs_tab, null);
 		
-		int orientation = getResources().getConfiguration().orientation;
-
 		ViewPager viewPager = (ViewPager) v.findViewById(R.id.tabContentFrame);
 		SwipeTabsAdapter oldAdapter = mTabsAdapter;
 		tabBar = new TabBar(getChildFragmentManager());
-		mTabsAdapter = new SwipeTabsAdapter(this, viewPager, tabBar, orientation, this);
+		mTabsAdapter = new SwipeTabsAdapter(this, viewPager, tabBar, this);
 		
 		tabBarButtons = ((MyEventsActivityTab) FragmentUtil.getActivity(this)).getTabBarButtons();
 		

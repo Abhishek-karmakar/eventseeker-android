@@ -1,16 +1,13 @@
 package com.wcities.eventseeker;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,13 +18,8 @@ import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.custom.view.RelativeLayoutCenterScale;
-import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.interfaces.ArtistListenerTab;
-import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
 import com.wcities.eventseeker.util.FragmentUtil;
-import com.wcities.eventseeker.util.ViewUtil;
-import com.wcities.eventseeker.viewdata.SharedElement;
-import com.wcities.eventseeker.viewdata.SharedElementPosition;
 
 public class FeaturingArtistFragmentTab extends Fragment {
 	

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rltLytRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <com.wcities.eventseeker.custom.view.RecyclerViewInterceptingVerticalScroll
+	    android:id="@+id/recyclerVArtists"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:scrollbars="none"
+	    android:background="@android:color/white"
+	    android:layout_marginTop="@dimen/rv_events_margin_t_discover_tab"
+	    android:padding="@dimen/rv_events_padding_discover_tab" />
+
+</RelativeLayout>

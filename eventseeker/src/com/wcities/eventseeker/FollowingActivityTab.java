@@ -1,17 +1,12 @@
 package com.wcities.eventseeker;
 
-import java.util.List;
-
 import android.os.Bundle;
 
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
-import com.wcities.eventseeker.core.Artist;
-import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.util.FragmentUtil;
-import com.wcities.eventseeker.viewdata.SharedElement;
 
-public class FollowingActivityTab extends BaseActivityTab implements ArtistListener {
+public class FollowingActivityTab extends BaseActivityTab {
 	
 	private static final String TAG = FollowingActivityTab.class.getSimpleName();
 	
@@ -47,17 +42,4 @@ public class FollowingActivityTab extends BaseActivityTab implements ArtistListe
 	protected int getDrawerItemPos() {
 		return INDEX_NAV_ITEM_FOLLOWING;
 	}
-
-	@Override
-	public void onArtistSelected(Artist artist) {
-		/*ArtistDetailsFragment artistDetailsFragment = new ArtistDetailsFragment();
-		Bundle args = new Bundle();
-		args.putSerializable(BundleKeys.ARTIST, artist);
-		artistDetailsFragment.setArguments(args);
-		selectNonDrawerItem(artistDetailsFragment,
-				AppConstants.FRAGMENT_TAG_ARTIST_DETAILS, "", true);*/
-	}
-
-	@Override
-	public void onArtistSelected(Artist artist, List<SharedElement> sharedElements) {}
 }

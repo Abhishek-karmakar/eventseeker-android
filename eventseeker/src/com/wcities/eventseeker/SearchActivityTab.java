@@ -3,6 +3,7 @@ package com.wcities.eventseeker;
 import android.os.Bundle;
 
 import com.wcities.eventseeker.constants.ScreenNames;
+import com.wcities.eventseeker.util.FragmentUtil;
 
 public class SearchActivityTab extends BaseActivityTab {
 	
@@ -14,9 +15,16 @@ public class SearchActivityTab extends BaseActivityTab {
         super.onCreate(savedInstanceState);
         
 		//Log.d(TAG, "onCreate()");
-		setContentView(R.layout.activity_base_tab);
+		setContentView(R.layout.activity_base_tab_with_tabs);
 		
 		setCommonUI();
+		
+		if (isOnCreateCalledFirstTime) {
+			//Log.d(TAG, "add event details fragment tab");
+			SearchFragmentTab searchFragmentTab = new SearchFragmentTab();
+			searchFragmentTab.setArguments(getIntent().getExtras());
+			addFragment(R.id.content_frame, searchFragmentTab, FragmentUtil.getTag(searchFragmentTab), false);
+		}
 	}
 
 	@Override

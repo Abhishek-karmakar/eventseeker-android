@@ -45,9 +45,24 @@ public class SwipeTabsAdapter extends FragmentPagerAdapter implements TabBar.Tab
 		this.orientation = orientation;
 	}
 	
+	public SwipeTabsAdapter(Fragment fragment, ViewPager pager, TabBar tabBar) {
+		super(fragment.getChildFragmentManager());
+		this.fragment = fragment;
+		mViewPager = pager;
+		this.tabBar = tabBar;
+		tabFragments = new ArrayList<Fragment>();
+		mViewPager.setAdapter(this);
+		mViewPager.setOnPageChangeListener(this);
+	}
+	
 	public SwipeTabsAdapter(Fragment fragment, ViewPager pager, TabBar tabBar, int orientation, 
 			SwipeTabsAdapterListener listener) {
 		this(fragment, pager, tabBar, orientation);
+		mListener = listener;
+	}
+	
+	public SwipeTabsAdapter(Fragment fragment, ViewPager pager, TabBar tabBar, SwipeTabsAdapterListener listener) {
+		this(fragment, pager, tabBar);
 		mListener = listener;
 	}
 
@@ -70,9 +85,8 @@ public class SwipeTabsAdapter extends FragmentPagerAdapter implements TabBar.Tab
 		}
 		notifyDataSetChanged();
 		
-		// For bosch we need tab backgrounds as in portrait orientation of pure android version 
-		if ((orientation == Configuration.ORIENTATION_PORTRAIT || MySpinServerSDK.sharedInstance().isConnected()) 
-				&& tabBar.getNumberOfTabs() > 1) {
+		// For bosch we need tab backgrounds curved depending on total number of tabs 
+		if (MySpinServerSDK.sharedInstance().isConnected() && tabBar.getNumberOfTabs() > 1) {
 			updateTabsBgForPortrait();
 		}
 	}

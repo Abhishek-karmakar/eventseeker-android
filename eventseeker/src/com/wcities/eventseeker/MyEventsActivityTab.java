@@ -1,18 +1,12 @@
 package com.wcities.eventseeker;
 
-import java.util.List;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.core.Event;
-import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.interfaces.FragmentLoadedFromBackstackListener;
 import com.wcities.eventseeker.util.FragmentUtil;
-import com.wcities.eventseeker.viewdata.SharedElement;
 
-public class MyEventsActivityTab extends BaseActivityTab implements FragmentLoadedFromBackstackListener, EventListener {
+public class MyEventsActivityTab extends BaseActivityTab implements FragmentLoadedFromBackstackListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -37,10 +31,6 @@ public class MyEventsActivityTab extends BaseActivityTab implements FragmentLoad
 			//Log.d(TAG, "add settings fragment tab");
 			MyEventsFragmentTab myEventsFragmentTab = new MyEventsFragmentTab();
 			addFragment(R.id.content_frame, myEventsFragmentTab, FragmentUtil.getTag(myEventsFragmentTab), false);
-		}
-		
-		if (savedInstanceState != null) {
-			currentContentFragmentTag = savedInstanceState.getString(BundleKeys.CURRENT_CONTENT_FRAGMENT_TAG);
 		}
 	}
 
@@ -76,24 +66,5 @@ public class MyEventsActivityTab extends BaseActivityTab implements FragmentLoad
 	}
 	
 	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		outState.putString(BundleKeys.CURRENT_CONTENT_FRAGMENT_TAG, currentContentFragmentTag);
-		super.onSaveInstanceState(outState);
-	}
-	
-	@Override
 	public void onFragmentResumed(Fragment fragment) {}
-
-	@Override
-	public void onEventSelected(Event event) {
-		EventDetailsFragment eventDetailsFragment = new EventDetailsFragment();
-		Bundle args = new Bundle();
-		args.putSerializable(BundleKeys.EVENT, event);
-		eventDetailsFragment.setArguments(args);
-		//selectNonDrawerItem(eventDetailsFragment, AppConstants.FRAGMENT_TAG_EVENT_DETAILS, "", true);
-	}
-
-	@Override
-	public void onEventSelected(Event event, List<SharedElement> sharedElements) {}
-	
 }

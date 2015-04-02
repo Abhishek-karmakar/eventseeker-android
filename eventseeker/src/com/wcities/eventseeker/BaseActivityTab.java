@@ -65,6 +65,8 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 	
 	private static final String TAG = BaseActivityTab.class.getSimpleName(); 
 	
+	private static final int SEARCHVIEW_MAX_WIDTH = 5000; 
+	
 	protected static final int INDEX_NAV_ITEM_DISCOVER = 0;
 	protected static final int INDEX_NAV_ITEM_MY_EVENTS = INDEX_NAV_ITEM_DISCOVER + 1;
 	protected static final int INDEX_NAV_ITEM_FOLLOWING = INDEX_NAV_ITEM_MY_EVENTS + 1;
@@ -81,7 +83,8 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 
 	private List<Button> tabBarBtn;
 	
-	protected String currentContentFragmentTag, searchQuery = "";
+	protected String currentContentFragmentTag;
+	private String searchQuery = "";
 	
 	protected boolean isOnCreateCalledFirstTime = true, isSearchViewIconified = true;
 	
@@ -205,7 +208,9 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		super.onSaveInstanceState(outState);
 		outState.putBoolean(BundleKeys.IS_ON_CREATE_CALLED_FIRST_TIME, isOnCreateCalledFirstTime);
 		outState.putString(BundleKeys.CURRENT_CONTENT_FRAGMENT_TAG, currentContentFragmentTag);
-		outState.putBoolean(BundleKeys.IS_SEARCHVIEW_ICONIFIED, searchView.isIconified());
+		if (searchView != null) {
+			outState.putBoolean(BundleKeys.IS_SEARCHVIEW_ICONIFIED, searchView.isIconified());
+		}
 		outState.putString(BundleKeys.SEARCH_QUERY, searchQuery);
 	}
 	
@@ -368,7 +373,7 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
     }
 	
 	private void setSearchView(Menu menu) {
-		Log.d(TAG, "setSearchView()");
+		//Log.d(TAG, "setSearchView()");
 		searchItem = menu.findItem(R.id.action_search);
 		searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 		searchView.setQueryHint(getResources().getString(R.string.menu_search));
@@ -380,10 +385,23 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 			v.setImageResource(R.drawable.search);
 		}
 		
+		if (this instanceof SearchActivityTab || this instanceof MyEventsActivityTab) {
+			/**
+			 * For screens having toolbar tabs, fill entire toolbar when searchview is expanded, because otherwise 
+			 * it just compresses tabs in portrait orientation which doesn't look good.
+			 */
+			searchView.setMaxWidth(SEARCHVIEW_MAX_WIDTH);
+		}
+		
+		/**
+		 * retain searchQuery on orientation change.
+		 * For all screens except search we need to retain only when isSearchViewIconified = false, 
+		 * but for SearchActivityTab, even if isSearchViewIconified = true, we want searchQuery be retained.
+		 */
+		searchView.setQuery(searchQuery, false);
 		if (!isSearchViewIconified) {
-			Log.d(TAG, "!isSearchViewIconified");
-			// retain searchQuery & softkeypad's open status on orientation change
-			searchView.setQuery(searchQuery, false);
+			//Log.d(TAG, "!isSearchViewIconified");
+			// retain searchview & softkeypad's open status on orientation change
 			searchView.setIconified(false);
 		}
 	}
@@ -708,6 +726,7 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 	
 	@Override
 	public boolean onQueryTextChange(String query) {
+		//Log.d(TAG, "onQueryTextChange() - query = " + query);
 		searchQuery = query;
 		return false;
 	}
@@ -726,17 +745,21 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 			 */
 			searchQuery = "";
 			searchView.setQuery(searchQuery, false);
+			searchView.setIconified(true);
 			
 			Intent intent = new Intent(getApplicationContext(), SearchActivityTab.class);
 			intent.putExtra(BundleKeys.QUERY, query);
 			startActivity(intent);
 			
 		} else {
-			Log.d(TAG, "else");
+			//Log.d(TAG, "else");
+			// Calling setIconified() only once doesn't collapse the searchview, hence calling it twice.
+			searchView.setIconified(true);
+			searchView.setIconified(true);
+			searchQuery = query;
+			searchView.setQuery(searchQuery, false);
 			((SearchActivityTab) this).onQueryTextUpdated(query);
 		}
-		searchView.setIconified(true);
-		Log.d(TAG, "return");
 		
 		return true;
 	}
