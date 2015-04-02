@@ -18,12 +18,12 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:drawableTop="@drawable/ic_sync_account"
+            android:drawableTop="@drawable/slctr_tabs_btn_sync_artists"
+            android:paddingTop="@dimen/btn_tabs_pad_t_fragment_following_tab"
             android:text="@string/btn_sync_accounts"
             android:textAllCaps="false"
             android:textColor="@color/slctr_clr_primary_on_tabs_txt_clr_off"
-            android:textSize="@dimen/btn_tabs_txt_size_fragment_following_tab"
-            android:paddingTop="@dimen/btn_tabs_pad_t_fragment_following_tab" />
+            android:textSize="@dimen/btn_tabs_txt_size_fragment_following_tab" />
 
         <View
             android:layout_width="@dimen/v_divider_w_fragment_following_tab"
@@ -38,12 +38,12 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:drawableTop="@drawable/ic_sync_account"
+            android:drawableTop="@drawable/slctr_tabs_btn_poplar_artists"
+            android:paddingTop="@dimen/btn_tabs_pad_t_fragment_following_tab"
             android:text="@string/btn_popular_artists"
             android:textAllCaps="false"
             android:textColor="@color/slctr_clr_primary_on_tabs_txt_clr_off"
-            android:textSize="@dimen/btn_tabs_txt_size_fragment_following_tab"
-            android:paddingTop="@dimen/btn_tabs_pad_t_fragment_following_tab" />
+            android:textSize="@dimen/btn_tabs_txt_size_fragment_following_tab" />
 
         <View
             android:layout_width="@dimen/v_divider_w_fragment_following_tab"
@@ -58,12 +58,12 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:drawableTop="@drawable/ic_sync_account"
+            android:drawableTop="@drawable/slctr_tabs_btn_recommended_artists"
+            android:paddingTop="@dimen/btn_tabs_pad_t_fragment_following_tab"
             android:text="@string/btn_recommended"
             android:textAllCaps="false"
             android:textColor="@color/slctr_clr_primary_on_tabs_txt_clr_off"
-            android:textSize="@dimen/btn_tabs_txt_size_fragment_following_tab"
-            android:paddingTop="@dimen/btn_tabs_pad_t_fragment_following_tab" />
+            android:textSize="@dimen/btn_tabs_txt_size_fragment_following_tab" />
 
         <View
             android:layout_width="@dimen/v_divider_w_fragment_following_tab"
@@ -78,12 +78,12 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:drawableTop="@drawable/ic_sync_account"
+            android:drawableTop="@drawable/slctr_tabs_btn_search_artists"
+            android:paddingTop="@dimen/btn_tabs_pad_t_fragment_following_tab"
             android:text="@string/btn_search"
             android:textAllCaps="false"
             android:textColor="@color/slctr_clr_primary_on_tabs_txt_clr_off"
-            android:textSize="@dimen/btn_tabs_txt_size_fragment_following_tab"
-            android:paddingTop="@dimen/btn_tabs_pad_t_fragment_following_tab" />
+            android:textSize="@dimen/btn_tabs_txt_size_fragment_following_tab" />
     </LinearLayout>
 
     <View
@@ -176,15 +176,11 @@
                         android:textSize="@dimen/txt_size_widget_eventSeeker_btn_alpha"
                         android:textStyle="bold" />
                 </RelativeLayout>
-            </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/lnr_root_padding_fragment_follow_more_artists"
-                android:layout_marginLeft="@dimen/lnr_root_padding_fragment_follow_more_artists"
-                android:layout_marginRight="@dimen/lnr_root_padding_fragment_follow_more_artists"
-                android:orientation="horizontal" >
+                <View
+                    android:layout_width="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent" />
 
                 <RelativeLayout
                     android:layout_width="0dp"
@@ -215,11 +211,15 @@
                         android:textSize="@dimen/txt_size_widget_eventSeeker_btn_alpha"
                         android:textStyle="bold" />
                 </RelativeLayout>
+            </LinearLayout>
 
-                <View
-                    android:layout_width="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/transparent" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/lnr_root_padding_fragment_follow_more_artists"
+                android:layout_marginLeft="@dimen/lnr_root_padding_fragment_follow_more_artists"
+                android:layout_marginRight="@dimen/lnr_root_padding_fragment_follow_more_artists"
+                android:orientation="horizontal" >
 
                 <RelativeLayout
                     android:layout_width="0dp"
@@ -250,15 +250,11 @@
                         android:textSize="@dimen/txt_size_widget_eventSeeker_btn_alpha"
                         android:textStyle="bold" />
                 </RelativeLayout>
-            </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/lnr_root_padding_fragment_follow_more_artists"
-                android:layout_marginLeft="@dimen/lnr_root_padding_fragment_follow_more_artists"
-                android:layout_marginRight="@dimen/lnr_root_padding_fragment_follow_more_artists"
-                android:orientation="horizontal" >
+                <View
+                    android:layout_width="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent" />
 
                 <RelativeLayout
                     android:layout_width="0dp"
@@ -328,11 +324,46 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/lnr_root_padding_fragment_follow_more_artists"
                 android:layout_marginLeft="@dimen/lnr_root_padding_fragment_follow_more_artists"
                 android:layout_marginRight="@dimen/lnr_root_padding_fragment_follow_more_artists"
                 android:orientation="horizontal" >
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" >
+
+                    <com.wcities.eventseeker.custom.view.ResizableImageView
+                        android:id="@+id/imgPop"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_pop" />
+
+                    <Button
+                        android:id="@+id/btnPop"
+                        style="@style/Widget.EventSeeker.Button.Transparent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignBottom="@+id/imgPop"
+                        android:layout_alignTop="@+id/imgPop" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:text="@string/btn_pop"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/txt_size_widget_eventSeeker_btn_alpha"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent" />
 
                 <RelativeLayout
                     android:layout_width="0dp"
@@ -414,41 +445,6 @@
                     android:layout_weight="1" >
 
                     <com.wcities.eventseeker.custom.view.ResizableImageView
-                        android:id="@+id/imgPop"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_pop" />
-
-                    <Button
-                        android:id="@+id/btnPop"
-                        style="@style/Widget.EventSeeker.Button.Transparent"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_alignBottom="@+id/imgPop"
-                        android:layout_alignTop="@+id/imgPop" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:gravity="center"
-                        android:text="@string/btn_pop"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/txt_size_widget_eventSeeker_btn_alpha"
-                        android:textStyle="bold" />
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/transparent" />
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" >
-
-                    <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgWorldMusic"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -472,16 +468,11 @@
                         android:textSize="@dimen/txt_size_widget_eventSeeker_btn_alpha"
                         android:textStyle="bold" />
                 </RelativeLayout>
-            </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginBottom="@dimen/lnr_root_padding_fragment_follow_more_artists"
-                android:layout_marginLeft="@dimen/lnr_root_padding_fragment_follow_more_artists"
-                android:layout_marginRight="@dimen/lnr_root_padding_fragment_follow_more_artists"
-                android:layout_weight="1"
-                android:orientation="horizontal" >
+                <View
+                    android:layout_width="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent" />
 
                 <RelativeLayout
                     android:layout_width="0dp"
@@ -622,6 +613,17 @@
                         android:textSize="@dimen/txt_size_widget_eventSeeker_btn_alpha"
                         android:textStyle="bold" />
                 </RelativeLayout>
+
+                <View
+                    android:layout_width="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="invisible" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

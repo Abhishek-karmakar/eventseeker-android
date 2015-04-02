@@ -13,13 +13,15 @@
 	    <ImageView android:id="@+id/imgPrev"
 	        android:layout_width="@dimen/img_prev_w_discover_tab"
 	        android:layout_height="match_parent"
-	        android:src="@drawable/less"
+	        android:src="@drawable/slctr_btn_previous"
+	        android:clickable="true"
 	        android:scaleType="centerInside" />
     
 	    <ImageView android:id="@+id/imgNext"
 	        android:layout_width="@dimen/img_next_w_discover_tab"
 	        android:layout_height="match_parent"
-	        android:src="@drawable/more"
+	        android:src="@drawable/slctr_btn_next"
+	        android:clickable="true"
 	        android:scaleType="centerInside"
 	        android:layout_alignParentRight="true" />
     
