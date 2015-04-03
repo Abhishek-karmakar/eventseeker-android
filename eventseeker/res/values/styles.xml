@@ -87,7 +87,7 @@
 	    <item name="android:titleTextStyle">@style/TextAppearance.EventSeekr.Widget.ActionBar.Title</item>
 	    <item name="titleTextStyle">@style/TextAppearance.EventSeekr.Widget.ActionBar.Title</item>
 	    <!-- <item name="android:backgroundStacked">@color/bg_bar_below_action_bar</item>
-    	<item name="backgroundStacked">@color/bg_bar_below_action_bar</item>-->
+    	<item name="backgroundStacked">@color/bg_bar_below_action_bar</item> -->
 	</style>
 	
 	<!-- Text style -->

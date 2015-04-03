@@ -11,6 +11,7 @@ import android.os.AsyncTask.Status;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +34,7 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.interfaces.ArtistAdapterListener;
-import com.wcities.eventseeker.interfaces.ArtistListener;
+import com.wcities.eventseeker.interfaces.ArtistListenerTab;
 import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
 import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
@@ -144,8 +145,10 @@ public class MyArtistListAdapterTab extends BaseAdapter implements SectionIndexe
 
 			convertView.findViewById(R.id.rltLytRootPrgs).setVisibility(View.INVISIBLE);
 			
-			((TextView) convertView.findViewById(R.id.txtArtistName)).setText(artist.getName());
-
+			final TextView txtArtistName = (TextView) convertView.findViewById(R.id.txtArtistName);
+			txtArtistName.setText(artist.getName());
+			ViewCompat.setTransitionName(txtArtistName, "txtArtistName" + position);
+			
 			CheckBox chkFollow = (CheckBox) convertView.findViewById(R.id.chkFollow);
 			chkFollow.setSelected(artist.getAttending() == Attending.Tracked);
 			chkFollow.setOnClickListener(new OnClickListener() {
@@ -192,12 +195,13 @@ public class MyArtistListAdapterTab extends BaseAdapter implements SectionIndexe
 				AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
 				asyncLoadImg.loadImg(imgArtist, ImgResolution.LOW, (AdapterView) parent, position, artist);
 			}
-
+			ViewCompat.setTransitionName(imgArtist, "imgArtist" + position);
+			
 			convertView.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
-					((ArtistListener) FragmentUtil.getActivity(fragment)).onArtistSelected(artist);
+					((ArtistListenerTab) FragmentUtil.getActivity(fragment)).onArtistSelected(artist, imgArtist, txtArtistName);
 				}
 			});
 		}

@@ -12,10 +12,13 @@ import android.os.Looper;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -91,7 +94,7 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 		rltLytNoEvts = (RelativeLayout) v.findViewById(R.id.rltLytNoEvts);
 		if (eventList != null && eventList.isEmpty()) {
 			// retain no events layout visibility on orientation change
-			rltLytNoEvts.setVisibility(View.VISIBLE);
+			refreshNoContentLyt(View.VISIBLE);
 		}
 		
 		return v;
@@ -167,12 +170,13 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 		rltLytProgressBar.setVisibility(visibility);
 		
 		if (visibility == View.VISIBLE) {
-			rltLytNoEvts.setVisibility(View.INVISIBLE);
+			refreshNoContentLyt(View.GONE);
 		}
 	}
 	
 	@Override
 	public void loadItemsInBackground() {
+		Log.d(TAG, "loadItemsInBackground");
 		loadEvents = new LoadMyEvents(Api.OAUTH_TOKEN, eventList, rvCatEventsAdapterTab, wcitiesId, loadType, 
 				lat, lon, this);
 		rvCatEventsAdapterTab.setLoadDateWiseEvents(loadEvents);
@@ -181,15 +185,16 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 
 	@Override
 	public void onTaskCompleted(Void... params) {
+		Log.d(TAG, "onTaskCompleted");
 		handler.post(new Runnable() {
 			
 			@Override
 			public void run() {
 				//Log.d(TAG, "onEventsLoaded()");
 				// to remove full screen progressbar
-				setCenterProgressBarVisibility(View.INVISIBLE);
+				setCenterProgressBarVisibility(View.GONE);
 				if (eventList.isEmpty()) {
-					rltLytNoEvts.setVisibility(View.VISIBLE);
+					refreshNoContentLyt(View.VISIBLE);
 				}
 			}
 		});
@@ -214,4 +219,40 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 			resetEventList();
 		}
 	}
+	
+	private void refreshNoContentLyt(int visibility) {
+		Log.d(TAG, "refreshNoContentLyt : " + visibility);
+		rltLytNoEvts.setVisibility(visibility);
+		if (visibility == View.VISIBLE) {
+			recyclerVEvents.setVisibility(View.GONE);
+			
+			int txtres, imgNoItemsRes, imgPhoneRes;
+			if (loadType == Type.mysavedevents) {
+				txtres = R.string.saved_events_no_content; 
+				imgNoItemsRes = R.drawable.ic_unsaved_event_slider; 
+				imgPhoneRes = R.drawable.ic_saved_events_no_content;	
+				
+			} else {
+				txtres = R.string.my_events_events_no_content; 
+				imgNoItemsRes = R.drawable.ic_list_follow; 
+				imgPhoneRes = (loadType == Type.myevents) ?
+						R.drawable.ic_my_events_no_content : R.drawable.ic_recommended_events_no_content;							
+			}
+			
+			/*((ImageView) rltRootNoContentFound.findViewById(R.id.imgNoItems))
+				.setImageDrawable(res.getDrawable(imgNoItemsRes));*/
+
+			TextView txtNoContentMsg = (TextView) rltLytNoEvts.findViewById(R.id.txtNoItemsMsg);
+			txtNoContentMsg.setText(txtres);
+			txtNoContentMsg.setCompoundDrawablesWithIntrinsicBounds(0, imgNoItemsRes, 0, 0);
+			
+			((ImageView) rltLytNoEvts.findViewById(R.id.imgPhone))
+				.setImageDrawable(FragmentUtil.getResources(this).getDrawable(imgPhoneRes));
+
+			
+		} else {
+			recyclerVEvents.setVisibility(View.VISIBLE);
+		}
+	}
+	
 }

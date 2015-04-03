@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.wcities.eventseeker"
+    android:id="@+id/rltRootNoContentFound"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <com.wcities.eventseeker.custom.view.ResizableImageView
+        android:id="@+id/imgPhone"
+        android:layout_width="@dimen/img_no_content_w_all_fragments"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/all_components_margin_t_include_no_content_with_phone"
+        android:layout_marginRight="@dimen/all_components_margin_t_include_no_content_with_phone"
+        android:layout_marginTop="@dimen/all_components_margin_t_include_no_content_with_phone"
+        android:src="@drawable/ic_no_content_following_1" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/imgPhone" >
+
+        <TextView
+            android:id="@+id/txtNoItemsMsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="@dimen/all_components_margin_t_include_no_content_with_phone"
+            android:drawablePadding="@dimen/txt_no_items_msg_drawwable_pad_include_no_content_with_phone"
+            android:drawableTop="@drawable/ic_list_follow"
+            android:gravity="center"
+            android:paddingLeft="@dimen/txt_no_content_msg_pad_l_r_include_no_content_with_phone"
+            android:paddingRight="@dimen/txt_no_content_msg_pad_l_r_include_no_content_with_phone"
+            android:text="@string/follow_artists_for_updates"
+            android:textColor="@color/txt_no_items_heading_txt_color_include_no_items_found_with_action"
+            android:textSize="@dimen/txt_no_items_msg_txt_size_include_no_items_found_with_action" />
+    </RelativeLayout>
+
+</RelativeLayout>

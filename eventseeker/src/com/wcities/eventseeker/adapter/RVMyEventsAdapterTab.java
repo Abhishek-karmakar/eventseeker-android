@@ -13,6 +13,7 @@ import android.os.Looper;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -89,14 +90,14 @@ public class RVMyEventsAdapterTab extends Adapter<ViewHolder> implements DateWis
 
 	private RVMyEventsAdapterTabListener rvMyEventsAdapterTabListener;
 
+	private static enum ViewType {
+		EVENT;
+	};
+	
 	public interface RVMyEventsAdapterTabListener {
 		public void setEvent(Event event);
 		public void setCenterProgressBarVisibility(int visibility);
 	}
-	
-	private static enum ViewType {
-		EVENT;
-	};
 	
 	static class ViewHolder extends RecyclerView.ViewHolder {
 		
@@ -187,7 +188,7 @@ public class RVMyEventsAdapterTab extends Adapter<ViewHolder> implements DateWis
 		final Event event = eventList.get(position);
 		if (event == null) {
 			// progress indicator
-			
+			Log.d(TAG, "eventList.size() == 1 : " + (eventList.size() == 1));
 			if (eventList.size() == 1) {
 				// no events loaded yet
 				rvMyEventsAdapterTabListener.setCenterProgressBarVisibility(View.VISIBLE);
@@ -206,6 +207,7 @@ public class RVMyEventsAdapterTab extends Adapter<ViewHolder> implements DateWis
 			}
 			
 		} else {
+			Log.d(TAG, "else");
 			//Log.d(TAG, "else");
 			holder.itemView.setVisibility(View.VISIBLE);
 			holder.rltLytRootPrgs.setVisibility(View.INVISIBLE);
@@ -583,7 +585,7 @@ public class RVMyEventsAdapterTab extends Adapter<ViewHolder> implements DateWis
 				holder.imgShare.setPressed(false);
 				
 				ShareViaDialogFragment shareViaDialogFragment = ShareViaDialogFragment.newInstance(event, 
-						ScreenNames.DISCOVER);
+						ScreenNames.MY_EVENTS_SCREEN);
 				/**
 				 * Passing activity fragment manager, since using this fragment's child fragment manager 
 				 * doesn't retain dialog on orientation change

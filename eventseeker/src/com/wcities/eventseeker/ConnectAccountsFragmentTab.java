@@ -36,7 +36,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
-import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
+import com.wcities.eventseeker.DrawerListFragmentTab.DrawerListFragmentTabListener;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
@@ -466,11 +466,11 @@ public class ConnectAccountsFragmentTab extends ListFragmentLoadableFromBackStac
 				public void onTaskCompleted(Integer... params) {
 					Log.d(TAG, "params[0] = " + params[0]);
 					if (params[0] > 0) {
-						((DrawerListFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragmentTab.this))
+						((DrawerListFragmentTabListener)FragmentUtil.getActivity(ConnectAccountsFragmentTab.this))
 							.onDrawerItemSelected(MainActivity.INDEX_NAV_ITEM_MY_EVENTS, null);
 						
 					} else {
-						((DrawerListFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragmentTab.this))
+						((DrawerListFragmentTabListener)FragmentUtil.getActivity(ConnectAccountsFragmentTab.this))
 							.onDrawerItemSelected(MainActivity.INDEX_NAV_ITEM_DISCOVER, null);
 					}
 				}
@@ -478,7 +478,7 @@ public class ConnectAccountsFragmentTab extends ListFragmentLoadableFromBackStac
 			loadMyEventsCount.execute();
 			
 		} else {
-			((DrawerListFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragmentTab.this))
+			((DrawerListFragmentTabListener)FragmentUtil.getActivity(ConnectAccountsFragmentTab.this))
 				.onDrawerItemSelected(MainActivity.INDEX_NAV_ITEM_DISCOVER, null);
 		}
 	}

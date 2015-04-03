@@ -1,92 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.wcities.eventseeker"
     android:id="@+id/rltLayoutRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white" >
 
-    <LinearLayout
+    <include
         android:id="@+id/lnrFollowMoreArtist"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/lnr_tabs_ht_fragment_following_tab"
         android:layout_alignParentTop="true"
-        android:background="@android:color/white"
-        android:elevation="@dimen/elevation_lnr_follow_more_artist_fragment_following_tab"
-        android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/btnSyncAccounts"
-            style="@style/Widget.EventSeeker.Button.Transparent"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/slctr_tabs_btn_sync_artists"
-            android:paddingTop="@dimen/btn_tabs_pad_t_fragment_following_tab"
-            android:text="@string/btn_sync_accounts"
-            android:textAllCaps="false"
-            android:textColor="@color/slctr_clr_primary_on_tabs_txt_clr_off"
-            android:textSize="@dimen/btn_tabs_txt_size_fragment_following_tab" />
-
-        <View
-            android:layout_width="@dimen/v_divider_w_fragment_following_tab"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/v_divider_t_b_fragment_following_tab"
-            android:layout_marginTop="@dimen/v_divider_t_b_fragment_following_tab"
-            android:background="@color/tabs_seperator" />
-
-        <Button
-            android:id="@+id/btnPopularArtists"
-            style="@style/Widget.EventSeeker.Button.Transparent"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/slctr_tabs_btn_poplar_artists"
-            android:paddingTop="@dimen/btn_tabs_pad_t_fragment_following_tab"
-            android:text="@string/btn_popular_artists"
-            android:textAllCaps="false"
-            android:textColor="@color/slctr_clr_primary_on_tabs_txt_clr_off"
-            android:textSize="@dimen/btn_tabs_txt_size_fragment_following_tab" />
-
-        <View
-            android:layout_width="@dimen/v_divider_w_fragment_following_tab"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/v_divider_t_b_fragment_following_tab"
-            android:layout_marginTop="@dimen/v_divider_t_b_fragment_following_tab"
-            android:background="@color/tabs_seperator" />
-
-        <Button
-            android:id="@+id/btnRecommended"
-            style="@style/Widget.EventSeeker.Button.Transparent"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/slctr_tabs_btn_recommended_artists"
-            android:paddingTop="@dimen/btn_tabs_pad_t_fragment_following_tab"
-            android:text="@string/btn_recommended"
-            android:textAllCaps="false"
-            android:textColor="@color/slctr_clr_primary_on_tabs_txt_clr_off"
-            android:textSize="@dimen/btn_tabs_txt_size_fragment_following_tab" />
-
-        <View
-            android:layout_width="@dimen/v_divider_w_fragment_following_tab"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/v_divider_t_b_fragment_following_tab"
-            android:layout_marginTop="@dimen/v_divider_t_b_fragment_following_tab"
-            android:background="@color/tabs_seperator" />
-
-        <Button
-            android:id="@+id/btnSearch"
-            style="@style/Widget.EventSeeker.Button.Transparent"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/slctr_tabs_btn_search_artists"
-            android:paddingTop="@dimen/btn_tabs_pad_t_fragment_following_tab"
-            android:text="@string/btn_search"
-            android:textAllCaps="false"
-            android:textColor="@color/slctr_clr_primary_on_tabs_txt_clr_off"
-            android:textSize="@dimen/btn_tabs_txt_size_fragment_following_tab" />
-    </LinearLayout>
+        layout="@layout/include_following_tabs" />
 
     <View
         android:id="@+id/vShadow"
@@ -110,90 +33,136 @@
             android:orientation="vertical"
             android:padding="@dimen/lnr_root_padding_fragment_follow_more_artists" >
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ic_nfl" >
+                android:layout_height="0dp"
+                android:layout_weight="1" >
+
+                <!--
+                NOTE: in this layout for ResizeableImageView, we haven't used 'app:compressAsPerWidth="true"' intentionally
+				because in graphical layout after adding 'app:compressAsPerWidth="true"' the ResizableImageView was taking more height with 
+				blank extra space around
+                -->
+
+                <com.wcities.eventseeker.custom.view.ResizableImageView
+                    android:id="@+id/imgBG"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_nfl" />
 
                 <Button
                     android:id="@+id/btnNFL"
                     style="@style/Widget.EventSeeker.Button.Transparent"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_alignBottom="@+id/imgBG"
+                    android:layout_alignTop="@+id/imgBG"
                     android:text="@string/btn_nfl" />
-            </LinearLayout>
+            </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
                 android:background="@android:color/transparent" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ic_nba" >
+                android:layout_height="0dp"
+                android:layout_weight="1" >
+
+                <com.wcities.eventseeker.custom.view.ResizableImageView
+                    android:id="@+id/imgBG1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_nba" />
 
                 <Button
                     android:id="@+id/btnNBA"
                     style="@style/Widget.EventSeeker.Button.Transparent"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_alignBottom="@+id/imgBG1"
+                    android:layout_alignTop="@+id/imgBG1"
                     android:text="@string/btn_nba" />
-            </LinearLayout>
+            </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
                 android:background="@android:color/transparent" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ic_nhl" >
+                android:layout_height="0dp"
+                android:layout_weight="1" >
+
+                <com.wcities.eventseeker.custom.view.ResizableImageView
+                    android:id="@+id/imgBG2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_nhl" />
 
                 <Button
                     android:id="@+id/btnNHL"
                     style="@style/Widget.EventSeeker.Button.Transparent"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_alignBottom="@+id/imgBG2"
+                    android:layout_alignTop="@+id/imgBG2"
                     android:text="@string/btn_nhl" />
-            </LinearLayout>
+            </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
                 android:background="@android:color/transparent" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ic_mlb" >
+                android:layout_height="0dp"
+                android:layout_weight="1" >
+
+                <com.wcities.eventseeker.custom.view.ResizableImageView
+                    android:id="@+id/imgBG3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_mlb" />
 
                 <Button
                     android:id="@+id/btnMLB"
                     style="@style/Widget.EventSeeker.Button.Transparent"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_alignBottom="@+id/imgBG3"
+                    android:layout_alignTop="@+id/imgBG3"
                     android:text="@string/btn_mlb" />
-            </LinearLayout>
+            </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
                 android:background="@android:color/transparent" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ic_mls" >
+                android:layout_height="0dp"
+                android:layout_weight="1" >
+
+                <com.wcities.eventseeker.custom.view.ResizableImageView
+                    android:id="@+id/imgBG4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_mls" />
 
                 <Button
                     android:id="@+id/btnMLS"
                     style="@style/Widget.EventSeeker.Button.Transparent"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_alignBottom="@+id/imgBG4"
+                    android:layout_alignTop="@+id/imgBG4"
                     android:text="@string/btn_mls" />
-            </LinearLayout>
+            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 

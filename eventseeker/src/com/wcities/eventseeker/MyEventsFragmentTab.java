@@ -75,9 +75,6 @@ public class MyEventsFragmentTab extends FragmentRetainingChildFragmentManager i
 		btnSaved.setText(R.string.saved_event);
 		btnSaved.setOnClickListener(this);
 		
-		//vTabBar.findViewById(R.id.btnTab3).setVisibility(View.GONE);
-		//vTabBar.findViewById(R.id.vDivider2).setVisibility(View.GONE);
-		
 		Bundle args = new Bundle();
 		args.putSerializable(BundleKeys.LOAD_TYPE, UserInfoApi.Type.myevents);
 		TabBar.Tab tabFollowing = new TabBar.Tab(btnFollowing, FRAGMENT_TAG_FOLLOWING, 
