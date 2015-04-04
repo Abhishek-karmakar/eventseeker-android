@@ -21,7 +21,7 @@
 
     <include
         android:id="@+id/rltLytNoEvts"
-        layout="@layout/include_no_content_with_phone"
+        layout="@layout/include_no_content_with_phone_tab"
         android:visibility="gone" />
 
     <include

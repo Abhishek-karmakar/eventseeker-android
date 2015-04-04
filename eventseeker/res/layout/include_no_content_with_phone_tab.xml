@@ -14,7 +14,9 @@
         android:layout_marginLeft="@dimen/all_components_margin_t_include_no_content_with_phone"
         android:layout_marginRight="@dimen/all_components_margin_t_include_no_content_with_phone"
         android:layout_marginTop="@dimen/all_components_margin_t_include_no_content_with_phone"
-        android:src="@drawable/ic_no_content_following_1" />
+        android:src="@drawable/ic_artist_news_no_content"
+        app:removeXtraHeight="true"
+        app:compressAsPerWidth="true" />
 
     <RelativeLayout
         android:layout_width="match_parent"

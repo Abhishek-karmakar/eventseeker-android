@@ -12,7 +12,6 @@ import android.os.Looper;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +27,7 @@ import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadMyEvents;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.custom.fragment.PublishEventFragment;
@@ -62,6 +62,8 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 
 	private String wcitiesId;
 
+	private boolean isNoEventFound;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -92,7 +94,7 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 		rltLytProgressBar.setBackgroundResource(R.drawable.bg_no_content_overlay_tab);
 		
 		rltLytNoEvts = (RelativeLayout) v.findViewById(R.id.rltLytNoEvts);
-		if (eventList != null && eventList.isEmpty()) {
+		if (isNoEventFound) {
 			// retain no events layout visibility on orientation change
 			refreshNoContentLyt(View.VISIBLE);
 		}
@@ -176,7 +178,6 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 	
 	@Override
 	public void loadItemsInBackground() {
-		Log.d(TAG, "loadItemsInBackground");
 		loadEvents = new LoadMyEvents(Api.OAUTH_TOKEN, eventList, rvCatEventsAdapterTab, wcitiesId, loadType, 
 				lat, lon, this);
 		rvCatEventsAdapterTab.setLoadDateWiseEvents(loadEvents);
@@ -185,7 +186,7 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 
 	@Override
 	public void onTaskCompleted(Void... params) {
-		Log.d(TAG, "onTaskCompleted");
+		isNoEventFound = eventList.size() == 1 && eventList.get(0) != null && eventList.get(0).getId() == AppConstants.INVALID_ID;
 		handler.post(new Runnable() {
 			
 			@Override
@@ -193,7 +194,7 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 				//Log.d(TAG, "onEventsLoaded()");
 				// to remove full screen progressbar
 				setCenterProgressBarVisibility(View.GONE);
-				if (eventList.isEmpty()) {
+				if (isNoEventFound) {
 					refreshNoContentLyt(View.VISIBLE);
 				}
 			}
@@ -221,7 +222,6 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 	}
 	
 	private void refreshNoContentLyt(int visibility) {
-		Log.d(TAG, "refreshNoContentLyt : " + visibility);
 		rltLytNoEvts.setVisibility(visibility);
 		if (visibility == View.VISIBLE) {
 			recyclerVEvents.setVisibility(View.GONE);
