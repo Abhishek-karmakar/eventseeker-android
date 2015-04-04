@@ -219,7 +219,7 @@ public class RVMyEventsAdapterTab extends Adapter<ViewHolder> implements DateWis
 			}
 			
 			holder.txtEvtTitle.setText(event.getName());
-			ViewCompat.setTransitionName(holder.txtEvtTitle, "txtTransition" + position);
+			ViewCompat.setTransitionName(holder.txtEvtTitle, "txtTransitionMyEvents" + position);
 			
 			if (event.getSchedule() != null) {
 				Schedule schedule = event.getSchedule();
@@ -260,7 +260,7 @@ public class RVMyEventsAdapterTab extends Adapter<ViewHolder> implements DateWis
 			    }
 			}
 			
-			ViewCompat.setTransitionName(holder.imgEvt, "imageTransition" + position);
+			ViewCompat.setTransitionName(holder.imgEvt, "imageTransitionMyEvents" + position);
 
 			final Resources res = FragmentUtil.getResources(publishEventFragment);
 			if (event.getSchedule() == null || event.getSchedule().getBookingInfos().isEmpty()) {

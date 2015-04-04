@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     
-    <include layout="@layout/include_no_content_with_phone"
+    <include layout="@layout/include_no_content_with_phone_tab"
         android:visibility="gone"/>
     
     <include layout="@layout/progress_bar_eventseeker_fixed_ht"

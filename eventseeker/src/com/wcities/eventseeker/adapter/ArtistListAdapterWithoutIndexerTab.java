@@ -8,8 +8,8 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.wcities.eventseeker.GeneralDialogFragment;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.SelectedArtistCategoryFragmentTab;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
@@ -30,7 +31,7 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.interfaces.ArtistAdapterListener;
-import com.wcities.eventseeker.interfaces.ArtistListener;
+import com.wcities.eventseeker.interfaces.ArtistListenerTab;
 import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
 import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
@@ -126,6 +127,8 @@ public class ArtistListAdapterWithoutIndexerTab extends BaseAdapter implements A
 			}
 			
 		} else {
+			String transitionName = fragment instanceof SelectedArtistCategoryFragmentTab ? "PopularArtists" : "RecommenededArtists";
+			
 			if (convertView == null || !convertView.getTag().equals(AppConstants.TAG_CONTENT)) {
 				convertView = LayoutInflater.from(FragmentUtil.getActivity(fragment))
 						.inflate(R.layout.fragment_following_artists_list_item_tab, null);
@@ -134,8 +137,10 @@ public class ArtistListAdapterWithoutIndexerTab extends BaseAdapter implements A
 
 			convertView.findViewById(R.id.rltLytRootPrgs).setVisibility(View.INVISIBLE);
 			
-			((TextView) convertView.findViewById(R.id.txtArtistName)).setText(artist.getName());
-
+			final TextView txtArtistName = (TextView) convertView.findViewById(R.id.txtArtistName);
+			txtArtistName.setText(artist.getName());
+			ViewCompat.setTransitionName(txtArtistName, "txtArtistName" + transitionName + position);
+			
 			CheckBox chkFollow = (CheckBox) convertView.findViewById(R.id.chkFollow);
 			chkFollow.setSelected(artist.getAttending() == Attending.Tracked);
 			chkFollow.setOnClickListener(new OnClickListener() {
@@ -182,12 +187,14 @@ public class ArtistListAdapterWithoutIndexerTab extends BaseAdapter implements A
 				AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
 				asyncLoadImg.loadImg(imgArtist, ImgResolution.LOW, (AdapterView) parent, position, artist);
 			}
-
+			
+			ViewCompat.setTransitionName(imgArtist, "imgArtist" + transitionName + position);
+			
 			convertView.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
-					((ArtistListener) FragmentUtil.getActivity(fragment)).onArtistSelected(artist);
+					((ArtistListenerTab) FragmentUtil.getActivity(fragment)).onArtistSelected(artist, imgArtist, txtArtistName);
 				}
 			});
 		}
