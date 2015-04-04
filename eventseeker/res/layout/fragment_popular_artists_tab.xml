@@ -32,29 +32,6 @@
             android:orientation="vertical"
             android:padding="@dimen/lnr_root_padding_fragment_follow_more_artists" >
 
-            <!--
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" >
-
-                <com.wcities.eventseeker.custom.view.ResizableImageView
-                    android:id="@+id/imgBG"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_nfl" />
-
-                <Button
-                    android:id="@+id/btnNFL"
-                    style="@style/Widget.EventSeeker.Button.Transparent"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignBottom="@+id/imgBG"
-                    android:layout_alignTop="@+id/imgBG"
-                    android:text="@string/btn_nfl" />
-            </RelativeLayout>
-            -->
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
