@@ -3,7 +3,6 @@ package com.wcities.eventseeker;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -306,7 +305,7 @@ public class RecommendedArtistsFragmentTab extends PublishArtistFragment impleme
 	public void doNegativeClick(String dialogTag) {}
 
 	@Override
-	public void onArtistTracking(Context context, Artist artist) {
+	public void onArtistTracking(Artist artist, int position) {
 		EventSeekr eventseekr = FragmentUtil.getApplication(this);
 		if (artist.getAttending() == Attending.NotTracked) {
 			artist.updateAttending(Attending.Tracked, eventseekr);

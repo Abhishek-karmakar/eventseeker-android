@@ -33,7 +33,6 @@ import android.widget.TextView;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
-import com.wcities.eventseeker.SearchFragment.SearchFragmentChildListener;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
@@ -58,6 +57,7 @@ import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
+import com.wcities.eventseeker.interfaces.SearchFragmentChildListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.DeviceUtil;

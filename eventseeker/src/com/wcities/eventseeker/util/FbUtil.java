@@ -41,7 +41,7 @@ import com.wcities.eventseeker.interfaces.PublishListener;
 
 public class FbUtil {
 
-	private static final String TAG = FbUtil.class.getName();
+	private static final String TAG = FbUtil.class.getSimpleName();
 
 	/**
 	 * error not occured
@@ -204,8 +204,9 @@ public class FbUtil {
 	    }
 
 	    if (!hasPermission(permissions)) {
+	    	//Log.d(TAG, "!hasPermission(permissions)");
 	    	if (!fbPublishListener.isPermissionDisplayed()) {
-		    	//Log.d(TAG, "publish permission is not there");
+	    		//Log.d(TAG, "publish permission is not there");
 		    	fbPublishListener.setPendingAnnounce(true); // Mark that we are currently waiting for confirmation of publish permissions
 		        session.addCallback(fbPublishListener); 
 		        // we get top level parent fragment here since onActivityResult() is not called in nested fragments.

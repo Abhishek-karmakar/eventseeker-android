@@ -202,7 +202,7 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 						 * This is the case, where user wants to Track an Artist. So, no dialog here.
 						 */
 						if (artistTrackingListener != null) {
-							artistTrackingListener.onArtistTracking(mContext, getItem(position));
+							artistTrackingListener.onArtistTracking(getItem(position), position);
 						}
 					}
 					/**
@@ -269,7 +269,7 @@ public class MyArtistListAdapter extends BaseAdapter implements SectionIndexer, 
 
 	public void unTrackArtistAt(final int position) {
 		if (artistTrackingListener != null) {
-			artistTrackingListener.onArtistTracking(mContext, getItem(position));
+			artistTrackingListener.onArtistTracking(getItem(position), position);
 		}
 		
 		/**

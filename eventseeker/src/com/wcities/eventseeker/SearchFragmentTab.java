@@ -1,8 +1,11 @@
 package com.wcities.eventseeker;
 
+import java.util.Iterator;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +16,7 @@ import android.widget.Button;
 import com.wcities.eventseeker.adapter.SwipeTabsAdapter;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentRetainingChildFragmentManager;
+import com.wcities.eventseeker.interfaces.SearchFragmentChildListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
 
@@ -72,6 +76,18 @@ public class SearchFragmentTab extends FragmentRetainingChildFragmentManager imp
 		
 		return v;
 	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		List<Fragment> pageFragments = mTabsAdapter.getTabFragments();
+		for (Iterator<Fragment> iterator = pageFragments.iterator(); iterator.hasNext();) {
+			Fragment fragment = iterator.next();
+			if (fragment instanceof SearchArtistsFragmentTab || fragment instanceof SearchEventsFragmentTab) {
+				fragment.onActivityResult(requestCode, resultCode, data);
+			}
+		}
+	}
 
 	@Override
 	public void onClick(View v) {
@@ -91,6 +107,33 @@ public class SearchFragmentTab extends FragmentRetainingChildFragmentManager imp
 
 		default:
 			break;
+		}
+	}
+	
+	public void onQueryTextUpdated(String query) {
+		//Log.d(TAG, "onQueryTextSubmit(), query = " + query);
+		searchQuery = query;
+		//hideSoftKeypad();
+		
+		if (mTabsAdapter != null) {
+			//Log.d(TAG, "mTabsAdapter != null");
+			int count = 0;
+			List<Fragment> pageFragments = mTabsAdapter.getTabFragments();
+			
+			// Refresh fragments which are already instantiated
+			for (Iterator<Fragment> iterator = pageFragments.iterator(); iterator.hasNext();) {
+				//Log.d(TAG, "next fragment");
+				count++;
+				SearchFragmentChildListener fragment = (SearchFragmentChildListener) iterator.next();
+				fragment.onQueryTextSubmit(query);
+			}
+			
+			// Update args for remaining fragments which are yet to be instantiated by getItem() of SwipeTabsAdapter.
+			Bundle args = new Bundle();
+			args.putString(BundleKeys.QUERY, query);
+			for (; count < tabBar.getNumberOfTabs(); count++) {
+				tabBar.setArgs(args, count);
+			}
 		}
 	}
 }

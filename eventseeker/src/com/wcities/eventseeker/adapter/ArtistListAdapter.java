@@ -157,6 +157,10 @@ public class ArtistListAdapter<T> extends BaseAdapter implements ArtistAdapterLi
 								res.getString(R.string.are_you_sure_you_want_to_remove_this_artist),  
 								res.getString(R.string.btn_cancel),  
 								res.getString(R.string.btn_Ok), false);
+						/**
+						 * Pass the position as tag. So, that in Positive button if response comes as
+						 * true then we can remove that Artist.
+						 */
 						generalDialogFragment.show(((ActionBarActivity) mContext).getSupportFragmentManager(), "" + position);
 						
 					} else {
@@ -164,13 +168,9 @@ public class ArtistListAdapter<T> extends BaseAdapter implements ArtistAdapterLi
 						 * This is the case, where user wants to Track an Artist. So, no dialog here.
 						 */
 						if (artistTrackingListener != null) {
-							artistTrackingListener.onArtistTracking(mContext, getItem(position));
+							artistTrackingListener.onArtistTracking(getItem(position), position);
 						}
 					}
-					/**
-					 * Pass the position as tag. So, that in Positive button if response comes as
-					 * true then we can remove that Artist.
-					 */
 				}
 			});
 			
@@ -216,7 +216,7 @@ public class ArtistListAdapter<T> extends BaseAdapter implements ArtistAdapterLi
 	
 	public void unTrackArtistAt(final int position) {
 		if (artistTrackingListener != null) {
-			artistTrackingListener.onArtistTracking(mContext, getItem(position));
+			artistTrackingListener.onArtistTracking(getItem(position), position);
 			notifyDataSetChanged();
 		}
 	}

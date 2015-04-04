@@ -3,7 +3,6 @@ package com.wcities.eventseeker;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask.Status;
@@ -286,7 +285,7 @@ public class SelectedArtistCategoryFragmentTab extends PublishArtistFragmentLoad
 	}
 
 	@Override
-	public void onArtistTracking(Context context, Artist artist) {
+	public void onArtistTracking(Artist artist, int position) {
 		EventSeekr eventseekr = FragmentUtil.getApplication(this);
 		if (artist.getAttending() == Attending.NotTracked) {
 			artist.updateAttending(Attending.Tracked, eventseekr);

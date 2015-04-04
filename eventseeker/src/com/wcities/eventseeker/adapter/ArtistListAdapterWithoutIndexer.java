@@ -190,7 +190,7 @@ public class ArtistListAdapterWithoutIndexer extends BaseAdapter implements Arti
 						 * This is the case, where user wants to Track an Artist. So, no dialog here.
 						 */
 						if (artistTrackingListener != null) {
-							artistTrackingListener.onArtistTracking(mContext, getItem(position));
+							artistTrackingListener.onArtistTracking(getItem(position), position);
 						}
 					}
 					/**
@@ -257,7 +257,7 @@ public class ArtistListAdapterWithoutIndexer extends BaseAdapter implements Arti
 
 	public void unTrackArtistAt(final int position) {
 		if (artistTrackingListener != null) {
-			artistTrackingListener.onArtistTracking(mContext, getItem(position));
+			artistTrackingListener.onArtistTracking(getItem(position), position);
 		}
 	}
 }

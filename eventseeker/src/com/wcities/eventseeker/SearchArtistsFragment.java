@@ -5,9 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -20,7 +18,6 @@ import android.widget.RelativeLayout;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
-import com.wcities.eventseeker.SearchFragment.SearchFragmentChildListener;
 import com.wcities.eventseeker.ShareOnFBDialogFragment.OnFacebookShareClickedListener;
 import com.wcities.eventseeker.adapter.ArtistListAdapter;
 import com.wcities.eventseeker.api.Api;
@@ -41,6 +38,7 @@ import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
 import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.interfaces.PublishListener;
+import com.wcities.eventseeker.interfaces.SearchFragmentChildListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -162,7 +160,7 @@ public class SearchArtistsFragment extends PublishArtistListFragment implements 
 	}
 
 	@Override
-	public void onArtistTracking(Context context, Artist artist) {
+	public void onArtistTracking(Artist artist, int position) {
 		EventSeekr eventseekr = FragmentUtil.getApplication(this);
 		if (artist.getAttending() == Attending.NotTracked) {
 			artist.updateAttending(Attending.Tracked, eventseekr);
@@ -170,7 +168,6 @@ public class SearchArtistsFragment extends PublishArtistListFragment implements 
 			//The below notifyDataSetChange will change the status of following CheckBox for current Artist
 			artistListAdapter.notifyDataSetChanged();
 
-			Resources res = FragmentUtil.getResources(this);
 			ShareOnFBDialogFragment dialogFragment = ShareOnFBDialogFragment.newInstance(this);
 			dialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), 
 						DIALOG_ARTIST_SAVED + ":" + artist.getId());

@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask.Status;
@@ -210,7 +209,7 @@ public class FollowingFragmentTab extends Fragment implements ArtistTrackingList
 	}
 
 	@Override
-	public void onArtistTracking(Context context, Artist artist) {
+	public void onArtistTracking(Artist artist, int position) {
 		EventSeekr eventseekr = FragmentUtil.getApplication(this);
 		artist.updateAttending(Attending.NotTracked, eventseekr );
 		new UserTracker(Api.OAUTH_TOKEN, eventseekr, UserTrackingItemType.artist, artist.getId(), 

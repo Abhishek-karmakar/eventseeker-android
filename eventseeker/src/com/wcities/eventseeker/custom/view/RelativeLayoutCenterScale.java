@@ -3,8 +3,10 @@ package com.wcities.eventseeker.custom.view;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.RelativeLayout;
 
+import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.adapter.FeaturingArtistPagerAdapter;
 
 public class RelativeLayoutCenterScale extends RelativeLayout {
@@ -50,7 +52,7 @@ public class RelativeLayoutCenterScale extends RelativeLayout {
 		// as your needs
 		int w = this.getWidth();
 		int h = this.getHeight();
-		//Log.d(VIEW_LOG_TAG, "h = " + h);
+		//Log.d(VIEW_LOG_TAG, "onDraw(), scale = " + scale);
 		canvas.scale(scale, scale, w/2, h/2);
 		
 		super.onDraw(canvas);

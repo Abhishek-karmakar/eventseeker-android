@@ -30,13 +30,14 @@ public class VideoFragment extends Fragment {
 	
 	private BitmapCache bitmapCache;
 
-	public static final VideoFragment newInstance(Video video, int artistId, float scale) {
+	public static final VideoFragment newInstance(Video video, int artistId, float scale, int position) {
 		//Log.d(TAG, "newInstance()");
 		VideoFragment videoFragment = new VideoFragment();
 		Bundle bundle = new Bundle();
 		bundle.putSerializable(BundleKeys.VIDEO, video);
 		bundle.putInt(BundleKeys.ARTIST_ID, artistId);
 		bundle.putFloat(BundleKeys.SCALE, scale);
+		bundle.putInt(BundleKeys.POS, position);
 		videoFragment.setArguments(bundle);
 		return videoFragment;
 	}
@@ -52,12 +53,14 @@ public class VideoFragment extends Fragment {
     		Bundle savedInstanceState) {
     	//Log.d(TAG, "onCreateView()");
     	final Video video = (Video) getArguments().getSerializable(BundleKeys.VIDEO);
+    	//Log.d(TAG, "video url = " + video.getVideoUrl());
     	View v = inflater.inflate(R.layout.fragment_video, null);
     	
     	RelativeLayoutCenterScale relativeLayoutCenterScale = (RelativeLayoutCenterScale) v.findViewById(R.id.rltLytRoot);
 		float scale = getArguments().getFloat(BundleKeys.SCALE);
 		relativeLayoutCenterScale.setScaleBoth(scale);
 		if (scale == VideoPagerAdapter.BIG_SCALE) {
+			//Log.d(TAG, "scale = " + scale);
 			/**
 			 * We get BIG_SCALE only after orientation change for current centered position.
 			 * Reset it to small scale again otherwise changing orientation for some other centered position
@@ -68,6 +71,7 @@ public class VideoFragment extends Fragment {
 		}
     	
     	ImageView imgVideo = (ImageView) v.findViewById(R.id.imgVideo);
+    	//Log.d(TAG, "imgVideo = " + imgVideo);
     	
     	String key = video.getKey(ImgResolution.LOW);
     	Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);

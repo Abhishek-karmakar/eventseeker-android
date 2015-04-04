@@ -13,6 +13,15 @@
 	    android:layout_marginTop="@dimen/rv_artists_margin_t_search_artists_tab"
 	    android:padding="@dimen/rv_artists_pad_search_artists_tab" />
     
+    <TextView android:id="@+id/txtNoItemsFound"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:text="No Items Found"
+	    android:gravity="center" 
+	    android:textSize="@dimen/txt_list_no_items_found_txt_size_list_no_items_found"
+	    android:background="@drawable/bg_no_content_overlay_tab"
+	    android:visibility="invisible" />
+    
     <include layout="@layout/progress_bar_eventseeker_transparent"
 	    android:id="@+id/rltLytProgressBar"
 	    android:layout_width="match_parent"

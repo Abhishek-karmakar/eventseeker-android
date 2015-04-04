@@ -155,6 +155,10 @@ public class ArtistListAdapterWithoutIndexerTab extends BaseAdapter implements A
 								res.getString(R.string.are_you_sure_you_want_to_remove_this_artist),  
 								res.getString(R.string.btn_cancel),  
 								res.getString(R.string.btn_Ok), false);
+						/**
+						 * Pass the position as tag. So, that in Positive button if response comes as
+						 * true then we can remove that Artist.
+						 */
 						generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(fragment))
 								.getSupportFragmentManager(), "" + position);
 						
@@ -163,13 +167,9 @@ public class ArtistListAdapterWithoutIndexerTab extends BaseAdapter implements A
 						 * This is the case, where user wants to Track an Artist. So, no dialog here.
 						 */
 						if (artistTrackingListener != null) {
-							artistTrackingListener.onArtistTracking(FragmentUtil.getActivity(fragment), getItem(position));
+							artistTrackingListener.onArtistTracking(getItem(position), position);
 						}
 					}
-					/**
-					 * Pass the position as tag. So, that in Positive button if response comes as
-					 * true then we can remove that Artist.
-					 */
 				}
 			});
 			
@@ -219,7 +219,7 @@ public class ArtistListAdapterWithoutIndexerTab extends BaseAdapter implements A
 
 	public void unTrackArtistAt(final int position) {
 		if (artistTrackingListener != null) {
-			artistTrackingListener.onArtistTracking(FragmentUtil.getActivity(fragment), getItem(position));
+			artistTrackingListener.onArtistTracking(getItem(position), position);
 		}
 	}
 }

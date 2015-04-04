@@ -171,7 +171,7 @@ public class MyArtistListAdapterTab extends BaseAdapter implements SectionIndexe
 						 * This is the case, where user wants to Track an Artist. So, no dialog here.
 						 */
 						if (artistTrackingListener != null) {
-							artistTrackingListener.onArtistTracking(FragmentUtil.getActivity(fragment), getItem(position));
+							artistTrackingListener.onArtistTracking(getItem(position), position);
 						}
 					}
 					/**
@@ -226,7 +226,7 @@ public class MyArtistListAdapterTab extends BaseAdapter implements SectionIndexe
 
 	public void unTrackArtistAt(final int position) {
 		if (artistTrackingListener != null) {
-			artistTrackingListener.onArtistTracking(FragmentUtil.getActivity(fragment), getItem(position));
+			artistTrackingListener.onArtistTracking(getItem(position), position);
 		}
 		
 		/**

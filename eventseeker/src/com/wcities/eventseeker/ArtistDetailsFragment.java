@@ -792,7 +792,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 				/**
 				 * This is the case, where user wants to Track an Artist. So, no dialog here.
 				 */
-				onArtistTracking(FragmentUtil.getApplication(this), artist);
+				onArtistTracking(artist, AppConstants.INVALID_INDEX);
 			}
 			break;
 			
@@ -1850,7 +1850,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	}
 
 	@Override
-	public void onArtistTracking(Context context, Artist artist) {
+	public void onArtistTracking(Artist artist, int position) {
 		EventSeekr eventseekr = FragmentUtil.getApplication(this);
 		if (artist.getAttending() == Artist.Attending.NotTracked) {
 			artist.updateAttending(Artist.Attending.Tracked, eventseekr);
@@ -1877,7 +1877,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	public void doPositiveClick(String dialogTag) {
 		//This is for Remove Artist Dialog
 		if (dialogTag.equals(FRAGMENT_TAG_REMOVE_ARTIST_DIALOG)) {
-			onArtistTracking(FragmentUtil.getApplication(this), artist);
+			onArtistTracking(artist, AppConstants.INVALID_INDEX);
 			fabSave.setSelected(artist.getAttending() == Artist.Attending.Tracked);
 		}
 	}

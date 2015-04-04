@@ -26,6 +26,7 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
+import com.wcities.eventseeker.interfaces.SearchFragmentChildListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
@@ -48,10 +49,6 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 	private boolean isOnPushedToBackStackCalled;
 	
 	//private SearchView searchView;
-	
-	public interface SearchFragmentChildListener {
-		public void onQueryTextSubmit(String query);
-    }
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -176,13 +173,11 @@ public class SearchFragment extends FragmentLoadableFromBackStack implements OnC
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (((EventSeekr)FragmentUtil.getActivity(this).getApplication()).isTablet()) {
-			List<Fragment> pageFragments = mTabsAdapter.getTabFragments();
-			for (Iterator<Fragment> iterator = pageFragments.iterator(); iterator.hasNext();) {
-				Fragment fragment = iterator.next();
-				if (fragment instanceof SearchEventsFragmentTab1) {
-					fragment.onActivityResult(requestCode, resultCode, data);
-				}
+		List<Fragment> pageFragments = mTabsAdapter.getTabFragments();
+		for (Iterator<Fragment> iterator = pageFragments.iterator(); iterator.hasNext();) {
+			Fragment fragment = iterator.next();
+			if (fragment instanceof SearchArtistsFragment || fragment instanceof SearchEventsFragment) {
+				fragment.onActivityResult(requestCode, resultCode, data);
 			}
 		}
 	}

@@ -6,7 +6,6 @@
     
     <com.wcities.eventseeker.custom.view.NestingViewPager android:id="@+id/tabContentFrame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/tab_content_frame_margin_t_fragment_custom_tabs" />
+        android:layout_height="match_parent" />
     
 </RelativeLayout>

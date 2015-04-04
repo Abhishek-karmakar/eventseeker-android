@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.AsyncTask.Status;
@@ -395,7 +394,7 @@ public class RecommendedArtistsFragment extends PublishArtistFragmentLoadableFro
 	}
 
 	@Override
-	public void onArtistTracking(Context context, Artist artist) {
+	public void onArtistTracking(Artist artist, int position) {
 		EventSeekr eventseekr = FragmentUtil.getApplication(this);
 		if (artist.getAttending() == Attending.NotTracked) {
 			artist.updateAttending(Attending.Tracked, eventseekr);

@@ -3,7 +3,6 @@ package com.wcities.eventseeker;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -527,7 +526,7 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 				/**
 				 * This is the case, where user wants to Track an Artist. So, no dialog here.
 				 */
-				onArtistTracking(FragmentUtil.getApplication(this), artist);
+				onArtistTracking(artist, AppConstants.INVALID_INDEX);
 			}
 			break;
 			
@@ -540,7 +539,7 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 	public void doPositiveClick(String dialogTag) {
 		//This is for Remove Artist Dialog
 		if (dialogTag.equals(FRAGMENT_TAG_REMOVE_ARTIST_DIALOG)) {
-			onArtistTracking(FragmentUtil.getApplication(this), artist);
+			onArtistTracking(artist, AppConstants.INVALID_INDEX);
 			fabSave.setSelected(artist.getAttending() == Artist.Attending.Tracked);
 		}
 	}
@@ -551,7 +550,7 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 	}
 
 	@Override
-	public void onArtistTracking(Context context, Artist artist) {
+	public void onArtistTracking(Artist artist, int position) {
 		EventSeekr eventseekr = FragmentUtil.getApplication(this);
 		if (artist.getAttending() == Artist.Attending.NotTracked) {
 			artist.updateAttending(Artist.Attending.Tracked, eventseekr);

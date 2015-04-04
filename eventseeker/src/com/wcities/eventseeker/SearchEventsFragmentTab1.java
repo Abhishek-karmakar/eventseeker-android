@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
-import com.wcities.eventseeker.SearchFragment.SearchFragmentChildListener;
 import com.wcities.eventseeker.adapter.DateWiseMyEventListAdapter;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -18,6 +17,7 @@ import com.wcities.eventseeker.asynctask.LoadDateWiseEvents;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.interfaces.PublishListener;
+import com.wcities.eventseeker.interfaces.SearchFragmentChildListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.DeviceUtil;

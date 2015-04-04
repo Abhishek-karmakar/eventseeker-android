@@ -1,6 +1,7 @@
 package com.wcities.eventseeker;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -38,6 +39,10 @@ public class SearchActivityTab extends BaseActivityTab {
 	}
 	
 	public boolean onQueryTextUpdated(String query) {
+		Fragment fragment = getSupportFragmentManager().findFragmentByTag(FragmentUtil.getTag(SearchFragmentTab.class));
+		if (fragment != null) {
+			((SearchFragmentTab) fragment).onQueryTextUpdated(query);
+		}
 		return true;
 	}
 }

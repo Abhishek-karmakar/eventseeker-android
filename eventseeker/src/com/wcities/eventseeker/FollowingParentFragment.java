@@ -9,7 +9,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
@@ -267,7 +266,7 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 	}
 	
 	@Override
-	public void onArtistTracking(Context context, Artist artist) {
+	public void onArtistTracking(Artist artist, int position) {
 		EventSeekr eventseekr = FragmentUtil.getApplication(this);
 		artist.updateAttending(Attending.NotTracked, eventseekr );
 		new UserTracker(Api.OAUTH_TOKEN, eventseekr, UserTrackingItemType.artist, artist.getId(), 

@@ -3,19 +3,38 @@ package com.wcities.eventseeker.adapter;
 import java.util.List;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
+import android.support.v4.view.ViewCompat;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.wcities.eventseeker.FeaturingArtistFragmentTab;
+import com.wcities.eventseeker.GeneralDialogFragment;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.SearchArtistsFragmentTab;
+import com.wcities.eventseeker.asynctask.AsyncLoadImg;
+import com.wcities.eventseeker.cache.BitmapCache;
+import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
+import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.interfaces.ArtistAdapterListener;
+import com.wcities.eventseeker.interfaces.ArtistListenerTab;
+import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
+import com.wcities.eventseeker.util.FragmentUtil;
 
 public class RVSearchArtistsAdapterTab<T> extends Adapter<RVSearchArtistsAdapterTab.ViewHolder> implements 
 		ArtistAdapterListener<T> {
@@ -29,6 +48,8 @@ public class RVSearchArtistsAdapterTab<T> extends Adapter<RVSearchArtistsAdapter
 	private boolean isMoreDataAvailable = true;
 	private int artistsAlreadyRequested;
 	
+	private BitmapCache bitmapCache;
+	
 	private static enum ViewType {
 		ARTIST;
 	};
@@ -36,12 +57,18 @@ public class RVSearchArtistsAdapterTab<T> extends Adapter<RVSearchArtistsAdapter
 	public static class ViewHolder extends RecyclerView.ViewHolder {
 		
 		private RelativeLayout rltLytRoot, rltLytRootPrgs;
-
+		private TextView txtArtistName;
+		private CheckBox chkFollow;
+		private ImageView imgItem;
+		
 		public ViewHolder(View itemView) {
 			super(itemView);
 			
 			rltLytRootPrgs = (RelativeLayout) itemView.findViewById(R.id.rltLytRootPrgs);
 			rltLytRoot = (RelativeLayout) itemView.findViewById(R.id.rltLytRoot);
+			txtArtistName = (TextView) itemView.findViewById(R.id.txtArtistName);
+			chkFollow = (CheckBox) itemView.findViewById(R.id.chkFollow);
+			imgItem = (ImageView) itemView.findViewById(R.id.imgItem);
 		}
 	}
 
@@ -49,6 +76,7 @@ public class RVSearchArtistsAdapterTab<T> extends Adapter<RVSearchArtistsAdapter
 		this.searchArtistsFragmentTab = searchArtistsFragmentTab;
 		
 		artistList = searchArtistsFragmentTab.getArtistList();
+		bitmapCache = BitmapCache.getInstance();
 	}
 
 	@Override
@@ -83,25 +111,105 @@ public class RVSearchArtistsAdapterTab<T> extends Adapter<RVSearchArtistsAdapter
 	}
 
 	@Override
-	public void onBindViewHolder(ViewHolder holder, int position) {
-		final Artist artist = artistList.get(position);
-		if (artist == null) {
-			if (artistList.size() == 1) {
-				// no events loaded yet
-				searchArtistsFragmentTab.displayFullScrnProgress();
+	public void onBindViewHolder(final ViewHolder holder, final int position) {
+		ViewType viewType = ViewType.values()[getItemViewType(position)];
+		
+		switch (viewType) {
+		
+		case ARTIST:
+			final Artist artist = artistList.get(position);
+			if (artist == null) {
+				holder.itemView.setVisibility(View.VISIBLE);
+				if (artistList.size() == 1) {
+					// no events loaded yet
+					((FullScrnProgressListener) searchArtistsFragmentTab).displayFullScrnProgress();
+					
+				} else {
+					holder.rltLytRootPrgs.setVisibility(View.VISIBLE);
+					holder.rltLytRoot.setVisibility(View.INVISIBLE);
+				}
+				
+				if ((loadArtists == null || loadArtists.getStatus() == Status.FINISHED) && isMoreDataAvailable) {
+					searchArtistsFragmentTab.loadItemsInBackground();
+				}
 				
 			} else {
-				holder.rltLytRootPrgs.setVisibility(View.VISIBLE);
-				holder.rltLytRoot.setVisibility(View.INVISIBLE);
+				if (artist.getId() == AppConstants.INVALID_ID) {
+					searchArtistsFragmentTab.displayNoItemsFound();
+					holder.itemView.setVisibility(View.INVISIBLE);
+					
+				} else {
+					holder.itemView.setVisibility(View.VISIBLE);
+					holder.rltLytRootPrgs.setVisibility(View.INVISIBLE);
+					
+					holder.txtArtistName.setText(artist.getName());
+					ViewCompat.setTransitionName(holder.txtArtistName, "txtArtistNameSearch" + position);
+					
+					holder.chkFollow.setSelected(artist.getAttending() == Attending.Tracked);
+					holder.chkFollow.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							Resources res = FragmentUtil.getResources(searchArtistsFragmentTab);
+							if (artist.getAttending() == Attending.Tracked) {
+								GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
+										searchArtistsFragmentTab,						
+										res.getString(R.string.remove_artist),  
+										res.getString(R.string.are_you_sure_you_want_to_remove_this_artist),  
+										res.getString(R.string.btn_cancel),  
+										res.getString(R.string.btn_Ok), false);
+								/**
+								 * Pass the position as tag. So, that in Positive button if response comes as
+								 * true then we can remove that Artist.
+								 */
+								generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(searchArtistsFragmentTab))
+										.getSupportFragmentManager(), "" + position);
+								
+							} else {
+								// This is the case, where user wants to Track an Artist. So, no dialog here.
+								searchArtistsFragmentTab.onArtistTracking(artist, position);
+							}
+						}
+					});
+					
+					String key = artist.getKey(ImgResolution.LOW);
+					// set tag to compare it in AsyncLoadImg before setting bitmap to imageview
+			    	holder.imgItem.setTag(key);
+			    	
+					Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
+					if (bitmap != null) {
+						//Log.d(TAG, "bitmap != null");
+						holder.imgItem.setImageBitmap(bitmap);
+
+					} else {
+						//Log.d(TAG, "bitmap = null");
+						holder.imgItem.setImageBitmap(null);
+
+						AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
+						asyncLoadImg.loadImg(holder.imgItem, ImgResolution.LOW, recyclerView, position, artist);
+					}
+					ViewCompat.setTransitionName(holder.imgItem, "imgArtistSearch" + position);
+
+					holder.itemView.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							((ArtistListenerTab)FragmentUtil.getActivity(searchArtistsFragmentTab))
+								.onArtistSelected(artist, holder.imgItem, holder.txtArtistName);
+						}
+					});
+				}
 			}
-			
-			if ((loadArtists == null || loadArtists.getStatus() == Status.FINISHED) && isMoreDataAvailable) {
-				searchArtistsFragmentTab.loadItemsInBackground();
-			}
-			
-		} else {
-			
+			break;
+
+		default:
+			break;
 		}
+	}
+	
+	public void unTrackArtistAt(int position) {
+		searchArtistsFragmentTab.onArtistTracking(artistList.get(position), position);
+		notifyItemChanged(position);
 	}
 
 	@Override

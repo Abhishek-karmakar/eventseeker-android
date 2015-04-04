@@ -5,37 +5,57 @@ import java.util.List;
 
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.AsyncTask.Status;
-import android.support.v4.app.Fragment;
+import android.os.Looper;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
+import com.wcities.eventseeker.ShareOnFBDialogFragment.OnFacebookShareClickedListener;
 import com.wcities.eventseeker.adapter.RVSearchArtistsAdapterTab;
 import com.wcities.eventseeker.api.Api;
+import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
+import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadArtists;
+import com.wcities.eventseeker.asynctask.UserTracker;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
+import com.wcities.eventseeker.core.Artist.Attending;
+import com.wcities.eventseeker.custom.fragment.PublishArtistFragment;
+import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
+import com.wcities.eventseeker.interfaces.SearchFragmentChildListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
+import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.ItemDecorationItemOffset;
 
-public class SearchArtistsFragmentTab extends Fragment implements FullScrnProgressListener, LoadItemsInBackgroundListener, 
-		AsyncTaskListener<Void> {
+public class SearchArtistsFragmentTab extends PublishArtistFragment implements FullScrnProgressListener, LoadItemsInBackgroundListener, 
+		AsyncTaskListener<Void>, DialogBtnClickListener, ArtistTrackingListener, OnFacebookShareClickedListener, SearchFragmentChildListener {
 	
+	private static final String TAG = SearchArtistsFragmentTab.class.getSimpleName();
+
 	private static final int GRID_COLS_PORTRAIT = 2;
 	private static final int GRID_COLS_LANDSCAPE = 3;
 	
 	private RecyclerView recyclerVArtists;
 	private RelativeLayout rltLytProgressBar;
+	private TextView txtNoItemsFound;
 	
 	private List<Artist> artistList;
 	private String query;
@@ -45,6 +65,15 @@ public class SearchArtistsFragmentTab extends Fragment implements FullScrnProgre
 	private RVSearchArtistsAdapterTab<String> rvSearchArtistsAdapterTab;
 	
 	private Handler handler;
+	
+	private int fbCallCountForSameArtist;
+	private Artist artistToBeSaved;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		handler = new Handler(Looper.getMainLooper());
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,6 +89,8 @@ public class SearchArtistsFragmentTab extends Fragment implements FullScrnProgre
 		rltLytProgressBar = (RelativeLayout) v.findViewById(R.id.rltLytProgressBar);
 		// Applying background here since overriding background doesn't work from xml with <include> layout
 		rltLytProgressBar.setBackgroundResource(R.drawable.bg_no_content_overlay_tab);
+		
+		txtNoItemsFound = (TextView) v.findViewById(R.id.txtNoItemsFound);
 		
 		return v;
 	}
@@ -98,6 +129,35 @@ public class SearchArtistsFragmentTab extends Fragment implements FullScrnProgre
 	public List<Artist> getArtistList() {
 		return artistList;
 	}
+	
+	public void displayNoItemsFound() {
+		txtNoItemsFound.setText(R.string.no_artist_found);
+		txtNoItemsFound.setVisibility(View.VISIBLE);
+	}
+	
+	private void refresh(String newQuery) {
+		Log.d(TAG, "refresh()");
+		// if user selection has changed then only reset the list
+		if (query == null || !query.equals(newQuery)) {
+			//Log.d(TAG, "query == null || !query.equals(newQuery)");
+
+			query = newQuery;
+			rvSearchArtistsAdapterTab.setArtistsAlreadyRequested(0);
+			rvSearchArtistsAdapterTab.setMoreDataAvailable(true);
+			
+			if (loadArtists != null && loadArtists.getStatus() != Status.FINISHED) {
+				loadArtists.cancel(true);
+			}
+			
+			txtNoItemsFound.setVisibility(View.INVISIBLE);
+			
+			artistList.clear();
+			artistList.add(null);
+			rvSearchArtistsAdapterTab.notifyDataSetChanged();
+			
+			loadItemsInBackground();
+		}
+	}
 
 	@Override
 	public void displayFullScrnProgress() {
@@ -123,5 +183,83 @@ public class SearchArtistsFragmentTab extends Fragment implements FullScrnProgre
 				rltLytProgressBar.setVisibility(View.INVISIBLE);
 			}
 		});
+	}
+
+	@Override
+	public void doPositiveClick(String dialogTag) {
+		//This is for Remove Artist Dialog
+		rvSearchArtistsAdapterTab.unTrackArtistAt(Integer.parseInt(dialogTag));
+	}
+
+	@Override
+	public void doNegativeClick(String dialogTag) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onArtistTracking(Artist artist, int position) {
+		EventSeekr eventseekr = FragmentUtil.getApplication(this);
+		if (artist.getAttending() == Attending.NotTracked) {
+			artist.updateAttending(Attending.Tracked, eventseekr);
+			new UserTracker(Api.OAUTH_TOKEN, eventseekr, UserTrackingItemType.artist, artist.getId()).execute();
+			//The below notifyDataSetChange will change the status of following CheckBox for current Artist
+			rvSearchArtistsAdapterTab.notifyItemChanged(position);
+
+			ShareOnFBDialogFragment dialogFragment = ShareOnFBDialogFragment.newInstance(this);
+			dialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), 
+						FragmentUtil.getTag(dialogFragment) + ":" + artist.getId());
+			
+		} else {			
+			artist.updateAttending(Attending.NotTracked, eventseekr);
+			new UserTracker(Api.OAUTH_TOKEN, eventseekr, UserTrackingItemType.artist, artist.getId(), 
+					Attending.NotTracked.getValue(), UserTrackingType.Edit).execute();
+		}
+	}
+
+	@Override
+	public void onFacebookShareClicked(String dialogTag) {
+		if (dialogTag.contains(FragmentUtil.getTag(ShareOnFBDialogFragment.class))) {
+			String strId = dialogTag.substring(dialogTag.indexOf(":") + 1);
+			//Log.d(TAG, "strId : " + strId);
+			for (Artist artist : artistList) {
+				if (artist != null && artist.getId() == Integer.parseInt(strId)) {					
+					fbCallCountForSameArtist = 0;
+					artistToBeSaved = artist;
+					FbUtil.handlePublishArtist(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
+							AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, artist);
+					break;
+				}
+			}
+		}
+	}
+
+	@Override
+	public void onPublishPermissionGranted() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void call(Session session, SessionState state, Exception exception) {
+		if (artistToBeSaved == null) {
+			return;
+		}
+		fbCallCountForSameArtist++;
+		/**
+		 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
+		 */
+		if (fbCallCountForSameArtist < AppConstants.MAX_FB_CALL_COUNT_FOR_SAME_EVT_OR_ART) {
+			FbUtil.call(session, state, exception, this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
+					AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, artistToBeSaved);
+			
+		} else {
+			fbCallCountForSameArtist = 0;
+			setPendingAnnounce(false);
+		}
+	}
+	
+	@Override
+	public void onQueryTextSubmit(String query) {
+		//Log.d(TAG, "onQueryTextSubmit(), query = " + query);
+		refresh(query);
 	}
 }
