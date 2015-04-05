@@ -78,7 +78,7 @@ public class BoschSearchVenuesFragment extends ListFragment implements LoadItems
 			}
 			
 		} else {
-			venueListAdapter.setmInflater(FragmentUtil.getActivity(this));
+			venueListAdapter.updateContext(FragmentUtil.getActivity(this));
 		}
 
 		setListAdapter(venueListAdapter);

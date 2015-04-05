@@ -383,6 +383,7 @@
 
     <!-- Common -->
     <string name="no_event_found">No Event Found.</string>
+    <string name="no_venue_found">No Venue Found.</string>
 
     <!-- RdioFragment -->
     <string name="user_name_or_email">Username or email</string>

@@ -7,6 +7,7 @@ import java.util.List;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -100,7 +101,7 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 			}
 			
 		} else {
-			venueListAdapter.setmInflater(FragmentUtil.getActivity(this));
+			venueListAdapter.updateContext(FragmentUtil.getActivity(this));
 			if (!venueList.isEmpty() && venueList.get(0) != null && venueList.get(0).getId() == AppConstants.INVALID_ID) {
 				getListView().setBackgroundResource(R.drawable.bg_no_content_overlay);
 			}
@@ -173,7 +174,7 @@ public class SearchVenuesFragment extends ListFragment implements SearchFragment
 				
 				if (venue.getId() == AppConstants.INVALID_ID) {
 					convertView = mInflater.inflate(R.layout.list_no_items_found, null);
-					((TextView)convertView).setText("No Venue Found.");
+					((TextView)convertView).setText(R.string.no_venue_found);
 					convertView.setTag("");
 					return convertView;
 				

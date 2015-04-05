@@ -622,7 +622,10 @@
     <dimen name="rv_item_l_r_offset_search_items_tab">@dimen/rv_item_l_r_offset_discover_tab</dimen>
     <dimen name="rv_item_t_b_offset_search_items_tab">@dimen/rv_item_t_b_offset_discover_tab</dimen>
     
-      <!-- include_no_items_found_with_action.xml -->
-      <dimen name="img_no_content_w_all_fragments">@integer/match_parent</dimen>
+    <!-- include_no_items_found_with_action.xml -->
+    <dimen name="img_no_content_w_all_fragments">@integer/match_parent</dimen>
+    
+    <!-- rv_item_venue_tab.xml -->
+    <dimen name="txt_loc_pad_b_rv_item_venue_tab">@dimen/txt_evt_loc_pad_t_rv_item_event_tab</dimen>
     
 </resources>
