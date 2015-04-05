@@ -77,9 +77,9 @@ public class SearchArtistsFragmentTab extends PublishArtistFragment implements F
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.fragment_search_artists_tab, null);
+		View v = inflater.inflate(R.layout.fragment_search_items_tab, null);
 		
-		recyclerVArtists = (RecyclerView) v.findViewById(R.id.recyclerVArtists);
+		recyclerVArtists = (RecyclerView) v.findViewById(R.id.recyclerVItems);
 		int spanCount = (FragmentUtil.getResources(this).getConfiguration().orientation == 
 				Configuration.ORIENTATION_PORTRAIT) ? GRID_COLS_PORTRAIT : GRID_COLS_LANDSCAPE;
 		GridLayoutManager gridLayoutManager = new GridLayoutManager(FragmentUtil.getActivity(this), spanCount);
@@ -113,7 +113,7 @@ public class SearchArtistsFragmentTab extends PublishArtistFragment implements F
 		
 		Resources res = FragmentUtil.getResources(this);
 		recyclerVArtists.addItemDecoration(new ItemDecorationItemOffset(res.getDimensionPixelSize(
-				R.dimen.rv_item_l_r_offset_search_artists_tab), res.getDimensionPixelSize(R.dimen.rv_item_t_b_offset_search_artists_tab)));
+				R.dimen.rv_item_l_r_offset_search_items_tab), res.getDimensionPixelSize(R.dimen.rv_item_t_b_offset_search_items_tab)));
 		recyclerVArtists.setAdapter(rvSearchArtistsAdapterTab);
 	}
 	
@@ -136,7 +136,7 @@ public class SearchArtistsFragmentTab extends PublishArtistFragment implements F
 	}
 	
 	private void refresh(String newQuery) {
-		Log.d(TAG, "refresh()");
+		//Log.d(TAG, "refresh()");
 		// if user selection has changed then only reset the list
 		if (query == null || !query.equals(newQuery)) {
 			//Log.d(TAG, "query == null || !query.equals(newQuery)");

@@ -5,13 +5,13 @@
     android:layout_height="match_parent" >
     
     <com.wcities.eventseeker.custom.view.RecyclerViewInterceptingVerticalScroll
-	    android:id="@+id/recyclerVArtists"
+	    android:id="@+id/recyclerVItems"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
 	    android:scrollbars="none"
 	    android:background="@android:color/white"
-	    android:layout_marginTop="@dimen/rv_artists_margin_t_search_artists_tab"
-	    android:padding="@dimen/rv_artists_pad_search_artists_tab" />
+	    android:layout_marginTop="@dimen/rv_items_margin_t_search_items_tab"
+	    android:padding="@dimen/rv_items_pad_search_items_tab" />
     
     <TextView android:id="@+id/txtNoItemsFound"
 	    android:layout_width="match_parent"

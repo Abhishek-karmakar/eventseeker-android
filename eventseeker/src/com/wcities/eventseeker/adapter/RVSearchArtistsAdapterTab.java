@@ -112,98 +112,89 @@ public class RVSearchArtistsAdapterTab<T> extends Adapter<RVSearchArtistsAdapter
 
 	@Override
 	public void onBindViewHolder(final ViewHolder holder, final int position) {
-		ViewType viewType = ViewType.values()[getItemViewType(position)];
-		
-		switch (viewType) {
-		
-		case ARTIST:
-			final Artist artist = artistList.get(position);
-			if (artist == null) {
-				holder.itemView.setVisibility(View.VISIBLE);
-				if (artistList.size() == 1) {
-					// no events loaded yet
-					((FullScrnProgressListener) searchArtistsFragmentTab).displayFullScrnProgress();
-					
-				} else {
-					holder.rltLytRootPrgs.setVisibility(View.VISIBLE);
-					holder.rltLytRoot.setVisibility(View.INVISIBLE);
-				}
-				
-				if ((loadArtists == null || loadArtists.getStatus() == Status.FINISHED) && isMoreDataAvailable) {
-					searchArtistsFragmentTab.loadItemsInBackground();
-				}
+		final Artist artist = artistList.get(position);
+		if (artist == null) {
+			holder.itemView.setVisibility(View.VISIBLE);
+			if (artistList.size() == 1) {
+				// no events loaded yet
+				((FullScrnProgressListener) searchArtistsFragmentTab).displayFullScrnProgress();
 				
 			} else {
-				if (artist.getId() == AppConstants.INVALID_ID) {
-					searchArtistsFragmentTab.displayNoItemsFound();
-					holder.itemView.setVisibility(View.INVISIBLE);
-					
-				} else {
-					holder.itemView.setVisibility(View.VISIBLE);
-					holder.rltLytRootPrgs.setVisibility(View.INVISIBLE);
-					
-					holder.txtArtistName.setText(artist.getName());
-					ViewCompat.setTransitionName(holder.txtArtistName, "txtArtistNameSearch" + position);
-					
-					holder.chkFollow.setSelected(artist.getAttending() == Attending.Tracked);
-					holder.chkFollow.setOnClickListener(new OnClickListener() {
-						
-						@Override
-						public void onClick(View v) {
-							Resources res = FragmentUtil.getResources(searchArtistsFragmentTab);
-							if (artist.getAttending() == Attending.Tracked) {
-								GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
-										searchArtistsFragmentTab,						
-										res.getString(R.string.remove_artist),  
-										res.getString(R.string.are_you_sure_you_want_to_remove_this_artist),  
-										res.getString(R.string.btn_cancel),  
-										res.getString(R.string.btn_Ok), false);
-								/**
-								 * Pass the position as tag. So, that in Positive button if response comes as
-								 * true then we can remove that Artist.
-								 */
-								generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(searchArtistsFragmentTab))
-										.getSupportFragmentManager(), "" + position);
-								
-							} else {
-								// This is the case, where user wants to Track an Artist. So, no dialog here.
-								searchArtistsFragmentTab.onArtistTracking(artist, position);
-							}
-						}
-					});
-					
-					String key = artist.getKey(ImgResolution.LOW);
-					// set tag to compare it in AsyncLoadImg before setting bitmap to imageview
-			    	holder.imgItem.setTag(key);
-			    	
-					Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
-					if (bitmap != null) {
-						//Log.d(TAG, "bitmap != null");
-						holder.imgItem.setImageBitmap(bitmap);
-
-					} else {
-						//Log.d(TAG, "bitmap = null");
-						holder.imgItem.setImageBitmap(null);
-
-						AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-						asyncLoadImg.loadImg(holder.imgItem, ImgResolution.LOW, recyclerView, position, artist);
-					}
-					ViewCompat.setTransitionName(holder.imgItem, "imgArtistSearch" + position);
-
-					holder.itemView.setOnClickListener(new OnClickListener() {
-						
-						@Override
-						public void onClick(View v) {
-							((ArtistListenerTab)FragmentUtil.getActivity(searchArtistsFragmentTab))
-								.onArtistSelected(artist, holder.imgItem, holder.txtArtistName);
-						}
-					});
-				}
+				holder.rltLytRootPrgs.setVisibility(View.VISIBLE);
+				holder.rltLytRoot.setVisibility(View.INVISIBLE);
 			}
-			break;
+			
+			if ((loadArtists == null || loadArtists.getStatus() == Status.FINISHED) && isMoreDataAvailable) {
+				searchArtistsFragmentTab.loadItemsInBackground();
+			}
+			
+		} else {
+			if (artist.getId() == AppConstants.INVALID_ID) {
+				searchArtistsFragmentTab.displayNoItemsFound();
+				holder.itemView.setVisibility(View.INVISIBLE);
+				
+			} else {
+				holder.itemView.setVisibility(View.VISIBLE);
+				holder.rltLytRootPrgs.setVisibility(View.INVISIBLE);
+				holder.rltLytRoot.setVisibility(View.VISIBLE);
+				
+				holder.txtArtistName.setText(artist.getName());
+				ViewCompat.setTransitionName(holder.txtArtistName, "txtArtistNameSearch" + position);
+				
+				holder.chkFollow.setSelected(artist.getAttending() == Attending.Tracked);
+				holder.chkFollow.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						Resources res = FragmentUtil.getResources(searchArtistsFragmentTab);
+						if (artist.getAttending() == Attending.Tracked) {
+							GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
+									searchArtistsFragmentTab,						
+									res.getString(R.string.remove_artist),  
+									res.getString(R.string.are_you_sure_you_want_to_remove_this_artist),  
+									res.getString(R.string.btn_cancel),  
+									res.getString(R.string.btn_Ok), false);
+							/**
+							 * Pass the position as tag. So, that in Positive button if response comes as
+							 * true then we can remove that Artist.
+							 */
+							generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(searchArtistsFragmentTab))
+									.getSupportFragmentManager(), "" + position);
+							
+						} else {
+							// This is the case, where user wants to Track an Artist. So, no dialog here.
+							searchArtistsFragmentTab.onArtistTracking(artist, position);
+						}
+					}
+				});
+				
+				String key = artist.getKey(ImgResolution.LOW);
+				// set tag to compare it in AsyncLoadImg before setting bitmap to imageview
+		    	holder.imgItem.setTag(key);
+		    	
+				Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
+				if (bitmap != null) {
+					//Log.d(TAG, "bitmap != null");
+					holder.imgItem.setImageBitmap(bitmap);
 
-		default:
-			break;
+				} else {
+					//Log.d(TAG, "bitmap = null");
+					holder.imgItem.setImageBitmap(null);
+
+					AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
+					asyncLoadImg.loadImg(holder.imgItem, ImgResolution.LOW, recyclerView, position, artist);
+				}
+				ViewCompat.setTransitionName(holder.imgItem, "imgArtistSearch" + position);
+
+				holder.itemView.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						((ArtistListenerTab)FragmentUtil.getActivity(searchArtistsFragmentTab))
+							.onArtistSelected(artist, holder.imgItem, holder.txtArtistName);
+					}
+				});
+			}
 		}
 	}
 	
