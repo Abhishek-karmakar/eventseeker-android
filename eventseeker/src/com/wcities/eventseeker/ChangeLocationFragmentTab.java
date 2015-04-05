@@ -7,22 +7,15 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.view.MenuItemCompat.OnActionExpandListener;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -32,20 +25,19 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.custom.fragment.FragmentRetainingChildFragmentManager;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GeoUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
 
-public class ChangeLocationFragmentTab extends Fragment implements OnQueryTextListener, GeoUtilListener, 
+public class ChangeLocationFragmentTab extends FragmentRetainingChildFragmentManager implements OnQueryTextListener, GeoUtilListener, 
 		OnClickListener {
 	
 	private static final String TAG = ChangeLocationFragmentTab.class.getSimpleName();
 
-	private SearchView searchView;
 	private GoogleMap mMap;
 	private String strAddress = "";
-	private CharSequence query = null;
 	
 	private double lat, lon;
 
@@ -54,7 +46,6 @@ public class ChangeLocationFragmentTab extends Fragment implements OnQueryTextLi
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setHasOptionsMenu(true);
 		setRetainInstance(true);
 		
 		double[] latLon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
@@ -73,31 +64,10 @@ public class ChangeLocationFragmentTab extends Fragment implements OnQueryTextLi
         args.putDouble(BundleKeys.LAT, lat);
         args.putDouble(BundleKeys.LON, lon);
         mMapFragment.setArguments(args);
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        FragmentTransaction transaction = childFragmentManager().beginTransaction();
         transaction.add(R.id.lnrLytMap, mMapFragment, FragmentUtil.getTag(MapFragment.class)).commit();
         
         return v;
-    }
-    
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-    	inflater.inflate(R.menu.fragment_change_location, menu);
-    	
-		MenuItem searchItem = menu.findItem(R.id.action_search_view);
-    	searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setQueryHint(getResources().getString(R.string.menu_search));
-        searchView.setOnQueryTextListener(this);
-        
-        ImageView v = (ImageView) searchView.findViewById(R.id.search_button);
-		// null check is for safety purpose
-		if (v != null) {
-			v.setImageResource(R.drawable.search);
-		}
-		
-        if (query != null && !query.equals("")) {
-        	searchView.setQuery(query, false);
-        }
-        super.onCreateOptionsMenu(menu, inflater);
     }
     
     @Override
@@ -108,9 +78,6 @@ public class ChangeLocationFragmentTab extends Fragment implements OnQueryTextLi
     	 * mMap instance is made null. So, that after the orientation change it can be reinitialized with the new Map 
     	 */
     	mMap = null;
-    	if (searchView != null) {
-    		query = searchView.getQuery();
-    	}
     }
     
     private void updateStrAddress(Address address) {
@@ -143,7 +110,7 @@ public class ChangeLocationFragmentTab extends Fragment implements OnQueryTextLi
     	boolean mapSetUp = true;
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
-        	MapFragment mMapFragment = (MapFragment) getChildFragmentManager().findFragmentByTag(FragmentUtil.getTag(MapFragment.class));
+        	MapFragment mMapFragment = (MapFragment) childFragmentManager().findFragmentByTag(FragmentUtil.getTag(MapFragment.class));
             mMap = mMapFragment.getMap();
             
             // Check if we were successful in obtaining the map.
@@ -155,10 +122,10 @@ public class ChangeLocationFragmentTab extends Fragment implements OnQueryTextLi
         return mapSetUp;
     }
     
-    private void hideSoftKeypad() {
-    	InputMethodManager imm = (InputMethodManager)FragmentUtil.getActivity(this).getSystemService(Context.INPUT_METHOD_SERVICE);
+    /*private void hideSoftKeypad() {
+    	InputMethodManager imm = (InputMethodManager) FragmentUtil.getActivity(this).getSystemService(Context.INPUT_METHOD_SERVICE);
     	imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
-    }
+    }*/
     
     public static class MapFragment extends SupportMapFragment {
     	
@@ -193,7 +160,6 @@ public class ChangeLocationFragmentTab extends Fragment implements OnQueryTextLi
     		}
 
             boolean mapSetUp = ((ChangeLocationFragmentTab) getParentFragment()).setUpMapIfNeeded();
-            Log.d(TAG, "map set up = " + mapSetUp);
             if (mapSetUp) {
             	 // The Map is verified. It is now safe to manipulate the map.
             	((ChangeLocationFragmentTab) getParentFragment()).setMarker(lat, lon);
@@ -232,7 +198,7 @@ public class ChangeLocationFragmentTab extends Fragment implements OnQueryTextLi
 			GeoUtil.getFromAddress(query, this);
 		}
 		
-		hideSoftKeypad();
+		//hideSoftKeypad();
 		
 		return true;
 	}
@@ -245,7 +211,6 @@ public class ChangeLocationFragmentTab extends Fragment implements OnQueryTextLi
 
 	@Override
 	public void onAddressSearchCompleted(String address) {
-		Log.d(TAG, "onAddressSearchCompleted");
 		if (address != null && address.length() != 0) {
 			strAddress = address;
 			setMarker(lat, lon);
@@ -258,7 +223,6 @@ public class ChangeLocationFragmentTab extends Fragment implements OnQueryTextLi
 	@Override
 	public void onCitySearchCompleted(String city) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -270,7 +234,6 @@ public class ChangeLocationFragmentTab extends Fragment implements OnQueryTextLi
 
 	@Override
 	public void onClick(View v) {
-		Log.d(TAG, "onClick");
 		switch (v.getId()) {
 		case R.id.btnMyLocation:
 			isMyLocationClicked = true;

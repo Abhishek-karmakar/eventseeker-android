@@ -1,15 +1,24 @@
 package com.wcities.eventseeker;
 
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SearchView;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.ImageView;
 
+import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class ChangeLocationActivityTab extends BaseActivityTab {
 	
 	private static final String TAG = ChangeLocationActivityTab.class.getSimpleName();
+	private SearchView searchView;
+	private String query;
+	
+	private ChangeLocationFragmentTab changeLocationFragmentTab;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -21,14 +30,38 @@ public class ChangeLocationActivityTab extends BaseActivityTab {
 		
 		if (isOnCreateCalledFirstTime) {
 			//Log.d(TAG, "add settings fragment tab");
-			ChangeLocationFragmentTab changeLocationFragmentTab = new ChangeLocationFragmentTab();
+			changeLocationFragmentTab = new ChangeLocationFragmentTab();
 			addFragment(R.id.content_frame, changeLocationFragmentTab, FragmentUtil.getTag(changeLocationFragmentTab), false);
+		}
+		
+		if (savedInstanceState != null) {
+			isSearchViewIconified = savedInstanceState.getBoolean(BundleKeys.IS_SEARCHVIEW_ICONIFIED);
+			query = savedInstanceState.getString(BundleKeys.SEARCH_QUERY);
 		}
 	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		return true;
+		getMenuInflater().inflate(R.menu.fragment_change_location, menu);
+    	
+		MenuItem searchItem = menu.findItem(R.id.action_search_view);
+    	searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setQueryHint(getResources().getString(R.string.menu_search));
+        searchView.setOnQueryTextListener(this);
+        
+        ImageView v = (ImageView) searchView.findViewById(R.id.search_button);
+		// null check is for safety purpose
+		if (v != null) {
+			v.setImageResource(R.drawable.search);
+		}
+		
+        if (query != null && !query.equals("")) {
+        	searchView.setQuery(query, false);
+        }
+        if (!isSearchViewIconified) {
+        	MenuItemCompat.expandActionView(searchItem);
+        }
+        return true;
 	}
 
 	@Override
@@ -59,5 +92,23 @@ public class ChangeLocationActivityTab extends BaseActivityTab {
 		}
 		return super.onKeyDown(keyCode, event);
 	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		if (searchView != null) {
+			outState.putBoolean(BundleKeys.IS_SEARCHVIEW_ICONIFIED, searchView.isIconified());
+		}
+		outState.putString(BundleKeys.SEARCH_QUERY, query);
+	}
 	
+
+	@Override
+	public boolean onQueryTextSubmit(String query) {
+		if (changeLocationFragmentTab != null) {
+			this.query = query;
+			return changeLocationFragmentTab.onQueryTextSubmit(query);
+		}
+		return false;
+	}
 }
