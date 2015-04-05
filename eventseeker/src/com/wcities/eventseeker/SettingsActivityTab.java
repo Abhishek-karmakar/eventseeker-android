@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
-import com.wcities.eventseeker.constants.Enums.SettingsItem;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class SettingsActivityTab extends BaseActivityTab {

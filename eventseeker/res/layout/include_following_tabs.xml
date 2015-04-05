@@ -6,12 +6,13 @@
     android:elevation="@dimen/elevation_lnr_follow_more_artist_fragment_following_tab"
     android:orientation="horizontal" >
 
-    <Button
+    <CheckBox
         android:id="@+id/btnSyncAccounts"
         style="@style/Widget.EventSeeker.Button.Transparent"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:button="@null"
         android:drawableTop="@drawable/slctr_tabs_btn_sync_artists"
         android:paddingTop="@dimen/btn_tabs_pad_t_fragment_following_tab"
         android:text="@string/btn_sync_accounts"
@@ -26,13 +27,14 @@
         android:layout_marginTop="@dimen/v_divider_t_b_fragment_following_tab"
         android:background="@color/tabs_seperator" />
 
-    <Button
+    <CheckBox
         android:id="@+id/btnPopularArtists"
         style="@style/Widget.EventSeeker.Button.Transparent"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:drawableTop="@drawable/slctr_tabs_btn_poplar_artists"
+        android:button="@null"
+        android:drawableTop="@drawable/slctr_tabs_btn_popular_artists"
         android:paddingTop="@dimen/btn_tabs_pad_t_fragment_following_tab"
         android:text="@string/btn_popular_artists"
         android:textAllCaps="false"
@@ -46,12 +48,13 @@
         android:layout_marginTop="@dimen/v_divider_t_b_fragment_following_tab"
         android:background="@color/tabs_seperator" />
 
-    <Button
+    <CheckBox
         android:id="@+id/btnRecommended"
         style="@style/Widget.EventSeeker.Button.Transparent"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:button="@null"
         android:drawableTop="@drawable/slctr_tabs_btn_recommended_artists"
         android:paddingTop="@dimen/btn_tabs_pad_t_fragment_following_tab"
         android:text="@string/btn_recommended"
@@ -66,12 +69,13 @@
         android:layout_marginTop="@dimen/v_divider_t_b_fragment_following_tab"
         android:background="@color/tabs_seperator" />
 
-    <Button
+    <CheckBox
         android:id="@+id/btnSearch"
         style="@style/Widget.EventSeeker.Button.Transparent"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:button="@null"
         android:drawableTop="@drawable/slctr_tabs_btn_search_artists"
         android:paddingTop="@dimen/btn_tabs_pad_t_fragment_following_tab"
         android:text="@string/btn_search"

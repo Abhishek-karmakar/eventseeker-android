@@ -27,16 +27,15 @@ import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.RepCodeResponse;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
-import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.constants.Enums.SettingsItem;
-import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
+import com.wcities.eventseeker.custom.fragment.FragmentRetainingChildFragmentManager;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class RepCodeFragment extends FragmentLoadableFromBackStack implements OnClickListener, DialogBtnClickListener {
+public class RepCodeFragmentTab extends FragmentRetainingChildFragmentManager implements OnClickListener, DialogBtnClickListener {
 	
-	private static final String TAG = RepCodeFragment.class.getName();
+	private static final String TAG = RepCodeFragmentTab.class.getName();
 	
 	private EditText edtRepCode;
 	private Button btnSubmit;
@@ -119,10 +118,10 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 			super.onPostExecute(result);
 			RepCodeResponse repCodeResponse = RepCodeResponse.getRepCodeResponse(result);
 			Resources res = eventSeekr.getResources();
-			GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(RepCodeFragment.this,
+			GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(RepCodeFragmentTab.this,
 					res.getString(R.string.rep_code_submission), repCodeResponse.getMsg(res), 
 					res.getString(R.string.ok), null, false);
-			generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(RepCodeFragment.this))
+			generalDialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(RepCodeFragmentTab.this))
 					.getSupportFragmentManager(), AppConstants.DIALOG_FRAGMENT_TAG_SUBMIT_REP_CODE_RESPONSE);
 			isSubmitting = false;
 			setVisibility();
@@ -182,16 +181,10 @@ public class RepCodeFragment extends FragmentLoadableFromBackStack implements On
 	public void doNegativeClick(String dialogTag) {
 		if (dialogTag.equals(AppConstants.DIALOG_FRAGMENT_TAG_LOGIN_TO_SUBMIT_REP_CODE) || 
 				dialogTag.equals(AppConstants.DIALOG_FRAGMENT_TAG_SUBMIT_REP_CODE_RESPONSE)) {
-			DialogFragment dialogFragment = (DialogFragment) getChildFragmentManager().findFragmentByTag(
-					dialogTag);
+			DialogFragment dialogFragment = (DialogFragment) childFragmentManager().findFragmentByTag(dialogTag);
 			if (dialogFragment != null) {
 				dialogFragment.dismiss();
 			}
 		}
-	}
-
-	@Override
-	public String getScreenName() {
-		return ScreenNames.REPCODE_SCREEN;
 	}
 }

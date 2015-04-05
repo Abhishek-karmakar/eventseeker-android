@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView.RecyclerListener;
+import android.widget.CheckBox;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -152,6 +153,8 @@ public class FollowingFragmentTab extends Fragment implements ArtistTrackingList
 	
 	@Override
 	public void onClick(View v) {
+		((CheckBox) v).setChecked(false);
+		
 		switch (v.getId()) {
 			case R.id.btnSyncAccounts:
 				Intent intent = new Intent(FragmentUtil.getApplication(this), ConnectAccountsActivityTab.class);

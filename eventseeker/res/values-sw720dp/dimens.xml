@@ -60,7 +60,7 @@
     <dimen name="eco_glry_featured_evt_child_ht_discover_gallery_item">400dp</dimen>
 
     <!-- fragment_about_us.xml -->
-    <dimen name="txt_app_name_margin_t_fragment_about_us">10dp</dimen>
+    <dimen name="txt_app_name_margin_t_fragment_about_us">75dp</dimen>
     <dimen name="txt_app_name_txt_size_fragment_about_us">45sp</dimen>
     <dimen name="txt_app_slogan_margin_t_fragment_about_us">0dp</dimen>
     <dimen name="txt_app_slogan_txt_size_fragment_about_us">25sp</dimen>

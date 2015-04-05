@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -31,10 +32,9 @@ public class PopularArtistsFragmentTab extends FragmentLoadableFromBackStack imp
 		view.findViewById(R.id.btnRecommended).setOnClickListener(this);
 		view.findViewById(R.id.btnSearch).setOnClickListener(this);
 		
-		Button btnPopularArtists = (Button) view.findViewById(R.id.btnPopularArtists);
+		CheckBox btnPopularArtists = (CheckBox) view.findViewById(R.id.btnPopularArtists);
 		btnPopularArtists.setOnClickListener(this);
-		btnPopularArtists.setSelected(true);
-		btnPopularArtists.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_popular_artists_link_pressed, 0, 0);
+		btnPopularArtists.setChecked(true);
 		return view;
 	}
 
@@ -109,18 +109,18 @@ public class PopularArtistsFragmentTab extends FragmentLoadableFromBackStack imp
 				 */
 				
 			case R.id.btnSyncAccounts:
+				((CheckBox) v).setChecked(false);
 				Intent intent = new Intent(FragmentUtil.getApplication(this), ConnectAccountsActivityTab.class);
 				startActivity(intent);
 				FragmentUtil.getActivity(this).finish();
 				break;
 
 			case R.id.btnPopularArtists:
-				intent = new Intent(FragmentUtil.getApplication(this), PopularArtistsActivityTab.class);
-				startActivity(intent);
-				FragmentUtil.getActivity(this).finish();
+				((CheckBox) v).setChecked(true);
 				break;
 				
 			case R.id.btnRecommended:
+				((CheckBox) v).setChecked(false);
 				intent = new Intent(FragmentUtil.getApplication(this), RecommendedArtistsActivityTab.class);
 				startActivity(intent);
 				FragmentUtil.getActivity(this).finish();
@@ -128,6 +128,7 @@ public class PopularArtistsFragmentTab extends FragmentLoadableFromBackStack imp
 
 				
 			case R.id.btnSearch:
+				((CheckBox) v).setChecked(false);
 				((BaseActivityTab) FragmentUtil.getActivity(this)).expandSearchView();
 				break;
 		}

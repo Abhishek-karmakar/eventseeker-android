@@ -718,7 +718,22 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 			case RATE_APP:
 				rateApp();
 				break;
-			
+				
+			case ABOUT:
+				intent = new Intent(getApplicationContext(), AboutUsActivityTab.class);
+				startActivity(intent);
+				break;
+				
+			case EULA:
+				intent = new Intent(getApplicationContext(), EULAActivityTab.class);
+				startActivity(intent);
+				break;
+				
+			case REPCODE:
+				intent = new Intent(getApplicationContext(), RepcodeActivityTab.class);
+				startActivity(intent);
+				break;
+
 			default:
 				break;
 		}

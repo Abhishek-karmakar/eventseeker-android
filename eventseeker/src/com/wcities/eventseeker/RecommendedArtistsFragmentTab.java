@@ -19,6 +19,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView.RecyclerListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -137,10 +138,9 @@ public class RecommendedArtistsFragmentTab extends PublishArtistFragment impleme
 		v.findViewById(R.id.btnPopularArtists).setOnClickListener(this);
 		v.findViewById(R.id.btnSearch).setOnClickListener(this);
 		
-		Button btnRecommended = (Button) v.findViewById(R.id.btnRecommended);
+		CheckBox btnRecommended = (CheckBox) v.findViewById(R.id.btnRecommended);
 		btnRecommended.setOnClickListener(this);
-		btnRecommended.setSelected(true);
-		btnRecommended.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_recommended_link_pressed, 0, 0);
+		btnRecommended.setChecked(true);
 		return v;
 	}
 
@@ -328,28 +328,25 @@ public class RecommendedArtistsFragmentTab extends PublishArtistFragment impleme
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.btnSyncAccounts:
+				((CheckBox) v).setChecked(false);
 				Intent intent = new Intent(FragmentUtil.getApplication(this), ConnectAccountsActivityTab.class);
 				startActivity(intent);
 				FragmentUtil.getActivity(this).finish();
 				break;
 				
 			case R.id.btnPopularArtists:
+				((CheckBox) v).setChecked(false);
 				intent = new Intent(FragmentUtil.getApplication(this), PopularArtistsActivityTab.class);
 				startActivity(intent);
 				FragmentUtil.getActivity(this).finish();
 				break;
 				
-			/**
-			 * NOTE:Commented this block to avoid RecommendedArtistActivityTab starting another instance of
-			 * RecommendedArtistActivityTab.
-			 * 
 			case R.id.btnRecommended:
-				intent = new Intent(FragmentUtil.getApplication(this), RecommendedArtistsActivityTab.class);
-				startActivity(intent);
+				((CheckBox) v).setChecked(true);
 				break;
-			 */
 				
 			case R.id.btnSearch:
+				((CheckBox) v).setChecked(false);
 				((BaseActivityTab) FragmentUtil.getActivity(this)).expandSearchView();
 				break;
 		}

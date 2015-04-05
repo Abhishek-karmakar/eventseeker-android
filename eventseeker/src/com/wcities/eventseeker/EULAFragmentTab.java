@@ -1,6 +1,7 @@
 package com.wcities.eventseeker;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,13 +9,11 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 
 import com.wcities.eventseeker.constants.AppConstants;
-import com.wcities.eventseeker.constants.ScreenNames;
-import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.FileUtil;
 
-public class EULAFragment extends FragmentLoadableFromBackStack {
+public class EULAFragmentTab extends Fragment {
 
-	private static final String TAG = EULAFragment.class.getName();
+	private static final String TAG = EULAFragmentTab.class.getName();
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -37,10 +36,5 @@ public class EULAFragment extends FragmentLoadableFromBackStack {
 		
 		webView.loadDataWithBaseURL(null, data, "text/html", AppConstants.CHARSET_NAME, null);
 		return v;
-	}
-
-	@Override
-	public String getScreenName() {
-		return ScreenNames.TERMS_OF_SERVICES_SCREEN;
 	}
 }

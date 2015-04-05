@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -39,9 +40,9 @@ public class MusicArtistsFragmentTab extends FragmentLoadableFromBackStack imple
 		view.findViewById(R.id.btnRecommended).setOnClickListener(this);
 		view.findViewById(R.id.btnSearch).setOnClickListener(this);
 		
-		Button btnPopularArtists = (Button) view.findViewById(R.id.btnPopularArtists);
+		CheckBox btnPopularArtists = (CheckBox) view.findViewById(R.id.btnPopularArtists);
 		btnPopularArtists.setOnClickListener(this);
-		btnPopularArtists.setSelected(true);
+		btnPopularArtists.setChecked(true);
 		return view;
 	}
 	
@@ -114,18 +115,22 @@ public class MusicArtistsFragmentTab extends FragmentLoadableFromBackStack imple
 			break;
 		
 		case R.id.btnSyncAccounts:
+			((CheckBox) v).setChecked(false);
 			intent = new Intent(FragmentUtil.getApplication(this), ConnectAccountsActivityTab.class);
 			break;			
 
 		case R.id.btnPopularArtists:
+			((CheckBox) v).setChecked(true);
 			intent = new Intent(FragmentUtil.getApplication(this), PopularArtistsActivityTab.class);
 			break;			
 			
 		case R.id.btnRecommended:
+			((CheckBox) v).setChecked(false);
 			intent = new Intent(FragmentUtil.getApplication(this), RecommendedArtistsActivityTab.class);
 			break;			
 			
 		case R.id.btnSearch:
+			((CheckBox) v).setChecked(false);
 			((BaseActivityTab) FragmentUtil.getActivity(this)).expandSearchView();
 			break;
 		}

@@ -5,11 +5,10 @@
     android:layout_height="match_parent"
     android:background="@drawable/ic_blue_app_bg" >
 
-    <ListView
-        android:id="@+id/android:list"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rcyclrSettings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" >
-    </ListView>
-
-</RelativeLayout>
+    </android.support.v7.widget.RecyclerView>
+</RelativeLayout>

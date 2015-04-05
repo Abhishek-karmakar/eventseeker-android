@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView.RecyclerListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -138,9 +139,9 @@ public class SelectedArtistCategoryFragmentTab extends PublishArtistFragmentLoad
 		v.findViewById(R.id.btnRecommended).setOnClickListener(this);
 		v.findViewById(R.id.btnSearch).setOnClickListener(this);
 		
-		Button btnPopularArtists = (Button) v.findViewById(R.id.btnPopularArtists);
+		CheckBox btnPopularArtists = (CheckBox) v.findViewById(R.id.btnPopularArtists);
 		btnPopularArtists.setOnClickListener(this);
-		btnPopularArtists.setSelected(true);
+		btnPopularArtists.setChecked(true);
 		return v;
 	}
 
@@ -360,18 +361,22 @@ public class SelectedArtistCategoryFragmentTab extends PublishArtistFragmentLoad
 		Intent intent = null;
 		switch (v.getId()) {
 		case R.id.btnSyncAccounts:
+			((CheckBox) v).setChecked(false);
 			intent = new Intent(FragmentUtil.getApplication(this), ConnectAccountsActivityTab.class);
 			break;
 
 		case R.id.btnPopularArtists:
+			((CheckBox) v).setChecked(true);
 			intent = new Intent(FragmentUtil.getApplication(this), PopularArtistsActivityTab.class);
 			break;
 
 		case R.id.btnRecommended:
+			((CheckBox) v).setChecked(false);
 			intent = new Intent(FragmentUtil.getApplication(this), RecommendedArtistsActivityTab.class);
 			break;
 
 		case R.id.btnSearch:
+			((CheckBox) v).setChecked(false);
 			((BaseActivityTab) FragmentUtil.getActivity(this)).expandSearchView();
 			break;
 		}

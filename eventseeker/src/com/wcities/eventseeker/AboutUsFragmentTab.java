@@ -1,10 +1,12 @@
 package com.wcities.eventseeker;
 
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,11 +16,10 @@ import android.widget.TextView;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
-import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class AboutUsFragment extends FragmentLoadableFromBackStack implements OnClickListener {
+public class AboutUsFragmentTab extends Fragment implements OnClickListener {
 
 	private String version;
 	private Resources res;
@@ -38,9 +39,8 @@ public class AboutUsFragment extends FragmentLoadableFromBackStack implements On
 	}
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_about_us, null);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_about_us_tab, null);
 		view.findViewById(R.id.imgFacebook).setOnClickListener(this);
 		view.findViewById(R.id.imgInstgram).setOnClickListener(this);
 		view.findViewById(R.id.imgTwitter).setOnClickListener(this);
@@ -51,10 +51,9 @@ public class AboutUsFragment extends FragmentLoadableFromBackStack implements On
 	}
 
 	private void openURL(String url) {
-		Bundle args = new Bundle();
-		args.putString(BundleKeys.URL, url);
-		((ReplaceFragmentListener) FragmentUtil.getActivity(this))
-			.replaceByFragment(AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
+		Intent intent = new Intent(FragmentUtil.getApplication(this), WebViewActivityTab.class);
+		intent.putExtra(BundleKeys.URL, url);
+		startActivity(intent);
 	}
 
 	@Override
@@ -79,10 +78,5 @@ public class AboutUsFragment extends FragmentLoadableFromBackStack implements On
 				break;
 
 		}
-	}
-
-	@Override
-	public String getScreenName() {
-		return ScreenNames.ABOUT_US_SCREEN;
 	}
 }

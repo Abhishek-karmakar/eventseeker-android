@@ -7,7 +7,8 @@ import java.util.List;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +18,6 @@ import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.AbsListView;
 import android.widget.AbsListView.LayoutParams;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,13 +27,14 @@ import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
 
-public class SettingsFragmentTab extends ListFragment {
+public class SettingsFragmentTab extends Fragment {
 	
 	private static final String TAG = SettingsFragmentTab.class.getSimpleName();
 	
 	private List<SettingsItem> settingsItems;
 	private SettingsListAdapter settingsListAdapter;
-
+	private RecyclerView rcyclrSettings;
+	
 	private int htForSettingsList;
 	
 	private OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -49,10 +50,10 @@ public class SettingsFragmentTab extends ListFragment {
         	} else {
         		count = 0;
         		if (VersionUtil.isApiLevelAbove15()) {
-    				getListView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
+    				rcyclrSettings.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
     			} else {
-    				getListView().getViewTreeObserver().removeGlobalOnLayoutListener(this);
+    				rcyclrSettings.getViewTreeObserver().removeGlobalOnLayoutListener(this);
     			}
         	}
         	
@@ -99,7 +100,13 @@ public class SettingsFragmentTab extends ListFragment {
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_settings_tab, null);
+		View view = inflater.inflate(R.layout.fragment_settings_tab, null);
+		rcyclrSettings = (RecyclerView) view.findViewById(R.id.rcyclrSettings);
+		// use a linear layout manager
+		LinearLayoutManager layoutManager = new LinearLayoutManager(FragmentUtil.getActivity(this));
+		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+		rcyclrSettings.setLayoutManager(layoutManager);
+		return view;
 	}
 	
 	@Override
@@ -109,103 +116,10 @@ public class SettingsFragmentTab extends ListFragment {
 			settingsItems = new ArrayList<SettingsItem>(Arrays.asList(SettingsItem.values()));
 			settingsListAdapter = new SettingsListAdapter(this, settingsItems);
 		}
-		setListAdapter(settingsListAdapter);
+		rcyclrSettings.setAdapter(settingsListAdapter);
 		
-        getListView().setDivider(null);
-        getListView().getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
+		rcyclrSettings.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
 	}
-	
-	private static class SettingsListAdapter extends BaseAdapter {
-
-		private List<SettingsItem> settingsItems;
-		private LayoutInflater inflater;
-		private int rowHt;
-		private OnSettingsItemClickedListener onSettingsItemClickedListener;
-		private Fragment fragment;
-		
-		public SettingsListAdapter(Fragment fragment, List<SettingsItem> settingsMenuListItems) {
-	        inflater = LayoutInflater.from(FragmentUtil.getActivity(fragment));
-	        this.settingsItems = settingsMenuListItems;
-	        this.fragment = fragment;
-	        this.onSettingsItemClickedListener = (OnSettingsItemClickedListener) FragmentUtil.getActivity(fragment);
-		}
-
-		public void setHtForSettingsList(int htForSettingsList) {
-			this.rowHt = htForSettingsList / settingsItems.size();
-			notifyDataSetChanged();
-		}
-
-		@Override
-		public int getCount() {
-			return settingsItems.size();
-		}
-
-		@Override
-		public Object getItem(int position) {
-			return settingsItems.get(position);
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
-
-		@Override
-		public View getView(final int position, View convertView, ViewGroup parent) {
-			final ListItemViewHolder listItemViewHolder;
-			SettingsItem settingsItem = (SettingsItem) getItem(position);
-
-			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.list_item_settings_tab, null);
-
-				listItemViewHolder = new ListItemViewHolder();
-				listItemViewHolder.imgIcon = (ImageView) convertView.findViewById(R.id.imgIcon);
-				listItemViewHolder.txtTitle = (TextView) convertView.findViewById(R.id.txtTitle);
-				convertView.setTag(listItemViewHolder);
-
-			} else {
-				listItemViewHolder = (ListItemViewHolder) convertView.getTag();
-			}
-
-			AbsListView.LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, rowHt);
-			convertView.setLayoutParams(lp);
-
-			listItemViewHolder.imgIcon.setImageDrawable(FragmentUtil.getResources(fragment)
-				.getDrawable(settingsItem.getIcon()));
-
-			listItemViewHolder.txtTitle.setText(settingsItem.getTitle());
-			
-			/**
-			 * This onClickListener is added as in Samsung Galaxy Tab, the If Settings screen is Started in
-			 * Landscape mode then onListItemClick was not getting called. After that if change the Orientation 
-			 * then it was working fine. So, resolved this issue by implementation.
-			 */
-			convertView.setOnClickListener(new View.OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					SettingsItem settingsItem = (SettingsItem) getItem(position);
-					onSettingsItemClickedListener.onSettingsItemClicked(settingsItem, null);
-				}
-			});
-			
-			return convertView;
-		}
-				
-		private static class ListItemViewHolder {
-			private ImageView imgIcon;
-			private TextView txtTitle;
-			private Object tag;
-		}
-	}
-
-	/*@Override
-	public void onListItemClick(ListView l, View v, int position, long id) {
-		super.onListItemClick(l, v, position, id);
-		Log.d(TAG, "onListItemClick");
-		SettingsItem settingsItem = (SettingsItem) l.getAdapter().getItem(position);
-		((OnSettingsItemClickedListener) FragmentUtil.getActivity(this)).onSettingsItemClicked(settingsItem, null);
-	}*/
 	
 	@Override
 	public void onStop() {
@@ -220,10 +134,10 @@ public class SettingsFragmentTab extends ListFragment {
 		 */
 		try {
 			if (VersionUtil.isApiLevelAbove15()) {
-				getListView().getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
+				rcyclrSettings.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
 	
 			} else {
-				getListView().getViewTreeObserver().removeGlobalOnLayoutListener(onGlobalLayoutListener);
+				rcyclrSettings.getViewTreeObserver().removeGlobalOnLayoutListener(onGlobalLayoutListener);
 			}
 			
 		} catch (NullPointerException ne) {
@@ -233,6 +147,82 @@ public class SettingsFragmentTab extends ListFragment {
 		} catch (IllegalStateException ie) {
 			// if contentview is not yet created
 			Log.e(TAG, ie.getMessage());
+		}
+	}
+	
+	private static class SettingsListAdapter extends RecyclerView.Adapter<VHSettings> {
+		private List<SettingsItem> settingsItems;
+		private int rowHt;
+		private OnSettingsItemClickedListener onSettingsItemClickedListener;
+		private Fragment fragment;
+		
+		public SettingsListAdapter(Fragment fragment, List<SettingsItem> settingsMenuListItems) {
+	        this.settingsItems = settingsMenuListItems;
+	        this.fragment = fragment;
+	        this.onSettingsItemClickedListener = (OnSettingsItemClickedListener) FragmentUtil.getActivity(fragment);
+		}
+
+		public void setHtForSettingsList(int htForSettingsList) {
+			this.rowHt = htForSettingsList / settingsItems.size();
+			notifyDataSetChanged();
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+		@Override
+		public int getItemCount() {
+			return settingsItems.size();
+		}
+
+		@Override
+		public VHSettings onCreateViewHolder(ViewGroup parent, int position) {
+			View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_settings_tab, parent, false);
+			VHSettings vhSettings = new VHSettings(v);
+			return vhSettings;
+		}
+
+		@Override
+		public void onBindViewHolder(VHSettings vhSettings, final int position) {
+			SettingsItem settingsItem = (SettingsItem) settingsItems.get(position);
+
+			AbsListView.LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, rowHt);
+			vhSettings.convertView.setLayoutParams(lp);
+
+			vhSettings.imgIcon.setImageDrawable(FragmentUtil.getResources(fragment)
+				.getDrawable(settingsItem.getIcon()));
+
+			vhSettings.txtTitle.setText(settingsItem.getTitle());
+			
+			/**
+			 * This onClickListener is added as in Samsung Galaxy Tab, the If Settings screen is Started in
+			 * Landscape mode then onListItemClick was not getting called. After that if change the Orientation 
+			 * then it was working fine. So, resolved this issue by implementation.
+			 */
+			vhSettings.convertView.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					SettingsItem settingsItem = (SettingsItem) settingsItems.get(position);
+					onSettingsItemClickedListener.onSettingsItemClicked(settingsItem, null);
+				}
+			});
+		}
+	}
+
+	public static class VHSettings extends RecyclerView.ViewHolder {
+		private ImageView imgIcon;
+		private TextView txtTitle;
+		private View convertView;
+		
+		public VHSettings(View convertView) {
+			super(convertView);
+			this.convertView = convertView;
+			
+			imgIcon = (ImageView) convertView.findViewById(R.id.imgIcon);
+			txtTitle = (TextView) convertView.findViewById(R.id.txtTitle);
 		}
 	}
 }

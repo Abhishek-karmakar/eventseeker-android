@@ -12,44 +12,49 @@
         android:layout_height="match_parent"
         android:background="@drawable/story_space" >
 
-        <TextView
-            android:id="@+id/txtAppName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/txt_app_name_margin_t_fragment_about_us"
-            android:text="@string/eventseeker"
-            android:textColor="@color/font_blue"
-            android:textSize="@dimen/txt_app_name_txt_size_fragment_about_us"
-            android:textStyle="bold" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/lnrLayoutIcons" >
 
-        <TextView
-            android:id="@+id/txtSlogan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtAppName"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/txt_app_slogan_margin_t_fragment_about_us"
-            android:text="@string/seek_share_live"
-            android:textColor="@color/font_blue"
-            android:textSize="@dimen/txt_app_slogan_txt_size_fragment_about_us"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/txtAppName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/txtSlogan"
+                android:layout_centerHorizontal="true"
+                android:text="@string/eventseeker"
+                android:textColor="@color/font_blue"
+                android:textSize="@dimen/txt_app_name_txt_size_fragment_about_us"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/txtDesc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtSlogan"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="@dimen/txt_desc_margin_l_fragment_about_us"
-            android:layout_marginRight="@dimen/txt_desc_margin_r_fragment_about_us"
-            android:layout_marginTop="@dimen/txt_desc_margin_t_fragment_about_us"
-            android:gravity="center_horizontal"
-            android:text="@string/eventseeker_desc"
-            android:textSize="@dimen/txt_desc_txt_size_fragment_about_us" />
+            <TextView
+                android:id="@+id/txtSlogan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="@dimen/txt_app_slogan_margin_t_fragment_about_us"
+                android:text="@string/seek_share_live"
+                android:textColor="@color/font_blue"
+                android:textSize="@dimen/txt_app_slogan_txt_size_fragment_about_us"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtSlogan"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="@dimen/txt_desc_margin_l_fragment_about_us"
+                android:layout_marginRight="@dimen/txt_desc_margin_r_fragment_about_us"
+                android:layout_marginTop="@dimen/txt_desc_margin_t_fragment_about_us"
+                android:gravity="center_horizontal"
+                android:text="@string/eventseeker_desc"
+                android:textSize="@dimen/txt_desc_txt_size_fragment_about_us" />
+        </RelativeLayout>
 
         <LinearLayout
-            android:id="@+id/lnr_layout_icons"
+            android:id="@+id/lnrLayoutIcons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -91,33 +96,38 @@
                 android:src="@drawable/web" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/imgWcities"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/txtPoweredBy"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/wcities" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/lnrLayoutIcons" >
 
-        <TextView
-            android:id="@+id/txtPoweredBy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/txtVersion"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/txt_powered_by_margin_b_fragment_about_us"
-            android:layout_marginTop="@dimen/txt_powered_by_margin_t_fragment_about_us"
-            android:text="@string/powered_by"
-            android:textSize="@dimen/txt_powered_by_txt_size_fragment_about_us" />
+            <ImageView
+                android:id="@+id/imgWcities"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/wcities" />
 
-        <TextView
-            android:id="@+id/txtVersion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/txt_version_margin_b_fragment_about_us"
-            android:textSize="@dimen/txt_powered_by_txt_size_fragment_about_us" />
+            <TextView
+                android:id="@+id/txtPoweredBy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imgWcities"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/txt_powered_by_margin_b_fragment_about_us"
+                android:layout_marginTop="@dimen/txt_powered_by_margin_t_fragment_about_us"
+                android:text="@string/powered_by"
+                android:textSize="@dimen/txt_powered_by_txt_size_fragment_about_us" />
+
+            <TextView
+                android:id="@+id/txtVersion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtPoweredBy"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/txt_version_margin_b_fragment_about_us"
+                android:textSize="@dimen/txt_powered_by_txt_size_fragment_about_us" />
+        </RelativeLayout>
     </RelativeLayout>
 
 </RelativeLayout>
