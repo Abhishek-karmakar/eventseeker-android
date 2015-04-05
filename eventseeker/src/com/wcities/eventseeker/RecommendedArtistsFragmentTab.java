@@ -350,7 +350,7 @@ public class RecommendedArtistsFragmentTab extends PublishArtistFragment impleme
 			 */
 				
 			case R.id.btnSearch:
-				//((MainActivity) FragmentUtil.getActivity(this)).expandSearchView();
+				((BaseActivityTab) FragmentUtil.getActivity(this)).expandSearchView();
 				break;
 		}
 	}

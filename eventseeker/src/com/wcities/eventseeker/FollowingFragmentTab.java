@@ -169,7 +169,7 @@ public class FollowingFragmentTab extends Fragment implements ArtistTrackingList
 				break;
 				
 			case R.id.btnSearch:
-				//((MainActivity) FragmentUtil.getActivity(this)).expandSearchView();
+				((BaseActivityTab) FragmentUtil.getActivity(this)).expandSearchView();
 				break;
 		}
 	}

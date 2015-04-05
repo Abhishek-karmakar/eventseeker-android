@@ -372,8 +372,7 @@ public class SelectedArtistCategoryFragmentTab extends PublishArtistFragmentLoad
 			break;
 
 		case R.id.btnSearch:
-			// ((MainActivity)
-			// FragmentUtil.getActivity(this)).expandSearchView();
+			((BaseActivityTab) FragmentUtil.getActivity(this)).expandSearchView();
 			break;
 		}
 		if (intent != null) {

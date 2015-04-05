@@ -128,7 +128,7 @@ public class PopularArtistsFragmentTab extends FragmentLoadableFromBackStack imp
 
 				
 			case R.id.btnSearch:
-				//((MainActivity) FragmentUtil.getActivity(this)).expandSearchView();
+				((BaseActivityTab) FragmentUtil.getActivity(this)).expandSearchView();
 				break;
 		}
 	}

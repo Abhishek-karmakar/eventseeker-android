@@ -91,8 +91,7 @@ public class SportsArtistsFragmentTab extends FragmentLoadableFromBackStack impl
 				break;
 
 			case R.id.btnSearch:
-				// ((MainActivity)
-				// FragmentUtil.getActivity(this)).expandSearchView();
+				((BaseActivityTab) FragmentUtil.getActivity(this)).expandSearchView();
 				break;
 		}
 		if (args.containsKey(BundleKeys.SCREEN_TITLE)) {

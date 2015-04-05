@@ -763,4 +763,8 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		
 		return true;
 	}
+	
+	public void expandSearchView() {
+		searchView.setIconified(false);
+	}
 }
