@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,14 +15,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.wcities.eventseeker.adapter.SwipeTabsAdapter;
+import com.wcities.eventseeker.adapter.SwipeTabsAdapter.SwipeTabsAdapterListener;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentRetainingChildFragmentManager;
 import com.wcities.eventseeker.interfaces.SearchFragmentChildListener;
+import com.wcities.eventseeker.interfaces.SwipeTabVisibilityListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
 
-public class SearchFragmentTab extends FragmentRetainingChildFragmentManager implements OnClickListener {
+public class SearchFragmentTab extends FragmentRetainingChildFragmentManager implements OnClickListener, 
+		SwipeTabsAdapterListener {
 
+	private static final String TAG = SearchFragmentTab.class.getSimpleName();
+	
 	private SwipeTabsAdapter mTabsAdapter;
 	private TabBar tabBar;
 	
@@ -35,7 +41,7 @@ public class SearchFragmentTab extends FragmentRetainingChildFragmentManager imp
 		SwipeTabsAdapter oldAdapter = mTabsAdapter;
 		tabBar = new TabBar(childFragmentManager());
 		
-		mTabsAdapter = new SwipeTabsAdapter(this, viewPager, tabBar);
+		mTabsAdapter = new SwipeTabsAdapter(this, viewPager, tabBar, this);
 		
 		List<Button> tabBarButtons = ((BaseActivityTab) FragmentUtil.getActivity(this)).getTabBarButtons();
 		
@@ -134,6 +140,54 @@ public class SearchFragmentTab extends FragmentRetainingChildFragmentManager imp
 			for (; count < tabBar.getNumberOfTabs(); count++) {
 				tabBar.setArgs(args, count);
 			}
+		}
+	}
+
+	@Override
+	public void onSwipeTabSelected(int position) {
+		Log.d(TAG, "onSwipeTabSelected() - pos = " + position);
+		List<Fragment> pageFragments = mTabsAdapter.getTabFragments();
+		
+		switch (position) {
+		
+		case 0:
+			for (Iterator<Fragment> iterator = pageFragments.iterator(); iterator.hasNext();) {
+				Fragment fragment = iterator.next();
+				if (!(fragment instanceof SearchArtistsFragmentTab)) {
+					((SwipeTabVisibilityListener) fragment).onInvisible();
+					
+				} else {
+					((SwipeTabVisibilityListener) fragment).onVisible();
+				}
+			};
+			break;
+			
+		case 1:
+			for (Iterator<Fragment> iterator = pageFragments.iterator(); iterator.hasNext();) {
+				Fragment fragment = iterator.next();
+				if (!(fragment instanceof SearchEventsFragmentTab)) {
+					((SwipeTabVisibilityListener) fragment).onInvisible();
+					
+				} else {
+					((SwipeTabVisibilityListener) fragment).onVisible();
+				}
+			};
+			break;
+			
+		case 2:
+			for (Iterator<Fragment> iterator = pageFragments.iterator(); iterator.hasNext();) {
+				Fragment fragment = iterator.next();
+				if (!(fragment instanceof SearchVenuesFragmentTab)) {
+					((SwipeTabVisibilityListener) fragment).onInvisible();
+					
+				} else {
+					((SwipeTabVisibilityListener) fragment).onVisible();
+				}
+			};
+			break;
+
+		default:
+			break;
 		}
 	}
 }

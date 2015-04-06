@@ -30,6 +30,8 @@ import com.wcities.eventseeker.widget.EventseekerWidget;
 public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 
 	private static final String TAG = "AsyncLoadImg";
+	
+	private static final int MAX_PENDING_REQUEST_LIMIT = 15;
 
 	private static AsyncLoadImg asyncLoadImg;
 	private BitmapCache bitmapCache;
@@ -194,6 +196,9 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 	private void startExecution(ImgDetails imgDetails) {
 		//synchronized (AsyncLoadImg.class) {
 		synchronized (imgDetailsList) {
+			if (imgDetailsList.size() > MAX_PENDING_REQUEST_LIMIT) {
+				imgDetailsList.remove(imgDetailsList.size() - 1);
+			}
 			//Log.i(TAG, "asyncLoadImg.getStatus() = " + asyncLoadImg.getStatus());
 			if (asyncLoadImg.getStatus() == Status.PENDING) {
 				//Log.i(TAG, "status is pending, execute now");

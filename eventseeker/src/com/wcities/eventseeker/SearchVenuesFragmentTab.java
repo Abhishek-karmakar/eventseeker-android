@@ -28,13 +28,14 @@ import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.interfaces.SearchFragmentChildListener;
+import com.wcities.eventseeker.interfaces.SwipeTabVisibilityListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.ItemDecorationItemOffset;
 
 public class SearchVenuesFragmentTab extends Fragment implements SearchFragmentChildListener, LoadItemsInBackgroundListener, 
-		AsyncTaskListener<Void>, FullScrnProgressListener {
+		AsyncTaskListener<Void>, FullScrnProgressListener, SwipeTabVisibilityListener {
 
 	private static final String TAG = SearchVenuesFragmentTab.class.getSimpleName();
 	
@@ -177,5 +178,26 @@ public class SearchVenuesFragmentTab extends Fragment implements SearchFragmentC
 				rltLytProgressBar.setVisibility(View.INVISIBLE);
 			}
 		});
+	}
+
+	@Override
+	public void onInvisible() {
+		if (rvSearchVenuesAdapterTab != null) {
+			rvSearchVenuesAdapterTab.setVisible(false);
+			rvSearchVenuesAdapterTab.notifyDataSetChanged();
+		}
+	}
+
+	@Override
+	public void onVisible() {
+		if (rvSearchVenuesAdapterTab != null) {
+			rvSearchVenuesAdapterTab.setVisible(true);
+			/**
+			 * need to call this because it doesn't call onBindViewHolder() automatically if 
+			 * next or previous tab is selected. Calls it only for tab selection changing from position 1 to 3 or 
+			 * 3 to 1
+			 */
+			rvSearchVenuesAdapterTab.notifyDataSetChanged();
+		}
 	}
 }

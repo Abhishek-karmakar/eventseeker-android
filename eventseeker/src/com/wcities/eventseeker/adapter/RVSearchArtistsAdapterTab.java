@@ -11,17 +11,16 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.wcities.eventseeker.FeaturingArtistFragmentTab;
 import com.wcities.eventseeker.GeneralDialogFragment;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.SearchArtistsFragmentTab;
@@ -39,13 +38,15 @@ import com.wcities.eventseeker.util.FragmentUtil;
 public class RVSearchArtistsAdapterTab<T> extends Adapter<RVSearchArtistsAdapterTab.ViewHolder> implements 
 		ArtistAdapterListener<T> {
 	
+	private static final String TAG = RVSearchArtistsAdapterTab.class.getSimpleName();
+	
 	private SearchArtistsFragmentTab searchArtistsFragmentTab;
 	private List<Artist> artistList;
 	
 	private RecyclerView recyclerView;
 	
 	private AsyncTask<T, Void, List<Artist>> loadArtists;
-	private boolean isMoreDataAvailable = true;
+	private boolean isMoreDataAvailable = true, isVisible = true;
 	private int artistsAlreadyRequested;
 	
 	private BitmapCache bitmapCache;
@@ -112,6 +113,7 @@ public class RVSearchArtistsAdapterTab<T> extends Adapter<RVSearchArtistsAdapter
 
 	@Override
 	public void onBindViewHolder(final ViewHolder holder, final int position) {
+		//Log.d(TAG, "onBindViewHolder(), pos = " + position);
 		final Artist artist = artistList.get(position);
 		if (artist == null) {
 			holder.itemView.setVisibility(View.VISIBLE);
@@ -168,21 +170,27 @@ public class RVSearchArtistsAdapterTab<T> extends Adapter<RVSearchArtistsAdapter
 					}
 				});
 				
-				String key = artist.getKey(ImgResolution.LOW);
-				// set tag to compare it in AsyncLoadImg before setting bitmap to imageview
-		    	holder.imgItem.setTag(key);
-		    	
-				Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
-				if (bitmap != null) {
-					//Log.d(TAG, "bitmap != null");
-					holder.imgItem.setImageBitmap(bitmap);
-
-				} else {
-					//Log.d(TAG, "bitmap = null");
+				if (!isVisible) {
+					// free memory
 					holder.imgItem.setImageBitmap(null);
-
-					AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-					asyncLoadImg.loadImg(holder.imgItem, ImgResolution.LOW, recyclerView, position, artist);
+					
+				} else {
+					String key = artist.getKey(ImgResolution.LOW);
+					// set tag to compare it in AsyncLoadImg before setting bitmap to imageview
+			    	holder.imgItem.setTag(key);
+			    	
+					Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
+					if (bitmap != null) {
+						//Log.d(TAG, "bitmap != null");
+						holder.imgItem.setImageBitmap(bitmap);
+	
+					} else {
+						//Log.d(TAG, "bitmap = null");
+						holder.imgItem.setImageBitmap(null);
+	
+						AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
+						asyncLoadImg.loadImg(holder.imgItem, ImgResolution.LOW, recyclerView, position, artist);
+					}
 				}
 				ViewCompat.setTransitionName(holder.imgItem, "imgArtistSearch" + position);
 
@@ -201,6 +209,10 @@ public class RVSearchArtistsAdapterTab<T> extends Adapter<RVSearchArtistsAdapter
 	public void unTrackArtistAt(int position) {
 		searchArtistsFragmentTab.onArtistTracking(artistList.get(position), position);
 		notifyItemChanged(position);
+	}
+
+	public void setVisible(boolean isVisible) {
+		this.isVisible = isVisible;
 	}
 
 	@Override

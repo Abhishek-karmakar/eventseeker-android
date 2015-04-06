@@ -67,7 +67,7 @@ public class RVSearchVenuesAdapterTab<T> extends Adapter<RVSearchVenuesAdapterTa
 	private RecyclerView recyclerView;
 	
 	private int venuesAlreadyRequested;
-	private boolean isMoreDataAvailable = true;
+	private boolean isMoreDataAvailable = true, isVisible = true;
 	
 	private BitmapCache bitmapCache;
 	private Handler handler;
@@ -190,20 +190,26 @@ public class RVSearchVenuesAdapterTab<T> extends Adapter<RVSearchVenuesAdapterTa
 				
 				holder.txtLoc.setText(getVenueAddress(venue));
 				
-				String key = venue.getKey(ImgResolution.LOW);
-				// set tag to compare it in AsyncLoadImg before setting bitmap to imageview
-		    	holder.imgVenue.setTag(key);
-
-				Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
-				if (bitmap != null) {
-					//Log.d(TAG, "bitmap != null");
-			        holder.imgVenue.setImageBitmap(bitmap);
-			        
-			    } else {
-			    	holder.imgVenue.setImageBitmap(null);
-			    	AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-			        asyncLoadImg.loadImg(holder.imgVenue, ImgResolution.LOW, recyclerView, position, venue);
-			    }
+				if (!isVisible) {
+					// free memory
+					holder.imgVenue.setImageBitmap(null);
+					
+				} else {
+					String key = venue.getKey(ImgResolution.LOW);
+					// set tag to compare it in AsyncLoadImg before setting bitmap to imageview
+			    	holder.imgVenue.setTag(key);
+	
+					Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
+					if (bitmap != null) {
+						//Log.d(TAG, "bitmap != null");
+				        holder.imgVenue.setImageBitmap(bitmap);
+				        
+				    } else {
+				    	holder.imgVenue.setImageBitmap(null);
+				    	AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
+				        asyncLoadImg.loadImg(holder.imgVenue, ImgResolution.LOW, recyclerView, position, venue);
+				    }
+				}
 				
 				ViewCompat.setTransitionName(holder.imgVenue, "imgVenueSearch" + position);
 				
@@ -679,6 +685,10 @@ public class RVSearchVenuesAdapterTab<T> extends Adapter<RVSearchVenuesAdapterTa
 		openPos = INVALID;
 		setVenuesAlreadyRequested(0);
 		setMoreDataAvailable(true);
+	}
+
+	public void setVisible(boolean isVisible) {
+		this.isVisible = isVisible;
 	}
 
 	@Override

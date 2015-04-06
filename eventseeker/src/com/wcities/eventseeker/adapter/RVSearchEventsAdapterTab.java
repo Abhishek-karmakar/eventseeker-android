@@ -13,6 +13,7 @@ import android.os.AsyncTask.Status;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -75,7 +76,7 @@ public class RVSearchEventsAdapterTab extends Adapter<RVSearchEventsAdapterTab.V
 	private RecyclerView recyclerView;
 	
 	private int eventsAlreadyRequested;
-	private boolean isMoreDataAvailable = true;
+	private boolean isMoreDataAvailable = true, isVisible = true;
 	
 	private int fbCallCountForSameEvt = 0;
 	private RVSearchEventsAdapterTab.ViewHolder holderPendingPublish;
@@ -164,7 +165,7 @@ public class RVSearchEventsAdapterTab extends Adapter<RVSearchEventsAdapterTab.V
 		
         return new ViewHolder(v);
 	}
-
+	
 	@Override
 	public void onBindViewHolder(final ViewHolder holder, final int position) {
 		final Event event = eventList.get(position);
@@ -218,34 +219,40 @@ public class RVSearchEventsAdapterTab extends Adapter<RVSearchEventsAdapterTab.V
 					holder.txtEvtLoc.setText(venueName);
 				}
 				
-				BitmapCacheable bitmapCacheable = null;
-				/**
-				 * added this try catch as if event will not have valid url and schedule object then
-				 * the below line may cause NullPointerException. So, added the try-catch and added the
-				 * null check for bitmapCacheable on following statements.
-				 */
-				try {
-					bitmapCacheable = event.doesValidImgUrlExist() ? event : event.getSchedule().getVenue();
+				if (!isVisible) {
+					// free memory
+					holder.imgEvt.setImageBitmap(null);
 					
-				} catch (NullPointerException e) {
-					e.printStackTrace();
-				}
-				
-				if (bitmapCacheable != null) {
-					String key = bitmapCacheable.getKey(ImgResolution.LOW);
-					// set tag to compare it in AsyncLoadImg before setting bitmap to imageview
-			    	holder.imgEvt.setTag(key);
-
-					Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
-					if (bitmap != null) {
-						//Log.d(TAG, "bitmap != null");
-				        holder.imgEvt.setImageBitmap(bitmap);
-				        
-				    } else {
-				    	holder.imgEvt.setImageBitmap(null);
-				    	AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-				        asyncLoadImg.loadImg(holder.imgEvt, ImgResolution.LOW, recyclerView, position, bitmapCacheable);
-				    }
+				} else {
+					BitmapCacheable bitmapCacheable = null;
+					/**
+					 * added this try catch as if event will not have valid url and schedule object then
+					 * the below line may cause NullPointerException. So, added the try-catch and added the
+					 * null check for bitmapCacheable on following statements.
+					 */
+					try {
+						bitmapCacheable = event.doesValidImgUrlExist() ? event : event.getSchedule().getVenue();
+						
+					} catch (NullPointerException e) {
+						e.printStackTrace();
+					}
+					
+					if (bitmapCacheable != null) {
+						String key = bitmapCacheable.getKey(ImgResolution.LOW);
+						// set tag to compare it in AsyncLoadImg before setting bitmap to imageview
+				    	holder.imgEvt.setTag(key);
+	
+						Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
+						if (bitmap != null) {
+							//Log.d(TAG, "bitmap != null");
+					        holder.imgEvt.setImageBitmap(bitmap);
+					        
+					    } else {
+					    	holder.imgEvt.setImageBitmap(null);
+					    	AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
+					        asyncLoadImg.loadImg(holder.imgEvt, ImgResolution.LOW, recyclerView, position, bitmapCacheable);
+					    }
+					}
 				}
 				
 				ViewCompat.setTransitionName(holder.imgEvt, "imgEvtSearch" + position);
@@ -742,6 +749,10 @@ public class RVSearchEventsAdapterTab extends Adapter<RVSearchEventsAdapterTab.V
 		openPos = INVALID;
 		setEventsAlreadyRequested(0);
 		setMoreDataAvailable(true);
+	}
+	
+	public void setVisible(boolean isVisible) {
+		this.isVisible = isVisible;
 	}
 	
 	public void call(Session session, SessionState state, Exception exception) {

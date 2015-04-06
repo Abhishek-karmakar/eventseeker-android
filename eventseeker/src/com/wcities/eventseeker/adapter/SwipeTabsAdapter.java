@@ -45,16 +45,6 @@ public class SwipeTabsAdapter extends FragmentPagerAdapter implements TabBar.Tab
 		this.orientation = orientation;
 	}
 	
-	public SwipeTabsAdapter(Fragment fragment, ViewPager pager, TabBar tabBar) {
-		super(fragment.getChildFragmentManager());
-		this.fragment = fragment;
-		mViewPager = pager;
-		this.tabBar = tabBar;
-		tabFragments = new ArrayList<Fragment>();
-		mViewPager.setAdapter(this);
-		mViewPager.setOnPageChangeListener(this);
-	}
-	
 	public SwipeTabsAdapter(Fragment fragment, ViewPager pager, TabBar tabBar, int orientation, 
 			SwipeTabsAdapterListener listener) {
 		this(fragment, pager, tabBar, orientation);
@@ -62,7 +52,13 @@ public class SwipeTabsAdapter extends FragmentPagerAdapter implements TabBar.Tab
 	}
 	
 	public SwipeTabsAdapter(Fragment fragment, ViewPager pager, TabBar tabBar, SwipeTabsAdapterListener listener) {
-		this(fragment, pager, tabBar);
+		super(fragment.getChildFragmentManager());
+		this.fragment = fragment;
+		mViewPager = pager;
+		this.tabBar = tabBar;
+		tabFragments = new ArrayList<Fragment>();
+		mViewPager.setAdapter(this);
+		mViewPager.setOnPageChangeListener(this);
 		mListener = listener;
 	}
 
