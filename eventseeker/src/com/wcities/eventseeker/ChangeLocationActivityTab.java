@@ -16,7 +16,8 @@ public class ChangeLocationActivityTab extends BaseActivityTab {
 	
 	private static final String TAG = ChangeLocationActivityTab.class.getSimpleName();
 	private SearchView searchView;
-	private String query;
+	private String searchQuery = "";
+	protected boolean isSearchViewIconified = true;
 	
 	private ChangeLocationFragmentTab changeLocationFragmentTab;
 
@@ -32,11 +33,15 @@ public class ChangeLocationActivityTab extends BaseActivityTab {
 			//Log.d(TAG, "add settings fragment tab");
 			changeLocationFragmentTab = new ChangeLocationFragmentTab();
 			addFragment(R.id.content_frame, changeLocationFragmentTab, FragmentUtil.getTag(changeLocationFragmentTab), false);
+		
+		} else {
+			changeLocationFragmentTab = (ChangeLocationFragmentTab) 
+					getSupportFragmentManager().findFragmentByTag(FragmentUtil.getTag(ChangeLocationFragmentTab.class));
 		}
 		
 		if (savedInstanceState != null) {
 			isSearchViewIconified = savedInstanceState.getBoolean(BundleKeys.IS_SEARCHVIEW_ICONIFIED);
-			query = savedInstanceState.getString(BundleKeys.SEARCH_QUERY);
+			searchQuery = savedInstanceState.getString(BundleKeys.SEARCH_QUERY);
 		}
 	}
 	
@@ -55,11 +60,11 @@ public class ChangeLocationActivityTab extends BaseActivityTab {
 			v.setImageResource(R.drawable.search);
 		}
 		
-        if (query != null && !query.equals("")) {
-        	searchView.setQuery(query, false);
+        if (searchQuery != null && !searchQuery.equals("")) {
+        	searchView.setQuery(searchQuery, false);
         }
         if (!isSearchViewIconified) {
-        	MenuItemCompat.expandActionView(searchItem);
+        	searchView.setIconified(false);
         }
         return true;
 	}
@@ -99,15 +104,24 @@ public class ChangeLocationActivityTab extends BaseActivityTab {
 		if (searchView != null) {
 			outState.putBoolean(BundleKeys.IS_SEARCHVIEW_ICONIFIED, searchView.isIconified());
 		}
-		outState.putString(BundleKeys.SEARCH_QUERY, query);
+		outState.putString(BundleKeys.SEARCH_QUERY, searchQuery);
 	}
 	
 
 	@Override
 	public boolean onQueryTextSubmit(String query) {
 		if (changeLocationFragmentTab != null) {
-			this.query = query;
+			this.searchQuery = query;
 			return changeLocationFragmentTab.onQueryTextSubmit(query);
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean onQueryTextChange(String query) {
+		if (changeLocationFragmentTab != null) {
+			this.searchQuery = query;
+			return changeLocationFragmentTab.onQueryTextChange(query);
 		}
 		return false;
 	}

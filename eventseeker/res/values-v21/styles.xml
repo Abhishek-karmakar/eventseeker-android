@@ -16,10 +16,6 @@
         <item name="android:background">?android:selectableItemBackground</item>
     </style>
 
-    <style name="SettingsListViewItemSelector">
-        <item name="android:background">@drawable/bg_lst_item_with_indicator_material</item>
-    </style>
-
     <style name="Widget.EventSeeker.ImageButton.White" parent="@android:style/Widget.Material.ImageButton">
         <item name="android:background">@drawable/bg_btn_curved_edges_white_material</item>
         <item name="android:textColor">@color/colorPrimary</item>

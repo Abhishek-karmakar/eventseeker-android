@@ -3,19 +3,16 @@ package com.wcities.eventseeker;
 import java.io.IOException;
 import java.util.List;
 
-import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -77,7 +74,7 @@ public class ChangeLocationFragmentTab extends FragmentRetainingChildFragmentMan
     	 * 17-03-2015:
     	 * mMap instance is made null. So, that after the orientation change it can be reinitialized with the new Map 
     	 */
-    	mMap = null;
+    	//mMap = null;
     }
     
     private void updateStrAddress(Address address) {
@@ -205,7 +202,6 @@ public class ChangeLocationFragmentTab extends FragmentRetainingChildFragmentMan
 
 	@Override
 	public boolean onQueryTextChange(String newText) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
