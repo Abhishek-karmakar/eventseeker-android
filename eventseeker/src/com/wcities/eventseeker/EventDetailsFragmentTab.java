@@ -146,7 +146,9 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 		txtEvtTitle.setText(event.getName());
 		// for marquee to work
 		txtEvtTitle.setSelected(true);
-		ViewCompat.setTransitionName(txtEvtTitle, getArguments().getString(BundleKeys.TRANSITION_NAME_SHARED_TEXT));
+		if (getArguments().containsKey(BundleKeys.TRANSITION_NAME_SHARED_TEXT)) {
+			ViewCompat.setTransitionName(txtEvtTitle, getArguments().getString(BundleKeys.TRANSITION_NAME_SHARED_TEXT));
+		}
 		
 		txtEvtTime = (TextView) rootView.findViewById(R.id.txtEvtTime);
 		txtVenue = (TextView) rootView.findViewById(R.id.txtVenue);
@@ -159,7 +161,9 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 		
 		imgEvt = (ImageView) rootView.findViewById(R.id.imgEvt);
 		updateEventImg();
-		ViewCompat.setTransitionName(imgEvt, getArguments().getString(BundleKeys.TRANSITION_NAME_SHARED_IMAGE));
+		if (getArguments().containsKey(BundleKeys.TRANSITION_NAME_SHARED_IMAGE)) {
+			ViewCompat.setTransitionName(imgEvt, getArguments().getString(BundleKeys.TRANSITION_NAME_SHARED_IMAGE));
+		}
 		
 		obsrScrlV = (ObservableScrollView) rootView.findViewById(R.id.obsrScrlV);
 		obsrScrlV.setListener(this);

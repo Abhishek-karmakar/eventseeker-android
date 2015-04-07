@@ -158,7 +158,9 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 		txtArtistTitle.setText(artist.getName());
 		// for marquee to work
 		txtArtistTitle.setSelected(true);
-		ViewCompat.setTransitionName(txtArtistTitle, getArguments().getString(BundleKeys.TRANSITION_NAME_SHARED_TEXT));
+		if (getArguments().containsKey(BundleKeys.TRANSITION_NAME_SHARED_TEXT)) {
+			ViewCompat.setTransitionName(txtArtistTitle, getArguments().getString(BundleKeys.TRANSITION_NAME_SHARED_TEXT));
+		}
 		
 		vNoContentBG = rootView.findViewById(R.id.vNoContentBG);
 		vDummy = rootView.findViewById(R.id.vDummy);
