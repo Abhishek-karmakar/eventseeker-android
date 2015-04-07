@@ -1,18 +1,16 @@
 package com.wcities.eventseeker.adapter;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import android.content.res.Configuration;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 
 import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.custom.fragment.FragmentRetainingChildFragmentManager;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
 import com.wcities.eventseeker.viewdata.TabBar.Tab;
@@ -52,7 +50,7 @@ public class SwipeTabsAdapter extends FragmentPagerAdapter implements TabBar.Tab
 	}
 	
 	public SwipeTabsAdapter(Fragment fragment, ViewPager pager, TabBar tabBar, SwipeTabsAdapterListener listener) {
-		super(fragment.getChildFragmentManager());
+		super(((FragmentRetainingChildFragmentManager)fragment).childFragmentManager());
 		this.fragment = fragment;
 		mViewPager = pager;
 		this.tabBar = tabBar;

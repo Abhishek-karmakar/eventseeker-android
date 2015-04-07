@@ -1,5 +1,6 @@
 package com.wcities.eventseeker.adapter;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import android.content.Context;
@@ -13,6 +14,7 @@ import android.os.AsyncTask.Status;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
+import android.support.v7.widget.RecyclerView.AdapterDataObserver;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -74,6 +76,7 @@ public class RVSearchEventsAdapterTab extends Adapter<RVSearchEventsAdapterTab.V
 	private AsyncTask<Void, Void, List<Event>> loadDateWiseEvents;
 	
 	private RecyclerView recyclerView;
+	private WeakReference<RecyclerView> weakRecyclerView;
 	
 	private int eventsAlreadyRequested;
 	private boolean isMoreDataAvailable = true, isVisible = true;
@@ -86,6 +89,8 @@ public class RVSearchEventsAdapterTab extends Adapter<RVSearchEventsAdapterTab.V
 	private Handler handler;
 	
 	private int lnrSliderContentW, openPos = INVALID, rltLytDetailsW = INVALID;
+	
+	private AdapterDataObserver adapterDataObserver;
 
 	private static enum ViewType {
 		EVENT;
@@ -134,6 +139,21 @@ public class RVSearchEventsAdapterTab extends Adapter<RVSearchEventsAdapterTab.V
 		Resources res = FragmentUtil.getResources(searchEventsFragmentTab);
 		lnrSliderContentW = res.getDimensionPixelSize(R.dimen.lnr_slider_content_w_rv_item_event_tab);
 	}
+	
+	/**
+	 * Need to unregister manually because otherwise using same adapter on orientation change results in
+	 * multiple time registrations w/o unregistration, due to which we need to manually 
+	 * call unregisterAdapterDataObserver if it tries to register with new observer when already some older
+	 * observer is registered. W/o having this results in multiple observers holding cardview & imgEvt memory.
+	 */
+	@Override
+	public void registerAdapterDataObserver(AdapterDataObserver observer) {
+		if (adapterDataObserver != null) {
+			unregisterAdapterDataObserver(adapterDataObserver);
+		}
+        super.registerAdapterDataObserver(observer);
+        adapterDataObserver = observer;
+    }
 
 	@Override
 	public int getItemCount() {
@@ -147,7 +167,10 @@ public class RVSearchEventsAdapterTab extends Adapter<RVSearchEventsAdapterTab.V
 	
 	@Override
 	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		recyclerView = (RecyclerView) parent;
+		if (recyclerView != parent) {
+			recyclerView = (RecyclerView) parent;
+			weakRecyclerView = new WeakReference<RecyclerView>(recyclerView);
+		}
 		
 		View v;
 		
@@ -250,7 +273,7 @@ public class RVSearchEventsAdapterTab extends Adapter<RVSearchEventsAdapterTab.V
 					    } else {
 					    	holder.imgEvt.setImageBitmap(null);
 					    	AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-					        asyncLoadImg.loadImg(holder.imgEvt, ImgResolution.LOW, recyclerView, position, bitmapCacheable);
+					        asyncLoadImg.loadImg(holder.imgEvt, ImgResolution.LOW, weakRecyclerView, position, bitmapCacheable);
 					    }
 					}
 				}

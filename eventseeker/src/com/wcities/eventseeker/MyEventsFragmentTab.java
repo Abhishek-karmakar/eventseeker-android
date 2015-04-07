@@ -19,8 +19,10 @@ import com.wcities.eventseeker.adapter.SwipeTabsAdapter;
 import com.wcities.eventseeker.adapter.SwipeTabsAdapter.SwipeTabsAdapterListener;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.api.UserInfoApi;
+import com.wcities.eventseeker.api.UserInfoApi.Type;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentRetainingChildFragmentManager;
+import com.wcities.eventseeker.interfaces.SwipeTabVisibilityListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
 
@@ -44,12 +46,6 @@ public class MyEventsFragmentTab extends FragmentRetainingChildFragmentManager i
 	private int lastGaEventSentForPos;
 
 	private List<Button> tabBarButtons;
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setRetainInstance(true);
-	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -162,6 +158,53 @@ public class MyEventsFragmentTab extends FragmentRetainingChildFragmentManager i
 			GoogleAnalyticsTracker.getInstance().sendEvent(FragmentUtil.getApplication(this), 
 					((BaseActivityTab) FragmentUtil.getActivity(this)).getScreenName(), label);
 			lastGaEventSentForPos = position;
+		}
+		
+		List<Fragment> pageFragments = mTabsAdapter.getTabFragments();
+		
+		switch (position) {
+		
+		case 0:
+			for (Iterator<Fragment> iterator = pageFragments.iterator(); iterator.hasNext();) {
+				Fragment fragment = iterator.next();
+				Type loadType = (Type) fragment.getArguments().getSerializable(BundleKeys.LOAD_TYPE);
+				if (loadType != Type.myevents) {
+					((SwipeTabVisibilityListener) fragment).onInvisible();
+					
+				} else {
+					((SwipeTabVisibilityListener) fragment).onVisible();
+				}
+			};
+			break;
+			
+		case 1:
+			for (Iterator<Fragment> iterator = pageFragments.iterator(); iterator.hasNext();) {
+				Fragment fragment = iterator.next();
+				Type loadType = (Type) fragment.getArguments().getSerializable(BundleKeys.LOAD_TYPE);
+				if (loadType != Type.recommendedevent) {
+					((SwipeTabVisibilityListener) fragment).onInvisible();
+					
+				} else {
+					((SwipeTabVisibilityListener) fragment).onVisible();
+				}
+			};
+			break;
+			
+		case 2:
+			for (Iterator<Fragment> iterator = pageFragments.iterator(); iterator.hasNext();) {
+				Fragment fragment = iterator.next();
+				Type loadType = (Type) fragment.getArguments().getSerializable(BundleKeys.LOAD_TYPE);
+				if (loadType != Type.mysavedevents) {
+					((SwipeTabVisibilityListener) fragment).onInvisible();
+					
+				} else {
+					((SwipeTabVisibilityListener) fragment).onVisible();
+				}
+			};
+			break;
+
+		default:
+			break;
 		}
 	}
 

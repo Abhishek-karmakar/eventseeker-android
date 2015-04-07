@@ -1,5 +1,6 @@
 package com.wcities.eventseeker;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -24,6 +25,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.AdapterDataObserver;
 import android.support.v7.widget.RecyclerView.LayoutParams;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -696,12 +698,15 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		private LoadItemsInBackgroundListener mListener;
 		private DiscoverFragment discoverFragment;
 		private RecyclerView recyclerView;
+		private WeakReference<RecyclerView> weakRecyclerView;
 		private int openPos = INVALID;
 		private int rltLytContentInitialMarginL, lnrSliderContentW, imgEventW, rltLytContentW = INVALID;
 		
 		private int fbCallCountForSameEvt = 0;
 		private EventListAdapter.ViewHolder holderPendingPublish;
 		private Event eventPendingPublish;
+		
+		private AdapterDataObserver adapterDataObserver;
 		
 		private static enum ViewType {
 			POS_0, POS_1, LAST_POS, PROGRESS, CONTENT
@@ -760,6 +765,21 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 			lnrSliderContentW = res.getDimensionPixelSize(R.dimen.lnr_slider_content_w_list_item_discover);
 			imgEventW = res.getDimensionPixelSize(R.dimen.img_event_w_list_item_discover);
 		}
+		
+		/**
+		 * Need to unregister manually because otherwise using same adapter on orientation change results in
+		 * multiple time registrations w/o unregistration, due to which we need to manually 
+		 * call unregisterAdapterDataObserver if it tries to register with new observer when already some older
+		 * observer is registered. W/o having this results in multiple observers holding cardview & imgEvt memory.
+		 */
+		@Override
+		public void registerAdapterDataObserver(AdapterDataObserver observer) {
+			if (adapterDataObserver != null) {
+				unregisterAdapterDataObserver(adapterDataObserver);
+			}
+	        super.registerAdapterDataObserver(observer);
+	        adapterDataObserver = observer;
+	    }
 
 		@Override
 		public int getItemViewType(int position) {
@@ -871,7 +891,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 					    } else {
 					    	holder.imgEvent.setImageBitmap(null);
 					    	AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-					        asyncLoadImg.loadImg(holder.imgEvent, ImgResolution.LOW, recyclerView, position, bitmapCacheable);
+					        asyncLoadImg.loadImg(holder.imgEvent, ImgResolution.LOW, weakRecyclerView, position, bitmapCacheable);
 					    }
 					}
 					//ViewCompat.setTransitionName(holder.imgEvent, TransitionName.DISCOVER_IMG_EVT + position);
@@ -1202,7 +1222,10 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 			//Log.d(TAG, "onCreateViewHolder(), viewType = " + viewType);
 			View v;
 			
-			recyclerView = (RecyclerView) parent;
+			if (recyclerView != parent) {
+				recyclerView = (RecyclerView) parent;
+				weakRecyclerView = new WeakReference<RecyclerView>(recyclerView);
+			}
 			
 			switch (viewType) {
 			

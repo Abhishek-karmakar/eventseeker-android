@@ -1,6 +1,7 @@
 package com.wcities.eventseeker.asynctask;
 
 import java.io.FileNotFoundException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -43,7 +44,7 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 		private ImageView imageView;
 		private String key;
 		private AdapterView adapterView;
-		private RecyclerView recyclerView;
+		private WeakReference<RecyclerView> recyclerView;
 		private int pos;
 		private Bitmap bitmap;
 		private long id;
@@ -136,7 +137,7 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 		
 	}
 	
-	public void loadImg(ImageView imageView, ImgResolution imgResolution, RecyclerView recyclerView, 
+	public void loadImg(ImageView imageView, ImgResolution imgResolution, WeakReference<RecyclerView> recyclerView, 
 			int pos, BitmapCacheable bitmapCacheable) {
 		//Log.i(TAG, "loadImg() for pos = " + pos);
 		ImgDetails imgDetails = new ImgDetails();
@@ -340,7 +341,10 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 			} else {
 				//Log.i(TAG, "onProgressUpdate() else");
 				if (imgDetails.recyclerView != null) {
-					LayoutManager lm = imgDetails.recyclerView.getLayoutManager();
+					if (imgDetails.recyclerView.get() == null) {
+						return;
+					}
+					LayoutManager lm = imgDetails.recyclerView.get().getLayoutManager();
 					
 					if (lm instanceof GridLayoutManager) {
 						GridLayoutManager glm = (GridLayoutManager) lm;
