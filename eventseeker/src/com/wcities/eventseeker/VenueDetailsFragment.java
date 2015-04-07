@@ -1,5 +1,6 @@
 package com.wcities.eventseeker;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -29,6 +30,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
+import android.support.v7.widget.RecyclerView.AdapterDataObserver;
 import android.support.v7.widget.ShareActionProvider.OnShareTargetSelectedListener;
 import android.text.Html;
 import android.text.TextUtils.TruncateAt;
@@ -691,6 +693,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		private static final int MAX_LINES_VENUE_DESC = 5;
 		
 		private RecyclerView recyclerView;
+		private WeakReference<RecyclerView> weakRecyclerView;
 		private VenueDetailsFragment venueDetailsFragment;
 		
 		private boolean isVenueDescExpanded;
@@ -708,6 +711,8 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		private int rltLytContentInitialMarginL, lnrSliderContentW, imgEventW, rltLytContentW = INVALID;
 		
 		private BitmapCache bitmapCache;
+		
+		private AdapterDataObserver adapterDataObserver;
 		
 		private static enum ViewType {
 			IMG, DESC, ADDRESS_MAP, UPCOMING_EVENTS_TITLE, PROGRESS, EVENT;
@@ -792,6 +797,21 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			imgEventW = res.getDimensionPixelSize(R.dimen.img_event_w_list_item_discover);
 		}
 
+		/**
+		 * Need to unregister manually because otherwise using same adapter on orientation change results in
+		 * multiple time registrations w/o unregistration, due to which we need to manually 
+		 * call unregisterAdapterDataObserver if it tries to register with new observer when already some older
+		 * observer is registered. W/o having this results in multiple observers holding cardview & imgEvt memory.
+		 */
+		@Override
+		public void registerAdapterDataObserver(AdapterDataObserver observer) {
+			if (adapterDataObserver != null) {
+				unregisterAdapterDataObserver(adapterDataObserver);
+			}
+	        super.registerAdapterDataObserver(observer);
+	        adapterDataObserver = observer;
+	    }
+		
 		@Override
 		public int getItemCount() {
 			return venueDetailsFragment.allDetailsLoaded ? (EXTRA_TOP_DUMMY_ITEM_COUNT_AFTER_DETAILS_LOADED + 
@@ -825,7 +845,10 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			//Log.d(TAG, "onCreateViewHolder(), viewType = " + viewType);
 			View v;
 			
-			recyclerView = (RecyclerView) parent;
+			if (recyclerView != parent) {
+				recyclerView = (RecyclerView) parent;
+				weakRecyclerView = new WeakReference<RecyclerView>(recyclerView);
+			}
 			
 			switch (ViewType.getViewType(viewType)) {
 			
@@ -937,7 +960,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 					    } else {
 					    	holder.imgEvent.setImageBitmap(null);
 					    	AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-					        asyncLoadImg.loadImg(holder.imgEvent, ImgResolution.LOW, recyclerView, position, bitmapCacheable);
+					        asyncLoadImg.loadImg(holder.imgEvent, ImgResolution.LOW, weakRecyclerView, position, bitmapCacheable);
 					    }
 					}
 					

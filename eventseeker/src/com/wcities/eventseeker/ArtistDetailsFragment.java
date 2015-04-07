@@ -1,5 +1,6 @@
 package com.wcities.eventseeker;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -25,6 +26,7 @@ import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.AdapterDataObserver;
 import android.text.Html;
 import android.text.TextUtils.TruncateAt;
 import android.util.DisplayMetrics;
@@ -825,6 +827,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		private static final int INVALID = -1;
 		
 		private RecyclerView recyclerView;
+		private WeakReference<RecyclerView> weakRecyclerView;
 		private ArtistDetailsFragment artistDetailsFragment;
 		
 		private boolean isArtistDescExpanded;
@@ -845,6 +848,8 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		
 		private int openPos = INVALID;
 		private int rltLytContentInitialMarginL, lnrSliderContentW, imgEventW, rltLytContentW = INVALID;
+		
+		private AdapterDataObserver adapterDataObserver;
 		
 		private static enum ViewType {
 			IMG, DESC, VIDEOS, FRIENDS, UPCOMING_EVENTS_TITLE, PROGRESS, EVENT;
@@ -924,6 +929,21 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			lnrSliderContentW = res.getDimensionPixelSize(R.dimen.lnr_slider_content_w_list_item_discover);
 			imgEventW = res.getDimensionPixelSize(R.dimen.img_event_w_list_item_discover);
 		}
+		
+		/**
+		 * Need to unregister manually because otherwise using same adapter on orientation change results in
+		 * multiple time registrations w/o unregistration, due to which we need to manually 
+		 * call unregisterAdapterDataObserver if it tries to register with new observer when already some older
+		 * observer is registered. W/o having this results in multiple observers holding cardview & imgEvt memory.
+		 */
+		@Override
+		public void registerAdapterDataObserver(AdapterDataObserver observer) {
+			if (adapterDataObserver != null) {
+				unregisterAdapterDataObserver(adapterDataObserver);
+			}
+	        super.registerAdapterDataObserver(observer);
+	        adapterDataObserver = observer;
+	    }
 
 		@Override
 		public int getItemViewType(int position) {
@@ -1057,7 +1077,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 					    } else {
 					    	holder.imgEvent.setImageBitmap(null);
 					    	AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-					        asyncLoadImg.loadImg(holder.imgEvent, ImgResolution.LOW, recyclerView, position, bitmapCacheable);
+					        asyncLoadImg.loadImg(holder.imgEvent, ImgResolution.LOW, weakRecyclerView, position, bitmapCacheable);
 					    }
 					}
 					
@@ -1284,7 +1304,10 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			//Log.d(TAG, "onCreateViewHolder(), viewType = " + viewType);
 			View v;
 			
-			recyclerView = (RecyclerView) parent;
+			if (recyclerView != parent) {
+				recyclerView = (RecyclerView) parent;
+				weakRecyclerView = new WeakReference<RecyclerView>(recyclerView);
+			}
 			
 			switch (ViewType.getViewType(viewType)) {
 			

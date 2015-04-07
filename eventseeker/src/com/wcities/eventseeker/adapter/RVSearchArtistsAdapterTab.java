@@ -1,5 +1,6 @@
 package com.wcities.eventseeker.adapter;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import android.content.Context;
@@ -11,6 +12,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
+import android.support.v7.widget.RecyclerView.AdapterDataObserver;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,12 +46,15 @@ public class RVSearchArtistsAdapterTab<T> extends Adapter<RVSearchArtistsAdapter
 	private List<Artist> artistList;
 	
 	private RecyclerView recyclerView;
+	private WeakReference<RecyclerView> weakRecyclerView;
 	
 	private AsyncTask<T, Void, List<Artist>> loadArtists;
 	private boolean isMoreDataAvailable = true, isVisible = true;
 	private int artistsAlreadyRequested;
 	
 	private BitmapCache bitmapCache;
+	
+	private AdapterDataObserver adapterDataObserver;
 	
 	private static enum ViewType {
 		ARTIST;
@@ -79,6 +84,21 @@ public class RVSearchArtistsAdapterTab<T> extends Adapter<RVSearchArtistsAdapter
 		artistList = searchArtistsFragmentTab.getArtistList();
 		bitmapCache = BitmapCache.getInstance();
 	}
+	
+	/**
+	 * Need to unregister manually because otherwise using same adapter on orientation change results in
+	 * multiple time registrations w/o unregistration, due to which we need to manually 
+	 * call unregisterAdapterDataObserver if it tries to register with new observer when already some older
+	 * observer is registered. W/o having this results in multiple observers holding cardview & imgEvt memory.
+	 */
+	@Override
+	public void registerAdapterDataObserver(AdapterDataObserver observer) {
+		if (adapterDataObserver != null) {
+			unregisterAdapterDataObserver(adapterDataObserver);
+		}
+        super.registerAdapterDataObserver(observer);
+        adapterDataObserver = observer;
+    }
 
 	@Override
 	public int getItemCount() {
@@ -92,7 +112,10 @@ public class RVSearchArtistsAdapterTab<T> extends Adapter<RVSearchArtistsAdapter
 	
 	@Override
 	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		recyclerView = (RecyclerView) parent;
+		if (recyclerView != parent) {
+			recyclerView = (RecyclerView) parent;
+			weakRecyclerView = new WeakReference<RecyclerView>(recyclerView);
+		}
 		
 		View v;
 		
@@ -189,7 +212,7 @@ public class RVSearchArtistsAdapterTab<T> extends Adapter<RVSearchArtistsAdapter
 						holder.imgItem.setImageBitmap(null);
 	
 						AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-						asyncLoadImg.loadImg(holder.imgItem, ImgResolution.LOW, recyclerView, position, artist);
+						asyncLoadImg.loadImg(holder.imgItem, ImgResolution.LOW, weakRecyclerView, position, artist);
 					}
 				}
 				ViewCompat.setTransitionName(holder.imgItem, "imgArtistSearch" + position);

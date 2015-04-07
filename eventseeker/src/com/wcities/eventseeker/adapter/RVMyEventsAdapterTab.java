@@ -1,5 +1,6 @@
 package com.wcities.eventseeker.adapter;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import android.content.Context;
@@ -13,6 +14,8 @@ import android.os.Looper;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
+import android.support.v7.widget.RecyclerView.AdapterDataObserver;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -72,13 +75,14 @@ public class RVMyEventsAdapterTab extends Adapter<ViewHolder> implements DateWis
 	private List<Event> eventList;
 	
 	private int eventsAlreadyRequested;
-	private boolean isMoreDataAvailable = true;
+	private boolean isMoreDataAvailable = true, isVisible = true;
 	
 	private int lnrSliderContentW, openPos = INVALID, rltLytDetailsW = INVALID;
 	
 	private AsyncTask<Void, Void, List<Event>> loadDateWiseEvents;
 	private LoadItemsInBackgroundListener mListener;
 	private RecyclerView recyclerView;
+	private WeakReference<RecyclerView> weakRecyclerView;
 	
 	private BitmapCache bitmapCache;
 	private Handler handler;
@@ -88,6 +92,7 @@ public class RVMyEventsAdapterTab extends Adapter<ViewHolder> implements DateWis
 	private Event eventPendingPublish;
 
 	private RVMyEventsAdapterTabListener rvMyEventsAdapterTabListener;
+	private AdapterDataObserver adapterDataObserver;
 
 	private static enum ViewType {
 		EVENT;
@@ -148,7 +153,22 @@ public class RVMyEventsAdapterTab extends Adapter<ViewHolder> implements DateWis
 		Resources res = FragmentUtil.getResources(publishEventFragment);
 		lnrSliderContentW = res.getDimensionPixelSize(R.dimen.lnr_slider_content_w_rv_item_event_tab);
 	}
-
+	
+	/**
+	 * Need to unregister manually because otherwise using same adapter on orientation change results in
+	 * multiple time registrations w/o unregistration, due to which we need to manually 
+	 * call unregisterAdapterDataObserver if it tries to register with new observer when already some older
+	 * observer is registered. W/o having this results in multiple observers holding cardview & imgEvt memory.
+	 */
+	@Override
+	public void registerAdapterDataObserver(AdapterDataObserver observer) {
+		if (adapterDataObserver != null) {
+			unregisterAdapterDataObserver(adapterDataObserver);
+		}
+        super.registerAdapterDataObserver(observer);
+        adapterDataObserver = observer;
+    }
+	
 	@Override
 	public int getItemCount() {
 		//Log.d(TAG, "getItemCount() - " + eventList.size());
@@ -162,7 +182,10 @@ public class RVMyEventsAdapterTab extends Adapter<ViewHolder> implements DateWis
 	
 	@Override
 	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		recyclerView = (RecyclerView) parent;
+		if (recyclerView != parent) {
+			recyclerView = (RecyclerView) parent;
+			weakRecyclerView = new WeakReference<RecyclerView>(recyclerView);
+		}
 		
 		View v;
 		
@@ -230,34 +253,40 @@ public class RVMyEventsAdapterTab extends Adapter<ViewHolder> implements DateWis
 				holder.txtEvtLoc.setText(venueName);
 			}
 
-			BitmapCacheable bitmapCacheable = null;
-			/**
-			 * added this try catch as if event will not have valid url and schedule object then
-			 * the below line may cause NullPointerException. So, added the try-catch and added the
-			 * null check for bitmapCacheable on following statements.
-			 */
-			try {
-				bitmapCacheable = event.doesValidImgUrlExist() ? event : event.getSchedule().getVenue();
+			if (!isVisible) {
+				// free memory
+				holder.imgEvt.setImageBitmap(null);
 				
-			} catch (NullPointerException e) {
-				e.printStackTrace();
-			}
-			
-			if (bitmapCacheable != null) {
-				String key = bitmapCacheable.getKey(ImgResolution.LOW);
-				// set tag to compare it in AsyncLoadImg before setting bitmap to imageview
-		    	holder.imgEvt.setTag(key);
-
-				Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
-				if (bitmap != null) {
-					//Log.d(TAG, "bitmap != null");
-			        holder.imgEvt.setImageBitmap(bitmap);
-			        
-			    } else {
-			    	holder.imgEvt.setImageBitmap(null);
-			    	AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-			        asyncLoadImg.loadImg(holder.imgEvt, ImgResolution.LOW, recyclerView, position, bitmapCacheable);
-			    }
+			} else {
+				BitmapCacheable bitmapCacheable = null;
+				/**
+				 * added this try catch as if event will not have valid url and schedule object then
+				 * the below line may cause NullPointerException. So, added the try-catch and added the
+				 * null check for bitmapCacheable on following statements.
+				 */
+				try {
+					bitmapCacheable = event.doesValidImgUrlExist() ? event : event.getSchedule().getVenue();
+					
+				} catch (NullPointerException e) {
+					e.printStackTrace();
+				}
+				
+				if (bitmapCacheable != null) {
+					String key = bitmapCacheable.getKey(ImgResolution.LOW);
+					// set tag to compare it in AsyncLoadImg before setting bitmap to imageview
+			    	holder.imgEvt.setTag(key);
+	
+					Bitmap bitmap = bitmapCache.getBitmapFromMemCache(key);
+					if (bitmap != null) {
+						//Log.d(TAG, "bitmap != null");
+				        holder.imgEvt.setImageBitmap(bitmap);
+				        
+				    } else {
+				    	holder.imgEvt.setImageBitmap(null);
+				    	AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
+				        asyncLoadImg.loadImg(holder.imgEvt, ImgResolution.LOW, weakRecyclerView, position, bitmapCacheable);
+				    }
+				}
 			}
 			
 			ViewCompat.setTransitionName(holder.imgEvt, "imageTransitionMyEvents" + position);
@@ -755,6 +784,10 @@ public class RVMyEventsAdapterTab extends Adapter<ViewHolder> implements DateWis
 		}
 	}
 	
+	public void setVisible(boolean isVisible) {
+		this.isVisible = isVisible;
+	}
+
 	public void call(Session session, SessionState state, Exception exception) {
 		//Log.i(TAG, "call()");
 		fbCallCountForSameEvt++;

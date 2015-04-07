@@ -1,5 +1,6 @@
 package com.wcities.eventseeker.adapter;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import android.content.Context;
@@ -14,6 +15,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
+import android.support.v7.widget.RecyclerView.AdapterDataObserver;
 import android.text.Html;
 import android.text.TextUtils.TruncateAt;
 import android.util.Log;
@@ -69,6 +71,7 @@ public class RVArtistDetailsAdapterTab extends Adapter<RVArtistDetailsAdapterTab
 	private static final int EXTRA_TOP_DUMMY_ITEM_COUNT_AFTER_DETAILS_LOADED = 5;
 	
 	private RecyclerView recyclerView;
+	private WeakReference<RecyclerView> weakRecyclerView;
 	
 	private ArtistDetailsFragmentTab artistDetailsFragmentTab;
 	private Artist artist;
@@ -87,6 +90,8 @@ public class RVArtistDetailsAdapterTab extends Adapter<RVArtistDetailsAdapterTab
 	private int fbCallCountForSameEvt = 0;
 	private RVArtistDetailsAdapterTab.ViewHolder holderPendingPublish;
 	private Event eventPendingPublish;
+	
+	private AdapterDataObserver adapterDataObserver;
 	
 	private static enum ViewType {
 		IMG, DESC, VIDEOS, FRIENDS, UPCOMING_EVENTS_TITLE, PROGRESS, EVENT;
@@ -146,6 +151,21 @@ public class RVArtistDetailsAdapterTab extends Adapter<RVArtistDetailsAdapterTab
 		eventList = artistDetailsFragmentTab.getEventList();
 		bitmapCache = BitmapCache.getInstance();
 	}
+	
+	/**
+	 * Need to unregister manually because otherwise using same adapter on orientation change results in
+	 * multiple time registrations w/o unregistration, due to which we need to manually 
+	 * call unregisterAdapterDataObserver if it tries to register with new observer when already some older
+	 * observer is registered. W/o having this results in multiple observers holding cardview & imgEvt memory.
+	 */
+	@Override
+	public void registerAdapterDataObserver(AdapterDataObserver observer) {
+		if (adapterDataObserver != null) {
+			unregisterAdapterDataObserver(adapterDataObserver);
+		}
+        super.registerAdapterDataObserver(observer);
+        adapterDataObserver = observer;
+    }
 
 	@Override
 	public int getItemViewType(int position) {
@@ -183,7 +203,10 @@ public class RVArtistDetailsAdapterTab extends Adapter<RVArtistDetailsAdapterTab
 		//Log.d(TAG, "onCreateViewHolder(), viewType = " + viewType);
 		View v;
 		
-		recyclerView = (RecyclerView) parent;
+		if (recyclerView != parent) {
+			recyclerView = (RecyclerView) parent;
+			weakRecyclerView = new WeakReference<RecyclerView>(recyclerView);
+		}
 		
 		switch (ViewType.getViewType(viewType)) {
 		
@@ -340,7 +363,7 @@ public class RVArtistDetailsAdapterTab extends Adapter<RVArtistDetailsAdapterTab
 				    } else {
 				    	holder.imgEvt.setImageBitmap(null);
 				    	AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-				        asyncLoadImg.loadImg(holder.imgEvt, ImgResolution.LOW, recyclerView, position, bitmapCacheable);
+				        asyncLoadImg.loadImg(holder.imgEvt, ImgResolution.LOW, weakRecyclerView, position, bitmapCacheable);
 				    }
 				}
 				ViewCompat.setTransitionName(holder.imgEvt, "imgEvtArtistDetails" + position);

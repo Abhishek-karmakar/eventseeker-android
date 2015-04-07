@@ -145,7 +145,7 @@ public class SearchFragmentTab extends FragmentRetainingChildFragmentManager imp
 
 	@Override
 	public void onSwipeTabSelected(int position) {
-		Log.d(TAG, "onSwipeTabSelected() - pos = " + position);
+		//Log.d(TAG, "onSwipeTabSelected() - pos = " + position);
 		List<Fragment> pageFragments = mTabsAdapter.getTabFragments();
 		
 		switch (position) {

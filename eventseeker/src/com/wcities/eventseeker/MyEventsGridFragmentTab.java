@@ -12,6 +12,7 @@ import android.os.Looper;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,13 +34,14 @@ import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.custom.fragment.PublishEventFragment;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
+import com.wcities.eventseeker.interfaces.SwipeTabVisibilityListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.ItemDecorationItemOffset;
 
 public class MyEventsGridFragmentTab extends PublishEventFragment implements LoadItemsInBackgroundListener, 
-		AsyncTaskListener<Void>, RVMyEventsAdapterTabListener {
+		AsyncTaskListener<Void>, RVMyEventsAdapterTabListener, SwipeTabVisibilityListener {
 	
 	private static final String TAG = MyEventsGridFragmentTab.class.getSimpleName();
 	
@@ -251,5 +253,25 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 			recyclerVEvents.setVisibility(View.VISIBLE);
 		}
 	}
-	
+
+	@Override
+	public void onVisible() {
+		if (rvCatEventsAdapterTab != null) {
+			rvCatEventsAdapterTab.setVisible(true);
+			/**
+			 * need to call this because it doesn't call onBindViewHolder() automatically if 
+			 * next or previous tab is selected. Calls it only for tab selection changing from position 1 to 3 or 
+			 * 3 to 1
+			 */
+			rvCatEventsAdapterTab.notifyDataSetChanged();
+		}
+	}
+
+	@Override
+	public void onInvisible() {
+		if (rvCatEventsAdapterTab != null) {
+			rvCatEventsAdapterTab.setVisible(false);
+			rvCatEventsAdapterTab.notifyDataSetChanged();
+		}
+	}
 }
