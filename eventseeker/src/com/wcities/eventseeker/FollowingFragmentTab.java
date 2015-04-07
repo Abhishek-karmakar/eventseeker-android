@@ -91,7 +91,7 @@ public class FollowingFragmentTab extends Fragment implements ArtistTrackingList
 		rltRootNoContentFound = v.findViewById(R.id.rltRootNoContentFound);
 		
 		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
-		rltLytPrgsBar.setBackgroundResource(R.drawable.bg_no_content_overlay);
+		rltLytPrgsBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
 		
 		v.findViewById(R.id.btnSyncAccounts).setOnClickListener(this);
 		v.findViewById(R.id.btnPopularArtists).setOnClickListener(this);

@@ -119,11 +119,6 @@ public class ChangeLocationFragmentTab extends FragmentRetainingChildFragmentMan
         return mapSetUp;
     }
     
-    /*private void hideSoftKeypad() {
-    	InputMethodManager imm = (InputMethodManager) FragmentUtil.getActivity(this).getSystemService(Context.INPUT_METHOD_SERVICE);
-    	imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
-    }*/
-    
     public static class MapFragment extends SupportMapFragment {
     	
     	@Override

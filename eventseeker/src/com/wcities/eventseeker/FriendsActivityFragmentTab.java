@@ -132,7 +132,7 @@ public class FriendsActivityFragmentTab extends PublishEventListFragment impleme
 		
 		rltRootNoContentFound = v.findViewById(R.id.rltRootNoContentFound);
 		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
-		rltLytPrgsBar.setBackgroundResource(R.drawable.bg_no_content_overlay);
+		rltLytPrgsBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
 		return v;
 	}
 	

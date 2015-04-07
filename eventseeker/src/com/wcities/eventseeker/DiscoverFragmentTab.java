@@ -180,7 +180,7 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 		
 		rltLytProgressBar = (RelativeLayout) v.findViewById(R.id.rltLytProgressBar);
 		// Applying background here since overriding background doesn't work from xml with <include> layout
-		rltLytProgressBar.setBackgroundResource(R.drawable.bg_no_content_overlay_tab);
+		rltLytProgressBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
 		
 		rltLytNoEvts = (RelativeLayout) v.findViewById(R.id.rltLytNoEvts);
 		if (eventList != null && eventList.isEmpty()) {

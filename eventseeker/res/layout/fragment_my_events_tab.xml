@@ -22,13 +22,13 @@
     <include
         android:id="@+id/rltLytNoEvts"
         layout="@layout/include_no_content_with_phone_tab"
-        android:visibility="gone" />
+        android:visibility="invisible" />
 
     <include
         android:id="@+id/rltLytProgressBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         layout="@layout/progress_bar_eventseeker_fixed_ht"
-        android:visibility="gone" />
+        android:visibility="invisible" />
 
 </RelativeLayout>

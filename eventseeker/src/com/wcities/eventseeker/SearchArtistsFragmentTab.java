@@ -88,7 +88,7 @@ public class SearchArtistsFragmentTab extends PublishArtistFragment implements F
 		
 		rltLytProgressBar = (RelativeLayout) v.findViewById(R.id.rltLytProgressBar);
 		// Applying background here since overriding background doesn't work from xml with <include> layout
-		rltLytProgressBar.setBackgroundResource(R.drawable.bg_no_content_overlay_tab);
+		rltLytProgressBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
 		
 		txtNoItemsFound = (TextView) v.findViewById(R.id.txtNoItemsFound);
 		

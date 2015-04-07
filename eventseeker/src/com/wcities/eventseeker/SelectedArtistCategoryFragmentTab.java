@@ -133,7 +133,7 @@ public class SelectedArtistCategoryFragmentTab extends PublishArtistFragmentLoad
 		
 		rltLayoutRoot = v.findViewById(R.id.rltLayoutRoot);
 		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
-		rltLytPrgsBar.setBackgroundResource(R.drawable.bg_no_content_overlay);
+		rltLytPrgsBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
 
 		v.findViewById(R.id.btnSyncAccounts).setOnClickListener(this);
 		v.findViewById(R.id.btnRecommended).setOnClickListener(this);
@@ -232,7 +232,7 @@ public class SelectedArtistCategoryFragmentTab extends PublishArtistFragmentLoad
 			e.printStackTrace();
 		}
 		
-		rltLayoutRoot.setBackgroundResource(R.drawable.bg_no_content_overlay);
+		rltLayoutRoot.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
 		txtNoItemsFound.setText(R.string.no_artist_found);
 		txtNoItemsFound.setVisibility(View.VISIBLE);		
 	}

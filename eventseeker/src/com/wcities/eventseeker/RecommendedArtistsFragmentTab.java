@@ -269,7 +269,7 @@ public class RecommendedArtistsFragmentTab extends PublishArtistFragment impleme
 			e.printStackTrace();
 		}
 		
-		rltLayoutRoot.setBackgroundResource(R.drawable.bg_no_content_overlay);
+		rltLayoutRoot.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
 		txtNoItemsFound.setText(R.string.no_artist_found);
 		txtNoItemsFound.setVisibility(View.VISIBLE);		
 	}
@@ -393,7 +393,7 @@ public class RecommendedArtistsFragmentTab extends PublishArtistFragment impleme
 
 	@Override
 	public void displayFullScrnProgress() {
-		rltLytPrgsBar.setBackgroundResource(R.drawable.bg_no_content_overlay);
+		rltLytPrgsBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
 		rltLytPrgsBar.setVisibility(View.VISIBLE);
 	}
 

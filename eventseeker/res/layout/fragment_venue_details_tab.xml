@@ -13,7 +13,7 @@
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
 	        android:layout_below="@+id/rltLytTxtVenueTitle"
-	        android:background="@drawable/bg_no_content_overlay"
+	        android:background="@drawable/ic_no_content_background_overlay"
 	        android:visibility="invisible" />
 	    
 	    <ImageView android:id="@+id/imgVenue"

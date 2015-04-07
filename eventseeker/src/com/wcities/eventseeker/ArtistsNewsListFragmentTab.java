@@ -77,7 +77,7 @@ public class ArtistsNewsListFragmentTab extends ListFragment implements LoadItem
 		View v = inflater.inflate(R.layout.fragment_artists_news_list_tab, null);
 		rltRootNoContentFound = v.findViewById(R.id.rltRootNoContentFound);
 		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
-		rltLytPrgsBar.setBackgroundResource(R.drawable.bg_no_content_overlay);
+		rltLytPrgsBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
 		return v;
 	}
 	

@@ -91,7 +91,7 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 		
 		rltLytProgressBar = (RelativeLayout) v.findViewById(R.id.rltLytProgressBar);
 		// Applying background here since overriding background doesn't work from xml with <include> layout
-		rltLytProgressBar.setBackgroundResource(R.drawable.bg_no_content_overlay_tab);
+		rltLytProgressBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
 		
 		rltLytNoEvts = (RelativeLayout) v.findViewById(R.id.rltLytNoEvts);
 		if (isNoEventFound) {
@@ -234,14 +234,11 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 				
 			} else {
 				txtres = R.string.my_events_events_no_content; 
-				imgNoItemsRes = R.drawable.ic_list_follow; 
+				imgNoItemsRes = R.drawable.ic_recommended_link_pressed; 
 				imgPhoneRes = (loadType == Type.myevents) ?
 						R.drawable.ic_my_events_no_content : R.drawable.ic_recommended_events_no_content;							
 			}
 			
-			/*((ImageView) rltRootNoContentFound.findViewById(R.id.imgNoItems))
-				.setImageDrawable(res.getDrawable(imgNoItemsRes));*/
-
 			TextView txtNoContentMsg = (TextView) rltLytNoEvts.findViewById(R.id.txtNoItemsMsg);
 			txtNoContentMsg.setText(txtres);
 			txtNoContentMsg.setCompoundDrawablesWithIntrinsicBounds(0, imgNoItemsRes, 0, 0);

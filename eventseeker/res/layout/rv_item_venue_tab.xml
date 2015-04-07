@@ -103,7 +103,7 @@
 	                android:layout_height="@dimen/lnr_slider_content_img_ht_rv_item_event_tab"
 	                android:layout_weight="1"
 	                android:scaleType="centerInside"
-	                android:src="@drawable/phone"
+	                android:src="@drawable/ic_phone_slider"
 	                android:background="@drawable/bg_slctr_lnr_slider_content_rv_item_event_tab" />
 		        
 		        <ImageView android:id="@+id/imgWeb"
@@ -111,7 +111,7 @@
 	                android:layout_height="@dimen/lnr_slider_content_img_ht_rv_item_event_tab"
 	                android:layout_weight="1"
 	                android:scaleType="centerInside"
-	                android:src="@drawable/web_small"
+	                android:src="@drawable/ic_web_slider"
 	                android:background="@drawable/bg_slctr_lnr_slider_content_rv_item_event_tab" />
 		        
 		        <ImageView android:id="@+id/imgDrive"
@@ -119,7 +119,7 @@
 	                android:layout_height="@dimen/lnr_slider_content_img_ht_rv_item_event_tab"
 	                android:layout_weight="1"
 	                android:scaleType="centerInside"
-	                android:src="@drawable/car"
+	                android:src="@drawable/ic_car_slider"
 	                android:background="@drawable/bg_slctr_lnr_slider_content_rv_item_event_tab" />
 		
 		    </LinearLayout>

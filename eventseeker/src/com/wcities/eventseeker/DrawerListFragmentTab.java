@@ -9,9 +9,9 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,19 +21,16 @@ import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.AbsListView;
 import android.widget.AbsListView.LayoutParams;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
+import com.wcities.eventseeker.DrawerListFragmentTab.DrawerListAdapter.ListItemViewHolder;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
 
-public class DrawerListFragmentTab extends ListFragment {
+public class DrawerListFragmentTab extends Fragment {
 
 	private static final String TAG = DrawerListFragmentTab.class.getSimpleName();
 	
@@ -42,6 +39,8 @@ public class DrawerListFragmentTab extends ListFragment {
 	private DrawerListFragmentTabListener mListener;
 	private List<DrawerListItem> drawerListItems;
 	private DrawerListAdapter drawerListAdapter;
+	
+	private RecyclerView rcyclrDrawer;
 	
 	private int htForDrawerList;
 	
@@ -63,10 +62,10 @@ public class DrawerListFragmentTab extends ListFragment {
         	} else {
         		count = 0;
         		if (VersionUtil.isApiLevelAbove15()) {
-    				getListView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
+    				rcyclrDrawer.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
     			} else {
-    				getListView().getViewTreeObserver().removeGlobalOnLayoutListener(this);
+    				rcyclrDrawer.getViewTreeObserver().removeGlobalOnLayoutListener(this);
     			}
         	}
         	
@@ -75,7 +74,7 @@ public class DrawerListFragmentTab extends ListFragment {
 			 * for htForDrawerList in onCreate() won't return right value since we are subtracting statusbar height
 			 * as well.
 			 */
-			htForDrawerList = getListView().getHeight()
+			htForDrawerList = rcyclrDrawer.getHeight()
 					// subtracting divider height
 					- FragmentUtil.getResources(DrawerListFragmentTab.this).getDimensionPixelSize(R.dimen.divider_section_ht_navigation_drawer_list_item);
 			drawerListAdapter.onHtForDrawerListUpdated(htForDrawerList);
@@ -122,47 +121,46 @@ public class DrawerListFragmentTab extends ListFragment {
 	}
 	
 	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_drawer_list_tab, null);
+		rcyclrDrawer = (RecyclerView) view.findViewById(R.id.rcyclrDrawer);
+		// use a linear layout manager
+		LinearLayoutManager layoutManager = new LinearLayoutManager(FragmentUtil.getActivity(this));
+		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+		rcyclrDrawer.setLayoutManager(layoutManager);
+		return view;
+	}
+	
+	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		if (drawerListItems == null) {
 			drawerListItems = new ArrayList<DrawerListItem>();
 			loadDrawerListItems();
-			
 	        drawerListAdapter = new DrawerListAdapter((Activity) FragmentUtil.getActivity(this), drawerListItems, 
-	        		htForDrawerList);
+	        		htForDrawerList, mListener);
 			
 		} else {
 			drawerListAdapter.setmInflater((Activity) FragmentUtil.getActivity(this));
 		}
 		
-		setListAdapter(drawerListAdapter);
-        getListView().setDivider(null);
-        getListView().setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
-        //getListView().setBackgroundResource(R.drawable.side_nav_bg);
-        //getListView().setBackgroundColor(FragmentUtil.getResources(this).getColor(R.color.bg_screen_dark_blue));
-        getListView().setVerticalScrollBarEnabled(false);
-        getListView().setHorizontalScrollBarEnabled(false);
-        getListView().setCacheColorHint(android.R.color.transparent);
-        getListView().setScrollingCacheEnabled(false);
-        
-        // Set the list's click listener
-        getListView().setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView parent, View view, int position, long id) {
-				//Log.d(TAG, "onItemClick(), pos = " + position);
-				if (position != DIVIDER_POS) {
-					mListener.onDrawerItemSelected(position, null);
-				}
-	        }
-		});
+		rcyclrDrawer.setAdapter(drawerListAdapter);
+        //TODO:NEED TO CHECK USE OF IT IN RECYCLERVIEW
+		//getListView().setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+		rcyclrDrawer.setVerticalScrollBarEnabled(false);
+		rcyclrDrawer.setHorizontalScrollBarEnabled(false);
         
         EventSeekr eventSeekr = FragmentUtil.getApplication(this);
         if (!eventSeekr.is10InchTabletAndInPortraitMode()) {
         	// for 10" tablet portrait orientation we are using fix height, hence this is not needed
-        	getListView().getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
+        	rcyclrDrawer.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
         }
         mListener.onDrawerListFragmentViewCreated();
+	}
+	
+	public void updateCheckedDrawerItem(int position) {
+		drawerListAdapter.setChecked(position);
+		drawerListAdapter.notifyDataSetChanged();
 	}
 	
 	@Override
@@ -178,10 +176,10 @@ public class DrawerListFragmentTab extends ListFragment {
 		 */
 		try {
 			if (VersionUtil.isApiLevelAbove15()) {
-				getListView().getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
+				rcyclrDrawer.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
 	
 			} else {
-				getListView().getViewTreeObserver().removeGlobalOnLayoutListener(onGlobalLayoutListener);
+				rcyclrDrawer.getViewTreeObserver().removeGlobalOnLayoutListener(onGlobalLayoutListener);
 			}
 			
 		} catch (NullPointerException ne) {
@@ -212,7 +210,7 @@ public class DrawerListFragmentTab extends ListFragment {
 		drawerListAdapter.notifyDataSetChanged();
 	}
 	
-	private static class DrawerListAdapter extends BaseAdapter {
+	public static class DrawerListAdapter extends RecyclerView.Adapter<ListItemViewHolder> {
 		
 		public static enum LIST_ITEM_TYPE {
 			HEADER, ITEM;
@@ -221,12 +219,16 @@ public class DrawerListFragmentTab extends ListFragment {
 		private WeakReference<Activity> baseActivityTab;
 	    private LayoutInflater mInflater;
 	    private List<DrawerListItem> drawerListItems;
+	    private DrawerListFragmentTabListener mListener;
 	    private int rowHt;
 	    
-	    public DrawerListAdapter(Activity baseActivityTab, List<DrawerListItem> drawerListItems, int htForDrawerList) {
+	    public DrawerListAdapter(Activity baseActivityTab, List<DrawerListItem> drawerListItems, int htForDrawerList, DrawerListFragmentTabListener mListener) {
 	    	this.baseActivityTab = new WeakReference<Activity>(baseActivityTab);
-	        mInflater = LayoutInflater.from(this.baseActivityTab.get());
 	        this.drawerListItems = drawerListItems;
+	        this.mListener = mListener;
+
+	        mInflater = LayoutInflater.from(this.baseActivityTab.get());
+	        
 	        // 1 subtracted since that item is just the section divider
 	        rowHt = htForDrawerList / (drawerListItems.size() - 1);
 	    }
@@ -241,56 +243,36 @@ public class DrawerListFragmentTab extends ListFragment {
 	        mInflater = LayoutInflater.from(this.baseActivityTab.get());
 		}
 
-	    @Override
-	    public int getViewTypeCount() {
-	    	return LIST_ITEM_TYPE.values().length;
-	    }
-	    
-		@Override
-		public int getCount() {
-			return drawerListItems.size();
-		}
-		
 		public void setData(List<DrawerListItem> drawerListItems) {
 			this.drawerListItems = drawerListItems;
 		}
 
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			ListItemViewHolder listItemViewHolder;
-			DrawerListItem drawerListItem = getItem(position);
-			
-			if (drawerListItem.getItemViewType() == LIST_ITEM_TYPE.HEADER) {
-				if (convertView == null || !((ListItemViewHolder)convertView.getTag()).tag.equals(LIST_ITEM_TYPE.HEADER)) {
-					convertView = mInflater.inflate(R.layout.navigation_drawer_list_section_header, null);
-					
-					listItemViewHolder = new ListItemViewHolder();
-					/*listItemViewHolder.txtTitle = (TextView) convertView.findViewById(R.id.txtTitle);
-					listItemViewHolder.vSectionDivider = convertView.findViewById(R.id.dividerSection);*/
-					listItemViewHolder.tag = LIST_ITEM_TYPE.HEADER;
-					convertView.setTag(listItemViewHolder);
-					
-				} else {
-					listItemViewHolder = (ListItemViewHolder) convertView.getTag();
-				}
+		public int getItemViewType(int position) {
+			return 	drawerListItems.get(position).iconDrawable == null ? 
+					DrawerListAdapter.LIST_ITEM_TYPE.HEADER.ordinal() : DrawerListAdapter.LIST_ITEM_TYPE.ITEM.ordinal();
+		}
+		
+		@Override
+		public ListItemViewHolder onCreateViewHolder(ViewGroup parent, int itemType) {
+			View convertView;
+			LIST_ITEM_TYPE type;
+			if (itemType == LIST_ITEM_TYPE.ITEM.ordinal()) {
+				convertView = mInflater.inflate(R.layout.navigation_drawer_list_item, null);
+				type = LIST_ITEM_TYPE.ITEM;
 				
 			} else {
-				if (convertView == null || !((ListItemViewHolder)convertView.getTag()).tag.equals(LIST_ITEM_TYPE.ITEM)) {
-					convertView = mInflater.inflate(R.layout.navigation_drawer_list_item, null);
-
-					listItemViewHolder = new ListItemViewHolder();
-					listItemViewHolder.imgIcon = (ImageView) convertView.findViewById(R.id.imgIcon);
-					listItemViewHolder.txtTitle = (TextView) convertView.findViewById(R.id.txtTitle);
-					listItemViewHolder.vSelection = convertView.findViewById(R.id.vSelection);
-					/*listItemViewHolder.vDivider = convertView.findViewById(R.id.divider);
-					listItemViewHolder.vSectionDivider = convertView.findViewById(R.id.dividerSection);*/
-					listItemViewHolder.tag = LIST_ITEM_TYPE.ITEM;
-					convertView.setTag(listItemViewHolder);
-					
-				} else {
-					listItemViewHolder = (ListItemViewHolder) convertView.getTag();
-				}
+				convertView = mInflater.inflate(R.layout.navigation_drawer_list_section_header, null);
+				type = LIST_ITEM_TYPE.HEADER;
+			}
 			
+			return new ListItemViewHolder(convertView, type);
+		}
+
+		@Override
+		public void onBindViewHolder(ListItemViewHolder listItemViewHolder, final int position) {
+			final DrawerListItem drawerListItem = drawerListItems.get(position);
+			if (listItemViewHolder.type == LIST_ITEM_TYPE.ITEM) {
 				/**
 				 * Can't set this only if convertView is null, because we are updating height afterwards as well
 				 * from onHtForDrawerListUpdated() due to which we need to update layout params even if convertview 
@@ -298,65 +280,61 @@ public class DrawerListFragmentTab extends ListFragment {
 				 */
 				// set custom height to fit entire list exactly within the available screen height  
 				AbsListView.LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, rowHt);
-				convertView.setLayoutParams(lp);
-				
-				/*if (sectionEndsOnIndices.contains(position)) {
-					listItemViewHolder.vDivider.setVisibility(View.GONE);
-					listItemViewHolder.vSectionDivider.setVisibility(View.VISIBLE);
-					
-				} else {
-					listItemViewHolder.vDivider.setVisibility(View.VISIBLE);
-					listItemViewHolder.vSectionDivider.setVisibility(View.GONE);
-				}*/
+				listItemViewHolder.vRoot.setLayoutParams(lp);
 				
 				listItemViewHolder.imgIcon.setImageDrawable(drawerListItem.iconDrawable);
-
-				if (((ListView)parent).getCheckedItemPosition() == position) {
+				listItemViewHolder.txtTitle.setText(drawerListItem.title);
+				
+				if (drawerListItem.isChecked) {
 					listItemViewHolder.vSelection.setVisibility(View.VISIBLE);
-					//listItemViewHolder.vSelection.setBackgroundColor(mainActivity.get().getResources().getColor(android.R.color.white));
-					//convertView.setBackgroundColor(mainActivity.get().getResources().getColor(android.R.color.white));
-					//listItemViewHolder.txtTitle.setTextColor(mainActivity.get().getResources().getColor(R.color.bg_screen_dark_blue));
-					//listItemViewHolder.imgIcon.setSelected(true);
 					
 				} else {
 					listItemViewHolder.vSelection.setVisibility(View.INVISIBLE);
-					//listItemViewHolder.vSelection.setBackgroundResource(0);
-					//convertView.setBackgroundResource(0);
-					//listItemViewHolder.txtTitle.setTextColor(mainActivity.get().getResources().getColor(android.R.color.white));
-					//listItemViewHolder.imgIcon.setSelected(false);
 				}
+				
+				listItemViewHolder.vRoot.setOnClickListener(new View.OnClickListener() {
+					
+					@Override
+					public void onClick(View view) {
+						mListener.onDrawerItemSelected(position, null);
+			        }
+				});
 			}
-			if (listItemViewHolder.tag != LIST_ITEM_TYPE.HEADER) {
-				listItemViewHolder.txtTitle.setText(drawerListItem.title);
-			}
-			
-			return convertView;
-		}
-
-		@Override
-		public DrawerListItem getItem(int position) {
-			return drawerListItems.get(position);
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return position;
 		}
 		
-		private static class ListItemViewHolder {
+		@Override
+		public int getItemCount() {
+			return drawerListItems.size();
+		}
+		
+		public void setChecked(int position) {
+			drawerListItems.get(position).isChecked = true;
+		}
+
+		public static class ListItemViewHolder extends RecyclerView.ViewHolder {
+			private View vRoot, vSelection;
 			private ImageView imgIcon;
 			private TextView txtTitle;
-			private View vSelection;
-			//private View vDivider, vSectionDivider;
-			private Object tag;
+			
+			private LIST_ITEM_TYPE type;
+			
+			public ListItemViewHolder(View itemView, LIST_ITEM_TYPE type) {
+				super(itemView);
+				vRoot = itemView;
+				imgIcon = (ImageView) itemView.findViewById(R.id.imgIcon);
+				txtTitle = (TextView) itemView.findViewById(R.id.txtTitle);
+				vSelection = itemView.findViewById(R.id.vSelection);
+				
+				this.type = type; 
+			}
 		}
 	}
 	
 	private static class DrawerListItem {
-		
 		private String title;
 		private Drawable iconDrawable;
 		private DrawerListAdapter.LIST_ITEM_TYPE type;
+		private boolean isChecked = false;
 		
 		public DrawerListItem(String title, Drawable iconDrawable) {
 			this.title = title;

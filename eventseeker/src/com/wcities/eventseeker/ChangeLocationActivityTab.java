@@ -1,11 +1,13 @@
 package com.wcities.eventseeker;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -112,7 +114,9 @@ public class ChangeLocationActivityTab extends BaseActivityTab {
 	public boolean onQueryTextSubmit(String query) {
 		if (changeLocationFragmentTab != null) {
 			this.searchQuery = query;
-			return changeLocationFragmentTab.onQueryTextSubmit(query);
+			boolean result = changeLocationFragmentTab.onQueryTextSubmit(query);
+			hideSoftKeypad();
+			return result;
 		}
 		return false;
 	}
@@ -125,4 +129,9 @@ public class ChangeLocationActivityTab extends BaseActivityTab {
 		}
 		return false;
 	}
+	
+	private void hideSoftKeypad() {
+    	InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+    	imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+    }
 }

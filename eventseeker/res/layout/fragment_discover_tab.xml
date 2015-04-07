@@ -57,7 +57,7 @@
 	    android:layout_height="match_parent"
 	    android:layout_alignTop="@+id/rltLytNoEvts"
 	    android:layout_alignBottom="@+id/rltLytNoEvts"
-	    android:background="@drawable/bg_no_content_overlay_tab"
+	    android:background="@drawable/ic_no_content_background_overlay"
     	android:visibility="invisible" />
 	
 	<RelativeLayout android:id="@+id/rltLytNoEvts"
@@ -65,7 +65,7 @@
 	    android:layout_height="match_parent"
 	    android:layout_below="@id/rltLytCatTitles"
 	    android:layout_marginTop="@dimen/rlt_lyt_no_evts_margin_t_discover_tab"
-	    android:background="@drawable/bg_no_content_overlay_tab"
+	    android:background="@drawable/ic_no_content_background_overlay"
 	    android:visibility="invisible" >
 	
 		<TextView android:id="@+id/txtNoEvents"
