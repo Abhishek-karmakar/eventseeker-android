@@ -546,7 +546,7 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		if (getDrawerItemPos() != AppConstants.INVALID_INDEX) {
 			DrawerListFragmentTab drawerListFragmentTab = (DrawerListFragmentTab) getSupportFragmentManager()
 					.findFragmentByTag(FragmentUtil.getTag(DrawerListFragmentTab.class));
-			drawerListFragmentTab.getListView().setItemChecked(getDrawerItemPos(), true);
+			drawerListFragmentTab.updateCheckedDrawerItem(getDrawerItemPos());
 		}
 	}
 	
