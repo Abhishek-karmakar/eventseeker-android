@@ -84,7 +84,7 @@ public class ConnectAccountsFragmentTab extends ListFragmentLoadableFromBackStac
 	private Handler handler;
 	private int syncInProgressCount;
 
-	private boolean isFirstTimeLaunch;
+	private boolean isFirstTimeLaunch, isFromSpotify;
 	
     public interface ConnectAccountsFragmentListener {
     	public void onServiceSelected(Service service, Bundle args, boolean addToBackStack);
@@ -180,6 +180,10 @@ public class ConnectAccountsFragmentTab extends ListFragmentLoadableFromBackStac
 	}
 	
 	private void loadAvailableService() {
+		if (getArguments() != null && getArguments().containsKey(BundleKeys.REQ_CODE_SPOTIFY)) {
+			getArguments().remove(BundleKeys.REQ_CODE_SPOTIFY);
+			isFromSpotify = true;
+		}
 		LoadAvailableService loadAvailableService = new LoadAvailableService() {
 			
 			@Override
@@ -195,7 +199,19 @@ public class ConnectAccountsFragmentTab extends ListFragmentLoadableFromBackStac
 				if (isAdded()) {
 					listAvailableServices = result;
 					loadServiceAccountItems();
-					listAdapter.notifyDataSetChanged();
+					if (isFromSpotify) {
+						for (ServiceAccount serviceAcc : serviceAccounts) {
+							//Log.d(TAG, "for - " + serviceAcc.name);
+							if (serviceAcc.name.equals(Service.Spotify.getStr(ConnectAccountsFragmentTab.this))) {
+								//Log.d(TAG, "set in progress");
+								serviceAcc.isInProgress = true;
+							}
+						}
+						onArtistSyncStarted(false);
+						
+					} else {
+						listAdapter.notifyDataSetChanged();
+					}
 					
 					dismissProgress();
 				}
@@ -321,7 +337,8 @@ public class ConnectAccountsFragmentTab extends ListFragmentLoadableFromBackStac
 				txtSyncCount.setText(((EventSeekr) FragmentUtil.getActivity(ConnectAccountsFragmentTab.this)
 						.getApplication()).getTotalSyncCount() + "");
 				txtSyncCount.setBackgroundResource(serviceAccount.isInProgress ? 0 : R.drawable.ic_circle_bg);
-				
+
+				//Log.d(TAG, "serviceAccount.isInProgress = " + serviceAccount.isInProgress);
 				convertView.findViewById(R.id.prgBrSyncArtist)
 					.setVisibility(serviceAccount.isInProgress ? View.VISIBLE : View.GONE);
 				
@@ -510,8 +527,11 @@ public class ConnectAccountsFragmentTab extends ListFragmentLoadableFromBackStac
 			public void run() {
 				//Log.d(TAG, "run");
 				if (serviceAccounts != null) {
+					//Log.d(TAG, "serviceAccounts != null");
 					for (ServiceAccount serviceAccount : serviceAccounts) {
-						if (serviceAccount != null && service.isOf(serviceAccount.name, ConnectAccountsFragmentTab.this)) { 
+						//Log.d(TAG, "serviceAccount = " + serviceAccount.name);
+						if (serviceAccount != null && service.isOf(serviceAccount.name, ConnectAccountsFragmentTab.this)) {
+							//Log.d(TAG, "serviceAccount is not in progress - " + serviceAccount.name);
 							serviceAccount.isInProgress = false;
 							serviceAccount.count = 
 								((EventSeekr)FragmentUtil.getActivity(ConnectAccountsFragmentTab.this).getApplication())
@@ -604,7 +624,9 @@ public class ConnectAccountsFragmentTab extends ListFragmentLoadableFromBackStac
 		
 		//Log.d(TAG, "onArtistSyncStarted() - " + this);
 		for (ServiceAccount serviceAcc : serviceAccounts) {
+			//Log.d(TAG, "for - " + serviceAcc.name);
 			if (serviceAcc.name.equals(Service.Title.getStr(ConnectAccountsFragmentTab.this))) {
+				//Log.d(TAG, "set in progress");
 				serviceAcc.isInProgress = true;
 			}
 		}

@@ -5,6 +5,7 @@ import java.util.List;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.AdapterDataObserver;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,8 @@ public class FriendsRVAdapter extends RecyclerView.Adapter<FriendsRVAdapter.View
 			this.txtFriendName = (TextView) itemView.findViewById(R.id.txtFriendName);
 		}
 	}
+
+	private static final String TAG = FriendsRVAdapter.class.getSimpleName();
 	
 	private BitmapCache bitmapCache;
 	private List<Friend> friends;
@@ -79,7 +82,12 @@ public class FriendsRVAdapter extends RecyclerView.Adapter<FriendsRVAdapter.View
 	@Override
 	public void registerAdapterDataObserver(AdapterDataObserver observer) {
 		if (adapterDataObserver != null) {
-			unregisterAdapterDataObserver(adapterDataObserver);
+			try {
+				unregisterAdapterDataObserver(adapterDataObserver);
+				
+			} catch (IllegalStateException e) {
+				Log.e(TAG, "RecyclerViewDataObserver was not registered");
+			}
 		}
         super.registerAdapterDataObserver(observer);
         adapterDataObserver = observer;

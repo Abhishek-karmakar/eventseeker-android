@@ -3,6 +3,7 @@ package com.wcities.eventseeker;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 
 import com.wcities.eventseeker.ConnectAccountsFragmentTab.ConnectAccountsFragmentListener;
 import com.wcities.eventseeker.constants.AppConstants;
@@ -40,6 +41,7 @@ public class ConnectAccountsActivityTab extends BaseActivityTab implements Conne
 		if (isOnCreateCalledFirstTime) {
 			//Log.d(TAG, "add settings fragment tab");
 			ConnectAccountsFragmentTab connectAccountsFragmentTab = new ConnectAccountsFragmentTab();
+			connectAccountsFragmentTab.setArguments(getIntent().getExtras());
 			addFragment(R.id.content_frame, connectAccountsFragmentTab, 
 					FragmentUtil.getTag(connectAccountsFragmentTab), false);
 		}
@@ -69,7 +71,7 @@ public class ConnectAccountsActivityTab extends BaseActivityTab implements Conne
 			
 		case AppConstants.REQ_CODE_SPOTIFY:
 			Fragment fragment = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
-			if (fragment instanceof ConnectAccountsFragment) {
+			if (fragment instanceof ConnectAccountsFragmentTab) {
 				fragment.onActivityResult(requestCode, resultCode, data);
 			}
 			break;

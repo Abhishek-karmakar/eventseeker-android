@@ -94,6 +94,7 @@ public class BundleKeys {
 	public static final String DIALOG_TAG = "dialogTag";
 	
 	public static final String SETTINGS_ITEM = "settingsItem";
+	public static final String REQ_CODE_SPOTIFY = "reqCodeSpotify";
 	
 	public static final String FRAGMENT_TRANSACTION_ANIM_IDS = "fragmentTransactionAnimIds";
 	

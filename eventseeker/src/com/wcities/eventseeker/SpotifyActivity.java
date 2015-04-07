@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.drivemode.spotify.ClientConfig;
 import com.drivemode.spotify.SpotifyApi;
@@ -35,8 +36,8 @@ public class SpotifyActivity extends Activity implements AuthenticationListener 
 	private static final int PLAYLIST_LIMIT = 50;
 	private static final int TRACKS_LIMIT = 100;
 	
-	private ServiceAccount serviceAccount;
-	private boolean isOnCreateOrOnNewIntentCalled;
+	private static ServiceAccount serviceAccount;
+	private boolean isOnCreateOrOnNewIntentCalled, didGetDataInOnCreate;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,17 @@ public class SpotifyActivity extends Activity implements AuthenticationListener 
 		
 		if (!((EventSeekr)getApplication()).isTablet()) {
 			setRequestedOrientation(Configuration.ORIENTATION_PORTRAIT);
+		}
+		
+		isOnCreateOrOnNewIntentCalled = true;
+		
+		// for 10" tablet instead of onNewIntent(), onCreate() is called
+		if (getIntent().getData() != null && getIntent().getData().toString().contains(AppConstants.SPOTIFY_REDIRECT_URI)) {
+			//Log.d(TAG, "getIntent().getData().toString() = " + intent.getData().toString());
+			// mark false to finish from onResume()
+			didGetDataInOnCreate = true;
+			SpotifyApi.getInstance().onCallback(getIntent().getData(), this);
+			return;
 		}
 		
 		Bundle args = getIntent().getExtras();
@@ -57,7 +69,6 @@ public class SpotifyActivity extends Activity implements AuthenticationListener 
         .build());
 		
 		SpotifyApi.getInstance().authorize(this, new String[] {}, true);
-		isOnCreateOrOnNewIntentCalled = true;
 	}
 	
 	@Override
@@ -91,12 +102,20 @@ public class SpotifyActivity extends Activity implements AuthenticationListener 
 		 * it might start new activity where serviceAccount won't be available, so just return from here
 		 */
 		if (serviceAccount == null) {
+			//Log.d(TAG, "serviceAccount == null");
 			finish();
 			return;
 		}
 		serviceAccount.isInProgress = true;
 		setResult(RESULT_OK);
 		finish();
+		
+		if (didGetDataInOnCreate) {
+			//Log.d(TAG, "didGetDataInOnCreate");
+			Intent intent = new Intent(getApplicationContext(), ConnectAccountsActivityTab.class);
+			intent.putExtra(BundleKeys.REQ_CODE_SPOTIFY, AppConstants.REQ_CODE_SPOTIFY);
+	    	startActivity(intent);
+		}
 		
 		SpotifyApi.getInstance().getApiService().getMe(new Callback<User>() {
 			

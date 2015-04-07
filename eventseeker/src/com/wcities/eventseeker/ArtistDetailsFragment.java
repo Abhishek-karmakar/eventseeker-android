@@ -30,6 +30,7 @@ import android.support.v7.widget.RecyclerView.AdapterDataObserver;
 import android.text.Html;
 import android.text.TextUtils.TruncateAt;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -939,7 +940,12 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		@Override
 		public void registerAdapterDataObserver(AdapterDataObserver observer) {
 			if (adapterDataObserver != null) {
-				unregisterAdapterDataObserver(adapterDataObserver);
+				try {
+					unregisterAdapterDataObserver(adapterDataObserver);
+					
+				} catch (IllegalStateException e) {
+					Log.e(TAG, "RecyclerViewDataObserver was not registered");
+				}
 			}
 	        super.registerAdapterDataObserver(observer);
 	        adapterDataObserver = observer;

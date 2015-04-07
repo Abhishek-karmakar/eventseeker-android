@@ -163,7 +163,12 @@ public class RVMyEventsAdapterTab extends Adapter<ViewHolder> implements DateWis
 	@Override
 	public void registerAdapterDataObserver(AdapterDataObserver observer) {
 		if (adapterDataObserver != null) {
-			unregisterAdapterDataObserver(adapterDataObserver);
+			try {
+				unregisterAdapterDataObserver(adapterDataObserver);
+				
+			} catch (IllegalStateException e) {
+				Log.e(TAG, "RecyclerViewDataObserver was not registered");
+			}
 		}
         super.registerAdapterDataObserver(observer);
         adapterDataObserver = observer;

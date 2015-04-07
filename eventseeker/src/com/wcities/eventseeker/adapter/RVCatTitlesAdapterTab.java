@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.support.v7.widget.RecyclerView.AdapterDataObserver;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -59,7 +60,12 @@ public class RVCatTitlesAdapterTab extends Adapter<RVCatTitlesAdapterTab.ViewHol
 	@Override
 	public void registerAdapterDataObserver(AdapterDataObserver observer) {
 		if (adapterDataObserver != null) {
-			unregisterAdapterDataObserver(adapterDataObserver);
+			try {
+				unregisterAdapterDataObserver(adapterDataObserver);
+				
+			} catch (IllegalStateException e) {
+				Log.e(TAG, "RecyclerViewDataObserver was not registered");
+			}
 		}
         super.registerAdapterDataObserver(observer);
         adapterDataObserver = observer;

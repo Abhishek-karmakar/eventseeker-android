@@ -16,6 +16,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.support.v7.widget.RecyclerView.AdapterDataObserver;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -129,7 +130,12 @@ public class RVSearchVenuesAdapterTab<T> extends Adapter<RVSearchVenuesAdapterTa
 	@Override
 	public void registerAdapterDataObserver(AdapterDataObserver observer) {
 		if (adapterDataObserver != null) {
-			unregisterAdapterDataObserver(adapterDataObserver);
+			try {
+				unregisterAdapterDataObserver(adapterDataObserver);
+				
+			} catch (IllegalStateException e) {
+				Log.e(TAG, "RecyclerViewDataObserver was not registered");
+			}
 		}
         super.registerAdapterDataObserver(observer);
         adapterDataObserver = observer;
