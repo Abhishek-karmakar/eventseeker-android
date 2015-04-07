@@ -10,7 +10,10 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.bosch.BoschMainActivity;
 import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.gcm.GcmBroadcastReceiver.NotificationType;
 import com.wcities.eventseeker.interfaces.ConnectionFailureListener;
+import com.wcities.eventseeker.interfaces.DrawerListFragmentListener;
 import com.wcities.eventseeker.util.DeviceUtil;
 
 import android.bluetooth.BluetoothAdapter;
@@ -27,7 +30,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-public abstract class BaseActivity extends ActionBarActivity implements ConnectionFailureListener, DialogBtnClickListener {
+public abstract class BaseActivity extends ActionBarActivity implements ConnectionFailureListener, DialogBtnClickListener,
+		DrawerListFragmentListener {
 
 	private static final String TAG = BaseActivity.class.getSimpleName();
 
@@ -320,6 +324,21 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
 	@Override
 	public void doNegativeClick(String dialogTag) {
 		// TODO Auto-generated method stub
+	}
+	
+	/**
+	 * Handles navigation to drawerList Items only
+	 * @param notificationType
+	 */
+	public void onNotificationClicked(NotificationType notificationType) {
+		if (notificationType.getNavDrawerIndex() != AppConstants.INVALID_INDEX) {
+			Bundle args = null;
+			if (notificationType == NotificationType.RECOMMENDED_EVENTS) {
+				args = new Bundle();
+				args.putBoolean(BundleKeys.SELECT_RECOMMENDED_EVENTS, true);
+			}
+			onDrawerItemSelected(notificationType.getNavDrawerIndex(), args);
+		}
 	}
 	
 	protected void inviteFriends() {

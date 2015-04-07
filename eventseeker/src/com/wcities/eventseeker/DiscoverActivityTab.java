@@ -5,6 +5,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.wcities.eventseeker.DiscoverSettingDialogFragment.DiscoverSettingChangedListenerTab;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.util.FragmentUtil;
 
@@ -71,7 +72,7 @@ public class DiscoverActivityTab extends BaseActivityTab implements DiscoverSett
 	
 	@Override
 	protected int getDrawerItemPos() {
-		return INDEX_NAV_ITEM_DISCOVER;
+		return AppConstants.INDEX_NAV_ITEM_DISCOVER;
 	}
 
 	@Override

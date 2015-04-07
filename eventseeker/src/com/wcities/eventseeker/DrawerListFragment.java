@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.wcities.eventseeker.interfaces.DrawerListFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.ViewUtil;
 
@@ -37,11 +38,6 @@ public class DrawerListFragment extends ListFragment {
 	private DrawerListAdapter drawerListAdapter;
 	
     private int htForDrawerList;
-	
-	public interface DrawerListFragmentListener {
-		public void onDrawerListFragmentViewCreated();
-		public void onDrawerItemSelected(int pos, Bundle args);
-	}
 	
 	@Override
 	public void onAttach(Activity activity) {

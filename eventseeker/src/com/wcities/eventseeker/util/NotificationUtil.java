@@ -4,10 +4,21 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
+import com.wcities.eventseeker.ArtistDetailsActivityTab;
+import com.wcities.eventseeker.ArtistsNewsActivityTab;
+import com.wcities.eventseeker.DiscoverActivityTab;
+import com.wcities.eventseeker.EventDetailsActivityTab;
+import com.wcities.eventseeker.FollowingActivityTab;
+import com.wcities.eventseeker.FriendsActivityActivityTab;
 import com.wcities.eventseeker.MainActivity;
+import com.wcities.eventseeker.MyEventsActivityTab;
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.SettingsActivityTab;
+import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.Enums.SettingsItem;
 import com.wcities.eventseeker.core.Artist;
@@ -53,7 +64,15 @@ public class NotificationUtil {
 			NotificationType notificationType, Event event, Artist artist) {
 		//Log.d(TAG, "addNotification() Message: " + message);
 		String title = context.getString(R.string.app_name);
-		Intent notificationIntent = new Intent(context, MainActivity.class);
+		Intent notificationIntent;
+
+		boolean isTablet = ((EventSeekr) context.getApplicationContext()).isTablet();
+		if (isTablet) {
+			notificationIntent = new Intent();
+			
+		} else {
+			notificationIntent = new Intent(context, MainActivity.class);			
+		}
 		/**
 		 * 18-09-2014: See Commit: removed launchmode=singletask due to error in Bosch
 		 * NOTE: added Action and Category of Launcher Activity for notification Intent so as to avoid
@@ -65,23 +84,70 @@ public class NotificationUtil {
 		 *	      can be observed now onwards for every launch. This happens due to onCreate() being called up on every 
 		 *	      launch after this, even though one task is there in back stack for the app.
 		 **/
-		notificationIntent.setAction(Intent.ACTION_MAIN);
-		notificationIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+		boolean isNewTakAndClearTask = true;
 		notificationIntent.putExtra(BundleKeys.NOTIFICATION_TYPE, notificationType);
 		if (notificationType == NotificationType.EVENT_DETAILS) {
 			notificationIntent.putExtra(BundleKeys.EVENT, event);
+			if (isTablet) {
+				notificationIntent.setClass(context, EventDetailsActivityTab.class);
+				isNewTakAndClearTask = false;
+			}
 			
 		} else if (notificationType == NotificationType.ARTIST_DETAILS) {
 			notificationIntent.putExtra(BundleKeys.ARTIST, artist);
-		
+			if (isTablet) {
+				notificationIntent.setClass(context, ArtistDetailsActivityTab.class);
+				isNewTakAndClearTask = false;
+			}
+			
 		} else if (notificationType == NotificationType.SYNC_ACCOUNTS) {
 			notificationIntent.putExtra(BundleKeys.SETTINGS_ITEM_ORDINAL, SettingsItem.SYNC_ACCOUNTS.ordinal());
-		
+			if (isTablet) {
+				notificationIntent.setClass(context, SettingsActivityTab.class);
+			}
+			
 		} else if (notificationType == NotificationType.INVITE_FRIENDS) {
 			notificationIntent.putExtra(BundleKeys.SETTINGS_ITEM_ORDINAL, SettingsItem.INVITE_FRIENDS.ordinal());
-			
+			if (isTablet) {
+				notificationIntent.setClass(context, SettingsActivityTab.class);
+			}
+		
+		} else if (isTablet) {
+			switch (notificationType.getNavDrawerIndex()) {
+				case AppConstants.INDEX_NAV_ITEM_DISCOVER:
+					notificationIntent.setClass(context, DiscoverActivityTab.class);
+					break;			
+					
+				case AppConstants.INDEX_NAV_ITEM_MY_EVENTS:
+					notificationIntent.setClass(context, MyEventsActivityTab.class);
+					if (notificationType == NotificationType.RECOMMENDED_EVENTS) {
+						Bundle args = new Bundle();
+						args.putBoolean(BundleKeys.SELECT_RECOMMENDED_EVENTS, true);
+						notificationIntent.putExtra(BundleKeys.NOTIFICATION_ARGS, args);
+					}
+					break;
+		
+				case AppConstants.INDEX_NAV_ITEM_FOLLOWING:
+					notificationIntent.setClass(context, FollowingActivityTab.class);
+					break;
+					
+				case AppConstants.INDEX_NAV_ITEM_FRIENDS_ACTIVITY:
+					notificationIntent.setClass(context, FriendsActivityActivityTab.class);
+					break;
+					
+				case AppConstants.INDEX_NAV_ITEM_ARTISTS_NEWS:
+					notificationIntent.setClass(context, ArtistsNewsActivityTab.class);
+					break;
+			}
 		}
-		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		if (isTablet) {
+			if (isNewTakAndClearTask) {
+				notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+			}
+			
+		} else {			
+			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		}
 		PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationId, 
 				notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 

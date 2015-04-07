@@ -2,8 +2,10 @@ package com.wcities.eventseeker;
 
 import android.os.Bundle;
 
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
+import com.wcities.eventseeker.constants.Enums.SettingsItem;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 public class SettingsActivityTab extends BaseActivityTab {
@@ -25,6 +27,12 @@ public class SettingsActivityTab extends BaseActivityTab {
 			}
 			addFragment(R.id.content_frame, settingsFragmentTab, FragmentUtil.getTag(settingsFragmentTab), false);
 		}
+
+		if (getIntent().hasExtra(BundleKeys.SETTINGS_ITEM_ORDINAL)) {
+			SettingsItem settingsItem = SettingsItem.getSettingsItemByOrdinal(
+					getIntent().getExtras().getInt(BundleKeys.SETTINGS_ITEM_ORDINAL));
+			onSettingsItemClicked(settingsItem, null);
+		}
 	}
 
 	@Override
@@ -39,6 +47,6 @@ public class SettingsActivityTab extends BaseActivityTab {
 	
 	@Override
 	protected int getDrawerItemPos() {
-		return INDEX_NAV_ITEM_SETTINGS;
+		return AppConstants.INDEX_NAV_ITEM_SETTINGS;
 	}
 }

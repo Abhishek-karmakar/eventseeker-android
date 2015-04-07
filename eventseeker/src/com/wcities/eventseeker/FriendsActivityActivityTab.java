@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.os.Bundle;
 
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.core.Event;
@@ -45,7 +46,7 @@ public class FriendsActivityActivityTab extends BaseActivityTab implements Event
 	
 	@Override
 	protected int getDrawerItemPos() {
-		return INDEX_NAV_ITEM_FRIENDS_ACTIVITY;
+		return AppConstants.INDEX_NAV_ITEM_FRIENDS_ACTIVITY;
 	}
 
 	@Override

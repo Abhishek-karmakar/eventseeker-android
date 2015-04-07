@@ -36,7 +36,6 @@ import android.widget.TextView;
 
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
-import com.wcities.eventseeker.DrawerListFragmentTab.DrawerListFragmentTabListener;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
@@ -50,6 +49,7 @@ import com.wcities.eventseeker.constants.Enums.Service;
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
+import com.wcities.eventseeker.interfaces.DrawerListFragmentListener;
 import com.wcities.eventseeker.interfaces.SyncArtistListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
@@ -466,20 +466,20 @@ public class ConnectAccountsFragmentTab extends ListFragmentLoadableFromBackStac
 				public void onTaskCompleted(Integer... params) {
 					Log.d(TAG, "params[0] = " + params[0]);
 					if (params[0] > 0) {
-						((DrawerListFragmentTabListener)FragmentUtil.getActivity(ConnectAccountsFragmentTab.this))
-							.onDrawerItemSelected(MainActivity.INDEX_NAV_ITEM_MY_EVENTS, null);
+						((DrawerListFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragmentTab.this))
+							.onDrawerItemSelected(AppConstants.INDEX_NAV_ITEM_MY_EVENTS, null);
 						
 					} else {
-						((DrawerListFragmentTabListener)FragmentUtil.getActivity(ConnectAccountsFragmentTab.this))
-							.onDrawerItemSelected(MainActivity.INDEX_NAV_ITEM_DISCOVER, null);
+						((DrawerListFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragmentTab.this))
+							.onDrawerItemSelected(AppConstants.INDEX_NAV_ITEM_DISCOVER, null);
 					}
 				}
 			});
 			loadMyEventsCount.execute();
 			
 		} else {
-			((DrawerListFragmentTabListener)FragmentUtil.getActivity(ConnectAccountsFragmentTab.this))
-				.onDrawerItemSelected(MainActivity.INDEX_NAV_ITEM_DISCOVER, null);
+			((DrawerListFragmentListener)FragmentUtil.getActivity(ConnectAccountsFragmentTab.this))
+				.onDrawerItemSelected(AppConstants.INDEX_NAV_ITEM_DISCOVER, null);
 		}
 	}
 	

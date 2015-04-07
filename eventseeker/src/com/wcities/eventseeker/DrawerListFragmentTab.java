@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.wcities.eventseeker.DrawerListFragmentTab.DrawerListAdapter.ListItemViewHolder;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.interfaces.DrawerListFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
@@ -36,18 +37,13 @@ public class DrawerListFragmentTab extends Fragment {
 	
 	public static final int DIVIDER_POS = 5;
 
-	private DrawerListFragmentTabListener mListener;
+	private DrawerListFragmentListener mListener;
 	private List<DrawerListItem> drawerListItems;
 	private DrawerListAdapter drawerListAdapter;
 	
 	private RecyclerView rcyclrDrawer;
 	
 	private int htForDrawerList;
-	
-	public interface DrawerListFragmentTabListener {
-		public void onDrawerListFragmentViewCreated();
-		public void onDrawerItemSelected(int pos, Bundle args);
-	}
 	
 	private OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
 		
@@ -85,7 +81,7 @@ public class DrawerListFragmentTab extends Fragment {
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		try {
-			mListener = (DrawerListFragmentTabListener) activity;
+			mListener = (DrawerListFragmentListener) activity;
 			
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement DrawerListFragmentTabListener");
@@ -219,10 +215,10 @@ public class DrawerListFragmentTab extends Fragment {
 		private WeakReference<Activity> baseActivityTab;
 	    private LayoutInflater mInflater;
 	    private List<DrawerListItem> drawerListItems;
-	    private DrawerListFragmentTabListener mListener;
+	    private DrawerListFragmentListener mListener;
 	    private int rowHt;
 	    
-	    public DrawerListAdapter(Activity baseActivityTab, List<DrawerListItem> drawerListItems, int htForDrawerList, DrawerListFragmentTabListener mListener) {
+	    public DrawerListAdapter(Activity baseActivityTab, List<DrawerListItem> drawerListItems, int htForDrawerList, DrawerListFragmentListener mListener) {
 	    	this.baseActivityTab = new WeakReference<Activity>(baseActivityTab);
 	        this.drawerListItems = drawerListItems;
 	        this.mListener = mListener;

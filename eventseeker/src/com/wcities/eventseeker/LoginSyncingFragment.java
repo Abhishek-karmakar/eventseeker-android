@@ -12,16 +12,17 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadMyEventsCount;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.Enums.SettingsItem;
 import com.wcities.eventseeker.core.registration.Registration.RegistrationErrorListener;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
+import com.wcities.eventseeker.interfaces.DrawerListFragmentListener;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
@@ -129,7 +130,7 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 				Bundle args = new Bundle();
 				args.putSerializable(BundleKeys.SETTINGS_ITEM, SettingsItem.SYNC_ACCOUNTS);
 				((DrawerListFragmentListener) FragmentUtil.getActivity(this)).onDrawerItemSelected(
-						MainActivity.INDEX_NAV_ITEM_SETTINGS, args);
+						AppConstants.INDEX_NAV_ITEM_SETTINGS, args);
 				
 			} else {
 				loadMyEventsCount = new LoadMyEventsCount(Api.OAUTH_TOKEN, wcitiesId, latLon[0], latLon[1], new AsyncTaskListener<Integer>() {
@@ -139,11 +140,11 @@ public class LoginSyncingFragment extends FragmentLoadableFromBackStack implemen
 						Log.d(TAG, "params[0] = " + params[0]);
 						if (params[0] > 0) {
 							((DrawerListFragmentListener)FragmentUtil.getActivity(LoginSyncingFragment.this)).onDrawerItemSelected(
-									MainActivity.INDEX_NAV_ITEM_MY_EVENTS, null);
+									AppConstants.INDEX_NAV_ITEM_MY_EVENTS, null);
 							
 						} else {
 							((DrawerListFragmentListener)FragmentUtil.getActivity(LoginSyncingFragment.this)).onDrawerItemSelected(
-									MainActivity.INDEX_NAV_ITEM_DISCOVER, null);
+									AppConstants.INDEX_NAV_ITEM_DISCOVER, null);
 						}
 					}
 				});

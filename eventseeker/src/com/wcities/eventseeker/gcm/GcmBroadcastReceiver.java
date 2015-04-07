@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.wcities.eventseeker.MainActivity;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
@@ -24,22 +23,14 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
 	private static GcmBroadcastReceiver gcmBroadcastReceiver;
 	
 	public static enum NotificationType {
-		DISCOVER (MainActivity.INDEX_NAV_ITEM_DISCOVER),
+		DISCOVER (AppConstants.INDEX_NAV_ITEM_DISCOVER),
 		ARTIST_DETAILS (AppConstants.INVALID_INDEX),
 		EVENT_DETAILS (AppConstants.INVALID_INDEX),
-		FRIENDS_NEWS (MainActivity.INDEX_NAV_ITEM_FRIENDS_ACTIVITY),
-		RECOMMENDED_EVENTS (MainActivity.INDEX_NAV_ITEM_MY_EVENTS),
-		FOLLOWING (MainActivity.INDEX_NAV_ITEM_FOLLOWING),
-		ARTIST_NEWS (MainActivity.INDEX_NAV_ITEM_ARTISTS_NEWS),
-		/**
-		 * 20-11-2014:
-		 * SYNC_ACCOUNTS is now removed from the Drawer Items and hence changed its index to INVALID_INDEX
-		 */
+		FRIENDS_NEWS (AppConstants.INDEX_NAV_ITEM_FRIENDS_ACTIVITY),
+		RECOMMENDED_EVENTS (AppConstants.INDEX_NAV_ITEM_MY_EVENTS),
+		FOLLOWING (AppConstants.INDEX_NAV_ITEM_FOLLOWING),
+		ARTIST_NEWS (AppConstants.INDEX_NAV_ITEM_ARTISTS_NEWS),
 		SYNC_ACCOUNTS (AppConstants.INVALID_INDEX),
-		/**
-		 * 20-11-2014:
-		 * INVITE_FRIENDS is now removed from the Drawer Items and hence changed its index to INVALID_INDEX
-		 */
 		INVITE_FRIENDS (AppConstants.INVALID_INDEX);
 		/*SETTINGS_ITEM_ORDINAL (MainActivity.INDEX_NAV_ITEM_CONNECT_ACCOUNTS),
 		IS_INVITE_FRIENDS (MainActivity.INDEX_NAV_ITEM_INVITE_FRIENDS);*/
@@ -87,10 +78,10 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
 			intent.putExtra("title", title);
 			intent.putExtra("msg", msg);
 			if (("" + NotificationType.EVENT_DETAILS.ordinal()).equals(type)) {
-				intent.putExtra("eventid", 98129422 + "");
+				intent.putExtra("eventid", 135672501 + "");
 			}
 			if (("" + NotificationType.ARTIST_DETAILS.ordinal()).equals(type)) {
-				intent.putExtra("artist_id", 14 + "");
+				intent.putExtra("artist_id", 2234 + "");
 				
 			}
 			gcmBroadcastReceiver.handleMessage(context, intent);

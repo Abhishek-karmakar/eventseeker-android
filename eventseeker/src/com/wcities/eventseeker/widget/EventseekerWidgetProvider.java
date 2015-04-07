@@ -18,8 +18,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import com.wcities.eventseeker.EventDetailsActivityTab;
 import com.wcities.eventseeker.MainActivity;
 import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -256,9 +258,15 @@ public class EventseekerWidgetProvider extends AppWidgetProvider {
 			//Log.d(TAG, "nextEvent = null for widget Id = " + eventseekerWidget.getWidgetId());
 			remoteViews.setBoolean(R.id.imgRight, "setEnabled", false);
 		}*/
-		
-		Intent mainActivityIntent = new Intent(context, MainActivity.class);
-		mainActivityIntent.putExtra(BundleKeys.EVENT, event);
+		boolean isTablet = ((EventSeekr) context.getApplicationContext()).isTablet();
+		Intent widgetIntent;
+		if (isTablet) {
+			widgetIntent = new Intent(context, EventDetailsActivityTab.class);			
+			
+		} else {
+			widgetIntent = new Intent(context, MainActivity.class);			
+		}
+		widgetIntent.putExtra(BundleKeys.EVENT, event);
 		/**
 		 * 18-09-2014: See Commit: removed launchmode=singletask due to error in Bosch
 		 * NOTE: added Action and Category of Launcher Activity for notification Intent so as to avoid
@@ -270,11 +278,11 @@ public class EventseekerWidgetProvider extends AppWidgetProvider {
 		 *	      can be observed now onwards for every launch. This happens due to onCreate() being called up on every 
 		 *	      launch after this, even though one task is there in back stack for the app.
 		 **/
-		mainActivityIntent.setAction(Intent.ACTION_MAIN);
-		mainActivityIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-		mainActivityIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		if (!isTablet) {
+			widgetIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		}
 		PendingIntent pendingIntent = PendingIntent.getActivity(context, eventseekerWidget.getWidgetId(), 
-				mainActivityIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+				widgetIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 		remoteViews.setOnClickPendingIntent(R.id.rltLayoutRoot, pendingIntent);
 		
 		Intent nextEvtIntent = new Intent();

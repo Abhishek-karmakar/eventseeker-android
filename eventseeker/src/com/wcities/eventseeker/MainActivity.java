@@ -38,7 +38,6 @@ import android.widget.LinearLayout.LayoutParams;
 
 import com.wcities.eventseeker.ChangeLocationFragment.ChangeLocationFragmentListener;
 import com.wcities.eventseeker.ConnectAccountsFragment.ConnectAccountsFragmentListener;
-import com.wcities.eventseeker.DrawerListFragment.DrawerListFragmentListener;
 import com.wcities.eventseeker.SettingsFragment.OnSettingsItemClickedListener;
 import com.wcities.eventseeker.api.UserInfoApi.LoginType;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -70,21 +69,13 @@ import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.viewdata.SharedElement;
 
 public class MainActivity extends BaseActivity implements
-		DrawerListFragmentListener, OnLocaleChangedListener, OnSettingsItemClickedListener,
+		OnLocaleChangedListener, OnSettingsItemClickedListener,
 		ReplaceFragmentListener, EventListener, ArtistListener, VenueListener,
 		FragmentLoadedFromBackstackListener, MapListener, RegistrationListener, 
 		ConnectAccountsFragmentListener, SearchView.OnQueryTextListener,
 		ChangeLocationFragmentListener {
 
 	private static final String TAG = MainActivity.class.getSimpleName();
-
-	public static final int INDEX_NAV_ITEM_DISCOVER = 0;
-	public static final int INDEX_NAV_ITEM_MY_EVENTS = INDEX_NAV_ITEM_DISCOVER + 1;
-	public static final int INDEX_NAV_ITEM_FOLLOWING = INDEX_NAV_ITEM_MY_EVENTS + 1;
-	public static final int INDEX_NAV_ITEM_ARTISTS_NEWS = INDEX_NAV_ITEM_FOLLOWING + 1;
-	public static final int INDEX_NAV_ITEM_FRIENDS_ACTIVITY = INDEX_NAV_ITEM_ARTISTS_NEWS + 1;
-	public static final int INDEX_NAV_ITEM_SETTINGS = DrawerListFragment.DIVIDER_POS + 1;
-	public static final int INDEX_NAV_ITEM_LOG_OUT = INDEX_NAV_ITEM_SETTINGS + 1;
 	
 	private static final String DRAWER_LIST_FRAGMENT_TAG = "drawerListFragment";
 	
@@ -374,7 +365,7 @@ public class MainActivity extends BaseActivity implements
 				onNotificationClicked((NotificationType) getIntent().getSerializableExtra(BundleKeys.NOTIFICATION_TYPE));
 
 			} else {
-				selectItem(INDEX_NAV_ITEM_DISCOVER, null);
+				selectItem(AppConstants.INDEX_NAV_ITEM_DISCOVER, null);
 			}
 			
 		} else {
@@ -851,7 +842,7 @@ public class MainActivity extends BaseActivity implements
 
 	    switch (position) {
 	    
-		case INDEX_NAV_ITEM_DISCOVER:
+		case AppConstants.INDEX_NAV_ITEM_DISCOVER:
 			//DiscoverParentFragment discoverFragment;
 			DiscoverFragment discoverFragment;
 			/*if(isTablet) {
@@ -865,7 +856,7 @@ public class MainActivity extends BaseActivity implements
 			replaceContentFrameByFragment(discoverFragment, AppConstants.FRAGMENT_TAG_DISCOVER, "", false);
 			break;
 
-		case INDEX_NAV_ITEM_MY_EVENTS:
+		case AppConstants.INDEX_NAV_ITEM_MY_EVENTS:
 			MyEventsFragment fragment = new MyEventsFragment();
 			if (args != null) {
 				fragment.setArguments(args);
@@ -874,7 +865,7 @@ public class MainActivity extends BaseActivity implements
 							.getString(R.string.title_my_events), false);
 			break;
 			
-		case INDEX_NAV_ITEM_FOLLOWING:
+		case AppConstants.INDEX_NAV_ITEM_FOLLOWING:
 			FollowingParentFragment followingFragment;
 			/*if(!isTablet) {*/
 				followingFragment = new FollowingFragment();
@@ -885,19 +876,19 @@ public class MainActivity extends BaseActivity implements
 					getResources().getString(R.string.title_following), false);
 			break;
 
-		case INDEX_NAV_ITEM_ARTISTS_NEWS:
+		case AppConstants.INDEX_NAV_ITEM_ARTISTS_NEWS:
 			ArtistsNewsListFragment artistsNewsFragment = new ArtistsNewsListFragment();
 			replaceContentFrameByFragment(artistsNewsFragment, AppConstants.FRAGMENT_TAG_ARTISTS_NEWS_LIST, getResources()
 							.getString(R.string.title_artists_news), false);
 			break;
 			
-		case INDEX_NAV_ITEM_FRIENDS_ACTIVITY:
+		case AppConstants.INDEX_NAV_ITEM_FRIENDS_ACTIVITY:
 			FriendsActivityFragment friendsActivityFragment = new FriendsActivityFragment();
 			replaceContentFrameByFragment(friendsActivityFragment, AppConstants.FRAGMENT_TAG_FRIENDS_ACTIVITY, getResources()
 							.getString(R.string.title_friends_activity), false);
 			break;
 
-		case INDEX_NAV_ITEM_SETTINGS:
+		case AppConstants.INDEX_NAV_ITEM_SETTINGS:
 			SettingsFragment settingsFragment = new SettingsFragment();
 			if (args != null) {
 				settingsFragment.setArguments(args);
@@ -906,7 +897,7 @@ public class MainActivity extends BaseActivity implements
 					.getString(R.string.title_settings_mobile_app), false);
 			break;
 			
-		case INDEX_NAV_ITEM_LOG_OUT:
+		case AppConstants.INDEX_NAV_ITEM_LOG_OUT:
 			EventSeekr eventSeekr = (EventSeekr) getApplication();
 			if (eventSeekr.getFbUserId() != null) {
 				FbUtil.callFacebookLogout(eventSeekr);
@@ -1384,21 +1375,6 @@ public class MainActivity extends BaseActivity implements
 				AppConstants.FRAGMENT_TAG_EVENT_DETAILS, "", addToBackStack);
 	}
 	
-	/**
-	 * Handles navigation to drawerList Items only
-	 * @param notificationType
-	 */
-	public void onNotificationClicked(NotificationType notificationType) {
-		if (notificationType.getNavDrawerIndex() != AppConstants.INVALID_INDEX) {
-			Bundle args = null;
-			if (notificationType == NotificationType.RECOMMENDED_EVENTS) {
-				args = new Bundle();
-				args.putBoolean(BundleKeys.SELECT_RECOMMENDED_EVENTS, true);
-			}
-			onDrawerItemSelected(notificationType.getNavDrawerIndex(), args);
-		}
-	}
-	
 	@Override
 	public void onSettingsItemClicked(SettingsItem settingsItem, Bundle args) {
 		switch (settingsItem) {
@@ -1568,27 +1544,27 @@ public class MainActivity extends BaseActivity implements
 
 		//} else if (fragment instanceof DiscoverParentFragment) {
 		} else if (fragment instanceof DiscoverFragment) {
-			onFragmentResumed(INDEX_NAV_ITEM_DISCOVER, ((DiscoverFragment)fragment).getCurrentTitle(), 
+			onFragmentResumed(AppConstants.INDEX_NAV_ITEM_DISCOVER, ((DiscoverFragment)fragment).getCurrentTitle(), 
 					AppConstants.FRAGMENT_TAG_DISCOVER);
 
 		} else if (fragment instanceof MyEventsFragment) {
-			onFragmentResumed(INDEX_NAV_ITEM_MY_EVENTS, getResources().getString(R.string.title_my_events),
+			onFragmentResumed(AppConstants.INDEX_NAV_ITEM_MY_EVENTS, getResources().getString(R.string.title_my_events),
 					AppConstants.FRAGMENT_TAG_MY_EVENTS);
 
 		} else if (fragment instanceof ArtistsNewsListFragment) {
-			onFragmentResumed(INDEX_NAV_ITEM_ARTISTS_NEWS, getResources().getString(R.string.title_artists_news),
+			onFragmentResumed(AppConstants.INDEX_NAV_ITEM_ARTISTS_NEWS, getResources().getString(R.string.title_artists_news),
 					AppConstants.FRAGMENT_TAG_ARTISTS_NEWS_LIST);
 
 		} else if (fragment instanceof FriendsActivityFragment) {
-			onFragmentResumed(INDEX_NAV_ITEM_FRIENDS_ACTIVITY, getResources().getString(R.string.title_friends_activity),
+			onFragmentResumed(AppConstants.INDEX_NAV_ITEM_FRIENDS_ACTIVITY, getResources().getString(R.string.title_friends_activity),
 					AppConstants.FRAGMENT_TAG_FRIENDS_ACTIVITY);
 
 		} else if (fragment instanceof FollowingParentFragment) {
-			onFragmentResumed(INDEX_NAV_ITEM_FOLLOWING, getResources().getString(R.string.title_following),
+			onFragmentResumed(AppConstants.INDEX_NAV_ITEM_FOLLOWING, getResources().getString(R.string.title_following),
 					AppConstants.FRAGMENT_TAG_FOLLOWING);
 			
 		} else if (fragment instanceof SettingsFragment) {
-			onFragmentResumed(INDEX_NAV_ITEM_SETTINGS, getResources().getString(R.string.title_settings_mobile_app),
+			onFragmentResumed(AppConstants.INDEX_NAV_ITEM_SETTINGS, getResources().getString(R.string.title_settings_mobile_app),
 					AppConstants.FRAGMENT_TAG_SETTINGS);
 
 		} else if (fragment instanceof ConnectAccountsFragment) {
@@ -1802,7 +1778,7 @@ public class MainActivity extends BaseActivity implements
 
 	@Override
 	public void onLocationChanged(Bundle args) {
-		onDrawerItemSelected(INDEX_NAV_ITEM_DISCOVER, args);
+		onDrawerItemSelected(AppConstants.INDEX_NAV_ITEM_DISCOVER, args);
 	}
 
 	public void setDrawerIndicatorEnabled(boolean enable) {

@@ -35,7 +35,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.wcities.eventseeker.DrawerListFragmentTab.DrawerListFragmentTabListener;
 import com.wcities.eventseeker.SettingsFragmentTab.OnSettingsItemClickedListener;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
@@ -60,20 +59,12 @@ import com.wcities.eventseeker.util.GPlusUtil;
  * by calling setSupportActionBar(toolbar) & also there is common code to both mobile & tablet which can be kept in BaseActivity
  */
 public abstract class BaseActivityTab extends BaseActivity implements IGoogleAnalyticsTracker, ActivityDestroyedListener, 
-		DrawerListFragmentTabListener, OnLocaleChangedListener, OnSettingsItemClickedListener, OnQueryTextListener, 
+		OnLocaleChangedListener, OnSettingsItemClickedListener, OnQueryTextListener, 
 		EventListenerTab, VenueListenerTab, ArtistListenerTab {
 	
 	private static final String TAG = BaseActivityTab.class.getSimpleName(); 
 	
 	private static final int SEARCHVIEW_MAX_WIDTH = 5000; 
-	
-	protected static final int INDEX_NAV_ITEM_DISCOVER = 0;
-	protected static final int INDEX_NAV_ITEM_MY_EVENTS = INDEX_NAV_ITEM_DISCOVER + 1;
-	protected static final int INDEX_NAV_ITEM_FOLLOWING = INDEX_NAV_ITEM_MY_EVENTS + 1;
-	protected static final int INDEX_NAV_ITEM_ARTISTS_NEWS = INDEX_NAV_ITEM_FOLLOWING + 1;
-	protected static final int INDEX_NAV_ITEM_FRIENDS_ACTIVITY = INDEX_NAV_ITEM_ARTISTS_NEWS + 1;
-	protected static final int INDEX_NAV_ITEM_SETTINGS = DrawerListFragment.DIVIDER_POS + 1;
-	protected static final int INDEX_NAV_ITEM_LOG_OUT = INDEX_NAV_ITEM_SETTINGS + 1;
 
 	private Toolbar toolbar;
 	private LinearLayout lnrLayoutRootNavDrawer;
@@ -306,32 +297,32 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		Intent intent = null;
 		switch (position) {
 	    
-		case INDEX_NAV_ITEM_DISCOVER:
+		case AppConstants.INDEX_NAV_ITEM_DISCOVER:
 			//DiscoverParentFragment discoverFragment;
 			intent = new Intent(getApplicationContext(), DiscoverActivityTab.class);
 			break;			
 			
-		case INDEX_NAV_ITEM_MY_EVENTS:
+		case AppConstants.INDEX_NAV_ITEM_MY_EVENTS:
 			intent = new Intent(getApplicationContext(), MyEventsActivityTab.class);
 			break;
 
-		case INDEX_NAV_ITEM_FOLLOWING:
+		case AppConstants.INDEX_NAV_ITEM_FOLLOWING:
 			intent = new Intent(getApplicationContext(), FollowingActivityTab.class);
 			break;
 			
-		case INDEX_NAV_ITEM_FRIENDS_ACTIVITY:
+		case AppConstants.INDEX_NAV_ITEM_FRIENDS_ACTIVITY:
 			intent = new Intent(getApplicationContext(), FriendsActivityActivityTab.class);
 			break;
 			
-		case INDEX_NAV_ITEM_ARTISTS_NEWS:
+		case AppConstants.INDEX_NAV_ITEM_ARTISTS_NEWS:
 			intent = new Intent(getApplicationContext(), ArtistsNewsActivityTab.class);
 			break;
 
-		case INDEX_NAV_ITEM_SETTINGS:
+		case AppConstants.INDEX_NAV_ITEM_SETTINGS:
 			intent = new Intent(getApplicationContext(), SettingsActivityTab.class);
 			break;
 			
-		case INDEX_NAV_ITEM_LOG_OUT:
+		case AppConstants.INDEX_NAV_ITEM_LOG_OUT:
 			EventSeekr eventSeekr = (EventSeekr) getApplication();
 			if (eventSeekr.getFbUserId() != null) {
 				FbUtil.callFacebookLogout(eventSeekr);
@@ -410,6 +401,16 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		//Log.d(TAG, "setCommonUI()");
 		toolbar = (Toolbar) findViewById(R.id.toolbarForActionbar);
 	    setSupportActionBar(toolbar);
+	    
+	    /**
+	     * This added as if in previous activity(EventDetail, ArtistDetail or VenueDetail) if the toolbar
+	     * color is 'TRANSPARENT' then from there if we launch any new activity then some times the 
+	     * toolbar color remains 'TRANSPARENT'.
+	     * This issue can be reproduced by removing below line and generate 'EventDetail' notification. It
+	     * leads to EventDetailsActivityTab, (toolbar should be transparent) from there press ticket icon.
+	     * This leads to WebView Screen with transparent toolbar.
+	     */
+	    setToolbarBg(getResources().getColor(R.color.colorPrimary));
 	    
 	    txtToolbarTitle = (TextView) toolbar.findViewById(R.id.txtToolbarTitle);
 	    txtToolbarSubTitle = (TextView) toolbar.findViewById(R.id.txtToolbarSubTitle);
@@ -497,7 +498,6 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 	}
 	
 	protected void setToolbarBg(int color) {
-		//Log.d(TAG, "setToolbarBg(), color = " + color);
 		toolbar.setBackgroundColor(color);
 	}
 	

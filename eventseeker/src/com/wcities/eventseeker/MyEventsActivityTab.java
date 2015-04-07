@@ -2,6 +2,8 @@ package com.wcities.eventseeker;
 
 import android.os.Bundle;
 
+import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.util.FragmentUtil;
 
@@ -17,6 +19,9 @@ public class MyEventsActivityTab extends BaseActivityTab {
 		if (isOnCreateCalledFirstTime) {
 			//Log.d(TAG, "add settings fragment tab");
 			MyEventsFragmentTab myEventsFragmentTab = new MyEventsFragmentTab();
+			if (getIntent().hasExtra(BundleKeys.NOTIFICATION_ARGS)) {
+				myEventsFragmentTab.setArguments(getIntent().getBundleExtra(BundleKeys.NOTIFICATION_ARGS));
+			}
 			addFragment(R.id.content_frame, myEventsFragmentTab, FragmentUtil.getTag(myEventsFragmentTab), false);
 		}
 	}
@@ -33,6 +38,6 @@ public class MyEventsActivityTab extends BaseActivityTab {
 	
 	@Override
 	protected int getDrawerItemPos() {
-		return INDEX_NAV_ITEM_MY_EVENTS;
+		return AppConstants.INDEX_NAV_ITEM_MY_EVENTS;
 	}
 }

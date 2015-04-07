@@ -130,6 +130,11 @@ public class FriendsActivityFragmentTab extends PublishEventListFragment impleme
 		super.onCreateView(inflater, container, savedInstanceState);
 		View v = inflater.inflate(R.layout.fragment_friends_activity_list, null);
 		
+		/**
+		 * Since we are using same layout res as that of Mobile and in Mobile layout bg color is gray.
+		 */
+		v.setBackgroundColor(Color.WHITE);
+		
 		rltRootNoContentFound = v.findViewById(R.id.rltRootNoContentFound);
 		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
 		rltLytPrgsBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);

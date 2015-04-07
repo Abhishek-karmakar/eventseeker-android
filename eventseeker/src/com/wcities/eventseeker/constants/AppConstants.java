@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.android.gms.common.Scopes;
+import com.wcities.eventseeker.DrawerListFragment;
 
 public class AppConstants {
 	
@@ -50,6 +51,18 @@ public class AppConstants {
 	public static double lat = NOT_ALLOWED_LAT, lon = NOT_ALLOWED_LON;
 	public static boolean IS_CAR_STATIONARY = true;
 	public static boolean IS_NIGHT_MODE_ENABLED;
+	
+	/**
+	 * Removed these constants from BaseActivityTab and MainActivity. 
+	 * Because of the Notification implementation.
+	 */
+	public static final int INDEX_NAV_ITEM_DISCOVER = 0;
+	public static final int INDEX_NAV_ITEM_MY_EVENTS = INDEX_NAV_ITEM_DISCOVER + 1;
+	public static final int INDEX_NAV_ITEM_FOLLOWING = INDEX_NAV_ITEM_MY_EVENTS + 1;
+	public static final int INDEX_NAV_ITEM_ARTISTS_NEWS = INDEX_NAV_ITEM_FOLLOWING + 1;
+	public static final int INDEX_NAV_ITEM_FRIENDS_ACTIVITY = INDEX_NAV_ITEM_ARTISTS_NEWS + 1;
+	public static final int INDEX_NAV_ITEM_SETTINGS = DrawerListFragment.DIVIDER_POS + 1;
+	public static final int INDEX_NAV_ITEM_LOG_OUT = INDEX_NAV_ITEM_SETTINGS + 1;
 	
 	public static final String FRAGMENT_TAG_DISCOVER = "discoverFragment";
 	public static final String FRAGMENT_TAG_CHANGE_LOCATION = "changeLocationFragment";

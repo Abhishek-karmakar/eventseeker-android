@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -87,7 +88,7 @@ public class ChangeLocationActivityTab extends BaseActivityTab {
 		 * Args are used on going back to discover screen from here after no events been found
 		 * earlier on discover screen showing change location button.
 		 */
-		onDrawerItemSelected(INDEX_NAV_ITEM_DISCOVER, getIntent().getExtras());
+		onDrawerItemSelected(AppConstants.INDEX_NAV_ITEM_DISCOVER, getIntent().getExtras());
 		finish();
 	}
 	

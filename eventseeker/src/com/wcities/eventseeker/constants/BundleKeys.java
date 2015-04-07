@@ -57,6 +57,8 @@ public class BundleKeys {
 	public static final String WIDGET_ID = "widgetId";
 	public static final String IS_CALLED_FROM_OTHER_TASK = "isCalledFromOtherTask";
 	public static final String SELECT_RECOMMENDED_EVENTS = "selectRecommendedEvents";
+
+	public static final String NOTIFICATION_ARGS = "notificationArgs";
 	
 	public static final String TWITTER = "twitter";
 	public static final String URL = "url";
