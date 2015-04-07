@@ -218,6 +218,18 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 	}
 	
 	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		
+		if (VersionUtil.isApiLevelAbove15()) {
+			recyclerVArtists.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
+
+		} else {
+			recyclerVArtists.getViewTreeObserver().removeGlobalOnLayoutListener(onGlobalLayoutListener);
+		}
+	}
+	
+	@Override
 	public void onDestroy() {
 		super.onDestroy();
 		

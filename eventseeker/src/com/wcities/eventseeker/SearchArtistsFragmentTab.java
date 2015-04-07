@@ -40,13 +40,15 @@ import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.interfaces.SearchFragmentChildListener;
+import com.wcities.eventseeker.interfaces.SwipeTabVisibilityListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.ItemDecorationItemOffset;
 
 public class SearchArtistsFragmentTab extends PublishArtistFragment implements FullScrnProgressListener, LoadItemsInBackgroundListener, 
-		AsyncTaskListener<Void>, DialogBtnClickListener, ArtistTrackingListener, OnFacebookShareClickedListener, SearchFragmentChildListener {
+		AsyncTaskListener<Void>, DialogBtnClickListener, ArtistTrackingListener, OnFacebookShareClickedListener, SearchFragmentChildListener,
+		SwipeTabVisibilityListener {
 	
 	private static final String TAG = SearchArtistsFragmentTab.class.getSimpleName();
 
@@ -261,5 +263,26 @@ public class SearchArtistsFragmentTab extends PublishArtistFragment implements F
 	public void onQueryTextSubmit(String query) {
 		//Log.d(TAG, "onQueryTextSubmit(), query = " + query);
 		refresh(query);
+	}
+
+	@Override
+	public void onInvisible() {
+		if (rvSearchArtistsAdapterTab != null) {
+			rvSearchArtistsAdapterTab.setVisible(false);
+			rvSearchArtistsAdapterTab.notifyDataSetChanged();
+		}
+	}
+
+	@Override
+	public void onVisible() {
+		if (rvSearchArtistsAdapterTab != null) {
+			rvSearchArtistsAdapterTab.setVisible(true);
+			/**
+			 * need to call this because it doesn't call onBindViewHolder() automatically if 
+			 * next or previous tab is selected. Calls it only for tab selection changing from position 1 to 3 or 
+			 * 3 to 1
+			 */
+			rvSearchArtistsAdapterTab.notifyDataSetChanged();
+		}
 	}
 }

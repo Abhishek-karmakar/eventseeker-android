@@ -4,34 +4,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
-import com.wcities.eventseeker.adapter.RVSearchArtistsAdapterTab;
-import com.wcities.eventseeker.adapter.RVSearchEventsAdapterTab;
-import com.wcities.eventseeker.api.Api;
-import com.wcities.eventseeker.asynctask.LoadArtists;
-import com.wcities.eventseeker.asynctask.LoadEvents;
-import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.core.Artist;
-import com.wcities.eventseeker.core.Event;
-import com.wcities.eventseeker.custom.fragment.PublishEventFragment;
-import com.wcities.eventseeker.interfaces.AsyncTaskListener;
-import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
-import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
-import com.wcities.eventseeker.interfaces.SearchFragmentChildListener;
-import com.wcities.eventseeker.util.AsyncTaskUtil;
-import com.wcities.eventseeker.util.ConversionUtil;
-import com.wcities.eventseeker.util.DeviceUtil;
-import com.wcities.eventseeker.util.FragmentUtil;
-import com.wcities.eventseeker.viewdata.ItemDecorationItemOffset;
-
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.AsyncTask.Status;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -41,8 +19,28 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.wcities.eventseeker.adapter.RVSearchEventsAdapterTab;
+import com.wcities.eventseeker.api.Api;
+import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.asynctask.LoadEvents;
+import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.custom.fragment.PublishEventFragment;
+import com.wcities.eventseeker.interfaces.AsyncTaskListener;
+import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
+import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
+import com.wcities.eventseeker.interfaces.SearchFragmentChildListener;
+import com.wcities.eventseeker.interfaces.SwipeTabVisibilityListener;
+import com.wcities.eventseeker.util.AsyncTaskUtil;
+import com.wcities.eventseeker.util.ConversionUtil;
+import com.wcities.eventseeker.util.DeviceUtil;
+import com.wcities.eventseeker.util.FragmentUtil;
+import com.wcities.eventseeker.viewdata.ItemDecorationItemOffset;
+
 public class SearchEventsFragmentTab extends PublishEventFragment implements SearchFragmentChildListener, FullScrnProgressListener, LoadItemsInBackgroundListener, 
-		AsyncTaskListener<Void> {
+		AsyncTaskListener<Void>, SwipeTabVisibilityListener {
 	
 	private static final String TAG = SearchEventsFragmentTab.class.getSimpleName();
 
@@ -137,7 +135,7 @@ public class SearchEventsFragmentTab extends PublishEventFragment implements Sea
 	}
 	
 	private void refresh(String newQuery) {
-		Log.d(TAG, "refresh()");
+		//Log.d(TAG, "refresh()");
 		// if user selection has changed then only reset the list
 		if (query == null || !query.equals(newQuery)) {
 			//Log.d(TAG, "query == null || !query.equals(newQuery)");
@@ -176,7 +174,8 @@ public class SearchEventsFragmentTab extends PublishEventFragment implements Sea
 		String endDate = ConversionUtil.getDay(c);
 		
 		loadEvents = new LoadEvents(Api.OAUTH_TOKEN, eventList, rvSearchEventsAdapterTab, query,
-				latLon[0], latLon[1], MILES_LIMIT, null, startDate, endDate, this);
+				latLon[0], latLon[1], MILES_LIMIT, ((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId(), 
+				startDate, endDate, this);
 		rvSearchEventsAdapterTab.setLoadDateWiseEvents(loadEvents);
 		AsyncTaskUtil.executeAsyncTask(loadEvents, true);
 	}
@@ -207,5 +206,26 @@ public class SearchEventsFragmentTab extends PublishEventFragment implements Sea
 	@Override
 	public void call(Session session, SessionState state, Exception exception) {
 		rvSearchEventsAdapterTab.call(session, state, exception);
+	}
+
+	@Override
+	public void onInvisible() {
+		if (rvSearchEventsAdapterTab != null) {
+			rvSearchEventsAdapterTab.setVisible(false);
+			rvSearchEventsAdapterTab.notifyDataSetChanged();
+		}
+	}
+
+	@Override
+	public void onVisible() {
+		if (rvSearchEventsAdapterTab != null) {
+			rvSearchEventsAdapterTab.setVisible(true);
+			/**
+			 * need to call this because it doesn't call onBindViewHolder() automatically if 
+			 * next or previous tab is selected. Calls it only for tab selection changing from position 1 to 3 or 
+			 * 3 to 1
+			 */
+			rvSearchEventsAdapterTab.notifyDataSetChanged();
+		}
 	}
 }

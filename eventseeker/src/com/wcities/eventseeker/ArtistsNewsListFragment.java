@@ -250,7 +250,7 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 		} else if (orientation == Configuration.ORIENTATION_PORTRAIT && !isTablet) {
 			firstVisibleNewsItemPosition = getListView().getFirstVisiblePosition();			
 		} else {
-			firstVisibleNewsItemPosition = getListView().getFirstVisiblePosition() * 2;;
+			firstVisibleNewsItemPosition = getListView().getFirstVisiblePosition() * 2;
 		}
 		
 		for (int i = getListView().getFirstVisiblePosition(), j = 0; 
