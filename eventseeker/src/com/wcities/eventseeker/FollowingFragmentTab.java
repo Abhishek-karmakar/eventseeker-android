@@ -33,6 +33,7 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadMyArtists;
 import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.core.FollowingList;
@@ -141,6 +142,10 @@ public class FollowingFragmentTab extends Fragment implements ArtistTrackingList
 	public void loadItemsInBackground() {
 		loadMyArtists = new LoadMyArtists(Api.OAUTH_TOKEN, wcitiesId, artistList, myArtistListAdapter, 
 				cachedFollowingList, artistIds, indices, alphaNumIndexer, this);
+		if (FragmentUtil.getActivity(this).getIntent().hasExtra(BundleKeys.IS_FROM_NOTIFICATION)) {
+			loadMyArtists.setAddSrcFromNotification(true);
+			FragmentUtil.getActivity(this).getIntent().removeExtra(BundleKeys.IS_FROM_NOTIFICATION);
+		}
 		myArtistListAdapter.setLoadArtists(loadMyArtists);
 		AsyncTaskUtil.executeAsyncTask(loadMyArtists, true);
 	}
