@@ -14,11 +14,8 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.Adapter;
-import android.support.v7.widget.RecyclerView.AdapterDataObserver;
 import android.text.Html;
 import android.text.TextUtils.TruncateAt;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -34,7 +31,6 @@ import com.wcities.eventseeker.BaseActivityTab;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.ShareViaDialogFragment;
 import com.wcities.eventseeker.WebViewActivityTab;
-import com.wcities.eventseeker.adapter.RVVenueDetailsAdapterTab.ViewHolder;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
@@ -52,8 +48,8 @@ import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
-import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.core.Event.Attending;
+import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.EventListenerTab;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
@@ -61,7 +57,7 @@ import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class RVArtistDetailsAdapterTab extends Adapter<RVArtistDetailsAdapterTab.ViewHolder> implements 
+public class RVArtistDetailsAdapterTab extends RVAdapterBase<RVArtistDetailsAdapterTab.ViewHolder> implements 
 		DateWiseEventParentAdapterListener {
 	
 	private static final String TAG = RVArtistDetailsAdapterTab.class.getSimpleName();
@@ -90,8 +86,6 @@ public class RVArtistDetailsAdapterTab extends Adapter<RVArtistDetailsAdapterTab
 	private int fbCallCountForSameEvt = 0;
 	private RVArtistDetailsAdapterTab.ViewHolder holderPendingPublish;
 	private Event eventPendingPublish;
-	
-	private AdapterDataObserver adapterDataObserver;
 	
 	private static enum ViewType {
 		IMG, DESC, VIDEOS, FRIENDS, UPCOMING_EVENTS_TITLE, PROGRESS, EVENT;
@@ -152,26 +146,6 @@ public class RVArtistDetailsAdapterTab extends Adapter<RVArtistDetailsAdapterTab
 		bitmapCache = BitmapCache.getInstance();
 	}
 	
-	/**
-	 * Need to unregister manually because otherwise using same adapter on orientation change results in
-	 * multiple time registrations w/o unregistration, due to which we need to manually 
-	 * call unregisterAdapterDataObserver if it tries to register with new observer when already some older
-	 * observer is registered. W/o having this results in multiple observers holding cardview & imgEvt memory.
-	 */
-	@Override
-	public void registerAdapterDataObserver(AdapterDataObserver observer) {
-		if (adapterDataObserver != null) {
-			try {
-				unregisterAdapterDataObserver(adapterDataObserver);
-				
-			} catch (IllegalStateException e) {
-				Log.e(TAG, "RecyclerViewDataObserver was not registered");
-			}
-		}
-        super.registerAdapterDataObserver(observer);
-        adapterDataObserver = observer;
-    }
-
 	@Override
 	public int getItemViewType(int position) {
 		if (position == ViewType.IMG.ordinal()) {

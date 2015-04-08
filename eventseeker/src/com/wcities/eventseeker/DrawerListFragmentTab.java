@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.AdapterDataObserver;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wcities.eventseeker.DrawerListFragmentTab.DrawerListAdapter.ListItemViewHolder;
+import com.wcities.eventseeker.adapter.RVAdapterBase;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.interfaces.DrawerListFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -207,7 +207,7 @@ public class DrawerListFragmentTab extends Fragment {
 		drawerListAdapter.notifyDataSetChanged();
 	}
 	
-	public static class DrawerListAdapter extends RecyclerView.Adapter<ListItemViewHolder> {
+	public static class DrawerListAdapter extends RVAdapterBase<ListItemViewHolder> {
 		
 		public static enum LIST_ITEM_TYPE {
 			HEADER, ITEM;
@@ -218,7 +218,6 @@ public class DrawerListFragmentTab extends Fragment {
 	    private List<DrawerListItem> drawerListItems;
 	    private DrawerListFragmentListener mListener;
 	    private int rowHt;
-	    private AdapterDataObserver adapterDataObserver;
 	    
 	    public DrawerListAdapter(Activity baseActivityTab, List<DrawerListItem> drawerListItems, int htForDrawerList, DrawerListFragmentListener mListener) {
 	    	this.baseActivityTab = new WeakReference<Activity>(baseActivityTab);
@@ -229,26 +228,6 @@ public class DrawerListFragmentTab extends Fragment {
 	        
 	        // 1 subtracted since that item is just the section divider
 	        rowHt = htForDrawerList / (drawerListItems.size() - 1);
-	    }
-	    
-	    /**
-		 * Need to unregister manually because otherwise using same adapter on orientation change results in
-		 * multiple time registrations w/o unregistration, due to which we need to manually 
-		 * call unregisterAdapterDataObserver if it tries to register with new observer when already some older
-		 * observer is registered. W/o having this results in multiple observers holding cardview & imgEvt memory.
-		 */
-		@Override
-		public void registerAdapterDataObserver(AdapterDataObserver observer) {
-			if (adapterDataObserver != null) {
-				try {
-					unregisterAdapterDataObserver(adapterDataObserver);
-					
-				} catch (IllegalStateException e) {
-					Log.e(TAG, "RecyclerViewDataObserver was not registered");
-				}
-			}
-	        super.registerAdapterDataObserver(observer);
-	        adapterDataObserver = observer;
 	    }
 	    
 	    private void onHtForDrawerListUpdated(int htForDrawerList) {

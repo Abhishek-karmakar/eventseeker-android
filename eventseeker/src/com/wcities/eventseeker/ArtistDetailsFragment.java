@@ -26,11 +26,9 @@ import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.AdapterDataObserver;
 import android.text.Html;
 import android.text.TextUtils.TruncateAt;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -57,6 +55,7 @@ import com.melnykov.fab.FloatingActionButton;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.ShareOnFBDialogFragment.OnFacebookShareClickedListener;
 import com.wcities.eventseeker.adapter.FriendsRVAdapter;
+import com.wcities.eventseeker.adapter.RVAdapterBase;
 import com.wcities.eventseeker.adapter.VideoPagerAdapter;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.api.Api;
@@ -819,7 +818,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		}
 	}
 	
-	private static class ArtistRVAdapter extends RecyclerView.Adapter<ArtistRVAdapter.ViewHolder> implements 
+	private static class ArtistRVAdapter extends RVAdapterBase<ArtistRVAdapter.ViewHolder> implements 
 			DateWiseEventParentAdapterListener {
 		
 		private static final int EXTRA_TOP_DUMMY_ITEM_COUNT = 2;
@@ -849,8 +848,6 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		
 		private int openPos = INVALID;
 		private int rltLytContentInitialMarginL, lnrSliderContentW, imgEventW, rltLytContentW = INVALID;
-		
-		private AdapterDataObserver adapterDataObserver;
 		
 		private static enum ViewType {
 			IMG, DESC, VIDEOS, FRIENDS, UPCOMING_EVENTS_TITLE, PROGRESS, EVENT;
@@ -931,26 +928,6 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			imgEventW = res.getDimensionPixelSize(R.dimen.img_event_w_list_item_discover);
 		}
 		
-		/**
-		 * Need to unregister manually because otherwise using same adapter on orientation change results in
-		 * multiple time registrations w/o unregistration, due to which we need to manually 
-		 * call unregisterAdapterDataObserver if it tries to register with new observer when already some older
-		 * observer is registered. W/o having this results in multiple observers holding cardview & imgEvt memory.
-		 */
-		@Override
-		public void registerAdapterDataObserver(AdapterDataObserver observer) {
-			if (adapterDataObserver != null) {
-				try {
-					unregisterAdapterDataObserver(adapterDataObserver);
-					
-				} catch (IllegalStateException e) {
-					Log.e(TAG, "RecyclerViewDataObserver was not registered");
-				}
-			}
-	        super.registerAdapterDataObserver(observer);
-	        adapterDataObserver = observer;
-	    }
-
 		@Override
 		public int getItemViewType(int position) {
 			if (position == ViewType.IMG.ordinal()) {

@@ -29,9 +29,6 @@ import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.ShareActionProvider;
-import android.support.v7.widget.RecyclerView.AdapterDataObserver;
-import android.support.v7.widget.ShareActionProvider.OnShareTargetSelectedListener;
 import android.text.Html;
 import android.text.TextUtils.TruncateAt;
 import android.util.DisplayMetrics;
@@ -59,8 +56,8 @@ import android.widget.Toast;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
+import com.wcities.eventseeker.adapter.RVAdapterBase;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
-import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker.Type;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
@@ -684,7 +681,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		venueRVAdapter.notifyDataSetChanged();
 	}
 	
-	private static class VenueRVAdapter extends RecyclerView.Adapter<VenueRVAdapter.ViewHolder> implements 
+	private static class VenueRVAdapter extends RVAdapterBase<VenueRVAdapter.ViewHolder> implements 
 			DateWiseEventParentAdapterListener {
 		
 		private static final int EXTRA_TOP_DUMMY_ITEM_COUNT = 2;
@@ -711,8 +708,6 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		private int rltLytContentInitialMarginL, lnrSliderContentW, imgEventW, rltLytContentW = INVALID;
 		
 		private BitmapCache bitmapCache;
-		
-		private AdapterDataObserver adapterDataObserver;
 		
 		private static enum ViewType {
 			IMG, DESC, ADDRESS_MAP, UPCOMING_EVENTS_TITLE, PROGRESS, EVENT;
@@ -796,26 +791,6 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			lnrSliderContentW = res.getDimensionPixelSize(R.dimen.lnr_slider_content_w_list_item_discover);
 			imgEventW = res.getDimensionPixelSize(R.dimen.img_event_w_list_item_discover);
 		}
-
-		/**
-		 * Need to unregister manually because otherwise using same adapter on orientation change results in
-		 * multiple time registrations w/o unregistration, due to which we need to manually 
-		 * call unregisterAdapterDataObserver if it tries to register with new observer when already some older
-		 * observer is registered. W/o having this results in multiple observers holding cardview & imgEvt memory.
-		 */
-		@Override
-		public void registerAdapterDataObserver(AdapterDataObserver observer) {
-			if (adapterDataObserver != null) {
-				try {
-					unregisterAdapterDataObserver(adapterDataObserver);
-					
-				} catch (IllegalStateException e) {
-					Log.e(TAG, "RecyclerViewDataObserver was not registered");
-				}
-			}
-	        super.registerAdapterDataObserver(observer);
-	        adapterDataObserver = observer;
-	    }
 		
 		@Override
 		public int getItemCount() {

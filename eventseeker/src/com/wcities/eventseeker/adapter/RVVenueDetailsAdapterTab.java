@@ -16,8 +16,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.Adapter;
-import android.support.v7.widget.RecyclerView.AdapterDataObserver;
 import android.text.Html;
 import android.text.TextUtils.TruncateAt;
 import android.util.Log;
@@ -65,7 +63,7 @@ import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.ViewHolder> implements 
+public class RVVenueDetailsAdapterTab extends RVAdapterBase<RVVenueDetailsAdapterTab.ViewHolder> implements 
 		DateWiseEventParentAdapterListener {
 	
 	private static final String TAG = RVVenueDetailsAdapterTab.class.getSimpleName();
@@ -91,8 +89,6 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 	private int fbCallCountForSameEvt = 0;
 	private RVVenueDetailsAdapterTab.ViewHolder holderPendingPublish;
 	private Event eventPendingPublish;
-	
-	private AdapterDataObserver adapterDataObserver;
 	
 	private static enum ViewType {
 		IMG, DESC, ADDRESS_MAP, UPCOMING_EVENTS_TITLE, PROGRESS, EVENT;
@@ -153,26 +149,6 @@ public class RVVenueDetailsAdapterTab extends Adapter<RVVenueDetailsAdapterTab.V
 		bitmapCache = BitmapCache.getInstance();
 	}
 	
-	/**
-	 * Need to unregister manually because otherwise using same adapter on orientation change results in
-	 * multiple time registrations w/o unregistration, due to which we need to manually 
-	 * call unregisterAdapterDataObserver if it tries to register with new observer when already some older
-	 * observer is registered. W/o having this results in multiple observers holding cardview & imgEvt memory.
-	 */
-	@Override
-	public void registerAdapterDataObserver(AdapterDataObserver observer) {
-		if (adapterDataObserver != null) {
-			try {
-				unregisterAdapterDataObserver(adapterDataObserver);
-				
-			} catch (IllegalStateException e) {
-				Log.e(TAG, "RecyclerViewDataObserver was not registered");
-			}
-		}
-        super.registerAdapterDataObserver(observer);
-        adapterDataObserver = observer;
-    }
-
 	@Override
 	public int getItemCount() {
 		return venueDetailsFragmentTab.isAllDetailsLoaded() ? (EXTRA_TOP_DUMMY_ITEM_COUNT_AFTER_DETAILS_LOADED + 

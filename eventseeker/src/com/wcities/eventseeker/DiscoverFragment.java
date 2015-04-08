@@ -56,6 +56,7 @@ import com.facebook.SessionState;
 import com.wcities.eventseeker.DiscoverSettingDialogFragment.DiscoverSettingChangedListener;
 import com.wcities.eventseeker.SettingsFragment.OnSettingsItemClickedListener;
 import com.wcities.eventseeker.adapter.CatTitlesAdapter;
+import com.wcities.eventseeker.adapter.RVAdapterBase;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
@@ -684,7 +685,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		}
 	}
 	
-	private static class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> implements 
+	private static class EventListAdapter extends RVAdapterBase<EventListAdapter.ViewHolder> implements 
 			DateWiseEventParentAdapterListener {
 		
 		private static final int INVALID = -1;
@@ -706,8 +707,6 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		private int fbCallCountForSameEvt = 0;
 		private EventListAdapter.ViewHolder holderPendingPublish;
 		private Event eventPendingPublish;
-		
-		private AdapterDataObserver adapterDataObserver;
 		
 		private static enum ViewType {
 			POS_0, POS_1, LAST_POS, PROGRESS, CONTENT
@@ -767,26 +766,6 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 			imgEventW = res.getDimensionPixelSize(R.dimen.img_event_w_list_item_discover);
 		}
 		
-		/**
-		 * Need to unregister manually because otherwise using same adapter on orientation change results in
-		 * multiple time registrations w/o unregistration, due to which we need to manually 
-		 * call unregisterAdapterDataObserver if it tries to register with new observer when already some older
-		 * observer is registered. W/o having this results in multiple observers holding cardview & imgEvt memory.
-		 */
-		@Override
-		public void registerAdapterDataObserver(AdapterDataObserver observer) {
-			if (adapterDataObserver != null) {
-				try {
-					unregisterAdapterDataObserver(adapterDataObserver);
-					
-				} catch (IllegalStateException e) {
-					Log.e(TAG, "RecyclerViewDataObserver was not registered");
-				}
-			}
-	        super.registerAdapterDataObserver(observer);
-	        adapterDataObserver = observer;
-	    }
-
 		@Override
 		public int getItemViewType(int position) {
 			//Log.d(TAG, "getItemViewType() - pos = " + position);

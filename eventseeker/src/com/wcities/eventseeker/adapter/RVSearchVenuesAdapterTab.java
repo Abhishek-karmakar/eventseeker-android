@@ -51,7 +51,7 @@ import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
 
-public class RVSearchVenuesAdapterTab<T> extends Adapter<RVSearchVenuesAdapterTab.ViewHolder> implements VenueAdapterListener<T> {
+public class RVSearchVenuesAdapterTab<T> extends RVAdapterBase<RVSearchVenuesAdapterTab.ViewHolder> implements VenueAdapterListener<T> {
 	
 	private static final String TAG = RVSearchVenuesAdapterTab.class.getSimpleName();
 	
@@ -71,8 +71,6 @@ public class RVSearchVenuesAdapterTab<T> extends Adapter<RVSearchVenuesAdapterTa
 	private Handler handler;
 	
 	private int lnrSliderContentW, openPos = INVALID, rltLytDetailsW = INVALID;
-	
-	private AdapterDataObserver adapterDataObserver;
 	
 	private static enum ViewType {
 		VENUE;
@@ -121,26 +119,6 @@ public class RVSearchVenuesAdapterTab<T> extends Adapter<RVSearchVenuesAdapterTa
 		lnrSliderContentW = res.getDimensionPixelSize(R.dimen.lnr_slider_content_w_rv_item_event_tab);
 	}
 	
-	/**
-	 * Need to unregister manually because otherwise using same adapter on orientation change results in
-	 * multiple time registrations w/o unregistration, due to which we need to manually 
-	 * call unregisterAdapterDataObserver if it tries to register with new observer when already some older
-	 * observer is registered. W/o having this results in multiple observers holding cardview & imgEvt memory.
-	 */
-	@Override
-	public void registerAdapterDataObserver(AdapterDataObserver observer) {
-		if (adapterDataObserver != null) {
-			try {
-				unregisterAdapterDataObserver(adapterDataObserver);
-				
-			} catch (IllegalStateException e) {
-				Log.e(TAG, "RecyclerViewDataObserver was not registered");
-			}
-		}
-        super.registerAdapterDataObserver(observer);
-        adapterDataObserver = observer;
-    }
-
 	@Override
 	public int getItemCount() {
 		return venueList.size();

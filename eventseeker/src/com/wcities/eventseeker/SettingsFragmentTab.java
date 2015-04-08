@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.AdapterDataObserver;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +21,7 @@ import android.widget.AbsListView.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.wcities.eventseeker.adapter.RVAdapterBase;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.Enums.SettingsItem;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -151,38 +151,18 @@ public class SettingsFragmentTab extends Fragment {
 		}
 	}
 	
-	private static class SettingsListAdapter extends RecyclerView.Adapter<VHSettings> {
+	private static class SettingsListAdapter extends RVAdapterBase<VHSettings> {
+		
 		private List<SettingsItem> settingsItems;
 		private int rowHt;
 		private OnSettingsItemClickedListener onSettingsItemClickedListener;
 		private Fragment fragment;
-		private AdapterDataObserver adapterDataObserver;
 		
 		public SettingsListAdapter(Fragment fragment, List<SettingsItem> settingsMenuListItems) {
 	        this.settingsItems = settingsMenuListItems;
 	        this.fragment = fragment;
 	        this.onSettingsItemClickedListener = (OnSettingsItemClickedListener) FragmentUtil.getActivity(fragment);
 		}
-		
-		/**
-		 * Need to unregister manually because otherwise using same adapter on orientation change results in
-		 * multiple time registrations w/o unregistration, due to which we need to manually 
-		 * call unregisterAdapterDataObserver if it tries to register with new observer when already some older
-		 * observer is registered. W/o having this results in multiple observers holding cardview & imgEvt memory.
-		 */
-		@Override
-		public void registerAdapterDataObserver(AdapterDataObserver observer) {
-			if (adapterDataObserver != null) {
-				try {
-					unregisterAdapterDataObserver(adapterDataObserver);
-					
-				} catch (IllegalStateException e) {
-					Log.e(TAG, "RecyclerViewDataObserver was not registered");
-				}
-			}
-	        super.registerAdapterDataObserver(observer);
-	        adapterDataObserver = observer;
-	    }
 
 		public void setHtForSettingsList(int htForSettingsList) {
 			this.rowHt = htForSettingsList / settingsItems.size();
