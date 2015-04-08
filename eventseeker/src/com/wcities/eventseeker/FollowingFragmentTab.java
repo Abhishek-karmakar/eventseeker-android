@@ -232,11 +232,14 @@ public class FollowingFragmentTab extends Fragment implements ArtistTrackingList
 	
 	@Override
 	public void displayFullScrnProgress() {
+		rltLytPrgsBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
 		rltLytPrgsBar.setVisibility(View.VISIBLE);
 	}
 	
 	@Override
 	public void onTaskCompleted(Void... params) {
+		// free up memory
+		rltLytPrgsBar.setBackgroundResource(0);
 		rltLytPrgsBar.setVisibility(View.INVISIBLE);
 	}
 

@@ -135,6 +135,7 @@ public class ArtistNewsListFragment extends ListFragmentLoadableFromBackStack im
 		if (getListView().getVisibility() != View.VISIBLE) {
 			getListView().setVisibility(View.VISIBLE);
 			rltRootNoContentFound.setVisibility(View.GONE);
+			((ImageView) rltRootNoContentFound.findViewById(R.id.imgPhone)).setImageDrawable(null);
 		}
 		if (artistNewsListItems == null) {
 			artistNewsListItems = new ArrayList<ArtistNewsListItem>();
@@ -304,8 +305,8 @@ public class ArtistNewsListFragment extends ListFragmentLoadableFromBackStack im
 			
 		} else {
 			rltRootNoContentFound.setVisibility(View.GONE);
+			((ImageView) rltRootNoContentFound.findViewById(R.id.imgPhone)).setImageDrawable(null);
 		}		
-		
 	}
 	
 	private void setNoItemsLayout() {

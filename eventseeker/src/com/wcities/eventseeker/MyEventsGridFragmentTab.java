@@ -174,7 +174,12 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 		rltLytProgressBar.setVisibility(visibility);
 		
 		if (visibility == View.VISIBLE) {
+			rltLytProgressBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
 			refreshNoContentLyt(View.GONE);
+			
+		} else {
+			// free up memory
+			rltLytProgressBar.setBackgroundResource(0);
 		}
 	}
 	
@@ -248,9 +253,9 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 			((ImageView) rltLytNoEvts.findViewById(R.id.imgPhone))
 				.setImageDrawable(FragmentUtil.getResources(this).getDrawable(imgPhoneRes));
 
-			
 		} else {
 			recyclerVEvents.setVisibility(View.VISIBLE);
+			((ImageView) rltLytNoEvts.findViewById(R.id.imgPhone)).setImageDrawable(null);
 		}
 	}
 

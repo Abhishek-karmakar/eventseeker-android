@@ -303,7 +303,8 @@ public class FriendsActivityFragmentTab extends PublishEventListFragment impleme
 			}
 			
 			friendActivityListAdapter.notifyDataSetChanged();
-			// to remove full screen progressbar
+			// to remove full screen progressbar & free up memory
+			rltLytPrgsBar.setBackgroundResource(0);
 			rltLytPrgsBar.setVisibility(View.INVISIBLE);
 		}
     }
@@ -333,6 +334,7 @@ public class FriendsActivityFragmentTab extends PublishEventListFragment impleme
 				}
 				
 				if (friendNewsItems.size() == 1) {
+					rltLytPrgsBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
 					rltLytPrgsBar.setVisibility(View.VISIBLE);
 					convertView.setVisibility(View.INVISIBLE);
 					

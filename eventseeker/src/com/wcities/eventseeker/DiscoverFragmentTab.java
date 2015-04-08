@@ -416,7 +416,12 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 		rltLytProgressBar.setVisibility(visibility);
 		
 		if (visibility == View.VISIBLE) {
+			rltLytProgressBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
 			rltLytNoEvts.setVisibility(View.INVISIBLE);
+			
+		} else {
+			// free up memory
+			rltLytProgressBar.setBackgroundResource(0);
 		}
 	}
 	

@@ -90,6 +90,7 @@ public class ArtistsNewsListFragmentTab extends ListFragment implements LoadItem
 	private void initListView() {
 		if (getListView().getVisibility() != View.VISIBLE) {
 			getListView().setVisibility(View.VISIBLE);
+			((ImageView) rltRootNoContentFound.findViewById(R.id.imgPhone)).setImageDrawable(null);
 			rltRootNoContentFound.setVisibility(View.GONE);
 		}
 		if (artistsNewsListItems == null) {
@@ -229,6 +230,7 @@ public class ArtistsNewsListFragmentTab extends ListFragment implements LoadItem
 
 		} else {
 			getListView().setVisibility(View.VISIBLE);
+			((ImageView) rltRootNoContentFound.findViewById(R.id.imgPhone)).setImageDrawable(null);
 			rltRootNoContentFound.setVisibility(View.GONE);
 		}				
 	}
@@ -259,11 +261,14 @@ public class ArtistsNewsListFragmentTab extends ListFragment implements LoadItem
 	@Override
 	public void onTaskCompleted(Void... params) {
 		// remove full screen progressbar
+		// free up memory
+		rltLytPrgsBar.setBackgroundResource(0);
 		rltLytPrgsBar.setVisibility(View.INVISIBLE);
 	}
 
 	@Override
 	public void displayFullScrnProgress() {
+		rltLytPrgsBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
 		rltLytPrgsBar.setVisibility(View.VISIBLE);
 	}
 	

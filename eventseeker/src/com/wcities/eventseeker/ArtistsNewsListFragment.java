@@ -143,6 +143,7 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 	private void initListView() {
 		if (getListView().getVisibility() != View.VISIBLE) {
 			getListView().setVisibility(View.VISIBLE);
+			((ImageView) rltRootNoContentFound.findViewById(R.id.imgPhone)).setImageDrawable(null);
 			rltRootNoContentFound.setVisibility(View.GONE);
 		}
 		if (artistsNewsListItems == null) {
@@ -310,6 +311,7 @@ public class ArtistsNewsListFragment extends ListFragmentLoadableFromBackStack i
 			}
 			
 		} else {
+			((ImageView) rltRootNoContentFound.findViewById(R.id.imgPhone)).setImageDrawable(null);
 			rltRootNoContentFound.setVisibility(View.GONE);
 		}				
 	}

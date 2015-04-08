@@ -399,7 +399,9 @@ public class RecommendedArtistsFragmentTab extends PublishArtistFragment impleme
 
 	@Override
 	public void onTaskCompleted(Void... params) {
-		Log.d(TAG, "onTaskCompleted");
+		//Log.d(TAG, "onTaskCompleted");
+		// free up memory
+		rltLytPrgsBar.setBackgroundResource(0);
 		rltLytPrgsBar.setVisibility(View.INVISIBLE);
 	}
 	

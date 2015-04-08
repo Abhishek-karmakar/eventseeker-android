@@ -300,9 +300,12 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 	
 	private void updateProgressBarVisibility() {
 		if (allDetailsLoaded) {
+			// free up memory
+			rltLytPrgsBar.setBackgroundResource(0);
 			rltLytPrgsBar.setVisibility(View.GONE);
 			
 		} else {
+			rltLytPrgsBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
 			rltLytPrgsBar.setVisibility(View.VISIBLE);
 		}
 	}

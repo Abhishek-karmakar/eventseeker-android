@@ -16,8 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/all_components_margin_t_include_no_content_with_phone"
-        android:src="@drawable/ic_my_events_no_content" />
+        android:layout_marginTop="@dimen/all_components_margin_t_include_no_content_with_phone" />
 
     <RelativeLayout
         android:layout_width="match_parent"

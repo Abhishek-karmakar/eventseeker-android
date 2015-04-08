@@ -159,6 +159,7 @@ public class SearchEventsFragmentTab extends PublishEventFragment implements Sea
 	
 	@Override
 	public void displayFullScrnProgress() {
+		rltLytProgressBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
 		rltLytProgressBar.setVisibility(View.VISIBLE);
 	}
 
@@ -192,7 +193,8 @@ public class SearchEventsFragmentTab extends PublishEventFragment implements Sea
 			@Override
 			public void run() {
 				//Log.d(TAG, "onEventsLoaded()");
-				// remove full screen progressbar
+				// remove full screen progressbar & free up memory
+				rltLytProgressBar.setBackgroundResource(0);
 				rltLytProgressBar.setVisibility(View.INVISIBLE);
 			}
 		});
