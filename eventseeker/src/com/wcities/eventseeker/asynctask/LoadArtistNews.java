@@ -43,6 +43,8 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 	private OnNewsLoadedListener newsLoadedListener;
 
 	private SortArtistNewsBy sortBy;
+
+	private boolean addSrcFromNotification;
 	
 	public interface OnNewsLoadedListener {
 		public abstract void onNewsLoaded();
@@ -68,7 +70,11 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 			((ArtistNewsListAdapterTab) artistNewsListAdapter).setBatchLoaded(batchLoaded);
 		}
 	}
-
+	
+	public void setAddSrcFromNotification(boolean addSrcFromNotification) {
+		this.addSrcFromNotification = addSrcFromNotification;
+	}
+	
 	@Override
 	protected List<ArtistNewsItem> doInBackground(Void... params) {
 		List<ArtistNewsItem> tmpArtistNewsItems = new ArrayList<ArtistNewsItem>();
@@ -76,6 +82,8 @@ public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> 
 		userInfoApi.setLimit(ARTISTS_NEWS_LIMIT);
 		userInfoApi.setUserId(wcitiesId);
 		userInfoApi.setSortBy(sortBy);
+		userInfoApi.setSrcFromNotification(addSrcFromNotification);
+
 		if (artistNewsListAdapter instanceof ArtistNewsListAdapter) {
 			userInfoApi.setAlreadyRequested(((ArtistNewsListAdapter) artistNewsListAdapter).getItemsAlreadyRequested());
 		

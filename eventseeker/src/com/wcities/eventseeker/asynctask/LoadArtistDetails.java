@@ -22,6 +22,11 @@ public class LoadArtistDetails extends AsyncTask<Void, Void, Void> {
 	private Fragment fragment;
 	private OnArtistUpdatedListener listener;
 	private String oauthToken;
+	private boolean addSrcFromNotification;
+	
+	public interface OnArtistUpdatedListener {
+		public void onArtistUpdated();
+	}
 
 	public LoadArtistDetails(String oauthToken, Artist artist, OnArtistUpdatedListener listener, Fragment fragment) {
 		this.oauthToken = oauthToken;
@@ -30,8 +35,8 @@ public class LoadArtistDetails extends AsyncTask<Void, Void, Void> {
 		this.fragment = fragment;
 	}
 	
-	public interface OnArtistUpdatedListener {
-		public void onArtistUpdated();
+	public void setAddSrcFromNotification(boolean addSrcFromNotification) {
+		this.addSrcFromNotification = addSrcFromNotification;
 	}
 	
 	@Override
@@ -42,6 +47,7 @@ public class LoadArtistDetails extends AsyncTask<Void, Void, Void> {
 		// null check is not required here, since if it's null, that's handled from eventApi
 		artistApi.setUserId(((EventSeekr)FragmentUtil.getActivity(fragment).getApplication()).getWcitiesId());
 		artistApi.setFriendsEnabled(true);
+		artistApi.setSrcFromNotification(addSrcFromNotification);
 		
 		try {
 			JSONObject jsonObject = artistApi.getArtists();
@@ -65,5 +71,5 @@ public class LoadArtistDetails extends AsyncTask<Void, Void, Void> {
 	protected void onPostExecute(Void result) {
 		//Log.d(TAG, "LoadEventDetails onPostExecute()");
 		listener.onArtistUpdated();
-	}    	
+	}
 }

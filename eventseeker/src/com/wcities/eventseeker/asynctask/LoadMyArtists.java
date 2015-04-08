@@ -43,6 +43,8 @@ public class LoadMyArtists extends AsyncTask<Void, Void, List<Artist>> {
 	private Map<Character, Integer> alphaNumIndexer;
 	
 	private LoadArtistsListener loadArtistsListener;
+
+	private boolean addSrcFromNotification;
 	
 	public LoadMyArtists(String oauthToken, String wcitiesId, List<Artist> artistList, ArtistAdapterListener<Void> artistAdapterListener,
 			FollowingList cachedFollowingList, SortedSet<Integer> artistIds, List<Character> indices, 
@@ -58,6 +60,10 @@ public class LoadMyArtists extends AsyncTask<Void, Void, List<Artist>> {
 		this.loadArtistsListener = loadArtistsListener;
 	}
 	
+	public void setAddSrcFromNotification(boolean addSrcFromNotification) {
+		this.addSrcFromNotification = addSrcFromNotification;
+	}
+	
 	@Override
 	protected List<Artist> doInBackground(Void... params) {
 		List<Artist> tmpArtists = new ArrayList<Artist>();
@@ -65,6 +71,7 @@ public class LoadMyArtists extends AsyncTask<Void, Void, List<Artist>> {
 		userInfoApi.setLimit(ARTISTS_LIMIT);
 		userInfoApi.setAlreadyRequested(artistAdapterListener.getArtistsAlreadyRequested());
 		userInfoApi.setUserId(wcitiesId);
+		userInfoApi.setSrcFromNotification(addSrcFromNotification);
 
 		try {
 			JSONObject jsonObject = userInfoApi.getMyProfileInfoFor(Type.myartists);

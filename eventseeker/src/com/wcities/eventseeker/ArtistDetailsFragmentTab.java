@@ -130,6 +130,10 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 			artist.getFriends().clear();
 			
 			loadArtistDetails = new LoadArtistDetails(Api.OAUTH_TOKEN, artist, this, this);
+			if (FragmentUtil.getActivity(this).getIntent().hasExtra(BundleKeys.IS_FROM_NOTIFICATION)) {
+				loadArtistDetails.setAddSrcFromNotification(true);
+				FragmentUtil.getActivity(this).getIntent().removeExtra(BundleKeys.IS_FROM_NOTIFICATION);
+			}
 			AsyncTaskUtil.executeAsyncTask(loadArtistDetails, true);
 		}
 		

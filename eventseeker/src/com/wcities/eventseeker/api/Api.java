@@ -64,6 +64,16 @@ public abstract class Api {
 	private String uri;
 	private String oauthToken;
 
+	/**
+	 * 08-04-2015:
+	 * NOTE: This flag must be set true only if the current Screen is launched from 
+	 * Notification click & from this screen it is the FIRST EVER call being made i.e this
+	 * flag must be true only if current screen started from Notification & current api call
+	 * is the first Api call from this Screen, then reset this flag to false for all the 
+	 * other calls from current Screen.
+	 */
+	private boolean isSrcFromNotification;
+	
 	public Api(String oauthToken) {
 		this.oauthToken = oauthToken;
 	}
@@ -103,6 +113,21 @@ public abstract class Api {
 			Log.d(TAG, "uri="+uri);
 		}
 	}
+
+	public void setSrcFromNotification(boolean isSrcFromNotification) {
+		this.isSrcFromNotification = isSrcFromNotification;
+	}
+	
+	/**
+	 * It will create uri which is to be sent in Google Analytics Tracker.
+	 * @return
+	 */
+	private String getGoogleAnalyticsUri() {
+		if (uri != null && isSrcFromNotification) {
+			return uri + "&fromsource=AndroidNotification";
+		}
+		return uri;
+	}
 	
 	public static void updateLocaleCode(String newLocaleCode) {
 		localeCode = newLocaleCode;
@@ -129,7 +154,7 @@ public abstract class Api {
 		 * using setLocale method.
 		 */
 		addLangParam();
-		GoogleAnalyticsTracker.getInstance().sendApiCall(EventSeekr.getEventSeekr(), uri, data);
+		GoogleAnalyticsTracker.getInstance().sendApiCall(EventSeekr.getEventSeekr(), getGoogleAnalyticsUri(), data);
 
 		JSONObject jsonObject;
 		URL url = new URL(uri);

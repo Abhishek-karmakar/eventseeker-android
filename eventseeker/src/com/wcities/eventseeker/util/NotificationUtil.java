@@ -69,6 +69,7 @@ public class NotificationUtil {
 		boolean isTablet = ((EventSeekr) context.getApplicationContext()).isTablet();
 		if (isTablet) {
 			notificationIntent = new Intent();
+			notificationIntent.putExtra(BundleKeys.IS_FROM_NOTIFICATION, true);
 			
 		} else {
 			notificationIntent = new Intent(context, MainActivity.class);			

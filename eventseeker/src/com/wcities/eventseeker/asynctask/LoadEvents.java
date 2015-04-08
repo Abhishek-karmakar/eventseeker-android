@@ -39,6 +39,8 @@ public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 	
 	private long venueId;
 	
+	private boolean addSrcFromNotification;
+	
 	private DateWiseEventParentAdapterListener eventListAdapter;
 	private AsyncTaskListener<Void> asyncTaskListener;
 	
@@ -83,6 +85,10 @@ public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 		this.asyncTaskListener = asyncTaskListener;
 	}
 
+	public void setAddSrcFromNotification(boolean addSrcFromNotification) {
+		this.addSrcFromNotification = addSrcFromNotification;
+	}
+
 	@Override
 	protected List<Event> doInBackground(Void... params) {
 		List<Event> tmpEvents = new ArrayList<Event>();
@@ -99,6 +105,7 @@ public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 		eventApi.setAlreadyRequested(eventsAlreadyRequested);
 		eventApi.addMoreInfo(MoreInfo.fallbackimage);
 		eventApi.setUserId(wcitiesId);
+		eventApi.setSrcFromNotification(addSrcFromNotification);
 		
 		if (startDate != null) {
 			eventApi.setStart(startDate);

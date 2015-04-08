@@ -26,6 +26,8 @@ public class LoadEventDetails extends AsyncTask<Void, Void, Void> {
 	private Fragment fragment;
 	private Event event;
 	private String oauthToken;
+
+	private boolean addSrcFromNotification;
 	
 	public interface OnEventUpdatedListner{
 		public void onEventUpdated();
@@ -38,6 +40,10 @@ public class LoadEventDetails extends AsyncTask<Void, Void, Void> {
 		this.listner = listner;
 	}
 	
+	public void setAddSrcFromNotification(boolean addSrcFromNotification) {
+		this.addSrcFromNotification = addSrcFromNotification;
+	}
+	
 	@Override
 	protected Void doInBackground(Void... params) {
 		//Log.d(TAG, "LoadEventDetails doInBackground()");
@@ -47,6 +53,7 @@ public class LoadEventDetails extends AsyncTask<Void, Void, Void> {
 		eventApi.setUserId(((EventSeekr)FragmentUtil.getActivity(fragment).getApplication()).getWcitiesId());
 		eventApi.setFriendsEnabled(true);
 		eventApi.addMoreInfo(MoreInfo.fallbackimage);
+		eventApi.setSrcFromNotification(addSrcFromNotification);
 		
 		try {
 			JSONObject jsonObject = eventApi.getEvents();

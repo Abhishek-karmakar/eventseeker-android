@@ -12,7 +12,6 @@ import android.os.Looper;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -187,6 +186,11 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 	public void loadItemsInBackground() {
 		loadEvents = new LoadMyEvents(Api.OAUTH_TOKEN, eventList, rvCatEventsAdapterTab, wcitiesId, loadType, 
 				lat, lon, this);
+		if (FragmentUtil.getActivity(this).getIntent().hasExtra(BundleKeys.IS_FROM_NOTIFICATION)
+				&& loadType == Type.recommendedevent) {
+			loadEvents.setAddSrcFromNotification(true);
+			FragmentUtil.getActivity(this).getIntent().removeExtra(BundleKeys.IS_FROM_NOTIFICATION);
+		}
 		rvCatEventsAdapterTab.setLoadDateWiseEvents(loadEvents);
         AsyncTaskUtil.executeAsyncTask(loadEvents, true);
 	}

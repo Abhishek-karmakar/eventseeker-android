@@ -35,6 +35,8 @@ public class LoadMyEvents extends AsyncTask<Void, Void, List<Event>> {
 	
 	private DateWiseEventParentAdapterListener dateWiseEventParentAdapterListener;
 	private AsyncTaskListener<Void> asyncTaskListener;
+
+	private boolean addSrcFromNotification;
 	
 	public LoadMyEvents(String oauthToken, List<Event> eventList, DateWiseEventParentAdapterListener 
 			dateWiseEventParentAdapterListener, String wcitiesId, Type loadType, double lat, double lon, 
@@ -49,6 +51,10 @@ public class LoadMyEvents extends AsyncTask<Void, Void, List<Event>> {
 		this.asyncTaskListener = asyncTaskListener;
 	}
 	
+	public void setAddSrcFromNotification(boolean addSrcFromNotification) {
+		this.addSrcFromNotification = addSrcFromNotification;
+	}
+	
 	@Override
 	protected List<Event> doInBackground(Void... params) {
 		List<Event> tmpEvents = new ArrayList<Event>();
@@ -60,6 +66,7 @@ public class LoadMyEvents extends AsyncTask<Void, Void, List<Event>> {
 		userInfoApi.setUserId(wcitiesId);
 		userInfoApi.setLat(lat);
 		userInfoApi.setLon(lon);
+		userInfoApi.setSrcFromNotification(addSrcFromNotification);
 		
 		try {
 			JSONObject jsonObject = userInfoApi.getMyProfileInfoFor(loadType);

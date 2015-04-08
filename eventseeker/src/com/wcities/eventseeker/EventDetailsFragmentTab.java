@@ -131,6 +131,10 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 			event.getFriends().clear();
 			
 			loadEventDetails = new LoadEventDetails(Api.OAUTH_TOKEN, this, this, event);
+			if (FragmentUtil.getActivity(this).getIntent().hasExtra(BundleKeys.IS_FROM_NOTIFICATION)) {
+				loadEventDetails.setAddSrcFromNotification(true);
+				FragmentUtil.getActivity(this).getIntent().removeExtra(BundleKeys.IS_FROM_NOTIFICATION);
+			}
 			AsyncTaskUtil.executeAsyncTask(loadEventDetails, true);
 		}
 	}

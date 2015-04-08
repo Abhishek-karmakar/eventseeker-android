@@ -28,6 +28,7 @@ import com.wcities.eventseeker.asynctask.LoadArtistNews;
 import com.wcities.eventseeker.asynctask.LoadArtistNews.ArtistNewsListItem;
 import com.wcities.eventseeker.asynctask.LoadArtistNews.OnNewsLoadedListener;
 import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.Enums.SortArtistNewsBy;
 import com.wcities.eventseeker.core.ArtistNewsItem;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
@@ -213,6 +214,10 @@ public class ArtistsNewsListFragmentTab extends ListFragment implements LoadItem
 	public void loadItemsInBackground() {
 		loadArtistsNews = new LoadArtistNews(Api.OAUTH_TOKEN, artistNewsListAdapterTab, wcitiesId, artistsNewsListItems, 
 				null, this, sortBy);
+		if (FragmentUtil.getActivity(this).getIntent().hasExtra(BundleKeys.IS_FROM_NOTIFICATION)) {
+			loadArtistsNews.setAddSrcFromNotification(true);
+			FragmentUtil.getActivity(this).getIntent().removeExtra(BundleKeys.IS_FROM_NOTIFICATION);
+		}
 		artistNewsListAdapterTab.setLoadArtistNews(loadArtistsNews);
 		AsyncTaskUtil.executeAsyncTask(loadArtistsNews, true);
 	}

@@ -494,6 +494,10 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 			loadEvents = new LoadEvents(Api.OAUTH_TOKEN, eventList, rvCatEventsAdapterTab, lat, lon, startDate, endDate, 
 					catTitlesAdapterTab.getSelectedCatId(), ((EventSeekr)FragmentUtil.getActivity(this)
 							.getApplicationContext()).getWcitiesId(), miles, this);
+			if (FragmentUtil.getActivity(this).getIntent().hasExtra(BundleKeys.IS_FROM_NOTIFICATION)) {
+				loadEvents.setAddSrcFromNotification(true);
+				FragmentUtil.getActivity(this).getIntent().removeExtra(BundleKeys.IS_FROM_NOTIFICATION);
+			}
 			rvCatEventsAdapterTab.setLoadDateWiseEvents(loadEvents);
 			AsyncTaskUtil.executeAsyncTask(loadEvents, true);
 		}
