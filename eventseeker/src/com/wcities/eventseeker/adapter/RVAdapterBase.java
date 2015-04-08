@@ -21,9 +21,16 @@ public abstract class RVAdapterBase<U extends RecyclerView.ViewHolder> extends A
 	 */
 	@Override
 	public void registerAdapterDataObserver(AdapterDataObserver observer) {
-		if (adapterDataObserver != null) {
+		//Log.d(TAG, "registerAdapterDataObserver() - adapterDataObserver = " + adapterDataObserver + ", observer = " + observer + ", this = " + this.getClass().getSimpleName());
+		/**
+		 * Reason for 2nd condition: For some adapters both adapterDataObserver & observer comes out to be equal 
+		 * (eg - for artist details screen on tablet for FriendsRVAdapter), in which case we should not unregister 
+		 * adapterDataObserver as same is still valid (otherwise it throws IllegalStateException, anyways which is also 
+		 * handled by try-catch for safety purpose).
+		 */
+		if (adapterDataObserver != null && adapterDataObserver != observer) {
+			// try-catch is used for safety purpose
 			try {
-				//Log.d(TAG, "unregisterAdapterDataObserver()");
 				unregisterAdapterDataObserver(adapterDataObserver);
 				
 			} catch (IllegalStateException e) {
