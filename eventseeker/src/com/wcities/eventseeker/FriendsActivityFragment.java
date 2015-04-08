@@ -284,6 +284,10 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	
 	private void loadFriendsNewsInBackground() {
 		loadFriendsNews = new LoadFriendsNews();
+		if (FragmentUtil.getActivity(this).getIntent().hasExtra(BundleKeys.IS_FROM_NOTIFICATION)) {
+			loadFriendsNews.setAddSrcFromNotification(true);
+			FragmentUtil.getActivity(this).getIntent().removeExtra(BundleKeys.IS_FROM_NOTIFICATION);
+		}
 		AsyncTaskUtil.executeAsyncTask(loadFriendsNews, true);
 	}
 	
@@ -306,7 +310,12 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	private class LoadFriendsNews extends AsyncTask<Void, Void, List<FriendNewsItem>> {
 		
 		private static final int FRIENDS_NEWS_LIMIT = 10;
-		
+		private boolean addSrcFromNotification;
+
+		public void setAddSrcFromNotification(boolean addSrcFromNotification) {
+			this.addSrcFromNotification = addSrcFromNotification;
+		}
+
 		@Override
 		protected List<FriendNewsItem> doInBackground(Void... params) {
 			List<FriendNewsItem> tmpFriendNewsItems = new ArrayList<FriendNewsItem>();
@@ -315,6 +324,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 			userInfoApi.setAlreadyRequested(itemsAlreadyRequested);
 			userInfoApi.setUserId(wcitiesId);
 			userInfoApi.setTracktype(Tracktype.event);
+			userInfoApi.setSrcFromNotification(addSrcFromNotification);
 
 			try {
 				JSONObject jsonObject = userInfoApi.getMyProfileInfoFor(Type.friendsfeed);

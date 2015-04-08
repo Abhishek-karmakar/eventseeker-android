@@ -69,11 +69,11 @@ public class NotificationUtil {
 		boolean isTablet = ((EventSeekr) context.getApplicationContext()).isTablet();
 		if (isTablet) {
 			notificationIntent = new Intent();
-			notificationIntent.putExtra(BundleKeys.IS_FROM_NOTIFICATION, true);
 			
 		} else {
 			notificationIntent = new Intent(context, MainActivity.class);			
 		}
+		notificationIntent.putExtra(BundleKeys.IS_FROM_NOTIFICATION, true);
 		/**
 		 * 18-09-2014: See Commit: removed launchmode=singletask due to error in Bosch
 		 * NOTE: added Action and Category of Launcher Activity for notification Intent so as to avoid

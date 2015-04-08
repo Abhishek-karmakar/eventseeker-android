@@ -118,6 +118,11 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 		}
 		loadEvents = new LoadMyEvents(Api.OAUTH_TOKEN, eventList, eventListAdapter, wcitiesId, loadType, 
 				latLon[0], latLon[1], this);
+		if (FragmentUtil.getActivity(this).getIntent().hasExtra(BundleKeys.IS_FROM_NOTIFICATION)
+				&& loadType == Type.recommendedevent) {
+			loadEvents.setAddSrcFromNotification(true);
+			FragmentUtil.getActivity(this).getIntent().removeExtra(BundleKeys.IS_FROM_NOTIFICATION);
+		}
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);
         AsyncTaskUtil.executeAsyncTask(loadEvents, true);
 	}

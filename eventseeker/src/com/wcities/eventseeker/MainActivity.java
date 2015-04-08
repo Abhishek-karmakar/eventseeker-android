@@ -379,7 +379,15 @@ public class MainActivity extends BaseActivity implements
 	protected void onNewIntent(Intent intent) {
 		//Log.d(TAG, "onNewIntent()");
 		super.onNewIntent(intent);
-		
+		if (intent.hasExtra(BundleKeys.IS_FROM_NOTIFICATION)) {
+			/**
+			 * we are setting 'IS_FROM_NOTIFICATION' value in current intent of this Activity.
+			 * Because we have to use it in Child Fragments of this Activity to send the
+			 * Notification related data in Google Analytics.
+			 */
+			getIntent().putExtra(BundleKeys.IS_FROM_NOTIFICATION, 
+					intent.getBooleanExtra(BundleKeys.IS_FROM_NOTIFICATION, true));
+		}
 		EventSeekr eventSeekr = (EventSeekr) getApplication();
 		if (eventSeekr.getWcitiesId() == null) {
 			
@@ -914,6 +922,8 @@ public class MainActivity extends BaseActivity implements
 			getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 			selectNonDrawerItem(new LauncherFragment(), AppConstants.FRAGMENT_TAG_LAUNCHER, 
 					getResources().getString(R.string.title_launcher), false);
+			/*GcmBroadcastReceiver.createDummyNotificationForTesting(this, NotificationType.SYNC_ACCOUNTS.ordinal() + "", 
+					"title", "msg");*/
 			break;
 			
 		default:

@@ -619,6 +619,10 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		loadEvents = new LoadEvents(Api.OAUTH_TOKEN, eventList, eventListAdapter, lat, lon, startDate, endDate, 
 				catTitlesAdapter.getSelectedCatId(), ((EventSeekr)FragmentUtil.getActivity(this)
 						.getApplicationContext()).getWcitiesId(), miles, this);
+		if (FragmentUtil.getActivity(this).getIntent().hasExtra(BundleKeys.IS_FROM_NOTIFICATION)) {
+			loadEvents.setAddSrcFromNotification(true);
+			FragmentUtil.getActivity(this).getIntent().removeExtra(BundleKeys.IS_FROM_NOTIFICATION);
+		}
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);
 		AsyncTaskUtil.executeAsyncTask(loadEvents, true);
 	}

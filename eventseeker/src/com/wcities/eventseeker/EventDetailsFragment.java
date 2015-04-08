@@ -9,7 +9,6 @@ import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -22,8 +21,6 @@ import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.ShareActionProvider;
-import android.support.v7.widget.ShareActionProvider.OnShareTargetSelectedListener;
 import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -50,7 +47,6 @@ import com.melnykov.fab.FloatingActionButton;
 import com.wcities.eventseeker.adapter.FeaturingArtistPagerAdapter;
 import com.wcities.eventseeker.adapter.FriendsRVAdapter;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
-import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker.Type;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
@@ -262,6 +258,10 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 				rootView.setBackgroundColor(Color.WHITE);
 				
 				loadEventDetails = new LoadEventDetails(Api.OAUTH_TOKEN, this, this, event);
+				if (FragmentUtil.getActivity(this).getIntent().hasExtra(BundleKeys.IS_FROM_NOTIFICATION)) {
+					loadEventDetails.setAddSrcFromNotification(true);
+					FragmentUtil.getActivity(this).getIntent().removeExtra(BundleKeys.IS_FROM_NOTIFICATION);
+				}
 				AsyncTaskUtil.executeAsyncTask(loadEventDetails, true);
 			}
 		}

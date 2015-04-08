@@ -217,16 +217,27 @@ public class ConnectAccountsFragmentTab extends ListFragmentLoadableFromBackStac
 				}
 			}
 		};
+		if (FragmentUtil.getActivity(this).getIntent().hasExtra(BundleKeys.IS_FROM_NOTIFICATION)) {
+			loadAvailableService.setAddSrcFromNotification(true);
+			FragmentUtil.getActivity(this).getIntent().removeExtra(BundleKeys.IS_FROM_NOTIFICATION);
+		}
 		AsyncTaskUtil.executeAsyncTask(loadAvailableService, true);
 	}
 	
 	private class LoadAvailableService extends AsyncTask<Void, Void, List<Service>> {
 
+		private boolean addSrcFromNotification;
+
+		public void setAddSrcFromNotification(boolean addSrcFromNotification) {
+			this.addSrcFromNotification = addSrcFromNotification;
+		}
+		
 		@Override
 		protected List<Service> doInBackground(Void... params) {
 			List<Service> list = new ArrayList<Service>();
 			try {
 				UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN);
+				userInfoApi.setSrcFromNotification(addSrcFromNotification);
 				JSONObject jsonObject = userInfoApi.getAvailableSyncServices();
 				
 				UserInfoApiJSONParser userInfoApiJSONParser = new UserInfoApiJSONParser();

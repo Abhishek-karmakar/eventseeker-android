@@ -107,6 +107,6 @@
     <dimen name="txt_margin_t_navigation">10dp</dimen>
     
      <!-- include_no_items_found_with_action.xml -->
-    <dimen name="img_no_content_w_all_fragments">500dp</dimen>
+    <dimen name="img_no_content_w_all_fragments">400dp</dimen>
     
 </resources>
