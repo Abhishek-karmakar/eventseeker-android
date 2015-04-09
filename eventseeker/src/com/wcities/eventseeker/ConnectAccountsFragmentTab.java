@@ -141,15 +141,7 @@ public class ConnectAccountsFragmentTab extends ListFragmentLoadableFromBackStac
 			
 			listAdapter = new AccountsListAdapter(FragmentUtil.getActivity(this));
 			
-			// following if condition in turn starts asynctask to generate wcitiesId if found null
-			/*if (((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId(this) != null) {
-				loadAvailableService();
-				
-			} else {
-				showProgress();
-			}*/
 			loadAvailableService();
-			//loadServiceAccountItems();
 			
 		} else {
 			listAdapter.setmInflater(FragmentUtil.getActivity(this));
@@ -588,10 +580,7 @@ public class ConnectAccountsFragmentTab extends ListFragmentLoadableFromBackStac
 	@Override
 	public void onTaskCompleted(Object... params) {
 		//Log.d(TAG, "onTaskCompleted()");
-		if (params.length == 0) {
-			loadAvailableService();
-			
-		} else if (params[0] instanceof String) {
+		if (params[0] instanceof String) {
 			//Log.d(TAG, "onTaskCompleted(), string");
 			String authToken = (String) params[0];
 			

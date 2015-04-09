@@ -50,6 +50,7 @@ import com.wcities.eventseeker.core.Category;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.core.registration.Registration.RegistrationListener;
+import com.wcities.eventseeker.gcm.GcmBroadcastReceiver;
 import com.wcities.eventseeker.gcm.GcmBroadcastReceiver.NotificationType;
 import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionDestination;
@@ -922,8 +923,6 @@ public class MainActivity extends BaseActivity implements
 			getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 			selectNonDrawerItem(new LauncherFragment(), AppConstants.FRAGMENT_TAG_LAUNCHER, 
 					getResources().getString(R.string.title_launcher), false);
-			/*GcmBroadcastReceiver.createDummyNotificationForTesting(this, NotificationType.SYNC_ACCOUNTS.ordinal() + "", 
-					"title", "msg");*/
 			break;
 			
 		default:

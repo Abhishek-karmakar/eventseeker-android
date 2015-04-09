@@ -69,6 +69,13 @@ public class GoogleAnalyticsTracker {
 			Tracker t = getTracker(eventSeekr, TrackerName.APP_TRACKER);
 			// Set screen name, where path is a String representing the screen name.
 			t.setScreenName(screenName);
+			/********************************** NOTE: ****************************************
+			 * Setting 'null' for below values is to reset these values. Otherwise, it would *
+			 * reuse the same values from previous tracking for these fields, as the same 	 *
+			 * Tracker is being used each time.												 *
+			 *********************************************************************************/
+			t.setPage(null);
+			t.setTitle(null);
 			// Send a screen view.
 			t.send(new HitBuilders.AppViewBuilder().build());
 		}

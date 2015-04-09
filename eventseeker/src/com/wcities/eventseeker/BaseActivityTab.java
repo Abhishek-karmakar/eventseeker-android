@@ -45,6 +45,8 @@ import com.wcities.eventseeker.constants.Enums.SettingsItem;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Venue;
+import com.wcities.eventseeker.gcm.GcmBroadcastReceiver;
+import com.wcities.eventseeker.gcm.GcmBroadcastReceiver.NotificationType;
 import com.wcities.eventseeker.interfaces.ActivityDestroyedListener;
 import com.wcities.eventseeker.interfaces.ArtistListenerTab;
 import com.wcities.eventseeker.interfaces.EventListenerTab;
@@ -692,6 +694,9 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		
 			case SYNC_ACCOUNTS:
 		    	intent = new Intent(getApplicationContext(), ConnectAccountsActivityTab.class);
+		    	if (getIntent().hasExtra(BundleKeys.IS_FROM_NOTIFICATION)) {
+		    		intent.putExtra(BundleKeys.IS_FROM_NOTIFICATION, true);
+		    	}
 		    	startActivity(intent);
 		    	break;
 		

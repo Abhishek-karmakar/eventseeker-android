@@ -139,15 +139,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			
 			listAdapter = new AccountsListAdapter(FragmentUtil.getActivity(this));
 			
-			// following if condition in turn starts asynctask to generate wcitiesId if found null
-			/*if (((EventSeekr)FragmentUtil.getActivity(this).getApplication()).getWcitiesId(this) != null) {
-				loadAvailableService();
-				
-			} else {
-				showProgress();
-			}*/
 			loadAvailableService();
-			//loadServiceAccountItems();
 			
 		} else {
 			listAdapter.setmInflater(FragmentUtil.getActivity(this));
@@ -193,6 +185,8 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				}
 			}
 		};
+		Log.d(TAG, "IS_FROM_NOTIFICATION : " + 
+				FragmentUtil.getActivity(this).getIntent().hasExtra(BundleKeys.IS_FROM_NOTIFICATION));
 		if (FragmentUtil.getActivity(this).getIntent().hasExtra(BundleKeys.IS_FROM_NOTIFICATION)) {
 			loadAvailableService.setAddSrcFromNotification(true);
 			FragmentUtil.getActivity(this).getIntent().removeExtra(BundleKeys.IS_FROM_NOTIFICATION);
@@ -627,10 +621,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 	@Override
 	public void onTaskCompleted(Object... params) {
 		//Log.d(TAG, "onTaskCompleted()");
-		if (params.length == 0) {
-			loadAvailableService();
-			
-		} else if (params[0] instanceof String) {
+		if (params[0] instanceof String) {
 			//Log.d(TAG, "onTaskCompleted(), string");
 			String authToken = (String) params[0];
 			
