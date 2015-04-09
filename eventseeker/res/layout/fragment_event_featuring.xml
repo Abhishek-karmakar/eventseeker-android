@@ -9,8 +9,7 @@
         android:id="@+id/lnrLayoutBtns"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="@dimen/lnr_layout_btns_margin_t_include_fragment_event_details_footer" />
+        android:layout_alignParentBottom="true" />
     
     <ListView android:id="@id/android:list"
 	    android:layout_width="match_parent"

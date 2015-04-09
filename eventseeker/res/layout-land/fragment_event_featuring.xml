@@ -9,31 +9,13 @@
         android:id="@+id/lnrLayoutBtns"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="@dimen/include_fragment_event_details_footer_margin_t_fragment_event_featuring" />
+        android:layout_alignParentBottom="true" />
     
     <ListView android:id="@id/android:list"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
         android:background="@android:color/white"
-		android:layout_above="@id/lnrLayoutBtns"
-		android:layout_marginLeft="@dimen/lnr_layout_artist_list_margin_l_fragment_event_featuring"
-	    android:layout_marginRight="@dimen/lnr_layout_artist_list_margin_r_fragment_event_featuring" />
-    
-    <!-- <ScrollView android:id="@+id/scrlVArtistList"
-        android:layout_width="match_parent"
-    	android:layout_height="match_parent"
-	    android:layout_above="@id/lnrLayoutBtns" >
-    	
-	    <LinearLayout android:id="@+id/lnrLayoutArtistList"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:orientation="vertical"
-	        android:background="@android:color/white"
-	        android:layout_marginLeft="@dimen/lnr_layout_artist_list_margin_l_fragment_event_featuring"
-	        android:layout_marginRight="@dimen/lnr_layout_artist_list_margin_r_fragment_event_featuring" />
-	    
-    </ScrollView> -->
+		android:layout_above="@id/lnrLayoutBtns" />
     
 </RelativeLayout>
 

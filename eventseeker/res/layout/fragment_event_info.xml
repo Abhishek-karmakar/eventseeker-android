@@ -12,8 +12,7 @@
 	    <include layout="@layout/include_fragment_event_details_footer"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:layout_alignParentBottom="true"
-	        android:layout_marginTop="@dimen/lnr_layout_btns_margin_t_include_fragment_event_details_footer" />
+	        android:layout_alignParentBottom="true" />
 	    
 	    <ScrollView android:id="@+id/scrlVContent"
 	        android:layout_width="match_parent"

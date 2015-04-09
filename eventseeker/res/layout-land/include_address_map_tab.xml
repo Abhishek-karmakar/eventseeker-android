@@ -7,9 +7,6 @@
     android:layout_marginTop="@dimen/rlt_desc_margin_t_include_desc"
     android:layout_weight="1"
     android:background="@drawable/story_space"
-    android:paddingBottom="@dimen/rlt_layout_evt_address_pad_fragment_event_info"
-    android:paddingLeft="@dimen/rlt_layout_evt_address_pad_fragment_event_info"
-    android:paddingRight="@dimen/rlt_layout_evt_address_pad_fragment_event_info"
     android:paddingTop="@dimen/rlt_layout_evt_address_pad_t_fragment_event_info" >
 
     <TextView

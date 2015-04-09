@@ -199,8 +199,6 @@
     <string name="eventseeker">eventseeker</string>
 
     <!-- Following/Follow Footer Text -->
-    <string name="footer_following">Following</string>
-    <string name="footer_follow">Follow</string>
     <string name="personalize_your_experience">Personalize your experience</string>
     <string name="sync_accounts_or_search_for_artists">Sync accounts or search for artists to start your personalized eventseeker experience.</string>
 

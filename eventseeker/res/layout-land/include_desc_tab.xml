@@ -14,9 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="end"
-        android:paddingBottom="@dimen/txt_evt_desc_pad_fragment_evt_info"
-        android:paddingLeft="@dimen/txt_evt_desc_pad_fragment_evt_info"
-        android:paddingRight="@dimen/txt_evt_desc_pad_fragment_evt_info"
         android:paddingTop="@dimen/txt_evt_desc_pad_t_fragment_evt_info"
         android:textSize="@dimen/txt_evt_desc_txt_size_fragment_evt_info" />
 
@@ -27,7 +24,6 @@
         android:layout_alignParentRight="true"
         android:layout_below="@id/txtDesc"
         android:layout_marginBottom="@dimen/img_down_margin_b_fragment_event_info"
-        android:layout_marginRight="@dimen/img_down_margin_r_fragment_evt_info"
         android:src="@drawable/down" />
 
 </RelativeLayout>

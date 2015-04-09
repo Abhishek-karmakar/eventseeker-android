@@ -9,9 +9,6 @@
     android:layout_marginTop="@dimen/rlt_layout_friends_margin_t_fragment_event_info"
     android:background="@drawable/story_space"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/rlt_layout_evt_address_pad_fragment_event_info"
-    android:paddingLeft="@dimen/rlt_layout_evt_address_pad_fragment_event_info"
-    android:paddingRight="@dimen/rlt_layout_evt_address_pad_fragment_event_info"
     android:paddingTop="@dimen/rlt_layout_evt_address_pad_t_fragment_event_info" >
 
     <TextView
@@ -23,23 +20,10 @@
         android:text="@string/friends_who_like"
         android:textSize="@dimen/txt_friends_txt_size_include_friends" />
 
-    <com.wcities.eventseeker.custom.view.ExpandableGridView
-        android:id="@+id/grdVFriends"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtFriends"
-        android:layout_marginLeft="@dimen/grd_v_friends_margin_l_fragment_event_info"
-        android:layout_marginRight="@dimen/grd_v_friends_margin_r_fragment_event_info"
-        android:columnWidth="@dimen/grd_v_friends_col_w_fragment_event_info"
-        android:horizontalSpacing="@dimen/grd_v_friends_hor_space_fragment_event_info"
-        android:numColumns="auto_fit"
-        android:stretchMode="spacingWidth" />
-
     <View
         android:id="@+id/vDivider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/v_divider_ht_fragment_event_info"
-        android:layout_below="@id/grdVFriends"
         android:background="@color/light_gray"
         android:visibility="gone" />
 

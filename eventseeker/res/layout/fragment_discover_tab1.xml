@@ -7,8 +7,8 @@
     android:layout_height="wrap_content" >
 
 </RelativeLayout>
-<!--
-<com.wcities.eventseeker.custom.view.ScrollViewContainingViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+
+<!-- <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res/com.wcities.eventseeker"
     android:id="@+id/scrlVRoot"
@@ -41,21 +41,7 @@
         
         </RelativeLayout>
 
-        <com.wcities.eventseeker.custom.view.ExpandableGridView
-            android:id="@+id/grdEvtCategories"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/ecoglryFeaturedEvt"
-            android:layout_alignRight="@id/ecoglryFeaturedEvt"
-            android:layout_below="@id/ecoglryFeaturedEvt"
-            android:layout_marginBottom="@dimen/grd_evt_categories_margin_b_discover"
-            android:background="@drawable/story_space"
-            android:horizontalSpacing="@dimen/grd_evt_categories_hor_space_discover"
-            android:numColumns="4"
-            android:padding="@dimen/grd_evt_categories_pad_discover"
-            android:verticalSpacing="@dimen/grd_evt_categories_ver_space_discover" />
     </RelativeLayout>
 
-</com.wcities.eventseeker.custom.view.ScrollViewContainingViewPager>
--->
+</ScrollView> -->
 

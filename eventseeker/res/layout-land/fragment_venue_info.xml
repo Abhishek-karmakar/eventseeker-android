@@ -19,10 +19,9 @@
 	    <include layout="@layout/include_venue_details_footer"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:layout_marginTop="@dimen/lnr_layout_btns_margin_t_include_fragment_event_details_footer"
 	        android:layout_alignParentBottom="true" />
 	    
-	    <com.wcities.eventseeker.custom.view.ScrollViewContainingViewPager android:id="@+id/scrlVContent"
+	    <ScrollView android:id="@+id/scrlVContent"
 	        android:layout_width="match_parent"
 		    android:layout_height="match_parent"
 		    android:layout_above="@id/lnrLayoutBtns" >
@@ -40,8 +39,7 @@
 		            android:layout_marginLeft="@dimen/lnr_layout_top_margin_l_fragment_event_info"
 		            android:layout_marginRight="@dimen/lnr_layout_top_margin_r_fragment_event_info" >
 		            
-		            <include layout="@layout/include_fragment_artist_details_img_artist"
-		                android:layout_width="0dp"
+		            <include android:layout_width="0dp"
 			            android:layout_height="wrap_content"
 			            android:layout_weight="1"
 			            android:layout_marginRight="@dimen/rlt_layout_img_evt_margin_r_fragment_event_info" />
@@ -54,15 +52,13 @@
 				    android:layout_width="match_parent"
 				    android:layout_height="wrap_content"
 				    android:background="@android:color/white"
-				    android:layout_marginTop="@dimen/rlt_layout_evt_desc_margin_t_fragment_event_info"
 				    android:layout_marginRight="@dimen/rlt_layout_img_evt_margin_r_fragment_event_info"
 				    android:layout_marginLeft="@dimen/layout_include_desc_margin_l_fragment_venue_info" >
 				 
 				 	<TextView android:id="@+id/txtDesc"
 				     	android:layout_width="match_parent"
 				     	android:layout_height="wrap_content"
-				     	android:ellipsize="end"
-				     	android:padding="@dimen/txt_evt_desc_pad_fragment_evt_info" />
+				     	android:ellipsize="end" />
 				 
 				 	<ImageView android:id="@+id/imgDown"
 				    	android:layout_width="wrap_content"
@@ -70,14 +66,13 @@
 				     	android:layout_below="@id/txtDesc"
 				     	android:src="@android:drawable/arrow_down_float"
 				     	android:layout_alignParentRight="true"
-				     	android:layout_marginRight="@dimen/img_down_margin_r_fragment_evt_info"
 				     	android:layout_marginBottom="@dimen/img_down_margin_b_fragment_event_info" />
 				
 				</RelativeLayout>
 		        
 		    </LinearLayout>
 		
-		</com.wcities.eventseeker.custom.view.ScrollViewContainingViewPager>
+		</ScrollView>
 		
 	</RelativeLayout>
     

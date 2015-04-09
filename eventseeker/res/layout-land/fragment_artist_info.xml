@@ -16,14 +16,12 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent" >
     
-	    <include layout="@layout/include_fragment_artist_details_footer"
-	        android:id="@+id/fragmentArtistDetailsFooter"
+	    <include android:id="@+id/fragmentArtistDetailsFooter"
 	        android:layout_width="match_parent"
 		    android:layout_height="wrap_content"
-		    android:layout_marginTop="@dimen/lnr_layout_btns_margin_t_include_fragment_event_details_footer"
 	        android:layout_alignParentBottom="true" />
 	    
-	    <com.wcities.eventseeker.custom.view.ScrollViewContainingViewPager android:id="@+id/scrlVContent"
+	    <ScrollView android:id="@+id/scrlVContent"
 	        android:layout_width="match_parent"
 		    android:layout_height="match_parent"
 		    android:layout_above="@id/fragmentArtistDetailsFooter" >
@@ -41,8 +39,7 @@
 		            android:layout_marginLeft="@dimen/lnr_layout_top_margin_l_fragment_event_info"
 		            android:layout_marginRight="@dimen/lnr_layout_top_margin_r_fragment_event_info" >
 		            
-		            <include layout="@layout/include_fragment_artist_details_img_artist"
-		                android:layout_width="0dp"
+		            <include android:layout_width="0dp"
 			            android:layout_height="wrap_content"
 			            android:layout_weight="1"
 			            android:layout_marginRight="@dimen/rlt_layout_img_evt_margin_r_fragment_event_info" />
@@ -52,10 +49,7 @@
 					    android:layout_height="match_parent"
 					    android:layout_weight="1"
 					    android:background="@drawable/story_space"
-					    android:orientation="vertical"
-					    android:paddingTop="@dimen/rlt_layout_videos_pad_fragment_artist_info"
-					    android:paddingLeft="@dimen/rlt_layout_videos_pad_fragment_artist_info"
-					    android:paddingRight="@dimen/rlt_layout_videos_pad_fragment_artist_info" >
+					    android:orientation="vertical" >
 					 
 					    <TextView android:id="@+id/txtVideos"
 							android:layout_width="match_parent"
@@ -103,7 +97,7 @@
 		        
 		    </LinearLayout>
 		
-		</com.wcities.eventseeker.custom.view.ScrollViewContainingViewPager>
+		</ScrollView>
 		
 	</RelativeLayout>
     

@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <com.wcities.eventseeker.custom.view.ScrollViewContainingViewPager
+        <ScrollView
             android:id="@+id/scrlVContent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -71,7 +71,6 @@
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
                             android:gravity="center"
-                            android:paddingLeft="@dimen/txt_artist_title_pad_l_include_fragment_artist_details_img_artist"
                             android:singleLine="true"
                             android:text="Artist Title"
                             android:textColor="@color/txt_evt_title_fragment_event_info_tab"
@@ -90,9 +89,7 @@
                             android:id="@+id/fragmentArtistDetailsFooter"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_marginTop="@dimen/lnr_layout_btns_margin_t_include_fragment_event_details_footer"
-                            layout="@layout/include_fragment_artist_details_footer" />
+                            android:layout_alignParentBottom="true" />
 
                         <LinearLayout
                             android:id="@+id/lnrBtnSocialNetworkingLinks"
@@ -168,7 +165,6 @@
                             android:id="@+id/txtVideos"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/rlt_layout_videos_pad_fragment_artist_info"
                             android:layout_marginBottom="@dimen/txt_videos_margin_b_fragment_artist_info"
                             android:text="@string/videos"
                             android:layout_alignParentTop="true"
@@ -199,7 +195,7 @@
 
                 <include layout="@layout/include_friends1" />
             </LinearLayout>
-        </com.wcities.eventseeker.custom.view.ScrollViewContainingViewPager>
+        </ScrollView>
     </RelativeLayout>
 
 </RelativeLayout>

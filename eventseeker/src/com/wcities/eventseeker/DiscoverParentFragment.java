@@ -29,7 +29,6 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Category;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
-import com.wcities.eventseeker.custom.view.ExpandableGridView;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -94,7 +93,7 @@ public abstract class DiscoverParentFragment extends FragmentLoadableFromBackSta
 
 		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
 				|| (((EventSeekr) FragmentUtil.getActivity(this).getApplicationContext()).isTablet())) {
-			((ExpandableGridView) grdEvtCategories).setExpanded(true);
+			//((ExpandableGridView) grdEvtCategories).setExpanded(true);
 		}
 
 		grdEvtCategories.setAdapter(evtCategoriesListAdapter);

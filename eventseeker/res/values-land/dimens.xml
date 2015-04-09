@@ -16,7 +16,6 @@
 
     <!-- fragment_discover.xml -->
     <dimen name="grd_evt_categories_margin_t_discover">@dimen/rlt_layout_featured_evts_parent_margin_discover</dimen>
-    <dimen name="grd_evt_categories_margin_b_discover">@dimen/rlt_layout_featured_evts_parent_margin_discover</dimen>
     <dimen name="grd_evt_categories_margin_r_discover">@dimen/rlt_layout_featured_evts_parent_margin_discover</dimen>
     <!-- v_pager_cat_titles_margin_t_discover = v_pager_cat_titles_margin_t_discover in portrait(160) - 
     (action_bar_ht in portrait(56) - action_bar_ht in landscape(48)) -->
@@ -63,13 +62,8 @@
     <dimen name="rlt_layout_img_evt_margin_r_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="rlt_layout_item_desc_min_ht_fragment_event_info">120dp</dimen>
     <dimen name="rlt_layout_evt_desc_margin_r_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="grd_v_friends_col_w_fragment_event_info">60dp</dimen>
-    <dimen name="img_down_margin_b_fragment_event_info">@dimen/img_down_margin_r_fragment_evt_info</dimen>
+    <dimen name="img_down_margin_b_fragment_event_info">8dp</dimen>
     <dimen name="img_evt_ht_fragment_event_info">190dp</dimen>
-
-    <!-- fragment_event_featuring.xml -->
-    <dimen name="lnr_layout_artist_list_margin_l_fragment_event_featuring">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="lnr_layout_artist_list_margin_r_fragment_event_featuring">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
 
     <!-- fragment_my_events_list_item.xml -->
     <dimen name="tbl_layout_evt_details_margin_l_fragment_my_events_list_item">18dp</dimen>

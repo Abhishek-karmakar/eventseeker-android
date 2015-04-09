@@ -48,7 +48,6 @@ import com.wcities.eventseeker.core.Friend;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.custom.fragment.PublishEventFragment;
-import com.wcities.eventseeker.custom.view.ExpandableGridView;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
 import com.wcities.eventseeker.util.FbUtil;
@@ -71,7 +70,7 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 	private Resources res;
 	private ProgressBar progressBar, progressBar2;
 	private ImageView imgEvt;
-	private ExpandableGridView grdVFriends;
+	//private ExpandableGridView grdVFriends;
 	private TextView txtViewAll;
 	private RelativeLayout rltLayoutEvtDesc, rltLayoutLoadedContent;
 	private TextView txtEvtDesc, txtAddress, txtEvtTime;
@@ -165,14 +164,14 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 
 		updateEventScheduleVisibility();
 		
-		grdVFriends = (ExpandableGridView) v.findViewById(R.id.grdVFriends);
+		//grdVFriends = (ExpandableGridView) v.findViewById(R.id.grdVFriends);
 		if (friendsGridAdapter == null) {
 			friendsGridAdapter = new FriendsGridAdapter();
 		}
-		if(isTablet) {
+		/*if(isTablet) {
 			grdVFriends.setNumColumns(MAX_FRIENDS_GRID);
 		}
-		grdVFriends.setAdapter(friendsGridAdapter);
+		grdVFriends.setAdapter(friendsGridAdapter);*/
 		
 		rltLayoutFriends = (RelativeLayout) v.findViewById(R.id.rltLayoutFriends);
 		txtViewAll = (TextView) v.findViewById(R.id.txtViewAll);
@@ -476,12 +475,12 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 		if (isFriendsGridExpanded) {
 			txtViewAll.setText(res.getString(R.string.txt_view_less));
 			imgRight.setImageResource(R.drawable.less);
-			grdVFriends.setExpanded(isFriendsGridExpanded);
+			//grdVFriends.setExpanded(isFriendsGridExpanded);
 			
 		} else {
 			txtViewAll.setText(res.getString(R.string.txt_view_all));
 			imgRight.setImageResource(R.drawable.down);
-			grdVFriends.setExpanded(isFriendsGridExpanded);
+			//grdVFriends.setExpanded(isFriendsGridExpanded);
 		}
 		
 		friendsGridAdapter.notifyDataSetChanged();
@@ -584,10 +583,10 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 				GridFriendHolder holder;
 
 				if (convertView == null || convertView.getTag() == null) {
-					convertView = LayoutInflater.from(FragmentUtil.getActivity(EventInfoFragment.this)).inflate(R.layout.grid_friend, null);
+					//convertView = LayoutInflater.from(FragmentUtil.getActivity(EventInfoFragment.this)).inflate(R.layout.grid_friend, null);
 					
 					holder = new GridFriendHolder();
-					holder.imgFriend = (ImageView) convertView.findViewById(R.id.imgFriend);
+					//holder.imgFriend = (ImageView) convertView.findViewById(R.id.imgFriend);
 					holder.txtFriendName = (TextView) convertView.findViewById(R.id.txtFriendName);
 					
 					convertView.setTag(holder);

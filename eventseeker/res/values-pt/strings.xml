@@ -142,8 +142,6 @@
     <string name="powered_by">Propulsionado por Wcities</string>
         
     <!-- Following/Follow Footer Text -->
-    <string name="footer_following">Seguindo</string>
-    <string name="footer_follow">Seguir</string>
     <string name="personalize_your_experience">Personalizzare sua esperienza</string>
     <string name="sync_accounts_or_search_for_artists">Sincronizar contas ou procura os artistas para personalizar sua experiencia eventseeker.</string>
     

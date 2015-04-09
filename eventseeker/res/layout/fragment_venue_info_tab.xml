@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <com.wcities.eventseeker.custom.view.ScrollViewContainingViewPager
+        <ScrollView
             android:id="@+id/scrlVContent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -130,7 +130,7 @@
                         android:minHeight="@dimen/frm_layout_map_container_ht_fragment_event_info" />
                 </LinearLayout>
             </LinearLayout>
-        </com.wcities.eventseeker.custom.view.ScrollViewContainingViewPager>
+        </ScrollView>
     </RelativeLayout>
 
 </RelativeLayout>

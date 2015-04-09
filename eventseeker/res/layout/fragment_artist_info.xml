@@ -16,14 +16,12 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent" >
     
-	    <include layout="@layout/include_fragment_artist_details_footer"
-	        android:id="@+id/fragmentArtistDetailsFooter"
+	    <include android:id="@+id/fragmentArtistDetailsFooter"
 	        android:layout_width="match_parent"
 		    android:layout_height="wrap_content"
-		    android:layout_marginTop="@dimen/lnr_layout_btns_margin_t_include_fragment_event_details_footer"
 	        android:layout_alignParentBottom="true" />
 	    
-	    <com.wcities.eventseeker.custom.view.ScrollViewContainingViewPager android:id="@+id/scrlVContent"
+	    <ScrollView android:id="@+id/scrlVContent"
 	        android:layout_width="match_parent"
 		    android:layout_height="match_parent"
 		    android:layout_above="@id/fragmentArtistDetailsFooter" >
@@ -32,8 +30,6 @@
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
 		        android:orientation="vertical" >
-		        
-		        <include layout="@layout/include_fragment_artist_details_img_artist"/>
 		        
 		        <ProgressBar android:id="@+id/progressBar2"
 			        android:layout_width="wrap_content"
@@ -48,10 +44,7 @@
 		            android:layout_height="wrap_content"
 		        	android:layout_marginTop="@dimen/rlt_layout_videos_margin_t_fragment_artist_info"
 				    android:background="@drawable/story_space"
-				    android:orientation="vertical"
-				    android:paddingTop="@dimen/rlt_layout_videos_pad_fragment_artist_info"
-				    android:paddingLeft="@dimen/rlt_layout_videos_pad_fragment_artist_info"
-				    android:paddingRight="@dimen/rlt_layout_videos_pad_fragment_artist_info" >
+				    android:orientation="vertical" >
 				 
 				    <TextView android:id="@+id/txtVideos"
 						android:layout_width="match_parent"
@@ -84,7 +77,7 @@
 		        
 		    </LinearLayout>
 		
-		</com.wcities.eventseeker.custom.view.ScrollViewContainingViewPager>
+		</ScrollView>
 		
 	</RelativeLayout>
     

@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="@dimen/lnr_layout_btns_margin_t_include_fragment_event_details_footer"
         layout="@layout/include_fragment_event_details_footer_tab"
         android:visibility="gone" />
 
@@ -19,8 +18,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/lnrLayoutBtns"
-        android:layout_marginLeft="@dimen/lnr_layout_artist_list_margin_l_fragment_event_featuring"
-        android:layout_marginRight="@dimen/lnr_layout_artist_list_margin_r_fragment_event_featuring"
         android:background="@android:color/white" />
 
     <!--

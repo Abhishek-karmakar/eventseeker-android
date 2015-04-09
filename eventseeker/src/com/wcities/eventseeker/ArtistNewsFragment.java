@@ -12,8 +12,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.wcities.eventseeker.ArtistDetailsFragment1.ArtistDetailsFragmentListener;
-import com.wcities.eventseeker.ArtistDetailsFragment1.FooterTxt;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
@@ -24,7 +22,7 @@ import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.util.FragmentUtil;
 
-public class ArtistNewsFragment extends Fragment implements ArtistDetailsFragmentListener, OnClickListener {
+public class ArtistNewsFragment extends Fragment implements OnClickListener {
 
 	private static final String TAG = ArtistNewsFragment.class.getName();
 
@@ -52,8 +50,8 @@ public class ArtistNewsFragment extends Fragment implements ArtistDetailsFragmen
         	addArtistNewsListFragment();
         }
         
-        imgFollow = (ImageView) v.findViewById(R.id.imgFollow);
-		txtFollow = (TextView) v.findViewById(R.id.txtFollow);
+        //imgFollow = (ImageView) v.findViewById(R.id.imgFollow);
+		//txtFollow = (TextView) v.findViewById(R.id.txtFollow);
 		fragmentArtistDetailsFooter = (RelativeLayout) v.findViewById(R.id.fragmentArtistDetailsFooter);
 		fragmentArtistDetailsFooter.setOnClickListener(this);
 		
@@ -86,13 +84,13 @@ public class ArtistNewsFragment extends Fragment implements ArtistDetailsFragmen
 			switch (artist.getAttending()) {
 
 			case Tracked:
-				imgFollow.setImageDrawable(getResources().getDrawable(R.drawable.following));
-				txtFollow.setText(FooterTxt.Following.getStringForm(this));
+				//imgFollow.setImageDrawable(getResources().getDrawable(R.drawable.following));
+				txtFollow.setText("");
 				break;
 
 			case NotTracked:
-				imgFollow.setImageDrawable(getResources().getDrawable(R.drawable.follow));
-				txtFollow.setText(FooterTxt.Follow.getStringForm(this));
+				//imgFollow.setImageDrawable(getResources().getDrawable(R.drawable.follow));
+				txtFollow.setText("");
 				break;
 
 			default:
@@ -119,7 +117,7 @@ public class ArtistNewsFragment extends Fragment implements ArtistDetailsFragmen
 				new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.artist, artist.getId(), 
 						Attending.NotTracked.getValue(), UserTrackingType.Edit).execute();
 			}
-			((ArtistDetailsFragment1) getParentFragment()).onArtistFollowingUpdated();
+			//((ArtistDetailsFragment1) getParentFragment()).onArtistFollowingUpdated();
 			break;
 			
 		default:
@@ -127,7 +125,7 @@ public class ArtistNewsFragment extends Fragment implements ArtistDetailsFragmen
 		}
 	}
 
-	@Override
+	/*@Override
 	public void onArtistUpdatedByArtistDetailsFragment() {
 		updateFollowingFooter();
 	}
@@ -135,7 +133,7 @@ public class ArtistNewsFragment extends Fragment implements ArtistDetailsFragmen
 	@Override
 	public void onArtistFollowingUpdated() {
 		updateFollowingFooter();
-	}
+	}*/
 	
 	
 	public void changeRltDummyLytVisibility(int visibility) {

@@ -4,9 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/story_space"
-    android:paddingBottom="@dimen/rlt_layout_evt_address_pad_fragment_event_info"
-    android:paddingLeft="@dimen/rlt_layout_evt_address_pad_fragment_event_info"
-    android:paddingRight="@dimen/rlt_layout_evt_address_pad_fragment_event_info"
     android:paddingTop="@dimen/rlt_layout_evt_address_pad_t_fragment_event_info" >
 
     <TextView
