@@ -26,7 +26,6 @@
 			android:layout_height="wrap_content"
 			android:textColor="@android:color/white"
 			android:text="Event Title"
-			android:textSize="@dimen/txt_evt_title_txt_size_include_fragment_event_details_img_evt"
 			android:layout_marginLeft="@dimen/txt_evt_title_margin_l_include_fragment_event_details_img_evt"
 			android:maxLines="2"
 			android:ellipsize="end" />

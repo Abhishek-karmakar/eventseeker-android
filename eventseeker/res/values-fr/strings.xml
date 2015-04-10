@@ -109,10 +109,6 @@
     <string name="connecting_account_allow_us">La connexion à votre compte nous permet de vous envoyer des alertes pertinentes et instantanées.</string>    
     <string name="follow_your_favorite_Artists">Suivez vos artistes préférés et recevez des nouvelles sur des événements en synchronisant les comptes suivants:</string>    
     
-    <!-- include_friends.xml -->
-    <string name="txt_view_all">Afficher Tous</string>
-    <string name="txt_view_less">Afficher Moins</string>
-
     <!-- fragment_device_library.xml -->
     <string name="txt_service_desc_txt_fragment_device_library">Voudriez-vous que l’application cherche votre bibliothèque de musique pour les artistes qui vous-pouvez suivre? Les artistes se mettront sous la section « Suivant ».</string>
     <string name="retrieve_artists">Rechercher des Artistes</string>

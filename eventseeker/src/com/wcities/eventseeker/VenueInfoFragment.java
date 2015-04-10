@@ -218,7 +218,7 @@ public class VenueInfoFragment extends Fragment implements OnClickListener, Asyn
 		txtDesc.setMaxLines(Integer.MAX_VALUE);
 		txtDesc.setEllipsize(null);
 		
-		imgDown.setImageDrawable(getResources().getDrawable(R.drawable.less));
+		//imgDown.setImageDrawable(getResources().getDrawable(R.drawable.less));
 
 		isVenueDescExpanded = true;
 	}
@@ -229,7 +229,7 @@ public class VenueInfoFragment extends Fragment implements OnClickListener, Asyn
 		txtDesc.setMaxLines(maxLines);
 		txtDesc.setEllipsize(TruncateAt.END);
 		
-		imgDown.setImageDrawable(getResources().getDrawable(R.drawable.down));
+		//imgDown.setImageDrawable(getResources().getDrawable(R.drawable.down));
 		
 		isVenueDescExpanded = false;
 	}

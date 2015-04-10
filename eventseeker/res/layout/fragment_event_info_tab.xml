@@ -34,8 +34,7 @@
                     <RelativeLayout android:id="@+id/rltLytImgEvt"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                       	android:padding="@dimen/img_evt_margin_fragment_event_info" >
+                        android:layout_weight="1" >
 
 	                    <ImageView android:id="@+id/imgEvt"
 	                        android:layout_width="match_parent"
@@ -54,8 +53,6 @@
                         android:id="@+id/rltLayoutEvtInfo"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_marginBottom="@dimen/img_evt_margin_fragment_event_info"
-                        android:layout_marginRight="@dimen/rlt_evt_info_margin_r_fragment_event_details_img_evt"
                         android:layout_marginTop="@dimen/rlt_evt_info_margin_t_b_fragment_event_details_img_evt"
                         android:layout_weight="1"
                         android:orientation="vertical" >
@@ -66,15 +63,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="0.24"
-                            android:gravity="center"
-                            android:textColor="@color/txt_evt_title_fragment_event_info_tab"
-                            android:textSize="@dimen/txt_evt_title_txt_size_include_fragment_event_details_img_evt" />
+                            android:gravity="center" />
 
                         <View
                             android:id="@+id/vDivider"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/v_divider_ht_fb_login"
-                            android:background="@drawable/info_divider" />
+                            android:layout_width="match_parent" />
 
                         <TextView
                             android:id="@+id/txtVenue"
@@ -84,7 +77,6 @@
                             android:layout_weight="0.21"
                             android:gravity="center"
                             android:maxLines="2"
-                            android:textColor="@color/txt_evt_title_fragment_event_info_tab"
                             android:textSize="@dimen/txt_evt_time_txt_size_include_fragment_event_details_img_evt" />
 
                         <TextView
@@ -95,7 +87,6 @@
                             android:layout_weight="0.15"
                             android:gravity="center"
                             android:maxLines="2"
-                            android:textColor="@color/txt_evt_title_fragment_event_info_tab"
                             android:textSize="@dimen/txt_evt_time_txt_size_include_fragment_event_details_img_evt" />
 
                         <LinearLayout
@@ -177,16 +168,13 @@
                     android:id="@+id/lnrEventDescAndMap"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/lnr_event_desc_and_map_margin_l_r_fragment_event_info"
-                    android:layout_marginRight="@dimen/lnr_event_desc_and_map_margin_l_r_fragment_event_info"
                     android:layout_marginTop="@dimen/v_margin_t_b_fragment_venue_info"
                     android:orientation="vertical" >
 
                     <include
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/v_margin_t_b_fragment_venue_info"
-                        layout="@layout/include_desc_tab" />
+                        android:layout_marginBottom="@dimen/v_margin_t_b_fragment_venue_info" />
 
                     <include
                         android:layout_width="match_parent"
@@ -194,7 +182,6 @@
                         layout="@layout/include_address_map_tab" />
                 </LinearLayout>
 
-                <include layout="@layout/include_friends1" />
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>

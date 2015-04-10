@@ -166,10 +166,6 @@
     <string name="connecting_account_allow_us">Connecting accounts allows us to provide relevant alerts instantly.</string>    
     <string name="follow_your_favorite_Artists">Follow your favorite artists and get updates on events by syncing any of the following.</string>    
     
-    <!-- include_friends.xml -->
-    <string name="txt_view_all">View All</string>
-    <string name="txt_view_less">View Less</string>
-
     <!-- fragment_device_library.xml -->
     <string name="txt_service_desc_txt_fragment_device_library">Would you like the application to search your music library for artists that you can then follow? The artists will be placed under the \"Following\" section?</string>
     <string name="retrieve_artists">Retrieve Artists</string>

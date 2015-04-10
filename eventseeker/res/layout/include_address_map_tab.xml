@@ -3,8 +3,7 @@
     android:id="@+id/rltLayoutAddress"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/story_space"
-    android:paddingTop="@dimen/rlt_layout_evt_address_pad_t_fragment_event_info" >
+    android:background="@drawable/story_space" >
 
     <TextView
         android:id="@+id/txtAddress"

@@ -109,10 +109,6 @@
     <string name="connecting_account_allow_us">La conexión de las cuentas nos deja proporcionar las alertas relevantes de forma instantánea.</string>    
     <string name="follow_your_favorite_Artists">Sigue sus artistas favoritos y obtenga las actualizaciones de evento con la sincronización desde alguno de lo siguiente: </string>    
     
-    <!-- include_friends.xml -->
-    <string name="txt_view_all">Ver todos</string>
-    <string name="txt_view_less">Ver menos</string>
-
     <!-- fragment_device_library.xml -->
     <string name="txt_service_desc_txt_fragment_device_library">¿Te gustaría que la aplicación buscara a los distintos artistas de tu lista de reproducciones para que los puedas seguir? Se irán almacenando en la sección "Siguiendo".</string>
     <string name="retrieve_artists">Recuperar los artistas</string>

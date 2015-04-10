@@ -55,14 +55,7 @@
     <dimen name="tab_content_frame_margin_t_fragment_custom_tabs">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
 
     <!-- fragment_event_info.xml -->
-    <dimen name="lnr_layout_top_margin_l_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="lnr_layout_top_margin_r_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="lnr_layout_btm_margin_l_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="lnr_layout_btm_margin_r_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="rlt_layout_img_evt_margin_r_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="rlt_layout_item_desc_min_ht_fragment_event_info">120dp</dimen>
     <dimen name="rlt_layout_evt_desc_margin_r_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="img_down_margin_b_fragment_event_info">8dp</dimen>
     <dimen name="img_evt_ht_fragment_event_info">190dp</dimen>
 
     <!-- fragment_my_events_list_item.xml -->
@@ -113,12 +106,8 @@
     <!-- fragment_rep_code.xml -->
     <dimen name="img_rep_code_margin_t_fragment_rep_code">20dp</dimen>
 
-    <!-- fragment_artist_info.xml -->
-    <dimen name="view_pager_margin_l_fragment_artist_info">5dp</dimen>
-    <dimen name="view_pager_margin_r_fragment_artist_info">@dimen/view_pager_margin_l_fragment_artist_info</dimen>
-
     <!-- fragment_venue_info -->
-    <dimen name="layout_include_desc_margin_l_fragment_venue_info">@dimen/rlt_layout_img_evt_margin_r_fragment_event_info</dimen>
+    <dimen name="layout_include_desc_margin_l_fragment_venue_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
 
     <!-- fragment_sync_account.xml -->
     <dimen name="v_dummy_ht_fragment_sync_account">10dp</dimen>

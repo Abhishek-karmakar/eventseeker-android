@@ -109,10 +109,6 @@
     <string name="connecting_account_allow_us">Verbinden von Accounts hilft bei der Bereitstellung von direkten, relevanten Benachrichtigungen.</string>    
     <string name="follow_your_favorite_Artists">Folgen Sie Ihren Lieblingskünstlern und erhalten Sie Updates über Veranstaltungen durch synchronisieren der folgenden.</string>    
     
-    <!-- include_friends.xml -->
-    <string name="txt_view_all">Alle zeigen</string>
-    <string name="txt_view_less">Zeig weniger</string>
-
     <!-- fragment_device_library.xml -->
     <string name="txt_service_desc_txt_fragment_device_library">Möchtest du, dass die Applikation in Deine Musik-Datenbank nach Künstlern sucht, denen Du dann folgen kannst? Die Künstler werden unter "Folgen" aufgeführt.</string>
     <string name="retrieve_artists">Künstler wieder aufrufen</string>

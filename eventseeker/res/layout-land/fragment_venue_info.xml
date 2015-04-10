@@ -35,14 +35,11 @@
 		            android:layout_width="match_parent"
 		            android:layout_height="wrap_content"
 		            android:orientation="horizontal"
-		            android:baselineAligned="false"
-		            android:layout_marginLeft="@dimen/lnr_layout_top_margin_l_fragment_event_info"
-		            android:layout_marginRight="@dimen/lnr_layout_top_margin_r_fragment_event_info" >
+		            android:baselineAligned="false" >
 		            
 		            <include android:layout_width="0dp"
 			            android:layout_height="wrap_content"
-			            android:layout_weight="1"
-			            android:layout_marginRight="@dimen/rlt_layout_img_evt_margin_r_fragment_event_info" />
+			            android:layout_weight="1" />
 		            
 		            <include layout="@layout/include_address_map1" />
 		            
@@ -52,7 +49,6 @@
 				    android:layout_width="match_parent"
 				    android:layout_height="wrap_content"
 				    android:background="@android:color/white"
-				    android:layout_marginRight="@dimen/rlt_layout_img_evt_margin_r_fragment_event_info"
 				    android:layout_marginLeft="@dimen/layout_include_desc_margin_l_fragment_venue_info" >
 				 
 				 	<TextView android:id="@+id/txtDesc"
@@ -65,8 +61,7 @@
 				     	android:layout_height="wrap_content"
 				     	android:layout_below="@id/txtDesc"
 				     	android:src="@android:drawable/arrow_down_float"
-				     	android:layout_alignParentRight="true"
-				     	android:layout_marginBottom="@dimen/img_down_margin_b_fragment_event_info" />
+				     	android:layout_alignParentRight="true" />
 				
 				</RelativeLayout>
 		        

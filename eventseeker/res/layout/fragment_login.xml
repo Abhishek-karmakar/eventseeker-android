@@ -143,7 +143,6 @@
                     android:layout_marginTop="@dimen/mar_t_get_started_fragment"
                     android:enabled="false"
                     android:text="@string/sign_in" />
-                <!-- android:background="@drawable/slctr_btn_login_default_grey_pressed_blue_rounded" -->
 
                 <Button
                     android:id="@+id/btnForgotPassword"

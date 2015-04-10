@@ -173,9 +173,9 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 		}
 		grdVFriends.setAdapter(friendsGridAdapter);*/
 		
-		rltLayoutFriends = (RelativeLayout) v.findViewById(R.id.rltLayoutFriends);
+		/*rltLayoutFriends = (RelativeLayout) v.findViewById(R.id.rltLayoutFriends);
 		txtViewAll = (TextView) v.findViewById(R.id.txtViewAll);
-		imgRight = (ImageView) v.findViewById(R.id.imgRight);
+		imgRight = (ImageView) v.findViewById(R.id.imgRight);*/
 		
 		updateFriendsVisibility();
 		
@@ -421,10 +421,10 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 				rltLayoutFriends.setVisibility(View.VISIBLE);
 
 				if (event.getFriends().size() > MAX_FRIENDS_GRID) {
-					RelativeLayout rltLayoutViewAll = 
+					/*RelativeLayout rltLayoutViewAll = 
 							(RelativeLayout) rltLayoutFriends.findViewById(R.id.rltLayoutViewAll);
 					rltLayoutViewAll.setVisibility(View.VISIBLE);
-					rltLayoutViewAll.setOnClickListener(this);
+					rltLayoutViewAll.setOnClickListener(this);*/
 
 					expandOrCollapseFriendsGrid();
 				}
@@ -438,10 +438,10 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 				rltLayoutFriends.setVisibility(View.VISIBLE);
 
 				if (event.getFriends().size() > MAX_FRIENDS_GRID) {
-					RelativeLayout rltLayoutViewAll = 
+					/*RelativeLayout rltLayoutViewAll = 
 							(RelativeLayout) rltLayoutFriends.findViewById(R.id.rltLayoutViewAll);
 					rltLayoutViewAll.setVisibility(View.VISIBLE);
-					rltLayoutViewAll.setOnClickListener(this);
+					rltLayoutViewAll.setOnClickListener(this);*/
 
 					expandOrCollapseFriendsGrid();
 				}
@@ -473,13 +473,13 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 	
 	private void expandOrCollapseFriendsGrid() {
 		if (isFriendsGridExpanded) {
-			txtViewAll.setText(res.getString(R.string.txt_view_less));
-			imgRight.setImageResource(R.drawable.less);
+			//txtViewAll.setText(res.getString(R.string.txt_view_less));
+			//imgRight.setImageResource(R.drawable.less);
 			//grdVFriends.setExpanded(isFriendsGridExpanded);
 			
 		} else {
-			txtViewAll.setText(res.getString(R.string.txt_view_all));
-			imgRight.setImageResource(R.drawable.down);
+			//txtViewAll.setText(res.getString(R.string.txt_view_all));
+			//imgRight.setImageResource(R.drawable.down);
 			//grdVFriends.setExpanded(isFriendsGridExpanded);
 		}
 		
@@ -510,7 +510,7 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 		txtEvtDesc.setMaxLines(Integer.MAX_VALUE);
 		txtEvtDesc.setEllipsize(null);
 		
-		imgDown.setImageDrawable(res.getDrawable(R.drawable.less));
+		//imgDown.setImageDrawable(res.getDrawable(R.drawable.less));
 
 		isEvtDescExpanded = true;
 	}
@@ -521,7 +521,7 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 		txtEvtDesc.setMaxLines(maxLines);
 		txtEvtDesc.setEllipsize(TruncateAt.END);
 		
-		imgDown.setImageDrawable(res.getDrawable(R.drawable.down));
+		//imgDown.setImageDrawable(res.getDrawable(R.drawable.down));
 		
 		isEvtDescExpanded = false;
 	}
@@ -664,10 +664,10 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 			}
 			break;
 			
-		case R.id.rltLayoutViewAll:
+		/*case R.id.rltLayoutViewAll:
 			isFriendsGridExpanded = !isFriendsGridExpanded;
 			expandOrCollapseFriendsGrid();
-			break;
+			break;*/
 			
 		case R.id.lnrLayoutTickets:
 			Bundle args = new Bundle();

@@ -9,22 +9,9 @@
     <dimen name="img_item_h_fragment_search_artists_list_item">190dp</dimen>
     <dimen name="txt_on_tour_pad_l_r_fragment_search_artists_list_item">35dp</dimen>
 
-    <!-- include_desc.xml -->
-    <dimen name="rlt_desc_margin_r_include_desc">20dp</dimen>
-
-    <!-- include_address_map_tab.xml -->
-    <dimen name="rlt_desc_margin_l_include_desc">0dp</dimen>
-
     <!-- fragment_event_info.xml -->
     <dimen name="lnr_layout_top_margin_l_r_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="lnr_event_desc_and_map_margin_l_r_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="lnr_layout_btm_margin_l_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="lnr_layout_btm_margin_r_fragment_event_info">@dimen/lnr_layout_btm_margin_l_fragment_event_info</dimen>
     <dimen name="img_evt_ht_fragment_event_info">320dp</dimen>
-
-    <!-- fragment_artist_info.xml -->
-    <dimen name="lnr_layout_top_margin_l_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="lnr_layout_top_margin_r_fragment_event_info">@dimen/lnr_layout_top_margin_l_fragment_event_info</dimen>
 
     <!-- include_fragment_event_details_footer.xml -->
     <dimen name="lnr_layout_btns_txt_size_include_fragment_event_details_footer">20sp</dimen>
@@ -41,7 +28,6 @@
 
     <!-- include_video.xml -->
     <dimen name="root_rlt_layout_pad_r_frag_video_tab">13dp</dimen>
-    <dimen name="img_video_ht_fragment_video">350dp</dimen>
     <dimen name="img_video_h_fragment_video">300dp</dimen>
 
     <!-- fragment_venue_info_tab.xml -->

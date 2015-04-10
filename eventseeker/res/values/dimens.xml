@@ -229,7 +229,6 @@
     <!-- fragment_get_started.xml -->
     <dimen name="rlt_lyt_root_pad_b_get_started">20dp</dimen>
     <dimen name="rlt_lyt_root_pad_l_r_get_started">20dp</dimen>
-    <dimen name="v_divider_ht_fb_login">1dp</dimen>
     <dimen name="btn_fb_sign_up_ht_fb_login">35dp</dimen>
     <dimen name="all_components_margin_t_get_started">30dp</dimen>
     <dimen name="txt_size_fb_google_btn_get_started">16sp</dimen>
@@ -310,15 +309,11 @@
     <dimen name="v_dummy_address_ht_fragment_event_info">20dp</dimen>
     <dimen name="txt_address_margin_b_fragment_event_info">5dp</dimen>
     <dimen name="txt_address_txt_size_fragment_event_info">16sp</dimen>
-    <dimen name="rlt_layout_friends_margin_t_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="txt_friends_margin_b_fragment_event_info">@dimen/txt_address_margin_b_fragment_event_info</dimen>
-    <dimen name="v_divider_ht_fragment_event_info">1dp</dimen>
     <!-- fragment_event_featuring.xml -->
     <dimen name="lnr_layout_artist_list_margin_t_fragment_event_featuring">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="lnr_layout_artist_list_pad_fragment_event_featuring">3dp</dimen>
     <!-- include_fragment_event_details_img_evt.xml -->
     <dimen name="img_evt_ht_include_fragment_event_details_img_evt">220dp</dimen>
-    <dimen name="txt_evt_title_txt_size_include_fragment_event_details_img_evt">20sp</dimen>
     <dimen name="txt_evt_title_margin_l_include_fragment_event_details_img_evt">6dp</dimen>
     <dimen name="txt_evt_time_txt_size_include_fragment_event_details_img_evt">14sp</dimen>
     <!-- include_fragment_event_details_footer.xml -->
@@ -427,13 +422,6 @@
     <!-- fragment_artist_info.xml -->
     <dimen name="rlt_layout_artist_desc_margin_t_fragment_artist_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
     <dimen name="img_down_margin_r_fragment_artist_info">8dp</dimen>
-    <dimen name="rlt_layout_videos_margin_t_fragment_artist_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
-    <dimen name="txt_videos_margin_b_fragment_artist_info">@dimen/txt_address_margin_b_fragment_event_info</dimen>
-    <dimen name="txt_videos_txt_size_fragment_artist_info">16sp</dimen>
-    <dimen name="page_indicator_pad_fragment_artist_info">8dp</dimen>
-    <dimen name="page_indicator_radius_fragment_artist_info">5dp</dimen>
-    <dimen name="page_indicator_stroke_w_fragment_artist_info">1dp</dimen>
-    <dimen name="view_pager_ht_fragment_artist_info">200dp</dimen>
     <!-- fragment_venue_events.xml -->
     <dimen name="lnr_layout_btns_margin_t_fragment_venue_events">0dp</dimen>
     <!-- widget_info.xml -->
@@ -839,15 +827,6 @@
     <!-- bosch_fragment_change_city_list_item_city -->
     <dimen name="b_txt_cities_margin_l_r_bosch_fragment_change_city_list_item_city">10dp</dimen>
     <dimen name="b_txt_cities_drw_pad_bosch_fragment_change_city_list_item_city">@dimen/b_txt_cities_margin_l_r_bosch_fragment_change_city_list_item_city</dimen>
-    <!-- fragment_bosch_settings -->
-    <dimen name="b_v_divider_h_fragment_bosch_settings">1dp</dimen>
-    <dimen name="b_rlt_root_lyt_pad_fragment_bosch_settings">10dp</dimen>
-    <dimen name="b_btn_continue_txt_size_fragment_bosch_settings">@dimen/b_txt_size_fragment_bosch_change_city</dimen>
-    <dimen name="b_txt_account_results_pad_fragment_bosch_settings">1dp</dimen>
-    <dimen name="b_btn_txt_size_fragment_bosch_settings">12sp</dimen>
-    <dimen name="b_btn_drw_pad_fragment_bosch_settings">8dp</dimen>
-    <dimen name="b_lnr_account_margin_t_b_fragment_bosch_settings">10dp</dimen>
-    <dimen name="b_btn_logIn_margin_t_b_fragment_bosch_settings">10dp</dimen>
     <!-- fragment_bosch_venue_info -->
     <dimen name="b_txt_size_fragment_bosch_info">15sp</dimen>
     <dimen name="b_rlt_root_lyt_fragment_bosch_info">10dp</dimen>

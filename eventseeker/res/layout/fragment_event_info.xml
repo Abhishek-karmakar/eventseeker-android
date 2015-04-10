@@ -32,11 +32,7 @@
 			        android:layout_gravity="center_horizontal"
 			        android:visibility="gone" />
 		        
-		        <include layout="@layout/include_desc" />
-		        
 		        <include layout="@layout/include_address_map1" />
-		        
-		        <include layout="@layout/include_friends1" />
 		        
 		    </LinearLayout>
 		

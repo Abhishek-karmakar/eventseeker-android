@@ -21,7 +21,6 @@
 	<color name="btn_white_pressed">#EDEDED</color>
 
     <color name="silver">#c0c0c0</color>
-	<color name="light_gray">#f6f6f6</color>
 	<color name="dark_gray">#eeeeee</color>
 	<color name="transparent">#00000000</color>
 
@@ -84,7 +83,6 @@
 	<color name="txt_color_include_fragment_event_details_footer_tab">#666666</color>
 	<color name="txt_color_include_fragment_vaenu_details_footer_tab">#666666</color>	
 	
-	<color name="txt_evt_title_fragment_event_info_tab">#666666</color>
 	<color name="txt_evt_time_widget_layout">#ddd</color>
 	
 	<color name="txt_no_items_heading_txt_color_include_no_items_found_with_action">#666</color>
@@ -116,7 +114,6 @@
 	
 	<color name="edt_search_bg_bosch_change_city_fragment">#f0f0f0</color>
 	
-	<color name="txt_signed_in_as_bg_fragment_preferences">#f0f0f0</color>
 	<color name="txt_signed_in_as_bg_fragment_preferences_night_mode">#666</color>
 	
 	<color name="v_divider_fragment_preferences">#9a9a9a</color>
