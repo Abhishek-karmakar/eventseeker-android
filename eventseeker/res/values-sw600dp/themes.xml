@@ -4,6 +4,7 @@
 	
 	<style name="Theme.EventSeeker.TranslucentWindow" parent="@style/Theme.EventSeekr">
         <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
         <!-- not using windowElevation, since it darkens the shadow color on orientation change -->
         <!-- <item name="android:windowElevation">8dp</item> -->
         
