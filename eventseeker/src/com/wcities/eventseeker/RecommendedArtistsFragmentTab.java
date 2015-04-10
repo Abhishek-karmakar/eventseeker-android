@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView.RecyclerListener;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -84,6 +83,7 @@ public class RecommendedArtistsFragmentTab extends PublishArtistFragment impleme
 	private Artist artistToBeSaved;
 	
 	private View /*rltFollowAll,*/ rltLayoutRoot;
+	private ImageView imgPrgOverlay;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -133,6 +133,7 @@ public class RecommendedArtistsFragmentTab extends PublishArtistFragment impleme
 
 		rltLayoutRoot = v.findViewById(R.id.rltLayoutRoot);
 		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
+		imgPrgOverlay = (ImageView) rltLytPrgsBar.findViewById(R.id.imgPrgOverlay);
 		
 		v.findViewById(R.id.btnSyncAccounts).setOnClickListener(this);
 		v.findViewById(R.id.btnPopularArtists).setOnClickListener(this);
@@ -393,16 +394,16 @@ public class RecommendedArtistsFragmentTab extends PublishArtistFragment impleme
 
 	@Override
 	public void displayFullScrnProgress() {
-		rltLytPrgsBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
 		rltLytPrgsBar.setVisibility(View.VISIBLE);
+		imgPrgOverlay.setVisibility(View.VISIBLE);
 	}
 
 	@Override
 	public void onTaskCompleted(Void... params) {
-		//Log.d(TAG, "onTaskCompleted");
 		// free up memory
-		rltLytPrgsBar.setBackgroundResource(0);
-		rltLytPrgsBar.setVisibility(View.INVISIBLE);
+		imgPrgOverlay.setBackgroundResource(0);
+		imgPrgOverlay.setVisibility(View.GONE);
+		rltLytPrgsBar.setVisibility(View.GONE);
 	}
 	
 	@Override

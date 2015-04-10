@@ -65,9 +65,15 @@
 	    android:layout_height="match_parent"
 	    android:layout_below="@id/rltLytCatTitles"
 	    android:layout_marginTop="@dimen/rlt_lyt_no_evts_margin_t_discover_tab"
-	    android:background="@drawable/ic_no_content_background_overlay"
 	    android:visibility="invisible" >
 	
+    	<com.wcities.eventseeker.custom.view.ResizableImageView android:id="@+id/imgNoEvts"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_alignParentBottom="true"
+	        android:scaleType="centerCrop"
+	        android:src="@drawable/ic_no_content_background_overlay" />
+	    
 		<TextView android:id="@+id/txtNoEvents"
 		    android:layout_width="@dimen/txt_no_events_w_discover_tab"
 		    android:layout_height="wrap_content"

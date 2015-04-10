@@ -45,10 +45,14 @@
         layout="@layout/list_no_items_found"
         android:visibility="gone" />
 
+    <!-- 09-04-2015: Top-Bottom -ve margin is applied to avoid the padding given in the layout files root -->
     <include
         android:id="@+id/rltLytPrgsBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/lnrFollowMoreArtist"
+        android:layout_marginTop="@dimen/rlt_lyt_root_margin_t_b_progress_bar_eventseeker_fixed_ht"
+        android:layout_marginBottom="@dimen/rlt_lyt_root_margin_t_b_progress_bar_eventseeker_fixed_ht"
         layout="@layout/progress_bar_eventseeker_fixed_ht"
         android:visibility="gone" />
 

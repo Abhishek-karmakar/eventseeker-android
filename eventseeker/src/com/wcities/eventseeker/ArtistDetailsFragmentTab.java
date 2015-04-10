@@ -86,7 +86,7 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 	private ImageView imgArtist;
 	private TextView txtArtistTitle;
 	private RelativeLayout rltLytTxtArtistTitle;
-	private View vNoContentBG;
+	private ImageView vNoContentBG;
 	private RecyclerView recyclerVArtists;
 	private View vDummy;
 	private FloatingActionButton fabSave;
@@ -166,7 +166,7 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 			ViewCompat.setTransitionName(txtArtistTitle, getArguments().getString(BundleKeys.TRANSITION_NAME_SHARED_TEXT));
 		}
 		
-		vNoContentBG = rootView.findViewById(R.id.vNoContentBG);
+		vNoContentBG = (ImageView) rootView.findViewById(R.id.vNoContentBG);
 		vDummy = rootView.findViewById(R.id.vDummy);
 		
 		recyclerVArtists = (RecyclerView) rootView.findViewById(R.id.recyclerVArtists);
@@ -403,7 +403,9 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 	}
 	
 	public void setVNoContentBgVisibility(int visibility) {
-		vNoContentBG.setVisibility(visibility);
+		vNoContentBG.setVisibility(visibility);		
+		vNoContentBG.setImageResource(visibility == View.VISIBLE ? 
+				R.drawable.ic_no_content_background_overlay_cropped : 0);
 	}
 
 	public Artist getArtist() {

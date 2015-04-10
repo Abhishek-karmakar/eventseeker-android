@@ -555,6 +555,7 @@
     <!-- progress_bar_eventseeker_fixed_ht.xml -->
     <dimen name="rlt_lyt_root_ht_progress_bar_eventseeker_fixed_ht">70dp</dimen>
     <dimen name="rlt_lyt_root_pad_t_b_progress_bar_eventseeker_fixed_ht">10dp</dimen>
+    <dimen name="rlt_lyt_root_margin_t_b_progress_bar_eventseeker_fixed_ht">0dp</dimen>
     <!-- list_item_discover.xml -->
     <dimen name="rlt_layout_root_ht_list_item_discover">100dp</dimen>
     <!-- img_event_w_list_item_discover = img w (104dp) + img_event_pad_l_list_item_discover + img_event_pad_r_list_item_discover -->

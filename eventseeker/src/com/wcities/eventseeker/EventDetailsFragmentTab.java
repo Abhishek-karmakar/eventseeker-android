@@ -70,7 +70,7 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 	private static final int MAX_LINES_EVENT_DESC = 3;
 	
 	private ObservableScrollView obsrScrlV;
-	private ImageView imgEvt, imgDown;
+	private ImageView imgEvt, imgDown, imgPrgOverlay;
 	private TextView txtEvtTitle, txtEvtTime, txtEvtDesc, txtVenue;
 	private RelativeLayout rltLytPrgsBar, rltLytFeaturing, rltLytVenue, rltLytFriends;
 	private RecyclerView recyclerVFriends;
@@ -174,8 +174,9 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 		obsrScrlV.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
 		
 		rltLytPrgsBar = (RelativeLayout) rootView.findViewById(R.id.rltLytPrgsBar);
-		rltLytPrgsBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
+		imgPrgOverlay = (ImageView) rltLytPrgsBar.findViewById(R.id.imgPrgOverlay);
 		updateProgressBarVisibility();
+
 		
 		rltLytFeaturing = (RelativeLayout) rootView.findViewById(R.id.rltLytFeaturing);
 		rltLytVenue = (RelativeLayout) rootView.findViewById(R.id.rltLytVenue);
@@ -305,12 +306,14 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 	private void updateProgressBarVisibility() {
 		if (allDetailsLoaded) {
 			// free up memory
-			rltLytPrgsBar.setBackgroundResource(0);
+			imgPrgOverlay.setBackgroundResource(0);
+			imgPrgOverlay.setVisibility(View.GONE);
 			rltLytPrgsBar.setVisibility(View.GONE);
 			
 		} else {
-			rltLytPrgsBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
 			rltLytPrgsBar.setVisibility(View.VISIBLE);
+			imgPrgOverlay.setBackgroundResource(R.drawable.ic_no_content_background_overlay_cropped);
+			imgPrgOverlay.setVisibility(View.VISIBLE);
 		}
 	}
 	

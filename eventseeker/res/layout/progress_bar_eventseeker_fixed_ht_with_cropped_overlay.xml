@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_no_content_background_overlay"
+        android:src="@drawable/ic_no_content_background_overlay_cropped"
         android:visibility="gone" />
 
     <ImageView

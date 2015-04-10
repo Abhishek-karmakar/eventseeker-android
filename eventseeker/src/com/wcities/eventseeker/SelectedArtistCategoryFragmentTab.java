@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView.RecyclerListener;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -70,6 +69,7 @@ public class SelectedArtistCategoryFragmentTab extends PublishArtistFragmentLoad
 	private List<Artist> artistList;
 
 	private TextView txtNoItemsFound;
+	private ImageView imgPrgOverlay;
 	//private Button btnFollowAll;	
 	private GridView grdvArtists;
 
@@ -133,8 +133,8 @@ public class SelectedArtistCategoryFragmentTab extends PublishArtistFragmentLoad
 		
 		rltLayoutRoot = v.findViewById(R.id.rltLayoutRoot);
 		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
-		rltLytPrgsBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
-
+		imgPrgOverlay = (ImageView) rltLytPrgsBar.findViewById(R.id.imgPrgOverlay);
+		
 		v.findViewById(R.id.btnSyncAccounts).setOnClickListener(this);
 		v.findViewById(R.id.btnRecommended).setOnClickListener(this);
 		v.findViewById(R.id.btnSearch).setOnClickListener(this);
@@ -355,8 +355,8 @@ public class SelectedArtistCategoryFragmentTab extends PublishArtistFragmentLoad
 
 	@Override
 	public void displayFullScrnProgress() {
-		rltLytPrgsBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
 		rltLytPrgsBar.setVisibility(View.VISIBLE);
+		imgPrgOverlay.setVisibility(View.VISIBLE);
 	}
 
 	@Override

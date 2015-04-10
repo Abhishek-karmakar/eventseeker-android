@@ -54,6 +54,7 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 	private RecyclerView recyclerVEvents;
 	private LinearLayoutManager layoutManager;
 	private RelativeLayout rltLytProgressBar, rltLytNoEvts;
+	private ImageView imgPrgOverlay;
 	
 	private RVMyEventsAdapterTab rvCatEventsAdapterTab;
 	
@@ -64,6 +65,7 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 	private String wcitiesId;
 
 	private boolean isNoEventFound;
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -92,7 +94,7 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 		
 		rltLytProgressBar = (RelativeLayout) v.findViewById(R.id.rltLytProgressBar);
 		// Applying background here since overriding background doesn't work from xml with <include> layout
-		rltLytProgressBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
+		imgPrgOverlay = (ImageView) rltLytProgressBar.findViewById(R.id.imgPrgOverlay);
 		
 		rltLytNoEvts = (RelativeLayout) v.findViewById(R.id.rltLytNoEvts);
 		if (isNoEventFound) {
@@ -169,17 +171,23 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 		this.event = event;
 	}
 	
-	public void setCenterProgressBarVisibility(int visibility) {
-		rltLytProgressBar.setVisibility(visibility);
-		
-		if (visibility == View.VISIBLE) {
-			rltLytProgressBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
-			refreshNoContentLyt(View.GONE);
+	public void setCenterProgressBarVisibility(final int visibility) {
+		handler.post(new Runnable() {
 			
-		} else {
-			// free up memory
-			rltLytProgressBar.setBackgroundResource(0);
-		}
+			@Override
+			public void run() {
+				rltLytProgressBar.setVisibility(visibility);
+				imgPrgOverlay.setVisibility(visibility);
+				
+				if (visibility == View.VISIBLE) {
+					refreshNoContentLyt(View.GONE);
+					
+				} else {
+					// free up memory
+					imgPrgOverlay.setBackgroundResource(0);
+				}
+			}
+		});
 	}
 	
 	@Override

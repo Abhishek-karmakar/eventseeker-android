@@ -53,6 +53,7 @@ public class ArtistsNewsListFragmentTab extends ListFragment implements LoadItem
 
 	private View rltRootNoContentFound;
 	private RelativeLayout rltLytPrgsBar;
+	private ImageView imgPrgOverlay;
 	
 	private SortArtistNewsBy sortBy = SortArtistNewsBy.chronological;
 	
@@ -77,8 +78,10 @@ public class ArtistsNewsListFragmentTab extends ListFragment implements LoadItem
 		super.onCreateView(inflater, container, savedInstanceState);
 		View v = inflater.inflate(R.layout.fragment_artists_news_list_tab, null);
 		rltRootNoContentFound = v.findViewById(R.id.rltRootNoContentFound);
+		
 		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
-		rltLytPrgsBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
+		imgPrgOverlay = (ImageView) rltLytPrgsBar.findViewById(R.id.imgPrgOverlay);
+		
 		return v;
 	}
 	
@@ -265,16 +268,16 @@ public class ArtistsNewsListFragmentTab extends ListFragment implements LoadItem
 
 	@Override
 	public void onTaskCompleted(Void... params) {
-		// remove full screen progressbar
 		// free up memory
-		rltLytPrgsBar.setBackgroundResource(0);
-		rltLytPrgsBar.setVisibility(View.INVISIBLE);
+		imgPrgOverlay.setBackgroundResource(0);
+		imgPrgOverlay.setVisibility(View.GONE);
+		rltLytPrgsBar.setVisibility(View.GONE);
 	}
 
 	@Override
 	public void displayFullScrnProgress() {
-		rltLytPrgsBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
 		rltLytPrgsBar.setVisibility(View.VISIBLE);
+		imgPrgOverlay.setVisibility(View.VISIBLE);
 	}
 	
 	@Override

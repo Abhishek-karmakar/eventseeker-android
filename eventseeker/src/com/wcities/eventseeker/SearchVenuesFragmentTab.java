@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,10 +13,10 @@ import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -45,6 +46,7 @@ public class SearchVenuesFragmentTab extends Fragment implements SearchFragmentC
 	private RecyclerView recyclerVVenues;
 	private RelativeLayout rltLytProgressBar;
 	private TextView txtNoItemsFound;
+	private ImageView imgPrgOverlay;
 	
 	private RVSearchVenuesAdapterTab<String> rvSearchVenuesAdapterTab;
 	
@@ -64,7 +66,6 @@ public class SearchVenuesFragmentTab extends Fragment implements SearchFragmentC
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_search_items_tab, null);
-		
 		recyclerVVenues = (RecyclerView) v.findViewById(R.id.recyclerVItems);
 		int spanCount = (FragmentUtil.getResources(this).getConfiguration().orientation == 
 				Configuration.ORIENTATION_PORTRAIT) ? GRID_COLS_PORTRAIT : GRID_COLS_LANDSCAPE;
@@ -74,8 +75,8 @@ public class SearchVenuesFragmentTab extends Fragment implements SearchFragmentC
 		
 		rltLytProgressBar = (RelativeLayout) v.findViewById(R.id.rltLytProgressBar);
 		// Applying background here since overriding background doesn't work from xml with <include> layout
-		rltLytProgressBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
-		
+		imgPrgOverlay = (ImageView) rltLytProgressBar.findViewById(R.id.imgPrgOverlay);
+				
 		txtNoItemsFound = (TextView) v.findViewById(R.id.txtNoItemsFound);
 		
 		return v;
@@ -84,7 +85,6 @@ public class SearchVenuesFragmentTab extends Fragment implements SearchFragmentC
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		
 		if (venueList == null) {
 			venueList = new ArrayList<Venue>();
 			
@@ -109,7 +109,6 @@ public class SearchVenuesFragmentTab extends Fragment implements SearchFragmentC
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		//Log.d(TAG, "onDestroy()");
 		if (loadVenues != null && loadVenues.getStatus() != Status.FINISHED) {
 			loadVenues.cancel(true);
 		}
@@ -146,11 +145,22 @@ public class SearchVenuesFragmentTab extends Fragment implements SearchFragmentC
 			loadItemsInBackground();
 		}
 	}
-	
+
 	@Override
 	public void displayFullScrnProgress() {
-		rltLytProgressBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
-		rltLytProgressBar.setVisibility(View.VISIBLE);
+		/**
+		 * Since we are using the transparent Progressbar layout.So, we need to set background white, else
+		 * in portrait mode in 10" devices the background will get visible.
+		 */
+		handler.post(new Runnable() {
+
+			@Override
+			public void run() {
+				rltLytProgressBar.setBackgroundColor(Color.WHITE);
+				rltLytProgressBar.setVisibility(View.VISIBLE);
+				imgPrgOverlay.setVisibility(View.VISIBLE);
+			}
+		});
 	}
 
 	@Override
@@ -174,14 +184,14 @@ public class SearchVenuesFragmentTab extends Fragment implements SearchFragmentC
 			
 			@Override
 			public void run() {
-				//Log.d(TAG, "onEventsLoaded()");
-				// remove full screen progressbar & free up memory
-				rltLytProgressBar.setBackgroundResource(0);
-				rltLytProgressBar.setVisibility(View.INVISIBLE);
+				// free up memory
+				imgPrgOverlay.setBackgroundResource(0);
+				imgPrgOverlay.setVisibility(View.GONE);
+				rltLytProgressBar.setVisibility(View.GONE);
 			}
 		});
 	}
-
+	
 	@Override
 	public void onInvisible() {
 		if (rvSearchVenuesAdapterTab != null) {

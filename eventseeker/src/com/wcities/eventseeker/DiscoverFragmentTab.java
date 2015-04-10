@@ -7,6 +7,7 @@ import java.util.List;
 
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,6 +22,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.facebook.Session;
@@ -66,7 +68,8 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 	private RecyclerView recyclerVCategories, recyclerVEvents;
 	private LinearLayoutManager layoutManager;
 	private RelativeLayout rltLytProgressBar, rltLytNoEvts;
-	
+	private ImageView imgPrgOverlay, imgNoEvts;
+
 	private RVCatTitlesAdapterTab catTitlesAdapterTab;
 	private RVCatEventsAdapterTab rvCatEventsAdapterTab;
 	private boolean isScrollStateIdle;
@@ -179,10 +182,12 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 		recyclerVEvents.setLayoutManager(gridLayoutManager);
 		
 		rltLytProgressBar = (RelativeLayout) v.findViewById(R.id.rltLytProgressBar);
+		rltLytProgressBar.setBackgroundColor(Color.WHITE);
 		// Applying background here since overriding background doesn't work from xml with <include> layout
-		rltLytProgressBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
-		
+		imgPrgOverlay = (ImageView) rltLytProgressBar.findViewById(R.id.imgPrgOverlay);
+				
 		rltLytNoEvts = (RelativeLayout) v.findViewById(R.id.rltLytNoEvts);
+		imgNoEvts = (ImageView) rltLytNoEvts.findViewById(R.id.imgNoEvts);
 		if (eventList != null && eventList.isEmpty()) {
 			// retain no events layout visibility on orientation change
 			rltLytNoEvts.setVisibility(View.VISIBLE);
@@ -414,14 +419,15 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 	
 	public void setCenterProgressBarVisibility(int visibility) {
 		rltLytProgressBar.setVisibility(visibility);
+		imgPrgOverlay.setVisibility(visibility);
 		
 		if (visibility == View.VISIBLE) {
-			rltLytProgressBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
 			rltLytNoEvts.setVisibility(View.INVISIBLE);
+			imgNoEvts.setImageResource(0);
 			
 		} else {
 			// free up memory
-			rltLytProgressBar.setBackgroundResource(0);
+			imgPrgOverlay.setBackgroundResource(0);
 		}
 	}
 	
@@ -514,6 +520,7 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 				setCenterProgressBarVisibility(View.INVISIBLE);
 				if (eventList.isEmpty()) {
 					rltLytNoEvts.setVisibility(View.VISIBLE);
+					imgNoEvts.setImageResource(R.drawable.ic_no_content_background_overlay);
 				}
 			}
 		});

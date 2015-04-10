@@ -110,6 +110,7 @@ public class FriendsActivityFragmentTab extends PublishEventListFragment impleme
 	
 	private View rltRootNoContentFound;	
 	private RelativeLayout rltLytPrgsBar;
+	private ImageView imgPrgOverlay;
 
 	private Resources res;
 
@@ -137,7 +138,7 @@ public class FriendsActivityFragmentTab extends PublishEventListFragment impleme
 		
 		rltRootNoContentFound = v.findViewById(R.id.rltRootNoContentFound);
 		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
-		rltLytPrgsBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
+		imgPrgOverlay = (ImageView) rltLytPrgsBar.findViewById(R.id.imgPrgOverlay);
 		return v;
 	}
 	
@@ -313,9 +314,10 @@ public class FriendsActivityFragmentTab extends PublishEventListFragment impleme
 			}
 			
 			friendActivityListAdapter.notifyDataSetChanged();
-			// to remove full screen progressbar & free up memory
-			rltLytPrgsBar.setBackgroundResource(0);
-			rltLytPrgsBar.setVisibility(View.INVISIBLE);
+			// free up memory
+			imgPrgOverlay.setBackgroundResource(0);
+			imgPrgOverlay.setVisibility(View.GONE);
+			rltLytPrgsBar.setVisibility(View.GONE);
 		}
     }
 	
@@ -344,8 +346,8 @@ public class FriendsActivityFragmentTab extends PublishEventListFragment impleme
 				}
 				
 				if (friendNewsItems.size() == 1) {
-					rltLytPrgsBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
 					rltLytPrgsBar.setVisibility(View.VISIBLE);
+					imgPrgOverlay.setVisibility(View.VISIBLE);
 					convertView.setVisibility(View.INVISIBLE);
 					
 				} else {

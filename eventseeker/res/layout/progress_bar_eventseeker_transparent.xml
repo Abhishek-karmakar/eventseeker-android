@@ -6,6 +6,15 @@
     android:layout_centerInParent="true"
     android:background="@android:color/transparent" >
 
+    <com.wcities.eventseeker.custom.view.ResizableImageView
+        android:id="@+id/imgPrgOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_no_content_background_overlay"
+        android:visibility="gone" />
+    
     <ImageView
         android:id="@+id/imgPrgsCenter"
         android:layout_width="wrap_content"

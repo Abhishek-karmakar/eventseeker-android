@@ -68,6 +68,7 @@ public class FollowingFragmentTab extends Fragment implements ArtistTrackingList
 
 	private View rltRootNoContentFound;
 	private RelativeLayout rltLytPrgsBar;
+	private ImageView imgPrgOverlay;
 	
 	private GridView grdvFollowing;
 
@@ -92,7 +93,7 @@ public class FollowingFragmentTab extends Fragment implements ArtistTrackingList
 		rltRootNoContentFound = v.findViewById(R.id.rltRootNoContentFound);
 		
 		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
-		rltLytPrgsBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
+		imgPrgOverlay = (ImageView) rltLytPrgsBar.findViewById(R.id.imgPrgOverlay);
 		
 		v.findViewById(R.id.btnSyncAccounts).setOnClickListener(this);
 		v.findViewById(R.id.btnPopularArtists).setOnClickListener(this);
@@ -237,15 +238,16 @@ public class FollowingFragmentTab extends Fragment implements ArtistTrackingList
 	
 	@Override
 	public void displayFullScrnProgress() {
-		rltLytPrgsBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
 		rltLytPrgsBar.setVisibility(View.VISIBLE);
+		imgPrgOverlay.setVisibility(View.VISIBLE);
 	}
 	
 	@Override
 	public void onTaskCompleted(Void... params) {
 		// free up memory
-		rltLytPrgsBar.setBackgroundResource(0);
-		rltLytPrgsBar.setVisibility(View.INVISIBLE);
+		imgPrgOverlay.setBackgroundResource(0);
+		imgPrgOverlay.setVisibility(View.GONE);
+		rltLytPrgsBar.setVisibility(View.GONE);
 	}
 
 	@Override

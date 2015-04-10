@@ -562,4 +562,7 @@
     <!-- rv_item_venue_tab.xml -->
     <dimen name="txt_loc_pad_b_rv_item_venue_tab">@dimen/txt_evt_loc_pad_t_rv_item_event_tab</dimen>
     
+    <!-- progress_bar_eventseeker_fixed_ht.xml -->
+    <dimen name="rlt_lyt_root_margin_t_b_progress_bar_eventseeker_fixed_ht">-10dp</dimen>
+
 </resources>

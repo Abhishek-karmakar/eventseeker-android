@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,10 +13,10 @@ import android.os.Looper;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -58,6 +59,7 @@ public class SearchArtistsFragmentTab extends PublishArtistFragment implements F
 	private RecyclerView recyclerVArtists;
 	private RelativeLayout rltLytProgressBar;
 	private TextView txtNoItemsFound;
+	private ImageView imgPrgOverlay;
 	
 	private List<Artist> artistList;
 	private String query;
@@ -80,7 +82,6 @@ public class SearchArtistsFragmentTab extends PublishArtistFragment implements F
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_search_items_tab, null);
-		
 		recyclerVArtists = (RecyclerView) v.findViewById(R.id.recyclerVItems);
 		int spanCount = (FragmentUtil.getResources(this).getConfiguration().orientation == 
 				Configuration.ORIENTATION_PORTRAIT) ? GRID_COLS_PORTRAIT : GRID_COLS_LANDSCAPE;
@@ -90,7 +91,7 @@ public class SearchArtistsFragmentTab extends PublishArtistFragment implements F
 		
 		rltLytProgressBar = (RelativeLayout) v.findViewById(R.id.rltLytProgressBar);
 		// Applying background here since overriding background doesn't work from xml with <include> layout
-		rltLytProgressBar.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
+		imgPrgOverlay = (ImageView) rltLytProgressBar.findViewById(R.id.imgPrgOverlay);
 		
 		txtNoItemsFound = (TextView) v.findViewById(R.id.txtNoItemsFound);
 		
@@ -100,7 +101,6 @@ public class SearchArtistsFragmentTab extends PublishArtistFragment implements F
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		
 		if (artistList == null) {
 			artistList = new ArrayList<Artist>();
 			
@@ -122,7 +122,6 @@ public class SearchArtistsFragmentTab extends PublishArtistFragment implements F
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		//Log.d(TAG, "onDestroy()");
 		if (loadArtists != null && loadArtists.getStatus() != Status.FINISHED) {
 			loadArtists.cancel(true);
 		}
@@ -163,9 +162,21 @@ public class SearchArtistsFragmentTab extends PublishArtistFragment implements F
 
 	@Override
 	public void displayFullScrnProgress() {
-		rltLytProgressBar.setVisibility(View.VISIBLE);
-	}
+		/**
+		 * Since we are using the transparent Progressbar layout.So, we need to set background white, else
+		 * in portrait mode in 10" devices the background will get visible.
+		 */
+		handler.post(new Runnable() {
 
+			@Override
+			public void run() {
+				rltLytProgressBar.setBackgroundColor(Color.WHITE);
+				rltLytProgressBar.setVisibility(View.VISIBLE);
+				imgPrgOverlay.setVisibility(View.VISIBLE);
+			}
+		});
+	}
+	
 	@Override
 	public void loadItemsInBackground() {
 		loadArtists = new LoadArtists(Api.OAUTH_TOKEN, artistList, rvSearchArtistsAdapterTab, 
@@ -180,13 +191,14 @@ public class SearchArtistsFragmentTab extends PublishArtistFragment implements F
 			
 			@Override
 			public void run() {
-				//Log.d(TAG, "onEventsLoaded()");
-				// remove full screen progressbar
-				rltLytProgressBar.setVisibility(View.INVISIBLE);
+				// free up memory
+				imgPrgOverlay.setBackgroundResource(0);
+				imgPrgOverlay.setVisibility(View.GONE);
+				rltLytProgressBar.setVisibility(View.GONE);
 			}
 		});
 	}
-
+	
 	@Override
 	public void doPositiveClick(String dialogTag) {
 		//This is for Remove Artist Dialog

@@ -70,7 +70,7 @@ public class VenueDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 	private ImageView imgVenue;
 	private RelativeLayout rltLytTxtVenueTitle;
 	private TextView txtVenueTitle;
-	private View vNoContentBG;
+	private ImageView vNoContentBG;
 	private RecyclerView recyclerVVenue;
 	private View vDummy;
 	
@@ -137,7 +137,7 @@ public class VenueDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 		txtVenueTitle.setSelected(true);
 		ViewCompat.setTransitionName(txtVenueTitle, getArguments().getString(BundleKeys.TRANSITION_NAME_SHARED_TEXT));
 
-		vNoContentBG = rootView.findViewById(R.id.vNoContentBG);
+		vNoContentBG = (ImageView) rootView.findViewById(R.id.vNoContentBG);
 		vDummy = rootView.findViewById(R.id.vDummy);
 		
 		recyclerVVenue = (RecyclerView) rootView.findViewById(R.id.recyclerVVenue);
@@ -257,7 +257,9 @@ public class VenueDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 	}
 
 	public void setVNoContentBgVisibility(int visibility) {
-		vNoContentBG.setVisibility(visibility);
+		vNoContentBG.setVisibility(visibility);		
+		vNoContentBG.setImageResource(visibility == View.VISIBLE ? 
+				R.drawable.ic_no_content_background_overlay_cropped : 0);
 	}
 	
 	private void updateVenueImg() {

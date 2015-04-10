@@ -9,12 +9,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
         
-        <View android:id="@+id/vNoContentBG"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-	        android:layout_below="@+id/rltLytTxtArtistTitle"
-	        android:background="@drawable/ic_no_content_background_overlay"
-	        android:visibility="invisible" />
+	<com.wcities.eventseeker.custom.view.ResizableImageView android:id="@+id/vNoContentBG"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_alignParentBottom="true"
+	    android:scaleType="centerCrop"
+	    android:src="@drawable/ic_no_content_background_overlay_cropped"
+	    android:visibility="invisible" />
+	    <!-- android:layout_below="@+id/rltLytTxtArtistTitle" -->
         
         <ImageView android:id="@+id/imgArtist"
 	      	android:layout_width="match_parent"
