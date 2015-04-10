@@ -36,4 +36,5 @@ public class ScreenNames {
 	public static final String ABOUT_US_SCREEN = "About Screen";
 	public static final String TERMS_OF_SERVICES_SCREEN = "Terms Of Service Screen";
 	public static final String REPCODE_SCREEN = "Rep Code Screen";
+	public static final String ARTIST_MORE_NEWS_SCREEN = "Artist More News Screen";
 }

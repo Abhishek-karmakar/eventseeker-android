@@ -3,6 +3,7 @@ package com.wcities.eventseeker;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -25,6 +26,7 @@ import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
@@ -41,10 +43,10 @@ import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.asynctask.LoadArtistDetails;
-import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.asynctask.LoadArtistDetails.OnArtistUpdatedListener;
 import com.wcities.eventseeker.asynctask.LoadArtistEvents;
 import com.wcities.eventseeker.asynctask.LoadArtistEvents.LoadArtistEventsListener;
+import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
@@ -54,7 +56,6 @@ import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.custom.fragment.PublishEventFragmentRetainingChildFragmentManager;
 import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
-import com.wcities.eventseeker.interfaces.FragmentHavingFragmentInRecyclerView;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
@@ -89,7 +90,7 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 	private ImageView vNoContentBG;
 	private RecyclerView recyclerVArtists;
 	private View vDummy;
-	private FloatingActionButton fabSave;
+	private FloatingActionButton fabSave, fabArtistNews;
 	
 	private RVArtistDetailsAdapterTab rvArtistDetailsAdapterTab;
 	
@@ -190,6 +191,16 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 		fabSave = (FloatingActionButton) artistDetailsActivityTab.getViewById(R.id.fab1);
 		fabSave.setOnClickListener(this);
 		fabSave.setImageDrawable(FragmentUtil.getResources(this).getDrawable(R.drawable.slctr_following_artist_details));
+		
+		int padFABArtistNews = FragmentUtil.getResources(this)
+				.getDimensionPixelSize(R.dimen.fab_artist_news_pad_artist_details);
+		
+		fabArtistNews = (FloatingActionButton) artistDetailsActivityTab.getViewById(R.id.fab2);
+		fabArtistNews.setOnClickListener(this);
+		fabArtistNews.setCropToPadding(true);
+		fabArtistNews.setImageDrawable(FragmentUtil.getResources(this).getDrawable(R.drawable.latestnews));
+		fabArtistNews.setPadding(padFABArtistNews, padFABArtistNews, padFABArtistNews, padFABArtistNews);	    
+		fabArtistNews.setScaleType(ScaleType.CENTER_INSIDE);
 		
 		updateFabVisibility();
 		return rootView;
@@ -388,6 +399,11 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 		//Log.d(TAG, "lp.topMargin = " + lp.topMargin);
 		lp.topMargin = fabMarginT - topMargin;
 		fabSave.setLayoutParams(lp);
+		
+		lp = (FrameLayout.LayoutParams) fabArtistNews.getLayoutParams();
+		//Log.d(TAG, "lp.topMargin = " + lp.topMargin);
+		lp.topMargin = fabMarginT - topMargin;
+		fabArtistNews.setLayoutParams(lp);
 	}
 
 	public String getTitle() {
@@ -450,8 +466,11 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 			fabSave.setSelected(artist.getAttending() == Artist.Attending.Tracked);
 			fabSave.setVisibility(View.VISIBLE);
 			
+			fabArtistNews.setVisibility(View.VISIBLE);
+			
 		} else {
 			fabSave.setVisibility(View.INVISIBLE);
+			fabArtistNews.setVisibility(View.INVISIBLE);
 		}
 	}
 
@@ -550,6 +569,12 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 			}
 			break;
 			
+		case R.id.fab2:
+			Intent intent = new Intent(FragmentUtil.getApplication(this), ArtistNewsActivityTab.class);
+			intent.putExtra(BundleKeys.ARTIST, artist);
+			startActivity(intent);
+			break;
+
 		default:
 			break;
 		}

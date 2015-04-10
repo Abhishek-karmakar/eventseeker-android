@@ -85,11 +85,22 @@ public class ChangeLocationActivityTab extends BaseActivityTab {
 	@Override
 	public void onBackPressed() {
 		/**
-		 * Args are used on going back to discover screen from here after no events been found
-		 * earlier on discover screen showing change location button.
+		 * 10-04-2015: This change is mentioned in Android Edits sheet on Google Drive.
+		 * If User has come from Discover Screen, then he must return there, else if he has
+		 * come from Settings Screen, then he must return there. 
 		 */
-		onDrawerItemSelected(AppConstants.INDEX_NAV_ITEM_DISCOVER, getIntent().getExtras());
-		finish();
+		Bundle args = getIntent().getExtras();
+		if (args == null) {
+			super.onBackPressed();
+			
+		} else {
+			/**
+			 * Args are used on going back to discover screen from here after no events been found
+			 * earlier on discover screen showing change location button.
+			 */
+			onDrawerItemSelected(AppConstants.INDEX_NAV_ITEM_DISCOVER, args);
+			finish();
+		}
 	}
 	
 	@Override

@@ -83,6 +83,7 @@
         <activity android:name="com.wcities.eventseeker.AboutUsActivityTab" />
         <activity android:name="com.wcities.eventseeker.EULAActivityTab" />
         <activity android:name="com.wcities.eventseeker.RepcodeActivityTab" />
+        <activity android:name="com.wcities.eventseeker.ArtistNewsActivityTab" />
         
         <activity android:name="com.wcities.eventseeker.SpotifyActivity" 
             android:theme="@style/Theme.Transparent"
