@@ -109,8 +109,6 @@ public class ArtistNewsListAdapterTab extends BaseAdapter {
 			if (convertView == null || convertView.getTag() instanceof ArtistNewsItemViewHolder) {
 				convertView = inflater.inflate(R.layout.progress_bar_eventseeker_fixed_ht, null);
 				convertView.setTag(AppConstants.TAG_PROGRESS_INDICATOR);
-				convertView.setBackgroundColor(FragmentUtil.getResources(fragment)
-						.getColor(R.color.root_lnr_layout_bg_artists_news_list_item));
 			}
 			
 			if (artistsNewsListItems.size() == 1) {
@@ -227,7 +225,7 @@ public class ArtistNewsListAdapterTab extends BaseAdapter {
 				imgCrclArtist.setImageBitmap(bitmap);
 				
 			} else {
-				imgCrclArtist.setImageResource(R.drawable.placeholder);
+				imgCrclArtist.setImageResource(R.drawable.ic_profile);
 				AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
 				asyncLoadImg.loadFBUserImg(imgCrclArtist, ImgResolution.LOW, (AdapterView) parent, pos, item.getArtist());
 			}

@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask.Status;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -57,7 +58,6 @@ import com.wcities.eventseeker.custom.fragment.PublishEventFragmentRetainingChil
 import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
-import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -197,9 +197,12 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 		
 		fabArtistNews = (FloatingActionButton) artistDetailsActivityTab.getViewById(R.id.fab2);
 		fabArtistNews.setOnClickListener(this);
-		fabArtistNews.setCropToPadding(true);
-		fabArtistNews.setImageDrawable(FragmentUtil.getResources(this).getDrawable(R.drawable.latestnews));
-		fabArtistNews.setPadding(padFABArtistNews, padFABArtistNews, padFABArtistNews, padFABArtistNews);	    
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+			//'setCropToPadding()' is available after API Level 16.
+			fabArtistNews.setCropToPadding(true);
+			fabArtistNews.setImageDrawable(FragmentUtil.getResources(this).getDrawable(R.drawable.latestnews));
+			fabArtistNews.setPadding(padFABArtistNews, padFABArtistNews, padFABArtistNews, padFABArtistNews);
+		}
 		fabArtistNews.setScaleType(ScaleType.CENTER_INSIDE);
 		
 		updateFabVisibility();

@@ -40,6 +40,13 @@ public class VideoPagerAdapter extends FragmentStatePagerAdapter implements OnPa
 		this.videos = (videos != null) ? videos : new ArrayList<Video>();
 		this.artistId = artistId;
 		fragmentReferences = new HashMap<Integer, WeakReference<VideoFragment>>();
+		if (videos != null) {
+			/**
+			 * initializing the current position at 2nd place if videos are more than 1, 
+			 * So that there is no space before the 1st item.
+			 */
+			currentPosition = (videos.size() > 1) ? 1 : 0;
+		}
 	}
 
 	@Override

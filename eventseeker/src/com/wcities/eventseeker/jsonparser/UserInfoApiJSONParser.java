@@ -427,7 +427,9 @@ public class UserInfoApiJSONParser {
 		 * ImageAttibution needs to be initialized else it would be null.
 		 */
 		artistNewsItem.getArtist().setImageAttribution(new ImageAttribution());
-		artistNewsItem.getArtist().setImageName(jsonObject.getString(KEY_ARTIST_IMAGE));
+		if (jsonObject.has(KEY_ARTIST_IMAGE)) {
+			artistNewsItem.getArtist().setImageName(jsonObject.getString(KEY_ARTIST_IMAGE));
+		}
 		
 		String postType = jsonObject.getString(KEY_POST_TYPE);
 		/*if (postType.equals("swf")) {
