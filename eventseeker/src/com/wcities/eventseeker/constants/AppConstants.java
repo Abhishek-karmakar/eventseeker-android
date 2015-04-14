@@ -39,6 +39,8 @@ public class AppConstants {
 	public static String LASTFM_API_KEY;
 
 	public static String GCM_SENDER_ID;
+	
+	public static String BROWSER_KEY_FOR_PLACES_API;
 
 	public static final String CHARSET_NAME = "UTF-8";
 	

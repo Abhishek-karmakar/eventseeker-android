@@ -309,6 +309,8 @@ public class EventSeekr extends Application {
 			
 			AppConstants.GCM_SENDER_ID = "972660105461";
 			
+			AppConstants.BROWSER_KEY_FOR_PLACES_API = "AIzaSyBOTuIbME9QmZsfoBFFLa38zjTGJ-jWT-k";
+			
 		} else {
 			AppConstants.TWITTER_CONSUMER_KEY = "Dt4IWLQhJmKVTdrfkvma7w";
 			AppConstants.TWITTER_CONSUMER_SECRET = "MqQWwm7sEqHdTuU47grSTfV5fLct22RY4ilHXCjwA";
@@ -322,6 +324,8 @@ public class EventSeekr extends Application {
 			AppConstants.SPOTIFY_CLIENT_SECRET = "0c1e396da5a54fa18fa849bd4e8a14b9";
 			
 			AppConstants.GCM_SENDER_ID = "802382771850";
+			
+			AppConstants.BROWSER_KEY_FOR_PLACES_API = "AIzaSyBHlh_Iyq33PY1zx9uSAT0isCGgL1wxwb4";
 		}
 	}
 	

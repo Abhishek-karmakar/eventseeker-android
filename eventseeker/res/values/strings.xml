@@ -490,6 +490,7 @@
     <string name="google_maps">Google Maps</string>
     <string name="navi_bridge">Navi Bridge</string>
     <string name="scout_navigation">Scout Navigation</string>
+    <string name="moovit">Moovit</string>
     
     <!-- NavigationFragment -->
     <string name="address_isnt_available">Address is not available for this venue.</string>

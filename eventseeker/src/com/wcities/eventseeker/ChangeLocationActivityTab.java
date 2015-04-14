@@ -1,9 +1,12 @@
 package com.wcities.eventseeker;
 
+import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,12 +21,13 @@ import com.wcities.eventseeker.util.FragmentUtil;
 public class ChangeLocationActivityTab extends BaseActivityTab {
 	
 	private static final String TAG = ChangeLocationActivityTab.class.getSimpleName();
+	
 	private SearchView searchView;
 	private String searchQuery = "";
 	protected boolean isSearchViewIconified = true;
 	
 	private ChangeLocationFragmentTab changeLocationFragmentTab;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -63,6 +67,11 @@ public class ChangeLocationActivityTab extends BaseActivityTab {
 			v.setImageResource(R.drawable.search);
 		}
 		
+		// Get the SearchView and set the searchable configuration
+	    SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+	    // Assumes current activity is the searchable activity
+	    searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+		
         if (searchQuery != null && !searchQuery.equals("")) {
         	searchView.setQuery(searchQuery, false);
         }
@@ -70,6 +79,20 @@ public class ChangeLocationActivityTab extends BaseActivityTab {
         	searchView.setIconified(false);
         }
         return true;
+	}
+	
+	@Override
+	protected void onNewIntent(Intent intent) {
+		//Log.d(TAG, "onNewIntent()");
+		super.onNewIntent(intent);
+		setIntent(intent);
+		
+		if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+        	//Log.d(TAG, "onNewIntent() - view");
+        	String query = intent.getStringExtra(SearchManager.EXTRA_DATA_KEY);
+        	searchView.setQuery(query, false);
+        	onQueryTextSubmit(query);
+        }
 	}
 
 	@Override
@@ -121,11 +144,13 @@ public class ChangeLocationActivityTab extends BaseActivityTab {
 		outState.putString(BundleKeys.SEARCH_QUERY, searchQuery);
 	}
 	
-
 	@Override
 	public boolean onQueryTextSubmit(String query) {
+		//Log.d(TAG, "onQueryTextSubmit() - query = " + query);
 		if (changeLocationFragmentTab != null) {
 			this.searchQuery = query;
+			// to remove autocomplete suggestions
+			searchView.clearFocus();
 			boolean result = changeLocationFragmentTab.onQueryTextSubmit(query);
 			hideSoftKeypad();
 			return result;
@@ -135,6 +160,7 @@ public class ChangeLocationActivityTab extends BaseActivityTab {
 	
 	@Override
 	public boolean onQueryTextChange(String query) {
+		//Log.d(TAG, "onQueryTextChange() - query = " + query);
 		if (changeLocationFragmentTab != null) {
 			this.searchQuery = query;
 			return changeLocationFragmentTab.onQueryTextChange(query);

@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -49,15 +50,8 @@ public class NavigationFragment extends FragmentLoadableFromBackStack implements
 		view.findViewById(R.id.imgGMaps).setOnClickListener(this);
 		view.findViewById(R.id.imgNaviBridge).setOnClickListener(this);
 		view.findViewById(R.id.imgScout).setOnClickListener(this);
+		view.findViewById(R.id.imgMoovit).setOnClickListener(this);
 		
-		// add touch listener, otherwise touch events are rendered by previous screen in backstack (venue details)
-		view.setOnTouchListener(new OnTouchListener() {
-			
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				return true;
-			}
-		});
 		return view;
 	}
 	
@@ -163,6 +157,18 @@ public class NavigationFragment extends FragmentLoadableFromBackStack implements
 			} else {
 				Toast.makeText(FragmentUtil.getActivity(this), R.string.address_isnt_available, 
 					Toast.LENGTH_SHORT).show();
+			}
+			break;
+			
+		case R.id.imgMoovit:
+			intent = FragmentUtil.getApplication(this).getPackageManager().getLaunchIntentForPackage("com.tranzmate");
+			if (intent != null) {
+				startActivity(intent);
+				
+			} else {
+				intent = new Intent(Intent.ACTION_VIEW); 
+				intent.setData(Uri.parse("market://details?id=com.tranzmate")); 
+				startActivity(intent);
 			}
 			break;
 

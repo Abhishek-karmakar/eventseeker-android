@@ -725,6 +725,7 @@
     <dimen name="img_event_pad_t_item_list_search_venue">8dp</dimen>
     <dimen name="img_event_pad_b_item_list_search_venue">8dp</dimen>
     <!-- fragment_navigation.xml -->
+    <dimen name="lnr_lyt_root_pad_t_b_navigation">20dp</dimen>
     <dimen name="txt_title_w_navigation">150dp</dimen>
     <dimen name="txt_title_margin_t_navigation">0dp</dimen>
     <dimen name="txt_txt_size_navigation">14sp</dimen>

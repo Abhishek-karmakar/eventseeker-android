@@ -10,7 +10,7 @@ import com.wcities.eventseeker.constants.BundleKeys;
 
 public class DefaultUncaughtExceptionHandler implements	UncaughtExceptionHandler {
 	
-	private static final String TAG = DefaultUncaughtExceptionHandler.class.getName();
+	private static final String TAG = DefaultUncaughtExceptionHandler.class.getSimpleName();
 	
 	private EventSeekr eventSeekr;
 	

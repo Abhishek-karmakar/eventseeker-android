@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,6 +40,7 @@ public class NavigationFragmentTab extends Fragment implements OnClickListener {
 		view.findViewById(R.id.imgGMaps).setOnClickListener(this);
 		view.findViewById(R.id.imgNaviBridge).setOnClickListener(this);
 		view.findViewById(R.id.imgScout).setOnClickListener(this);
+		view.findViewById(R.id.imgMoovit).setOnClickListener(this);
 		
 		return view;
 	}
@@ -142,6 +144,18 @@ public class NavigationFragmentTab extends Fragment implements OnClickListener {
 					Toast.LENGTH_SHORT).show();
 			}
 			break;
+			
+		case R.id.imgMoovit:
+			intent = FragmentUtil.getApplication(this).getPackageManager().getLaunchIntentForPackage("com.tranzmate");
+			if (intent != null) {
+				startActivity(intent);
+				
+			} else {
+				intent = new Intent(Intent.ACTION_VIEW); 
+				intent.setData(Uri.parse("market://details?id=com.tranzmate")); 
+				startActivity(intent);
+			}
+			break; 
 
 		default:
 			break;
