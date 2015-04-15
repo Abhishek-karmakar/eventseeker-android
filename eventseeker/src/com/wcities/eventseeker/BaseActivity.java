@@ -1,11 +1,15 @@
 package com.wcities.eventseeker;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Set;
 
 import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.ford.syncV4.proxy.SyncProxyALM;
 import com.ford.syncV4.transport.TransportType;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
+import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
+import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker.Type;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.bosch.BoschMainActivity;
@@ -15,6 +19,7 @@ import com.wcities.eventseeker.gcm.GcmBroadcastReceiver.NotificationType;
 import com.wcities.eventseeker.interfaces.ConnectionFailureListener;
 import com.wcities.eventseeker.interfaces.DrawerListFragmentListener;
 import com.wcities.eventseeker.util.DeviceUtil;
+import com.wcities.eventseeker.util.FragmentUtil;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -343,6 +348,20 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
 	
 	protected void inviteFriends() {
 		//Log.d(TAG, "inviteFriends()");
+		try {
+			if (getIntent().hasExtra(BundleKeys.IS_FROM_NOTIFICATION)) {
+				EventSeekr eventseekr = (EventSeekr) getApplication();
+				GoogleAnalyticsTracker.getInstance().sendApiCall(eventseekr, GoogleAnalyticsTracker.getInstance()
+					.getExtraInfoApiUrl(Type.Notification.name(), URLEncoder.encode(GoogleAnalyticsTracker.OPEN_INVITE_FRIENDS_NOTIFICATION, 
+						AppConstants.CHARSET_NAME), null, AppConstants.INVALID_ID, eventseekr.getWcitiesId()), null);
+				
+				getIntent().removeExtra(BundleKeys.IS_FROM_NOTIFICATION);
+			}
+			
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
 		String url = "https://play.google.com/store/apps/details?id=" + getPackageName();
 		Intent intent = new Intent(android.content.Intent.ACTION_SEND);
 		intent.setType("text/plain");

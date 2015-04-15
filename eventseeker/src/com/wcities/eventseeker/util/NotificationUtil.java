@@ -102,13 +102,19 @@ public class NotificationUtil {
 			}
 			
 		} else if (notificationType == NotificationType.SYNC_ACCOUNTS) {
-			notificationIntent.putExtra(BundleKeys.SETTINGS_ITEM_ORDINAL, SettingsItem.SYNC_ACCOUNTS.ordinal());
+			Bundle bundle = new Bundle();
+			bundle.putSerializable(BundleKeys.SETTINGS_ITEM, SettingsItem.SYNC_ACCOUNTS);
+			notificationIntent.putExtras(bundle);
+			
 			if (isTablet) {
 				notificationIntent.setClass(context, SettingsActivityTab.class);
 			}
 			
 		} else if (notificationType == NotificationType.INVITE_FRIENDS) {
-			notificationIntent.putExtra(BundleKeys.SETTINGS_ITEM_ORDINAL, SettingsItem.INVITE_FRIENDS.ordinal());
+			Bundle bundle = new Bundle();
+			bundle.putSerializable(BundleKeys.SETTINGS_ITEM, SettingsItem.INVITE_FRIENDS);
+			notificationIntent.putExtras(bundle);
+			
 			if (isTablet) {
 				notificationIntent.setClass(context, SettingsActivityTab.class);
 			}

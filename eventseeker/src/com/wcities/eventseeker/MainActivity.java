@@ -337,6 +337,7 @@ public class MainActivity extends BaseActivity implements
 		// getOverflowMenu();
 		if (currentContentFragmentTag == null) {
 			//Log.d(TAG, "currentContentFragmentTag = null");
+			Bundle bundle = getIntent().getExtras();
 			/**
 			 * Above null check is required for widget, because if user
 			 * navigates to any other screen from this event details, we want to
@@ -357,10 +358,8 @@ public class MainActivity extends BaseActivity implements
 			} else if (getIntent().hasExtra(BundleKeys.ARTIST)) {
 				onArtistSelectedFromOtherTask((Artist) getIntent().getSerializableExtra(BundleKeys.ARTIST), false);
 
-			} else if (getIntent().hasExtra(BundleKeys.SETTINGS_ITEM_ORDINAL)) {
-				SettingsItem settingsItem = SettingsItem.getSettingsItemByOrdinal(
-						getIntent().getExtras().getInt(BundleKeys.SETTINGS_ITEM_ORDINAL));
-				onSettingsItemClicked(settingsItem, null);
+			} else if (bundle != null && bundle.containsKey(BundleKeys.SETTINGS_ITEM)) {
+				selectItem(AppConstants.INDEX_NAV_ITEM_SETTINGS, bundle);
 				
 			} else if (getIntent().hasExtra(BundleKeys.NOTIFICATION_TYPE)) {
 				onNotificationClicked((NotificationType) getIntent().getSerializableExtra(BundleKeys.NOTIFICATION_TYPE));
@@ -389,6 +388,7 @@ public class MainActivity extends BaseActivity implements
 			getIntent().putExtra(BundleKeys.IS_FROM_NOTIFICATION, 
 					intent.getBooleanExtra(BundleKeys.IS_FROM_NOTIFICATION, true));
 		}
+		Bundle bundle = intent.getExtras();
 		EventSeekr eventSeekr = (EventSeekr) getApplication();
 		if (eventSeekr.getWcitiesId() == null) {
 			
@@ -398,10 +398,8 @@ public class MainActivity extends BaseActivity implements
 		} else if (intent.hasExtra(BundleKeys.ARTIST)) {
 			onArtistSelectedFromOtherTask((Artist) intent.getSerializableExtra(BundleKeys.ARTIST), true);
 
-		} else if (intent.hasExtra(BundleKeys.SETTINGS_ITEM_ORDINAL)) {
-			SettingsItem settingsItem = SettingsItem.getSettingsItemByOrdinal(
-					intent.getExtras().getInt(BundleKeys.SETTINGS_ITEM_ORDINAL));
-			onSettingsItemClicked(settingsItem, null);
+		} else if (bundle != null && bundle.containsKey(BundleKeys.SETTINGS_ITEM)) {
+			selectItem(AppConstants.INDEX_NAV_ITEM_SETTINGS, bundle);
 			
 		} else if (intent.hasExtra(BundleKeys.NOTIFICATION_TYPE)) {
 			onNotificationClicked((NotificationType) intent.getSerializableExtra(BundleKeys.NOTIFICATION_TYPE));

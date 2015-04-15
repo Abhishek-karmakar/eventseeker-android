@@ -70,7 +70,7 @@
 	    <ImageView android:id="@+id/imgMoovit"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:src="@drawable/ic_scout_app"
+	        android:src="@drawable/ic_moovit_app"
 	        android:layout_marginTop="@dimen/img_margin_t_navigation" />
 	    
 	    <TextView android:id="@+id/txtMoovit"

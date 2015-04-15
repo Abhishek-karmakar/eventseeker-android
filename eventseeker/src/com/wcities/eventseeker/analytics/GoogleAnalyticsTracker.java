@@ -26,7 +26,8 @@ public class GoogleAnalyticsTracker {
 	public enum Type {
 		Event,
 		Artist,
-		Venue;
+		Venue,
+		Notification;
 	}
 	
 	private static final String TAG = GoogleAnalyticsTracker.class.getSimpleName();
@@ -34,6 +35,7 @@ public class GoogleAnalyticsTracker {
 	
 	public static final String EVENT_LABEL_TICKETS_BUTTON = "Tickets Button";
 	public static final String ARTIST_VIDEO_CLICK = "ARTIST_VIDEO_CLICK";
+	public static final String OPEN_INVITE_FRIENDS_NOTIFICATION = "Open Invite Friends Notification";
 
 	private static GoogleAnalyticsTracker googleAnalyticsTracker;
 
@@ -186,16 +188,23 @@ public class GoogleAnalyticsTracker {
 	 * @param wcitiesId
 	 * @return
 	 */
-	private String getExtraInfoApiUrl(String type /*artist/event/venue*/, 
+	public String getExtraInfoApiUrl(String type /*artist/event/venue/Notification*/, 
 			String requestType /*[SHARE_TYPE/ARIST_VIDEO_CLICK/BUY_TICKET]*/, 
 			String videoUrl /*This is only if type is artist*/,
 			long typeId /*artist/event/venue - id*/, String wcitiesId) {
 		String url = Api.COMMON_URL + "extraInfo_ga.php?oauth_token=" + Api.OAUTH_TOKEN + "&type=" + type + 
-				"&requestType=" + requestType + "&id=" + typeId + "&_u=" + wcitiesId;
-		if (videoUrl != null) {
-			url += "&video_url=" + videoUrl;
-		}
+				"&requestType=" + requestType;
+		
+		if (typeId != AppConstants.INVALID_ID) {
+			url += "&id=" + typeId;
+			
+			if (videoUrl != null) {
+				url += "&video_url=" + videoUrl;
+			}
+			
+			//for type = Notification, '_u' would be added in sendApiCall.
+			url += "&_u=" + wcitiesId;
+		} 
 		return url;
 	}
-	
 }

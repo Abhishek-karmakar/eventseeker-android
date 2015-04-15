@@ -144,15 +144,6 @@ public class Enums {
 		public int getTitle() {
 			return title;
 		}
-		
-		public static SettingsItem getSettingsItemByOrdinal(int ordinal) {
-			for (SettingsItem settingsItem : SettingsItem.values()) {
-				if (settingsItem.ordinal() == ordinal) {
-					return settingsItem;
-				}
-			}
-			return null;
-		}
 	}
 	
 	public enum Locales {
