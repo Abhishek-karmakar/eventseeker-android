@@ -98,6 +98,9 @@ public class ArtistApiJSONParser {
 	private static final String KEY_TWITTER = "twitter";
 	private static final String KEY_WEBSITE = "website";
 	
+	private static final String KEY_CATEGORY = "category";
+	private static final String KEY_CAT = "cat";
+	
 	public void fillArtistDetails(Artist artist, JSONObject jsonObject) {
 		if (jsonObject.has(KEY_ARTIST_DETAIL)) {
 			try {
@@ -118,6 +121,16 @@ public class ArtistApiJSONParser {
 					
 					artist.addArtistLink(new ArtistLink(LinkType.WEBSITE,
 							jObjLinks.optString(KEY_WEBSITE, null)));
+				}
+				
+				if (jObjArtist.has(KEY_CATEGORY)) {
+					JSONArray jArrCategory = jObjArtist.getJSONArray(KEY_CATEGORY);
+					for (int i = 0; i < jArrCategory.length(); i++) {
+						if (((JSONObject) jArrCategory.get(i)).getInt(KEY_CAT) == Artist.CAT_ID_SPORTS) {
+							artist.setBelongsToSportsCat(true);
+							break;
+						}
+					}
 				}
 				
 				if (jObjArtist.has(KEY_MEDIA)) {

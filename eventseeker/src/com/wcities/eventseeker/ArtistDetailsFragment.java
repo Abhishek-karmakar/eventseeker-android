@@ -276,10 +276,13 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			eventList = new ArrayList<Event>();
 			/**
 			 * 16-02-2015
-			 * This check is added as per discussion with Amir Sir, the upcoming events should be queried
+			 * This ontour check is added as per discussion with Amir Sir, the upcoming events should be queried
 			 * only if Artist is on Tour.
+			 * 
+			 * sports cat check is added because for sports artist, onTour value won't come ever, so we need to check
+			 * for upcoming events irrespective of ontour value for sports artist
 			 */
-			if (artist.isOntour()) {
+			if (artist.isOntour() || artist.doesBelongToSportsCat()) {
 				eventList.add(null);
 			}
 			artistRVAdapter = new ArtistRVAdapter(this, eventList, null, this);
@@ -772,7 +775,11 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		
 		fabArtistNews.setVisibility(View.VISIBLE);
 		
-		if (artist.isOntour() && eventList != null && eventList.isEmpty()) {
+		/**
+		 * sports cat check is added because for sports artist, onTour value won't come ever, so we need to check
+		 * for upcoming events irrespective of ontour value for sports artist
+		 */
+		if ((artist.isOntour() || artist.doesBelongToSportsCat()) && eventList != null && eventList.isEmpty()) {
 			eventList.add(null);
 		}
 		artistRVAdapter.notifyDataSetChanged();

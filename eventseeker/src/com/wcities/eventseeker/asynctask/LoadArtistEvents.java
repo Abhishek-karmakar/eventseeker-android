@@ -11,7 +11,6 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
-import android.widget.BaseAdapter;
 
 import com.wcities.eventseeker.api.ArtistApi;
 import com.wcities.eventseeker.api.ArtistApi.Method;
@@ -19,7 +18,6 @@ import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
 import com.wcities.eventseeker.util.ConversionUtil;
-import com.wcities.eventseeker.viewdata.DateWiseEventList;
 
 public class LoadArtistEvents extends AsyncTask<Void, Void, List<Event>> {
 

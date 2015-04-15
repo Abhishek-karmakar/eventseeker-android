@@ -14,6 +14,8 @@ public class Artist implements Serializable, BitmapCacheable {
 	public static final String DEFAULT_LOW_RES_PATH = "http://c0364947.cdn2.cloudfiles.rackspacecloud.com/";
 	public static final String DEFAULT_HIGH_RES_PATH = "http://c0364946.cdn2.cloudfiles.rackspacecloud.com/";
 	
+	public static final int CAT_ID_SPORTS = 615;
+	
 	public static enum Attending {
 		NotTracked(0),
 		Tracked(1);
@@ -89,6 +91,7 @@ public class Artist implements Serializable, BitmapCacheable {
 	private Attending attending;
 	private String artistUrl;
 	private List<ArtistLink> listArtistLink;
+	private boolean belongsToSportsCat;
 	
 	public Artist(int id, String name) {
 		this.id = id;
@@ -206,6 +209,14 @@ public class Artist implements Serializable, BitmapCacheable {
 		this.artistUrl = artistUrl;
 	}
 	
+	public boolean doesBelongToSportsCat() {
+		return belongsToSportsCat;
+	}
+
+	public void setBelongsToSportsCat(boolean belongsToSportsCat) {
+		this.belongsToSportsCat = belongsToSportsCat;
+	}
+
 	public boolean doesValidImgUrlExist() {
 		if (getLowResImgUrl() != null || getMobiResImgUrl() != null || getHighResImgUrl() != null) {
 			return true;
