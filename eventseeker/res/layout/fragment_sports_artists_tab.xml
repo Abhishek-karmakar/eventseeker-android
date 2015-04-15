@@ -52,7 +52,7 @@
 
                 <Button
                     android:id="@+id/btnNFL"
-                    style="@style/Widget.EventSeeker.Button.Transparent"
+                    style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignBottom="@+id/imgBG"
@@ -78,7 +78,7 @@
 
                 <Button
                     android:id="@+id/btnNBA"
-                    style="@style/Widget.EventSeeker.Button.Transparent"
+                    style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignBottom="@+id/imgBG1"
@@ -104,7 +104,7 @@
 
                 <Button
                     android:id="@+id/btnNHL"
-                    style="@style/Widget.EventSeeker.Button.Transparent"
+                    style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignBottom="@+id/imgBG2"
@@ -130,7 +130,7 @@
 
                 <Button
                     android:id="@+id/btnMLB"
-                    style="@style/Widget.EventSeeker.Button.Transparent"
+                    style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignBottom="@+id/imgBG3"
@@ -156,7 +156,7 @@
 
                 <Button
                     android:id="@+id/btnMLS"
-                    style="@style/Widget.EventSeeker.Button.Transparent"
+                    style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignBottom="@+id/imgBG4"

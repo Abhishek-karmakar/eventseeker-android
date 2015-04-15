@@ -170,6 +170,7 @@ public class VenueDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 			rvVenueDetailsAdapterTab = new RVVenueDetailsAdapterTab(this);
 			
 		} else {
+			rvVenueDetailsAdapterTab.onActivityCreated();
 			/**
 			 * To prevent "java.lang.IllegalArgumentException: No view found for id 0x7f1101d8 
 			 * (com.wcities.eventseeker:id/frmLayoutMapContainer) for fragment AddressMapFragment{41ce1d78 #0 

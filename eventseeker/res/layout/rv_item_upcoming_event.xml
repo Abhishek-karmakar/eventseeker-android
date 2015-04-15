@@ -2,91 +2,137 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rltLytRoot"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/bg_rlt_lyt_root_rv_item_upcoming_event" >
-    
-    <ImageView android:id="@+id/imgEvt"
+    android:layout_height="wrap_content" >
+
+    <ImageView
+        android:id="@+id/imgEvt"
         android:layout_width="@dimen/img_evt_w_rv_item_upcoming_event"
         android:layout_height="@dimen/img_evt_ht_rv_item_upcoming_event"
-        android:layout_marginLeft="@dimen/img_evt_margin_l_rv_item_upcoming_event"
-        android:layout_marginTop="@dimen/img_evt_margin_t_rv_item_upcoming_event"
-        android:layout_marginBottom="@dimen/img_evt_margin_b_rv_item_upcoming_event"
+        android:background="@android:color/white"
+        android:paddingBottom="@dimen/img_evt_margin_b_rv_item_upcoming_event"
+        android:paddingLeft="@dimen/img_evt_margin_l_rv_item_upcoming_event"
+        android:paddingRight="@dimen/img_evt_margin_l_rv_item_upcoming_event"
+        android:paddingTop="@dimen/img_evt_margin_t_rv_item_upcoming_event"
         android:scaleType="fitXY"
         android:src="@drawable/ic_launcher" />
-    
-    <ImageView android:id="@+id/imgTicket"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_tickets_available"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@id/imgEvt"
-        android:layout_marginRight="@dimen/img_action_margin_r_rv_item_upcoming_event"
-        android:background="@drawable/bg_slctr_img_action_rv_item_upcoming_evt" />
-    
-    <ImageView android:id="@+id/imgSave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_unsaved_event"
-        android:layout_alignRight="@id/imgTicket"
-        android:background="@drawable/bg_slctr_img_action_rv_item_upcoming_evt"
-        android:layout_centerVertical="true" />
-    
-    <ImageView android:id="@+id/imgShare"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_share_blue"
-        android:layout_alignRight="@id/imgTicket"
-        android:layout_alignBottom="@id/imgEvt"
-        android:background="@drawable/bg_slctr_img_action_rv_item_upcoming_evt" />
-    
-    <TextView
-        android:id="@+id/txtEvtTitle"
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@id/imgEvt"
-        android:layout_marginLeft="@dimen/txt_evt_title_margin_l_rv_item_upcoming_event"
-        android:layout_marginRight="@dimen/txt_evt_title_margin_r_rv_item_upcoming_event"
-        android:layout_toLeftOf="@id/imgTicket"
-        android:layout_toRightOf="@id/imgEvt"
-        android:ellipsize="end"
-        android:lines="2"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/txt_evt_title_txt_size_rv_item_upcoming_event" />
-    
-    <TextView
-        android:id="@+id/txtEvtTime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/txtEvtTitle"
-        android:layout_alignRight="@id/txtEvtTitle"
-        android:layout_centerVertical="true"
-        android:drawableLeft="@drawable/ic_event_time"
-        android:drawablePadding="@dimen/txt_evt_drawable_padding_rv_item_upcoming_event"
-        android:ellipsize="end"
-        android:gravity="center_vertical"
-        android:singleLine="true"
-        android:textSize="@dimen/txt_detail_txt_size_rv_item_upcoming_event" />
-    
-    <TextView
-        android:id="@+id/txtEvtLoc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/imgEvt"
-        android:layout_alignLeft="@id/txtEvtTitle"
-        android:layout_alignRight="@id/txtEvtTitle"
-        android:drawableLeft="@drawable/ic_event_location"
-        android:drawablePadding="@dimen/txt_evt_drawable_padding_rv_item_upcoming_event"
-        android:ellipsize="end"
-        android:gravity="center_vertical"
-        android:singleLine="true"
-        android:textSize="@dimen/txt_detail_txt_size_rv_item_upcoming_event" />
-    
-    <View android:id="@+id/vHorLine"
+        android:layout_alignBottom="@+id/imgEvt"
+        android:layout_alignTop="@+id/imgEvt"
+        android:layout_toRightOf="@id/imgEvt" >
+
+        <RelativeLayout
+            android:id="@+id/rltLytDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_slctr_rlt_lyt_btm_rv_item_event_tab" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toLeftOf="@id/imgHandle"
+                android:paddingBottom="@dimen/img_evt_margin_b_rv_item_upcoming_event"
+                android:paddingTop="@dimen/img_evt_margin_t_rv_item_upcoming_event" >
+
+                <TextView
+                    android:id="@+id/txtEvtTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/txtEvtTime"
+                    android:layout_alignParentTop="true"
+                    android:ellipsize="end"
+                    android:gravity="top"
+                    android:lines="2"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/txt_evt_title_txt_size_rv_item_upcoming_event" />
+
+                <TextView
+                    android:id="@+id/txtEvtTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:drawableLeft="@drawable/ic_event_time"
+                    android:drawablePadding="@dimen/txt_evt_drawable_padding_rv_item_upcoming_event"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:textSize="@dimen/txt_detail_txt_size_rv_item_upcoming_event" />
+
+                <TextView
+                    android:id="@+id/txtEvtLoc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:drawableLeft="@drawable/ic_event_location"
+                    android:drawablePadding="@dimen/txt_evt_drawable_padding_rv_item_upcoming_event"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:textSize="@dimen/txt_detail_txt_size_rv_item_upcoming_event" />
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/imgHandle"
+                android:layout_width="@dimen/img_handle_w_rv_item_event_tab"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/txt_evt_title_margin_r_rv_item_upcoming_event"
+                android:contentDescription="handle image"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_more_slider" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/lnrSliderContent"
+            android:layout_width="@dimen/lnr_slider_content_w_rv_item_event_tab"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/rltLytDetails"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/rltLytDetails"
+            android:background="@drawable/bg_slctr_lnr_slider_content_rv_item_event_tab"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="invisible" >
+
+            <ImageView
+                android:id="@+id/imgTicket"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/lnr_slider_content_img_ht_rv_item_event_tab"
+                android:layout_weight="1"
+                android:background="@drawable/bg_slctr_lnr_slider_content_rv_item_event_tab"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_tickets_available_slider" />
+
+            <ImageView
+                android:id="@+id/imgSave"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/lnr_slider_content_img_ht_rv_item_event_tab"
+                android:layout_weight="1"
+                android:background="@drawable/bg_slctr_lnr_slider_content_rv_item_event_tab"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_unsaved_event_slider" />
+
+            <ImageView
+                android:id="@+id/imgShare"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/lnr_slider_content_img_ht_rv_item_event_tab"
+                android:layout_weight="1"
+                android:background="@drawable/bg_slctr_lnr_slider_content_rv_item_event_tab"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_share_slider" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/vHorLine"
         android:layout_width="match_parent"
         android:layout_height="@dimen/v_hor_line_ht_rv_item_upcoming_event"
-        android:background="@color/gray_shade_d"
         android:layout_below="@id/imgEvt"
         android:layout_marginLeft="@dimen/v_hor_line_margin_l_r_rv_item_upcoming_event"
-        android:layout_marginRight="@dimen/v_hor_line_margin_l_r_rv_item_upcoming_event" />
+        android:layout_marginRight="@dimen/v_hor_line_margin_l_r_rv_item_upcoming_event"
+        android:background="@color/gray_shade_d" />
 
 </RelativeLayout>

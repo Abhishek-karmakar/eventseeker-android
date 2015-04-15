@@ -225,6 +225,7 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 			rvArtistDetailsAdapterTab = new RVArtistDetailsAdapterTab(this);
 			
 		} else {
+			rvArtistDetailsAdapterTab.onActivityCreated();
 			/**
 			 * required to prevent "IllegalArgumentException: No view found for id 0x7f110209 
 			 * (com.example:id/vPagerVideos) for fragment VideoFragment{da512cf #0 id=0x7f110209}", 
