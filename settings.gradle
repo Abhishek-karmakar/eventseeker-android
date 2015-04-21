@@ -5,6 +5,5 @@ include ':serverSDK'
 include ':spotifyApi'
 include ':viewPagerIndicator'
 include ':gmusic'
-include ':cardview'
 include ':eventseeker'
 
