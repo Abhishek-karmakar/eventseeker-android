@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rltLytRoot"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/rlt_layout_root_ht_list_item_discover"
+    android:background="@drawable/bg_slctr_rlt_lyt_root_list_item_discover" >
+    
+    <RelativeLayout android:id="@+id/rltLytContent"
+   		android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:layout_centerVertical="true"
+    	android:layout_marginLeft="@dimen/rlt_lyt_content_margin_l_list_item_discover"
+    	android:paddingLeft="@dimen/rlt_lyt_content_pad_l_list_item_discover" >
+    	
+        <RelativeLayout
+            android:id="@+id/vHandle"
+			android:layout_alignParentRight="true"
+            android:layout_width="@dimen/event_listing_slider_items_outer_size_w_h"
+            android:layout_height="@dimen/event_listing_slider_items_outer_size_w_h" >
+
+            <ImageView
+                android:id="@+id/imgHandle"
+                android:layout_width="@dimen/v_handle_w_list_item_discover"
+                android:layout_height="wrap_content"
+				android:layout_alignParentRight="true"
+				android:layout_alignParentTop="true"
+                android:contentDescription="handle image"
+                android:src="@drawable/ic_more_slider" />
+
+        </RelativeLayout>
+        
+	    <RelativeLayout android:id="@+id/rltLytEvtDetails"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:gravity="center_vertical"
+	        android:layout_marginRight="@dimen/rlt_lyt_evt_details_margin_r_list_item_discover"
+	        android:layout_centerVertical="true"
+	        android:layout_toLeftOf="@id/vHandle" >
+		    
+	        <TextView android:id="@+id/txtEvtTitle"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textStyle="bold"
+				android:textSize="@dimen/txt_evt_title_txt_size_list_item_discover"
+				android:text="Event Name"
+				android:lines="2"
+				android:ellipsize="end" />
+	        
+	        <TextView android:id="@+id/txtEvtTime"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textColor="@color/txt_evt_location_list_item_discover"
+				android:textSize="@dimen/txt_evt_time_txt_size_list_item_discover"
+				android:text="Time"
+				android:layout_below="@id/txtEvtTitle"
+				android:gravity="center_vertical"
+				android:lines="1"
+				android:ellipsize="end" />
+	        
+	        <TextView android:id="@+id/txtEvtLocation"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textColor="@color/txt_evt_location_list_item_discover"
+				android:textSize="@dimen/txt_evt_location_txt_size_list_item_discover"
+				android:text="Location"
+				android:lines="2"
+				android:ellipsize="end"
+				android:layout_below="@id/txtEvtTime"
+				android:gravity="bottom" />
+	        
+	    </RelativeLayout>
+	    
+    </RelativeLayout>
+    
+    <ImageView android:id="@+id/imgEvent"
+        android:layout_width="@dimen/img_event_w_list_item_discover"
+        android:layout_height="@dimen/img_event_ht_list_item_discover"
+        android:scaleType="fitXY"
+        android:layout_centerVertical="true"
+        android:paddingLeft="@dimen/img_event_pad_l_list_item_discover"
+        android:paddingRight="@dimen/img_event_pad_r_list_item_discover"
+        android:paddingTop="@dimen/img_event_pad_t_list_item_discover"
+        android:paddingBottom="@dimen/img_event_pad_b_list_item_discover"
+        android:contentDescription="event image"
+        android:background="@android:color/white" />
+    
+    <LinearLayout
+        android:id="@+id/lnrSliderContent"
+        android:layout_width="@dimen/lnr_slider_content_w_list_item_discover"
+        android:layout_height="@dimen/lnr_slider_content_ht_list_item_discover"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/bg_slctr_lnr_slider_content_list_item_discover"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="invisible" >
+
+        <RelativeLayout
+            android:id="@+id/rltTicket"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/event_listing_slider_items_outer_size_w_h"
+            android:layout_weight="1"
+            android:background="@drawable/bg_slctr_lnr_slider_content_list_item_discover" >
+
+            <ImageView
+                android:id="@+id/imgTicket"
+                android:layout_width="@dimen/event_listing_slider_items_size_w_h"
+                android:layout_height="@dimen/event_listing_slider_items_size_w_h"
+                android:layout_centerInParent="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_tickets_available_slider" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rltSave"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/event_listing_slider_items_outer_size_w_h"
+            android:layout_weight="1"
+            android:background="@drawable/bg_slctr_lnr_slider_content_list_item_discover" >
+
+            <ImageView
+                android:id="@+id/imgSave"
+                android:layout_width="@dimen/event_listing_slider_items_size_w_h"
+                android:layout_height="@dimen/event_listing_slider_items_size_w_h"
+                android:layout_centerInParent="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_unsaved_event_slider" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rltShare"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/event_listing_slider_items_outer_size_w_h"
+            android:layout_weight="1"
+            android:background="@drawable/bg_slctr_lnr_slider_content_list_item_discover" >
+
+            <ImageView
+                android:id="@+id/imgShare"
+                android:layout_width="@dimen/event_listing_slider_items_size_w_h"
+                android:layout_height="@dimen/event_listing_slider_items_size_w_h"
+                android:layout_centerInParent="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_share_slider" />
+        </RelativeLayout>
+    </LinearLayout>
+    
+    <View android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_ht_list_item_discover"
+        android:background="@drawable/event_divide"
+        android:layout_marginLeft="@dimen/divider_margin_l_list_item_discover"
+        android:layout_marginRight="@dimen/divider_margin_r_list_item_discover"
+        android:layout_alignParentBottom="true" />
+    
+</RelativeLayout>

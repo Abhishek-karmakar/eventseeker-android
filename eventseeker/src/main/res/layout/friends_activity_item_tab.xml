@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rltLayoutActivityItemContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/story_space" >
+    
+    <ProgressBar android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/txtTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/txt_title_margin_t_b_friends_activity_item"
+        android:layout_marginLeft="@dimen/txt_title_margin_l_r_friends_activity_item"
+        android:layout_marginRight="@dimen/txt_title_margin_l_r_friends_activity_item"
+        android:layout_marginTop="@dimen/txt_title_margin_t_b_friends_activity_item"
+        android:text="is going"
+        android:lines="2"
+        android:ellipsize="end"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/txt_title_txt_size_friends_activity_item" />
+
+    <com.wcities.eventseeker.custom.view.ResizableImageView
+        android:id="@+id/imgEvt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/txtTitle"
+        android:layout_alignRight="@id/txtTitle"
+        android:layout_below="@id/txtTitle"
+        android:layout_marginBottom="@dimen/img_evt_margin_friends_activity_item"
+        android:contentDescription="event image"
+        android:src="@drawable/placeholder"
+        app:compressAsPerWidth="true" />
+
+    <RelativeLayout
+        android:id="@+id/lnrLayoutEvtInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/imgEvt"
+        android:layout_alignLeft="@id/imgEvt"
+        android:layout_alignRight="@id/imgEvt"
+        android:background="@color/bg_black_transparent_strip" >
+
+        <TextView
+            android:id="@+id/txtVenueTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/txt_evt_title_margin_l_include_fragment_event_details_img_evt"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="Venue Title"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/txt_venue_title_txt_size_friends_activity_item" />
+
+        <TextView
+            android:id="@+id/txtEvtTime"
+            style="@style/SingleLineMarqueeTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/txtVenueTitle"
+            android:layout_below="@id/txtVenueTitle"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/txt_evt_time_txt_size_friends_activity_item" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/lnrLayoutBtns"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/lnr_layout_btns_ht_friends_activity_item"
+        android:layout_below="@id/imgEvt"
+        android:layout_marginBottom="@dimen/lnr_layout_btns_margin_friends_activity_item"
+        android:layout_marginLeft="@dimen/lnr_layout_btns_margin_l_friends_activity_item"
+        android:layout_marginRight="@dimen/lnr_layout_btns_margin_r_friends_activity_item"
+        android:background="@drawable/button_bar"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:id="@+id/lnrLayoutBtnLike"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <Button
+                android:id="@+id/btnLike"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:clickable="false"
+                android:drawableLeft="@drawable/like"
+                android:drawablePadding="@dimen/btn_drawable_pad_friends_activity_item"
+                android:layout_gravity="center_vertical"
+                android:text="@string/like"
+                android:textSize="@dimen/btn_txt_size_friends_activity_item" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="@dimen/divider_lnr_layout_btns_w_include_fragment_event_details_footer"
+            android:layout_height="@dimen/v_divider_lnr_ht_friends_activity_item"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/button_divide" />
+
+        <LinearLayout
+            android:id="@+id/lnrLayoutBtnComment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <Button
+                android:id="@+id/btnComment"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:clickable="false"
+                android:drawableLeft="@drawable/comment"
+                android:drawablePadding="@dimen/btn_drawable_pad_friends_activity_item"
+                android:layout_gravity="center_vertical"
+                android:text="@string/comment"
+                android:textSize="@dimen/btn_txt_size_friends_activity_item" />
+        </LinearLayout>
+    </LinearLayout>
+    
+    <include layout="@layout/include_fragment_friends_activity_item_track_btns"
+		android:id="@+id/lnrLayoutTrackBtns"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/lnr_layout_btns_ht_friends_activity_item"
+        android:layout_alignTop="@id/lnrLayoutBtns"
+        android:layout_alignLeft="@id/lnrLayoutBtns"
+        android:layout_alignRight="@id/lnrLayoutBtns"
+        android:layout_alignBottom="@id/lnrLayoutBtns" />
+
+</RelativeLayout>

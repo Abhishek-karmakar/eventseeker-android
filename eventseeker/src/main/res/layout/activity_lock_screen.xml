@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:layout_width="@dimen/img_ford_logo_w_h_lock_screen"
+        android:layout_height="@dimen/img_ford_logo_w_h_lock_screen"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_marginBottom="@dimen/margin_b_lock_screen"
+        android:layout_marginTop="@dimen/img_ford_logo_margin_t_lock_screen"
+        android:src="@drawable/ford_logo_lock_screen" />
+
+    <TextView
+        android:id="@+id/txtEventseeker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_t_lock_screen"
+        android:gravity="center"
+        android:text="@string/txt_eventseeker_activity_lockscreen"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/txt_eventseeker_lock_screen" />
+
+    <TextView
+        android:id="@+id/txtLockScreen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_t_lock_screen"
+        android:gravity="center"
+        android:text="@string/txt_lockscreen_activity_lockscreen"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/txt_lock_screen_lock_screen" />
+
+</LinearLayout>
+<!--
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="bottom|center_horizontal|center_vertical|clip_horizontal"
+    android:orientation="vertical"
+    tools:context=".LockScreenActivity" >
+
+    
+         <Button
+        android:id="@+id/lockreset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_gravity="bottom|center_horizontal"
+        android:text="Reset SYNC connection"
+        android:textSize="20sp"
+        android:visibility="visible" />
+   
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/sync" />
+
+</LinearLayout> -->

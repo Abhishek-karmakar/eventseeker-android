@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootRltLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center" >
+
+    <com.wcities.eventseeker.custom.view.ResizableImageView
+        android:id="@+id/imgCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY" 
+        app:compressAsPerWidth="true"/>
+        <!-- android:layout_height="@dimen/img_category_ht_grid_category" -->
+
+    <TextView
+        android:id="@+id/txtCategory"
+        style="@style/SingleLineMarqueeTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/imgCategory"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/imgCategory"
+        android:background="@color/bg_black_transparent_strip"
+        android:gravity="center_vertical"
+        android:paddingBottom="@dimen/txt_category_pad_b_grid_category"
+        android:paddingLeft="@dimen/txt_category_pad_l_grid_category"
+        android:paddingTop="@dimen/txt_category_pad_t_grid_category"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/txt_category_txt_size_grid_category" />
+
+</RelativeLayout>

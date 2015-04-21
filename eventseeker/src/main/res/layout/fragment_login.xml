@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_blue_app_bg" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/scrl_v_margin_t_fragment_login"
+        android:fillViewport="true"
+        android:padding="@dimen/scrl_v_pad_fragment_login"
+        android:scrollbars="none" >
+
+        <RelativeLayout
+            android:id="@+id/rltLytRoot"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingBottom="@dimen/rlt_lyt_root_pad_b_get_started"
+            android:paddingLeft="@dimen/rlt_lyt_root_pad_l_r_get_started"
+            android:paddingRight="@dimen/rlt_lyt_root_pad_l_r_get_started" >
+
+            <Button
+                android:id="@+id/imgFbSignUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/img_fb_sign_up_margin_t_login"
+                android:background="@drawable/ic_fb_continue"
+                android:gravity="left|center_vertical"
+                android:singleLine="true"
+                android:text="@string/continue_with_facebook"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/txt_size_fb_google_btn_get_started" />
+
+            <RelativeLayout
+                android:id="@+id/rltGPlus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imgFbSignUp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/all_components_margin_t_get_started" >
+
+                <TextView
+                    android:id="@+id/txtGPlusSignInStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:text="@string/signing_in"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/txt_g_plus_sign_in_status_txt_size_get_started" />
+
+                <Button
+                    android:id="@+id/imgGPlusSignIn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_ggl_continue"
+                    android:gravity="left|center_vertical"
+                    android:singleLine="true"
+                    android:text="@string/continue_wiht_google"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/txt_size_fb_google_btn_get_started" />
+
+            </RelativeLayout>
+
+            <!-- In nexus 7 this screen opens up soft keypad automatically on launch with focus on edtEmail. 
+            To prevent this we have used focusableInTouchMode on this parent layout. Haven't checked on other
+            devices w/o this parameter focusableInTouchMode, but same case must be there with all devices, 
+            although it was not observed on nexus 5. -->
+            <RelativeLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rltGPlus"
+                android:layout_marginTop="@dimen/lyt_mar_t_get_started_fragment"
+                android:focusableInTouchMode="true" >
+
+                <TextView android:id="@+id/txtLoginLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center"
+                    android:text="@string/sign_in_with_email"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/txt_login_label_txt_size_get_started_fragment" />
+
+                <EditText android:id="@+id/edtEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txtLoginLabel"
+                    android:layout_marginLeft="@dimen/mar_l_r_get_started_fragment"
+                	android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
+                    android:layout_marginTop="@dimen/mar_t_get_started_fragment"
+                    android:hint="@string/email"
+                    android:inputType="textEmailAddress"
+                    style="@style/edtTxtSingleLineWhiteColor" />
+                
+                <ImageView android:id="@+id/imgEmailIndicator"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_alignBottom="@+id/edtEmail"
+	                android:layout_alignParentRight="true"
+	                android:layout_alignTop="@+id/edtEmail"
+	                android:layout_marginRight="@dimen/rlt_register_details_mar_r_get_started_fragment" />
+                
+                <TextView android:id="@+id/txtEmailInvalid"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_below="@+id/edtEmail"
+	                android:gravity="center"
+	                android:text="@string/error_email_invalid"
+	                android:textColor="@android:color/white"
+	                android:visibility="invisible" />
+
+                <EditText android:id="@+id/edtPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/edtEmail"
+                    android:layout_marginLeft="@dimen/mar_l_r_get_started_fragment"
+                	android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
+                    android:layout_marginTop="@dimen/mar_t_get_started_fragment"
+                    android:hint="@string/password"
+                    android:password="true"
+                    style="@style/edtTxtSingleLineWhiteColor" />
+                
+                <ImageView android:id="@+id/imgPasswordIndicator"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_alignBottom="@+id/edtPassword"
+	                android:layout_alignParentRight="true"
+	                android:layout_alignTop="@+id/edtPassword"
+	                android:layout_marginRight="@dimen/rlt_register_details_mar_r_get_started_fragment" />
+
+                <Button android:id="@+id/btnLogin"
+                    style="@style/Widget.EventSeeker.Button.White"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/btn_default_ht"
+                    android:layout_below="@+id/edtPassword"
+                    android:layout_marginLeft="@dimen/mar_l_r_get_started_fragment"
+                	android:layout_marginRight="@dimen/mar_l_r_get_started_fragment"
+                    android:layout_marginTop="@dimen/mar_t_get_started_fragment"
+                    android:enabled="false"
+                    android:text="@string/sign_in" />
+
+                <Button
+                    android:id="@+id/btnForgotPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/btnLogin"
+                    android:layout_marginTop="@dimen/btn_forgot_pass_mar_t_get_started_fragment"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:text="@string/forgot_your_password"
+                    android:textSize="@dimen/btn_forgot_pass_txt_size_get_started_fragment"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
+
+	<RelativeLayout
+        android:id="@+id/rltLytPrgsBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:visibility="invisible" >
+
+        <ProgressBar
+            android:id="@+id/prgsBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
+</RelativeLayout>

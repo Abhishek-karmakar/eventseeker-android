@@ -1,0 +1,12 @@
+<resources>    
+
+	<!-- Keyboard -->
+    <string name="keyboard_space">Spazio</string>
+    <string name="keyboard_done">Vai</string>
+    <string name="keyboard_go">Fine</string>
+    <string name="keyboard_next">Avanti</string>
+    <string name="keyboard_prev">Prec</string>
+    <string name="keyboard_search">Cerca</string>
+    <string name="keyboard_ok">OK</string>
+
+</resources>

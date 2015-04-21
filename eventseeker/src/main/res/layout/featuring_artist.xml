@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    
+	<com.wcities.eventseeker.custom.view.RelativeLayoutCenterScale 
+	    android:id="@+id/rltLytRoot"
+	    android:layout_width="@dimen/rlt_lyt_root_w_featuring_artist"
+	    android:layout_height="match_parent"
+	    android:layout_gravity="center" >
+	    
+	    <ImageView android:id="@+id/imgArtist"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:background="@android:color/darker_gray"
+	        android:scaleType="fitXY"
+	        android:contentDescription="artist image" />
+	    
+	    <View android:id="@+id/vTranslucentLayer"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:background="@color/bg_v_translucent_layer_featuring_artist" />
+	    
+	    <TextView android:id="@+id/txtArtistName"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentBottom="true"
+	        android:textColor="@android:color/white"
+	        android:textSize="@dimen/txt_artist_name_txt_size_featuring_artist"
+	        android:gravity="center_horizontal"
+	        android:paddingLeft="@dimen/txt_artist_name_pad_l_featuring_artist"
+	        android:paddingRight="@dimen/txt_artist_name_pad_r_featuring_artist"
+	        android:paddingTop="@dimen/txt_artist_name_pad_t_featuring_artist"
+	        android:paddingBottom="@dimen/txt_artist_name_pad_b_featuring_artist"
+	        android:background="@drawable/bg_lnr_gradient_top_transparent_btm_black"
+	        android:singleLine="true"
+	        android:ellipsize="end" />
+	
+	</com.wcities.eventseeker.custom.view.RelativeLayoutCenterScale>
+
+</LinearLayout>

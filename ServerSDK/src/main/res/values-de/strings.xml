@@ -1,0 +1,12 @@
+<resources>    
+
+	<!-- Keyboard -->
+    <string name="keyboard_space">Leerzeichen</string>
+    <string name="keyboard_done">Fertig</string>
+    <string name="keyboard_go">Los</string>
+    <string name="keyboard_next">Weiter</string>
+    <string name="keyboard_prev">Zurück</string>
+    <string name="keyboard_search">Suchen</string>
+    <string name="keyboard_ok">OK</string>
+
+</resources>

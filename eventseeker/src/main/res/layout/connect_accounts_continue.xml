@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <Button
+        android:id="@+id/btnContinue"
+        style="@style/Widget.EventSeeker.Button.White"
+        android:layout_width="@dimen/btn_continue_wt_fragment_connect_account"
+        android:layout_height="@dimen/btn_default_ht"
+        android:layout_marginBottom="@dimen/btn_continue_margin_b_fb_login"
+        android:layout_marginLeft="@dimen/btn_continue_margin_l_r_fragment_connect_account"
+        android:layout_marginRight="@dimen/btn_continue_margin_l_r_fragment_connect_account"
+        android:layout_marginTop="@dimen/btn_continue_margin_b_fb_login"
+        android:layout_centerInParent="true"
+        android:text="@string/btn_continue" />
+
+</RelativeLayout>

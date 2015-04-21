@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootRltLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_gray" >
+
+    <RelativeLayout
+        android:id="@+id/rltLayoutLoadedContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <ScrollView
+            android:id="@+id/scrlVContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <LinearLayout
+                android:id="@+id/rltRootLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:id="@+id/lnrLayoutTop"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/lnr_layout_top_margin_l_r_fragment_event_info"
+                    android:layout_marginRight="@dimen/lnr_layout_top_margin_l_r_fragment_event_info"
+                    android:background="@drawable/story_space"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal" >
+                    
+                    <RelativeLayout android:id="@+id/rltLytImgEvt"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" >
+
+	                    <ImageView android:id="@+id/imgEvt"
+	                        android:layout_width="match_parent"
+	                        android:layout_height="@dimen/img_evt_ht_fragment_event_info"
+	                        android:contentDescription="event image"
+	                        android:scaleType="fitXY" />
+	                    
+	                    <ProgressBar android:id="@+id/progressBar"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_centerInParent="true" />
+                    
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:id="@+id/rltLayoutEvtInfo"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/rlt_evt_info_margin_t_b_fragment_event_details_img_evt"
+                        android:layout_weight="1"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:id="@+id/txtEvtTitle"
+                            style="@style/SingleLineMarqueeTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="0.24"
+                            android:gravity="center" />
+
+                        <View
+                            android:id="@+id/vDivider"
+                            android:layout_width="match_parent" />
+
+                        <TextView
+                            android:id="@+id/txtVenue"
+                            style="@style/SingleLineMarqueeTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="0.21"
+                            android:gravity="center"
+                            android:maxLines="2"
+                            android:textSize="@dimen/txt_evt_time_txt_size_include_fragment_event_details_img_evt" />
+
+                        <TextView
+                            android:id="@+id/txtEvtTime"
+                            style="@style/SingleLineMarqueeTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="0.15"
+                            android:gravity="center"
+                            android:maxLines="2"
+                            android:textSize="@dimen/txt_evt_time_txt_size_include_fragment_event_details_img_evt" />
+
+                        <LinearLayout
+                            android:id="@+id/lnrLayoutChkBoxGoing"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="0.24"
+                            android:gravity="center"
+                            android:orientation="horizontal" >
+
+                            <LinearLayout
+                                android:id="@+id/lnrLayoutChkBoxGoing"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center" >
+
+                                <CheckBox
+                                    android:id="@+id/chkBoxGoing"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:button="@drawable/checkbox_button_checked_blue_unchecked_grey"
+                                    android:drawablePadding="@dimen/chk_box_drawable_pad_include_fragment_event_details_footer"
+                                    android:text="Going"
+                                    android:textColor="@color/txt_color_include_fragment_event_details_footer_tab"
+                                    android:textSize="@dimen/lnr_layout_btns_txt_size_include_fragment_event_details_footer" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/lnrLayoutChkBoxWantToGo"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center" >
+
+                                <CheckBox
+                                    android:id="@+id/chkBoxWantToGo"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:button="@drawable/checkbox_button_checked_blue_unchecked_grey"
+                                    android:drawablePadding="@dimen/chk_box_drawable_pad_include_fragment_event_details_footer"
+                                    android:text="Want To"
+                                    android:textColor="@color/txt_color_include_fragment_event_details_footer_tab"
+                                    android:textSize="@dimen/lnr_layout_btns_txt_size_include_fragment_event_details_footer" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/lnrLayoutTickets"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="0.16"
+                            android:background="@color/font_blue" >
+
+                            <ImageView
+                                android:id="@+id/imgBuyTickets"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+	                            android:layout_margin="@dimen/chk_box_drawable_pad_include_fragment_event_details_footer"
+                                android:layout_centerVertical="true"
+                                android:src="@drawable/tickets" />
+
+                            <TextView
+                                android:id="@+id/txtBuyTickets"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:clickable="false"
+                                android:gravity="center"
+                                android:text="Tickets"
+                                android:textColor="@android:color/white"
+                                android:textSize="@dimen/lnr_layout_btns_txt_size_include_fragment_event_details_footer" />
+                        </RelativeLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lnrEventDescAndMap"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <include layout="@layout/include_address_map1" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+
+</RelativeLayout>

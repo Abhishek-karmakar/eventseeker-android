@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  	android:layout_width="match_parent" 
+  	android:layout_height="match_parent">
+  	
+    <ImageView android:id="@+id/imgCategory"
+      	android:layout_width="match_parent"
+      	android:layout_height="@dimen/img_category_ht_discover"
+      	android:scaleType="fitXY"
+      	android:contentDescription="Category Image" />
+  
+    <com.wcities.eventseeker.custom.view.RecyclerViewInterceptingVerticalScroll
+	    android:id="@+id/recyclerVEvents"
+	    android:scrollbars="vertical"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:background="@android:color/transparent" />
+  	
+  	<!-- Added android:layout_gravity="top" due to 2.3 api bug:
+	http://stackoverflow.com/questions/5401952/framelayout-margin-not-working -->
+	<android.support.v4.view.ViewPager android:id="@+id/vPagerCatTitles"
+	    android:layout_width="match_parent"
+	    android:layout_height="@dimen/v_pager_cat_titles_ht_discover"
+	    android:layout_marginTop="@dimen/v_pager_cat_titles_margin_t_discover"
+	    android:layout_gravity="top"
+	    android:background="@drawable/bg_lnr_gradient_top_transparent_btm_black" />
+
+	<View
+	    android:id="@+id/vNoContentBgImg"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_marginTop="@dimen/v_no_content_bg_margin_t_discover"
+	    android:background="@drawable/bg_no_content_overlay"
+	    android:visibility="invisible" />
+	
+	<RelativeLayout android:id="@+id/rltLytNoEvts"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:background="@android:color/transparent"
+	    android:visibility="invisible" >
+	
+		<TextView android:id="@+id/txtNoEvents"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:text="@string/txt_no_events"
+		    android:textSize="@dimen/txt_no_events_txt_size_discover"
+		    android:gravity="center"
+		    android:paddingLeft="@dimen/txt_no_events_pad_l_discover"
+		    android:paddingRight="@dimen/txt_no_events_pad_r_discover"
+		    android:layout_marginTop="@dimen/txt_no_events_margin_t_discover" />
+		
+		<Button android:id="@+id/btnChgLoc"
+		    android:layout_width="wrap_content"
+		    android:layout_height="@dimen/btn_chg_loc_ht_discover"
+		    android:text="@string/btn_chg_loc_txt"
+		    android:textSize="@dimen/btn_chg_loc_txt_size_discover"
+		    android:layout_alignParentBottom="true" 
+		    android:layout_marginBottom="@dimen/btn_chg_loc_margin_b_discover"
+		    android:paddingLeft="@dimen/btn_chg_loc_pad_l_discover"
+		    android:paddingRight="@dimen/btn_chg_loc_pad_r_discover"
+		    android:layout_centerHorizontal="true"
+		    style="@style/Widget.EventSeeker.ButtonRoundedCorner" />
+	
+	</RelativeLayout>
+	
+	<include layout="@layout/progress_bar_eventseeker_fixed_ht"
+	    android:id="@+id/rltLytProgressBar"
+	    android:layout_width="match_parent"
+    	android:layout_height="@dimen/rlt_lyt_root_ht_progress_bar_eventseeker_fixed_ht"
+    	android:layout_marginTop="@dimen/rlt_lyt_progress_bar_margin_t_fragment_discover"
+    	android:visibility="invisible" />
+	
+ </FrameLayout>

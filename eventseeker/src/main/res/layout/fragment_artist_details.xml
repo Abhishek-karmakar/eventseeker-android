@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white" >
+    
+    <!-- layout_height is kept as match_parent instead of wrap_content so that shared element (imgArtist)
+    transition is visible entirely & it doesn't get bounded by its parent rltLyt height -->
+    <RelativeLayout android:id="@+id/rltLyt"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+            
+	    <View
+	        android:id="@+id/vNoContentBG"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_below="@+id/rltLytTxtArtistTitle"
+	        android:background="@drawable/bg_no_content_overlay"
+	        android:visibility="invisible" />
+        
+	    <ImageView android:id="@+id/imgArtist"
+	      	android:layout_width="match_parent"
+	      	android:layout_height="@dimen/img_artist_ht_artist_details"
+	      	android:scaleType="centerCrop"
+	      	android:contentDescription="Artist Image" />
+	    
+	    <RelativeLayout android:id="@+id/rltLytTxtArtistTitle"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignBottom="@id/imgArtist"
+	        android:paddingLeft="@dimen/rlt_lyt_txt_artist_title_pad_l_artist_details"
+	    	android:paddingBottom="@dimen/rlt_lyt_txt_artist_title_pad_b_artist_details"
+	    	android:paddingTop="@dimen/rlt_lyt_txt_artist_title_pad_t_artist_details"
+	    	android:background="@drawable/bg_lnr_gradient_top_transparent_btm_black" >
+	    
+	    	<TextView android:id="@+id/txtArtistTitle"
+	    	    android:layout_width="match_parent"
+	    	    android:layout_height="@dimen/txt_artist_title_ht_artist_details"
+	    	    android:textColor="@android:color/white"
+	    	    android:textSize="@dimen/txt_artist_title_txt_size_artist_details"
+	    	    android:gravity="center_vertical"
+	    	    android:singleLine="true"
+	    	    android:ellipsize="marquee" />
+	    	
+	    </RelativeLayout>
+	    
+	</RelativeLayout>
+	
+    <com.wcities.eventseeker.custom.view.RecyclerViewInterceptingVerticalScroll
+	    android:id="@+id/recyclerVArtists"
+	    android:scrollbars="vertical"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:background="@android:color/transparent" />
+    
+   <!--  <com.melnykov.fab.FloatingActionButton android:id="@+id/fabSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="@dimen/fab_margin_b_artist_details"
+        android:layout_marginTop="@dimen/fab_margin_t_artist_details"
+        android:layout_marginRight="@dimen/fab_margin_r_artist_details"
+        android:src="@drawable/slctr_following_artist_details"
+        fab:fab_type="normal"
+        fab:fab_colorNormal="@color/colorPrimary"
+        fab:fab_colorPressed="@color/colorPrimaryDark"
+        fab:fab_colorRipple="@color/ripple_material_light" /> -->
+    
+    	
+	<com.melnykov.fab.FloatingActionButton android:id="@+id/fabSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="@dimen/fab_margin_b_event_details"
+        android:layout_marginRight="@dimen/fab_margin_l_r_event_details"
+        android:src="@drawable/slctr_following_artist_details"
+        fab:fab_type="normal"
+        fab:fab_colorNormal="@color/colorPrimary"
+        fab:fab_colorPressed="@color/colorPrimaryDark"
+        fab:fab_colorRipple="@android:color/white" />
+	
+	<!-- 
+    	NOTE:
+    	android:cropToPadding="true"
+	    android:padding="@dimen/fab_artist_news_pad_artist_details"
+	    android:scaleType="centerInside"
+	    - will resize the latestnews icon of Navigation drawer for the FAB
+    -->
+	<com.melnykov.fab.FloatingActionButton
+	    android:id="@+id/fabArtistNews"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="bottom|center_horizontal"
+	    android:layout_marginBottom="@dimen/fab_margin_b_artist_details"
+	    android:layout_marginLeft="@dimen/fab_margin_l_r_artist_details"
+	    android:cropToPadding="true"
+	    android:padding="@dimen/fab_artist_news_pad_artist_details"
+	    android:scaleType="centerInside"
+	    android:src="@drawable/latestnews"
+	    fab:fab_colorNormal="@color/colorPrimary"
+	    fab:fab_colorPressed="@color/colorPrimaryDark"
+	    fab:fab_colorRipple="@android:color/white"
+	    fab:fab_type="normal" />
+	
+</FrameLayout>

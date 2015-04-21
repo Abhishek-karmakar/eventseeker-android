@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frmLytRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".DiscoverActivityTab" >
+    
+    <LinearLayout android:id="@+id/lnrLytRoot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <android.support.v4.widget.DrawerLayout
+            android:id="@+id/drawer_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <!-- The main content view -->
+
+            <FrameLayout android:id="@+id/content_frame"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="@dimen/action_bar_ht" />
+
+            <!-- The navigation drawer -->
+
+            <LinearLayout
+                android:id="@+id/rootNavigationDrawer"
+                android:layout_width="@dimen/root_navigation_drawer_w_main"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:background="@drawable/bg_list_nav_drawer"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/action_bar_ht" >
+                
+            </LinearLayout>
+            
+        </android.support.v4.widget.DrawerLayout>
+        
+    </LinearLayout>
+    
+    <include layout="@layout/toolbar" />
+
+</FrameLayout>

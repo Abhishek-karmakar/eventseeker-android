@@ -1,0 +1,10 @@
+include ':endlessViewPager'
+include ':facebook'
+include ':floatingActionButton'
+include ':serverSDK'
+include ':spotifyApi'
+include ':viewPagerIndicator'
+include ':gmusic'
+include ':cardview'
+include ':eventseeker'
+

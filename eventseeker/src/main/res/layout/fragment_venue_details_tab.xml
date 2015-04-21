@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white" >
+    
+    <RelativeLayout android:id="@+id/rltLyt"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    
+	    <com.wcities.eventseeker.custom.view.ResizableImageView android:id="@+id/vNoContentBG"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_alignParentBottom="true"
+	        android:scaleType="centerCrop"
+	        android:src="@drawable/ic_no_content_background_overlay_cropped"
+	        android:visibility="invisible" />
+	        <!-- android:layout_below="@+id/rltLytTxtVenueTitle" -->
+	    
+	    <ImageView android:id="@+id/imgVenue"
+	      	android:layout_width="match_parent"
+	      	android:layout_height="@dimen/img_venue_ht_venue_details_tab"
+	      	android:scaleType="centerCrop"
+	      	android:contentDescription="Venue Image" />
+	    
+	    <RelativeLayout android:id="@+id/rltLytTxtVenueTitle"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignBottom="@id/imgVenue"
+	        android:paddingLeft="@dimen/rlt_lyt_txt_venue_title_pad_l_venue_details_tab"
+	    	android:paddingBottom="@dimen/rlt_lyt_txt_venue_title_pad_b_venue_details_tab"
+	    	android:paddingTop="@dimen/rlt_lyt_txt_venue_title_pad_t_venue_details_tab"
+	    	android:background="@drawable/bg_lnr_gradient_top_transparent_btm_black" >
+	    
+	    	<TextView android:id="@+id/txtVenueTitle"
+	    	    android:layout_width="match_parent"
+	    	    android:layout_height="@dimen/txt_venue_title_ht_venue_details_tab"
+	    	    android:textColor="@android:color/white"
+	    	    android:textSize="@dimen/txt_venue_title_txt_size_venue_details_tab"
+	    	    android:gravity="center_vertical"
+	    	    android:singleLine="true"
+	    	    android:ellipsize="marquee"
+	    	    android:textStyle="bold" />
+	    	
+	    </RelativeLayout>
+	    
+	    <View android:id="@+id/vDummy"
+	        android:layout_width="match_parent"
+	        android:layout_height="0dp"
+	        android:layout_below="@id/rltLytTxtVenueTitle"
+	        android:background="@android:color/white" />
+	    
+	</RelativeLayout>
+	
+    <com.wcities.eventseeker.custom.view.RecyclerViewInterceptingVerticalScroll
+	    android:id="@+id/recyclerVVenue"
+	    android:scrollbars="vertical"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:background="@android:color/transparent" />
+    
+</FrameLayout>

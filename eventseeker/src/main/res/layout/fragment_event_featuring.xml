@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootRltLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_gray" >
+    
+    <include layout="@layout/include_fragment_event_details_footer"
+        android:id="@+id/lnrLayoutBtns"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
+    
+    <ListView android:id="@id/android:list"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+        android:background="@android:color/white"
+		android:layout_above="@id/lnrLayoutBtns" />
+    
+    <!-- <ScrollView android:id="@+id/scrlVArtistList"
+        android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_above="@id/lnrLayoutBtns" >
+	        
+	    <LinearLayout android:id="@+id/lnrLayoutArtistList"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical"
+	        android:background="@android:color/white" />
+	        
+	</ScrollView> -->
+    
+</RelativeLayout>

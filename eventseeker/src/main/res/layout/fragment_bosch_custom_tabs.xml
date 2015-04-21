@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/tab_bar_margin_fragment_custom_tabs" >
+    
+    <LinearLayout android:id="@+id/tabBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/tab_bar_ht_fragment_custom_tabs"
+        android:orientation="horizontal"
+        android:layout_marginLeft="@dimen/tab_bar_margin_fragment_custom_tabs"
+        android:layout_marginRight="@dimen/tab_bar_margin_fragment_custom_tabs"
+        android:layout_marginBottom="@dimen/tab_bar_margin_fragment_custom_tabs"
+        android:background="@drawable/tab_bar_rounded_corners" >
+    
+		<Button android:id="@+id/btnTab1"
+		    android:layout_width="0dp"
+		    android:layout_height="match_parent"
+		    android:text="TAB 1"
+		    style="@style/CustomTabBarBosch"
+		    android:layout_weight="1" />
+		
+		<View android:id="@+id/vDivider1"
+		    android:layout_width="@dimen/v_divider_w_fragment_custom_tabs"
+		    android:layout_height="match_parent"
+		    android:background="@drawable/button_divide"
+		    android:layout_marginTop="@dimen/v_divider_margin_t_fragment_custom_tabs"
+		    android:layout_marginBottom="@dimen/v_divider_margin_b_fragment_custom_tabs" />
+		
+		<Button android:id="@+id/btnTab2"
+		    android:layout_width="0dp"
+		    android:layout_height="match_parent"
+		    android:text="TAB 2"
+		    style="@style/CustomTabBarBosch"
+		    android:layout_weight="1" />
+		
+		<View android:id="@+id/vDivider2"
+		    android:layout_width="@dimen/v_divider_w_fragment_custom_tabs"
+		    android:layout_height="match_parent"
+		    android:background="@drawable/button_divide"
+		    android:layout_marginTop="@dimen/v_divider_margin_t_fragment_custom_tabs"
+		    android:layout_marginBottom="@dimen/v_divider_margin_b_fragment_custom_tabs" />
+		
+		<Button android:id="@+id/btnTab3"
+		    android:layout_width="0dp"
+		    android:layout_height="match_parent"
+		    android:text="TAB 3"
+		    style="@style/CustomTabBarBosch"
+		    android:layout_weight="1" />
+	
+	</LinearLayout>
+	
+    <com.wcities.eventseeker.custom.view.NestingViewPager android:id="@+id/tabContentFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tabBar"
+        android:layout_marginLeft="@dimen/tab_bar_margin_fragment_custom_tabs"
+        android:layout_marginRight="@dimen/tab_bar_margin_fragment_custom_tabs" />
+    
+</RelativeLayout>

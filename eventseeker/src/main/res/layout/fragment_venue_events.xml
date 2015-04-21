@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rltLayoutRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <include layout="@layout/include_venue_details_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="@dimen/lnr_layout_btns_margin_t_fragment_venue_events" />
+
+</RelativeLayout>

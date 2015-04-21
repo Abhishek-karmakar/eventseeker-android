@@ -1,0 +1,138 @@
+<resources>
+
+    <dimen name="lnr_layout_chk_box_going_margin_b_evt_details">30dp</dimen>
+    <dimen name="lnr_layout_chk_box_want_to_go_margin_b_evt_details">@dimen/lnr_layout_chk_box_going_margin_b_evt_details</dimen>
+    <dimen name="rel_layout_btns_w_evt_details">150dp</dimen>
+    <dimen name="rel_layout_btns_ht_evt_details">60dp</dimen>
+
+    <!-- actionbar -->
+    <dimen name="action_bar_title_txt_size">20sp</dimen>
+    <dimen name="action_bar_ht">48dp</dimen>
+
+    <!-- fragment_fb_login.xml -->
+    <dimen name="txt_fb_login_desc_margin_t_fb_login">10dp</dimen>
+    <dimen name="btn_fb_sign_up_margin_t_fb_login">10dp</dimen>
+    <dimen name="btn_continue_margin_b_fb_login">20dp</dimen>
+
+    <!-- fragment_discover.xml -->
+    <dimen name="grd_evt_categories_margin_t_discover">@dimen/rlt_layout_featured_evts_parent_margin_discover</dimen>
+    <dimen name="grd_evt_categories_margin_r_discover">@dimen/rlt_layout_featured_evts_parent_margin_discover</dimen>
+    <!-- v_pager_cat_titles_margin_t_discover = v_pager_cat_titles_margin_t_discover in portrait(160) - 
+    (action_bar_ht in portrait(56) - action_bar_ht in landscape(48)) -->
+    <dimen name="v_pager_cat_titles_margin_t_discover">@dimen/v_pager_cat_titles_margin_t_discover_land</dimen>
+    <!-- img_category_ht_discover = v_pager_cat_titles_ht_discover + v_pager_cat_titles_margin_t_discover -->
+    <dimen name="img_category_ht_discover">212dp</dimen>
+    <!-- txt_no_events_margin_t_discover = img_category_ht_discover (212dp) + actual margin (4dp) -->
+    <dimen name="txt_no_events_margin_t_discover">216dp</dimen>
+    <dimen name="btn_chg_loc_margin_b_discover">5dp</dimen>
+
+    <!-- grid_category.xml -->
+    <dimen name="img_category_ht_grid_category">120dp</dimen>
+
+    <!-- fragment_search_artists_list_item.xml -->
+    <dimen name="img_artist_w_fragment_search_artists_list_item">110dp</dimen>
+    <dimen name="img_artist_ht_fragment_search_artists_list_item">80dp</dimen>
+    <dimen name="rel_layout_artist_details_margin_l_fragment_search_artists_list_item">60dp</dimen>
+
+    <!-- activity_artist_details.xml -->
+    <dimen name="lnr_layout_btn_follow_margin_b_artist_details">30dp</dimen>
+    <dimen name="lnr_layout_btn_news_margin_b_artist_details">@dimen/lnr_layout_btn_follow_margin_b_artist_details</dimen>
+    <dimen name="rel_layout_btns_w_artist_details">150dp</dimen>
+    <dimen name="rel_layout_btns_ht_artist_details">60dp</dimen>
+
+    <!-- activity_discover_by_category_list_item_evt.xml -->
+    <dimen name="rlt_layout_evt_details_margin_l_fragment_discover_by_category_list_item_evt">30dp</dimen>
+    <dimen name="txt_evt_location_margin_l_include_evt_details">35dp</dimen>
+
+    <!-- custom_actionbar_tabs.xml -->
+    <dimen name="v_divider_w_custom_actionbar_tabs">30dp</dimen>
+    <dimen name="v_divider_margin_t_custom_actionbar_tabs">8dp</dimen>
+    <dimen name="v_divider_margin_b_custom_actionbar_tabs">@dimen/v_divider_margin_t_custom_actionbar_tabs</dimen>
+    <dimen name="btn_pad_l_custom_actionbar_tabs">15dp</dimen>
+    <dimen name="btn_pad_r_custom_actionbar_tabs">@dimen/btn_pad_l_custom_actionbar_tabs</dimen>
+
+    <!-- fragment_custom_tabs.xml -->
+    <dimen name="tab_content_frame_margin_t_fragment_custom_tabs">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+
+    <!-- fragment_event_info.xml -->
+    <dimen name="rlt_layout_evt_desc_margin_r_fragment_event_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="img_evt_ht_fragment_event_info">190dp</dimen>
+
+    <!-- fragment_my_events_list_item.xml -->
+    <dimen name="tbl_layout_evt_details_margin_l_fragment_my_events_list_item">18dp</dimen>
+    <dimen name="tbl_layout_evt_details_margin_r_fragment_my_events_list_item">25dp</dimen>
+    <dimen name="img_event_w_fragment_my_events_list_item">160dp</dimen>
+    <dimen name="img_event_ht_fragment_my_events_list_item">120dp</dimen>
+    <dimen name="txt_evt_title_margin_l_fragment_my_events_list_item">3dp</dimen>
+    <dimen name="chk_box_txt_w_fragment_my_events_list_item">65dp</dimen>
+    <dimen name="row_img_dim_fragment_my_events_list_item">17dp</dimen>
+    <dimen name="txt_evt_location_txt_size_fragment_my_events_list_item">15sp</dimen>
+    <dimen name="txt_evt_time_am_pm_margin_t_fragment_my_events_list_item">-5dp</dimen>
+    <dimen name="btn_buy_tickets_ht_fragment_my_events_list_item">30dp</dimen>
+    <dimen name="btn_buy_tickets_drawable_pad_fragment_my_events_list_item">10dp</dimen>
+    <dimen name="chk_box_w_fragment_my_events_list_item">120dp</dimen>
+    <dimen name="chk_box_margin_r_fragment_my_events_list_item">8dp</dimen>
+    <dimen name="chk_box_pad_l_fragment_my_events_list_item">20dp</dimen>
+    <dimen name="row_txt_margin_l_fragment_my_events_list_item">10dp</dimen>
+
+    <!-- include_fragment_my_events_list_item_footer.xml -->
+    <dimen name="lnr_layout_btns_ht_fragment_my_events_list_item">35dp</dimen>
+    <dimen name="lnr_layout_btns_margin_l_fragment_my_events_list_item">@dimen/divider_margin_l_fragment_discover_by_category_list_item_evt</dimen>
+    <dimen name="lnr_layout_btns_margin_r_fragment_my_events_list_item">@dimen/divider_margin_l_fragment_discover_by_category_list_item_evt</dimen>
+    <dimen name="lnr_layout_btns_margin_t_fragment_my_events_list_item">2dp</dimen>
+
+    <!-- friends_activity_item.xml -->
+    <dimen name="img_evt_margin_friends_activity_item">0dp</dimen>
+    <dimen name="lnr_layout_btns_margin_l_friends_activity_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="lnr_layout_btns_margin_r_friends_activity_item">@dimen/lnr_layout_btns_margin_l_friends_activity_item</dimen>
+    <dimen name="lnr_layout_btns_margin_friends_activity_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="lnr_layout_btns_ht_friends_activity_item">50dp</dimen>
+    <dimen name="btn_drawable_pad_friends_activity_item">5dp</dimen>
+
+    <!-- fragment_about_us.xml -->
+    <!-- <dimen name="txt_app_name_margin_t_fragment_about_us">2dp</dimen>
+    <dimen name="txt_app_name_txt_size_fragment_about_us">30sp</dimen>
+    <dimen name="txt_app_slogan_margin_t_fragment_about_us">-2dp</dimen>
+    <dimen name="txt_app_slogan_txt_size_fragment_about_us">16sp</dimen>
+    <dimen name="txt_desc_margin_t_fragment_about_us">2dp</dimen>
+    <dimen name="txt_desc_margin_l_fragment_about_us">10dp</dimen>
+    <dimen name="txt_desc_margin_r_fragment_about_us">@dimen/txt_desc_margin_l_fragment_about_us</dimen>
+    <dimen name="txt_desc_txt_size_fragment_about_us">12sp</dimen>
+    <dimen name="lnr_layout_icons_margin_t_fragment_about_us">5dp</dimen>
+    <dimen name="txt_powered_by_margin_t_fragment_about_us">2dp</dimen>
+    <dimen name="txt_powered_by_margin_b_fragment_about_us">4dp</dimen>
+    <dimen name="txt_powered_by_txt_size_fragment_about_us">10sp</dimen> -->
+
+    <!-- fragment_rep_code.xml -->
+    <dimen name="img_rep_code_margin_t_fragment_rep_code">20dp</dimen>
+
+    <!-- fragment_venue_info -->
+    <dimen name="layout_include_desc_margin_l_fragment_venue_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+
+    <!-- fragment_sync_account.xml -->
+    <dimen name="v_dummy_ht_fragment_sync_account">10dp</dimen>
+    
+    <!-- list_no_items_found.xml -->
+    <dimen name="txt_list_no_items_found_pad_list_no_items_found">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="rlt_list_no_items_found_pad_list_no_items_found">0dp</dimen>
+    
+    <!-- include_no_items_found_with_action.xml -->
+    <dimen name="rlt_layout_root_pad_l_include_no_items_found_with_action">40dp</dimen>
+    <dimen name="rlt_layout_root_pad_r_include_no_items_found_with_action">@dimen/rlt_layout_root_pad_l_include_no_items_found_with_action</dimen>
+    
+    <!-- fragment_my_events_list.xml -->
+    <dimen name="rlt_layout_root_pad_l_fragment_my_events_list">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="rlt_layout_root_pad_r_fragment_my_events_list">@dimen/rlt_layout_root_pad_l_fragment_my_events_list</dimen>
+    
+    <!-- login/register fragment -->
+    <dimen name="mar_l_r_get_started_fragment">70dp</dimen>
+   	<dimen name="rlt_register_details_mar_r_get_started_fragment">30dp</dimen>
+   	
+   	<!-- fragment_event_details.xml -->
+    <!-- After scrolling to top, txtEvtTitle text must be in center vertical position exactly aligned with 
+    toolbar title (for good looking transition effect), hence following calculation is used to derive txt_evt_title_ht_event_details. 
+    Here, rlt_lyt_txt_evt_title_pad_b_event_details is fixed to 8dp, so to keep txtEvtTitle textview
+    in center vertical position, we leave aside 8dp more (for top). Hence ht comes out as 48 - 2*8 = 32dp 
+    txt_evt_title_ht_event_details = action_bar_ht - 2*rlt_lyt_txt_evt_title_pad_b_event_details -->
+    <dimen name="txt_evt_title_ht_event_details">32dp</dimen>
+</resources>

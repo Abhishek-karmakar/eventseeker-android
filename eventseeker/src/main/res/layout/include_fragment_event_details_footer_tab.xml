@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- NOTE: THIS LAYOUT IS NOW NOT IN USE BUT STILL THIS FILE SHOULDN'T BE DELETED AS, IN FEATURING TAB IT IS USED AND 
+ITS VISIBILITY IS GONE AS THE FUNCTIONALITY IS NEEDED IN PHONE DEVICE AND TO REDUCE NUM OF CONDITION IN PROJECT -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lnrLayoutBtns"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/lnr_layout_btns_min_ht_include_fragment_event_details_footer"
+    android:background="@android:color/transparent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/lnrLayoutChkBoxGoing"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="3dp" >
+
+        <LinearLayout
+            android:id="@+id/lnrLayoutChkBoxGoing"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <CheckBox
+                android:id="@+id/chkBoxGoing"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:button="@drawable/checkbox_button_checked_blue_unchecked_grey"
+                android:drawablePadding="@dimen/chk_box_drawable_pad_include_fragment_event_details_footer"
+                android:text="@string/going_lower"
+                android:textColor="@color/txt_color_include_fragment_event_details_footer_tab"
+                android:textSize="@dimen/lnr_layout_btns_txt_size_include_fragment_event_details_footer" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lnrLayoutChkBoxWantToGo"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <CheckBox
+                android:id="@+id/chkBoxWantToGo"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:button="@drawable/checkbox_button_checked_blue_unchecked_grey"
+                android:drawablePadding="@dimen/chk_box_drawable_pad_include_fragment_event_details_footer"
+                android:text="@string/want_to_lower"
+                android:textColor="@color/txt_color_include_fragment_event_details_footer_tab"
+                android:textSize="@dimen/lnr_layout_btns_txt_size_include_fragment_event_details_footer" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/lnrLayoutTickets"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/font_blue" >
+
+        <ImageView
+            android:id="@+id/imgBuyTickets"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/tickets" />
+
+        <TextView
+            android:id="@+id/txtBuyTickets"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:clickable="false"
+            android:drawablePadding="@dimen/chk_box_drawable_pad_include_fragment_event_details_footer"
+            android:gravity="center"
+            android:text="@string/tickets_lower"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/lnr_layout_btns_txt_size_include_fragment_event_details_footer" />
+    </RelativeLayout>
+
+</LinearLayout>

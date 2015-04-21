@@ -1,0 +1,875 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_medium">8dp</dimen>
+    <dimen name="padding_large">16dp</dimen>
+    <!-- toolbar.xml -->
+    <dimen name="action_bar_title_txt_size">22sp</dimen>
+    <dimen name="action_bar_ht">56dp</dimen>
+    <dimen name="common_t_mar_pad_for_all_layout">@dimen/action_bar_ht</dimen>
+    <dimen name="action_bar_tab_txt_size">17sp</dimen>
+    <dimen name="action_bar_elevation">4dp</dimen>
+    <dimen name="action_bar_title_margin_start">0dp</dimen>
+    <dimen name="event_listing_slider_items_size_w_h">25dp</dimen>
+    <dimen name="event_listing_slider_items_outer_size_w_h">45dp</dimen>
+    <!-- fragment_discover.xml -->
+    <dimen name="rlt_layout_featured_evts_parent_margin_discover">8dp</dimen>
+    <dimen name="v_pager_cat_titles_margin_t_discover_port">160dp</dimen>
+    <dimen name="v_pager_cat_titles_margin_t_discover_land">152dp</dimen>
+    <dimen name="v_pager_cat_titles_margin_t_discover">@dimen/v_pager_cat_titles_margin_t_discover_port</dimen>
+    <!-- v_no_content_bg_margin_t_discover = v_pager_cat_titles_ht_discover 
+    									   + v_pager_cat_titles_margin_t_discover -->
+    <dimen name="v_no_content_bg_margin_t_discover">220dp</dimen>
+    <dimen name="v_pager_cat_titles_ht_discover">60dp</dimen>
+    <dimen name="txt_no_events_pad_l_discover">30dp</dimen>
+    <dimen name="txt_no_events_pad_r_discover">@dimen/txt_no_events_pad_l_discover</dimen>
+    <!-- txt_no_events_margin_t_discover = img_category_ht_discover (220dp) + actual margin (40dp) -->
+    <dimen name="txt_no_events_margin_t_discover">260dp</dimen>
+    <dimen name="txt_no_events_txt_size_discover">17sp</dimen>
+    <dimen name="rlt_lyt_progress_bar_margin_t_fragment_discover">280dp</dimen>
+    <!-- img_category_ht_discover = v_pager_cat_titles_ht_discover + v_pager_cat_titles_margin_t_discover -->
+    <dimen name="img_category_ht_discover">220dp</dimen>
+    <dimen name="btn_chg_loc_ht_discover">45dp</dimen>
+    <dimen name="btn_chg_loc_margin_b_discover">20dp</dimen>
+    <dimen name="btn_chg_loc_pad_l_discover">25dp</dimen>
+    <dimen name="btn_chg_loc_pad_r_discover">@dimen/btn_chg_loc_pad_l_discover</dimen>
+    <dimen name="btn_chg_loc_txt_size_discover">17sp</dimen>
+    <!-- cat_title.xml -->
+    <dimen name="txt_title_txt_size_cat_titles">17sp</dimen>
+    <dimen name="v_hor_line_ht_cat_titles">4dp</dimen>
+    <dimen name="v_hor_line_margin_b_cat_titles">3dp</dimen>
+    <!-- fragment_featured_events.xml -->
+    <dimen name="root_rlt_layout_pad_l_frag_featured_events">8dp</dimen>
+    <dimen name="root_rlt_layout_pad_r_frag_featured_events">8dp</dimen>
+    <dimen name="txt_v_pad_l_frag_featured_events">5dp</dimen>
+    <dimen name="txt_v_pad_r_frag_featured_events">@dimen/txt_v_pad_l_frag_featured_events</dimen>
+    <dimen name="txt_evt_title_txt_size_frag_featured_events">16sp</dimen>
+    <dimen name="txt_evt_time_txt_size_frag_featured_events">13sp</dimen>
+    <!-- grid_category.xml -->
+    <dimen name="img_category_ht_grid_category">100dp</dimen>
+    <dimen name="txt_category_pad_t_grid_category">2dp</dimen>
+    <dimen name="txt_category_pad_b_grid_category">@dimen/txt_category_pad_t_grid_category</dimen>
+    <dimen name="txt_category_pad_l_grid_category">5dp</dimen>
+    <!-- activity_event_details.xml -->
+    <dimen name="rlt_layout_evt_title_ht_evt_details">48dp</dimen>
+    <dimen name="spnr_share_ht_evt_details">45dp</dimen>
+    <dimen name="spnr_share_margin_l_evt_details">3dp</dimen>
+    <dimen name="spnr_share_margin_r_evt_details">10dp</dimen>
+    <dimen name="divider_w_evt_details">2dp</dimen>
+    <dimen name="divider_ht_evt_details">30dp</dimen>
+    <dimen name="txt_evt_name_txt_size_evt_details">17sp</dimen>
+    <dimen name="txt_evt_name_margin_l_evt_details">10dp</dimen>
+    <dimen name="txt_evt_name_margin_t_evt_details">4dp</dimen>
+    <dimen name="txt_evt_name_margin_r_evt_details">3dp</dimen>
+    <dimen name="txt_evt_name_margin_b_evt_details">-2dp</dimen>
+    <dimen name="txt_evt_time_txt_size_evt_details">12sp</dimen>
+    <dimen name="rlt_layout_evt_details_pad_evt_details">7dp</dimen>
+    <dimen name="img_loc_marker_w_evt_details">20dp</dimen>
+    <dimen name="img_loc_marker_ht_evt_details">20dp</dimen>
+    <dimen name="img_loc_marker_margin_l_evt_details">10dp</dimen>
+    <dimen name="txt_evt_location_txt_size_evt_details">14sp</dimen>
+    <dimen name="lnr_layout_btns_margin_t_evt_details">5dp</dimen>
+    <dimen name="lnr_layout_btns_pad_t_evt_details">0dp</dimen>
+    <dimen name="lnr_layout_btns_pad_b_evt_details">@dimen/lnr_layout_btns_pad_t_evt_details</dimen>
+    <dimen name="lnr_layout_btns_txt_size_evt_details">12sp</dimen>
+    <dimen name="divider_lnr_layout_btns_w_evt_details">1dp</dimen>
+    <dimen name="divider_lnr_layout_btns_ht_evt_details">25dp</dimen>
+    <dimen name="txt_artists_list_title_margin_t_evt_details">8dp</dimen>
+    <dimen name="txt_artists_list_title_margin_l_evt_details">3dp</dimen>
+    <dimen name="txt_artists_list_title_txt_size_evt_details">16sp</dimen>
+    <dimen name="hor_divider_ht_evt_details">2dp</dimen>
+    <dimen name="hor_divider_margin_b_evt_details">3dp</dimen>
+    <!-- share_dropdown_item.xml -->
+    <dimen name="rlt_layout_root_pad_t_share_dropdown_item">5dp</dimen>
+    <dimen name="img_app_icon_w_share_dropdown_item">25dp</dimen>
+    <dimen name="img_app_icon_ht_share_dropdown_item">25dp</dimen>
+    <dimen name="img_app_icon_margin_l_share_dropdown_item">10dp</dimen>
+    <dimen name="img_app_icon_margin_r_share_dropdown_item">8dp</dimen>
+    <dimen name="v_dummy_w_share_dropdown_item">25dp</dimen>
+    <dimen name="v_dummy_ht_share_dropdown_item">5dp</dimen>
+    <dimen name="txt_app_label_txt_size_share_dropdown_item">14sp</dimen>
+    <!-- fragment_search_artists_list_item.xml -->
+    <dimen name="img_artist_w_fragment_search_artists_list_item">@dimen/img_event_w_fragment_discover_by_category_list_item_evt</dimen>
+    <dimen name="img_artist_ht_fragment_search_artists_list_item">@dimen/img_event_ht_fragment_discover_by_category_list_item_evt</dimen>
+    <dimen name="img_artist_margin_t_fragment_search_artists_list_item">10dp</dimen>
+    <dimen name="img_artist_margin_l_fragment_search_artists_list_item">@dimen/img_artist_margin_t_fragment_search_artists_list_item</dimen>
+    <dimen name="img_artist_margin_b_fragment_search_artists_list_item">@dimen/img_artist_margin_t_fragment_search_artists_list_item</dimen>
+    <dimen name="rel_layout_artist_details_margin_l_fragment_search_artists_list_item">23dp</dimen>
+    <dimen name="rel_layout_artist_details_margin_r_fragment_search_artists_list_item">5dp</dimen>
+    <dimen name="rel_layout_artist_details_pad_t_fragment_search_artists_list_item">8dp</dimen>
+    <dimen name="rel_layout_artist_details_pad_b_fragment_search_artists_list_item">12dp</dimen>
+    <dimen name="txt_artist_name_txt_size_fragment_search_artists_list_item">15sp</dimen>
+    <dimen name="txt_on_tour_txt_size_fragment_search_artists_list_item">11sp</dimen>
+    <dimen name="chk_follow_mar_r_fragment_search_artists_list_item">10dp</dimen>
+    <dimen name="divider_h_fragment_search_artists_list_item">1dp</dimen>
+    <dimen name="divider_margin_l_fragment_search_artists_list_item">5dp</dimen>
+    <dimen name="divider_margin_r_fragment_search_artists_list_item">5dp</dimen>
+    <dimen name="divider_margin_r_fragment_search_artists_list_item_for_indexed_list">25dp</dimen>
+    <!-- activity_artist_details.xml -->
+    <dimen name="rlt_layout_artist_details_pad_artist_details">7dp</dimen>
+    <dimen name="txt_artist_name_ht_artist_details">60dp</dimen>
+    <dimen name="txt_artist_name_txt_size_artist_details">14sp</dimen>
+    <dimen name="txt_artist_name_pad_l_artist_details">15dp</dimen>
+    <dimen name="lnr_layout_btns_margin_t_artist_details">5dp</dimen>
+    <dimen name="lnr_layout_btns_pad_t_artist_details">0dp</dimen>
+    <dimen name="lnr_layout_btns_pad_b_artist_details">@dimen/lnr_layout_btns_pad_t_artist_details</dimen>
+    <dimen name="lnr_layout_btns_txt_size_artist_details">12sp</dimen>
+    <dimen name="divider_lnr_layout_btns_w_artist_details">1dp</dimen>
+    <dimen name="divider_lnr_layout_btns_ht_artist_details">25dp</dimen>
+    <dimen name="btns_drawable_pad_artist_details">3dp</dimen>
+    <dimen name="rlt_layout_friends_section_margin_t_artist_details">8dp</dimen>
+    <dimen name="txt_friends_section_title_margin_l_artist_details">3dp</dimen>
+    <dimen name="txt_friends_section_title_txt_size_artist_details">16sp</dimen>
+    <dimen name="hor_divider_ht_artist_details">2dp</dimen>
+    <dimen name="hor_divider_margin_b_artist_details">3dp</dimen>
+    <dimen name="btn_more_margin_r_artist_details">1dp</dimen>
+    <dimen name="btn_more_margin_t_artist_details">-10dp</dimen>
+    <dimen name="btn_more_txt_size_artist_details">14sp</dimen>
+    <dimen name="grd_friends_imgs_col_w_artist_details">100dp</dimen>
+    <dimen name="grd_friends_imgs_hor_spacing_artist_details">10dp</dimen>
+    <dimen name="img_friend_ht_artist_details_friends_grid_item">100dp</dimen>
+    <dimen name="txt_friend_name_txt_size_artist_details_friends_grid_item">14sp</dimen>
+    <dimen name="txt_upcoming_evts_list_title_margin_l_artist_details">3dp</dimen>
+    <dimen name="rlt_layout_upcoming_evts_list_title_margin_t_artist_details">-10dp</dimen>
+    <dimen name="txt_upcoming_evts_list_title_txt_size_artist_details">16sp</dimen>
+    <dimen name="txt_news_list_title_margin_l_artist_details">@dimen/txt_upcoming_evts_list_title_margin_l_artist_details</dimen>
+    <dimen name="txt_news_list_title_margin_t_artist_details">5dp</dimen>
+    <dimen name="txt_news_list_title_txt_size_artist_details">@dimen/txt_upcoming_evts_list_title_txt_size_artist_details</dimen>
+    <!-- fragment_discover_by_category_list_item_evt.xml -->
+    <!--
+    summation of img_event_ht_fragment_discover_by_category_list_item_evt + img_event_margin_t_fragment_discover_by_category_list_item_evt +
+    img_event_margin_b_fragment_discover_by_category_list_item_evt + divider_ht_fragment_discover_by_category_list_item_evt
+    -->
+    <dimen name="rlt_layout_root_ht_fragment_discover_by_category_list_item_evt">90dp</dimen>
+    <dimen name="img_event_w_fragment_discover_by_category_list_item_evt">112dp</dimen>
+    <dimen name="img_event_ht_fragment_discover_by_category_list_item_evt">84dp</dimen>
+    <dimen name="img_event_margin_t_fragment_discover_by_category_list_item_evt">8dp</dimen>
+    <dimen name="img_event_margin_l_fragment_discover_by_category_list_item_evt">@dimen/divider_margin_l_fragment_discover_by_category_list_item_evt</dimen>
+    <dimen name="img_event_margin_b_fragment_discover_by_category_list_item_evt">8dp</dimen>
+    <dimen name="rlt_layout_evt_details_margin_l_fragment_discover_by_category_list_item_evt">13dp</dimen>
+    <dimen name="rlt_layout_evt_details_margin_r_fragment_discover_by_category_list_item_evt">5dp</dimen>
+    <dimen name="divider_ht_fragment_discover_by_category_list_item_evt">1dp</dimen>
+    <dimen name="divider_margin_l_fragment_discover_by_category_list_item_evt">8dp</dimen>
+    <dimen name="divider_margin_r_fragment_discover_by_category_list_item_evt">@dimen/divider_margin_l_fragment_discover_by_category_list_item_evt</dimen>
+    <!-- include_evt_details.xml -->
+    <dimen name="txt_evt_title_txt_size_include_evt_details">14sp</dimen>
+    <dimen name="txt_evt_title_margin_l_include_evt_details">2dp</dimen>
+    <dimen name="img_evt_location_w_include_evt_details">15dp</dimen>
+    <dimen name="img_evt_location_ht_include_evt_details">15dp</dimen>
+    <dimen name="img_evt_location_margin_t_include_evt_details">2dp</dimen>
+    <dimen name="txt_evt_location_margin_l_include_evt_details">7dp</dimen>
+    <dimen name="txt_evt_location_txt_size_include_evt_details">12sp</dimen>
+    <dimen name="img_evt_time_w_include_evt_details">15dp</dimen>
+    <dimen name="img_evt_time_ht_include_evt_details">15dp</dimen>
+    <dimen name="txt_evt_time_txt_size_include_evt_details">12sp</dimen>
+    <!-- activity_venue_details.xml -->
+    <dimen name="rlt_layout_root_pad_venue_details">7dp</dimen>
+    <dimen name="img_venue_w_venue_details">100dp</dimen>
+    <dimen name="img_venue_margin_b_venue_details">@dimen/rlt_layout_root_pad_venue_details</dimen>
+    <dimen name="img_venue_location_w_venue_details">20dp</dimen>
+    <dimen name="img_venue_location_ht_venue_details">20dp</dimen>
+    <dimen name="img_venue_location_margin_l_venue_details">5dp</dimen>
+    <dimen name="img_venue_location_margin_t_venue_details">2dp</dimen>
+    <dimen name="txt_venue_txt_size_venue_details">16sp</dimen>
+    <dimen name="txt_venue_name_margin_l_venue_details">@dimen/img_venue_location_margin_l_venue_details</dimen>
+    <dimen name="lnr_layout_btns_pad_t_venue_details">0dp</dimen>
+    <dimen name="lnr_layout_btns_pad_b_venue_details">@dimen/lnr_layout_btns_pad_t_venue_details</dimen>
+    <dimen name="lnr_layout_btns_txt_size_venue_details">12sp</dimen>
+    <dimen name="divider_lnr_layout_btns_w_venue_details">1dp</dimen>
+    <dimen name="divider_lnr_layout_btns_ht_venue_details">25dp</dimen>
+    <dimen name="btns_drawable_pad_venue_details">3dp</dimen>
+    <dimen name="txt_venue_description_margin_t_venue_details">3dp</dimen>
+    <dimen name="txt_venue_description_margin_l_venue_details">2dp</dimen>
+    <dimen name="txt_venue_description_margin_r_venue_details">@dimen/txt_venue_description_margin_l_venue_details</dimen>
+    <dimen name="txt_venue_description_txt_size_venue_details">@dimen/txt_venue_txt_size_venue_details</dimen>
+    <dimen name="btn_more_margin_r_venue_details">1dp</dimen>
+    <dimen name="btn_more_margin_t_venue_details">-10dp</dimen>
+    <dimen name="btn_more_txt_size_venue_details">14sp</dimen>
+    <dimen name="txt_upcoming_evts_list_title_margin_l_venue_details">3dp</dimen>
+    <dimen name="txt_upcoming_evts_list_title_txt_size_venue_details">16sp</dimen>
+    <dimen name="hor_divider_ht_venue_details">2dp</dimen>
+    <dimen name="hor_divider_margin_b_venue_details">3dp</dimen>
+    <!-- activity_main.xml -->
+    <dimen name="root_navigation_drawer_w_main">240dp</dimen>
+	<dimen name="v_selection_w_nav_drawer">3dp</dimen>
+	<dimen name="v_selection_margin_r_nav_drawer">10dp</dimen>
+	<dimen name="rlt_content_margin_l_nav_drawer">20dp</dimen>
+    <!-- navigation_drawer_section_header.xml -->
+    <dimen name="txt_title_margin_l_navigation_drawer_section_header">10dp</dimen>
+    <dimen name="txt_title_margin_t_navigation_drawer_section_header">10dp</dimen>
+    <dimen name="txt_title_txt_size_navigation_drawer_section_header">14sp</dimen>
+    <!-- navigation_drawer_list_item.xml -->
+    <dimen name="rlt_layout_content_pad_t_navigation_drawer_list_item">0dp</dimen>
+    <dimen name="rlt_layout_content_pad_b_navigation_drawer_list_item">@dimen/rlt_layout_content_pad_t_navigation_drawer_list_item</dimen>
+    <dimen name="rlt_layout_content_margin_l_navigation_drawer_list_item">@dimen/txt_title_margin_l_navigation_drawer_section_header</dimen>
+    <dimen name="rlt_layout_content_pad_t_b_navigation_drawer_list_item">0dp</dimen>
+    <dimen name="img_icon_margin_l_navigation_drawer_list_item">20dp</dimen>
+    <dimen name="txt_title_margin_l_navigation_drawer_list_item">20dp</dimen>
+    <dimen name="txt_title_txt_size_navigation_drawer_list_item">18sp</dimen>
+    <!--
+    <dimen name="txt_count_margin_r_navigation_drawer_list_item">10dp</dimen>
+    <dimen name="txt_count_pad_l_navigation_drawer_list_item">5dp</dimen>
+    <dimen name="txt_count_pad_r_navigation_drawer_list_item">@dimen/txt_count_pad_l_navigation_drawer_list_item</dimen>
+    <dimen name="txt_count_txt_size_navigation_drawer_list_item">@dimen/txt_title_txt_size_navigation_drawer_list_item</dimen>
+    -->
+    <dimen name="divider_ht_navigation_drawer_list_item">1dp</dimen>
+    <dimen name="divider_margin_l_navigation_drawer_list_item">@dimen/txt_title_margin_l_navigation_drawer_list_item</dimen>
+    <dimen name="divider_margin_r_navigation_drawer_list_item">@dimen/img_icon_margin_l_navigation_drawer_list_item</dimen>
+    <dimen name="divider_section_ht_navigation_drawer_list_item">1dp</dimen>
+    <!-- navigation_drawer_list_section_header.xml -->
+    <dimen name="txt_title_margin_l_navigation_drawer_list_section_header">15dp</dimen>
+    <dimen name="txt_title_txt_size_navigation_drawer_list_section_header">12sp</dimen>
+    <!-- fragment_discover_by_category_list_item_header.xml -->
+    <dimen name="txt_date_margin_t_fragment_discover_by_category_list_item_header">5dp</dimen>
+    <dimen name="txt_date_margin_b_fragment_discover_by_category_list_item_header">@dimen/txt_date_margin_t_fragment_discover_by_category_list_item_header</dimen>
+    <dimen name="txt_date_margin_l_fragment_discover_by_category_list_item_header">8dp</dimen>
+    <dimen name="txt_date_txt_size_fragment_discover_by_category_list_item_header">14sp</dimen>
+    <dimen name="divider_ht_fragment_discover_by_category_list_item_header">2dp</dimen>
+    <dimen name="divider_margin_t_fragment_discover_by_category_list_item_header">-1dp</dimen>
+    <dimen name="divider_margin_l_fragment_discover_by_category_list_item_header">@dimen/divider_margin_l_fragment_discover_by_category_list_item_evt</dimen>
+    <dimen name="divider_margin_r_fragment_discover_by_category_list_item_header">@dimen/divider_margin_r_fragment_discover_by_category_list_item_evt</dimen>
+    <!-- fragment_get_started.xml -->
+    <dimen name="rlt_lyt_root_pad_b_get_started">20dp</dimen>
+    <dimen name="rlt_lyt_root_pad_l_r_get_started">20dp</dimen>
+    <dimen name="btn_fb_sign_up_ht_fb_login">35dp</dimen>
+    <dimen name="all_components_margin_t_get_started">30dp</dimen>
+    <dimen name="txt_size_fb_google_btn_get_started">16sp</dimen>
+    <dimen name="txt_size_msg_btn_fb_dialog">18sp</dimen>
+    <dimen name="txt_size_fb_dialog">@dimen/txt_size_fb_google_btn_get_started</dimen>
+    <dimen name="txt_mar_pad_t_b_fb_dialog">10dp</dimen>
+    <dimen name="txt_mar_pad_l_r_fb_dialog">5dp</dimen>
+    <dimen name="txt_g_plus_sign_in_status_txt_size_get_started">18sp</dimen>
+    <dimen name="btn_fb_sign_up_txt_size_fb_login">16sp</dimen>
+    <dimen name="btn_fb_sign_up_pad_l_fb_login">10dp</dimen>
+    <dimen name="btn_fb_sign_up_pad_r_fb_login">@dimen/btn_fb_sign_up_pad_l_fb_login</dimen>
+    <dimen name="txt_fb_login_desc_margin_t_fb_login">20dp</dimen>
+    <dimen name="txt_fb_login_desc_pad_l_fb_login">30dp</dimen>
+    <dimen name="txt_fb_login_desc_pad_r_fb_login">@dimen/txt_fb_login_desc_pad_l_fb_login</dimen>
+    <dimen name="v_dummy_ht_fb_login">0dp</dimen>
+    <dimen name="txt_fb_login_desc_txt_size_fb_login">16sp</dimen>
+    <dimen name="txt_fb_login_get_started_txt_size_fb_login">18sp</dimen>
+    <dimen name="btn_continue_margin_b_fb_login">30dp</dimen>
+    <dimen name="btn_continue_w_fb_login">150dp</dimen>
+    <dimen name="btn_continue_ht_fb_login">@dimen/btn_fb_sign_up_ht_fb_login</dimen>
+    <dimen name="btn_continue_txt_size_fb_login">@dimen/btn_fb_sign_up_txt_size_fb_login</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="txt_why_login_txt_size_get_started">22sp</dimen>
+    <dimen name="txt_guide_txt_size_get_started">18sp</dimen>
+    <dimen name="btn_skip_w_get_started">120dp</dimen>
+    <!-- artists_news_list_item.xml -->
+    <dimen name="root_lnr_layout_pad_l_artists_news_list_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="root_lnr_layout_pad_r_artists_news_list_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="root_lnr_layout_pad_t_artists_news_list_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="rlt_layout_news_item_container2_margin_l_artists_news_list_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <!-- artist_news_item.xml -->
+    <dimen name="rlt_layout_news_item_container_pad_artist_news_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="txt_title_txt_size_artist_news_item">16sp</dimen>
+    <dimen name="txt_margin_l_artist_news_item">5dp</dimen>
+    <dimen name="txt_margin_r_artist_news_item">@dimen/txt_margin_l_artist_news_item</dimen>
+    <dimen name="txt_time_margin_b_artist_news_item">6dp</dimen>
+    <dimen name="txt_time_txt_size_artist_news_item">10sp</dimen>
+    <dimen name="txt_desc_txt_size_artist_news_item">12sp</dimen>
+    <dimen name="img_photo_margin_b_artist_news_item">@dimen/txt_time_margin_b_artist_news_item</dimen>
+    <dimen name="img_photo_margin_t_artist_news_item">@dimen/txt_time_margin_b_artist_news_item</dimen>
+    <dimen name="img_link_w_artist_news_item">50dp</dimen>
+    <dimen name="img_link_ht_artist_news_item">@dimen/img_link_w_artist_news_item</dimen>
+    <dimen name="img_link_margin_r_artist_news_item">5dp</dimen>
+    <dimen name="txt_link_title_txt_size_artist_news_item">14sp</dimen>
+    <dimen name="txt_link_title_margin_b_artist_news_item">@dimen/txt_time_margin_b_artist_news_item</dimen>
+    <!-- friend_news_item.xml -->
+    <dimen name="txt_title_txt_size_friend_news_item">@dimen/txt_title_txt_size_artist_news_item</dimen>
+    <dimen name="txt_title_margin_b_friend_news_item">10dp</dimen>
+    <dimen name="img_photo_margin_b_friend_news_item">5dp</dimen>
+    <dimen name="btn_margin_r_friend_news_item">10dp</dimen>
+    <dimen name="tbl_layout_evt_details_pad_l_friend_news_item">8dp</dimen>
+    <dimen name="tbl_layout_evt_details_txt_size_friend_news_item">@dimen/txt_title_txt_size_friend_news_item</dimen>
+    <dimen name="img_evt_loc_size_friend_news_item">20dp</dimen>
+    <dimen name="row_1_margin_b_friend_news_item">-10dp</dimen>
+    <!-- fragment_custom_tabs.xml -->
+    <dimen name="v_divider_w_fragment_custom_tabs">1dp</dimen>
+    <dimen name="v_divider_margin_t_fragment_custom_tabs">8dp</dimen>
+    <dimen name="v_divider_margin_b_fragment_custom_tabs">@dimen/v_divider_margin_t_fragment_custom_tabs</dimen>
+    <dimen name="tab_bar_ht_fragment_custom_tabs">45dp</dimen>
+    <dimen name="tab_bar_margin_fragment_custom_tabs">8dp</dimen>
+    <dimen name="txt_size_btn_tab_bar_fragment_custom_tabs">13sp</dimen>
+    <dimen name="btn_tab_pad_l_r_bar_fragment_custom_tabs">0dp</dimen>
+    
+    <!-- fragment_custom_tabs_tab.xml -->
+    <dimen name="tab_content_frame_margin_t_fragment_custom_tabs">10dp</dimen>
+    
+    <!-- custom_actionbar_tabs.xml -->
+    <dimen name="v_divider_w_custom_actionbar_tabs">20dp</dimen>
+    <dimen name="v_divider_margin_t_custom_actionbar_tabs">8dp</dimen>
+    <dimen name="v_divider_margin_b_custom_actionbar_tabs">@dimen/v_divider_margin_t_custom_actionbar_tabs</dimen>
+    <dimen name="btn_pad_l_custom_actionbar_tabs">15dp</dimen>
+    <dimen name="btn_pad_r_custom_actionbar_tabs">@dimen/btn_pad_l_custom_actionbar_tabs</dimen>
+    
+    <!-- fragment_event_info.xml -->
+    <dimen name="frm_layout_map_container_ht_fragment_event_info">200dp</dimen>
+    <!-- 10% of frm_layout_map_container_ht_fragment_event_info -->
+    <dimen name="v_dummy_address_ht_fragment_event_info">20dp</dimen>
+    <dimen name="txt_address_margin_b_fragment_event_info">5dp</dimen>
+    <dimen name="txt_address_txt_size_fragment_event_info">16sp</dimen>
+    <!-- fragment_event_featuring.xml -->
+    <dimen name="lnr_layout_artist_list_margin_t_fragment_event_featuring">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="lnr_layout_artist_list_pad_fragment_event_featuring">3dp</dimen>
+    <!-- include_fragment_event_details_img_evt.xml -->
+    <dimen name="img_evt_ht_include_fragment_event_details_img_evt">220dp</dimen>
+    <dimen name="txt_evt_title_margin_l_include_fragment_event_details_img_evt">6dp</dimen>
+    <dimen name="txt_evt_time_txt_size_include_fragment_event_details_img_evt">14sp</dimen>
+    <!-- include_fragment_event_details_footer.xml -->
+    <dimen name="lnr_layout_btns_min_ht_include_fragment_event_details_footer">45dp</dimen>
+    <dimen name="lnr_layout_btns_txt_size_include_fragment_event_details_footer">14sp</dimen>
+    <dimen name="divider_lnr_layout_btns_w_include_fragment_event_details_footer">1dp</dimen>
+    <dimen name="divider_lnr_layout_btns_ht_include_fragment_event_details_footer">25dp</dimen>
+    <!-- fragment_discover_by_category.xml.xml -->
+    <dimen name="lnr_layout_root_pad_l_fragment_discover_by_category">@dimen/rlt_layout_featured_evts_parent_margin_discover</dimen>
+    <dimen name="lnr_layout_root_pad_r_fragment_discover_by_category">@dimen/rlt_layout_featured_evts_parent_margin_discover</dimen>
+    <dimen name="lnr_layout_root_pad_t_fragment_discover_by_category">@dimen/rlt_layout_featured_evts_parent_margin_discover</dimen>
+    <dimen name="lnr_layout_root_pad_b_fragment_discover_by_category">@dimen/rlt_layout_featured_evts_parent_margin_discover</dimen>
+    <!-- fragment_my_events_list_item.xml -->
+    <dimen name="img_event_margin_fragment_my_events_list_item">10dp</dimen>
+    <dimen name="img_event_ht_fragment_my_events_list_item">200dp</dimen>
+    <dimen name="divider_margin_t_fragment_my_events_list_item">@dimen/img_event_margin_fragment_my_events_list_item</dimen>
+    <!-- item_list_my_events.xml -->
+    <dimen name="rlt_lyt_txt_evt_title_pad_l_item_list_my_events">15dp</dimen>
+    	<!-- this floating buttons must have -20dp(half of wt/ht of mini type) as top margin 
+    	so as to overlap equally on top-bottom layouts -->
+    <dimen name="rlt_floating_btn_mar_t_item_list_my_events">-20dp</dimen>
+    <dimen name="fab_margin_item_list_my_events">25dp</dimen>
+    <dimen name="txt_evt_details_margin_l_r_item_list_my_events">15dp</dimen>
+    <dimen name="txt_evt_details_margin_t_item_list_my_events">10dp</dimen>
+    <dimen name="rlt_content_pad_t_item_list_my_events">15dp</dimen>
+    <dimen name="rlt_content_pad_b_item_list_my_events">10dp</dimen>
+    <!-- include_fragment_my_events_list_item_footer.xml -->
+    <dimen name="lnr_layout_btns_ht_fragment_my_events_list_item">40dp</dimen>
+    <dimen name="lnr_layout_btns_txt_size_include_fragment_my_events_list_item_footer">12sp</dimen>
+    <!-- friends_activity_item.xml -->
+    <dimen name="txt_title_txt_size_friends_activity_item">16sp</dimen>
+    <dimen name="txt_venue_txt_size_friends_activity_item">10sp</dimen>
+    <dimen name="txt_title_margin_friends_activity_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="img_evt_margin_friends_activity_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="lnr_layout_btns_ht_friends_activity_item">40dp</dimen>
+    <dimen name="lnr_layout_btns_margin_friends_activity_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="btn_drawable_pad_friends_activity_item">10dp</dimen>
+    <dimen name="btn_txt_size_friends_activity_item">15sp</dimen>
+    <dimen name="img_crcl_friend_w_h_friends_activity_item">40dp</dimen>
+    <dimen name="img_crcl_friend_mar_l_r_friends_activity_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="rlt_root_padding_friends_activity_item">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <!-- connect_accounts_list_item_top.xml -->
+    <dimen name="txt_sync_count_margin_t_connect_accounts_li_top">20dp</dimen>
+    <dimen name="txt_sync_count_txt_size_connect_accounts_li_top">40sp</dimen>
+    <dimen name="txt_sync_count_pad_connect_accounts_li_top">20dp</dimen>
+    <dimen name="txt_artist_synced_txt_size_connect_accounts_li_top">14sp</dimen>
+    <dimen name="txt_artist_synced_margin_t_connect_accounts_li_top">15dp</dimen>
+    <dimen name="txt_artist_synced_pad_l_r_connect_accounts_li_top">10dp</dimen>
+    <dimen name="txt_artist_synced_pad_t_b_connect_accounts_li_top">1dp</dimen>
+    <dimen name="txt_personalize_margin_t_connect_accounts_li_top">20dp</dimen>
+    <dimen name="txt_personalize_pad_b_connect_accounts_li_top">20dp</dimen>
+    <dimen name="txt_personalize_wt_connect_accounts_li_top">@integer/wrap_content</dimen>
+    <dimen name="txt_personalize_txt_size_connect_accounts_li_top">13sp</dimen>
+    <!-- connect_accounts_list_item.xml -->
+    <dimen name="rlt_layout_root_ht_connect_accounts_list_item">@dimen/action_bar_ht</dimen>
+    <dimen name="rlt_layout_root_pad_l_connect_accounts_list_item">14dp</dimen>
+    <dimen name="rlt_layout_root_pad_r_connect_accounts_list_item">@dimen/rlt_layout_root_pad_l_connect_accounts_list_item</dimen>
+    <dimen name="lst_item_v_margin_l_connect_accounts_list_item">20dp</dimen>
+    <dimen name="rlt_layout_service_details_txt_size_connect_accounts_list_item">22sp</dimen>
+    <dimen name="img_plus_margin_r_connect_accounts_list_item">10dp</dimen>
+    <dimen name="txt_count_margin_r_connect_accounts_list_item">20dp</dimen>
+    <dimen name="divider_ht_connect_accounts_list_item">1dp</dimen>
+    <dimen name="txt_service_name_w_connect_accounts_list_item">200dp</dimen>
+    <!-- fragment_connect_accounts_list.xml -->
+    <dimen name="rlt_layout_root_pad_fragment_connect_accounts_list">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="txt_connect_accounts_txt_size_fragment_connect_account">17sp</dimen>
+    <dimen name="txt_connect_accounts_margin_t_b_fragment_connect_account">30dp</dimen>
+    <dimen name="txt_connect_accounts_margin_l_r_fragment_connect_account">40dp</dimen>
+    <dimen name="btn_continue_margin_l_r_fragment_connect_account">40dp</dimen>
+    <dimen name="btn_continue_wt_fragment_connect_account">@integer/match_parent</dimen>
+    <!-- fragment_about_us.xml -->
+    <dimen name="rlt_layout_root_pad_fragment_about_us">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="txt_app_name_margin_t_fragment_about_us">30dp</dimen>
+    <dimen name="txt_app_name_txt_size_fragment_about_us">34sp</dimen>
+    <dimen name="txt_app_slogan_margin_t_fragment_about_us">8dp</dimen>
+    <dimen name="txt_app_slogan_txt_size_fragment_about_us">20sp</dimen>
+    <dimen name="txt_desc_margin_t_fragment_about_us">15dp</dimen>
+    <dimen name="txt_desc_margin_l_fragment_about_us">15dp</dimen>
+    <dimen name="txt_desc_margin_r_fragment_about_us">@dimen/txt_desc_margin_l_fragment_about_us</dimen>
+    <dimen name="txt_desc_txt_size_fragment_about_us">14sp</dimen>
+    <dimen name="lnr_layout_icons_margin_t_fragment_about_us">50dp</dimen>
+    <dimen name="img_icons_margin_r_fragment_about_us">10dp</dimen>
+    <dimen name="txt_powered_by_margin_t_fragment_about_us">5dp</dimen>
+    <dimen name="img_wcities_margin_t_fragment_about_us">70dp</dimen>
+    <dimen name="txt_powered_by_margin_b_fragment_about_us">10dp</dimen>
+    <dimen name="txt_version_margin_b_fragment_about_us">20dp</dimen>
+    <dimen name="txt_powered_by_txt_size_fragment_about_us">12sp</dimen>
+    <!-- fragment_change_location.xml -->
+    <dimen name="lnr_lyt_map_pad_fragment_change_location">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="btn_my_location_margin_l_r_fragment_change_location">20dp</dimen>
+    <dimen name="btn_my_location_margin_t_b_fragment_change_location">80dp</dimen>
+    <!-- fragment_eula.xml -->
+    <dimen name="rlt_layout_root_pad_fragment_eula">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <!-- fragment_rep_code.xml -->
+    <dimen name="rlt_layout_root_pad_fragment_rep_code">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="img_rep_code_margin_t_fragment_rep_code">50dp</dimen>
+    <dimen name="txt_rep_code_margin_t_fragment_rep_code">5dp</dimen>
+    <dimen name="txt_rep_code_txt_size_fragment_rep_code">20sp</dimen>
+    <dimen name="edt_rep_code_w_fragment_rep_code">220dp</dimen>
+    <dimen name="edt_rep_code_margin_t_fragment_rep_code">20dp</dimen>
+    <dimen name="btn_submit_ht_fragment_rep_code">30dp</dimen>
+    <dimen name="btn_submit_margin_t_fragment_rep_code">@dimen/edt_rep_code_margin_t_fragment_rep_code</dimen>
+    <dimen name="btn_submit_pad_l_fragment_rep_code">12dp</dimen>
+    <dimen name="btn_submit_pad_r_fragment_rep_code">@dimen/btn_submit_pad_l_fragment_rep_code</dimen>
+    <dimen name="btn_submit_txt_size_fragment_rep_code">22sp</dimen>
+    <!-- fragment_artist_info.xml -->
+    <dimen name="rlt_layout_artist_desc_margin_t_fragment_artist_info">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="img_down_margin_r_fragment_artist_info">8dp</dimen>
+    <!-- fragment_venue_events.xml -->
+    <dimen name="lnr_layout_btns_margin_t_fragment_venue_events">0dp</dimen>
+    <!-- widget_info.xml -->
+    <dimen name="min_w_widget_info">312dp</dimen>
+    <dimen name="min_ht_widget_info">234dp</dimen>
+    <!--
+    <dimen name="widget_margin_hor">20dp</dimen>
+    <dimen name="widget_margin_vert">4dp</dimen>
+    -->
+    <!-- widget_layout.xml -->
+    <dimen name="rlt_layout_root_w_widget_layout">312dp</dimen>
+    <dimen name="rlt_layout_root_ht_widget_layout">234dp</dimen>
+    <dimen name="rlt_layout_root_pad_widget_layout">4dp</dimen>
+    <dimen name="rlt_layout_btm_bar_pad_l_widget_layout">3dp</dimen>
+    <dimen name="rlt_layout_refresh_pad_hor_widget_layout">3dp</dimen>
+    <dimen name="lnr_layout_evt_details_margin_l_widget_layout">10dp</dimen>
+    <dimen name="rlt_layout_evt_details_margin_b_widget_layout">-10dp</dimen>
+    <dimen name="txt_date_margin_l_widget_layout">10dp</dimen>
+    <dimen name="txt_evt_time_am_pm_margin_t_widget_layout">-3dp</dimen>
+    <dimen name="txt_evt_time_am_pm_txt_size_widget_layout">8sp</dimen>
+    <!-- fragment_device_library.xml -->
+    <dimen name="rlt_layout_root_pad_fragment_device_library">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="txt_service_title_drawable_pad_fragment_device_library">5dp</dimen>
+    <dimen name="txt_service_desc_margin_t_fragment_device_library">10dp</dimen>
+    <dimen name="txt_service_title_txt_size_fragment_device_library">18sp</dimen>
+    <dimen name="txt_service_desc_txt_size_fragment_device_library">15sp</dimen>
+    <dimen name="btn_retrieve_artists_margin_t_fragment_device_library">@dimen/txt_service_desc_margin_t_fragment_device_library</dimen>
+    <!-- left_most_tab_selected.xml -->
+    <!-- top_left_most_tab_selected = (tab_bar_ht_fragment_custom_tabs - 6) -->
+    <dimen name="top_left_most_tab_selected">42dp</dimen>
+    <dimen name="corners_radius_left_most_tab_selected">6dp</dimen>
+    <!-- fragment_rep_code.xml -->
+    <dimen name="edt_rep_code_ht_fragment_rep_code">30dp</dimen>
+    <!-- fragment_sync_account.xml -->
+    <dimen name="v_dummy_ht_fragment_sync_account">30dp</dimen>
+    <dimen name="btn_connect_other_account_pad_l_r_fragment_sync_account">7dp</dimen>
+    <dimen name="txt_sync_account_txt_size_fragment_sync_account">20sp</dimen>
+    <dimen name="btn_connect_accounts_txt_size_fragment_sync_account">18sp</dimen>
+    <dimen name="btn_connect_accounts_ht_fragment_sync_account">30dp</dimen>
+    <dimen name="img_progress_bar_mar_t_b_fragment_sync_account">10dp</dimen>
+    <dimen name="img_progress_bar_size_fragment_sync_account">80dp</dimen>
+    <dimen name="img_account_size_fragment_sync_account">40dp</dimen>
+    <!-- list_no_items_found.xml -->
+    <dimen name="txt_list_no_items_found_margin_list_no_items_found">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="txt_list_no_items_found_txt_size_list_no_items_found">16sp</dimen>
+    <dimen name="txt_list_no_items_found_pad_list_no_items_found">0dp</dimen>
+    <dimen name="rlt_list_no_items_found_pad_list_no_items_found">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <!-- include_no_items_found_with_action.xml -->
+    <dimen name="rlt_layout_root_pad_l_include_no_items_found_with_action">20dp</dimen>
+    <dimen name="rlt_layout_root_pad_r_include_no_items_found_with_action">@dimen/rlt_layout_root_pad_l_include_no_items_found_with_action</dimen>
+    <dimen name="rlt_layout_root_pad_b_include_no_items_found_with_action">20dp</dimen>
+    <dimen name="all_components_margin_t_include_no_items_found_with_action">20dp</dimen>
+    <dimen name="txt_no_items_heading_txt_size_include_no_items_found_with_action">20sp</dimen>
+    <dimen name="txt_no_items_msg_txt_size_include_no_items_found_with_action">18sp</dimen>
+    <dimen name="btn_action_pad_l_include_no_items_found_with_action">15dp</dimen>
+    <dimen name="btn_action_pad_r_include_no_items_found_with_action">@dimen/btn_action_pad_l_include_no_items_found_with_action</dimen>
+    <dimen name="txt_no_content_msg_pad_l_r_include_no_content_with_phone">25dp</dimen>
+    <dimen name="all_components_margin_t_include_no_content_with_phone">20dp</dimen>
+    <dimen name="txt_no_items_msg_drawwable_pad_include_no_content_with_phone">15dp</dimen>
+    <!-- fragment_artists_news_list.xml -->
+    <dimen name="include_no_items_found_with_action_margin_fragment_artists_news_list">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="rlt_root_pad_fragment_artists_news_list">10dp</dimen>
+    <!-- fragment_my_events_list.xml -->
+    <dimen name="rlt_layout_root_pad_l_fragment_my_events_list">0dp</dimen>
+    <dimen name="rlt_layout_root_pad_r_fragment_my_events_list">@dimen/rlt_layout_root_pad_l_fragment_my_events_list</dimen>
+    <!-- include_fragment_friends_activity_item_track_btns.xml -->
+    <dimen name="lnr_layout_btns_margin_t_include_fragment_friends_activity_item_track_btns">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="lnr_layout_btns_txt_size_include_fragment_friends_activity_item_track_btns">12sp</dimen>
+    <dimen name="divider_lnr_layout_btns_w_include_fragment_friends_activity_item_track_btns">1dp</dimen>
+    <dimen name="divider_lnr_layout_btns_ht_include_fragment_friends_activity_item_track_btns">25dp</dimen>
+    <!-- list_item_language -->
+    <dimen name="common_margin_padding_r_list_item_language">20dp</dimen>
+    <dimen name="common_margin_padding_l_list_item_language">40dp</dimen>
+    <dimen name="common_margin_padding_t_list_item_language">25dp</dimen>
+    <dimen name="common_margin_padding_b_list_item_language">10dp</dimen>
+    <dimen name="txt_language_txt_size_list_item_language">18sp</dimen>
+    <!-- fragment_launcher.xml -->
+    <dimen name="txt_desc_txt_size_fragment_launcher">40sp</dimen>
+    <dimen name="btn_default_ht">50dp</dimen>
+    <dimen name="txt_desc_mar_t_text_fragment">20dp</dimen>
+    <dimen name="all_component_mar_launcher_fragment">10dp</dimen>
+    <dimen name="txt_frag_ht_launcher_fragment">120dp</dimen>
+    <dimen name="pg_indctr_pad_t_b_launcher_fragment">30dp</dimen>
+    <dimen name="txt_title_view_pager_launcher_fragment">25sp</dimen>
+    <dimen name="txt_desc_view_pager_launcher_fragment">15sp</dimen>
+    <dimen name="btn_txt_size_launcher">18sp</dimen>
+    <dimen name="txt_desc_pad_l_r_fragment_text">0dp</dimen>
+    <!-- login/register fragment -->
+    <dimen name="lyt_mar_t_get_started_fragment">40dp</dimen>
+    <dimen name="mar_t_get_started_fragment">25dp</dimen>
+    <dimen name="mar_t_below_error_get_started_fragment">12dp</dimen>
+    <dimen name="btn_forgot_pass_mar_t_get_started_fragment">10dp</dimen>
+    <dimen name="mar_l_r_get_started_fragment">20dp</dimen>
+    <dimen name="rlt_register_details_mar_r_get_started_fragment">2dp</dimen>
+    <dimen name="txt_login_label_txt_size_get_started_fragment">20sp</dimen>
+    <dimen name="btn_forgot_pass_txt_size_get_started_fragment">18sp</dimen>
+    <!-- fragment_login.xml -->
+    <dimen name="scrl_v_margin_t_fragment_login">@dimen/action_bar_ht</dimen>
+    <dimen name="scrl_v_pad_fragment_login">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="img_fb_sign_up_margin_t_login">30dp</dimen>
+    <!-- fragment_sign_up.xml -->
+    <dimen name="scrl_v_pad_sign_up">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
+    <dimen name="rlt_lyt_root_pad_t_sign_up">@dimen/action_bar_ht</dimen>
+    <dimen name="img_fb_sign_up_margin_t_sign_up">30dp</dimen>
+    <dimen name="rlt_g_plus_margin_t_sign_up">30dp</dimen>
+    <dimen name="rlt_register_details_margin_t_sign_up">40dp</dimen>
+    <dimen name="rlt_register_details_pad_b_sign_up">0dp</dimen>
+    <!-- list_item_settings.xml -->
+    <dimen name="rlt_layout_content_pad_t_b_list_item_settings">15dp</dimen>
+    <dimen name="rlt_layout_content_pad_l_r_list_item_settings">40dp</dimen>
+    <!-- below 2 directions are on basis of 'v_selection_w_nav_drawer' -->
+    <dimen name="indicator_wt_lyr_bg_item_lst_settings_pressed">3dp</dimen>
+    <dimen name="indicator_pad_lyr_bg_item_lst_settings_pressed">-4dp</dimen><!-- -3-1 to avoid white stroke in nexus 7 -->
+    <dimen name="txt_title_mar_l_list_item_settings">20dp</dimen>
+    <dimen name="txt_title_txt_size_list_item_settings">20sp</dimen>
+    <dimen name="divider_ht_list_item_settings">1dp</dimen>
+    <!-- fragment_settings.xml -->
+    <dimen name="lst_mar_fragment_settings">@dimen/divider_margin_l_fragment_discover_by_category_list_item_evt</dimen>
+    <dimen name="lst_pad_l_r_fragment_settings">20dp</dimen>
+    <!-- fragment_follow_more_artists.xml -->
+    <dimen name="v_dummy_wt_ht_fragment_follow_more_artists">8dp</dimen>
+    <dimen name="lnr_root_padding_fragment_follow_more_artists">8dp</dimen>
+    <dimen name="v_dummy_margin_t_b_fragment_follow_more_artists">10dp</dimen>
+    <!-- common -->
+    <dimen name="txt_size_widget_eventSeeker_btn_white">16sp</dimen>
+    <dimen name="txt_size_widget_eventSeeker_btn_alpha">18sp</dimen>
+    <dimen name="elevation_widget_eventSeeker_btn_white">15dp</dimen>
+    <dimen name="elevation_widget_eventSeeker_btn_white_blue_stroke">30dp</dimen>
+    <dimen name="elevation_top_button">5dp</dimen>
+    <dimen name="elevation_nav_drawer_row">3dp</dimen>
+    <!-- progress_bar_eventseeker_fixed_ht.xml -->
+    <dimen name="rlt_lyt_root_ht_progress_bar_eventseeker_fixed_ht">70dp</dimen>
+    <dimen name="rlt_lyt_root_pad_t_b_progress_bar_eventseeker_fixed_ht">10dp</dimen>
+    <dimen name="rlt_lyt_root_margin_t_b_progress_bar_eventseeker_fixed_ht">0dp</dimen>
+    <!-- list_item_discover.xml -->
+    <dimen name="rlt_layout_root_ht_list_item_discover">100dp</dimen>
+    <!-- img_event_w_list_item_discover = img w (104dp) + img_event_pad_l_list_item_discover + img_event_pad_r_list_item_discover -->
+    <dimen name="img_event_w_list_item_discover">112dp</dimen>
+    <!-- img_event_ht_list_item_discover = img ht (78dp) + img_event_pad_t_list_item_discover + img_event_pad_b_list_item_discover
+    Also, img_event_ht_list_item_discover = rlt_layout_root_ht_list_item_discover - divider_ht_list_item_discover -->
+    <dimen name="img_event_ht_list_item_discover">99dp</dimen>
+    <dimen name="img_event_pad_l_list_item_discover">2dp</dimen>
+    <dimen name="img_event_pad_r_list_item_discover">6dp</dimen>
+    <dimen name="img_event_pad_t_list_item_discover">10dp</dimen>
+    <dimen name="img_event_pad_b_list_item_discover">11dp</dimen>
+    <dimen name="rlt_lyt_evt_details_margin_r_list_item_discover">3dp</dimen>
+    <dimen name="txt_evt_title_txt_size_list_item_discover">14sp</dimen>
+    <dimen name="txt_evt_time_txt_size_list_item_discover">12sp</dimen>
+    <dimen name="txt_evt_location_txt_size_list_item_discover">12sp</dimen>
+    <dimen name="divider_ht_list_item_discover">1dp</dimen>
+    <dimen name="divider_margin_l_list_item_discover">8dp</dimen>
+    <dimen name="divider_margin_r_list_item_discover">@dimen/divider_margin_l_list_item_discover</dimen>
+    <dimen name="rlt_lyt_content_margin_l_list_item_discover">@dimen/img_event_w_list_item_discover</dimen>
+    <dimen name="rlt_lyt_content_pad_l_list_item_discover">7dp</dimen>
+    <dimen name="v_handle_w_list_item_discover">30dp</dimen>
+    <dimen name="v_handle_margin_t_list_item_discover">10dp</dimen>
+    <dimen name="v_handle_ht_list_item_discover">40dp</dimen>
+    <dimen name="lnr_slider_content_w_list_item_discover">170dp</dimen>
+    <dimen name="lnr_slider_content_ht_list_item_discover">@dimen/img_event_ht_list_item_discover</dimen>
+    <!-- dialog_discover_setting.xml -->
+    <dimen name="v_hor_line_ht_dialog_discover_setting">1dp</dimen>
+    <dimen name="lnr_lyt_root_pad_t_dialog_discover_setting">8dp</dimen>
+    <dimen name="lnr_lyt_root_pad_l_dialog_discover_setting">8dp</dimen>
+    <dimen name="lnr_lyt_root_pad_r_dialog_discover_setting">@dimen/lnr_lyt_root_pad_l_dialog_discover_setting</dimen>
+    <dimen name="txt_search_radius_txt_size_dialog_discover_setting">20sp</dimen>
+    <dimen name="txt_search_radius_margin_b_dialog_discover_setting">6dp</dimen>
+    <dimen name="seek_bar_margin_b_dialog_discover_setting">8dp</dimen>
+    <dimen name="v_hor_line_margin_b_dialog_discover_setting">6dp</dimen>
+    <dimen name="txt_select_date_margin_b_dialog_discover_setting">6dp</dimen>
+    <dimen name="txt_select_date_txt_size_dialog_discover_setting">@dimen/txt_search_radius_txt_size_dialog_discover_setting</dimen>
+    <dimen name="v_dummy_ht_dialog_discover_setting">6dp</dimen>
+    <!-- fragment_event_details.xml -->
+    <dimen name="img_event_ht_event_details">230dp</dimen>
+    <dimen name="rlt_lyt_txt_evt_title_pad_l_event_details">16dp</dimen>
+    <dimen name="rlt_lyt_txt_evt_title_pad_b_event_details">8dp</dimen>
+    <dimen name="rlt_lyt_txt_evt_title_pad_t_event_details">30dp</dimen>
+    <dimen name="txt_evt_title_txt_size_event_details">24sp</dimen>
+    <!-- txt_toolbar_title_pos_all_details = 56dp to keep it left aligned with toolbar title 
+    Ref: http://www.google.com/design/spec/layout/metrics-keylines.html#metrics-keylines-keylines-spacing, where
+    72dp is specified as actionbar title margin from screen left edge, but if we skip 16dp margin just before title,
+    then it comes out to be 56dp. Also note that we have set titleMarginStart for toolbar to 0 under styles.xml
+    for style="ThemeOverlay.EventSeeker.Dark.ActionBar" -->
+    <dimen name="txt_toolbar_title_pos_all_details">56dp</dimen>
+    <!-- After scrolling to top, txtEvtTitle text must be in center vertical position exactly aligned with 
+    toolbar title (for good looking transition effect), hence following calculation is used to derive txt_evt_title_ht_event_details. 
+    Here, rlt_lyt_txt_evt_title_pad_b_event_details is fixed to 8dp, so to keep txtEvtTitle textview
+    in center vertical position, we leave aside 8dp more (for top). Hence ht comes out as 56 - 2*8 = 40dp 
+    txt_evt_title_ht_event_details = action_bar_ht - 2*rlt_lyt_txt_evt_title_pad_b_event_details -->
+    <dimen name="txt_evt_title_ht_event_details">40dp</dimen>
+    <dimen name="txt_evt_details_margin_l_event_details">15dp</dimen>
+    <dimen name="txt_evt_details_margin_r_event_details">16dp</dimen>
+    <dimen name="txt_evt_details_margin_t_event_details">25dp</dimen>
+    <dimen name="txt_evt_details_drawable_pad_event_details">20dp</dimen>
+    <dimen name="txt_evt_details_txt_size_event_details">16sp</dimen>
+    <dimen name="txt_desc_margin_l_event_details">16dp</dimen>
+    <dimen name="txt_desc_margin_t_event_details">15dp</dimen>
+    <dimen name="lnr_lyt_expand_desc_margin_l_event_details">16dp</dimen>
+    <dimen name="lnr_lyt_expand_desc_margin_t_event_details">@dimen/txt_desc_margin_t_event_details</dimen>
+    <dimen name="img_down_margin_r_event_details">@dimen/txt_desc_margin_l_event_details</dimen>
+    <dimen name="v_hor_line_ht_event_details">1dp</dimen>
+    <dimen name="v_hor_margin_b_event_details">10dp</dimen>
+    <dimen name="txt_featuring_margin_t_event_details">@dimen/txt_desc_margin_t_event_details</dimen>
+    <dimen name="v_pager_featuring_ht_event_details">150dp</dimen>
+    <dimen name="v_pager_featuring_margin_t_event_details">@dimen/txt_desc_margin_t_event_details</dimen>
+    <dimen name="v_hor_line_margin_l_event_details">16dp</dimen>
+    <dimen name="v_hor_line_margin_r_event_details">@dimen/v_hor_line_margin_l_event_details</dimen>
+    <dimen name="v_hor_line_margin_t_event_details">@dimen/txt_desc_margin_t_event_details</dimen>
+    <dimen name="txt_venue_margin_t_event_details">@dimen/txt_desc_margin_t_event_details</dimen>
+    <dimen name="rlt_lyt_address_margin_t_event_details">@dimen/txt_desc_margin_t_event_details</dimen>
+    <dimen name="rlt_lyt_address_margin_l_event_details">@dimen/v_hor_line_margin_l_event_details</dimen>
+    <dimen name="rlt_lyt_address_margin_r_event_details">@dimen/v_hor_line_margin_r_event_details</dimen>
+    <dimen name="txt_venue_drawable_pad_event_details">10dp</dimen>
+    <dimen name="actionbar_title_margin_l_event_details">56dp</dimen>
+    <dimen name="fab_margin_b_event_details">16dp</dimen>
+    <dimen name="fab_margin_l_r_event_details">60dp</dimen>
+    <!-- featuring_artist.xml -->
+    <dimen name="rlt_lyt_root_w_featuring_artist">200dp</dimen>
+    <dimen name="txt_artist_name_txt_size_featuring_artist">20sp</dimen>
+    <dimen name="txt_artist_name_pad_l_featuring_artist">5dp</dimen>
+    <dimen name="txt_artist_name_pad_r_featuring_artist">@dimen/txt_artist_name_pad_l_featuring_artist</dimen>
+    <dimen name="txt_artist_name_pad_b_featuring_artist">6dp</dimen>
+    <dimen name="txt_artist_name_pad_t_featuring_artist">18dp</dimen>
+    <!-- include_friends.xml -->
+    <dimen name="txt_friends_margin_t_include_friends">@dimen/txt_desc_margin_t_event_details</dimen>
+    <dimen name="txt_friends_txt_size_include_friends">@dimen/txt_evt_details_txt_size_event_details</dimen>
+    <dimen name="recycler_v_friends_ht_include_friends">120dp</dimen>
+    <dimen name="recycler_v_friends_margin_t_include_friends">@dimen/txt_desc_margin_t_event_details</dimen>
+    <dimen name="recycler_v_friends_margin_l_include_friends">@dimen/v_hor_line_margin_l_event_details</dimen>
+    <dimen name="recycler_v_friends_margin_r_include_friends">@dimen/recycler_v_friends_margin_l_include_friends</dimen>
+    <dimen name="v_hor_line_ht_include_friends">@dimen/v_hor_line_ht_event_details</dimen>
+    <dimen name="v_hor_line_margin_l_include_friends">@dimen/v_hor_line_margin_l_event_details</dimen>
+    <dimen name="v_hor_line_margin_r_include_friends">@dimen/v_hor_line_margin_l_include_friends</dimen>
+    <dimen name="v_hor_line_margin_t_include_friends">@dimen/txt_desc_margin_t_event_details</dimen>
+    <!-- rv_item_friend.xml -->
+    <dimen name="rlt_lyt_root_pad_l_rv_item_friend">10dp</dimen>
+    <dimen name="rlt_lyt_root_pad_r_rv_item_friend">@dimen/rlt_lyt_root_pad_l_rv_item_friend</dimen>
+    <dimen name="circle_img_v_friend_w_rv_item_friend">80dp</dimen>
+    <dimen name="circle_img_v_friend_ht_rv_item_friend">@dimen/circle_img_v_friend_w_rv_item_friend</dimen>
+    <dimen name="circle_img_v_friend_border_w_rv_item_friend">0dp</dimen>
+    <dimen name="txt_friend_name_margin_t_rv_item_friend">8dp</dimen>
+    <!-- fragment_artist_details.xml -->
+    <dimen name="img_artist_ht_artist_details">230dp</dimen>
+    <dimen name="rlt_lyt_txt_artist_title_pad_b_artist_details">8dp</dimen>
+    <dimen name="rlt_lyt_txt_artist_title_pad_t_artist_details">30dp</dimen>
+    <dimen name="txt_artist_title_txt_size_artist_details">24sp</dimen>
+    <dimen name="rlt_lyt_txt_artist_title_pad_l_artist_details">@dimen/rlt_lyt_txt_evt_title_pad_l_event_details</dimen>
+    <!-- After scrolling to top, txtArtistTitle text must be in center vertical position exactly aligned with 
+    toolbar title (for good looking transition effect), hence following calculation is used to derive txt_artist_title_ht_artist_details. 
+    Here, rlt_lyt_txt_artist_title_pad_b_artist_details is fixed to 8dp, so to keep txtArtistTitle textview
+    in center vertical position, we leave aside 8dp more (for top). Hence ht comes out as 56 - 2*8 = 40dp 
+    txt_artist_title_ht_artist_details = action_bar_ht - 2*rlt_lyt_txt_artist_title_pad_b_artist_details -->
+    <dimen name="txt_artist_title_ht_artist_details">40dp</dimen>
+    <dimen name="v_hor_line_ht_artist_details">1dp</dimen>
+    <dimen name="txt_videos_margin_t_artist_details">@dimen/txt_desc_margin_t_rv_item_desc</dimen>
+    <dimen name="txt_artist_details_txt_size_artist_details">16sp</dimen>
+    <dimen name="v_pager_videos_ht_artist_details">150dp</dimen>
+    <dimen name="v_pager_videos_margin_t_artist_details">@dimen/txt_desc_margin_t_rv_item_desc</dimen>
+    <dimen name="v_hor_line_margin_l_artist_details">16dp</dimen>
+    <dimen name="v_hor_line_margin_r_artist_details">@dimen/v_hor_line_margin_l_artist_details</dimen>
+    <dimen name="v_hor_line_margin_t_artist_details">@dimen/txt_desc_margin_t_rv_item_desc</dimen>
+    <dimen name="fab_margin_l_r_artist_details">@dimen/fab_margin_l_r_event_details</dimen>
+    <dimen name="fab_artist_news_pad_artist_details">16dp</dimen>
+    <dimen name="fab_margin_b_artist_details">@dimen/fab_margin_b_event_details</dimen>
+    <!-- rv_item_desc.xml -->
+    <dimen name="prgs_bar_ht_rv_item_desc">200dp</dimen>
+    <dimen name="prgs_bar_margin_t_rv_item_desc">@dimen/txt_desc_margin_t_rv_item_desc</dimen>
+    <dimen name="txt_desc_margin_l_rv_item_desc">16dp</dimen>
+    <dimen name="txt_desc_margin_r_rv_item_desc">16dp</dimen>
+    <dimen name="txt_desc_margin_t_rv_item_desc">20dp</dimen>
+    <!-- <dimen name="img_down_margin_l_rv_item_desc">16dp</dimen>
+    <dimen name="img_down_margin_r_rv_item_desc">@dimen/txt_desc_margin_l_rv_item_desc</dimen> -->
+    <!-- As the 'img down' icon size in mdpi is of '16*16' and previous margin l & r was 16dp. Sp, 
+    	 refering this sizes calculated the wt & ht of the icon as 48dp (i.e.lmargin + width + rmargin) -->
+    <dimen name="img_down_wt_rv_item_desc">48dp</dimen>
+    <dimen name="img_down_ht_rv_item_desc">32dp</dimen>
+    <dimen name="img_down_margin_t_rv_item_desc">@dimen/txt_desc_margin_t_rv_item_desc</dimen>
+    <!-- fragment_video.xml -->
+    <dimen name="rlt_lyt_root_w_video">200dp</dimen>
+    <!-- fragment_venue_details.xml -->
+    <dimen name="img_venue_ht_venue_details">@dimen/img_artist_ht_artist_details</dimen>
+    <dimen name="rlt_lyt_txt_venue_title_pad_l_venue_details">@dimen/rlt_lyt_txt_artist_title_pad_l_artist_details</dimen>
+    <dimen name="rlt_lyt_txt_venue_title_pad_b_venue_details">@dimen/rlt_lyt_txt_artist_title_pad_b_artist_details</dimen>
+    <dimen name="rlt_lyt_txt_venue_title_pad_t_venue_details">@dimen/rlt_lyt_txt_artist_title_pad_t_artist_details</dimen>
+    <dimen name="txt_venue_title_ht_venue_details">@dimen/txt_artist_title_ht_artist_details</dimen>
+    <dimen name="txt_venue_title_txt_size_venue_details">@dimen/txt_artist_title_txt_size_artist_details</dimen>
+    <!-- rv_item_address_map_venue_details.xml -->
+    <dimen name="v_fab_separator_w_rv_item_address_map_venue_details">70dp</dimen>
+    <dimen name="v_fab_separator_h_rv_item_address_map_venue_details">1dp</dimen>
+    <dimen name="fab_margin_t_rv_item_address_map_venue_details">20dp</dimen>
+    <!-- item_list_search_venue.xml -->
+    <!-- img_event_ht_item_list_search_venue = 84 + img_event_pad_t_item_list_search_venue + img_event_pad_b_item_list_search_venue -->
+    <dimen name="img_event_w_item_list_search_venue">112dp</dimen>
+    <dimen name="img_event_ht_item_list_search_venue">100dp</dimen>
+    <dimen name="img_event_pad_t_item_list_search_venue">8dp</dimen>
+    <dimen name="img_event_pad_b_item_list_search_venue">8dp</dimen>
+    <!-- fragment_navigation.xml -->
+    <dimen name="lnr_lyt_root_pad_t_b_navigation">20dp</dimen>
+    <dimen name="txt_title_w_navigation">150dp</dimen>
+    <dimen name="txt_title_margin_t_navigation">0dp</dimen>
+    <dimen name="txt_txt_size_navigation">14sp</dimen>
+    <dimen name="img_margin_t_navigation">30dp</dimen>
+    <dimen name="txt_margin_t_navigation">10dp</dimen>
+    <!-- activity_splash.xml -->
+    <dimen name="txt_app_name_margin_t_activity_splash">30dp</dimen>
+    <dimen name="txt_app_name_txt_size_activity_splash">40sp</dimen>
+    <!-- activity_beats_music.xml -->
+    <dimen name="abc_action_bar_title_text_size">15sp</dimen>
+    <!-- friends_activity_item_tab.xml -->
+    <dimen name="rlt_root_padding_friends_activity_item_tab">12dp</dimen>
+    <!-- artist_fix_size_news_list_item.xml -->
+    <dimen name="root_lnr_lyt_w_artist_fix_size_news_list_item">300dp</dimen>
+    
+    <!-- rv_item_videos_artist_details.xml -->
+    <dimen name="v_pager_videos_margin_l_rv_item_videos_artist_details">0dp</dimen>
+    <dimen name="v_pager_videos_margin_r_rv_item_videos_artist_details">@dimen/v_pager_videos_margin_l_rv_item_videos_artist_details</dimen>
+    
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- activity_bosch_main.xml -->
+    <dimen name="b_root_navigation_drawer_w_main">210dp</dimen>
+    <!-- bosch_navigation_drawer_list_item.xml -->
+    <!--
+    <dimen name="b_rlt_layout_content_pad_vert_navigation_drawer_list_item">12dp</dimen>
+    <dimen name="b_rlt_layout_content_margin_l_navigation_drawer_list_item">10dp</dimen>
+    <dimen name="b_txt_title_margin_l_navigation_drawer_list_item">10dp</dimen>
+    <dimen name="b_txt_title_txt_size_navigation_drawer_list_item">18sp</dimen>
+    <dimen name="b_divider_ht_navigation_drawer_list_item">1dp</dimen>
+    <dimen name="b_divider_margin_l_navigation_drawer_list_item">10dp</dimen>
+    <dimen name="b_divider_margin_r_navigation_drawer_list_item">5dp</dimen>
+
+    -->
+    <dimen name="b_rlt_root_lyt_h_bosch_navigation_drawer_list_item">45dp</dimen>
+    <dimen name="b_txt_screen_title_pad_bosch_navigation_drawer_list_item">5dp</dimen>
+    <dimen name="b_v_divider_h_bosch_navigation_drawer_list_item">1dp</dimen>
+    <dimen name="b_v_divider_margin_l_r_bosch_navigation_drawer_list_item">10dp</dimen>
+    <!-- bosch_actionbar_titleview.xml -->
+    <dimen name="b_actionbar_root_rlt_layout_pad_hor_bosch_actionbar_titleview">10dp</dimen>
+    <dimen name="b_txt_actionbar_title_txt_size_bosch_actionbar_titleview">16sp</dimen>
+    <!-- fragment_bosch_discover.xml -->
+    <dimen name="b_grd_evt_categories_hor_space_fragment_bosch_discover">15dp</dimen>
+    <dimen name="b_grd_evt_categories_vert_space_fragment_bosch_discover">15dp</dimen>
+    <dimen name="b_grd_evt_categories_pad_fragment_bosch_discover">10dp</dimen>
+    <!-- bosch_grid_category.xml -->
+    <dimen name="b_txt_category_pad_vert_bosch_grid_category">2dp</dimen>
+    <dimen name="b_txt_category_txt_size_bosch_grid_category">13sp</dimen>
+    <!-- bosch_fragment_discover_by_category_list_item_header.xml -->
+    <dimen name="b_txt_date_pad_bosch_fragment_discover_by_category_list_item_header">1dp</dimen>
+    <dimen name="b_txt_date_txt_size_bosch_fragment_discover_by_category_list_item_header">12sp</dimen>
+    <!-- bosch_fragment_discover_by_category_list_item_evt.xml -->
+    <dimen name="b_rlt_layout_root_pad_t_bosch_fragment_discover_by_category_list_item_evt">3dp</dimen>
+    <dimen name="b_img_event_w_bosch_fragment_discover_by_category_list_item_evt">56dp</dimen>
+    <dimen name="b_img_event_ht_bosch_fragment_discover_by_category_list_item_evt">42dp</dimen>
+    <dimen name="b_lnr_lyt_details_ht_bosch_fragment_discover_by_category_list_item_evt">@dimen/b_img_event_ht_bosch_fragment_discover_by_category_list_item_evt</dimen>
+    <dimen name="b_img_event_margin_l_bosch_fragment_discover_by_category_list_item_evt">5dp</dimen>
+    <dimen name="b_lnr_layout_details_margin_l_bosch_fragment_discover_by_category_list_item_evt">15dp</dimen>
+    <dimen name="b_txt_title_txt_size_bosch_fragment_discover_by_category_list_item_evt">14sp</dimen>
+    <dimen name="b_txt_evt_location_txt_size_bosch_fragment_discover_by_category_list_item_evt">12sp</dimen>
+    <dimen name="b_txt_evt_location_margin_l_fragment_discover_by_category_list_item_evt">5dp</dimen>
+    <dimen name="b_divider_ht_bosch_fragment_discover_by_category_list_item_evt">1dp</dimen>
+    <dimen name="b_divider_margin_t_b_bosch_fragment_discover_by_category_list_item_evt">3dp</dimen>
+    <!-- bosch_artists_list_item.xml -->
+    <dimen name="b_rlt_layout_root_pad_t_bosch_artists_list_item">@dimen/b_rlt_layout_root_pad_t_bosch_fragment_discover_by_category_list_item_evt</dimen>
+    <dimen name="b_img_event_w_bosch_artists_list_item">@dimen/b_img_event_w_bosch_fragment_discover_by_category_list_item_evt</dimen>
+    <dimen name="b_img_event_ht_bosch_artists_list_item">@dimen/b_img_event_ht_bosch_fragment_discover_by_category_list_item_evt</dimen>
+    <dimen name="b_txt_artist_name_ht_bosch_artists_list_item">@dimen/b_img_event_ht_bosch_artists_list_item</dimen>
+    <dimen name="b_img_event_margin_l_bosch_artists_list_item">@dimen/b_img_event_margin_l_bosch_fragment_discover_by_category_list_item_evt</dimen>
+    <dimen name="b_lnr_layout_details_margin_l_bosch_artists_list_item">@dimen/b_lnr_layout_details_margin_l_bosch_fragment_discover_by_category_list_item_evt</dimen>
+    <dimen name="b_txt_title_txt_size_bosch_artists_list_item">@dimen/b_txt_title_txt_size_bosch_fragment_discover_by_category_list_item_evt</dimen>
+    <dimen name="b_divider_ht_bosch_artists_list_item">@dimen/b_divider_ht_bosch_fragment_discover_by_category_list_item_evt</dimen>
+    <dimen name="b_divider_margin_t_b_bosch_artists_list_item">@dimen/b_divider_margin_t_b_bosch_fragment_discover_by_category_list_item_evt</dimen>
+    <!-- fragment_bosch_about_us -->
+    <dimen name="b_rlt_root_lyt_pad_fragment_bosch_about_us">20dp</dimen>
+    <dimen name="b_lnr_btn_about_us_margin_l_fragment_bosch_about_us">10dp</dimen>
+    <dimen name="b_txt_app_details_txt_size_fragment_bosch_about_us">12sp</dimen>
+    <dimen name="b_lnr_btn_about_us_txt_size_fragment_bosch_about_us">11sp</dimen>
+    <dimen name="b_btn_about_us_stroke_h_fragment_bosch_about_us">1dp</dimen>
+    <dimen name="b_btn_bg_radius_fragment_bosch_about_us">10dp</dimen>
+    <!-- fragment_bosch_change_city -->
+    <dimen name="b_lnr_search_lyt_h_fragment_bosch_change_city">45dp</dimen>
+    <dimen name="b_lnr_search_lyt_pad_fragment_bosch_change_city"> <!-- 10 -->
+5dp</dimen>
+    <dimen name="b_edt_search_city_bg_edge_radius_fragment_bosch_change_city">10dp</dimen>
+    <dimen name="b_edt_search_city_pad_l_r_fragment_bosch_change_city">10dp</dimen>
+    <dimen name="b_edt_search_city_stroke_h_fragment_bosch_change_city">2dp</dimen>
+    <dimen name="b_btn_margin_l_r_fragment_bosch_change_city">5dp</dimen>
+    <dimen name="b_btn_pad_l_r_fragment_bosch_change_city">10dp</dimen>
+    <dimen name="b_lst_cities_pad_fragment_bosch_change_city">2dp</dimen>
+    <dimen name="b_txt_size_fragment_bosch_change_city">11sp</dimen>
+    <!-- fragment_bosch_change_city -->
+    <dimen name="b_lnr_search_lyt_h_fragment_change_city">45dp</dimen>
+    <dimen name="b_lnr_search_lyt_pad_fragment_change_city">10dp</dimen>
+    <dimen name="edt_search_city_bg_edge_radius_fragment_change_city">10dp</dimen>
+    <dimen name="b_edt_search_city_pad_l_r_fragment_change_city">10dp</dimen>
+    <dimen name="b_btn_margin_l_r_fragment_change_city">5dp</dimen>
+    <dimen name="b_btn_pad_l_r_fragment_change_city">5dp</dimen>
+    <dimen name="b_lst_cities_pad_fragment_change_city">2dp</dimen>
+    <dimen name="b_txt_size_fragment_change_city">11sp</dimen>
+    <!-- include_up_down_arrow_btn -->
+    <dimen name="b_rlt_up_down_arrow_btn_pad_include_up_down_arrow_btn">1dp</dimen>
+    <!-- bosch_fragment_change_city_list_item_city -->
+    <dimen name="b_txt_cities_margin_l_r_bosch_fragment_change_city_list_item_city">10dp</dimen>
+    <dimen name="b_txt_cities_drw_pad_bosch_fragment_change_city_list_item_city">@dimen/b_txt_cities_margin_l_r_bosch_fragment_change_city_list_item_city</dimen>
+    <!-- fragment_bosch_venue_info -->
+    <dimen name="b_txt_size_fragment_bosch_info">15sp</dimen>
+    <dimen name="b_rlt_root_lyt_fragment_bosch_info">10dp</dimen>
+    <dimen name="b_txt_views_margin_b_fragment_bosch_info">10dp</dimen>
+    <dimen name="b_txt_address_label_margin_b_fragment_bosch_info">10dp</dimen>
+    <!-- fragment_venue_details -->
+    <dimen name="b_rlt_root_layout_pad_fragment_bosch_all_details">10dp</dimen>
+    <dimen name="b_txt_venue_name_pad_fragment_bosch_all_details">3dp</dimen>
+    <dimen name="b_txt_distance_pad_l_r_fragment_bosch_all_details">5dp</dimen>
+    <dimen name="b_txt_distance_drw_pad_fragment_bosch_all_details">5dp</dimen>
+    <dimen name="b_txt_distance_pad_t_b_fragment_bosch_all_details">2dp</dimen>
+    <dimen name="b_txt_venue_name_size_fragment_bosch_all_details">15sp</dimen>
+    <dimen name="b_txt_date_size_fragment_bosch_all_details">12sp</dimen>
+    <dimen name="b_txt_distance_size_fragment_bosch_all_details">13sp</dimen>
+    <dimen name="b_v_dummy_outter_w_fragment_bosch_all_details">10dp</dimen>
+    <dimen name="b_v_dummy_inner_w_h_fragment_bosch_all_details">1dp</dimen>
+    <dimen name="b_btn_pad_fragment_bosch_all_details">6dp</dimen>
+    <dimen name="b_btn_drw_pad_fragment_bosch_all_details">0dp</dimen>
+    <dimen name="b_btn_txt_size_fragment_bosch_all_details">16sp</dimen>
+    <dimen name="b_btn_stroke_h_fragment_venue_details">3dp</dimen>
+    <!-- fragment_bosch_venue_details -->
+    <dimen name="txt_distance_drw_pad_bosch_venue_details">5dp</dimen>
+    <dimen name="txt_distance_pad_t_b_bosch_venue_details">2dp</dimen>
+    <dimen name="txt_distance_pad_l_r_bosch_venue_details">5dp</dimen>
+    <dimen name="txt_distance_size_bosch_venue_details">12sp</dimen>
+    <!-- bosch_element_alert_dialog -->
+    <dimen name="b_rlt_root_lyt_pad_bosch_element_alert_dialog">30dp</dimen>
+    <dimen name="b_txt_title_txt_size_bosch_element_alert_dialog">15sp</dimen>
+    <!-- item_lst_cities -->
+    <dimen name="b_txt_cities_margin_l_r_item_lst_cities">10dp</dimen>
+    <dimen name="b_txt_cities_drw_pad_item_lst_cities">@dimen/b_txt_cities_margin_l_r_item_lst_cities</dimen>
+    <!-- fragment_plan_travel -->
+    <dimen name="b_btn_drw_pad_fragment_plan_travel">10dp</dimen>
+    <!-- ends for bosch -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for ford ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- LockScreenActivity -->
+    <dimen name="img_ford_logo_w_h_lock_screen">180dp</dimen>
+    <dimen name="img_ford_logo_margin_t_lock_screen">90dp</dimen>
+    <dimen name="margin_t_lock_screen">10dp</dimen>
+    <dimen name="margin_b_lock_screen">15dp</dimen>
+    <dimen name="txt_eventseeker_lock_screen">24sp</dimen>
+    <dimen name="txt_lock_screen_lock_screen">22sp</dimen>
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for ford ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+</resources>

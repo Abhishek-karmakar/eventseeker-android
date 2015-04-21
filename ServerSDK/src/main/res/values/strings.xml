@@ -1,0 +1,14 @@
+<resources>    
+
+	<!-- Keyboard -->
+    <string name="keyboard_space">space</string>
+    <string name="keyboard_done">done</string>
+    <string name="keyboard_go">go</string>
+    <string name="keyboard_next">next</string>
+    <string name="keyboard_prev">prev</string>
+    <string name="keyboard_search">search</string>
+    <string name="keyboard_ok">OK</string>
+    <string name="keyboard_abc" translatable="false">ABC</string>
+    <string name="keyboard_abc_ru" translatable="false">АБВ</string>
+
+</resources>

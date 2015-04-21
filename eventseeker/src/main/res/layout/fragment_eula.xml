@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rltLayoutRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/rlt_layout_root_pad_fragment_eula"
+    android:background="@color/dark_gray" >
+    
+    <WebView android:id="@+id/webview"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_marginTop="@dimen/common_t_mar_pad_for_all_layout" />
+
+</RelativeLayout>

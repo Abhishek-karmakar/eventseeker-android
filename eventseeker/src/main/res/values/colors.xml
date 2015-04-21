@@ -1,0 +1,125 @@
+<resources>
+    
+    <color name="colorPrimary">#0097ff</color>
+    <color name="colorPrimaryDark">#006ab2</color>
+
+    <color name="colorPrimaryAlpha">#880097ff</color>
+    <color name="colorPrimaryDarkAlpha">#88006ab2</color>
+
+    <color name="nav_drawer_divider">#33ffffff</color>
+
+    <color name="tabs_seperator">#CBCBCB</color>
+	
+	<color name="primary_text_default_material_light">#ffffffff</color>
+	<!-- 26% of default values -->
+    <color name="primary_text_disabled_material_light">#42ffffff</color>
+    
+    <color name="btn_bg_primary_pressed">#0060ff</color>
+	<color name="btn_bg_gray">#333333</color>
+	<color name="btn_bg_gray_pressed">#222222</color>
+
+	<color name="btn_white_pressed">#EDEDED</color>
+
+    <color name="silver">#c0c0c0</color>
+	<color name="dark_gray">#eeeeee</color>
+	<color name="transparent">#00000000</color>
+
+	<color name="semi_translucent">#aa000000</color>
+	
+	<color name="bg_black_transparent_strip">#99000000</color>
+	<color name="bg_white_transparent_strip">#99ffffff</color>
+
+	<color name="bg_login_btn_dark_gray_launcher_screen">#333333</color>
+	<color name="pgindctr_page_color_semi_trans_launcher_screen">#9fff</color>
+
+	<color name="bg_screen_dark_blue">#3baaf3</color>
+	
+    <color name="bg_bar_below_action_bar">#dddddd</color>
+    
+	<color name="bg_evt_details_btns">#444444</color>
+	<color name="bg_evt_details_btns_divider">#666666</color>
+	<color name="bg_evt_details_btns_pressed">#357ec7</color>
+	
+	<color name="bg_artist_details_btns">#444444</color>
+	<color name="bg_artist_details_btns_divider">#666666</color>
+	
+	<color name="bg_venue_details_btns">@color/bg_artist_details_btns</color>
+	<color name="bg_venue_details_btns_divider">@color/bg_artist_details_btns_divider</color>
+	
+	<color name="bg_navigation_drawer">#fff</color>
+	<color name="txt_title_navigation_drawer_section_header">#666666</color>
+	<!-- <color name="bg_divider_navigation_drawer_list_item">@color/txt_title_navigation_drawer_section_header</color> -->
+	
+	<color name="txt_evt_location_include_evt_details">#aaaaaa</color>
+	
+	<color name="bg_rlt_layout_content_fb_login">#cccccc</color>
+	
+	<!-- brought from android higher api versions to serve to all apis starting with 8 -->
+	<color name="holo_blue_dark">#ff0099cc</color>
+	<color name="holo_blue_light">#ff33b5e5</color>
+	<color name="darker_gray">#aaa</color>
+	
+	<color name="gray_shade_d">#ddd</color>
+	<color name="gray_shade_7">#777</color>
+	
+	<color name="divider1_bg_fragment_discover_by_category_list_item_header">#ccc</color>
+	<color name="lnr_layout_btns_bg_include_fragment_my_events_list_item_footer">#ddd</color>
+	<color name="root_lnr_layout_bg_artists_news_list_item">#ddd</color>
+	<color name="root_lnr_layout_bg_friends_activity_list_item">@color/root_lnr_layout_bg_artists_news_list_item</color>
+	<color name="txt_desc_txt_color_artist_news_item">#666</color>
+	<color name="lnr_layout_btns_bg_friends_activity_item">#bbb</color>
+	<color name="divider_bg_friends_activity_item">#555</color>
+	<color name="txt_service_name_txt_color">#999</color>
+	<color name="txt_rep_code_txt_color">#999</color>
+	<color name="edt_rep_code_txt_color">@color/txt_rep_code_txt_color</color>
+	
+	<color name="btn_fb_sign_up_bg">#0099ff</color>
+	<color name="actionbar_title_color"> #666666</color>
+	<color name="font_blue">#0099ff</color>
+	<color name="tab_selection">#36B2E8</color>
+	<color name="btn_buy_tickets_disabled_txt_color">#b24f4f4f</color>
+	<color name="light_txt_txt_color_fragment_my_events_list_item">#666</color>
+	
+	<color name="txt_color_include_fragment_event_details_footer_tab">#666666</color>
+	<color name="txt_color_include_fragment_vaenu_details_footer_tab">#666666</color>	
+	
+	<color name="txt_evt_time_widget_layout">#ddd</color>
+	
+	<color name="txt_no_items_heading_txt_color_include_no_items_found_with_action">#666</color>
+	<color name="txt_no_items_msg_txt_color_include_no_items_found_with_action">#999</color>
+	
+	<color name="txt_why_login_txt_color_fragment_get_started">#555</color>
+	<color name="txt_guide_txt_color_fragment_get_started">#888</color>
+	
+	<!-- list_item_discover.xml -->
+	<color name="txt_evt_location_list_item_discover">#aaaaaa</color>
+	
+	<!-- featuring_artist.xml -->
+	<color name="bg_v_translucent_layer_featuring_artist">#80ffffff</color>
+
+	<!-- following_fragment_tab.xml -->
+	<color name="btn_tabs_txt_color">#666666</color>
+	
+	<!-- starts for bosch -->
+	<color name="b_bg_navigation_drawer">#666</color>
+	<!-- <color name="b_lnr_layout_btns_txt_color_fragment_plan_travel">#0088ff</color> -->
+	<color name="b_txt_date_bg_bosch_fragment_discover_by_category_list_item_header">#ccc</color>
+	<color name="b_txt_date_bg_bosch_fragment_discover_by_category_list_item_header_night_mode">#666</color>
+	
+	<color name="eventseeker_bosch_theme_grey">#666666</color>
+	<color name="eventseeker_bosch_theme_blue">#0099ff</color>
+	
+	<color name="btn_bg_border_fragment_bosch">#bebebe</color>
+	<color name="btn_bg_fragment_bosch_about_us">#e0e4e0</color>
+	
+	<color name="edt_search_bg_bosch_change_city_fragment">#f0f0f0</color>
+	
+	<color name="txt_signed_in_as_bg_fragment_preferences_night_mode">#666</color>
+	
+	<color name="v_divider_fragment_preferences">#9a9a9a</color>
+	<color name="bg_black_transparent_strip_night_mode">#c8222222</color>
+	
+	<color name="v_list_divider_color">#999999</color>
+	<!-- ends for bosch -->
+	
+</resources>

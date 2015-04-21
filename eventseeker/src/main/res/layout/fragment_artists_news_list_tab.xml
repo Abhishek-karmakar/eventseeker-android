@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rltLayoutRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white" >
+
+    <ListView
+    	android:paddingTop="@dimen/txt_list_no_items_found_pad_list_no_items_found"
+    	android:paddingBottom="@dimen/txt_list_no_items_found_pad_list_no_items_found"
+        android:id="@id/android:list"
+	    android:layout_margin="@dimen/rlt_list_no_items_found_pad_list_no_items_found"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    
+    <include layout="@layout/include_no_content_with_phone_tab"
+        android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+        android:visibility="gone"/>
+    
+    <!-- 09-04-2015: Top-Bottom -ve margin is applied to avoid the padding given in the layout files root -->
+    <include
+        android:id="@+id/rltLytPrgsBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/rlt_lyt_root_margin_t_b_progress_bar_eventseeker_fixed_ht"
+        android:layout_marginBottom="@dimen/rlt_lyt_root_margin_t_b_progress_bar_eventseeker_fixed_ht"
+        layout="@layout/progress_bar_eventseeker_fixed_ht"
+        android:visibility="gone" />
+    
+</RelativeLayout>

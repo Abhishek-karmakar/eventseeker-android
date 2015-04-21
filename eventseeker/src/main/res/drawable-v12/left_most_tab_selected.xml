@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:top="@dimen/top_left_most_tab_selected">
+        <shape android:shape="rectangle" >
+            <solid android:color="@android:color/white" />
+            <!-- <solid android:color="@color/tab_selection" /> -->
+            <!-- <corners android:bottomLeftRadius="@dimen/corners_radius_left_most_tab_selected" /> -->
+        </shape>
+    </item>
+</layer-list>

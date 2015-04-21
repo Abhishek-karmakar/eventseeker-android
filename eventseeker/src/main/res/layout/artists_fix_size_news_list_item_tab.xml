@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rltRootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="horizontal"
+    android:paddingLeft="@dimen/root_lnr_layout_pad_l_artists_news_list_item"
+    android:paddingRight="@dimen/root_lnr_layout_pad_r_artists_news_list_item"
+    android:paddingTop="@dimen/root_lnr_layout_pad_t_artists_news_list_item" >
+
+    <include
+        android:id="@+id/rltLayoutNewsItemContainer"
+        android:layout_width="@dimen/root_lnr_lyt_w_artist_fix_size_news_list_item"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        layout="@layout/artist_fix_size_news_item_tab"
+        android:background="@android:color/white" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@+id/rltLayoutNewsItemContainer"
+        android:layout_marginLeft="@dimen/v_dummy_margin_l_r_artist_fix_size_news_list_item"
+        android:layout_marginRight="@dimen/v_dummy_margin_l_r_artist_fix_size_news_list_item"
+        android:background="@color/dark_gray" />
+
+</RelativeLayout>

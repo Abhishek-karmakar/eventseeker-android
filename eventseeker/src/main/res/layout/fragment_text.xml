@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:minHeight="@dimen/txt_frag_ht_launcher_fragment"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/txtTitle"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/txt_title_view_pager_launcher_fragment"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtDesc"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_below="@+id/txtTitle"
+            android:layout_marginTop="@dimen/txt_desc_mar_t_text_fragment"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/txt_desc_view_pager_launcher_fragment"
+            android:textStyle="bold"
+            android:paddingLeft="@dimen/txt_desc_pad_l_r_fragment_text"
+            android:paddingRight="@dimen/txt_desc_pad_l_r_fragment_text" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Languages -->
+    <!-- <string name="lang_english">Anglais</string>
+    <string name="lang_french">Français</string>
+    <string name="lang_german">Allemand</string>
+    <string name="lang_italian">Italien</string>
+    <string name="lang_spanish">Espagnol</string>
+    <string name="lang_portuguese">Portugais</string> -->
+    
+    <string name="menu_search">Rechercher</string>
+    <string name="menu_change_location">Changer le lieu</string>
+    <string name="title_discover">Découvertes</string>
+    <string name="title_change_location">Changer le lieu</string>
+    <string name="title_language">Langue</string>
+    <string name="menu_settings">Règlages</string>
+    <string name="menu_calendar">Calendar</string>
+    <string name="artist_on_tour">" En tournée "</string>
+    <string name="title_event_details">Détails de l’événement</string>
+    <string name="title_artist_details">Description de l\'artiste</string>
+    <string name="title_venue_details">Venue Details</string>
+    <string name="title_following">Suivant</string>
+    <string name="title_my_events">Mes évènements</string>
+    <string name="title_artists_news">Nouvelles de l\'artiste</string>
+    <string name="title_friends_activity">Activités des amis</string>
+    <string name="title_connect_accounts">Synchroniser les comptes</string>
+    <string name="title_get_started">Démarrez</string>
+    <string name="title_about_us">A propos de nous</string>
+    <string name="title_eula">EULA</string>
+    <string name="title_rep_code">@string/rep_code</string>
+    <string name="title_search_results">Résultats de la recherche</string>
+    <string name="title_google_play">Google Play</string>
+    <string name="title_device_library">@string/service_device_library</string>
+    <string name="title_facebook">Facebook</string>
+    <string name="title_google_plus">Google Plus</string>
+    <string name="title_twitter">Twitter</string>
+    <string name="title_rdio">Rdio</string>
+    <string name="title_lastfm">last.fm</string>
+    <string name="title_pandora">Pandora</string>
+    <string name="title_settings_mobile_app">Règlages</string>
+    <string name="title_web">Web</string>
+    <string name="title_signup">@string/btn_sign_up</string>
+    
+    <string name="no_items_found_pls_login">Please login with Facebook or Google from \'Sync Accounts\' page to see</string>
+	<string name="pls_login_to_see_all_events_you_are_following">Connectez-vous sur Facebook ou Google sur la page Synchroniser Les Comptes pour afficher tous les événements que vous suivez.</string>
+    <string name="pls_login_to_see_to_see_recommended_events">Connectez-vous sur Facebook ou Google sur la page Synchroniser Les Comptes pour afficher les événements suggérés pour vous</string>    
+    <string name="pls_login_to_track_evt">Pour suivre cet événement, vous devez vous connecter sur Facebook ou Google de la page "Synchroniser les Comptes"</string>
+    <string name="pls_login_through_mobile_app">Please log in through mobile app.</string>
+    <string name="pls_login_to_see_friends_activity">Connectez-vous sur Facebook ou Google de la page Synchroniser Les Compters pour afficher votre activité d\'amis</string>
+	<string name="pls_login_to_see_artist_news">Connectez-vous sur Facebook ou Google de la page Synchroniser Les Comptes pour afficher les nouveautés d\'artistes.</string>
+    <string name="pls_login_to_submit_repcode">Connectez vous sur facebook ou google de la page Synchroniser les Comptes</string>
+    <string name="connection_lost">Vous êtes déconnecté.</string>
+    <string name="no_internet_connectivity">Vous êtes déconnectés d\'internet</string>
+    <string name="yes">oui</string>
+    <string name="go_to_login">Afficher la page de connéxion?</string>
+	<string name="add_to_calender">Ajouter</string>
+	<string name="select_calender">Sélectionner le calendrier</string>
+	<string name="event_added_to_calender_successfully">Événement Ajouté au Calendrier</string>
+	<string name="event_not_found">Evénement introuvable: impossible d\'ajouter l\'événement au calendrier.</string>
+	<string name="can_not_add_event_to_calender">problème inconnu: Impossible d\'ajouter l\'événement au calendrier.</string>		
+	
+    <!-- Strings used for navigation drawer list -->
+    <string name="navigation_drawer_section_browse">Naviguer</string>
+    <string name="navigation_drawer_item_discover">@string/title_discover</string>
+    <string name="navigation_drawer_item_my_events">@string/title_my_events</string>
+    <string name="navigation_drawer_item_artists_news">@string/title_artists_news</string>
+    <string name="navigation_drawer_item_friends_activity">@string/title_friends_activity</string>
+    <string name="navigation_drawer_item_following">@string/title_following</string>
+    <string name="navigation_drawer_section_settings">Règlages</string>
+    <string name="navigation_drawer_item_settings">Règlages</string>
+    <string name="navigation_drawer_item_logout">Se Déconnecter</string>
+    <string name="navigation_drawer_item_sync_accounts">Synchroniser vos comptes</string>
+    <string name="navigation_drawer_item_change_location">@string/title_change_location</string>
+    <string name="navigation_drawer_item_language">@string/title_language</string>
+    <string name="navigation_drawer_section_about">A Propos</string>
+    <string name="navigation_drawer_item_invite_friends">Inviter des Amis</string>
+    <string name="navigation_drawer_item_rate_app">Évaluer l\'application</string>
+    <string name="navigation_drawer_item_about">A Propos</string>
+    <string name="navigation_drawer_item_eula">@string/title_eula</string>
+    <string name="navigation_drawer_item_enter_rep_code">Entrez l\'identifiant de votre ambassadeur</string>
+    
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="action_settings">@string/menu_settings</string>
+
+    <!-- ConnectAccountsFragment -->
+    <!--
+    Any value chandges in ConnectAccountsFragment's below strings should also needs to be updated in 
+    ConnectAccountsFragment's Service enum
+    -->
+    <string name="connect_accounts_item_title">Title</string>
+    <string name="connect_accounts_item_facebook">Facebook</string>
+    <string name="connect_accounts_item_blank">Blank</string>
+    <string name="connect_accounts_item_device_library">@string/service_device_library</string>
+    <string name="connect_accounts_item_twitter">Twitter</string>
+    <string name="connect_accounts_item_spotify">Spotify</string>
+    <string name="connect_accounts_item_rdio">Rdio</string>
+    <string name="connect_accounts_item_lastfm">Last.fm</string>
+    <string name="connect_accounts_item_pandora">Pandora</string>
+    <string name="connect_accounts_item_button">Button</string>
+
+    <string name="google_sign_in">Connexion Google Plus</string>
+    <string name="google_sign_out">Déconnexion Google Plus</string>
+    
+    <string name="pls_login">Connectez-vous sur Facebook ou Google avant de synchroniser vos comptes.</string>    
+    <string name="syncing_your_acc">En train de synchroniser votre compte...Veuillez patienter...</string>    
+    <string name="are_you_sure">Etes-vous sûr?</string>    
+    <string name="connecting_account_allow_us">La connexion à votre compte nous permet de vous envoyer des alertes pertinentes et instantanées.</string>    
+    <string name="follow_your_favorite_Artists">Suivez vos artistes préférés et recevez des nouvelles sur des événements en synchronisant les comptes suivants:</string>    
+    
+    <!-- fragment_device_library.xml -->
+    <string name="txt_service_desc_txt_fragment_device_library">Voudriez-vous que l’application cherche votre bibliothèque de musique pour les artistes qui vous-pouvez suivre? Les artistes se mettront sous la section « Suivant ».</string>
+    <string name="retrieve_artists">Rechercher des Artistes</string>
+ 
+    <!-- Strings used for event category titles -->
+    <string name="evt_cat_concerts">Concerts</string>
+    <string name="evt_cat_theater">Théâtre</string>
+    <string name="evt_cat_sports">Sports</string>
+    <string name="evt_cat_arts_museums">Arts et Musées</string>
+    <string name="evt_cat_dance">Danse</string>
+    <string name="evt_cat_nightlife">Vie Nocturne</string>
+    <string name="evt_cat_educational">Éducatif</string>
+    <string name="evt_cat_festivals_fairs">Festivals et Foires</string>
+    <string name="evt_cat_family">Famille</string>
+    <string name="evt_cat_community">Communauté</string>
+    <string name="evt_cat_business_tech">Entreprise et Technologie</string>
+    <string name="evt_cat_tours">Tournées</string>
+    
+    <string name="plus_generic_error">Sign in with Google is not available.</string>
+    
+    <string name="already_signed_in_with_google_account">Vous êtes déjà connecté avec Facebook. Voulez-vous vous déconnecter et reconnecter avec Google?</string>
+    <string name="already_signed_in_with_facebook_account">Vous êtes déjà connecté avec Google. Voulez-vous vous déconnecter et reconnecter avec Facebook?</string>
+ 
+    <!-- About us -->
+    <string name="seek_share_live">Cherche. Partage. Vis.</string>
+    <string name="eventseeker_desc">eventseeker rend la découverte d\'artistes et d\'évènements facile et sociale. Nous vous donnons les outils pour ne plus jamais manquer le moindre évènement.</string>
+    <string name="powered_by">Réalisé par Wcities</string>
+        
+    <!-- Following/Follow Footer Text -->
+    <string name="personalize_your_experience">Personnaliser votre expérience</string>
+    <string name="sync_accounts_or_search_for_artists">Synchroniser vos comptes ou rechercher des artistes pour démarrer votre expérience personnalisée avec eventseeker.</string>
+    
+    <!-- Artists Details -->
+    <string name="info">Infos</string>
+    <string name="events">Evènements</string>
+    <string name="news">Nouvelles</string>
+    <string name="videos">Vidéos</string>
+    <string name="friends_who_like">Amis qui aiment</string>
+    <string name="upcoming_events">Évènements a l\'avenir</string>
+    <string name="no_artist_news_found">Il n\'y a pas des nouvelles d\'artiste.</string>
+    <string name="facebook_link_unavailable">Un lien Facebook n\'est pas disponible pour cet artiste</string>
+    <string name="twitter_link_unavailable">Un lien Twitter n\'est pas disponible pour cet artiste</string>
+    <string name="web_link_unavailable">Un lien Internaute n\'est pas disponible pour cet artiste</string>
+     
+    <!-- Artists Adapter -->
+    <string name="no_artist_found">Aucun Artiste Trouvé</string>
+ 
+    <!-- Artists News -->
+    <string name="posted_a_picture">a publié une photo</string>
+    <string name="shared_a_link">a publié un lien</string>
+    <string name="posted_a_video">a publié un vidéo nouvel</string>
+    <string name="posted_a_status">a partagé un statut</string>
+    <string name="follow_artists_for_updates">Suivez les artistes pour recevoir les dernières nouvelles en temps réel</string>
+    <string name="search_artists">Recherche d\'artistes</string>
+    <string name="sort_by">Catégoriser par : </string>
+    <string name="chronological">Chronologique</string>
+    <string name="trending">Tendances</string>
+        
+   	<!-- Connect Accounts Services -->
+    <string name="service_google_play" >Google Play</string>
+    <string name="service_device_library">Bibliothèque d\'appareil</string>
+    <string name="service_twitter" >Twitter</string>
+    <string name="service_rdio" >Rdio</string>
+    <string name="service_last_fm" >Last.fm</string>
+    <string name="service_pandora" >Pandora</string>
+    <string name="service_facebook" >Facebook</string>
+    <string name="service_google_plus" >Google Plus</string>
+    <string name="service_title" >Title</string>
+    <string name="service_blank" >Blank</string>
+    <string name="service_button" >Button</string>
+    
+   	<!-- Connect Accounts -->
+    <string name="fb_login">Accès Facebook</string>
+    <string name="fb_logout">Se déconnecter de Facebook</string>
+    <string name="btn_continue">Continuez</string>
+    <string name="syncing_fb">Synchroniser Facebook</string>
+	<string name="syncing_google_plus">Synchroniser Google Plus</string>
+	<string name="syncing_google_play">Synchroniser Google Play</string>
+	<string name="syncing_device_lib">Synchroniser Device Library</string>
+	<string name="syncing_twitter">Synchroniser Twitter</string>
+	<string name="syncing_rdio">Synchroniser Rdio</string>
+	<string name="syncing_last_fm">Synchroniser Last.fm</string>
+	<string name="syncing_pandora">Synchroniser Pandora</string>
+	<string name="artist_synced">L’artiste synchronisé</string>
+	<string name="personalize_by_syncing">Personnaliser encore plus avec la synchronisation de vos comptes et laisse nous qui sont les préférées.</string>
+	
+	<!-- Following -->
+    <string name="follow_more_artists">Suivre d\'avantage d\'artistes +</string>
+	
+   	<!-- My Events -->
+    <string name="following">Suivant</string>
+    <string name="recommended">Recommandé</string>
+    <string name="saved_event">Sauvegardé</string>
+   	
+   	<!-- Search Results -->
+    <string name="artists">Artistes</string>
+    <string name="venues">Lieux</string>
+   	
+   	<!-- Event Details -->
+    <string name="featuring">Avec</string>
+   	<string name="cancel">Annuler</string>
+	<string name="time">Horaire</string>
+   			
+   	<!-- Venue Details -->
+    <string name="phone">Téléphone</string>
+   	<string name="drive">Conduire</string>
+   	
+    <!-- Friends Activity -->
+    <string name="is_going_to">%1$s se rend à %2$s</string>
+    <string name="wants_to_go_to">%1$s veut aller à %2$s</string>
+    <string name="like">J\'aime</string>
+    <string name="comment">Commentaire</string>
+    <string name="events_are_better_with_friends">Les événements sont toujours mieux entre amis. Invitez les à vous rejoindre sur eventseeker.</string>
+    <string name="invite_friends">Inviter des amis</string>
+    <string name="add_comment">Ajouter un commentaire</string>
+    <string name="add">Ajouter</string>
+    <string name="sending_like_request">Demande "J'aime" Envoyée</string>
+    <string name="posting_comment">Commentaire en cours de publication...</string>
+ 	<string name="no_friends_activity_found">Aucune activité à afficher</string>
+ 	
+ 	<!-- RepCodeFragment -->
+ 	<string name="submit">Envoyer</string>
+ 	<string name="rep_code">Code Rep</string>
+ 	<string name="rep_code_response_other_account_already_synced">Un autre compte est déjà synchronisé sur cet appareil.</string>
+ 	<string name="rep_code_response_successfully_submitted">Envoyé avec succès!</string>
+ 	<string name="rep_code_response_database_insertion_error">Une erreur est survenue lors du traitement de ce code rep.</string>
+ 	<string name="rep_code_response_invalid_rep_code">Code Rep Non Valide!</string>
+ 	<string name="rep_code_response_unknown_error">Impossible de traiter votre demande. Veuillez réessayer.</string>
+  	<string name="rep_code_enter_a_valid_repcode">Vous devez entrer un code rep valide.</string>
+ 	<string name="rep_code_submission">Envoi du code rep</string>
+ 	<string name="ok">Ok</string>
+ 	
+   	<!-- My Events -->
+    <string name="no_events_in_your_area">Il n\'y a aucun événement dans votre région. Suivez davantage d\'artistes pour créer votre agenda personnalisé.</string>
+
+    <!-- About Us -->
+    <string name="version">Version</string>
+    
+    <!-- Navigate -->
+    <string name="couldnt_find_drive_location">Impossible de trouver l\'itineraire pour ce lieu</string>	
+    
+    <!-- Discover -->
+    <string name="set_start_date">Configurez la date de début de l\'événement</string>	
+    <string name="loading">Chargement en cours...</string>	
+ 
+    <!-- Get Started -->
+    <string name="skip">Ignorer</string>
+ 	<string name="signin_for_better_experience">Connectez-vous pour optimiser votre experience.</string>
+    <string name="couldnt_login_to_google_play_music">Impossible de connecter à votre compte Google Play Music. Veuillez verifier vos données de compte Google Play Music</string>
+    <string name="why_login">Pourquoi se connecter?</string>
+    <string name="get_event_recommendations">Recevez des suggestions selon vos intérêts.</string>
+    <string name="stay_connected_with_friends">Restez en contacte avec vos amis et invitez-les à participer aux événements.</string>
+ 
+    <!-- Last Fm -->
+    <string name="user_name">Nom d\'utilisateur</string>
+    <string name="user_name_could_not_be_found">Impossible de trouver le nom d\'utilisateur.</string>
+
+    <!-- MainAcitivity -->
+    <string name="error_this_action_couldnt_be_completed_at_this_time">Erreur: impossible de traiter votre demande en ce moment.</string>
+ 
+    <!-- VenueDetails -->
+    <string name="phone_number_not_available">Le numéro de téléphone n\'est pas disponible pour ce lieu. </string>
+    <string name="web_address_isnt_available">Un lien n\'est pas disponible pour ce lieu.</string>
+ 
+    <!-- include_sync_account.xml -->
+ 	<string name="connect_other_accounts">Connecter Autres Comptes</string>
+ 	
+ 	<!-- EventseekerWidgetProvider -->
+ 	<string name="loading_events">Chargement en cours...</string>
+ 	
+    <!-- Common GOING, WANT TO & TICKETS -->
+    <string name="going">Aller</string>
+    <string name="want_to">Vouloir</string>
+    <string name="tickets">Billets</string>
+	<string name="going_lower">@string/going</string>
+    <string name="want_to_lower">@string/want_to</string>
+    <string name="tickets_lower">@string/tickets</string>
+ 
+    <!-- Time difference strings -->
+    <string name="sec_gt_one">%1$d seconds ago</string>
+    <string name="min_gt_one">Il y a %1$d minutes</string>
+    <string name="hr_gt_one">Il y a %1$d heures</string>
+    <string name="day_gt_one">Il y a %1$d jours</string>
+    <string name="week_gt_one">%1$d weeks ago</string>
+    <string name="mon_gt_one">%1$d months ago</string>
+    <string name="yr_gt_one">%1$d years ago</string>
+
+    <string name="sec_not_gt_one">1 second ago</string>
+    <string name="min_not_gt_one">Il y a une minute</string>
+    <string name="hr_not_gt_one">Il y a une heure</string>
+    <string name="day_not_gt_one">Il y a un jour</string>
+    <string name="week_not_gt_one">1 week ago</string>
+    <string name="mon_not_gt_one">1 month ago</string>
+    <string name="yr_not_gt_one">1 year ago</string>
+       
+    <!-- Common -->
+    <string name="no_event_found">Aucun événement trouvé</string>
+     
+    <!-- RdioFragment -->
+    <string name="user_name_or_email">Nom d\'utilisateur ou addresse email</string>
+    
+    <!-- LauncherFragment -->
+    <string name="firstTitle">Explorer</string>
+    <string name="secondTitle">Découvrir</string>
+    <string name="thirdTitle">Connecter</string>
+    <string name="forthTitle">Vivre</string>
+    <string name="firstTitleDescription">Des millions d\'evénements, à portée de clic. Concerts, sports, théâtre, festivals et encore plus!</string>
+    <string name="secondTitleDescription">Après la synchronisation, on vous recommandera des événements personnalisés. Recevez des alertes et trouvez des billets dans n\'importe quelle ville.</string>
+    <string name="thirdTitleDescription">Gardez contact avec les amis et la famille. On facilite le partage d’événements.</string>
+    <string name="forthTitleDescription">Minimisez votre recherche et optimisez votre découverte. Affronter le monde avec eventseeker.</string>
+    <string name="btn_log_in">Connexion</string>
+    <string name="btn_sign_up">S\'Inscrire</string>
+    
+    <!-- SignUpFragment -->
+    <string name="sign_up_with_email">Connecter avec email.</string>
+    <string name="first_name">Prénom</string>
+    <string name="last_name">Nom de Famille</string>
+    <string name="email">Adresse électronique</string>
+    <string name="password">mot de passe</string>
+    <string name="confirm_password">Confirmez le mot de passe</string>
+    <string name="error_email_invalid">CETTE ADDRESSE ÉLECTRONIQUE N’EST PAS VALIDE</string>
+    <string name="error_pass_do_not_match">LES PASSE-MOTS NE CORRESPONDENT PAS</string>
+    <string name="error_email_exists">CETTE ADDRESSE ELECTRONIQUE DEJA EXISTE</string>
+    <string name="error_email_or_password_incorrect">L’adresse électronique ou passé-mot n’est pas correcte</string>
+    <string name="error_unknown_error">Une erreur inconnue s’est produite. Essayez plus tard.</string>
+    
+    <!-- FollowMoreArtistFragment -->
+    <string name="btn_sync_accounts">Syncroniser les comptes</string>
+    <string name="btn_popular_artists">Artistes populaires</string>
+    <string name="btn_recommended">Suggérés</string>
+    <string name="btn_search">Rechercher</string>
+    <string name="title_find_more_artist">Trouver d\'autres artists</string>
+    
+    <!-- PopularArtistsFragment -->
+    <string name="btn_featured">En Vedette</string>
+    <string name="btn_music">Musique</string>
+    <string name="btn_comedy">Comédie</string>
+    <string name="btn_theater">Théâtre</string>
+    <string name="btn_sports">Sport</string>
+    
+    <!-- RecommendedArtistsFragment -->
+    <string name="btn_follow_all">Les Suivre Tous</string>
+    <string name="a_z">A - Z</string>
+    <string name="recommendation_score">Recommendation Score</string>
+    <string name="dialog_title_follow_all">Les Suivre Tous</string>
+    <string name="dialog_msg_follow_all">Voulez-vous suivre %1$d artistes?</string>
+    <string name="dialog_btn_yes">yes</string>
+    <string name="dialog_btn_no">no</string>
+    
+    <!-- Following section screen names -->
+    <string name="title_popular">Populaire</string>
+    <string name="title_featured_list">Liste Présenté</string>
+    
+    <string name="title_categories">Catégories</string>
+    <string name="title_alternative_rock">Rock Alternatif</string>
+    <string name="title_classic_rock">Rock Classique</string>
+    <string name="title_indie_rock">Rock Indépendent</string>
+    <string name="title_folk">Folk</string>
+    <string name="title_country">Country</string>
+    <string name="title_electronic">Electro</string>
+    <string name="title_pop">Pop</string>
+    <string name="title_punk">Punk</string>
+    <string name="title_hard_rock_metal">Hard Rock / Métal</string>
+    <string name="title_world_music">Musiques du Monde</string>
+    <string name="title_blues_jazz">Blues / Jazz</string>
+    <string name="title_hip_hop">Hip-Hop</string>
+    <string name="title_soul_r_and_b_funk">Soul / R&amp;B / Funk</string>
+    <string name="title_classical">Musique Classique</string>
+    
+    <!-- DiscoverSettingDialogFragment -->
+	<string name="txt_search_radius">Cherchez pour rayon (milles)</string>
+    <string name="txt_select_date">Sélectionnez la date</string>
+    <string name="title_dialog_discover_setting">@string/title_settings_mobile_app</string>
+    
+    <!-- MusicArtistsFragment -->
+    <string name="btn_alternative_rock">Rock Alternatif</string>
+    <string name="btn_classic_rock">Rock Classique</string>
+    <string name="btn_indie_rock">Rock Indépendent</string>
+    <string name="btn_folk">Folk</string>
+    <string name="btn_country">Country</string>
+    <string name="btn_electronic">Electro</string>
+    <string name="btn_pop">Pop</string>
+    <string name="btn_punk">Punk</string>
+    <string name="btn_hard_rock_metal">Hard Rock / Métal</string>
+    <string name="btn_world_music">Musiques du Monde</string>
+    <string name="btn_blues_jazz">Blues / Jazz</string>
+    <string name="btn_hip_hop">Hip-Hop</string>
+    <string name="btn_soul_r_and_b_funck">Soul \/ R&amp;B \/ Funk</string>
+    <string name="btn_classical">Musique Classique</string>
+    
+    <!-- LoginFragment -->
+    <string name="continue_with_facebook">Continuer avec Facebook</string>
+    <string name="continue_wiht_google">Continuer avec Google</string>
+    <string name="sign_in_with_email">Ouvrez une session avec votre adresse électronique</string>
+    <string name="signing_in">L’ouverture de session...</string>
+    <string name="sign_in">Ouvrez une session</string>
+    <string name="dialog_msg_user_email_doesnt_exist">L’utilisateur avec cette adresse électronique n’existe pas</string>
+    <string name="share_on_facebook">Partagez sur Facebook</string>
+    
+    <!--  fragment_discover.xml -->
+    <string name="txt_no_events">Il n’y a pas des évènements actuellement dans votre localité. Essayez une autre categorie ou cherchez une localité nouvelle / Rayon.</string>
+    <string name="btn_chg_loc_txt">CHANGEZ LOCALITÉ</string>
+    
+    <!-- Following -->
+    <string name="remove_artist">Retirez l’artiste</string>
+    <string name="follow_artist">Suivez l’artiste</string>
+    <string name="are_you_sure_you_want_to_remove_this_artist">Vous-êtes sûr que voulez vous retirer cet artiste?</string>
+    <string name="artist_saved">L’artiste sauvegardé!</string>
+    
+    <!-- NavigationFragment -->
+    <string name="address_isnt_available">L\'adresse n\'est pas disponible pour cet endroit.</string>
+    
+    <!-- fragment_navigation.xml -->
+    <string name="select_navigation_app">Sélectionnez votre application de navigation et demander le chemin.</string>
+    
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <string name="title_activity_bosch_main">BoschMainActivity</string>
+    
+    <!-- Strings used for navigation drawer list -->
+    <string name="bosch_navigation_drawer_item_home">Home</string>
+    <string name="bosch_navigation_drawer_item_change_city">Change City</string>
+    <string name="bosch_navigation_drawer_item_search">Search</string>
+    <string name="bosch_navigation_drawer_item_favorites">Favorites</string>
+    <!-- <string name="bosch_navigation_drawer_item_about_us">About Us</string> -->
+    
+    <string name="title_artists">Artists</string>
+    <string name="title_featured">Featured</string>
+    <string name="title_search">Search</string>
+    <string name="title_map">eventseeker | Navigate</string>
+    <string name="title_settings">eventseeker | Settings</string>
+    <string name="title_events">Events</string>
+    
+    <!-- fragment_bosch_about_us -->
+    <string name="txt_app_details"><![CDATA[<b>App name :</b> eventseeker<br/><b>Description :</b> The eventseeker is the premier sources for event, artist and ticketing information available anywhere, gathered from worldwide ticketing partners, in-house research, and the insight of local contributors around the world.<br/><b>Mailing address :</b> Wcities.com, Inc. 512 2nd Street Second Floor, San Francisco, CA 94107, USA<br/><b>Tel :</b> 4154958090<br/><b>Fax : </b>4154958093]]></string>
+  	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for Ford ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!-- Common Messages -->
+	<string name="msg_welcome_to">Bienvenue à</string>
+    <string name="msg_eventseeker">Eventseeker!</string>
+    <string name="time_out">Délai d\'expiration</string>
+    <string name="ford_phone_no_is_unavailable">le numéro de téléphone n\'est pas disponible</string>
+	<string name="ford_phone_no">Numéro de téléphone</string>
+    <string name="calling">En train d\'appeler</string>
+    <string name="leaving_app_for_call">Yá estás saliendo de la aplicación Eventseeker. Se realizará una llamada desde tu móvil</string>
+    <string name="the_internet">Vous êtes</string>
+    <string name="connection_appears">déconnecté</string>
+    <string name="to_be_offline"></string>
+    
+    <!-- Commands -->
+    <string name="al_command_next">Suivant</string>
+    <string name="al_command_back">Précédent</string>
+    <string name="al_command_details">Détail</string>
+    <string name="al_command_play">Écouter</string>
+    <string name="al_command_call_venue">Appel</string>
+    <string name="al_command_follow">Suivre</string>
+        
+    <!-- SoftButtons -->
+    <!-- <string name="soft_btn_discover"></string> -->
+    
+    <!-- MainActivityAL -->
+    <string name="al_command_my_events">Mes événements</string>
+    <string name="al_command_discover">Explorer</string>
+    <string name="al_command_search">Chercher</string>
+    
+   	<!-- DiscoverActivityAL -->
+    <string name="discover_al_discover_categories">D\'accord ! Voulez-vous des concerts, clubs, sports, théâtres, ou, festivals ?</string>
+    <string name="discover_al_time_out_help_text">concerts, clubs, sports, théâtres, festivals</string>
+    <string name="discover_al_discover">Dites catégorie</string>
+    <string name="discover_al_concerts">concerts</string>
+    <string name="discover_al_clubs">clubs</string>
+    <string name="discover_al_sports">sports</string>
+    <string name="discover_al_theater">théâtres</string>
+    <string name="discover_al_festivals">festivals</string>
+    
+    <!-- SearchAL -->
+    <string name="search_events_or_artists">D\'accord! vous souhaitez rechercher artiste, événement ou le lieu de rendez-vous?</string>
+    <string name="search_event">événement</string>
+    <string name="search_artist">artiste</string>
+    <string name="search_for">Chercher</string>
+    <string name="searching_for">En train de chercher</string>
+    <string name="say_event_name">Dites le nom de l\'événement</string>
+    <string name="say_artist_name">Dites le nom de l\'artiste</string>
+    <string name="alert_no_artists_available">Il n\'a y pas d\'artistes disponibles.</string>
+    <string name="no_artists_avail">Il n\'a y pas d\'artistes disponibles.</string>
+    <string name="already_followed">Déjà Suivi</string>
+    <string name="followed">Suivi</string>
+    <string name="search_event_text">Chercher l\'événement</string>
+    <string name="search_artist_text">Chercher l\'artiste</string>
+    <string name="listening">En train d\'écouter...</string>
+    <string name="processing">Traitement en cours...</string>
+    <string name="error">Erreur</string>
+    <string name="nuance_error">Une erreur s\'est produite. Veuillez appuyer sur le boutton voix et dites mes événements, explorer ou chercher</string>
+    
+    <!-- Events -->
+    <string name="event_no_evts_avail">Aucun événement disponible</string>
+    <string name="alert_no_events_available">Aucun événement disponible</string>
+    <string name="plz_press_nxt_or_bck">, Veuillez appuyez sur le bouton d\'enregistrement vocal et dites suivant ou précédent.</string>
+    <string name="plz_press_nxt_bck_dtls_cll">, Veuillez appuyer sur le bouton d\'enregistrement vocal et dites suivant, précédent, détail ou appel</string>
+    <string name="detail_not_available">Description détaillée n\'est pas disponible</string>
+    <string name="description">Description</string>
+    <string name="not_available">Indisponible</string><!-- Continuation of above -->
+    <string name="is_performing_for_this_event">sera sur scène pour cet événement</string>
+    <string name="are_performing_for_this_event">seront sur scène pour cet événement</string>
+    <string name="price_would_be">Prix approximatif : </string>
+    <string name="price_range_would_be">Fourchette de prix comprise entre</string>
+    <string name="and">et</string>
+    
+    <!-- MyEventsAL -->
+    <string name="my_events_al_yes">Oui</string>
+    <string name="my_events_al_no">Non</string>
+    <string name="my_events_al_no_evts_avail_make_suggestions">Il n\'y a aucun événement disponible. Puis-je faire des suggstions?</string>
+    <string name="my_events_al_time_out_help_text">Oui, Non</string>
+    <string name="my_events_al_confirmation">suggstions?</string>
+    <string name="my_events_how_can_i_help">Comment puis-je vous aider ?</string>
+	
+	<!-- LockScreenActivity -->
+    <!-- <string name="txt_eventseeker_activity_lockscreen">eventseeker</string>
+    <string name="txt_lockscreen_activity_lockscreen">Lock Screen</string> -->
+    
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for Ford ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+</resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rltLayoutRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/rlt_layout_root_pad_t_share_dropdown_item" >
+    
+    <ImageView android:id="@+id/imgAppIcon"
+        android:layout_width="@dimen/img_app_icon_w_share_dropdown_item"
+        android:layout_height="@dimen/img_app_icon_ht_share_dropdown_item"
+        android:scaleType="centerInside"
+        android:layout_marginLeft="@dimen/img_app_icon_margin_l_share_dropdown_item"
+        android:layout_marginRight="@dimen/img_app_icon_margin_r_share_dropdown_item"
+        android:contentDescription="app icon" />
+    
+    <View android:id="@+id/vDummy"
+        android:layout_width="@dimen/v_dummy_w_share_dropdown_item"
+        android:layout_height="@dimen/v_dummy_ht_share_dropdown_item"
+        android:layout_alignLeft="@id/imgAppIcon"
+        android:layout_alignRight="@id/imgAppIcon"
+        android:layout_below="@id/imgAppIcon" />
+    
+    <TextView android:id="@+id/txtAppLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/imgAppIcon"
+        android:layout_centerVertical="true"
+        android:textSize="@dimen/txt_app_label_txt_size_share_dropdown_item" />
+
+</RelativeLayout>

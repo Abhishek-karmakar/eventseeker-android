@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white" >
+    
+    <RelativeLayout android:id="@+id/rltLyt"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+        
+	<com.wcities.eventseeker.custom.view.ResizableImageView android:id="@+id/vNoContentBG"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_alignParentBottom="true"
+	    android:scaleType="centerCrop"
+	    android:src="@drawable/ic_no_content_background_overlay_cropped"
+	    android:visibility="invisible" />
+	    <!-- android:layout_below="@+id/rltLytTxtArtistTitle" -->
+        
+        <ImageView android:id="@+id/imgArtist"
+	      	android:layout_width="match_parent"
+	      	android:layout_height="@dimen/img_artist_ht_artist_details_tab"
+	      	android:scaleType="centerCrop"
+	      	android:contentDescription="Artist Image" />
+        
+        <RelativeLayout android:id="@+id/rltLytTxtArtistTitle"
+	        android:layout_width="match_parent"
+	        android:layout_height="@dimen/rlt_lyt_txt_artist_title_ht_artist_details_tab"
+	        android:layout_alignBottom="@id/imgArtist"
+	        android:paddingLeft="@dimen/rlt_lyt_txt_artist_title_pad_l_artist_details_tab"
+	    	android:paddingBottom="@dimen/rlt_lyt_txt_artist_title_pad_b_artist_details_tab"
+	    	android:background="@drawable/bg_lnr_gradient_top_transparent_btm_black" >
+	    
+	    	<TextView android:id="@+id/txtArtistTitle"
+	    	    android:layout_width="match_parent"
+	    	    android:layout_height="@dimen/txt_artist_title_ht_artist_details_tab"
+	    	    android:textColor="@android:color/white"
+	    	    android:textSize="@dimen/txt_artist_title_txt_size_artist_details_tab"
+	    	    android:gravity="center_vertical"
+	    	    android:singleLine="true"
+	    	    android:ellipsize="marquee"
+	    	    android:textStyle="bold"
+	    	    android:layout_alignParentBottom="true" />
+	    	
+	    </RelativeLayout>
+	    
+        <View android:id="@+id/vDummy"
+	        android:layout_width="match_parent"
+	        android:layout_height="0dp"
+	        android:layout_below="@id/rltLytTxtArtistTitle"
+	        android:background="@android:color/white" />
+        
+    </RelativeLayout>
+    
+    <com.wcities.eventseeker.custom.view.RecyclerViewInterceptingVerticalScroll
+	    android:id="@+id/recyclerVArtists"
+	    android:scrollbars="vertical"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:background="@android:color/transparent" />
+
+</FrameLayout>

@@ -1,0 +1,47 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 'Google Inc.:Google APIs:21'
+    buildToolsVersion "22.0.1"
+
+    defaultConfig {
+        applicationId "com.wcities.eventseeker"
+        minSdkVersion 11
+        targetSdkVersion 21
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
+        }
+    }
+}
+
+dependencies {
+    compile project(':gmusic')
+    compile project(':facebook')
+    compile project(':serverSDK')
+    compile project(':endlessViewPager')
+    compile project(':floatingActionButton')
+    compile project(':viewPagerIndicator')
+    compile project(':spotifyApi')
+    compile project(':cardview')
+    compile 'com.android.support:support-v4:22.0.0'
+    compile 'com.android.support:appcompat-v7:21.0.3'
+    //compile 'com.google.android.gms:play-services:+'
+    compile 'com.google.android.gms:play-services-plus:7.0.0'
+    compile 'com.google.android.gms:play-services-identity:7.0.0'
+    compile 'com.google.android.gms:play-services-base:7.0.0'
+    compile 'com.google.android.gms:play-services-analytics:7.0.0'
+    compile 'com.google.android.gms:play-services-gcm:7.0.0'
+    compile 'com.google.android.gms:play-services-location:7.0.0'
+    compile 'com.google.android.gms:play-services-maps:7.0.0'
+    compile files('libs/android-support-v7-recyclerview.jar')
+    compile files('libs/AppLinkSDKAndroid-2-2.jar')
+    compile files('libs/lastfm-java-0.1.2.jar')
+    compile files('libs/rdio-android-sdk.jar')
+    compile files('libs/signpost-commonshttp4-1.2.1.1.jar')
+    compile files('libs/signpost-core-1.2.1.1.jar')
+    compile files('libs/twitter4j-core-4.0.2-SNAPSHOT.jar')
+}

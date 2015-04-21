@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/common_t_mar_pad_for_all_layout" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/lnr_root_padding_fragment_follow_more_artists"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+
+        <!--
+            textAllCaps="false" is added in all the buttons as in android api level 21 was having 
+        	an issue which was keeping textAllCaps="true" by default. So, all the button text were 
+        	appearing in capital        -->
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/ic_sync" >
+
+            <!-- 
+            	btnSyncAccounts widget is changed from Button to RelativeLayout as in Android L devices 
+            	The imageView and TextView with white color content were rendering the color of Button's
+            	background over the white content.
+            -->
+            <RelativeLayout
+                android:id="@+id/btnSyncAccounts"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/slctr_btn_alpha_clr_prmry_normal_clr_prmry_drk_pressed_material" />
+
+            <View
+                android:id="@+id/vDummySyncAccounts"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="@dimen/v_dummy_margin_t_b_fragment_follow_more_artists"
+                android:layout_marginTop="@dimen/v_dummy_margin_t_b_fragment_follow_more_artists" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/vDummySyncAccounts"
+                android:gravity="center"
+                android:text="@string/btn_sync_accounts"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/txt_size_widget_eventSeeker_btn_alpha"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/vDummySyncAccounts"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_sync_accounts_link" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent" />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/ic_popular_artists" >
+
+            <!-- 
+            	btnSyncAccounts widget is changed from Button to RelativeLayout as in Android L devices 
+            	The imageView and TextView with white color content were rendering the color of Button's
+            	background over the white content.
+            -->
+            <RelativeLayout
+                android:id="@+id/btnPopularArtists"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/slctr_btn_alpha_clr_prmry_normal_clr_prmry_drk_pressed_material" />
+
+            <View
+                android:id="@+id/vDummyPopularArtists"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="@dimen/v_dummy_margin_t_b_fragment_follow_more_artists"
+                android:layout_marginTop="@dimen/v_dummy_margin_t_b_fragment_follow_more_artists" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/vDummyPopularArtists"
+                android:gravity="center"
+                android:text="@string/btn_popular_artists"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/txt_size_widget_eventSeeker_btn_alpha"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/vDummyPopularArtists"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_popular_artists_link" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/lnr_root_padding_fragment_follow_more_artists"
+        android:layout_marginLeft="@dimen/lnr_root_padding_fragment_follow_more_artists"
+        android:layout_marginRight="@dimen/lnr_root_padding_fragment_follow_more_artists"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/ic_recomended" >
+
+            <!-- 
+            	btnSyncAccounts widget is changed from Button to RelativeLayout as in Android L devices 
+            	The imageView and TextView with white color content were rendering the color of Button's
+            	background over the white content.
+            -->
+            <RelativeLayout
+                android:id="@+id/btnRecommended"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/slctr_btn_alpha_clr_prmry_normal_clr_prmry_drk_pressed_material" />
+
+            <View
+                android:id="@+id/vDummyRecommended"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="@dimen/v_dummy_margin_t_b_fragment_follow_more_artists"
+                android:layout_marginTop="@dimen/v_dummy_margin_t_b_fragment_follow_more_artists" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/vDummyRecommended"
+                android:gravity="center"
+                android:text="@string/btn_recommended"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/txt_size_widget_eventSeeker_btn_alpha"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/vDummyRecommended"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_recommended_link" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent" />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/ic_search" >
+
+            <!-- 
+            	btnSyncAccounts widget is changed from Button to RelativeLayout as in Android L devices 
+            	The imageView and TextView with white color content were rendering the color of Button's
+            	background over the white content.
+            -->
+            <RelativeLayout
+                android:id="@+id/btnSearch"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/slctr_btn_alpha_clr_prmry_normal_clr_prmry_drk_pressed_material" />
+
+            <View
+                android:id="@+id/vDummySearch"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="@dimen/v_dummy_margin_t_b_fragment_follow_more_artists"
+                android:layout_marginTop="@dimen/v_dummy_margin_t_b_fragment_follow_more_artists" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/vDummySearch"
+                android:gravity="center"
+                android:text="@string/btn_search"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/txt_size_widget_eventSeeker_btn_alpha"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/vDummySearch"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_search_link" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

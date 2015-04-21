@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootRltLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_blue_app_bg"
+    android:paddingTop="@dimen/common_t_mar_pad_for_all_layout" >
+
+    <ListView
+        android:id="@+id/android:list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true" >
+
+        <!--
+        android:paddingLeft="@dimen/lst_pad_l_r_fragment_settings"
+        android:paddingRight="@dimen/lst_pad_l_r_fragment_settings"
+        android:layout_margin="@dimen/lst_mar_fragment_settings"        -->
+    </ListView>
+
+</RelativeLayout>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrlVRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white" >
+    
+    <RelativeLayout android:id="@+id/lnrLytRoot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+    	android:gravity="center_horizontal"
+    	android:paddingTop="@dimen/lnr_lyt_root_pad_t_dialog_discover_setting"
+    	android:paddingLeft="@dimen/lnr_lyt_root_pad_l_dialog_discover_setting"
+    	android:paddingRight="@dimen/lnr_lyt_root_pad_r_dialog_discover_setting" >
+    
+		<TextView android:id="@+id/txtSearchRadius"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="@string/txt_search_radius"
+		    android:textSize="@dimen/txt_search_radius_txt_size_dialog_discover_setting"
+		    android:layout_centerHorizontal="true"
+		    android:layout_marginBottom="@dimen/txt_search_radius_margin_b_dialog_discover_setting" />
+		
+		<TextView android:id="@+id/txtMinVal"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="1"
+		    android:layout_below="@id/txtSearchRadius" />
+		
+		<TextView android:id="@+id/txtMaxVal"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="100"
+		    android:layout_below="@id/txtSearchRadius"
+		    android:layout_alignParentRight="true" />
+		
+		<TextView android:id="@+id/txtSelectedMiles"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="50"
+		    android:layout_below="@id/txtSearchRadius"
+		    android:layout_centerHorizontal="true" />
+		
+		<SeekBar android:id="@+id/seekBar"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:max="99"
+		    android:layout_below="@id/txtMinVal"
+		    android:layout_marginBottom="@dimen/seek_bar_margin_b_dialog_discover_setting" />
+		
+		<View android:id="@+id/vHorLine"
+		    android:layout_width="match_parent"
+		    android:layout_height="@dimen/v_hor_line_ht_dialog_discover_setting"
+		    android:background="@color/darker_gray"
+		    android:layout_below="@id/seekBar"
+		    android:layout_marginBottom="@dimen/v_hor_line_margin_b_dialog_discover_setting" />
+		
+		<TextView android:id="@+id/txtSelectDate"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="@string/txt_select_date"
+		    android:textSize="@dimen/txt_select_date_txt_size_dialog_discover_setting"
+		    android:layout_below="@id/vHorLine"
+		    android:layout_centerHorizontal="true"
+		    android:layout_marginBottom="@dimen/txt_select_date_margin_b_dialog_discover_setting" />
+		
+		<DatePicker android:id="@+id/datePicker"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_below="@id/txtSelectDate"
+		    android:layout_centerHorizontal="true"
+		    android:datePickerMode="spinner"
+		    android:calendarViewShown="false" />
+		
+		<!-- Since bottom margin doesn't work for last element datePicker, we have used this dummy view -->
+		<View android:id="@+id/vDummy" 
+		    android:layout_width="match_parent"
+		    android:layout_height="@dimen/v_dummy_ht_dialog_discover_setting"
+		    android:layout_below="@id/datePicker"
+		    android:background="@android:color/transparent" />
+	
+	</RelativeLayout>
+    
+</ScrollView>

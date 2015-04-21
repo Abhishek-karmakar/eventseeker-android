@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for Ford ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    
+    <!-- Common Messages -->
+    <string name="ford_phone_no_is_unavailable">número de telefone não está disponível</string>
+    <string name="ford_phone_no">Número de Telefone</string>
+    <string name="calling">Chamando</string>
+    <string name="leaving_app_for_call">Você está saindo do aplicativo Eventseeker. Um telefonema será realizado do seu celular</string>
+    	
+    <!-- DiscoverActivityAL -->
+    <string name="discover_al_discover_categories">Okay, Você deseja concertos, clubes, esportes, teatros ou festivais?</string>
+    <string name="discover_al_time_out_help_text">concertos, clubes, esportes, teatros ou festivais</string>
+    <string name="discover_al_sports">esportes</string>
+    
+    <!-- SearchAL -->
+    <string name="search_events_or_artists">Okay, Você deseja buscar por artista ou evento?</string>
+    <string name="searching_for">Buscando por</string>
+    <string name="say_event_name">Diga o nome do evento</string>
+    <string name="already_followed">Já seguido</string>
+    <string name="listening">Escutando...</string>
+    <string name="processing">Processando...</string>
+    <string name="error">Erro</string>
+    <string name="nuance_error">Desculpe, ocorreu um erro. Por favor, Pressione o botão de voz e diga meus eventos, descobrir ou pesquisa</string>
+    
+    <!-- Events -->
+    <string name="plz_press_nxt_or_bck">, Por favor, pressione o botão de voz e diga próximo ou anterior.</string>
+    <string name="plz_press_nxt_bck_dtls_cll">, Por favor, pressione o botão de voz e diga próximo, anterior, detalhes ou chamar.</string>
+    <string name="detail_not_available">Descrição detalhada não disponível</string>
+    <string name="description">Descrição</string>
+    <string name="not_available">Não disponível</string><!-- Continuation of above -->
+    <string name="is_performing_for_this_event">se apresenta neste evento</string>
+    <string name="are_performing_for_this_event">se apresentam neste evento</string>
+    <string name="price_range_would_be">, a faixa de preço seria aproximadamente entre</string>
+    
+    <!-- MyEventsAL -->
+    <string name="my_events_how_can_i_help">Como posso ajudar?</string>
+    
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ends for Ford ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+</resources>

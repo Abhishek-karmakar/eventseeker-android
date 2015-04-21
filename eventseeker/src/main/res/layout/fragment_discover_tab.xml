@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rltLytRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <RelativeLayout android:id="@+id/rltLytCatTitles"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rlt_lyt_cat_titles_ht_discover_tab"
+        android:background="@android:color/white"
+        android:elevation="@dimen/rlt_lyt_cat_titles_elevation_discover_tab" >
+    
+	    <ImageView android:id="@+id/imgPrev"
+	        android:layout_width="@dimen/img_prev_w_discover_tab"
+	        android:layout_height="match_parent"
+	        android:src="@drawable/slctr_btn_previous"
+	        android:clickable="true"
+	        android:scaleType="centerInside" />
+    
+	    <ImageView android:id="@+id/imgNext"
+	        android:layout_width="@dimen/img_next_w_discover_tab"
+	        android:layout_height="match_parent"
+	        android:src="@drawable/slctr_btn_next"
+	        android:clickable="true"
+	        android:scaleType="centerInside"
+	        android:layout_alignParentRight="true" />
+    
+	    <android.support.v7.widget.RecyclerView
+		    android:id="@+id/recyclerVCategories"
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent"
+		    android:layout_toRightOf="@id/imgPrev"
+		    android:layout_toLeftOf="@id/imgNext"
+		    android:scrollbars="none" />
+    
+    </RelativeLayout>
+    
+    <com.wcities.eventseeker.custom.view.RecyclerViewInterceptingVerticalScroll
+	    android:id="@+id/recyclerVEvents"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_below="@id/rltLytCatTitles"
+	    android:scrollbars="none"
+	    android:background="@android:color/white"
+	    android:layout_marginTop="@dimen/rv_events_margin_t_discover_tab"
+	    android:padding="@dimen/rv_events_padding_discover_tab" />
+    
+	<View android:id="@+id/vRltLytCatTitlesShadow"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/v_rlt_lyt_cat_titles_shadow_ht_discover_tab"
+        android:layout_below="@id/rltLytCatTitles"
+        android:background="@drawable/bg_shadow" />
+	
+	<include layout="@layout/progress_bar_eventseeker_transparent"
+	    android:id="@+id/rltLytProgressBar"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_alignTop="@+id/rltLytNoEvts"
+	    android:layout_alignBottom="@+id/rltLytNoEvts"
+	    android:background="@drawable/ic_no_content_background_overlay"
+    	android:visibility="invisible" />
+	
+	<RelativeLayout android:id="@+id/rltLytNoEvts"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_below="@id/rltLytCatTitles"
+	    android:layout_marginTop="@dimen/rlt_lyt_no_evts_margin_t_discover_tab"
+	    android:visibility="invisible" >
+	
+    	<com.wcities.eventseeker.custom.view.ResizableImageView android:id="@+id/imgNoEvts"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_alignParentBottom="true"
+	        android:scaleType="centerCrop"
+	        android:src="@drawable/ic_no_content_background_overlay" />
+	    
+		<TextView android:id="@+id/txtNoEvents"
+		    android:layout_width="@dimen/txt_no_events_w_discover_tab"
+		    android:layout_height="wrap_content"
+		    android:text="@string/txt_no_events"
+		    android:textSize="@dimen/txt_no_events_txt_size_discover_tab"
+		    android:gravity="center"
+		    android:layout_centerHorizontal="true"
+		    android:layout_marginTop="@dimen/txt_no_events_margin_t_discover_tab"
+		    android:drawableTop="@drawable/ic_discover_settings"
+		    android:drawablePadding="@dimen/txt_no_events_drawable_pad_discover_tab" />
+		
+		<Button android:id="@+id/btnChgLoc"
+		    android:layout_width="wrap_content"
+		    android:layout_height="@dimen/btn_chg_loc_ht_discover_tab"
+		    android:text="@string/btn_chg_loc_txt"
+		    android:textSize="@dimen/btn_chg_loc_txt_size_discover_tab"
+		    android:layout_alignParentBottom="true" 
+		    android:layout_marginBottom="@dimen/btn_chg_loc_margin_b_discover_tab"
+		    android:paddingLeft="@dimen/btn_chg_loc_pad_l_discover_tab"
+		    android:paddingRight="@dimen/btn_chg_loc_pad_r_discover_tab"
+		    android:layout_centerHorizontal="true"
+		    style="@style/Widget.EventSeeker.ButtonRoundedCorner" />
+	
+	</RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootRltLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_gray" >
+    
+    <ProgressBar android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+    
+    <RelativeLayout android:id="@+id/rltLayoutLoadedContent"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent" >
+    
+	    <include layout="@layout/include_venue_details_footer"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentBottom="true" />
+	    
+	    <ScrollView android:id="@+id/scrlVContent"
+	        android:layout_width="match_parent"
+		    android:layout_height="match_parent"
+		    android:layout_above="@id/lnrLayoutBtns" >
+		
+		    <LinearLayout android:id="@+id/lnrLayoutRoot"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="vertical" >
+		        
+		        <LinearLayout android:id="@+id/lnrLayoutTop"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:orientation="horizontal"
+		            android:baselineAligned="false" >
+		            
+		            <include android:layout_width="0dp"
+			            android:layout_height="wrap_content"
+			            android:layout_weight="1" />
+		            
+		            <include layout="@layout/include_address_map1" />
+		            
+		        </LinearLayout>
+		        
+				<RelativeLayout android:id="@+id/rltLayoutDesc"
+				    android:layout_width="match_parent"
+				    android:layout_height="wrap_content"
+				    android:background="@android:color/white"
+				    android:layout_marginLeft="@dimen/layout_include_desc_margin_l_fragment_venue_info" >
+				 
+				 	<TextView android:id="@+id/txtDesc"
+				     	android:layout_width="match_parent"
+				     	android:layout_height="wrap_content"
+				     	android:ellipsize="end" />
+				 
+				 	<ImageView android:id="@+id/imgDown"
+				    	android:layout_width="wrap_content"
+				     	android:layout_height="wrap_content"
+				     	android:layout_below="@id/txtDesc"
+				     	android:src="@android:drawable/arrow_down_float"
+				     	android:layout_alignParentRight="true" />
+				
+				</RelativeLayout>
+		        
+		    </LinearLayout>
+		
+		</ScrollView>
+		
+	</RelativeLayout>
+    
+</RelativeLayout>

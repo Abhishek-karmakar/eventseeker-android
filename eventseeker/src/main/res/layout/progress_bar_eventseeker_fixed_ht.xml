@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rltLytRoot"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/rlt_lyt_root_ht_progress_bar_eventseeker_fixed_ht"
+    android:background="@android:color/white"
+    android:paddingBottom="@dimen/rlt_lyt_root_pad_t_b_progress_bar_eventseeker_fixed_ht"
+    android:paddingTop="@dimen/rlt_lyt_root_pad_t_b_progress_bar_eventseeker_fixed_ht" >
+
+    <com.wcities.eventseeker.custom.view.ResizableImageView
+        android:id="@+id/imgPrgOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_no_content_background_overlay"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/imgPrgsCenter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_progress_e" />
+
+    <ProgressBar
+        android:id="@+id/prgsBar"
+        style="@style/CustomProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
+</RelativeLayout>

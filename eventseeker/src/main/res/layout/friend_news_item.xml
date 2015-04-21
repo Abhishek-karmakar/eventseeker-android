@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   	xmlns:app="http://schemas.android.com/apk/res-auto"
+   	android:id="@+id/rltLayoutActivityItemContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/rlt_layout_news_item_container_pad_artist_news_item"
+    android:background="@android:color/white">
+    
+    <TextView android:id="@+id/txtTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/txt_title_margin_b_friend_news_item"
+        android:textSize="@dimen/txt_title_txt_size_friend_news_item"
+        android:text="Alice is going to" />
+    
+    <com.wcities.eventseeker.custom.view.ResizableImageView android:id="@+id/imgPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtTitle"
+        android:layout_marginBottom="@dimen/img_photo_margin_b_friend_news_item"
+        android:contentDescription="photo" />
+    
+    <Button android:id="@+id/btnComment" 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imgPhoto"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/btn_margin_r_friend_news_item"
+        android:text="@string/comment"
+        android:drawableLeft="@android:drawable/sym_action_chat" />
+    
+    <Button android:id="@+id/btnLike" 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imgPhoto"
+        android:layout_toLeftOf="@id/btnComment"
+        android:layout_marginRight="@dimen/btn_margin_r_friend_news_item"
+        android:text="@string/like"
+        android:drawableLeft="@android:drawable/btn_star" />
+    
+    <TableLayout android:id="@+id/tblLayoutEvtDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/imgPhoto"
+        android:layout_alignRight="@id/imgPhoto"
+        android:layout_alignBottom="@id/imgPhoto"
+        android:paddingLeft="@dimen/tbl_layout_evt_details_pad_l_friend_news_item"
+        android:background="@color/bg_black_transparent_strip" >
+        
+        <TableRow android:id="@+id/row1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/row_1_margin_b_friend_news_item" >
+            
+            <ImageView android:id="@+id/imgEvtTime"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:src="@drawable/calendar"
+	            android:layout_gravity="center" />
+	        
+	        <TextView android:id="@+id/txtEvtTime"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:textColor="@android:color/white"
+			    style="@style/SingleLineMarqueeTxtViewXtraPadding"
+			    android:textSize="@dimen/tbl_layout_evt_details_txt_size_friend_news_item"
+			    android:text="Friday May 03" />
+            
+        </TableRow>
+        
+        <TableRow android:id="@+id/row2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+            
+            <ImageView android:id="@+id/imgEvtLoc"
+	            android:layout_width="@dimen/img_evt_loc_size_friend_news_item"
+	            android:layout_height="@dimen/img_evt_loc_size_friend_news_item"
+	            android:src="@drawable/location"
+	            android:layout_gravity="center" />
+	        
+	        <TextView android:id="@+id/txtEvtLocation"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:textColor="@android:color/white"
+			    style="@style/SingleLineMarqueeTxtViewXtraPadding"
+			    android:textSize="@dimen/tbl_layout_evt_details_txt_size_friend_news_item"
+			    android:text="AT Park - San Francisco" />
+            
+        </TableRow>
+        
+	</TableLayout>
+    
+</RelativeLayout>

@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white" >
+    
+	<com.wcities.eventseeker.custom.view.ObservableScrollView 
+	    android:id="@+id/obsrScrlV"
+	  	android:layout_width="match_parent" 
+	  	android:layout_height="match_parent"
+	  	android:fillViewport="true" >
+	  	
+	    <RelativeLayout android:id="@+id/rltLyt"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
+	  	
+		    <ImageView android:id="@+id/imgEvent"
+		      	android:layout_width="match_parent"
+		      	android:layout_height="@dimen/img_event_ht_event_details"
+		      	android:scaleType="centerCrop"
+		      	android:contentDescription="Event Image" />
+		    
+		    <RelativeLayout android:id="@+id/rltLytTxtEvtTitle"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_alignBottom="@id/imgEvent"
+		        android:paddingLeft="@dimen/rlt_lyt_txt_evt_title_pad_l_event_details"
+		    	android:paddingBottom="@dimen/rlt_lyt_txt_evt_title_pad_b_event_details"
+		    	android:paddingTop="@dimen/rlt_lyt_txt_evt_title_pad_t_event_details"
+		    	android:background="@drawable/bg_lnr_gradient_top_transparent_btm_black" >
+		    
+		    	<TextView android:id="@+id/txtEvtTitle"
+		    	    android:layout_width="match_parent"
+		    	    android:layout_height="@dimen/txt_evt_title_ht_event_details"
+		    	    android:textColor="@android:color/white"
+		    	    android:textSize="@dimen/txt_evt_title_txt_size_event_details"
+		    	    android:gravity="center_vertical"
+		    	    android:singleLine="true"
+		    	    android:ellipsize="marquee" />
+		    	
+		    </RelativeLayout>
+		    
+		    <RelativeLayout android:id="@+id/rltLytContent"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_below="@id/rltLytTxtEvtTitle"
+		        android:background="@android:color/white">
+		        
+		        <TextView android:id="@+id/txtEvtLoc"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:drawableLeft="@drawable/ic_event_location"
+		            android:gravity="center_vertical"
+		            android:layout_marginLeft="@dimen/txt_evt_details_margin_l_event_details"
+		            android:layout_marginRight="@dimen/txt_evt_details_margin_r_event_details"
+		            android:layout_marginTop="@dimen/txt_evt_details_margin_t_event_details"
+		            android:drawablePadding="@dimen/txt_evt_details_drawable_pad_event_details"
+		            android:textSize="@dimen/txt_evt_details_txt_size_event_details" />
+		        
+		        <TextView android:id="@+id/txtEvtTime"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:drawableLeft="@drawable/ic_event_time"
+		            android:gravity="center_vertical"
+		            android:layout_marginLeft="@dimen/txt_evt_details_margin_l_event_details"
+		            android:layout_marginRight="@dimen/txt_evt_details_margin_r_event_details"
+		            android:layout_marginTop="@dimen/txt_evt_details_margin_t_event_details"
+		            android:drawablePadding="@dimen/txt_evt_details_drawable_pad_event_details"
+		            android:textSize="@dimen/txt_evt_details_txt_size_event_details"
+		            android:layout_below="@id/txtEvtLoc" />
+		        
+		        <TextView android:id="@+id/txtDesc"
+			     	android:layout_width="match_parent"
+			     	android:layout_height="wrap_content"
+			     	android:layout_marginLeft="@dimen/txt_desc_margin_l_event_details"
+			     	android:layout_marginRight="@dimen/txt_evt_details_margin_r_event_details"
+			     	android:layout_marginTop="@dimen/txt_desc_margin_t_event_details"
+			     	android:layout_below="@id/txtEvtTime" />
+		        
+		        <RelativeLayout
+		            android:id="@+id/lnrLytExpandDesc"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:layout_below="@id/txtDesc"
+		            android:layout_marginTop="@dimen/lnr_lyt_expand_desc_margin_t_event_details" >
+
+		            <View
+		                android:id="@+id/vHorLine"
+		                android:layout_width="match_parent"
+		                android:layout_height="@dimen/v_hor_line_ht_artist_details"
+		                android:layout_alignBottom="@+id/imgDown"
+		                android:layout_marginBottom="@dimen/v_hor_margin_b_event_details"
+		                android:layout_marginRight="@dimen/txt_desc_margin_r_rv_item_desc"
+		                android:layout_marginLeft="@dimen/v_hor_line_margin_l_event_details"
+		                android:background="@color/gray_shade_d" />
+		            
+		            <ImageView
+		                android:id="@+id/imgDown"
+		                android:layout_width="@dimen/img_down_wt_rv_item_desc"
+		                android:layout_height="@dimen/img_down_ht_rv_item_desc"
+		                android:scaleType="center"
+		                android:src="@drawable/ic_description_expand"
+		                android:background="@android:color/white" />
+		            
+		        </RelativeLayout>
+			    
+		        <include layout="@layout/progress_bar_eventseeker_fixed_ht"
+		            android:id="@+id/rltLytPrgsBar"
+		            android:layout_width="match_parent"
+	    			android:layout_height="match_parent"
+		            android:layout_below="@id/lnrLytExpandDesc" />
+			    
+		        <RelativeLayout android:id="@+id/rltLytFeaturing"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:layout_below="@id/lnrLytExpandDesc">
+			    
+			        <TextView android:id="@+id/txtFeaturing"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:layout_centerHorizontal="true"
+			            android:text="@string/featuring"
+			            android:layout_marginTop="@dimen/txt_featuring_margin_t_event_details"
+			            android:textSize="@dimen/txt_evt_details_txt_size_event_details" />
+			        
+			        <android.support.v4.view.ViewPager android:id="@+id/vPagerFeaturing"
+					    android:layout_width="match_parent"
+					    android:layout_height="@dimen/v_pager_featuring_ht_event_details"
+					    android:layout_marginTop="@dimen/v_pager_featuring_margin_t_event_details"
+					    android:layout_below="@id/txtFeaturing" />
+			        
+			        <View android:id="@+id/vHorLine2"
+			            android:layout_width="match_parent"
+			            android:layout_height="@dimen/v_hor_line_ht_event_details"
+			            android:background="@color/gray_shade_d"
+			            android:layout_below="@id/vPagerFeaturing"
+			            android:layout_marginLeft="@dimen/v_hor_line_margin_l_event_details"
+			            android:layout_marginRight="@dimen/v_hor_line_margin_r_event_details"
+			            android:layout_marginTop="@dimen/v_hor_line_margin_t_event_details" />
+		        
+		        </RelativeLayout>
+		        
+		        <RelativeLayout android:id="@+id/rltLytVenue"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:layout_below="@id/rltLytFeaturing">
+			    
+			        <TextView android:id="@+id/txtVenue"
+			            android:layout_width="wrap_content"
+			            android:layout_height="wrap_content"
+			            android:layout_centerHorizontal="true"
+			            android:layout_marginLeft="@dimen/rlt_lyt_address_margin_l_event_details"
+			            android:layout_marginRight="@dimen/rlt_lyt_address_margin_r_event_details"
+			            android:layout_marginTop="@dimen/txt_venue_margin_t_event_details"
+			            android:textSize="@dimen/txt_evt_details_txt_size_event_details"
+			            android:drawableLeft="@drawable/ic_event_location"
+			            android:drawablePadding="@dimen/txt_venue_drawable_pad_event_details"
+			            android:gravity="center" />
+			        
+			        <include layout="@layout/include_address_map"
+			            android:id="@+id/rltLytAddress"
+			            android:layout_width="match_parent"
+			            android:layout_height="wrap_content"
+			            android:layout_below="@id/txtVenue"
+			            android:layout_marginTop="@dimen/rlt_lyt_address_margin_t_event_details"
+			            android:layout_marginLeft="@dimen/rlt_lyt_address_margin_l_event_details"
+			            android:layout_marginRight="@dimen/rlt_lyt_address_margin_r_event_details" />
+			        
+			        <View android:id="@+id/vHorLine3"
+			            android:layout_width="match_parent"
+			            android:layout_height="@dimen/v_hor_line_ht_event_details"
+			            android:background="@color/gray_shade_d"
+			            android:layout_below="@id/rltLytAddress"
+			            android:layout_marginLeft="@dimen/v_hor_line_margin_l_event_details"
+			            android:layout_marginRight="@dimen/v_hor_line_margin_r_event_details"
+			            android:layout_marginTop="@dimen/v_hor_line_margin_t_event_details" />
+		        
+		        </RelativeLayout>
+		        
+		        <include layout="@layout/include_friends"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:layout_below="@id/rltLytVenue" />
+		        
+		    </RelativeLayout>
+	    	
+	    </RelativeLayout>
+	    
+	</com.wcities.eventseeker.custom.view.ObservableScrollView>
+	
+	<com.melnykov.fab.FloatingActionButton android:id="@+id/fabTickets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="@dimen/fab_margin_b_event_details"
+        android:layout_marginRight="@dimen/fab_margin_l_r_event_details"
+        android:src="@drawable/ic_ticket_available_floating"
+        fab:fab_type="normal"
+        fab:fab_colorNormal="@color/colorPrimary"
+        fab:fab_colorPressed="@color/colorPrimaryDark"
+        fab:fab_colorRipple="@android:color/white" />
+	
+	<com.melnykov.fab.FloatingActionButton android:id="@+id/fabSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="@dimen/fab_margin_b_event_details"
+        android:layout_marginLeft="@dimen/fab_margin_l_r_event_details"
+        android:src="@drawable/ic_unsaved_event_floating"
+        fab:fab_type="normal"
+        fab:fab_colorNormal="@color/colorPrimary"
+        fab:fab_colorPressed="@color/colorPrimaryDark"
+        fab:fab_colorRipple="@android:color/white" />
+	
+</FrameLayout>
