@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android" >
-    <solid android:color="#cccccc"/>
-    <corners android:radius="@dimen/corners_radius_left_most_tab_selected" />
-</shape>
