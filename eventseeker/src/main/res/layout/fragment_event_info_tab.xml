@@ -90,7 +90,7 @@
                             android:textSize="@dimen/txt_evt_time_txt_size_include_fragment_event_details_img_evt" />
 
                         <LinearLayout
-                            android:id="@+id/lnrLayoutChkBoxGoing"
+                            android:id="@+id/lnrLayoutChkBox"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="0.24"

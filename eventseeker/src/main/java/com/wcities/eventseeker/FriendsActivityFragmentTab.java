@@ -614,13 +614,13 @@ public class FriendsActivityFragmentTab extends PublishEventListFragment impleme
 				baseActivityTab.getScreenName(), GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON, 
 				GoogleAnalyticsTracker.Type.Event.name(), null, item.getTrackId());
 	}
-	
+
+    @SuppressLint("ValidFragment")
 	private static class AddCommentDialogFragment extends DialogFragment {
 
 	    /**
 	     * Create a new instance of AddCommentDialogFragment
 	     */
-	    @SuppressLint("ValidFragment")
 		static AddCommentDialogFragment newInstance() {
 	        return new AddCommentDialogFragment();
 	    }

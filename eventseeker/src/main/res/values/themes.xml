@@ -11,7 +11,7 @@
     	<item name="searchViewStyle">@style/Widget.EventSeeker.Light.SearchView</item>
 	</style>
 
-	<style name="Theme.EventSeekr" parent="@style/Theme.EventSeekr.Base"></style>
+	<style name="Theme.EventSeekr.App" parent="@style/Theme.EventSeekr.Base"></style>
 	
 	<style name="Theme.EventSeekr.Bosch" parent="@style/Theme.AppCompat.Light">
 	    <item name="android:actionBarStyle">@style/Widget.EventSeekr.ActionBar</item>

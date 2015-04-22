@@ -696,13 +696,13 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 		((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
 				AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
 	}
-	
+
+    @SuppressLint("ValidFragment")
 	private static class AddCommentDialogFragment extends DialogFragment {
 
 	    /**
 	     * Create a new instance of AddCommentDialogFragment
 	     */
-	    @SuppressLint("ValidFragment")
 		static AddCommentDialogFragment newInstance() {
 	        return new AddCommentDialogFragment();
 	    }

@@ -6,8 +6,11 @@ android {
 
     defaultConfig {
         applicationId "com.wcities.eventseeker"
-        minSdkVersion 11
+        minSdkVersion 14
         targetSdkVersion 21
+
+        // Enabling multidex support.
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -15,6 +18,13 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
         }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        //abortOnError false
     }
 }
 
@@ -26,9 +36,10 @@ dependencies {
     compile project(':floatingActionButton')
     compile project(':viewPagerIndicator')
     compile project(':spotifyApi')
-    compile 'com.android.support:support-v4:22.0.0'
-    compile 'com.android.support:appcompat-v7:21.0.3'
-    compile 'com.android.support:cardview-v7:21.0.0'
+    compile 'com.android.support:support-v4:22.1.0'
+    compile 'com.android.support:appcompat-v7:22.0.0'
+    compile 'com.android.support:cardview-v7:22.1.0'
+    compile 'com.android.support:recyclerview-v7:22.1.0'
     //compile 'com.google.android.gms:play-services:+'
     compile 'com.google.android.gms:play-services-plus:7.0.0'
     compile 'com.google.android.gms:play-services-identity:7.0.0'
@@ -37,7 +48,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-gcm:7.0.0'
     compile 'com.google.android.gms:play-services-location:7.0.0'
     compile 'com.google.android.gms:play-services-maps:7.0.0'
-    compile files('libs/android-support-v7-recyclerview.jar')
+    compile 'com.android.support:multidex:1.0.1'
     compile files('libs/AppLinkSDKAndroid-2-2.jar')
     compile files('libs/lastfm-java-0.1.2.jar')
     compile files('libs/rdio-android-sdk.jar')

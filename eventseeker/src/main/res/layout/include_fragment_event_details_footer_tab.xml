@@ -9,7 +9,7 @@ ITS VISIBILITY IS GONE AS THE FUNCTIONALITY IS NEEDED IN PHONE DEVICE AND TO RED
     android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/lnrLayoutChkBoxGoing"
+        android:id="@+id/lnrLayoutChkBox"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

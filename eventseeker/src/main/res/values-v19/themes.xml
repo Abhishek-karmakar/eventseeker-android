@@ -1,5 +1,5 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-	<style name="Theme.EventSeekr" parent="@style/Theme.EventSeekr.Base">
+	<style name="Theme.EventSeekr.App" parent="@style/Theme.EventSeekr.Base">
 	    <item name="android:windowTranslucentStatus">true</item>
 	</style>
 </resources>

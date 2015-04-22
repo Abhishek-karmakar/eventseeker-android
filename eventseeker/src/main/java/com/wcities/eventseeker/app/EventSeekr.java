@@ -1,14 +1,5 @@
 package com.wcities.eventseeker.app;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -18,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.StrictMode;
+import android.support.multidex.MultiDex;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
@@ -46,6 +38,15 @@ import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FileUtil;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
 
 public class EventSeekr extends Application {
 
@@ -253,7 +254,13 @@ public class EventSeekr extends Application {
 		}
 	}
 
-	@Override
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
+
+    @Override
 	public void onCreate() {
 		// StrictMode testing
 		if (AppConstants.STRICT_MODE_ENABLED) {

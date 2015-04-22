@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rltRootLyt"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -52,7 +53,8 @@
             android:id="@+id/vDummy"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.5" />
+            android:layout_weight="0.5"
+            tools:ignore="DuplicateIds" />
 
         <Button
             android:id="@+id/btnPP"
@@ -68,7 +70,8 @@
             android:id="@+id/vDummy"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.5" />
+            android:layout_weight="0.5"
+            tools:ignore="DuplicateIds" />
 
         <Button
             android:id="@+id/btnGL"
@@ -84,7 +87,9 @@
             android:id="@+id/vDummy"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            tools:ignore="DuplicateIds" />
+
     </LinearLayout>
 
 </LinearLayout>

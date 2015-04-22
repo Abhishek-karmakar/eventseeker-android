@@ -207,7 +207,7 @@
                 android:layout_height="@dimen/b_v_dummy_inner_w_h_fragment_bosch_all_details" />
 
             <LinearLayout
-                android:id="@+id/lnrBottomBtns"
+                android:id="@+id/lnrBottomBtns2"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<style name="Theme.EventSeekr" parent="@style/Theme.EventSeekr.Base"></style>
+	<style name="Theme.EventSeekr.App" parent="@style/Theme.EventSeekr.Base"></style>
 	
-	<style name="Theme.EventSeeker.TranslucentWindow" parent="@style/Theme.EventSeekr">
+	<style name="Theme.EventSeeker.TranslucentWindow" parent="@style/Theme.EventSeekr.App">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowCloseOnTouchOutside">true</item>
         <!-- not using windowElevation, since it darkens the shadow color on orientation change -->

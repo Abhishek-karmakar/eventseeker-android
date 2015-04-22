@@ -367,6 +367,7 @@
     <dimen name="txt_artist_synced_pad_t_b_connect_accounts_li_top">1dp</dimen>
     <dimen name="txt_personalize_margin_t_connect_accounts_li_top">20dp</dimen>
     <dimen name="txt_personalize_pad_b_connect_accounts_li_top">20dp</dimen>
+    <!--suppress AndroidLintReferenceType -->
     <dimen name="txt_personalize_wt_connect_accounts_li_top">@integer/wrap_content</dimen>
     <dimen name="txt_personalize_txt_size_connect_accounts_li_top">13sp</dimen>
     <!-- connect_accounts_list_item.xml -->
@@ -385,6 +386,7 @@
     <dimen name="txt_connect_accounts_margin_t_b_fragment_connect_account">30dp</dimen>
     <dimen name="txt_connect_accounts_margin_l_r_fragment_connect_account">40dp</dimen>
     <dimen name="btn_continue_margin_l_r_fragment_connect_account">40dp</dimen>
+    <!--suppress AndroidLintReferenceType -->
     <dimen name="btn_continue_wt_fragment_connect_account">@integer/match_parent</dimen>
     <!-- fragment_about_us.xml -->
     <dimen name="rlt_layout_root_pad_fragment_about_us">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>

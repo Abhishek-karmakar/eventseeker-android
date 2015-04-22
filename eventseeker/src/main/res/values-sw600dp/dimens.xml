@@ -549,6 +549,7 @@
     <dimen name="rv_item_t_b_offset_search_items_tab">@dimen/rv_item_t_b_offset_discover_tab</dimen>
     
     <!-- include_no_items_found_with_action.xml -->
+    <!--suppress AndroidLintReferenceType -->
     <dimen name="img_no_content_w_all_fragments">@integer/match_parent</dimen>
     
     <!-- rv_item_venue_tab.xml -->
