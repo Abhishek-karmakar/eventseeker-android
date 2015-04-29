@@ -1,8 +1,18 @@
 package com.wcities.eventseeker;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Set;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.ford.syncV4.proxy.SyncProxyALM;
@@ -19,21 +29,10 @@ import com.wcities.eventseeker.gcm.GcmBroadcastReceiver.NotificationType;
 import com.wcities.eventseeker.interfaces.ConnectionFailureListener;
 import com.wcities.eventseeker.interfaces.DrawerListFragmentListener;
 import com.wcities.eventseeker.util.DeviceUtil;
-import com.wcities.eventseeker.util.FragmentUtil;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
-import android.widget.Toast;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Set;
 
 public abstract class BaseActivity extends ActionBarActivity implements ConnectionFailureListener, DialogBtnClickListener,
 		DrawerListFragmentListener {
@@ -73,7 +72,7 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
 	@Override
 	protected void onStart() {
 		super.onStart();
-		
+		//Log.d(TAG, "onStart()");
 		EventSeekr.setConnectionFailureListener(this);
 		DeviceUtil.registerLocationListener(this);
 		if (((EventSeekr) getApplication()).getWcitiesId() == null) {

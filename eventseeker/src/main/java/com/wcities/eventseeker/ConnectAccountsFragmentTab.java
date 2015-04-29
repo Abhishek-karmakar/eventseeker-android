@@ -1,13 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Context;
@@ -56,6 +48,14 @@ import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.ServiceAccount;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConnectAccountsFragmentTab extends ListFragmentLoadableFromBackStack implements EventSeekrListener, 
 		AsyncTaskListener<Object>, DialogBtnClickListener, SyncArtistListener {
@@ -566,8 +566,7 @@ public class ConnectAccountsFragmentTab extends ListFragmentLoadableFromBackStac
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// Log.d(TAG, "onActivityResult(), requestCode = " + requestCode +
-		// ", resultCode = " + resultCode);
+		//Log.d(TAG, "onActivityResult(), requestCode = " + requestCode + ", resultCode = " + resultCode);
 		if (requestCode == AppConstants.REQ_CODE_GOOGLE_ACCOUNT_CHOOSER_FOR_GOOGLE_MUSIC && resultCode == Activity.RESULT_OK) {
 			String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
 			new GetAuthToken(this, this).execute(accountName);

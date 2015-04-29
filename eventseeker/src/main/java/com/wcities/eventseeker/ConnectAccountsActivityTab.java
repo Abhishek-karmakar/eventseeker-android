@@ -3,7 +3,6 @@ package com.wcities.eventseeker;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import com.wcities.eventseeker.ConnectAccountsFragmentTab.ConnectAccountsFragmentListener;
 import com.wcities.eventseeker.constants.AppConstants;
@@ -67,6 +66,7 @@ public class ConnectAccountsActivityTab extends BaseActivityTab implements Conne
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		//Log.d(TAG, "onActivityResult(), requestCode = " + requestCode);
 		switch (requestCode) {
 			
 		case AppConstants.REQ_CODE_SPOTIFY:
@@ -75,7 +75,14 @@ public class ConnectAccountsActivityTab extends BaseActivityTab implements Conne
 				fragment.onActivityResult(requestCode, resultCode, data);
 			}
 			break;
-			
+
+        case AppConstants.REQ_CODE_TWITTER:
+            fragment = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
+            if (fragment instanceof TwitterFragmentTab) {
+                fragment.onActivityResult(requestCode, resultCode, data);
+            }
+            break;
+
 		default:
 			super.onActivityResult(requestCode, resultCode, data);
 		}

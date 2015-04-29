@@ -1,5 +1,20 @@
 package com.wcities.eventseeker;
 
+import android.content.res.Resources;
+import android.os.Bundle;
+import android.widget.Toast;
+
+import com.twitter.sdk.android.core.TwitterAuthToken;
+import com.wcities.eventseeker.api.Api;
+import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.asynctask.SyncArtists;
+import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.constants.Enums.Service;
+import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
+import com.wcities.eventseeker.interfaces.SyncArtistListener;
+import com.wcities.eventseeker.util.FragmentUtil;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -12,25 +27,14 @@ import twitter4j.User;
 import twitter4j.auth.AccessToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
-import android.content.res.Resources;
-import android.os.Bundle;
-import android.widget.Toast;
-
-import com.wcities.eventseeker.api.Api;
-import com.wcities.eventseeker.app.EventSeekr;
-import com.wcities.eventseeker.asynctask.SyncArtists;
-import com.wcities.eventseeker.constants.AppConstants;
-import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.constants.Enums.Service;
-import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
-import com.wcities.eventseeker.interfaces.SyncArtistListener;
-import com.wcities.eventseeker.util.FragmentUtil;
 
 public class TwitterSyncingFragment extends FragmentLoadableFromBackStack {
 
 	private static final String TAG = TwitterSyncingFragment.class.getSimpleName();
 	
 	private Twitter twitter;
+    private TwitterAuthToken authToken;
+    private String oauthVerifier;
 	private Resources res;
 
 	private SyncArtistListener syncArtistListener;
@@ -51,9 +55,14 @@ public class TwitterSyncingFragment extends FragmentLoadableFromBackStack {
 		super.onActivityCreated(savedInstanceState);
 		syncArtistListener.onArtistSyncStarted(true);
 		
-		if (twitter == null) {
-			twitter = (Twitter) getArguments().getSerializable(BundleKeys.TWITTER);
-			final String oauthVerifier = getArguments().getString(BundleKeys.OAUTH_VERIFIER);
+		if (twitter == null && authToken == null) {
+            if (getArguments().containsKey(BundleKeys.TWITTER)) {
+                twitter = (Twitter) getArguments().getSerializable(BundleKeys.TWITTER);
+                oauthVerifier = getArguments().getString(BundleKeys.OAUTH_VERIFIER);
+
+            } else {
+                authToken = getArguments().getParcelable(BundleKeys.AUTH_TOKEN);
+            }
 			final EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(TwitterSyncingFragment.this)
 					.getApplication();
 			
@@ -64,12 +73,23 @@ public class TwitterSyncingFragment extends FragmentLoadableFromBackStack {
 					final List<String> artistNames = new ArrayList<String>();
 
 					try {
-						AccessToken at = twitter.getOAuthAccessToken(oauthVerifier);
+                        String oAuthAccessToken, oAuthAccessTokenSecret;
+                        if (twitter != null) {
+                            AccessToken at = twitter.getOAuthAccessToken(oauthVerifier);
+                            oAuthAccessToken = at.getToken();
+                            oAuthAccessTokenSecret = at.getTokenSecret();
+
+                        } else {
+                            oAuthAccessToken = authToken.token;
+                            oAuthAccessTokenSecret = authToken.secret;
+                        }
+                        //Log.d(TAG, "token = " + oAuthAccessToken + ", secret = " + oAuthAccessTokenSecret);
+
 						ConfigurationBuilder builder = new ConfigurationBuilder();
 			            builder.setOAuthConsumerKey(AppConstants.TWITTER_CONSUMER_KEY);
 			            builder.setOAuthConsumerSecret(AppConstants.TWITTER_CONSUMER_SECRET);
-			            builder.setOAuthAccessToken(at.getToken());
-			            builder.setOAuthAccessTokenSecret(at.getTokenSecret());
+			            builder.setOAuthAccessToken(oAuthAccessToken);
+			            builder.setOAuthAccessTokenSecret(oAuthAccessTokenSecret);
 			            Configuration conf = builder.build();
 			            Twitter t = new TwitterFactory(conf).getInstance();
 			            

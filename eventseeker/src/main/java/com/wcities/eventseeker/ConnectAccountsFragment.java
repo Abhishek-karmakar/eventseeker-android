@@ -1,13 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Context;
@@ -56,6 +48,14 @@ import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.ServiceAccount;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack implements EventSeekrListener, 
 		AsyncTaskListener<Object>, DialogBtnClickListener, SyncArtistListener {
@@ -663,7 +663,8 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				
 				@Override
 				public void run() {
-					FragmentUtil.getActivity(ConnectAccountsFragment.this).onBackPressed();
+                    //Log.d(TAG, "call onBackPressed()");
+				    FragmentUtil.getActivity(ConnectAccountsFragment.this).onBackPressed();
 				}
 			});
 		}

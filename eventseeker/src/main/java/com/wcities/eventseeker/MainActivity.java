@@ -1,10 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.List;
-
 import android.animation.ObjectAnimator;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -50,7 +45,6 @@ import com.wcities.eventseeker.core.Category;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.core.registration.Registration.RegistrationListener;
-import com.wcities.eventseeker.gcm.GcmBroadcastReceiver;
 import com.wcities.eventseeker.gcm.GcmBroadcastReceiver.NotificationType;
 import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionDestination;
@@ -68,6 +62,11 @@ import com.wcities.eventseeker.util.GPlusUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.viewdata.SharedElement;
+
+import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.List;
 
 public class MainActivity extends BaseActivity implements
 		OnLocaleChangedListener, OnSettingsItemClickedListener,
@@ -112,14 +111,14 @@ public class MainActivity extends BaseActivity implements
 	private int prevBackStackEntryCount;
 	private CustomSharedElementTransitionSource prevCustomSharedElementTransitionSource;
 	private Fragment prevFragment;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//Log.d(TAG, "onCreate()");
 		super.onCreate(savedInstanceState);	
 		
 		setContentView(R.layout.activity_main);
-		
+
 		vStatusBar = findViewById(R.id.vStatusBar);
 		
 		if (VersionUtil.isApiLevelAbove18()) {
@@ -639,6 +638,13 @@ public class MainActivity extends BaseActivity implements
 				
 			}
 			break;*/
+
+        case AppConstants.REQ_CODE_TWITTER:
+            fragment = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
+            if (fragment instanceof TwitterFragment) {
+                fragment.onActivityResult(requestCode, resultCode, data);
+            }
+            break;
 
 		default:
 			if (GPlusUtil.isGPlusPublishPending) {
@@ -1237,9 +1243,10 @@ public class MainActivity extends BaseActivity implements
 					getResources().getString(args.getInt(BundleKeys.SCREEN_TITLE)), true);
 			
 		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_TWITTER_SYNCING)) {
-			//Log.d(TAG, "FRAGMENT_TAG_TWITTER_SYNCING");
+			//Log.d(TAG, "replace by FRAGMENT_TAG_TWITTER_SYNCING");
 			if (currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_TWITTER)) {
 				try {
+                    //Log.d(TAG, "try");
 					/**
 					 * added this try catch as the app was crashing when user presses the twitter button to sync and
 					 * after that if he immediately presses home then after around 2-3 sec, app was crashing with
@@ -1247,16 +1254,18 @@ public class MainActivity extends BaseActivity implements
 					 * onSaveInstanceState
 					 */
 					isCalledFromTwitterSection = true;
-					onBackPressed();
-					
+                    onBackPressed();
+
 				} catch (IllegalStateException e) {
 					e.printStackTrace();
 					/**
 					 * return from here otherwise app will again crash at below lines.
 					 */
+                    //Log.d(TAG, "return");
 					return;
 				}
 			}
+            //Log.d(TAG, "start TwitterSyncingFragment");
 			TwitterSyncingFragment twitterSyncingFragment = new TwitterSyncingFragment();
 			twitterSyncingFragment.setArguments(args);
 			selectNonDrawerItem(twitterSyncingFragment, fragmentTag, getResources().getString(
@@ -1859,8 +1868,17 @@ public class MainActivity extends BaseActivity implements
 				} else {
 					super.onBackPressed();
 				}
-				
+
+                if (isCalledFromTwitterSection) {
+                    /**
+                     * Reset isCalledFromTwitterSection flag to prevent throwing IllegalStateException from below catch block for further
+                     * exceptions which are not due to call to this method onBackPressed() from replaceByFragment()
+                     */
+                    isCalledFromTwitterSection = false;
+                }
+
 			} catch (IllegalStateException e) {
+                //Log.d(TAG, "isCalledFromTwitterSection = " + isCalledFromTwitterSection);
 				if (isCalledFromTwitterSection) {
 					isCalledFromTwitterSection = false;
 					throw e;

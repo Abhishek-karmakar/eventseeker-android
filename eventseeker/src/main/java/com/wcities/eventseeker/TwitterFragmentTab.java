@@ -1,14 +1,14 @@
 package com.wcities.eventseeker;
 
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
-import twitter4j.auth.RequestToken;
-import twitter4j.conf.ConfigurationBuilder;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,6 +17,12 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
 
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterAuthToken;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -26,6 +32,13 @@ import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.ServiceAccount;
+
+import io.fabric.sdk.android.Fabric;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.auth.RequestToken;
+import twitter4j.conf.ConfigurationBuilder;
 
 public class TwitterFragmentTab extends FragmentLoadableFromBackStack {
 	
@@ -41,7 +54,13 @@ public class TwitterFragmentTab extends FragmentLoadableFromBackStack {
 	
 	private Bundle webViewBundle;
 	
-	private boolean isURLLoadedInWebView;
+	private boolean isURLLoadedInWebView, isTwitterAppFound = true;
+	private TwitterAuthClient mTwitterAuthClient;
+
+    private Handler handler;
+    private int lastRequestCode, lastResultCode;
+    private Intent lastData;
+    private boolean isOnActivityResultCalled;
 	
 	private WebViewClient webViewClient = new WebViewClient() {
 		
@@ -113,19 +132,62 @@ public class TwitterFragmentTab extends FragmentLoadableFromBackStack {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
+
+        handler = new Handler(Looper.getMainLooper());
 		
-		ConfigurationBuilder builder = new ConfigurationBuilder();
-        builder.setOAuthConsumerKey(AppConstants.TWITTER_CONSUMER_KEY);
-        builder.setOAuthConsumerSecret(AppConstants.TWITTER_CONSUMER_SECRET);
-        twitter4j.conf.Configuration configuration = builder.build();
-        
-        TwitterFactory factory = new TwitterFactory(configuration);
-        twitter = factory.getInstance();
+		TwitterAuthConfig authConfig = new TwitterAuthConfig(AppConstants.TWITTER_CONSUMER_KEY, 
+				AppConstants.TWITTER_CONSUMER_SECRET);
+		Fabric.with(FragmentUtil.getActivity(this), new com.twitter.sdk.android.Twitter(authConfig));
+		
+		mTwitterAuthClient = new TwitterAuthClient();
+        try {
+            mTwitterAuthClient.authorize(FragmentUtil.getActivity(this), new Callback<TwitterSession>() {
+
+                @Override
+                public void success(Result<TwitterSession> twitterSessionResult) {
+                    // Success
+                    //Log.d(TAG, "success()");
+                    ServiceAccount serviceAccount = (ServiceAccount) getArguments()
+                            .getSerializable(BundleKeys.SERVICE_ACCOUNTS);
+                    serviceAccount.isInProgress = true;
+
+                    TwitterAuthToken authToken = twitterSessionResult.data.getAuthToken();
+                    Bundle args = new Bundle();
+                    args.putParcelable(BundleKeys.AUTH_TOKEN, authToken);
+                    args.putString(BundleKeys.SYNC_ARTIST_LISTENER,
+                            getArguments().getString(BundleKeys.SYNC_ARTIST_LISTENER));
+
+                    ((ReplaceFragmentListener) FragmentUtil.getActivity(TwitterFragmentTab.this))
+                            .replaceByFragment(FragmentUtil.getTag(TwitterSyncingFragment.class), args);
+                }
+
+                @Override
+                public void failure(com.twitter.sdk.android.core.TwitterException e) {
+                    //Log.d(TAG, "failure()");
+                    e.printStackTrace();
+                    FragmentUtil.getActivity(TwitterFragmentTab.this).onBackPressed();
+                }
+            });
+
+        } catch (ActivityNotFoundException e) {
+            Log.i(TAG, "Twitter app not found");
+
+            isTwitterAppFound = false;
+
+            ConfigurationBuilder builder = new ConfigurationBuilder();
+            builder.setOAuthConsumerKey(AppConstants.TWITTER_CONSUMER_KEY);
+            builder.setOAuthConsumerSecret(AppConstants.TWITTER_CONSUMER_SECRET);
+            twitter4j.conf.Configuration configuration = builder.build();
+
+            TwitterFactory factory = new TwitterFactory(configuration);
+            twitter = factory.getInstance();
+        }
 	}
 	
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
+        //Log.d(TAG, "onSaveInstanceState()");
 		if (webView != null && isURLLoadedInWebView) {
 			webViewBundle = new Bundle();
 			webView.saveState(webViewBundle);
@@ -161,13 +223,14 @@ public class TwitterFragmentTab extends FragmentLoadableFromBackStack {
 		if (isURLLoadedInWebView) {
 			rltProgressBar.setVisibility(View.INVISIBLE);
 		}
-		
-		if (url == null) {
-			new LoadRequestToken().execute();
-        	
-        } else if (webViewBundle != null) {
-			webView.restoreState(webViewBundle);
-		
+
+        if (!isTwitterAppFound) {
+            if (url == null) {
+                new LoadRequestToken().execute();
+
+            } else if (webViewBundle != null) {
+                webView.restoreState(webViewBundle);
+            }
         }
 		return v;
 	}
@@ -176,6 +239,28 @@ public class TwitterFragmentTab extends FragmentLoadableFromBackStack {
 	public void onResume() {
 		super.onResume(AppConstants.INVALID_INDEX, 
 				FragmentUtil.getResources(this).getString(R.string.title_twitter));
+        if (isOnActivityResultCalled) {
+            mTwitterAuthClient.onActivityResult(lastRequestCode, lastResultCode, lastData);
+            isOnActivityResultCalled = false;
+        }
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.d(TAG, "onActivityResult() - requestCode = " + requestCode);
+        /**
+         * Instead of calling onActivityResult() on mTwitterAuthClient from here, we are calling from onResume()
+         * to ensure that onResume() is called before failure()/success() callback methods' execution which in turn
+         * are using onBackPressed() internally for which activity must be visible; otherwise it throws
+         * IllegalStateException: Cannot perform this action after onSaveInstanceState().
+         * Although we can use handlers to call onBackPressed(), in rare cases onResume() is called after
+         * handler's task execution. As a better solution this trick of ensuring first onResume() execution & then only
+         * updating mTwitterAuthClient would help us.
+         */
+        lastRequestCode = requestCode;
+        lastResultCode = resultCode;
+        lastData = data;
+        isOnActivityResultCalled = true;
 	}
 	
 	@Override
