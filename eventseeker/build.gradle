@@ -6,11 +6,12 @@ android {
 
     defaultConfig {
         applicationId "com.wcities.eventseeker"
-        minSdkVersion 14
+        minSdkVersion 11
         targetSdkVersion 21
 
         // Enabling multidex support.
-        multiDexEnabled true
+        //multiDexEnabled true
+        //change minSdkVersion to 14
     }
 
     buildTypes {
@@ -48,7 +49,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-gcm:7.0.0'
     compile 'com.google.android.gms:play-services-location:7.0.0'
     compile 'com.google.android.gms:play-services-maps:7.0.0'
-    compile 'com.android.support:multidex:1.0.1'
+    //compile 'com.android.support:multidex:1.0.1'
     // for twitter SSO
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile files('libs/AppLinkSDKAndroid-2-2.jar')

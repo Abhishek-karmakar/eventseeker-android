@@ -2,7 +2,7 @@
     package="com.bosch.myspin.serversdk" >
 
     <uses-sdk
-        android:minSdkVersion="14"
+        android:minSdkVersion="11"
         android:targetSdkVersion="19" />
 
 </manifest>

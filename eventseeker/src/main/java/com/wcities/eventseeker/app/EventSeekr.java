@@ -9,7 +9,6 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.StrictMode;
-import android.support.multidex.MultiDex;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
@@ -254,11 +253,11 @@ public class EventSeekr extends Application {
 		}
 	}
 
-    @Override
+    /*@Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
-    }
+    }*/
 
     @Override
 	public void onCreate() {
