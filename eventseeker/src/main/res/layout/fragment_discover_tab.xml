@@ -57,7 +57,6 @@
 	    android:layout_height="match_parent"
 	    android:layout_alignTop="@+id/rltLytNoEvts"
 	    android:layout_alignBottom="@+id/rltLytNoEvts"
-	    android:background="@drawable/ic_no_content_background_overlay"
     	android:visibility="invisible" />
 	
 	<RelativeLayout android:id="@+id/rltLytNoEvts"
@@ -71,8 +70,7 @@
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
 	        android:layout_alignParentBottom="true"
-	        android:scaleType="centerCrop"
-	        android:src="@drawable/ic_no_content_background_overlay" />
+	        android:scaleType="centerCrop" />
 	    
 		<TextView android:id="@+id/txtNoEvents"
 		    android:layout_width="@dimen/txt_no_events_w_discover_tab"

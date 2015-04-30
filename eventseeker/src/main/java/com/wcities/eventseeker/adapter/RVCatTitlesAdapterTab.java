@@ -1,7 +1,5 @@
 package com.wcities.eventseeker.adapter;
 
-import java.util.List;
-
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +13,8 @@ import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Category;
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import java.util.List;
 
 public class RVCatTitlesAdapterTab extends RVAdapterBase<RVCatTitlesAdapterTab.ViewHolder> {
 	

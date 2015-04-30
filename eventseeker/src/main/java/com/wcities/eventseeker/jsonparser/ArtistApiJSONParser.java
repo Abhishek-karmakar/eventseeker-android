@@ -1,16 +1,5 @@
 package com.wcities.eventseeker.jsonparser;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.util.Log;
 import android.util.SparseArray;
 
 import com.wcities.eventseeker.core.Address;
@@ -28,6 +17,16 @@ import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.core.Video;
 import com.wcities.eventseeker.util.ConversionUtil;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class ArtistApiJSONParser {
 	
@@ -126,10 +125,23 @@ public class ArtistApiJSONParser {
 				if (jObjArtist.has(KEY_CATEGORY)) {
 					JSONArray jArrCategory = jObjArtist.getJSONArray(KEY_CATEGORY);
 					for (int i = 0; i < jArrCategory.length(); i++) {
-						if (((JSONObject) jArrCategory.get(i)).getInt(KEY_CAT) == Artist.CAT_ID_SPORTS) {
-							artist.setBelongsToSportsCat(true);
-							break;
-						}
+                        JSONObject jObjCategory = jArrCategory.getJSONObject(i);
+                        if (jObjCategory.has(KEY_CAT)) {
+                            if (jObjCategory.getInt(KEY_CAT) == Artist.CAT_ID_SPORTS) {
+                                artist.setBelongsToSportsCat(true);
+                                break;
+                            }
+
+                        } else {
+                            /**
+                             * If cat is not found then check for id value.
+                             * When there is no sub category for the artist, the cat value comes with id key rather than cat key.
+                             */
+                            if (jObjCategory.getInt(KEY_ID) == Artist.CAT_ID_SPORTS) {
+                                artist.setBelongsToSportsCat(true);
+                                break;
+                            }
+                        }
 					}
 				}
 				

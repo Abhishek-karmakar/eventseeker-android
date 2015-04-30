@@ -1,10 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -47,6 +42,11 @@ import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.viewdata.ItemDecorationItemOffset;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 public class DiscoverFragmentTab extends PublishEventFragment implements OnClickListener, LoadItemsInBackgroundListener, 
 		AsyncTaskListener<Void> {
@@ -107,7 +107,7 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 			} else {
 				recyclerVCategories.getViewTreeObserver().removeGlobalOnLayoutListener(this);
 			}
-        	//Log.d(TAG, "from onGlobalLayoutListenerCatTitles");
+        	//Log.d(TAG, "from onGlobalLayoutListenerCatTitles, pos = " + catTitlesAdapterTab.getSelectedPos());
         	centerPosition(catTitlesAdapterTab.getSelectedPos(), false);
         }
     };
@@ -157,7 +157,17 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 			public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 				super.onScrolled(recyclerView, dx, dy);
 				//Log.d(TAG, "onScrolled() - dx = " + dx + ", dy = " + dy);
-				updateCenteredPosition();
+                /**
+                 * Sometimes following call was occurring before cat titles' global layout listener's call to centerPosition()
+                 * resulting in wrong category title selection on orientation change.
+                 * Hence used handler here.
+                 */
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateCenteredPosition();
+                    }
+                });
 			}
 			
 			@Override
@@ -182,15 +192,18 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 		recyclerVEvents.setLayoutManager(gridLayoutManager);
 		
 		rltLytProgressBar = (RelativeLayout) v.findViewById(R.id.rltLytProgressBar);
+        // Applying background here since overriding background doesn't work from xml with <include> layout
 		rltLytProgressBar.setBackgroundColor(Color.WHITE);
-		// Applying background here since overriding background doesn't work from xml with <include> layout
 		imgPrgOverlay = (ImageView) rltLytProgressBar.findViewById(R.id.imgPrgOverlay);
+        // free memory. It's state will be retained on orientation change by rvCatEventsAdapterTab by calling setCenterProgressBarVisibility()
+        imgPrgOverlay.setImageDrawable(null);
 				
 		rltLytNoEvts = (RelativeLayout) v.findViewById(R.id.rltLytNoEvts);
 		imgNoEvts = (ImageView) rltLytNoEvts.findViewById(R.id.imgNoEvts);
 		if (eventList != null && eventList.isEmpty()) {
 			// retain no events layout visibility on orientation change
 			rltLytNoEvts.setVisibility(View.VISIBLE);
+            imgNoEvts.setImageDrawable(FragmentUtil.getResources(this).getDrawable(R.drawable.ic_no_content_background_overlay));
 		}
 		
 		v.findViewById(R.id.btnChgLoc).setOnClickListener(this);
@@ -338,6 +351,7 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 				prevSelectedCenteredCategory = selectedCenteredCategoryPos;
 			}
 		};
+        //Log.d(TAG, "positionToBeCentered = " + positionToBeCentered);
 		recyclerVCategories.scrollToPosition(positionToBeCentered);
 		/**
 		 * We post on handler otherwise directly calling selectCenteredCategory() from here doesn't return
@@ -348,6 +362,7 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 	}
 	
 	private int updateCenteredPosition() {
+        //Log.d(TAG, "updateCenteredPosition()");
 		int selectedPos = layoutManager.findFirstVisibleItemPosition() + ((layoutManager.findLastVisibleItemPosition() 
 						- layoutManager.findFirstVisibleItemPosition()) / 2);
 		/**
@@ -423,11 +438,12 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 		
 		if (visibility == View.VISIBLE) {
 			rltLytNoEvts.setVisibility(View.INVISIBLE);
-			imgNoEvts.setImageResource(0);
+			imgNoEvts.setImageDrawable(null);
+            imgPrgOverlay.setImageDrawable(FragmentUtil.getResources(this).getDrawable(R.drawable.ic_no_content_background_overlay));
 			
 		} else {
 			// free up memory
-			imgPrgOverlay.setBackgroundResource(0);
+			imgPrgOverlay.setImageDrawable(null);
 		}
 	}
 	
