@@ -23,8 +23,13 @@
 -dontwarn org.json.*
 # 2 libraries signost-commonshttp & signpost-core having package initials oauth.signpost are required by rdio api.
 -dontwarn oauth.signpost.**
+# required for spotify & twitter SSO
 -dontwarn retrofit.**
+# required for spotify
 -dontwarn okio.**
+# com.digits.sdk.android.** & com.twitter.sdk.android.** required for twitter SSO
+-dontwarn com.digits.sdk.android.**
+-dontwarn com.twitter.sdk.android.**
 
 -keep class javax.** { *; }
 -keep class org.** { *; }
@@ -32,7 +37,9 @@
 -keep class oauth.signpost.** { *; }
 -keep class com.facebook.** { *; }
 -keep class android.support.v7.widget.ShareActionProvider
+# Required for spotify
 -keep class com.drivemode.spotify.** { *; }
+# Required for spotify & twitter SSO
 -keep class retrofit.** { *; }
 
 # Required for facebook publish permission
@@ -44,6 +51,7 @@
 -keepclassmembers class com.bosch.myspin.serversdk.maps.MySpinJavaScriptHandler {
    public *;
 }
+
 -keep class * extends java.util.ListResourceBundle {
     protected Object[][] getContents();
 }
