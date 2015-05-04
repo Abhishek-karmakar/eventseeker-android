@@ -11,6 +11,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnScrollListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -75,6 +76,8 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 	private boolean isScrollStateIdle;
 	
 	private Handler handler;
+
+    private boolean isGlobalLayoutCalled;
 	
 	private enum ScrollDirection {
 		UNDECIDED, LEFT, RIGHT;
@@ -93,6 +96,7 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 			}
         	//Log.d(TAG, "from onGlobalLayoutListenerCatTitlesInit");
         	centerPosition(RVCatTitlesAdapterTab.FIRST_PAGE, true);
+            isGlobalLayoutCalled = true;
         }
     };
     
@@ -109,6 +113,7 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 			}
         	//Log.d(TAG, "from onGlobalLayoutListenerCatTitles, pos = " + catTitlesAdapterTab.getSelectedPos());
         	centerPosition(catTitlesAdapterTab.getSelectedPos(), false);
+            isGlobalLayoutCalled = true;
         }
     };
 
@@ -151,36 +156,6 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 		recyclerVCategories.setHasFixedSize(true);
 		recyclerVCategories.setLayoutManager(layoutManager);
 		
-		recyclerVCategories.setOnScrollListener(new OnScrollListener() {
-			
-			@Override
-			public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-				super.onScrolled(recyclerView, dx, dy);
-				//Log.d(TAG, "onScrolled() - dx = " + dx + ", dy = " + dy);
-                /**
-                 * Sometimes following call was occurring before cat titles' global layout listener's call to centerPosition()
-                 * resulting in wrong category title selection on orientation change.
-                 * Hence used handler here.
-                 */
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateCenteredPosition();
-                    }
-                });
-			}
-			
-			@Override
-			public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-				super.onScrollStateChanged(recyclerView, newState);
-				//Log.d(TAG, "onScrollStateChanged() - newState = " + newState);
-				isScrollStateIdle = (newState == RecyclerView.SCROLL_STATE_IDLE) ? true : false;
-				if (isScrollStateIdle) {
-					onCatChanged();
-				}
-			}
-		});
-		
 		v.findViewById(R.id.imgPrev).setOnClickListener(this);
 		v.findViewById(R.id.imgNext).setOnClickListener(this);
 		
@@ -214,7 +189,9 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		
+
+        isGlobalLayoutCalled = false;
+
 		if (evtCategories == null) {
 			buildEvtCategories();
 			catTitlesAdapterTab = new RVCatTitlesAdapterTab(evtCategories, this);
@@ -235,7 +212,49 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 			// to update values which should change on orientation change
 			rvCatEventsAdapterTab.onActivityCreated();
 		}
-		
+
+        recyclerVCategories.setOnScrollListener(new OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                //Log.d(TAG, "onScrolled() - dx = " + dx + ", dy = " + dy);
+
+                if (!isGlobalLayoutCalled) {
+                    /**
+                     * Sometimes following call was occurring before cat titles' global layout listener's call to centerPosition()
+                     * resulting in wrong category title selection on orientation change.
+                     * Hence used handler here.
+                     */
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Log.d(TAG, "onScrolled()");
+                            updateCenteredPosition();
+                        }
+                    });
+
+                } else {
+                    /**
+                     * Using handler here as in if results in delayed call to this method after execution of scrollToPosition()
+                     * from centerPosition() which results in wrong category selection, hence should not use handler here.
+                     */
+                    //Log.d(TAG, "onScrolled()");
+                    updateCenteredPosition();
+                }
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                //Log.d(TAG, "onScrollStateChanged() - newState = " + newState);
+                isScrollStateIdle = (newState == RecyclerView.SCROLL_STATE_IDLE) ? true : false;
+                if (isScrollStateIdle) {
+                    onCatChanged();
+                }
+            }
+        });
+
 		recyclerVCategories.setAdapter(catTitlesAdapterTab);
 		
 		Resources res = FragmentUtil.getResources(this);
@@ -288,6 +307,7 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
     		
 			@Override
 			public void run() {
+                //Log.d(TAG, "centerPosition()");
 				int selectedCenteredCategoryPos = updateCenteredPosition();
 				if (selectedCenteredCategoryPos < 0) {
 					return;
@@ -302,7 +322,7 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 					loopCount++;
 					if (loopCount >= 5) {
 						recyclerVCategories.scrollToPosition(positionToBeCentered);
-						//Log.d(TAG, "loopCount >= 5");
+						//Log.d(TAG, "loopCount >= 5, positionToBeCentered = " + positionToBeCentered);
 						catTitlesAdapterTab.setSelectedPos(positionToBeCentered);
 						if (isCalledDueToCatChange) {
 							onCatChanged();
@@ -315,7 +335,7 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 				}
 				
 				/**
-				 * scrollDirection check is added because it's possible (although not encountered yet) 
+				 * scrollDirection check is added because it's possible
 				 * that selectedCenteredCategory never matches CatTitlesAdapterTab.FIRST_PAGE after 
 				 * continuously scrolling along 1 direction few times. In such case we just need to stop 
 				 * scrolling further & settle regardless of whether current category selected position is
@@ -325,11 +345,13 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 				 * category lengths. In this case last else if block settles selection to correct category.
 				 */
 				if (scrollDirection != ScrollDirection.LEFT && selectedCenteredCategoryPos < positionToBeCentered) {
+                    //Log.d(TAG, "if");
 					scrollDirection = ScrollDirection.RIGHT;
 					recyclerVCategories.scrollToPosition(layoutManager.findLastVisibleItemPosition() + 1);
 					handler.post(this);
 					
 				} else if (scrollDirection != ScrollDirection.RIGHT && selectedCenteredCategoryPos > positionToBeCentered) {
+                    //Log.d(TAG, "else if");
 					scrollDirection = ScrollDirection.LEFT;
 					recyclerVCategories.scrollToPosition(layoutManager.findFirstVisibleItemPosition() - 1);
 					handler.post(this);
@@ -343,6 +365,7 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 					}
 					
 				} else if (selectedCenteredCategoryPos == positionToBeCentered) {
+                    //Log.d(TAG, "last else if");
 					if (isCalledDueToCatChange) {
 						onCatChanged();
 					}

@@ -1,31 +1,25 @@
 package com.wcities.eventseeker.adapter;
 
-import java.lang.ref.WeakReference;
-import java.util.List;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.os.AsyncTask.Status;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.AsyncTask.Status;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.Adapter;
-import android.support.v7.widget.RecyclerView.AdapterDataObserver;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -38,7 +32,6 @@ import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.SearchEventsFragmentTab;
 import com.wcities.eventseeker.ShareViaDialogFragment;
 import com.wcities.eventseeker.WebViewActivityTab;
-import com.wcities.eventseeker.adapter.RVCatEventsAdapterTab.ViewHolder;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
@@ -54,8 +47,8 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
-import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.core.Event.Attending;
+import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.EventListenerTab;
 import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
@@ -64,6 +57,9 @@ import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
+
+import java.lang.ref.WeakReference;
+import java.util.List;
 
 public class RVSearchEventsAdapterTab extends RVAdapterBase<RVSearchEventsAdapterTab.ViewHolder> implements DateWiseEventParentAdapterListener {
 	
@@ -219,7 +215,8 @@ public class RVSearchEventsAdapterTab extends RVAdapterBase<RVSearchEventsAdapte
 				if (event.getSchedule() != null) {
 					Schedule schedule = event.getSchedule();
 					Date date = schedule.getDates().get(0);
-					holder.txtEvtTime.setText(ConversionUtil.getDateTime(date.getStartDate(), date.isStartTimeAvailable(), true, false, false));
+					holder.txtEvtTime.setText(ConversionUtil.getDateTime(FragmentUtil.getApplication(searchEventsFragmentTab),
+                            date.getStartDate(), date.isStartTimeAvailable(), true, false, false));
 					
 					String venueName = (schedule.getVenue() != null) ? schedule.getVenue().getName() : "";
 					holder.txtEvtLoc.setText(venueName);

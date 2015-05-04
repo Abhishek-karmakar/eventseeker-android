@@ -1,5 +1,14 @@
 package com.wcities.eventseeker.util;
 
+import android.content.Context;
+import android.content.res.Resources;
+
+import com.wcities.eventseeker.R;
+import com.wcities.eventseeker.constants.Enums;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
@@ -7,13 +16,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.content.res.Resources;
-
-import com.wcities.eventseeker.R;
 
 public class ConversionUtil {
 	
@@ -101,49 +103,57 @@ public class ConversionUtil {
 	 * 
 	 * @param date
 	 * @param parseTime
-	 * @param parseYear TODO
-	 * @param amPmCaps TODO
-	 * @param spaceBeforeAmPm TODO
-	 * @return datetime in format Friday October 10, 2015 10:00pm. It's configurable based on arguments passed.
+	 * @param parseYear Applicable only for English language; otherwise it's true for all non-English languages
+	 * @param amPmCaps Applicable only for English language; otherwise it's 24-hr clock format, so no am-pm needed
+	 * @param spaceBeforeAmPm Applicable only for English language; otherwise it's 24-hr clock format, so no am-pm needed
+	 * @return datetime in format
+     * Friday October 17, 2015 10:00pm for English language
+     * & Friday 17/10/2015 22:00 for non-English languages.
+     * It's configurable based on arguments passed.
 	 */
-	public static String getDateTime(Date date, boolean parseTime, boolean parseYear, boolean amPmCaps, 
+	public static String getDateTime(Context context, Date date, boolean parseTime, boolean parseYear, boolean amPmCaps,
 			boolean spaceBeforeAmPm) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
-		
-		DateFormatSymbols dateFormatSymbols = new DateFormatSymbols();
-		String time = dateFormatSymbols.getWeekdays()[calendar.get(Calendar.DAY_OF_WEEK)] 
-				+ " " + dateFormatSymbols.getMonths()[calendar.get(Calendar.MONTH)] 
-				+ " " + calendar.get(Calendar.DATE);
+
+        // For all non-english versions, use 24-hr clock and dd/mm/yyyy format
+        boolean isEnglishLocale = Enums.Locales.isDefaultLocale(context, Enums.Locales.ENGLISH);
+
+        String dateFormatStr = "EEEE ";
+        if (isEnglishLocale) {
+            dateFormatStr += "MMMM dd";
+            if (parseYear) {
+                dateFormatStr += ", yyyy";
+            }
+
+        } else {
+            dateFormatStr += "dd/MM/yyyy";
+        }
 				
-		if (parseYear) {
-			time += ", " + calendar.get(Calendar.YEAR);
-		}
-		
 		if (parseTime) {
-			if (!parseYear) {
-				time += ",";
+			if (isEnglishLocale && !parseYear) {
+                dateFormatStr += ",";
 			}
-			
-			int hr = calendar.get(Calendar.HOUR);
-			if (hr == 0) {
-				hr = 12;
-			}
-			
-			int min = calendar.get(Calendar.MINUTE);
-			String strMin = (min < 10) ? "0" + min : min + "";
-			
-			time += " " + hr + ":" + strMin;
-			if (spaceBeforeAmPm) {
-				time += " ";
-			}
-			String am_pm = ((calendar.get(Calendar.AM_PM) == Calendar.AM) ? "am" : "pm");
-			if (amPmCaps) {
-				am_pm = am_pm.toUpperCase();
-			}
-			time += am_pm;
+
+            if (isEnglishLocale) {
+                dateFormatStr += " h:mm";
+
+                if (spaceBeforeAmPm) {
+                    dateFormatStr += " ";
+                }
+
+                dateFormatStr += "a";
+
+            } else {
+                dateFormatStr += " H:mm";
+            }
 		}
-		
+
+        DateFormat df = new SimpleDateFormat(dateFormatStr);
+        String time = df.format(calendar.getTime());
+        if (!amPmCaps) {
+            time = time.replace("AM", "am").replace("PM", "pm");
+        }
 		return time;
 	}
 	

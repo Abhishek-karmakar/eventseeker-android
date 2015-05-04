@@ -423,6 +423,9 @@
     
     <!-- NavigationFragment -->
     <string name="address_isnt_available">Die Adresse des Veranstaltungsortes steht nicht zur Verfügung.</string>
+
+    <!-- menu/fragment_artist_details.xml -->
+    <string name="share">Teilen</string>
     
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>

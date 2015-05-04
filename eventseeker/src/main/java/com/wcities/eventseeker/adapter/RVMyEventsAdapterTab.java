@@ -1,8 +1,5 @@
 package com.wcities.eventseeker.adapter;
 
-import java.lang.ref.WeakReference;
-import java.util.List;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -61,6 +58,9 @@ import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
+
+import java.lang.ref.WeakReference;
+import java.util.List;
 
 public class RVMyEventsAdapterTab extends RVAdapterBase<ViewHolder> implements DateWiseEventParentAdapterListener {
 
@@ -228,7 +228,8 @@ public class RVMyEventsAdapterTab extends RVAdapterBase<ViewHolder> implements D
 			if (event.getSchedule() != null) {
 				Schedule schedule = event.getSchedule();
 				Date date = schedule.getDates().get(0);
-				holder.txtEvtTime.setText(ConversionUtil.getDateTime(date.getStartDate(), date.isStartTimeAvailable(), true, false, false));
+				holder.txtEvtTime.setText(ConversionUtil.getDateTime(FragmentUtil.getApplication(publishEventFragment),
+                        date.getStartDate(), date.isStartTimeAvailable(), true, false, false));
 				
 				String venueName = (schedule.getVenue() != null) ? schedule.getVenue().getName() : "";
 				holder.txtEvtLoc.setText(venueName);

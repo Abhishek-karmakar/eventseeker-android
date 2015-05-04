@@ -1,8 +1,5 @@
 package com.wcities.eventseeker.adapter;
 
-import java.lang.ref.WeakReference;
-import java.util.List;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -61,6 +58,9 @@ import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
+
+import java.lang.ref.WeakReference;
+import java.util.List;
 
 public class RVCatEventsAdapterTab extends RVAdapterBase<ViewHolder> implements DateWiseEventParentAdapterListener {
 
@@ -219,11 +219,22 @@ public class RVCatEventsAdapterTab extends RVAdapterBase<ViewHolder> implements 
 			if (event.getSchedule() != null) {
 				Schedule schedule = event.getSchedule();
 				Date date = schedule.getDates().get(0);
-				holder.txtEvtTime.setText(ConversionUtil.getDateTime(date.getStartDate(), date.isStartTimeAvailable(), true, false, false));
+				holder.txtEvtTime.setText(ConversionUtil.getDateTime(FragmentUtil.getApplication(discoverFragmentTab),
+                        date.getStartDate(), date.isStartTimeAvailable(), true, false, false));
 				
 				String venueName = (schedule.getVenue() != null) ? schedule.getVenue().getName() : "";
 				holder.txtEvtLoc.setText(venueName);
-			}
+
+			} else {
+                /**
+                 * First of all this should not occur only as we expect both time & location's availability with
+                 * getEvents() call for any category. But in case of some unexpected result from server,
+                 * if we don't get these values, then just reset to blank; otherwise it would show viewHolder's
+                 * previous values.
+                 */
+                holder.txtEvtTime.setText("");
+                holder.txtEvtLoc.setText("");
+            }
 
 			BitmapCacheable bitmapCacheable = null;
 			/**

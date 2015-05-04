@@ -558,4 +558,7 @@
     <!-- progress_bar_eventseeker_fixed_ht.xml -->
     <dimen name="rlt_lyt_root_margin_t_b_progress_bar_eventseeker_fixed_ht">-10dp</dimen>
 
+    <!-- rv_item_desc_tab.xml -->
+    <dimen name="txt_desc_margin_t_rv_item_desc_tab">25dp</dimen>
+
 </resources>

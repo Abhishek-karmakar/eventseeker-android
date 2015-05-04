@@ -1,9 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorSet;
@@ -79,6 +75,10 @@ import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.viewdata.SharedElement;
 import com.wcities.eventseeker.viewdata.SharedElementPosition;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackStack implements ObservableScrollViewListener, 
 		DrawerListener, CustomSharedElementTransitionDestination, OnClickListener, OnEventUpdatedListner, 
@@ -562,7 +562,8 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			
 			if (schedule.getDates().size() > 0) {
 				Date date = schedule.getDates().get(0);
-				txtEvtTime.setText(ConversionUtil.getDateTime(date.getStartDate(), date.isStartTimeAvailable(), true, false, false));
+				txtEvtTime.setText(ConversionUtil.getDateTime(FragmentUtil.getApplication(this),
+                        date.getStartDate(), date.isStartTimeAvailable(), true, false, false));
 			}
 		}
 	}

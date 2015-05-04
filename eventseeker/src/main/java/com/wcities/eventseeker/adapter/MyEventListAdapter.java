@@ -1,8 +1,5 @@
 package com.wcities.eventseeker.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -54,6 +51,9 @@ import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.viewdata.SharedElement;
 import com.wcities.eventseeker.viewdata.SharedElementPosition;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MyEventListAdapter extends BaseAdapter implements DateWiseEventParentAdapterListener {
 
@@ -217,7 +217,8 @@ public class MyEventListAdapter extends BaseAdapter implements DateWiseEventPare
 				if (schedule.getDates().size() > 0) {
 					Date date = schedule.getDates().get(0);
 					txtEvtTime.setVisibility(View.VISIBLE);
-					txtEvtTime.setText(ConversionUtil.getDateTime(date.getStartDate(), date.isStartTimeAvailable(), true, false, false));
+					txtEvtTime.setText(ConversionUtil.getDateTime(mContext.getApplicationContext(),
+                            date.getStartDate(), date.isStartTimeAvailable(), true, false, false));
 				
 				} else {
 					txtEvtTime.setVisibility(View.GONE);

@@ -259,7 +259,7 @@
     <string name="syncing_last_fm">Syncing Last.fm</string>
     <string name="syncing_pandora">Syncing Pandora</string>
 	<string name="artist_synced">ARTIST SYNCED</string>
-	<string name="personalize_by_syncing">Sync your accounts and let eventseeker know about your favorite artists.</string>
+	<string name="personalize_by_syncing">Let eventseeker know who your favorite artists are.</string>
 	
     <!-- My Events -->
     <string name="following">FOLLOWING</string>
@@ -497,6 +497,9 @@
     
     <!-- FbUtil -->
     <string name="saving_event">Saving the event...</string>
+
+    <!-- menu/fragment_artist_details.xml -->
+    <string name="share">Share</string>
     
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     

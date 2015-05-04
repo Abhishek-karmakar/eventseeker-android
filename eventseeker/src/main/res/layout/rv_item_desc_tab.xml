@@ -18,7 +18,7 @@
 	   	android:layout_height="wrap_content"
 	   	android:layout_marginLeft="@dimen/txt_desc_margin_l_rv_item_desc"
 	   	android:layout_marginRight="@dimen/txt_desc_margin_r_rv_item_desc"
-	   	android:layout_marginTop="@dimen/txt_desc_margin_t_rv_item_desc"
+	   	android:layout_marginTop="@dimen/txt_desc_margin_t_rv_item_desc_tab"
 	   	android:textSize="@dimen/txt_desc_txt_size_rv_item_desc_tab"
 	   	android:ellipsize="end" />
     

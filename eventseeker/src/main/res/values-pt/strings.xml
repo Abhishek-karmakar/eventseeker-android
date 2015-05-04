@@ -423,7 +423,10 @@
     
     <!-- fragment_navigation.xml -->
     <string name="select_navigation_app">Selecione seu aplicativo de navegação para indicações.</string>
-    
+
+    <!-- menu/fragment_artist_details.xml -->
+    <string name="share">Compartilhe</string>
+
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>
     

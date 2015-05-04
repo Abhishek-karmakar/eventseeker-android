@@ -852,11 +852,22 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 					if (event.getSchedule() != null) {
 						Schedule schedule = event.getSchedule();
 						Date date = schedule.getDates().get(0);
-						holder.txtEvtTime.setText(ConversionUtil.getDateTime(date.getStartDate(), date.isStartTimeAvailable(), true, false, false));
+						holder.txtEvtTime.setText(ConversionUtil.getDateTime(FragmentUtil.getApplication(discoverFragment),
+                                date.getStartDate(), date.isStartTimeAvailable(), true, false, false));
 						
 						String venueName = (schedule.getVenue() != null) ? schedule.getVenue().getName() : "";
 						holder.txtEvtLocation.setText(venueName);
-					}
+
+					} else {
+                        /**
+                         * First of all this should not occur only as we expect both time & location's availability with
+                         * getEvents() call for any category. But in case of some unexpected result from server,
+                         * if we don't get these values, then just reset to blank; otherwise it would show viewHolder's
+                         * previous values.
+                         */
+                        holder.txtEvtTime.setText("");
+                        holder.txtEvtLocation.setText("");
+                    }
 					
 					BitmapCacheable bitmapCacheable = null;
 					/**
