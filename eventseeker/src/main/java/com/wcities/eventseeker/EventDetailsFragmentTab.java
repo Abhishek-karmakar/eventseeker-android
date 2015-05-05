@@ -177,7 +177,6 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 		imgPrgOverlay = (ImageView) rltLytPrgsBar.findViewById(R.id.imgPrgOverlay);
 		updateProgressBarVisibility();
 
-		
 		rltLytFeaturing = (RelativeLayout) rootView.findViewById(R.id.rltLytFeaturing);
 		rltLytVenue = (RelativeLayout) rootView.findViewById(R.id.rltLytVenue);
 		rltLytFriends = (RelativeLayout) rootView.findViewById(R.id.rltLytFriends);
@@ -187,6 +186,7 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 		fabTickets = (FloatingActionButton) eventDetailsActivityTab.getViewById(R.id.fab2);
 		fabSave.setOnClickListener(this);
 		fabTickets.setOnClickListener(this);
+        rootView.findViewById(R.id.fabNavigate).setOnClickListener(this);
 		
 		updateDetailsVisibility();
 		
@@ -628,6 +628,12 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 				}
 			}
 			break;
+
+        case R.id.fabNavigate:
+            intent = new Intent(FragmentUtil.getApplication(this), NavigationActivityTab.class);
+            intent.putExtra(BundleKeys.VENUE, event.getSchedule().getVenue());
+            startActivity(intent);
+            break;
 			
 		default:
 			break;

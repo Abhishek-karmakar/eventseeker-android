@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white" >
@@ -84,7 +85,7 @@
 		                android:scaleType="center"
 		                android:src="@drawable/ic_description_expand"
 		                android:background="@android:color/white" />
-		            
+
 		        </RelativeLayout>
 		        
 		        <!-- 09-04-2015 
@@ -146,7 +147,7 @@
 			            android:drawableLeft="@drawable/ic_event_location"
 			            android:drawablePadding="@dimen/txt_venue_drawable_pad_event_details_tab"
 			            android:gravity="center" />
-			        
+
 			        <include layout="@layout/include_address_map"
 			            android:id="@+id/rltLytAddress"
 			            android:layout_width="match_parent"
@@ -155,12 +156,26 @@
 			            android:layout_marginTop="@dimen/rlt_lyt_address_margin_t_event_details_tab"
 			            android:layout_marginLeft="@dimen/rlt_lyt_address_margin_l_event_details_tab"
 			            android:layout_marginRight="@dimen/rlt_lyt_address_margin_r_event_details_tab" />
+
+                    <com.melnykov.fab.FloatingActionButton android:id="@+id/fabNavigate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/rltLytAddress"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/fab_navigate_margin_t_event_details"
+                        android:src="@drawable/ic_car_floating"
+                        fab:fab_type="normal"
+                        fab:fab_colorNormal="@color/colorPrimary"
+                        fab:fab_colorPressed="@color/darker_gray"
+                        fab:fab_colorRipple="@android:color/white"
+                        fab:fab_shadow="false"
+                        android:elevation="0dp" />
 			        
 			        <View android:id="@+id/vHorLine3"
 			            android:layout_width="match_parent"
 			            android:layout_height="@dimen/v_hor_line_ht_event_details_tab"
 			            android:background="@color/gray_shade_d"
-			            android:layout_below="@id/rltLytAddress"
+			            android:layout_below="@id/fabNavigate"
 			            android:layout_marginLeft="@dimen/v_hor_line_margin_l_event_details_tab"
 			            android:layout_marginRight="@dimen/v_hor_line_margin_r_event_details_tab"
 			            android:layout_marginTop="@dimen/v_hor_line_margin_t_event_details_tab" />

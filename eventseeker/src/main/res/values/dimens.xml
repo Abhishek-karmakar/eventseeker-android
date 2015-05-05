@@ -641,6 +641,7 @@
     <dimen name="actionbar_title_margin_l_event_details">56dp</dimen>
     <dimen name="fab_margin_b_event_details">16dp</dimen>
     <dimen name="fab_margin_l_r_event_details">60dp</dimen>
+    <dimen name="fab_navigate_margin_t_event_details">20dp</dimen>
     <!-- featuring_artist.xml -->
     <dimen name="rlt_lyt_root_w_featuring_artist">200dp</dimen>
     <dimen name="txt_artist_name_txt_size_featuring_artist">20sp</dimen>
@@ -741,7 +742,18 @@
     <!-- rv_item_videos_artist_details.xml -->
     <dimen name="v_pager_videos_margin_l_rv_item_videos_artist_details">0dp</dimen>
     <dimen name="v_pager_videos_margin_r_rv_item_videos_artist_details">@dimen/v_pager_videos_margin_l_rv_item_videos_artist_details</dimen>
-    
+
+    <!-- list_item_discover_with_date_range.xml -->
+    <dimen name="rlt_layout_root_ht_list_item_discover_with_date_range">110dp</dimen>
+    <!-- img_event_ht_list_item_discover_with_date_range = img ht (78dp) + img_event_pad_t_list_item_discover_with_date_range
+    + img_event_pad_b_list_item_discover_with_date_range
+    Also, img_event_ht_list_item_discover_with_date_range = rlt_layout_root_ht_list_item_discover_with_date_range
+    - divider_ht_list_item_discover -->
+    <dimen name="img_event_ht_list_item_discover_with_date_range">109dp</dimen>
+    <dimen name="img_event_pad_t_list_item_discover_with_date_range">15dp</dimen>
+    <dimen name="img_event_pad_b_list_item_discover_with_date_range">16dp</dimen>
+    <dimen name="lnr_slider_content_ht_list_item_discover_with_date_range">@dimen/img_event_ht_list_item_discover_with_date_range</dimen>
+
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <!-- activity_bosch_main.xml -->
     <dimen name="b_root_navigation_drawer_w_main">210dp</dimen>

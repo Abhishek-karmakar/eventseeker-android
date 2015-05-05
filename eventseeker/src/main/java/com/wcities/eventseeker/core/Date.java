@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Date implements Serializable {
 	
 	private java.util.Date startDate;
+    private java.util.Date endDate;
 	private boolean startTimeAvailable;
 	
 	public Date(boolean startTimeAvailable) {
@@ -19,7 +20,15 @@ public class Date implements Serializable {
 		this.startDate = startDate;
 	}
 
-	public boolean isStartTimeAvailable() {
+    public java.util.Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(java.util.Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public boolean isStartTimeAvailable() {
 		return startTimeAvailable;
 	}
 

@@ -22,11 +22,13 @@ public class ConversionUtil {
 	private static final String TAG = ConversionUtil.class.getName();
 
 	private static final long SECONDS_PER_MINUTE = 60;
-	private static final long SECONDS_PER_HOUR = 60*60;
-	private static final long SECONDS_PER_DAY = 60*60*24;
-	private static final long SECONDS_PER_WEEK = 60*60*24*7;
-	private static final long SECONDS_PER_MONTH = 60*60*24*30;
-	private static final long SECONDS_PER_YEAR = 60*60*24*365;
+	private static final long SECONDS_PER_HOUR = SECONDS_PER_MINUTE*60;
+	private static final long SECONDS_PER_DAY = SECONDS_PER_HOUR*24;
+	private static final long SECONDS_PER_WEEK = SECONDS_PER_DAY*7;
+	private static final long SECONDS_PER_MONTH = SECONDS_PER_DAY*30;
+	private static final long SECONDS_PER_YEAR = SECONDS_PER_DAY*365;
+
+    public static final long MILLI_SECONDS_PER_DAY = SECONDS_PER_DAY*1000;
 
 	public static int toPx(Resources res, float dp) {
 		// Get the screen's density scale

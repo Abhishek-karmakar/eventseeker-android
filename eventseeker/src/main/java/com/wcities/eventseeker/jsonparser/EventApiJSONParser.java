@@ -1,16 +1,5 @@
 package com.wcities.eventseeker.jsonparser;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.util.Log;
 import android.util.SparseArray;
 
 import com.wcities.eventseeker.api.Api;
@@ -19,6 +8,7 @@ import com.wcities.eventseeker.core.Address;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.BookingInfo;
 import com.wcities.eventseeker.core.Country;
+import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Friend;
@@ -27,6 +17,15 @@ import com.wcities.eventseeker.core.ItemsList;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.util.ConversionUtil;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EventApiJSONParser {
 	
@@ -56,6 +55,7 @@ public class EventApiJSONParser {
 	private static final String KEY_VENUE_ID = "venue_id";
 	private static final String KEY_DATES = "dates";
 	private static final String KEY_START = "start";
+    private static final String KEY_END = "end";
 	private static final String KEY_EVENT_TIME = "event_time";
 	private static final String KEY_VENUES = "venues";
 	private static final String KEY_VENUE = "venue";
@@ -152,10 +152,16 @@ public class EventApiJSONParser {
 					Attending.getAttending(jObjEvent.getInt(KEY_ATTENDING)) : Attending.NOT_GOING;
 			event.setAttending(attending);
 			//Log.d(TAG, "AT issue fillEventDetails event.getAttending() = " + event.getAttending().getValue());
-			
-			JSONObject jObjAddress = jObjCityevent.getJSONObject(KEY_VENUES).getJSONObject(KEY_VENUE).getJSONObject(KEY_ADDRESS);
-			event.getSchedule().getVenue().setAddress(getAddress(jObjAddress));
-			
+
+            JSONObject jObjVenue = jObjCityevent.getJSONObject(KEY_VENUES).getJSONObject(KEY_VENUE);
+			JSONObject jObjAddress = jObjVenue.getJSONObject(KEY_ADDRESS);
+            Venue venue = event.getSchedule().getVenue();
+			venue.setAddress(getAddress(jObjAddress));
+            if (venue.getPhone() == null) {
+                // for navigation button on event details screen (via NaviBridge app, which displays phone number as well)
+                venue.setPhone(getPhone(jObjVenue));
+            }
+
 			if (jObjEvent.has(KEY_FRIENDS) || jObjEvent.has(KEY_SUGGESTED_INVITES)) {
 				JSONObject jObjFriends = jObjEvent.has(KEY_FRIENDS) ? jObjEvent.getJSONObject(KEY_FRIENDS) 
 						: null;
@@ -187,6 +193,24 @@ public class EventApiJSONParser {
 			e.printStackTrace();
 		}
 	}
+
+    private String getPhone(JSONObject jObjVenue) throws JSONException {
+        String phone = null;
+        if (jObjVenue.has(KEY_PHONE)) {
+            Object jPhone = jObjVenue.get(KEY_PHONE);
+            if (jPhone instanceof JSONArray) {
+                //Log.d(TAG, "array");
+                phone = ((JSONArray) jPhone).getString(0);
+                phone = ConversionUtil.parseForPhone(phone);
+
+            } else {
+                //Log.d(TAG, "not array");
+                phone = (String) jPhone;
+                phone = ConversionUtil.parseForPhone(phone);
+            }
+        }
+        return phone;
+    }
 	
 	private List<Friend> getFriends(JSONObject jObjFriends, Object jSuggestedInvites) throws JSONException {
 		List<Friend> friends = new ArrayList<Friend>();
@@ -461,21 +485,7 @@ public class EventApiJSONParser {
 		if (jsonObject.has(KEY_ADDRESS)) {
 			venue.setAddress(getAddress(jsonObject.getJSONObject(KEY_ADDRESS)));
 		}
-		if (jsonObject.has(KEY_PHONE)) {
-			Object jPhone = jsonObject.get(KEY_PHONE);
-			if (jPhone instanceof JSONArray) {
-				//Log.d(TAG, "array");
-				String phone = ((JSONArray) jPhone).getString(0);
-				phone = ConversionUtil.parseForPhone(phone);
-				venue.setPhone(phone);
-				
-			} else {
-				//Log.d(TAG, "not array");
-				String phone = (String) jPhone;
-				phone = ConversionUtil.parseForPhone(phone);
-				venue.setPhone(phone);
-			}
-		}
+        venue.setPhone(getPhone(jsonObject));
 		return venue;
 	}
 
@@ -566,17 +576,36 @@ public class EventApiJSONParser {
 
 	private void buildSchedule(JSONObject jsonObject, Event event) {
 		try {
-			List<String> startDates = new ArrayList<String>();
-			String date = jsonObject.getString(KEY_DATE);
-			startDates.add(date);
-	
-			String eventTime = "";
-			if (jsonObject.has(KEY_EVENT_TIME)) {
-				eventTime = jsonObject.getString(KEY_EVENT_TIME);
-			}
+			List<Date> dates = new ArrayList<Date>();
+            String eventTime = "";
+
+            if (jsonObject.has(KEY_EVENT_TIME)) {
+                eventTime = jsonObject.getString(KEY_EVENT_TIME);
+            }
+
+            SimpleDateFormat format;
+            boolean startTimeAvailable;
+            if (eventTime.equals("")) {
+                format = new SimpleDateFormat("yyyy-MM-dd");
+                startTimeAvailable = false;
+
+            } else {
+                format = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
+                startTimeAvailable = true;
+            }
+            Date date = new Date(startTimeAvailable);
+			String strDate = jsonObject.getString(KEY_DATE);
+            try {
+                date.setStartDate(format.parse(strDate + eventTime));
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+			dates.add(date);
+
 			int venueId = jsonObject.getInt(KEY_VENUE_ID);
 			String venueName = ConversionUtil.decodeHtmlEntities(jsonObject, KEY_VENUE_NAME);
-			event.setSchedule(buildSchedule(startDates, eventTime, venueId, venueName, null));
+			event.setSchedule(buildSchedule(dates, venueId, venueName, null));
 			
 			Venue venue = event.getSchedule().getVenue();
 			if (jsonObject.has(KEY_LATITUDE)) {
@@ -640,10 +669,10 @@ public class EventApiJSONParser {
 			eventTime = jsonObject.getString(KEY_EVENT_TIME);
 		}
 
-		List<String> dates = getDates(jsonObject.get(KEY_DATES));
+		List<Date> dates = getDates(jsonObject.get(KEY_DATES), eventTime);
 		int venueId = jsonObject.getInt(KEY_VENUE_ID);
 
-		Schedule schedule = buildSchedule(dates, eventTime, venueId, null, venues);
+		Schedule schedule = buildSchedule(dates, venueId, null, venues);
 		
 		if (jsonObject.has(KEY_BOOKINGINFO)) {
 			fillBookingInfo(schedule, jsonObject);
@@ -654,7 +683,7 @@ public class EventApiJSONParser {
 		return schedule;
 	}
 	
-	private Schedule buildSchedule(List<String> startDates, String time, int venueId, String venueName, SparseArray<Venue> venues) {
+	private Schedule buildSchedule(List<Date> dates, int venueId, String venueName, SparseArray<Venue> venues) {
 		Schedule schedule = new Schedule();
 		
 		Venue venue;
@@ -666,50 +695,61 @@ public class EventApiJSONParser {
 			venue = venues.get(venueId);
 		}
 		schedule.setVenue(venue);
-		
-		SimpleDateFormat format;  
-		boolean startTimeAvailable;
-		
-		if (time.equals("")) {
-			format = new SimpleDateFormat("yyyy-MM-dd");
-			startTimeAvailable = false;
-			
-		} else {
-			format = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
-			startTimeAvailable = true;
-		}
-
-		for (Iterator<String> iterator = startDates.iterator(); iterator.hasNext();) {
-			com.wcities.eventseeker.core.Date date = new com.wcities.eventseeker.core.Date(startTimeAvailable);
-			String strStartDate = iterator.next();
-			try {  
-				date.setStartDate(format.parse(strStartDate + time));
-			    
-			} catch (ParseException e) {  
-			    e.printStackTrace();  
-			}
-			schedule.addDate(date);
-		}
-
+		schedule.setDates(dates);
 		return schedule;
 	}
-	
-	private List<String> getDates(Object json) throws JSONException {
-		List<String> dates = new ArrayList<String>();
-		
-		if (json instanceof JSONObject) {
-			JSONObject jObjDate = (JSONObject) json;
-			String strStartDate = jObjDate.getString(KEY_START);
-			dates.add(strStartDate);
-			
-		} else {
-			JSONArray jArrDates = (JSONArray) json;
 
-			for (int i = 0; i < jArrDates.length(); i++) {
-				String strStartDate = jArrDates.getJSONObject(i).getString(KEY_START);
-				dates.add(strStartDate);
-			}
-		}
-		return dates;
-	}
+    private List<Date> getDates(Object json, String time) throws JSONException {
+        List<Date> dates = new ArrayList<Date>();
+
+        SimpleDateFormat format;
+        boolean startTimeAvailable;
+
+        if (time.equals("")) {
+            format = new SimpleDateFormat("yyyy-MM-dd");
+            startTimeAvailable = false;
+
+        } else {
+            format = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
+            startTimeAvailable = true;
+        }
+
+        if (json instanceof JSONObject) {
+            com.wcities.eventseeker.core.Date date = new com.wcities.eventseeker.core.Date(startTimeAvailable);
+
+            JSONObject jObjDate = (JSONObject) json;
+            String strStartDate = jObjDate.getString(KEY_START);
+            String strEndDate = jObjDate.getString(KEY_END);
+
+            try {
+                date.setStartDate(format.parse(strStartDate + time));
+                // for festivals start & end dates in single json object may vary
+                if (!strStartDate.equals(strEndDate)) {
+                    date.setEndDate(format.parse(strEndDate + time));
+                }
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            dates.add(date);
+
+        } else {
+            JSONArray jArrDates = (JSONArray) json;
+
+            for (int i = 0; i < jArrDates.length(); i++) {
+                com.wcities.eventseeker.core.Date date = new com.wcities.eventseeker.core.Date(startTimeAvailable);
+
+                String strStartDate = jArrDates.getJSONObject(i).getString(KEY_START);
+                try {
+                    date.setStartDate(format.parse(strStartDate + time));
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                dates.add(date);
+            }
+        }
+        return dates;
+    }
 }

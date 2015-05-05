@@ -217,7 +217,8 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		fabSave = (FloatingActionButton) rootView.findViewById(R.id.fabSave);
 		fabTickets.setOnClickListener(this);
 		fabSave.setOnClickListener(this);
-        
+        rootView.findViewById(R.id.fabNavigate).setOnClickListener(this);
+
 		updateDetailsVisibility();
 		
 		recyclerVFriends = (RecyclerView) rootView.findViewById(R.id.recyclerVFriends);
@@ -921,6 +922,13 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 				}
 			}
 			break;
+
+        case R.id.fabNavigate:
+            args = new Bundle();
+            args.putSerializable(BundleKeys.VENUE, event.getSchedule().getVenue());
+            ((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
+                    AppConstants.FRAGMENT_TAG_NAVIGATION, args);
+            break;
 			
 		default:
 			break;

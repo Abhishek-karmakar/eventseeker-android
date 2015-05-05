@@ -28,8 +28,12 @@ public class Schedule implements Serializable {
 	public List<Date> getDates() {
 		return dates;
 	}
-	
-	public void addDate(Date date) {
+
+    public void setDates(List<Date> dates) {
+        this.dates = dates;
+    }
+
+    public void addDate(Date date) {
 		dates.add(date);
 	}
 
