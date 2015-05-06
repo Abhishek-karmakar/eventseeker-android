@@ -1,10 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.animation.ObjectAnimator;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -45,8 +40,6 @@ import com.wcities.eventseeker.constants.Enums.SettingsItem;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Venue;
-import com.wcities.eventseeker.gcm.GcmBroadcastReceiver;
-import com.wcities.eventseeker.gcm.GcmBroadcastReceiver.NotificationType;
 import com.wcities.eventseeker.interfaces.ActivityDestroyedListener;
 import com.wcities.eventseeker.interfaces.ArtistListenerTab;
 import com.wcities.eventseeker.interfaces.EventListenerTab;
@@ -55,6 +48,11 @@ import com.wcities.eventseeker.interfaces.VenueListenerTab;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GPlusUtil;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Using ActionBarActivity (extended by BaseActivity) instead of Activity so as to use support library toolbar as actionbar even for lower apis
@@ -586,7 +584,7 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		/**
 		 * 	refresh the SearchView	
 		 */
-		//searchView.setQueryHint(getResources().getString(R.string.menu_search));
+		searchView.setQueryHint(getResources().getString(R.string.menu_search));
 	}
 	
 	@Override

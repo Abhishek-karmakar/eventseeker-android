@@ -17,7 +17,7 @@
     <string name="menu_settings">Règlages</string>
     <string name="menu_calendar">Calendar</string>
     <string name="artist_on_tour">" En tournée "</string>
-    <string name="title_event_details">Détails de l’événement</string>
+    <string name="title_event_details">Détails de l\'événement</string>
     <string name="title_artist_details">Description de l\'artiste</string>
     <string name="title_venue_details">Venue Details</string>
     <string name="title_following">Suivant</string>
@@ -40,6 +40,7 @@
     <string name="title_pandora">Pandora</string>
     <string name="title_settings_mobile_app">Règlages</string>
     <string name="title_web">Web</string>
+    <string name="title_login">Ouvrez une session</string>
     <string name="title_signup">@string/btn_sign_up</string>
     
     <string name="no_items_found_pls_login">Please login with Facebook or Google from \'Sync Accounts\' page to see</string>
@@ -110,7 +111,7 @@
     <string name="follow_your_favorite_Artists">Suivez vos artistes préférés et recevez des nouvelles sur des événements en synchronisant les comptes suivants:</string>    
     
     <!-- fragment_device_library.xml -->
-    <string name="txt_service_desc_txt_fragment_device_library">Voudriez-vous que l’application cherche votre bibliothèque de musique pour les artistes qui vous-pouvez suivre? Les artistes se mettront sous la section « Suivant ».</string>
+    <string name="txt_service_desc_txt_fragment_device_library">Voudriez-vous que l\'application cherche votre bibliothèque de musique pour les artistes qui vous-pouvez suivre? Les artistes se mettront sous la section « Suivant ».</string>
     <string name="retrieve_artists">Rechercher des Artistes</string>
  
     <!-- Strings used for event category titles -->
@@ -192,7 +193,7 @@
 	<string name="syncing_rdio">Synchroniser Rdio</string>
 	<string name="syncing_last_fm">Synchroniser Last.fm</string>
 	<string name="syncing_pandora">Synchroniser Pandora</string>
-	<string name="artist_synced">L’artiste synchronisé</string>
+    <string name="artist_synced">L\'artiste synchronisé</string>
 	<string name="personalize_by_syncing">Personnaliser encore plus avec la synchronisation de vos comptes et laisse nous qui sont les préférées.</string>
 	
 	<!-- Following -->
@@ -317,7 +318,7 @@
     <string name="forthTitle">Vivre</string>
     <string name="firstTitleDescription">Des millions d\'evénements, à portée de clic. Concerts, sports, théâtre, festivals et encore plus!</string>
     <string name="secondTitleDescription">Après la synchronisation, on vous recommandera des événements personnalisés. Recevez des alertes et trouvez des billets dans n\'importe quelle ville.</string>
-    <string name="thirdTitleDescription">Gardez contact avec les amis et la famille. On facilite le partage d’événements.</string>
+    <string name="thirdTitleDescription">Gardez contact avec les amis et la famille. On facilite le partage d\'événements.</string>
     <string name="forthTitleDescription">Minimisez votre recherche et optimisez votre découverte. Affronter le monde avec eventseeker.</string>
     <string name="btn_log_in">Connexion</string>
     <string name="btn_sign_up">S\'Inscrire</string>
@@ -329,28 +330,28 @@
     <string name="email">Adresse électronique</string>
     <string name="password">mot de passe</string>
     <string name="confirm_password">Confirmez le mot de passe</string>
-    <string name="error_email_invalid">CETTE ADDRESSE ÉLECTRONIQUE N’EST PAS VALIDE</string>
+    <string name="error_email_invalid">CETTE ADDRESSE ÉLECTRONIQUE N\'EST PAS VALIDE</string>
     <string name="error_pass_do_not_match">LES PASSE-MOTS NE CORRESPONDENT PAS</string>
     <string name="error_email_exists">CETTE ADDRESSE ELECTRONIQUE DEJA EXISTE</string>
-    <string name="error_email_or_password_incorrect">L’adresse électronique ou passé-mot n’est pas correcte</string>
-    <string name="error_unknown_error">Une erreur inconnue s’est produite. Essayez plus tard.</string>
+    <string name="error_email_or_password_incorrect">L\'adresse électronique ou passé-mot n\'est pas correcte</string>
+    <string name="error_unknown_error">Une erreur inconnue s\'est produite. Essayez plus tard.</string>
     
     <!-- FollowMoreArtistFragment -->
     <string name="btn_sync_accounts">Syncroniser les comptes</string>
     <string name="btn_popular_artists">Artistes populaires</string>
     <string name="btn_recommended">Suggérés</string>
     <string name="btn_search">Rechercher</string>
-    <string name="title_find_more_artist">Trouver d\'autres artists</string>
+    <string name="title_find_more_artist">Trouvez plus d\'artistes</string>
     
     <!-- PopularArtistsFragment -->
-    <string name="btn_featured">En Vedette</string>
+    <string name="btn_featured">Présenté</string>
     <string name="btn_music">Musique</string>
     <string name="btn_comedy">Comédie</string>
     <string name="btn_theater">Théâtre</string>
     <string name="btn_sports">Sport</string>
     
     <!-- RecommendedArtistsFragment -->
-    <string name="btn_follow_all">Les Suivre Tous</string>
+    <string name="btn_follow_all">Suivez tous</string>
     <string name="a_z">A - Z</string>
     <string name="recommendation_score">Recommendation Score</string>
     <string name="dialog_title_follow_all">Les Suivre Tous</string>
@@ -392,31 +393,31 @@
     <string name="btn_electronic">Electro</string>
     <string name="btn_pop">Pop</string>
     <string name="btn_punk">Punk</string>
-    <string name="btn_hard_rock_metal">Hard Rock / Métal</string>
+    <string name="btn_hard_rock_metal">Hard Rock Métal</string>
     <string name="btn_world_music">Musiques du Monde</string>
-    <string name="btn_blues_jazz">Blues / Jazz</string>
-    <string name="btn_hip_hop">Hip-Hop</string>
-    <string name="btn_soul_r_and_b_funck">Soul \/ R&amp;B \/ Funk</string>
+    <string name="btn_blues_jazz">Blues, Jazz</string>
+    <string name="btn_hip_hop">Hip-hop</string>
+    <string name="btn_soul_r_and_b_funck">Soul, R&amp;B, Funk</string>
     <string name="btn_classical">Musique Classique</string>
     
     <!-- LoginFragment -->
     <string name="continue_with_facebook">Continuer avec Facebook</string>
     <string name="continue_wiht_google">Continuer avec Google</string>
     <string name="sign_in_with_email">Ouvrez une session avec votre adresse électronique</string>
-    <string name="signing_in">L’ouverture de session...</string>
+    <string name="signing_in">L\'ouverture de session...</string>
     <string name="sign_in">Ouvrez une session</string>
-    <string name="dialog_msg_user_email_doesnt_exist">L’utilisateur avec cette adresse électronique n’existe pas</string>
+    <string name="dialog_msg_user_email_doesnt_exist">L\'utilisateur avec cette adresse électronique n\'existe pas</string>
     <string name="share_on_facebook">Partagez sur Facebook</string>
     
     <!--  fragment_discover.xml -->
-    <string name="txt_no_events">Il n’y a pas des évènements actuellement dans votre localité. Essayez une autre categorie ou cherchez une localité nouvelle / Rayon.</string>
+    <string name="txt_no_events">Il n\'y a pas des évènements actuellement dans votre localité. Essayez une autre categorie ou cherchez une localité nouvelle / Rayon.</string>
     <string name="btn_chg_loc_txt">CHANGEZ LOCALITÉ</string>
     
     <!-- Following -->
-    <string name="remove_artist">Retirez l’artiste</string>
-    <string name="follow_artist">Suivez l’artiste</string>
+    <string name="remove_artist">Retirez l\'artiste</string>
+    <string name="follow_artist">Suivez l\'artiste</string>
     <string name="are_you_sure_you_want_to_remove_this_artist">Vous-êtes sûr que voulez vous retirer cet artiste?</string>
-    <string name="artist_saved">L’artiste sauvegardé!</string>
+    <string name="artist_saved">L\'artiste sauvegardé!</string>
     
     <!-- NavigationFragment -->
     <string name="address_isnt_available">L\'adresse n\'est pas disponible pour cet endroit.</string>

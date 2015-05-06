@@ -1,9 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,11 +18,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wcities.eventseeker.adapter.RVAdapterBase;
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.BundleKeys;
+import com.wcities.eventseeker.constants.Enums;
 import com.wcities.eventseeker.constants.Enums.SettingsItem;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class SettingsFragmentTab extends Fragment {
 	
@@ -37,6 +39,8 @@ public class SettingsFragmentTab extends Fragment {
 	private RecyclerView rcyclrSettings;
 	
 	private int htForSettingsList;
+
+    private Enums.Locales currentLocale;
 	
 	private OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
 		
@@ -118,9 +122,14 @@ public class SettingsFragmentTab extends Fragment {
 			settingsListAdapter = new SettingsListAdapter(this, settingsItems);
 		}
 		rcyclrSettings.setAdapter(settingsListAdapter);
-		
 		rcyclrSettings.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
-	}
+
+        currentLocale = ((EventSeekr) FragmentUtil.getApplication(this)).getLocale();
+    }
+
+    public Enums.Locales getCurrentLocale() {
+        return currentLocale;
+    }
 	
 	@Override
 	public void onStop() {

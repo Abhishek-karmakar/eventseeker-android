@@ -417,8 +417,6 @@
     <string name="btn_recommended">Recommended</string>
     <string name="btn_search">Search</string>
 
-    <!-- Sync your accounts and let eventseeker know about your favorite artists.  --> 
-    
     <!-- PopularArtistsFragment -->
     <string name="btn_featured">Featured</string>
     <string name="btn_music">Music</string>

@@ -40,6 +40,7 @@
     <string name="title_pandora">Pandora</string>
     <string name="title_settings_mobile_app">Configurações</string>
     <string name="title_web">Web</string>
+    <string name="title_login">Iniciar a sessão</string>
     <string name="title_signup">@string/btn_sign_up</string>
     
     <string name="no_items_found_pls_login">Please login with Facebook or Google from \'Sync Accounts\' page to see</string>
@@ -395,11 +396,11 @@
     <string name="btn_electronic">Música eletrónica</string>
     <string name="btn_pop">Pop</string>
     <string name="btn_punk">Punk</string>
-    <string name="btn_hard_rock_metal">Hard Rock \/ Metal</string>
+    <string name="btn_hard_rock_metal">Hard Rock Metal</string>
     <string name="btn_world_music">Música mundial</string>
-    <string name="btn_blues_jazz">Blues \/ Jazz</string>
+    <string name="btn_blues_jazz">Blues, Jazz</string>
     <string name="btn_hip_hop">Hip Hop</string>
-    <string name="btn_soul_r_and_b_funck">Soul \/ R&amp;B \/ Funk</string>
+    <string name="btn_soul_r_and_b_funck">Soul, R&amp;B, Funk</string>
     <string name="btn_classical">Música clássica</string>
     
     <string name="title_categories">Categorias</string>

@@ -40,6 +40,7 @@
     <string name="title_pandora">Pandora</string>
     <string name="title_settings_mobile_app">Impostazioni</string>
     <string name="title_web">Web</string>
+    <string name="title_login">accedi</string>
     <string name="title_signup">@string/btn_sign_up</string>
     
     <string name="no_items_found_pls_login">Please login with Facebook or Google from \'Sync Accounts\' page to see</string>
@@ -297,7 +298,7 @@
 
     <string name="sec_not_gt_one">1 second ago</string>
     <string name="min_not_gt_one">Già fa un minuto</string>
-    <string name="hr_not_gt_one">Fa un’ora</string>
+    <string name="hr_not_gt_one">Fa un\'ora</string>
     <string name="day_not_gt_one">Fa un giorno</string>
     <string name="week_not_gt_one">1 week ago</string>
     <string name="mon_not_gt_one">1 month ago</string>
@@ -336,7 +337,7 @@
     
     <!-- FollowMoreArtistFragment -->
     <string name="btn_sync_accounts">Sincronizzazione</string>
-    <string name="btn_popular_artists">artisti popolari</string>
+    <string name="btn_popular_artists">Artisti Popolari</string>
     <string name="btn_recommended">Racommandati</string>
     <string name="btn_search">Cerca</string>
     <string name="title_find_more_artist">Trovi altri artisti</string>
@@ -398,7 +399,7 @@
     <string name="btn_world_music">Musica Etnica</string>
     <string name="btn_blues_jazz">blues \/ jazz</string>
     <string name="btn_hip_hop">hip hop</string>
-    <string name="btn_soul_r_and_b_funck">Soul \/ R&amp;B \/ Funk</string>
+    <string name="btn_soul_r_and_b_funck">Soul, R&amp;B, Funk</string>
     <string name="btn_classical">classica</string>
     
     <string name="title_categories">categorie</string>

@@ -40,6 +40,7 @@
     <string name="title_pandora">Pandora</string>
     <string name="title_settings_mobile_app">Einstellungen</string>
     <string name="title_web">Web</string>
+    <string name="title_login">Anmelden</string>
     <string name="title_signup">@string/btn_sign_up</string>
     
     <string name="no_items_found_pls_login">Please login with Facebook or Google from \'Sync Accounts\' page to see</string>
@@ -291,7 +292,7 @@
     <string name="sec_gt_one">%1$d seconds ago</string>
     <string name="min_gt_one">%1$d Minuten her</string>
     <string name="hr_gt_one">%1$d Stunden her</string>
-    <string name="day_gt_one">%1$d Tage her</string>
+    <string name="day_gt_one">%1$d Tagen her</string>
     <string name="week_gt_one">%1$d weeks ago</string>
     <string name="mon_gt_one">%1$d months ago</string>
     <string name="yr_gt_one">%1$d years ago</string>
@@ -336,11 +337,11 @@
     <string name="error_unknown_error">Unbekannter Fehler ist aufgetreten. Bitte versuchen Sie es später noch einmal.</string>
     
     <!-- FollowMoreArtistFragment -->
-    <string name="btn_sync_accounts">Synchronisieren</string>
+    <string name="btn_sync_accounts">Accounts synchronisieren</string>
     <string name="btn_popular_artists">Beliebte Künstler</string>
     <string name="btn_recommended">Vorschläge</string>
     <string name="btn_search">Suchen</string>
-    <string name="title_find_more_artist">Folge mehr Künstlern</string>
+    <string name="title_find_more_artist">Mehr Künstler finden</string>
     
     <!-- PopularArtistsFragment -->
     <string name="btn_featured">Featured</string>
@@ -362,8 +363,8 @@
     <string name="sign_in_with_email">Mit E-Mail anmelden</string>
     <string name="signing_in">Anmelden...</string>
     <string name="dialog_msg_user_email_doesnt_exist">Benutzer mit dieser E-Mail ist noch nicht kreiert.</string>
-    <string name="continue_with_facebook">Mit Facebook weitermachen</string>
-    <string name="continue_wiht_google">Mit Google weitermachen</string>
+    <string name="continue_with_facebook">Mit Facebook fortfahren</string>
+    <string name="continue_wiht_google">Mit Google fortfahren</string>
     <string name="sign_in">Anmelden</string>
     <string name="share_on_facebook">Share On Facebook</string>
     
@@ -412,10 +413,10 @@
     <string name="btn_pop">Pop</string>
     <string name="btn_punk">Punk</string>
     <string name="btn_hard_rock_metal">Hard Rock / Metal</string>
-    <string name="btn_world_music">World Music</string>
+    <string name="btn_world_music">Weltmusik</string>
     <string name="btn_blues_jazz">Blues / Jazz</string>
     <string name="btn_hip_hop">Hip Hop</string>
-    <string name="btn_soul_r_and_b_funck">Soul / RnB / Funk</string>
+    <string name="btn_soul_r_and_b_funck">Soul, RnB, Funk</string>
     <string name="btn_classical">Klassisch</string>
     
     <!-- fragment_navigation.xml -->
