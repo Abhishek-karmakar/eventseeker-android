@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- rv_item_event_tab.xml -->
 	<integer name="txt_evt_time_lines_rv_item_event_tab">2</integer>
+    <!-- rv_item_event_tab_with_date_range.xml -->
+    <integer name="txt_evt_time_lines_rv_item_event_tab_with_date_range">3</integer>
 </resources>

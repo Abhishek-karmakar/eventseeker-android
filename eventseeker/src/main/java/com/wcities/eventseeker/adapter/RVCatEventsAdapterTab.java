@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -164,7 +165,7 @@ public class RVCatEventsAdapterTab extends RVAdapterBase<ViewHolder> implements 
 		switch (vType) {
 		
 		case EVENT:
-			v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_event_tab, parent, false);
+			v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_event_tab_with_date_range, parent, false);
 			break;
 			
 		default:
@@ -217,11 +218,42 @@ public class RVCatEventsAdapterTab extends RVAdapterBase<ViewHolder> implements 
 			ViewCompat.setTransitionName(holder.txtEvtTitle, "txtEvtTitleDiscover" + position);
 			
 			if (event.getSchedule() != null) {
-				Schedule schedule = event.getSchedule();
-				Date date = schedule.getDates().get(0);
-				holder.txtEvtTime.setText(ConversionUtil.getDateTime(FragmentUtil.getApplication(discoverFragmentTab),
-                        date.getStartDate(), date.isStartTimeAvailable(), true, false, false));
-				
+                Schedule schedule = event.getSchedule();
+                List<Date> dates = schedule.getDates();
+                Date date1 = dates.get(0);
+                String strDate;
+
+                if (dates.size() == 1 && date1.getEndDate() != null) {
+                    // for festivals dates size is 1 & endDate can be non-null which is different than startDate.
+                    // display date range
+                    strDate = ConversionUtil.getDateTime(FragmentUtil.getApplication(discoverFragmentTab),
+                            date1.getStartDate(), false, true, false, false);
+                    strDate += " - " + ConversionUtil.getDateTime(FragmentUtil.getApplication(discoverFragmentTab),
+                            date1.getEndDate(), date1.isStartTimeAvailable(), true, false, false);
+
+                } else if (dates.size() > 1) {
+                    Date dateN = dates.get(dates.size() - 1);
+                    //Log.d(TAG, "" + ((dateN.getStartDate().getTime() - date1.getStartDate().getTime()) / ConversionUtil.MILLI_SECONDS_PER_DAY) + ", " + dates.size());
+                    // Check if dates are all sequential, if yes then display date range
+                    if (((dateN.getStartDate().getTime() - date1.getStartDate().getTime()) / ConversionUtil.MILLI_SECONDS_PER_DAY) + 1 == dates.size()) {
+                        strDate = ConversionUtil.getDateTime(FragmentUtil.getApplication(discoverFragmentTab),
+                                date1.getStartDate(), false, true, false, false);
+                        strDate += " - " + ConversionUtil.getDateTime(FragmentUtil.getApplication(discoverFragmentTab),
+                                dateN.getStartDate(), dateN.isStartTimeAvailable(), true, false, false);
+
+                    } else {
+                        // display first date only
+                        strDate = ConversionUtil.getDateTime(FragmentUtil.getApplication(discoverFragmentTab),
+                                date1.getStartDate(), date1.isStartTimeAvailable(), true, false, false);
+                    }
+
+                } else {
+                    // display single date
+                    strDate = ConversionUtil.getDateTime(FragmentUtil.getApplication(discoverFragmentTab),
+                            date1.getStartDate(), date1.isStartTimeAvailable(), true, false, false);
+                }
+                holder.txtEvtTime.setText(strDate);
+
 				String venueName = (schedule.getVenue() != null) ? schedule.getVenue().getName() : "";
 				holder.txtEvtLoc.setText(venueName);
 

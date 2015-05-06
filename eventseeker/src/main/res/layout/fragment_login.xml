@@ -154,7 +154,7 @@
                     android:gravity="center"
                     android:text="@string/forgot_your_password"
                     android:textSize="@dimen/btn_forgot_pass_txt_size_get_started_fragment"
-                    android:visibility="gone" />
+                    android:textAllCaps="false"/>
 
             </RelativeLayout>
         </RelativeLayout>
