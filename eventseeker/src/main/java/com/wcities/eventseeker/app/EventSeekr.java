@@ -119,7 +119,9 @@ public class EventSeekr extends Application {
 	
 	private Handler handler;
 	private ActivityDestroyedListener activityDestroyedListener;
-	
+
+    private boolean firstTimeLaunchFordWelComeMsg = true;
+
 	public static GoogleApiClient mGoogleApiClient;
 	// for ford
 	private static BaseActivity currentBaseActivity;
@@ -200,8 +202,16 @@ public class EventSeekr extends Application {
 	}
 
 	public static void setCityName(String cityName) {
-		EventSeekr.cityName = cityName;
-	}
+        EventSeekr.cityName = cityName;
+    }
+
+    public boolean isFirstTimeLaunchFordWelComeMsg() {
+        return firstTimeLaunchFordWelComeMsg ;
+    }
+
+    public void setFirstTimeLaunchFordWelComeMsg(boolean firstTimeLaunchFordWelComeMsg) {
+        this.firstTimeLaunchFordWelComeMsg = firstTimeLaunchFordWelComeMsg;
+    }
 
 	public boolean isFirstEventTitleForFordEventAL() {
 		return isFirstEventTitleForFordEventAL;

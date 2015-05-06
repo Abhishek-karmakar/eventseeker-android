@@ -1,7 +1,5 @@
 package com.wcities.eventseeker.applink.handler;
 
-import java.util.Vector;
-
 import android.util.Log;
 
 import com.ford.syncV4.proxy.rpc.SoftButton;
@@ -11,6 +9,8 @@ import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.applink.util.ALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil.Command;
+
+import java.util.Vector;
 
 public class MainAL extends ESIProxyALM {
 	
@@ -33,6 +33,10 @@ public class MainAL extends ESIProxyALM {
 	@Override
 	public void onStartInstance() {
 		addCommands();
+        if (context.isFirstTimeLaunchFordWelComeMsg()) {
+            ALUtil.speak(context.getResources().getString(R.string.welcome_to_cityseeker_msg));
+            context.setFirstTimeLaunchFordWelComeMsg(false);
+        }
 		Vector<SoftButton> softBtns = buildSoftButtons();
 		ALUtil.displayMessage(R.string.msg_welcome_to, R.string.msg_eventseeker, softBtns);
 	}

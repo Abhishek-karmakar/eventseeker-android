@@ -544,6 +544,7 @@
     <string name="ford_phone_no">Phone Number</string>
     <string name="calling">Calling</string>
     <string name="leaving_app_for_call">You are now leaving cityseeker. Call will be initiated on your mobile device</string>
+    <string name="welcome_to_cityseeker_msg">Welcome to eventseeker. Find concerts, clubs, sports, theater, festivals and more using the EXPLORE function. Use the MY EVENTS command addto access recommended events based on your interests.</string>
     
 	<!-- Commands -->
     <string name="al_command_next">Next</string>
@@ -595,7 +596,7 @@
     <string name="event_no_evts_avail">No events available</string>
     <string name="alert_no_events_available">No events available</string>
     <string name="plz_press_nxt_or_bck">, Please press the voice button and say next or back.</string>
-    <string name="plz_press_nxt_bck_dtls_cll">, Please press the voice button and say next, back, details or call.</string>
+    <string name="plz_press_nxt_bck_dtls_cll">, Please press the voice button and say next, previous, details call or address.</string>
     <string name="detail_not_available">Detail description not available</string>
     <string name="description">Description</string>
     <string name="not_available">not available</string><!-- Continuation of above -->

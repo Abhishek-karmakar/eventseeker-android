@@ -1,10 +1,5 @@
 package com.wcities.eventseeker.applink.util;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.Vector;
-
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -22,10 +17,21 @@ import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Venue;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Vector;
+
 public class EventALUtil {
 	
 	private static final String COUNTRY_NAME = "United States";
 	private static final String TAG = EventALUtil.class.getName();
+
+    /**
+     * This flag is added because whenever user presses next/previous button continuously
+     * which results in repetation of alert dialog 'No Points Available'
+     */
+    public static boolean isAlertForNoPointsAvailable;
 	
 	public static void speakEventTitle(Event event, EventSeekr app) {
 		/**
@@ -218,11 +224,15 @@ public class EventALUtil {
 	}
 	
 	public static void onNextCommand(EventList eventList, EventSeekr context) throws IOException {
+        if (isAlertForNoPointsAvailable) {
+        	return;
+        }
 		if (eventList.moveToNextEvent()) {
 			displayCurrentEvent(eventList);
 			speakEventTitle(eventList.getCurrentEvent(), context);
 			
 		} else {
+            isAlertForNoPointsAvailable = true;
 			Resources res = context.getResources();
 			ALUtil.alert(res.getString(R.string.alert_no_events_available), res.getString(
 					R.string.event_no_evts_avail));
@@ -230,11 +240,15 @@ public class EventALUtil {
 	}
 
 	public static void onBackCommand(EventList eventList,EventSeekr context) {
+        if (isAlertForNoPointsAvailable) {
+            return;
+        }
 		if (eventList.moveToPreviousEvent()) {
 			displayCurrentEvent(eventList);
 			speakEventTitle(eventList.getCurrentEvent(), context);
 			
 		} else {
+            isAlertForNoPointsAvailable = true;
 			Resources res = context.getResources();
 			ALUtil.alert(res.getString(R.string.alert_no_events_available), res.getString(
 					R.string.event_no_evts_avail));
