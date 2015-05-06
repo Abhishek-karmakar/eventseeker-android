@@ -1,13 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
 import android.app.Activity;
 import android.content.res.Resources;
 import android.os.AsyncTask.Status;
@@ -51,6 +43,14 @@ import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public abstract class FollowingParentFragment extends FragmentLoadableFromBackStack implements ArtistTrackingListener,
 		LoadArtistsListener, LoadItemsInBackgroundListener, DialogBtnClickListener, 
@@ -230,16 +230,14 @@ public abstract class FollowingParentFragment extends FragmentLoadableFromBackSt
 			((ImageView) view.findViewById(R.id.imgItem)).setImageBitmap(null);
 		}
 	}
-	
-	@Override
-	public void onDestroyView() {
-		super.onDestroyView();
-		for (int i = absListView.getFirstVisiblePosition(), j = 0; 
-				i <= absListView.getLastVisiblePosition(); 
-				i++, j++) {
-			freeUpBitmapMemory(absListView.getChildAt(j));
-		}
-	}
+
+    @Override
+    public void onDestroyView() {
+        for (int i = absListView.getFirstVisiblePosition(), j = 0; i <= absListView.getLastVisiblePosition(); i++, j++) {
+            freeUpBitmapMemory(absListView.getChildAt(j));
+        }
+        super.onDestroyView();
+    }
 	
 	@Override
 	public void showNoArtistFound() {

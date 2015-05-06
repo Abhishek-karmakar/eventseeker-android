@@ -159,7 +159,7 @@
  
     <!-- Artists News -->
     <string name="posted_a_picture">ha impostato una foto</string>
-    <string name="shared_a_link">impostava un collegamento</string>
+    <string name="shared_a_link">ha condiviso un link</string>
     <string name="posted_a_video">ha impostato un video nuovo</string>
     <string name="posted_a_status">ha impostato un status</string>
     <string name="follow_artists_for_updates">Segue gli artisti per ricevere le ultime notizie in tempo reale</string>
@@ -167,6 +167,7 @@
     <string name="sort_by">ordina per:</string>
     <string name="chronological">cronologia</string>
     <string name="trending">tendenze</string>
+    <string name="saved_events_no_content">Seleziona il calendario per salvare eventi.</string>
            
    	<!-- Connect Accounts Services -->
     <string name="service_google_play" >Google Play</string>
@@ -194,6 +195,8 @@
 	<string name="syncing_last_fm">Sincronizzando Last.fm</string>
 	<string name="syncing_pandora">Sincronizzando Pandora</string>
 	<string name="artist_synced">Artista sincronizzato</string>
+    <string name="artists_synced">Artisti sincronizzati</string>
+    <string name="personalize_by_syncing">Sincronizza i tuoi account per far sapere a eventseeker chi sono i tuoi preferiti artisit.</string>
     
 	<!-- Following -->
     <string name="follow_more_artists">segui più artisti +</string>
@@ -290,7 +293,7 @@
     <!-- Time difference strings -->
     <string name="sec_gt_one">%1$d seconds ago</string>
     <string name="min_gt_one">Fa %1$d minuti</string>
-    <string name="hr_gt_one">Già fa %1$d ore</string>
+    <string name="hr_gt_one">%1$d ore fa</string>
     <string name="day_gt_one">Già fa %1$d giorni</string>
     <string name="week_gt_one">%1$d weeks ago</string>
     <string name="mon_gt_one">%1$d months ago</string>
@@ -299,7 +302,7 @@
     <string name="sec_not_gt_one">1 second ago</string>
     <string name="min_not_gt_one">Già fa un minuto</string>
     <string name="hr_not_gt_one">Fa un\'ora</string>
-    <string name="day_not_gt_one">Fa un giorno</string>
+    <string name="day_not_gt_one">1 giorno fa</string>
     <string name="week_not_gt_one">1 week ago</string>
     <string name="mon_not_gt_one">1 month ago</string>
     <string name="yr_not_gt_one">1 year ago</string>
@@ -370,7 +373,10 @@
     <!--  fragment_discover.xml -->
     <string name="txt_no_events">Non ci sono eventi presenti nella tua posizione. Cerca con un\'altra categoria o cambia posizione.</string>
     <string name="btn_chg_loc_txt">Cambia posizione</string>
-    
+
+    <!-- DiscoverFragment -->
+    <string name="share_via">condividi via</string>
+
     <!-- Following -->
     <string name="remove_artist">Rimuovi artista</string>
     <string name="follow_artist">Segui artista</string>

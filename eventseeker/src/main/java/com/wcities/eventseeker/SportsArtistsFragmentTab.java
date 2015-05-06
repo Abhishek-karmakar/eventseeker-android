@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -112,4 +112,14 @@ public class SportsArtistsFragmentTab extends FragmentLoadableFromBackStack impl
 		}
 	}
 
+    @Override
+    public void onDestroyView() {
+        //to free the memory allocated for high-res cat images
+        ((ImageView) getView().findViewById(R.id.imgBG)).setImageBitmap(null);
+        ((ImageView) getView().findViewById(R.id.imgBG1)).setImageBitmap(null);
+        ((ImageView) getView().findViewById(R.id.imgBG2)).setImageBitmap(null);
+        ((ImageView) getView().findViewById(R.id.imgBG3)).setImageBitmap(null);
+        ((ImageView) getView().findViewById(R.id.imgBG4)).setImageBitmap(null);
+        super.onDestroyView();
+    }
 }

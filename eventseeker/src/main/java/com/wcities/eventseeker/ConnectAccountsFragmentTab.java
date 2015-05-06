@@ -335,16 +335,20 @@ public class ConnectAccountsFragmentTab extends ListFragmentLoadableFromBackStac
 				/*convertView = mInflater.inflate(R.layout.connect_accounts_txt_list_item, null);*/
 				convertView = mInflater.inflate(R.layout.connect_accounts_list_item_top, null);
 				convertView.setTag("");
+
+                int syncArtistCount = ((EventSeekr) FragmentUtil.getActivity(ConnectAccountsFragmentTab.this)
+                        .getApplication()).getTotalSyncCount();
 				
 				TextView txtSyncCount = (TextView) convertView.findViewById(R.id.txtSyncCount);
-				txtSyncCount.setText(((EventSeekr) FragmentUtil.getActivity(ConnectAccountsFragmentTab.this)
-						.getApplication()).getTotalSyncCount() + "");
+                txtSyncCount.setText(syncArtistCount + "");
 				txtSyncCount.setBackgroundResource(serviceAccount.isInProgress ? 0 : R.drawable.ic_circle_bg);
+
+                TextView txtArtistSynced = (TextView) convertView.findViewById(R.id.txtArtistSynced);
+                txtArtistSynced.setText((syncArtistCount > 1) ? R.string.artists_synced : R.string.artist_synced);
 
 				//Log.d(TAG, "serviceAccount.isInProgress = " + serviceAccount.isInProgress);
 				convertView.findViewById(R.id.prgBrSyncArtist)
 					.setVisibility(serviceAccount.isInProgress ? View.VISIBLE : View.GONE);
-				
 				
 			} else {
 				//Log.d(TAG, "setting Title : " + serviceAccount.name);

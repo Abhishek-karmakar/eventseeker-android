@@ -259,6 +259,7 @@
     <string name="syncing_last_fm">Syncing Last.fm</string>
     <string name="syncing_pandora">Syncing Pandora</string>
 	<string name="artist_synced">ARTIST SYNCED</string>
+    <string name="artists_synced">ARTISTS SYNCED</string>
 	<string name="personalize_by_syncing">Let eventseeker know who your favorite artists are.</string>
 	
     <!-- My Events -->

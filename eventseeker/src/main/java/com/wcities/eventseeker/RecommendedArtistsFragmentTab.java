@@ -1,8 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -49,6 +46,9 @@ import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecommendedArtistsFragmentTab extends PublishArtistFragment implements OnClickListener,
 		LoadArtistsListener, LoadItemsInBackgroundListener, DialogBtnClickListener, ArtistTrackingListener,
@@ -246,7 +246,6 @@ public class RecommendedArtistsFragmentTab extends PublishArtistFragment impleme
 
 	@Override
 	public void onDestroyView() {
-		super.onDestroyView();
 		for (int i = grdvFollowing.getFirstVisiblePosition(), j = 0; i <= grdvFollowing.getLastVisiblePosition(); i++, j++) {
 			freeUpBitmapMemory(grdvFollowing.getChildAt(j));
 		}

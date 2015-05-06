@@ -1,8 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask.Status;
@@ -46,6 +43,9 @@ import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SelectedArtistCategoryFragmentTab extends PublishArtistFragmentLoadableFromBackStack implements ArtistTrackingListener, 
 		LoadArtistsListener, LoadItemsInBackgroundListener, DialogBtnClickListener, OnFacebookShareClickedListener,
@@ -195,16 +195,14 @@ public class SelectedArtistCategoryFragmentTab extends PublishArtistFragmentLoad
 			((ImageView) view.findViewById(R.id.imgItem)).setImageBitmap(null);
 		}
 	}
-	
-	@Override
-	public void onDestroyView() {
-		super.onDestroyView();
-		for (int i = grdvArtists.getFirstVisiblePosition(), j = 0; 
-				i <= grdvArtists.getLastVisiblePosition(); 
-				i++, j++) {
-			freeUpBitmapMemory(grdvArtists.getChildAt(j));
-		}
-	}
+
+    @Override
+    public void onDestroyView() {
+        for (int i = grdvArtists.getFirstVisiblePosition(), j = 0; i <= grdvArtists.getLastVisiblePosition(); i++, j++) {
+            freeUpBitmapMemory(grdvArtists.getChildAt(j));
+        }
+        super.onDestroyView();
+    }
 	
 	@Override
 	public void onDestroy() {

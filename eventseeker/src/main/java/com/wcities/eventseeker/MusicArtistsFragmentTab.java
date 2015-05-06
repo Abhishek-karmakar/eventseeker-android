@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
@@ -150,5 +150,24 @@ public class MusicArtistsFragmentTab extends FragmentLoadableFromBackStack imple
 	@Override
 	public String getScreenName() {
 		return ScreenNames.POPULAR_MUSIC_ARTISTS;
-	}		
+	}
+
+    @Override
+    public void onDestroyView() {
+        ((ImageView) getView().findViewById(R.id.imgAlternativeRock)).setImageBitmap(null);
+        ((ImageView) getView().findViewById(R.id.imgClassicRock)).setImageBitmap(null);
+        ((ImageView) getView().findViewById(R.id.imgIndieRock)).setImageBitmap(null);
+        ((ImageView) getView().findViewById(R.id.imgFolk)).setImageBitmap(null);
+        ((ImageView) getView().findViewById(R.id.imgCountry)).setImageBitmap(null);
+        ((ImageView) getView().findViewById(R.id.imgElectronic)).setImageBitmap(null);
+        ((ImageView) getView().findViewById(R.id.imgPop)).setImageBitmap(null);
+        ((ImageView) getView().findViewById(R.id.imgPunk)).setImageBitmap(null);
+        ((ImageView) getView().findViewById(R.id.imgHardRockMetal)).setImageBitmap(null);
+        ((ImageView) getView().findViewById(R.id.imgWorldMusic)).setImageBitmap(null);
+        ((ImageView) getView().findViewById(R.id.imgBluesJazz)).setImageBitmap(null);
+        ((ImageView) getView().findViewById(R.id.imgHipHop)).setImageBitmap(null);
+        ((ImageView) getView().findViewById(R.id.imgSoulRAndBFunck)).setImageBitmap(null);
+        ((ImageView) getView().findViewById(R.id.imgClassical)).setImageBitmap(null);
+        super.onDestroyView();
+    }
 }

@@ -322,11 +322,16 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 				txtSyncCount.setText(((EventSeekr) FragmentUtil.getActivity(ConnectAccountsFragment.this)
 						.getApplication()).getTotalSyncCount() + "");
 				txtSyncCount.setBackgroundResource(serviceAccount.isInProgress ? 0 : R.drawable.ic_circle_bg);
-				
+
+                int syncArtistCount = ((EventSeekr) FragmentUtil.getActivity(ConnectAccountsFragment.this)
+                        .getApplication()).getTotalSyncCount();
+
+                TextView txtArtistSynced = (TextView) convertView.findViewById(R.id.txtArtistSynced);
+                txtArtistSynced.setText((syncArtistCount > 1) ? R.string.artists_synced : R.string.artist_synced);
+
 				convertView.findViewById(R.id.prgBrSyncArtist)
 					.setVisibility(serviceAccount.isInProgress ? View.VISIBLE : View.GONE);
-				
-				
+
 			} else {
 				//Log.d(TAG, "setting Title : " + serviceAccount.name);
 				final AccountViewHolder holder;
