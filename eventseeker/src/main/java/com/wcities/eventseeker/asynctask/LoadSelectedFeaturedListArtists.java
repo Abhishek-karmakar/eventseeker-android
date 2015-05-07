@@ -9,11 +9,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
+import android.widget.BaseAdapter;
 
 import com.wcities.eventseeker.adapter.ArtistListAdapterWithoutIndexer;
 import com.wcities.eventseeker.api.ArtistApi;
 import com.wcities.eventseeker.api.ArtistApi.Method;
 import com.wcities.eventseeker.core.Artist;
+import com.wcities.eventseeker.interfaces.ArtistAdapterListener;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
 
@@ -26,7 +28,7 @@ public class LoadSelectedFeaturedListArtists extends AsyncTask<Void, Void, List<
 	private double lon;
 	private String wcitiesId;
 	
-	private ArtistListAdapterWithoutIndexer artistListAdapter;
+	private ArtistAdapterListener artistListAdapter;
 	private AsyncTaskListener<Void> asyncTaskListener;
 	
 	/**
@@ -36,7 +38,7 @@ public class LoadSelectedFeaturedListArtists extends AsyncTask<Void, Void, List<
 	//private ARTISTS_LIMIT = 10;
 	
 	public LoadSelectedFeaturedListArtists(String oauthToken, List<Artist> artistList, 
-			 int id, double lat, double lon, ArtistListAdapterWithoutIndexer artistListAdapter,  
+			 int id, double lat, double lon, ArtistAdapterListener artistListAdapter,
 			AsyncTaskListener<Void> asyncTaskListener, String wcitiesId) {
 		this.oauthToken = oauthToken;
 		this.artistList = artistList;
@@ -88,7 +90,7 @@ public class LoadSelectedFeaturedListArtists extends AsyncTask<Void, Void, List<
 		}
 		artistList.remove(artistList.size() - 1);
 		artistListAdapter.setMoreDataAvailable(false);
-		artistListAdapter.notifyDataSetChanged();
+		((BaseAdapter) artistListAdapter).notifyDataSetChanged();
 		
 		if (asyncTaskListener != null) {
 			asyncTaskListener.onTaskCompleted();

@@ -17,7 +17,6 @@
     <ImageView android:id="@+id/imgProxy"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_loading_page_img_bg"
         android:scaleType="centerCrop"
         android:visibility="gone" />
 

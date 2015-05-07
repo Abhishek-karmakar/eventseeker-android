@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/lnr_tabs_ht_fragment_following_tab"
+    android:layout_alignParentTop="true"
     android:background="@android:color/white"
     android:elevation="@dimen/elevation_lnr_follow_more_artist_fragment_following_tab"
     android:orientation="horizontal" >

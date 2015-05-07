@@ -270,6 +270,7 @@ public class LauncherFragmentTab extends Fragment implements OnClickListener, Ca
 	}
 
 	protected void hideVideoViewAndShowBG() {
+		imgProxy.setBackgroundResource(R.drawable.ic_loading_page_img_bg);
 		imgProxy.setVisibility(View.VISIBLE);
 		srfvVideo.setVisibility(View.GONE);
 	}
@@ -280,5 +281,11 @@ public class LauncherFragmentTab extends Fragment implements OnClickListener, Ca
 			mdPlyr.release();
 			mdPlyr = null;
 		}
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		imgProxy.setBackgroundResource(0);
 	}
 }

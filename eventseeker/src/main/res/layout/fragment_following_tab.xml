@@ -54,6 +54,6 @@
         android:layout_marginTop="@dimen/rlt_lyt_root_margin_t_b_progress_bar_eventseeker_fixed_ht"
         android:layout_marginBottom="@dimen/rlt_lyt_root_margin_t_b_progress_bar_eventseeker_fixed_ht"
         layout="@layout/progress_bar_eventseeker_fixed_ht"
-        android:visibility="gone" />
+        android:visibility="invisible" />
 
 </RelativeLayout>

@@ -1,22 +1,22 @@
 package com.wcities.eventseeker;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import android.app.Activity;
-import android.content.res.Resources;
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView.RecyclerListener;
-import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -24,11 +24,12 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.ShareOnFBDialogFragment.OnFacebookShareClickedListener;
-import com.wcities.eventseeker.adapter.ArtistListAdapterWithoutIndexer;
+import com.wcities.eventseeker.adapter.ArtistListAdapterWithoutIndexerTab;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.asynctask.LoadArtistsByCategory;
 import com.wcities.eventseeker.asynctask.LoadSelectedFeaturedListArtists;
 import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.constants.AppConstants;
@@ -36,11 +37,10 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Artist.Attending;
+import com.wcities.eventseeker.core.Artist.Genre;
 import com.wcities.eventseeker.custom.fragment.PublishArtistFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
-import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
-import com.wcities.eventseeker.interfaces.DrawerListFragmentListener;
 import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadArtistsListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
@@ -48,52 +48,42 @@ import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
-import com.wcities.eventseeker.util.VersionUtil;
-import com.wcities.eventseeker.util.ViewUtil;
 
-public class SelectedFeaturedListArtistsFragment extends PublishArtistFragmentLoadableFromBackStack 
-		implements ArtistTrackingListener, LoadArtistsListener, LoadItemsInBackgroundListener, 
-		DialogBtnClickListener, OnFacebookShareClickedListener, CustomSharedElementTransitionSource, 
-		FullScrnProgressListener, AsyncTaskListener<Void> {
+public class SelectedFeaturedListArtistsFragmentTab extends PublishArtistFragmentLoadableFromBackStack implements ArtistTrackingListener, 
+		LoadArtistsListener, LoadItemsInBackgroundListener, DialogBtnClickListener, OnFacebookShareClickedListener,
+		FullScrnProgressListener, AsyncTaskListener<Void>, OnClickListener {
 
-	private static final String TAG = SelectedFeaturedListArtistsFragment.class.getName();
+	private static final String TAG = SelectedFeaturedListArtistsFragmentTab.class.getName();
 
 	private static final String DIALOG_FOLLOW_ALL = "dialogFollowAll";
 	private static final String DIALOG_ARTIST_SAVED = "dialogArtistSaved";
+
+	private static final int NUM_COLUMNS_PORTRAIT = 2;
+	private static final int NUM_COLUMNS_LANDSCAPE = 3;
 	
 	private String wcitiesId;
 
-	private LoadSelectedFeaturedListArtists loadCategorialArtists;
-	private ArtistListAdapterWithoutIndexer myArtistListAdapter;
+	private LoadArtistsByCategory loadCategorialArtists;
+	private ArtistListAdapterWithoutIndexerTab artistListAdapter;
 
 	private List<Artist> artistList;
 
 	private TextView txtNoItemsFound;
-	private Button btnFollowAll;	
-	private ListView listView;
+	private ImageView imgPrgOverlay;
+	//private Button btnFollowAll;	
+	private GridView grdvArtists;
 
-	private RelativeLayout rltFollowAll;
+	//private RelativeLayout rltFollowAll;
 	private RelativeLayout rltLytPrgsBar;
 
 	private int fbCallCountForSameArtist = 0;
 
 	private Artist artistToBeSaved;
-	
-	private List<View> hiddenViews;
-	private boolean isOnPushedToBackStackCalled;
 
 	private View rltLayoutRoot;
-	
+
 	private double[] latlon;
-	
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		if (!(activity instanceof DrawerListFragmentListener)) {
-            throw new ClassCastException(activity.toString() + " must implement DrawerListFragmentListener");
-        }
-	}
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -105,32 +95,20 @@ public class SelectedFeaturedListArtistsFragment extends PublishArtistFragmentLo
 		}
 		
 		latlon = DeviceUtil.getLatLon(eventseeker);
-		
-		hiddenViews = new ArrayList<View>();
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.fragment_following, null);
-		rltFollowAll = (RelativeLayout) v.findViewById(R.id.rltFollowMoreArtist);
-		/**
-		 * add extra top margin (equal to statusbar height) since we are removing vStatusBar from onStart() 
-		 * even though we want search screen to have this statusbar. We had to mark VStatusBar as GONE from 
-		 * onStart() so that on transition to details screen doesn't cause jumping effect on this screen, as we remove vStatusBar 
-		 * on detail screen when this screen is visible in the background
-		 */
-		final Resources res = FragmentUtil.getResources(this);
-		if (VersionUtil.isApiLevelAbove18()) {
-			RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) rltFollowAll.getLayoutParams();
-			lp.topMargin = res.getDimensionPixelSize(R.dimen.common_t_mar_pad_for_all_layout) 
-					+ ViewUtil.getStatusBarHeight(res);
-			rltFollowAll.setLayoutParams(lp);
-		}
+		View v = inflater.inflate(R.layout.fragment_following_tab, null);
+		//rltFollowAll = (RelativeLayout) v.findViewById(R.id.rltFollowMoreArtist);
+		
 		txtNoItemsFound = (TextView) v.findViewById(R.id.txtNoItemsFound);
 		
-		listView = (ListView) v.findViewById(android.R.id.list);
-
-		btnFollowAll = (Button) v.findViewById(R.id.btnFollowMoreArtists);
+		grdvArtists = (GridView) v.findViewById(R.id.grdvFollowing);
+		grdvArtists.setNumColumns(FragmentUtil.getResources(this).getConfiguration()
+			.orientation == Configuration.ORIENTATION_PORTRAIT ? NUM_COLUMNS_PORTRAIT : NUM_COLUMNS_LANDSCAPE);
+						
+		/*btnFollowAll = (Button) v.findViewById(R.id.btnFollowMoreArtists);
 		btnFollowAll.setText(R.string.btn_follow_all);
 		btnFollowAll.setOnClickListener(new View.OnClickListener() {
 			
@@ -139,31 +117,35 @@ public class SelectedFeaturedListArtistsFragment extends PublishArtistFragmentLo
 				if (artistList.isEmpty()) {
 					return;
 				}
+				Resources res = FragmentUtil.getResources(SelectedArtistCategoryFragmentTab.this);
 				GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
-					SelectedFeaturedListArtistsFragment.this,
+					SelectedArtistCategoryFragmentTab.this,
 					res.getString(R.string.dialog_title_follow_all),  
-					/**
+					*//**
 					 * 'artistList.size() - 1' is being passed as number of Artist as 1 value is 
 					 * null to show progress dialog.
-					 */
+					 *//*
 					String.format(res.getString(R.string.dialog_msg_follow_all), artistList.size() - 1),
 					res.getString(R.string.my_events_al_no),
 					res.getString(R.string.yes), false);
 				generalDialogFragment.show(
-					((ActionBarActivity) FragmentUtil.getActivity(SelectedFeaturedListArtistsFragment.this))
+					((ActionBarActivity) FragmentUtil.getActivity(SelectedArtistCategoryFragmentTab.this))
 					.getSupportFragmentManager(), DIALOG_FOLLOW_ALL);
 			}
-		});
+		});*/
 		
 		rltLayoutRoot = v.findViewById(R.id.rltLayoutRoot);
 		rltLytPrgsBar = (RelativeLayout) v.findViewById(R.id.rltLytPrgsBar);
-		rltLytPrgsBar.setBackgroundResource(R.drawable.bg_no_content_overlay);
+		imgPrgOverlay = (ImageView) rltLytPrgsBar.findViewById(R.id.imgPrgOverlay);
+		
+		v.findViewById(R.id.btnSyncAccounts).setOnClickListener(this);
+		v.findViewById(R.id.btnRecommended).setOnClickListener(this);
+		v.findViewById(R.id.btnSearch).setOnClickListener(this);
+		
+		CheckBox btnPopularArtists = (CheckBox) v.findViewById(R.id.btnPopularArtists);
+		btnPopularArtists.setOnClickListener(this);
+		btnPopularArtists.setChecked(true);
 		return v;
-	}
-
-	@Override
-	public String getScreenName() {
-		return ScreenNames.POPULAR_ARTISTS_CATEGORIES_SCREEN + getArguments().getString(BundleKeys.SCREEN_TITLE);
 	}
 
 	@Override
@@ -175,8 +157,7 @@ public class SelectedFeaturedListArtistsFragment extends PublishArtistFragmentLo
 			artistList = new ArrayList<Artist>();
 			artistList.add(null);
 			
-			myArtistListAdapter = new ArtistListAdapterWithoutIndexer(FragmentUtil.getActivity(this), artistList, 
-					null, this, this, this, this);
+			artistListAdapter = new ArtistListAdapterWithoutIndexerTab(this, artistList, null, this, this, this);
 
 			loadItemsInBackground();
 
@@ -184,10 +165,9 @@ public class SelectedFeaturedListArtistsFragment extends PublishArtistFragmentLo
 			if (artistList.isEmpty()) {
 				showNoArtistFound();				
 			}
-			myArtistListAdapter.updateContext(FragmentUtil.getActivity(this));
 		}
 		
-		listView.setRecyclerListener(new RecyclerListener() {
+		grdvArtists.setRecyclerListener(new RecyclerListener() {
 			
 			@Override
 			public void onMovedToScrapHeap(View view) {
@@ -195,19 +175,23 @@ public class SelectedFeaturedListArtistsFragment extends PublishArtistFragmentLo
 			}
 		});
 		
-		listView.setAdapter(myArtistListAdapter);
-		listView.setScrollingCacheEnabled(false);
-		listView.setFastScrollEnabled(true);
-		listView.setDivider(null);
+		grdvArtists.setAdapter(artistListAdapter);
+		grdvArtists.setScrollingCacheEnabled(false);
+		grdvArtists.setFastScrollEnabled(true);
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume(AppConstants.INVALID_INDEX, getArguments().getString(BundleKeys.SCREEN_TITLE));
 	}
 
 	@Override
 	public void loadItemsInBackground() {
-		LoadSelectedFeaturedListArtists loadFeaturedListArtists = new LoadSelectedFeaturedListArtists(Api.OAUTH_TOKEN,
+		LoadSelectedFeaturedListArtists loadSelectedFeaturedListArtists = new LoadSelectedFeaturedListArtists(Api.OAUTH_TOKEN,
 				artistList, getArguments().getInt(BundleKeys.FEATURED_LIST_ARTISTS_ID), latlon[0], latlon[1], 
-				myArtistListAdapter, this, wcitiesId);
-		myArtistListAdapter.setLoadArtists(loadFeaturedListArtists);
-		AsyncTaskUtil.executeAsyncTask(loadFeaturedListArtists, true);
+				artistListAdapter, this, wcitiesId);
+		artistListAdapter.setLoadArtists(loadSelectedFeaturedListArtists);
+		AsyncTaskUtil.executeAsyncTask(loadSelectedFeaturedListArtists, true);
 	}
 	
 	protected void freeUpBitmapMemory(View view) {
@@ -217,42 +201,11 @@ public class SelectedFeaturedListArtistsFragment extends PublishArtistFragmentLo
 	}
 	
 	@Override
-	public void onStart() {
-		if (!isOnTop()) {
-			callOnlySuperOnStart = true;
-			super.onStart();
-			return;
-		}
-		
-		super.onStart();
-		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
-		ma.setToolbarElevation(0);
-		/**
-		 * Even though we want status bar in this case, mark it gone to have smoother transition to detail fragment
-		 * & prevent jumping effect on search screen, caused due to removal of status bar on detail screen when this 
-		 * search screen is visible in background.
-		 */
-		ma.setVStatusBarVisibility(View.GONE, AppConstants.INVALID_ID);
-		ma.setVStatusBarLayeredVisibility(View.VISIBLE, R.color.colorPrimaryDark);
-	}
-	
-	@Override
-	public void onStop() {
-		super.onStop();
-		MainActivity ma = (MainActivity) FragmentUtil.getActivity(this);
-		ma.setToolbarElevation(ma.getResources().getDimensionPixelSize(R.dimen.action_bar_elevation));
-		ma.setVStatusBarVisibility(View.VISIBLE, R.color.colorPrimaryDark);
-		ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
-	}
-	
-	@Override
 	public void onDestroyView() {
-		super.onDestroyView();
-		for (int i = listView.getFirstVisiblePosition(), j = 0; 
-				i <= listView.getLastVisiblePosition(); 
-				i++, j++) {
-			freeUpBitmapMemory(listView.getChildAt(j));
+		for (int i = grdvArtists.getFirstVisiblePosition(), j = 0; i <= grdvArtists.getLastVisiblePosition(); i++, j++) {
+			freeUpBitmapMemory(grdvArtists.getChildAt(j));
 		}
+		super.onDestroyView();
 	}
 	
 	@Override
@@ -271,26 +224,25 @@ public class SelectedFeaturedListArtistsFragment extends PublishArtistFragmentLo
 		 * this screen.
 		 */
 		try {
-			listView.setVisibility(View.GONE);
-			if (rltFollowAll != null) {
+			grdvArtists.setVisibility(View.GONE);
+			/*if (rltFollowAll != null) {
 				rltFollowAll.setVisibility(View.GONE);
-			}
+			}*/
 			
 		} catch (IllegalStateException e) {
 			Log.e(TAG, "" + e.getMessage());
 			e.printStackTrace();
 		}
 		
-		rltLayoutRoot.setBackgroundResource(R.drawable.bg_no_content_overlay);
+		rltLayoutRoot.setBackgroundResource(R.drawable.ic_no_content_background_overlay);
 		txtNoItemsFound.setText(R.string.no_artist_found);
 		txtNoItemsFound.setVisibility(View.VISIBLE);		
 	}
 
-
 	@Override
 	public void doPositiveClick(String dialogTag) {
 		if (dialogTag.equals(DIALOG_FOLLOW_ALL)) {
-			EventSeekr eventSeekr = FragmentUtil.getApplication(SelectedFeaturedListArtistsFragment.this);
+			EventSeekr eventSeekr = FragmentUtil.getApplication(SelectedFeaturedListArtistsFragmentTab.this);
 			List<Long> ids = new ArrayList<Long>();
 			for (Artist artist : artistList) {
 				if (artist != null && artist.getAttending() == Attending.NotTracked) {
@@ -300,17 +252,17 @@ public class SelectedFeaturedListArtistsFragment extends PublishArtistFragmentLo
 			}
 			if (ids.size() > 1) {
 				new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.artist, ids).execute();
-				myArtistListAdapter.notifyDataSetChanged();
+				artistListAdapter.notifyDataSetChanged();
 			
 			} else if (ids.size() == 1) {
 				new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.artist, ids.get(0)).execute();				
-				myArtistListAdapter.notifyDataSetChanged();
+				artistListAdapter.notifyDataSetChanged();
 			}
 			
 		} else {
 			//This is for Remove Artist Dialog
-			myArtistListAdapter.unTrackArtistAt(Integer.parseInt(dialogTag));
-			myArtistListAdapter.notifyDataSetChanged();
+			artistListAdapter.unTrackArtistAt(Integer.parseInt(dialogTag));
+			artistListAdapter.notifyDataSetChanged();
 		}
 	}
 
@@ -318,7 +270,7 @@ public class SelectedFeaturedListArtistsFragment extends PublishArtistFragmentLo
 	public void doNegativeClick(String dialogTag) {
 		/*if (FieldValidationUtil.isNumber(dialogTag)) {
 			//This is for Remove Artist Dialog
-			myArtistListAdapter.notifyDataSetChanged();
+			artistListAdapter.notifyDataSetChanged();
 		}*/
 		/*if (dialogTag.contains(DIALOG_ARTIST_SAVED)) {
 			String strId = dialogTag.substring(dialogTag.indexOf(":") + 1);
@@ -342,7 +294,7 @@ public class SelectedFeaturedListArtistsFragment extends PublishArtistFragmentLo
 			artist.updateAttending(Attending.Tracked, eventseekr);
 			new UserTracker(Api.OAUTH_TOKEN, eventseekr, UserTrackingItemType.artist, artist.getId()).execute();
 			//The below notifyDataSetChange will change the status of following CheckBox for current Artist
-			myArtistListAdapter.notifyDataSetChanged();
+			artistListAdapter.notifyDataSetChanged();
 
 			ShareOnFBDialogFragment dialogFragment = ShareOnFBDialogFragment.newInstance(this);
 			dialogFragment.show(((ActionBarActivity) FragmentUtil.getActivity(this)).getSupportFragmentManager(), 
@@ -397,61 +349,51 @@ public class SelectedFeaturedListArtistsFragment extends PublishArtistFragmentLo
 	}
 
 	@Override
-	public void addViewsToBeHidden(View... views) {
-		for (int i = 0; i < views.length; i++) {
-			hiddenViews.add(views[i]);
-		}
-	}
-
-	@Override
-	public void hideSharedElements() {
-		for (Iterator<View> iterator = hiddenViews.iterator(); iterator.hasNext();) {
-			View view = iterator.next();
-			view.setVisibility(View.INVISIBLE);
-		}
-	}
-
-	@Override
-	public void onPushedToBackStack() {
-		/**
-		 * Not calling onStop() to prevent toolbar color changes occurring in between
-		 * the transition
-		 */
-		super.onStop();
-		
-		isOnPushedToBackStackCalled = true;
-	}
-
-	@Override
-	public void onPoppedFromBackStack() {
-		if (isOnPushedToBackStackCalled) {
-			isOnPushedToBackStackCalled = false;
-			
-			// to update statusbar visibility
-			onStart();
-			// to call onFragmentResumed(Fragment) of MainActivity (to update title, current fragment tag, etc.)
-			onResume();
-			
-			for (Iterator<View> iterator = hiddenViews.iterator(); iterator.hasNext();) {
-				View view = iterator.next();
-				view.setVisibility(View.VISIBLE);
-			}
-			hiddenViews.clear();
-		}
-	}
-
-	@Override
-	public boolean isOnTop() {
-		return !isOnPushedToBackStackCalled;
-	}
-
-	@Override
 	public void onTaskCompleted(Void... params) {
+		// free up memory
+		rltLytPrgsBar.setBackgroundResource(0);
 		rltLytPrgsBar.setVisibility(View.INVISIBLE);
 	}
 
 	@Override
 	public void displayFullScrnProgress() {
 		rltLytPrgsBar.setVisibility(View.VISIBLE);
+		imgPrgOverlay.setVisibility(View.VISIBLE);
 	}
+
+	@Override
+	public void onClick(View v) {
+		Intent intent = null;
+		switch (v.getId()) {
+		case R.id.btnSyncAccounts:
+			((CheckBox) v).setChecked(false);
+			intent = new Intent(FragmentUtil.getApplication(this), ConnectAccountsActivityTab.class);
+			break;
+
+		case R.id.btnPopularArtists:
+			((CheckBox) v).setChecked(true);
+			intent = new Intent(FragmentUtil.getApplication(this), PopularArtistsActivityTab.class);
+			break;
+
+		case R.id.btnRecommended:
+			((CheckBox) v).setChecked(false);
+			intent = new Intent(FragmentUtil.getApplication(this), RecommendedArtistsActivityTab.class);
+			break;
+
+		case R.id.btnSearch:
+			((CheckBox) v).setChecked(false);
+			((BaseActivityTab) FragmentUtil.getActivity(this)).expandSearchView();
+			break;
+		}
+		if (intent != null) {
+			startActivity(intent);
+			FragmentUtil.getActivity(this).finish();
+		}
+	}
+
+	@Override
+	public String getScreenName() {
+		return ScreenNames.POPULAR_ARTISTS_CATEGORIES_SCREEN + getArguments().getString(BundleKeys.SCREEN_TITLE);
+	}
+
 }
