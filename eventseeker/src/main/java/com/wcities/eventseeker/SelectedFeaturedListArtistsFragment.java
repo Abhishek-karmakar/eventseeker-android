@@ -29,14 +29,13 @@ import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
-import com.wcities.eventseeker.asynctask.LoadArtistsByCategory;
+import com.wcities.eventseeker.asynctask.LoadSelectedFeaturedListArtists;
 import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Artist.Attending;
-import com.wcities.eventseeker.core.Artist.Genre;
 import com.wcities.eventseeker.custom.fragment.PublishArtistFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
@@ -46,26 +45,25 @@ import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadArtistsListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
+import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
 
-public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadableFromBackStack 
+public class SelectedFeaturedListArtistsFragment extends PublishArtistFragmentLoadableFromBackStack 
 		implements ArtistTrackingListener, LoadArtistsListener, LoadItemsInBackgroundListener, 
 		DialogBtnClickListener, OnFacebookShareClickedListener, CustomSharedElementTransitionSource, 
 		FullScrnProgressListener, AsyncTaskListener<Void> {
 
-	private static final String TAG = SelectedArtistCategoryFragment.class.getName();
+	private static final String TAG = SelectedFeaturedListArtistsFragment.class.getName();
 
 	private static final String DIALOG_FOLLOW_ALL = "dialogFollowAll";
 	private static final String DIALOG_ARTIST_SAVED = "dialogArtistSaved";
 	
 	private String wcitiesId;
 
-	private Genre genre;
-
-	private LoadArtistsByCategory loadCategorialArtists;
+	private LoadSelectedFeaturedListArtists loadCategorialArtists;
 	private ArtistListAdapterWithoutIndexer myArtistListAdapter;
 
 	private List<Artist> artistList;
@@ -86,6 +84,8 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 
 	private View rltLayoutRoot;
 	
+	private double[] latlon;
+	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -93,17 +93,19 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
             throw new ClassCastException(activity.toString() + " must implement DrawerListFragmentListener");
         }
 	}
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
 
-		genre = (Genre) getArguments().getSerializable(BundleKeys.GENRE);
-		
+		EventSeekr eventseeker = FragmentUtil.getApplication(this);
 		if (wcitiesId == null) {
-			wcitiesId = ((EventSeekr) FragmentUtil.getActivity(this).getApplication()).getWcitiesId();
+			wcitiesId = eventseeker.getWcitiesId();
 		}
+		
+		latlon = DeviceUtil.getLatLon(eventseeker);
+		
 		hiddenViews = new ArrayList<View>();
 	}
 	
@@ -112,9 +114,9 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 		View v = inflater.inflate(R.layout.fragment_following, null);
 		rltFollowAll = (RelativeLayout) v.findViewById(R.id.rltFollowMoreArtist);
 		/**
-		 * add extra top margin (equal to statusbar height) since we are removing vStatusBar from onStart()
-		 * even though we want search screen to have this statusbar. We had to mark VStatusBar as GONE from
-		 * onStart() so that on transition to details screen doesn't cause jumping effect on this screen, as we remove vStatusBar
+		 * add extra top margin (equal to statusbar height) since we are removing vStatusBar from onStart() 
+		 * even though we want search screen to have this statusbar. We had to mark VStatusBar as GONE from 
+		 * onStart() so that on transition to details screen doesn't cause jumping effect on this screen, as we remove vStatusBar 
 		 * on detail screen when this screen is visible in the background
 		 */
 		final Resources res = FragmentUtil.getResources(this);
@@ -138,7 +140,7 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 					return;
 				}
 				GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(
-					SelectedArtistCategoryFragment.this,
+					SelectedFeaturedListArtistsFragment.this,
 					res.getString(R.string.dialog_title_follow_all),  
 					/**
 					 * 'artistList.size() - 1' is being passed as number of Artist as 1 value is 
@@ -148,7 +150,7 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 					res.getString(R.string.my_events_al_no),
 					res.getString(R.string.yes), false);
 				generalDialogFragment.show(
-					((ActionBarActivity) FragmentUtil.getActivity(SelectedArtistCategoryFragment.this))
+					((ActionBarActivity) FragmentUtil.getActivity(SelectedFeaturedListArtistsFragment.this))
 					.getSupportFragmentManager(), DIALOG_FOLLOW_ALL);
 			}
 		});
@@ -160,8 +162,7 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 	}
 	@Override
 	public String getScreenName() {
-		return ScreenNames.POPULAR_ARTISTS_CATEGORIES_SCREEN + FragmentUtil.getResources(this)
-				.getString(getArguments().getInt(BundleKeys.SCREEN_TITLE));
+		return ScreenNames.POPULAR_ARTISTS_CATEGORIES_SCREEN + getArguments().getString(BundleKeys.SCREEN_TITLE);
 	}
 
 	@Override
@@ -201,10 +202,11 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 
 	@Override
 	public void loadItemsInBackground() {
-		loadCategorialArtists = new LoadArtistsByCategory(Api.OAUTH_TOKEN, wcitiesId, artistList, 
-				myArtistListAdapter, this, genre);
-		myArtistListAdapter.setLoadArtists(loadCategorialArtists);
-		AsyncTaskUtil.executeAsyncTask(loadCategorialArtists, true);
+		LoadSelectedFeaturedListArtists loadFeaturedListArtists = new LoadSelectedFeaturedListArtists(Api.OAUTH_TOKEN,
+				artistList, getArguments().getInt(BundleKeys.FEATURED_LIST_ARTISTS_ID), latlon[0], latlon[1], 
+				myArtistListAdapter, this, wcitiesId);
+		myArtistListAdapter.setLoadArtists(loadFeaturedListArtists);
+		AsyncTaskUtil.executeAsyncTask(loadFeaturedListArtists, true);
 	}
 	
 	protected void freeUpBitmapMemory(View view) {
@@ -287,7 +289,7 @@ public class SelectedArtistCategoryFragment extends PublishArtistFragmentLoadabl
 	@Override
 	public void doPositiveClick(String dialogTag) {
 		if (dialogTag.equals(DIALOG_FOLLOW_ALL)) {
-			EventSeekr eventSeekr = FragmentUtil.getApplication(SelectedArtistCategoryFragment.this);
+			EventSeekr eventSeekr = FragmentUtil.getApplication(SelectedFeaturedListArtistsFragment.this);
 			List<Long> ids = new ArrayList<Long>();
 			for (Artist artist : artistList) {
 				if (artist != null && artist.getAttending() == Attending.NotTracked) {

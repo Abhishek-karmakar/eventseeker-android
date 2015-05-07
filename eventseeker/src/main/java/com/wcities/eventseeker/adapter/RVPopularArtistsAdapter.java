@@ -20,13 +20,15 @@ import com.wcities.eventseeker.core.FeaturedListArtistCategory;
 import com.wcities.eventseeker.core.PopularArtistCategory;
 import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
+import com.wcities.eventseeker.interfaces.OnPopularArtistsCategoryClickListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
 
 public class RVPopularArtistsAdapter extends RVAdapterBase<RVPopularArtistsAdapter.ViewHolder> {
-	
+
+	private static final String TAG = RVPopularArtistsAdapter.class.getSimpleName();
 	private Fragment fragment;
 	private RecyclerView rvPopularArtists;
 	private WeakReference<RecyclerView> weakRecyclerView;
@@ -40,18 +42,21 @@ public class RVPopularArtistsAdapter extends RVAdapterBase<RVPopularArtistsAdapt
 	
 	private int artistsAlreadyRequested;
 	private boolean isMoreDataAvailable = true;
+	private OnPopularArtistsCategoryClickListener onPopularArtistsCategoryClickListener;
 	
 	private enum ViewType {
 		ROW, PROGRESS
 	}
 	
 	public RVPopularArtistsAdapter(List<PopularArtistCategory> popularArtistCategories, Fragment fragment,
-			FullScrnProgressListener fullScrnProgressListener, LoadItemsInBackgroundListener loadItemsInBackgroundListener) {
+			FullScrnProgressListener fullScrnProgressListener, LoadItemsInBackgroundListener loadItemsInBackgroundListener,
+			OnPopularArtistsCategoryClickListener onPopularArtistsCategoryClickListener) {
 		this.popularArtistCategories = popularArtistCategories;
 		this.fragment = fragment;
 		this.fullScrnProgressListener = fullScrnProgressListener;
 		this.loadItemsInBackgroundListener = loadItemsInBackgroundListener;
-		
+		this.onPopularArtistsCategoryClickListener = onPopularArtistsCategoryClickListener;
+
 		bitmapCache = BitmapCache.getInstance();
 	}
 
@@ -67,8 +72,10 @@ public class RVPopularArtistsAdapter extends RVAdapterBase<RVPopularArtistsAdapt
 	
 	@Override
 	public void onBindViewHolder(ViewHolder viewHolder, int position) {
-		PopularArtistCategory popularArtistCategory = popularArtistCategories.get(position);
+		final PopularArtistCategory popularArtistCategory = popularArtistCategories.get(position);
 		if (popularArtistCategory != null) {
+			viewHolder.vSeparator.setVisibility((position == 0) ? View.GONE : View.VISIBLE);
+
 			if (popularArtistCategory instanceof FeaturedListArtistCategory) {
 				FeaturedListArtistCategory featuredListArtistCategory = (FeaturedListArtistCategory) popularArtistCategory;
 				
@@ -83,18 +90,21 @@ public class RVPopularArtistsAdapter extends RVAdapterBase<RVPopularArtistsAdapt
 					viewHolder.imgAritstCategory.setImageBitmap(null);
 
 					AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
-					asyncLoadImg.loadImg(viewHolder.imgAritstCategory, ImgResolution.LOW, weakRecyclerView, 
-							position, featuredListArtistCategory);
+					asyncLoadImg.loadImg(viewHolder.imgAritstCategory, ImgResolution.LOW, weakRecyclerView, position,
+							featuredListArtistCategory);
 				}
-				
+				viewHolder.btnAritstCategory.setText(featuredListArtistCategory.getName());
 			} else {
 				viewHolder.imgAritstCategory.setImageResource(popularArtistCategory.getDrwResIdCategory());
+				viewHolder.btnAritstCategory.setText(popularArtistCategory.getStrResIdCategory());
 			}
 			viewHolder.btnAritstCategory.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
-					
+					if (onPopularArtistsCategoryClickListener != null) {
+						onPopularArtistsCategoryClickListener.onPopularArtistsCategoryClick(popularArtistCategory);
+					}
 				}
 			});
 			
@@ -150,11 +160,13 @@ public class RVPopularArtistsAdapter extends RVAdapterBase<RVPopularArtistsAdapt
 	public static class ViewHolder extends RecyclerView.ViewHolder {
 		private Button btnAritstCategory;
 		private ImageView imgAritstCategory;
-		
+		private View vSeparator;
+
 		public ViewHolder(View itemView) {
 			super(itemView);
 			btnAritstCategory = (Button) itemView.findViewById(R.id.btnAritstCategory);
 			imgAritstCategory = (ImageView) itemView.findViewById(R.id.imgAritstCategory);
+			vSeparator = itemView.findViewById(R.id.vSeparator);
 		}
 	}
 }

@@ -1241,7 +1241,13 @@ public class MainActivity extends BaseActivity implements
 			selectedArtistCategoryFragment.setArguments(args);
 			selectNonDrawerItem(selectedArtistCategoryFragment, AppConstants.FRAGMENT_TAG_SELECTED_ARTIST_CATEGORY_FRAGMENT, 
 					getResources().getString(args.getInt(BundleKeys.SCREEN_TITLE)), true);
-			
+
+		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_SELECTED_FEATURED_LIST_ARTISTS_FRAGMENT)) {
+						SelectedFeaturedListArtistsFragment selectedFeaturedListArtistsFragment = new SelectedFeaturedListArtistsFragment();
+						selectedFeaturedListArtistsFragment.setArguments(args);
+						selectNonDrawerItem(selectedFeaturedListArtistsFragment, AppConstants.FRAGMENT_TAG_SELECTED_FEATURED_LIST_ARTISTS_FRAGMENT,
+										args.getString(BundleKeys.SCREEN_TITLE), true);
+
 		} else if (fragmentTag.equals(AppConstants.FRAGMENT_TAG_TWITTER_SYNCING)) {
 			//Log.d(TAG, "replace by FRAGMENT_TAG_TWITTER_SYNCING");
 			if (currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_TWITTER)) {

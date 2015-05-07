@@ -580,6 +580,40 @@ public class ArtistApiJSONParser {
 		return featuredListArtistCategory;
 	}
 
+	public List<Artist> getFeaturedListArtistsDetailsList(JSONObject jsonObject) {
+
+		List<Artist> artists = new ArrayList<Artist>();
+
+		try {
+			JSONObject jObjFeaturedList = jsonObject.getJSONObject(KEY_FEATURED_LIST);
+			if (jObjFeaturedList.has(KEY_ARTIST_DETAIL)) {
+
+				JSONObject jObjArtistDetail = jObjFeaturedList.getJSONObject(KEY_ARTIST_DETAIL);
+				if (jObjArtistDetail.has(KEY_ARTIST)) {
+
+					Object jsonArtist = jObjArtistDetail.get(KEY_ARTIST);
+					if (jsonArtist instanceof JSONArray) {
+
+						JSONArray jArrArtists = (JSONArray) jsonArtist;
+						for (int i = 0; i < jArrArtists.length(); i++) {
+							Artist artist = getArtist(jArrArtists.getJSONObject(i));
+							artists.add(artist);
+						}
+
+					} else {
+						Artist artist = getArtist(((JSONObject) jObjArtistDetail));
+						artists.add(artist);
+					}
+				}
+			}
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return artists;
+	}
+
 	public List<Artist> getArtistList(JSONObject jsonObject) {
 		//Log.d(TAG, "getArtistList()");
 		List<Artist> artists = new ArrayList<Artist>();

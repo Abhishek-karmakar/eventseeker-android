@@ -16,7 +16,8 @@ public class BundleKeys {
 	
 	public static final String SCREEN_TITLE = "ScreenTitle";
 	public static final String GENRE = "genre";
-	
+	public static final String FEATURED_LIST_ARTISTS_ID = "featuredListArtistsId";
+
 	public static final String VENUE = "venue";
 	public static final String VENUE_ID = "venueId";
 	public static final String VENUE_NAME = "venueName";

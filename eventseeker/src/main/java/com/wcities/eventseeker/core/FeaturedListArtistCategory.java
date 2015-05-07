@@ -7,14 +7,16 @@ import com.wcities.eventseeker.cache.BitmapCacheable;
  * but it isn't extending any property from its SuperType.
  */
 public class FeaturedListArtistCategory extends PopularArtistCategory implements BitmapCacheable {
-	
+
 	private int id;
 	private String name;
 	private String image;
-	
+
 	public FeaturedListArtistCategory(int id, String name) {
 		this.id = id;
 		this.name = name;
+
+		this.popularArtistsType = PopularArtistsType.FeaturedListArtists;
 	}
 	
 	public int getId() {

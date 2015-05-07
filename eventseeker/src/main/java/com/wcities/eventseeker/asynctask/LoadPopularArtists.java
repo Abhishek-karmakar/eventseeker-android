@@ -13,8 +13,6 @@ import android.os.AsyncTask;
 import com.wcities.eventseeker.adapter.RVPopularArtistsAdapter;
 import com.wcities.eventseeker.api.ArtistApi;
 import com.wcities.eventseeker.api.ArtistApi.Method;
-import com.wcities.eventseeker.app.EventSeekr;
-import com.wcities.eventseeker.core.FeaturedListArtistCategory;
 import com.wcities.eventseeker.core.PopularArtistCategory;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
@@ -29,18 +27,16 @@ public class LoadPopularArtists extends AsyncTask<Void, Void, List<PopularArtist
 	
 	private RVPopularArtistsAdapter popularArtistsAdapter;
 	private AsyncTaskListener<Void> asyncTaskListener;
-	private EventSeekr eventSeekr;
-	
+
 	public LoadPopularArtists(String oauthToken, List<PopularArtistCategory> popularArtistCategories, 
 			double lat, double lon, RVPopularArtistsAdapter popularArtistsAdapter,  
-			AsyncTaskListener<Void> asyncTaskListener, EventSeekr eventSeekr) {
+			AsyncTaskListener<Void> asyncTaskListener) {
 		this.oauthToken = oauthToken;
 		this.popularArtistCategories = popularArtistCategories;
 		this.lat = lat;
 		this.lon = lon;
 		this.popularArtistsAdapter = popularArtistsAdapter;
 		this.asyncTaskListener = asyncTaskListener;
-		this.eventSeekr = eventSeekr;
 	}
 
 	@Override

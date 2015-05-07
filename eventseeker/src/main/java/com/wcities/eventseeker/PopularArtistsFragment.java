@@ -15,12 +15,14 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.core.Artist.Genre;
+import com.wcities.eventseeker.core.FeaturedListArtistCategory;
 import com.wcities.eventseeker.core.PopularArtistCategory;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.interfaces.OnPopularArtistsCategoryClickListener;
+import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
@@ -55,6 +57,7 @@ public class PopularArtistsFragment extends FragmentLoadableFromBackStack implem
 		rvPopularArtists.setLayoutManager(layoutManager);
 
 		rltLytProgressBar = (RelativeLayout) view.findViewById(R.id.rltLytProgressBar);
+		rltLytProgressBar.setBackgroundResource(R.drawable.bg_no_content_overlay);
 
 		return view;
 	}
@@ -67,7 +70,7 @@ public class PopularArtistsFragment extends FragmentLoadableFromBackStack implem
 			popularArtistCategories = new ArrayList<PopularArtistCategory>();
 			popularArtistCategories.add(null);
 
-			popularArtistsAdapter = new RVPopularArtistsAdapter(popularArtistCategories, this, this, this);
+			popularArtistsAdapter = new RVPopularArtistsAdapter(popularArtistCategories, this, this, this, this);
 		}
 		rvPopularArtists.setAdapter(popularArtistsAdapter);
 	}
@@ -82,6 +85,12 @@ public class PopularArtistsFragment extends FragmentLoadableFromBackStack implem
 		Bundle args;
 		switch (popularArtistCategory.getPopularArtistsType()) {
 			case FeaturedListArtists:
+				FeaturedListArtistCategory featuredListArtistCategory = ((FeaturedListArtistCategory) popularArtistCategory);
+				args = new Bundle();
+				args.putSerializable(BundleKeys.FEATURED_LIST_ARTISTS_ID, featuredListArtistCategory.getId());
+				args.putString(BundleKeys.SCREEN_TITLE, featuredListArtistCategory.getName());
+				((MainActivity) FragmentUtil.getActivity(this))
+						.replaceByFragment(AppConstants.FRAGMENT_TAG_SELECTED_FEATURED_LIST_ARTISTS_FRAGMENT, args);
 				break;
 
 			case FeaturedArtists:
@@ -128,13 +137,13 @@ public class PopularArtistsFragment extends FragmentLoadableFromBackStack implem
 	@Override
 	public void loadItemsInBackground() {
 		LoadPopularArtists loadFeaturedListArtists = new LoadPopularArtists(Api.OAUTH_TOKEN,
-				popularArtistCategories, latlon[0], latlon[1], popularArtistsAdapter, this, FragmentUtil.getApplication(this));
+				popularArtistCategories, latlon[0], latlon[1], popularArtistsAdapter, this);
 		popularArtistsAdapter.setLoadArtists(loadFeaturedListArtists);
-		loadFeaturedListArtists.execute();
+		AsyncTaskUtil.executeAsyncTask(loadFeaturedListArtists, true);
 	}
 
 	@Override
 	public void onTaskCompleted(Void... params) {
-		rltLytProgressBar.setVisibility(View.GONE);
+		rltLytProgressBar.setVisibility(View.INVISIBLE);
 	}
 }

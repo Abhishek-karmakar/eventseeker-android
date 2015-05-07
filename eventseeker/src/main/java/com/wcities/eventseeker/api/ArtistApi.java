@@ -34,6 +34,7 @@ public class ArtistApi extends Api {
 	private int alreadyRequested;
 	private Method method;
 	private int artistId;
+	private int featuredListId;
 	private boolean venueDetail;
 	private boolean friends;
 	private String endDate;
@@ -164,6 +165,14 @@ public class ArtistApi extends Api {
 		this.userId = userId;
 	}
 
+	public int getFeaturedListId() {
+		return featuredListId;
+	}
+
+	public void setFeaturedListId(int featuredListId) {
+		this.featuredListId = featuredListId;
+	}
+
 	public String getEndDate() {
 		return endDate;
 	}
@@ -239,7 +248,9 @@ public class ArtistApi extends Api {
 				uri = uri + "&friends=enable";
 			}
 		}
-
+		if (featuredListId != NOT_INITIALIZED) {
+			uri = uri + "&id=" + featuredListId;
+		}
 		if (method != Method.featuredList) {
 			uri += "&moreInfo=strictlang";
 

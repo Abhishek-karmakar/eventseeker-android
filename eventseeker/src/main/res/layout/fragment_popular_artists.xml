@@ -14,9 +14,9 @@
 
     <include
         android:id="@+id/rltLytProgressBar"
-        layout="@layout/progress_bar_eventseeker_fixed_ht"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone" />
+        layout="@layout/progress_bar_eventseeker_fixed_ht"
+        android:visibility="invisible" />
 
 </RelativeLayout>
