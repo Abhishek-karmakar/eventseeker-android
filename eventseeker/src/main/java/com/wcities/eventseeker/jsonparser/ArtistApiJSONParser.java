@@ -10,9 +10,11 @@ import com.wcities.eventseeker.core.ArtistLink.LinkType;
 import com.wcities.eventseeker.core.BookingInfo;
 import com.wcities.eventseeker.core.Country;
 import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.core.FeaturedListArtistCategory;
 import com.wcities.eventseeker.core.Friend;
 import com.wcities.eventseeker.core.ImageAttribution;
 import com.wcities.eventseeker.core.ItemsList;
+import com.wcities.eventseeker.core.PopularArtistCategory;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.core.Video;
@@ -99,7 +101,10 @@ public class ArtistApiJSONParser {
 	
 	private static final String KEY_CATEGORY = "category";
 	private static final String KEY_CAT = "cat";
-	
+
+	private static final String KEY_FEATURED_LIST = "featuredList";
+	private static final String KEY_ARTIST_LIST = "artistList";
+
 	public void fillArtistDetails(Artist artist, JSONObject jsonObject) {
 		if (jsonObject.has(KEY_ARTIST_DETAIL)) {
 			try {
@@ -522,7 +527,59 @@ public class ArtistApiJSONParser {
 		}
 		return item;
 	}
-	
+
+	public List<PopularArtistCategory> getFeaturedListArtistCategories(JSONObject jsonObject) {
+		List<PopularArtistCategory> featuredListArtistCategories = new ArrayList<PopularArtistCategory>();
+
+		try {
+			JSONObject jObjFeaturedList = jsonObject.getJSONObject(KEY_FEATURED_LIST);
+			if (jObjFeaturedList.has(KEY_ARTIST_LIST)) {
+
+				Object jArtistList = jObjFeaturedList.get(KEY_ARTIST_LIST);
+				if (jArtistList instanceof JSONArray) {
+
+					JSONArray jArrArtistList = (JSONArray) jArtistList;
+					for (int i = 0; i < jArrArtistList.length(); i++) {
+						JSONObject jObj = jArrArtistList.getJSONObject(i);
+
+						FeaturedListArtistCategory featuredListArtistCategory = getFeaturedListArtistCategory(jObj);
+						if (featuredListArtistCategory != null) {
+							featuredListArtistCategories.add(featuredListArtistCategory);
+						}
+					}
+
+				} else { // if instance of JSONObject
+					JSONObject jObj = (JSONObject) jArtistList;
+
+					FeaturedListArtistCategory featuredListArtistCategory = getFeaturedListArtistCategory(jObj);
+					if (featuredListArtistCategory != null) {
+						featuredListArtistCategories.add(featuredListArtistCategory);
+					}
+				}
+			}
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return featuredListArtistCategories;
+	}
+
+	private FeaturedListArtistCategory getFeaturedListArtistCategory(JSONObject jsonObject) {
+		FeaturedListArtistCategory featuredListArtistCategory = null;
+		try {
+			featuredListArtistCategory = new FeaturedListArtistCategory(
+					jsonObject.getInt(KEY_ID),
+					jsonObject.getString(KEY_NAME));
+			featuredListArtistCategory.setImage(jsonObject.getString(KEY_IMAGE));
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return featuredListArtistCategory;
+	}
+
 	public List<Artist> getArtistList(JSONObject jsonObject) {
 		//Log.d(TAG, "getArtistList()");
 		List<Artist> artists = new ArrayList<Artist>();

@@ -1,7 +1,5 @@
-include ':endlessViewPager'
+include ':endlessViewPager', 'floatingActionButton', 'serverSDK'
 include ':facebook'
-include ':floatingActionButton'
-include ':serverSDK'
 include ':spotifyApi'
 include ':viewPagerIndicator'
 include ':gmusic'

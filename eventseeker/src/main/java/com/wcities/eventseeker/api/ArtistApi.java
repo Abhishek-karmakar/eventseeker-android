@@ -19,7 +19,11 @@ public class ArtistApi extends Api {
 	public static enum Method {
 		artistSearch,
 		artistDetail,
-		artistEvent
+		artistEvent,
+		/**
+		 * This is for Featured List of Artists Groups in Popular Artists Screen
+		 */
+		featuredList
 	};
 	
 	private double lat = AppConstants.NOT_ALLOWED_LAT;
@@ -235,11 +239,16 @@ public class ArtistApi extends Api {
 				uri = uri + "&friends=enable";
 			}
 		}
-		
-		uri += "&moreInfo=strictlang";
-		
-		setUri(uri);
-		addLangParam = true;
+
+		if (method != Method.featuredList) {
+			uri += "&moreInfo=strictlang";
+
+			setUri(uri);
+			addLangParam = true;
+
+		} else {
+			setUri(uri);
+		}
 		
 		return execute(RequestMethod.GET, null, null);
 	}
