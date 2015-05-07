@@ -7,7 +7,7 @@ import com.wcities.eventseeker.R;
 
 public class PopularArtistCategory {
 
-	private PopularArtistsType popularArtistsType;
+	protected PopularArtistsType popularArtistsType;
 	private int strResIdCategory;
 	private int drwResIdCategory;
 
@@ -35,19 +35,19 @@ public class PopularArtistCategory {
 		this.drwResIdCategory = drwResIdCategory;
 	}
 
-	public PopularArtistsType getPopularArtistsType() {
+	public final PopularArtistsType getPopularArtistsType() {
 		return popularArtistsType;
 	}
 	
-	public void setPopularArtistsType(PopularArtistsType popularArtistsType) {
+	public final void setPopularArtistsType(PopularArtistsType popularArtistsType) {
 		this.popularArtistsType = popularArtistsType;
 	}
 	
-	public int getStrResIdCategory() {
+	public final int getStrResIdCategory() {
 		return strResIdCategory;
 	}
 
-	public int getDrwResIdCategory() {
+	public final int getDrwResIdCategory() {
 		return drwResIdCategory;
 	}
 	
