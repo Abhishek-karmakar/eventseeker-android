@@ -1,17 +1,22 @@
 package com.wcities.eventseeker.gcm;
 
 import android.app.Activity;
+import android.app.Notification;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
+import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.util.NotificationUtil;
+
+import java.net.URLEncoder;
 
 public class GcmBroadcastReceiver extends BroadcastReceiver {
 
@@ -135,6 +140,12 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
 				Log.e(TAG, "handleMessage() type is unknown and therefor not handled: " + type);
 				break;
 			}
+
+            EventSeekr eventseekr = (EventSeekr) context.getApplicationContext();
+            String url = "http://dev.wcities.com/V3/extraInfo_ga.php?oauth_token=" + Api.OAUTH_TOKEN
+                    + "&type=Notification&requestType=" + URLEncoder.encode(title, AppConstants.CHARSET_NAME)
+                    + "&message=" + URLEncoder.encode(message, AppConstants.CHARSET_NAME);
+            GoogleAnalyticsTracker.getInstance().sendApiCall(eventseekr, url, null);
 			
 		} catch (final Exception e) {
 			Log.e(TAG, "handleMessage() ERROR: ", e);

@@ -961,20 +961,20 @@ public class RVVenueDetailsAdapterTab extends RVAdapterBase<RVVenueDetailsAdapte
     private void updateFabLinks(ViewHolder holder) {
         final Resources res = FragmentUtil.getResources(venueDetailsFragmentTab);
         if (venue.getUrl() == null) {
-            holder.fabWeb.setImageDrawable(res.getDrawable(R.drawable.ic_ticket_unavailable_floating));
+            holder.fabWeb.setImageDrawable(res.getDrawable(R.drawable.ic_web_link_unavailable));
             holder.fabWeb.setEnabled(false);
 
         } else {
-            holder.fabWeb.setImageDrawable(res.getDrawable(R.drawable.ic_ticket_available_floating));
+            holder.fabWeb.setImageDrawable(res.getDrawable(R.drawable.ic_web_link_available));
             holder.fabWeb.setEnabled(true);
         }
 
         if (venue.getFbLink() == null) {
-            holder.fabFb.setImageDrawable(res.getDrawable(R.drawable.ic_ticket_unavailable_floating));
+            holder.fabFb.setImageDrawable(res.getDrawable(R.drawable.ic_facebook_link_unavailable));
             holder.fabFb.setEnabled(false);
 
         } else {
-            holder.fabFb.setImageDrawable(res.getDrawable(R.drawable.ic_ticket_available_floating));
+            holder.fabFb.setImageDrawable(res.getDrawable(R.drawable.ic_facebook_link_available));
             holder.fabFb.setEnabled(true);
         }
     }
