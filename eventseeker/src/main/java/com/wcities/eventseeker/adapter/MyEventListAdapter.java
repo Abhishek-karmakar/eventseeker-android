@@ -269,7 +269,8 @@ public class MyEventListAdapter extends BaseAdapter implements DateWiseEventPare
 				public void onClick(View arg0) {
 					if (doesBookingUrlExist) {
 						Bundle args = new Bundle();
-						args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
+						args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl()
+                            + "&lang=" + ((EventSeekr) mContext.getApplicationContext()).getLocale().getLocaleCode());
 						((ReplaceFragmentListener) mContext).replaceByFragment(AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
 						/**
 						 * added on 15-12-2014

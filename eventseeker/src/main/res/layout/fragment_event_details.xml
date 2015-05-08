@@ -3,7 +3,7 @@
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white" >
+    android:background="@android:color/white">
     
 	<com.wcities.eventseeker.custom.view.ObservableScrollView 
 	    android:id="@+id/obsrScrlV"
@@ -69,20 +69,59 @@
 		            android:drawablePadding="@dimen/txt_evt_details_drawable_pad_event_details"
 		            android:textSize="@dimen/txt_evt_details_txt_size_event_details"
 		            android:layout_below="@id/txtEvtLoc" />
-		        
-		        <TextView android:id="@+id/txtDesc"
-			     	android:layout_width="match_parent"
-			     	android:layout_height="wrap_content"
-			     	android:layout_marginLeft="@dimen/txt_desc_margin_l_event_details"
-			     	android:layout_marginRight="@dimen/txt_evt_details_margin_r_event_details"
-			     	android:layout_marginTop="@dimen/txt_desc_margin_t_event_details"
-			     	android:layout_below="@id/txtEvtTime" />
+
+                <RelativeLayout android:id="@+id/rltLytCollapsible"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/rlt_lyt_collapsible_margin_l_event_details"
+                    android:layout_marginRight="@dimen/txt_evt_details_margin_r_event_details"
+                    android:layout_marginTop="@dimen/rlt_lyt_collapsible_margin_t_event_details"
+                    android:layout_below="@id/txtEvtTime">
+
+                    <TextView android:id="@+id/txtDesc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/txt_desc_margin_b_event_details"/>
+
+                    <View android:id="@+id/vFabSeparator"
+                        android:layout_width="@dimen/v_fab_separator_w_event_details"
+                        android:layout_height="@dimen/v_fab_separator_h_rv_item_address_map_venue_details"
+                        android:layout_below="@id/txtDesc"
+                        android:layout_centerHorizontal="true" />
+
+                    <com.melnykov.fab.FloatingActionButton android:id="@+id/fabWeb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txtDesc"
+                        android:layout_toLeftOf="@id/vFabSeparator"
+                        android:src="@drawable/ic_ticket_available_floating"
+                        fab:fab_type="normal"
+                        fab:fab_colorNormal="@color/colorPrimary"
+                        fab:fab_colorPressed="@color/colorPrimaryDark"
+                        fab:fab_colorRipple="@android:color/white"
+                        fab:fab_shadow="false"
+                        android:elevation="0dp"/>
+
+                    <com.melnykov.fab.FloatingActionButton android:id="@+id/fabFb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txtDesc"
+                        android:layout_toRightOf="@id/vFabSeparator"
+                        android:src="@drawable/ic_ticket_available_floating"
+                        fab:fab_type="normal"
+                        fab:fab_colorNormal="@color/colorPrimary"
+                        fab:fab_colorPressed="@color/colorPrimaryDark"
+                        fab:fab_colorRipple="@android:color/white"
+                        fab:fab_shadow="false"
+                        android:elevation="0dp"/>
+
+                </RelativeLayout>
 		        
 		        <RelativeLayout
 		            android:id="@+id/lnrLytExpandDesc"
 		            android:layout_width="match_parent"
 		            android:layout_height="wrap_content"
-		            android:layout_below="@id/txtDesc"
+		            android:layout_below="@id/rltLytCollapsible"
 		            android:layout_marginTop="@dimen/lnr_lyt_expand_desc_margin_t_event_details" >
 
 		            <View

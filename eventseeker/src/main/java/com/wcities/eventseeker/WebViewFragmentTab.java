@@ -11,9 +11,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
 
-import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.util.FragmentUtil;
 
 public class WebViewFragmentTab extends Fragment {
 
@@ -29,7 +27,6 @@ public class WebViewFragmentTab extends Fragment {
 		setRetainInstance(true);
 		
 		url = getArguments().getString(BundleKeys.URL);
-        url += "&lang=" + ((EventSeekr) FragmentUtil.getApplication(this)).getLocale().getLocaleCode();
 	}
 	
 	@Override

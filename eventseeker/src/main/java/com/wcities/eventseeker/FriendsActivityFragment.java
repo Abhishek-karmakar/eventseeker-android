@@ -1,15 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.R.color;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -86,6 +76,16 @@ import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.viewdata.SharedElement;
 import com.wcities.eventseeker.viewdata.SharedElementPosition;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 public class FriendsActivityFragment extends PublishEventListFragmentLoadableFromBackStack implements 
 		StatusCallback, OnClickListener, PublishListener, CustomSharedElementTransitionSource {
@@ -602,7 +602,8 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 					public void onClick(View arg0) {
 						if (item.getBookingUrl() != null) {
 							Bundle args = new Bundle();
-							args.putString(BundleKeys.URL, item.getBookingUrl());
+							args.putString(BundleKeys.URL, item.getBookingUrl() + "&lang="
+                                    + eventSeekr.getLocale().getLocaleCode());
 							onBuyTicketClicked(args);
 						}
 					}

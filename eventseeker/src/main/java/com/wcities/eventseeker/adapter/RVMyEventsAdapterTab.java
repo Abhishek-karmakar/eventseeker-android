@@ -538,7 +538,8 @@ public class RVMyEventsAdapterTab extends RVAdapterBase<ViewHolder> implements D
 				BaseActivityTab baseActivityTab = (BaseActivityTab) FragmentUtil.getActivity(publishEventFragment);
 						
 				Intent intent = new Intent(eventSeekr, WebViewActivityTab.class);
-				intent.putExtra(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
+				intent.putExtra(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl()
+                    + "&lang=" + FragmentUtil.getApplication(publishEventFragment).getLocale().getLocaleCode());
 				baseActivityTab.startActivity(intent);
 				
 				GoogleAnalyticsTracker.getInstance().sendEvent(eventSeekr, 

@@ -95,9 +95,9 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	private ObservableScrollView obsrScrlV;
 	private ImageView imgEvent, imgDown;
 	private TextView txtEvtTitle, txtEvtDesc, txtEvtLoc, txtVenue, txtEvtTime;
-	private RelativeLayout rltLytContent, rltLytFeaturing, rltLytPrgsBar, rltLytVenue, rltLytFriends;
+	private RelativeLayout rltLytContent, rltLytCollapsible, rltLytFeaturing, rltLytPrgsBar, rltLytVenue, rltLytFriends;
 	private RecyclerView recyclerVFriends;
-	private FloatingActionButton fabTickets, fabSave;
+	private FloatingActionButton fabTickets, fabSave, fabWeb, fabFb;
 	
 	private int limitScrollAt, actionBarElevation, fabScrollThreshold, prevScrollY = UNSCROLLED;
 	private int txtEvtTitleDiffX, txtEvtTitleSourceX;
@@ -105,7 +105,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	private String title = "";
 	private float minTitleScale;
 	
-	private boolean isEvtDescExpanded;
+	private boolean isRltLytCollapsibleExpanded;
 	
 	private LoadEventDetails loadEventDetails;
 	private boolean allDetailsLoaded;
@@ -197,10 +197,20 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		txtVenue = (TextView) rootView.findViewById(R.id.txtVenue);
 		updateEventSchedule();
 
-		txtEvtDesc = (TextView) rootView.findViewById(R.id.txtDesc);
+        txtEvtDesc = (TextView) rootView.findViewById(R.id.txtDesc);
+        updateDesc();
+
+        fabWeb = (FloatingActionButton) rootView.findViewById(R.id.fabWeb);
+        fabFb = (FloatingActionButton) rootView.findViewById(R.id.fabFb);
+        fabWeb.setOnClickListener(this);
+        fabFb.setOnClickListener(this);
+        updateFabLinks();
+
+        rltLytCollapsible = (RelativeLayout) rootView.findViewById(R.id.rltLytCollapsible);
 		imgDown = (ImageView) rootView.findViewById(R.id.imgDown);
-		updateDescVisibility();
-		
+        imgDown.setOnClickListener(this);
+		updateRltLytCollapsibleVisibility();
+
 		updateEventImg();
 		
 		obsrScrlV = (ObservableScrollView) rootView.findViewById(R.id.obsrScrlV);
@@ -540,15 +550,20 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		});
 		rltLytContent.startAnimation(slideOutToBottom);
     }
+
+    private void updateDesc() {
+        if (event.getDescription() != null) {
+            txtEvtDesc.setText(Html.fromHtml(event.getDescription()));
+        }
+    }
 	
-	private void updateDescVisibility() {
-		if (event.getDescription() != null) {
-			makeDescVisible();
-			
-		} else {
-			txtEvtDesc.setVisibility(View.GONE);
-			imgDown.setVisibility(View.GONE);
-		}
+	private void updateRltLytCollapsibleVisibility() {
+        if (isRltLytCollapsibleExpanded) {
+            expandRltLytCollapsible();
+
+        } else {
+            collapseRltLytCollapsible();
+        }
 	}
 	
 	private void updateEventSchedule() {
@@ -569,32 +584,18 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		}
 	}
 	
-	private void makeDescVisible() {
-		txtEvtDesc.setVisibility(View.VISIBLE);
-		txtEvtDesc.setText(Html.fromHtml(event.getDescription()));
-		imgDown.setVisibility(View.VISIBLE);
-		imgDown.setOnClickListener(this);
-		
-		if (isEvtDescExpanded) {
-			expandEvtDesc();
-			
-		} else {
-			collapseEvtDesc();
-		}
-	}
-	
-	private void expandEvtDesc() {
-		txtEvtDesc.setVisibility(View.VISIBLE);
+	private void expandRltLytCollapsible() {
+		rltLytCollapsible.setVisibility(View.VISIBLE);
 		imgDown.setImageDrawable(FragmentUtil.getResources(this).getDrawable(R.drawable.ic_description_collapse));
 
-		isEvtDescExpanded = true;
+		isRltLytCollapsibleExpanded = true;
 	}
 	
-	private void collapseEvtDesc() {
-		txtEvtDesc.setVisibility(View.GONE);
+	private void collapseRltLytCollapsible() {
+		rltLytCollapsible.setVisibility(View.GONE);
 		imgDown.setImageDrawable(FragmentUtil.getResources(this).getDrawable(R.drawable.ic_description_expand));
 		
-		isEvtDescExpanded = false;
+		isRltLytCollapsibleExpanded = false;
 	}
 	
 	private void updateEventImg() {
@@ -673,6 +674,27 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			e.printStackTrace();
 		}
     }
+
+    private void updateFabLinks() {
+        final Resources res = FragmentUtil.getResources(this);
+        if (event.getWebsite() == null) {
+            fabWeb.setImageDrawable(res.getDrawable(R.drawable.ic_ticket_unavailable_floating));
+            fabWeb.setEnabled(false);
+
+        } else {
+            fabWeb.setImageDrawable(res.getDrawable(R.drawable.ic_ticket_available_floating));
+            fabWeb.setEnabled(true);
+        }
+
+        if (event.getFbLink() == null) {
+            fabFb.setImageDrawable(res.getDrawable(R.drawable.ic_ticket_unavailable_floating));
+            fabFb.setEnabled(false);
+
+        } else {
+            fabFb.setImageDrawable(res.getDrawable(R.drawable.ic_ticket_available_floating));
+            fabFb.setEnabled(true);
+        }
+    }
 	
 	private void updateFabs() {
 		fabTickets.setVisibility(View.VISIBLE);
@@ -701,7 +723,9 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	private void updateDetailsVisibility() {
 		if (allDetailsLoaded) {
 			rltLytPrgsBar.setVisibility(View.GONE);
-			updateDescVisibility();
+            updateDesc();
+            updateFabLinks();
+			updateRltLytCollapsibleVisibility();
 			updateEventImg();
 			updateFeaturingVisibility();
 			updateEventSchedule();
@@ -880,17 +904,18 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			break;
 			
 		case R.id.imgDown:
-			if (isEvtDescExpanded) {
-				collapseEvtDesc();
+			if (isRltLytCollapsibleExpanded) {
+				collapseRltLytCollapsible();
 				
 			} else {
-				expandEvtDesc();
+				expandRltLytCollapsible();
 			}
 			break;
 			
 		case R.id.fabTickets:
 			Bundle args = new Bundle();
-			args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
+			args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl()
+                + "&lang=" + ((EventSeekr) FragmentUtil.getApplication(this)).getLocale().getLocaleCode());
 			((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
 					AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
 			/**
@@ -928,6 +953,20 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
             args.putSerializable(BundleKeys.VENUE, event.getSchedule().getVenue());
             ((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
                     AppConstants.FRAGMENT_TAG_NAVIGATION, args);
+            break;
+
+        case R.id.fabWeb:
+            args = new Bundle();
+            args.putString(BundleKeys.URL, event.getWebsite());
+            ((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
+                    AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
+            break;
+
+        case R.id.fabFb:
+            args = new Bundle();
+            args.putString(BundleKeys.URL, event.getFbLink());
+            ((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
+                    AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
             break;
 			
 		default:

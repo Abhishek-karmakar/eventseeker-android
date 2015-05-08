@@ -1,10 +1,10 @@
 package com.wcities.eventseeker.core;
 
+import com.wcities.eventseeker.cache.BitmapCacheable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.wcities.eventseeker.cache.BitmapCacheable;
 
 public class Event implements Serializable, BitmapCacheable {
 	
@@ -51,6 +51,8 @@ public class Event implements Serializable, BitmapCacheable {
 	private List<Friend> friends;
 	private String eventUrl;
 	private boolean hasArtists = true, isDeletedOrExpired = false;
+    private String website;
+    private String fbLink;
 	
 	public Event(long id, String name) {
 		this.id = id;
@@ -184,7 +186,23 @@ public class Event implements Serializable, BitmapCacheable {
 		this.isDeletedOrExpired = isDeletedOrExpired;
 	}
 
-	private String getImgName() {
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public String getFbLink() {
+        return fbLink;
+    }
+
+    public void setFbLink(String fbLink) {
+        this.fbLink = fbLink;
+    }
+
+    private String getImgName() {
 		//Log.d(TAG, "getImgName()");
 		if (imgName != null) {
 			return imgName;

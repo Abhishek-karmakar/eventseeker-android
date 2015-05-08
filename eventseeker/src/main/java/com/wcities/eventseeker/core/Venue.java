@@ -25,6 +25,7 @@ public class Venue implements Serializable, BitmapCacheable {
 	private String longDesc;
 	private String phone;
 	private String url;
+    private String fbLink;
 	
 	public Venue(int id) {
 		this.id = id;
@@ -101,8 +102,16 @@ public class Venue implements Serializable, BitmapCacheable {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	
-	public boolean doesValidImgUrlExist() {
+
+    public String getFbLink() {
+        return fbLink;
+    }
+
+    public void setFbLink(String fbLink) {
+        this.fbLink = fbLink;
+    }
+
+    public boolean doesValidImgUrlExist() {
 		if (getLowResImgUrl() != null || getMobiResImgUrl() != null || getHighResImgUrl() != null) {
 			return true;
 			

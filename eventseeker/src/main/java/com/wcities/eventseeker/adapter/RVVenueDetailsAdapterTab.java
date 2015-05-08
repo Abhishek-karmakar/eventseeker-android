@@ -127,10 +127,10 @@ public class RVVenueDetailsAdapterTab extends RVAdapterBase<RVVenueDetailsAdapte
 		private RelativeLayout rltLytPrgsBar, rltRootDesc, rltLytDetails;
 		private TextView txtDesc;
 		private ImageView imgDown;
-		private View vHorLine;
+		private View vHorLine, vFabSeparator;
 		
 		private TextView txtVenue;
-		private ImageView fabPhone, fabNavigate;
+		private ImageView fabPhone, fabNavigate, fabWeb, fabFb;
 		
 		private ImageView imgEvt, imgTicket, imgSave, imgShare, imgHandle;
 		private TextView txtEvtTitle, txtEvtTime, txtEvtLoc;
@@ -142,6 +142,9 @@ public class RVVenueDetailsAdapterTab extends RVAdapterBase<RVVenueDetailsAdapte
 			rltRootDesc = (RelativeLayout) itemView.findViewById(R.id.rltRootDesc);
 			rltLytPrgsBar = (RelativeLayout) itemView.findViewById(R.id.rltLytPrgsBar);
 			txtDesc = (TextView) itemView.findViewById(R.id.txtDesc);
+            fabWeb = (ImageView) itemView.findViewById(R.id.fabWeb);
+            fabFb = (ImageView) itemView.findViewById(R.id.fabFb);
+            vFabSeparator = itemView.findViewById(R.id.vFabSeparator);
 			imgDown = (ImageView) itemView.findViewById(R.id.imgDown);
 			vHorLine = itemView.findViewById(R.id.vHorLine);
 			
@@ -268,6 +271,24 @@ public class RVVenueDetailsAdapterTab extends RVAdapterBase<RVVenueDetailsAdapte
 			// nothing to do
 			
 		}  else if (position == ViewType.DESC.ordinal()) {
+            EventSeekr eventSeekr = FragmentUtil.getApplication(venueDetailsFragmentTab);
+            final BaseActivityTab baseActivityTab = (BaseActivityTab) FragmentUtil.getActivity(venueDetailsFragmentTab);
+            final Intent intent = new Intent(eventSeekr, WebViewActivityTab.class);
+
+            holder.fabWeb.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    intent.putExtra(BundleKeys.URL, venue.getUrl());
+                    baseActivityTab.startActivity(intent);
+                }
+            });
+            holder.fabFb.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    intent.putExtra(BundleKeys.URL, venue.getFbLink());
+                    baseActivityTab.startActivity(intent);
+                }
+            });
 			updateDescVisibility(holder);
 			
 		} else if (position == ViewType.ADDRESS_MAP.ordinal()) {
@@ -782,7 +803,8 @@ public class RVVenueDetailsAdapterTab extends RVAdapterBase<RVVenueDetailsAdapte
 				BaseActivityTab baseActivityTab = (BaseActivityTab) FragmentUtil.getActivity(venueDetailsFragmentTab);
 						
 				Intent intent = new Intent(eventSeekr, WebViewActivityTab.class);
-				intent.putExtra(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
+				intent.putExtra(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl()
+                    + "&lang=" + FragmentUtil.getApplication(venueDetailsFragmentTab).getLocale().getLocaleCode());
 				baseActivityTab.startActivity(intent);
 				
 				GoogleAnalyticsTracker.getInstance().sendEvent(eventSeekr, 
@@ -871,22 +893,61 @@ public class RVVenueDetailsAdapterTab extends RVAdapterBase<RVVenueDetailsAdapte
 		}
 	}
 	
-	private void updateDescVisibility(ViewHolder holder) {
+	private void updateDescVisibility(final ViewHolder holder) {
 		if (venueDetailsFragmentTab.isAllDetailsLoaded()) {
+            updateFabLinks(holder);
+
 			venueDetailsFragmentTab.setVNoContentBgVisibility(View.INVISIBLE);
+
+            holder.rltRootDesc.setBackgroundColor(Color.WHITE);
+            holder.rltLytPrgsBar.setVisibility(View.GONE);
+            holder.imgDown.setVisibility(View.VISIBLE);
+            holder.vHorLine.setVisibility(View.VISIBLE);
+            holder.fabWeb.setVisibility(View.VISIBLE);
+            holder.fabFb.setVisibility(View.VISIBLE);
+            holder.vFabSeparator.setVisibility(View.VISIBLE);
+
 			if (venue.getLongDesc() != null) {
-				holder.rltRootDesc.setBackgroundColor(Color.WHITE);
-				holder.rltLytPrgsBar.setVisibility(View.GONE);
 				holder.txtDesc.setVisibility(View.VISIBLE);
-				holder.imgDown.setVisibility(View.VISIBLE);
-				holder.vHorLine.setVisibility(View.VISIBLE);
-				
-				makeDescVisible(holder);
-				
-			} else {
-				setViewGone(holder);
+                holder.txtDesc.setText(Html.fromHtml(venue.getLongDesc()));
 			}
-			
+
+            holder.imgDown.setOnClickListener(new OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    //Log.d(TAG, "totalScrolled  = " + holder.itemView.getTop());
+                    if (isVenueDescExpanded) {
+                        collapseVenueDesc(holder);
+
+                        /**
+                         * update scrolled distance after collapse, because sometimes it can happen that view becamse scrollable only
+                         * due to expanded description after which if user collapses it, then based on recyclerview
+                         * height it automatically resettles itself such that recyclerview again becomes unscrollable.
+                         * Accordingly we need to reset scrolled amount, venue img & title
+                         */
+                        venueDetailsFragmentTab.getHandler().post(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                venueDetailsFragmentTab.onScrolled(0, true);
+                            }
+                        });
+
+                    } else {
+                        expandVenueDesc(holder);
+                    }
+                    //Log.d(TAG, "totalScrolled after  = " + holder.itemView.getTop());
+                }
+            });
+
+            if (isVenueDescExpanded) {
+                expandVenueDesc(holder);
+
+            } else {
+                collapseVenueDesc(holder);
+            }
+
 		} else {
 			venueDetailsFragmentTab.setVNoContentBgVisibility(View.VISIBLE);
 			holder.rltRootDesc.setBackgroundColor(Color.TRANSPARENT);
@@ -896,52 +957,38 @@ public class RVVenueDetailsAdapterTab extends RVAdapterBase<RVVenueDetailsAdapte
 			holder.vHorLine.setVisibility(View.GONE);
 		}
 	}
-	
-	private void makeDescVisible(final ViewHolder holder) {
-		holder.txtDesc.setText(Html.fromHtml(venue.getLongDesc()));
-		holder.imgDown.setVisibility(View.VISIBLE);
-		holder.imgDown.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				//Log.d(TAG, "totalScrolled  = " + holder.itemView.getTop());
-				if (isVenueDescExpanded) {
-					collapseVenueDesc(holder);
-					
-					/**
-					 * update scrolled distance after collapse, because sometimes it can happen that view becamse scrollable only
-					 * due to expanded description after which if user collapses it, then based on recyclerview
-					 * height it automatically resettles itself such that recyclerview again becomes unscrollable.
-					 * Accordingly we need to reset scrolled amount, venue img & title
-					 */
-					venueDetailsFragmentTab.getHandler().post(new Runnable() {
-						
-						@Override
-						public void run() {
-							venueDetailsFragmentTab.onScrolled(0, true);
-						}
-					});
-					
-				} else {
-					expandVenueDesc(holder);
-				}
-				//Log.d(TAG, "totalScrolled after  = " + holder.itemView.getTop());
-			}
-		});
-		
-		if (isVenueDescExpanded) {
-			expandVenueDesc(holder);
-			
-		} else {
-			collapseVenueDesc(holder);
-		}
-	}
+
+    private void updateFabLinks(ViewHolder holder) {
+        final Resources res = FragmentUtil.getResources(venueDetailsFragmentTab);
+        if (venue.getUrl() == null) {
+            holder.fabWeb.setImageDrawable(res.getDrawable(R.drawable.ic_ticket_unavailable_floating));
+            holder.fabWeb.setEnabled(false);
+
+        } else {
+            holder.fabWeb.setImageDrawable(res.getDrawable(R.drawable.ic_ticket_available_floating));
+            holder.fabWeb.setEnabled(true);
+        }
+
+        if (venue.getFbLink() == null) {
+            holder.fabFb.setImageDrawable(res.getDrawable(R.drawable.ic_ticket_unavailable_floating));
+            holder.fabFb.setEnabled(false);
+
+        } else {
+            holder.fabFb.setImageDrawable(res.getDrawable(R.drawable.ic_ticket_available_floating));
+            holder.fabFb.setEnabled(true);
+        }
+    }
 	
 	private void collapseVenueDesc(ViewHolder holder) {
 		holder.txtDesc.setMaxLines(MAX_LINES_VENUE_DESC);
 		holder.txtDesc.setEllipsize(TruncateAt.END);
 		holder.imgDown.setImageDrawable(FragmentUtil.getResources(venueDetailsFragmentTab).getDrawable(
 				R.drawable.ic_description_expand));
+
+        holder.fabWeb.setVisibility(View.GONE);
+        holder.fabFb.setVisibility(View.GONE);
+        holder.vFabSeparator.setVisibility(View.GONE);
+
 		isVenueDescExpanded = false;
 	}
 	
@@ -950,6 +997,11 @@ public class RVVenueDetailsAdapterTab extends RVAdapterBase<RVVenueDetailsAdapte
 		holder.txtDesc.setEllipsize(null);
 		holder.imgDown.setImageDrawable(FragmentUtil.getResources(venueDetailsFragmentTab).getDrawable(
 				R.drawable.ic_description_collapse));
+
+        holder.fabWeb.setVisibility(View.VISIBLE);
+        holder.fabFb.setVisibility(View.VISIBLE);
+        holder.vFabSeparator.setVisibility(View.VISIBLE);
+
 		isVenueDescExpanded = true;
 	}
 	

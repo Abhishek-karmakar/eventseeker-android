@@ -1411,7 +1411,8 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 				public void run() {
 					holder.rltTicket.setPressed(false);
 					Bundle args = new Bundle();
-					args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
+					args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl()
+                            + "&lang=" + ((EventSeekr) FragmentUtil.getApplication(discoverFragment)).getLocale().getLocaleCode());
 					((ReplaceFragmentListener)FragmentUtil.getActivity(discoverFragment)).replaceByFragment(
 							AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
 					/**

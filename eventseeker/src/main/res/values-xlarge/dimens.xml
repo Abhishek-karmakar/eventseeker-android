@@ -2,7 +2,7 @@
 
     <!-- activity_main.xml -->
     <dimen name="root_navigation_drawer_w_main">280dp</dimen>
-    
+
     <!-- navigation_drawer_list_section_header.xml -->
     <dimen name="txt_title_margin_l_navigation_drawer_list_section_header">17dp</dimen>
     <dimen name="txt_title_txt_size_navigation_drawer_list_section_header">15sp</dimen>
@@ -164,7 +164,7 @@
     <dimen name="btn_txt_size_friends_activity_item">13sp</dimen>
     <dimen name="txt_evt_title_margin_l_include_fragment_event_details_img_evt">7dp</dimen>
     <dimen name="v_divider_lnr_ht_friends_activity_item">22dp</dimen>
-	<dimen name="img_crcl_friend_w_h_friends_activity_item">50dp</dimen>
+    <dimen name="img_crcl_friend_w_h_friends_activity_item">50dp</dimen>
 
     <!-- include_video.xml -->
     <dimen name="root_rlt_layout_pad_r_frag_video_tab">8dp</dimen>
@@ -198,13 +198,13 @@
     <dimen name="rlt_layout_root_pad_r_connect_accounts_list_item">@dimen/rlt_layout_root_pad_l_connect_accounts_list_item</dimen>
     <dimen name="img_service_margin_l_r_connect_accounts_list_item">15dp</dimen>
     <dimen name="btn_continue_wt_fragment_connect_account">300dp</dimen>
-    
+
     <!-- connect_accounts_list_item_top.xml -->
     <dimen name="txt_personalize_wt_connect_accounts_li_top">400dp</dimen>
-    
+
     <!-- artist_news_item.xml -->
     <dimen name="txt_margin_l_r_artist_news_item_tab">2dp</dimen>
-    
+
     <!-- fragment_rep_code.xml -->
     <dimen name="edt_rep_code_ht_fragment_rep_code">33dp</dimen>
     <dimen name="rlt_layout_root_pad_fragment_rep_code">@dimen/tab_bar_margin_fragment_custom_tabs</dimen>
@@ -244,7 +244,7 @@
     <dimen name="txt_connect_accounts_txt_size_fragment_connect_account">19sp</dimen>
     <dimen name="txt_connect_accounts_margin_t_b_fragment_connect_account">35dp</dimen>
     <dimen name="txt_connect_accounts_margin_l_r_fragment_connect_account">45dp</dimen>
-    
+
     <!-- list_no_items_found.xml -->
     <dimen name="txt_list_no_items_found_txt_size_list_no_items_found">@dimen/action_bar_title_txt_size</dimen>
 
@@ -255,9 +255,9 @@
     <dimen name="all_components_margin_t_include_no_items_found_with_action">30dp</dimen>
     <dimen name="txt_no_items_heading_txt_size_include_no_items_found_with_action">26sp</dimen>
     <dimen name="txt_no_items_msg_txt_size_include_no_items_found_with_action">22sp</dimen>
-    
-   	<!-- fragment_get_started.xml -->
-   	<dimen name="rlt_lyt_root_pad_b_get_started">0dp</dimen>
+
+    <!-- fragment_get_started.xml -->
+    <dimen name="rlt_lyt_root_pad_b_get_started">0dp</dimen>
     <dimen name="rlt_lyt_root_pad_l_r_get_started">60dp</dimen>
     <dimen name="all_components_margin_t_get_started">50dp</dimen>
     <dimen name="txt_size_fb_google_btn_get_started">18sp</dimen>
@@ -280,8 +280,8 @@
     <dimen name="btn_fb_sign_up_txt_size_fb_login">20sp</dimen>
     <dimen name="txt_fb_login_get_started_txt_size_fb_login">24sp</dimen>
     <dimen name="btn_continue_w_fb_login">150dp</dimen>
-    
-    <!-- fragment_my_events_list.xml -->    
+
+    <!-- fragment_my_events_list.xml -->
     <dimen name="txt_desc_txt_size_fragment_launcher">37sp</dimen>
 
     <!-- fragment_launcher.xml -->
@@ -290,8 +290,8 @@
     <dimen name="txt_title_view_pager_launcher_fragment">28sp</dimen>
     <dimen name="txt_desc_view_pager_launcher_fragment">18sp</dimen>
     <dimen name="txt_desc_pad_l_r_fragment_text">50dp</dimen>
-    
-    <!-- login/register fragment -->    
+
+    <!-- login/register fragment -->
     <dimen name="lyt_mar_t_get_started_fragment">55dp</dimen>
     <dimen name="mar_t_get_started_fragment">40dp</dimen>
     <dimen name="mar_t_below_error_get_started_fragment">15dp</dimen>
@@ -300,12 +300,12 @@
     <dimen name="rlt_register_details_mar_r_get_started_fragment">22dp</dimen>
     <dimen name="txt_login_label_txt_size_get_started_fragment">24sp</dimen>
     <dimen name="btn_forgot_pass_txt_size_get_started_fragment">22sp</dimen>
-    
+
     <!-- fragment_login.xml -->
     <dimen name="scrl_v_margin_t_fragment_login">0dp</dimen>
     <dimen name="scrl_v_pad_fragment_login">0dp</dimen>
     <dimen name="img_fb_sign_up_margin_t_login">0dp</dimen>
-    
+
     <!-- fragment_sign_up.xml -->
     <dimen name="scrl_v_pad_sign_up">0dp</dimen>
     <dimen name="rlt_lyt_root_pad_t_sign_up">0dp</dimen>
@@ -313,22 +313,22 @@
     <dimen name="rlt_g_plus_margin_t_sign_up">40dp</dimen>
     <dimen name="rlt_register_details_margin_t_sign_up">40dp</dimen>
     <dimen name="rlt_register_details_pad_b_sign_up">30dp</dimen>
-    
-    <!-- list_item_settings.xml -->
-	<dimen name="rlt_layout_content_pad_t_b_list_item_settings">10dp</dimen>
-	<dimen name="rlt_layout_content_wt_list_item_settings">250dp</dimen>
 
-	<!-- fragment_settings.xml -->
+    <!-- list_item_settings.xml -->
+    <dimen name="rlt_layout_content_pad_t_b_list_item_settings">10dp</dimen>
+    <dimen name="rlt_layout_content_wt_list_item_settings">250dp</dimen>
+
+    <!-- fragment_settings.xml -->
     <dimen name="lst_pad_l_r_fragment_settings">100dp</dimen>
-    
+
     <!-- activity_splash.xml -->
     <dimen name="txt_app_name_margin_t_activity_splash">50dp</dimen>
     <dimen name="txt_app_name_txt_size_activity_splash">50sp</dimen>
-    
+
     <!-- toolbar.xml -->
     <dimen name="action_bar_ht">64dp</dimen>
     <dimen name="common_t_mar_pad_for_all_layout">0dp</dimen>
-    
+
     <!-- fragment_discover_tab.xml -->
     <dimen name="img_prev_w_discover_tab">70dp</dimen>
     <dimen name="img_next_w_discover_tab">@dimen/img_prev_w_discover_tab</dimen>
@@ -349,15 +349,15 @@
     <dimen name="btn_chg_loc_pad_l_discover_tab">50dp</dimen>
     <dimen name="btn_chg_loc_pad_r_discover_tab">@dimen/btn_chg_loc_pad_l_discover_tab</dimen>
     <dimen name="rlt_lyt_no_evts_margin_t_discover_tab">@dimen/v_rlt_lyt_cat_titles_shadow_ht_discover_tab</dimen>
-    
+
     <!--  DiscoverFragmentTab.java -->
     <dimen name="rv_item_l_r_offset_discover_tab">1dp</dimen>
     <dimen name="rv_item_t_b_offset_discover_tab">-1dp</dimen>
-    
+
     <!-- cat_title_tab.xml -->
     <dimen name="txt_title_pad_l_r_cat_title_tab">15dp</dimen>
     <dimen name="txt_title_txt_size_cat_title_tab">18sp</dimen>
-    
+
     <!-- rv_item_event_tab.xml -->
     <dimen name="cv_root_corner_rad_rv_item_event_tab">0dp</dimen>
     <dimen name="cv_root_elevation_rv_item_event_tab">4dp</dimen>
@@ -376,15 +376,15 @@
     <dimen name="txt_evt_time_pad_b_rv_item_event_tab">@dimen/txt_evt_loc_pad_t_rv_item_event_tab</dimen>
     <dimen name="lnr_slider_content_w_rv_item_event_tab">200dp</dimen>
     <dimen name="lnr_slider_content_img_ht_rv_item_event_tab">70dp</dimen>
-    
+
     <!-- fragment_change_location.xml -->
     <dimen name="btn_my_location_margin_l_r_fragment_change_location">30dp</dimen>
     <dimen name="btn_my_location_margin_t_b_fragment_change_location">@dimen/btn_my_location_margin_l_r_fragment_change_location</dimen>
-    
+
     <!-- BaseActivityTab.java -->
     <dimen name="floating_window_w">450dp</dimen>
     <dimen name="floating_window_ht">700dp</dimen>
-    
+
     <!-- toolbar_floating_window_double_line.xml -->
     <dimen name="floating_double_line_toolbar_ht">76dp</dimen>
     <dimen name="max_btn_ht_toolbar_floating_window_double_line">44dp</dimen>
@@ -396,7 +396,7 @@
     <dimen name="txt_toolbar_sub_title_ht_toolbar_floating_window_double_line">32dp</dimen>
     <dimen name="txt_toolbar_title_txt_size_toolbar_floating_window_double_line">22sp</dimen>
     <dimen name="txt_toolbar_sub_title_txt_size_toolbar_floating_window_double_line">16sp</dimen>
-    
+
     <!-- fragment_event_details_tab.xml -->
     <!-- img_evt_ht_event_details_tab = floating_window_w * 3/4 -->
     <dimen name="img_evt_ht_event_details_tab">338dp</dimen>
@@ -409,6 +409,7 @@
     <dimen name="txt_desc_margin_l_event_details_tab">16dp</dimen>
     <dimen name="txt_desc_margin_r_event_details_tab">@dimen/txt_desc_margin_l_event_details_tab</dimen>
     <dimen name="txt_desc_margin_t_event_details_tab">25dp</dimen>
+    <dimen name="txt_desc_margin_b_event_details_tab">@dimen/txt_desc_margin_b_event_details</dimen>
     <dimen name="txt_desc_txt_size_event_details_tab">16sp</dimen>
     <dimen name="lnr_lyt_expand_desc_margin_t_event_details_tab">15dp</dimen>
     <dimen name="img_down_w_rv_item_desc_tab">48dp</dimen>
@@ -429,30 +430,30 @@
     <dimen name="txt_venue_margin_t_event_details_tab">@dimen/lnr_lyt_expand_desc_margin_t_event_details_tab</dimen>
     <dimen name="txt_venue_drawable_pad_event_details_tab">10dp</dimen>
     <dimen name="rlt_lyt_address_margin_t_event_details_tab">@dimen/lnr_lyt_expand_desc_margin_t_event_details_tab</dimen>
-    
+
     <!-- EventDetailsFragmentTab.java -->
     <!-- txt_toolbar_double_line_title_pos_all_details = 44dp to keep it left aligned with toolbar title.
     min_nav_btn_w_toolbar_floating_window_double_line is 44dp which is amount of space consumed by back arrow.
     Also we have set titleMarginStart for toolbar to 0 under styles.xml for 
     style="ThemeOverlay.EventSeeker.Dark.ActionBar". After this we can start with other content placement. -->
     <dimen name="txt_toolbar_double_line_title_pos_all_details">@dimen/min_nav_btn_w_toolbar_floating_window_double_line</dimen>
-    
+
     <!-- fragment_language_tab -->
     <dimen name="list_view_w_language_fragment_tab">200dp</dimen>
     <dimen name="list_view_m_t_b_language_fragment_tab">90dp</dimen>
     <dimen name="txt_language_txt_size_list_item_language_tab">22sp</dimen>
-    
+
     <!-- artist_fix_size_news_list_item.xml -->
     <dimen name="v_dummy_margin_l_r_artist_fix_size_news_list_item">25dp</dimen>
     <dimen name="root_lnr_lyt_w_artist_fix_size_news_list_item">400dp</dimen>
-    
+
     <!-- friends_activity_item_tab.xml -->
     <dimen name="rlt_root_padding_friends_activity_item_tab">12dp</dimen>
-    
+
     <!-- fragment_following_artists_list_item_tab.xml -->
     <dimen name="txt_artist_name_margin_t_b_fragment_following_artists_list_item_tab">10dp</dimen>
     <dimen name="rlt_artist_name_padding_l_r_fragment_following_artists_list_item_tab">10dp</dimen>
-    
+
     <!-- fragment_following_tab.xml -->
     <dimen name="grd_v_padding_fragment_following_tab">8dp</dimen>
     <dimen name="grd_v_h_space_fragment_following_tab">4dp</dimen>
@@ -468,10 +469,10 @@
 
     <!-- fragment_popular_artist_tab.xml -->
     <dimen name="txt_size_category_popular_artist_fragment_popular_artist_tab">23sp</dimen>
-	<dimen name="txt_size_widget_eventSeeker_btn_alpha">23sp</dimen>
+    <dimen name="txt_size_widget_eventSeeker_btn_alpha">23sp</dimen>
 
     <!-- fragment_follow_more_artists_tab.xml -->
-    <dimen name="v_dummy_wt_ht_fragment_follow_more_artists">5dp</dimen> 
+    <dimen name="v_dummy_wt_ht_fragment_follow_more_artists">5dp</dimen>
     <dimen name="lnr_root_padding_fragment_follow_more_artists">5dp</dimen>
     <!-- <dimen name="v_dummy_margin_t_b_fragment_follow_more_artists">10dp</dimen> -->
 
@@ -480,7 +481,7 @@
     <dimen name="fab_margin_t_base_tab_floating">310dp</dimen>
     <dimen name="fab_1_margin_r_base_tab_floating">30dp</dimen>
     <dimen name="fab_2_margin_r_base_tab_floating">120dp</dimen>
-    
+
     <!-- fragment_venue_details_tab.xml -->
     <dimen name="img_venue_ht_venue_details_tab">@dimen/img_evt_ht_event_details_tab</dimen>
     <dimen name="rlt_lyt_txt_venue_title_pad_l_venue_details_tab">@dimen/rlt_lyt_txt_evt_title_pad_l_event_details_tab</dimen>
@@ -494,17 +495,19 @@
     <dimen name="txt_venue_title_ht_venue_details_tab">48dp</dimen>
     <dimen name="txt_venue_title_txt_size_venue_details_tab">@dimen/abc_text_size_title_material_toolbar</dimen>
     <dimen name="img_venue_ht_venue_details">@dimen/img_venue_ht_venue_details_tab</dimen>
-    
+
     <!-- rv_item_desc_tab.xml -->
     <dimen name="txt_desc_txt_size_rv_item_desc_tab">@dimen/txt_desc_txt_size_event_details_tab</dimen>
+    <dimen name="fab_margin_t_rv_item_desc_tab">10dp</dimen>
     <dimen name="img_down_margin_t_rv_item_desc_tab">10dp</dimen>
-    
+    <dimen name="txt_desc_margin_t_rv_item_desc_tab">25dp</dimen>
+
     <!-- fragment_navigation.xml -->
     <dimen name="txt_title_w_navigation">210dp</dimen>
     <dimen name="txt_txt_size_navigation">18sp</dimen>
     <dimen name="img_margin_t_navigation">60dp</dimen>
     <dimen name="txt_margin_t_navigation">15dp</dimen>
-    
+
     <!-- rv_item_upcoming_event.xml -->
     <dimen name="img_evt_w_rv_item_upcoming_event">160dp</dimen>
     <dimen name="img_evt_ht_rv_item_upcoming_event">120dp</dimen>
@@ -519,7 +522,7 @@
     <dimen name="txt_detail_txt_size_rv_item_upcoming_event">14sp</dimen>
     <dimen name="v_hor_line_ht_rv_item_upcoming_event">1dp</dimen>
     <dimen name="v_hor_line_margin_l_r_rv_item_upcoming_event">@dimen/txt_desc_margin_l_rv_item_desc</dimen>
-    
+
     <!-- left_most_tab_selected.xml -->
     <!-- top_left_most_tab_selected = (tab_bar_ht_fragment_custom_tabs - 6) -->
     <dimen name="top_left_most_tab_selected">58dp</dimen>
@@ -535,30 +538,27 @@
     <dimen name="txt_artist_title_ht_artist_details_tab">48dp</dimen>
     <dimen name="txt_artist_title_txt_size_artist_details_tab">@dimen/txt_toolbar_title_txt_size_toolbar_floating_window_double_line</dimen>
     <dimen name="img_artist_ht_artist_details">@dimen/img_artist_ht_artist_details_tab</dimen>
-    
+
     <!-- rv_item_videos_artist_details.xml -->
     <dimen name="v_pager_videos_margin_l_rv_item_videos_artist_details">@dimen/txt_desc_margin_l_rv_item_desc</dimen>
     <dimen name="v_pager_videos_margin_r_rv_item_videos_artist_details">@dimen/v_pager_videos_margin_l_rv_item_videos_artist_details</dimen>
-    
+
     <!-- fragment_search_items_tab.xml -->
     <dimen name="rv_items_margin_t_search_items_tab">@dimen/rv_events_margin_t_discover_tab</dimen>
     <dimen name="rv_items_pad_search_items_tab">@dimen/rv_events_padding_discover_tab</dimen>
-    
+
     <!--  SearchArtistsFragmentTab.java -->
     <dimen name="rv_item_l_r_offset_search_items_tab">@dimen/rv_item_l_r_offset_discover_tab</dimen>
     <dimen name="rv_item_t_b_offset_search_items_tab">@dimen/rv_item_t_b_offset_discover_tab</dimen>
-    
+
     <!-- include_no_items_found_with_action.xml -->
     <!--suppress AndroidLintReferenceType -->
     <dimen name="img_no_content_w_all_fragments">@integer/match_parent</dimen>
-    
+
     <!-- rv_item_venue_tab.xml -->
     <dimen name="txt_loc_pad_b_rv_item_venue_tab">@dimen/txt_evt_loc_pad_t_rv_item_event_tab</dimen>
-    
+
     <!-- progress_bar_eventseeker_fixed_ht.xml -->
     <dimen name="rlt_lyt_root_margin_t_b_progress_bar_eventseeker_fixed_ht">-10dp</dimen>
-
-    <!-- rv_item_desc_tab.xml -->
-    <dimen name="txt_desc_margin_t_rv_item_desc_tab">25dp</dimen>
 
 </resources>

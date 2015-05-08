@@ -1,16 +1,16 @@
 package com.wcities.eventseeker.jsonparser;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.wcities.eventseeker.core.Address;
+import com.wcities.eventseeker.core.Country;
+import com.wcities.eventseeker.core.Venue;
+import com.wcities.eventseeker.util.ConversionUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.wcities.eventseeker.core.Address;
-import com.wcities.eventseeker.core.Country;
-import com.wcities.eventseeker.core.Venue;
-import com.wcities.eventseeker.util.ConversionUtil;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecordApiJSONParser {
 
@@ -33,6 +33,8 @@ public class RecordApiJSONParser {
 	private static final String KEY_LONGITUDE = "longitude";
 	private static final String KEY_PHONE = "phone";
 	private static final String KEY_URL = "url";
+    private static final String KEY_LINKS = "links";
+    private static final String KEY_SOCIAL_URL = "social_url";
 
 	private static final Object JSON_NULL = "null";
 	
@@ -47,12 +49,12 @@ public class RecordApiJSONParser {
 				if (jsonRecord instanceof JSONArray) {
 					JSONArray jArrRecords = (JSONArray) jsonRecord;
 					for (int i = 0; i < jArrRecords.length(); i++) {
-						Venue venue = getVenue(jArrRecords.getJSONObject(i).getJSONObject(KEY_DETAILS), null);
+						Venue venue = getVenue(jArrRecords.getJSONObject(i), null);
 						venues.add(venue);
 					}
 					
 				} else {
-					Venue venue = getVenue(((JSONObject) jsonRecord).getJSONObject(KEY_DETAILS), null);
+					Venue venue = getVenue((JSONObject) jsonRecord, null);
 					venues.add(venue);
 				}
 			}
@@ -67,22 +69,22 @@ public class RecordApiJSONParser {
 	public void fillVenueDetails(JSONObject jsonObject, Venue venue) throws JSONException {
 		JSONObject jObjRecords = jsonObject.getJSONObject(KEY_RECORDS);
 		if (jObjRecords.has(KEY_RECORD)) {
-			Object jsonRecord = jObjRecords.get(KEY_RECORD);
-			getVenue(((JSONObject) jsonRecord).getJSONObject(KEY_DETAILS), venue);
+			getVenue(jObjRecords.getJSONObject(KEY_RECORD), venue);
 		}
 	}
 	
-	private Venue getVenue(JSONObject jsonObject, Venue venue) throws JSONException {
+	private Venue getVenue(JSONObject jObjRecord, Venue venue) throws JSONException {
+        JSONObject jObjDetails = jObjRecord.getJSONObject(KEY_DETAILS);
 		if (venue == null) {
-			venue = new Venue(jsonObject.getInt(KEY_ID));
-			venue.setName(ConversionUtil.decodeHtmlEntities(jsonObject, KEY_NAME));
+			venue = new Venue(jObjDetails.getInt(KEY_ID));
+			venue.setName(ConversionUtil.decodeHtmlEntities(jObjDetails, KEY_NAME));
 		}
-		if (jsonObject.has(KEY_LONG_DESC)) {
+		if (jObjDetails.has(KEY_LONG_DESC)) {
 			venue.setLongDesc(ConversionUtil.removeBuggyTextsFromDesc(ConversionUtil.decodeHtmlEntities(
-					jsonObject, KEY_LONG_DESC)));
+					jObjDetails, KEY_LONG_DESC)));
 		}
 		
-		String imagefile = jsonObject.getString(KEY_IMAGEFILE);
+		String imagefile = jObjDetails.getString(KEY_IMAGEFILE);
 		if (!imagefile.startsWith("http:")) {
 			venue.setImagefile(imagefile);
 			
@@ -90,9 +92,9 @@ public class RecordApiJSONParser {
 			venue.setImageUrl(imagefile);
 		}
 		
-		venue.setAddress(getAddress(jsonObject.getJSONObject(KEY_ADDRESS)));
-		if (jsonObject.has(KEY_PHONE)) {
-			Object jPhone = jsonObject.get(KEY_PHONE);
+		venue.setAddress(getAddress(jObjDetails.getJSONObject(KEY_ADDRESS)));
+		if (jObjDetails.has(KEY_PHONE)) {
+			Object jPhone = jObjDetails.get(KEY_PHONE);
 			if (jPhone instanceof JSONArray) {
 				//Log.d(TAG, "array");
 				String phone = ((JSONArray) jPhone).getString(0);
@@ -106,13 +108,36 @@ public class RecordApiJSONParser {
 				venue.setPhone(phone);
 			}
 		}
-		if (jsonObject.has(KEY_URL)) {
-			String url = jsonObject.getString(KEY_URL);
+		if (jObjDetails.has(KEY_URL)) {
+			String url = jObjDetails.getString(KEY_URL);
 			if (url != null && url.equals(JSON_NULL)) {
 				url = null;
 			}
 			venue.setUrl(url);
 		}
+
+        if (jObjRecord.has(KEY_LINKS)) {
+            JSONObject jObjLinks = jObjRecord.getJSONObject(KEY_LINKS);
+
+            if (jObjLinks.has(KEY_SOCIAL_URL)) {
+                Object objSocialUrl = jObjLinks.get(KEY_SOCIAL_URL);
+
+                if (objSocialUrl instanceof JSONArray) {
+                    JSONArray jArrSocialUrl = (JSONArray) objSocialUrl;
+
+                    for (int i = 0; i < jArrSocialUrl.length(); i++) {
+                        String link = jArrSocialUrl.getString(i);
+                        if (link.startsWith("https://www.facebook.com/")) {
+                            venue.setFbLink(link);
+                            break;
+                        }
+                    }
+
+                } else if (((String) objSocialUrl).startsWith("https://www.facebook.com/")) {
+                    venue.setFbLink((String) objSocialUrl);
+                }
+            }
+        }
 		
 		return venue;
 	}

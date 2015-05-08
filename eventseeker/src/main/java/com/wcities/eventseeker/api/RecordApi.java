@@ -1,12 +1,12 @@
 package com.wcities.eventseeker.api;
 
-import java.io.IOException;
+import com.wcities.eventseeker.constants.AppConstants;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.wcities.eventseeker.constants.AppConstants;
+import java.io.IOException;
 
 public class RecordApi extends Api {
 	
@@ -112,7 +112,7 @@ public class RecordApi extends Api {
 		
 		uriBuilder.append("&moreInfo=fallbackimage,strictlang");
 		
-		uriBuilder.append("&strip_html=name,description");
+		uriBuilder.append("&link=enable&strip_html=name,description");
 		
 		setUri(uriBuilder.toString());
 		addLangParam = true;

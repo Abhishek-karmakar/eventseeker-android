@@ -52,6 +52,7 @@ public class EventApiJSONParser {
 	private static final String KEY_CITYEVENT = "cityevent";
 	private static final String KEY_EVENT = "event";
 	private static final String KEY_SCHEDULE = "schedule";
+    private static final String KEY_WEBSITE = "website";
 	private static final String KEY_VENUE_ID = "venue_id";
 	private static final String KEY_DATES = "dates";
 	private static final String KEY_START = "start";
@@ -87,6 +88,7 @@ public class EventApiJSONParser {
 	private static final String KEY_VALUE = "value";
 	private static final String KEY_LINKS = "links";
 	private static final String KEY_TRACKBACK_URL = "trackback_url";
+    private static final String KEY_SOCIAL_URL = "social_url";
 
 	private static final String KEY_SUGGESTED_INVITES = "suggested_invites";
 
@@ -133,6 +135,10 @@ public class EventApiJSONParser {
 				SparseArray<Venue> venues = getVenues(jObjCityevent);
 				event.setSchedule(getSchedule(jObjSchedule, venues));
 			}
+
+            if (jObjEvent.has(KEY_WEBSITE)) {
+                event.setWebsite(jObjEvent.getString(KEY_WEBSITE));
+            }
 			
 			if (jObjSchedule.has(KEY_BOOKINGINFO) && event.getSchedule().getBookingInfos().isEmpty()) {
 				fillBookingInfo(event.getSchedule(), jObjSchedule);
@@ -187,6 +193,25 @@ public class EventApiJSONParser {
 				if (jObjLinks.has(KEY_TRACKBACK_URL)) {
 					event.setEventUrl(jObjLinks.getString(KEY_TRACKBACK_URL));
 				}
+
+                if (jObjLinks.has(KEY_SOCIAL_URL)) {
+                    Object objSocialUrl = jObjLinks.get(KEY_SOCIAL_URL);
+
+                    if (objSocialUrl instanceof JSONArray) {
+                        JSONArray jArrSocialUrl = (JSONArray) objSocialUrl;
+
+                        for (int i = 0; i < jArrSocialUrl.length(); i++) {
+                            String link = jArrSocialUrl.getString(i);
+                            if (link.startsWith("https://www.facebook.com/")) {
+                                event.setFbLink(link);
+                                break;
+                            }
+                        }
+
+                    } else if (((String) objSocialUrl).startsWith("https://www.facebook.com/")) {
+                        event.setFbLink((String) objSocialUrl);
+                    }
+                }
 			}
 			
 		} catch (JSONException e) {

@@ -134,7 +134,7 @@
     <string name="already_signed_in_with_facebook_account">Vous êtes déjà connecté avec Google. Voulez-vous vous déconnecter et reconnecter avec Facebook?</string>
  
     <!-- About us -->
-    <string name="seek_share_live">Cherche. Partage. Vis.</string>
+    <string name="seek_share_live">Cherche. Partagez. Vis.</string>
     <string name="eventseeker_desc">eventseeker rend la découverte d\'artistes et d\'évènements facile et sociale. Nous vous donnons les outils pour ne plus jamais manquer le moindre évènement.</string>
     <string name="powered_by">Réalisé par Wcities</string>
         
@@ -426,7 +426,7 @@
     <string name="select_navigation_app">Sélectionnez votre application de navigation et demander le chemin.</string>
 
     <!-- menu/fragment_artist_details.xml -->
-    <string name="share">Partage</string>
+    <string name="share">Partagez</string>
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>

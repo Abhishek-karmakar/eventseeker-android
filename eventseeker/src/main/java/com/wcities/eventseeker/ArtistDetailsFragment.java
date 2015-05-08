@@ -1544,7 +1544,8 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 				public void run() {
 					holder.rltTicket.setPressed(false);
 					Bundle args = new Bundle();
-					args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
+					args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl()
+                            + "&lang=" + ((EventSeekr) FragmentUtil.getApplication(artistDetailsFragment)).getLocale().getLocaleCode());
 					((ReplaceFragmentListener)FragmentUtil.getActivity(artistDetailsFragment)).replaceByFragment(
 							AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
 					

@@ -409,6 +409,7 @@
     <dimen name="txt_desc_margin_l_event_details_tab">16dp</dimen>
     <dimen name="txt_desc_margin_r_event_details_tab">@dimen/txt_desc_margin_l_event_details_tab</dimen>
     <dimen name="txt_desc_margin_t_event_details_tab">25dp</dimen>
+    <dimen name="txt_desc_margin_b_event_details_tab">@dimen/txt_desc_margin_b_event_details</dimen>
     <dimen name="txt_desc_txt_size_event_details_tab">16sp</dimen>
     <dimen name="lnr_lyt_expand_desc_margin_t_event_details_tab">15dp</dimen>
     <dimen name="img_down_w_rv_item_desc_tab">48dp</dimen>
@@ -497,7 +498,9 @@
     
     <!-- rv_item_desc_tab.xml -->
     <dimen name="txt_desc_txt_size_rv_item_desc_tab">@dimen/txt_desc_txt_size_event_details_tab</dimen>
+    <dimen name="fab_margin_t_rv_item_desc_tab">10dp</dimen>
     <dimen name="img_down_margin_t_rv_item_desc_tab">10dp</dimen>
+    <dimen name="txt_desc_margin_t_rv_item_desc_tab">25dp</dimen>
     
     <!-- fragment_navigation.xml -->
     <dimen name="txt_title_w_navigation">210dp</dimen>
@@ -557,8 +560,5 @@
     
     <!-- progress_bar_eventseeker_fixed_ht.xml -->
     <dimen name="rlt_lyt_root_margin_t_b_progress_bar_eventseeker_fixed_ht">-10dp</dimen>
-
-    <!-- rv_item_desc_tab.xml -->
-    <dimen name="txt_desc_margin_t_rv_item_desc_tab">25dp</dimen>
 
 </resources>

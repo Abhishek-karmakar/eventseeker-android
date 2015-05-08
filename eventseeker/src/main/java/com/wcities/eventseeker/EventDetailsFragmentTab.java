@@ -74,7 +74,8 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 	private TextView txtEvtTitle, txtEvtTime, txtEvtDesc, txtVenue;
 	private RelativeLayout rltLytPrgsBar, rltLytFeaturing, rltLytVenue, rltLytFriends;
 	private RecyclerView recyclerVFriends;
-	private FloatingActionButton fabTickets, fabSave;
+	private FloatingActionButton fabTickets, fabSave, fabWeb, fabFb;
+    private View vFabSeparator;
 	
 	private FeaturingArtistPagerAdapterTab featuringArtistPagerAdapterTab;
 	private FriendsRVAdapter friendsRVAdapter;
@@ -158,9 +159,17 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 		txtVenue = (TextView) rootView.findViewById(R.id.txtVenue);
 		ViewCompat.setTransitionName(txtVenue, "txtVenueEventDetails");
 		updateEventSchedule();
-		
+
+        fabWeb = (FloatingActionButton) rootView.findViewById(R.id.fabWeb);
+        fabFb = (FloatingActionButton) rootView.findViewById(R.id.fabFb);
+        fabWeb.setOnClickListener(this);
+        fabFb.setOnClickListener(this);
+        updateFabLinks();
+
+        vFabSeparator = rootView.findViewById(R.id.vFabSeparator);
 		txtEvtDesc = (TextView) rootView.findViewById(R.id.txtDesc);
 		imgDown = (ImageView) rootView.findViewById(R.id.imgDown);
+        imgDown.setOnClickListener(this);
 		updateDescVisibility();
 		
 		imgEvt = (ImageView) rootView.findViewById(R.id.imgEvt);
@@ -319,32 +328,33 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 	
 	private void updateDescVisibility() {
 		if (event.getDescription() != null) {
-			makeDescVisible();
-			
+            txtEvtDesc.setText(Html.fromHtml(event.getDescription()));
+            txtEvtDesc.setVisibility(View.VISIBLE);
+
 		} else {
-			txtEvtDesc.setVisibility(View.GONE);
-			imgDown.setVisibility(View.GONE);
-		}
-	}
-	
-	private void makeDescVisible() {
-		txtEvtDesc.setVisibility(View.VISIBLE);
-		txtEvtDesc.setText(Html.fromHtml(event.getDescription()));
-		imgDown.setVisibility(View.VISIBLE);
-		imgDown.setOnClickListener(this);
-		
-		if (isEvtDescExpanded) {
-			expandEvtDesc();
-			
-		} else {
-			collapseEvtDesc();
-		}
+            txtEvtDesc.setVisibility(View.GONE);
+            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) vFabSeparator.getLayoutParams();
+            lp.topMargin = ConversionUtil.toPx(FragmentUtil.getResources(this), 28);
+            vFabSeparator.setLayoutParams(lp);
+        }
+
+        if (isEvtDescExpanded) {
+            expandEvtDesc();
+
+        } else {
+            collapseEvtDesc();
+        }
 	}
 	
 	private void expandEvtDesc() {
 		txtEvtDesc.setMaxLines(Integer.MAX_VALUE);
 		txtEvtDesc.setEllipsize(null);
 		imgDown.setImageDrawable(FragmentUtil.getResources(this).getDrawable(R.drawable.ic_description_collapse));
+
+        fabWeb.setVisibility(View.VISIBLE);
+        fabFb.setVisibility(View.VISIBLE);
+        vFabSeparator.setVisibility(View.VISIBLE);
+
 		isEvtDescExpanded = true;
 	}
 	
@@ -352,6 +362,11 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 		txtEvtDesc.setMaxLines(MAX_LINES_EVENT_DESC);
 		txtEvtDesc.setEllipsize(TruncateAt.END);
 		imgDown.setImageDrawable(FragmentUtil.getResources(this).getDrawable(R.drawable.ic_description_expand));
+
+        fabWeb.setVisibility(View.GONE);
+        fabFb.setVisibility(View.GONE);
+        vFabSeparator.setVisibility(View.GONE);
+
 		isEvtDescExpanded = false;
 	}
 	
@@ -431,6 +446,27 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 			e.printStackTrace();
 		}
     }
+
+    private void updateFabLinks() {
+        final Resources res = FragmentUtil.getResources(this);
+        if (event.getWebsite() == null) {
+            fabWeb.setImageDrawable(res.getDrawable(R.drawable.ic_ticket_unavailable_floating));
+            fabWeb.setEnabled(false);
+
+        } else {
+            fabWeb.setImageDrawable(res.getDrawable(R.drawable.ic_ticket_available_floating));
+            fabWeb.setEnabled(true);
+        }
+
+        if (event.getFbLink() == null) {
+            fabFb.setImageDrawable(res.getDrawable(R.drawable.ic_ticket_unavailable_floating));
+            fabFb.setEnabled(false);
+
+        } else {
+            fabFb.setImageDrawable(res.getDrawable(R.drawable.ic_ticket_available_floating));
+            fabFb.setEnabled(true);
+        }
+    }
 	
 	private void updateFabs() {
 		fabTickets.setVisibility(View.VISIBLE);
@@ -483,6 +519,7 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 		updateProgressBarVisibility();
 		
 		if (allDetailsLoaded) {
+            updateFabLinks();
 			updateDescVisibility();
 			updateEventImg();
 			updateEventSchedule();
@@ -599,7 +636,8 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 			BaseActivityTab baseActivityTab = (BaseActivityTab) FragmentUtil.getActivity(this);
 					
 			Intent intent = new Intent(eventSeekr, WebViewActivityTab.class);
-			intent.putExtra(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
+			intent.putExtra(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl()
+                + "&lang=" + ((EventSeekr) FragmentUtil.getApplication(this)).getLocale().getLocaleCode());
 			baseActivityTab.startActivity(intent);
 			
 			GoogleAnalyticsTracker.getInstance().sendEvent(eventSeekr, 
@@ -633,6 +671,26 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
             intent = new Intent(FragmentUtil.getApplication(this), NavigationActivityTab.class);
             intent.putExtra(BundleKeys.VENUE, event.getSchedule().getVenue());
             startActivity(intent);
+            break;
+
+        case R.id.fabWeb:
+            eventSeekr = FragmentUtil.getApplication(this);
+            baseActivityTab = (BaseActivityTab) FragmentUtil.getActivity(this);
+
+            intent = new Intent(eventSeekr, WebViewActivityTab.class);
+            intent.putExtra(BundleKeys.URL, event.getWebsite());
+            baseActivityTab.startActivity(intent);
+
+            break;
+
+        case R.id.fabFb:
+            eventSeekr = FragmentUtil.getApplication(this);
+            baseActivityTab = (BaseActivityTab) FragmentUtil.getActivity(this);
+
+            intent = new Intent(eventSeekr, WebViewActivityTab.class);
+            intent.putExtra(BundleKeys.URL, event.getFbLink());
+            baseActivityTab.startActivity(intent);
+
             break;
 			
 		default:

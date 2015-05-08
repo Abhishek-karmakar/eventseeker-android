@@ -620,21 +620,22 @@
     <dimen name="txt_evt_details_margin_t_event_details">25dp</dimen>
     <dimen name="txt_evt_details_drawable_pad_event_details">20dp</dimen>
     <dimen name="txt_evt_details_txt_size_event_details">16sp</dimen>
-    <dimen name="txt_desc_margin_l_event_details">16dp</dimen>
-    <dimen name="txt_desc_margin_t_event_details">15dp</dimen>
+    <dimen name="rlt_lyt_collapsible_margin_l_event_details">16dp</dimen>
+    <dimen name="rlt_lyt_collapsible_margin_t_event_details">15dp</dimen>
+    <dimen name="txt_desc_margin_b_event_details">5dp</dimen>
     <dimen name="lnr_lyt_expand_desc_margin_l_event_details">16dp</dimen>
-    <dimen name="lnr_lyt_expand_desc_margin_t_event_details">@dimen/txt_desc_margin_t_event_details</dimen>
-    <dimen name="img_down_margin_r_event_details">@dimen/txt_desc_margin_l_event_details</dimen>
+    <dimen name="lnr_lyt_expand_desc_margin_t_event_details">@dimen/rlt_lyt_collapsible_margin_t_event_details</dimen>
+    <dimen name="img_down_margin_r_event_details">@dimen/rlt_lyt_collapsible_margin_l_event_details</dimen>
     <dimen name="v_hor_line_ht_event_details">1dp</dimen>
     <dimen name="v_hor_margin_b_event_details">10dp</dimen>
-    <dimen name="txt_featuring_margin_t_event_details">@dimen/txt_desc_margin_t_event_details</dimen>
+    <dimen name="txt_featuring_margin_t_event_details">@dimen/rlt_lyt_collapsible_margin_t_event_details</dimen>
     <dimen name="v_pager_featuring_ht_event_details">150dp</dimen>
-    <dimen name="v_pager_featuring_margin_t_event_details">@dimen/txt_desc_margin_t_event_details</dimen>
+    <dimen name="v_pager_featuring_margin_t_event_details">@dimen/rlt_lyt_collapsible_margin_t_event_details</dimen>
     <dimen name="v_hor_line_margin_l_event_details">16dp</dimen>
     <dimen name="v_hor_line_margin_r_event_details">@dimen/v_hor_line_margin_l_event_details</dimen>
-    <dimen name="v_hor_line_margin_t_event_details">@dimen/txt_desc_margin_t_event_details</dimen>
-    <dimen name="txt_venue_margin_t_event_details">@dimen/txt_desc_margin_t_event_details</dimen>
-    <dimen name="rlt_lyt_address_margin_t_event_details">@dimen/txt_desc_margin_t_event_details</dimen>
+    <dimen name="v_hor_line_margin_t_event_details">@dimen/rlt_lyt_collapsible_margin_t_event_details</dimen>
+    <dimen name="txt_venue_margin_t_event_details">@dimen/rlt_lyt_collapsible_margin_t_event_details</dimen>
+    <dimen name="rlt_lyt_address_margin_t_event_details">@dimen/rlt_lyt_collapsible_margin_t_event_details</dimen>
     <dimen name="rlt_lyt_address_margin_l_event_details">@dimen/v_hor_line_margin_l_event_details</dimen>
     <dimen name="rlt_lyt_address_margin_r_event_details">@dimen/v_hor_line_margin_r_event_details</dimen>
     <dimen name="txt_venue_drawable_pad_event_details">10dp</dimen>
@@ -642,6 +643,7 @@
     <dimen name="fab_margin_b_event_details">16dp</dimen>
     <dimen name="fab_margin_l_r_event_details">60dp</dimen>
     <dimen name="fab_navigate_margin_t_event_details">20dp</dimen>
+    <dimen name="v_fab_separator_w_event_details">@dimen/fab_margin_l_r_event_details</dimen>
     <!-- featuring_artist.xml -->
     <dimen name="rlt_lyt_root_w_featuring_artist">200dp</dimen>
     <dimen name="txt_artist_name_txt_size_featuring_artist">20sp</dimen>
@@ -650,16 +652,16 @@
     <dimen name="txt_artist_name_pad_b_featuring_artist">6dp</dimen>
     <dimen name="txt_artist_name_pad_t_featuring_artist">18dp</dimen>
     <!-- include_friends.xml -->
-    <dimen name="txt_friends_margin_t_include_friends">@dimen/txt_desc_margin_t_event_details</dimen>
+    <dimen name="txt_friends_margin_t_include_friends">@dimen/rlt_lyt_collapsible_margin_t_event_details</dimen>
     <dimen name="txt_friends_txt_size_include_friends">@dimen/txt_evt_details_txt_size_event_details</dimen>
     <dimen name="recycler_v_friends_ht_include_friends">120dp</dimen>
-    <dimen name="recycler_v_friends_margin_t_include_friends">@dimen/txt_desc_margin_t_event_details</dimen>
+    <dimen name="recycler_v_friends_margin_t_include_friends">@dimen/rlt_lyt_collapsible_margin_t_event_details</dimen>
     <dimen name="recycler_v_friends_margin_l_include_friends">@dimen/v_hor_line_margin_l_event_details</dimen>
     <dimen name="recycler_v_friends_margin_r_include_friends">@dimen/recycler_v_friends_margin_l_include_friends</dimen>
     <dimen name="v_hor_line_ht_include_friends">@dimen/v_hor_line_ht_event_details</dimen>
     <dimen name="v_hor_line_margin_l_include_friends">@dimen/v_hor_line_margin_l_event_details</dimen>
     <dimen name="v_hor_line_margin_r_include_friends">@dimen/v_hor_line_margin_l_include_friends</dimen>
-    <dimen name="v_hor_line_margin_t_include_friends">@dimen/txt_desc_margin_t_event_details</dimen>
+    <dimen name="v_hor_line_margin_t_include_friends">@dimen/rlt_lyt_collapsible_margin_t_event_details</dimen>
     <!-- rv_item_friend.xml -->
     <dimen name="rlt_lyt_root_pad_l_rv_item_friend">10dp</dimen>
     <dimen name="rlt_lyt_root_pad_r_rv_item_friend">@dimen/rlt_lyt_root_pad_l_rv_item_friend</dimen>
@@ -696,13 +698,14 @@
     <dimen name="txt_desc_margin_l_rv_item_desc">16dp</dimen>
     <dimen name="txt_desc_margin_r_rv_item_desc">16dp</dimen>
     <dimen name="txt_desc_margin_t_rv_item_desc">20dp</dimen>
+    <dimen name="fab_margin_t_rv_item_desc">10dp</dimen>
     <!-- <dimen name="img_down_margin_l_rv_item_desc">16dp</dimen>
     <dimen name="img_down_margin_r_rv_item_desc">@dimen/txt_desc_margin_l_rv_item_desc</dimen> -->
     <!-- As the 'img down' icon size in mdpi is of '16*16' and previous margin l & r was 16dp. Sp, 
     	 refering this sizes calculated the wt & ht of the icon as 48dp (i.e.lmargin + width + rmargin) -->
     <dimen name="img_down_wt_rv_item_desc">48dp</dimen>
     <dimen name="img_down_ht_rv_item_desc">32dp</dimen>
-    <dimen name="img_down_margin_t_rv_item_desc">@dimen/txt_desc_margin_t_rv_item_desc</dimen>
+    <dimen name="img_down_margin_t_rv_item_desc">10dp</dimen>
     <!-- fragment_video.xml -->
     <dimen name="rlt_lyt_root_w_video">200dp</dimen>
     <!-- fragment_venue_details.xml -->

@@ -1,15 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.R.color;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -72,14 +62,21 @@ import com.wcities.eventseeker.custom.view.CircleImageView;
 import com.wcities.eventseeker.custom.view.ResizableImageView;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.interfaces.PublishListener;
-import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
-import com.wcities.eventseeker.util.VersionUtil;
-import com.wcities.eventseeker.util.ViewUtil;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 public class FriendsActivityFragmentTab extends PublishEventListFragment implements 
 		StatusCallback, OnClickListener, PublishListener {
@@ -599,7 +596,6 @@ public class FriendsActivityFragmentTab extends PublishEventListFragment impleme
 		private void updateAttendingChkSave(FriendNewsItem item, CheckBox chkSave) {
 			chkSave.setChecked(item.getUserAttending() == Attending.SAVED);			
 		}
-		
 	}
 	
 	private void onBuyTicketClicked(FriendNewsItem item) {
@@ -607,7 +603,8 @@ public class FriendsActivityFragmentTab extends PublishEventListFragment impleme
 		BaseActivityTab baseActivityTab = (BaseActivityTab) FragmentUtil.getActivity(this);
 				
 		Intent intent = new Intent(eventSeekr, WebViewActivityTab.class);
-		intent.putExtra(BundleKeys.URL, item.getBookingUrl());
+		intent.putExtra(BundleKeys.URL, item.getBookingUrl() + "&lang="
+                + ((EventSeekr) FragmentUtil.getApplication(this)).getLocale().getLocaleCode());
 		baseActivityTab.startActivity(intent);
 		
 		GoogleAnalyticsTracker.getInstance().sendEvent(eventSeekr, 
