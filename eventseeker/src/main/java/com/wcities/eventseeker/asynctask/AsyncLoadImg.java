@@ -61,6 +61,7 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 		 * image for fb user pic or normal(WCities) images added this boolean flag
 		 */
 		private boolean isFBUserProfilePic;
+        private boolean scaleDown;
 		
 		/**
 		 * list of urls in order of their priorities. First url will be attempted first. 
@@ -149,6 +150,20 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 		
 		startExecution(imgDetails);
 	}
+
+    public void loadImg(ImageView imageView, ImgResolution imgResolution, WeakReference<RecyclerView> recyclerView,
+                        int pos, BitmapCacheable bitmapCacheable, boolean scaleDown) {
+        //Log.i(TAG, "loadImg() for pos = " + pos);
+        ImgDetails imgDetails = new ImgDetails();
+        imgDetails.imageView = imageView;
+        imgDetails.key = bitmapCacheable.getKey(imgResolution);
+        imgDetails.recyclerView = recyclerView;
+        imgDetails.pos = pos;
+        imgDetails.urls = BitmapUtil.getUrlsInOrder(bitmapCacheable, imgResolution);
+        imgDetails.scaleDown = scaleDown;
+
+        startExecution(imgDetails);
+    }
 	
 	public void loadImg(ImageView imageView, ImgResolution imgResolution, BitmapCacheable bitmapCacheable) {
 		//Log.i(TAG, "loadImg()");
@@ -252,7 +267,7 @@ public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 					Log.i(TAG, "url for img = " + url);
 					try {
 						if (!imgDetails.isFBUserProfilePic) {
-							imgDetails.bitmap = BitmapUtil.getBitmap(url);
+							imgDetails.bitmap = BitmapUtil.getBitmap(url, imgDetails.scaleDown);
 							
 						} else {
 							imgDetails.bitmap = BitmapUtil.getFBUserBitmap(url);

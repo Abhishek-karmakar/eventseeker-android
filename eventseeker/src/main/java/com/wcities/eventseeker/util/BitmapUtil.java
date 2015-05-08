@@ -25,9 +25,8 @@ import java.util.List;
 public class BitmapUtil {
 
 	private static final String TAG = BitmapUtil.class.getSimpleName();
-	private static final int MAX_BITMAP_DIMENSION = 2048;
 
-	public static Bitmap getBitmap(String url) throws FileNotFoundException {
+	public static Bitmap getBitmap(String url, boolean scaleDown) throws FileNotFoundException {
 		//Log.i(TAG, "getBitmap()");
 		Bitmap bitmap = null;
 		InputStream is = null;
@@ -35,22 +34,14 @@ public class BitmapUtil {
 		try {
 			is = (InputStream) new URL(url).getContent();
 			//Log.i(TAG, "got is");
-			BitmapFactory.Options options = new BitmapFactory.Options();
-			options.inJustDecodeBounds = true;
-			BitmapFactory.decodeStream(is, null, options);
+            if (scaleDown) {
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 4;
+                bitmap = BitmapFactory.decodeStream(is, null, options);
 
-			/**
-			 * NOTE: In few of the devices like Nexus 7, Sometimes an error was showing saying 'bitmap is
-			 * too large to upload' while setting the bitmap on ImageView. So, scaling the bitmaps max dimen
-			 * to be 'MAX_BITMAP_DIMENSION' and keeping the aspect ratio constant, if width or height >
-			 * MAX_BITMAP_DIMENSION.
-			 */
-			if (options.outWidth > MAX_BITMAP_DIMENSION || options.outHeight > MAX_BITMAP_DIMENSION) {
-				options.inSampleSize = 4;
-			}
-			options.inJustDecodeBounds = false;
-			is = (InputStream) new URL(url).getContent();
-			bitmap = BitmapFactory.decodeStream(is, null, options);
+            } else {
+                bitmap = BitmapFactory.decodeStream(is);
+            }
 
 		} catch (MalformedURLException e) {
 			e.printStackTrace();

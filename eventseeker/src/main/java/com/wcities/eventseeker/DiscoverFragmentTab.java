@@ -291,8 +291,12 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 			loadEvents.cancel(true);
 		}
 	}
-	
-	/**
+
+    public Handler getHandler() {
+        return handler;
+    }
+
+    /**
 	 * @param positionToBeCentered
 	 * @param isCalledDueToCatChange This is false when called from onGlobalLayoutListenerCatTitles()
 	 * For eg - on orientation change or while coming back to this screen from some other screen, when

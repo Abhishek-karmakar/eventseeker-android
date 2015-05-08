@@ -123,7 +123,7 @@ public class RVPopularArtistsAdapter extends RVAdapterBase<RVPopularArtistsAdapt
 
 					AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
 					asyncLoadImg.loadImg(viewHolder.imgAritstCategory, ImgResolution.LOW, weakRecyclerView, position,
-							featuredListArtistCategory);
+							featuredListArtistCategory, true);
 				}
 				viewHolder.btnAritstCategory.setText(featuredListArtistCategory.getName());
 

@@ -86,11 +86,16 @@ public class RVCatTitlesAdapterTab extends RVAdapterBase<RVCatTitlesAdapterTab.V
 		if (this.selectedPos != selectedPos) {
 			int catIndex = selectedPos % AppConstants.TOTAL_CATEGORIES;
 			selectedCatId = evtCategories.get(catIndex).getId();
-			
-			notifyItemChanged(this.selectedPos);
-			this.selectedPos = selectedPos;
-			notifyItemChanged(this.selectedPos);
-			
+            final int prevSelectedPos = this.selectedPos;
+            this.selectedPos = selectedPos;
+            discoverFragmentTab.getHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                    notifyItemChanged(prevSelectedPos);
+                    notifyItemChanged(RVCatTitlesAdapterTab.this.selectedPos);
+                }
+            });
+
 			/**
 			 * not calling onCatChanged() from here, because this setSelectedPos() function is called number 
 			 * of times even when scroll is in progress, whereas we need to reset eventList only if 
