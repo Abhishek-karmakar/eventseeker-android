@@ -29,7 +29,6 @@ import com.wcities.eventseeker.util.FragmentUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class PopularArtistsFragment extends FragmentLoadableFromBackStack implements FullScrnProgressListener,
 		LoadItemsInBackgroundListener, AsyncTaskListener<Void>, OnPopularArtistsCategoryClickListener {
 
@@ -46,6 +45,7 @@ public class PopularArtistsFragment extends FragmentLoadableFromBackStack implem
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setRetainInstance(true);
 		latlon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 	}
 
@@ -68,14 +68,16 @@ public class PopularArtistsFragment extends FragmentLoadableFromBackStack implem
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-
 		if (popularArtistCategories == null) {
 			popularArtistCategories = new ArrayList<PopularArtistCategory>();
 			popularArtistCategories.add(null);
 
 			popularArtistsAdapter = new RVPopularArtistsAdapter(popularArtistCategories, this, this, this, this);
+
+		} else {
+			popularArtistsAdapter.updateViewParams();
 		}
-			rvPopularArtists.setAdapter(popularArtistsAdapter);
+		rvPopularArtists.setAdapter(popularArtistsAdapter);
 	}
 
 	@Override

@@ -8,41 +8,28 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/lnr_root_padding_fragment_follow_more_artists" />
 
-    <!--
-        NOTE: The images of the Categories for the Featured List of Artists are having more height
-            than the Actual Popular Artist Categories 'drawable'. So, to make the image buttons to have
-            same dimension for both types of categories(Featured List of Artist & Actual Popular Artist)
-            this ImageView is added with 'src="ic_featured"' & the 'imgAritstCategory' is aligned with
-            this reference ImageView to all the sides and also due to this we have added
-            'android:scaleType="centerCrop"' in 'imgAritstCategory'. As the 'imgReference' is used just
-            for referenceing the dimensions, it is kept 'invisible'
-    -->
-    <com.wcities.eventseeker.custom.view.ResizableImageView
-        android:id="@+id/imgReference"
-        android:layout_width="match_parent"
+    <ProgressBar
+        android:id="@+id/prgbrAritstCategory"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/vSeparator"
-        android:layout_centerInParent="true"
-        android:scaleType="fitStart"
-        android:src="@drawable/ic_featured"
-        android:visibility="invisible" />
+        android:layout_centerInParent="true" />
 
     <ImageView
         android:id="@+id/imgAritstCategory"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:src="@drawable/ic_featured" />
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        android:layout_below="@+id/vSeparator" />
 
     <Button
         android:id="@+id/btnAritstCategory"
         style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imgReference"
-        android:layout_alignLeft="@+id/imgReference"
-        android:layout_alignRight="@+id/imgReference"
-        android:layout_alignTop="@+id/imgReference"
+        android:layout_alignBottom="@+id/imgAritstCategory"
+        android:layout_alignLeft="@+id/imgAritstCategory"
+        android:layout_alignRight="@+id/imgAritstCategory"
+        android:layout_alignTop="@+id/imgAritstCategory"
         android:layout_below="@+id/vSeparator"
         android:scaleType="centerCrop" />
 

@@ -33,6 +33,7 @@ import java.util.List;
 
 public class PopularArtistsFragmentTab extends FragmentLoadableFromBackStack implements FullScrnProgressListener,
 		LoadItemsInBackgroundListener, AsyncTaskListener<Void>, OnPopularArtistsCategoryClickListener, View.OnClickListener {
+	private static final String TAG = PopularArtistsFragmentTab.class.getSimpleName();
 
 	private RecyclerView rvPopularArtists;
 	private RelativeLayout rltLytProgressBar;
@@ -45,6 +46,7 @@ public class PopularArtistsFragmentTab extends FragmentLoadableFromBackStack imp
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setRetainInstance(true);
 		latlon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 	}
 
@@ -74,12 +76,14 @@ public class PopularArtistsFragmentTab extends FragmentLoadableFromBackStack imp
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-
 		if (popularArtistCategories == null) {
 			popularArtistCategories = new ArrayList<PopularArtistCategory>();
 			popularArtistCategories.add(null);
 
 			popularArtistsAdapter = new RVPopularArtistsAdapter(popularArtistCategories, this, this, this, this);
+
+		} else {
+			popularArtistsAdapter.updateViewParams();
 		}
 		rvPopularArtists.setAdapter(popularArtistsAdapter);
 	}

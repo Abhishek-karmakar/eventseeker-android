@@ -15,6 +15,12 @@ import com.wcities.eventseeker.util.FragmentUtil;
 public class SportsArtistsFragment extends FragmentLoadableFromBackStack implements View.OnClickListener {
 
 	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setRetainInstance(true);
+	}
+
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_sports_artists, null);
