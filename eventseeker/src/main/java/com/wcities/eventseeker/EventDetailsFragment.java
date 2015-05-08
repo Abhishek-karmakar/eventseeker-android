@@ -678,20 +678,20 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
     private void updateFabLinks() {
         final Resources res = FragmentUtil.getResources(this);
         if (event.getWebsite() == null) {
-            fabWeb.setImageDrawable(res.getDrawable(R.drawable.ic_ticket_unavailable_floating));
+            fabWeb.setImageDrawable(res.getDrawable(R.drawable.ic_web_link_unavailable));
             fabWeb.setEnabled(false);
 
         } else {
-            fabWeb.setImageDrawable(res.getDrawable(R.drawable.ic_ticket_available_floating));
+            fabWeb.setImageDrawable(res.getDrawable(R.drawable.ic_web_link_available));
             fabWeb.setEnabled(true);
         }
 
         if (event.getFbLink() == null) {
-            fabFb.setImageDrawable(res.getDrawable(R.drawable.ic_ticket_unavailable_floating));
+            fabFb.setImageDrawable(res.getDrawable(R.drawable.ic_facebook_link_unavailable));
             fabFb.setEnabled(false);
 
         } else {
-            fabFb.setImageDrawable(res.getDrawable(R.drawable.ic_ticket_available_floating));
+            fabFb.setImageDrawable(res.getDrawable(R.drawable.ic_facebook_link_available));
             fabFb.setEnabled(true);
         }
     }
