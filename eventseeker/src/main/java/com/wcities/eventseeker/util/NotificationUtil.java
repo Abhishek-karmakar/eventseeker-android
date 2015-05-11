@@ -162,7 +162,9 @@ public class NotificationUtil {
 		        .setSmallIcon(R.drawable.ic_notification_white)
 		        .setColor(context.getResources().getColor(R.color.colorPrimary))
 		        .setContentTitle(title)
-		        .setContentText(message);
+		        .setContentText(message)
+				.setStyle(new NotificationCompat.BigTextStyle()
+						.bigText(message));
 		mBuilder.setContentIntent(pendingIntent);
 		mBuilder.setAutoCancel(true);
 		mBuilder.setOnlyAlertOnce(true);
