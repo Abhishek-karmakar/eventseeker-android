@@ -393,35 +393,31 @@
     <string name="title_dialog_discover_setting">@string/title_settings_mobile_app</string>
     
     <!-- MusicArtistsFragment -->
-    <string name="btn_alternative_rock">rock alternativo</string>
-    <string name="btn_classic_rock">rock classico</string>
-    <string name="btn_indie_rock">indie rock</string>
+    <string name="btn_rock">rock</string>
     <string name="btn_folk">folk</string>
     <string name="btn_country">country</string>
     <string name="btn_electronic">elettronica</string>
     <string name="btn_pop">popolare</string>
-    <string name="btn_punk">punk</string>
-    <string name="btn_hard_rock_metal">hard rock \/ metal</string>
-    <string name="btn_world_music">Musica Etnica</string>
-    <string name="btn_blues_jazz">blues \/ jazz</string>
+    <string name="btn_metal">metal</string>
+    <string name="btn_world">Etnica</string>
+    <string name="btn_jazz">jazz</string>
+    <string name="btn_blues">blues</string>
     <string name="btn_hip_hop">hip hop</string>
-    <string name="btn_soul_r_and_b_funck">Soul, R&amp;B, Funk</string>
+    <string name="btn_soul_r_and_b">Soul \/ R&amp;B</string>
     <string name="btn_classical">classica</string>
     
     <string name="title_categories">categorie</string>
-    <string name="title_alternative_rock">rock alternativo</string>
-    <string name="title_classic_rock">rock classico</string>
-    <string name="title_indie_rock">indie rock</string>
+    <string name="title_rock">rock</string>
     <string name="title_folk">folk</string>
     <string name="title_country">country</string>
     <string name="title_electronic">elettronica</string>
     <string name="title_pop">popolare</string>
-    <string name="title_punk">punk</string>
-    <string name="title_hard_rock_metal">hard rock \/ metal</string>
-    <string name="title_world_music">Musica Etnica</string>
-    <string name="title_blues_jazz">blues \/ jazz</string>
+    <string name="title_jazz">jazz</string>
+    <string name="title_metal">metal</string>
+    <string name="title_world">Etnica</string>
+    <string name="title_blues">blues</string>
     <string name="title_hip_hop">hip hop</string>
-    <string name="title_soul_r_and_b_funk">Soul \/ R&amp;B \/ Funk</string>
+    <string name="title_soul_r_and_b">Soul \/ R&amp;B</string>
     <string name="title_classical">classica</string>
     
     <!-- NavigationFragment -->

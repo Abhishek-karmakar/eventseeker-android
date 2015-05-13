@@ -364,20 +364,18 @@
     <string name="title_featured_list">Lista destacada</string>
     
    	<string name="title_categories">Categorías</string>
-    <string name="title_alternative_rock">Rock Alternativo</string>
-    <string name="title_classic_rock">Rock Clásico</string>
-    <string name="title_indie_rock">Indie Rock</string>
-    <string name="title_folk">Folk</string>
-    <string name="title_country">Country</string>
+    <string name="title_rock">Rock</string>
+    <string name="title_folk">Música folclórica</string>
+    <string name="title_country">Música country</string>
     <string name="title_electronic">Electrónica</string>
     <string name="title_pop">Pop</string>
-    <string name="title_punk">Punk</string>
-    <string name="title_hard_rock_metal">Hard Rock / Metal</string>
-    <string name="title_world_music">Músicas del Mundo</string>
-    <string name="title_blues_jazz">Blues / Jazz</string>
-    <string name="title_hip_hop">Hip-Hop</string>
-    <string name="title_soul_r_and_b_funk">Soul / R&amp;B / Funk</string>
-    <string name="title_classical">Clásica</string>
+    <string name="title_jazz">Jazz</string>
+    <string name="title_metal">Metal</string>
+    <string name="title_world">Mundial</string>
+    <string name="title_blues">Blues</string>
+    <string name="title_hip_hop">Hip Hop</string>
+    <string name="title_soul_r_and_b">Soul / R&amp;B</string>
+    <string name="title_classical">Música clásica</string>
     
     <!-- DiscoverSettingDialogFragment -->
 	<string name="txt_search_radius">Buscar por radio (Miles)</string>
@@ -385,19 +383,17 @@
     <string name="title_dialog_discover_setting">@string/title_settings_mobile_app</string>
     
     <!-- MusicArtistsFragment -->
-    <string name="btn_alternative_rock">Rock Alternativo</string>
-    <string name="btn_classic_rock">Rock Clásico</string>
-    <string name="btn_indie_rock">Indie Rock</string>
+    <string name="btn_rock">Rock</string>
     <string name="btn_folk">Música folclórica</string>
     <string name="btn_country">Música country</string>
     <string name="btn_electronic">Electrónica</string>
     <string name="btn_pop">Pop</string>
-    <string name="btn_punk">Punk</string>
-    <string name="btn_hard_rock_metal">Hard Rock / Metal</string>
-    <string name="btn_world_music">Músicas Mundial</string>
-    <string name="btn_blues_jazz">Blues, Jazz</string>
+    <string name="btn_metal">Metal</string>
+    <string name="btn_world">Mundial</string>
+    <string name="btn_jazz">Jazz</string>
+    <string name="btn_blues">Blues</string>
     <string name="btn_hip_hop">Hip Hop</string>
-    <string name="btn_soul_r_and_b_funck">Soul / R&amp;B / Funk</string>
+    <string name="btn_soul_r_and_b">Soul / R&amp;B</string>
     <string name="btn_classical">Música clásica</string>
     
     <!-- LoginFragment -->

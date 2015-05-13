@@ -23,7 +23,7 @@
 
     <Button
         android:id="@+id/btnAritstCategory"
-        style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
+        style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.AlphaColorPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/imgAritstCategory"

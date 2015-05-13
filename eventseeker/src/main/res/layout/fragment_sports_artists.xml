@@ -19,7 +19,7 @@
 
             <Button
                 android:id="@+id/btnNFL"
-                style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
+                style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.AlphaColorPrimary"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/btn_nfl" />
@@ -37,7 +37,7 @@
 
             <Button
                 android:id="@+id/btnNBA"
-                style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
+                style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.AlphaColorPrimary"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/btn_nba" />
@@ -55,7 +55,7 @@
 
             <Button
                 android:id="@+id/btnNHL"
-                style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
+                style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.AlphaColorPrimary"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/btn_nhl" />
@@ -73,7 +73,7 @@
 
             <Button
                 android:id="@+id/btnMLB"
-                style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
+                style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.AlphaColorPrimary"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/btn_mlb" />
@@ -91,7 +91,7 @@
 
             <Button
                 android:id="@+id/btnMLS"
-                style="@style/Widget.EventSeeker.Button.AlphaColorPrimary"
+                style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.AlphaColorPrimary"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/btn_mls" />

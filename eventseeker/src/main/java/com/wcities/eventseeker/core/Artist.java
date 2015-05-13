@@ -1,12 +1,12 @@
 package com.wcities.eventseeker.core;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.cache.BitmapCacheable;
 import com.wcities.eventseeker.core.ArtistLink.LinkType;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Artist implements Serializable, BitmapCacheable {
 	
@@ -51,20 +51,18 @@ public class Artist implements Serializable, BitmapCacheable {
 		NHL("National Hockey League (NHL)"),
 		MLB("Major League Baseball (MLB)"),
 		MLS("Major League Soccer (MLS)"),
-		AlternativeRock("alternative rock"),
-		ClassicRock("classic rock"),
-		IndieRock("indie rock"),
-		Folk("folk"),
-		CountryAndWestern("Country and Western"),
-		Electronic("electronic"),
-		Pop("pop"),
-		Punk("punk"),
-		HardRock("hard rock"),
-		International("International"),
-		Blues("blues"),
-		RAndBFunkAndSoul("R&B Funk and Soul"),
-		HipHopAndRap("Hip-Hop & Rap"),
-		Classical("classical");
+		Rock("Rock"),
+		Folk("Folk"),
+		Country("Country and Western"),
+		Electronic("Electronic"),
+		Pop("Pop"),
+		Jazz("Jazz"),
+		Metal("Metal"),
+		World("World Hip-Hop"),
+		Blues("Blues"),
+		SoulRAndB("R&B Funk and Soul"),
+		HipHop("Hip-Hop & Rap"),
+		Classical("Classical");
 		
 		private String urlForm;
 		private Genre(String urlForm) {
