@@ -52,7 +52,6 @@
 	<string name="pls_login_to_see_artist_news">Por favor entrar a Facebook o Google desde la página \'Sincronizar Cuentas\' para ver las noticias de artista.</string>
     <string name="connection_lost">La conexión Internet no está en línea.</string>
     <string name="no_internet_connectivity">Internet desconectado</string>
-    <string name="yes">sí</string>
 	<string name="add_to_calender">Añadir a la agenda</string>
 	<string name="select_calender">Elegir la agenda</string>
 	<string name="event_added_to_calender_successfully">Evento añadido a la agenda exitosamente</string>
@@ -190,8 +189,6 @@
    	<string name="drive">Conducir</string>
    	
     <!-- Friends Activity -->
-    <string name="is_going_to">%1$s va al %2$s</string>
-    <string name="wants_to_go_to">%1$s quiere ir al %2$s</string>
     <string name="like">Gustar</string>
     <string name="comment">Comentario</string>
     <string name="events_are_better_with_friends">Los eventos siempre están mejores con amigos. Invítalos a eventseeker.</string>
@@ -213,9 +210,6 @@
  	<string name="rep_code_enter_a_valid_repcode">Por favor introduce un código rep válido.</string>
  	<string name="rep_code_submission">Envio del código rep</string>
  	<string name="ok">Ok</string>
-  
- 	<!-- My Events -->
-    <string name="no_events_in_your_area">No hay eventos actualmente en su región. Sigue más artistas para empezar su agenda de eventos personalizada.</string>
 
     <!-- About Us -->
     <string name="version">Versión</string>
@@ -224,17 +218,12 @@
     <string name="couldnt_find_drive_location">No podría encontrar las direcciones para este lugar.</string>	
     
     <!-- Discover -->
-    <string name="set_start_date">Configurar la fecha de iniciar el evento</string>	
-    <string name="loading">Cargando...</string>	
+    <string name="loading">Cargando...</string>
  
     <!-- Get Started -->
     <string name="skip">Ignorar</string>
- 	<string name="signin_for_better_experience">Se permite una experiencia mejor al conectarse.</string>
     <string name="couldnt_login_to_google_play_music">No podría conectar a la cuenta Google Play Music. Por favor averigüe que estás usando la cuenta verdadera de Google Play.</string>
-    <string name="why_login">¿Por que inicie la sesión?</string>
-    <string name="get_event_recommendations">Obtenga las recomendaciones del evento basadas en sus intereses</string>
-    <string name="stay_connected_with_friends">Quedase conectado con sus amigos y descubre a quién necesita invitar a eventos.</string>
- 
+
     <!-- Last Fm -->
     <string name="user_name">Nombre de usuario</string>
     <string name="user_name_could_not_be_found">El nombre de usuario no podría ser encontrado</string>
@@ -329,11 +318,8 @@
     <string name="btn_follow_all">Sigue todos</string>
     <string name="a_z">A - Z</string>
     <string name="recommendation_score">Recommendation Score</string>
-    <string name="dialog_title_follow_all">Sigue todos</string>
     <string name="dialog_msg_follow_all">¿Quieres seguir %1$d artistas?</string>
-    <string name="dialog_btn_yes">yes</string>
-    <string name="dialog_btn_no">no</string>
-    
+
     <!-- Following section screen names -->
     <string name="title_popular">Popular</string>
     <string name="title_featured_list">Lista destacada</string>

@@ -11,6 +11,7 @@ import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
@@ -34,8 +35,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
+import com.facebook.login.LoginResult;
 import com.wcities.eventseeker.AddressMapFragment;
 import com.wcities.eventseeker.BaseActivityTab;
 import com.wcities.eventseeker.NavigationActivityTab;
@@ -98,7 +98,6 @@ public class RVVenueDetailsAdapterTab extends RVAdapterBase<RVVenueDetailsAdapte
 	
 	private BitmapCache bitmapCache;
 	
-	private int fbCallCountForSameEvt = 0;
 	private RVVenueDetailsAdapterTab.ViewHolder holderPendingPublish;
 	private Event eventPendingPublish;
 
@@ -639,7 +638,7 @@ public class RVVenueDetailsAdapterTab extends RVAdapterBase<RVVenueDetailsAdapte
 		});
         
         holder.fabNavigate.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(FragmentUtil.getApplication(venueDetailsFragmentTab), NavigationActivityTab.class);
@@ -794,21 +793,21 @@ public class RVVenueDetailsAdapterTab extends RVAdapterBase<RVVenueDetailsAdapte
 	private void onImgTicketClick(final ViewHolder holder, final Event event) {
 		holder.imgTicket.setPressed(true);
 		handler.postDelayed(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				holder.imgTicket.setPressed(false);
-				
+
 				EventSeekr eventSeekr = FragmentUtil.getApplication(venueDetailsFragmentTab);
 				BaseActivityTab baseActivityTab = (BaseActivityTab) FragmentUtil.getActivity(venueDetailsFragmentTab);
-						
+
 				Intent intent = new Intent(eventSeekr, WebViewActivityTab.class);
 				intent.putExtra(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl()
-                    + "&lang=" + FragmentUtil.getApplication(venueDetailsFragmentTab).getLocale().getLocaleCode());
+						+ "&lang=" + FragmentUtil.getApplication(venueDetailsFragmentTab).getLocale().getLocaleCode());
 				baseActivityTab.startActivity(intent);
-				
-				GoogleAnalyticsTracker.getInstance().sendEvent(eventSeekr, 
-						baseActivityTab.getScreenName(), GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON, 
+
+				GoogleAnalyticsTracker.getInstance().sendEvent(eventSeekr,
+						baseActivityTab.getScreenName(), GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON,
 						GoogleAnalyticsTracker.Type.Event.name(), null, event.getId());
 			}
 		}, 200);
@@ -839,11 +838,10 @@ public class RVVenueDetailsAdapterTab extends RVAdapterBase<RVVenueDetailsAdapte
 						venueDetailsFragmentTab.handlePublishEvent();
 						
 					} else {
-						fbCallCountForSameEvt = 0;
 						event.setNewAttending(Attending.SAVED);
 						//NOTE: THIS CAN BE TESTED WITH PODUCTION BUILD ONLY
-						FbUtil.handlePublishEvent(venueDetailsFragmentTab, venueDetailsFragmentTab, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-								AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
+						FbUtil.handlePublishEvent(venueDetailsFragmentTab, venueDetailsFragmentTab, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
+								event);
 					}
 				}
 			}
@@ -1036,20 +1034,10 @@ public class RVVenueDetailsAdapterTab extends RVAdapterBase<RVVenueDetailsAdapte
 		this.loadEvents = (LoadEvents) loadDateWiseEvents;
 	}
 	
-	public void call(Session session, SessionState state, Exception exception) {
-		//Log.i(TAG, "call()");
-		fbCallCountForSameEvt++;
-		/**
-		 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
-		 */
-		if (fbCallCountForSameEvt < AppConstants.MAX_FB_CALL_COUNT_FOR_SAME_EVT_OR_ART) {
-			FbUtil.call(session, state, exception, venueDetailsFragmentTab, venueDetailsFragmentTab, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-					AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, eventPendingPublish);
-			
-		} else {
-			fbCallCountForSameEvt = 0;
-			venueDetailsFragmentTab.setPendingAnnounce(false);
-		}
+	public void onSuccess(LoginResult loginResult) {
+		//Log.d(TAG, "onSuccess()");
+		FbUtil.handlePublishEvent(venueDetailsFragmentTab, venueDetailsFragmentTab, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
+				eventPendingPublish);
 	}
 
 	public void onPublishPermissionGranted() {

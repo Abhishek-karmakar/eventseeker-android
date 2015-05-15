@@ -1,15 +1,13 @@
 package com.wcities.eventseeker;
 
-import java.util.Calendar;
-
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
 import com.wcities.eventseeker.adapter.DateWiseMyEventListAdapter;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -23,6 +21,8 @@ import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
+
+import java.util.Calendar;
 
 public class SearchEventsFragmentTab1 extends SearchEventsParentFragment implements 
 		SearchFragmentChildListener, LoadItemsInBackgroundListener, PublishListener {
@@ -104,13 +104,28 @@ public class SearchEventsFragmentTab1 extends SearchEventsParentFragment impleme
 		refresh(query);
 	}
 	
-	@Override
+	/*@Override
 	public void call(Session session, SessionState state, Exception exception) {
 		eventListAdapter.call(session, state, exception);
-	}
+	}*/
 
 	@Override
 	public void onPublishPermissionGranted() {
 		eventListAdapter.onPublishPermissionGranted();
+	}
+
+	@Override
+	public void onSuccess(LoginResult loginResult) {
+
+	}
+
+	@Override
+	public void onCancel() {
+
+	}
+
+	@Override
+	public void onError(FacebookException e) {
+
 	}
 }

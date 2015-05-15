@@ -29,6 +29,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils.TruncateAt;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -49,8 +50,8 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
 import com.melnykov.fab.FloatingActionButton;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.ShareOnFBDialogFragment.OnFacebookShareClickedListener;
@@ -147,8 +148,6 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	
 	private int imgEventPadL, imgEventPadR, imgEventPadT, imgEventPadB, fabSaveMarginT;
 	private List<View> hiddenViews;
-	
-	private int fbCallCountForSameArtist = 0;
 	
 	private boolean isArtistSaveClicked;
 	
@@ -617,39 +616,40 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
         ValueAnimator va = ValueAnimator.ofInt(1, 100);
         va.setDuration(TRANSITION_ANIM_DURATION);
         va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-        	
-            int color = FragmentUtil.getResources(ArtistDetailsFragment.this).getColor(android.R.color.white);
-            
-            public void onAnimationUpdate(ValueAnimator animation) {
-                Integer progress = (Integer) animation.getAnimatedValue();
 
-                RelativeLayout.LayoutParams lp = (LayoutParams) imgArtist.getLayoutParams();
-                lp.width = (int) (sharedElementPosition.getWidth() + 
-                		(((screenW - sharedElementPosition.getWidth()) * progress.intValue()) / 100));
-                lp.height = (int) (sharedElementPosition.getHeight() + 
-                		(((imgArtistHt - sharedElementPosition.getHeight()) * progress.intValue()) / 100));
-                imgArtist.setLayoutParams(lp);
-                
-                int newAlpha = (int) (progress * 2.55);
-                rootView.setBackgroundColor(Color.argb(newAlpha, Color.red(color), Color.green(color), Color.blue(color)));
-            }
-        });
+			int color = FragmentUtil.getResources(ArtistDetailsFragment.this).getColor(android.R.color.white);
+
+			public void onAnimationUpdate(ValueAnimator animation) {
+				Integer progress = (Integer) animation.getAnimatedValue();
+
+				RelativeLayout.LayoutParams lp = (LayoutParams) imgArtist.getLayoutParams();
+				lp.width = (int) (sharedElementPosition.getWidth() +
+						(((screenW - sharedElementPosition.getWidth()) * progress.intValue()) / 100));
+				lp.height = (int) (sharedElementPosition.getHeight() +
+						(((imgArtistHt - sharedElementPosition.getHeight()) * progress.intValue()) / 100));
+				imgArtist.setLayoutParams(lp);
+
+				int newAlpha = (int) (progress * 2.55);
+				rootView.setBackgroundColor(Color.argb(newAlpha, Color.red(color), Color.green(color), Color.blue(color)));
+			}
+		});
         
 		animatorSet = new AnimatorSet();
         animatorSet.playTogether(xAnim, yAnim, va);
         animatorSet.addListener(new AnimatorListener() {
-        	
-        	private boolean isCancelled;
-			
+
+			private boolean isCancelled;
+
 			@Override
 			public void onAnimationStart(Animator arg0) {
 				recyclerVArtists.setVisibility(View.INVISIBLE);
-				((MainActivity)FragmentUtil.getActivity(ArtistDetailsFragment.this)).onSharedElementAnimStart();
+				((MainActivity) FragmentUtil.getActivity(ArtistDetailsFragment.this)).onSharedElementAnimStart();
 			}
-			
+
 			@Override
-			public void onAnimationRepeat(Animator arg0) {}
-			
+			public void onAnimationRepeat(Animator arg0) {
+			}
+
 			@Override
 			public void onAnimationEnd(Animator arg0) {
 				//Log.d(TAG, "onAnimationEnd()");
@@ -658,13 +658,15 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 					recyclerVArtists.setVisibility(View.VISIBLE);
 					Animation slideInFromBottom = AnimationUtils.loadAnimation(FragmentUtil.getApplication(ArtistDetailsFragment.this), R.anim.slide_in_from_bottom);
 					slideInFromBottom.setAnimationListener(new AnimationListener() {
-						
+
 						@Override
-						public void onAnimationStart(Animation animation) {}
-						
+						public void onAnimationStart(Animation animation) {
+						}
+
 						@Override
-						public void onAnimationRepeat(Animation animation) {}
-						
+						public void onAnimationRepeat(Animation animation) {
+						}
+
 						@Override
 						public void onAnimationEnd(Animation animation) {
 							/**
@@ -678,7 +680,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 					recyclerVArtists.startAnimation(slideInFromBottom);
 				}
 			}
-			
+
 			@Override
 			public void onAnimationCancel(Animator arg0) {
 				//Log.d(TAG, "onAnimationCancel()");
@@ -696,65 +698,70 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		
 		Animation slideOutToBottom = AnimationUtils.loadAnimation(FragmentUtil.getApplication(ArtistDetailsFragment.this), R.anim.slide_out_to_bottom);
 		slideOutToBottom.setAnimationListener(new AnimationListener() {
-			
+
 			@Override
-			public void onAnimationStart(Animation animation) {}
-			
+			public void onAnimationStart(Animation animation) {
+			}
+
 			@Override
-			public void onAnimationRepeat(Animation animation) {}
-			
+			public void onAnimationRepeat(Animation animation) {
+			}
+
 			@Override
 			public void onAnimationEnd(Animation animation) {
 				recyclerVArtists.setVisibility(View.INVISIBLE);
-				
+
 				animatorSet = new AnimatorSet();
-				
+
 				SharedElement sharedElement = sharedElements.get(0);
-		        
+
 				final SharedElementPosition sharedElementPosition = sharedElement.getSharedElementPosition();
-		        ObjectAnimator xAnim = ObjectAnimator.ofFloat(imgArtist, "x", 0, sharedElementPosition.getStartX());
-		        xAnim.setDuration(TRANSITION_ANIM_DURATION);
-		        
-		        ObjectAnimator yAnim = ObjectAnimator.ofFloat(imgArtist, "y", 0, sharedElementPosition.getStartY());
-		        yAnim.setDuration(TRANSITION_ANIM_DURATION);
-		        
-		        ValueAnimator va = ValueAnimator.ofInt(100, 1);
-		        va.setDuration(TRANSITION_ANIM_DURATION);
-		        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-		        	
-		        	int color = FragmentUtil.getResources(ArtistDetailsFragment.this).getColor(android.R.color.white);
-		        	
-		            public void onAnimationUpdate(ValueAnimator animation) {
-		                Integer value = (Integer) animation.getAnimatedValue();
-		                imgArtist.getLayoutParams().width = (int) (sharedElementPosition.getWidth() + 
-		                		(((screenW - sharedElementPosition.getWidth()) * value.intValue()) / 100));
-		                imgArtist.getLayoutParams().height = (int) (sharedElementPosition.getHeight() + 
-		                		(((imgArtistHt - sharedElementPosition.getHeight()) * value.intValue()) / 100));
-		                imgArtist.requestLayout();
-		                
-		                int newAlpha = (int) (value * 2.55);
-		                rootView.setBackgroundColor(Color.argb(newAlpha, Color.red(color), Color.green(color), Color.blue(color)));
-		            }
-		        });
-		        
-		        animatorSet.playTogether(xAnim, yAnim, va);
-		        animatorSet.addListener(new AnimatorListener() {
-					
+				ObjectAnimator xAnim = ObjectAnimator.ofFloat(imgArtist, "x", 0, sharedElementPosition.getStartX());
+				xAnim.setDuration(TRANSITION_ANIM_DURATION);
+
+				ObjectAnimator yAnim = ObjectAnimator.ofFloat(imgArtist, "y", 0, sharedElementPosition.getStartY());
+				yAnim.setDuration(TRANSITION_ANIM_DURATION);
+
+				ValueAnimator va = ValueAnimator.ofInt(100, 1);
+				va.setDuration(TRANSITION_ANIM_DURATION);
+				va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+					int color = FragmentUtil.getResources(ArtistDetailsFragment.this).getColor(android.R.color.white);
+
+					public void onAnimationUpdate(ValueAnimator animation) {
+						Integer value = (Integer) animation.getAnimatedValue();
+						imgArtist.getLayoutParams().width = (int) (sharedElementPosition.getWidth() +
+								(((screenW - sharedElementPosition.getWidth()) * value.intValue()) / 100));
+						imgArtist.getLayoutParams().height = (int) (sharedElementPosition.getHeight() +
+								(((imgArtistHt - sharedElementPosition.getHeight()) * value.intValue()) / 100));
+						imgArtist.requestLayout();
+
+						int newAlpha = (int) (value * 2.55);
+						rootView.setBackgroundColor(Color.argb(newAlpha, Color.red(color), Color.green(color), Color.blue(color)));
+					}
+				});
+
+				animatorSet.playTogether(xAnim, yAnim, va);
+				animatorSet.addListener(new AnimatorListener() {
+
 					@Override
-					public void onAnimationStart(Animator animation) {}
-					
+					public void onAnimationStart(Animator animation) {
+					}
+
 					@Override
-					public void onAnimationRepeat(Animator animation) {}
-					
+					public void onAnimationRepeat(Animator animation) {
+					}
+
 					@Override
 					public void onAnimationEnd(Animator animation) {
 						FragmentUtil.getActivity(ArtistDetailsFragment.this).onBackPressed();
 					}
-					
+
 					@Override
-					public void onAnimationCancel(Animator animation) {}
+					public void onAnimationCancel(Animator animation) {
+					}
 				});
-		        animatorSet.start();
+				animatorSet.start();
 			}
 		});
 		/**
@@ -851,7 +858,6 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		private VideoPagerAdapter videoPagerAdapter;
 		private FriendsRVAdapter friendsRVAdapter;
 		
-		private int fbCallCountForSameEvt = 0;
 		private ArtistRVAdapter.ViewHolder holderPendingPublish;
 		private Event eventPendingPublish;
 		
@@ -1513,24 +1519,24 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		private void onEventClick(final ViewHolder holder, final Event event) {
 			holder.rltLytRoot.setPressed(true);
 			artistDetailsFragment.handler.postDelayed(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					List<SharedElement> sharedElements = new ArrayList<SharedElement>();
-					
-					SharedElementPosition sharedElementPosition = new SharedElementPosition(artistDetailsFragment.imgEventPadL, 
-							holder.itemView.getTop() + artistDetailsFragment.imgEventPadT, 
-							holder.imgEvent.getWidth() - artistDetailsFragment.imgEventPadL - artistDetailsFragment.imgEventPadR, 
+
+					SharedElementPosition sharedElementPosition = new SharedElementPosition(artistDetailsFragment.imgEventPadL,
+							holder.itemView.getTop() + artistDetailsFragment.imgEventPadT,
+							holder.imgEvent.getWidth() - artistDetailsFragment.imgEventPadL - artistDetailsFragment.imgEventPadR,
 							holder.imgEvent.getHeight() - artistDetailsFragment.imgEventPadT - artistDetailsFragment.imgEventPadB);
 					SharedElement sharedElement = new SharedElement(sharedElementPosition, holder.imgEvent);
 					sharedElements.add(sharedElement);
 					artistDetailsFragment.addViewsToBeHidden(holder.imgEvent);
-					
+
 					//Log.d(TAG, "AT issue event = " + event);
 					((EventListener) FragmentUtil.getActivity(artistDetailsFragment)).onEventSelected(event, sharedElements);
-					
+
 					artistDetailsFragment.onPushedToBackStack();
-					
+
 					holder.rltLytRoot.setPressed(false);
 				}
 			}, 200);
@@ -1539,30 +1545,30 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		private void onImgTicketClick(final ViewHolder holder, final Event event) {
 			holder.rltTicket.setPressed(true);
 			artistDetailsFragment.handler.postDelayed(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					holder.rltTicket.setPressed(false);
 					Bundle args = new Bundle();
 					args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl()
-                            + "&lang=" + ((EventSeekr) FragmentUtil.getApplication(artistDetailsFragment)).getLocale().getLocaleCode());
-					((ReplaceFragmentListener)FragmentUtil.getActivity(artistDetailsFragment)).replaceByFragment(
+							+ "&lang=" + ((EventSeekr) FragmentUtil.getApplication(artistDetailsFragment)).getLocale().getLocaleCode());
+					((ReplaceFragmentListener) FragmentUtil.getActivity(artistDetailsFragment)).replaceByFragment(
 							AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
-					
+
 					/**
 					 * need to call onPushedToBackStack() since we are adding any fragment instead of replacing on artist details screen.
 					 * Why adding? Answer: If we replace or remove-add anything on artist details fragment, it crashes with 
 					 * "IllegalArgumentException: no view found for id R.id.vPagerVideos for 
 					 * VideoFragment" on coming back to artist details screen. Couldn't find its solution. 
 					 * Probably it's happening with any Fragment within RecyclerView.
-					 */ 
-					((FragmentHavingFragmentInRecyclerView)artistDetailsFragment).onPushedToBackStackFHFIR();
-					
+					 */
+					((FragmentHavingFragmentInRecyclerView) artistDetailsFragment).onPushedToBackStackFHFIR();
+
 					/**
 					 * added on 15-12-2014
 					 */
-					GoogleAnalyticsTracker.getInstance().sendEvent(FragmentUtil.getApplication(artistDetailsFragment), 
-							artistDetailsFragment.getScreenName(), GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON, 
+					GoogleAnalyticsTracker.getInstance().sendEvent(FragmentUtil.getApplication(artistDetailsFragment),
+							artistDetailsFragment.getScreenName(), GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON,
 							GoogleAnalyticsTracker.Type.Event.name(), null, event.getId());
 				}
 			}, 200);
@@ -1571,33 +1577,32 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		private void onImgSaveClick(final ViewHolder holder, final Event event) {
 			holder.rltSave.setPressed(true);
 			artistDetailsFragment.handler.postDelayed(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					holder.rltSave.setPressed(false);
-					
+
 					EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(artistDetailsFragment).getApplication();
 					if (event.getAttending() == Attending.SAVED) {
 						event.setAttending(Attending.NOT_GOING);
-						new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.event, event.getId(), 
+						new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.event, event.getId(),
 								event.getAttending().getValue(), UserTrackingType.Add).execute();
-		    			updateImgSaveSrc(holder, event, FragmentUtil.getResources(artistDetailsFragment));
-						
+						updateImgSaveSrc(holder, event, FragmentUtil.getResources(artistDetailsFragment));
+
 					} else {
 						artistDetailsFragment.event = eventPendingPublish = event;
 						holderPendingPublish = holder;
-						
+
 						if (eventSeekr.getGPlusUserId() != null) {
 							event.setNewAttending(Attending.SAVED);
 							artistDetailsFragment.handlePublishEvent();
-							
+
 						} else {
 							artistDetailsFragment.isArtistSaveClicked = false;
-							fbCallCountForSameEvt = 0;
 							event.setNewAttending(Attending.SAVED);
 							//NOTE: THIS CAN BE TESTED WITH PODUCTION BUILD ONLY
-							FbUtil.handlePublishEvent(artistDetailsFragment, artistDetailsFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-									AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
+							FbUtil.handlePublishEvent(artistDetailsFragment, artistDetailsFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
+									event);
 						}
 					}
 				}
@@ -1607,18 +1612,18 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		private void onImgShareClick(final ViewHolder holder, final Event event) {
 			holder.rltShare.setPressed(true);
 			artistDetailsFragment.handler.postDelayed(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					holder.rltShare.setPressed(false);
-					
-					ShareViaDialogFragment shareViaDialogFragment = ShareViaDialogFragment.newInstance(event, 
+
+					ShareViaDialogFragment shareViaDialogFragment = ShareViaDialogFragment.newInstance(event,
 							artistDetailsFragment.getScreenName());
 					/**
 					 * Passing activity fragment manager, since using this fragment's child fragment manager 
 					 * doesn't retain dialog on orientation change
 					 */
-					shareViaDialogFragment.show(((FragmentActivity)FragmentUtil.getActivity(artistDetailsFragment))
+					shareViaDialogFragment.show(((FragmentActivity) FragmentUtil.getActivity(artistDetailsFragment))
 							.getSupportFragmentManager(), FRAGMENT_TAG_SHARE_VIA_DIALOG);
 				}
 			}, 200);
@@ -1654,13 +1659,13 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			holder.txtDesc.setText(Html.fromHtml(artistDetailsFragment.artist.getDescription()));
 			holder.imgDown.setVisibility(View.VISIBLE);
 			holder.imgDown.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
 					//Log.d(TAG, "totalScrolled  = " + holder.itemView.getTop());
 					if (isArtistDescExpanded) {
 						collapseArtistDesc(holder);
-						
+
 						/**
 						 * update scrolled distance after collapse, because sometimes it can happen that view becamse scrollable only
 						 * due to expanded description after which if user collapses it, then based on recyclerview
@@ -1668,13 +1673,13 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 						 * Accordingly we need to reset scrolled amount, artist img & title
 						 */
 						artistDetailsFragment.handler.post(new Runnable() {
-							
+
 							@Override
 							public void run() {
 								artistDetailsFragment.onScrolled(0, true, false);
 							}
 						});
-						
+
 					} else {
 						expandArtistDesc(holder);
 					}
@@ -1728,20 +1733,10 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			holder.itemView.setLayoutParams(lp);
 		}
 		
-		private void call(Session session, SessionState state, Exception exception) {
-			//Log.i(TAG, "call()");
-			fbCallCountForSameEvt++;
-			/**
-			 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
-			 */
-			if (fbCallCountForSameEvt < AppConstants.MAX_FB_CALL_COUNT_FOR_SAME_EVT_OR_ART) {
-				FbUtil.call(session, state, exception, artistDetailsFragment, artistDetailsFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-						AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, eventPendingPublish);
-				
-			} else {
-				fbCallCountForSameEvt = 0;
-				artistDetailsFragment.setPendingAnnounce(false);
-			}
+		private void onSuccess(LoginResult loginResult) {
+			//Log.d(TAG, "onSuccess()");
+			FbUtil.handlePublishEvent(artistDetailsFragment, artistDetailsFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
+					eventPendingPublish);
 		}
 
 		private void onPublishPermissionGranted() {
@@ -1848,24 +1843,25 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	}
 
 	@Override
-	public void call(Session session, SessionState state, Exception exception) {
+	public void onSuccess(LoginResult loginResult) {
+		Log.d(TAG, "onSuccess()");
 		if (isArtistSaveClicked) {
-			fbCallCountForSameArtist++;
-			/**
-			 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
-			 */
-			if (fbCallCountForSameArtist < AppConstants.MAX_FB_CALL_COUNT_FOR_SAME_EVT_OR_ART) {
-				FbUtil.call(session, state, exception, this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-						AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, artist);
-				
-			} else {
-				fbCallCountForSameArtist = 0;
-				setPendingAnnounce(false);
-			}
-			
+			FbUtil.handlePublishArtist(this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
+					artist);
+
 		} else {
-			artistRVAdapter.call(session, state, exception);
+			artistRVAdapter.onSuccess(loginResult);
 		}
+	}
+
+	@Override
+	public void onCancel() {
+		Log.d(TAG, "onCancel()");
+	}
+
+	@Override
+	public void onError(FacebookException e) {
+		Log.d(TAG, "onError()");
 	}
 
 	@Override
@@ -1938,9 +1934,8 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	public void onFacebookShareClicked(String dialogTag) {
 		if (dialogTag.equals(FRAGMENT_TAG_ARTIST_SAVED_DIALOG)) {
 			isArtistSaveClicked = true;
-			fbCallCountForSameArtist = 0;
-			FbUtil.handlePublishArtist(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-					AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, artist);
+			FbUtil.handlePublishArtist(this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
+					artist);
 		}
 	}
 

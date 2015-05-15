@@ -21,8 +21,8 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
 import com.wcities.eventseeker.SettingsFragmentTab.OnSettingsItemClickedListener;
 import com.wcities.eventseeker.adapter.RVCatEventsAdapterTab;
 import com.wcities.eventseeker.adapter.RVCatTitlesAdapterTab;
@@ -481,7 +481,7 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 		 * Passing activity fragment manager, since using this fragment's child fragment manager 
 		 * doesn't retain dialog on orientation change
 		 */
-		discoverSettingDialogFragment.show(((BaseActivityTab)FragmentUtil.getActivity(this))
+		discoverSettingDialogFragment.show(((BaseActivityTab) FragmentUtil.getActivity(this))
 				.getSupportFragmentManager(), FragmentUtil.getTag(discoverSettingDialogFragment));
 	}
 	
@@ -555,7 +555,7 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 	@Override
 	public void onTaskCompleted(Void... params) {
 		handler.post(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				//Log.d(TAG, "onEventsLoaded()");
@@ -575,7 +575,18 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 	}
 
 	@Override
-	public void call(Session session, SessionState state, Exception exception) {
-		rvCatEventsAdapterTab.call(session, state, exception);
+	public void onSuccess(LoginResult loginResult) {
+		Log.d(TAG, "onSuccess()");
+		rvCatEventsAdapterTab.onSuccess(loginResult);
+	}
+
+	@Override
+	public void onCancel() {
+		Log.d(TAG, "onCancel()");
+	}
+
+	@Override
+	public void onError(FacebookException e) {
+		Log.d(TAG, "onError()");
 	}
 }

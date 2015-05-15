@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils.TruncateAt;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,8 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
+import com.facebook.login.LoginResult;
 import com.wcities.eventseeker.ArtistDetailsFragmentTab;
 import com.wcities.eventseeker.BaseActivityTab;
 import com.wcities.eventseeker.R;
@@ -95,7 +95,6 @@ public class RVArtistDetailsAdapterTab extends RVAdapterBase<RVArtistDetailsAdap
 	
 	private BitmapCache bitmapCache;
 	
-	private int fbCallCountForSameEvt = 0;
 	private RVArtistDetailsAdapterTab.ViewHolder holderPendingPublish;
 	private Event eventPendingPublish;
 
@@ -760,21 +759,21 @@ public class RVArtistDetailsAdapterTab extends RVAdapterBase<RVArtistDetailsAdap
 	private void onImgTicketClick(final ViewHolder holder, final Event event) {
 		holder.imgTicket.setPressed(true);
 		handler.postDelayed(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				holder.imgTicket.setPressed(false);
-				
+
 				EventSeekr eventSeekr = FragmentUtil.getApplication(artistDetailsFragmentTab);
 				BaseActivityTab baseActivityTab = (BaseActivityTab) FragmentUtil.getActivity(artistDetailsFragmentTab);
-						
+
 				Intent intent = new Intent(eventSeekr, WebViewActivityTab.class);
 				intent.putExtra(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl()
-                    + "&lang=" + ((EventSeekr) FragmentUtil.getApplication(artistDetailsFragmentTab)).getLocale().getLocaleCode());
+						+ "&lang=" + ((EventSeekr) FragmentUtil.getApplication(artistDetailsFragmentTab)).getLocale().getLocaleCode());
 				baseActivityTab.startActivity(intent);
-				
-				GoogleAnalyticsTracker.getInstance().sendEvent(eventSeekr, 
-						baseActivityTab.getScreenName(), GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON, 
+
+				GoogleAnalyticsTracker.getInstance().sendEvent(eventSeekr,
+						baseActivityTab.getScreenName(), GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON,
 						GoogleAnalyticsTracker.Type.Event.name(), null, event.getId());
 			}
 		}, 200);
@@ -805,11 +804,10 @@ public class RVArtistDetailsAdapterTab extends RVAdapterBase<RVArtistDetailsAdap
 						artistDetailsFragmentTab.handlePublishEvent();
 						
 					} else {
-						fbCallCountForSameEvt = 0;
 						event.setNewAttending(Attending.SAVED);
 						//NOTE: THIS CAN BE TESTED WITH PODUCTION BUILD ONLY
-						FbUtil.handlePublishEvent(artistDetailsFragmentTab, artistDetailsFragmentTab, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-								AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
+						FbUtil.handlePublishEvent(artistDetailsFragmentTab, artistDetailsFragmentTab, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
+								event);
 					}
 				}
 			}
@@ -994,20 +992,10 @@ public class RVArtistDetailsAdapterTab extends RVAdapterBase<RVArtistDetailsAdap
 		this.loadArtistEvents = (LoadArtistEvents) loadDateWiseEvents;
 	}
 	
-	public void call(Session session, SessionState state, Exception exception) {
-		//Log.i(TAG, "call()");
-		fbCallCountForSameEvt++;
-		/**
-		 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
-		 */
-		if (fbCallCountForSameEvt < AppConstants.MAX_FB_CALL_COUNT_FOR_SAME_EVT_OR_ART) {
-			FbUtil.call(session, state, exception, artistDetailsFragmentTab, artistDetailsFragmentTab, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-					AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, eventPendingPublish);
-			
-		} else {
-			fbCallCountForSameEvt = 0;
-			artistDetailsFragmentTab.setPendingAnnounce(false);
-		}
+	public void onSuccess(LoginResult loginResult) {
+		//Log.d(TAG, "onSuccess()");
+		FbUtil.handlePublishEvent(artistDetailsFragmentTab, artistDetailsFragmentTab, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
+				eventPendingPublish);
 	}
 
 	public void onPublishPermissionGranted() {

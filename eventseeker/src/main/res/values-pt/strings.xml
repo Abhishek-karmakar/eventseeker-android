@@ -52,7 +52,6 @@
     <string name="pls_login_to_see_artist_news">Se faz favor, login no Facebook ou Google da página \'Sincronizar Contas\' para ver as notícias de artista.</string>
     <string name="connection_lost">A ligação de Internet aparece fora de linha.</string>
     <string name="no_internet_connectivity">Internet desligado</string>
-    <string name="yes">sim</string>
 	<string name="add_to_calender">Adicionar ao calendário</string>
 	<string name="select_calender">Escolher o calendário</string>
 	<string name="event_added_to_calender_successfully">Evento adicionado ao calendário</string>
@@ -190,8 +189,6 @@
    	<string name="drive">Conduzir</string>
    	
     <!-- Friends Activity -->
-    <string name="is_going_to">%1$s vai ao %2$s</string>
-    <string name="wants_to_go_to">%1$s quer ir ao %2$s</string>
     <string name="like">Gosta</string>
     <string name="comment">Comentário</string>
     <string name="events_are_better_with_friends">Os eventos sempre estão ótimos com amigos. Convide-los a eventseeker</string>
@@ -213,9 +210,6 @@
  	<string name="rep_code_enter_a_valid_repcode">Se faz favor, introduz um código rep válido.</string>
  	<string name="rep_code_submission">Envio do código rep</string>
  	<string name="ok">Ok</string>
- 	
-   	<!-- My Events -->
-    <string name="no_events_in_your_area">Não têm eventos no momento em sua região. Segue mais artistas para começar sua agenda personalizada.</string>
 
     <!-- About Us -->
     <string name="version">Versão</string>
@@ -224,17 +218,12 @@
     <string name="couldnt_find_drive_location">Não podia encontrar as instruções como chegar para este local.</string>	
     
     <!-- Discover -->
-    <string name="set_start_date">Configurar data de início do evento</string>	
-    <string name="loading">Está a cargar...</string>	
+    <string name="loading">Está a cargar...</string>
  
     <!-- Get Started -->
     <string name="skip">Ignorar</string>
-    <string name="signin_for_better_experience">Quando a gente se-conecte tem uma melhor experiencia.</string>
     <string name="couldnt_login_to_google_play_music">Não podia fazer o login na conta Google Play Music. Faz-se favor, verifique que está a utilizar a conta certa de Google Play Music.</string>
-    <string name="why_login">Por que deve conectar-se?</string>
-    <string name="get_event_recommendations">Receber as recomendações baseadas nos seus interesses</string>
-    <string name="stay_connected_with_friends">Ficar conectado aos amigos e conheçe quem precisa convidar aos eventos.</string>
- 
+
     <!-- Last Fm -->
     <string name="user_name">Nome de utilizador</string>
     <string name="user_name_could_not_be_found">O nome do utilizador não se podia encontrar</string>
@@ -327,11 +316,8 @@
     <string name="btn_follow_all">Seguir todas</string>
     <string name="a_z">A - Z</string>
     <string name="recommendation_score">Recommendation Score</string>
-    <string name="dialog_title_follow_all">Segue todos</string>
-    <string name="dialog_msg_follow_all">Quer seguir %1$d artistas?</string>
-    <string name="dialog_btn_yes">yes</string>
-    <string name="dialog_btn_no">no</string>
-    
+    <string name="dialog_msg_follow_all">Gostaria seguir %1$d artistas?</string>
+
     <!-- LoginFragment -->
     <string name="continue_with_facebook">Continuar com Facebook</string>
     <string name="continue_wiht_google">Continuar com Google</string>

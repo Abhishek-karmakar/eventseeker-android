@@ -1,8 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -13,6 +10,7 @@ import android.os.Looper;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +18,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.ShareOnFBDialogFragment.OnFacebookShareClickedListener;
 import com.wcities.eventseeker.adapter.RVSearchArtistsAdapterTab;
@@ -47,6 +45,9 @@ import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.ItemDecorationItemOffset;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SearchArtistsFragmentTab extends PublishArtistFragment implements FullScrnProgressListener, LoadItemsInBackgroundListener, 
 		AsyncTaskListener<Void>, DialogBtnClickListener, ArtistTrackingListener, OnFacebookShareClickedListener, SearchFragmentChildListener,
 		SwipeTabVisibilityListener {
@@ -70,7 +71,6 @@ public class SearchArtistsFragmentTab extends PublishArtistFragment implements F
 	
 	private Handler handler;
 	
-	private int fbCallCountForSameArtist;
 	private Artist artistToBeSaved;
 	
 	@Override
@@ -237,10 +237,9 @@ public class SearchArtistsFragmentTab extends PublishArtistFragment implements F
 			//Log.d(TAG, "strId : " + strId);
 			for (Artist artist : artistList) {
 				if (artist != null && artist.getId() == Integer.parseInt(strId)) {					
-					fbCallCountForSameArtist = 0;
 					artistToBeSaved = artist;
-					FbUtil.handlePublishArtist(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-							AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, artist);
+					FbUtil.handlePublishArtist(this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
+							artist);
 					break;
 				}
 			}
@@ -248,27 +247,20 @@ public class SearchArtistsFragmentTab extends PublishArtistFragment implements F
 	}
 
 	@Override
-	public void onPublishPermissionGranted() {
-		// TODO Auto-generated method stub
+	public void onSuccess(LoginResult loginResult) {
+		Log.d(TAG, "onSuccess()");
+		FbUtil.handlePublishArtist(this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
+				artistToBeSaved);
 	}
 
 	@Override
-	public void call(Session session, SessionState state, Exception exception) {
-		if (artistToBeSaved == null) {
-			return;
-		}
-		fbCallCountForSameArtist++;
-		/**
-		 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
-		 */
-		if (fbCallCountForSameArtist < AppConstants.MAX_FB_CALL_COUNT_FOR_SAME_EVT_OR_ART) {
-			FbUtil.call(session, state, exception, this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-					AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, artistToBeSaved);
-			
-		} else {
-			fbCallCountForSameArtist = 0;
-			setPendingAnnounce(false);
-		}
+	public void onCancel() {
+		Log.d(TAG, "onCancel()");
+	}
+
+	@Override
+	public void onError(FacebookException e) {
+		Log.d(TAG, "onError()");
 	}
 	
 	@Override

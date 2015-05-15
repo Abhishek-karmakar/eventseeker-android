@@ -5,8 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
 import com.wcities.eventseeker.adapter.DateWiseMyEventListAdapter;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.PublishListener;
@@ -37,13 +37,28 @@ public class VenueEventsListFragmentTab extends VenueEventsParentListFragment im
 				this, this, FragmentUtil.getScreenName(this));
 	}
 	
-	@Override
+	/*@Override
 	public void call(Session session, SessionState state, Exception exception) {
 		((DateWiseMyEventListAdapter)adapter).call(session, state, exception);
-	}
+	}*/
 
 	@Override
 	public void onPublishPermissionGranted() {
 		((DateWiseMyEventListAdapter)adapter).onPublishPermissionGranted();
+	}
+
+	@Override
+	public void onSuccess(LoginResult loginResult) {
+
+	}
+
+	@Override
+	public void onCancel() {
+
+	}
+
+	@Override
+	public void onError(FacebookException e) {
+
 	}
 }

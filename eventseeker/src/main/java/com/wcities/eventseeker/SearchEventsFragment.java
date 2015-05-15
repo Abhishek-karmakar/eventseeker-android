@@ -1,11 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Iterator;
-import java.util.List;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -14,10 +8,12 @@ import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,8 +28,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
 import com.wcities.eventseeker.adapter.RVAdapterBase;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.api.Api;
@@ -69,6 +65,12 @@ import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.viewdata.SharedElement;
 import com.wcities.eventseeker.viewdata.SharedElementPosition;
+
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Iterator;
+import java.util.List;
 
 public class SearchEventsFragment extends PublishEventFragment implements LoadItemsInBackgroundListener, 
 		SearchFragmentChildListener, CustomSharedElementTransitionSource, AsyncTaskListener<Void> {
@@ -201,8 +203,19 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 	}
 
 	@Override
-	public void call(Session session, SessionState state, Exception exception) {		
-		eventListAdapter.call(session, state, exception);
+	public void onSuccess(LoginResult loginResult) {
+		Log.d(TAG, "onSuccess()");
+		eventListAdapter.onSuccess(loginResult);
+	}
+
+	@Override
+	public void onCancel() {
+		Log.d(TAG, "onCancel()");
+	}
+
+	@Override
+	public void onError(FacebookException e) {
+		Log.d(TAG, "onError()");
 	}
 
 	@Override
@@ -227,7 +240,6 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 		private int openPos = INVALID;
 		private int rltLytContentInitialMarginL, lnrSliderContentW, imgEventW, rltLytContentW = INVALID;
 		
-		private int fbCallCountForSameEvt = 0;
 		private EventListAdapter.ViewHolder holderPendingPublish;
 		private Event eventPendingPublish;
 		
@@ -800,26 +812,26 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 			holder.rltLytRoot.setPressed(true);
 			
 			searchEventFragment.handler.postDelayed(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					List<SharedElement> sharedElements = new ArrayList<SharedElement>();
-					
+
 					int[] loc = ViewUtil.getLocationOnScreen(holder.itemView, FragmentUtil.getResources(searchEventFragment));
-					
-					SharedElementPosition sharedElementPosition = new SharedElementPosition(searchEventFragment.imgEventPadL, 
-							loc[1] + searchEventFragment.imgEventPadT, 
-							holder.imgEvent.getWidth() - searchEventFragment.imgEventPadL - searchEventFragment.imgEventPadR, 
+
+					SharedElementPosition sharedElementPosition = new SharedElementPosition(searchEventFragment.imgEventPadL,
+							loc[1] + searchEventFragment.imgEventPadT,
+							holder.imgEvent.getWidth() - searchEventFragment.imgEventPadL - searchEventFragment.imgEventPadR,
 							holder.imgEvent.getHeight() - searchEventFragment.imgEventPadT - searchEventFragment.imgEventPadB);
 					SharedElement sharedElement = new SharedElement(sharedElementPosition, holder.imgEvent);
 					sharedElements.add(sharedElement);
 					searchEventFragment.addViewsToBeHidden(holder.imgEvent);
-					
+
 					//Log.d(TAG, "AT issue event = " + event);
 					((EventListener) FragmentUtil.getActivity(searchEventFragment)).onEventSelected(event, sharedElements);
-					
+
 					searchEventFragment.onPushedToBackStack();
-					
+
 					holder.rltLytRoot.setPressed(false);
 				}
 			}, 200);
@@ -834,15 +846,15 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 					holder.rltTicket.setPressed(false);
 					Bundle args = new Bundle();
 					args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl()
-                        + "&lang=" + ((EventSeekr) FragmentUtil.getApplication(searchEventFragment)).getLocale().getLocaleCode());
+							+ "&lang=" + ((EventSeekr) FragmentUtil.getApplication(searchEventFragment)).getLocale().getLocaleCode());
 					((ReplaceFragmentListener) FragmentUtil.getActivity(searchEventFragment)).replaceByFragment(
 							AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
 					/**
 					 * added on 15-12-2014
 					 */
-					GoogleAnalyticsTracker.getInstance().sendEvent(FragmentUtil.getApplication(searchEventFragment), 
-							((SearchFragment) searchEventFragment.getParentFragment()).getScreenName(), 
-							GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON, 
+					GoogleAnalyticsTracker.getInstance().sendEvent(FragmentUtil.getApplication(searchEventFragment),
+							((SearchFragment) searchEventFragment.getParentFragment()).getScreenName(),
+							GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON,
 							GoogleAnalyticsTracker.Type.Event.name(), null, event.getId());
 				}
 			}, 200);
@@ -851,32 +863,31 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 		private void onImgSaveClick(final ViewHolder holder, final Event event) {
 			holder.rltSave.setPressed(true);
 			searchEventFragment.handler.postDelayed(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					holder.rltSave.setPressed(false);
-					
+
 					EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(searchEventFragment).getApplication();
 					if (event.getAttending() == Attending.SAVED) {
 						event.setAttending(Attending.NOT_GOING);
-						new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.event, event.getId(), 
+						new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.event, event.getId(),
 								event.getAttending().getValue(), UserTrackingType.Add).execute();
-		    			updateImgSaveSrc(holder, event, FragmentUtil.getResources(searchEventFragment));
-						
+						updateImgSaveSrc(holder, event, FragmentUtil.getResources(searchEventFragment));
+
 					} else {
 						searchEventFragment.event = eventPendingPublish = event;
 						holderPendingPublish = holder;
-						
+
 						if (eventSeekr.getGPlusUserId() != null) {
 							event.setNewAttending(Attending.SAVED);
 							searchEventFragment.handlePublishEvent();
-							
+
 						} else {
-							fbCallCountForSameEvt = 0;
 							event.setNewAttending(Attending.SAVED);
 							//NOTE: THIS CAN BE TESTED WITH PODUCTION BUILD ONLY
-							FbUtil.handlePublishEvent(searchEventFragment, searchEventFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-									AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
+							FbUtil.handlePublishEvent(searchEventFragment, searchEventFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
+									event);
 						}
 					}
 				}
@@ -886,18 +897,18 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 		private void onImgShareClick(final ViewHolder holder, final Event event) {
 			holder.rltShare.setPressed(true);
 			searchEventFragment.handler.postDelayed(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					holder.rltShare.setPressed(false);
-					
-					ShareViaDialogFragment shareViaDialogFragment = ShareViaDialogFragment.newInstance(event, 
+
+					ShareViaDialogFragment shareViaDialogFragment = ShareViaDialogFragment.newInstance(event,
 							((SearchFragment) searchEventFragment.getParentFragment()).getScreenName());
 					/**
 					 * Passing activity fragment manager, since using this fragment's child fragment manager 
 					 * doesn't retain dialog on orientation change
 					 */
-					shareViaDialogFragment.show(((FragmentActivity)FragmentUtil.getActivity(searchEventFragment))
+					shareViaDialogFragment.show(((FragmentActivity) FragmentUtil.getActivity(searchEventFragment))
 							.getSupportFragmentManager(), FRAGMENT_TAG_SHARE_VIA_DIALOG);
 				}
 			}, 200);
@@ -911,22 +922,12 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 			lnrSliderContentW = res.getDimensionPixelSize(R.dimen.lnr_slider_content_w_list_item_discover);
 		}
 		
-		private void call(Session session, SessionState state, Exception exception) {
-			//Log.i(TAG, "call()");
-			fbCallCountForSameEvt++;
-			/**
-			 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
-			 */
-			if (fbCallCountForSameEvt < AppConstants.MAX_FB_CALL_COUNT_FOR_SAME_EVT_OR_ART) {
-				FbUtil.call(session, state, exception, searchEventFragment, searchEventFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-						AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, eventPendingPublish);
-				
-			} else {
-				fbCallCountForSameEvt = 0;
-				searchEventFragment.setPendingAnnounce(false);
-			}
+		public void onSuccess(LoginResult loginResult) {
+			//Log.d(TAG, "onSuccess()");
+			FbUtil.handlePublishEvent(searchEventFragment, searchEventFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
+					eventPendingPublish);
 		}
-		
+
 		private void onPublishPermissionGranted() {
 			//Log.d(TAG, "onPublishPermissionGranted()");
 			updateImgSaveSrc(holderPendingPublish, eventPendingPublish, FragmentUtil.getResources(searchEventFragment));

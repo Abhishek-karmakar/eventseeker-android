@@ -325,7 +325,7 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		case AppConstants.INDEX_NAV_ITEM_LOG_OUT:
 			EventSeekr eventSeekr = (EventSeekr) getApplication();
 			if (eventSeekr.getFbUserId() != null) {
-				FbUtil.callFacebookLogout(eventSeekr);
+				FbUtil.logout(eventSeekr);
 				
 			} else if (eventSeekr.getGPlusUserId() != null) {
 				GPlusUtil.callGPlusLogout(EventSeekr.mGoogleApiClient, eventSeekr);

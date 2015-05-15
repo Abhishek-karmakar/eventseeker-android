@@ -21,6 +21,7 @@ import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -54,8 +55,8 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
 import com.wcities.eventseeker.adapter.RVAdapterBase;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.api.Api;
@@ -700,7 +701,6 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		private boolean isMoreDataAvailable = true;
 		private int eventsAlreadyRequested;
 		
-		private int fbCallCountForSameEvt = 0;
 		private VenueRVAdapter.ViewHolder holderPendingPublish;
 		private Event eventPendingPublish;
 		
@@ -1527,24 +1527,24 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		private void onEventClick(final ViewHolder holder, final Event event) {
 			holder.rltLytRoot.setPressed(true);
 			venueDetailsFragment.handler.postDelayed(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					List<SharedElement> sharedElements = new ArrayList<SharedElement>();
-					
-					SharedElementPosition sharedElementPosition = new SharedElementPosition(venueDetailsFragment.imgEventPadL, 
-							holder.itemView.getTop() + venueDetailsFragment.imgEventPadT, 
-							holder.imgEvent.getWidth() - venueDetailsFragment.imgEventPadL - venueDetailsFragment.imgEventPadR, 
+
+					SharedElementPosition sharedElementPosition = new SharedElementPosition(venueDetailsFragment.imgEventPadL,
+							holder.itemView.getTop() + venueDetailsFragment.imgEventPadT,
+							holder.imgEvent.getWidth() - venueDetailsFragment.imgEventPadL - venueDetailsFragment.imgEventPadR,
 							holder.imgEvent.getHeight() - venueDetailsFragment.imgEventPadT - venueDetailsFragment.imgEventPadB);
 					SharedElement sharedElement = new SharedElement(sharedElementPosition, holder.imgEvent);
 					sharedElements.add(sharedElement);
 					venueDetailsFragment.addViewsToBeHidden(holder.imgEvent);
-					
+
 					//Log.d(TAG, "AT issue event = " + event);
 					((EventListener) FragmentUtil.getActivity(venueDetailsFragment)).onEventSelected(event, sharedElements);
-					
+
 					venueDetailsFragment.onPushedToBackStack();
-					
+
 					holder.rltLytRoot.setPressed(false);
 				}
 			}, 200);
@@ -1559,7 +1559,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 					holder.rltTicket.setPressed(false);
 					Bundle args = new Bundle();
 					args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl()
-                        + "&lang=" + ((EventSeekr) FragmentUtil.getApplication(venueDetailsFragment)).getLocale().getLocaleCode());
+							+ "&lang=" + ((EventSeekr) FragmentUtil.getApplication(venueDetailsFragment)).getLocale().getLocaleCode());
 					((ReplaceFragmentListener)FragmentUtil.getActivity(venueDetailsFragment)).replaceByFragment(
 							AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
 					
@@ -1574,8 +1574,8 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 					/**
 					 * added on 15-12-2014
 					 */
-					GoogleAnalyticsTracker.getInstance().sendEvent(FragmentUtil.getApplication(venueDetailsFragment), 
-							venueDetailsFragment.getScreenName(), GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON, 
+					GoogleAnalyticsTracker.getInstance().sendEvent(FragmentUtil.getApplication(venueDetailsFragment),
+							venueDetailsFragment.getScreenName(), GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON,
 							GoogleAnalyticsTracker.Type.Event.name(), null, event.getId());
 				}
 			}, 200);
@@ -1605,11 +1605,10 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 							venueDetailsFragment.handlePublishEvent();
 							
 						} else {
-							fbCallCountForSameEvt = 0;
 							event.setNewAttending(Attending.SAVED);
 							//NOTE: THIS CAN BE TESTED WITH PODUCTION BUILD ONLY
-							FbUtil.handlePublishEvent(venueDetailsFragment, venueDetailsFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-									AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
+							FbUtil.handlePublishEvent(venueDetailsFragment, venueDetailsFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
+									event);
 						}
 					}
 				}
@@ -1644,20 +1643,10 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			lnrSliderContentW = res.getDimensionPixelSize(R.dimen.lnr_slider_content_w_list_item_discover);
 		}
 		
-		private void call(Session session, SessionState state, Exception exception) {
-			//Log.i(TAG, "call()");
-			fbCallCountForSameEvt++;
-			/**
-			 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
-			 */
-			if (fbCallCountForSameEvt < AppConstants.MAX_FB_CALL_COUNT_FOR_SAME_EVT_OR_ART) {
-				FbUtil.call(session, state, exception, venueDetailsFragment, venueDetailsFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-						AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, eventPendingPublish);
-				
-			} else {
-				fbCallCountForSameEvt = 0;
-				venueDetailsFragment.setPendingAnnounce(false);
-			}
+		public void onSuccess(LoginResult loginResult) {
+			//Log.d(TAG, "onSuccess()");
+			FbUtil.handlePublishEvent(venueDetailsFragment, venueDetailsFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
+					eventPendingPublish);
 		}
 
 		private void onPublishPermissionGranted() {
@@ -1762,8 +1751,19 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	}
 
 	@Override
-	public void call(Session session, SessionState state, Exception exception) {
-		venueRVAdapter.call(session, state, exception);
+	public void onSuccess(LoginResult loginResult) {
+		Log.d(TAG, "onSuccess()");
+		venueRVAdapter.onSuccess(loginResult);
+	}
+
+	@Override
+	public void onCancel() {
+		Log.d(TAG, "onCancel()");
+	}
+
+	@Override
+	public void onError(FacebookException e) {
+		Log.d(TAG, "onError()");
 	}
 
 	@Override

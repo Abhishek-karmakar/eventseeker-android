@@ -1,8 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,8 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
 import com.wcities.eventseeker.EventDetailsFragment1.EventDetailsFragmentChildListener;
 import com.wcities.eventseeker.adapter.ArtistListAdapter;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
@@ -37,6 +34,9 @@ import com.wcities.eventseeker.custom.fragment.PublishEventListFragment;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EventFeaturingFragment extends PublishEventListFragment implements OnClickListener, 
 		EventDetailsFragmentChildListener {
@@ -185,7 +185,7 @@ public class EventFeaturingFragment extends PublishEventListFragment implements 
 				if (eventSeekr.getFbUserId() != null) {
 					fbCallCountForSameEvt = 0;
 					event.setNewAttending(newAttending);
-					FbUtil.handlePublishEvent(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
+					FbUtil.handlePublishEvent(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, event);
 					
 				} else if (eventSeekr.getGPlusUserId() != null) {
 					event.setNewAttending(newAttending);
@@ -260,13 +260,13 @@ public class EventFeaturingFragment extends PublishEventListFragment implements 
 		updateAttendingChkBoxes();	
 	}
 	
-	@Override
+	/*@Override
 	public void call(Session session, SessionState state, Exception exception) {
 		//Log.d(TAG, "call()");
 		fbCallCountForSameEvt++;
-		/**
+		*//**
 		 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
-		 */
+		 *//*
 		if (fbCallCountForSameEvt < MAX_FB_CALL_COUNT_FOR_SAME_EVT) {
 			FbUtil.call(session, state, exception, this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, 
 					event);
@@ -275,10 +275,25 @@ public class EventFeaturingFragment extends PublishEventListFragment implements 
 			fbCallCountForSameEvt = 0;
 			setPendingAnnounce(false);
 		}
-	}
+	}*/
 
 	@Override
 	public void onPublishPermissionGranted() {
 		((EventDetailsFragment1)getParentFragment()).onEventAttendingUpdated();
+	}
+
+	@Override
+	public void onSuccess(LoginResult loginResult) {
+
+	}
+
+	@Override
+	public void onCancel() {
+
+	}
+
+	@Override
+	public void onError(FacebookException e) {
+
 	}
 }

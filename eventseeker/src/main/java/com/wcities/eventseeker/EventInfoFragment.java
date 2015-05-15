@@ -1,8 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -25,8 +22,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
 import com.wcities.eventseeker.EventDetailsFragment1.EventDetailsFragmentChildListener;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
@@ -52,6 +49,9 @@ import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.interfaces.VenueListener;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class EventInfoFragment extends PublishEventFragment implements OnClickListener, 
 		EventDetailsFragmentChildListener, AsyncLoadImageListener {
@@ -375,7 +375,7 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 			} else {
 				btnBuyTickets.setTextColor(res.getColor(R.color.btn_buy_tickets_disabled_txt_color));
 				btnBuyTickets.setCompoundDrawablesWithIntrinsicBounds(
-						res.getDrawable(R.drawable.tickets_disabled), null,null, null);
+						res.getDrawable(R.drawable.tickets_disabled), null, null, null);
 			}
 		}
 	}
@@ -636,7 +636,7 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 				if (eventSeekr.getFbUserId() != null) {
 					fbCallCountForSameEvt = 0;
 					event.setNewAttending(newAttending);
-					FbUtil.handlePublishEvent(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
+					FbUtil.handlePublishEvent(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, event);
 					
 				} else if (eventSeekr.getGPlusUserId() != null) {
 					event.setNewAttending(newAttending);
@@ -751,13 +751,13 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 		updateScreen();
 	}
 
-	@Override
+	/*@Override
 	public void call(Session session, SessionState state, Exception exception) {
 		//Log.i(TAG, "call()");
 		fbCallCountForSameEvt++;
-		/**
+		*//**
 		 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
-		 */
+		 *//*
 		if (fbCallCountForSameEvt < AppConstants.MAX_FB_CALL_COUNT_FOR_SAME_EVT_OR_ART) {
 			FbUtil.call(session, state, exception, this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, 
 					event);
@@ -766,6 +766,21 @@ public class EventInfoFragment extends PublishEventFragment implements OnClickLi
 			fbCallCountForSameEvt = 0;
 			setPendingAnnounce(false);
 		}
+	}*/
+
+	@Override
+	public void onSuccess(LoginResult loginResult) {
+		Log.d(TAG, "onSuccess()");
+	}
+
+	@Override
+	public void onCancel() {
+		Log.d(TAG, "onCancel()");
+	}
+
+	@Override
+	public void onError(FacebookException e) {
+		Log.d(TAG, "onError()");
 	}
 
 	@Override

@@ -32,12 +32,13 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.HttpMethod;
-import com.facebook.Request;
-import com.facebook.Response;
-import com.facebook.Session;
-import com.facebook.Session.StatusCallback;
-import com.facebook.SessionState;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.wcities.eventseeker.SettingsFragment.OnSettingsItemClickedListener;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
@@ -65,7 +66,6 @@ import com.wcities.eventseeker.custom.view.ResizableImageView;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
 import com.wcities.eventseeker.interfaces.DrawerListFragmentListener;
 import com.wcities.eventseeker.interfaces.EventListener;
-import com.wcities.eventseeker.interfaces.PublishListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
@@ -88,20 +88,19 @@ import java.util.Iterator;
 import java.util.List;
 
 public class FriendsActivityFragment extends PublishEventListFragmentLoadableFromBackStack implements 
-		StatusCallback, OnClickListener, PublishListener, CustomSharedElementTransitionSource {
+		/*StatusCallback,*/ OnClickListener, CustomSharedElementTransitionSource {
 	
 	private static final String TAG = FriendsActivityFragment.class.getName();
 	
 	// List of additional write permissions being requested
-	private static final List<String> PERMISSIONS = Arrays.asList("publish_actions", "publish_stream");
-	// Request code for facebook reauthorization requests. 
-	private static final int FACEBOOK_REAUTH_ACTIVITY_CODE = 100; 
+	private static final List<String> PERMISSIONS = Arrays.asList("publish_actions");
 	// Flag to represent if we are waiting for extended permissions
 	private boolean pendingLikeOrComment = false;
 	// Strings required to build like request graph path 
 	private String fbPostId;
 	// indicates which type of request is pending to be executed
 	private PublishRequest publishRequest;
+	private CallbackManager callbackManager;
 	
 	private LoadFriendsNews loadFriendsNews;
 	private FriendActivityListAdapter friendActivityListAdapter;
@@ -148,6 +147,9 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 		
 		res = FragmentUtil.getResources(this);
 		hiddenViews = new ArrayList<View>();
+
+		callbackManager = CallbackManager.Factory.create();
+		LoginManager.getInstance().registerCallback(callbackManager, this);
 	}
 	
 	@Override
@@ -215,7 +217,7 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 		});
 		
 		getListView().setRecyclerListener(new RecyclerListener() {
-			
+
 			@Override
 			public void onMovedToScrapHeap(View view) {
 				freeUpBitmapMemory(view);
@@ -264,11 +266,6 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 			freeUpBitmapMemory(getListView().getChildAt(j));
 		}
 		
-		Session session = Session.getActiveSession();
-		if (session != null) {
-			//Log.d(TAG, "removeCallback");
-			session.removeCallback(this);
-		}
 		super.onDestroyView();
 	}
 	
@@ -293,20 +290,16 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		//Log.d(TAG, "onActivityResult(), requestCode = " + requestCode);
+		Log.d(TAG, "onActivityResult(), requestCode = " + requestCode);
 		if (isPendingAnnounce()) {
 			super.onActivityResult(requestCode, resultCode, data);
 			
 		} else {
 			// for like/comment functionality
-			Session session = Session.getActiveSession();
-	        if (session != null) {
-	        	//Log.d(TAG, "session!=null");
-	            session.onActivityResult(FragmentUtil.getActivity(this), requestCode, resultCode, data);
-	        }
+			callbackManager.onActivityResult(requestCode, resultCode, data);
 		}
 	}
-	
+
 	private class LoadFriendsNews extends AsyncTask<Void, Void, List<FriendNewsItem>> {
 		
 		private static final int FRIENDS_NEWS_LIMIT = 10;
@@ -385,14 +378,11 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	
 	private class FriendActivityListAdapter extends BaseAdapter {
 		
-		private static final int MAX_FB_CALL_COUNT_FOR_SAME_EVT = 20;
-		
 	    private LayoutInflater mInflater;
 	    private EventSeekr eventSeekr;
 	    
 	    private FriendNewsItem newsItemPendingPublish;
 		private CheckBox newsItemPendingPublishChkBoxSave;
-		private int fbCallCountForSameEvt = 0;
 		private Context mContext;
 		
 		private CustomSharedElementTransitionSource customSharedElementTransitionSource;
@@ -650,10 +640,9 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 						item.setNewUserAttending(userAttending);
 						newsItemPendingPublish = item;
 						newsItemPendingPublishChkBoxSave = chkSave;
-						fbCallCountForSameEvt = 0;
 						//NOTE: THIS CAN BE TESTED WITH PODUCTION BUILD ONLY
 						FbUtil.handlePublishFriendNewsItem(FriendsActivityFragment.this, FriendsActivityFragment.this, 
-								AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, item);
+								AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, item);
 						
 					} else if (eventSeekr.getGPlusUserId() != null) {
 						item.setNewUserAttending(userAttending);
@@ -666,21 +655,10 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 			}
 		}
 		
-		public void call(Session session, SessionState state, Exception exception) {
-			//Log.d(TAG, "call()");
-			fbCallCountForSameEvt++;
-			/**
-			 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
-			 */
-			if (fbCallCountForSameEvt < MAX_FB_CALL_COUNT_FOR_SAME_EVT) {
-				FbUtil.call(session, state, exception, FriendsActivityFragment.this, FriendsActivityFragment.this, 
-						AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, 
-						newsItemPendingPublish);
-				
-			} else {
-				fbCallCountForSameEvt = 0;
-				FriendsActivityFragment.this.setPendingAnnounce(false);
-			}
+		public void onSuccess(LoginResult loginResult) {
+			//Log.d(TAG, "onSuccess()");
+			FbUtil.handlePublishFriendNewsItem(FriendsActivityFragment.this, FriendsActivityFragment.this,
+					AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, newsItemPendingPublish);
 		}
 		
 		public void onPublishPermissionGranted() {
@@ -690,7 +668,6 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 		private void updateAttendingChkSave(FriendNewsItem item, CheckBox chkSave) {
 			chkSave.setChecked(item.getUserAttending() == Attending.SAVED);			
 		}
-		
 	}
 	
 	private void onBuyTicketClicked(Bundle args) {
@@ -752,31 +729,14 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	
 	private boolean canPublishNow() {
 		pendingLikeOrComment = false;
-	    Session session = Session.getActiveSession();
-
-	    if (session == null) {
-	    	//Log.d(TAG, "session=null");
-	    	session = new Session(FragmentUtil.getActivity(this));
-			Session.setActiveSession(session);
-	    }
-	    
-	    //Log.d(TAG, "active session, state=" + session.getState().name());
-	    if (!session.isOpened()) {
-	    	//Log.d(TAG, "session is not opened");
-	    	pendingLikeOrComment = true; // Mark that we are currently waiting for opening of session
-    		Session.openActiveSession(FragmentUtil.getActivity(this), this, true, this);
-    		return false;
-	    }
-
-	    if (!hasPublishPermission()) {
-	    	//Log.d(TAG, "publish permission is not there");
-	    	pendingLikeOrComment = true; // Mark that we are currently waiting for confirmation of publish permissions
-	        session.addCallback(this); 
-	        requestPublishPermissions(session, PERMISSIONS, FACEBOOK_REAUTH_ACTIVITY_CODE);
-	        return false;
-	    }
-	    
-	    return true;
+		if (!FbUtil.hasPermission(PERMISSIONS)) {
+			//Log.d(TAG, "no permission");
+			pendingLikeOrComment = true; // Mark that we are currently waiting for opening of session
+			// we get top level parent fragment here since onActivityResult() is not called in nested fragments.
+			LoginManager.getInstance().logInWithPublishPermissions(this, PERMISSIONS);
+			return false;
+		}
+		return true;
 	}
 	
 	private void handlePublish() {
@@ -791,33 +751,14 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 		}
 	}
 	
-	private boolean hasPublishPermission() {
-		//Log.d(TAG, "hasPublishPermission()");
-        Session session = Session.getActiveSession();
-        /*List<String> permissions = session.getPermissions();
-        for (Iterator<String> iterator = permissions.iterator(); iterator.hasNext();) {
-			Log.d(TAG, iterator.next());
-		}*/
-        return session != null && session.getPermissions().containsAll(PERMISSIONS);
-    }
-	
-	private void requestPublishPermissions(Session session, List<String> permissions,
-		    int requestCode) {
-		//Log.d(TAG, "requestPublishPermissions()");
-        Session.NewPermissionsRequest reauthRequest = new Session.NewPermissionsRequest(this, permissions)
-        	.setRequestCode(requestCode);
-        session.requestNewPublishPermissions(reauthRequest);
-	}
-	
 	private void postLikeRequest() {
 		//Log.d(TAG, "postLikeRequest()");
 		Toast.makeText(FragmentUtil.getActivity(this), R.string.sending_like_request, Toast.LENGTH_SHORT).show();
-		Request likeRequest = Request.newPostRequest(Session.getActiveSession(), fbPostId + "/likes", null, new Request.Callback() {
-
-			         @Override
-			         public void onCompleted(Response response) {
-			                Log.i(TAG, response.toString());
-			         }
+		GraphRequest likeRequest = GraphRequest.newPostRequest(AccessToken.getCurrentAccessToken(), fbPostId + "/likes", null, new GraphRequest.Callback() {
+					@Override
+					public void onCompleted(GraphResponse graphResponse) {
+						Log.i(TAG, graphResponse.toString());
+					}
 				});
 		likeRequest.executeAsync();
 	}
@@ -827,14 +768,14 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 		Toast.makeText(FragmentUtil.getActivity(this), R.string.posting_comment, Toast.LENGTH_SHORT).show();
 		Bundle parameters = new Bundle();
 		parameters.putString("message", comment);
-		Request commentRequest = new Request(Session.getActiveSession(), fbPostId + "/comments", 
-				parameters, HttpMethod.POST, new Request.Callback() {
-
-			         @Override
-			         public void onCompleted(Response response) {
-			                Log.i(TAG, response.toString());
-			         }
+		GraphRequest commentRequest = GraphRequest.newPostRequest(AccessToken.getCurrentAccessToken(), fbPostId + "/comments",
+				null, new GraphRequest.Callback() {
+					@Override
+					public void onCompleted(GraphResponse graphResponse) {
+						Log.i(TAG, graphResponse.toString());
+					}
 				});
+		commentRequest.setParameters(parameters);
 		commentRequest.executeAsync();
 	}
 	
@@ -844,68 +785,31 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 	}
 
 	private void doPositiveClickToAddComment(String comment) {
-	    // Do stuff here.
-	    postCommentRequest(comment);
+		// Do stuff here.
+		postCommentRequest(comment);
 	}
+	
+	@Override
+	public void onSuccess(LoginResult loginResult) {
+		Log.d(TAG, "onSuccess()");
+		if (pendingLikeOrComment) {
+			handlePublish();
 
-	/**
-	 * Called when additional permission request is completed successfully.
-	 */
-	private void tokenUpdated() {
-		//Log.d(TAG, "tokenUpdated()");
-	    // Check if a publish action is in progress
-	    // awaiting a successful reauthorization
-	    if (pendingLikeOrComment) {
-	        
-	    	if (hasPublishPermission()) {
-	    		// Publish the action
-	    		handlePublish();
-	    		
-	    	} else {
-	    		// user has denied the permission
-	    		pendingLikeOrComment = false;
-	    	}
-	    }
-	}
-	
-	private void sessionOpened() {
-		//Log.d(TAG, "sessionOpened()");
-		// Check if a publish action is in progress
-	    // awaiting a successful reauthorization
-	    if (pendingLikeOrComment) {
-	        // Publish the action
-	    	handlePublish();
-	    }
-	}
-	
-	protected void onSessionStateChange(final Session session, SessionState state, Exception exception) {
-		//Log.d(TAG, "onSessionStateChange() state = " + state.name());
-	    if (session != null && session.isOpened()) {
-	    	//Log.d(TAG, "session != null && session.isOpened(), state = " + state.name());
-	    	if (state.equals(SessionState.OPENED)) {
-	    		Log.d(TAG, "OPENED");
-	    		// Session opened 
-	            // so try publishing once more.
-	    		sessionOpened();
-	    		
-	    	} else if (state.equals(SessionState.OPENED_TOKEN_UPDATED)) {
-	    		Log.d(TAG, "OPENED_TOKEN_UPDATED");
-	            // Session updated with new permissions
-	            // so try publishing once more.
-	            tokenUpdated();
-	        }
-	    }
+		} else {
+			friendActivityListAdapter.onSuccess(loginResult);
+		}
 	}
 
 	@Override
-	public void call(Session session, SessionState state, Exception exception) {
-		//Log.d(TAG, "call()");
-		if (pendingLikeOrComment) {
-			onSessionStateChange(session, state, exception);
-			
-		} else {
-			friendActivityListAdapter.call(session, state, exception);
-		}
+	public void onCancel() {
+		Log.d(TAG, "onCancel()");
+		pendingLikeOrComment = false;
+	}
+
+	@Override
+	public void onError(FacebookException e) {
+		Log.d(TAG, "onError()");
+		pendingLikeOrComment = false;
 	}
 	
 	private void showNoFriendsActivityFound() {

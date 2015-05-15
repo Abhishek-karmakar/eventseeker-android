@@ -30,7 +30,7 @@ public class VersionUtil {
 	}
 	
 	private static void updatesForV4(EventSeekr eventSeekr) {
-		FbUtil.callFacebookLogout(eventSeekr);
+		FbUtil.logout(eventSeekr);
 		GPlusUtil.callGPlusLogout(null, eventSeekr);
 		eventSeekr.removeWcitiesId();
 	}

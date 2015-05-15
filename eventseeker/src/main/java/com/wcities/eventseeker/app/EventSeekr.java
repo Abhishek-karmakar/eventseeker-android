@@ -13,6 +13,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 
 import com.bosch.myspin.serversdk.MySpinServerSDK;
+import com.facebook.FacebookSdk;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Logger.LogLevel;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -308,6 +309,8 @@ public class EventSeekr extends Application {
 			// Set the log level to verbose.
 			GoogleAnalytics.getInstance(this).getLogger().setLogLevel(LogLevel.VERBOSE);
 		}
+
+		FacebookSdk.sdkInitialize(this);
 	}
 	
 	private void initConfigParams() {

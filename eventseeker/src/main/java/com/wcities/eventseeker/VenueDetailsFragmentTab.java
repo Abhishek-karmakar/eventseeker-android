@@ -1,8 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -14,6 +11,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,11 +22,11 @@ import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.TextView;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
 import com.wcities.eventseeker.adapter.RVVenueDetailsAdapterTab;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -48,11 +46,16 @@ import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class VenueDetailsFragmentTab extends PublishEventFragmentRetainingChildFragmentManager implements 
 		OnVenueUpdatedListener, LoadItemsInBackgroundListener, AsyncTaskListener<Void> {
 
+	private static final String TAG = VenueDetailsFragmentTab.class.getSimpleName();
+
 	private static final int UNSCROLLED = -1;
-	
+
 	private String title = "";
 	
 	private int totalScrolledDy = UNSCROLLED; // indicates layout not yet created
@@ -387,8 +390,19 @@ public class VenueDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 	}
 
 	@Override
-	public void call(Session session, SessionState state, Exception exception) {
-		rvVenueDetailsAdapterTab.call(session, state, exception);
+	public void onSuccess(LoginResult loginResult) {
+		Log.d(TAG, "onSuccess()");
+		rvVenueDetailsAdapterTab.onSuccess(loginResult);
+	}
+
+	@Override
+	public void onCancel() {
+		Log.d(TAG, "onCancel()");
+	}
+
+	@Override
+	public void onError(FacebookException e) {
+		Log.d(TAG, "onError()");
 	}
 	
 	@Override

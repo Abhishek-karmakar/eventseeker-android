@@ -8,11 +8,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
-import com.facebook.Request;
-import com.facebook.Response;
-import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.model.GraphUser;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -31,30 +34,21 @@ import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GPlusUtil;
 import com.wcities.eventseeker.util.NetworkUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public abstract class FbGPlusRegisterFragmentTab extends Fragment implements ConnectionCallbacks, 
-		OnConnectionFailedListener {
+		OnConnectionFailedListener, FacebookCallback<LoginResult> {
 	
     private static final String TAG = FbGPlusRegisterFragment.class.getSimpleName();
 
 	private GoogleApiClient mGoogleApiClient;
 	private ConnectionResult mConnectionResult;
 	protected boolean isGPlusSigningIn;
-	
-	private Session.StatusCallback statusCallback = new SessionStatusCallback();
-	private boolean isPermissionDisplayed;
-	
-	private boolean isForSignUp;
-	
-	private class SessionStatusCallback implements Session.StatusCallback {
 
-		@Override
-        public void call(Session session, SessionState state, Exception exception) {
-        	Log.d(TAG, "call() - state = " + state.name() + ", session = " + session);
-        	if (state == SessionState.OPENED || state == SessionState.OPENED_TOKEN_UPDATED) {
-        		updateView();
-        	}
-        }
-    }
+	private CallbackManager callbackManager;
+
+	private boolean isForSignUp;
 	
 	protected abstract void setGooglePlusSigningInVisibility();
 	
@@ -64,27 +58,12 @@ public abstract class FbGPlusRegisterFragmentTab extends Fragment implements Con
 		
 		EventSeekr.mGoogleApiClient = mGoogleApiClient = GPlusUtil.createPlusClientInstance(this, this, this);
     	//Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
-		
+
+		callbackManager = CallbackManager.Factory.create();
+		LoginManager.getInstance().registerCallback(callbackManager, this);
+
 		isForSignUp = (this instanceof SignUpFragmentTab) ? true : false;
 	}
-	
-	@Override
-    public void onStart() {
-		//Log.d(TAG, "onStart()");
-        super.onStart();
-        
-        // In starting if user's credentials are available, then this active session will be null.
-        if (Session.getActiveSession() != null) {
-        	Session.getActiveSession().addCallback(statusCallback);
-        }
-    }
-	
-	@Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Session session = Session.getActiveSession();
-        Session.saveSession(session, outState);
-    }
 	
 	@Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -101,21 +80,10 @@ public abstract class FbGPlusRegisterFragmentTab extends Fragment implements Con
         	}
             
         } else {
-        	Session.getActiveSession().onActivityResult(FragmentUtil.getActivity(this), requestCode, resultCode, data);
+			callbackManager.onActivityResult(requestCode, resultCode, data);
         }
     }
 	
-	@Override
-    public void onStop() {
-        super.onStop();
-    	//Log.d(TAG, "onStop()");
-
-        // In starting if user's credentials are available, then this active session will be null.
-        if (Session.getActiveSession() != null) {
-        	Session.getActiveSession().removeCallback(statusCallback);
-        }
-    }
-    
     @Override
     public void onDestroy() {
     	super.onDestroy();
@@ -131,7 +99,7 @@ public abstract class FbGPlusRegisterFragmentTab extends Fragment implements Con
 			connectionFailureListener.onConnectionFailure();
 			return;
 		}
-		FbUtil.onClickLogin(FbGPlusRegisterFragmentTab.this, statusCallback);
+		FbUtil.login(this);
     }
     
     protected void onGPlusClicked() {
@@ -205,76 +173,42 @@ public abstract class FbGPlusRegisterFragmentTab extends Fragment implements Con
         	}
         }
 	}
-	
-	private void updateView() {
+
+	private void updateView(AccessToken accessToken) {
 		//Log.d(TAG, "updateView()");
-        final Session session = Session.getActiveSession();
-        if (session.isOpened()) {
-        	//Log.d(TAG, "session is opened");
-        	/*if (!hasPublishPermission()) {
-        		*//**
-        		 * request for publish permissions now only so that in future user don't need to 
-        		 * login again while using like/comment feature of friends activity screen.
-        		 *//*
-				requestPublishPermissions(session, PERMISSIONS, 0);
-				
-        	} else {*/
-        	if (FbUtil.hasPermission(AppConstants.PERMISSIONS_FB_LOGIN)) {
-	        	FbUtil.makeMeRequest(session, new Request.GraphUserCallback() {
-	
-	    			@Override
-	    			public void onCompleted(GraphUser user, Response response) {
-	    				// If the response is successful
-	    	            
-	    				if (session == Session.getActiveSession()) {
-	    	                if (user != null) {
-	    	                	Bundle bundle = new Bundle();
-	    	                	bundle.putBoolean(BundleKeys.IS_FOR_SIGN_UP, isForSignUp);
-	    	                	bundle.putSerializable(BundleKeys.LOGIN_TYPE, LoginType.facebook);
-	    	                	bundle.putString(BundleKeys.FB_USER_ID, user.getId());
-	    	                	bundle.putString(BundleKeys.FB_USER_NAME, user.getUsername());
-	    	                	/**
-	    	                	 * this email property requires "email" permission while opening session.
-	    	                	 * Email comes null if user has not verified his primary emailId on fb account
-	    	                	 */
-	    	                	String email = (user.getProperty("email") == null) ? "" : user.getProperty("email").toString();
-	    	                	bundle.putString(BundleKeys.FB_EMAIL_ID, email);
-	    	                	String registerErrorListener = isForSignUp ? AppConstants.FRAGMENT_TAG_SIGN_UP 
-	    	                			: AppConstants.FRAGMENT_TAG_LOGIN;
-	    	                	bundle.putString(BundleKeys.REGISTER_ERROR_LISTENER, registerErrorListener);
-	    	                	
-	    	                	RegistrationListener listener = (RegistrationListener)FragmentUtil.getActivity(
-										FbGPlusRegisterFragmentTab.this);
-	    	                	/**
-	    	                	 * While changing orientation quickly sometimes listener returned is null, 
-	    	                	 * hence the following check.
-	    	                	 */
-	    	                	if (listener != null) {
-		    	                	((RegistrationListener)listener).onRegistration(LoginType.facebook, bundle, true);
-	    	                	}
-	    	                }
-	    	            }
-	    				
-	    	            if (response.getError() != null) {
-	    	                // Handle errors, will do so later.
-	    	            }
-	    			}
-	    	    });
-	        	
-        	} else {
-        		if (!isPermissionDisplayed) {
-	        		//Log.d(TAG, "request email permission");
-	        		FbUtil.requestEmailPermission(session, AppConstants.PERMISSIONS_FB_LOGIN, 
-	        				AppConstants.REQ_CODE_FB_LOGIN_EMAIL, this);
-	        		isPermissionDisplayed = true;
-	        		
-        		} else {
-        			//Log.d(TAG, "permission is already displayed");
-        			isPermissionDisplayed = false;
-        		}
-        	}
-        } 
-    }
+		FbUtil.makeMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
+			@Override
+			public void onCompleted(JSONObject object, GraphResponse response) {
+				if (object != null) {
+					try {
+						Bundle bundle = new Bundle();
+						bundle.putBoolean(BundleKeys.IS_FOR_SIGN_UP, isForSignUp);
+						bundle.putSerializable(BundleKeys.LOGIN_TYPE, LoginType.facebook);
+						bundle.putString(BundleKeys.FB_USER_ID, object.getString("id"));
+						bundle.putString(BundleKeys.FB_USER_NAME, object.getString("name"));
+						bundle.putString(BundleKeys.FB_EMAIL_ID, object.getString("email"));
+
+						String registerErrorListener = isForSignUp ? AppConstants.FRAGMENT_TAG_SIGN_UP
+								: AppConstants.FRAGMENT_TAG_LOGIN;
+						bundle.putString(BundleKeys.REGISTER_ERROR_LISTENER, registerErrorListener);
+
+						RegistrationListener listener = (RegistrationListener) FragmentUtil.getActivity(
+								FbGPlusRegisterFragmentTab.this);
+						/**
+						 * While changing orientation quickly sometimes listener returned is null,
+						 * hence the following check.
+						 */
+						if (listener != null) {
+							((RegistrationListener) listener).onRegistration(LoginType.facebook, bundle, true);
+						}
+
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+	}
 	
 	private void updateGoogleButton() {
 		//Log.d(TAG, "updateGoogleButton()");
@@ -314,5 +248,21 @@ public abstract class FbGPlusRegisterFragmentTab extends Fragment implements Con
 	public void onConnectionSuspended(int cause) {
 		//Log.d(TAG, "onConnectionSuspended");
 		updateGoogleButton();
+	}
+
+	@Override
+	public void onSuccess(LoginResult loginResult) {
+		Log.d(TAG, "fb onSuccess()");
+		updateView(loginResult.getAccessToken());
+	}
+
+	@Override
+	public void onCancel() {
+		Log.d(TAG, "fb onCancel()");
+	}
+
+	@Override
+	public void onError(FacebookException exception) {
+		Log.d(TAG, "fb onError()");
 	}
 }

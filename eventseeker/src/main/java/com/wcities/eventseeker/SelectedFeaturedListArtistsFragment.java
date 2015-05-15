@@ -1,9 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.res.Resources;
 import android.os.AsyncTask.Status;
@@ -20,8 +16,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.ShareOnFBDialogFragment.OnFacebookShareClickedListener;
 import com.wcities.eventseeker.adapter.ArtistListAdapterWithoutIndexer;
@@ -51,6 +47,10 @@ import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 public class SelectedFeaturedListArtistsFragment extends PublishArtistFragmentLoadableFromBackStack 
 		implements ArtistTrackingListener, LoadArtistsListener, LoadItemsInBackgroundListener, 
 		DialogBtnClickListener, OnFacebookShareClickedListener, CustomSharedElementTransitionSource, 
@@ -74,8 +74,6 @@ public class SelectedFeaturedListArtistsFragment extends PublishArtistFragmentLo
 
 	private RelativeLayout rltFollowAll;
 	private RelativeLayout rltLytPrgsBar;
-
-	private int fbCallCountForSameArtist = 0;
 
 	private Artist artistToBeSaved;
 	
@@ -355,20 +353,15 @@ public class SelectedFeaturedListArtistsFragment extends PublishArtistFragmentLo
 		}
 	}
 
-	@Override
-	public void onPublishPermissionGranted() {
-		
-	}
-
-	@Override
+	/*@Override
 	public void call(Session session, SessionState state, Exception exception) {
 		if (artistToBeSaved == null) {
 			return;
 		}
 		fbCallCountForSameArtist++;
-		/**
+		*//**
 		 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
-		 */
+		 *//*
 		if (fbCallCountForSameArtist < AppConstants.MAX_FB_CALL_COUNT_FOR_SAME_EVT_OR_ART) {
 			FbUtil.call(session, state, exception, this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
 					AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, artistToBeSaved);
@@ -377,6 +370,23 @@ public class SelectedFeaturedListArtistsFragment extends PublishArtistFragmentLo
 			fbCallCountForSameArtist = 0;
 			setPendingAnnounce(false);
 		}
+	}*/
+
+	@Override
+	public void onSuccess(LoginResult loginResult) {
+		Log.d(TAG, "onSuccess()");
+		FbUtil.handlePublishArtist(this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
+				artistToBeSaved);
+	}
+
+	@Override
+	public void onCancel() {
+		Log.d(TAG, "onCancel()");
+	}
+
+	@Override
+	public void onError(FacebookException e) {
+		Log.d(TAG, "onError()");
 	}
 
 	@Override
@@ -386,10 +396,9 @@ public class SelectedFeaturedListArtistsFragment extends PublishArtistFragmentLo
 			//Log.d(TAG, "strId : " + strId);
 			for (Artist artist : artistList) {
 				if (artist != null && artist.getId() == Integer.parseInt(strId)) {					
-					fbCallCountForSameArtist = 0;
 					artistToBeSaved = artist;
-					FbUtil.handlePublishArtist(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-							AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, artist);
+					FbUtil.handlePublishArtist(this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
+							artist);
 					break;
 				}
 			}

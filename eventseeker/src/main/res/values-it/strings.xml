@@ -52,7 +52,6 @@
 	<string name="pls_login_to_see_artist_news">Si prega di accedere con Facebook o Google dalla pagina “Sincronizza i tuoi account” per vedere notizie d’artisti.</string>
     <string name="connection_lost">La connessione Internet è offline.</string>
     <string name="no_internet_connectivity">Internet è disconnesso</string>
-    <string name="yes">si</string>
 	<string name="add_to_calender">Aggiungi al calendario</string>
 	<string name="select_calender">Selezioni calendario</string>
 	<string name="event_added_to_calender_successfully">Evento aggiunto al calendario</string>
@@ -190,8 +189,6 @@
    	<string name="drive">Indicazioni</string>
    	
     <!-- Friends Activity -->
-    <string name="is_going_to">%1$s va a %2$s</string>
-    <string name="wants_to_go_to">%1$s vuole andare a %2$s</string>
     <string name="like">Piacere</string>
     <string name="comment">Commentario</string>
     <string name="events_are_better_with_friends">Eventi sono più divertenti con amici. Invitali a eventseeker.</string>
@@ -213,9 +210,6 @@
  	<string name="rep_code_enter_a_valid_repcode">Si prega, entra un valido codice rep</string>
  	<string name="rep_code_submission">Invio codice rep</string>
  	<string name="ok">Ok</string>
- 	
-   	<!-- My Events -->
-    <string name="no_events_in_your_area">Non ci sono eventi in questo periodo in sua regione. Segue più artisti per cominciare suo calendario di eventi personalizzati.</string>
 
     <!-- About Us -->
     <string name="version">Versione</string>
@@ -224,17 +218,12 @@
     <string name="couldnt_find_drive_location">Impossibile trovare indicazioni stradale per questo luogo.</string>	
     
     <!-- Discover -->
-    <string name="set_start_date">Imposta la data d’inizio</string>	
-    <string name="loading">Caricamento in corso...</string>	
+    <string name="loading">Caricamento in corso...</string>
  
     <!-- Get Started -->
     <string name="skip">Salta</string>
- 	<string name="signin_for_better_experience">Accedi per ottimizzare la tua esperienza.</string>
     <string name="couldnt_login_to_google_play_music">Impossibile accedere questo account di Google Play Music. Si prega di verificare il account.</string>
-    <string name="why_login">Perché accedere?</string>
-    <string name="get_event_recommendations">Ricevi raccomandazioni basati sui tuoi interessi</string>
-    <string name="stay_connected_with_friends">Rimani in contatto con i tuoi amici e invitali a partecipare a eventi</string>
- 
+
     <!-- Last Fm -->
     <string name="user_name">Nome utente</string>
     <string name="user_name_could_not_be_found">Impossibile trovare il nome utente</string>
@@ -329,11 +318,8 @@
     <string name="btn_follow_all">Segui tutti</string>
     <string name="a_z">A - Z</string>
     <string name="recommendation_score">Recommendation Score</string>
-    <string name="dialog_title_follow_all">Follow All</string>
     <string name="dialog_msg_follow_all">Vuoi seguire %1$d artisti?</string>
-    <string name="dialog_btn_yes">yes</string>
-    <string name="dialog_btn_no">no</string>
-    
+
     <!-- LoginFragment -->
     <string name="continue_with_facebook">continua con facebook</string>
     <string name="continue_wiht_google">continua con google</string>

@@ -1,9 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import android.content.res.Resources;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
@@ -17,8 +13,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
 import com.wcities.eventseeker.adapter.MyEventListAdapter;
 import com.wcities.eventseeker.adapter.MyEventListAdapter.OnNoEventsListener;
 import com.wcities.eventseeker.api.Api;
@@ -33,13 +29,16 @@ import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.CustomSharedElementTransitionSource;
 import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
-import com.wcities.eventseeker.interfaces.PublishListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 public class MyEventsListFragment extends PublishEventListFragment implements LoadItemsInBackgroundListener, 
-		PublishListener, OnNoEventsListener, CustomSharedElementTransitionSource, 
+		OnNoEventsListener, CustomSharedElementTransitionSource,
 		FullScrnProgressListener, AsyncTaskListener<Void> {
 	
 	private static final String TAG = MyEventsListFragment.class.getSimpleName();
@@ -132,8 +131,19 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 	}
 
 	@Override
-	public void call(Session session, SessionState state, Exception exception) {
-		eventListAdapter.call(session, state, exception);
+	public void onSuccess(LoginResult loginResult) {
+		Log.d(TAG, "onSuccess()");
+		eventListAdapter.onSuccess(loginResult);
+	}
+
+	@Override
+	public void onCancel() {
+		Log.d(TAG, "onCancel()");
+	}
+
+	@Override
+	public void onError(FacebookException e) {
+		Log.d(TAG, "onError()");
 	}
 
 	@Override

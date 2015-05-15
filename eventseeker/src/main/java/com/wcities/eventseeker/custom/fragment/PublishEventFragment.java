@@ -7,7 +7,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
-import com.facebook.Session;
+import com.facebook.CallbackManager;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -24,7 +25,7 @@ import com.wcities.eventseeker.interfaces.PublishListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GPlusUtil;
 
-public abstract class PublishEventFragment extends Fragment implements PublishListener, 
+public abstract class PublishEventFragment extends Fragment implements PublishListener,
 		ConnectionCallbacks, OnConnectionFailedListener {
 	
 	private static final String TAG = PublishEventFragment.class.getSimpleName();
@@ -36,13 +37,17 @@ public abstract class PublishEventFragment extends Fragment implements PublishLi
 	protected GoogleApiClient mGoogleApiClient;
 	protected ConnectionResult mConnectionResult;
 
-	private boolean isPublishPermissionDisplayed;
 	protected boolean callOnlySuperOnStart;
+
+	private CallbackManager callbackManager;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
     	mGoogleApiClient = GPlusUtil.createPlusClientInstance(this, this, this);
+
+		callbackManager = CallbackManager.Factory.create();
+		LoginManager.getInstance().registerCallback(callbackManager, this);
 	}
 	
 	@Override
@@ -50,24 +55,8 @@ public abstract class PublishEventFragment extends Fragment implements PublishLi
 		//Log.d(TAG, "onStart()");
 		if (callOnlySuperOnStart) {
 			callOnlySuperOnStart = false;
-			
-		} else {
-			Session session = Session.getActiveSession();
-			if (session != null) {
-				session.addCallback(this);
-			}
 		}
 		super.onStart();
-	}
-	
-	@Override
-	public void onStop() {
-		//Log.d(TAG, "onStop()");
-		Session session = Session.getActiveSession();
-		if (session != null) {
-			session.removeCallback(this);
-		}
-		super.onStop();
 	}
 	
 	@Override
@@ -81,6 +70,7 @@ public abstract class PublishEventFragment extends Fragment implements PublishLi
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.d(TAG, "onActivityResult(), requestCode = " + requestCode);
+		boolean processed = false;
 		if (pendingAnnounce) {
 			if (requestCode == AppConstants.REQ_CODE_GOOGLE_PLUS_RESOLVE_ERR || 
 	        		requestCode == AppConstants.REQ_CODE_GET_GOOGLE_PLAY_SERVICES) {
@@ -88,6 +78,7 @@ public abstract class PublishEventFragment extends Fragment implements PublishLi
 	                    && !mGoogleApiClient.isConnecting()) {
 		            connectPlusClient();
 	        	}
+				processed = true;
 	            
 	        } else if (GPlusUtil.isGPlusPublishPending) {
 	        	GPlusUtil.isGPlusPublishPending = false;
@@ -96,16 +87,12 @@ public abstract class PublishEventFragment extends Fragment implements PublishLi
 	    			onPublishPermissionGranted();
 	        		trackEvent();
 	        	}
-	        	
-	        } else {
-	        	//Log.d(TAG, "handle fb");
-	    		// don't compare request code here, since it normally returns 64206 (hardcoded value) for openActiveSession() request
-				Session session = Session.getActiveSession();
-		        if (session != null) {
-		        	//Log.d(TAG, "session!=null");
-		            session.onActivityResult(FragmentUtil.getActivity(this), requestCode, resultCode, data);
-		        }
+				processed = true;
 	        }
+		}
+
+		if (!processed) {
+			callbackManager.onActivityResult(requestCode, resultCode, data);
 		}
 	}
 
@@ -197,13 +184,4 @@ public abstract class PublishEventFragment extends Fragment implements PublishLi
 			GPlusUtil.publishEvent(event, this);
 		}
 	}
-	
-	public boolean isPermissionDisplayed() {
-		return isPublishPermissionDisplayed;
-	}
-	
-	public void setPermissionDisplayed(boolean isPublishPermissionDisplayed) {
-		this.isPublishPermissionDisplayed = isPublishPermissionDisplayed;
-	}
-	
 }

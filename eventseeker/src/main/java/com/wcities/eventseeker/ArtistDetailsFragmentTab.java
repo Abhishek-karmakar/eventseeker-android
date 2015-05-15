@@ -1,8 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -16,6 +13,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,8 +30,8 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
 import com.melnykov.fab.FloatingActionButton;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.ShareOnFBDialogFragment.OnFacebookShareClickedListener;
@@ -62,6 +60,9 @@ import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChildFragmentManager implements 
 		OnArtistUpdatedListener, AsyncTaskListener<Void>, LoadItemsInBackgroundListener, LoadArtistEventsListener, 
@@ -100,8 +101,7 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 	private LoadArtistEvents loadArtistEvents;
 	
 	private boolean isArtistSaveClicked;
-	private int fbCallCountForSameArtist = 0;
-	
+
 	private OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
         @Override
         public void onGlobalLayout() {
@@ -197,12 +197,12 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 		
 		fabArtistNews = (FloatingActionButton) artistDetailsActivityTab.getViewById(R.id.fab2);
 		fabArtistNews.setOnClickListener(this);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 			//'setCropToPadding()' is available after API Level 16.
 			fabArtistNews.setCropToPadding(true);
-			fabArtistNews.setImageDrawable(FragmentUtil.getResources(this).getDrawable(R.drawable.latestnews));
-			fabArtistNews.setPadding(padFABArtistNews, padFABArtistNews, padFABArtistNews, padFABArtistNews);
 		}
+		fabArtistNews.setImageDrawable(FragmentUtil.getResources(this).getDrawable(R.drawable.latestnews));
+		fabArtistNews.setPadding(padFABArtistNews, padFABArtistNews, padFABArtistNews, padFABArtistNews);
 		fabArtistNews.setScaleType(ScaleType.CENTER_INSIDE);
 		
 		updateFabVisibility();
@@ -505,24 +505,25 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 	}
 
 	@Override
-	public void call(Session session, SessionState state, Exception exception) {
+	public void onSuccess(LoginResult loginResult) {
+		Log.d(TAG, "onSuccess()");
 		if (isArtistSaveClicked) {
-			fbCallCountForSameArtist++;
-			/**
-			 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
-			 */
-			if (fbCallCountForSameArtist < AppConstants.MAX_FB_CALL_COUNT_FOR_SAME_EVT_OR_ART) {
-				FbUtil.call(session, state, exception, this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-						AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, artist);
-				
-			} else {
-				fbCallCountForSameArtist = 0;
-				setPendingAnnounce(false);
-			}
-			
+			FbUtil.handlePublishArtist(this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
+					artist);
+
 		} else {
-			rvArtistDetailsAdapterTab.call(session, state, exception);
+			rvArtistDetailsAdapterTab.onSuccess(loginResult);
 		}
+	}
+
+	@Override
+	public void onCancel() {
+		Log.d(TAG, "onCancel()");
+	}
+
+	@Override
+	public void onError(FacebookException e) {
+		Log.d(TAG, "onError()");
 	}
 
 	@Override
@@ -628,9 +629,8 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 	public void onFacebookShareClicked(String dialogTag) {
 		if (dialogTag.equals(FRAGMENT_TAG_ARTIST_SAVED_DIALOG)) {
 			isArtistSaveClicked = true;
-			fbCallCountForSameArtist = 0;
-			FbUtil.handlePublishArtist(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-					AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, artist);
+			FbUtil.handlePublishArtist(this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
+					artist);
 		}
 	}
 }

@@ -1,14 +1,11 @@
 package com.wcities.eventseeker.adapter;
 
-import java.util.List;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,10 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
 import com.melnykov.fab.FloatingActionButton;
-import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
 import com.wcities.eventseeker.MyEventsListFragment;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
@@ -49,10 +43,11 @@ import com.wcities.eventseeker.interfaces.PublishListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FbUtil;
-import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.EventListItem;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.LIST_ITEM_TYPE;
+
+import java.util.List;
 
 public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseEventParentAdapterListener{
 
@@ -453,8 +448,8 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 				eventPendingPublishFabSave = fabSave;
 				fbCallCountForSameEvt = 0;
 				FbUtil.handlePublishEvent(fbPublishListener, (Fragment) mListener, 
-						AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-						AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
+						AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
+						event);
 				
 			} else if (eventSeekr.getGPlusUserId() != null) {
 				event.setNewAttending(attending);
@@ -565,12 +560,12 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 		this.isMoreDataAvailable = isMoreDataAvailable;
 	}
 	
-	public void call(Session session, SessionState state, Exception exception) {
+	/*public void call(Session session, SessionState state, Exception exception) {
 		Log.d(TAG, "call()");
 		fbCallCountForSameEvt++;
-		/**
+		*//**
 		 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
-		 */
+		 *//*
 		if (fbCallCountForSameEvt < MAX_FB_CALL_COUNT_FOR_SAME_EVT) {
 			FbUtil.call(session, state, exception, fbPublishListener, (Fragment) mListener, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
 	    			AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, eventPendingPublish);
@@ -579,7 +574,7 @@ public class DateWiseMyEventListAdapter extends BaseAdapter implements DateWiseE
 			fbCallCountForSameEvt = 0;
 			fbPublishListener.setPendingAnnounce(false);
 		}
-	}
+	}*/
 	
 	public void onPublishPermissionGranted() {
 		updateAttendingFabSaved(eventPendingPublish, eventPendingPublishFabSave);

@@ -25,8 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
+import com.facebook.login.LoginResult;
 import com.wcities.eventseeker.BaseActivityTab;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.SearchEventsFragmentTab;
@@ -77,7 +76,6 @@ public class RVSearchEventsAdapterTab extends RVAdapterBase<RVSearchEventsAdapte
 	private int eventsAlreadyRequested;
 	private boolean isMoreDataAvailable = true, isVisible = true;
 	
-	private int fbCallCountForSameEvt = 0;
 	private RVSearchEventsAdapterTab.ViewHolder holderPendingPublish;
 	private Event eventPendingPublish;
 	
@@ -659,21 +657,21 @@ public class RVSearchEventsAdapterTab extends RVAdapterBase<RVSearchEventsAdapte
 	private void onImgTicketClick(final ViewHolder holder, final Event event) {
 		holder.imgTicket.setPressed(true);
 		handler.postDelayed(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				holder.imgTicket.setPressed(false);
-				
+
 				EventSeekr eventSeekr = FragmentUtil.getApplication(searchEventsFragmentTab);
 				BaseActivityTab baseActivityTab = (BaseActivityTab) FragmentUtil.getActivity(searchEventsFragmentTab);
-						
+
 				Intent intent = new Intent(eventSeekr, WebViewActivityTab.class);
 				intent.putExtra(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl()
-                    + "&lang=" + FragmentUtil.getApplication(searchEventsFragmentTab).getLocale().getLocaleCode());
+						+ "&lang=" + FragmentUtil.getApplication(searchEventsFragmentTab).getLocale().getLocaleCode());
 				baseActivityTab.startActivity(intent);
-				
-				GoogleAnalyticsTracker.getInstance().sendEvent(eventSeekr, 
-						baseActivityTab.getScreenName(), GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON, 
+
+				GoogleAnalyticsTracker.getInstance().sendEvent(eventSeekr,
+						baseActivityTab.getScreenName(), GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON,
 						GoogleAnalyticsTracker.Type.Event.name(), null, event.getId());
 			}
 		}, 200);
@@ -704,11 +702,10 @@ public class RVSearchEventsAdapterTab extends RVAdapterBase<RVSearchEventsAdapte
 						searchEventsFragmentTab.handlePublishEvent();
 						
 					} else {
-						fbCallCountForSameEvt = 0;
 						event.setNewAttending(Attending.SAVED);
 						//NOTE: THIS CAN BE TESTED WITH PODUCTION BUILD ONLY
-						FbUtil.handlePublishEvent(searchEventsFragmentTab, searchEventsFragmentTab, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-								AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
+						FbUtil.handlePublishEvent(searchEventsFragmentTab, searchEventsFragmentTab, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
+								event);
 					}
 				}
 			}
@@ -759,20 +756,10 @@ public class RVSearchEventsAdapterTab extends RVAdapterBase<RVSearchEventsAdapte
 		this.isVisible = isVisible;
 	}
 	
-	public void call(Session session, SessionState state, Exception exception) {
-		//Log.i(TAG, "call()");
-		fbCallCountForSameEvt++;
-		/**
-		 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
-		 */
-		if (fbCallCountForSameEvt < AppConstants.MAX_FB_CALL_COUNT_FOR_SAME_EVT_OR_ART) {
-			FbUtil.call(session, state, exception, searchEventsFragmentTab, searchEventsFragmentTab, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-					AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, eventPendingPublish);
-			
-		} else {
-			fbCallCountForSameEvt = 0;
-			searchEventsFragmentTab.setPendingAnnounce(false);
-		}
+	public void onSuccess(LoginResult loginResult) {
+		//Log.d(TAG, "onSuccess()");
+		FbUtil.handlePublishEvent(searchEventsFragmentTab, searchEventsFragmentTab, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
+				eventPendingPublish);
 	}
 
 	public void onPublishPermissionGranted() {

@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,8 +15,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
+import com.facebook.login.LoginResult;
 import com.melnykov.fab.FloatingActionButton;
 import com.wcities.eventseeker.MyEventsListFragment;
 import com.wcities.eventseeker.R;
@@ -71,8 +69,7 @@ public class MyEventListAdapter extends BaseAdapter implements DateWiseEventPare
 	
 	// vars for fb event publish
 	private PublishListener fbPublishListener;
-	private int fbCallCountForSameEvt = 0;
-	
+
 	private Event eventPendingPublish;
 	private FloatingActionButton eventPendingPublishFabSave;
 	
@@ -353,10 +350,9 @@ public class MyEventListAdapter extends BaseAdapter implements DateWiseEventPare
 				event.setNewAttending(attending);
 				eventPendingPublish = event;
 				eventPendingPublishFabSave = fabSave;
-				fbCallCountForSameEvt = 0;
-				FbUtil.handlePublishEvent(fbPublishListener, (Fragment) mListener, 
-						AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-						AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
+				FbUtil.handlePublishEvent(fbPublishListener, (Fragment) mListener,
+						AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
+						event);
 			}
 		}
 	}
@@ -391,20 +387,10 @@ public class MyEventListAdapter extends BaseAdapter implements DateWiseEventPare
 		this.isMoreDataAvailable = isMoreDataAvailable;
 	}
 	
-	public void call(Session session, SessionState state, Exception exception) {
-		Log.d(TAG, "call()");
-		fbCallCountForSameEvt++;
-		/**
-		 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
-		 */
-		if (fbCallCountForSameEvt < MAX_FB_CALL_COUNT_FOR_SAME_EVT) {
-			FbUtil.call(session, state, exception, fbPublishListener, (Fragment) mListener, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-	    			AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, eventPendingPublish);
-			
-		} else {
-			fbCallCountForSameEvt = 0;
-			fbPublishListener.setPendingAnnounce(false);
-		}
+	public void onSuccess(LoginResult loginResult) {
+		//Log.d(TAG, "onSuccess()");
+		FbUtil.handlePublishEvent(fbPublishListener, (Fragment) mListener, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
+				eventPendingPublish);
 	}
 	
 	public void onPublishPermissionGranted() {

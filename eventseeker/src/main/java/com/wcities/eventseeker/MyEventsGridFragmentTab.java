@@ -1,8 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.AsyncTask.Status;
@@ -12,6 +9,7 @@ import android.os.Looper;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +17,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
 import com.wcities.eventseeker.adapter.RVMyEventsAdapterTab;
 import com.wcities.eventseeker.adapter.RVMyEventsAdapterTab.RVMyEventsAdapterTabListener;
 import com.wcities.eventseeker.api.Api;
@@ -38,6 +36,9 @@ import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.ItemDecorationItemOffset;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MyEventsGridFragmentTab extends PublishEventFragment implements LoadItemsInBackgroundListener, 
 		AsyncTaskListener<Void>, RVMyEventsAdapterTabListener, SwipeTabVisibilityListener {
@@ -65,7 +66,6 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 	private String wcitiesId;
 
 	private boolean isNoEventFound;
-
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -173,15 +173,15 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 	
 	public void setCenterProgressBarVisibility(final int visibility) {
 		handler.post(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				rltLytProgressBar.setVisibility(visibility);
 				imgPrgOverlay.setVisibility(visibility);
-				
+
 				if (visibility == View.VISIBLE) {
 					refreshNoContentLyt(View.GONE);
-					
+
 				} else {
 					// free up memory
 					imgPrgOverlay.setBackgroundResource(0);
@@ -226,8 +226,19 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 	}
 
 	@Override
-	public void call(Session session, SessionState state, Exception exception) {
-		rvCatEventsAdapterTab.call(session, state, exception);
+	public void onSuccess(LoginResult loginResult) {
+		Log.d(TAG, "onSuccess()");
+		rvCatEventsAdapterTab.onSuccess(loginResult);
+	}
+
+	@Override
+	public void onCancel() {
+		Log.d(TAG, "onCancel()");
+	}
+
+	@Override
+	public void onError(FacebookException e) {
+		Log.d(TAG, "onError()");
 	}
 	
 	public void onEventAttendingUpdated() {

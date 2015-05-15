@@ -9,9 +9,9 @@
     <string name="map_v3_browser_key">AIzaSyDhuqduP4vkcqEbDeX0nxuBE5HnvZTrt9w</string>
     
     <!-- production keys -->
-   	<!-- <string name="fb_app_id">153033148171841</string>
+   	<!--<string name="fb_app_id">153033148171841</string>
     <string name="map_v2_android_key">AIzaSyDUaOHXTK9bv4-JhQ3h_1M0iew07JqTb9I</string>
-    <string name="map_v3_browser_key">AIzaSyBOTuIbME9QmZsfoBFFLa38zjTGJ-jWT-k</string> -->
+    <string name="map_v3_browser_key">AIzaSyBOTuIbME9QmZsfoBFFLa38zjTGJ-jWT-k</string>-->
     
     <!-- beats music credentials are given by Samir on 20-03-2015 -->
     <string name="api_key">9tv4fx82y43skf9yqk4djgmj</string> <!-- beats sample production key -->
@@ -104,7 +104,7 @@
     <string name="pls_login_to_see_artist_news">Please login with Facebook or Google from \'Sync Accounts\' page to see artist news.</string>
     <string name="connection_lost">The Internet connection appears to be offline.</string>
     <string name="no_internet_connectivity">No Internet Connectivity</string>
-    <string name="yes">Yes</string>
+    <string name="yes">@string/my_events_al_yes</string>
     <string name="add_to_calender">Add to calendar</string>
     <string name="select_calender">Select calendar</string>
     <string name="event_added_to_calender_successfully">Event added to calendar successfully!</string>
@@ -250,8 +250,6 @@
     <string name="drive">Drive</string>
 
     <!-- Friends Activity -->
-    <string name="is_going_to">%1$s is going to %2$s</string>
-    <string name="wants_to_go_to">%1$s wants to go to %2$s</string>
     <string name="saved">%1$s saved %2$s</string>
     <string name="like">Like</string>
     <string name="comment">Comment</string>
@@ -274,9 +272,6 @@
  	<string name="rep_code_enter_a_valid_repcode">Please enter a valid rep code.</string>
  	<string name="rep_code_submission">Rep Code Submission</string>
  	<string name="ok">Ok</string>
- 
-    <!-- My Events -->
-    <string name="no_events_in_your_area">No events currently in your area. Follow more artists to start your personalized event calendar.</string>
 
     <!-- About Us -->
     <string name="version">Version</string>
@@ -285,16 +280,11 @@
     <string name="couldnt_find_drive_location">Could not find driving direction for this venue.</string>	
 
     <!-- Discover -->
-    <string name="set_start_date">Set Event Start Date</string>	
     <string name="loading">Loading...</string>
 
     <!-- Get Started -->
     <string name="skip">Skip</string>
-    <string name="signin_for_better_experience">Signing in allows for a better experience.</string>
     <string name="couldnt_login_to_google_play_music">Could not login to google play music account. Please make sure you are using right google play music account.</string>
-    <string name="why_login">Why Login?</string>
-    <string name="get_event_recommendations">Get event recommendations based on your interests</string>
-    <string name="stay_connected_with_friends">Stay connected with friends and know who to invite to events</string>
 
     <!-- Last Fm -->
     <string name="user_name">Username</string>
@@ -397,10 +387,10 @@
     <string name="btn_follow_all">Follow All</string>
     <string name="a_z">A - Z</string>
     <string name="recommendation_score">Recommendation Score</string>
-    <string name="dialog_title_follow_all">Follow All</string>
-    <string name="dialog_msg_follow_all">Gostaria seguir %1$d artistas?</string>
-    <string name="dialog_btn_yes">yes</string>
-    <string name="dialog_btn_no">no</string>
+    <string name="dialog_title_follow_all">@string/btn_follow_all</string>
+    <string name="dialog_msg_follow_all">Do you want to follow %1$d artists?</string>
+    <string name="dialog_btn_yes">@string/my_events_al_yes</string>
+    <string name="dialog_btn_no">@string/my_events_al_no</string>
     
     <!-- MusicArtistsFragment -->
     <string name="btn_rock">Rock</string>

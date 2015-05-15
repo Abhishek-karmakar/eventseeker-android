@@ -25,7 +25,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout.DrawerListener;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.AdapterDataObserver;
 import android.support.v7.widget.RecyclerView.LayoutParams;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -51,8 +50,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
 import com.wcities.eventseeker.DiscoverSettingDialogFragment.DiscoverSettingChangedListener;
 import com.wcities.eventseeker.SettingsFragment.OnSettingsItemClickedListener;
 import com.wcities.eventseeker.adapter.CatTitlesAdapter;
@@ -688,7 +687,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 			resetEventList();
 		}
 	}
-	
+
 	private static class EventListAdapter extends RVAdapterBase<EventListAdapter.ViewHolder> implements
 			DateWiseEventParentAdapterListener {
 		
@@ -708,7 +707,6 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		private int openPos = INVALID;
 		private int rltLytContentInitialMarginL, lnrSliderContentW, imgEventW, rltLytContentW = INVALID;
 		
-		private int fbCallCountForSameEvt = 0;
 		private EventListAdapter.ViewHolder holderPendingPublish;
 		private Event eventPendingPublish;
 		
@@ -1380,24 +1378,24 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		private void onEventClick(final ViewHolder holder, final Event event) {
 			holder.rltLytRoot.setPressed(true);
 			discoverFragment.handler.postDelayed(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					List<SharedElement> sharedElements = new ArrayList<SharedElement>();
-					
-					SharedElementPosition sharedElementPosition = new SharedElementPosition(discoverFragment.imgEventPadL, 
-							holder.itemView.getTop() + discoverFragment.imgEventPadT, 
-							holder.imgEvent.getWidth() - discoverFragment.imgEventPadL - discoverFragment.imgEventPadR, 
+
+					SharedElementPosition sharedElementPosition = new SharedElementPosition(discoverFragment.imgEventPadL,
+							holder.itemView.getTop() + discoverFragment.imgEventPadT,
+							holder.imgEvent.getWidth() - discoverFragment.imgEventPadL - discoverFragment.imgEventPadR,
 							holder.imgEvent.getHeight() - discoverFragment.imgEventPadT - discoverFragment.imgEventPadB);
 					SharedElement sharedElement = new SharedElement(sharedElementPosition, holder.imgEvent);
 					sharedElements.add(sharedElement);
 					discoverFragment.addViewsToBeHidden(holder.imgEvent);
-					
+
 					//Log.d(TAG, "AT issue event = " + event);
 					((EventListener) FragmentUtil.getActivity(discoverFragment)).onEventSelected(event, sharedElements);
-					
+
 					discoverFragment.onPushedToBackStack();
-					
+
 					holder.rltLytRoot.setPressed(false);
 				}
 			}, 200);
@@ -1412,14 +1410,14 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 					holder.rltTicket.setPressed(false);
 					Bundle args = new Bundle();
 					args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl()
-                            + "&lang=" + ((EventSeekr) FragmentUtil.getApplication(discoverFragment)).getLocale().getLocaleCode());
+							+ "&lang=" + ((EventSeekr) FragmentUtil.getApplication(discoverFragment)).getLocale().getLocaleCode());
 					((ReplaceFragmentListener)FragmentUtil.getActivity(discoverFragment)).replaceByFragment(
 							AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
 					/**
 					 * added on 15-12-2014
 					 */
-					GoogleAnalyticsTracker.getInstance().sendEvent(FragmentUtil.getApplication(discoverFragment), 
-							discoverFragment.getScreenName(), GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON, 
+					GoogleAnalyticsTracker.getInstance().sendEvent(FragmentUtil.getApplication(discoverFragment),
+							discoverFragment.getScreenName(), GoogleAnalyticsTracker.EVENT_LABEL_TICKETS_BUTTON,
 							GoogleAnalyticsTracker.Type.Event.name(), null, event.getId());
 				}
 			}, 200);
@@ -1428,32 +1426,31 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		private void onImgSaveClick(final ViewHolder holder, final Event event) {
 			holder.rltSave.setPressed(true);
 			discoverFragment.handler.postDelayed(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					holder.rltSave.setPressed(false);
-					
+
 					EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(discoverFragment).getApplication();
 					if (event.getAttending() == Attending.SAVED) {
 						event.setAttending(Attending.NOT_GOING);
-						new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.event, event.getId(), 
+						new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.event, event.getId(),
 								event.getAttending().getValue(), UserTrackingType.Add).execute();
-		    			updateImgSaveSrc(holder, event, FragmentUtil.getResources(discoverFragment));
-						
+						updateImgSaveSrc(holder, event, FragmentUtil.getResources(discoverFragment));
+
 					} else {
 						discoverFragment.event = eventPendingPublish = event;
 						holderPendingPublish = holder;
-						
+
 						if (eventSeekr.getGPlusUserId() != null) {
 							event.setNewAttending(Attending.SAVED);
 							discoverFragment.handlePublishEvent();
-							
+
 						} else {
-							fbCallCountForSameEvt = 0;
 							event.setNewAttending(Attending.SAVED);
 							//NOTE: THIS CAN BE TESTED WITH PODUCTION BUILD ONLY
-							FbUtil.handlePublishEvent(discoverFragment, discoverFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-									AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
+							FbUtil.handlePublishEvent(discoverFragment, discoverFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
+									event);
 						}
 					}
 				}
@@ -1463,18 +1460,18 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		private void onImgShareClick(final ViewHolder holder, final Event event) {
 			holder.rltShare.setPressed(true);
 			discoverFragment.handler.postDelayed(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					holder.rltShare.setPressed(false);
-					
-					ShareViaDialogFragment shareViaDialogFragment = ShareViaDialogFragment.newInstance(event, 
+
+					ShareViaDialogFragment shareViaDialogFragment = ShareViaDialogFragment.newInstance(event,
 							discoverFragment.getScreenName());
 					/**
 					 * Passing activity fragment manager, since using this fragment's child fragment manager 
 					 * doesn't retain dialog on orientation change
 					 */
-					shareViaDialogFragment.show(((FragmentActivity)FragmentUtil.getActivity(discoverFragment))
+					shareViaDialogFragment.show(((FragmentActivity) FragmentUtil.getActivity(discoverFragment))
 							.getSupportFragmentManager(), FRAGMENT_TAG_SHARE_VIA_DIALOG);
 				}
 			}, 200);
@@ -1488,20 +1485,10 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 			lnrSliderContentW = res.getDimensionPixelSize(R.dimen.lnr_slider_content_w_list_item_discover);
 		}
 		
-		private void call(Session session, SessionState state, Exception exception) {
-			//Log.i(TAG, "call()");
-			fbCallCountForSameEvt++;
-			/**
-			 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
-			 */
-			if (fbCallCountForSameEvt < AppConstants.MAX_FB_CALL_COUNT_FOR_SAME_EVT_OR_ART) {
-				FbUtil.call(session, state, exception, discoverFragment, discoverFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-						AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, eventPendingPublish);
-				
-			} else {
-				fbCallCountForSameEvt = 0;
-				discoverFragment.setPendingAnnounce(false);
-			}
+		private void onSuccess(LoginResult loginResult) {
+			//Log.d(TAG, "onSuccess()");
+			FbUtil.handlePublishEvent(discoverFragment, discoverFragment, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
+					eventPendingPublish);
 		}
 
 		private void onPublishPermissionGranted() {
@@ -1536,9 +1523,19 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	}
 
 	@Override
-	public void call(Session session, SessionState state, Exception exception) {
-		//Log.i(TAG, "call()");
-		eventListAdapter.call(session, state, exception);
+	public void onSuccess(LoginResult loginResult) {
+		Log.d(TAG, "onSuccess()");
+		eventListAdapter.onSuccess(loginResult);
+	}
+
+	@Override
+	public void onCancel() {
+		Log.d(TAG, "onCancel()");
+	}
+
+	@Override
+	public void onError(FacebookException e) {
+		Log.d(TAG, "onError()");
 	}
 
 	@Override

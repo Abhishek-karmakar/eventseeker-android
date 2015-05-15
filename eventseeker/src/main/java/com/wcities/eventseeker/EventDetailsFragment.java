@@ -37,8 +37,8 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
 import com.melnykov.fab.FloatingActionButton;
 import com.wcities.eventseeker.adapter.FeaturingArtistPagerAdapter;
 import com.wcities.eventseeker.adapter.FriendsRVAdapter;
@@ -117,8 +117,6 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	private boolean isOnCreateViewCalledFirstTime = true;
 	private int screenW, imgEventHt;
 	private AnimatorSet animatorSet;
-	
-	private int fbCallCountForSameEvt = 0;
 	
 	private List<View> hiddenViews;
 	
@@ -940,10 +938,9 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 					handlePublishEvent();
 					
 				} else {
-					fbCallCountForSameEvt = 0;
 					event.setNewAttending(Attending.SAVED);
-					FbUtil.handlePublishEvent(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-							AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
+					FbUtil.handlePublishEvent(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
+							event);
 				}
 			}
 			break;
@@ -1034,19 +1031,20 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	}
 
 	@Override
-	public void call(Session session, SessionState state, Exception exception) {
-		fbCallCountForSameEvt++;
-		/**
-		 * To prevent infinite loop when network is off & we are calling requestPublishPermissions() of FbUtil.
-		 */
-		if (fbCallCountForSameEvt < AppConstants.MAX_FB_CALL_COUNT_FOR_SAME_EVT_OR_ART) {
-			FbUtil.call(session, state, exception, this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, 
-					AppConstants.REQ_CODE_FB_PUBLISH_EVT_OR_ART, event);
-			
-		} else {
-			fbCallCountForSameEvt = 0;
-			setPendingAnnounce(false);
-		}
+	public void onSuccess(LoginResult loginResult) {
+		Log.d(TAG, "onSuccess()");
+		FbUtil.handlePublishEvent(this, this, AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
+				event);
+	}
+
+	@Override
+	public void onCancel() {
+		Log.d(TAG, "onCancel()");
+	}
+
+	@Override
+	public void onError(FacebookException e) {
+		Log.d(TAG, "onError()");
 	}
 
 	@Override
