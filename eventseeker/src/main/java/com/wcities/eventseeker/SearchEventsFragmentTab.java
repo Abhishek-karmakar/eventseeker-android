@@ -23,6 +23,7 @@ import com.wcities.eventseeker.adapter.RVSearchEventsAdapterTab;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.LoadEvents;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.custom.fragment.PublishEventFragment;
@@ -42,7 +43,7 @@ import java.util.Calendar;
 import java.util.List;
 
 public class SearchEventsFragmentTab extends PublishEventFragment implements SearchFragmentChildListener, FullScrnProgressListener, LoadItemsInBackgroundListener, 
-		AsyncTaskListener<Void>, SwipeTabVisibilityListener {
+		AsyncTaskListener<Void>, SwipeTabVisibilityListener, GeneralDialogFragment.DialogBtnClickListener {
 	
 	private static final String TAG = SearchEventsFragmentTab.class.getSimpleName();
 
@@ -213,7 +214,12 @@ public class SearchEventsFragmentTab extends PublishEventFragment implements Sea
 
 	@Override
 	public void onPublishPermissionGranted() {
-		rvSearchEventsAdapterTab.onPublishPermissionGranted();
+		if (FragmentUtil.getActivity(this) != null) {
+			// if user has not left the screen (activity)
+			//Log.d(TAG, "activity != null");
+			rvSearchEventsAdapterTab.onPublishPermissionGranted();
+			showAddToCalendarDialog(this);
+		}
 	}
 
 	@Override
@@ -251,5 +257,17 @@ public class SearchEventsFragmentTab extends PublishEventFragment implements Sea
 			 */
 			rvSearchEventsAdapterTab.notifyDataSetChanged();
 		}
+	}
+
+	@Override
+	public void doPositiveClick(String dialogTag) {
+		if (AppConstants.DIALOG_FRAGMENT_TAG_EVENT_SAVED.equals(dialogTag)) {
+			addEventToCalendar();
+		}
+	}
+
+	@Override
+	public void doNegativeClick(String dialogTag) {
+
 	}
 }

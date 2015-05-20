@@ -41,7 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MyEventsGridFragmentTab extends PublishEventFragment implements LoadItemsInBackgroundListener, 
-		AsyncTaskListener<Void>, RVMyEventsAdapterTabListener, SwipeTabVisibilityListener {
+		AsyncTaskListener<Void>, RVMyEventsAdapterTabListener, SwipeTabVisibilityListener, GeneralDialogFragment.DialogBtnClickListener {
 	
 	private static final String TAG = MyEventsGridFragmentTab.class.getSimpleName();
 	
@@ -57,7 +57,7 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 	private RelativeLayout rltLytProgressBar, rltLytNoEvts;
 	private ImageView imgPrgOverlay;
 	
-	private RVMyEventsAdapterTab rvCatEventsAdapterTab;
+	private RVMyEventsAdapterTab rvMyEventsAdapterTab;
 	
 	private Handler handler;
 
@@ -120,17 +120,17 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 			eventList = new ArrayList<Event>();
 			eventList.add(null);
 			
-			rvCatEventsAdapterTab = new RVMyEventsAdapterTab(eventList, null, this, this, this);
+			rvMyEventsAdapterTab = new RVMyEventsAdapterTab(eventList, null, this, this, this);
 			
 		} else {
 			// to update values which should change on orientation change
-			rvCatEventsAdapterTab.onActivityCreated();
+			rvMyEventsAdapterTab.onActivityCreated();
 		}
 		
 		Resources res = FragmentUtil.getResources(this);
 		recyclerVEvents.addItemDecoration(new ItemDecorationItemOffset(res.getDimensionPixelSize(
 				R.dimen.rv_item_l_r_offset_discover_tab), res.getDimensionPixelSize(R.dimen.rv_item_t_b_offset_discover_tab)));
-		recyclerVEvents.setAdapter(rvCatEventsAdapterTab);
+		recyclerVEvents.setAdapter(rvMyEventsAdapterTab);
 	}
 	
 	@Override
@@ -142,11 +142,11 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 	}
 	
 	private void resetEventList() {
-		if (rvCatEventsAdapterTab == null) {
+		if (rvMyEventsAdapterTab == null) {
 			return;
 		}
 		//Log.d(TAG, "resetEventList()");
-		rvCatEventsAdapterTab.reset();
+		rvMyEventsAdapterTab.reset();
 
 		if (loadEvents != null) {
 			loadEvents.cancel(true);
@@ -155,11 +155,11 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 		eventList.clear();
 		eventList.add(null);
 		
-		rvCatEventsAdapterTab.notifyDataSetChanged();
+		rvMyEventsAdapterTab.notifyDataSetChanged();
 		/**
-		 * Although we expect rvCatEventsAdapterTab to call loadItemsInBackground() due to 1st null item in 
+		 * Although we expect rvMyEventsAdapterTab to call loadItemsInBackground() due to 1st null item in
 		 * eventList, it won't work always. For eg - If user changes categories fast one by one then loadDateWiseEvents
-		 * in rvCatEventsAdapterTab won't be null & also it won't be in FINISHED state. Hence it won't call
+		 * in rvMyEventsAdapterTab won't be null & also it won't be in FINISHED state. Hence it won't call
 		 * loadItemsInBackground() for latest category selection in this case, so better we call loadItemsInBackground()
 		 * from here itself.
 		 */
@@ -192,14 +192,14 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 	
 	@Override
 	public void loadItemsInBackground() {
-		loadEvents = new LoadMyEvents(Api.OAUTH_TOKEN, eventList, rvCatEventsAdapterTab, wcitiesId, loadType, 
+		loadEvents = new LoadMyEvents(Api.OAUTH_TOKEN, eventList, rvMyEventsAdapterTab, wcitiesId, loadType,
 				lat, lon, this);
 		if (FragmentUtil.getActivity(this).getIntent().hasExtra(BundleKeys.IS_FROM_NOTIFICATION)
 				&& loadType == Type.recommendedevent) {
 			loadEvents.setAddSrcFromNotification(true);
 			FragmentUtil.getActivity(this).getIntent().removeExtra(BundleKeys.IS_FROM_NOTIFICATION);
 		}
-		rvCatEventsAdapterTab.setLoadDateWiseEvents(loadEvents);
+		rvMyEventsAdapterTab.setLoadDateWiseEvents(loadEvents);
         AsyncTaskUtil.executeAsyncTask(loadEvents, true);
 	}
 
@@ -222,13 +222,19 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 
 	@Override
 	public void onPublishPermissionGranted() {
-		rvCatEventsAdapterTab.onPublishPermissionGranted();
+		if (FragmentUtil.getActivity(this) != null) {
+			 // if user has not left the screen (activity)
+			//Log.d(TAG, "activity != null");
+			rvMyEventsAdapterTab.onPublishPermissionGranted();
+			((MyEventsFragmentTab) getParentFragment()).onEventAttendingUpdated();
+			showAddToCalendarDialog(this);
+		}
 	}
 
 	@Override
 	public void onSuccess(LoginResult loginResult) {
 		Log.d(TAG, "onSuccess()");
-		rvCatEventsAdapterTab.onSuccess(loginResult);
+		rvMyEventsAdapterTab.onSuccess(loginResult);
 	}
 
 	@Override
@@ -284,22 +290,34 @@ public class MyEventsGridFragmentTab extends PublishEventFragment implements Loa
 
 	@Override
 	public void onVisible() {
-		if (rvCatEventsAdapterTab != null) {
-			rvCatEventsAdapterTab.setVisible(true);
+		if (rvMyEventsAdapterTab != null) {
+			rvMyEventsAdapterTab.setVisible(true);
 			/**
 			 * need to call this because it doesn't call onBindViewHolder() automatically if 
 			 * next or previous tab is selected. Calls it only for tab selection changing from position 1 to 3 or 
 			 * 3 to 1
 			 */
-			rvCatEventsAdapterTab.notifyDataSetChanged();
+			rvMyEventsAdapterTab.notifyDataSetChanged();
 		}
 	}
 
 	@Override
 	public void onInvisible() {
-		if (rvCatEventsAdapterTab != null) {
-			rvCatEventsAdapterTab.setVisible(false);
-			rvCatEventsAdapterTab.notifyDataSetChanged();
+		if (rvMyEventsAdapterTab != null) {
+			rvMyEventsAdapterTab.setVisible(false);
+			rvMyEventsAdapterTab.notifyDataSetChanged();
 		}
+	}
+
+	@Override
+	public void doPositiveClick(String dialogTag) {
+		if (AppConstants.DIALOG_FRAGMENT_TAG_EVENT_SAVED.equals(dialogTag)) {
+			addEventToCalendar();
+		}
+	}
+
+	@Override
+	public void doNegativeClick(String dialogTag) {
+
 	}
 }

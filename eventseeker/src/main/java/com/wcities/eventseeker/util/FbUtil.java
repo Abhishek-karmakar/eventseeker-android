@@ -191,6 +191,7 @@ public class FbUtil {
 					Log.d(TAG, "jsonObject = null");
 				}
 
+				//Log.d(TAG, "track event");
 				new UserTracker(Api.OAUTH_TOKEN, (EventSeekr) FragmentUtil.getActivity(fragment).getApplication(),
 						UserInfoApi.UserTrackingItemType.event, event.getId(), event.getAttending().getValue(), postId,
 						UserInfoApi.UserTrackingType.Add) {

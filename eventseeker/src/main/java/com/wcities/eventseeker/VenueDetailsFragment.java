@@ -99,7 +99,7 @@ import com.wcities.eventseeker.viewdata.SharedElementPosition;
 
 public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackStack implements DrawerListener, 
 		CustomSharedElementTransitionDestination, OnVenueUpdatedListener, LoadItemsInBackgroundListener, 
-		CustomSharedElementTransitionSource, AsyncTaskListener<Void>, FragmentHavingFragmentInRecyclerView {
+		CustomSharedElementTransitionSource, AsyncTaskListener<Void>, FragmentHavingFragmentInRecyclerView, GeneralDialogFragment.DialogBtnClickListener {
 
 	private static final String TAG = VenueDetailsFragment.class.getSimpleName();
 	private static final String FRAGMENT_TAG_SHARE_VIA_DIALOG = ShareViaDialogFragment.class.getSimpleName();
@@ -681,7 +681,19 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		updateVenueImg();
 		venueRVAdapter.notifyDataSetChanged();
 	}
-	
+
+	@Override
+	public void doPositiveClick(String dialogTag) {
+		if (AppConstants.DIALOG_FRAGMENT_TAG_EVENT_SAVED.equals(dialogTag)) {
+			addEventToCalendar();
+		}
+	}
+
+	@Override
+	public void doNegativeClick(String dialogTag) {
+
+	}
+
 	private static class VenueRVAdapter extends RVAdapterBase<VenueRVAdapter.ViewHolder> implements 
 			DateWiseEventParentAdapterListener {
 		
@@ -1652,6 +1664,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		private void onPublishPermissionGranted() {
 			//Log.d(TAG, "onPublishPermissionGranted()");
 			updateImgSaveSrc(holderPendingPublish, eventPendingPublish, FragmentUtil.getResources(venueDetailsFragment));
+			venueDetailsFragment.showAddToCalendarDialog(venueDetailsFragment);
 		}
 
 		@Override

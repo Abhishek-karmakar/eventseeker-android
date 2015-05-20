@@ -36,6 +36,7 @@ import com.wcities.eventseeker.asynctask.LoadVenueDetails;
 import com.wcities.eventseeker.asynctask.LoadVenueDetails.OnVenueUpdatedListener;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
+import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Venue;
@@ -50,7 +51,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VenueDetailsFragmentTab extends PublishEventFragmentRetainingChildFragmentManager implements 
-		OnVenueUpdatedListener, LoadItemsInBackgroundListener, AsyncTaskListener<Void> {
+		OnVenueUpdatedListener, LoadItemsInBackgroundListener, AsyncTaskListener<Void>, GeneralDialogFragment.DialogBtnClickListener {
 
 	private static final String TAG = VenueDetailsFragmentTab.class.getSimpleName();
 
@@ -386,7 +387,12 @@ public class VenueDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 	
 	@Override
 	public void onPublishPermissionGranted() {
-		rvVenueDetailsAdapterTab.onPublishPermissionGranted();
+		if (FragmentUtil.getActivity(this) != null) {
+			// if user has not left the screen (activity)
+			//Log.d(TAG, "activity != null");
+			rvVenueDetailsAdapterTab.onPublishPermissionGranted();
+			showAddToCalendarDialog(this);
+		}
 	}
 
 	@Override
@@ -429,5 +435,17 @@ public class VenueDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 				onScrolled(0, true);
 			}
 		});
+	}
+
+	@Override
+	public void doPositiveClick(String dialogTag) {
+		if (AppConstants.DIALOG_FRAGMENT_TAG_EVENT_SAVED.equals(dialogTag)) {
+			addEventToCalendar();
+		}
+	}
+
+	@Override
+	public void doNegativeClick(String dialogTag) {
+
 	}
 }

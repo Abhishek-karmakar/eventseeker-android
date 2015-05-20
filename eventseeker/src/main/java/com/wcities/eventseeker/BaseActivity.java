@@ -1,9 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Set;
-
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.ActivityNotFoundException;
@@ -34,6 +30,10 @@ import com.wcities.eventseeker.interfaces.ConnectionFailureListener;
 import com.wcities.eventseeker.interfaces.DrawerListFragmentListener;
 import com.wcities.eventseeker.util.DeviceUtil;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Set;
+
 public abstract class BaseActivity extends ActionBarActivity implements ConnectionFailureListener, DialogBtnClickListener,
         DrawerListFragmentListener {
 
@@ -47,9 +47,12 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
 
     private boolean activityOnTop;
 
+    private boolean onSaveInstanceStateCalled;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Log.d(TAG, "onCreate()");
 
         /**
          * Locale changes are Activity specific i.e. after the Activity gets destroyed, the Locale changes
@@ -58,7 +61,7 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
          * the Device specific Locale. So, each and every time when activity gets initialized it should
          * also initialize its Locale from SharedPref.
          */
-        ((EventSeekr) getApplication()).setDefaultLocale();
+                ((EventSeekr) getApplication()).setDefaultLocale();
 
         if (((EventSeekr) getApplication()).getWcitiesId() == null) {
             return;
@@ -158,6 +161,7 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
             ((EventSeekr) getApplication()).setDefaultLocale();
             //Log.d(TAG, "onResume()");
         }
+        onSaveInstanceStateCalled = false;
     }
 
     @Override
@@ -194,7 +198,13 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
              */
             handler.removeCallbacks(periodicCheckForBoschConnection);
         }
+    }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //Log.d(TAG, "onSaveInstanceState()");
+        onSaveInstanceStateCalled = true;
     }
 
     /**
@@ -218,6 +228,10 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
                 serviceInstance.resetCurrentActivityFor(this);
             }
         }
+    }
+
+    public boolean isOnSaveInstanceStateCalled() {
+        return onSaveInstanceStateCalled;
     }
 
     private void startBoschMainActivity() {

@@ -454,6 +454,10 @@
     <string name="tab_twitter">TWITTER</string>
     <string name="tab_instagram">INSTAGRAM</string>
 
+    <!-- CalendarUtil.java -->
+    <string name="event_saved">Event Saved!</string>
+    <string name="add_event_to_google_calendar">Add event to google calendar?</string>
+
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     
     <!-- Common -->

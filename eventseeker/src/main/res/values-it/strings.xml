@@ -115,8 +115,8 @@
     <string name="evt_cat_community">Comunità</string>
     <string name="evt_cat_business_tech">Business e tecnologia</string>
     <string name="evt_cat_tours">Escursioni</string>
-    
-    <string name="plus_generic_error">Sign in with Google is not available.</string>
+
+    <string name="plus_generic_error">Non è possibile accedere con Google.</string>
 
     <!-- About us -->
     <string name="seek_share_live">Cerchi. Condividi. Vivi.</string>
@@ -268,6 +268,7 @@
           
     <!-- Common -->
     <string name="no_event_found">Nessun evento trovato</string>
+    <string name="no_venue_found">Non c\'è un luogo</string>
  
     <!-- RdioFragment -->
     <string name="user_name_or_email">Nome utente o email</string>
@@ -317,10 +318,11 @@
     <!-- RecommendedArtistsFragment -->
     <string name="btn_follow_all">Segui tutti</string>
     <string name="a_z">A - Z</string>
-    <string name="recommendation_score">Recommendation Score</string>
+    <string name="recommendation_score">Punteggio di raccomandazione</string>
     <string name="dialog_msg_follow_all">Vuoi seguire %1$d artisti?</string>
 
     <!-- LoginFragment -->
+    <string name="dialog_msg_chk_email_to_reset_pwd">Controlla la sua casella email per reimpostare la password.</string>
     <string name="continue_with_facebook">continua con facebook</string>
     <string name="continue_wiht_google">continua con google</string>
     <string name="sign_in_with_email">Accedi con il tuo indirizzo email</string>
@@ -380,16 +382,23 @@
     <string name="title_soul_r_and_b">Soul \/ R&amp;B</string>
     <string name="title_classical">classica</string>
 
-    <string name="title_popular_sports">Sport</string>
+    <string name="title_popular_sports">Sport populari</string>
 
     <!-- NavigationFragment -->
     <string name="address_isnt_available">questo indirizzo non è disponibile.</string>
+
+    <!-- FbUtil -->
+    <string name="saving_event">Salvando il evento...</string>
     
     <!-- fragment_navigation.xml -->
     <string name="select_navigation_app">seleziona la app di navigazione per direzioni.</string>
 
     <!-- menu/fragment_artist_details.xml -->
     <string name="share">Condividi</string>
+
+    <!-- CalendarUtil.java -->
+    <string name="event_saved">Evento salvato!</string>
+    <string name="add_event_to_google_calendar">Aggiungere l\'evento al calendario di Google?</string>
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>

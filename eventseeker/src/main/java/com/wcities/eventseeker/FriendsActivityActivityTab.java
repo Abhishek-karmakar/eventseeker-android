@@ -1,18 +1,13 @@
 package com.wcities.eventseeker;
 
-import java.util.List;
-
 import android.os.Bundle;
 
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
-import com.wcities.eventseeker.core.Event;
-import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.util.FragmentUtil;
-import com.wcities.eventseeker.viewdata.SharedElement;
 
-public class FriendsActivityActivityTab extends BaseActivityTab implements EventListener {
+public class FriendsActivityActivityTab extends BaseActivityTab {
 	
 	private static final String TAG = FriendsActivityActivityTab.class.getSimpleName();
 	
@@ -47,19 +42,5 @@ public class FriendsActivityActivityTab extends BaseActivityTab implements Event
 	@Override
 	protected int getDrawerItemPos() {
 		return AppConstants.INDEX_NAV_ITEM_FRIENDS_ACTIVITY;
-	}
-
-	@Override
-	public void onEventSelected(Event event) {
-		EventDetailsFragment eventDetailsFragment = new EventDetailsFragment();
-		Bundle args = new Bundle();
-		args.putSerializable(BundleKeys.EVENT, event);
-		eventDetailsFragment.setArguments(args);
-	}
-
-	@Override
-	public void onEventSelected(Event event, List<SharedElement> sharedElements) {
-		// TODO Auto-generated method stub
-		
 	}
 }

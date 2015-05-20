@@ -26,7 +26,7 @@
     <string name="title_friends_activity">Activités des amis</string>
     <string name="title_connect_accounts">Synchroniser les comptes</string>
     <string name="title_about_us">A propos de nous</string>
-    <string name="title_eula">CGU</string>
+    <string name="title_eula">CLUF</string>
     <string name="title_rep_code">@string/rep_code</string>
     <string name="title_search_results">Résultats de la recherche</string>
     <string name="title_google_play">Google Play</string>
@@ -115,8 +115,8 @@
     <string name="evt_cat_community">Communauté</string>
     <string name="evt_cat_business_tech">Entreprise et Technologie</string>
     <string name="evt_cat_tours">Tournées</string>
-    
-    <string name="plus_generic_error">Sign in with Google is not available.</string>
+
+    <string name="plus_generic_error">La connexion via Google n\'est pas disponible.</string>
 
     <!-- About us -->
     <string name="seek_share_live">Cherche. Partagez. Vis.</string>
@@ -268,6 +268,7 @@
        
     <!-- Common -->
     <string name="no_event_found">Aucun événement trouvé</string>
+    <string name="no_venue_found">Aucun lieu trouvé</string>
      
     <!-- RdioFragment -->
     <string name="user_name_or_email">Nom d\'utilisateur ou addresse email</string>
@@ -338,7 +339,7 @@
     <string name="title_soul_r_and_b">Soul, R&amp;B</string>
     <string name="title_classical">Musique Classique</string>
 
-    <string name="title_popular_sports">Sport</string>
+    <string name="title_popular_sports">Sports populaires</string>
 
     <!-- DiscoverSettingDialogFragment -->
 	<string name="txt_search_radius">Cherchez pour rayon (milles)</string>
@@ -360,6 +361,7 @@
     <string name="btn_classical">Musique Classique</string>
     
     <!-- LoginFragment -->
+    <string name="dialog_msg_chk_email_to_reset_pwd">Consultez votre email pour réinitialiser votre mot de passe</string>
     <string name="continue_with_facebook">Continuer avec Facebook</string>
     <string name="continue_wiht_google">Continuer avec Google</string>
     <string name="sign_in_with_email">Ouvrez une session avec votre adresse électronique</string>
@@ -384,12 +386,19 @@
     
     <!-- NavigationFragment -->
     <string name="address_isnt_available">L\'adresse n\'est pas disponible pour cet endroit.</string>
+
+    <!-- FbUtil -->
+    <string name="saving_event">Sauvegarde de l\'évènement...</string>
     
     <!-- fragment_navigation.xml -->
     <string name="select_navigation_app">Sélectionnez votre application de navigation et demander le chemin.</string>
 
     <!-- menu/fragment_artist_details.xml -->
     <string name="share">Partagez</string>
+
+    <!-- CalendarUtil.java -->
+    <string name="event_saved">Evènement sauvegardé!</string>
+    <string name="add_event_to_google_calendar">Ajouter l\'evènement à Google Calendar?</string>
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>

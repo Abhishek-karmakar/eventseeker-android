@@ -116,7 +116,7 @@
     <string name="evt_cat_business_tech">Business &amp; Tech</string>
     <string name="evt_cat_tours">Touren</string>
     
-    <string name="plus_generic_error">Sign in with Google is not available.</string>
+    <string name="plus_generic_error">Anmeldung mit Google ist nicht verfügbar.</string>
 
     <!-- About us -->
     <string name="seek_share_live">Suchen. Teilen. Leben</string>
@@ -268,6 +268,7 @@
           
     <!-- Common -->
     <string name="no_event_found">Keine Veranstaltung gefunden</string>
+    <string name="no_venue_found">Kein Veranstaltungsort gefunden</string>
   
     <!-- RdioFragment -->
     <string name="user_name_or_email">Benutzername oder E-Mail</string>
@@ -317,10 +318,11 @@
     <!-- RecommendedArtistsFragment -->
     <string name="btn_follow_all">Allen folgen</string>
     <string name="a_z">A - Z</string>
-    <string name="recommendation_score">Recommendation Score</string>
+    <string name="recommendation_score">Empfehlungswert</string>
     <string name="dialog_msg_follow_all">Möchtest du %1$d Künstlern folgen?</string>
 
     <!-- LoginFragment -->
+    <string name="dialog_msg_chk_email_to_reset_pwd">Bitte checken Sie Ihre Emails, um das Passwort zurückzusetzen</string>
     <string name="sign_in_with_email">Mit E-Mail anmelden</string>
     <string name="signing_in">Anmelden...</string>
     <string name="dialog_msg_user_email_doesnt_exist">Benutzer mit dieser E-Mail ist noch nicht kreiert.</string>
@@ -361,7 +363,7 @@
     <string name="title_soul_r_and_b">Soul, RnB</string>
     <string name="title_classical">Klassisch</string>
 
-    <string name="title_popular_sports">Beliebter Sport</string>
+    <string name="title_popular_sports">Beliebte Sportarten</string>
 
     <!-- DiscoverSettingDialogFragment -->
 	<string name="txt_search_radius">Suchradius</string>
@@ -388,8 +390,15 @@
     <!-- NavigationFragment -->
     <string name="address_isnt_available">Die Adresse des Veranstaltungsortes steht nicht zur Verfügung.</string>
 
+    <!-- FbUtil -->
+    <string name="saving_event">Event speichern...</string>
+
     <!-- menu/fragment_artist_details.xml -->
     <string name="share">Teilen</string>
+
+    <!-- CalendarUtil.java -->
+    <string name="event_saved">Event gespeichert!</string>
+    <string name="add_event_to_google_calendar">Event zu Google Kalender hinzufügen?</string>
     
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <string name="title_activity_bosch_main">BoschMainActivity</string>

@@ -193,10 +193,11 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		super.onConfigurationChanged(newConfig);
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
-	
+
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
+		//Log.d(TAG, "onSaveInstanceState()");
 		outState.putBoolean(BundleKeys.IS_ON_CREATE_CALLED_FIRST_TIME, isOnCreateCalledFirstTime);
 		outState.putString(BundleKeys.CURRENT_CONTENT_FRAGMENT_TAG, currentContentFragmentTag);
 		if (searchView != null) {
@@ -204,7 +205,7 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		}
 		outState.putString(BundleKeys.SEARCH_QUERY, searchQuery);
 	}
-	
+
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -592,15 +593,28 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 		Intent intent = new Intent(getApplication(), EventDetailsActivityTab.class);
 		intent.putExtra(BundleKeys.EVENT, event);
 		intent.putExtra(BundleKeys.TRANSITION_NAME_SHARED_IMAGE, ViewCompat.getTransitionName(imageView));
-		intent.putExtra(BundleKeys.TRANSITION_NAME_SHARED_TEXT, ViewCompat.getTransitionName(textView));
+
+		Pair<View, String> pairTxt = null;
+
+		if (textView != null) {
+			intent.putExtra(BundleKeys.TRANSITION_NAME_SHARED_TEXT, ViewCompat.getTransitionName(textView));
+			pairTxt = Pair.create((View)textView, ViewCompat.getTransitionName(textView));
+		}
 		
 		/**
 		 * ActivityOptionsCompat is used since it's helper for accessing features in ActivityOptions 
 		 * introduced in API level 16 in a backwards compatible fashion.
 		 */
-		ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, 
-				Pair.create((View)imageView, ViewCompat.getTransitionName(imageView)),
-				Pair.create((View)textView, ViewCompat.getTransitionName(textView)));
+		ActivityOptionsCompat options = null;
+		if (pairTxt != null) {
+			options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+					Pair.create((View)imageView, ViewCompat.getTransitionName(imageView)), pairTxt);
+
+		} else {
+			options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+					Pair.create((View)imageView, ViewCompat.getTransitionName(imageView)));
+		}
+
         ActivityCompat.startActivity(this, intent, options.toBundle());
 	}
 	

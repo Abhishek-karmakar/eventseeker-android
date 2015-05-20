@@ -1,8 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.Iterator;
-import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,6 +22,9 @@ import com.wcities.eventseeker.custom.fragment.FragmentRetainingChildFragmentMan
 import com.wcities.eventseeker.interfaces.SwipeTabVisibilityListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
+
+import java.util.Iterator;
+import java.util.List;
 
 public class MyEventsFragmentTab extends FragmentRetainingChildFragmentManager implements OnClickListener,
 		SwipeTabsAdapterListener {
@@ -208,11 +208,11 @@ public class MyEventsFragmentTab extends FragmentRetainingChildFragmentManager i
 		}
 	}
 
-	/*public void onEventAttendingUpdated() {
+	public void onEventAttendingUpdated() {
 		List<Fragment> pageFragments = mTabsAdapter.getTabFragments();
 		for (Iterator<Fragment> iterator = pageFragments.iterator(); iterator.hasNext();) {
 			MyEventsGridFragmentTab myEventsGridFragmentTab = (MyEventsGridFragmentTab) iterator.next();
 			myEventsGridFragmentTab.onEventAttendingUpdated();
 		}
-	}*/
+	}
 }

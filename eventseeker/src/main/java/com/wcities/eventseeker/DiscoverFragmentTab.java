@@ -50,7 +50,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 public class DiscoverFragmentTab extends PublishEventFragment implements OnClickListener, LoadItemsInBackgroundListener, 
-		AsyncTaskListener<Void> {
+		AsyncTaskListener<Void>,GeneralDialogFragment.DialogBtnClickListener {
 	
 	private static final String TAG = DiscoverFragmentTab.class.getSimpleName();
 	
@@ -78,7 +78,7 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 	private Handler handler;
 
     private boolean isGlobalLayoutCalled;
-	
+
 	private enum ScrollDirection {
 		UNDECIDED, LEFT, RIGHT;
 	}
@@ -571,7 +571,23 @@ public class DiscoverFragmentTab extends PublishEventFragment implements OnClick
 
 	@Override
 	public void onPublishPermissionGranted() {
-		rvCatEventsAdapterTab.onPublishPermissionGranted();
+		if (FragmentUtil.getActivity(this) != null) {
+			//Log.d(TAG, "activity != null");
+			rvCatEventsAdapterTab.onPublishPermissionGranted();
+			showAddToCalendarDialog(this);
+		}
+	}
+
+	@Override
+	public void doPositiveClick(String dialogTag) {
+		if (AppConstants.DIALOG_FRAGMENT_TAG_EVENT_SAVED.equals(dialogTag)) {
+			addEventToCalendar();
+		}
+	}
+
+	@Override
+	public void doNegativeClick(String dialogTag) {
+
 	}
 
 	@Override

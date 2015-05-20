@@ -95,7 +95,8 @@ import com.wcities.eventseeker.viewdata.SharedElement;
 import com.wcities.eventseeker.viewdata.SharedElementPosition;
 
 public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack implements LoadItemsInBackgroundListener, 
-		DiscoverSettingChangedListener, DrawerListener, CustomSharedElementTransitionSource, AsyncTaskListener<Void> {
+		DiscoverSettingChangedListener, DrawerListener, CustomSharedElementTransitionSource, AsyncTaskListener<Void>,
+		GeneralDialogFragment.DialogBtnClickListener {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -1494,6 +1495,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 		private void onPublishPermissionGranted() {
 			//Log.d(TAG, "onPublishPermissionGranted()");
 			updateImgSaveSrc(holderPendingPublish, eventPendingPublish, FragmentUtil.getResources(discoverFragment));
+			discoverFragment.showAddToCalendarDialog(discoverFragment);
 		}
 
 		@Override
@@ -1651,5 +1653,17 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	@Override
 	public boolean isOnTop() {
 		return !isOnPushedToBackStackCalled;
+	}
+
+	@Override
+	public void doPositiveClick(String dialogTag) {
+		if (AppConstants.DIALOG_FRAGMENT_TAG_EVENT_SAVED.equals(dialogTag)) {
+			addEventToCalendar();
+		}
+	}
+
+	@Override
+	public void doNegativeClick(String dialogTag) {
+
 	}
 }

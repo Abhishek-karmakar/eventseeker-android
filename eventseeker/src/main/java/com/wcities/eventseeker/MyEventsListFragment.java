@@ -39,7 +39,7 @@ import java.util.List;
 
 public class MyEventsListFragment extends PublishEventListFragment implements LoadItemsInBackgroundListener, 
 		OnNoEventsListener, CustomSharedElementTransitionSource,
-		FullScrnProgressListener, AsyncTaskListener<Void> {
+		FullScrnProgressListener, AsyncTaskListener<Void>, GeneralDialogFragment.DialogBtnClickListener {
 	
 	private static final String TAG = MyEventsListFragment.class.getSimpleName();
 	
@@ -150,6 +150,7 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 	public void onPublishPermissionGranted() {
 		eventListAdapter.onPublishPermissionGranted();
 		((MyEventsFragment) getParentFragment()).onEventAttendingUpdated();
+		showAddToCalendarDialog(this);
 	}
 
 	@Override
@@ -290,5 +291,17 @@ public class MyEventsListFragment extends PublishEventListFragment implements Lo
 		if (loadType == Type.mysavedevents) {
 			resetEventList();
 		}
+	}
+
+	@Override
+	public void doPositiveClick(String dialogTag) {
+		if (AppConstants.DIALOG_FRAGMENT_TAG_EVENT_SAVED.equals(dialogTag)) {
+			addEventToCalendar();
+		}
+	}
+
+	@Override
+	public void doNegativeClick(String dialogTag) {
+
 	}
 }

@@ -1,10 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.io.File;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -37,6 +32,11 @@ import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.util.FileUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 
+import java.io.File;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 public class ShareViaDialogFragment extends DialogFragment {
 
 	private static final String TAG = ShareViaDialogFragment.class.getSimpleName();
@@ -54,7 +54,7 @@ public class ShareViaDialogFragment extends DialogFragment {
 	
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		AlertDialog.Builder builder = new AlertDialog.Builder(FragmentUtil.getActivity(this));
 		builder.setTitle(R.string.share_via)
 		.setAdapter(new ShareDropdownAdapter(this), new OnClickListener() {
 
@@ -113,7 +113,6 @@ public class ShareViaDialogFragment extends DialogFragment {
 				
 				startActivity(intent);
 			}
-
 		});
 		
         // Create the AlertDialog object and return it

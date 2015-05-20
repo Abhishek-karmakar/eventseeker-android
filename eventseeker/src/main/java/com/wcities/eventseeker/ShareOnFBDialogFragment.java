@@ -30,7 +30,7 @@ public class ShareOnFBDialogFragment extends DialogFragment {
 	  
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		final Dialog dialog = new Dialog(FragmentUtil.getActivity(this));
+		Dialog dialog = new Dialog(FragmentUtil.getActivity(this));
 		dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 		dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,

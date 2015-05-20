@@ -14,6 +14,7 @@ import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,7 +62,7 @@ import com.wcities.eventseeker.core.FriendNewsItem;
 import com.wcities.eventseeker.custom.fragment.PublishEventListFragment;
 import com.wcities.eventseeker.custom.view.CircleImageView;
 import com.wcities.eventseeker.custom.view.ResizableImageView;
-import com.wcities.eventseeker.interfaces.EventListener;
+import com.wcities.eventseeker.interfaces.EventListenerTab;
 import com.wcities.eventseeker.interfaces.PublishListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
@@ -123,6 +124,8 @@ public class FriendsActivityFragmentTab extends PublishEventListFragment impleme
 		}
 		
 		res = FragmentUtil.getResources(this);
+		callbackManager = CallbackManager.Factory.create();
+		LoginManager.getInstance().registerCallback(callbackManager, this);
 	}
 	
 	@Override
@@ -431,7 +434,9 @@ public class FriendsActivityFragmentTab extends PublishEventListFragment impleme
 			        AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
 			        asyncLoadImg.loadImg(imgEvt, ImgResolution.LOW, (AdapterView) parent, pos, item);
 			    }
-								
+
+				ViewCompat.setTransitionName(imgEvt, "imgEvtFriendsActivity" + pos);
+
 				Date date = item.getStartTime();
 				String strDate = "";
 				if (date != null) {
@@ -478,7 +483,8 @@ public class FriendsActivityFragmentTab extends PublishEventListFragment impleme
 					
 					@Override
 					public void onClick(View v) {
-						((EventListener) FragmentUtil.getActivity(fragment)).onEventSelected(item.toEvent());
+						((EventListenerTab) FragmentUtil.getActivity(fragment)).onEventSelected(item.toEvent(),
+								imgEvt, null);
 					}
 				});
 			}

@@ -73,7 +73,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class SearchEventsFragment extends PublishEventFragment implements LoadItemsInBackgroundListener, 
-		SearchFragmentChildListener, CustomSharedElementTransitionSource, AsyncTaskListener<Void> {
+		SearchFragmentChildListener, CustomSharedElementTransitionSource, AsyncTaskListener<Void>, GeneralDialogFragment.DialogBtnClickListener {
 
 	private static final String TAG = SearchEventsFragment.class.getSimpleName();
 	private static final String FRAGMENT_TAG_SHARE_VIA_DIALOG = ShareViaDialogFragment.class.getSimpleName();
@@ -165,7 +165,7 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 		String endDate = ConversionUtil.getDay(c);
 		
 		loadEvents = new LoadEvents(Api.OAUTH_TOKEN, eventList, eventListAdapter, query,
-				latLon[0], latLon[1], MILES_LIMIT, null, startDate, endDate, this);
+				latLon[0], latLon[1], MILES_LIMIT, FragmentUtil.getApplication(this).getWcitiesId(), startDate, endDate, this);
 		eventListAdapter.setLoadDateWiseEvents(loadEvents);
 		AsyncTaskUtil.executeAsyncTask(loadEvents, true);
 	}
@@ -222,7 +222,19 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 	public void onPublishPermissionGranted() {
 		eventListAdapter.onPublishPermissionGranted();
 	}
-	
+
+	@Override
+	public void doPositiveClick(String dialogTag) {
+		if (AppConstants.DIALOG_FRAGMENT_TAG_EVENT_SAVED.equals(dialogTag)) {
+			addEventToCalendar();
+		}
+	}
+
+	@Override
+	public void doNegativeClick(String dialogTag) {
+
+	}
+
 	protected static class EventListAdapter extends RVAdapterBase<EventListAdapter.ViewHolder> implements 
 			DateWiseEventParentAdapterListener {
 
@@ -931,6 +943,7 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 		private void onPublishPermissionGranted() {
 			//Log.d(TAG, "onPublishPermissionGranted()");
 			updateImgSaveSrc(holderPendingPublish, eventPendingPublish, FragmentUtil.getResources(searchEventFragment));
+			searchEventFragment.showAddToCalendarDialog(searchEventFragment);
 		}
 		
 		@Override

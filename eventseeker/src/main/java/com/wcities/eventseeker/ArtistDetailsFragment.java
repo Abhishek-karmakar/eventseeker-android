@@ -1742,6 +1742,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		private void onPublishPermissionGranted() {
 			//Log.d(TAG, "onPublishPermissionGranted()");
 			updateImgSaveSrc(holderPendingPublish, eventPendingPublish, FragmentUtil.getResources(artistDetailsFragment));
+			artistDetailsFragment.showAddToCalendarDialog(artistDetailsFragment);
 		}
 
 		@Override
@@ -1894,6 +1895,9 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		if (dialogTag.equals(FRAGMENT_TAG_REMOVE_ARTIST_DIALOG)) {
 			onArtistTracking(artist, AppConstants.INVALID_INDEX);
 			fabSave.setSelected(artist.getAttending() == Artist.Attending.Tracked);
+
+		} else if (AppConstants.DIALOG_FRAGMENT_TAG_EVENT_SAVED.equals(dialogTag)) {
+			addEventToCalendar();
 		}
 	}
 

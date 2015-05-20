@@ -63,7 +63,7 @@ import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 
 public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildFragmentManager implements 
-		ObservableScrollViewListener, OnEventUpdatedListner, OnClickListener {
+		ObservableScrollViewListener, OnEventUpdatedListner, OnClickListener, GeneralDialogFragment.DialogBtnClickListener {
 
 	private static final String TAG = EventDetailsFragmentTab.class.getSimpleName();
 	private static final int UNSCROLLED = -1;
@@ -697,7 +697,11 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 
 	@Override
 	public void onPublishPermissionGranted() {
-		updateFabSaveSrc(FragmentUtil.getResources(this));
+		if (FragmentUtil.getActivity(this) != null) {
+			//Log.d(TAG, "activity != null");
+			updateFabSaveSrc(FragmentUtil.getResources(this));
+			showAddToCalendarDialog(this);
+		}
 	}
 
 	@Override
@@ -715,5 +719,17 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 	@Override
 	public void onError(FacebookException e) {
 		Log.d(TAG, "onError()");
+	}
+
+	@Override
+	public void doPositiveClick(String dialogTag) {
+		if (AppConstants.DIALOG_FRAGMENT_TAG_EVENT_SAVED.equals(dialogTag)) {
+			addEventToCalendar();
+		}
+	}
+
+	@Override
+	public void doNegativeClick(String dialogTag) {
+
 	}
 }

@@ -1,19 +1,18 @@
 package com.wcities.eventseeker.asynctask;
 
-import java.io.IOException;
-import java.util.List;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
 import com.wcities.eventseeker.app.EventSeekr;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.List;
 
 public class UserTracker extends AsyncTask<Void, Void, Void> {
 	
@@ -73,7 +72,7 @@ public class UserTracker extends AsyncTask<Void, Void, Void> {
 				jsonObject = userInfoApi.editUserTracking(type, id, attending);
 			}
 			//Log.d(TAG, "result = " + jsonObject.toString());
-			
+
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 			

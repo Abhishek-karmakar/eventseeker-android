@@ -15,6 +15,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.wcities.eventseeker.GeneralDialogFragment;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
@@ -25,6 +26,7 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.FriendNewsItem;
 import com.wcities.eventseeker.interfaces.PublishListener;
+import com.wcities.eventseeker.util.CalendarUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GPlusUtil;
 
@@ -236,5 +238,13 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 				GPlusUtil.publishFriendNewsItem(friendNewsItem, this);
 			}
 		}
+	}
+
+	protected void addEventToCalendar() {
+		CalendarUtil.addEventToCalendar(this, event);
+	}
+
+	protected void showAddToCalendarDialog(GeneralDialogFragment.DialogBtnClickListener dialogBtnClickListener) {
+		CalendarUtil.showAddToCalendarDialog(this, dialogBtnClickListener);
 	}
 }

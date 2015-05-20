@@ -500,7 +500,11 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 	@Override
 	public void onPublishPermissionGranted() {
 		if (!isArtistSaveClicked) {
-			rvArtistDetailsAdapterTab.onPublishPermissionGranted();
+			if (FragmentUtil.getActivity(this) != null) {
+				//Log.d(TAG, "activity != null");
+				rvArtistDetailsAdapterTab.onPublishPermissionGranted();
+				showAddToCalendarDialog(this);
+			}
 		}
 	}
 
@@ -598,6 +602,9 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 		if (dialogTag.equals(FRAGMENT_TAG_REMOVE_ARTIST_DIALOG)) {
 			onArtistTracking(artist, AppConstants.INVALID_INDEX);
 			fabSave.setSelected(artist.getAttending() == Artist.Attending.Tracked);
+
+		} else if (AppConstants.DIALOG_FRAGMENT_TAG_EVENT_SAVED.equals(dialogTag)) {
+			addEventToCalendar();
 		}
 	}
 

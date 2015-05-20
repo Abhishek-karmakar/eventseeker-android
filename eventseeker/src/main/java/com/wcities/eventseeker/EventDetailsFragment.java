@@ -82,10 +82,10 @@ import java.util.List;
 
 public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackStack implements ObservableScrollViewListener, 
 		DrawerListener, CustomSharedElementTransitionDestination, OnClickListener, OnEventUpdatedListner, 
-		CustomSharedElementTransitionSource {
+		CustomSharedElementTransitionSource, GeneralDialogFragment.DialogBtnClickListener {
 	
 	private static final String TAG = EventDetailsFragment.class.getSimpleName();
-	
+
 	private static final int UNSCROLLED = -1;
 	private static final int TRANSITION_ANIM_DURATION = 400, FAB_SCROLL_THRESHOLD_IN_DP = 4;
 
@@ -1027,7 +1027,9 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 
 	@Override
 	public void onPublishPermissionGranted() {
+		//Log.d(TAG, "onPublishPermissionGranted()");
 		updateFabSaveSrc(FragmentUtil.getResources(this));
+		showAddToCalendarDialog(this);
 	}
 
 	@Override
@@ -1050,5 +1052,18 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	@Override
 	public boolean isOnTop() {
 		return !isOnPushedToBackStackCalled;
+	}
+
+	@Override
+	public void doPositiveClick(String dialogTag) {
+		//Log.d(TAG, "isAdded = " + isAdded());
+		if (AppConstants.DIALOG_FRAGMENT_TAG_EVENT_SAVED.equals(dialogTag)) {
+			addEventToCalendar();
+		}
+	}
+
+	@Override
+	public void doNegativeClick(String dialogTag) {
+
 	}
 }

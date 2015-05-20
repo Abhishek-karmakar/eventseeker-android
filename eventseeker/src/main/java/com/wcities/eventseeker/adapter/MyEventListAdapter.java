@@ -56,8 +56,7 @@ import java.util.List;
 public class MyEventListAdapter extends BaseAdapter implements DateWiseEventParentAdapterListener {
 
 	private static final String TAG = MyEventListAdapter.class.getName();
-	private static final int MAX_FB_CALL_COUNT_FOR_SAME_EVT = 20;
-	
+
 	private Context mContext;
 	private BitmapCache bitmapCache;
 	private List<Event> eventList;
@@ -350,6 +349,8 @@ public class MyEventListAdapter extends BaseAdapter implements DateWiseEventPare
 				event.setNewAttending(attending);
 				eventPendingPublish = event;
 				eventPendingPublishFabSave = fabSave;
+				// setting event in PublishEventListFragment is required to add event to calendar
+				((PublishEventListFragment) mListener).setEvent(eventPendingPublish);
 				FbUtil.handlePublishEvent(fbPublishListener, (Fragment) mListener,
 						AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART,
 						event);

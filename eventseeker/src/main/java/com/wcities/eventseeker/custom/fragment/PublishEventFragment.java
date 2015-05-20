@@ -14,6 +14,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.wcities.eventseeker.GeneralDialogFragment;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingItemType;
 import com.wcities.eventseeker.api.UserInfoApi.UserTrackingType;
@@ -22,6 +23,7 @@ import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.interfaces.PublishListener;
+import com.wcities.eventseeker.util.CalendarUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GPlusUtil;
 
@@ -84,8 +86,7 @@ public abstract class PublishEventFragment extends Fragment implements PublishLi
 	        	GPlusUtil.isGPlusPublishPending = false;
 	        	if (resultCode == Activity.RESULT_OK) {
 	        		event.updateAttendingToNewAttending();
-	    			onPublishPermissionGranted();
-	        		trackEvent();
+					trackEvent();
 	        	}
 				processed = true;
 	        }
@@ -109,7 +110,13 @@ public abstract class PublishEventFragment extends Fragment implements PublishLi
 	private void trackEvent() {
 		new UserTracker(Api.OAUTH_TOKEN, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
         		UserTrackingItemType.event, event.getId(), event.getAttending().getValue(), null, 
-        		UserTrackingType.Add).execute();
+        		UserTrackingType.Add) {
+
+			protected void onPostExecute(Void result) {
+				onPublishPermissionGranted();
+			}
+
+		}.execute();
 	}
 	
 	public void handlePublishEvent() {
@@ -183,5 +190,13 @@ public abstract class PublishEventFragment extends Fragment implements PublishLi
 		if (pendingAnnounce) {
 			GPlusUtil.publishEvent(event, this);
 		}
+	}
+
+	protected void addEventToCalendar() {
+		CalendarUtil.addEventToCalendar(this, event);
+	}
+
+	protected void showAddToCalendarDialog(GeneralDialogFragment.DialogBtnClickListener dialogBtnClickListener) {
+		CalendarUtil.showAddToCalendarDialog(this, dialogBtnClickListener);
 	}
 }
