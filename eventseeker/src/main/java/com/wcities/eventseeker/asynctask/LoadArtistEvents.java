@@ -1,14 +1,5 @@
 package com.wcities.eventseeker.asynctask;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 
@@ -18,6 +9,15 @@ import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
 import com.wcities.eventseeker.util.ConversionUtil;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 public class LoadArtistEvents extends AsyncTask<Void, Void, List<Event>> {
 
@@ -71,6 +71,7 @@ public class LoadArtistEvents extends AsyncTask<Void, Void, List<Event>> {
 			artistApi.setEndDate(endDate);
 			
 			artistApi.setAlreadyRequested(eventsAlreadyRequested);
+			artistApi.setAddTimestamp(true);
 
 			JSONObject jsonObject = artistApi.getArtists();
 			ArtistApiJSONParser jsonParser = new ArtistApiJSONParser();

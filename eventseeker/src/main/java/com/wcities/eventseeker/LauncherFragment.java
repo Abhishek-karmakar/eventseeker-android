@@ -1,7 +1,6 @@
 package com.wcities.eventseeker;
 
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
@@ -20,6 +19,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lianghanzhen.endless.viewpager.BannerHandler;
@@ -45,7 +45,7 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 
 	private int videoDuration;
 
-	private View rltLayoutRoot;
+	private ImageView imgProxy;
 	
 	private static enum PagerTitle {
 		firstTitle,
@@ -100,7 +100,7 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 		View view = inflater.inflate(R.layout.fragment_launcher, null);
 		
 		srfvVideo = (SurfaceView) view.findViewById(R.id.srfvVideo);
-		rltLayoutRoot = view.findViewById(R.id.rltLayoutRoot);
+		imgProxy = (ImageView) view.findViewById(R.id.imgProxy);
 		
 		view.findViewById(R.id.btnLogin).setOnClickListener(this);
 		view.findViewById(R.id.btnSignUp).setOnClickListener(this);
@@ -152,6 +152,9 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 	public void onDestroy() {
 		super.onDestroy();
 		//Log.d(TAG, "onDestroy()");
+
+		imgProxy.setImageResource(0);
+
 		/**
 		 * This is required to unlock drawer after login/sign up process completes, because user is navigated 
 		 * to my events or discover screen. At this point first we clear back stack from selectItem()
@@ -321,9 +324,8 @@ public class LauncherFragment extends FragmentLoadableFromBackStack implements O
 	}
 
 	protected void hideVideoViewAndShowBG() {
-		/*rltLayoutRoot.setBackgroundColor(
-			FragmentUtil.getResources(LauncherFragment.this).getColor(R.color.bg_screen_dark_blue));*/		
-		rltLayoutRoot.setBackgroundResource(R.drawable.ic_loading_page_img_bg);
+		imgProxy.setImageResource(R.drawable.ic_loading_page_img_bg);
+		imgProxy.setVisibility(View.VISIBLE);
 		srfvVideo.setVisibility(View.GONE);
 	}
 

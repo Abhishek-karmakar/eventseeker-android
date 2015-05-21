@@ -81,7 +81,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class FriendsActivityFragmentTab extends PublishEventListFragment implements 
-		/*StatusCallback,*/ OnClickListener, PublishListener {
+		/*StatusCallback,*/ OnClickListener, PublishListener, GeneralDialogFragment.DialogBtnClickListener {
 	
 	private static final String TAG = FriendsActivityFragmentTab.class.getName();
 	
@@ -235,7 +235,19 @@ public class FriendsActivityFragmentTab extends PublishEventListFragment impleme
 			callbackManager.onActivityResult(requestCode, resultCode, data);
 		}
 	}
-	
+
+	@Override
+	public void doPositiveClick(String dialogTag) {
+		if (AppConstants.DIALOG_FRAGMENT_TAG_EVENT_SAVED.equals(dialogTag)) {
+			addEventToCalendar();
+		}
+	}
+
+	@Override
+	public void doNegativeClick(String dialogTag) {
+
+	}
+
 	private class LoadFriendsNews extends AsyncTask<Void, Void, List<FriendNewsItem>> {
 		
 		private static final int FRIENDS_NEWS_LIMIT = 10;
@@ -547,21 +559,24 @@ public class FriendsActivityFragmentTab extends PublishEventListFragment impleme
 					 * since it's handled after checking fb/google publish permission
 					 */
 					updateAttendingChkSave(item, chkSave);
-					
-					if (eventSeekr.getFbUserId() != null) {
-						item.setNewUserAttending(userAttending);
-						newsItemPendingPublish = item;
-						newsItemPendingPublishChkBoxSave = chkSave;
+
+					item.setNewUserAttending(userAttending);
+					newsItemPendingPublish = item;
+					newsItemPendingPublishChkBoxSave = chkSave;
+					/**
+					 * setting friendNewsItem in PublishEventListFragment is required
+					 * 1) for if - where it's used from handlePublishEvent()
+					 * 2) for else - to add event to calendar
+					 */
+					((PublishEventListFragment)FriendsActivityFragmentTab.this).setFriendNewsItem(newsItemPendingPublish);
+
+					if (eventSeekr.getGPlusUserId() != null) {
+						((PublishEventListFragment)FriendsActivityFragmentTab.this).handlePublishEvent();
+
+					} else {
 						//NOTE: THIS CAN BE TESTED WITH PODUCTION BUILD ONLY
 						FbUtil.handlePublishFriendNewsItem(FriendsActivityFragmentTab.this, FriendsActivityFragmentTab.this, 
 								AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, item);
-						
-					} else if (eventSeekr.getGPlusUserId() != null) {
-						item.setNewUserAttending(userAttending);
-						newsItemPendingPublish = item;
-						newsItemPendingPublishChkBoxSave = chkSave;
-						((PublishEventListFragment)FriendsActivityFragmentTab.this).setFriendNewsItem(newsItemPendingPublish);
-						((PublishEventListFragment)FriendsActivityFragmentTab.this).handlePublishEvent();
 					}
 				}
 			}
@@ -772,7 +787,11 @@ public class FriendsActivityFragmentTab extends PublishEventListFragment impleme
 
 	@Override
 	public void onPublishPermissionGranted() {
-		friendActivityListAdapter.onPublishPermissionGranted();
+		if (FragmentUtil.getActivity(this) != null) {
+			// if user has not left the screen (activity)
+			friendActivityListAdapter.onPublishPermissionGranted();
+			showAddToCalendarDialog(this);
+		}
 	}
 	
 	@Override

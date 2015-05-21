@@ -12,7 +12,7 @@
         android:layout_gravity="center" >
     </SurfaceView>
     
-    <!-- used only for tablet, since we want to maintain aspect ratio of image we can't use it as 
+    <!-- used separate ImageView here, since we want to maintain aspect ratio of image we can't use it as
     background of rltLayoutRoot -->
     <ImageView android:id="@+id/imgProxy"
         android:layout_width="match_parent"

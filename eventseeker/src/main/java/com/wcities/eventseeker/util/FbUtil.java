@@ -101,11 +101,11 @@ public class FbUtil {
 	 */
 	public static void handlePublishFriendNewsItem(PublishListener fbPublishListener, Fragment fragment,
 												   List<String> permissions, FriendNewsItem friendNewsItem) {
-		Log.d(TAG, "handlePublish()");
+		//Log.d(TAG, "handlePublish()");
 		if (canPublishNow(fragment, permissions)) {
 			friendNewsItem.updateUserAttendingToNewUserAttending();
-			fbPublishListener.onPublishPermissionGranted();
-			publishFriendNewsItem(friendNewsItem, fragment);
+			Toast.makeText(FragmentUtil.getActivity(fragment), R.string.saving_event, Toast.LENGTH_SHORT).show();
+			publishFriendNewsItem(friendNewsItem, fragment, fbPublishListener);
 		}
 	}
 	
@@ -218,7 +218,7 @@ public class FbUtil {
 	 * @param item
 	 * @param fragment
 	 */
-	private static void publishFriendNewsItem(final FriendNewsItem item, final Fragment fragment) {
+	private static void publishFriendNewsItem(final FriendNewsItem item, final Fragment fragment, final PublishListener fbPublishListener) {
 		String attendingAction = AppConstants.ACTION_ADD;
 		GraphRequest request = GraphRequest.newPostRequest(AccessToken.getCurrentAccessToken(), "me/" + attendingAction, null, new GraphRequest.Callback() {
 			@Override
@@ -240,7 +240,13 @@ public class FbUtil {
 
 				new UserTracker(Api.OAUTH_TOKEN, (EventSeekr) FragmentUtil.getActivity(fragment).getApplication(),
 						UserInfoApi.UserTrackingItemType.event, item.getTrackId(), item.getUserAttending().getValue(),
-						postId, UserInfoApi.UserTrackingType.Add).execute();
+						postId, UserInfoApi.UserTrackingType.Add) {
+
+					protected void onPostExecute(Void result) {
+						fbPublishListener.onPublishPermissionGranted();
+					}
+
+				}.execute();
 			}
 		});
 		Bundle postParams = request.getParameters();

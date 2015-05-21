@@ -1,17 +1,17 @@
 package com.wcities.eventseeker.api;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import android.util.Log;
+
+import com.wcities.eventseeker.constants.AppConstants;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-
-import com.wcities.eventseeker.constants.AppConstants;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class EventApi extends Api {
 	
@@ -53,7 +53,7 @@ public class EventApi extends Api {
 	private List<String> moreInfo;
 	private List<String> compactList;
 	private String userId;
-	
+
 	private EventApi(String oauthToken) {
 		super(oauthToken);
 		moreInfo = new ArrayList<String>();
@@ -374,6 +374,7 @@ public class EventApi extends Api {
 		}
 		
 		uri += "&link=enable&strip_html=name,description";
+
 		setUri(uri.toString());
 		addLangParam = true;
 		return execute(RequestMethod.GET, null, null);

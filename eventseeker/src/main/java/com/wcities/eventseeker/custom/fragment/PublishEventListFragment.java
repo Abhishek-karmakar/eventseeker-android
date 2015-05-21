@@ -104,7 +104,6 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 	        			
 	        		} else {
 	        			friendNewsItem.updateUserAttendingToNewUserAttending();
-	        			onPublishPermissionGranted();
 		        		trackFriendNewsItem();
 	        		}
 	        	}
@@ -154,7 +153,13 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 		int attending = friendNewsItem.getUserAttending().getValue();
 		new UserTracker(Api.OAUTH_TOKEN, (EventSeekr) FragmentUtil.getActivity(this).getApplication(), 
         		UserTrackingItemType.event, id, attending, null, 
-        		UserTrackingType.Add).execute();
+        		UserTrackingType.Add) {
+
+			protected void onPostExecute(Void result) {
+				onPublishPermissionGranted();
+			}
+
+		}.execute();
 	}
 	
 	public void handlePublishEvent() {
@@ -241,7 +246,12 @@ public abstract class PublishEventListFragment extends ListFragment implements P
 	}
 
 	protected void addEventToCalendar() {
-		CalendarUtil.addEventToCalendar(this, event);
+		if (event != null) {
+			CalendarUtil.addEventToCalendar(this, event);
+
+		} else {
+			CalendarUtil.addEventToCalendar(this, friendNewsItem.toEvent());
+		}
 	}
 
 	protected void showAddToCalendarDialog(GeneralDialogFragment.DialogBtnClickListener dialogBtnClickListener) {

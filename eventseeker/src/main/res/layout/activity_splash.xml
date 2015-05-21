@@ -10,6 +10,12 @@
         android:src="@drawable/ic_loading_page_img_bg"
         android:scaleType="centerCrop" />
 
+    <!-- Added extra imageview to make eventseeker text readable in landscape orientation for tablet -->
+    <ImageView android:id="@+id/imgTranslucency"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="#3000" />
+
     <TextView android:id="@+id/txtAppName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

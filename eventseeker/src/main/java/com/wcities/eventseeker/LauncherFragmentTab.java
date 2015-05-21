@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
@@ -270,7 +269,7 @@ public class LauncherFragmentTab extends Fragment implements OnClickListener, Ca
 	}
 
 	protected void hideVideoViewAndShowBG() {
-		imgProxy.setBackgroundResource(R.drawable.ic_loading_page_img_bg);
+		imgProxy.setImageResource(R.drawable.ic_loading_page_img_bg);
 		imgProxy.setVisibility(View.VISIBLE);
 		srfvVideo.setVisibility(View.GONE);
 	}
@@ -286,6 +285,6 @@ public class LauncherFragmentTab extends Fragment implements OnClickListener, Ca
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		imgProxy.setBackgroundResource(0);
+		imgProxy.setImageResource(0);
 	}
 }

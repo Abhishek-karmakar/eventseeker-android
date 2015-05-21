@@ -1,14 +1,7 @@
 package com.wcities.eventseeker.asynctask;
 
-import java.io.IOException;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import com.wcities.eventseeker.api.EventApi;
 import com.wcities.eventseeker.api.EventApi.IdType;
@@ -17,6 +10,12 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 public class LoadEventDetails extends AsyncTask<Void, Void, Void> {
 	
@@ -54,6 +53,7 @@ public class LoadEventDetails extends AsyncTask<Void, Void, Void> {
 		eventApi.setFriendsEnabled(true);
 		eventApi.addMoreInfo(MoreInfo.fallbackimage);
 		eventApi.setSrcFromNotification(addSrcFromNotification);
+		eventApi.setAddTimestamp(true);
 		
 		try {
 			JSONObject jsonObject = eventApi.getEvents();

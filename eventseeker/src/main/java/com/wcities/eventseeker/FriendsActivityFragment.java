@@ -88,9 +88,9 @@ import java.util.Iterator;
 import java.util.List;
 
 public class FriendsActivityFragment extends PublishEventListFragmentLoadableFromBackStack implements 
-		/*StatusCallback,*/ OnClickListener, CustomSharedElementTransitionSource {
+		/*StatusCallback,*/ OnClickListener, CustomSharedElementTransitionSource, GeneralDialogFragment.DialogBtnClickListener {
 	
-	private static final String TAG = FriendsActivityFragment.class.getName();
+	private static final String TAG = FriendsActivityFragment.class.getSimpleName();
 	
 	// List of additional write permissions being requested
 	private static final List<String> PERMISSIONS = Arrays.asList("publish_actions");
@@ -298,6 +298,18 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 			// for like/comment functionality
 			callbackManager.onActivityResult(requestCode, resultCode, data);
 		}
+	}
+
+	@Override
+	public void doPositiveClick(String dialogTag) {
+		if (AppConstants.DIALOG_FRAGMENT_TAG_EVENT_SAVED.equals(dialogTag)) {
+			addEventToCalendar();
+		}
+	}
+
+	@Override
+	public void doNegativeClick(String dialogTag) {
+
 	}
 
 	private class LoadFriendsNews extends AsyncTask<Void, Void, List<FriendNewsItem>> {
@@ -635,21 +647,24 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 					 * since it's handled after checking fb/google publish permission
 					 */
 					updateAttendingChkSave(item, chkSave);
-					
-					if (eventSeekr.getFbUserId() != null) {
-						item.setNewUserAttending(userAttending);
-						newsItemPendingPublish = item;
-						newsItemPendingPublishChkBoxSave = chkSave;
+
+					item.setNewUserAttending(userAttending);
+					newsItemPendingPublish = item;
+					newsItemPendingPublishChkBoxSave = chkSave;
+					/**
+					 * setting friendNewsItem in PublishEventListFragment is required
+					 * 1) for if - where it's used from handlePublishEvent()
+					 * 2) for else - to add event to calendar
+					 */
+					((PublishEventListFragment)FriendsActivityFragment.this).setFriendNewsItem(newsItemPendingPublish);
+
+					if (eventSeekr.getGPlusUserId() != null) {
+						((PublishEventListFragment)FriendsActivityFragment.this).handlePublishEvent();
+
+					} else {
 						//NOTE: THIS CAN BE TESTED WITH PODUCTION BUILD ONLY
 						FbUtil.handlePublishFriendNewsItem(FriendsActivityFragment.this, FriendsActivityFragment.this, 
 								AppConstants.PERMISSIONS_FB_PUBLISH_EVT_OR_ART, item);
-						
-					} else if (eventSeekr.getGPlusUserId() != null) {
-						item.setNewUserAttending(userAttending);
-						newsItemPendingPublish = item;
-						newsItemPendingPublishChkBoxSave = chkSave;
-						((PublishEventListFragment)FriendsActivityFragment.this).setFriendNewsItem(newsItemPendingPublish);
-						((PublishEventListFragment)FriendsActivityFragment.this).handlePublishEvent();
 					}
 				}
 			}
@@ -851,7 +866,9 @@ public class FriendsActivityFragment extends PublishEventListFragmentLoadableFro
 
 	@Override
 	public void onPublishPermissionGranted() {
+		//Log.d(TAG, "onPublishPermissionGranted()");
 		friendActivityListAdapter.onPublishPermissionGranted();
+		showAddToCalendarDialog(this);
 	}
 
 	@Override

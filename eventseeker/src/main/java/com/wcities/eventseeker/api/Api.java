@@ -1,5 +1,16 @@
 package com.wcities.eventseeker.api;
 
+import android.util.Log;
+
+import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
+import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.constants.Enums.Locales;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -8,17 +19,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.util.Log;
-
-import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
-import com.wcities.eventseeker.app.EventSeekr;
-import com.wcities.eventseeker.constants.AppConstants;
-import com.wcities.eventseeker.constants.Enums.Locales;
 
 public abstract class Api {
 	
@@ -73,6 +73,7 @@ public abstract class Api {
 	 * other calls from current Screen.
 	 */
 	private boolean isSrcFromNotification;
+	private boolean addTimestamp;
 	
 	public Api(String oauthToken) {
 		this.oauthToken = oauthToken;
@@ -136,24 +137,23 @@ public abstract class Api {
 	public static void updateFordLocaleCode(String newFordLocaleCode) {
 		fordLocaleCode = newFordLocaleCode;
 	}
-	
-	protected JSONObject execute(RequestMethod requestMethod, ContentType contentType, byte[] data) throws ClientProtocolException, IOException, JSONException {
-		/*JSONObject jsonObject = null;
-		HttpClient httpClient = new DefaultHttpClient();
-		HttpPost httpPost = new HttpPost(uri);
 
-        HttpResponse response = httpClient.execute(httpPost);
-		HttpEntity entity = response.getEntity();
-		String text = EntityUtils.toString(entity, AppConstants.CHARSET_NAME);
-		
-		jsonObject = new JSONObject(text);
-		httpClient.getConnectionManager().shutdown();
-		return jsonObject;*/
+	public void setAddTimestamp(boolean addTimestamp) {
+		this.addTimestamp = addTimestamp;
+	}
+
+	protected JSONObject execute(RequestMethod requestMethod, ContentType contentType, byte[] data) throws ClientProtocolException, IOException, JSONException {
+		if (addTimestamp) {
+			// add timestamp to get fresh response rather than cached one
+			uri += "&_t=" + (System.currentTimeMillis()/1000);
+		}
+
 		/**
 		 * For multi-Language support in api calls we are adding 'iso2' parameter
 		 * using setLocale method.
 		 */
 		addLangParam();
+
 		GoogleAnalyticsTracker.getInstance().sendApiCall(EventSeekr.getEventSeekr(), getGoogleAnalyticsUri(), data);
 
 		JSONObject jsonObject;

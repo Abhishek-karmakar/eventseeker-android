@@ -1,13 +1,5 @@
 package com.wcities.eventseeker.asynctask;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.widget.BaseAdapter;
@@ -20,6 +12,14 @@ import com.wcities.eventseeker.core.ItemsList;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoadMyEvents extends AsyncTask<Void, Void, List<Event>> {
 	
@@ -67,6 +67,7 @@ public class LoadMyEvents extends AsyncTask<Void, Void, List<Event>> {
 		userInfoApi.setLat(lat);
 		userInfoApi.setLon(lon);
 		userInfoApi.setSrcFromNotification(addSrcFromNotification);
+		userInfoApi.setAddTimestamp(true);
 		
 		try {
 			JSONObject jsonObject = userInfoApi.getMyProfileInfoFor(loadType);

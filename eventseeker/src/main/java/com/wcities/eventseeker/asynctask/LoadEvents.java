@@ -1,14 +1,5 @@
 package com.wcities.eventseeker.asynctask;
 
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 
@@ -20,6 +11,15 @@ import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 	
@@ -106,7 +106,8 @@ public class LoadEvents extends AsyncTask<Void, Void, List<Event>> {
 		eventApi.addMoreInfo(MoreInfo.fallbackimage);
 		eventApi.setUserId(wcitiesId);
 		eventApi.setSrcFromNotification(addSrcFromNotification);
-		
+		eventApi.setAddTimestamp(true);
+
 		if (startDate != null) {
 			eventApi.setStart(startDate);
 			eventApi.setEnd(endDate);

@@ -26,6 +26,7 @@ public class CalendarUtil {
     private static final String TAG = CalendarUtil.class.getSimpleName();
 
     public static void showAddToCalendarDialog(Fragment fragment, GeneralDialogFragment.DialogBtnClickListener dialogBtnClickListener) {
+        //Log.d(TAG, "showAddToCalendarDialog()");
         Resources res = FragmentUtil.getResources(fragment);
         GeneralDialogFragment generalDialogFragment = GeneralDialogFragment.newInstance(dialogBtnClickListener,
                 res.getString(R.string.event_saved),
@@ -34,6 +35,7 @@ public class CalendarUtil {
                 res.getString(R.string.btn_Ok), true);
         BaseActivity baseActivity = (BaseActivity) FragmentUtil.getActivity(fragment);
         if (!baseActivity.isOnSaveInstanceStateCalled()) {
+            //Log.d(TAG, "!onSaveInstanceCalled");
             generalDialogFragment.show(baseActivity.getSupportFragmentManager(),
                     AppConstants.DIALOG_FRAGMENT_TAG_EVENT_SAVED);
         }
