@@ -10,8 +10,9 @@
     <dimen name="action_bar_tab_txt_size">17sp</dimen>
     <dimen name="action_bar_elevation">4dp</dimen>
     <dimen name="action_bar_title_margin_start">0dp</dimen>
-    <dimen name="event_listing_slider_items_size_w_h">25dp</dimen>
-    <dimen name="event_listing_slider_items_outer_size_w_h">45dp</dimen>
+    <dimen name="event_listing_slider_items_size_w_h">28dp</dimen>
+    <dimen name="event_listing_slider_items_outer_size_w_h">70dp</dimen>
+    <dimen name="event_listing_v_handle_w_h">45dp</dimen>
     <!-- fragment_discover.xml -->
     <dimen name="rlt_layout_featured_evts_parent_margin_discover">8dp</dimen>
     <dimen name="v_pager_cat_titles_margin_t_discover_port">160dp</dimen>

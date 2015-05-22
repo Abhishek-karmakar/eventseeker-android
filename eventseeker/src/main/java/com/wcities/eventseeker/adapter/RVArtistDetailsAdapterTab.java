@@ -15,7 +15,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils.TruncateAt;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -120,7 +119,7 @@ public class RVArtistDetailsAdapterTab extends RVAdapterBase<RVArtistDetailsAdap
 
 	static class ViewHolder extends RecyclerView.ViewHolder {
 		
-		private RelativeLayout rltLytPrgsBar, rltRootDesc, rltLytDetails;
+		private RelativeLayout rltLytPrgsBar, rltRootDesc, rltLytDetails, rltLytRoot;
 		private TextView txtDesc;
 		private ImageView imgDown;
 		private View vHorLine;
@@ -153,7 +152,8 @@ public class RVArtistDetailsAdapterTab extends RVAdapterBase<RVArtistDetailsAdap
 			txtEvtTitle = (TextView) itemView.findViewById(R.id.txtEvtTitle);
             txtEvtTime = (TextView) itemView.findViewById(R.id.txtEvtTime);
             txtEvtLoc = (TextView) itemView.findViewById(R.id.txtEvtLoc);
-            
+
+			rltLytRoot = (RelativeLayout) itemView.findViewById(R.id.rltLytRoot);
             rltLytDetails = (RelativeLayout) itemView.findViewById(R.id.rltLytDetails);
             
             lnrSliderContent = (LinearLayout) itemView.findViewById(R.id.lnrSliderContent);
@@ -455,7 +455,7 @@ public class RVArtistDetailsAdapterTab extends RVAdapterBase<RVArtistDetailsAdap
 					holder.rltLytDetails.setLayoutParams(lp);
 				}
 				
-				((ViewGroup) holder.rltLytDetails.getParent()).setOnTouchListener(new OnTouchListener() {
+				holder.rltLytRoot.setOnTouchListener(new OnTouchListener() {
 					
 					int MIN_SWIPE_DISTANCE_X = ConversionUtil.toPx(res, 50);
 					int MAX_CLICK_DISTANCE = ConversionUtil.toPx(res, 4);
@@ -571,7 +571,7 @@ public class RVArtistDetailsAdapterTab extends RVAdapterBase<RVArtistDetailsAdap
 									} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.imgShare)) {
 										onImgShareClick(holder, event);
 										
-									} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltLytDetails)) {
+									} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltLytRoot)) {
 										/**
 										 * This block is added to consider row click as event click even when
 										 * slider is open (openPos == position); otherwise it won't do anything 
@@ -580,7 +580,7 @@ public class RVArtistDetailsAdapterTab extends RVAdapterBase<RVArtistDetailsAdap
 										onEventClick(holder, event);
 									}
 									
-								} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltLytDetails)) {
+								} else if (ViewUtil.isPointInsideView(mEvent.getRawX(), mEvent.getRawY(), holder.rltLytRoot)) {
 									onEventClick(holder, event);
 								}
 							}

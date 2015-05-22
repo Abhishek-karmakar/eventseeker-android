@@ -16,17 +16,17 @@
         android:scaleType="fitXY"
         android:src="@drawable/ic_launcher" />
 
+    <!-- height is fixed to imgEvt height; otherwise keeping it wrap_content doesn't work on
+    galaxy tab 4 in US where it overlaps all the 3 TextViews -->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imgEvt"
-        android:layout_alignTop="@+id/imgEvt"
+        android:layout_height="@dimen/img_evt_ht_rv_item_upcoming_event"
         android:layout_toRightOf="@id/imgEvt" >
 
         <RelativeLayout
             android:id="@+id/rltLytDetails"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="@drawable/bg_slctr_rlt_lyt_btm_rv_item_event_tab" >
 
             <RelativeLayout

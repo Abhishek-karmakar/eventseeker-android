@@ -7,7 +7,7 @@
     
     <RelativeLayout android:id="@+id/rltLytContent"
    		android:layout_width="match_parent"
-    	android:layout_height="wrap_content"
+    	android:layout_height="match_parent"
     	android:layout_centerVertical="true"
     	android:layout_marginLeft="@dimen/rlt_lyt_content_margin_l_list_item_discover"
     	android:paddingLeft="@dimen/rlt_lyt_content_pad_l_list_item_discover" >
@@ -15,15 +15,15 @@
         <RelativeLayout
             android:id="@+id/vHandle"
 			android:layout_alignParentRight="true"
-            android:layout_width="@dimen/event_listing_slider_items_outer_size_w_h"
-            android:layout_height="@dimen/event_listing_slider_items_outer_size_w_h" >
+            android:layout_width="@dimen/event_listing_v_handle_w_h"
+            android:layout_height="match_parent" >
 
             <ImageView
                 android:id="@+id/imgHandle"
                 android:layout_width="@dimen/v_handle_w_list_item_discover"
                 android:layout_height="wrap_content"
 				android:layout_alignParentRight="true"
-				android:layout_alignParentTop="true"
+                android:layout_centerInParent="true"
                 android:contentDescription="handle image"
                 android:src="@drawable/ic_more_slider" />
 
@@ -103,11 +103,12 @@
 
             <ImageView
                 android:id="@+id/imgTicket"
-                android:layout_width="@dimen/event_listing_slider_items_size_w_h"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/event_listing_slider_items_size_w_h"
                 android:layout_centerInParent="true"
-                android:scaleType="fitXY"
+                android:scaleType="centerInside"
                 android:src="@drawable/ic_tickets_available_slider" />
+
         </RelativeLayout>
 
         <RelativeLayout
@@ -119,11 +120,12 @@
 
             <ImageView
                 android:id="@+id/imgSave"
-                android:layout_width="@dimen/event_listing_slider_items_size_w_h"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/event_listing_slider_items_size_w_h"
                 android:layout_centerInParent="true"
-                android:scaleType="fitXY"
+                android:scaleType="centerInside"
                 android:src="@drawable/ic_unsaved_event_slider" />
+
         </RelativeLayout>
 
         <RelativeLayout
@@ -135,12 +137,14 @@
 
             <ImageView
                 android:id="@+id/imgShare"
-                android:layout_width="@dimen/event_listing_slider_items_size_w_h"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/event_listing_slider_items_size_w_h"
                 android:layout_centerInParent="true"
-                android:scaleType="fitXY"
+                android:scaleType="centerInside"
                 android:src="@drawable/ic_share_slider" />
+
         </RelativeLayout>
+
     </LinearLayout>
     
     <View android:id="@+id/divider"
