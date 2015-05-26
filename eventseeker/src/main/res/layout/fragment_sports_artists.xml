@@ -12,17 +12,19 @@
         android:orientation="vertical"
         android:padding="@dimen/lnr_root_padding_fragment_follow_more_artists" >
 
-        <LinearLayout
+        <LinearLayout android:id="@+id/lnrLytNFL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_nfl" >
+            android:background="@drawable/ic_nfl"
+            android:gravity="center">
 
-            <Button
+            <TextView
                 android:id="@+id/btnNFL"
-                style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.AlphaColorPrimary"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/btn_nfl" />
+                style="@style/Widget.EventSeeker.TextView.PopularArtistCatTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_nfl"
+                android:gravity="center"/>
         </LinearLayout>
 
         <View
@@ -30,17 +32,19 @@
             android:layout_height="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
             android:background="@android:color/transparent" />
 
-        <LinearLayout
+        <LinearLayout android:id="@+id/lnrLytNBA"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_nba" >
+            android:background="@drawable/ic_nba"
+            android:gravity="center">
 
-            <Button
+            <TextView
                 android:id="@+id/btnNBA"
-                style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.AlphaColorPrimary"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/btn_nba" />
+                style="@style/Widget.EventSeeker.TextView.PopularArtistCatTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_nba"
+                android:gravity="center"/>
         </LinearLayout>
 
         <View
@@ -48,17 +52,19 @@
             android:layout_height="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
             android:background="@android:color/transparent" />
 
-        <LinearLayout
+        <LinearLayout android:id="@+id/lnrLytNHL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_nhl" >
+            android:background="@drawable/ic_nhl"
+            android:gravity="center">
 
-            <Button
+            <TextView
                 android:id="@+id/btnNHL"
-                style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.AlphaColorPrimary"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/btn_nhl" />
+                style="@style/Widget.EventSeeker.TextView.PopularArtistCatTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_nhl"
+                android:gravity="center"/>
         </LinearLayout>
 
         <View
@@ -66,17 +72,19 @@
             android:layout_height="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
             android:background="@android:color/transparent" />
 
-        <LinearLayout
+        <LinearLayout android:id="@+id/lnrLytMLB"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_mlb" >
+            android:background="@drawable/ic_mlb"
+            android:gravity="center">
 
-            <Button
+            <TextView
                 android:id="@+id/btnMLB"
-                style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.AlphaColorPrimary"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/btn_mlb" />
+                style="@style/Widget.EventSeeker.TextView.PopularArtistCatTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_mlb"
+                android:gravity="center"/>
         </LinearLayout>
 
         <View
@@ -84,17 +92,19 @@
             android:layout_height="@dimen/v_dummy_wt_ht_fragment_follow_more_artists"
             android:background="@android:color/transparent" />
 
-        <LinearLayout
+        <LinearLayout android:id="@+id/lnrLytMLS"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_mls" >
+            android:background="@drawable/ic_mls"
+            android:gravity="center">
 
-            <Button
+            <TextView
                 android:id="@+id/btnMLS"
-                style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.AlphaColorPrimary"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/btn_mls" />
+                style="@style/Widget.EventSeeker.TextView.PopularArtistCatTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_mls"
+                android:gravity="center"/>
         </LinearLayout>
     </LinearLayout>
 

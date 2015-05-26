@@ -27,13 +27,14 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_rock" />
 
-                <Button
+                <TextView
                     android:id="@+id/btnRock"
-                    style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.Music"
-                    android:layout_width="match_parent"
+                    style="@style/Widget.EventSeeker.TextView.PopularArtistCatTxt"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="@string/btn_rock" />
+                    android:text="@string/btn_rock"
+                    android:gravity="center"/>
 
             </RelativeLayout>
 
@@ -48,13 +49,14 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_hip_hop" />
 
-                <Button
+                <TextView
                     android:id="@+id/btnHipHop"
-                    style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.Music"
-                    android:layout_width="match_parent"
+                    style="@style/Widget.EventSeeker.TextView.PopularArtistCatTxt"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="@string/btn_hip_hop" />
+                    android:text="@string/btn_hip_hop"
+                    android:gravity="center"/>
 
             </RelativeLayout>
 
@@ -76,13 +78,14 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_pop" />
 
-                <Button
+                <TextView
                     android:id="@+id/btnPop"
-                    style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.Music"
-                    android:layout_width="match_parent"
+                    style="@style/Widget.EventSeeker.TextView.PopularArtistCatTxt"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="@string/btn_pop" />
+                    android:text="@string/btn_pop"
+                    android:gravity="center"/>
 
             </RelativeLayout>
 
@@ -97,13 +100,14 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_folk" />
 
-                <Button
+                <TextView
                     android:id="@+id/btnFolk"
-                    style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.Music"
-                    android:layout_width="match_parent"
+                    style="@style/Widget.EventSeeker.TextView.PopularArtistCatTxt"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="@string/btn_folk" />
+                    android:text="@string/btn_folk"
+                    android:gravity="center"/>
 
             </RelativeLayout>
 
@@ -125,13 +129,14 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_country" />
 
-                <Button
+                <TextView
                     android:id="@+id/btnCountry"
-                    style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.Music"
-                    android:layout_width="match_parent"
+                    style="@style/Widget.EventSeeker.TextView.PopularArtistCatTxt"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="@string/btn_country" />
+                    android:text="@string/btn_country"
+                    android:gravity="center"/>
 
             </RelativeLayout>
 
@@ -146,13 +151,14 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_electronic" />
 
-                <Button
+                <TextView
                     android:id="@+id/btnElectronic"
-                    style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.Music"
-                    android:layout_width="match_parent"
+                    style="@style/Widget.EventSeeker.TextView.PopularArtistCatTxt"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="@string/btn_electronic" />
+                    android:text="@string/btn_electronic"
+                    android:gravity="center"/>
 
             </RelativeLayout>
 
@@ -174,15 +180,16 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_soul_r_n_b" />
 
-                <Button
+                <TextView
                     android:id="@+id/btnSoulRAndB"
-                    style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.Music"
-                    android:layout_width="match_parent"
+                    style="@style/Widget.EventSeeker.TextView.PopularArtistCatTxt"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/imgSoulRAndB"
                     android:layout_alignTop="@+id/imgSoulRAndB"
                     android:layout_centerInParent="true"
-                    android:text="@string/btn_soul_r_and_b" />
+                    android:text="@string/btn_soul_r_and_b"
+                    android:gravity="center"/>
 
             </RelativeLayout>
 
@@ -197,13 +204,14 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_jazz" />
 
-                <Button
+                <TextView
                     android:id="@+id/btnJazz"
-                    style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.Music"
-                    android:layout_width="match_parent"
+                    style="@style/Widget.EventSeeker.TextView.PopularArtistCatTxt"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="@string/btn_jazz" />
+                    android:text="@string/btn_jazz"
+                    android:gravity="center"/>
 
             </RelativeLayout>
 
@@ -225,13 +233,14 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_classical" />
 
-                <Button
+                <TextView
                     android:id="@+id/btnClassical"
-                    style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.Music"
-                    android:layout_width="match_parent"
+                    style="@style/Widget.EventSeeker.TextView.PopularArtistCatTxt"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="@string/btn_classical" />
+                    android:text="@string/btn_classical"
+                    android:gravity="center"/>
 
             </RelativeLayout>
 
@@ -246,13 +255,14 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_blues" />
 
-                <Button
+                <TextView
                     android:id="@+id/btnBlues"
-                    style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.Music"
-                    android:layout_width="match_parent"
+                    style="@style/Widget.EventSeeker.TextView.PopularArtistCatTxt"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="@string/btn_blues" />
+                    android:text="@string/btn_blues"
+                    android:gravity="center"/>
 
             </RelativeLayout>
 
@@ -274,13 +284,14 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_metal" />
 
-                <Button
+                <TextView
                     android:id="@+id/btnMetal"
-                    style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.Music"
-                    android:layout_width="match_parent"
+                    style="@style/Widget.EventSeeker.TextView.PopularArtistCatTxt"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="@string/btn_metal" />
+                    android:text="@string/btn_metal"
+                    android:gravity="center"/>
 
             </RelativeLayout>
 
@@ -295,13 +306,14 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_world" />
 
-                <Button
+                <TextView
                     android:id="@+id/btnWorld"
-                    style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.Music"
-                    android:layout_width="match_parent"
+                    style="@style/Widget.EventSeeker.TextView.PopularArtistCatTxt"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="@string/btn_world" />
+                    android:text="@string/btn_world"
+                    android:gravity="center"/>
 
             </RelativeLayout>
 

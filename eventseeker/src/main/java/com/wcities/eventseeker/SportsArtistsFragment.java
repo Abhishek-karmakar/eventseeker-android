@@ -25,11 +25,11 @@ public class SportsArtistsFragment extends FragmentLoadableFromBackStack impleme
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_sports_artists, null);
 		
-		view.findViewById(R.id.btnNFL).setOnClickListener(this);
-		view.findViewById(R.id.btnNBA).setOnClickListener(this);
-		view.findViewById(R.id.btnNHL).setOnClickListener(this);
-		view.findViewById(R.id.btnMLB).setOnClickListener(this);
-		view.findViewById(R.id.btnMLS).setOnClickListener(this);
+		view.findViewById(R.id.lnrLytNFL).setOnClickListener(this);
+		view.findViewById(R.id.lnrLytNBA).setOnClickListener(this);
+		view.findViewById(R.id.lnrLytNHL).setOnClickListener(this);
+		view.findViewById(R.id.lnrLytMLB).setOnClickListener(this);
+		view.findViewById(R.id.lnrLytMLS).setOnClickListener(this);
 		
 		return view;
 	}
@@ -43,27 +43,27 @@ public class SportsArtistsFragment extends FragmentLoadableFromBackStack impleme
 	public void onClick(View v) {
 		Bundle args = new Bundle();
 		switch (v.getId()) {
-			case R.id.btnNFL:
+			case R.id.lnrLytNFL:
 				args.putSerializable(BundleKeys.GENRE, Genre.NFL);
 				args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_nfl);
 				break;
 				
-			case R.id.btnNBA:
+			case R.id.lnrLytNBA:
 				args.putSerializable(BundleKeys.GENRE, Genre.NBA);
 				args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_nba);
 				break;
 				
-			case R.id.btnNHL:
+			case R.id.lnrLytNHL:
 				args.putSerializable(BundleKeys.GENRE, Genre.NHL);
 				args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_nhl);
 				break;
 				
-			case R.id.btnMLB:
+			case R.id.lnrLytMLB:
 				args.putSerializable(BundleKeys.GENRE, Genre.MLB);
 				args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_mlb);
 				break;
 				
-			case R.id.btnMLS:
+			case R.id.lnrLytMLS:
 				args.putSerializable(BundleKeys.GENRE, Genre.MLS);
 				args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_mls);
 				break;

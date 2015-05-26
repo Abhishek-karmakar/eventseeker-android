@@ -4,7 +4,11 @@
     <color name="colorPrimaryDark">#006ab2</color>
 
     <color name="colorPrimaryAlpha">#880097ff</color>
-    <color name="colorPrimaryDarkAlpha">#88006ab2</color>
+
+	<color name="opacity_25">#40000000</color>
+	<color name="opacity_40">#66000000</color>
+
+	<color name="bg_featured_list_img">#88d3d3d3</color>
 
     <color name="nav_drawer_divider">#33ffffff</color>
 

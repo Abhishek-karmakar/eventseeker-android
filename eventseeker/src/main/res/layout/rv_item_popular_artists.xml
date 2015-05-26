@@ -21,16 +21,14 @@
         android:scaleType="centerCrop"
         android:layout_below="@+id/vSeparator" />
 
-    <Button
-        android:id="@+id/btnAritstCategory"
-        style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.AlphaColorPrimary"
+    <TextView
+        android:id="@+id/txtAritstCategory"
+        style="@style/Widget.EventSeeker.TextView.PopularArtistCatTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imgAritstCategory"
-        android:layout_alignLeft="@+id/imgAritstCategory"
-        android:layout_alignRight="@+id/imgAritstCategory"
-        android:layout_alignTop="@+id/imgAritstCategory"
-        android:layout_below="@+id/vSeparator"
-        android:scaleType="centerCrop" />
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:paddingLeft="@dimen/txt_artist_category_pad_l_r_rv_item_popular_artists"
+        android:paddingRight="@dimen/txt_artist_category_pad_l_r_rv_item_popular_artists"/>
 
 </RelativeLayout>

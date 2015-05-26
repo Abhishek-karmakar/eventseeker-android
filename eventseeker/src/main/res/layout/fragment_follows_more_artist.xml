@@ -16,7 +16,8 @@
         <!--
             textAllCaps="false" is added in all the buttons as in android api level 21 was having 
         	an issue which was keeping textAllCaps="true" by default. So, all the button text were 
-        	appearing in capital        -->
+        	appearing in capital
+        -->
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -33,7 +34,7 @@
                 android:id="@+id/btnSyncAccounts"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/slctr_btn_alpha_clr_prmry_normal_clr_prmry_drk_pressed_material" />
+                android:background="@drawable/slctr_btn_opacity_25_40" />
 
             <View
                 android:id="@+id/vDummySyncAccounts"
@@ -81,7 +82,7 @@
                 android:id="@+id/btnPopularArtists"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/slctr_btn_alpha_clr_prmry_normal_clr_prmry_drk_pressed_material" />
+                android:background="@drawable/slctr_btn_opacity_25_40" />
 
             <View
                 android:id="@+id/vDummyPopularArtists"
@@ -134,7 +135,7 @@
                 android:id="@+id/btnRecommended"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/slctr_btn_alpha_clr_prmry_normal_clr_prmry_drk_pressed_material" />
+                android:background="@drawable/slctr_btn_opacity_25_40" />
 
             <View
                 android:id="@+id/vDummyRecommended"
@@ -182,7 +183,7 @@
                 android:id="@+id/btnSearch"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/slctr_btn_alpha_clr_prmry_normal_clr_prmry_drk_pressed_material" />
+                android:background="@drawable/slctr_btn_opacity_25_40" />
 
             <View
                 android:id="@+id/vDummySearch"

@@ -8,7 +8,6 @@
 
     <include
         android:id="@+id/lnrFollowMoreArtist"
-        android:layout_alignParentTop="true"
         layout="@layout/include_following_tabs" />
 
     <View
@@ -45,19 +44,19 @@
                 -->
 
                 <com.wcities.eventseeker.custom.view.ResizableImageView
-                    android:id="@+id/imgBG"
+                    android:id="@+id/imgNFL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_nfl" />
 
-                <Button
+                <TextView
                     android:id="@+id/btnNFL"
-                    style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.AlphaColorPrimary"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignBottom="@+id/imgBG"
-                    android:layout_alignTop="@+id/imgBG"
-                    android:text="@string/btn_nfl" />
+                    style="@style/Widget.EventSeeker.TextView.PopularArtistCatTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_nfl"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"/>
             </RelativeLayout>
 
             <View
@@ -71,19 +70,19 @@
                 android:layout_weight="1" >
 
                 <com.wcities.eventseeker.custom.view.ResizableImageView
-                    android:id="@+id/imgBG1"
+                    android:id="@+id/imgNBA"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_nba" />
 
-                <Button
+                <TextView
                     android:id="@+id/btnNBA"
-                    style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.AlphaColorPrimary"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignBottom="@+id/imgBG1"
-                    android:layout_alignTop="@+id/imgBG1"
-                    android:text="@string/btn_nba" />
+                    style="@style/Widget.EventSeeker.TextView.PopularArtistCatTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_nba"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"/>
             </RelativeLayout>
 
             <View
@@ -97,19 +96,19 @@
                 android:layout_weight="1" >
 
                 <com.wcities.eventseeker.custom.view.ResizableImageView
-                    android:id="@+id/imgBG2"
+                    android:id="@+id/imgNHL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_nhl" />
 
-                <Button
+                <TextView
                     android:id="@+id/btnNHL"
-                    style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.AlphaColorPrimary"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignBottom="@+id/imgBG2"
-                    android:layout_alignTop="@+id/imgBG2"
-                    android:text="@string/btn_nhl" />
+                    style="@style/Widget.EventSeeker.TextView.PopularArtistCatTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_nhl"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"/>
             </RelativeLayout>
 
             <View
@@ -123,19 +122,19 @@
                 android:layout_weight="1" >
 
                 <com.wcities.eventseeker.custom.view.ResizableImageView
-                    android:id="@+id/imgBG3"
+                    android:id="@+id/imgMLB"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_mlb" />
 
-                <Button
+                <TextView
                     android:id="@+id/btnMLB"
-                    style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.AlphaColorPrimary"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignBottom="@+id/imgBG3"
-                    android:layout_alignTop="@+id/imgBG3"
-                    android:text="@string/btn_mlb" />
+                    style="@style/Widget.EventSeeker.TextView.PopularArtistCatTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_mlb"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"/>
             </RelativeLayout>
 
             <View
@@ -149,19 +148,19 @@
                 android:layout_weight="1" >
 
                 <com.wcities.eventseeker.custom.view.ResizableImageView
-                    android:id="@+id/imgBG4"
+                    android:id="@+id/imgMLS"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_mls" />
 
-                <Button
+                <TextView
                     android:id="@+id/btnMLS"
-                    style="@style/Widget.EventSeeker.Button.PopularArtistCatTxt.AlphaColorPrimary"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignBottom="@+id/imgBG4"
-                    android:layout_alignTop="@+id/imgBG4"
-                    android:text="@string/btn_mls" />
+                    style="@style/Widget.EventSeeker.TextView.PopularArtistCatTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_mls"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"/>
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>

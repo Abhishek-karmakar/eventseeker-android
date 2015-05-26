@@ -28,11 +28,11 @@ public class SportsArtistsFragmentTab extends FragmentLoadableFromBackStack impl
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_sports_artists_tab, null);
 		
-		view.findViewById(R.id.btnNFL).setOnClickListener(this);
-		view.findViewById(R.id.btnNBA).setOnClickListener(this);
-		view.findViewById(R.id.btnNHL).setOnClickListener(this);
-		view.findViewById(R.id.btnMLB).setOnClickListener(this);
-		view.findViewById(R.id.btnMLS).setOnClickListener(this);
+		view.findViewById(R.id.imgNFL).setOnClickListener(this);
+		view.findViewById(R.id.imgNBA).setOnClickListener(this);
+		view.findViewById(R.id.imgNHL).setOnClickListener(this);
+		view.findViewById(R.id.imgMLB).setOnClickListener(this);
+		view.findViewById(R.id.imgMLS).setOnClickListener(this);
 
 		view.findViewById(R.id.btnSyncAccounts).setOnClickListener(this);
 		view.findViewById(R.id.btnRecommended).setOnClickListener(this);
@@ -60,27 +60,27 @@ public class SportsArtistsFragmentTab extends FragmentLoadableFromBackStack impl
 		Bundle args = new Bundle();
 		Intent intent = null;
 		switch (v.getId()) {
-			case R.id.btnNFL:
+			case R.id.imgNFL:
 				args.putSerializable(BundleKeys.GENRE, Genre.NFL);
 				args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_nfl);
 				break;
 				
-			case R.id.btnNBA:
+			case R.id.imgNBA:
 				args.putSerializable(BundleKeys.GENRE, Genre.NBA);
 				args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_nba);
 				break;
 				
-			case R.id.btnNHL:
+			case R.id.imgNHL:
 				args.putSerializable(BundleKeys.GENRE, Genre.NHL);
 				args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_nhl);
 				break;
 				
-			case R.id.btnMLB:
+			case R.id.imgMLB:
 				args.putSerializable(BundleKeys.GENRE, Genre.MLB);
 				args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_mlb);
 				break;
 				
-			case R.id.btnMLS:
+			case R.id.imgMLS:
 				args.putSerializable(BundleKeys.GENRE, Genre.MLS);
 				args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_mls);
 				break;
@@ -121,11 +121,11 @@ public class SportsArtistsFragmentTab extends FragmentLoadableFromBackStack impl
     @Override
     public void onDestroyView() {
         //to free the memory allocated for high-res cat images
-        ((ImageView) getView().findViewById(R.id.imgBG)).setImageBitmap(null);
-        ((ImageView) getView().findViewById(R.id.imgBG1)).setImageBitmap(null);
-        ((ImageView) getView().findViewById(R.id.imgBG2)).setImageBitmap(null);
-        ((ImageView) getView().findViewById(R.id.imgBG3)).setImageBitmap(null);
-        ((ImageView) getView().findViewById(R.id.imgBG4)).setImageBitmap(null);
+        ((ImageView) getView().findViewById(R.id.imgNFL)).setImageBitmap(null);
+        ((ImageView) getView().findViewById(R.id.imgNBA)).setImageBitmap(null);
+        ((ImageView) getView().findViewById(R.id.imgNHL)).setImageBitmap(null);
+        ((ImageView) getView().findViewById(R.id.imgMLB)).setImageBitmap(null);
+        ((ImageView) getView().findViewById(R.id.imgMLS)).setImageBitmap(null);
         super.onDestroyView();
     }
 }

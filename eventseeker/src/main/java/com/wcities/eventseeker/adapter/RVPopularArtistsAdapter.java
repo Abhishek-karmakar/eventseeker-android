@@ -11,9 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.asynctask.AsyncLoadImg;
@@ -119,20 +119,21 @@ public class RVPopularArtistsAdapter extends RVAdapterBase<RVPopularArtistsAdapt
 				} else {
 					//Log.d(TAG, "bitmap = null");
 					viewHolder.imgAritstCategory.setImageBitmap(null);
+					viewHolder.imgAritstCategory.setBackgroundResource(R.color.bg_featured_list_img);
 					viewHolder.prgbrAritstCategory.setVisibility(View.VISIBLE);
 
 					AsyncLoadImg asyncLoadImg = AsyncLoadImg.getInstance();
 					asyncLoadImg.loadImg(viewHolder.imgAritstCategory, ImgResolution.LOW, weakRecyclerView, position,
 							featuredListArtistCategory, true);
 				}
-				viewHolder.btnAritstCategory.setText(featuredListArtistCategory.getName());
+				viewHolder.txtAritstCategory.setText(featuredListArtistCategory.getName());
 
 			} else {
 				viewHolder.imgAritstCategory.setImageResource(popularArtistCategory.getDrwResIdCategory());
-				viewHolder.btnAritstCategory.setText(popularArtistCategory.getStrResIdCategory());
+				viewHolder.txtAritstCategory.setText(popularArtistCategory.getStrResIdCategory());
 			}
-			viewHolder.btnAritstCategory.setOnClickListener(new OnClickListener() {
-				
+			viewHolder.itemView.setOnClickListener(new OnClickListener() {
+
 				@Override
 				public void onClick(View v) {
 					if (onPopularArtistsCategoryClickListener != null) {
@@ -191,7 +192,8 @@ public class RVPopularArtistsAdapter extends RVAdapterBase<RVPopularArtistsAdapt
 	}
 
 	public static class ViewHolder extends RecyclerView.ViewHolder {
-		private Button btnAritstCategory;
+
+		private TextView txtAritstCategory;
 		private ImageView imgAritstCategory;
 		private View vSeparator;
 		private View prgbrAritstCategory;
@@ -199,7 +201,7 @@ public class RVPopularArtistsAdapter extends RVAdapterBase<RVPopularArtistsAdapt
 		public ViewHolder(View itemView) {
 			super(itemView);
 			vSeparator = itemView.findViewById(R.id.vSeparator);
-			btnAritstCategory = (Button) itemView.findViewById(R.id.btnAritstCategory);
+			txtAritstCategory = (TextView) itemView.findViewById(R.id.txtAritstCategory);
 			imgAritstCategory = (ImageView) itemView.findViewById(R.id.imgAritstCategory);
 			prgbrAritstCategory = itemView.findViewById(R.id.prgbrAritstCategory);
 		}

@@ -59,26 +59,16 @@
         <item name="android:minHeight">@dimen/btn_default_ht</item>
     </style>
 
-    <style name="Widget.EventSeeker.Button.PopularArtistCatTxt" parent="@android:style/Widget.Button">
+    <style name="Widget.EventSeeker.TextView.PopularArtistCatTxt" parent="@android:style/Widget.TextView">
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">@dimen/txt_size_widget_eventSeeker_btn_alpha</item>
-        <item name="android:textAllCaps">false</item>
-    </style>
-    
-    <style name="Widget.EventSeeker.Button.PopularArtistCatTxt.AlphaColorPrimary">
-        <item name="android:background">@drawable/slctr_btn_alpha_clr_prmry_normal_clr_prmry_drk_pressed_material</item>
-    </style>
-
-    <style name="Widget.EventSeeker.Button.PopularArtistCatTxt.Music">
         <item name="android:background">@drawable/bg_music_cat_txt</item>
     </style>
-
-    <style name="Widget.EventSeeker.Button.Transparent" parent="@android:style/Widget.Material.Button">
+    
+    <style name="Widget.EventSeeker.Button.Transparent" parent="@android:style/Widget.Button">
         <item name="android:background">@drawable/slctr_btn_transparent_clr_prmry_drk_pressed</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">@dimen/txt_size_category_popular_artist_fragment_popular_artist_tab</item>
-        <item name="android:elevation">@dimen/elevation_widget_eventSeeker_btn_white</item>
-        <item name="android:textAllCaps">false</item>
         <!-- In Nexus 10 with api 15 the button text were getting aligned towards left, So added gravity='center' -->
         <item name="android:gravity">center</item>
     </style>

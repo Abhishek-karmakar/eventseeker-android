@@ -758,6 +758,9 @@
     <dimen name="img_event_pad_b_list_item_discover_with_date_range">16dp</dimen>
     <dimen name="lnr_slider_content_ht_list_item_discover_with_date_range">@dimen/img_event_ht_list_item_discover_with_date_range</dimen>
 
+    <!-- rv_item_popular_artists.xml -->
+    <dimen name="txt_artist_category_pad_l_r_rv_item_popular_artists">30dp</dimen>
+
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ starts for bosch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <!-- activity_bosch_main.xml -->
     <dimen name="b_root_navigation_drawer_w_main">210dp</dimen>
