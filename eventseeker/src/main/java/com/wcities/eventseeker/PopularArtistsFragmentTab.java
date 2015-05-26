@@ -118,7 +118,7 @@ public class PopularArtistsFragmentTab extends FragmentLoadableFromBackStack imp
 					selectedFeaturedListArtistsFragmentTab, FragmentUtil.getTag(selectedFeaturedListArtistsFragmentTab), true);
 				break;
 
-			case FeaturedArtists:
+			/*case FeaturedArtists:
 				args = new Bundle();
 				args.putSerializable(BundleKeys.GENRE, Artist.Genre.Featured);
 				args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_featured_list);
@@ -128,7 +128,7 @@ public class PopularArtistsFragmentTab extends FragmentLoadableFromBackStack imp
 				
 				((PopularArtistsActivityTab) FragmentUtil.getActivity(this)).replaceFragment(R.id.content_frame, 
 						selectedArtistCategoryFragmentTab, FragmentUtil.getTag(selectedArtistCategoryFragmentTab), true);
-				break;
+				break;*/
 				
 			case MusicArtists:
 				MusicArtistsFragmentTab musicArtistsFragmentTab = new MusicArtistsFragmentTab();
@@ -141,8 +141,8 @@ public class PopularArtistsFragmentTab extends FragmentLoadableFromBackStack imp
 				args = new Bundle();
 				args.putSerializable(BundleKeys.GENRE, Artist.Genre.Comedy);
 				args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_comedy);
-				
-				selectedArtistCategoryFragmentTab = new SelectedArtistCategoryFragmentTab();
+
+				SelectedArtistCategoryFragmentTab selectedArtistCategoryFragmentTab = new SelectedArtistCategoryFragmentTab();
 				selectedArtistCategoryFragmentTab.setArguments(args);
 				
 				((PopularArtistsActivityTab) FragmentUtil.getActivity(this)).replaceFragment(R.id.content_frame, 

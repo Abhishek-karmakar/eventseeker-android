@@ -1,13 +1,5 @@
 package com.wcities.eventseeker.asynctask;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.os.AsyncTask;
 
 import com.wcities.eventseeker.adapter.RVPopularArtistsAdapter;
@@ -16,6 +8,14 @@ import com.wcities.eventseeker.api.ArtistApi.Method;
 import com.wcities.eventseeker.core.PopularArtistCategory;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoadPopularArtists extends AsyncTask<Void, Void, List<PopularArtistCategory>> {
 	

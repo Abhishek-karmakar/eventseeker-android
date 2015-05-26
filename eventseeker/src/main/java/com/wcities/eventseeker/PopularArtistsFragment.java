@@ -97,13 +97,13 @@ public class PopularArtistsFragment extends FragmentLoadableFromBackStack implem
 					.replaceByFragment(AppConstants.FRAGMENT_TAG_SELECTED_FEATURED_LIST_ARTISTS_FRAGMENT, args);
 				break;
 
-			case FeaturedArtists:
+			/*case FeaturedArtists:
 				args = new Bundle();
 				args.putSerializable(BundleKeys.GENRE, Artist.Genre.Featured);
 				args.putInt(BundleKeys.SCREEN_TITLE, R.string.title_featured_list);
 				((MainActivity) FragmentUtil.getActivity(this))
 						.replaceByFragment(AppConstants.FRAGMENT_TAG_SELECTED_ARTIST_CATEGORY_FRAGMENT, args);
-				break;
+				break;*/
 
 			case MusicArtists:
 				((MainActivity) FragmentUtil.getActivity(this))

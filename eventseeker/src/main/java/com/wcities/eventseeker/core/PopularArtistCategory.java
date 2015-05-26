@@ -1,9 +1,9 @@
 package com.wcities.eventseeker.core;
 
+import com.wcities.eventseeker.R;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.wcities.eventseeker.R;
 
 public class PopularArtistCategory {
 
@@ -20,7 +20,7 @@ public class PopularArtistCategory {
 	 */
 	public static enum PopularArtistsType {
 		FeaturedListArtists,
-		FeaturedArtists,
+		//FeaturedArtists,
 		MusicArtists,
 		ComedyArtists,
 		TheaterArtists,
@@ -60,10 +60,10 @@ public class PopularArtistCategory {
 				case FeaturedListArtists:
 					continue;
 					
-				case FeaturedArtists:
+				/*case FeaturedArtists:
 					popularArtistCategory = new PopularArtistCategory(popularArtistType, R.string.btn_featured, 
 							R.drawable.ic_featured); 
-					break;
+					break;*/
 
 				case MusicArtists:
 					popularArtistCategory = new PopularArtistCategory(popularArtistType, R.string.btn_music, 

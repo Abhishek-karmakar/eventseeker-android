@@ -15,7 +15,7 @@ public class AppConstants {
 	 * 'DEBUG' and 'FORD_SYNC_APP' variable is only for ford implementation
 	 */
 	public static final boolean DEBUG = false;
-	public static final boolean FORD_SYNC_APP = false;
+	public static final boolean FORD_SYNC_APP = true;
 	
 	public static final boolean CRASH_REPORTING_ENABLED = false;
 	public static final boolean STRICT_MODE_ENABLED = false;

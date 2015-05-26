@@ -72,7 +72,7 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 	private ObservableScrollView obsrScrlV;
 	private ImageView imgEvt, imgDown, imgPrgOverlay;
 	private TextView txtEvtTitle, txtEvtTime, txtEvtDesc, txtVenue;
-	private RelativeLayout rltLytPrgsBar, rltLytFeaturing, rltLytVenue, rltLytFriends;
+	private RelativeLayout rltLytPrgsBar, rltLytFeaturing, rltLytVenue, rltLytFriends, rltLytFabLinks;
 	private RecyclerView recyclerVFriends;
 	private FloatingActionButton fabTickets, fabSave, fabWeb, fabFb;
     private View vFabSeparator;
@@ -158,17 +158,18 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 		ViewCompat.setTransitionName(txtVenue, "txtVenueEventDetails");
 		updateEventSchedule();
 
+		rltLytFabLinks = (RelativeLayout) rootView.findViewById(R.id.rltLytFabLinks);
+		vFabSeparator = rootView.findViewById(R.id.vFabSeparator);
         fabWeb = (FloatingActionButton) rootView.findViewById(R.id.fabWeb);
         fabFb = (FloatingActionButton) rootView.findViewById(R.id.fabFb);
-        fabWeb.setOnClickListener(this);
-        fabFb.setOnClickListener(this);
         updateFabLinks();
 
-        vFabSeparator = rootView.findViewById(R.id.vFabSeparator);
 		txtEvtDesc = (TextView) rootView.findViewById(R.id.txtDesc);
 		imgDown = (ImageView) rootView.findViewById(R.id.imgDown);
         imgDown.setOnClickListener(this);
 		updateDescVisibility();
+
+		updateImgDownVisibility();
 		
 		imgEvt = (ImageView) rootView.findViewById(R.id.imgEvt);
 		updateEventImg();
@@ -331,9 +332,9 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 
 		} else {
             txtEvtDesc.setVisibility(View.GONE);
-            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) vFabSeparator.getLayoutParams();
+            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) rltLytFabLinks.getLayoutParams();
             lp.topMargin = ConversionUtil.toPx(FragmentUtil.getResources(this), 28);
-            vFabSeparator.setLayoutParams(lp);
+			rltLytFabLinks.setLayoutParams(lp);
         }
 
         if (isEvtDescExpanded) {
@@ -349,21 +350,19 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 		txtEvtDesc.setEllipsize(null);
 		imgDown.setImageDrawable(FragmentUtil.getResources(this).getDrawable(R.drawable.ic_description_collapse));
 
-        fabWeb.setVisibility(View.VISIBLE);
-        fabFb.setVisibility(View.VISIBLE);
-        vFabSeparator.setVisibility(View.VISIBLE);
+		if (event.getWebsite() != null || event.getFbLink() != null) {
+			rltLytFabLinks.setVisibility(View.VISIBLE);
+		}
 
 		isEvtDescExpanded = true;
 	}
-	
+
 	private void collapseEvtDesc() {
 		txtEvtDesc.setMaxLines(MAX_LINES_EVENT_DESC);
 		txtEvtDesc.setEllipsize(TruncateAt.END);
 		imgDown.setImageDrawable(FragmentUtil.getResources(this).getDrawable(R.drawable.ic_description_expand));
 
-        fabWeb.setVisibility(View.GONE);
-        fabFb.setVisibility(View.GONE);
-        vFabSeparator.setVisibility(View.GONE);
+        rltLytFabLinks.setVisibility(View.GONE);
 
 		isEvtDescExpanded = false;
 	}
@@ -446,25 +445,43 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
     }
 
     private void updateFabLinks() {
-        final Resources res = FragmentUtil.getResources(this);
-        if (event.getWebsite() == null) {
-            fabWeb.setImageDrawable(res.getDrawable(R.drawable.ic_web_link_unavailable));
-            fabWeb.setEnabled(false);
+		if (event.getWebsite() == null) {
+			fabWeb.setVisibility(View.GONE);
 
-        } else {
-            fabWeb.setImageDrawable(res.getDrawable(R.drawable.ic_web_link_available));
-            fabWeb.setEnabled(true);
-        }
+		} else {
+			fabWeb.setVisibility(View.VISIBLE);
+			fabWeb.setOnClickListener(this);
+		}
 
-        if (event.getFbLink() == null) {
-            fabFb.setImageDrawable(res.getDrawable(R.drawable.ic_facebook_link_unavailable));
-            fabFb.setEnabled(false);
+		if (event.getFbLink() == null) {
+			fabFb.setVisibility(View.GONE);
 
-        } else {
-            fabFb.setImageDrawable(res.getDrawable(R.drawable.ic_facebook_link_available));
-            fabFb.setEnabled(true);
-        }
+		} else {
+			fabFb.setVisibility(View.VISIBLE);
+			fabFb.setOnClickListener(this);
+		}
+
+		if (event.getWebsite() == null && event.getFbLink() == null) {
+			rltLytFabLinks.setVisibility(View.GONE);
+
+		} else if (event.getWebsite() == null || event.getFbLink() == null) {
+			rltLytFabLinks.setVisibility(View.VISIBLE);
+			vFabSeparator.setVisibility(View.GONE);
+
+		} else {
+			rltLytFabLinks.setVisibility(View.VISIBLE);
+			vFabSeparator.setVisibility(View.VISIBLE);
+		}
     }
+
+	private void updateImgDownVisibility() {
+		if (event.getDescription() == null && event.getWebsite() == null && event.getFbLink() == null) {
+			imgDown.setVisibility(View.GONE);
+
+		} else {
+			imgDown.setVisibility(View.VISIBLE);
+		}
+	}
 	
 	private void updateFabs() {
 		fabTickets.setVisibility(View.VISIBLE);
@@ -519,6 +536,7 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 		if (allDetailsLoaded) {
             updateFabLinks();
 			updateDescVisibility();
+			updateImgDownVisibility();
 			updateEventImg();
 			updateEventSchedule();
 			updateFeaturingVisibility();

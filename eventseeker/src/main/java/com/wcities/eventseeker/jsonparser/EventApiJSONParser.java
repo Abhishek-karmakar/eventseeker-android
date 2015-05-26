@@ -202,13 +202,13 @@ public class EventApiJSONParser {
 
                         for (int i = 0; i < jArrSocialUrl.length(); i++) {
                             String link = jArrSocialUrl.getString(i);
-                            if (link.startsWith("https://www.facebook.com/")) {
+                            if (link.contains("//www.facebook.com/")) {
                                 event.setFbLink(link);
                                 break;
                             }
                         }
 
-                    } else if (((String) objSocialUrl).startsWith("https://www.facebook.com/")) {
+                    } else if (((String) objSocialUrl).contains("//www.facebook.com/")) {
                         event.setFbLink((String) objSocialUrl);
                     }
                 }

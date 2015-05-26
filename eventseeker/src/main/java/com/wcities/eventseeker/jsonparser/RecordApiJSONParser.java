@@ -127,13 +127,13 @@ public class RecordApiJSONParser {
 
                     for (int i = 0; i < jArrSocialUrl.length(); i++) {
                         String link = jArrSocialUrl.getString(i);
-                        if (link.startsWith("https://www.facebook.com/")) {
+                        if (link.contains("//www.facebook.com/")) {
                             venue.setFbLink(link);
                             break;
                         }
                     }
 
-                } else if (((String) objSocialUrl).startsWith("https://www.facebook.com/")) {
+                } else if (((String) objSocialUrl).contains("//www.facebook.com/")) {
                     venue.setFbLink((String) objSocialUrl);
                 }
             }

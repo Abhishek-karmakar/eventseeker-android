@@ -95,9 +95,11 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	private ObservableScrollView obsrScrlV;
 	private ImageView imgEvent, imgDown;
 	private TextView txtEvtTitle, txtEvtDesc, txtEvtLoc, txtVenue, txtEvtTime;
-	private RelativeLayout rltLytContent, rltLytCollapsible, rltLytFeaturing, rltLytPrgsBar, rltLytVenue, rltLytFriends;
+	private RelativeLayout rltLytContent, rltLytCollapsible, rltLytFabLinks, rltLytFeaturing, rltLytPrgsBar,
+			rltLytVenue, rltLytFriends;
 	private RecyclerView recyclerVFriends;
 	private FloatingActionButton fabTickets, fabSave, fabWeb, fabFb;
+	private View vFabSeparator;
 	
 	private int limitScrollAt, actionBarElevation, fabScrollThreshold, prevScrollY = UNSCROLLED;
 	private int txtEvtTitleDiffX, txtEvtTitleSourceX;
@@ -198,16 +200,18 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
         txtEvtDesc = (TextView) rootView.findViewById(R.id.txtDesc);
         updateDesc();
 
+		rltLytFabLinks = (RelativeLayout) rootView.findViewById(R.id.rltLytFabLinks);
+		vFabSeparator = rootView.findViewById(R.id.vFabSeparator);
         fabWeb = (FloatingActionButton) rootView.findViewById(R.id.fabWeb);
         fabFb = (FloatingActionButton) rootView.findViewById(R.id.fabFb);
-        fabWeb.setOnClickListener(this);
-        fabFb.setOnClickListener(this);
         updateFabLinks();
 
         rltLytCollapsible = (RelativeLayout) rootView.findViewById(R.id.rltLytCollapsible);
 		imgDown = (ImageView) rootView.findViewById(R.id.imgDown);
         imgDown.setOnClickListener(this);
 		updateRltLytCollapsibleVisibility();
+
+		updateImgDownVisibility();
 
 		updateEventImg();
 		
@@ -425,20 +429,21 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
         });
         
 		animatorSet = new AnimatorSet();
-        animatorSet.playTogether(xAnim, yAnim, va);
-        animatorSet.addListener(new AnimatorListener() {
-        	
-        	private boolean isCancelled;
-			
+		animatorSet.playTogether(xAnim, yAnim, va);
+		animatorSet.addListener(new AnimatorListener() {
+
+			private boolean isCancelled;
+
 			@Override
 			public void onAnimationStart(Animator arg0) {
 				rltLytContent.setVisibility(View.INVISIBLE);
-				((MainActivity)FragmentUtil.getActivity(EventDetailsFragment.this)).onSharedElementAnimStart();
+				((MainActivity) FragmentUtil.getActivity(EventDetailsFragment.this)).onSharedElementAnimStart();
 			}
-			
+
 			@Override
-			public void onAnimationRepeat(Animator arg0) {}
-			
+			public void onAnimationRepeat(Animator arg0) {
+			}
+
 			@Override
 			public void onAnimationEnd(Animator arg0) {
 				//Log.d(TAG, "onAnimationEnd()");
@@ -447,20 +452,22 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 					rltLytContent.setVisibility(View.VISIBLE);
 					Animation slideInFromBottom = AnimationUtils.loadAnimation(FragmentUtil.getApplication(EventDetailsFragment.this), R.anim.slide_in_from_bottom);
 					slideInFromBottom.setAnimationListener(new AnimationListener() {
-						
+
 						@Override
-						public void onAnimationStart(Animation animation) {}
-						
+						public void onAnimationStart(Animation animation) {
+						}
+
 						@Override
-						public void onAnimationRepeat(Animation animation) {}
-						
+						public void onAnimationRepeat(Animation animation) {
+						}
+
 						@Override
 						public void onAnimationEnd(Animation animation) {
 							/**
 							 * Load here instead of onCreate(), because otherwise animation slows down on some 
 							 * devices
 							 */
-							loadEventDetails = new LoadEventDetails(Api.OAUTH_TOKEN, EventDetailsFragment.this, 
+							loadEventDetails = new LoadEventDetails(Api.OAUTH_TOKEN, EventDetailsFragment.this,
 									EventDetailsFragment.this, event);
 							AsyncTaskUtil.executeAsyncTask(loadEventDetails, true);
 						}
@@ -468,15 +475,15 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 					rltLytContent.startAnimation(slideInFromBottom);
 				}
 			}
-			
+
 			@Override
 			public void onAnimationCancel(Animator arg0) {
 				//Log.d(TAG, "onAnimationCancel()");
 				isCancelled = true;
 			}
 		});
-        
-        animatorSet.start();
+
+		animatorSet.start();
 	}
 	
 	@Override
@@ -486,64 +493,69 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		
 		Animation slideOutToBottom = AnimationUtils.loadAnimation(FragmentUtil.getApplication(EventDetailsFragment.this), R.anim.slide_out_to_bottom);
 		slideOutToBottom.setAnimationListener(new AnimationListener() {
-			
+
 			@Override
-			public void onAnimationStart(Animation animation) {}
-			
+			public void onAnimationStart(Animation animation) {
+			}
+
 			@Override
-			public void onAnimationRepeat(Animation animation) {}
-			
+			public void onAnimationRepeat(Animation animation) {
+			}
+
 			@Override
 			public void onAnimationEnd(Animation animation) {
 				rltLytContent.setVisibility(View.INVISIBLE);
 				animatorSet = new AnimatorSet();
-				
+
 				SharedElement sharedElement = sharedElements.get(0);
-				
+
 				final SharedElementPosition sharedElementPosition = sharedElement.getSharedElementPosition();
-		        ObjectAnimator xAnim = ObjectAnimator.ofFloat(imgEvent, "x", 0, sharedElementPosition.getStartX());
-		        xAnim.setDuration(TRANSITION_ANIM_DURATION);
-		        
-		        ObjectAnimator yAnim = ObjectAnimator.ofFloat(imgEvent, "y", 0, sharedElementPosition.getStartY() + prevScrollY);
-		        yAnim.setDuration(TRANSITION_ANIM_DURATION);
-		        
-		        ValueAnimator va = ValueAnimator.ofInt(100, 1);
-		        va.setDuration(TRANSITION_ANIM_DURATION);
-		        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-		        	
-		        	private int color = FragmentUtil.getResources(EventDetailsFragment.this).getColor(android.R.color.white);
-		        	
-		            public void onAnimationUpdate(ValueAnimator animation) {
-		                Integer value = (Integer) animation.getAnimatedValue();
-		                imgEvent.getLayoutParams().width = (int) (sharedElementPosition.getWidth() + 
-		                		(((screenW - sharedElementPosition.getWidth()) * value.intValue()) / 100));
-		                imgEvent.getLayoutParams().height = (int) (sharedElementPosition.getHeight() + 
-		                		(((imgEventHt - sharedElementPosition.getHeight()) * value.intValue()) / 100));
-		                imgEvent.requestLayout();
-		                
-		                int newAlpha = (int) (value * 2.55);
-		                rootView.setBackgroundColor(Color.argb(newAlpha, Color.red(color), Color.green(color), Color.blue(color)));
-		            }
-		        });
-		        
-		        animatorSet.playTogether(xAnim, yAnim, va);
-		        animatorSet.addListener(new AnimatorListener() {
-					
+				ObjectAnimator xAnim = ObjectAnimator.ofFloat(imgEvent, "x", 0, sharedElementPosition.getStartX());
+				xAnim.setDuration(TRANSITION_ANIM_DURATION);
+
+				ObjectAnimator yAnim = ObjectAnimator.ofFloat(imgEvent, "y", 0, sharedElementPosition.getStartY() + prevScrollY);
+				yAnim.setDuration(TRANSITION_ANIM_DURATION);
+
+				ValueAnimator va = ValueAnimator.ofInt(100, 1);
+				va.setDuration(TRANSITION_ANIM_DURATION);
+				va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+					private int color = FragmentUtil.getResources(EventDetailsFragment.this).getColor(android.R.color.white);
+
+					public void onAnimationUpdate(ValueAnimator animation) {
+						Integer value = (Integer) animation.getAnimatedValue();
+						imgEvent.getLayoutParams().width = (int) (sharedElementPosition.getWidth() +
+								(((screenW - sharedElementPosition.getWidth()) * value.intValue()) / 100));
+						imgEvent.getLayoutParams().height = (int) (sharedElementPosition.getHeight() +
+								(((imgEventHt - sharedElementPosition.getHeight()) * value.intValue()) / 100));
+						imgEvent.requestLayout();
+
+						int newAlpha = (int) (value * 2.55);
+						rootView.setBackgroundColor(Color.argb(newAlpha, Color.red(color), Color.green(color), Color.blue(color)));
+					}
+				});
+
+				animatorSet.playTogether(xAnim, yAnim, va);
+				animatorSet.addListener(new AnimatorListener() {
+
 					@Override
-					public void onAnimationStart(Animator animation) {}
-					
+					public void onAnimationStart(Animator animation) {
+					}
+
 					@Override
-					public void onAnimationRepeat(Animator animation) {}
-					
+					public void onAnimationRepeat(Animator animation) {
+					}
+
 					@Override
 					public void onAnimationEnd(Animator animation) {
 						FragmentUtil.getActivity(EventDetailsFragment.this).onBackPressed();
 					}
-					
+
 					@Override
-					public void onAnimationCancel(Animator animation) {}
+					public void onAnimationCancel(Animator animation) {
+					}
 				});
-		        animatorSet.start();
+				animatorSet.start();
 			}
 		});
 		rltLytContent.startAnimation(slideOutToBottom);
@@ -551,7 +563,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 
     private void updateDesc() {
         if (event.getDescription() != null) {
-            txtEvtDesc.setText(Html.fromHtml(event.getDescription()));
+			txtEvtDesc.setText(Html.fromHtml(event.getDescription()));
         }
     }
 	
@@ -674,25 +686,43 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
     }
 
     private void updateFabLinks() {
-        final Resources res = FragmentUtil.getResources(this);
         if (event.getWebsite() == null) {
-            fabWeb.setImageDrawable(res.getDrawable(R.drawable.ic_web_link_unavailable));
-            fabWeb.setEnabled(false);
+            fabWeb.setVisibility(View.GONE);
 
         } else {
-            fabWeb.setImageDrawable(res.getDrawable(R.drawable.ic_web_link_available));
-            fabWeb.setEnabled(true);
+			fabWeb.setVisibility(View.VISIBLE);
+			fabWeb.setOnClickListener(this);
         }
 
         if (event.getFbLink() == null) {
-            fabFb.setImageDrawable(res.getDrawable(R.drawable.ic_facebook_link_unavailable));
-            fabFb.setEnabled(false);
+            fabFb.setVisibility(View.GONE);
 
         } else {
-            fabFb.setImageDrawable(res.getDrawable(R.drawable.ic_facebook_link_available));
-            fabFb.setEnabled(true);
-        }
+            fabFb.setVisibility(View.VISIBLE);
+			fabFb.setOnClickListener(this);
+		}
+
+		if (event.getWebsite() == null && event.getFbLink() == null) {
+			rltLytFabLinks.setVisibility(View.GONE);
+
+		} else if (event.getWebsite() == null || event.getFbLink() == null) {
+			rltLytFabLinks.setVisibility(View.VISIBLE);
+			vFabSeparator.setVisibility(View.GONE);
+
+		} else {
+			rltLytFabLinks.setVisibility(View.VISIBLE);
+			vFabSeparator.setVisibility(View.VISIBLE);
+		}
     }
+
+	private void updateImgDownVisibility() {
+		if (event.getDescription() == null && event.getWebsite() == null && event.getFbLink() == null) {
+			imgDown.setVisibility(View.GONE);
+
+		} else {
+			imgDown.setVisibility(View.VISIBLE);
+		}
+	}
 	
 	private void updateFabs() {
 		fabTickets.setVisibility(View.VISIBLE);
@@ -724,6 +754,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
             updateDesc();
             updateFabLinks();
 			updateRltLytCollapsibleVisibility();
+			updateImgDownVisibility();
 			updateEventImg();
 			updateFeaturingVisibility();
 			updateEventSchedule();
