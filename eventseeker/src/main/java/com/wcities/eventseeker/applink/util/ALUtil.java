@@ -1,8 +1,5 @@
 package com.wcities.eventseeker.applink.util;
 
-import java.util.List;
-import java.util.Vector;
-
 import android.util.Log;
 
 import com.ford.syncV4.exception.SyncException;
@@ -26,6 +23,9 @@ import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.applink.util.CommandsUtil.Command;
 import com.wcities.eventseeker.constants.AppConstants;
+
+import java.util.List;
+import java.util.Vector;
 
 public class ALUtil {
 
@@ -135,14 +135,14 @@ public class ALUtil {
 		}
 	}
 
-	public static void performInteractionChoiceSet(Vector<TTSChunk> initialPrompt, String initialText,
-			Vector<Integer> interactionChoiceSetIDList, Vector<TTSChunk> timeoutPrompt) {
+	public static void performInteractionChoiceSet(Vector<TTSChunk> initialPrompt, String initialText, Vector<Integer>
+			interactionChoiceSetIDList, Vector<TTSChunk> timeoutPrompt, boolean manualIOOnly) {
 		PerformInteraction msg = new PerformInteraction();
 		msg.setCorrelationID(AppLinkService.getInstance().autoIncCorrId++);		
 		msg.setInitialPrompt(initialPrompt);
 		msg.setInitialText(initialText);
 		msg.setInteractionChoiceSetIDList(interactionChoiceSetIDList);
-		msg.setInteractionMode(InteractionMode.BOTH);
+		msg.setInteractionMode(manualIOOnly ? InteractionMode.MANUAL_ONLY : InteractionMode.BOTH);
 		msg.setTimeout(AppConstants.INTERACTION_TIME_OUT_AL);
 		msg.setTimeoutPrompt(timeoutPrompt);
 		msg.setHelpPrompt(timeoutPrompt);

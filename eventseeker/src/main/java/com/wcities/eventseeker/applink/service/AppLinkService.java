@@ -5,10 +5,14 @@
 
 package com.wcities.eventseeker.applink.service;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.ford.syncV4.exception.SyncException;
@@ -69,6 +73,7 @@ import com.ford.syncV4.proxy.rpc.enums.DriverDistractionState;
 import com.ford.syncV4.proxy.rpc.enums.Language;
 import com.ford.syncV4.proxy.rpc.enums.LockScreenStatus;
 import com.ford.syncV4.proxy.rpc.enums.SyncDisconnectedReason;
+import com.ford.syncV4.proxy.rpc.enums.TriggerSource;
 import com.ford.syncV4.proxy.rpc.enums.VehicleDataResultCode;
 import com.ford.syncV4.transport.TCPTransportConfig;
 import com.wcities.eventseeker.BaseActivity;
@@ -84,6 +89,7 @@ import com.wcities.eventseeker.applink.util.ALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil.Command;
 import com.wcities.eventseeker.applink.util.InteractionChoiceSetUtil;
 import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.Enums.Locales;
 import com.wcities.eventseeker.util.DeviceUtil;
 
@@ -162,29 +168,62 @@ public class AppLinkService extends Service implements IProxyListenerALM {
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "onStartCommand()");
-        if (AppConstants.DEBUG) {
-            startProxy();
 
-        } else {
-            //Log.d(TAG, "onStartCommand(), Non-debug mode");
-            if (intent != null) {
-                //Log.d(TAG, "intent != null");
-                mBtAdapter = BluetoothAdapter.getDefaultAdapter();
-                if (mBtAdapter != null) {
-                    //Log.d(TAG, "mBtAdapter != null");
-                    if (mBtAdapter.isEnabled()) {
-                        //Log.d(TAG, "mBtAdapter is Enabled");
-                        startProxy();
+        /**
+         * if 'intent is null or intent.getAction() is null' is added to avoid NullPointerException,
+         * as once found crash over here.
+         */
+        if (intent == null || (intent != null && intent.getAction() == null)) {
+            if (AppConstants.DEBUG) {
+                startProxy();
+
+            } else {
+                //Log.d(TAG, "onStartCommand(), Non-debug mode");
+                if (intent != null) {
+                    //Log.d(TAG, "intent != null");
+                    mBtAdapter = BluetoothAdapter.getDefaultAdapter();
+                    if (mBtAdapter != null) {
+                        //Log.d(TAG, "mBtAdapter != null");
+                        if (mBtAdapter.isEnabled()) {
+                            //Log.d(TAG, "mBtAdapter is Enabled");
+                            startProxy();
+                        }
                     }
                 }
             }
-        }
 
-        if (EventSeekr.getCurrentBaseActivity() != null) {
-            setCurrentActivity(EventSeekr.getCurrentBaseActivity());
-        }
+            if (EventSeekr.getCurrentBaseActivity() != null) {
+                setCurrentActivity(EventSeekr.getCurrentBaseActivity());
+            }
 
+        } else if (intent.getAction().equals(AppConstants.ACTION_APPLINK_SERVICE_START_FOREGROUND)) {
+            Intent activityIntent = new Intent(this, LockScreenActivity.class);
+            activityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, activityIntent, 0);
+
+            /**
+             * 21-04-2015:
+             * Issue: In Sony Xperia L, Before adding the below code to make this Service as Foreground
+             * when the service gets started and if we leave the app in background and start using other apps
+             * (mostly happens with chrome) then because of Low Memory the application gets killed and thus
+             * the Service gets killed and the Connection with Applink get disconnected. So, to avoid this issue
+             * we are making this Service to run as Foreground process.
+             * This code will make this service to run in foreground and it is added
+             */
+            Notification notification = new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.ic_notification_white)
+                    .setColor(getResources().getColor(R.color.colorPrimary))
+                    .setContentTitle("Eventseeker")
+                    .setContentText("connected to Ford SYNC")
+                    .setContentIntent(pendingIntent)
+                    .setOngoing(true)
+                    .build();
+
+            startForeground(AppConstants.FOREGROUND_SERVICE_NOTIFICATION_ID, notification);
+
+        } else if (intent.getAction().equals(AppConstants.ACTION_APPLINK_SERVICE_STOP_FOREGROUND)) {
+            stopForeground(true);
+        }
         return START_STICKY;
     }
 
@@ -524,7 +563,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
         int cmdId = Integer.parseInt(notification.getParameters("cmdID").toString());
         //Log.d(TAG, "onOnCommand, cmdId = " + cmdId);
         Command cmd = Command.getCommandById(cmdId);
-        esIProxyALM.performOperationForCommand(cmd);
+        esIProxyALM.performOperationForCommand(cmd, notification.getTriggerSource() == TriggerSource.TS_MENU);
     }
 
     public void onCreateInteractionChoiceSetResponse(CreateInteractionChoiceSetResponse response) {
@@ -551,15 +590,16 @@ public class AppLinkService extends Service implements IProxyListenerALM {
         } else {
             cmd = Command.getCommandByButtonName(btnName);
         }
-        esIProxyALM.performOperationForCommand(cmd);
+        esIProxyALM.performOperationForCommand(cmd, true);
     }
 
     /**
      * must be called when Discover, My Events and search commands are invoked
      * cmd - non null value
      * @param cmd
+     * @param isTriggerSrcMenu
      */
-    public void initiateESIProxyListener(Command cmd) {
+    public void initiateESIProxyListener(Command cmd, boolean isTriggerSrcMenu) {
         switch (cmd) {
             case DISCOVER:
                 //Log.d(TAG, "DISCOVER");
@@ -577,6 +617,9 @@ public class AppLinkService extends Service implements IProxyListenerALM {
         if (esIProxyALM == null) {
             return;
         }
+        Bundle args = new Bundle();
+        args.putBoolean(BundleKeys.MANUAL_IO_ONLY, isTriggerSrcMenu);
+        esIProxyALM.setArguments(args);
         esIProxyALM.onStartInstance();
     }
 

@@ -1,16 +1,5 @@
 package com.wcities.eventseeker.applink.handler;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Vector;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.res.Resources;
 import android.util.Log;
 
@@ -44,6 +33,7 @@ import com.wcities.eventseeker.applink.util.EventALUtil;
 import com.wcities.eventseeker.applink.util.InteractionChoiceSetUtil.ChoiceSet;
 import com.wcities.eventseeker.asynctask.UserTracker;
 import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Artist.Attending;
 import com.wcities.eventseeker.core.Event;
@@ -51,6 +41,17 @@ import com.wcities.eventseeker.core.ItemsList;
 import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
 import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
 import com.wcities.eventseeker.util.ConversionUtil;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Vector;
 
 public class SearchAL extends ESIProxyALM {
 
@@ -127,7 +128,8 @@ public class SearchAL extends ESIProxyALM {
 		Vector<TTSChunk> timeoutChunks = TTSChunkFactory.createSimpleTTSChunks(
 				context.getResources().getString(R.string.time_out));
 		
-		ALUtil.performInteractionChoiceSet(initChunks, initialText, interactionChoiceSetIDList, timeoutChunks);
+		ALUtil.performInteractionChoiceSet(initChunks, initialText, interactionChoiceSetIDList, timeoutChunks,
+				getArguments().getBoolean(BundleKeys.MANUAL_IO_ONLY));
 	}
 	
 	private void addCommands() {
@@ -307,7 +309,7 @@ public class SearchAL extends ESIProxyALM {
 		}
 	}
 
-	public void performOperationForCommand(Command cmd) {
+	public void performOperationForCommand(Command cmd, boolean isTriggerSrcMenu) {
 		if (cmd == null) {
 			return;
 		}
@@ -319,7 +321,7 @@ public class SearchAL extends ESIProxyALM {
 			case MY_EVENTS:
 			case SEARCH:
 				reset();
-				AppLinkService.getInstance().initiateESIProxyListener(cmd);
+				AppLinkService.getInstance().initiateESIProxyListener(cmd, isTriggerSrcMenu);
 				break;
 				
 			case NEXT:

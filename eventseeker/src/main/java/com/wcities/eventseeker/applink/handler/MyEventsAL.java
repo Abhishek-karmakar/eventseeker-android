@@ -1,13 +1,5 @@
 package com.wcities.eventseeker.applink.handler;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Vector;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.util.Log;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
@@ -28,9 +20,18 @@ import com.wcities.eventseeker.applink.util.CommandsUtil.Command;
 import com.wcities.eventseeker.applink.util.EventALUtil;
 import com.wcities.eventseeker.applink.util.InteractionChoiceSetUtil.ChoiceSet;
 import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.ItemsList;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Vector;
 
 public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 
@@ -124,7 +125,8 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 				//mEventSeekr.getResources().getString(R.string.time_out));
 				mEventSeekr.getResources().getString(R.string.my_events_al_time_out_help_text));
 		
-		ALUtil.performInteractionChoiceSet(initChunks, initialText, interactionChoiceSetIDList, timeoutChunks);
+		ALUtil.performInteractionChoiceSet(initChunks, initialText, interactionChoiceSetIDList, timeoutChunks,
+				getArguments().getBoolean(BundleKeys.MANUAL_IO_ONLY));
 	}
 	
 	private void handleNext() throws IOException {
@@ -209,7 +211,7 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 		return userInfoApi;
 	}
 	
-	public void performOperationForCommand(Command cmd) {
+	public void performOperationForCommand(Command cmd, boolean isTriggerSrcMenu) {
 		if (cmd == null) {
 			return;
 		}
@@ -219,7 +221,7 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 		case DISCOVER:
 		case MY_EVENTS:
 		case SEARCH:
-			AppLinkService.getInstance().initiateESIProxyListener(cmd);
+			AppLinkService.getInstance().initiateESIProxyListener(cmd, isTriggerSrcMenu);
 			break;
 			
 		case NEXT:

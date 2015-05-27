@@ -57,7 +57,7 @@ public class MainAL extends ESIProxyALM {
 		return softBtns;
 	}
 	
-	public void performOperationForCommand(Command cmd) {
+	public void performOperationForCommand(Command cmd, boolean isTriggerSrcMenu) {
 		if (cmd == null) {
 			return;
 		}
@@ -66,7 +66,7 @@ public class MainAL extends ESIProxyALM {
 			case DISCOVER:
 			case MY_EVENTS:
 			case SEARCH:
-				AppLinkService.getInstance().initiateESIProxyListener(cmd);
+				AppLinkService.getInstance().initiateESIProxyListener(cmd, isTriggerSrcMenu);
 				break;
 			default:
 				Log.d(TAG, "Command : " + cmd + " is an invalid command.");

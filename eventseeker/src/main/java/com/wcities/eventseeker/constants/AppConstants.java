@@ -177,6 +177,10 @@ public class AppConstants {
 	public static final String FORD_APP_ID = "3260118906";
 	public static final int INTERACTION_TIME_OUT_AL = 5000;
 	public static final int INVALID_RES_ID = -1;
-	
+
+	public static final int FOREGROUND_SERVICE_NOTIFICATION_ID = 10000;
+	public static final String ACTION_APPLINK_SERVICE_START_FOREGROUND = "startServiceForeground";
+	public static final String ACTION_APPLINK_SERVICE_STOP_FOREGROUND = "stopServiceForeground";
+
 	/************************    ends for Ford    *******************************/
 }

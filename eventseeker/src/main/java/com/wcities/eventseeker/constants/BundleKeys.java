@@ -113,6 +113,12 @@ public class BundleKeys {
 	/**-------------------- starts for bosch ---------------------------**/
 	
 	public static final String CATEGORY = "category";
-	
+
 	/**-------------------- ends for bosch ---------------------------**/
+
+	/**-------------------- starts ford here ---------------------------**/
+
+	public static final java.lang.String MANUAL_IO_ONLY = "manualIOOnly";
+
+	/**-------------------- ends ford here ---------------------------**/
 }

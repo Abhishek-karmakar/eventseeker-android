@@ -1,5 +1,7 @@
 package com.wcities.eventseeker.applink.handler;
 
+import android.os.Bundle;
+
 import com.ford.syncV4.proxy.interfaces.IProxyListenerALM;
 import com.ford.syncV4.proxy.rpc.AddCommandResponse;
 import com.ford.syncV4.proxy.rpc.AddSubMenuResponse;
@@ -55,8 +57,18 @@ import com.wcities.eventseeker.applink.util.CommandsUtil.Command;
 
 public abstract class ESIProxyALM implements IProxyListenerALM {
 
+    private Bundle args;
+
     public abstract void onStartInstance();
-    public abstract void performOperationForCommand(Command cmd);
+    public abstract void performOperationForCommand(Command cmd, boolean isTriggerSrcMenu);
+
+    public Bundle getArguments() {
+        return args;
+    }
+
+    public void setArguments(Bundle args) {
+        this.args = args;
+    }
 
     @Override
     public void onOnButtonPress(OnButtonPress response) {}
