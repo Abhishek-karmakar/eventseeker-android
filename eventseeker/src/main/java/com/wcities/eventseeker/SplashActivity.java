@@ -23,7 +23,8 @@ public class SplashActivity extends Activity implements IGoogleAnalyticsTracker 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+		//Log.d(TAG, "bosch onCreate()");
+		//Toast.makeText(getApplicationContext(), "bosch onCreate() splash", Toast.LENGTH_SHORT).show();
 		try {
 			MySpinServerSDK.sharedInstance().registerApplication(getApplication());
 			

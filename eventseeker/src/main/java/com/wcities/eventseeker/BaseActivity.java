@@ -6,15 +6,12 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.ford.syncV4.proxy.SyncProxyALM;
 import com.ford.syncV4.transport.TransportType;
 import com.wcities.eventseeker.GeneralDialogFragment.DialogBtnClickListener;
@@ -39,12 +36,6 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
 
     private static final String TAG = BaseActivity.class.getSimpleName();
 
-    private static final int MIN_MILLIS_TO_CHK_BOSCH_CONNECTION = 500;
-
-    private long timeIntervalInMillisToCheckForBoschConnection = MIN_MILLIS_TO_CHK_BOSCH_CONNECTION;
-    private Runnable periodicCheckForBoschConnection;
-    private Handler handler;
-
     private boolean activityOnTop;
 
     private boolean onSaveInstanceStateCalled;
@@ -52,8 +43,10 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Log.d(TAG, "onCreate()");
+        //Log.d(TAG, "base onCreate() - " + getClass().getSimpleName() + ", taskId = " + getTaskId());
+        //Toast.makeText(getApplicationContext(), "base onCreate() - " + getClass().getSimpleName() + ", taskId = " + getTaskId(), Toast.LENGTH_SHORT).show();
 
+        BoschMainActivity.appTaskId = getTaskId();
         /**
          * Locale changes are Activity specific i.e. after the Activity gets destroyed, the Locale changes
          * associated with that activity will also get destroyed. So, if Activity was destroyed due to
@@ -61,14 +54,10 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
          * the Device specific Locale. So, each and every time when activity gets initialized it should
          * also initialize its Locale from SharedPref.
          */
-                ((EventSeekr) getApplication()).setDefaultLocale();
+        ((EventSeekr) getApplication()).setDefaultLocale();
 
         if (((EventSeekr) getApplication()).getWcitiesId() == null) {
             return;
-        }
-
-        if (EventSeekr.isConnectedWithBosch()) {
-            startBoschMainActivity();
         }
 
         if (AppConstants.FORD_SYNC_APP) {
@@ -81,38 +70,15 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
     protected void onStart() {
         super.onStart();
         //Log.d(TAG, "BaseActivity onStart()");
+        //Toast.makeText(getApplicationContext(), "BaseActivity onStart()", Toast.LENGTH_SHORT).show();
         EventSeekr.setConnectionFailureListener(this);
         DeviceUtil.registerLocationListener(this);
         if (((EventSeekr) getApplication()).getWcitiesId() == null) {
             return;
         }
 
-        /**
-         * Due to myspin bug sometimes it doesn't detect connected state instantly. To compensate for this
-         * we run a delayed task to recheck on connected state & refresh UI.
-         */
-        HandlerThread hThread = new HandlerThread("HandlerThread");
-        hThread.start();
-
-        handler = new Handler(hThread.getLooper());
-        timeIntervalInMillisToCheckForBoschConnection = MIN_MILLIS_TO_CHK_BOSCH_CONNECTION;
-        periodicCheckForBoschConnection = new Runnable() {
-
-            @Override
-            public void run() {
-                //Log.d(TAG, "Periodic chk, isConnected = " + MySpinServerSDK.sharedInstance().isConnected());
-                if (MySpinServerSDK.sharedInstance().isConnected()) {
-                    startBoschMainActivity();
-
-                } else {
-                    timeIntervalInMillisToCheckForBoschConnection = (timeIntervalInMillisToCheckForBoschConnection*2 > 10*60*1000) ?
-                            MIN_MILLIS_TO_CHK_BOSCH_CONNECTION : timeIntervalInMillisToCheckForBoschConnection*2;
-                    handler.postDelayed(this, timeIntervalInMillisToCheckForBoschConnection);
-                }
-            }
-        };
-
-        handler.postDelayed(periodicCheckForBoschConnection, timeIntervalInMillisToCheckForBoschConnection);
+        // when user comes back from bosch, onStart() is called where we need to reset language as per mobile/tablet app
+        ((EventSeekr) getApplication()).setDefaultLocale();
 
         //Log.d(TAG, "onStart() AppConstants.FORD_SYNC_APP: " + AppConstants.FORD_SYNC_APP);
         if (AppConstants.FORD_SYNC_APP) {
@@ -189,15 +155,6 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
         if (((EventSeekr) getApplication()).getWcitiesId() == null) {
             return;
         }
-
-        if (handler != null) {
-            /**
-             * handler is null when starting login or signup activity but after signing in/up when onStop()
-             * is called wcitiesId won't be null & hence execution will reach this statement even though
-             * wcitiesId was null when activity was initiated
-             */
-            handler.removeCallbacks(periodicCheckForBoschConnection);
-        }
     }
 
     @Override
@@ -218,7 +175,8 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //Log.d(TAG, "onDestroy()");
+        //Log.d(TAG, "BaseActivity onDestroy()");
+        //Toast.makeText(getApplicationContext(), "BaseActivity onDestroy()", Toast.LENGTH_SHORT).show();
         if (AppConstants.FORD_SYNC_APP) {
             //Log.v(TAG, "onDestroy main");
             endSyncProxyInstance();
@@ -232,12 +190,6 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
 
     public boolean isOnSaveInstanceStateCalled() {
         return onSaveInstanceStateCalled;
-    }
-
-    private void startBoschMainActivity() {
-        Intent intent = new Intent(getApplicationContext(), BoschMainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        startActivity(intent);
     }
 
     public void startSyncProxyService() {

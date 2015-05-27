@@ -1,7 +1,6 @@
 package com.wcities.eventseeker.bosch;
 
-import java.util.List;
-
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -32,7 +31,6 @@ import com.bosch.myspin.serversdk.IOnCarDataChangeListener;
 import com.bosch.myspin.serversdk.IPhoneCallStateListener;
 import com.bosch.myspin.serversdk.MySpinException;
 import com.bosch.myspin.serversdk.MySpinServerSDK;
-import com.wcities.eventseeker.MainActivity;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.app.EventSeekr.ProximityUnit;
@@ -52,9 +50,11 @@ import com.wcities.eventseeker.interfaces.VenueListener;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.viewdata.SharedElement;
 
+import java.util.List;
+
 public class BoschMainActivity extends ActionBarActivity implements ReplaceFragmentListener, 
 		EventListener, ArtistListener, VenueListener, FragmentLoadedFromBackstackListener, 
-		BoschDrawerListFragmentListener, ConnectionFailureListener  {
+		BoschDrawerListFragmentListener, ConnectionFailureListener, MySpinServerSDK.ConnectionStateListener {
 
 	private static final String TAG = BoschMainActivity.class.getName();
 
@@ -62,6 +62,8 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	protected static final int INDEX_NAV_ITEM_CHANGE_CITY = 1;
 	protected static final int INDEX_NAV_ITEM_SEARCH = 2;
 	protected static final int INDEX_NAV_ITEM_FAVORITES = 3;
+
+	public static int appTaskId;
 
 	private LinearLayout lnrLayoutRootNavDrawer;
 	private DrawerLayout mDrawerLayout;
@@ -83,7 +85,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		
 		@Override
 		public void onPhoneCallStateChanged(int arg0) {
-			//Toast.makeText(BoschMainActivity.this, "onPhoneCallStateChanged() - arg0 = " + arg0, Toast.LENGTH_LONG).show();
+			//Toast.makeText(BoschMainActivity.this, "onPhoneCallStateChanged() - arg0 = " + arg0, Toast.LENGTH_SHORT).show();
 			//Log.d(TAG, "onPhoneCallStateChanged() - arg0 = " + arg0);
 			if (arg0 == IPhoneCallStateListener.PHONECALLSTATE_REJECTED || 
 					arg0 == IPhoneCallStateListener.PHONECALLSTATE_ENDED) {
@@ -104,6 +106,17 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		}
 	};
 
+	@Override
+	public void onConnectionStateChanged(boolean isConnected) {
+		//Log.d(TAG, "onConnectionStateChanged() isConnected = " + isConnected);
+		//Toast.makeText(getApplicationContext(), "onConnectionStateChanged() isConnected = " + isConnected, Toast.LENGTH_SHORT).show();
+		if (!isConnected) {
+			ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+			activityManager.moveTaskToFront(appTaskId, 0);
+			isBoschActivityDestroying = true;
+		}
+	}
+
 	public interface OnCarStationaryStatusChangedListener {
 		public void onCarStationaryStatusChanged(boolean isStationary);
 	}
@@ -119,7 +132,8 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//Log.d(TAG, "onCreate()");
+		//Log.d(TAG, "onCreate() BoschActivity, taskId = " + getTaskId());
+		//Toast.makeText(getApplicationContext(), "onCreate() BoschActivity, taskId = " + getTaskId(), Toast.LENGTH_SHORT).show();
 		setContentView(R.layout.activity_bosch_main);
 		
 		/**
@@ -204,7 +218,8 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	@Override
 	protected void onResume() {
 		super.onResume();
-		//Log.d(TAG, "onResume()");
+		//Log.d(TAG, "onResume() BoschActivity");
+		//Toast.makeText(getApplicationContext(), "onResume() BoschActivity", Toast.LENGTH_SHORT).show();
 		try {
 			/**
 			 * This will set Locale to English just for Bosch System. This is done as if in Mobile app the Locale 
@@ -260,12 +275,16 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	@Override
 	protected void onStart() {
 		super.onStart();
-		//Log.d(TAG, "onStart()");
-		if (/*MySpinServerSDK.sharedInstance().isConnected()*/!EventSeekr.isConnectedWithBosch()) {
-			Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-			startActivity(intent);
-			isBoschActivityDestroying = true;
+		//Log.d(TAG, "onStart() BoschActivity");
+		//Toast.makeText(getApplicationContext(), "onStart() BoschActivity", Toast.LENGTH_SHORT).show();
+
+		// When this activity gets started register for mySPIN connection events in
+		// order to adapt views for the according connection state.
+		try {
+			MySpinServerSDK.sharedInstance().registerConnectionStateListener(this);
+
+		} catch (MySpinException e) {
+			e.printStackTrace();
 		}
 
 		registerReceiver(keyboardVisibilityStatusBR, new IntentFilter(MySpinServerSDK.EVENT_KEYBOARD_VISIBILITY_CHANGED));
@@ -277,7 +296,15 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	@Override
 	protected void onStop() {
 		super.onStop();
-		//Log.d(TAG, "onStop()");
+		//Log.d(TAG, "onStop() BoschActivity");
+		//Toast.makeText(getApplicationContext(), "onStop() BoschActivity", Toast.LENGTH_SHORT).show();
+		// When this activity gets stopped unregister for mySPIN connection events.
+		try {
+			MySpinServerSDK.sharedInstance().unregisterConnectionStateListener(this);
+
+		} catch (MySpinException e) {
+			e.printStackTrace();
+		}
 		//MySpinServerSDK.sharedInstance().unregisterBlockStatusListener();
 		unregisterReceiver(keyboardVisibilityStatusBR);
 		DeviceUtil.unregisterLocationListener((EventSeekr) getApplication());
@@ -286,7 +313,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			((EventSeekr) getApplication()).resetDefaultLocale();
 		}
 	}
-	
+
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
@@ -295,7 +322,8 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	
 	@Override
 	protected void onDestroy() {
-		//Log.d(TAG, "onDestroy()");
+		//Log.d(TAG, "onDestroy() BoschActivity");
+		//Toast.makeText(getApplicationContext(), "onDestroy() BoschActivity", Toast.LENGTH_SHORT).show();
 		EventSeekr.resetConnectionFailureListener(this);
 		MySpinServerSDK.sharedInstance().unregisterForPhoneCallStateEvents();
 		try {
@@ -411,9 +439,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	
 	/**
 	 * for updating the action bar title from within the Fragment(Just used in Bosch related fragments)
-	 * @param title
 	 */
-
 	public void replaceContentFrameByFragment(Fragment replaceBy, boolean addToBackStack) {
 		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 		
@@ -611,6 +637,8 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	
 	private void selfStart() {
 		if (MySpinServerSDK.sharedInstance().isConnected()) {
+			//Log.d(TAG, "selfStart() BoschActivity");
+			//Toast.makeText(getApplicationContext(), "selfStart() BoschActivity", Toast.LENGTH_SHORT).show();
 			Intent intent = new Intent(getApplicationContext(), BoschMainActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 			startActivity(intent);

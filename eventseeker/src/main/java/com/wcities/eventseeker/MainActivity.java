@@ -30,6 +30,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.Toast;
 
 import com.wcities.eventseeker.ChangeLocationFragment.ChangeLocationFragmentListener;
 import com.wcities.eventseeker.ConnectAccountsFragment.ConnectAccountsFragmentListener;
@@ -377,6 +378,8 @@ public class MainActivity extends BaseActivity implements
 	@Override
 	protected void onNewIntent(Intent intent) {
 		//Log.d(TAG, "onNewIntent()");
+		//Log.d(TAG, "main onNewIntent()" + ", taskId = " + getTaskId());
+		//Toast.makeText(getApplicationContext(), "main onNewIntent()" + ", taskId = " + getTaskId(), Toast.LENGTH_SHORT).show();
 		super.onNewIntent(intent);
 		if (intent.hasExtra(BundleKeys.IS_FROM_NOTIFICATION)) {
 			/**
