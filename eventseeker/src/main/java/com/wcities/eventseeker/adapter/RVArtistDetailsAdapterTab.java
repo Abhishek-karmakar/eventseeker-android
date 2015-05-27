@@ -782,27 +782,27 @@ public class RVArtistDetailsAdapterTab extends RVAdapterBase<RVArtistDetailsAdap
 	private void onImgSaveClick(final ViewHolder holder, final Event event) {
 		holder.imgSave.setPressed(true);
 		handler.postDelayed(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				holder.imgSave.setPressed(false);
-				
+
 				EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(artistDetailsFragmentTab).getApplication();
 				if (event.getAttending() == Attending.SAVED) {
 					event.setAttending(Attending.NOT_GOING);
-					new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.event, event.getId(), 
+					new UserTracker(Api.OAUTH_TOKEN, eventSeekr, UserTrackingItemType.event, event.getId(),
 							event.getAttending().getValue(), UserTrackingType.Add).execute();
-	    			updateImgSaveSrc(holder, event, FragmentUtil.getResources(artistDetailsFragmentTab));
-					
+					updateImgSaveSrc(holder, event, FragmentUtil.getResources(artistDetailsFragmentTab));
+
 				} else {
 					artistDetailsFragmentTab.setEvent(event);
 					eventPendingPublish = event;
 					holderPendingPublish = holder;
-					
+
 					if (eventSeekr.getGPlusUserId() != null) {
 						event.setNewAttending(Attending.SAVED);
 						artistDetailsFragmentTab.handlePublishEvent();
-						
+
 					} else {
 						event.setNewAttending(Attending.SAVED);
 						//NOTE: THIS CAN BE TESTED WITH PODUCTION BUILD ONLY
@@ -817,18 +817,18 @@ public class RVArtistDetailsAdapterTab extends RVAdapterBase<RVArtistDetailsAdap
 	private void onImgShareClick(final ViewHolder holder, final Event event) {
 		holder.imgShare.setPressed(true);
 		handler.postDelayed(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				holder.imgShare.setPressed(false);
-				
-				ShareViaDialogFragment shareViaDialogFragment = ShareViaDialogFragment.newInstance(event, 
+
+				ShareViaDialogFragment shareViaDialogFragment = ShareViaDialogFragment.newInstance(event,
 						ScreenNames.ARTIST_DETAILS);
 				/**
 				 * Passing activity fragment manager, since using this fragment's child fragment manager 
 				 * doesn't retain dialog on orientation change
 				 */
-				shareViaDialogFragment.show(((BaseActivityTab)FragmentUtil.getActivity(artistDetailsFragmentTab))
+				shareViaDialogFragment.show(((BaseActivityTab) FragmentUtil.getActivity(artistDetailsFragmentTab))
 						.getSupportFragmentManager(), FragmentUtil.getTag(ShareViaDialogFragment.class));
 			}
 		}, 200);
@@ -887,13 +887,13 @@ public class RVArtistDetailsAdapterTab extends RVAdapterBase<RVArtistDetailsAdap
 		holder.txtDesc.setText(Html.fromHtml(artist.getDescription()));
 		holder.imgDown.setVisibility(View.VISIBLE);
 		holder.imgDown.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				//Log.d(TAG, "totalScrolled  = " + holder.itemView.getTop());
 				if (isArtistDescExpanded) {
 					collapseArtistDesc(holder);
-					
+
 					/**
 					 * update scrolled distance after collapse, because sometimes it can happen that view becamse scrollable only
 					 * due to expanded description after which if user collapses it, then based on recyclerview
@@ -901,13 +901,13 @@ public class RVArtistDetailsAdapterTab extends RVAdapterBase<RVArtistDetailsAdap
 					 * Accordingly we need to reset scrolled amount, artist img & title
 					 */
 					artistDetailsFragmentTab.getHandler().post(new Runnable() {
-						
+
 						@Override
 						public void run() {
 							artistDetailsFragmentTab.onScrolled(0, true);
 						}
 					});
-					
+
 				} else {
 					expandArtistDesc(holder);
 				}
@@ -964,7 +964,9 @@ public class RVArtistDetailsAdapterTab extends RVAdapterBase<RVArtistDetailsAdap
 	}
 	
 	public void detachFragments() {
-		videoPagerAdapter.detachFragments();
+		if (videoPagerAdapter != null) {
+			videoPagerAdapter.detachFragments();
+		}
 	}
 
 	@Override
