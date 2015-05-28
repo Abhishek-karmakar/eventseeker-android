@@ -1,11 +1,5 @@
 package com.wcities.eventseeker.constants;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-
 import android.content.Context;
 import android.support.v4.app.Fragment;
 
@@ -13,6 +7,12 @@ import com.ford.syncV4.proxy.rpc.enums.Language;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
 
 public class Enums {
 
@@ -31,11 +31,10 @@ public class Enums {
     	Lastfm(6, R.string.service_last_fm, R.drawable.ic_lastfm, 
     			R.drawable.ic_lastfm_pressed, true, "lastfm", 5),
     	Pandora(7, R.string.service_pandora, R.drawable.ic_pandora, 
-    			R.drawable.ic_pandora_pressed, true, "pandora", 6),
+    			R.drawable.ic_pandora_pressed, true, "pandora", 6);
     	/*Beats(8, R.string.service_beats, R.drawable.ic_beats, 
     			R.drawable.ic_beats_pressed, true, "beatsmusic", 8),*/
-    	Button(9, R.string.service_button, R.drawable.placeholder, 0, false, null, AppConstants.INVALID_ID);
-    	
+
     	private int intId;
     	private int strResId;
     	private int normalDrwResId;

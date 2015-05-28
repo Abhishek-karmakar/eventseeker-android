@@ -299,21 +299,7 @@ public class ConnectAccountsFragment extends ListFragmentLoadableFromBackStack i
 			
 			final ServiceAccount serviceAccount = getItem(position);
 			
-			if (serviceAccount.name.equals(Service.Button.getStr(ConnectAccountsFragment.this))) {
-				
-				// it's for Continue button
-				convertView = mInflater.inflate(R.layout.connect_accounts_continue, null);
-				Button btnContinue = (Button) convertView.findViewById(R.id.btnContinue);
-				if (((EventSeekr)FragmentUtil.getActivity(ConnectAccountsFragment.this).getApplication())
-						.isAnyAccountSynced()) {
-					btnContinue.setText(TXT_BTN_CONTINUE);
-					
-				} else {
-					btnContinue.setText(TXT_BTN_SKIP);
-				}
-				btnContinue.setOnClickListener(onBtnContinueClickListener);
-				
-			} else if(serviceAccount.name.equals(Service.Title.getStr(ConnectAccountsFragment.this))) {
+			if(serviceAccount.name.equals(Service.Title.getStr(ConnectAccountsFragment.this))) {
 				/*convertView = mInflater.inflate(R.layout.connect_accounts_txt_list_item, null);*/
 				convertView = mInflater.inflate(R.layout.connect_accounts_list_item_top, null);
 				convertView.setTag("");
