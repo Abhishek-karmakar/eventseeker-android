@@ -91,6 +91,7 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
     protected void onResume() {
         super.onResume();
         //Log.d(TAG, "BaseActivity onResume()");
+        //Toast.makeText(getApplicationContext(), "BaseActivity onResume()", Toast.LENGTH_SHORT).show();
         if (((EventSeekr) getApplication()).getWcitiesId() == null) {
             return;
         }

@@ -30,7 +30,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.Toast;
 
 import com.wcities.eventseeker.ChangeLocationFragment.ChangeLocationFragmentListener;
 import com.wcities.eventseeker.ConnectAccountsFragment.ConnectAccountsFragmentListener;
@@ -1833,14 +1832,6 @@ public class MainActivity extends BaseActivity implements
 	
 	@Override
 	public void onBackPressed() throws IllegalStateException {
-		/**
-		 * this added as after the Syncing screen when the onbackpressed occurs, on Connect account screen back arrow
-		 * is retained in tablet landscape mode. So, to resolve the issue below statements are added.
-		 */
-		if (isTabletAndInLandscapeMode && currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_LOGIN_SYNCING)) {
-			getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
-		} 
-		
 		if (currentContentFragmentTag.equals(AppConstants.FRAGMENT_TAG_CHANGE_LOCATION)) {
 			onLocationChanged(getSupportFragmentManager()
 				.findFragmentByTag(currentContentFragmentTag).getArguments());
@@ -1854,30 +1845,25 @@ public class MainActivity extends BaseActivity implements
 				 * This try catch will handle IllegalStateException which may occur if onBackPressed() on Super
 				 * has been called after the onSaveInstanceState().
 				 */
-				if (!isTabletAndInLandscapeMode) {
-					Fragment currentFrag = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
-					if (currentFrag instanceof CustomSharedElementTransitionDestination && 
-							currentFrag.getArguments() != null && currentFrag.getArguments().containsKey(
-									BundleKeys.SHARED_ELEMENTS)) {
-						//Log.d(TAG, "CustomSharedElementTransitionDestination, exitAnimCalled = " + exitAnimCalled);
-						if (exitAnimCalled) {
-				    		exitAnimCalled = false;
-				    		super.onBackPressed();
-				    		
-				    	} else {
-				    		exitAnimCalled = true;
-				    		((CustomSharedElementTransitionDestination)currentFrag).exitAnimation();
-				    	}
-						
-					} else {
-						//Log.d(TAG, "!CustomSharedElementTransitionDestination");
+				Fragment currentFrag = getSupportFragmentManager().findFragmentByTag(currentContentFragmentTag);
+				if (currentFrag instanceof CustomSharedElementTransitionDestination &&
+						currentFrag.getArguments() != null && currentFrag.getArguments().containsKey(
+								BundleKeys.SHARED_ELEMENTS)) {
+					//Log.d(TAG, "CustomSharedElementTransitionDestination, exitAnimCalled = " + exitAnimCalled);
+					if (exitAnimCalled) {
+						exitAnimCalled = false;
 						super.onBackPressed();
+
+					} else {
+						exitAnimCalled = true;
+						((CustomSharedElementTransitionDestination)currentFrag).exitAnimation();
 					}
-					
+
 				} else {
+					//Log.d(TAG, "!CustomSharedElementTransitionDestination");
 					super.onBackPressed();
 				}
-
+					
                 if (isCalledFromTwitterSection) {
                     /**
                      * Reset isCalledFromTwitterSection flag to prevent throwing IllegalStateException from below catch block for further

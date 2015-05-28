@@ -1038,6 +1038,7 @@ public class EventSeekr extends Application {
 	 */
 	public void resetDefaultLocale() {
 		defaultLocale = null;
+		setDefaultLocale();
 	}
 
 	public void onActivityDestroyed() {

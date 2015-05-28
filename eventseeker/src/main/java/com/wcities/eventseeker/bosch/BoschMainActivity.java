@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -56,12 +57,14 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		EventListener, ArtistListener, VenueListener, FragmentLoadedFromBackstackListener, 
 		BoschDrawerListFragmentListener, ConnectionFailureListener, MySpinServerSDK.ConnectionStateListener {
 
-	private static final String TAG = BoschMainActivity.class.getName();
+	private static final String TAG = BoschMainActivity.class.getSimpleName();
 
 	protected static final int INDEX_NAV_ITEM_HOME = 0;
 	protected static final int INDEX_NAV_ITEM_CHANGE_CITY = 1;
 	protected static final int INDEX_NAV_ITEM_SEARCH = 2;
 	protected static final int INDEX_NAV_ITEM_FAVORITES = 3;
+
+	private static final int MILLIS_TO_CHK_BOSCH_STOPPED = 200;
 
 	public static int appTaskId;
 
@@ -75,11 +78,11 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	private TextView txtActionBarTitle;
 	private FrameLayout frmLayoutContentFrame;
 	private AlertDialog dialog;
-	
-	/**
-	 * This will keep track if the BoschMainActivity is being destroyed.
-	 **/
-	private boolean isBoschActivityDestroying;
+
+	private Runnable periodicCheckForBoschConnection;
+	private android.os.Handler handler;
+
+	private boolean onStopCalled;
 	
 	private IPhoneCallStateListener iPhoneCallStateListener = new IPhoneCallStateListener() {
 		
@@ -106,17 +109,6 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		}
 	};
 
-	@Override
-	public void onConnectionStateChanged(boolean isConnected) {
-		//Log.d(TAG, "onConnectionStateChanged() isConnected = " + isConnected);
-		//Toast.makeText(getApplicationContext(), "onConnectionStateChanged() isConnected = " + isConnected, Toast.LENGTH_SHORT).show();
-		if (!isConnected) {
-			ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-			activityManager.moveTaskToFront(appTaskId, 0);
-			isBoschActivityDestroying = true;
-		}
-	}
-
 	public interface OnCarStationaryStatusChangedListener {
 		public void onCarStationaryStatusChanged(boolean isStationary);
 	}
@@ -134,8 +126,11 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		super.onCreate(savedInstanceState);
 		//Log.d(TAG, "onCreate() BoschActivity, taskId = " + getTaskId());
 		//Toast.makeText(getApplicationContext(), "onCreate() BoschActivity, taskId = " + getTaskId(), Toast.LENGTH_SHORT).show();
+
 		setContentView(R.layout.activity_bosch_main);
-		
+
+		handler = new android.os.Handler(Looper.getMainLooper());
+
 		/**
 		 * Note: the below try catch is added to avoid crash, When User is connected to Bosch then 
 		 * sometime app crashes with following Exception:
@@ -219,17 +214,15 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	protected void onResume() {
 		super.onResume();
 		//Log.d(TAG, "onResume() BoschActivity");
-		//Toast.makeText(getApplicationContext(), "onResume() BoschActivity", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(getApplicationContext(), "onResume() BoschActivity connected = " + MySpinServerSDK.sharedInstance().isConnected(), Toast.LENGTH_SHORT).show();
 		try {
 			/**
 			 * This will set Locale to English just for Bosch System. This is done as if in Mobile app the Locale 
 			 * set to be different then some string which are common for Mobile app and Bosch app will appear in 
 			 * Language as per the default Locale set in Mobile app which shouldn't be happened.
 			 */
-			if (!isBoschActivityDestroying) {
-				((EventSeekr) getApplication()).updateLocaleForBosch();
-			}
-			
+			((EventSeekr) getApplication()).updateLocaleForBosch();
+
 			MySpinServerSDK.sharedInstance().registerCarDataChangedListener(new IOnCarDataChangeListener() {
 				
 				@Override
@@ -270,6 +263,19 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		} catch (MySpinException e) {
 			e.printStackTrace();
 		}
+
+		/**
+		 * When user is connected to bosch if device gets some other app started (for example get a call
+		 * covering entire screen), then bosch gets disconnected. Now, after that third party app finishes,
+		 * mobile/tablet app starts, but if we press back on first screen of mobile/tablet app then
+		 * it starts displaying this bosch activity task on mobile/tablet.
+		 * To prevent this, we just move this task to back in such case when even though onResume()
+		 * is called, it's not connected to bosch.
+		 */
+		/*if (!MySpinServerSDK.sharedInstance().isConnected()) {
+			Toast.makeText(getApplicationContext(), "not connected", Toast.LENGTH_SHORT).show();
+			moveTaskToBack(true);
+		}*/
 	}
 	
 	@Override
@@ -278,6 +284,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		//Log.d(TAG, "onStart() BoschActivity");
 		//Toast.makeText(getApplicationContext(), "onStart() BoschActivity", Toast.LENGTH_SHORT).show();
 
+		onStopCalled = false;
 		// When this activity gets started register for mySPIN connection events in
 		// order to adapt views for the according connection state.
 		try {
@@ -298,6 +305,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		super.onStop();
 		//Log.d(TAG, "onStop() BoschActivity");
 		//Toast.makeText(getApplicationContext(), "onStop() BoschActivity", Toast.LENGTH_SHORT).show();
+		onStopCalled = true;
 		// When this activity gets stopped unregister for mySPIN connection events.
 		try {
 			MySpinServerSDK.sharedInstance().unregisterConnectionStateListener(this);
@@ -309,9 +317,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		unregisterReceiver(keyboardVisibilityStatusBR);
 		DeviceUtil.unregisterLocationListener((EventSeekr) getApplication());
 		EventSeekr.resetConnectionFailureListener(this);
-		if (!isBoschActivityDestroying) {
-			((EventSeekr) getApplication()).resetDefaultLocale();
-		}
+		((EventSeekr) getApplication()).resetDefaultLocale();
 	}
 
 	@Override
@@ -325,7 +331,17 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		//Log.d(TAG, "onDestroy() BoschActivity");
 		//Toast.makeText(getApplicationContext(), "onDestroy() BoschActivity", Toast.LENGTH_SHORT).show();
 		EventSeekr.resetConnectionFailureListener(this);
-		MySpinServerSDK.sharedInstance().unregisterForPhoneCallStateEvents();
+		/**
+		 * sometime app crashes with following Exception:
+		 * Caused by: java.lang.NullPointerException
+		 * at com.bosch.myspin.serversdk.MySpinServerSDK.unregisterForPhoneCallStateEvents(SourceFile:634)
+		 */
+		try {
+			MySpinServerSDK.sharedInstance().unregisterForPhoneCallStateEvents();
+
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
 		try {
 			// calling 'super.onDestroy()' in try catch as some times it gives no view found error while destroying
 			// and then the app gets crashed. So, the try catch catches the exception and helps to continue the 
@@ -335,6 +351,41 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		} catch (Exception e) {
 			Log.e(TAG, "Error Destroying Activity : " + e.toString());
 		}
+	}
+
+	@Override
+	public void onConnectionStateChanged(boolean isConnected) {
+		//Log.d(TAG, "onConnectionStateChanged() isConnected = " + isConnected + ", appTaskId = " + appTaskId);
+		//Toast.makeText(getApplicationContext(), "onConnectionStateChanged() isConnected = " + isConnected + ", appTaskId = " + appTaskId, Toast.LENGTH_SHORT).show();
+		if (!isConnected) {
+			handleNotConnected();
+		}
+	}
+
+	private void handleNotConnected() {
+		bringTaskToFront(appTaskId);
+
+		/**
+		 * for some slow devices like galaxy 10" tab, moveTaskToFront() doesn't work resulting
+		 * in bosch screen being displayed on android device, hence following periodic check is added
+		 */
+		periodicCheckForBoschConnection = new Runnable() {
+
+			@Override
+			public void run() {
+				//Toast.makeText(getApplicationContext(), "handler onStopCalled = " + onStopCalled, Toast.LENGTH_SHORT).show();
+				if (!onStopCalled) {
+					bringTaskToFront(appTaskId);
+					handler.postDelayed(this, MILLIS_TO_CHK_BOSCH_STOPPED);
+				}
+			}
+		};
+		handler.postDelayed(periodicCheckForBoschConnection, MILLIS_TO_CHK_BOSCH_STOPPED);
+	}
+
+	private void bringTaskToFront(int taskId) {
+		ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+		activityManager.moveTaskToFront(taskId, 0);
 	}
 	
 	private void updateColors() {
@@ -482,7 +533,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
         // Handle your other action bar items...
-		// Log.d(TAG, "onOptionsItemSelected");
+		//Log.d(TAG, "onOptionsItemSelected");
 		//Toast.makeText(this, "onOptionsItemSelected()", Toast.LENGTH_SHORT).show();
 		switch (item.getItemId()) {
 
