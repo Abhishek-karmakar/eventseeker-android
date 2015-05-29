@@ -37,7 +37,7 @@
 		    	    android:textSize="@dimen/txt_evt_title_txt_size_event_details"
 		    	    android:gravity="center_vertical"
 		    	    android:singleLine="true"
-		    	    android:ellipsize="marquee" />
+		    	    android:ellipsize="marquee"/>
 		    	
 		    </RelativeLayout>
 		    
@@ -236,12 +236,18 @@
 		        </RelativeLayout>
 		        
 		        <include layout="@layout/include_friends"
+					android:id="@+id/rltLytFriends"
 		            android:layout_width="match_parent"
 		            android:layout_height="wrap_content"
 		            android:layout_below="@id/rltLytVenue" />
+
+				<View android:id="@+id/vEmptySpace"
+					android:layout_width="match_parent"
+					android:layout_height="@dimen/v_empty_space_ht_event_details"
+					android:layout_below="@id/rltLytFriends" />
 		        
 		    </RelativeLayout>
-	    	
+
 	    </RelativeLayout>
 	    
 	</com.wcities.eventseeker.custom.view.ObservableScrollView>

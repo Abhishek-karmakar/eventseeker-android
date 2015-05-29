@@ -841,6 +841,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		
 		private static final int EXTRA_TOP_DUMMY_ITEM_COUNT = 2;
 		private static final int EXTRA_TOP_DUMMY_ITEM_COUNT_AFTER_DETAILS_LOADED = 5;
+		private static final int BTM_EMPTY_SPACE_ROW = 1;
 		private static final int MAX_LINES_ARTIST_DESC = 5;
 		private static final int INVALID = -1;
 		
@@ -867,7 +868,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		private int rltLytContentInitialMarginL, lnrSliderContentW, imgEventW, rltLytContentW = INVALID;
 		
 		private static enum ViewType {
-			IMG, DESC, VIDEOS, FRIENDS, UPCOMING_EVENTS_TITLE, PROGRESS, EVENT;
+			IMG, DESC, VIDEOS, FRIENDS, UPCOMING_EVENTS_TITLE, PROGRESS, EVENT, EMPTY_SPACE;
 			
 			private static ViewType getViewType(int type) {
 				ViewType[] viewTypes = ViewType.values();
@@ -962,6 +963,9 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			} else if (position == ViewType.UPCOMING_EVENTS_TITLE.ordinal()) {
 				return ViewType.UPCOMING_EVENTS_TITLE.ordinal();
 				
+			} else if (position == eventList.size() + EXTRA_TOP_DUMMY_ITEM_COUNT_AFTER_DETAILS_LOADED) {
+				return ViewType.EMPTY_SPACE.ordinal();
+
 			} else if (eventList.get(position - EXTRA_TOP_DUMMY_ITEM_COUNT_AFTER_DETAILS_LOADED) == null) {
 				return ViewType.PROGRESS.ordinal();
 				
@@ -973,7 +977,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 		@Override
 		public int getItemCount() {
 			return artistDetailsFragment.allDetailsLoaded ? (EXTRA_TOP_DUMMY_ITEM_COUNT_AFTER_DETAILS_LOADED + 
-					eventList.size()) : EXTRA_TOP_DUMMY_ITEM_COUNT;
+					eventList.size() + BTM_EMPTY_SPACE_ROW) : EXTRA_TOP_DUMMY_ITEM_COUNT;
 		}
 
 		@Override
@@ -1024,6 +1028,9 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 					setViewGone(holder);
 				}
 				
+			} else if (position == eventList.size() + EXTRA_TOP_DUMMY_ITEM_COUNT_AFTER_DETAILS_LOADED) {
+				holder.rltLytRoot.removeAllViews();
+
 			} else {
 				final Event event = eventList.get(position - EXTRA_TOP_DUMMY_ITEM_COUNT_AFTER_DETAILS_LOADED);
 				if (event == null) {
@@ -1343,6 +1350,10 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 				break;
 				
 			case EVENT:
+				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_discover, parent, false);
+				break;
+
+			case EMPTY_SPACE:
 				v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_discover, parent, false);
 				break;
 				

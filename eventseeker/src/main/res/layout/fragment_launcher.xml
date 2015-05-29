@@ -26,16 +26,12 @@
         android:layout_height="match_parent"
         android:background="@android:color/transparent" >
 
-        <TextView
-            android:id="@+id/txtAppName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView android:id="@+id/imgTxtEventseeker"
+            android:layout_width="@dimen/img_txt_eventseeker_w_activity_splash"
+            android:layout_height="@dimen/img_txt_eventseeker_ht_activity_splash"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/txt_app_name_margin_t_activity_splash"
-            android:text="@string/eventseeker"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/txt_app_name_txt_size_activity_splash"
-            android:textStyle="bold" />
+            android:layout_marginTop="@dimen/img_txt_eventseeker_margin_t_activity_splash"
+            android:src="@drawable/txt_eventseeker"/>
 
         <LinearLayout
             android:id="@+id/lnrBtn"

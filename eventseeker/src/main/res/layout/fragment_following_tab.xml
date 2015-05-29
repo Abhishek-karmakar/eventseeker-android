@@ -7,7 +7,6 @@
 
     <include
         android:id="@+id/lnrFollowMoreArtist"
-        android:layout_alignParentTop="true"
         layout="@layout/include_following_tabs" />
 
     <View

@@ -645,6 +645,7 @@
     <dimen name="fab_margin_l_r_event_details">60dp</dimen>
     <dimen name="fab_navigate_margin_t_event_details">20dp</dimen>
     <dimen name="v_fab_separator_w_event_details">@dimen/fab_margin_l_r_event_details</dimen>
+    <dimen name="v_empty_space_ht_event_details">80dp</dimen>
     <!-- featuring_artist.xml -->
     <dimen name="rlt_lyt_root_w_featuring_artist">200dp</dimen>
     <dimen name="txt_artist_name_txt_size_featuring_artist">20sp</dimen>
@@ -734,8 +735,9 @@
     <dimen name="img_margin_t_navigation">30dp</dimen>
     <dimen name="txt_margin_t_navigation">10dp</dimen>
     <!-- activity_splash.xml -->
-    <dimen name="txt_app_name_margin_t_activity_splash">30dp</dimen>
-    <dimen name="txt_app_name_txt_size_activity_splash">40sp</dimen>
+    <dimen name="img_txt_eventseeker_margin_t_activity_splash">80dp</dimen>
+    <dimen name="img_txt_eventseeker_w_activity_splash">250dp</dimen>
+    <dimen name="img_txt_eventseeker_ht_activity_splash">32dp</dimen>
     <!-- activity_beats_music.xml -->
     <dimen name="abc_action_bar_title_text_size">15sp</dimen>
     <!-- friends_activity_item_tab.xml -->

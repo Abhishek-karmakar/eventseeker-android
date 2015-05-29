@@ -3,5 +3,6 @@
     android:id="@+id/toolbarForActionbar"
     android:layout_width="match_parent"
     android:layout_height="@dimen/action_bar_ht"
-    android:elevation="@dimen/action_bar_elevation" />
+    android:elevation="@dimen/action_bar_elevation"/>
+    <!--android:background="@drawable/bg_translucent_toolbar"/>-->
 <!-- style="@style/ThemeOverlay.EventSeeker.Dark.ActionBar" -->
