@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <include
         android:id="@+id/lnrFollowMoreArtist"
@@ -20,22 +20,24 @@
         android:layout_below="@+id/lnrFollowMoreArtist"
         android:layout_marginTop="@dimen/grdv_following_margin_t_fragment_following_tab"
         android:background="@android:color/white"
-        android:fillViewport="true" >
+        android:fillViewport="true"
+        android:padding="@dimen/lnr_root_padding_fragment_follow_more_artists">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/lnr_root_padding_fragment_follow_more_artists">
 
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" >
+                    android:layout_weight="1">
 
                     <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgRock"
@@ -49,10 +51,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:text="@string/btn_rock"
-                        android:gravity="center"/>
+                        android:gravity="center"
+                        android:text="@string/btn_rock" />
 
                 </RelativeLayout>
+
+                <View
+                    android:layout_width="@dimen/lnr_root_padding_fragment_follow_more_artists"
+                    android:layout_height="match_parent" />
 
                 <!-- height is kept match_parent instead of wrap_content, because otherwise on tablets first image
                 in each row gets placed slightly above compared to other 2 images resulting in white space between
@@ -60,7 +66,7 @@
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1" >
+                    android:layout_weight="1">
 
                     <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgHipHop"
@@ -74,18 +80,27 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:text="@string/btn_hip_hop"
-                        android:gravity="center"/>
+                        android:gravity="center"
+                        android:text="@string/btn_hip_hop" />
 
                 </RelativeLayout>
 
                 <!-- height is kept match_parent instead of wrap_content, because otherwise on tablets first image
                 in each row gets placed slightly above compared to other 2 images resulting in white space between
                 images of 1st column -->
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/lnr_root_padding_fragment_follow_more_artists">
+
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1" >
+                    android:layout_weight="1">
 
                     <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgPop"
@@ -99,22 +114,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:text="@string/btn_pop"
-                        android:gravity="center"/>
+                        android:gravity="center"
+                        android:text="@string/btn_pop" />
 
                 </RelativeLayout>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                <View
+                    android:layout_width="@dimen/lnr_root_padding_fragment_follow_more_artists"
+                    android:layout_height="match_parent" />
 
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" >
+                    android:layout_weight="1">
 
                     <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgFolk"
@@ -128,15 +140,23 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:text="@string/btn_folk"
-                        android:gravity="center"/>
+                        android:gravity="center"
+                        android:text="@string/btn_folk" />
 
                 </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/lnr_root_padding_fragment_follow_more_artists">
 
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1" >
+                    android:layout_weight="1">
 
                     <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgCountry"
@@ -150,15 +170,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:text="@string/btn_country"
-                        android:gravity="center"/>
+                        android:gravity="center"
+                        android:text="@string/btn_country" />
 
                 </RelativeLayout>
+
+                <View
+                    android:layout_width="@dimen/lnr_root_padding_fragment_follow_more_artists"
+                    android:layout_height="match_parent" />
 
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1" >
+                    android:layout_weight="1">
 
                     <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgElectronic"
@@ -172,8 +196,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:text="@string/btn_electronic"
-                        android:gravity="center"/>
+                        android:gravity="center"
+                        android:text="@string/btn_electronic" />
 
                 </RelativeLayout>
 
@@ -182,12 +206,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/lnr_root_padding_fragment_follow_more_artists">
 
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" >
+                    android:layout_weight="1">
 
                     <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgSoulRAndB"
@@ -201,15 +226,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:text="@string/btn_soul_r_and_b"
-                        android:gravity="center"/>
+                        android:gravity="center"
+                        android:text="@string/btn_soul_r_and_b" />
 
                 </RelativeLayout>
+
+                <View
+                    android:layout_width="@dimen/lnr_root_padding_fragment_follow_more_artists"
+                    android:layout_height="match_parent" />
 
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1" >
+                    android:layout_weight="1">
 
                     <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgJazz"
@@ -223,15 +252,23 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:text="@string/btn_jazz"
-                        android:gravity="center"/>
+                        android:gravity="center"
+                        android:text="@string/btn_jazz" />
 
                 </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/lnr_root_padding_fragment_follow_more_artists">
 
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1" >
+                    android:layout_weight="1">
 
                     <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgClassical"
@@ -245,22 +282,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:text="@string/btn_classical"
-                        android:gravity="center"/>
+                        android:gravity="center"
+                        android:text="@string/btn_classical" />
 
                 </RelativeLayout>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                <View
+                    android:layout_width="@dimen/lnr_root_padding_fragment_follow_more_artists"
+                    android:layout_height="match_parent" />
 
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" >
+                    android:layout_weight="1">
 
                     <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgBlues"
@@ -274,15 +308,21 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:text="@string/btn_blues"
-                        android:gravity="center"/>
+                        android:gravity="center"
+                        android:text="@string/btn_blues" />
 
                 </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1" >
+                    android:layout_weight="1">
 
                     <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgMetal"
@@ -296,15 +336,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:text="@string/btn_metal"
-                        android:gravity="center"/>
+                        android:gravity="center"
+                        android:text="@string/btn_metal" />
 
                 </RelativeLayout>
+
+                <View
+                    android:layout_width="@dimen/lnr_root_padding_fragment_follow_more_artists"
+                    android:layout_height="match_parent" />
 
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1" >
+                    android:layout_weight="1">
 
                     <com.wcities.eventseeker.custom.view.ResizableImageView
                         android:id="@+id/imgWorld"
@@ -318,8 +362,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:text="@string/btn_world"
-                        android:gravity="center"/>
+                        android:gravity="center"
+                        android:text="@string/btn_world" />
 
                 </RelativeLayout>
 
