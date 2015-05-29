@@ -263,19 +263,6 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		} catch (MySpinException e) {
 			e.printStackTrace();
 		}
-
-		/**
-		 * When user is connected to bosch if device gets some other app started (for example get a call
-		 * covering entire screen), then bosch gets disconnected. Now, after that third party app finishes,
-		 * mobile/tablet app starts, but if we press back on first screen of mobile/tablet app then
-		 * it starts displaying this bosch activity task on mobile/tablet.
-		 * To prevent this, we just move this task to back in such case when even though onResume()
-		 * is called, it's not connected to bosch.
-		 */
-		/*if (!MySpinServerSDK.sharedInstance().isConnected()) {
-			Toast.makeText(getApplicationContext(), "not connected", Toast.LENGTH_SHORT).show();
-			moveTaskToBack(true);
-		}*/
 	}
 	
 	@Override
@@ -385,7 +372,19 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 
 	private void bringTaskToFront(int taskId) {
 		ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-		activityManager.moveTaskToFront(taskId, 0);
+		/**
+		 * Q: Why have we used MOVE_TASK_WITH_HOME flag?
+		 * A: When user is connected to bosch if device gets some other third party app started (for example get a call
+		 * covering entire screen), then bosch gets disconnected. After this third party app finishes,
+		 * mobile/tablet app starts from back stack, but if we go on pressing back button until we reach first screen &
+		 * then on first screen of mobile/tablet app pressing back once more, it starts displaying task holding
+		 * this bosch activity on mobile/tablet.
+		 * To prevent this, we use MOVE_TASK_WITH_HOME flag so as to bring back task containing mobile/tablet activities
+		 * along with "home" activity, such that "home" is positioned immediately behind the mobile/tablet app task
+		 * & hence pressing back in above mentioned case won't display bosch activity on mobile, instead it
+		 * would land us to home screen as expected.
+		 */
+		activityManager.moveTaskToFront(taskId, ActivityManager.MOVE_TASK_WITH_HOME);
 	}
 	
 	private void updateColors() {
