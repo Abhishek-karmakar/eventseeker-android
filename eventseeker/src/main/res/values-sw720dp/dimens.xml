@@ -115,6 +115,8 @@
     <dimen name="btn_pad_l_custom_actionbar_tabs">25dp</dimen>
     <dimen name="btn_pad_r_custom_actionbar_tabs">@dimen/btn_pad_l_custom_actionbar_tabs</dimen>
     <dimen name="txt_size_custom_actionbar_tabs">16sp</dimen>
+    <dimen name="v_divider_w_custom_actionbar_tabs">30dp</dimen>
+    <dimen name="v_divider_w_in_btwn_custom_actionbar_tabs">20dp</dimen>
 
     <!-- fragment_search_artists_list_item.xml -->
     <dimen name="img_artist_w_fragment_search_artists_list_item">@dimen/img_event_w_fragment_my_events_list_item</dimen>

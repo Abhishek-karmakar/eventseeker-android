@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="custom_actionbar_tabs" type="layout">@layout/custom_actionbar_tabs_big_tab</item>
+
+</resources>

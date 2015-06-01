@@ -46,7 +46,7 @@
 
     <!-- custom_actionbar_tabs.xml -->
     <dimen name="v_divider_w_custom_actionbar_tabs">30dp</dimen>
-    <dimen name="v_divider_w_in_btwn_custom_actionbar_tabs">15dp</dimen>
+    <dimen name="v_divider_w_in_btwn_custom_actionbar_tabs">7dp</dimen>
     <dimen name="v_divider_margin_t_custom_actionbar_tabs">8dp</dimen>
     <dimen name="v_divider_margin_b_custom_actionbar_tabs">@dimen/v_divider_margin_t_custom_actionbar_tabs</dimen>
     <dimen name="btn_pad_l_custom_actionbar_tabs">15dp</dimen>
