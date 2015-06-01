@@ -14,25 +14,38 @@
     <Button
         android:id="@+id/btnTab1"
         style="@style/CustomTabBar"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_marginLeft="@dimen/v_divider_w_in_btwn_custom_actionbar_tabs"
+        android:layout_marginRight="@dimen/v_divider_w_in_btwn_custom_actionbar_tabs"
         android:text="TAB 1" />
+
+   <!-- <View
+        android:id="@+id/vDivider2"
+        android:layout_width="@dimen/v_divider_w_in_btwn_custom_actionbar_tabs"
+        android:layout_height="match_parent" />-->
 
     <Button
         android:id="@+id/btnTab2"
         style="@style/CustomTabBar"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_marginLeft="@dimen/v_divider_w_in_btwn_custom_actionbar_tabs"
+        android:layout_marginRight="@dimen/v_divider_w_in_btwn_custom_actionbar_tabs"
         android:text="TAB 2" />
+
+    <!--<View
+        android:id="@+id/vDivider3"
+        android:layout_width="@dimen/v_divider_w_in_btwn_custom_actionbar_tabs"
+        android:layout_height="match_parent" />-->
 
     <Button
         android:id="@+id/btnTab3"
         style="@style/CustomTabBar"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_marginLeft="@dimen/v_divider_w_in_btwn_custom_actionbar_tabs"
+        android:layout_marginRight="@dimen/v_divider_w_in_btwn_custom_actionbar_tabs"
         android:text="TAB 3" />
 
     <View
