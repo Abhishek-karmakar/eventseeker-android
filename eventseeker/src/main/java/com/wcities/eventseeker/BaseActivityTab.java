@@ -501,6 +501,10 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 	protected void setToolbarBg(int color) {
 		toolbar.setBackgroundColor(color);
 	}
+
+	protected void setToolbarBgRes(int resId) {
+		toolbar.setBackgroundResource(resId);
+	}
 	
 	protected void addFragment(int containerViewId, Fragment fragment, String tag, boolean addToBackStack) {
 		FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();

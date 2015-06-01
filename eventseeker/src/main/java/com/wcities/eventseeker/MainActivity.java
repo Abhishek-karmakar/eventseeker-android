@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -134,7 +136,7 @@ public class MainActivity extends BaseActivity implements
 			
 			vDrawerStatusBar = findViewById(R.id.vDrawerStatusBar);
 			vDrawerStatusBar.setLayoutParams(params);
-			
+
 		} else {
 			vStatusBar.setVisibility(View.GONE);
 		}
@@ -1995,6 +1997,10 @@ public class MainActivity extends BaseActivity implements
 		//Log.d(TAG, "setToolbarBg(), color = " + color);
 		toolbar.setBackgroundColor(color);
 	}
+
+	public void setToolbarBgRes(int resId) {
+		toolbar.setBackgroundResource(resId);
+	}
 	
 	public void setToolbarElevation(float elevation) {
 		ViewCompat.setElevation(toolbar, elevation);
@@ -2007,10 +2013,23 @@ public class MainActivity extends BaseActivity implements
 	}
 	
 	public void updateToolbarOnDrawerSlide(float slideOffset) {
-        int newAlpha = (int) (slideOffset * 255);
+		int newAlpha = (int) (slideOffset * 255);
         int color = getResources().getColor(R.color.colorPrimary);
         toolbar.setBackgroundColor(Color.argb(newAlpha, Color.red(color), Color.green(color), Color.blue(color)));
     }
+
+	public void updateToolbarOnDrawerSlide(float slideOffset, int drawableId) {
+		Drawable drawable = getResources().getDrawable(drawableId);
+		int newAlpha = (int) (slideOffset * 255);
+		int color = getResources().getColor(R.color.colorPrimary);
+		drawable.setColorFilter(Color.argb(newAlpha, Color.red(color), Color.green(color), Color.blue(color)), PorterDuff.Mode.ADD);
+		if (VersionUtil.isApiLevelAbove15()) {
+			toolbar.setBackground(drawable);
+
+		} else {
+			toolbar.setBackgroundDrawable(drawable);
+		}
+	}
 	
 	public void onSharedElementAnimStart() {
 		if (prevCustomSharedElementTransitionSource != null) {

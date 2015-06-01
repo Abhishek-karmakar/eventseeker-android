@@ -431,8 +431,8 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 			ma.animateToolbarElevation(actionBarElevation, 0.0f);
 			
 			ma.setVStatusBarLayeredVisibility(View.GONE, AppConstants.INVALID_ID);
-			ma.setToolbarBg(Color.TRANSPARENT);
-			
+			ma.setToolbarBgRes(R.drawable.bg_translucent_toolbar);
+
 			title = "";
 			ma.updateTitle(title);
 			
@@ -592,7 +592,7 @@ public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackS
 	@Override
 	public void onDrawerSlide(View drawerView, float slideOffset) {
 		if (!isScrollLimitReached) {
-			((MainActivity)FragmentUtil.getActivity(this)).updateToolbarOnDrawerSlide(slideOffset);
+			((MainActivity)FragmentUtil.getActivity(this)).updateToolbarOnDrawerSlide(slideOffset, R.drawable.bg_translucent_toolbar);
 		}
 	}
 

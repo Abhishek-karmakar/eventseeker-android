@@ -576,7 +576,7 @@ public class EventDetailsFragmentTab extends PublishEventFragmentRetainingChildF
 		} else if ((isScrollLimitReached || forceUpdate) && scrollY < limitScrollAt) {
 			//Log.d(TAG, "else if");
 			baseActivityTab.animateToolbarElevation(actionBarElevation, 0.0f);
-			baseActivityTab.setToolbarBg(Color.TRANSPARENT);
+			baseActivityTab.setToolbarBgRes(R.drawable.bg_translucent_toolbar);
 			
 			title = "";
 			baseActivityTab.updateTitle(title);

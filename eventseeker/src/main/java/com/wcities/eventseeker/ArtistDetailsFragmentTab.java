@@ -385,7 +385,7 @@ public class ArtistDetailsFragmentTab extends PublishEventFragmentRetainingChild
 			
 		} else if ((isScrollLimitReached || forceUpdate) && totalScrolledDy < limitScrollAt) {
 			baseActivityTab.animateToolbarElevation(actionBarElevation, 0.0f);
-			baseActivityTab.setToolbarBg(Color.TRANSPARENT);
+			baseActivityTab.setToolbarBgRes(R.drawable.bg_translucent_toolbar);
 			
 			title = "";
 			baseActivityTab.updateTitle(title);
