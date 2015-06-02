@@ -64,7 +64,9 @@ import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.EventListenerTab;
+import com.wcities.eventseeker.interfaces.FragmentHavingFragmentInRecyclerView;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
+import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -130,6 +132,7 @@ public class RVVenueDetailsAdapterTab extends RVAdapterBase<RVVenueDetailsAdapte
 		
 		private TextView txtVenue;
 		private ImageView fabPhone, fabNavigate, fabWeb, fabFb;
+		private RelativeLayout rltLytFabLinks;
 		
 		private ImageView imgEvt, imgTicket, imgSave, imgShare, imgHandle;
 		private TextView txtEvtTitle, txtEvtTime, txtEvtLoc;
@@ -144,6 +147,7 @@ public class RVVenueDetailsAdapterTab extends RVAdapterBase<RVVenueDetailsAdapte
             fabWeb = (ImageView) itemView.findViewById(R.id.fabWeb);
             fabFb = (ImageView) itemView.findViewById(R.id.fabFb);
             vFabSeparator = itemView.findViewById(R.id.vFabSeparator);
+			rltLytFabLinks = (RelativeLayout) itemView.findViewById(R.id.rltLytFabLinks);
 			imgDown = (ImageView) itemView.findViewById(R.id.imgDown);
 			vHorLine = itemView.findViewById(R.id.vHorLine);
 			
@@ -270,24 +274,6 @@ public class RVVenueDetailsAdapterTab extends RVAdapterBase<RVVenueDetailsAdapte
 			// nothing to do
 			
 		}  else if (position == ViewType.DESC.ordinal()) {
-            EventSeekr eventSeekr = FragmentUtil.getApplication(venueDetailsFragmentTab);
-            final BaseActivityTab baseActivityTab = (BaseActivityTab) FragmentUtil.getActivity(venueDetailsFragmentTab);
-            final Intent intent = new Intent(eventSeekr, WebViewActivityTab.class);
-
-            holder.fabWeb.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    intent.putExtra(BundleKeys.URL, venue.getUrl());
-                    baseActivityTab.startActivity(intent);
-                }
-            });
-            holder.fabFb.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    intent.putExtra(BundleKeys.URL, venue.getFbLink());
-                    baseActivityTab.startActivity(intent);
-                }
-            });
 			updateDescVisibility(holder);
 			
 		} else if (position == ViewType.ADDRESS_MAP.ordinal()) {
@@ -802,8 +788,7 @@ public class RVVenueDetailsAdapterTab extends RVAdapterBase<RVVenueDetailsAdapte
 				BaseActivityTab baseActivityTab = (BaseActivityTab) FragmentUtil.getActivity(venueDetailsFragmentTab);
 
 				Intent intent = new Intent(eventSeekr, WebViewActivityTab.class);
-				intent.putExtra(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl()
-						+ "&lang=" + FragmentUtil.getApplication(venueDetailsFragmentTab).getLocale().getLocaleCode());
+				intent.putExtra(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
 				baseActivityTab.startActivity(intent);
 
 				GoogleAnalyticsTracker.getInstance().sendEvent(eventSeekr,
@@ -899,15 +884,20 @@ public class RVVenueDetailsAdapterTab extends RVAdapterBase<RVVenueDetailsAdapte
 
             holder.rltRootDesc.setBackgroundColor(Color.WHITE);
             holder.rltLytPrgsBar.setVisibility(View.GONE);
-            holder.imgDown.setVisibility(View.VISIBLE);
+			if (venue.getLongDesc() != null || venue.getUrl() != null || venue.getFbLink() != null) {
+				holder.imgDown.setVisibility(View.VISIBLE);
+
+			} else {
+				holder.imgDown.setVisibility(View.INVISIBLE);
+			}
             holder.vHorLine.setVisibility(View.VISIBLE);
-            holder.fabWeb.setVisibility(View.VISIBLE);
-            holder.fabFb.setVisibility(View.VISIBLE);
-            holder.vFabSeparator.setVisibility(View.VISIBLE);
 
 			if (venue.getLongDesc() != null) {
 				holder.txtDesc.setVisibility(View.VISIBLE);
                 holder.txtDesc.setText(Html.fromHtml(venue.getLongDesc()));
+
+			} else {
+				holder.txtDesc.setVisibility(View.GONE);
 			}
 
             holder.imgDown.setOnClickListener(new OnClickListener() {
@@ -957,24 +947,49 @@ public class RVVenueDetailsAdapterTab extends RVAdapterBase<RVVenueDetailsAdapte
 	}
 
     private void updateFabLinks(ViewHolder holder) {
-        final Resources res = FragmentUtil.getResources(venueDetailsFragmentTab);
-        if (venue.getUrl() == null) {
-            holder.fabWeb.setImageDrawable(res.getDrawable(R.drawable.ic_web_link_unavailable));
-            holder.fabWeb.setEnabled(false);
+		EventSeekr eventSeekr = FragmentUtil.getApplication(venueDetailsFragmentTab);
+		final BaseActivityTab baseActivityTab = (BaseActivityTab) FragmentUtil.getActivity(venueDetailsFragmentTab);
+		final Intent intent = new Intent(eventSeekr, WebViewActivityTab.class);
 
-        } else {
-            holder.fabWeb.setImageDrawable(res.getDrawable(R.drawable.ic_web_link_available));
-            holder.fabWeb.setEnabled(true);
-        }
+		if (venue.getUrl() == null) {
+			holder.fabWeb.setVisibility(View.GONE);
 
-        if (venue.getFbLink() == null) {
-            holder.fabFb.setImageDrawable(res.getDrawable(R.drawable.ic_facebook_link_unavailable));
-            holder.fabFb.setEnabled(false);
+		} else {
+			holder.fabWeb.setVisibility(View.VISIBLE);
+			holder.fabWeb.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					intent.putExtra(BundleKeys.URL, venue.getUrl());
+					baseActivityTab.startActivity(intent);
+				}
+			});
+		}
 
-        } else {
-            holder.fabFb.setImageDrawable(res.getDrawable(R.drawable.ic_facebook_link_available));
-            holder.fabFb.setEnabled(true);
-        }
+		if (venue.getFbLink() == null) {
+			holder.fabFb.setVisibility(View.GONE);
+
+		} else {
+			holder.fabFb.setVisibility(View.VISIBLE);
+			holder.fabFb.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					intent.putExtra(BundleKeys.URL, venue.getFbLink());
+					baseActivityTab.startActivity(intent);
+				}
+			});
+		}
+
+		if (venue.getUrl() == null && venue.getFbLink() == null) {
+			holder.rltLytFabLinks.setVisibility(View.GONE);
+
+		} else if (venue.getUrl() == null || venue.getFbLink() == null) {
+			holder.rltLytFabLinks.setVisibility(View.VISIBLE);
+			holder.vFabSeparator.setVisibility(View.GONE);
+
+		} else {
+			holder.rltLytFabLinks.setVisibility(View.VISIBLE);
+			holder.vFabSeparator.setVisibility(View.VISIBLE);
+		}
     }
 	
 	private void collapseVenueDesc(ViewHolder holder) {
@@ -983,9 +998,7 @@ public class RVVenueDetailsAdapterTab extends RVAdapterBase<RVVenueDetailsAdapte
 		holder.imgDown.setImageDrawable(FragmentUtil.getResources(venueDetailsFragmentTab).getDrawable(
 				R.drawable.ic_description_expand));
 
-        holder.fabWeb.setVisibility(View.GONE);
-        holder.fabFb.setVisibility(View.GONE);
-        holder.vFabSeparator.setVisibility(View.GONE);
+		holder.rltLytFabLinks.setVisibility(View.GONE);
 
 		isVenueDescExpanded = false;
 	}
@@ -996,9 +1009,9 @@ public class RVVenueDetailsAdapterTab extends RVAdapterBase<RVVenueDetailsAdapte
 		holder.imgDown.setImageDrawable(FragmentUtil.getResources(venueDetailsFragmentTab).getDrawable(
 				R.drawable.ic_description_collapse));
 
-        holder.fabWeb.setVisibility(View.VISIBLE);
-        holder.fabFb.setVisibility(View.VISIBLE);
-        holder.vFabSeparator.setVisibility(View.VISIBLE);
+		if (venue.getUrl() != null || venue.getFbLink() != null) {
+			holder.rltLytFabLinks.setVisibility(View.VISIBLE);
+		}
 
 		isVenueDescExpanded = true;
 	}

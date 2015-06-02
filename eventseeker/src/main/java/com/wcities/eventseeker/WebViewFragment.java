@@ -10,9 +10,11 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
 
+import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
+import com.wcities.eventseeker.util.FragmentUtil;
 
 public class WebViewFragment extends FragmentLoadableFromBackStack {
 
@@ -28,6 +30,10 @@ public class WebViewFragment extends FragmentLoadableFromBackStack {
 		setRetainInstance(true);
 		
 		url = getArguments().getString(BundleKeys.URL);
+		if (url.startsWith("http://eventseeker.com/ticket_booking/ticket_booking.php?eventId=")) {
+			// for multiple ticket booking url we need to display our eventseeker page with user's set language
+			url += "&lang=" + ((EventSeekr) FragmentUtil.getApplication(this)).getLocale().getLocaleCode();
+		}
 	}
 	
 	@Override

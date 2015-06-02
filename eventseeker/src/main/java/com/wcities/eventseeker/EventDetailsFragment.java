@@ -943,8 +943,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			
 		case R.id.fabTickets:
 			Bundle args = new Bundle();
-			args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl()
-                + "&lang=" + ((EventSeekr) FragmentUtil.getApplication(this)).getLocale().getLocaleCode());
+			args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
 			((ReplaceFragmentListener)FragmentUtil.getActivity(this)).replaceByFragment(
 					AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
 			/**

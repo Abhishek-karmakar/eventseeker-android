@@ -137,7 +137,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	private int limitScrollAt, screenHt, minRecyclerVHt, recyclerVDummyTopViewsHt, recyclerVPrgsBarHt, 
 		recyclerVContentRowHt, vPagerCatTitlesMarginT;
 	private float translationZPx;
-	private boolean isScrollLimitReached, isOnPushedToBackStackCalled;
+	private boolean isScrollLimitReached, isOnPushedToBackStackCalled, isOnStopCalled;
 	private String title = "";
 	private List<Category> evtCategories;
 	private int totalScrolledDy = UNSCROLLED; // indicates layout not yet created
@@ -353,7 +353,8 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 			super.onStart();
 			return;
 		}
-		
+
+		isOnStopCalled = false;
 		super.onStart();
 		((MainActivity) FragmentUtil.getActivity(this)).setVStatusBarVisibility(View.GONE, AppConstants.INVALID_ID);
 		
@@ -366,6 +367,8 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	public void onStop() {
 		super.onStop();
 		//Log.d(TAG, "onStop()");
+
+		isOnStopCalled = true;
 		
 		/**
 		 * Following call is required to prevent non-removal of onGlobalLayoutListener. If onGlobalLayout() 
@@ -1410,8 +1413,7 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 				public void run() {
 					holder.rltTicket.setPressed(false);
 					Bundle args = new Bundle();
-					args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl()
-							+ "&lang=" + ((EventSeekr) FragmentUtil.getApplication(discoverFragment)).getLocale().getLocaleCode());
+					args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
 					((ReplaceFragmentListener)FragmentUtil.getActivity(discoverFragment)).replaceByFragment(
 							AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
 					/**
@@ -1632,10 +1634,10 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 	@Override
 	public void onTaskCompleted(Void... params) {
 		handler.post(new Runnable() {
-			
+
 			@Override
 			public void run() {
-				//Log.d(TAG, "onEventsLoaded()");
+				//Log.d(TAG, "onEventsLoaded(): isOnStopCalled = " + isOnStopCalled);
 				// to remove full screen progressbar
 				rltLytProgressBar.setVisibility(View.INVISIBLE);
 				if (!eventList.isEmpty()) {
@@ -1645,7 +1647,15 @@ public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack 
 				 * to update toolbar color since totalScrolledDy might have changed due to automatic scroll
 				 * (e.g. - progressbar removal)
 				 */
-				onScrolled(0, true, true);
+				if (!isOnStopCalled) {
+					/**
+					 * this check is required to prevent toolbar from becoming transparent in following case:
+					 * User moves to search screen from discover even before events are loaded for selected category.
+					 * On event loading completion, from here we change toolbar coloring by executing following call,
+					 * which we should not since user has already moved to search screen.
+					 */
+					onScrolled(0, true, true);
+				}
 			}
 		});
 	}

@@ -22,43 +22,43 @@
 	   	android:layout_marginTop="@dimen/txt_desc_margin_t_rv_item_desc"
 	   	android:ellipsize="end" />
 
-    <View android:id="@+id/vFabSeparator"
-        android:layout_width="@dimen/v_fab_separator_w_event_details"
-        android:layout_height="@dimen/v_fab_separator_h_rv_item_address_map_venue_details"
+    <RelativeLayout android:id="@+id/rltLytFabLinks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@id/txtDesc"
         android:layout_marginTop="@dimen/fab_margin_t_rv_item_desc"
         android:layout_centerHorizontal="true"
-        android:visibility="gone"/>
+        android:visibility="gone">
 
-    <com.melnykov.fab.FloatingActionButton android:id="@+id/fabWeb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtDesc"
-        android:layout_alignTop="@id/vFabSeparator"
-        android:layout_toLeftOf="@id/vFabSeparator"
-        android:src="@drawable/ic_web_link_available"
-        fab:fab_type="normal"
-        fab:fab_colorNormal="@color/colorPrimary"
-        fab:fab_colorPressed="@color/colorPrimaryDark"
-        fab:fab_colorRipple="@android:color/white"
-        fab:fab_shadow="false"
-        android:elevation="0dp"
-        android:visibility="gone"/>
+        <com.melnykov.fab.FloatingActionButton android:id="@+id/fabWeb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_web_link_available"
+            fab:fab_type="normal"
+            fab:fab_colorNormal="@color/colorPrimary"
+            fab:fab_colorPressed="@color/colorPrimaryDark"
+            fab:fab_colorRipple="@android:color/white"
+            fab:fab_shadow="false"
+            android:elevation="0dp"/>
 
-    <com.melnykov.fab.FloatingActionButton android:id="@+id/fabFb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtDesc"
-        android:layout_alignTop="@id/vFabSeparator"
-        android:layout_toRightOf="@id/vFabSeparator"
-        android:src="@drawable/ic_facebook_link_available"
-        fab:fab_type="normal"
-        fab:fab_colorNormal="@color/colorPrimary"
-        fab:fab_colorPressed="@color/colorPrimaryDark"
-        fab:fab_colorRipple="@android:color/white"
-        fab:fab_shadow="false"
-        android:elevation="0dp"
-        android:visibility="gone"/>
+        <View android:id="@+id/vFabSeparator"
+            android:layout_width="@dimen/v_fab_separator_w_event_details"
+            android:layout_height="@dimen/v_fab_separator_h_rv_item_address_map_venue_details"
+            android:layout_toRightOf="@id/fabWeb"/>
+
+        <com.melnykov.fab.FloatingActionButton android:id="@+id/fabFb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/vFabSeparator"
+            android:src="@drawable/ic_facebook_link_available"
+            fab:fab_type="normal"
+            fab:fab_colorNormal="@color/colorPrimary"
+            fab:fab_colorPressed="@color/colorPrimaryDark"
+            fab:fab_colorRipple="@android:color/white"
+            fab:fab_shadow="false"
+            android:elevation="0dp"/>
+
+    </RelativeLayout>
     
     <View android:id="@+id/vHorLine"
         android:layout_width="match_parent"
@@ -73,7 +73,7 @@
     	android:layout_width="@dimen/img_down_wt_rv_item_desc"
     	android:layout_height="@dimen/img_down_ht_rv_item_desc"
     	android:src="@drawable/ic_description_expand"
-    	android:layout_below="@id/fabFb"
+    	android:layout_below="@id/rltLytFabLinks"
     	android:scaleType="centerInside"
     	android:layout_marginTop="@dimen/img_down_margin_t_rv_item_desc"
     	android:background="@android:color/white" />

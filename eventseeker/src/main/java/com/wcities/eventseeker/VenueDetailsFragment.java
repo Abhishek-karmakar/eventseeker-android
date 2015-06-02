@@ -744,6 +744,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			
 			private TextView txtVenue;
 			private ImageView/*FloatingActionButton*/ fabPhone, fabNavigate, fabWeb, fabFb;
+			private RelativeLayout rltLytFabLinks;
 			
 			// event item
 			private View vHandle;
@@ -763,6 +764,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
                 fabWeb = (ImageView) itemView.findViewById(R.id.fabWeb);
                 fabFb = (ImageView) itemView.findViewById(R.id.fabFb);
                 vFabSeparator = itemView.findViewById(R.id.vFabSeparator);
+				rltLytFabLinks = (RelativeLayout) itemView.findViewById(R.id.rltLytFabLinks);
 				
 				txtVenue = (TextView) itemView.findViewById(R.id.txtVenue);
 				fabPhone = (ImageView/*FloatingActionButton*/) itemView.findViewById(R.id.fabPhone);
@@ -891,26 +893,6 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 				// nothing to do
 				
 			} else if (position == ViewType.DESC.ordinal()) {
-                final Bundle args = new Bundle();
-
-                holder.fabWeb.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ((FragmentHavingFragmentInRecyclerView)venueDetailsFragment).onPushedToBackStackFHFIR();
-                        args.putString(BundleKeys.URL, venue.getUrl());
-                        ((ReplaceFragmentListener)FragmentUtil.getActivity(venueDetailsFragment)).replaceByFragment(
-                                AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
-                    }
-                });
-                holder.fabFb.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ((FragmentHavingFragmentInRecyclerView)venueDetailsFragment).onPushedToBackStackFHFIR();
-                        args.putString(BundleKeys.URL, venue.getFbLink());
-                        ((ReplaceFragmentListener)FragmentUtil.getActivity(venueDetailsFragment)).replaceByFragment(
-                                AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
-                    }
-                });
 				updateDescVisibility(holder);
 				
 			} else if (position == ViewType.ADDRESS_MAP.ordinal()) {
@@ -1209,22 +1191,22 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	        }
 	        
 	        holder.fabPhone.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
 					if (venue.getPhone() != null) {
 						Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + venue.getPhone()));
 						venueDetailsFragment.startActivity(Intent.createChooser(intent, "Call..."));
-						
+
 					} else {
-						Toast.makeText(FragmentUtil.getActivity(venueDetailsFragment), R.string.phone_number_not_available, 
+						Toast.makeText(FragmentUtil.getActivity(venueDetailsFragment), R.string.phone_number_not_available,
 								Toast.LENGTH_SHORT).show();
 					}
 				}
 			});
 	        
 	        holder.fabNavigate.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
 					/**
@@ -1233,11 +1215,11 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 					 * "IllegalArgumentException: no view found for id R.id.frmLayoutMapContainer for 
 					 * AddressMapFragment" on coming back to venue details screen. Couldn't find its solution. 
 					 * Probably it's happening with MapFragment within RecyclerView.
-					 */ 
-					((FragmentHavingFragmentInRecyclerView)venueDetailsFragment).onPushedToBackStackFHFIR();
+					 */
+					((FragmentHavingFragmentInRecyclerView) venueDetailsFragment).onPushedToBackStackFHFIR();
 					Bundle args = new Bundle();
 					args.putSerializable(BundleKeys.VENUE, venue);
-					((ReplaceFragmentListener)FragmentUtil.getActivity(venueDetailsFragment)).replaceByFragment(
+					((ReplaceFragmentListener) FragmentUtil.getActivity(venueDetailsFragment)).replaceByFragment(
 							AppConstants.FRAGMENT_TAG_NAVIGATION, args);
 				}
 			});
@@ -1273,45 +1255,50 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 
                 holder.rltRootDesc.setBackgroundColor(Color.WHITE);
                 holder.rltLytPrgsBar.setVisibility(View.GONE);
-                holder.imgDown.setVisibility(View.VISIBLE);
+				if (venue.getLongDesc() != null || venue.getUrl() != null || venue.getFbLink() != null) {
+					holder.imgDown.setVisibility(View.VISIBLE);
+
+				} else {
+					holder.imgDown.setVisibility(View.INVISIBLE);
+				}
                 holder.vHorLine.setVisibility(View.VISIBLE);
-                holder.fabWeb.setVisibility(View.VISIBLE);
-                holder.fabFb.setVisibility(View.VISIBLE);
-                holder.vFabSeparator.setVisibility(View.VISIBLE);
 
 				if (venueDetailsFragment.venue.getLongDesc() != null) {
                     holder.txtDesc.setVisibility(View.VISIBLE);
                     holder.txtDesc.setText(Html.fromHtml(venue.getLongDesc()));
+
+				} else {
+					holder.txtDesc.setVisibility(View.GONE);
 				}
 
                 holder.imgDown.setOnClickListener(new OnClickListener() {
 
-                    @Override
-                    public void onClick(View v) {
-                        //Log.d(TAG, "totalScrolled  = " + holder.itemView.getTop());
-                        if (isVenueDescExpanded) {
-                            collapseVenueDesc(holder);
+					@Override
+					public void onClick(View v) {
+						//Log.d(TAG, "totalScrolled  = " + holder.itemView.getTop());
+						if (isVenueDescExpanded) {
+							collapseVenueDesc(holder);
 
-                            /**
-                             * update scrolled distance after collapse, because sometimes it can happen that view becamse scrollable only
-                             * due to expanded description after which if user collapses it, then based on recyclerview
-                             * height it automatically resettles itself such that recyclerview again becomes unscrollable.
-                             * Accordingly we need to reset scrolled amount, artist img & title
-                             */
-                            venueDetailsFragment.handler.post(new Runnable() {
+							/**
+							 * update scrolled distance after collapse, because sometimes it can happen that view becamse scrollable only
+							 * due to expanded description after which if user collapses it, then based on recyclerview
+							 * height it automatically resettles itself such that recyclerview again becomes unscrollable.
+							 * Accordingly we need to reset scrolled amount, artist img & title
+							 */
+							venueDetailsFragment.handler.post(new Runnable() {
 
-                                @Override
-                                public void run() {
-                                    venueDetailsFragment.onScrolled(0, true, false);
-                                }
-                            });
+								@Override
+								public void run() {
+									venueDetailsFragment.onScrolled(0, true, false);
+								}
+							});
 
-                        } else {
-                            expandVenueDesc(holder);
-                        }
-                        //Log.d(TAG, "totalScrolled after  = " + holder.itemView.getTop());
-                    }
-                });
+						} else {
+							expandVenueDesc(holder);
+						}
+						//Log.d(TAG, "totalScrolled after  = " + holder.itemView.getTop());
+					}
+				});
 
                 if (isVenueDescExpanded) {
                     expandVenueDesc(holder);
@@ -1331,25 +1318,52 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 		}
 
         private void updateFabLinks(ViewHolder holder) {
-            final Resources res = FragmentUtil.getResources(venueDetailsFragment);
             if (venue.getUrl() == null) {
-                holder.fabWeb.setImageDrawable(res.getDrawable(R.drawable.ic_web_link_unavailable));
-                holder.fabWeb.setEnabled(false);
+				holder.fabWeb.setVisibility(View.GONE);
 
             } else {
-                holder.fabWeb.setImageDrawable(res.getDrawable(R.drawable.ic_web_link_available));
-                holder.fabWeb.setEnabled(true);
+				holder.fabWeb.setVisibility(View.VISIBLE);
+				holder.fabWeb.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						((FragmentHavingFragmentInRecyclerView)venueDetailsFragment).onPushedToBackStackFHFIR();
+						Bundle args = new Bundle();
+						args.putString(BundleKeys.URL, venue.getUrl());
+						((ReplaceFragmentListener)FragmentUtil.getActivity(venueDetailsFragment)).replaceByFragment(
+								AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
+					}
+				});
             }
 
             if (venue.getFbLink() == null) {
-                holder.fabFb.setImageDrawable(res.getDrawable(R.drawable.ic_facebook_link_unavailable));
-                holder.fabFb.setEnabled(false);
+				holder.fabFb.setVisibility(View.GONE);
 
             } else {
-                holder.fabFb.setImageDrawable(res.getDrawable(R.drawable.ic_facebook_link_available));
-                holder.fabFb.setEnabled(true);
+				holder.fabFb.setVisibility(View.VISIBLE);
+				holder.fabFb.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						((FragmentHavingFragmentInRecyclerView) venueDetailsFragment).onPushedToBackStackFHFIR();
+						Bundle args = new Bundle();
+						args.putString(BundleKeys.URL, venue.getFbLink());
+						((ReplaceFragmentListener) FragmentUtil.getActivity(venueDetailsFragment)).replaceByFragment(
+								AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
+					}
+				});
             }
-        }
+
+			if (venue.getUrl() == null && venue.getFbLink() == null) {
+				holder.rltLytFabLinks.setVisibility(View.GONE);
+
+			} else if (venue.getUrl() == null || venue.getFbLink() == null) {
+				holder.rltLytFabLinks.setVisibility(View.VISIBLE);
+				holder.vFabSeparator.setVisibility(View.GONE);
+
+			} else {
+				holder.rltLytFabLinks.setVisibility(View.VISIBLE);
+				holder.vFabSeparator.setVisibility(View.VISIBLE);
+			}
+		}
 		
 		private void expandVenueDesc(ViewHolder holder) {
 			holder.txtDesc.setMaxLines(Integer.MAX_VALUE);
@@ -1357,9 +1371,9 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			holder.imgDown.setImageDrawable(FragmentUtil.getResources(venueDetailsFragment).getDrawable(
 					R.drawable.ic_description_collapse));
 
-            holder.fabWeb.setVisibility(View.VISIBLE);
-            holder.fabFb.setVisibility(View.VISIBLE);
-            holder.vFabSeparator.setVisibility(View.VISIBLE);
+            if (venue.getUrl() != null || venue.getFbLink() != null) {
+				holder.rltLytFabLinks.setVisibility(View.VISIBLE);
+			}
 
 			isVenueDescExpanded = true;
 		}
@@ -1370,9 +1384,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 			holder.imgDown.setImageDrawable(FragmentUtil.getResources(venueDetailsFragment).getDrawable(
 					R.drawable.ic_description_expand));
 
-            holder.fabWeb.setVisibility(View.GONE);
-            holder.fabFb.setVisibility(View.GONE);
-            holder.vFabSeparator.setVisibility(View.GONE);
+			holder.rltLytFabLinks.setVisibility(View.GONE);
 
             isVenueDescExpanded = false;
 		}
@@ -1570,8 +1582,7 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 				public void run() {
 					holder.rltTicket.setPressed(false);
 					Bundle args = new Bundle();
-					args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl()
-							+ "&lang=" + ((EventSeekr) FragmentUtil.getApplication(venueDetailsFragment)).getLocale().getLocaleCode());
+					args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
 					((ReplaceFragmentListener)FragmentUtil.getActivity(venueDetailsFragment)).replaceByFragment(
 							AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
 					

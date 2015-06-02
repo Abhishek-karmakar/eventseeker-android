@@ -857,8 +857,7 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 				public void run() {
 					holder.rltTicket.setPressed(false);
 					Bundle args = new Bundle();
-					args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl()
-							+ "&lang=" + ((EventSeekr) FragmentUtil.getApplication(searchEventFragment)).getLocale().getLocaleCode());
+					args.putString(BundleKeys.URL, event.getSchedule().getBookingInfos().get(0).getBookingUrl());
 					((ReplaceFragmentListener) FragmentUtil.getActivity(searchEventFragment)).replaceByFragment(
 							AppConstants.FRAGMENT_TAG_WEB_VIEW, args);
 					/**
