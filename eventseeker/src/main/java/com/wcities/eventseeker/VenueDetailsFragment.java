@@ -1189,22 +1189,24 @@ public class VenueDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 	        	//Log.d(TAG, "call addAddressMapFragment()");
 	        	addAddressMapFragment();
 	        }
-	        
-	        holder.fabPhone.setOnClickListener(new OnClickListener() {
 
-				@Override
-				public void onClick(View v) {
-					if (venue.getPhone() != null) {
+			if (venue.getPhone() != null) {
+				holder.vFabSeparator.setVisibility(View.VISIBLE);
+				holder.fabPhone.setVisibility(View.VISIBLE);
+				holder.fabPhone.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
 						Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + venue.getPhone()));
 						venueDetailsFragment.startActivity(Intent.createChooser(intent, "Call..."));
-
-					} else {
-						Toast.makeText(FragmentUtil.getActivity(venueDetailsFragment), R.string.phone_number_not_available,
-								Toast.LENGTH_SHORT).show();
 					}
-				}
-			});
-	        
+				});
+
+			} else {
+				holder.vFabSeparator.setVisibility(View.GONE);
+				holder.fabPhone.setVisibility(View.GONE);
+			}
+
 	        holder.fabNavigate.setOnClickListener(new OnClickListener() {
 
 				@Override

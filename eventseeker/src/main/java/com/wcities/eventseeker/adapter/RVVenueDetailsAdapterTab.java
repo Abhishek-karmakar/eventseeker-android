@@ -11,7 +11,6 @@ import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
@@ -57,16 +56,13 @@ import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
-import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.interfaces.EventListenerTab;
-import com.wcities.eventseeker.interfaces.FragmentHavingFragmentInRecyclerView;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
-import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
@@ -305,13 +301,12 @@ public class RVVenueDetailsAdapterTab extends RVAdapterBase<RVVenueDetailsAdapte
 				
 				holder.txtEvtTitle.setText(event.getName());
 				ViewCompat.setTransitionName(holder.txtEvtTitle, "txtEvtTitleVenueDetails" + position);
-				
+
+				Schedule schedule = event.getSchedule();
 				if (event.getSchedule() != null) {
-					Schedule schedule = event.getSchedule();
-					Date date = schedule.getDates().get(0);
-					holder.txtEvtTime.setText(ConversionUtil.getDateTime(FragmentUtil.getApplication(venueDetailsFragmentTab),
-                            date.getStartDate(), date.isStartTimeAvailable(), false, true, true));
-					
+					holder.txtEvtTime.setText(schedule.getDateRangeOrDateToDisplay(FragmentUtil.getApplication(venueDetailsFragmentTab),
+							true, true, true));
+
 					String venueName = (schedule.getVenue() != null) ? schedule.getVenue().getName() : "";
 					holder.txtEvtLoc.setText(venueName);
 				}
@@ -578,11 +573,11 @@ public class RVVenueDetailsAdapterTab extends RVAdapterBase<RVVenueDetailsAdapte
 	private void onEventClick(final ViewHolder holder, final Event event) {
 		holder.rltLytDetails.setPressed(true);
 		handler.postDelayed(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				//Log.d(TAG, "AT issue event = " + event);
-				((EventListenerTab) FragmentUtil.getActivity(venueDetailsFragmentTab)).onEventSelected(event, 
+				((EventListenerTab) FragmentUtil.getActivity(venueDetailsFragmentTab)).onEventSelected(event,
 						holder.imgEvt, holder.txtEvtTitle);
 				holder.rltLytDetails.setPressed(false);
 			}
@@ -607,22 +602,24 @@ public class RVVenueDetailsAdapterTab extends RVAdapterBase<RVVenueDetailsAdapte
         } else if (fragmentDetached) {
         	attachFragments();
         }
-        
-        holder.fabPhone.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				if (venue.getPhone() != null) {
+
+		if (venue.getPhone() != null) {
+			holder.vFabSeparator.setVisibility(View.VISIBLE);
+			holder.fabPhone.setVisibility(View.VISIBLE);
+			holder.fabPhone.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
 					Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + venue.getPhone()));
 					venueDetailsFragmentTab.startActivity(Intent.createChooser(intent, "Call..."));
-					
-				} else {
-					Toast.makeText(FragmentUtil.getActivity(venueDetailsFragmentTab), R.string.phone_number_not_available, 
-							Toast.LENGTH_SHORT).show();
 				}
-			}
-		});
-        
+			});
+
+		} else {
+			holder.vFabSeparator.setVisibility(View.GONE);
+			holder.fabPhone.setVisibility(View.GONE);
+		}
+
         holder.fabNavigate.setOnClickListener(new OnClickListener() {
 
 			@Override

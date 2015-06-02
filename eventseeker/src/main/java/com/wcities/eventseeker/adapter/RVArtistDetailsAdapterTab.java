@@ -51,7 +51,6 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.core.Artist;
-import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
@@ -345,12 +344,11 @@ public class RVArtistDetailsAdapterTab extends RVAdapterBase<RVArtistDetailsAdap
 				
 				holder.txtEvtTitle.setText(event.getName());
 				ViewCompat.setTransitionName(holder.txtEvtTitle, "txtEvtTitleArtistDetails" + position);
-				
-				if (event.getSchedule() != null) {
-					Schedule schedule = event.getSchedule();
-					Date date = schedule.getDates().get(0);
-					holder.txtEvtTime.setText(ConversionUtil.getDateTime(FragmentUtil.getApplication(artistDetailsFragmentTab),
-                            date.getStartDate(), date.isStartTimeAvailable(), false, true, true));
+
+				Schedule schedule = event.getSchedule();
+				if (schedule != null) {
+					holder.txtEvtTime.setText(schedule.getDateRangeOrDateToDisplay(FragmentUtil.getApplication(artistDetailsFragmentTab),
+							true, true, true));
 					
 					String venueName = (schedule.getVenue() != null) ? schedule.getVenue().getName() : "";
 					holder.txtEvtLoc.setText(venueName);

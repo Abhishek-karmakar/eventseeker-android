@@ -172,7 +172,7 @@ public class RVMyEventsAdapterTab extends RVAdapterBase<ViewHolder> implements D
 		switch (vType) {
 		
 		case EVENT:
-			v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_event_tab, parent, false);
+			v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_event_tab_with_date_range, parent, false);
 			break;
 			
 		default:
@@ -222,13 +222,12 @@ public class RVMyEventsAdapterTab extends RVAdapterBase<ViewHolder> implements D
 			
 			holder.txtEvtTitle.setText(event.getName());
 			ViewCompat.setTransitionName(holder.txtEvtTitle, "txtTransitionMyEvents" + position);
-			
-			if (event.getSchedule() != null) {
-				Schedule schedule = event.getSchedule();
-				Date date = schedule.getDates().get(0);
-				holder.txtEvtTime.setText(ConversionUtil.getDateTime(FragmentUtil.getApplication(publishEventFragment),
-                        date.getStartDate(), date.isStartTimeAvailable(), true, false, false));
-				
+
+			Schedule schedule = event.getSchedule();
+			if (schedule != null) {
+				holder.txtEvtTime.setText(schedule.getDateRangeOrDateToDisplay(FragmentUtil.getApplication(publishEventFragment),
+						true, false, false));
+
 				String venueName = (schedule.getVenue() != null) ? schedule.getVenue().getName() : "";
 				holder.txtEvtLoc.setText(venueName);
 			}

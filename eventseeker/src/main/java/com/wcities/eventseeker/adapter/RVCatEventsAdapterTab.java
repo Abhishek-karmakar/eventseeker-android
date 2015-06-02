@@ -45,7 +45,6 @@ import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
-import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
@@ -213,43 +212,11 @@ public class RVCatEventsAdapterTab extends RVAdapterBase<ViewHolder> implements 
 			
 			holder.txtEvtTitle.setText(event.getName());
 			ViewCompat.setTransitionName(holder.txtEvtTitle, "txtEvtTitleDiscover" + position);
-			
-			if (event.getSchedule() != null) {
-                Schedule schedule = event.getSchedule();
-                List<Date> dates = schedule.getDates();
-                Date date1 = dates.get(0);
-                String strDate;
 
-                if (dates.size() == 1 && date1.getEndDate() != null) {
-                    // for festivals dates size is 1 & endDate can be non-null which is different than startDate.
-                    // display date range
-                    strDate = ConversionUtil.getDateTime(FragmentUtil.getApplication(discoverFragmentTab),
-                            date1.getStartDate(), false, true, false, false);
-                    strDate += " - " + ConversionUtil.getDateTime(FragmentUtil.getApplication(discoverFragmentTab),
-                            date1.getEndDate(), date1.isStartTimeAvailable(), true, false, false);
-
-                } else if (dates.size() > 1) {
-                    Date dateN = dates.get(dates.size() - 1);
-                    //Log.d(TAG, "" + ((dateN.getStartDate().getTime() - date1.getStartDate().getTime()) / ConversionUtil.MILLI_SECONDS_PER_DAY) + ", " + dates.size());
-                    // Check if dates are all sequential, if yes then display date range
-                    if (((dateN.getStartDate().getTime() - date1.getStartDate().getTime()) / ConversionUtil.MILLI_SECONDS_PER_DAY) + 1 == dates.size()) {
-                        strDate = ConversionUtil.getDateTime(FragmentUtil.getApplication(discoverFragmentTab),
-                                date1.getStartDate(), false, true, false, false);
-                        strDate += " - " + ConversionUtil.getDateTime(FragmentUtil.getApplication(discoverFragmentTab),
-                                dateN.getStartDate(), dateN.isStartTimeAvailable(), true, false, false);
-
-                    } else {
-                        // display first date only
-                        strDate = ConversionUtil.getDateTime(FragmentUtil.getApplication(discoverFragmentTab),
-                                date1.getStartDate(), date1.isStartTimeAvailable(), true, false, false);
-                    }
-
-                } else {
-                    // display single date
-                    strDate = ConversionUtil.getDateTime(FragmentUtil.getApplication(discoverFragmentTab),
-                            date1.getStartDate(), date1.isStartTimeAvailable(), true, false, false);
-                }
-                holder.txtEvtTime.setText(strDate);
+			Schedule schedule = event.getSchedule();
+			if (schedule != null) {
+				holder.txtEvtTime.setText(schedule.getDateRangeOrDateToDisplay(FragmentUtil.getApplication(discoverFragmentTab),
+						true, false, false));
 
 				String venueName = (schedule.getVenue() != null) ? schedule.getVenue().getName() : "";
 				holder.txtEvtLoc.setText(venueName);

@@ -33,17 +33,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_toLeftOf="@id/imgHandle"
-                android:paddingBottom="@dimen/img_evt_margin_b_rv_item_upcoming_event"
-                android:paddingTop="@dimen/img_evt_margin_t_rv_item_upcoming_event" >
+                android:gravity="center_vertical" >
 
                 <TextView
                     android:id="@+id/txtEvtTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_above="@+id/txtEvtTime"
-                    android:layout_alignParentTop="true"
+                    android:gravity="center_vertical"
                     android:ellipsize="end"
-                    android:gravity="top"
                     android:lines="2"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/txt_evt_title_txt_size_rv_item_upcoming_event" />
@@ -52,25 +49,26 @@
                     android:id="@+id/txtEvtTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
+                    android:layout_below="@id/txtEvtTitle"
                     android:drawableLeft="@drawable/ic_event_time"
                     android:drawablePadding="@dimen/txt_evt_drawable_padding_rv_item_upcoming_event"
                     android:ellipsize="end"
                     android:gravity="center_vertical"
-                    android:singleLine="true"
+                    android:lines="2"
                     android:textSize="@dimen/txt_detail_txt_size_rv_item_upcoming_event" />
 
                 <TextView
                     android:id="@+id/txtEvtLoc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
+                    android:layout_below="@id/txtEvtTime"
                     android:drawableLeft="@drawable/ic_event_location"
                     android:drawablePadding="@dimen/txt_evt_drawable_padding_rv_item_upcoming_event"
                     android:ellipsize="end"
                     android:gravity="center_vertical"
-                    android:singleLine="true"
+                    android:lines="2"
                     android:textSize="@dimen/txt_detail_txt_size_rv_item_upcoming_event" />
+
             </RelativeLayout>
 
             <ImageView

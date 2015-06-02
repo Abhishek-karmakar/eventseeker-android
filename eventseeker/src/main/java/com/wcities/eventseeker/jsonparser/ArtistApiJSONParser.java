@@ -9,6 +9,7 @@ import com.wcities.eventseeker.core.ArtistLink;
 import com.wcities.eventseeker.core.ArtistLink.LinkType;
 import com.wcities.eventseeker.core.BookingInfo;
 import com.wcities.eventseeker.core.Country;
+import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.FeaturedListArtistCategory;
 import com.wcities.eventseeker.core.Friend;
@@ -88,6 +89,7 @@ public class ArtistApiJSONParser {
 
 	private static final String KEY_DATES = "dates";
 	private static final String KEY_START = "start";
+	private static final String KEY_END = "end";
 
 	private static final String KEY_BOOKINGINFO = "bookinginfo";
 	private static final String KEY_BOOKINGLINK = "bookinglink";
@@ -350,10 +352,10 @@ public class ArtistApiJSONParser {
 			eventTime = jsonObject.getString(KEY_EVENT_TIME);
 		}
 
-		List<String> dates = getDates(jsonObject.get(KEY_DATES));
+		List<Date> dates = getDates(jsonObject.get(KEY_DATES), eventTime);
 		int venueId = jsonObject.getInt(KEY_VENUE_ID);
 		
-		Schedule schedule = buildSchedule(dates, eventTime, venueId, venues);
+		Schedule schedule = buildSchedule(dates, venueId, venues);
 		
 		if (jsonObject.has(KEY_BOOKINGINFO)) {
 			fillBookingInfo(schedule, jsonObject);
@@ -387,57 +389,64 @@ public class ArtistApiJSONParser {
 		}
 		return bookingInfo;
 	}
-	
-	
-	private Schedule buildSchedule(List<String> startDates, String time, int venueId, SparseArray<Venue> venues) {
+
+	private Schedule buildSchedule(List<Date> dates, int venueId, SparseArray<Venue> venues) {
 		Schedule schedule = new Schedule();
-		
 		Venue venue = venues.get(venueId);
-		
 		schedule.setVenue(venue);
-		
-		SimpleDateFormat format;  
+		schedule.setDates(dates);
+		return schedule;
+	}
+	
+	private List<Date> getDates(Object json, String time) throws JSONException {
+		List<Date> dates = new ArrayList<Date>();
+
+		SimpleDateFormat format;
 		boolean startTimeAvailable;
-		
+
 		if (time.equals("")) {
 			format = new SimpleDateFormat("yyyy-MM-dd");
 			startTimeAvailable = false;
-			
+
 		} else {
 			format = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
 			startTimeAvailable = true;
 		}
 
-		for (Iterator<String> iterator = startDates.iterator(); iterator.hasNext();) {
-			com.wcities.eventseeker.core.Date date = new com.wcities.eventseeker.core.Date(startTimeAvailable);
-			String strStartDate = iterator.next();
-			try {  
-				date.setStartDate(format.parse(strStartDate + time));
-			    
-			} catch (ParseException e) {  
-			    e.printStackTrace();  
-			}
-			schedule.addDate(date);
-		}
-
-		return schedule;
-	}
-	
-	
-	private List<String> getDates(Object json) throws JSONException {
-		List<String> dates = new ArrayList<String>();
-		
 		if (json instanceof JSONObject) {
+			com.wcities.eventseeker.core.Date date = new com.wcities.eventseeker.core.Date(startTimeAvailable);
+
 			JSONObject jObjDate = (JSONObject) json;
 			String strStartDate = jObjDate.getString(KEY_START);
-			dates.add(strStartDate);
-			
+			String strEndDate = jObjDate.getString(KEY_END);
+
+			try {
+				date.setStartDate(format.parse(strStartDate + time));
+				// for festivals start & end dates in single json object may vary
+				if (!strStartDate.equals(strEndDate)) {
+					date.setEndDate(format.parse(strEndDate + time));
+				}
+
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+
+			dates.add(date);
+
 		} else {
 			JSONArray jArrDates = (JSONArray) json;
 
 			for (int i = 0; i < jArrDates.length(); i++) {
+				com.wcities.eventseeker.core.Date date = new com.wcities.eventseeker.core.Date(startTimeAvailable);
+
 				String strStartDate = jArrDates.getJSONObject(i).getString(KEY_START);
-				dates.add(strStartDate);
+				try {
+					date.setStartDate(format.parse(strStartDate + time));
+
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				dates.add(date);
 			}
 		}
 		return dates;

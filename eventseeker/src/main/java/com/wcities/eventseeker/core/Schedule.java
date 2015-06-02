@@ -1,5 +1,8 @@
 package com.wcities.eventseeker.core;
 
+import com.wcities.eventseeker.app.EventSeekr;
+import com.wcities.eventseeker.util.ConversionUtil;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -66,5 +69,43 @@ public class Schedule implements Serializable {
 			priceRange = tmpPriceRange;
 		}
 		return priceRange;
+	}
+
+	public String getDateRangeOrDateToDisplay(EventSeekr eventSeekr, boolean parseYear, boolean amPmCaps,
+				  boolean spaceBeforeAmPm) {
+		Date date1 = dates.get(0);
+		String strDate;
+
+		if (dates.size() == 1 && date1.getEndDate() != null) {
+			// for festivals dates size is 1 & endDate can be non-null which is different than startDate.
+			// display date range
+			strDate = ConversionUtil.getDateTime(eventSeekr,
+					date1.getStartDate(), false, parseYear, amPmCaps, spaceBeforeAmPm);
+			strDate += " - " + ConversionUtil.getDateTime(eventSeekr,
+					date1.getEndDate(), date1.isStartTimeAvailable(), parseYear, amPmCaps, spaceBeforeAmPm);
+
+		} else if (dates.size() > 1) {
+			Date dateN = dates.get(dates.size() - 1);
+			//Log.d(TAG, "" + ((dateN.getStartDate().getTime() - date1.getStartDate().getTime()) / ConversionUtil.MILLI_SECONDS_PER_DAY) + ", " + dates.size());
+			// Check if dates are all sequential, if yes then display date range
+			if (((dateN.getStartDate().getTime() - date1.getStartDate().getTime()) / ConversionUtil.MILLI_SECONDS_PER_DAY) + 1 == dates.size()) {
+				strDate = ConversionUtil.getDateTime(eventSeekr,
+						date1.getStartDate(), false, parseYear, amPmCaps, spaceBeforeAmPm);
+				strDate += " - " + ConversionUtil.getDateTime(eventSeekr,
+						dateN.getStartDate(), dateN.isStartTimeAvailable(), parseYear, amPmCaps, spaceBeforeAmPm);
+
+			} else {
+				// display first date only
+				strDate = ConversionUtil.getDateTime(eventSeekr,
+						date1.getStartDate(), date1.isStartTimeAvailable(), parseYear, amPmCaps, spaceBeforeAmPm);
+			}
+
+		} else {
+			// display single date
+			strDate = ConversionUtil.getDateTime(eventSeekr,
+					date1.getStartDate(), date1.isStartTimeAvailable(), parseYear, amPmCaps, spaceBeforeAmPm);
+		}
+
+		return strDate;
 	}
 }

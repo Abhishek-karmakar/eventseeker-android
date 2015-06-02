@@ -155,7 +155,7 @@ public class RVSearchEventsAdapterTab extends RVAdapterBase<RVSearchEventsAdapte
 		switch (vType) {
 		
 		case EVENT:
-			v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_event_tab, parent, false);
+			v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_event_tab_with_date_range, parent, false);
 			break;
 			
 		default:
@@ -209,13 +209,12 @@ public class RVSearchEventsAdapterTab extends RVAdapterBase<RVSearchEventsAdapte
 				
 				holder.txtEvtTitle.setText(event.getName());
 				ViewCompat.setTransitionName(holder.txtEvtTitle, "txtEvtTitleSearch" + position);
-				
-				if (event.getSchedule() != null) {
-					Schedule schedule = event.getSchedule();
-					Date date = schedule.getDates().get(0);
-					holder.txtEvtTime.setText(ConversionUtil.getDateTime(FragmentUtil.getApplication(searchEventsFragmentTab),
-                            date.getStartDate(), date.isStartTimeAvailable(), true, false, false));
-					
+
+				Schedule schedule = event.getSchedule();
+				if (schedule != null) {
+					holder.txtEvtTime.setText(schedule.getDateRangeOrDateToDisplay(FragmentUtil.getApplication(searchEventsFragmentTab),
+							true, false, false));
+
 					String venueName = (schedule.getVenue() != null) ? schedule.getVenue().getName() : "";
 					holder.txtEvtLoc.setText(venueName);
 				}
