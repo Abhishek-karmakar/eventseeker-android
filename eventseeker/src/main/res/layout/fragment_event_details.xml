@@ -57,18 +57,19 @@
 		            android:layout_marginTop="@dimen/txt_evt_details_margin_t_event_details"
 		            android:drawablePadding="@dimen/txt_evt_details_drawable_pad_event_details"
 		            android:textSize="@dimen/txt_evt_details_txt_size_event_details" />
-		        
-		        <TextView android:id="@+id/txtEvtTime"
-		            android:layout_width="match_parent"
-		            android:layout_height="wrap_content"
-		            android:drawableLeft="@drawable/ic_event_time"
-		            android:gravity="center_vertical"
-		            android:layout_marginLeft="@dimen/txt_evt_details_margin_l_event_details"
-		            android:layout_marginRight="@dimen/txt_evt_details_margin_r_event_details"
-		            android:layout_marginTop="@dimen/txt_evt_details_margin_t_event_details"
-		            android:drawablePadding="@dimen/txt_evt_details_drawable_pad_event_details"
-		            android:textSize="@dimen/txt_evt_details_txt_size_event_details"
-		            android:layout_below="@id/txtEvtLoc" />
+
+				<TextView android:id="@+id/txtEvtTime"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_below="@id/txtEvtLoc"
+					android:layout_marginLeft="@dimen/txt_evt_details_margin_l_event_details"
+					android:layout_marginRight="@dimen/txt_evt_details_margin_r_event_details"
+					android:layout_marginTop="@dimen/txt_evt_details_margin_t_event_details"
+					android:drawableLeft="@drawable/ic_event_time"
+					android:drawablePadding="@dimen/txt_evt_details_drawable_pad_event_details"
+					android:maxLines="2"
+					android:gravity="center_vertical"
+					android:textSize="@dimen/txt_evt_details_txt_size_event_details" />
 
                 <RelativeLayout android:id="@+id/rltLytCollapsible"
                     android:layout_width="match_parent"

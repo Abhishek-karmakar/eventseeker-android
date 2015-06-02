@@ -71,6 +71,7 @@
             android:drawableLeft="@drawable/ic_event_time"
             android:drawablePadding="@dimen/txt_evt_details_drawable_pad_event_details"
             android:gravity="center_vertical"
+            android:maxLines="2"
             android:textSize="@dimen/txt_evt_details_txt_size_event_details" />
     </RelativeLayout>
 

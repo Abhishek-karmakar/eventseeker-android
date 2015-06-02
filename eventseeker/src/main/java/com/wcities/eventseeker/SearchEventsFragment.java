@@ -366,9 +366,42 @@ public class SearchEventsFragment extends PublishEventFragment implements LoadIt
 				
 				if (event.getSchedule() != null) {
 					Schedule schedule = event.getSchedule();
-					Date date = schedule.getDates().get(0);
-					holder.txtEvtTime.setText(ConversionUtil.getDateTime(FragmentUtil.getApplication(searchEventFragment),
-                            date.getStartDate(), date.isStartTimeAvailable(), true, false, false));
+
+					List<Date> dates = schedule.getDates();
+					if (dates.size() > 0) {
+						Date date1 = dates.get(0);
+						String strDate;
+
+						if (dates.size() == 1 && date1.getEndDate() != null) {
+							// for festivals, endDate can be non-null which is different than startDate display date range
+							strDate = ConversionUtil.getDateTime(FragmentUtil.getApplication(searchEventFragment),
+									date1.getStartDate(), false, true, false, false);
+							strDate += " - " + ConversionUtil.getDateTime(FragmentUtil.getApplication(searchEventFragment),
+									date1.getEndDate(), date1.isStartTimeAvailable(), true, false, false);
+
+						} else if (dates.size() > 1) {
+							Date dateN = dates.get(dates.size() - 1);
+							//Log.d(TAG, "" + ((dateN.getStartDate().getTime() - date1.getStartDate().getTime()) / ConversionUtil.MILLI_SECONDS_PER_DAY) + ", " + dates.size());
+							// Check if dates are all sequential, if yes then display date range
+							if (((dateN.getStartDate().getTime() - date1.getStartDate().getTime()) / ConversionUtil.MILLI_SECONDS_PER_DAY) + 1 == dates.size()) {
+								strDate = ConversionUtil.getDateTime(FragmentUtil.getApplication(searchEventFragment),
+										date1.getStartDate(), false, true, false, false);
+								strDate += " - " + ConversionUtil.getDateTime(FragmentUtil.getApplication(searchEventFragment),
+										dateN.getStartDate(), dateN.isStartTimeAvailable(), true, false, false);
+
+							} else {
+								// display first date only
+								strDate = ConversionUtil.getDateTime(FragmentUtil.getApplication(searchEventFragment),
+										date1.getStartDate(), date1.isStartTimeAvailable(), true, false, false);
+							}
+
+						} else {
+							// display single date
+							strDate = ConversionUtil.getDateTime(FragmentUtil.getApplication(searchEventFragment),
+									date1.getStartDate(), date1.isStartTimeAvailable(), true, false, false);
+						}
+						holder.txtEvtTime.setText(strDate);
+					}
 					
 					String venueName = (schedule.getVenue() != null) ? schedule.getVenue().getName() : "";
 					holder.txtEvtLocation.setText(venueName);

@@ -54,7 +54,7 @@
 				android:text="Time"
 				android:layout_below="@id/txtEvtTitle"
 				android:gravity="center_vertical"
-				android:lines="1"
+				android:maxLines="2"
 				android:ellipsize="end" />
 	        
 	        <TextView android:id="@+id/txtEvtLocation"

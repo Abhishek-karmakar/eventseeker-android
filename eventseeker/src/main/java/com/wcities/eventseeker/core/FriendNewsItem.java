@@ -11,12 +11,10 @@ public class FriendNewsItem implements BitmapCacheable {
 	private Attending attending;
 	private ImageAttribution imageAttribution;
 	private String imgName;
-	private int venueId;
-	private String venueName;
-	private Date startTime;
 	private String fbPostId;
 	private Attending userAttending, newUserAttending;
 	private String bookingUrl;
+	private Schedule schedule;
 
 	public Friend getFriend() {
 		return friend;
@@ -50,6 +48,14 @@ public class FriendNewsItem implements BitmapCacheable {
 		this.attending = attending;
 	}
 
+	public Schedule getSchedule() {
+		return schedule;
+	}
+
+	public void setSchedule(Schedule schedule) {
+		this.schedule = schedule;
+	}
+
 	public ImageAttribution getImageAttribution() {
 		return imageAttribution;
 	}
@@ -64,30 +70,6 @@ public class FriendNewsItem implements BitmapCacheable {
 
 	public void setImgName(String imgName) {
 		this.imgName = imgName;
-	}
-
-	public int getVenueId() {
-		return venueId;
-	}
-
-	public void setVenueId(int venueId) {
-		this.venueId = venueId;
-	}
-
-	public String getVenueName() {
-		return venueName;
-	}
-
-	public void setVenueName(String venueName) {
-		this.venueName = venueName;
-	}
-
-	public Date getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
 	}
 
 	public String getFbPostId() {
@@ -135,13 +117,12 @@ public class FriendNewsItem implements BitmapCacheable {
 		event.setImgName(imgName);		
 		event.setImageAttribution(imageAttribution);
 		
-		Schedule schedule = new Schedule();		
-		Venue venue = new Venue(venueId);
-		venue.setName(venueName);
+		/*Schedule schedule = new Schedule();
 		schedule.setVenue(venue);
-		schedule.addDate(startTime);
-		event.setSchedule(schedule);
-		
+		//schedule.addDate(startTime);
+		schedule.setDates(this.schedule.getDates());*/
+		event.setSchedule(this.schedule);
+
 		event.setAttending(userAttending);
 		
 		return event;

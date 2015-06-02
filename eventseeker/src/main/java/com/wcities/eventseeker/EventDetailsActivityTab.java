@@ -19,7 +19,7 @@ public class EventDetailsActivityTab extends BaseActivityTab implements MapListe
 
 	    //Log.d(TAG, "onCreate()");
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_base_tab_double_line_toolbar);
+		setContentView(R.layout.activity_base_tab_triple_line_toolbar);
 		
 		setCommonUI();
 		
