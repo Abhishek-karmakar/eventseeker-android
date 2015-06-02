@@ -383,7 +383,7 @@
     
     <!-- toolbar_floating_window_double_line.xml -->
     <dimen name="floating_double_line_toolbar_ht">76dp</dimen>
-    <dimen name="floating_triple_line_toolbar_ht">90dp</dimen>
+    <dimen name="floating_triple_line_toolbar_ht">80dp</dimen>
     <dimen name="max_btn_ht_toolbar_floating_window_double_line">44dp</dimen>
     <dimen name="min_ht_toolbar_floating_window_double_line">@dimen/max_btn_ht_toolbar_floating_window_double_line</dimen>
     <dimen name="min_nav_btn_w_toolbar_floating_window_double_line">@dimen/max_btn_ht_toolbar_floating_window_double_line</dimen>
@@ -391,7 +391,8 @@
     + txt_toolbar_sub_title_ht_toolbar_floating_window_double_line -->
     <dimen name="txt_toolbar_title_ht_toolbar_floating_window_double_line">@dimen/max_btn_ht_toolbar_floating_window_double_line</dimen>
     <dimen name="txt_toolbar_sub_title_ht_toolbar_floating_window_double_line">32dp</dimen>
-    <dimen name="txt_toolbar_sub_title_ht_toolbar_floating_window_triple_line">47dp</dimen>
+    <dimen name="txt_toolbar_sub_title_ht_toolbar_floating_window_triple_line">36dp</dimen>
+    <dimen name="txt_toolbar_sub_title_margin_t_toolbar_floating_window_triple_line">-10dp</dimen>
     <dimen name="txt_toolbar_title_txt_size_toolbar_floating_window_double_line">22sp</dimen>
     <dimen name="txt_toolbar_sub_title_txt_size_toolbar_floating_window_double_line">16sp</dimen>
     
@@ -402,6 +403,7 @@
     <dimen name="rlt_lyt_txt_evt_title_pad_l_event_details_tab">16dp</dimen>
     <dimen name="txt_evt_title_ht_event_details_tab">@dimen/txt_toolbar_title_ht_toolbar_floating_window_double_line</dimen>
     <dimen name="txt_evt_time_ht_event_details_tab">@dimen/txt_toolbar_sub_title_ht_toolbar_floating_window_triple_line</dimen>
+    <dimen name="txt_evt_time_margin_t_event_details_tab">@dimen/txt_toolbar_sub_title_margin_t_toolbar_floating_window_triple_line</dimen>
     <dimen name="txt_evt_time_margin_r_toolbar_tab">110dp</dimen>
     <dimen name="txt_evt_time_margin_r_event_details_tab">170dp</dimen><!-- 120dp + 56dp = 176dp, In Event Details screen Tab
     (in activity lyt), the 1st fab's margin right is 120dp and width of fab is 56dp. So, we need to have event time to the right
