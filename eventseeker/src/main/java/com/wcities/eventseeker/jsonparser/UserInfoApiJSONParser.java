@@ -118,10 +118,6 @@ public class UserInfoApiJSONParser {
 
 	private static final String KEY_SYNC_SERVICE = "syncService";
 
-	private static final String KEY_DATES = "dates";
-	private static final String KEY_START = "start";
-	private static final String KEY_END = "end";
-	
 	public static final int MSG_CODE_SUCCESS = -1;
 	public static final int MSG_CODE_UNSUCCESS = -2;
 	public static final int MSG_CODE_NO_ACCESS_TOKEN = -3;
