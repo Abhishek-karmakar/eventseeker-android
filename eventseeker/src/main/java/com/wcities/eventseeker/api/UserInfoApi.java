@@ -552,7 +552,7 @@ public class UserInfoApi extends Api {
 		//}
 		
 		if (type == Type.friendsfeed) { 
-			uriBuilder.append("&multiple_account=enable");
+			uriBuilder.append("&multiple_account=enable&moreInfo=daterange");
 			
 			if (tracktype != null) {
 				uriBuilder.append("&tracktype=").append(tracktype.name()).append("&removeTracking=enable");
@@ -581,7 +581,7 @@ public class UserInfoApi extends Api {
 		}
 		
 		if (type == Type.myevents || type == Type.recommendedevent || type == Type.mysavedevents) {
-			uriBuilder.append("&link=enable");
+			uriBuilder.append("&link=enable&moreInfo=daterange");
 		}
 		
 		/*if (type == Type.mysavedevents) {

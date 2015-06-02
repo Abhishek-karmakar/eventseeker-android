@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/frmLytRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".EventDetailsActivityTab" >
+    
+    <LinearLayout android:id="@+id/lnrLytRoot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <android.support.v4.widget.DrawerLayout
+            android:id="@+id/drawer_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <!-- The main content view -->
+
+            <FrameLayout android:id="@+id/content_frame"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <!-- The navigation drawer -->
+
+            <LinearLayout
+                android:id="@+id/rootNavigationDrawer"
+                android:layout_width="@dimen/root_navigation_drawer_w_main"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:background="@drawable/bg_list_nav_drawer"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/action_bar_ht" >
+                
+            </LinearLayout>
+            
+        </android.support.v4.widget.DrawerLayout>
+        
+    </LinearLayout>
+    
+    <include layout="@layout/toolbar_floating_window_triple_line" />
+    
+    <com.melnykov.fab.FloatingActionButton android:id="@+id/fab1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
+        android:layout_marginTop="@dimen/fab_margin_t_base_tab_floating"
+        android:layout_marginRight="@dimen/fab_1_margin_r_base_tab_floating"
+        android:src="@drawable/ic_ticket_available_floating"
+        fab:fab_type="normal"
+        fab:fab_colorNormal="@color/fab_color_normal_base_tab_floating"
+        fab:fab_colorPressed="@color/colorPrimaryDark"
+        fab:fab_colorRipple="@android:color/white"
+        android:visibility="invisible" />
+	
+	<com.melnykov.fab.FloatingActionButton android:id="@+id/fab2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
+        android:layout_marginTop="@dimen/fab_margin_t_base_tab_floating"
+        android:layout_marginRight="@dimen/fab_2_margin_r_base_tab_floating"
+        android:src="@drawable/ic_unsaved_event_floating"
+        fab:fab_type="normal"
+        fab:fab_colorNormal="@color/fab_color_normal_base_tab_floating"
+        fab:fab_colorPressed="@color/colorPrimaryDark"
+        fab:fab_colorRipple="@android:color/white"
+        android:visibility="invisible" />
+
+</FrameLayout>

@@ -296,7 +296,7 @@ public class FriendsActivityFragmentTab extends PublishEventListFragment impleme
 				 * Venue startTime is null by default for events which were tracked in past but afterwards deleted 
 				 * from server due to some reason. We need not show such feeds.
 				 */
-				if (friendNewsItem.getAttending() == Attending.NOT_GOING || friendNewsItem.getStartTime() == null) {
+				if (friendNewsItem.getAttending() == Attending.NOT_GOING || friendNewsItem.getSchedule().getDates().size() == 0) {
 					iterator.remove();
 				}
 			}
@@ -449,12 +449,44 @@ public class FriendsActivityFragmentTab extends PublishEventListFragment impleme
 
 				ViewCompat.setTransitionName(imgEvt, "imgEvtFriendsActivity" + pos);
 
-				Date date = item.getStartTime();
-				String strDate = "";
-				if (date != null) {
-					strDate = ConversionUtil.getDayForFriendsActivity(date.getStartDate()) + " @ ";
+				List<Date> dates = item.getSchedule().getDates();
+				if (dates.size() > 0) {
+					Date date1 = dates.get(0);
+					String strDate = "";
+
+					if (dates.size() == 1 && date1.getEndDate() != null) {
+						// for festivals, endDate can be non-null which is different than startDate display date range
+						strDate = ConversionUtil.getDateTime(FragmentUtil.getApplication(fragment),
+								date1.getStartDate(), false, true, false, false);
+						strDate += " - " + ConversionUtil.getDateTime(FragmentUtil.getApplication(fragment),
+								date1.getEndDate(), date1.isStartTimeAvailable(), true, false, false);
+
+					} else if (dates.size() > 1) {
+						Date dateN = dates.get(dates.size() - 1);
+						//Log.d(TAG, "" + ((dateN.getStartDate().getTime() - date1.getStartDate().getTime()) / ConversionUtil.MILLI_SECONDS_PER_DAY) + ", " + dates.size());
+						// Check if dates are all sequential, if yes then display date range
+						if (((dateN.getStartDate().getTime() - date1.getStartDate().getTime()) / ConversionUtil.MILLI_SECONDS_PER_DAY) + 1 == dates.size()) {
+							strDate = ConversionUtil.getDateTime(FragmentUtil.getApplication(fragment),
+									date1.getStartDate(), false, true, false, false);
+							strDate += " - " + ConversionUtil.getDateTime(FragmentUtil.getApplication(fragment),
+									dateN.getStartDate(), dateN.isStartTimeAvailable(), true, false, false);
+
+						} else {
+							// display first date only
+							strDate = ConversionUtil.getDateTime(FragmentUtil.getApplication(fragment),
+									date1.getStartDate(), date1.isStartTimeAvailable(), true, false, false);
+						}
+
+					} else {
+						// display single date
+						strDate = ConversionUtil.getDateTime(FragmentUtil.getApplication(fragment),
+								date1.getStartDate(), date1.isStartTimeAvailable(), true, false, false);
+					}
+					if (!strDate.equals("")) {
+						strDate = strDate + " @ ";
+					}
+					txtVenue.setText(strDate + item.getSchedule().getVenue().getName().toUpperCase());
 				}
-				txtVenue.setText(strDate + item.getVenueName().toUpperCase());
 				
 				if (item.getFbPostId() != null) {
 					lnrLike.setVisibility(View.VISIBLE);

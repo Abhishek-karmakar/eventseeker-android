@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toolbarForActionbar"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/floating_triple_line_toolbar_ht"
+    android:elevation="@dimen/action_bar_elevation">
+    
+    <RelativeLayout android:id="@+id/rltLytCustomToolbar"
+        android:layout_width="match_parent"
+    	android:layout_height="match_parent">
+    
+	    <TextView android:id="@+id/txtToolbarTitle"
+	        android:layout_width="match_parent"
+	    	android:layout_height="@dimen/txt_toolbar_title_ht_toolbar_floating_window_double_line"
+	    	android:gravity="center_vertical"
+	    	android:textColor="@color/text_color_primary"
+	    	android:textSize="@dimen/txt_toolbar_title_txt_size_toolbar_floating_window_double_line"
+	    	android:singleLine="true"
+		    android:ellipsize="end"
+	    	android:textStyle="bold" />
+
+		<TextView android:id="@+id/txtToolbarSubTitle"
+			android:layout_width="match_parent"
+			android:layout_height="@dimen/txt_toolbar_sub_title_ht_toolbar_floating_window_triple_line"
+			android:layout_marginRight="@dimen/txt_evt_time_margin_r_toolbar_tab"
+			android:layout_below="@id/txtToolbarTitle"
+			android:gravity="center_vertical"
+			android:maxLines="2"
+			android:ellipsize="end"
+			android:textColor="@color/text_color_primary"
+			android:textSize="@dimen/txt_toolbar_sub_title_txt_size_toolbar_floating_window_double_line" />
+    
+    </RelativeLayout>
+    
+</android.support.v7.widget.Toolbar>
