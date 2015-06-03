@@ -56,7 +56,6 @@ import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
-import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
@@ -585,42 +584,7 @@ public class EventDetailsFragment extends PublishEventFragmentLoadableFromBackSt
 				txtVenue.setText(event.getSchedule().getVenue().getName());
 				txtVenue.setOnClickListener(this);
 			}
-
-			List<Date> dates = schedule.getDates();
-			if (dates.size() > 0) {
-				Date date1 = dates.get(0);
-				String strDate;
-
-				if (dates.size() == 1 && date1.getEndDate() != null) {
-					// for festivals, endDate can be non-null which is different than startDate display date range
-					strDate = ConversionUtil.getDateTime(FragmentUtil.getApplication(this),
-							date1.getStartDate(), false, true, false, false);
-					strDate += " - " + ConversionUtil.getDateTime(FragmentUtil.getApplication(this),
-							date1.getEndDate(), date1.isStartTimeAvailable(), true, false, false);
-
-				} else if (dates.size() > 1) {
-					Date dateN = dates.get(dates.size() - 1);
-					//Log.d(TAG, "" + ((dateN.getStartDate().getTime() - date1.getStartDate().getTime()) / ConversionUtil.MILLI_SECONDS_PER_DAY) + ", " + dates.size());
-					// Check if dates are all sequential, if yes then display date range
-					if (((dateN.getStartDate().getTime() - date1.getStartDate().getTime()) / ConversionUtil.MILLI_SECONDS_PER_DAY) + 1 == dates.size()) {
-						strDate = ConversionUtil.getDateTime(FragmentUtil.getApplication(this),
-								date1.getStartDate(), false, true, false, false);
-						strDate += " - " + ConversionUtil.getDateTime(FragmentUtil.getApplication(this),
-								dateN.getStartDate(), dateN.isStartTimeAvailable(), true, false, false);
-
-					} else {
-						// display first date only
-						strDate = ConversionUtil.getDateTime(FragmentUtil.getApplication(this),
-								date1.getStartDate(), date1.isStartTimeAvailable(), true, false, false);
-					}
-
-				} else {
-					// display single date
-					strDate = ConversionUtil.getDateTime(FragmentUtil.getApplication(this),
-							date1.getStartDate(), date1.isStartTimeAvailable(), true, false, false);
-				}
-				txtEvtTime.setText(strDate);
-			}
+			txtEvtTime.setText(schedule.getDateRangeOrDateToDisplay(FragmentUtil.getApplication(this), true, false, false));
 		}
 	}
 	

@@ -1739,7 +1739,12 @@ public class MainActivity extends BaseActivity implements
 			Bundle args = fragment.getArguments();
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(args.getInt(BundleKeys.SCREEN_TITLE)),
 					AppConstants.FRAGMENT_TAG_SELECTED_ARTIST_CATEGORY_FRAGMENT);
-			
+
+		} else if (fragment instanceof SelectedFeaturedListArtistsFragment) {
+			Bundle args = fragment.getArguments();
+			onFragmentResumed(AppConstants.INVALID_INDEX, args.getString(BundleKeys.SCREEN_TITLE),
+					AppConstants.FRAGMENT_TAG_SELECTED_FEATURED_LIST_ARTISTS_FRAGMENT);
+
 		} else if (fragment instanceof NavigationFragment) {
 			onFragmentResumed(AppConstants.INVALID_INDEX, getResources().getString(R.string.title_navigation), 
 					AppConstants.FRAGMENT_TAG_NAVIGATION);

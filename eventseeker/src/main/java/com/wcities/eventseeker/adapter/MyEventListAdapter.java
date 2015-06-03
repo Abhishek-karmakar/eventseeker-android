@@ -32,7 +32,6 @@ import com.wcities.eventseeker.cache.BitmapCacheable;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
-import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
@@ -44,7 +43,6 @@ import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.interfaces.PublishListener;
 import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
-import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FbUtil;
 import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.viewdata.SharedElement;
@@ -210,39 +208,9 @@ public class MyEventListAdapter extends BaseAdapter implements DateWiseEventPare
 				}
 				
 				TextView txtEvtTime = ((TextView) convertView.findViewById(R.id.txtEvtTime));
-				List<Date> dates = schedule.getDates();
-				if (dates.size() > 0) {
-					Date date1 = dates.get(0);
-					String strDate;
-
-					if (dates.size() == 1 && date1.getEndDate() != null) {
-						// for festivals, endDate can be non-null which is different than startDate display date range
-						strDate = ConversionUtil.getDateTime(mContext.getApplicationContext(),
-								date1.getStartDate(), false, true, false, false);
-						strDate += " - " + ConversionUtil.getDateTime(mContext.getApplicationContext(),
-								date1.getEndDate(), date1.isStartTimeAvailable(), true, false, false);
-
-					} else if (dates.size() > 1) {
-						Date dateN = dates.get(dates.size() - 1);
-						//Log.d(TAG, "" + ((dateN.getStartDate().getTime() - date1.getStartDate().getTime()) / ConversionUtil.MILLI_SECONDS_PER_DAY) + ", " + dates.size());
-						// Check if dates are all sequential, if yes then display date range
-						if (((dateN.getStartDate().getTime() - date1.getStartDate().getTime()) / ConversionUtil.MILLI_SECONDS_PER_DAY) + 1 == dates.size()) {
-							strDate = ConversionUtil.getDateTime(mContext.getApplicationContext(),
-									date1.getStartDate(), false, true, false, false);
-							strDate += " - " + ConversionUtil.getDateTime(mContext.getApplicationContext(),
-									dateN.getStartDate(), dateN.isStartTimeAvailable(), true, false, false);
-
-						} else {
-							// display first date only
-							strDate = ConversionUtil.getDateTime(mContext.getApplicationContext(),
-									date1.getStartDate(), date1.isStartTimeAvailable(), true, false, false);
-						}
-
-					} else {
-						// display single date
-						strDate = ConversionUtil.getDateTime(mContext.getApplicationContext(),
-								date1.getStartDate(), date1.isStartTimeAvailable(), true, false, false);
-					}
+				String strDate = schedule.getDateRangeOrDateToDisplay(
+						(EventSeekr) mContext.getApplicationContext(), true, false, false);
+				if (!strDate.trim().equals("")) {
 					txtEvtTime.setVisibility(View.VISIBLE);
 					txtEvtTime.setText(strDate);
 
