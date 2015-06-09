@@ -587,9 +587,15 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 			updateTitle(title);
 		}
 		/**
-		 * 	refresh the SearchView	
+		 * 	refresh the SearchView
+		 *
+		 * SearchView becomes null on orientation change which is the case when user changes
+		 * language & then changes orientation due to which this function will be called from
+		 * SettingsActivityTab's onStart().
 		 */
-		searchView.setQueryHint(getResources().getString(R.string.menu_search));
+		if (searchView != null) {
+			searchView.setQueryHint(getResources().getString(R.string.menu_search));
+		}
 	}
 	
 	@Override
@@ -647,7 +653,7 @@ public abstract class BaseActivityTab extends BaseActivity implements IGoogleAna
 			
 		} else if (pairImg != null) {
 			options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, pairImg);
-			
+
 		} else if (pairTxt != null) {
 			options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, pairTxt);
 		} 

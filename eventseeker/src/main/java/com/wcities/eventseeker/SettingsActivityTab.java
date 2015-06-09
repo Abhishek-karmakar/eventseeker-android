@@ -45,8 +45,8 @@ public class SettingsActivityTab extends BaseActivityTab {
             if (previousLocale != null && currentLocale != previousLocale) {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.detach(settingsFragmentTab).attach(settingsFragmentTab).commitAllowingStateLoss();
+				onLocaleChanged();
             }
-            onLocaleChanged();
         }
         super.onStart();
     }

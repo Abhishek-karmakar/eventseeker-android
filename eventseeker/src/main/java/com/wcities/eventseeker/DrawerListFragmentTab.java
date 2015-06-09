@@ -198,10 +198,17 @@ public class DrawerListFragmentTab extends Fragment {
 	}
 	
 	public void refreshDrawerList() {
-		drawerListItems = new ArrayList<DrawerListItem>();
-		loadDrawerListItems();
-		drawerListAdapter.setData(drawerListItems);
-		drawerListAdapter.notifyDataSetChanged();
+		/**
+		 * drawerListAdapter becomes null on orientation change which is the case when user changes
+		 * language & then changes orientation due to which this function will be called from
+		 * SettingsActivityTab's onStart() -> onLocaleChanged().
+		 */
+		if (drawerListAdapter != null) {
+			drawerListItems = new ArrayList<DrawerListItem>();
+			loadDrawerListItems();
+			drawerListAdapter.setData(drawerListItems);
+			drawerListAdapter.notifyDataSetChanged();
+		}
 	}
 	
 	private static class DrawerListAdapter extends RVAdapterBase<DrawerListAdapter.ListItemViewHolder> {
