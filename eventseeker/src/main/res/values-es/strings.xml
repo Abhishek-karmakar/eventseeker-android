@@ -437,14 +437,16 @@
 
     <!-- Commands -->
     <string name="al_command_next">Siguiente</string>
-    <string name="al_command_back">Atrás</string>
+    <string name="al_command_back">Anterior</string>
     <string name="al_command_details">Detalles</string>
     <string name="al_command_play">Play</string>
     <string name="al_command_call_venue">Llamar</string>
     <string name="al_command_follow">Seguir</string>
+    <string name="al_command_address">Dirección</string>
 
     <!-- SoftButtons -->
     <!-- <string name="soft_btn_discover"></string> -->
+    <string name="soft_btn_back">Ante.</string>
 
     <!-- MainActivityAL -->
     <string name="al_command_my_events">Mis Eventos</string>

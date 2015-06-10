@@ -1,20 +1,20 @@
 package com.wcities.eventseeker.applink.core;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.applink.util.ALUtil;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EventList {
 
 	private static final String TAG = EventList.class.getName();
 	private static final int DEFAULT_EVT_LIMIT = 10;
 	private static final int MAX_EVENTS = 25;
-	
+
 	public static enum GetEventsFrom {
 		EVENTS,
 		FEATURED_EVENTS,
@@ -143,9 +143,7 @@ public class EventList {
 	}
 	
 	public boolean hasNextEvent() throws IOException {
-		//Log.d(TAG, "hasNextEvents");
 		if (currentEvtPos + 1 < eventList.size()) {
-			//Log.d(TAG, "hasNextEvents true");
 			return true;
 			
 		} else if (isMoreDataAvailable && loadEventsListener != null && size() < MAX_EVENTS) {
@@ -153,38 +151,22 @@ public class EventList {
 			// First show the loading message
 			ALUtil.displayMessage(R.string.loading, AppConstants.INVALID_RES_ID);
 			loadEventsListener.loadEvents();
-			if (currentEvtPos + 1 < eventList.size()) {
-				//Log.d(TAG, "hasNextEvents true");
-				return true;
-				
-			} else {
-				//Log.d(TAG, "hasNextEvents false");
-				return false;
-			}
-			
+			return (currentEvtPos + 1 < eventList.size());
+
 		} else {
-			//Log.d(TAG, "hasNextEvents false");
 			return false;
 		}
 	}
 	
 	public boolean hasPreviousEvent() {
-		if (currentEvtPos - 1 > -1) {
-			return true;
-			
-		} else {
-			return false;
-		}
+		return  (currentEvtPos - 1 > -1);
 	}
 
 	public boolean moveToNextEvent() throws IOException {
-		//Log.d(TAG, "moveToNextEvent");
 		if (hasNextEvent()) {
 			currentEvtPos++;
-			//Log.d(TAG, "moveToNextEvent true");
 			return true;
 		}
-		//Log.d(TAG, "moveToNextEvent false");
 		return false;
 	}
 	

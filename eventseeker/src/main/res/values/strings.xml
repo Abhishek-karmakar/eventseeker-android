@@ -503,17 +503,20 @@
     <string name="calling">Calling</string>
     <string name="leaving_app_for_call">You are now leaving cityseeker. Call will be initiated on your mobile device</string>
     <string name="welcome_to_cityseeker_msg">Welcome to eventseeker. Find concerts, clubs, sports, theater, festivals and more using the EXPLORE function. Use the MY EVENTS command addto access recommended events based on your interests.</string>
-    
+    <string name="venue_address_not_available">Venue address not available.</string>
+
 	<!-- Commands -->
     <string name="al_command_next">Next</string>
-    <string name="al_command_back">Back</string>
+    <string name="al_command_back">Previous</string>
     <string name="al_command_details">Details</string>
     <string name="al_command_play">Play</string>
     <string name="al_command_call_venue">Call</string>
     <string name="al_command_follow">Follow</string>
-    
+    <string name="al_command_address">Address</string>
+
     <!-- SoftButtons -->
     <string name="soft_btn_discover">@string/al_command_discover</string>
+    <string name="soft_btn_back">Prev.</string>
 
 	<!-- MainActivityAL -->
     <string name="al_command_my_events">My Events</string>

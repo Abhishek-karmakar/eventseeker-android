@@ -436,18 +436,20 @@
     
     <!-- Commands -->
     <string name="al_command_next">Avanti</string>
-    <string name="al_command_back">Indietro</string>
+    <string name="al_command_back">Precedente</string>
     <string name="al_command_details">Dettagli</string>
     <string name="al_command_play">Play</string>
     <string name="al_command_call_venue">chiamata</string>
     <string name="al_command_follow">Seguire</string>
+    <string name="al_command_address">Indirizzo</string>
         
     <!-- SoftButtons -->
     <!-- <string name="soft_btn_discover"></string> -->
+    <string name="soft_btn_back">Prec.</string>
     
     <!-- MainActivityAL -->
     <string name="al_command_my_events">I miei eventi</string>
-    <string name="al_command_discover">Esplorare</string>
+    <string name="al_command_discover">Esplora</string>
     <string name="al_command_search">cerca</string>
     
     <!-- DiscoverActivityAL -->

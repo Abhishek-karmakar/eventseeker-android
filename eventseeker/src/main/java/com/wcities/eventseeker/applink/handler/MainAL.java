@@ -1,7 +1,5 @@
 package com.wcities.eventseeker.applink.handler;
 
-import android.util.Log;
-
 import com.ford.syncV4.proxy.rpc.SoftButton;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -9,6 +7,7 @@ import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.applink.util.ALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil.Command;
+import com.wcities.eventseeker.logger.Logger;
 
 import java.util.Vector;
 
@@ -66,10 +65,10 @@ public class MainAL extends ESIProxyALM {
 			case DISCOVER:
 			case MY_EVENTS:
 			case SEARCH:
-				AppLinkService.getInstance().initiateESIProxyListener(cmd, isTriggerSrcMenu);
+				AppLinkService.getInstance().initiateESIProxyListener(cmd, isTriggerSrcMenu, null);
 				break;
 			default:
-				Log.d(TAG, "Command : " + cmd + " is an invalid command.");
+				Logger.d(TAG, "Command : " + cmd + " is an invalid command.");
 				break;
 		}
 	}

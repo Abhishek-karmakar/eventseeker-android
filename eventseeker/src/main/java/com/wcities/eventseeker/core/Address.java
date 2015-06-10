@@ -10,6 +10,15 @@ public class Address implements Serializable {
 	private String city, state;
 	private Country country;
 	private double lat, lon;
+	private String zip;
+
+	public String getZip() {
+		return zip;
+	}
+
+	public void setZip(String zip) {
+		this.zip = zip;
+	}
 
 	public String getAddress1() {
 		return address1;

@@ -3,7 +3,6 @@ package com.wcities.eventseeker.applink.util;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
-import android.util.Log;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
@@ -11,11 +10,13 @@ import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.applink.core.EventList;
 import com.wcities.eventseeker.applink.service.AppLinkService;
+import com.wcities.eventseeker.core.Address;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.BookingInfo;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Venue;
+import com.wcities.eventseeker.logger.Logger;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -26,12 +27,13 @@ public class EventALUtil {
 	
 	private static final String COUNTRY_NAME = "United States";
 	private static final String TAG = EventALUtil.class.getName();
+	private static final int ALERT_SLEEP_FOR_CALL = 500;
 
-    /**
+	/**
      * This flag is added because whenever user presses next/previous button continuously
      * which results in repetation of alert dialog 'No Points Available'
      */
-    public static boolean isAlertForNoPointsAvailable;
+    public static boolean isAlertForNoEventsAvailable;
 	
 	public static void speakEventTitle(Event event, EventSeekr app) {
 		/**
@@ -40,8 +42,7 @@ public class EventALUtil {
 		 * the current session it shouldn't append the second line.
 		 */
 
-		String simple = "Okay, " + event.getName();
-		
+		String simple = event.getName();
 		if (event.getSchedule() != null) {
 			Venue venue = event.getSchedule().getVenue();
 			if (venue != null) {
@@ -120,7 +121,7 @@ public class EventALUtil {
 				}
 				
 			} else {
-				Log.d(TAG, "Price Details are not available.");
+				Logger.d(TAG, "Price Details are not available.");
 			}
 		}
 		if (simple.equals("")) {
@@ -224,23 +225,34 @@ public class EventALUtil {
 	}
 	
 	public static void onNextCommand(EventList eventList, EventSeekr context) throws IOException {
-        if (isAlertForNoPointsAvailable) {
+		if (isAlertForNoEventsAvailable) {
         	return;
         }
 		if (eventList.moveToNextEvent()) {
 			displayCurrentEvent(eventList);
 			speakEventTitle(eventList.getCurrentEvent(), context);
-			
+
 		} else {
-            isAlertForNoPointsAvailable = true;
+			/**
+			 * The below check is for the case when total no. of events are multiples of 10.
+			 * In this case, suppose if total events are 20 and when user presses next button
+			 * after the 20th event then 'loading...' text would appear on screen and then it
+			 * will show alert saying 'No events available'. Then alert gets dismissed but the
+			 * loading text stays forever. So, to avoid that we will show current event in
+			 * this scenario and hence the screen gets refreshed.
+			 */
+			if (eventList.size() > 0) {
+				displayCurrentEvent(eventList);
+			}
+			isAlertForNoEventsAvailable = true;
 			Resources res = context.getResources();
 			ALUtil.alert(res.getString(R.string.alert_no_events_available), res.getString(
 					R.string.event_no_evts_avail));
 		}		
 	}
 
-	public static void onBackCommand(EventList eventList,EventSeekr context) {
-        if (isAlertForNoPointsAvailable) {
+	public static void onBackCommand(EventList eventList, EventSeekr context) {
+        if (isAlertForNoEventsAvailable) {
             return;
         }
 		if (eventList.moveToPreviousEvent()) {
@@ -248,7 +260,7 @@ public class EventALUtil {
 			speakEventTitle(eventList.getCurrentEvent(), context);
 			
 		} else {
-            isAlertForNoPointsAvailable = true;
+            isAlertForNoEventsAvailable = true;
 			Resources res = context.getResources();
 			ALUtil.alert(res.getString(R.string.alert_no_events_available), res.getString(
 					R.string.event_no_evts_avail));
@@ -259,21 +271,82 @@ public class EventALUtil {
 		Event event = eventList.getCurrentEvent();
 		Resources res = AppLinkService.getInstance().getResources();
 		if (event != null) {
-			Venue venue = event.getSchedule().getVenue();
+			final Venue venue = event.getSchedule().getVenue();
 			if (venue != null && venue.getPhone() != null) {
 				String simple = res.getString(R.string.calling);
 				ALUtil.alert(simple + " " + venue.getName(), simple);
-				//ALUtil.speak(R.string.leaving_app_for_call);
-				
-				Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + venue.getPhone()));
-				/*AppLinkService.getInstance().getCurrentActivity().startActivity(Intent.createChooser(
-						intent, "Call..."));*/
-				AppLinkService.getInstance().getCurrentActivity().startActivity(intent);
-				
+				//speak(R.string.leaving_app_for_call);
+				new Thread(new Runnable() {
+
+					@Override
+					public void run() {
+						do {
+							try {
+								Thread.sleep(ALERT_SLEEP_FOR_CALL);
+
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+
+						} while (AppLinkService.getInstance().isAlertCurrentlyVisible());
+
+						Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + venue.getPhone()));
+						intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+						AppLinkService.getInstance().getCurrentActivity().startActivity(intent);
+					}
+				}).start();
+
 			} else {
 				ALUtil.alert(res.getString(R.string.ford_phone_no), res.getString(R.string.not_available), "", 
 					res.getString(R.string.ford_phone_no_is_unavailable));
 			}
 		}
+	}
+
+	public static void speakVenueAddress(Venue venue, EventSeekr context) {
+		String simple = context.getResources().getString(R.string.venue_address_not_available);
+		if(venue != null) {
+			Address address = venue.getAddress();
+			if (address != null) {
+				String address1 = address.getAddress1();
+				String address2 = address.getAddress2();
+				String city = address.getCity();
+				String zipcode = address.getZip();
+
+				StringBuilder addressToSpeak = new StringBuilder();
+
+				if (address1 != null && !address1.trim().equals("")) {
+					addressToSpeak.append(address1);
+				}
+
+				if (address2 != null && !address2.trim().equals("")) {
+					if (!addressToSpeak.toString().equals("")) {
+						addressToSpeak.append(", ");
+					}
+					addressToSpeak.append(address2);
+				}
+
+				if (city != null && !city.trim().equals("")) {
+					if (!addressToSpeak.toString().equals("")) {
+						addressToSpeak.append(", ");
+					}
+					addressToSpeak.append(city);
+				}
+
+				if (zipcode != null && !zipcode.trim().equals("")) {
+					if (!addressToSpeak.toString().equals("")) {
+						addressToSpeak.append(", ");
+					}
+					addressToSpeak.append(zipcode);
+				}
+
+				if (!addressToSpeak.toString().equals("")) {
+					simple = addressToSpeak.toString();
+				}
+			}
+		}
+		Logger.d(TAG, "Address : " + simple);
+		Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
+		ALUtil.speakText(ttsChunks);
 	}
 }

@@ -1,15 +1,15 @@
 package com.wcities.eventseeker.applink.util;
 
-import java.util.Arrays;
-import java.util.Vector;
-
 import com.ford.syncV4.proxy.rpc.Choice;
 import com.wcities.eventseeker.applink.handler.DiscoverAL.Discover;
 import com.wcities.eventseeker.applink.handler.MyEventsAL.SuggestionReply;
 import com.wcities.eventseeker.applink.handler.SearchAL.SearchCategories;
 
+import java.util.Arrays;
+import java.util.Vector;
+
 public class InteractionChoiceSetUtil {
-	
+
 	public static enum ChoiceSet {
 		DISCOVER,
 		SUGGESTION_REPLY,

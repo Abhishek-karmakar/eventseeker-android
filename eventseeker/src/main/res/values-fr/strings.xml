@@ -441,9 +441,11 @@
     <string name="al_command_play">Écouter</string>
     <string name="al_command_call_venue">Appel</string>
     <string name="al_command_follow">Suivre</string>
+    <string name="al_command_address">Adresse</string>
         
     <!-- SoftButtons -->
     <!-- <string name="soft_btn_discover"></string> -->
+    <string name="soft_btn_back">Préc.</string>
     
     <!-- MainActivityAL -->
     <string name="al_command_my_events">Mes événements</string>
