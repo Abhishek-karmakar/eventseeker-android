@@ -226,8 +226,8 @@ public class EventALUtil {
 	
 	public static void onNextCommand(EventList eventList, EventSeekr context) throws IOException {
 		if (isAlertForNoEventsAvailable) {
-        	return;
-        }
+			return;
+		}
 		if (eventList.moveToNextEvent()) {
 			displayCurrentEvent(eventList);
 			speakEventTitle(eventList.getCurrentEvent(), context);
@@ -241,14 +241,21 @@ public class EventALUtil {
 			 * loading text stays forever. So, to avoid that we will show current event in
 			 * this scenario and hence the screen gets refreshed.
 			 */
-			if (eventList.size() > 0) {
-				displayCurrentEvent(eventList);
-			}
 			isAlertForNoEventsAvailable = true;
 			Resources res = context.getResources();
-			ALUtil.alert(res.getString(R.string.alert_no_events_available), res.getString(
-					R.string.event_no_evts_avail));
-		}		
+			if (eventList.size() > 0) {
+				displayCurrentEvent(eventList);
+				ALUtil.alert(res.getString(R.string.you_have_reached), res.getString(R.string.the_last_element),
+						res.getString(R.string.of_the_list), res.getString(R.string.you_have_reached_the_last_element_of_the_list));
+
+			} else {
+				/**
+				 * This is the case when after loading the list, '0' elements are there in entire list and then we have called
+				 * onNextCommand to show the first element of the list
+				 */
+				ALUtil.alert(res.getString(R.string.alert_no_events_available), res.getString(R.string.event_no_evts_avail));
+			}
+		}
 	}
 
 	public static void onBackCommand(EventList eventList, EventSeekr context) {
@@ -262,8 +269,8 @@ public class EventALUtil {
 		} else {
             isAlertForNoEventsAvailable = true;
 			Resources res = context.getResources();
-			ALUtil.alert(res.getString(R.string.alert_no_events_available), res.getString(
-					R.string.event_no_evts_avail));
+			ALUtil.alert(res.getString(R.string.you_are_on), res.getString(R.string.the_first_element),
+				res.getString(R.string.of_the_list), res.getString(R.string.you_are_on_the_first_element_of_the_list));
 		}		
 	}
 

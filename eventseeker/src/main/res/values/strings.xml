@@ -526,7 +526,7 @@
 	<!-- DiscoverActivityAL -->
     <string name="discover_al_discover_categories">Okay, would you like concerts, clubs, sports, theater, or, festivals?</string>
     <string name="discover_al_time_out_help_text">concerts, clubs, sports, theater, festivals</string>
-    <string name="discover_al_discover">Say Category</string>
+    <string name="discover_al_discover">Choose Category</string>
     <string name="discover_al_concerts">Concerts</string>
     <string name="discover_al_clubs">Clubs</string>
     <string name="discover_al_sports">Sports</string>
@@ -556,6 +556,14 @@
     <!-- Events -->
     <string name="event_no_evts_avail">No events available</string>
     <string name="alert_no_events_available">No events available</string>
+    <string name="you_are_on_the_first_element_of_the_list">You are on the first element of the list</string>
+    <string name="you_are_on">You are on</string>
+    <string name="the_first_element">the first element</string>
+    <string name="of_the_list">of the list</string>
+    <string name="you_have_reached_the_last_element_of_the_list">You have reached the last element of the list</string>
+    <string name="you_have_reached">You have reached</string>
+    <string name="the_last_element">the last element</string>
+
     <string name="plz_press_nxt_or_bck">, Please press the voice button and say next or back.</string>
     <string name="plz_press_nxt_bck_dtls_cll">, Please press the voice button and say next, previous, details call or address.</string>
     <string name="detail_not_available">Detail description not available</string>

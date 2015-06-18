@@ -317,7 +317,9 @@ public class EventApiJSONParser {
 		}
 		address.setCity(ConversionUtil.decodeHtmlEntities(jObjAddress, KEY_CITY));
 		address.setCountry(getCountry(jObjAddress.getJSONObject(KEY_COUNTRY)));
-		address.setZip(jObjAddress.getString(KEY_ZIP));
+		if (jObjAddress.has(KEY_ZIP)) {
+			address.setZip(jObjAddress.getString(KEY_ZIP));
+		}
 		if (jObjAddress.has(KEY_LATITUDE)) {
 			String strLat = jObjAddress.getString(KEY_LATITUDE);
 			String strLon = jObjAddress.getString(KEY_LONGITUDE);
@@ -575,7 +577,7 @@ public class EventApiJSONParser {
 		} else if (jsonObject.has(KEY_DATE)) {
 			buildSchedule(jsonObject, event);
 		}
-		
+
 		if (jsonObject.has(KEY_ARTIST)) {
 			fillArtists(event, jsonObject);
 			
@@ -639,8 +641,22 @@ public class EventApiJSONParser {
 				}
 				address.setLat(jsonObject.getDouble(KEY_LATITUDE));
 				address.setLon(jsonObject.getDouble(KEY_LONGITUDE));
+				if (jsonObject.has(KEY_ADDRESS1)) {
+					address.setAddress1(jsonObject.getString(KEY_ADDRESS1));
+				}
+				if (jsonObject.has(KEY_ADDRESS2)) {
+					address.setAddress2(jsonObject.getString(KEY_ADDRESS2));
+				}
 				if (jsonObject.has(KEY_ZIP)) {
 					address.setZip(jsonObject.getString(KEY_ZIP));
+				}
+				if (jsonObject.has(KEY_CITY_NAME)) {
+					address.setCity(ConversionUtil.decodeHtmlEntities(jsonObject, KEY_CITY_NAME));
+				}
+				if (jsonObject.has(KEY_COUNTRY)) {
+					Country c = new Country();
+					c.setName(ConversionUtil.decodeHtmlEntities(jsonObject, KEY_COUNTRY));
+					address.setCountry(c);
 				}
 			}
 			
