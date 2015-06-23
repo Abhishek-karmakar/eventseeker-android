@@ -72,6 +72,7 @@ import com.ford.syncV4.proxy.rpc.enums.ButtonName;
 import com.ford.syncV4.proxy.rpc.enums.DriverDistractionState;
 import com.ford.syncV4.proxy.rpc.enums.Language;
 import com.ford.syncV4.proxy.rpc.enums.LockScreenStatus;
+import com.ford.syncV4.proxy.rpc.enums.Result;
 import com.ford.syncV4.proxy.rpc.enums.SyncDisconnectedReason;
 import com.ford.syncV4.proxy.rpc.enums.TriggerSource;
 import com.ford.syncV4.proxy.rpc.enums.VehicleDataResultCode;
@@ -126,7 +127,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
     //variable to contain the current state of the lockscreen
     private boolean lockscreenUP = false;
     private ESIProxyALM esIProxyALM;
-    private boolean isHMIStatusNone, isVehicleDataSubscribed, isAlertCurrentlyVisible;
+    private boolean isHMIStatusNone, isFordGPSAvailable, isAlertCurrentlyVisible;
 
     /**
      * This flag is used to notify if DD mode is OFF or ON. In similar way it also notifies if Lockscreen is ON or OFF.
@@ -386,7 +387,6 @@ public class AppLinkService extends Service implements IProxyListenerALM {
         switch (notification.getHmiLevel()) {
 
             case HMI_FULL:
-                Log.d(TAG, "onOnHMIStatus(), HMI_FULL, driverDistractionNotif = " + driverDistractionNotif);
                 /**
                  * Commented driverDistractionNotif check because it doesn't open lock screen when user
                  * goes to change language in between from sync tdk & then returns back to app
@@ -467,7 +467,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
                  *
                  * To know about 'isDDOff' flag see its description.
                  */
-                else if (isDDOff && !isVehicleDataSubscribed) {
+                else if (isDDOff && !isFordGPSAvailable) {
                     final double[] latLng = DeviceUtil.getLatLon((EventSeekr) getApplication());
                     if (lat != latLng[0] || lng != latLng[1]) {
                         lat = latLng[0];
@@ -475,27 +475,21 @@ public class AppLinkService extends Service implements IProxyListenerALM {
                         isLatLngUpdatedInDdOffMode = true;
                     }
                 }
-                if (!isVehicleDataSubscribed) {
-                    ALUtil.subscribeForGps();
-                }
                 break;
 
             case HMI_LIMITED:
-                Log.d(TAG, "onOnHMIStatus(), HMI_LIMITED, driverDistractionNotif = " + driverDistractionNotif);
                 if (driverDistractionNotif == false) {
                     showLockScreen();
                 }
                 break;
 
             case HMI_BACKGROUND:
-                Log.d(TAG, "onOnHMIStatus(), HMI_BACKGROUND, driverDistractionNotif = " + driverDistractionNotif);
                 if (driverDistractionNotif == false) {
                     showLockScreen();
                 }
                 break;
 
             case HMI_NONE:
-                Log.d(TAG, "onOnHMIStatus(), HMI_NONE");
                 driverDistractionNotif = false;
                 isHMIStatusNone = true;
                 clearLockScreen();
@@ -590,18 +584,16 @@ public class AppLinkService extends Service implements IProxyListenerALM {
             clearLockScreen();
             isDDOff = true;
 
-        } else {
-            if (!isVehicleDataSubscribed) {
-                final double[] latLng = DeviceUtil.getLatLon((EventSeekr) getApplication());
-                if (lat != latLng[0] || lng != latLng[1]) {
-                    lat = latLng[0];
-                    lng = latLng[1];
-                    isLatLngUpdatedInDdOffMode = true;
-                }
+        } else if (!isFordGPSAvailable) {
+            final double[] latLng = DeviceUtil.getLatLon((EventSeekr) getApplication());
+            if (lat != latLng[0] || lng != latLng[1]) {
+                lat = latLng[0];
+                lng = latLng[1];
+                isLatLngUpdatedInDdOffMode = true;
             }
-            showLockScreen();
-            isDDOff = false;
         }
+        showLockScreen();
+        isDDOff = false;
     }
 
     public void onOnCommand(OnCommand notification) {
@@ -639,7 +631,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
      * @param cmd
      */
     private void onCommandPress(Command cmd, boolean isTriggerSrcMenu) {
-        if (!isVehicleDataSubscribed && secLevelCmd.contains(cmd)) {
+        if (!isFordGPSAvailable && secLevelCmd.contains(cmd)) {
             double latlon[] = DeviceUtil.getLatLon((EventSeekr) getApplication());
             if (lat != latlon[0] || lng != latlon[1] || isLatLngUpdatedInDdOffMode) {
                 lat = latlon[0];
@@ -841,7 +833,26 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 
     @Override
     public void onGetVehicleDataResponse(final GetVehicleDataResponse arg0) {
+        /**17-06-2015:
+         * As per the email on 16-06-2015, we need to remove the usage of 'subscribeForGps()' instead we need to
+         * use 'getVehicleData()'
+         */
+        final Result resultCode = arg0.getResultCode();
+        if (resultCode == Result.SUCCESS) {
+            isFordGPSAvailable = true;
+            lat = arg0.getGps().getLatitudeDegrees();
+            lng = arg0.getGps().getLongitudeDegrees();
 
+        } else {
+            if (DeviceUtil.isDefaultLatLonUsed()) {
+                ALUtil.alert(getResources().getString(R.string.unable_to_determine),
+                        getResources().getString(R.string.your_location), "",
+                        getResources().getString(R.string.using_san_francisco_as_default));
+            }
+        }
+        if (esIProxyALM != null) {
+            esIProxyALM.onGetVehicleDataResponse(arg0);
+        }
     }
 
     @Override
@@ -929,13 +940,16 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 
     @Override
     public void onSubscribeVehicleDataResponse(final SubscribeVehicleDataResponse arg0) {
-        VehicleDataResultCode resultCode = arg0.getGps().getResultCode();
+        /**17-06-2015:
+         * As per the email on 16-06-2015, we need to remove the usage of 'subscribeForGps()' instead we need to
+         * use 'getVehicleData()'
+         *VehicleDataResultCode resultCode = arg0.getGps().getResultCode();
         if (resultCode == VehicleDataResultCode.SUCCESS || resultCode == VehicleDataResultCode.DATA_ALREADY_SUBSCRIBED) {
-            isVehicleDataSubscribed = true;
+            isFordGPSAvailable = true;
 
         } else {
-            isVehicleDataSubscribed = false;
-        }
+            isFordGPSAvailable = false;
+        }*/
         if (esIProxyALM != null) {
             esIProxyALM.onSubscribeVehicleDataResponse(arg0);
         }
@@ -951,7 +965,7 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 
     @Override
     public void onUnsubscribeVehicleDataResponse(final UnsubscribeVehicleDataResponse arg0) {
-        //isVehicleDataSubscribed = false;
+        //isFordGPSAvailable = false;
     }
 
     @Override

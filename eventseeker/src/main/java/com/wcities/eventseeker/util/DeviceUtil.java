@@ -350,6 +350,10 @@ public class DeviceUtil {
         }
 	}
 
+	public static boolean isDefaultLatLonUsed() {
+		return retryGenerating;
+	}
+
 	private static class DeviceLocationListener implements LocationListener {
 
 		private static DeviceLocationListener deviceLocationListener;

@@ -1,6 +1,7 @@
 package com.wcities.eventseeker.applink.handler;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
+import com.ford.syncV4.proxy.rpc.GetVehicleDataResponse;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
 import com.ford.syncV4.proxy.rpc.SoftButton;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
@@ -85,13 +86,18 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 		}
 		addCommands(true);
 		ALUtil.displayMessage(R.string.loading, AppConstants.INVALID_RES_ID, buildNoCmdSoftButtons());
+		ALUtil.getVehicleData();
+	}
 
+	@Override
+	public void onGetVehicleDataResponse(GetVehicleDataResponse response) {
+		super.onGetVehicleDataResponse(response);
 		generateLatLon();
 		try {
 			loadEvents(Type.myevents);
 			if (eventList.isEmpty()) {
 				performInteraction();
-				
+
 			} else {
 				addCommands(eventList.size() != 1);
 				ALUtil.displayMessage(R.string.loading, AppConstants.INVALID_RES_ID, buildSoftButtons(eventList.size() != 1));
@@ -103,7 +109,7 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 			AppLinkService.getInstance().handleNoNetConnectivity();
 		}
 	}
-	
+
 	private void reset() {
 		eventList.resetEventList();
 		eventList.setLoadEventsListener(this);	

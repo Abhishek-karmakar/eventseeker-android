@@ -310,6 +310,9 @@
     <string name="going_lower">Going</string>
     <string name="want_to_lower">Want To</string>
     <string name="tickets_lower">Tickets</string>
+    <string name="using_san_francisco_as_default">Unable to determine your location. The current city has been defaulted to San Francisco.</string>
+    <string name="unable_to_determine">Unable to determine</string>
+    <string name="your_location">your location</string>
 
     <!-- Time difference strings -->
     <string name="sec_gt_one">%1$d seconds ago</string>

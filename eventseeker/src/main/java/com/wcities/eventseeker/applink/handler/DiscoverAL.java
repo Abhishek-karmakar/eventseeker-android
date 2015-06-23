@@ -1,6 +1,7 @@
 package com.wcities.eventseeker.applink.handler;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
+import com.ford.syncV4.proxy.rpc.GetVehicleDataResponse;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
 import com.ford.syncV4.proxy.rpc.SoftButton;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
@@ -115,7 +116,8 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		 * the current Discover category list as per new lat long.
 		 */
 		if (getArguments().containsKey(BundleKeys.HAS_LAT_LON_CHANGED_OUT_OF_FORD_APP_SCOPE)) {
-			displayEventListForCurrentCategory();
+			//displayEventListForCurrentCategory();
+			ALUtil.getVehicleData();
 
 		} else {
 			performInteraction();
@@ -184,7 +186,8 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 			return;
 		}
 		selectedCategoryId = Discover.getDiscoverChoiceId(response.getChoiceID()).getCategoryId();
-		displayEventListForCurrentCategory();
+		//displayEventListForCurrentCategory();
+		ALUtil.getVehicleData();
 	}
 
 	private void displayEventListForCurrentCategory() {
@@ -419,5 +422,11 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 			loadFeaturedEvents(selectedCategoryId);
 			break;
 		}
+	}
+
+	@Override
+	public void onGetVehicleDataResponse(GetVehicleDataResponse response) {
+		super.onGetVehicleDataResponse(response);
+		displayEventListForCurrentCategory();
 	}
 }
