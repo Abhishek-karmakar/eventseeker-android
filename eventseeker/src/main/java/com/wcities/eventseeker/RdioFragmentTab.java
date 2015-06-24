@@ -179,20 +179,23 @@ public class RdioFragmentTab extends FragmentLoadableFromBackStack implements On
 							SEARCH_LIMIT, 0, SEARCH_LIMIT, null, false, null, new RdioService_Api.ResponseListener() {
 								@Override
 								public void onResponse(RdioApiResponse rdioApiResponse) {
-									Log.d(TAG, "heavy rotation onResponse() - " + rdioApiResponse.getResult().toString());
+									//Log.d(TAG, "heavy rotation onResponse() - " + rdioApiResponse.getResult().toString());
 									List<String> artistNames = new ArrayList<String>();
 									JSONArray media = rdioApiResponse.getResult();
-									for (int i = 0; i < media.length(); i++) {
-										try {
-											JSONObject object = media.getJSONObject(i);
-											String artistName = object.getString("name");
-											if (!artistNames.contains(artistName)) {
-												artistNames.add(artistName);
-											}
+									// sometimes rdio lib returns null as result
+									if (media != null) {
+										for (int i = 0; i < media.length(); i++) {
+											try {
+												JSONObject object = media.getJSONObject(i);
+												String artistName = object.getString("name");
+												if (!artistNames.contains(artistName)) {
+													artistNames.add(artistName);
+												}
 
-										} catch (Exception e) {
-											//Log.d(TAG, "1");
-											continue;
+											} catch (Exception e) {
+												//Log.d(TAG, "1");
+												continue;
+											}
 										}
 									}
 									apiCallFinished(artistNames);

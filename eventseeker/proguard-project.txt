@@ -33,6 +33,9 @@
 # com.digits.sdk.android.** & com.twitter.sdk.android.** required for twitter SSO
 -dontwarn com.digits.sdk.android.**
 -dontwarn com.twitter.sdk.android.**
+# sun.misc.Unsafe & com.google.common.collect.MinMaxPriorityQueue required for guava (used by Rdio lib)
+-dontwarn sun.misc.Unsafe
+-dontwarn com.google.common.collect.MinMaxPriorityQueue
 
 -keep class javax.** { *; }
 -keep class org.** { *; }
@@ -44,6 +47,8 @@
 -keep class com.drivemode.spotify.** { *; }
 # Required for spotify & twitter SSO
 -keep class retrofit.** { *; }
+# Required for rdio
+-keep class com.rdio.android.** { *; }
 
 # Required for facebook publish permission
 -keepattributes Signature
