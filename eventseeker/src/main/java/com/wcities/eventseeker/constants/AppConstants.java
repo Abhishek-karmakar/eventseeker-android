@@ -35,7 +35,6 @@ public class AppConstants {
 	
 	public static String RDIO_CLIENT_ID;
 	public static String RDIO_CLIENT_SECRET;
-	public static String RDIO_REDIRECT_URI = "http://eventseeker.com/";
 
 	public static String LASTFM_API_KEY;
 
