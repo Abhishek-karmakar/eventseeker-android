@@ -66,7 +66,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 
 	private static final int MILLIS_TO_CHK_BOSCH_STOPPED = 200;
 
-	public static int appTaskId;
+	public static int appTaskId = AppConstants.INVALID_ID;
 
 	private LinearLayout lnrLayoutRootNavDrawer;
 	private DrawerLayout mDrawerLayout;
@@ -384,7 +384,12 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		 * & hence pressing back in above mentioned case won't display bosch activity on mobile, instead it
 		 * would land us to home screen as expected.
 		 */
-		activityManager.moveTaskToFront(taskId, ActivityManager.MOVE_TASK_WITH_HOME);
+		if (taskId != AppConstants.INVALID_ID) {
+			activityManager.moveTaskToFront(taskId, ActivityManager.MOVE_TASK_WITH_HOME);
+
+		} else {
+			moveTaskToBack(true);
+		}
 	}
 	
 	private void updateColors() {

@@ -9,9 +9,11 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.StrictMode;
+import android.support.multidex.MultiDex;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import com.bosch.myspin.serversdk.MySpinException;
 import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.facebook.FacebookSdk;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -264,11 +266,11 @@ public class EventSeekr extends Application {
 		}
 	}
 
-    /*@Override
+    @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
-    }*/
+    }
 
     @Override
 	public void onCreate() {
@@ -311,6 +313,18 @@ public class EventSeekr extends Application {
 		}
 
 		FacebookSdk.sdkInitialize(this);
+
+		/**
+		 * register from here instead of SplashActivity to handle the case where user is directly starting
+		 * bosch app even before launching app from mobile/tablet. Otherwise w/o this in above case,
+		 * it will display bosch screen on mobile/tablet.
+		 */
+		try {
+			MySpinServerSDK.sharedInstance().registerApplication(this);
+
+		} catch (MySpinException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void initConfigParams() {
@@ -318,8 +332,8 @@ public class EventSeekr extends Application {
 			AppConstants.TWITTER_CONSUMER_KEY = "1l49nf8bD96xpgUbTrbzg";
 			AppConstants.TWITTER_CONSUMER_SECRET = "9zzFZlJknYRIPrUrLSrTeVSTtkLHNP4d4fNwYHRP5Y";
 			
-			AppConstants.RDIO_KEY = "mbfj65dzv625pyvajtfqq6c2";
-			AppConstants.RDIO_SECRET = "Wvvt3ysYdj";
+			AppConstants.RDIO_CLIENT_ID = "itzd34at35gj7nefndpqx2tq5u";
+			AppConstants.RDIO_CLIENT_SECRET = "rO9zKqrj--9aAtdIFIY98Q";
 			
 			AppConstants.LASTFM_API_KEY = "dce45347e8ec4ce36c107d9d12549907";
 			
@@ -334,8 +348,8 @@ public class EventSeekr extends Application {
 			AppConstants.TWITTER_CONSUMER_KEY = "Dt4IWLQhJmKVTdrfkvma7w";
 			AppConstants.TWITTER_CONSUMER_SECRET = "MqQWwm7sEqHdTuU47grSTfV5fLct22RY4ilHXCjwA";
 			
-			AppConstants.RDIO_KEY = "x83dzkx2xdmxuqtguqdz2nj6";
-			AppConstants.RDIO_SECRET = "rXNJ5ajSut";
+			AppConstants.RDIO_CLIENT_ID = "qiq4c2upebhfdgxwa2rl3sp2pm";
+			AppConstants.RDIO_CLIENT_SECRET = "b544ux1NqVQBEs7FBGNpZw";
 			
 			AppConstants.LASTFM_API_KEY = "5f7e82824ba8ba0fe1cbe2a6ea80472e";
 			

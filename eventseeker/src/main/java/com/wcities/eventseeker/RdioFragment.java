@@ -1,18 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,9 +16,12 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
-import com.rdio.android.api.Rdio;
-import com.rdio.android.api.RdioApiCallback;
-import com.rdio.android.api.RdioListener;
+import com.rdio.android.core.RdioApiResponse;
+import com.rdio.android.core.RdioService_Api;
+import com.rdio.android.sdk.OAuth2Credential;
+import com.rdio.android.sdk.Rdio;
+import com.rdio.android.sdk.RdioListener;
+import com.rdio.android.sdk.RdioService;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.asynctask.SyncArtists;
@@ -44,76 +34,60 @@ import com.wcities.eventseeker.interfaces.SyncArtistListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.ServiceAccount;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class RdioFragment extends FragmentLoadableFromBackStack implements OnClickListener, RdioListener {
 
-	private static final String TAG = RdioFragment.class.getName();
+	private static final String TAG = RdioFragment.class.getSimpleName();
 	
-	private static final String PREF_ACCESSTOKEN = "prefs.accesstoken";
-    private static final String PREF_ACCESSTOKENSECRET = "prefs.accesstokensecret";
-    
     private static final int SEARCH_LIMIT = 250;
 
-    private String accessToken = null;
-    private String accessTokenSecret = null;
-    
 	private EditText edtUserCredential;
 	private Button btnRetrieveArtists;
 	
 	private ServiceAccount serviceAccount;
 
 	private SyncArtistListener syncArtistListener;
-	
-	private static Rdio rdio;
+
+	private Rdio rdio;
+	private RdioService rdioService;
+
+	private boolean onApiServiceReadyCalled, isDestroyed;
 	
 	private Resources res;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		/**
-		 * Since there is no way to update activity reference associated with Rdio Api object, we need to create 
-		 * new Rdio Api object each time the orientation changes. And if we do 'setRetainInstance(true)' then it will 
-		 * try to create 2 instances which is not allowed by Rdio Api. So, we won't do 'setRetainInstance(true)'.
-		 */
-		//setRetainInstance(true);
+		setRetainInstance(true);
 		serviceAccount = (ServiceAccount) getArguments().getSerializable(BundleKeys.SERVICE_ACCOUNTS);
 		//Log.d(TAG, "onCreate : SerciveAccount" + serviceAccount);
-
 
 		String tag = getArguments().getString(BundleKeys.SYNC_ARTIST_LISTENER);
 		syncArtistListener = (SyncArtistListener) 
 				((BaseActivity) FragmentUtil.getActivity(this)).getFragmentByTag(tag);
+
+		// Initialize our API object
+		rdio = new Rdio(AppConstants.RDIO_CLIENT_ID, AppConstants.RDIO_CLIENT_SECRET, null,
+				FragmentUtil.getApplication(this), this);
 		/**
-		 * this is because when orientation got change, before that syncing might be in progress, so the value of
-		 * 'serviceAccount.isInProgress' will be true. But now if user doesn't sync again and he goes back then then
-		 * there the status would be syncing(arrow will rotate). 
+		 * try-catch included for api < 16, because in fact this rdio api supports minSdk 16.
+		 * In lower apis, it throws:
+		 * java.lang.NoClassDefFoundError: android.media.MediaCodec$BufferInfo
+		 * at com.rdio.android.audioplayer.RdioAudioPlayer.initializeMediaDecoder(RdioAudioPlayer.java:241)
 		 */
-		serviceAccount.isInProgress = false;
-		//Log.d(TAG, "Setting in progress false");
-		
-		//Log.d(TAG, "rdio : " + rdio);
-		
-		if (rdio == null) {
-            SharedPreferences settings = FragmentUtil.getActivity(this).getPreferences(Context.MODE_PRIVATE);
-            accessToken = settings.getString(PREF_ACCESSTOKEN, null);
-            accessTokenSecret = settings.getString(PREF_ACCESSTOKENSECRET, null);
+		try {
+			rdio.requestApiService();
 
-            if (accessToken == null || accessTokenSecret == null) {
-                // If either one is null, reset both of them
-                accessToken = accessTokenSecret = null;
-                
-            } else {
-                /*Log.d(TAG, "Found cached credentials:");
-                Log.d(TAG, "Access token: " + accessToken);
-                Log.d(TAG, "Access token secret: " + accessTokenSecret);*/
-            }
-
-            // Initialize our API object
-            rdio = new Rdio(AppConstants.RDIO_KEY, AppConstants.RDIO_SECRET, accessToken, accessTokenSecret,
-					FragmentUtil.getActivity(this), this);     
-            
-            res = getResources();
+		} catch (NoClassDefFoundError e) {
+			e.printStackTrace();
 		}
+            
+        res = getResources();
 	}
 	
 	@Override
@@ -135,128 +109,112 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 				return false;
 			}
 		});
-		edtUserCredential.setOnClickListener(this);
-		
+
 		return v;
 	}
 	
 	@Override
 	public void onDestroy() {
 		//Log.d(TAG, "Cleaning up..");
+		/**
+		 * If we call cleanupRdio() without this check, it throws NullPointerException from rdio api
+		 * internal code where it requires handler which becomes null on cleanup().
+		 */
+		if (onApiServiceReadyCalled) {
+			cleanupRdio();
+		}
+		isDestroyed = true;
+		super.onDestroy();
+	}
+
+	private void cleanupRdio() {
 		// Make sure to call the cleanup method on the API object
 		if (rdio != null) {
-			rdio.cleanup();
+			/**
+			 * try-catch included for api < 16, because in fact this rdio api supports minSdk 16.
+			 * In lower apis, it throws:
+			 * java.lang.NullPointerException
+			 * at com.rdio.android.sdk.internal.RdioInternal.cleanup(RdioInternal.java:124)
+			 */
+			try {
+				rdio.cleanup();
+
+			} catch (NullPointerException e) {
+				e.printStackTrace();
+			}
 		}
-		super.onDestroy();
 	}
 	
 	private void searchUserId(String userId) {
 		//Log.d(TAG, "searchUserId");
-		if (userId == null || userId.length() == 0) {
+		if (userId == null || userId.length() == 0 || rdioService == null) {
 			return;
 		}
 		
 		serviceAccount.isInProgress = true;
 		syncArtistListener.onArtistSyncStarted(true);
-		
-		final List<String> artistNames = new ArrayList<String>();
 
-		List<NameValuePair> args = new LinkedList<NameValuePair>();
-		String key = userId.contains("@") ? "email" : "vanityName";
-		args.add(new BasicNameValuePair(key, userId));
-		
-		rdio.apiCall("findUser", args, new RdioApiCallback() {
+		RdioService_Api.ResponseListener responseListener = new RdioService_Api.ResponseListener() {
+
 			@Override
-			public void onApiSuccess(JSONObject result) {
+			public void onResponse(RdioApiResponse rdioApiResponse) {
+				//Log.d(TAG, "onResponse() - " + rdioApiResponse.getResult().toString());
 				try {
-					
-					if (result == null) {
+					JSONObject userInfo = rdioApiResponse.getResult();
+					if (userInfo == null || (userInfo.has("result") && userInfo.isNull("result"))) {
+						//Log.d(TAG, "throw exception");
 						throw new Exception(res.getString(R.string.user_name_could_not_be_found));
 					}
-					
-					JSONObject userInfo = result.getJSONObject("result");
-					String userKey = userInfo.getString("key"); 
 
-					List<NameValuePair> args = new LinkedList<NameValuePair>();
-					args.add(new BasicNameValuePair("user", userKey));
-					args.add(new BasicNameValuePair("type", "artists"));
-					args.add(new BasicNameValuePair("limit", SEARCH_LIMIT + ""));
-					
-					rdio.apiCall("getHeavyRotation", args, new RdioApiCallback(){
+					String userKey = userInfo.getString("key");
+					//Log.d(TAG, "userKey = " + userKey);
 
-						@Override
-						public void onApiFailure(String methodName, Exception e) {
-							apiCallFinished(artistNames);
-						}
+					rdioService.getHeavyRotation(userKey, RdioService_Api.GetHeavyRotation_type.Artists, false,
+							SEARCH_LIMIT, 0, SEARCH_LIMIT, null, false, null, new RdioService_Api.ResponseListener() {
+								@Override
+								public void onResponse(RdioApiResponse rdioApiResponse) {
+									Log.d(TAG, "heavy rotation onResponse() - " + rdioApiResponse.getResult().toString());
+									List<String> artistNames = new ArrayList<String>();
+									JSONArray media = rdioApiResponse.getResult();
+									for (int i = 0; i < media.length(); i++) {
+										try {
+											JSONObject object = media.getJSONObject(i);
+											String artistName = object.getString("name");
+											if (!artistNames.contains(artistName)) {
+												artistNames.add(artistName);
+											}
 
-						@Override
-						public void onApiSuccess(JSONObject result) {
-							try {
-								if (result == null) {
+										} catch (Exception e) {
+											//Log.d(TAG, "1");
+											continue;
+										}
+									}
 									apiCallFinished(artistNames);
 								}
-							
-								//Log.d(TAG, "result = " + result.toString());
-								JSONArray media = result.getJSONArray("result");
-								for (int i = 0; i < media.length(); i++) {
-									try {
-										JSONObject object = media.getJSONObject(i);
-										String artistName = object.getString("name");
-										if (!artistNames.contains(artistName)) {
-											artistNames.add(artistName);
-										}
-										
-									} catch (Exception e) {
-										//Log.d(TAG, "1");
-										continue;
-									}
-								}
-								apiCallFinished(artistNames);
-										
-							} catch (JSONException e) {
-								//Log.d(TAG, "2");
-								apiCallFinished(artistNames);
-							}
-						}
-					});
-					
+							});
+
 				} catch (Exception e) {
 					//Log.d(TAG, "3");
-
-					Toast toast = Toast.makeText(FragmentUtil.getActivity(RdioFragment.this), 
+					Toast toast = Toast.makeText(FragmentUtil.getActivity(RdioFragment.this),
 							R.string.user_name_could_not_be_found, Toast.LENGTH_SHORT);
-					if(toast != null) {
+					if (toast != null) {
 						toast.setGravity(Gravity.CENTER, 0, -100);
 						toast.show();
 					}
-					
+
 					EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(RdioFragment.this).getApplicationContext();
 					eventSeekr.setSyncCount(Service.Rdio, EventSeekr.UNSYNC_COUNT);
 					Log.e(TAG, "Failed to handle JSONObject: " + e.toString());
 				}
 			}
+		};
 
-			/**
-			 * The 'onApiFailure' method will be called when user wouldn't be able to connect to the rdio server
-			 * and that might be because of internet connection issue.
-			 */
-			@Override
-			public void onApiFailure(String methodName, Exception e) {
-				//Log.d(TAG, "onApiFailure");
-				
-				Toast toast = Toast.makeText(FragmentUtil.getActivity(RdioFragment.this), R.string.connection_lost, 
-						Toast.LENGTH_SHORT);
-				if(toast != null) {
-					toast.setGravity(Gravity.CENTER, 0, -100);
-					toast.show();
-				}
+		if (userId.contains("@")) {
+			rdioService.findUser(userId, null, null, false, null, responseListener);
 
-				EventSeekr eventSeekr = (EventSeekr) FragmentUtil.getActivity(RdioFragment.this).getApplicationContext();
-				eventSeekr.setSyncCount(Service.Rdio, EventSeekr.UNSYNC_COUNT);
-				Log.e(TAG, "Failed to handle JSONObject: ", e);
-				Log.e(TAG, "getHeavyRotation failed. ", e);
-			}
-		});
+		} else {
+			rdioService.findUser(null, userId, null, false, null, responseListener);
+		}
 	}
 	
 	private void apiCallFinished(List<String> artistNames) {
@@ -279,33 +237,39 @@ public class RdioFragment extends FragmentLoadableFromBackStack implements OnCli
 			searchUserId(edtUserCredential.getText().toString().trim());
 			break;
 			
-		case R.id.edtUserCredential:
-			edtUserCredential.selectAll();
-			break;
-
 		default:
 			break;
 		}
 	}
 
 	@Override
-	public void onRdioAuthorised(String arg0, String arg1) {
-		// TODO Auto-generated method stub
-	}
+	public void onRdioReadyForPlayback() {
 
-	@Override
-	public void onRdioReady() {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void onRdioUserAppApprovalNeeded(Intent arg0) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void onRdioUserPlayingElsewhere() {
-		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onRdioAuthorised(OAuth2Credential oAuth2Credential) {
+
+	}
+
+	@Override
+	public void onError(Rdio.RdioError rdioError, String s) {
+
+	}
+
+	@Override
+	public void onApiServiceReady(RdioService rdioService) {
+		this.rdioService = rdioService;
+		onApiServiceReadyCalled = true;
+		if (isDestroyed) {
+			//Log.d(TAG, "onApiServiceReady() isDestroyed = true");
+			cleanupRdio();
+		}
 	}
 
 	@Override

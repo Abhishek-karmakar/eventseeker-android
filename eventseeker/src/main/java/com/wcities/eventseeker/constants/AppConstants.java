@@ -33,9 +33,10 @@ public class AppConstants {
 	
 	public static final String BEATS_MUSIC_REDIRECT_URI = "com.wcities.eventseeker://beats_music_callback";
 	
-	public static String RDIO_KEY;
-	public static String RDIO_SECRET;
-	
+	public static String RDIO_CLIENT_ID;
+	public static String RDIO_CLIENT_SECRET;
+	public static String RDIO_REDIRECT_URI = "http://eventseeker.com/";
+
 	public static String LASTFM_API_KEY;
 
 	public static String GCM_SENDER_ID;

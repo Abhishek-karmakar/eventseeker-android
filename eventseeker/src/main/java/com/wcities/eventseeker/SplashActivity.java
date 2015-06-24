@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.bosch.myspin.serversdk.MySpinException;
-import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.wcities.eventseeker.analytics.GoogleAnalyticsTracker;
 import com.wcities.eventseeker.analytics.IGoogleAnalyticsTracker;
 import com.wcities.eventseeker.app.EventSeekr;
@@ -25,13 +23,7 @@ public class SplashActivity extends Activity implements IGoogleAnalyticsTracker 
 		super.onCreate(savedInstanceState);
 		//Log.d(TAG, "bosch onCreate()");
 		//Toast.makeText(getApplicationContext(), "bosch onCreate() splash", Toast.LENGTH_SHORT).show();
-		try {
-			MySpinServerSDK.sharedInstance().registerApplication(getApplication());
-			
-		} catch (MySpinException e) {
-			e.printStackTrace();
-		}
-		
+
 		setContentView(R.layout.activity_splash);
 		
 		VersionUtil.updateCheckes((EventSeekr) getApplication());
