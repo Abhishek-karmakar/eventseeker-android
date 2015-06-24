@@ -25,6 +25,7 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.gcm.GcmBroadcastReceiver.NotificationType;
 import com.wcities.eventseeker.interfaces.ConnectionFailureListener;
 import com.wcities.eventseeker.interfaces.DrawerListFragmentListener;
+import com.wcities.eventseeker.logger.Logger;
 import com.wcities.eventseeker.util.DeviceUtil;
 
 import java.io.UnsupportedEncodingException;
@@ -39,6 +40,10 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
     private boolean activityOnTop;
 
     private boolean onSaveInstanceStateCalled;
+    /**
+     * will be shared by all the Activity instances.
+     */
+    private static boolean isConnectedToFord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +64,6 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
         if (((EventSeekr) getApplication()).getWcitiesId() == null) {
             return;
         }
-
-        if (AppConstants.FORD_SYNC_APP) {
-            EventSeekr.setCurrentBaseActivity(this);
-            startSyncProxyService();
-        }
     }
 
     @Override
@@ -74,17 +74,10 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
         EventSeekr.setConnectionFailureListener(this);
         DeviceUtil.registerLocationListener(this);
         if (((EventSeekr) getApplication()).getWcitiesId() == null) {
-            return;
         }
-
         // when user comes back from bosch, onStart() is called where we need to reset language as per mobile/tablet app
         ((EventSeekr) getApplication()).setDefaultLocale();
-
-        //Log.d(TAG, "onStart() AppConstants.FORD_SYNC_APP: " + AppConstants.FORD_SYNC_APP);
-        if (AppConstants.FORD_SYNC_APP) {
-            EventSeekr.setCurrentBaseActivity(this);
-            setCurrentActivity();
-        }
+        return;
     }
 
     @Override
@@ -97,16 +90,23 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
         }
 
         boolean isLockscreenVisible = false;
-        //Log.d(TAG, "onResume() AppConstants.FORD_SYNC_APP: " + AppConstants.FORD_SYNC_APP);
+        Logger.d(TAG, "onResume() AppConstants.FORD_SYNC_APP: " + AppConstants.FORD_SYNC_APP);
         if (AppConstants.FORD_SYNC_APP) {
+            EventSeekr.setCurrentBaseActivity(this);
+            if (!isConnectedToFord) {
+                startSyncProxyService();
+                isConnectedToFord = true;
+            }
+            setCurrentActivity();
+
             activityOnTop = true;
             // check if lockscreen should be up
             AppLinkService serviceInstance = AppLinkService.getInstance();
-            //Log.d(TAG, "onResume() serviceInstance: " + serviceInstance);
+            Logger.d(TAG, "onResume() serviceInstance: " + serviceInstance);
             if (serviceInstance != null) {
-                //Log.d(TAG, "onResume() serviceInstance.getLockScreenStatus(): " + serviceInstance.getLockScreenStatus());
+                Logger.d(TAG, "onResume() serviceInstance.getLockScreenStatus(): " + serviceInstance.getLockScreenStatus());
                 if (serviceInstance.getLockScreenStatus() == true) {
-                    //Log.d(TAG, "onResume() LockScreenActivity.getInstance(): " + LockScreenActivity.getInstance());
+                    Logger.d(TAG, "onResume() LockScreenActivity.getInstance(): " + LockScreenActivity.getInstance());
                     if (LockScreenActivity.getInstance() == null) {
 						/*Intent i = new Intent(this, LockScreenActivity.class);
 						i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -178,7 +178,7 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
         super.onDestroy();
         //Log.d(TAG, "BaseActivity onDestroy()");
         //Toast.makeText(getApplicationContext(), "BaseActivity onDestroy()", Toast.LENGTH_SHORT).show();
-        if (AppConstants.FORD_SYNC_APP) {
+        if (AppConstants.FORD_SYNC_APP && EventSeekr.getCurrentBaseActivity() == this) {
             //Log.v(TAG, "onDestroy main");
             endSyncProxyInstance();
             EventSeekr.resetCurrentBaseActivityFor(this);

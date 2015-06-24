@@ -92,6 +92,7 @@ import com.wcities.eventseeker.applink.util.InteractionChoiceSetUtil;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.Enums;
+import com.wcities.eventseeker.logger.Logger;
 import com.wcities.eventseeker.util.DeviceUtil;
 
 import java.util.ArrayList;
@@ -479,12 +480,14 @@ public class AppLinkService extends Service implements IProxyListenerALM {
 
             case HMI_LIMITED:
                 if (driverDistractionNotif == false) {
+                    Logger.d(TAG, "HMI_LIMITED.. showing LocakScreen..");
                     showLockScreen();
                 }
                 break;
 
             case HMI_BACKGROUND:
                 if (driverDistractionNotif == false) {
+                    Logger.d(TAG, "HMI_BACKGROUND.. showing LocakScreen..");
                     showLockScreen();
                 }
                 break;
@@ -539,13 +542,12 @@ public class AppLinkService extends Service implements IProxyListenerALM {
         // pop-up while a user is using another app on the phone
         if (currentUIActivity != null) {
             if (currentUIActivity.isActivityonTop()) {
-                Log.d(TAG, "showLockScreen() LockScreenActivity.getInstance() : " + LockScreenActivity.getInstance());
                 if (LockScreenActivity.getInstance() == null) {
                     startLockScreen();
                 }
             }
         }
-        //Log.d(TAG, "showLockScreen lockscreenUP(before setting true): " + lockscreenUP);
+        Logger.d(TAG, "showLockScreen lockscreenUP(before setting true): " + lockscreenUP);
         lockscreenUP = true;
     }
 
@@ -558,11 +560,10 @@ public class AppLinkService extends Service implements IProxyListenerALM {
     }
 
     private void clearLockScreen() {
-        Log.d(TAG, "clearlockscreen() LockScreenActivity.getInstance(): " + LockScreenActivity.getInstance());
         if (LockScreenActivity.getInstance() != null) {
             LockScreenActivity.getInstance().exit();
         }
-        //Log.d(TAG, "clearLockScreen lockscreenUP(before setting false): " + lockscreenUP);
+        Logger.d(TAG, "clearLockScreen lockscreenUP(before setting false): " + lockscreenUP);
         lockscreenUP = false;
         //ALUtil.unsubscribeForGps();
     }
@@ -581,19 +582,23 @@ public class AppLinkService extends Service implements IProxyListenerALM {
     public void onOnDriverDistraction(final OnDriverDistraction notification) {
         driverDistractionNotif = true;
         if (notification.getState() == DriverDistractionState.DD_OFF) {
+            Logger.d(TAG, "onOnDriverDistraction.. clearing LockScreen..");
             clearLockScreen();
             isDDOff = true;
 
-        } else if (!isFordGPSAvailable) {
-            final double[] latLng = DeviceUtil.getLatLon((EventSeekr) getApplication());
-            if (lat != latLng[0] || lng != latLng[1]) {
-                lat = latLng[0];
-                lng = latLng[1];
-                isLatLngUpdatedInDdOffMode = true;
+        } else {
+            if (!isFordGPSAvailable) {
+                final double[] latLng = DeviceUtil.getLatLon((EventSeekr) getApplication());
+                if (lat != latLng[0] || lng != latLng[1]) {
+                    lat = latLng[0];
+                    lng = latLng[1];
+                    isLatLngUpdatedInDdOffMode = true;
+                }
             }
+            Logger.d(TAG, "onOnDriverDistraction.. showing LockScreen..");
+            showLockScreen();
+            isDDOff = false;
         }
-        showLockScreen();
-        isDDOff = false;
     }
 
     public void onOnCommand(OnCommand notification) {
@@ -843,12 +848,10 @@ public class AppLinkService extends Service implements IProxyListenerALM {
             lat = arg0.getGps().getLatitudeDegrees();
             lng = arg0.getGps().getLongitudeDegrees();
 
-        } else {
-            if (DeviceUtil.isDefaultLatLonUsed()) {
-                ALUtil.alert(getResources().getString(R.string.unable_to_determine),
-                        getResources().getString(R.string.your_location), "",
-                        getResources().getString(R.string.using_san_francisco_as_default));
-            }
+        } else if (DeviceUtil.isDefaultLatLonUsed()) {
+            ALUtil.alert(getResources().getString(R.string.unable_to_determine),
+                getResources().getString(R.string.your_location), "",
+                getResources().getString(R.string.using_san_francisco_as_default));
         }
         if (esIProxyALM != null) {
             esIProxyALM.onGetVehicleDataResponse(arg0);
@@ -984,14 +987,13 @@ public class AppLinkService extends Service implements IProxyListenerALM {
     public void onOnLockScreenNotification(OnLockScreenStatus notification) {
         //Log.d(TAG, "onOnLockScreenNotification");
         LockScreenStatus displayLockScreen = notification.getShowLockScreen();
-        Log.d(TAG, "onOnLockScreenNotification displayLockScreen: " + displayLockScreen);
-        if (displayLockScreen == LockScreenStatus.REQUIRED || displayLockScreen == LockScreenStatus.OPTIONAL) {
+        Logger.d(TAG, "onOnLockScreenNotification displayLockScreen: " + displayLockScreen);
+        if (!isDDOff && displayLockScreen == LockScreenStatus.REQUIRED || displayLockScreen == LockScreenStatus.OPTIONAL) {
             showLockScreen();
-        }
-        else {
+
+        } else {
             clearLockScreen();
         }
-
     }
 
     @Override
