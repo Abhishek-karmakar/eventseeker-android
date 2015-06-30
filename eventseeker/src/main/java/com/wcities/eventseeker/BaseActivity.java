@@ -25,7 +25,6 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.gcm.GcmBroadcastReceiver.NotificationType;
 import com.wcities.eventseeker.interfaces.ConnectionFailureListener;
 import com.wcities.eventseeker.interfaces.DrawerListFragmentListener;
-import com.wcities.eventseeker.logger.Logger;
 import com.wcities.eventseeker.util.DeviceUtil;
 
 import java.io.UnsupportedEncodingException;
@@ -90,7 +89,6 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
         }
 
         boolean isLockscreenVisible = false;
-        Logger.d(TAG, "onResume() AppConstants.FORD_SYNC_APP: " + AppConstants.FORD_SYNC_APP);
         if (AppConstants.FORD_SYNC_APP) {
             EventSeekr.setCurrentBaseActivity(this);
             if (!isConnectedToFord) {
@@ -102,16 +100,9 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
             activityOnTop = true;
             // check if lockscreen should be up
             AppLinkService serviceInstance = AppLinkService.getInstance();
-            Logger.d(TAG, "onResume() serviceInstance: " + serviceInstance);
             if (serviceInstance != null) {
-                Logger.d(TAG, "onResume() serviceInstance.getLockScreenStatus(): " + serviceInstance.getLockScreenStatus());
                 if (serviceInstance.getLockScreenStatus() == true) {
-                    Logger.d(TAG, "onResume() LockScreenActivity.getInstance(): " + LockScreenActivity.getInstance());
                     if (LockScreenActivity.getInstance() == null) {
-						/*Intent i = new Intent(this, LockScreenActivity.class);
-						i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-						i.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-						startActivity(i);*/
                         serviceInstance.startLockScreen();
                     }
                     isLockscreenVisible = true;
@@ -176,7 +167,6 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //Log.d(TAG, "BaseActivity onDestroy()");
         //Toast.makeText(getApplicationContext(), "BaseActivity onDestroy()", Toast.LENGTH_SHORT).show();
         if (AppConstants.FORD_SYNC_APP && EventSeekr.getCurrentBaseActivity() == this) {
             //Log.v(TAG, "onDestroy main");

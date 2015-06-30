@@ -88,7 +88,7 @@ public abstract class ESIProxyALM implements IProxyListenerALM {
 				}
 			}
 		});*/
-        Logger.d(TAG, "onOnCommand : " + response.getCmdID());
+        //Logger.d(TAG, "onOnCommand : " + response.getCmdID());
     }
 
     @Override
@@ -111,7 +111,7 @@ public abstract class ESIProxyALM implements IProxyListenerALM {
 					+ response.getInfo() + " Response : " + response.getResultCode(), Toast.LENGTH_SHORT).show();
 			}
 		});*/
-        Logger.d(TAG, "onAddCommandResponse : " + response.getResultCode());
+        //Logger.d(TAG, "onAddCommandResponse : " + response.getResultCode());
     }
 
     @Override
@@ -152,7 +152,7 @@ public abstract class ESIProxyALM implements IProxyListenerALM {
 					+ response.getInfo() + " Response : " + response.getResultCode(), Toast.LENGTH_SHORT).show();
 			}
 		});*/
-        Logger.d(TAG, "onDeleteCommandResponse : " + response.getResultCode());
+        //Logger.d(TAG, "onDeleteCommandResponse : " + response.getResultCode());
     }
 
     @Override

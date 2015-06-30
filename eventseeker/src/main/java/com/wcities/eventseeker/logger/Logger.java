@@ -8,6 +8,8 @@ import com.wcities.eventseeker.constants.AppConstants;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Logger {
 	private static final String TAG = Logger.class.getSimpleName();
@@ -67,8 +69,11 @@ public class Logger {
 				return;
 			}
 			try {
+				SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+				Date resultdate = new Date(System.currentTimeMillis());
+
 				FileWriter fileWriter = new FileWriter(logFile, true);
-				fileWriter.append("\n" + System.currentTimeMillis() + " :: " + tag + " : " + msg);
+				fileWriter.append("\n" + sdf.format(resultdate) + " :: " + tag + " : " + msg);
 				fileWriter.close();
 	
 			} catch (IOException e) {

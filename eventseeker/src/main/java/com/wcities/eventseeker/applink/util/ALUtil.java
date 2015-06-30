@@ -1,5 +1,7 @@
 package com.wcities.eventseeker.applink.util;
 
+import android.util.Log;
+
 import com.ford.syncV4.exception.SyncException;
 import com.ford.syncV4.proxy.TTSChunkFactory;
 import com.ford.syncV4.proxy.rpc.AddCommand;
@@ -211,14 +213,14 @@ public class ALUtil {
 
 		} catch (SyncException e) {
 			e.printStackTrace();
-			Logger.d(TAG, "Failed to send Show");
+			Log.d(TAG, "Failed to send Show");
 		}
 	}
 	
 	public static void alert(final String alertText1, final String speakText) {
 		AppLinkService service = AppLinkService.getInstance();
 		if (service.isAlertCurrentlyVisible()) {
-			Logger.d(TAG, "Alert is already Visible, lets sleep for " + ALERT_SLEEP_DURATION + " ms");
+			Log.d(TAG, "Alert is already Visible, lets sleep for " + ALERT_SLEEP_DURATION + " ms");
 			new Thread(new Runnable() {
 
 				@Override
@@ -249,14 +251,14 @@ public class ALUtil {
 			
 		} catch (SyncException e) {
 			e.printStackTrace();
-			Logger.d(TAG, "Failed to show alert");
+			Log.d(TAG, "Failed to show alert");
 		}
 	}
 	
 	public static void alertText(final String alertText1, final String alertText2) {
 		AppLinkService service = AppLinkService.getInstance();
 		if (service.isAlertCurrentlyVisible()) {
-			Logger.d(TAG, "Alert is already Visible, lets sleep for " + ALERT_SLEEP_DURATION + " ms");
+			Log.d(TAG, "Alert is already Visible, lets sleep for " + ALERT_SLEEP_DURATION + " ms");
 			new Thread(new Runnable() {
 
 				@Override
@@ -286,14 +288,14 @@ public class ALUtil {
 			
 		} catch (SyncException e) {
 			e.printStackTrace();
-			Logger.d(TAG, "Failed to show alert");
+			Log.d(TAG, "Failed to show alert");
 		}
 	}
 	
 	public static void alert(final String alertText1, final String alertText2, final String alertText3, final String speakText) {
 		AppLinkService service = AppLinkService.getInstance();
 		if (service.isAlertCurrentlyVisible()) {
-			Logger.d(TAG, "Alert is already Visible, lets sleep for " + ALERT_SLEEP_DURATION + " ms");
+			//Logger.d(TAG, "Alert is already Visible, lets sleep for " + ALERT_SLEEP_DURATION + " ms");
 			new Thread(new Runnable() {
 
 				@Override
@@ -326,7 +328,7 @@ public class ALUtil {
 
 		} catch (SyncException e) {
 			e.printStackTrace();
-			Logger.d(TAG, "Failed to show alert");
+			Log.d(TAG, "Failed to show alert");
 		}
 	}
 

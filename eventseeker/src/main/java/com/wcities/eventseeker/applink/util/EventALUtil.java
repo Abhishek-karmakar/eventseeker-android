@@ -3,6 +3,7 @@ package com.wcities.eventseeker.applink.util;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.util.Log;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
@@ -121,7 +122,7 @@ public class EventALUtil {
 				}
 				
 			} else {
-				Logger.d(TAG, "Price Details are not available.");
+				Log.d(TAG, "Price Details are not available.");
 			}
 		}
 		if (simple.equals("")) {
@@ -352,7 +353,7 @@ public class EventALUtil {
 				}
 			}
 		}
-		Logger.d(TAG, "Address : " + simple);
+		Log.d(TAG, "Address : " + simple);
 		Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
 		ALUtil.speakText(ttsChunks);
 	}

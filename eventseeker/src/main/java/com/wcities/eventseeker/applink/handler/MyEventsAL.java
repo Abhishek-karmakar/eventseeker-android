@@ -1,5 +1,7 @@
 package com.wcities.eventseeker.applink.handler;
 
+import android.util.Log;
+
 import com.ford.syncV4.proxy.TTSChunkFactory;
 import com.ford.syncV4.proxy.rpc.GetVehicleDataResponse;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
@@ -254,7 +256,7 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 				EventALUtil.callVenue(eventList);
 				break;
 			default:
-				Logger.d(TAG, cmd + " is an Invalid Command");
+				Log.d(TAG, cmd + " is an Invalid Command");
 				break;
 		}
 	}

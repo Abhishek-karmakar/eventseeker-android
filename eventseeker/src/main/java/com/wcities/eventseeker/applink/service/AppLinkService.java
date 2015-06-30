@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.ford.syncV4.exception.SyncException;
 import com.ford.syncV4.exception.SyncExceptionCause;
@@ -92,7 +93,6 @@ import com.wcities.eventseeker.applink.util.InteractionChoiceSetUtil;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.Enums;
-import com.wcities.eventseeker.logger.Logger;
 import com.wcities.eventseeker.util.DeviceUtil;
 
 import java.util.ArrayList;
@@ -476,18 +476,22 @@ public class AppLinkService extends Service implements IProxyListenerALM {
                         isLatLngUpdatedInDdOffMode = true;
                     }
                 }
+                if (!lockscreenUP) {
+                    //26-06-2015:
+                    //For the Scenario when User is in DD_OFF mode and after using mobile Device, he has
+                    //pressed any Command
+                    showLockScreen();
+                }
                 break;
 
             case HMI_LIMITED:
                 if (driverDistractionNotif == false) {
-                    Logger.d(TAG, "HMI_LIMITED.. showing LocakScreen..");
                     showLockScreen();
                 }
                 break;
 
             case HMI_BACKGROUND:
                 if (driverDistractionNotif == false) {
-                    Logger.d(TAG, "HMI_BACKGROUND.. showing LocakScreen..");
                     showLockScreen();
                 }
                 break;
@@ -544,11 +548,10 @@ public class AppLinkService extends Service implements IProxyListenerALM {
             if (currentUIActivity.isActivityonTop()) {
                 if (LockScreenActivity.getInstance() == null) {
                     startLockScreen();
+                    lockscreenUP = true;
                 }
             }
         }
-        Logger.d(TAG, "showLockScreen lockscreenUP(before setting true): " + lockscreenUP);
-        lockscreenUP = true;
     }
 
     public void startLockScreen() {
@@ -556,15 +559,15 @@ public class AppLinkService extends Service implements IProxyListenerALM {
         Intent i = new Intent(this, LockScreenActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         i.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
     }
 
     private void clearLockScreen() {
         if (LockScreenActivity.getInstance() != null) {
             LockScreenActivity.getInstance().exit();
+            lockscreenUP = false;
         }
-        Logger.d(TAG, "clearLockScreen lockscreenUP(before setting false): " + lockscreenUP);
-        lockscreenUP = false;
         //ALUtil.unsubscribeForGps();
     }
 
@@ -582,7 +585,6 @@ public class AppLinkService extends Service implements IProxyListenerALM {
     public void onOnDriverDistraction(final OnDriverDistraction notification) {
         driverDistractionNotif = true;
         if (notification.getState() == DriverDistractionState.DD_OFF) {
-            Logger.d(TAG, "onOnDriverDistraction.. clearing LockScreen..");
             clearLockScreen();
             isDDOff = true;
 
@@ -595,7 +597,6 @@ public class AppLinkService extends Service implements IProxyListenerALM {
                     isLatLngUpdatedInDdOffMode = true;
                 }
             }
-            Logger.d(TAG, "onOnDriverDistraction.. showing LockScreen..");
             showLockScreen();
             isDDOff = false;
         }
@@ -636,6 +637,12 @@ public class AppLinkService extends Service implements IProxyListenerALM {
      * @param cmd
      */
     private void onCommandPress(Command cmd, boolean isTriggerSrcMenu) {
+        /*if (!lockscreenUP) {
+            //26-06-2015:
+            //For the Scenario when User is in DD_OFF mode and after using mobile Device, he has
+            //pressed any Command
+            showLockScreen();
+        }*/
         if (!isFordGPSAvailable && secLevelCmd.contains(cmd)) {
             double latlon[] = DeviceUtil.getLatLon((EventSeekr) getApplication());
             if (lat != latlon[0] || lng != latlon[1] || isLatLngUpdatedInDdOffMode) {
@@ -986,14 +993,16 @@ public class AppLinkService extends Service implements IProxyListenerALM {
     @Override
     public void onOnLockScreenNotification(OnLockScreenStatus notification) {
         //Log.d(TAG, "onOnLockScreenNotification");
-        LockScreenStatus displayLockScreen = notification.getShowLockScreen();
-        Logger.d(TAG, "onOnLockScreenNotification displayLockScreen: " + displayLockScreen);
-        if (!isDDOff && displayLockScreen == LockScreenStatus.REQUIRED || displayLockScreen == LockScreenStatus.OPTIONAL) {
-            showLockScreen();
+        /*if (!((EventSeekr) getApplication()).isTablet()) {
+            LockScreenStatus displayLockScreen = notification.getShowLockScreen();
+            //Logger.d(TAG, "onOnLockScreenNotification displayLockScreen: " + displayLockScreen);
+            if (displayLockScreen == LockScreenStatus.REQUIRED || displayLockScreen == LockScreenStatus.OPTIONAL) {
+                showLockScreen();
 
-        } else {
-            clearLockScreen();
-        }
+            } else {
+                clearLockScreen();
+            }
+        }*/
     }
 
     @Override
