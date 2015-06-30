@@ -1314,7 +1314,18 @@ public class MainActivity extends BaseActivity implements
 		 * otherwise just close the drawer
 		 */
 		if (drawerItemSelectedPosition != pos || (args != null && args.containsKey(BundleKeys.SELECT_RECOMMENDED_EVENTS))) {
-			getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+			/**
+			 * If user is Loging in and If Ford is running at that time a crash occurd here:
+			 * FATAL EXCEPTION: main
+			 * Process: com.wcities.eventseeker, PID: 5996
+			 * java.lang.IllegalStateException: Can not perform this action after onSaveInstanceState
+			 */
+			try {
+				getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			}
 			selectItem(pos, args);
 
 		} else {

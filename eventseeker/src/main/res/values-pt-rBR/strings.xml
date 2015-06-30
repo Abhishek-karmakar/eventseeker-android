@@ -10,7 +10,7 @@
     <string name="leaving_app_for_call">Você está saindo do aplicativo Eventseeker. Um telefonema será realizado do seu celular</string>
     	
     <!-- DiscoverActivityAL -->
-    <string name="discover_al_discover_categories">Okay, Você deseja concertos, clubes, esportes, teatros ou festivais?</string>
+    <string name="discover_al_discover_categories">Você deseja concertos, clubes, esportes, teatros ou festivais?</string>
     <string name="discover_al_time_out_help_text">concertos, clubes, esportes, teatros ou festivais</string>
     <string name="discover_al_sports">esportes</string>
     

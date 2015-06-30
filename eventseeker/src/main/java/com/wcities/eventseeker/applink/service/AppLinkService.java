@@ -156,6 +156,10 @@ public class AppLinkService extends Service implements IProxyListenerALM {
         return proxy;
     }
 
+    public boolean isDDOff() {
+        return isDDOff;
+    }
+
     public BaseActivity getCurrentActivity() {
         return currentUIActivity;
     }

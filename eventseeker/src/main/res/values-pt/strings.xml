@@ -454,7 +454,7 @@
     <string name="al_command_search">Procurar</string>
     
     <!-- DiscoverActivityAL -->
-    <string name="discover_al_discover_categories">Bem, deseja os concertos, clubes, desporto, teatros, ou, festivais?</string>
+    <string name="discover_al_discover_categories">deseja os concertos, clubes, desporto, teatros, ou, festivais?</string>
     <string name="discover_al_time_out_help_text">concertos, clubes, desporto, teatros, festivais</string>
     <string name="discover_al_discover">Diga categoria</string>
     <string name="discover_al_concerts">concertos</string>

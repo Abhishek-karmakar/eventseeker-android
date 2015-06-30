@@ -39,9 +39,7 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
     private boolean activityOnTop;
 
     private boolean onSaveInstanceStateCalled;
-    /**
-     * will be shared by all the Activity instances.
-     */
+
     private static boolean isConnectedToFord;
 
     @Override
@@ -49,7 +47,6 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
         super.onCreate(savedInstanceState);
         //Log.d(TAG, "base onCreate() - " + getClass().getSimpleName() + ", taskId = " + getTaskId());
         //Toast.makeText(getApplicationContext(), "base onCreate() - " + getClass().getSimpleName() + ", taskId = " + getTaskId(), Toast.LENGTH_SHORT).show();
-
         BoschMainActivity.appTaskId = getTaskId();
         /**
          * Locale changes are Activity specific i.e. after the Activity gets destroyed, the Locale changes
@@ -60,8 +57,13 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
          */
         ((EventSeekr) getApplication()).setDefaultLocale();
 
-        if (((EventSeekr) getApplication()).getWcitiesId() == null) {
+        /*if (((EventSeekr) getApplication()).getWcitiesId() == null) {
             return;
+        }*/
+
+        if (AppConstants.FORD_SYNC_APP && !isConnectedToFord) {
+            startSyncProxyService();
+            isConnectedToFord = true;
         }
     }
 
@@ -72,8 +74,9 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
         //Toast.makeText(getApplicationContext(), "BaseActivity onStart()", Toast.LENGTH_SHORT).show();
         EventSeekr.setConnectionFailureListener(this);
         DeviceUtil.registerLocationListener(this);
-        if (((EventSeekr) getApplication()).getWcitiesId() == null) {
-        }
+        /*if (((EventSeekr) getApplication()).getWcitiesId() == null) {
+            return;
+        }*/
         // when user comes back from bosch, onStart() is called where we need to reset language as per mobile/tablet app
         ((EventSeekr) getApplication()).setDefaultLocale();
         return;
@@ -84,17 +87,13 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
         super.onResume();
         //Log.d(TAG, "BaseActivity onResume()");
         //Toast.makeText(getApplicationContext(), "BaseActivity onResume()", Toast.LENGTH_SHORT).show();
-        if (((EventSeekr) getApplication()).getWcitiesId() == null) {
+        /*if (((EventSeekr) getApplication()).getWcitiesId() == null) {
             return;
-        }
+        }*/
 
         boolean isLockscreenVisible = false;
         if (AppConstants.FORD_SYNC_APP) {
             EventSeekr.setCurrentBaseActivity(this);
-            if (!isConnectedToFord) {
-                startSyncProxyService();
-                isConnectedToFord = true;
-            }
             setCurrentActivity();
 
             activityOnTop = true;
@@ -126,13 +125,35 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
     protected void onPause() {
         //Log.d(TAG, "onPause()");
         super.onPause();
-
-        if (((EventSeekr) getApplication()).getWcitiesId() == null) {
+        /*if (((EventSeekr) getApplication()).getWcitiesId() == null) {
             return;
-        }
+        }*/
 
         if (AppConstants.FORD_SYNC_APP) {
             activityOnTop = false;
+            /**
+             * 30-06-2015:
+             * Below code determines if DriverDistraction is Off then the user must be using Eventseeker
+             * Mobile app if at this moment if he leaves app (moves to some other app) then in Low memory
+             * Scenarios the Eventseeker app may get killed(seen this issue in Sony Xperia L) resulting into
+             * disconnection with Applink. So, This is just to put the Service in Foreground Process.
+             * Here, if the Service is already running then new instance would not be created, instead
+             * the onStartCommand() would be called with this new intent.
+             *
+             * NOTE: The below code is strictly for the DDOff scenario, if this check isn't added then this
+             * block will get executed even while switching from BaseActivity to LockScreenActivity.
+             * And we haven't added code for 'ACTION_APPLINK_SERVICE_STOP_FOREGROUND' in onStop() as this
+             * will get executed in LockScreenActivity as soon as we resume the app the LockScreenActivity
+             * would get launch.
+             */
+            AppLinkService serviceInstance = AppLinkService.getInstance();
+            if (serviceInstance != null && serviceInstance.isDDOff()) {
+                //Logger.d(TAG, "making service in Foreground for the DDOff mode...");
+                Intent intent = new Intent(getApplicationContext(), AppLinkService.class);
+                intent.setAction(AppConstants.ACTION_APPLINK_SERVICE_START_FOREGROUND);
+                startService(intent);
+
+            }
         }
     }
 
@@ -143,10 +164,6 @@ public abstract class BaseActivity extends ActionBarActivity implements Connecti
 
         EventSeekr.resetConnectionFailureListener(this);
         DeviceUtil.unregisterLocationListener((EventSeekr) getApplication());
-
-        if (((EventSeekr) getApplication()).getWcitiesId() == null) {
-            return;
-        }
     }
 
     @Override
