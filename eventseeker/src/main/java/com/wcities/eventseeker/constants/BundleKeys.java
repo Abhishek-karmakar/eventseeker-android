@@ -119,6 +119,7 @@ public class BundleKeys {
 	/**-------------------- starts ford here ---------------------------**/
 
 	public static final java.lang.String MANUAL_IO_ONLY = "manualIOOnly";
+	public static final String HAS_LAT_LON_CHANGED_OUT_OF_FORD_APP_SCOPE = "hasLatLonChangedOutOfFordAppScope";
 
 	/**-------------------- ends ford here ---------------------------**/
 }

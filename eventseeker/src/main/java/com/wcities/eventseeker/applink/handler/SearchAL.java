@@ -321,7 +321,7 @@ public class SearchAL extends ESIProxyALM {
 			case MY_EVENTS:
 			case SEARCH:
 				reset();
-				AppLinkService.getInstance().initiateESIProxyListener(cmd, isTriggerSrcMenu);
+				AppLinkService.getInstance().initiateESIProxyListener(cmd, isTriggerSrcMenu, null);
 				break;
 				
 			case NEXT:

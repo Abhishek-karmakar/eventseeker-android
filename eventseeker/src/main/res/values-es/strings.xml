@@ -437,14 +437,16 @@
 
     <!-- Commands -->
     <string name="al_command_next">Siguiente</string>
-    <string name="al_command_back">Atrás</string>
+    <string name="al_command_back">Anterior</string>
     <string name="al_command_details">Detalles</string>
     <string name="al_command_play">Play</string>
     <string name="al_command_call_venue">Llamar</string>
     <string name="al_command_follow">Seguir</string>
+    <string name="al_command_address">Dirección</string>
 
     <!-- SoftButtons -->
     <!-- <string name="soft_btn_discover"></string> -->
+    <string name="soft_btn_back">Ante.</string>
 
     <!-- MainActivityAL -->
     <string name="al_command_my_events">Mis Eventos</string>
@@ -452,7 +454,7 @@
     <string name="al_command_search">Buscar</string>
 
     <!-- DiscoverActivityAL -->
-    <string name="discover_al_discover_categories">OK, ¿Usted quiere los conciertos, clubes, deportes, teatros, o, festivales?</string>
+    <string name="discover_al_discover_categories">¿Usted quiere los conciertos, clubes, deportes, teatros, o, festivales?</string>
     <string name="discover_al_time_out_help_text">conciertos, clubes, deportes, teatros, festivales</string>
     <string name="discover_al_discover">Diga Categoría</string>
     <string name="discover_al_concerts">Conciertos</string>

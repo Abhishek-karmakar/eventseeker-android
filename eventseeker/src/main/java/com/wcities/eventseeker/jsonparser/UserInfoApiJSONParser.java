@@ -4,10 +4,12 @@ import android.util.Log;
 
 import com.wcities.eventseeker.api.UserInfoApi.RepCodeResponse;
 import com.wcities.eventseeker.constants.Enums.Service;
+import com.wcities.eventseeker.core.Address;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.ArtistNewsItem;
 import com.wcities.eventseeker.core.ArtistNewsItem.PostType;
 import com.wcities.eventseeker.core.BookingInfo;
+import com.wcities.eventseeker.core.Country;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
@@ -82,6 +84,10 @@ public class UserInfoApiJSONParser {
 	private static final String KEY_IMAGE_ATTRIBUTION = "image_attribution";
 	private static final String KEY_TOTAL = "total";
 	private static final String KEY_URL = "url";
+
+	private static final String KEY_ADDRESS1 = "address1";
+	private static final String KEY_ADDRESS2 = "address2";
+	private static final String KEY_COUNTRY = "country";
 
 	private static final String KEY_ONTOUR = "ontour";
 
@@ -710,7 +716,28 @@ public class UserInfoApiJSONParser {
 				event.setEventUrl(jObjLinks.getString(KEY_TRACKBACK_URL));
 			}
 		}
-		
+
+		//For Ford Myevents List
+		if (venue.getAddress() == null && jsonObject.has(KEY_ADDRESS1)) {
+			Address address = new Address();
+			address.setAddress1(jsonObject.getString(KEY_ADDRESS1));
+			//For Ford Myevents List
+			if (jsonObject.has(KEY_ADDRESS2)) {
+				address.setAddress2(jsonObject.getString(KEY_ADDRESS2));
+			}
+			//For Ford Myevents List
+			if (jsonObject.has(KEY_CITY)) {
+				address.setCity(ConversionUtil.decodeHtmlEntities(jsonObject, KEY_CITY));
+			}
+			//For Ford Myevents List
+			if (jsonObject.has(KEY_COUNTRY)) {
+				Country country = new Country();
+				country.setName(ConversionUtil.decodeHtmlEntities(jsonObject, KEY_COUNTRY));
+				address.setCountry(country);
+			}
+			venue.setAddress(address);
+		}
+
 		Attending attending = jsonObject.has(KEY_ATTENDING) ? 
 				Attending.getAttending(jsonObject.getInt(KEY_ATTENDING)) : Attending.NOT_GOING;
 		event.setAttending(attending);

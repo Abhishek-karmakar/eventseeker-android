@@ -1,14 +1,14 @@
 package com.wcities.eventseeker.applink.util;
 
-import java.util.Arrays;
-import java.util.Vector;
-
 import com.ford.syncV4.proxy.rpc.SoftButton;
 import com.ford.syncV4.proxy.rpc.enums.ButtonName;
 import com.ford.syncV4.proxy.rpc.enums.SoftButtonType;
 import com.ford.syncV4.proxy.rpc.enums.SystemAction;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.applink.service.AppLinkService;
+
+import java.util.Arrays;
+import java.util.Vector;
 
 public class CommandsUtil {
 
@@ -21,18 +21,35 @@ public class CommandsUtil {
 		 * The Search screen has been removed from the Ford app.
 		 */
 		SEARCH(AppLinkService.CMD_ID_AL + 2),
-		NEXT(AppLinkService.CMD_ID_AL + 3),
-		BACK(AppLinkService.CMD_ID_AL + 4),
-		DETAILS(AppLinkService.CMD_ID_AL + 5),
-		//PLAY(AppLinkService.CMD_ID_AL + 6),
-		CALL_VENUE(AppLinkService.CMD_ID_AL + 6),
-		FOLLOW(AppLinkService.CMD_ID_AL + 7);
+		NEXT(AppLinkService.CMD_ID_AL + 3, true),
+		BACK(AppLinkService.CMD_ID_AL + 4, true),
+		DETAILS(AppLinkService.CMD_ID_AL + 5, true),
+		//PLAY(AppLinkService.CMD_ID_AL + 6, true),
+		ADDRESS(AppLinkService.CMD_ID_AL + 6, true),
+		CALL_VENUE(AppLinkService.CMD_ID_AL + 7, true),
+		FOLLOW(AppLinkService.CMD_ID_AL + 8, true),
+		/**
+		 * 04-06-2015:
+		 * This is added as a hack to prevent showing any soft buttons on 'DISCOVER'.
+		 * An issue was occurring while removing soft buttons when the ChoiceSet Dialog appears.
+		 * When this ChoiceSet Dialog appears at that time we don't need to show any soft buttons. we
+		 * tried to resolve this issue by passing an empty vector instance & null to the
+		 * 'ALUtil.displayMessage()'(this updates the soft buttons on screen) to remove the soft
+		 * buttons for that moment but the soft buttons implementation for ford is like that it just
+		 * updates the new soft buttons over the previous. Thus, added this 'NO_CMD'.
+		 */
+		NO_CMD(AppLinkService.CMD_ID_AL + 9);
 
 		private int cmdId;
-		private boolean isAdded;
+		private boolean isAdded, isSecLevelCmd;
 		
 		private Command(int cId) {
 			this.cmdId = cId;
+		}
+
+		private Command(int cId, boolean isSecLevelCmd) {
+			this(cId);
+			this.isSecLevelCmd = isSecLevelCmd;
 		}
 		
 		public static Command getCommandById(int cmdId) {
@@ -70,39 +87,49 @@ public class CommandsUtil {
 			this.isAdded = isAdded;
 		}
 
+		public boolean isSecLevelCmd() {
+			return isSecLevelCmd;
+		}
+
 		@Override
 		public String toString() {
 			String str = null;
 			switch (this) {
-			case DISCOVER:
-				str = AppLinkService.getInstance().getResources().getString(R.string.al_command_discover);
-				break;
-			case MY_EVENTS:
-				str = AppLinkService.getInstance().getResources().getString(R.string.al_command_my_events);
-				break;
-			case SEARCH:
-				str = AppLinkService.getInstance().getResources().getString(R.string.al_command_search);
-				break;
-			case NEXT:
-				str = AppLinkService.getInstance().getResources().getString(R.string.al_command_next);
-				break;
-			case BACK:
-				str = AppLinkService.getInstance().getResources().getString(R.string.al_command_back);
-				break;
-			case DETAILS:
-				str = AppLinkService.getInstance().getResources().getString(R.string.al_command_details);
-				break;
-			/*case PLAY:
-				str = AppLinkService.getInstance().getResources().getString(R.string.al_command_play);
-				break;*/
-			case CALL_VENUE:
-				str = AppLinkService.getInstance().getResources().getString(R.string.al_command_call_venue);
-				break;
-			case FOLLOW:
-				str = AppLinkService.getInstance().getResources().getString(R.string.al_command_follow);
-				break;
-			default:
-				break;
+				case DISCOVER:
+					str = AppLinkService.getInstance().getResources().getString(R.string.al_command_discover);
+					break;
+				case MY_EVENTS:
+					str = AppLinkService.getInstance().getResources().getString(R.string.al_command_my_events);
+					break;
+				case SEARCH:
+					str = AppLinkService.getInstance().getResources().getString(R.string.al_command_search);
+					break;
+				case NEXT:
+					str = AppLinkService.getInstance().getResources().getString(R.string.al_command_next);
+					break;
+				case BACK:
+					str = AppLinkService.getInstance().getResources().getString(R.string.al_command_back);
+					break;
+				case DETAILS:
+					str = AppLinkService.getInstance().getResources().getString(R.string.al_command_details);
+					break;
+				/*case PLAY:
+					str = AppLinkService.getInstance().getResources().getString(R.string.al_command_play);
+					break;*/
+				case ADDRESS:
+					str = AppLinkService.getInstance().getResources().getString(R.string.al_command_address);
+					break;
+				case CALL_VENUE:
+					str = AppLinkService.getInstance().getResources().getString(R.string.al_command_call_venue);
+					break;
+				case FOLLOW:
+					str = AppLinkService.getInstance().getResources().getString(R.string.al_command_follow);
+					break;
+				case NO_CMD:
+					str = "-";
+					break;
+				default:
+					break;
 			}
 			return str;
 		}
@@ -112,6 +139,9 @@ public class CommandsUtil {
 			
 			case DISCOVER:
 				return AppLinkService.getInstance().getResources().getString(R.string.soft_btn_discover);
+
+			case BACK:
+				return AppLinkService.getInstance().getResources().getString(R.string.soft_btn_back);
 
 			default:
 				return toString();

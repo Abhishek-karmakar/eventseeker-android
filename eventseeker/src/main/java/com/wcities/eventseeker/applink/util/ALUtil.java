@@ -10,6 +10,7 @@ import com.ford.syncV4.proxy.rpc.Choice;
 import com.ford.syncV4.proxy.rpc.CreateInteractionChoiceSet;
 import com.ford.syncV4.proxy.rpc.DeleteCommand;
 import com.ford.syncV4.proxy.rpc.DeleteInteractionChoiceSet;
+import com.ford.syncV4.proxy.rpc.GetVehicleData;
 import com.ford.syncV4.proxy.rpc.MenuParams;
 import com.ford.syncV4.proxy.rpc.PerformInteraction;
 import com.ford.syncV4.proxy.rpc.SetGlobalProperties;
@@ -23,6 +24,7 @@ import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.applink.service.AppLinkService;
 import com.wcities.eventseeker.applink.util.CommandsUtil.Command;
 import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.logger.Logger;
 
 import java.util.List;
 import java.util.Vector;
@@ -31,6 +33,7 @@ public class ALUtil {
 
 	private static final String TAG = ALUtil.class.getSimpleName();
 	private static final int ALERT_DURATION = 3000;
+	private static final int ALERT_SLEEP_DURATION = 1000;
 	
 	public static void addCommand(Vector<String> vrCommands, int cmdID) {
 		//Log.d(TAG, "Add Command Id is : " + cmdID);
@@ -77,7 +80,7 @@ public class ALUtil {
 	}
 	
 	public static void deleteCommand(int cmdID) {
-		//Log.d(TAG, "Delete Command Id is : " + cmdID);
+		//Logger.d(TAG, "Delete Command Id is : " + cmdID);
 		AppLinkService appLinkService = AppLinkService.getInstance();
 		
 		DeleteCommand msg = new DeleteCommand();
@@ -105,7 +108,7 @@ public class ALUtil {
 	}
 
 	public static void createInteractionChoiceSet(Vector<Choice> choices, int choiceSetId) {
-		Log.d(TAG, "ChoiceSetid : " + choiceSetId);
+		//Logger.d(TAG, "ChoiceSetid : " + choiceSetId);
 		if (!choices.isEmpty()) {
 			CreateInteractionChoiceSet msg = new CreateInteractionChoiceSet();
 			msg.setCorrelationID(AppLinkService.getInstance().autoIncCorrId++);
@@ -122,7 +125,7 @@ public class ALUtil {
 	}
 	
 	public static void deleteInteractionChoiceSet(int choiceSetId) {
-		Log.d(TAG, "ChoiceSetid : " + choiceSetId);
+		//Logger.d(TAG, "ChoiceSetid : " + choiceSetId);
 		DeleteInteractionChoiceSet msg = new DeleteInteractionChoiceSet();
 		msg.setCorrelationID(AppLinkService.getInstance().autoIncCorrId++);
 		msg.setInteractionChoiceSetID(choiceSetId);
@@ -214,7 +217,26 @@ public class ALUtil {
 		}
 	}
 	
-	public static void alert(String alertText1, String speakText) {
+	public static void alert(final String alertText1, final String speakText) {
+		AppLinkService service = AppLinkService.getInstance();
+		if (service.isAlertCurrentlyVisible()) {
+			Log.d(TAG, "Alert is already Visible, lets sleep for " + ALERT_SLEEP_DURATION + " ms");
+			new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+					try {
+						Thread.sleep(ALERT_SLEEP_DURATION);
+
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+
+					alert(alertText1, speakText);
+				}
+			}).start();
+			return;
+		}
 		try {
 			Alert msg = new Alert();
 			msg.setCorrelationID(AppLinkService.getInstance().autoIncCorrId++);
@@ -223,7 +245,9 @@ public class ALUtil {
 			msg.setPlayTone(true);
 			Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(speakText);
 			msg.setTtsChunks(ttsChunks);
-			AppLinkService.getInstance().getProxy().sendRPCRequest(msg);
+
+			service.setIsAlertCurrentlyVisible(true);
+			service.getProxy().sendRPCRequest(msg);
 			
 		} catch (SyncException e) {
 			e.printStackTrace();
@@ -231,7 +255,26 @@ public class ALUtil {
 		}
 	}
 	
-	public static void alertText(String alertText1, String alertText2) {
+	public static void alertText(final String alertText1, final String alertText2) {
+		AppLinkService service = AppLinkService.getInstance();
+		if (service.isAlertCurrentlyVisible()) {
+			Log.d(TAG, "Alert is already Visible, lets sleep for " + ALERT_SLEEP_DURATION + " ms");
+			new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+					try {
+						Thread.sleep(ALERT_SLEEP_DURATION);
+
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+
+					alertText(alertText1, alertText2);
+				}
+			}).start();
+			return;
+		}
 		try {
 			Alert msg = new Alert();
 			msg.setCorrelationID(AppLinkService.getInstance().autoIncCorrId++);
@@ -239,7 +282,9 @@ public class ALUtil {
 			msg.setAlertText2(alertText2);
 			msg.setDuration(ALERT_DURATION);
 			msg.setPlayTone(true);
-			AppLinkService.getInstance().getProxy().sendRPCRequest(msg);
+
+			service.setIsAlertCurrentlyVisible(true);
+			service.getProxy().sendRPCRequest(msg);
 			
 		} catch (SyncException e) {
 			e.printStackTrace();
@@ -247,7 +292,26 @@ public class ALUtil {
 		}
 	}
 	
-	public static void alert(String alertText1, String alertText2, String alertText3, String speakText) {
+	public static void alert(final String alertText1, final String alertText2, final String alertText3, final String speakText) {
+		AppLinkService service = AppLinkService.getInstance();
+		if (service.isAlertCurrentlyVisible()) {
+			//Logger.d(TAG, "Alert is already Visible, lets sleep for " + ALERT_SLEEP_DURATION + " ms");
+			new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+					try {
+						Thread.sleep(ALERT_SLEEP_DURATION);
+
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+
+					alert(alertText1, alertText2, alertText3, speakText);
+				}
+			}).start();
+			return;
+		}
 		try {
 			Alert msg = new Alert();
 			msg.setCorrelationID(AppLinkService.getInstance().autoIncCorrId++);
@@ -258,14 +322,29 @@ public class ALUtil {
 			msg.setPlayTone(true);
 			Vector<TTSChunk> ttsChunks = TTSChunkFactory.createSimpleTTSChunks(speakText);
 			msg.setTtsChunks(ttsChunks);
-			AppLinkService.getInstance().getProxy().sendRPCRequest(msg);
-			
+
+			service.setIsAlertCurrentlyVisible(true);
+			service.getProxy().sendRPCRequest(msg);
+
 		} catch (SyncException e) {
 			e.printStackTrace();
 			Log.d(TAG, "Failed to show alert");
 		}
 	}
-	
+
+	public static void getVehicleData() {
+		GetVehicleData msg = new GetVehicleData();
+		msg.setGps(true);
+		msg.setCorrelationID(AppLinkService.getInstance().autoIncCorrId++);
+
+		try {
+			AppLinkService.getInstance().getProxy().sendRPCRequest(msg);
+
+		} catch (SyncException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static void subscribeForGps() {
 		SubscribeVehicleData msg = new SubscribeVehicleData();
 		msg.setGps(true);
@@ -299,7 +378,7 @@ public class ALUtil {
 			helpPrompt += command.toString() + ", ";
 		}
 		helpPrompt += "and, " + commands.get(commands.size() - 1).toString();
-		Log.d(TAG, "help = " + helpPrompt);
+		Logger.d(TAG, "help = " + helpPrompt);
 		
 		SetGlobalProperties msg = new SetGlobalProperties();
 		msg.setCorrelationID(AppLinkService.getInstance().autoIncCorrId++);

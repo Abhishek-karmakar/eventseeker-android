@@ -54,9 +54,11 @@ import com.ford.syncV4.proxy.rpc.UnsubscribeVehicleDataResponse;
 import com.ford.syncV4.proxy.rpc.enums.SyncDisconnectedReason;
 import com.wcities.eventseeker.applink.util.EventALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil.Command;
+import com.wcities.eventseeker.logger.Logger;
 
 public abstract class ESIProxyALM implements IProxyListenerALM {
 
+    private static final String TAG = ESIProxyALM.class.getSimpleName();
     private Bundle args;
 
     public abstract void onStartInstance();
@@ -86,6 +88,7 @@ public abstract class ESIProxyALM implements IProxyListenerALM {
 				}
 			}
 		});*/
+        //Logger.d(TAG, "onOnCommand : " + response.getCmdID());
     }
 
     @Override
@@ -108,6 +111,7 @@ public abstract class ESIProxyALM implements IProxyListenerALM {
 					+ response.getInfo() + " Response : " + response.getResultCode(), Toast.LENGTH_SHORT).show();
 			}
 		});*/
+        //Logger.d(TAG, "onAddCommandResponse : " + response.getResultCode());
     }
 
     @Override
@@ -118,7 +122,7 @@ public abstract class ESIProxyALM implements IProxyListenerALM {
      */
     @Override
     public void onAlertResponse(final AlertResponse response) {
-        EventALUtil.isAlertForNoPointsAvailable = false;
+        EventALUtil.isAlertForNoEventsAvailable = false;
 		/*AppLinkService.getInstance().getCurrentActivity().runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
@@ -148,6 +152,7 @@ public abstract class ESIProxyALM implements IProxyListenerALM {
 					+ response.getInfo() + " Response : " + response.getResultCode(), Toast.LENGTH_SHORT).show();
 			}
 		});*/
+        //Logger.d(TAG, "onDeleteCommandResponse : " + response.getResultCode());
     }
 
     @Override

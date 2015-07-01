@@ -3,6 +3,7 @@ package com.wcities.eventseeker.applink.handler;
 import android.util.Log;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
+import com.ford.syncV4.proxy.rpc.GetVehicleDataResponse;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
 import com.ford.syncV4.proxy.rpc.SoftButton;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
@@ -24,6 +25,7 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.ItemsList;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
+import com.wcities.eventseeker.logger.Logger;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
@@ -40,7 +42,7 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 	
 	private static MyEventsAL instance;
 
-	private EventSeekr mEventSeekr;
+	private EventSeekr context;
 	private EventList eventList;
 	private double lat, lon;
 	private Type type;
@@ -66,7 +68,7 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 	}
 	
 	public MyEventsAL(EventSeekr mEventSeekr) {
-		this.mEventSeekr = mEventSeekr;
+		this.context = mEventSeekr;
 		eventList = new EventList();
 		eventList.setLoadEventsListener(this);
 	}
@@ -84,84 +86,90 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 		if (eventList != null) {
 			reset();
 		}
-		addCommands();
-		Vector<SoftButton> softBtns = buildSoftButtons();
-		ALUtil.displayMessage(R.string.loading, AppConstants.INVALID_RES_ID, softBtns);
+		addCommands(true);
+		ALUtil.displayMessage(R.string.loading, AppConstants.INVALID_RES_ID, buildNoCmdSoftButtons());
+		ALUtil.getVehicleData();
+	}
 
+	@Override
+	public void onGetVehicleDataResponse(GetVehicleDataResponse response) {
+		super.onGetVehicleDataResponse(response);
 		generateLatLon();
 		try {
 			loadEvents(Type.myevents);
 			if (eventList.isEmpty()) {
-				onNoMyEventsFound();
-				
+				performInteraction();
+
 			} else {
-				handleNext();
+				addCommands(eventList.size() != 1);
+				ALUtil.displayMessage(R.string.loading, AppConstants.INVALID_RES_ID, buildSoftButtons(eventList.size() != 1));
+				EventALUtil.onNextCommand(eventList, context);
 			}
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 			AppLinkService.getInstance().handleNoNetConnectivity();
 		}
 	}
-	
+
 	private void reset() {
 		eventList.resetEventList();
 		eventList.setLoadEventsListener(this);	
 	}
-	
-	private void onNoMyEventsFound() {
-		performInteraction();
-	}
-	
+
 	private void performInteraction() {
 		Vector<Integer> interactionChoiceSetIDList = new Vector<Integer>();
 		interactionChoiceSetIDList.add(ChoiceSet.SUGGESTION_REPLY.ordinal());
 		
 		String simple = AppLinkService.getInstance().getString(R.string.my_events_al_no_evts_avail_make_suggestions);
-		String initialText = mEventSeekr.getResources().getString(R.string.my_events_al_confirmation);	
+		String initialText = context.getResources().getString(R.string.my_events_al_confirmation);
 		
 		Vector<TTSChunk> initChunks = TTSChunkFactory.createSimpleTTSChunks(simple);
 		Vector<TTSChunk> timeoutChunks = TTSChunkFactory.createSimpleTTSChunks(
-				//mEventSeekr.getResources().getString(R.string.time_out));
-				mEventSeekr.getResources().getString(R.string.my_events_al_time_out_help_text));
+				//context.getResources().getString(R.string.time_out));
+				context.getResources().getString(R.string.my_events_al_time_out_help_text));
 		
 		ALUtil.performInteractionChoiceSet(initChunks, initialText, interactionChoiceSetIDList, timeoutChunks,
 				getArguments().getBoolean(BundleKeys.MANUAL_IO_ONLY));
 	}
-	
-	private void handleNext() throws IOException {
-		EventALUtil.onNextCommand(eventList, mEventSeekr);
-	}
-	
-	private void handleBack() {
-		EventALUtil.onBackCommand(eventList, mEventSeekr);
-	}
-	
+
 	private void generateLatLon() {
     	double[] latLon = AppLinkService.getInstance().getLatLng();
     	lat = latLon[0];
     	lon = latLon[1];
     }
-	
-	private void addCommands() {
-		//Log.d(TAG, "addCommands");
+
+	private void addCommands(boolean isNextAndPrevNeeded) {
 		Vector<Command> reqCmds = new Vector<Command>();
 		reqCmds.add(Command.DISCOVER);
 		reqCmds.add(Command.MY_EVENTS);
 		//reqCmds.add(Command.SEARCH);
-		reqCmds.add(Command.NEXT);
-		reqCmds.add(Command.BACK);
-		reqCmds.add(Command.DETAILS);
+		if (isNextAndPrevNeeded) {
+			reqCmds.add(Command.NEXT);
+			reqCmds.add(Command.BACK);
+		}
 		//reqCmds.add(Commands.PLAY);
+		reqCmds.add(Command.DETAILS);
+		reqCmds.add(Command.ADDRESS);
 		reqCmds.add(Command.CALL_VENUE);
-		
-		CommandsUtil.addCommands(reqCmds);	
+
+		CommandsUtil.addCommands(reqCmds);
 	}
-	
-	private Vector<SoftButton> buildSoftButtons() {
+
+	private Vector<SoftButton> buildSoftButtons(boolean isNextAndPrevNeeded) {
 		Vector<SoftButton> softBtns = new Vector<SoftButton>();
-		//softBtns.add(Commands.PLAY.buildSoftBtn());		
-		softBtns.add(Command.CALL_VENUE.buildSoftBtn());
+		if (isNextAndPrevNeeded) {
+			softBtns.add(Command.BACK.buildSoftBtn());
+			softBtns.add(Command.NEXT.buildSoftBtn());
+		}
+		softBtns.add(Command.DETAILS.buildSoftBtn());
+		return softBtns;
+	}
+
+
+	private Vector<SoftButton> buildNoCmdSoftButtons() {
+		Vector<SoftButton> softBtns = new Vector<SoftButton>();
+		softBtns.add(Command.NO_CMD.buildSoftBtn());
 		return softBtns;
 	}
 
@@ -186,7 +194,9 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 			
 			eventList.setRequestCode(type);
 			eventList.addAll(tmpEvents);
-			eventList.setTotalNoOfEvents(myEventsList.getTotalCount());
+			if (myEventsList.getTotalCount() > 0) {
+				eventList.setTotalNoOfEvents(myEventsList.getTotalCount());
+			}
 			
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
@@ -204,7 +214,7 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 		UserInfoApi userInfoApi = new UserInfoApi(Api.OAUTH_TOKEN_FORD_APP);
 		userInfoApi.setLimit(eventList.updateAndGetEventsLimit());
 		userInfoApi.setAlreadyRequested(eventList.getEventsAlreadyRequested());
-		userInfoApi.setUserId(mEventSeekr.getWcitiesId());
+		userInfoApi.setUserId(context.getWcitiesId());
 		userInfoApi.setLat(lat);
 		userInfoApi.setLon(lon);
 		userInfoApi.setAddFordLangParam(true);
@@ -217,48 +227,43 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 		}
 
 		switch (cmd) {
-		
-		case DISCOVER:
-		case MY_EVENTS:
-		case SEARCH:
-			AppLinkService.getInstance().initiateESIProxyListener(cmd, isTriggerSrcMenu);
-			break;
-			
-		case NEXT:
-			try {
-				handleNext();
-				
-			} catch (IOException e) {
-				e.printStackTrace();
-				AppLinkService.getInstance().handleNoNetConnectivity();
-			}
-			break;
-			
-		case BACK:
-			handleBack();
-			break;
-			
-		case DETAILS:
-			EventALUtil.speakDetailsOfEvent(eventList.getCurrentEvent(), mEventSeekr);
-			break;
-			
-		/*case PLAY:
-			break;*/
-			
-		case CALL_VENUE:
-			EventALUtil.callVenue(eventList);
-			break;
-			
-		default:
-			Log.d(TAG, cmd + " is an Invalid Command");
-			break;
+			case DISCOVER:
+			case MY_EVENTS:
+			case SEARCH:
+				AppLinkService.getInstance().initiateESIProxyListener(cmd, isTriggerSrcMenu, null);
+				break;
+			case NEXT:
+				try {
+					EventALUtil.onNextCommand(eventList, context);
+
+				} catch (IOException e) {
+					e.printStackTrace();
+					AppLinkService.getInstance().handleNoNetConnectivity();
+				}
+				break;
+			case BACK:
+				EventALUtil.onBackCommand(eventList, context);
+				break;
+			case DETAILS:
+				EventALUtil.speakDetailsOfEvent(eventList.getCurrentEvent(), context);
+				break;
+			case ADDRESS:
+				EventALUtil.speakVenueAddress(eventList.getCurrentEvent().getSchedule().getVenue(), context);
+				break;
+			/*case PLAY:
+				break;*/
+			case CALL_VENUE:
+				EventALUtil.callVenue(eventList);
+				break;
+			default:
+				Log.d(TAG, cmd + " is an Invalid Command");
+				break;
 		}
 	}
 	
 	@Override
 	public void onPerformInteractionResponse(PerformInteractionResponse response) {
 		super.onPerformInteractionResponse(response);
-		
 		if (response == null || response.getChoiceID() == null) {
 			// This will happen when on Choice menu user selects cancel button
 			AppLinkService.getInstance().initiateMainAL();
@@ -268,13 +273,15 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 		if (response.getChoiceID() == SuggestionReply.Yes.id) {
 			try {
 				loadEvents(Type.recommendedevent);
-				
 				if (eventList.isEmpty()) {
 					AppLinkService.getInstance().initiateMainAL();
-				} 
-				
-				handleNext();
-				
+
+				} else {
+					addCommands(eventList.size() != 1);
+					ALUtil.displayMessage(R.string.loading, AppConstants.INVALID_RES_ID, buildSoftButtons(eventList.size() != 1));
+				}
+				EventALUtil.onNextCommand(eventList, context);
+
 			} catch (IOException e) {
 				e.printStackTrace();
 				AppLinkService.getInstance().handleNoNetConnectivity();

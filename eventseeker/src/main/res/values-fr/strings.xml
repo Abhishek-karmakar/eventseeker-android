@@ -441,9 +441,11 @@
     <string name="al_command_play">Écouter</string>
     <string name="al_command_call_venue">Appel</string>
     <string name="al_command_follow">Suivre</string>
+    <string name="al_command_address">Adresse</string>
         
     <!-- SoftButtons -->
     <!-- <string name="soft_btn_discover"></string> -->
+    <string name="soft_btn_back">Préc.</string>
     
     <!-- MainActivityAL -->
     <string name="al_command_my_events">Mes événements</string>
@@ -451,7 +453,7 @@
     <string name="al_command_search">Chercher</string>
     
    	<!-- DiscoverActivityAL -->
-    <string name="discover_al_discover_categories">D\'accord ! Voulez-vous des concerts, clubs, sports, théâtres, ou, festivals ?</string>
+    <string name="discover_al_discover_categories">Voulez-vous des concerts, clubs, sports, théâtres, ou, festivals ?</string>
     <string name="discover_al_time_out_help_text">concerts, clubs, sports, théâtres, festivals</string>
     <string name="discover_al_discover">Dites catégorie</string>
     <string name="discover_al_concerts">concerts</string>

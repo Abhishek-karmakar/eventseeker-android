@@ -3,6 +3,7 @@ package com.wcities.eventseeker.applink.handler;
 import android.util.Log;
 
 import com.ford.syncV4.proxy.TTSChunkFactory;
+import com.ford.syncV4.proxy.rpc.GetVehicleDataResponse;
 import com.ford.syncV4.proxy.rpc.PerformInteractionResponse;
 import com.ford.syncV4.proxy.rpc.SoftButton;
 import com.ford.syncV4.proxy.rpc.TTSChunk;
@@ -25,6 +26,7 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.ItemsList;
 import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
+import com.wcities.eventseeker.logger.Logger;
 import com.wcities.eventseeker.util.ConversionUtil;
 
 import org.apache.http.client.ClientProtocolException;
@@ -107,37 +109,59 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 	public void onStartInstance() {
 		//Log.d(TAG, "onStartInstance()");
 		reset();
-		performInteraction();		
-		addCommands();
-		Vector<SoftButton> softBtns = buildSoftButtons();
-		ALUtil.displayMessage(R.string.loading, AppConstants.INVALID_RES_ID, softBtns);
+		addCommands(true);
+		ALUtil.displayMessage(R.string.loading, AppConstants.INVALID_RES_ID, buildNoCmdSoftButtons());
+		/**
+		 * If arguments contains key 'HAS_LAT_LON_CHANGED_OUT_OF_FORD_APP_SCOPE' than that means this screen is being refreshed as the
+		 * lat-long has been changed from outside of Ford app scope i.e. DDOFF then from mobile app Change Location.
+		 * So, in onCommandPress of AppLinkService, we check if Second Level command has been triggered then update
+		 * the current Discover category list as per new lat long.
+		 */
+		if (getArguments().containsKey(BundleKeys.HAS_LAT_LON_CHANGED_OUT_OF_FORD_APP_SCOPE)) {
+			//displayEventListForCurrentCategory();
+			ALUtil.getVehicleData();
+
+		} else {
+			performInteraction();
+		}
 	}
 	
-	private void addCommands() {
+	private void addCommands(boolean isNextAndPrevNeeded) {
 		Vector<Command> requiredCmds = new Vector<Command>();
 		requiredCmds.add(Command.DISCOVER);
 		requiredCmds.add(Command.MY_EVENTS);
 		//requiredCmds.add(Command.SEARCH);
-		requiredCmds.add(Command.NEXT);
-		requiredCmds.add(Command.BACK);
+		if (isNextAndPrevNeeded) {
+			requiredCmds.add(Command.NEXT);
+			requiredCmds.add(Command.BACK);
+		}
 		//requiredCmds.add(Commands.PLAY);
 		requiredCmds.add(Command.DETAILS);
+		requiredCmds.add(Command.ADDRESS);
 		requiredCmds.add(Command.CALL_VENUE);
 		
 		CommandsUtil.addCommands(requiredCmds);
 	}
-	
-	private Vector<SoftButton> buildSoftButtons() {
+
+	private Vector<SoftButton> buildNoCmdSoftButtons() {
 		Vector<SoftButton> softBtns = new Vector<SoftButton>();
-		//softBtns.add(Commands.PLAY.buildSoftBtn());
-		softBtns.add(Command.CALL_VENUE.buildSoftBtn());
+		softBtns.add(Command.NO_CMD.buildSoftBtn());
+		return softBtns;
+	}
+
+	private Vector<SoftButton> buildSoftButtons(boolean isNextAndPrevNeeded) {
+		Vector<SoftButton> softBtns = new Vector<SoftButton>();
+		if (isNextAndPrevNeeded) {
+			softBtns.add(Command.BACK.buildSoftBtn());
+			softBtns.add(Command.NEXT.buildSoftBtn());
+		}
+		softBtns.add(Command.DETAILS.buildSoftBtn());
 		return softBtns;
 	}
 
 	private void performInteraction() {
 		//Log.d(TAG, "performInteraction()");
 		//Log.d(TAG, "Discover ordinal : " + CHOICE_SET_ID_DISCOVER);
-		
 		Vector<Integer> interactionChoiceSetIDList = new Vector<Integer>();
 		interactionChoiceSetIDList.add(ChoiceSet.DISCOVER.ordinal());
 		
@@ -156,19 +180,20 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 	@Override
 	public void onPerformInteractionResponse(final PerformInteractionResponse response) {
 		super.onPerformInteractionResponse(response);
-		//Log.i(TAG, "onPerformInteractionResponse(), response.getChoiceID() = " + response.getChoiceID());
 		if (response == null || response.getChoiceID() == null) {
 			/**
 			* This will happen when on Choice menu user selects cancel button
 			*/
-			//Log.i(TAG, "ChoiceID == null");
 			AppLinkService.getInstance().initiateMainAL();
 			return;
 		}
-		
-		generateLatLon();
-		
 		selectedCategoryId = Discover.getDiscoverChoiceId(response.getChoiceID()).getCategoryId();
+		//displayEventListForCurrentCategory();
+		ALUtil.getVehicleData();
+	}
+
+	private void displayEventListForCurrentCategory() {
+		generateLatLon();
 		/**
 		 * According to current implementation, 1st make Featured events call and if events are available,
 		 * then show these events to user and if not, only then load events from 'getEvents' API call.
@@ -184,18 +209,21 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 			// divide by 2 to compensate for last one extra multiplication
 			miles /= 2;
 
-			//show Welcome message when no events are available
 			if (eventList.isEmpty()) {
 				AppLinkService.getInstance().initiateMainAL();
+
+			} else {
+				addCommands(eventList.size() != 1);
+				ALUtil.displayMessage(R.string.loading, AppConstants.INVALID_RES_ID, buildSoftButtons(eventList.size() != 1));
 			}
 			EventALUtil.onNextCommand(eventList, context);
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 			AppLinkService.getInstance().handleNoNetConnectivity();
 		}
 	}
-	
+
 	private void loadEvents(int categoryId) throws IOException {
 		/**
 		 * http://dev.wcities.com/V3/event_api/getEvents.php?oauth_token=5c63440e7db1ad33c3898cdac3405b1e
@@ -232,15 +260,13 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 			
 			ItemsList<Event> eventsList = jsonParser.getEventItemList(jsonObject, GetEventsFrom.EVENTS);
 			tmpEvents = eventsList.getItems();
-			//totalNoOfEvents = (eventsList.getTotalCount() > MAX_EVENTS) ? MAX_EVENTS : eventsList.getTotalCount();
-			
+
 			eventList.setRequestCode(GetEventsFrom.EVENTS);
 			eventList.addAll(tmpEvents);
-			eventList.setTotalNoOfEvents(eventsList.getTotalCount());
-			/*if (eventList.size() >= MAX_EVENTS) {
-				eventList.setMoreDataAvailable(false);
-			}*/
-			
+			if (eventsList.getTotalCount() > 0) {
+				eventList.setTotalNoOfEvents(eventsList.getTotalCount());
+			}
+
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 			
@@ -297,11 +323,10 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 			
 			eventList.setRequestCode(GetEventsFrom.FEATURED_EVENTS);
 			eventList.addAll(tmpEvents);
-			eventList.setTotalNoOfEvents(eventsList.getTotalCount());
-			/*if (eventList.size() >= MAX_EVENTS) {
-				eventList.setMoreDataAvailable(false);
-			}*/
-			
+			if (eventsList.getTotalCount() > 0) {
+				eventList.setTotalNoOfEvents(eventsList.getTotalCount());
+			}
+
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 			
@@ -338,7 +363,9 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 	 */
 	private void reset() {
 		eventList.resetEventList();
-		selectedCategoryId = 0;
+		if (!getArguments().containsKey(BundleKeys.HAS_LAT_LON_CHANGED_OUT_OF_FORD_APP_SCOPE)) {
+			selectedCategoryId = 0;
+		}
 		miles = MIN_MILES;
 		//evtsLimit = EVENTS_LIMIT_10;
 		eventList.setLoadEventsListener(this);	
@@ -355,9 +382,8 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 			case MY_EVENTS:
 			case SEARCH:
 				reset();
-				AppLinkService.getInstance().initiateESIProxyListener(cmd, isTriggerSrcMenu);
+				AppLinkService.getInstance().initiateESIProxyListener(cmd, isTriggerSrcMenu, null);
 				break;
-				
 			case NEXT:
 				try {
 					EventALUtil.onNextCommand(eventList, context);
@@ -367,12 +393,14 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 					AppLinkService.getInstance().handleNoNetConnectivity();
 				}
 				break;
-				
 			case BACK:
 				EventALUtil.onBackCommand(eventList, context);
 				break;
 			case DETAILS:
 				EventALUtil.speakDetailsOfEvent(eventList.getCurrentEvent(), context);
+				break;
+			case ADDRESS:
+				EventALUtil.speakVenueAddress(eventList.getCurrentEvent().getSchedule().getVenue(), context);
 				break;
 			/*case PLAY:
 				break;*/
@@ -382,7 +410,6 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 			default:
 				Log.d(TAG, cmd + " is an Invalid Command");
 				break;
-			
 		}
 	}
 
@@ -397,5 +424,11 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 			loadFeaturedEvents(selectedCategoryId);
 			break;
 		}
+	}
+
+	@Override
+	public void onGetVehicleDataResponse(GetVehicleDataResponse response) {
+		super.onGetVehicleDataResponse(response);
+		displayEventListForCurrentCategory();
 	}
 }

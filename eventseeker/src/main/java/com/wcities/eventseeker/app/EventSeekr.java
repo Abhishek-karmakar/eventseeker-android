@@ -36,6 +36,7 @@ import com.wcities.eventseeker.interfaces.ActivityDestroyedListener;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.ConnectionFailureListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
+import com.wcities.eventseeker.logger.Logger;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
@@ -282,7 +283,9 @@ public class EventSeekr extends Application {
 	    }
 		
 		super.onCreate();
-		
+
+		Logger.init(this);
+
 		eventSeekr = this;
 		//Log.d(TAG, "onCreate()");
 		listeners = new ArrayList<EventSeekr.EventSeekrListener>();
