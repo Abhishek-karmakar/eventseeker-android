@@ -24,10 +24,11 @@ public class CommandsUtil {
 		NEXT(AppLinkService.CMD_ID_AL + 3, true),
 		BACK(AppLinkService.CMD_ID_AL + 4, true),
 		DETAILS(AppLinkService.CMD_ID_AL + 5, true),
+		REPEAT(AppLinkService.CMD_ID_AL + 6, true),
 		//PLAY(AppLinkService.CMD_ID_AL + 6, true),
-		ADDRESS(AppLinkService.CMD_ID_AL + 6, true),
-		CALL_VENUE(AppLinkService.CMD_ID_AL + 7, true),
-		FOLLOW(AppLinkService.CMD_ID_AL + 8, true),
+		ADDRESS(AppLinkService.CMD_ID_AL + 7, true),
+		CALL_VENUE(AppLinkService.CMD_ID_AL + 8, true),
+		FOLLOW(AppLinkService.CMD_ID_AL + 9, true),
 		/**
 		 * 04-06-2015:
 		 * This is added as a hack to prevent showing any soft buttons on 'DISCOVER'.
@@ -38,7 +39,7 @@ public class CommandsUtil {
 		 * buttons for that moment but the soft buttons implementation for ford is like that it just
 		 * updates the new soft buttons over the previous. Thus, added this 'NO_CMD'.
 		 */
-		NO_CMD(AppLinkService.CMD_ID_AL + 9);
+		NO_CMD(AppLinkService.CMD_ID_AL + 10);
 
 		private int cmdId;
 		private boolean isAdded, isSecLevelCmd;
@@ -112,6 +113,9 @@ public class CommandsUtil {
 					break;
 				case DETAILS:
 					str = AppLinkService.getInstance().getResources().getString(R.string.al_command_details);
+					break;
+				case REPEAT:
+					str = AppLinkService.getInstance().getResources().getString(R.string.al_command_repeat);
 					break;
 				/*case PLAY:
 					str = AppLinkService.getInstance().getResources().getString(R.string.al_command_play);

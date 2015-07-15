@@ -147,6 +147,8 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 		if (isNextAndPrevNeeded) {
 			reqCmds.add(Command.NEXT);
 			reqCmds.add(Command.BACK);
+		} else {
+			reqCmds.add(Command.REPEAT);
 		}
 		//reqCmds.add(Commands.PLAY);
 		reqCmds.add(Command.DETAILS);
@@ -161,6 +163,8 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 		if (isNextAndPrevNeeded) {
 			softBtns.add(Command.BACK.buildSoftBtn());
 			softBtns.add(Command.NEXT.buildSoftBtn());
+		} else {
+			softBtns.add(Command.REPEAT.buildSoftBtn());
 		}
 		softBtns.add(Command.DETAILS.buildSoftBtn());
 		return softBtns;
@@ -246,6 +250,9 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 				break;
 			case DETAILS:
 				EventALUtil.speakDetailsOfEvent(eventList.getCurrentEvent(), context);
+				break;
+			case REPEAT:
+				EventALUtil.speakEventTitle(eventList.getCurrentEvent(), context);
 				break;
 			case ADDRESS:
 				EventALUtil.speakVenueAddress(eventList.getCurrentEvent().getSchedule().getVenue(), context);

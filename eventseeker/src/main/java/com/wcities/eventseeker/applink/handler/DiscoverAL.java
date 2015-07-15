@@ -46,7 +46,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 	
 	private static final int MIN_MILES = 25;
 	private static final int MAX_MILES = 100;
-	
+
 	public static enum Discover {
 		Concerts(CHOICE_CATEGORIES_DISCOVER_AL, 900, R.string.discover_al_concerts),
 		Clubs(CHOICE_CATEGORIES_DISCOVER_AL + 1, 905, R.string.discover_al_clubs),
@@ -134,6 +134,8 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		if (isNextAndPrevNeeded) {
 			requiredCmds.add(Command.NEXT);
 			requiredCmds.add(Command.BACK);
+		} else {
+			requiredCmds.add(Command.REPEAT);
 		}
 		//requiredCmds.add(Commands.PLAY);
 		requiredCmds.add(Command.DETAILS);
@@ -154,6 +156,8 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		if (isNextAndPrevNeeded) {
 			softBtns.add(Command.BACK.buildSoftBtn());
 			softBtns.add(Command.NEXT.buildSoftBtn());
+		} else {
+			softBtns.add(Command.REPEAT.buildSoftBtn());
 		}
 		softBtns.add(Command.DETAILS.buildSoftBtn());
 		return softBtns;
@@ -398,6 +402,9 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 				break;
 			case DETAILS:
 				EventALUtil.speakDetailsOfEvent(eventList.getCurrentEvent(), context);
+				break;
+			case REPEAT:
+				EventALUtil.speakEventTitle(eventList.getCurrentEvent(), context);
 				break;
 			case ADDRESS:
 				EventALUtil.speakVenueAddress(eventList.getCurrentEvent().getSchedule().getVenue(), context);
