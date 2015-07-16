@@ -127,7 +127,7 @@ public class EventList {
 		return eventList.size();
 	}
 	
-	public void resetEventList() {
+	public void resetEventList(boolean resetLoadListener) {
 		if (eventList != null) {
 			eventList.clear();
 		}
@@ -135,10 +135,10 @@ public class EventList {
 		eventsAlreadyRequested = 0;
 		totalNoOfEvents = 0;
 		eventsLimit = DEFAULT_EVT_LIMIT;
-
 		isMoreDataAvailable = true;
-		
-		loadEventsListener = null;
+		if (resetLoadListener) {
+			loadEventsListener = null;
+		}
 		requestCode = null;
 	}
 	

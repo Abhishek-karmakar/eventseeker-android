@@ -17,7 +17,6 @@ import com.wcities.eventseeker.core.BookingInfo;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Venue;
-import com.wcities.eventseeker.logger.Logger;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;

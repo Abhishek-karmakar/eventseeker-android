@@ -25,7 +25,6 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.ItemsList;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
-import com.wcities.eventseeker.logger.Logger;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
@@ -113,7 +112,7 @@ public class MyEventsAL extends ESIProxyALM implements LoadEventsListener {
 	}
 
 	private void reset() {
-		eventList.resetEventList();
+		eventList.resetEventList(true);
 		eventList.setLoadEventsListener(this);	
 	}
 

@@ -446,7 +446,7 @@ public class SearchAL extends ESIProxyALM {
 	}
 	
 	private void reset() {
-		eventList.resetEventList();
+		eventList.resetEventList(true);
 		artistList.resetArtistList();
 		selectedCategoryId = 0;
 		query = null;

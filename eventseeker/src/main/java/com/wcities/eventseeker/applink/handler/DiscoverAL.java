@@ -26,7 +26,6 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.ItemsList;
 import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
-import com.wcities.eventseeker.logger.Logger;
 import com.wcities.eventseeker.util.ConversionUtil;
 
 import org.apache.http.client.ClientProtocolException;
@@ -204,8 +203,26 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 		 */
 		try {
 			while (eventList.isEmpty() && miles <= MAX_MILES) {
+				/**
+				 * 16-07-2015: Resetting of EventList in below line and inside of below 'if' is needed to resolve issue
+				 * mentioned in mail received on '16-07-2015'. A video is given, where user has set city 'Cologne' and
+				 * in 'Clubs' category the total events are '18' but then to when user presses next from 10th event,
+				 * instead of loading the remaining events, a dialog appears saying 'Your on the Last element of the
+				 * list..'.
+				 * Reason: During the call result of Featured Events with mile-range 25, No events were found and after
+				 * debugging the flow, it was found that in 'loadFeaturedEvents(selectedCategoryId);' call we were calling
+				 * 'eventList.addAll(tmpEvents);' and due to this call the 'isMoreDataAvailable' in EventList class was
+				 * becoming 'false'. And then this same eventList was being used for 'loadEvents(selectedCategoryId);' call
+				 * thus the 'isMoreDataAvailable' is still false and when it will call the next 10 events after the 1st 10
+				 * events the 'isMoreDataAvailable && loadEventsListener != null && size() < MAX_EVENTS' check in
+				 * hasNextEvent() of EventList will return false. So, even if there are more than 10 events. The user wasn't
+				 * able load next batch of events.
+				 */
+				eventList.resetEventList(false);
 				loadFeaturedEvents(selectedCategoryId);
+
 				if (eventList.isEmpty()) {
+					eventList.resetEventList(false);
 					loadEvents(selectedCategoryId);
 				}
 				miles *= 2;
@@ -273,7 +290,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw e;
@@ -333,7 +350,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw e;
@@ -366,7 +383,7 @@ public class DiscoverAL extends ESIProxyALM implements LoadEventsListener {
 	 * @param cmd
 	 */
 	private void reset() {
-		eventList.resetEventList();
+		eventList.resetEventList(true);
 		if (!getArguments().containsKey(BundleKeys.HAS_LAT_LON_CHANGED_OUT_OF_FORD_APP_SCOPE)) {
 			selectedCategoryId = 0;
 		}
