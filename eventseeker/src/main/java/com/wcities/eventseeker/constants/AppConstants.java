@@ -8,9 +8,9 @@ import java.util.List;
 
 public class AppConstants {
 	
-	public static final boolean IS_RELEASE_MODE = true;
+	public static final boolean IS_RELEASE_MODE = false;
 	public static final boolean CHECK_CONNECTIVITY_STATUS = true;
-	public static final boolean SEND_GOOGLE_ANALYTICS = true;
+	public static final boolean SEND_GOOGLE_ANALYTICS = false;
 	/**
 	 * 'DEBUG' and 'FORD_SYNC_APP' variable is only for ford implementation
 	 */
