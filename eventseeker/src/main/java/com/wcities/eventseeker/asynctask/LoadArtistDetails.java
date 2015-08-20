@@ -1,11 +1,5 @@
 package com.wcities.eventseeker.asynctask;
 
-import java.io.IOException;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 
@@ -15,6 +9,12 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 public class LoadArtistDetails extends AsyncTask<Void, Void, Void> {
 	

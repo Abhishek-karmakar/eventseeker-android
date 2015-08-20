@@ -1,7 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.io.Serializable;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -19,6 +17,8 @@ import android.widget.TextView;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
+
+import java.io.Serializable;
 
 public class DiscoverSettingDialogFragment extends DialogFragment {
 	

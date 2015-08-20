@@ -1,14 +1,5 @@
 package com.wcities.eventseeker.api;
 
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.util.List;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.res.Resources;
 import android.util.Log;
 
@@ -23,6 +14,15 @@ import com.wcities.eventseeker.core.registration.EmailSignup;
 import com.wcities.eventseeker.core.registration.FacebookLogin;
 import com.wcities.eventseeker.core.registration.GooglePlusLogin;
 import com.wcities.eventseeker.core.registration.Registration;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.util.List;
 
 public class UserInfoApi extends Api {
 	

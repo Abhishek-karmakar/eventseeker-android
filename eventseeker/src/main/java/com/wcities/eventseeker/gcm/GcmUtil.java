@@ -1,11 +1,5 @@
 package com.wcities.eventseeker.gcm;
 
-import java.io.IOException;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.AsyncTask;
@@ -16,6 +10,12 @@ import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.api.UserInfoApi;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 public class GcmUtil {
 

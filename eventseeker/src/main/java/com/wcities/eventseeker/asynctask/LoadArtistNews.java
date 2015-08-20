@@ -1,14 +1,5 @@
 package com.wcities.eventseeker.asynctask;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.widget.BaseAdapter;
@@ -27,6 +18,15 @@ import com.wcities.eventseeker.core.ArtistNewsItem;
 import com.wcities.eventseeker.core.ArtistNewsItem.PostType;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class LoadArtistNews extends AsyncTask<Void, Void, List<ArtistNewsItem>> {
 	

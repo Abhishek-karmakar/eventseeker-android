@@ -1,13 +1,5 @@
 package com.wcities.eventseeker.asynctask;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.os.AsyncTask;
 import android.widget.BaseAdapter;
 
@@ -20,6 +12,14 @@ import com.wcities.eventseeker.interfaces.ArtistAdapterListener;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.LoadArtistsListener;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoadRecommendedArtists extends AsyncTask<Void, Void, List<Artist>> {
 

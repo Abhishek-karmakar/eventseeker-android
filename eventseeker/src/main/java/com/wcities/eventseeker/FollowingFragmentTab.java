@@ -1,12 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask.Status;
@@ -44,6 +37,13 @@ import com.wcities.eventseeker.interfaces.LoadArtistsListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class FollowingFragmentTab extends Fragment implements ArtistTrackingListener, LoadArtistsListener, 
 		OnClickListener, LoadItemsInBackgroundListener, DialogBtnClickListener, FullScrnProgressListener, 

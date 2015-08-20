@@ -1,8 +1,5 @@
 package com.wcities.eventseeker.util;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -28,8 +25,9 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.SharedPrefKeys;
 import com.wcities.eventseeker.core.Event;
-import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.FriendNewsItem;
+
+import java.io.IOException;
 
 public class GPlusUtil {
 

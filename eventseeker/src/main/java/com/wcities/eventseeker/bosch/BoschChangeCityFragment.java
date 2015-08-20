@@ -1,11 +1,9 @@
 package com.wcities.eventseeker.bosch;
 
-import java.io.IOException;
-import java.util.List;
-
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +34,9 @@ import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GeoUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
 
+import java.io.IOException;
+import java.util.List;
+
 public class BoschChangeCityFragment extends BoschFragmentLoadableFromBackStack implements OnClickListener, 
 		GeoUtilListener, BoschEditTextListener, OnMapLeftListener, OnMapLoadedListener, OnCarStationaryStatusChangedListener,
 		OnKeyboardVisibilityStateChangedListener {
@@ -49,10 +50,19 @@ public class BoschChangeCityFragment extends BoschFragmentLoadableFromBackStack 
 
 	private String cityName;
 	private String strAddress;
+	private String strInputcity;
 	
 	private double latitude, longitude;
 
 	private View vDummy;
+
+	private Handler mHandler;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		mHandler = new Handler(FragmentUtil.getActivity(this).getMainLooper());
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,8 +79,8 @@ public class BoschChangeCityFragment extends BoschFragmentLoadableFromBackStack 
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 				if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 					onSearchClicked();
-		            return true;
-		        }
+					return true;
+				}
 				return false;
 			}
 		});
@@ -103,7 +113,7 @@ public class BoschChangeCityFragment extends BoschFragmentLoadableFromBackStack 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		
+
 		double[] latlon = DeviceUtil.getLatLon(FragmentUtil.getApplication(this));
 		
 		latitude = latlon[0];
@@ -147,8 +157,14 @@ public class BoschChangeCityFragment extends BoschFragmentLoadableFromBackStack 
 			
 			latitude = latlon[0];
 			longitude = latlon[1];
-		} 
-		setMarker(latitude, longitude);
+		}
+		mHandler.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				setMarker(latitude, longitude);
+			}
+		}, 500);
+		//setMarker(latitude, longitude);
 	}
 
 	private String buildTitle() {
@@ -178,6 +194,7 @@ public class BoschChangeCityFragment extends BoschFragmentLoadableFromBackStack 
 	
 	public boolean searchFor(String query) {
 		//Log.i(TAG, "onQueryTextSubmit()");
+		strInputcity=query;
 		Geocoder geocoder = new Geocoder(FragmentUtil.getActivity(this));
 		List<Address> addresses = null;
 		try {
@@ -203,15 +220,33 @@ public class BoschChangeCityFragment extends BoschFragmentLoadableFromBackStack 
 	}
 	
 	private void onAddressUpdated(Address address) {
-    	updateStrAddress(address);
-		
-    	latitude = address.getLatitude();
-		longitude = address.getLongitude();
-		DeviceUtil.updateLatLon(latitude, longitude);
-		//setMarker(latitude, longitude);
-		addNewMapView();
-		
-		GeoUtil.getCityName(this, FragmentUtil.getActivity(this));
+		String locality = address.getLocality();
+		String subLocality = address.getSubLocality();
+		/*Log.e(TAG, "address:max line index "+address.getMaxAddressLineIndex());
+		Log.e(TAG,"getAdminArea::> "+address.getAdminArea());
+		Log.e(TAG,"getSubAdminArea::> "+address.getSubAdminArea());
+		Log.e(TAG,"getSubLocality::> "+address.getSubLocality());
+		Log.e(TAG,"getLocality::> "+address.getLocality());
+		Log.e(TAG,"getAddressLine(0)::> "+address.getAddressLine(0));
+		Log.e(TAG,"getAddressLine(1)::>  "+address.getAddressLine(1));
+		Log.e(TAG,"getCountryCode::>  "+address.getCountryCode());*/
+
+		/*We are doing check for locality and sublocality so that if user input random text
+		* Locality and SubLocality will come null then it will give user dialog of city not found*/
+		if((locality != null) || (subLocality != null )) {
+			updateStrAddress(address);
+
+			latitude = address.getLatitude();
+			longitude = address.getLongitude();
+			DeviceUtil.updateLatLon(latitude, longitude);
+			//setMarker(latitude, longitude);
+
+			addNewMapView();
+
+			GeoUtil.getCityName(this, FragmentUtil.getActivity(this));
+		}else{
+			((BoschMainActivity) FragmentUtil.getActivity(this)).showBoschDialog("City not found.");
+		}
 		
     }
 	

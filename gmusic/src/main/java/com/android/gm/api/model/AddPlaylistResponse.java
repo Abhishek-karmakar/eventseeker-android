@@ -1,8 +1,8 @@
 package com.android.gm.api.model;
 
-import org.json.JSONObject;
-
 import com.android.gm.api.interfaces.IJsonObject;
+
+import org.json.JSONObject;
 
 // not used in the Android app
 public class AddPlaylistResponse implements IJsonObject<AddPlaylistResponse>

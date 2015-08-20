@@ -1,8 +1,5 @@
 package com.wcities.eventseeker.bosch;
 
-import java.util.Iterator;
-import java.util.List;
-
 import android.location.Address;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,6 +25,9 @@ import com.wcities.eventseeker.util.GeoUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
 import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
+
+import java.util.Iterator;
+import java.util.List;
 
 public class BoschFavoritesFragment extends BoschFragmentLoadableFromBackStack implements GeoUtilListener, 
 		OnClickListener, OnDisplayModeChangedListener {

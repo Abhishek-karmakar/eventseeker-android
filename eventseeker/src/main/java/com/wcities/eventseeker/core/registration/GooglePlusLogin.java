@@ -1,11 +1,5 @@
 package com.wcities.eventseeker.core.registration;
 
-import java.io.IOException;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.util.Log;
 
 import com.wcities.eventseeker.api.Api;
@@ -17,6 +11,12 @@ import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser.SyncAccountResponse;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.GPlusUtil;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 public class GooglePlusLogin extends Registration {
 

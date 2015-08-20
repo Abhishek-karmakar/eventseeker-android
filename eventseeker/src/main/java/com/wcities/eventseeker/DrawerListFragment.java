@@ -1,9 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -26,6 +22,10 @@ import android.widget.TextView;
 import com.wcities.eventseeker.interfaces.DrawerListFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.ViewUtil;
+
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DrawerListFragment extends ListFragment {
 

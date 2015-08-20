@@ -1,17 +1,34 @@
 /*     */ package com.android.gm.api.lib;
 /*     */ 
-/*     */ import android.os.SystemClock;
-/*     */ import java.io.IOException;
-/*     */ import java.io.InterruptedIOException;
-/*     */ import java.net.SocketException;
-/*     */ import java.net.UnknownHostException;
-/*     */ import java.util.HashSet;
-/*     */ import java.util.Iterator;
-/*     */ import javax.net.ssl.SSLException;
-/*     */ import org.apache.http.NoHttpResponseException;
-/*     */ import org.apache.http.client.HttpRequestRetryHandler;
-/*     */ import org.apache.http.client.methods.HttpUriRequest;
-/*     */ import org.apache.http.protocol.HttpContext;
+/*     */
+
+import android.os.SystemClock;
+
+import org.apache.http.NoHttpResponseException;
+import org.apache.http.client.HttpRequestRetryHandler;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.protocol.HttpContext;
+
+import java.io.IOException;
+import java.io.InterruptedIOException;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.HashSet;
+import java.util.Iterator;
+
+import javax.net.ssl.SSLException;
+
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
 /*     */ 
 /*     */ class RetryHandler
 /*     */   implements HttpRequestRetryHandler

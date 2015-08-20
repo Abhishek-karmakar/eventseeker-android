@@ -1,11 +1,11 @@
 package com.wcities.eventseeker.applink.core;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.util.Log;
 
 import com.wcities.eventseeker.core.Artist;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ArtistList {
 

@@ -1,12 +1,12 @@
 package com.wcities.eventseeker.util;
 
+import android.os.Environment;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-
-import android.os.Environment;
 
 public class LogUtil {
 	

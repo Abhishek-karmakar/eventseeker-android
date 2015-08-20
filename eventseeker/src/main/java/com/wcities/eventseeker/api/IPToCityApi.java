@@ -1,10 +1,10 @@
 package com.wcities.eventseeker.api;
 
-import java.io.IOException;
-
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
 
 public class IPToCityApi extends Api {
 	

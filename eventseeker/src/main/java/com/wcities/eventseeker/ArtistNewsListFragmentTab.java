@@ -1,8 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -37,6 +34,9 @@ import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ArtistNewsListFragmentTab extends ListFragment implements LoadItemsInBackgroundListener, 
 		OnNewsLoadedListener, AsyncTaskListener<Void>, FullScrnProgressListener {

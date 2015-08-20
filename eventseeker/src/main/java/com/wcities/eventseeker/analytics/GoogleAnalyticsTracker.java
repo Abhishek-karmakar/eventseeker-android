@@ -1,15 +1,15 @@
 package com.wcities.eventseeker.analytics;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.HashMap;
-
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.wcities.eventseeker.api.Api;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.HashMap;
 
 public class GoogleAnalyticsTracker {
 	

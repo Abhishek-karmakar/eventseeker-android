@@ -1,7 +1,5 @@
 package com.wcities.eventseeker.bosch.adapter;
 
-import java.util.List;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -26,6 +24,8 @@ import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.LIST_ITEM_TYPE;
+
+import java.util.List;
 
 public class BoschLazyLoadingEventListAdapter extends BaseAdapter implements DateWiseEventParentAdapterListener {
 	

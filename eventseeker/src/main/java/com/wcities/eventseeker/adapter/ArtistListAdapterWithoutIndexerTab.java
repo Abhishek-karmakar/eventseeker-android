@@ -1,7 +1,5 @@
 package com.wcities.eventseeker.adapter;
 
-import java.util.List;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -36,6 +34,8 @@ import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
 import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import java.util.List;
 
 /**
  * This Adapter is required for 'Recommended and SelectedArtistCategory' Screens. As, the 

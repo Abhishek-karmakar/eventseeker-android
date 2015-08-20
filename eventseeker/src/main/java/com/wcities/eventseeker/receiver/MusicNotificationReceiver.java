@@ -1,13 +1,5 @@
 package com.wcities.eventseeker.receiver;
 
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.util.Calendar;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +17,14 @@ import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.NotificationUtil;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.util.Calendar;
 
 public class MusicNotificationReceiver extends BroadcastReceiver {
 

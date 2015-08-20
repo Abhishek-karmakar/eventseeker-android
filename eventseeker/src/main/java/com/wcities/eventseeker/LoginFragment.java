@@ -1,11 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.io.IOException;
-import java.util.HashMap;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -38,6 +32,12 @@ import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FieldValidationUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+
+import java.io.IOException;
+import java.util.HashMap;
 
 public class LoginFragment extends FbGPlusRegisterFragment implements OnClickListener, TextWatcher, 
 		RegistrationErrorListener, DialogBtnClickListener, OnFocusChangeListener {

@@ -1,13 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -72,7 +64,6 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.Enums.SettingsItem;
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.core.Category;
-import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
@@ -93,6 +84,14 @@ import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.viewdata.SharedElement;
 import com.wcities.eventseeker.viewdata.SharedElementPosition;
+
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 public class DiscoverFragment extends PublishEventFragmentLoadableFromBackStack implements LoadItemsInBackgroundListener, 
 		DiscoverSettingChangedListener, DrawerListener, CustomSharedElementTransitionSource, AsyncTaskListener<Void>,

@@ -794,7 +794,7 @@
     <dimen name="b_txt_category_txt_size_bosch_grid_category">13sp</dimen>
     <!-- bosch_fragment_discover_by_category_list_item_header.xml -->
     <dimen name="b_txt_date_pad_bosch_fragment_discover_by_category_list_item_header">1dp</dimen>
-    <dimen name="b_txt_date_txt_size_bosch_fragment_discover_by_category_list_item_header">12sp</dimen>
+    <dimen name="b_txt_date_txt_size_bosch_fragment_discover_by_category_list_item_header">14sp</dimen>
     <!-- bosch_fragment_discover_by_category_list_item_evt.xml -->
     <dimen name="b_rlt_layout_root_pad_t_bosch_fragment_discover_by_category_list_item_evt">3dp</dimen>
     <dimen name="b_img_event_w_bosch_fragment_discover_by_category_list_item_evt">56dp</dimen>
@@ -877,6 +877,10 @@
     <!-- bosch_element_alert_dialog -->
     <dimen name="b_rlt_root_lyt_pad_bosch_element_alert_dialog">30dp</dimen>
     <dimen name="b_txt_title_txt_size_bosch_element_alert_dialog">15sp</dimen>
+    <dimen name="b_rlt_root_lyt_pad_bosch_element_alert_dialog_ok">20dp</dimen>
+    <dimen name="b_ht_bosch_element_alert_dialog_ok">50dp</dimen>
+    <dimen name="b_ht_bosch_element_alert_dialog_txt">100dp</dimen>
+
     <!-- item_lst_cities -->
     <dimen name="b_txt_cities_margin_l_r_item_lst_cities">10dp</dimen>
     <dimen name="b_txt_cities_drw_pad_item_lst_cities">@dimen/b_txt_cities_margin_l_r_item_lst_cities</dimen>

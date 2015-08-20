@@ -2,12 +2,11 @@ package com.wcities.eventseeker.bosch;
 
 import android.app.ActivityManager;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
@@ -28,10 +27,10 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bosch.myspin.serversdk.IOnCarDataChangeListener;
-import com.bosch.myspin.serversdk.IPhoneCallStateListener;
 import com.bosch.myspin.serversdk.MySpinException;
 import com.bosch.myspin.serversdk.MySpinServerSDK;
+import com.bosch.myspin.serversdk.OnCarDataChangeListener;
+import com.bosch.myspin.serversdk.PhoneCallStateListener;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.app.EventSeekr.ProximityUnit;
@@ -84,14 +83,14 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 
 	private boolean onStopCalled;
 	
-	private IPhoneCallStateListener iPhoneCallStateListener = new IPhoneCallStateListener() {
+	private PhoneCallStateListener phoneCallStateListener = new PhoneCallStateListener() {
 		
 		@Override
 		public void onPhoneCallStateChanged(int arg0) {
 			//Toast.makeText(BoschMainActivity.this, "onPhoneCallStateChanged() - arg0 = " + arg0, Toast.LENGTH_SHORT).show();
 			//Log.d(TAG, "onPhoneCallStateChanged() - arg0 = " + arg0);
-			if (arg0 == IPhoneCallStateListener.PHONECALLSTATE_REJECTED || 
-					arg0 == IPhoneCallStateListener.PHONECALLSTATE_ENDED) {
+			if (arg0 == phoneCallStateListener.PHONECALLSTATE_REJECTED ||
+					arg0 == phoneCallStateListener.PHONECALLSTATE_ENDED) {
 				selfStart();
 			}
 		}
@@ -138,12 +137,15 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		 * at com.bosch.myspin.serversdk.MySpinServerSDK.registerForPhoneCallStateEvents(SourceFile:494)
 		 */
 		try {
-			MySpinServerSDK.sharedInstance().registerForPhoneCallStateEvents(iPhoneCallStateListener);
+			MySpinServerSDK.sharedInstance().registerForPhoneCallStateEvents(phoneCallStateListener);
 			
 		} catch (NullPointerException e) {
 			e.printStackTrace();
+
+		} catch (MySpinException e) {
+			e.printStackTrace();
 		}
-		
+
 		EventSeekr.setConnectionFailureListener(this);
 		
 		initializeCurrentProximityUnitForBosch();
@@ -223,7 +225,7 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			 */
 			((EventSeekr) getApplication()).updateLocaleForBosch();
 
-			MySpinServerSDK.sharedInstance().registerCarDataChangedListener(new IOnCarDataChangeListener() {
+			MySpinServerSDK.sharedInstance().registerCarDataChangedListener(new OnCarDataChangeListener() {
 				
 				@Override
 				public void onLocationUpdate(Location arg0) {}
@@ -663,16 +665,26 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 		}
 		
 		View view = LayoutInflater.from(this).inflate(R.layout.bosch_element_alert_dialog, null);
-		
+
 		((TextView)view.findViewById(R.id.txtTitle)).setText(msg);
+		TextView textOk = (TextView) view.findViewById(R.id.textOk);
 
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-		dialog = alertDialog.setCustomTitle(view).setCancelable(false)
-			.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+		textOk.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+			}
+		});
+		dialog = alertDialog.setCustomTitle(view).setCancelable(false).create();
+		/*Remove positive button because of UI issue, positive button come in right hand side
+		* so added textview in center*/
+		/*	.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				dialog.dismiss();
 			}
-		}).create();
+		})*/
+		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
 		try {
 			MySpinServerSDK.sharedInstance().registerDialog(dialog);
@@ -680,7 +692,6 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 			Log.e(TAG, "Error : " + e.toString());
 			e.printStackTrace();
 		}
-		
 		dialog.show();
 	}
 	
@@ -775,17 +786,26 @@ public class BoschMainActivity extends ActionBarActivity implements ReplaceFragm
 	@Override
 	public void onConnectionFailure() {
 		View view = LayoutInflater.from(this).inflate(R.layout.bosch_element_alert_dialog, null);
-		
-		((TextView)view.findViewById(R.id.txtTitle)).setText(getResources().getString(R.string.connection_lost));
-
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-		Dialog dialog = alertDialog.setCustomTitle(view).setCancelable(false)
-			.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+		dialog = alertDialog.setCustomTitle(view).setCancelable(false).create();
+
+		((TextView)view.findViewById(R.id.txtTitle)).setText(getResources().getString(R.string.connection_lost));
+		TextView textOk = (TextView) view.findViewById(R.id.textOk);
+		textOk.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+			}
+		});
+
+		/*	.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				onDrawerItemSelected(INDEX_NAV_ITEM_HOME);
 				dialog.dismiss();
 			}
-		}).create();
+		})*/
+
+		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
 		try {
 			MySpinServerSDK.sharedInstance().registerDialog(dialog);

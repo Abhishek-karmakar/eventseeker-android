@@ -1,7 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.lang.ref.WeakReference;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -15,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.viewpagerindicator.CirclePageIndicator;
+
+import java.lang.ref.WeakReference;
 
 public class DiscoverFragment1 extends DiscoverParentFragment implements OnPageChangeListener {
 

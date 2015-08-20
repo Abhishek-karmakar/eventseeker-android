@@ -1,8 +1,5 @@
 package com.wcities.eventseeker.adapter;
 
-import java.util.List;
-import java.util.Map;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -39,6 +36,9 @@ import com.wcities.eventseeker.interfaces.ArtistTrackingListener;
 import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * This Adapter is only required for 'FollowingParentFragment'. As, the 'SectionIndexer' is required

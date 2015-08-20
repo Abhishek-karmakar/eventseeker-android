@@ -1,10 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.AnimatorSet;
@@ -76,7 +71,6 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.core.Artist;
-import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Event.Attending;
 import com.wcities.eventseeker.core.Schedule;
@@ -97,6 +91,11 @@ import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.viewdata.SharedElement;
 import com.wcities.eventseeker.viewdata.SharedElementPosition;
+
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class ArtistDetailsFragment extends PublishEventFragmentLoadableFromBackStack implements DrawerListener, 
 		CustomSharedElementTransitionDestination, OnArtistUpdatedListener, OnClickListener, 

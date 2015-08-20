@@ -1,9 +1,5 @@
 package com.wcities.eventseeker.bosch;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
@@ -28,6 +24,10 @@ import com.wcities.eventseeker.interfaces.ReplaceFragmentListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GeoUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class BoschDiscoverFragment extends BoschFragmentLoadableFromBackStack implements OnClickListener, GeoUtilListener {
 	

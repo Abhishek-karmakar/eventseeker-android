@@ -1,8 +1,5 @@
 package com.wcities.eventseeker.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -14,6 +11,9 @@ import com.wcities.eventseeker.FeaturingArtistFragmentTab;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.custom.view.RelativeLayoutCenterScale;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FeaturingArtistPagerAdapterTab extends FragmentStatePagerAdapter implements ViewPager.OnPageChangeListener {
 	

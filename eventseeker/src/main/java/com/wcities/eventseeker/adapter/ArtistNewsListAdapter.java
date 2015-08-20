@@ -1,8 +1,5 @@
 package com.wcities.eventseeker.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -35,6 +32,9 @@ import com.wcities.eventseeker.core.ArtistNewsItem.PostType;
 import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.ConversionUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ArtistNewsListAdapter extends BaseAdapter {
 	

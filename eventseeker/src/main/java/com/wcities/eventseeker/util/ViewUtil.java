@@ -1,7 +1,6 @@
 package com.wcities.eventseeker.util;
 
 import android.content.res.Resources;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;

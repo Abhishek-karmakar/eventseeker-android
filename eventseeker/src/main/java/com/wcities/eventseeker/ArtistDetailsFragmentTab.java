@@ -3,7 +3,6 @@ package com.wcities.eventseeker;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.AsyncTask.Status;
 import android.os.Build;
 import android.os.Bundle;

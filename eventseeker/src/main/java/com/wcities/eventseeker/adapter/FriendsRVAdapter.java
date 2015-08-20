@@ -1,7 +1,5 @@
 package com.wcities.eventseeker.adapter;
 
-import java.util.List;
-
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +13,8 @@ import com.wcities.eventseeker.asynctask.AsyncLoadImg;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.core.Friend;
+
+import java.util.List;
 
 public class FriendsRVAdapter extends RVAdapterBase<FriendsRVAdapter.ViewHolder> {
 	

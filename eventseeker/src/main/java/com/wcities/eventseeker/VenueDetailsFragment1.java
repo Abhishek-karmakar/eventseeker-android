@@ -1,9 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.io.File;
-import java.util.Iterator;
-import java.util.List;
-
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -37,6 +33,10 @@ import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.FileUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
+
+import java.io.File;
+import java.util.Iterator;
+import java.util.List;
 
 public class VenueDetailsFragment1 extends FragmentLoadableFromBackStack implements OnClickListener {
 

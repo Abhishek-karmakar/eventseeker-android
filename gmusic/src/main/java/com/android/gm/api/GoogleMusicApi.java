@@ -1,13 +1,7 @@
 package com.android.gm.api;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.android.gm.api.comm.GmHttpClient;
 import com.android.gm.api.comm.SimpleForm;
@@ -27,6 +21,11 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GoogleMusicApi
 {

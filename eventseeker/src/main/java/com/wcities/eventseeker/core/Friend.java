@@ -1,9 +1,9 @@
 package com.wcities.eventseeker.core;
 
-import java.io.Serializable;
-
 import com.wcities.eventseeker.cache.BitmapCacheable;
 import com.wcities.eventseeker.core.Event.Attending;
+
+import java.io.Serializable;
 
 public class Friend implements Serializable, BitmapCacheable {
 

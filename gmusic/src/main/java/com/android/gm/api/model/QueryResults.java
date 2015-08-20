@@ -1,12 +1,13 @@
 package com.android.gm.api.model;
 
-import java.util.ArrayList;
+import com.android.gm.api.interfaces.IJsonArray;
+import com.android.gm.api.interfaces.IJsonObject;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.android.gm.api.interfaces.IJsonArray;
-import com.android.gm.api.interfaces.IJsonObject;
+import java.util.ArrayList;
 
 //not used in the Android app
 public class QueryResults implements IJsonObject<QueryResults>, IJsonArray<Song>

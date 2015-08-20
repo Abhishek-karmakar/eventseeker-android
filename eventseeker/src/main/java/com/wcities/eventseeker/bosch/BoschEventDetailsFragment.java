@@ -1,7 +1,5 @@
 package com.wcities.eventseeker.bosch;
 
-import java.text.SimpleDateFormat;
-
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -16,6 +14,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bosch.myspin.serversdk.MySpinException;
 import com.bosch.myspin.serversdk.MySpinServerSDK;
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.api.Api;
@@ -44,6 +43,8 @@ import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import java.text.SimpleDateFormat;
 
 public class BoschEventDetailsFragment extends BoschFragmentLoadableFromBackStack implements OnClickListener, 
 		AsyncLoadImageListener, OnEventUpdatedListner, OnCarStationaryStatusChangedListener, 
@@ -255,15 +256,19 @@ public class BoschEventDetailsFragment extends BoschFragmentLoadableFromBackStac
 
 			case R.id.btnCall:
 				Venue venue = event.getSchedule().getVenue();
-				if (venue != null && venue.getPhone() != null && MySpinServerSDK.sharedInstance().hasPhoneCallCapability()) {
-					MySpinServerSDK.sharedInstance().initiatePhoneCall(venue.getName(), venue.getPhone());
-					
-				} else {
-					String msg = (venue.getPhone() == null) ? "Phone number is not available for this venue." : 
-						"Calling is not supported on this IVI System.";
-					((BoschMainActivity) FragmentUtil.getActivity(this)).showBoschDialog(msg);
+				try {
+					if (venue != null && venue.getPhone() != null && MySpinServerSDK.sharedInstance().hasPhoneCallCapability()) {
+                        MySpinServerSDK.sharedInstance().initiatePhoneCall(venue.getName(), venue.getPhone());
+
+                    } else {
+                        String msg = (venue.getPhone() == null) ? "Phone number is not available for this venue." :
+                            "Calling is not supported on this IVI System.";
+                        ((BoschMainActivity) FragmentUtil.getActivity(this)).showBoschDialog(msg);
+                    }
+				} catch (MySpinException e) {
+					e.printStackTrace();
 				}
-				
+
 				break;
 			
 			case R.id.btnFollow :

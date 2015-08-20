@@ -1,11 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.io.IOException;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,6 +26,12 @@ import com.wcities.eventseeker.custom.fragment.FragmentRetainingChildFragmentMan
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 public class RepCodeFragmentTab extends FragmentRetainingChildFragmentManager implements OnClickListener, DialogBtnClickListener {
 	

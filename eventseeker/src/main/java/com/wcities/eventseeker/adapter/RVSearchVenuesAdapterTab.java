@@ -1,8 +1,5 @@
 package com.wcities.eventseeker.adapter;
 
-import java.lang.ref.WeakReference;
-import java.util.List;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -14,9 +11,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.Adapter;
-import android.support.v7.widget.RecyclerView.AdapterDataObserver;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -50,6 +44,9 @@ import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
+
+import java.lang.ref.WeakReference;
+import java.util.List;
 
 public class RVSearchVenuesAdapterTab<T> extends RVAdapterBase<RVSearchVenuesAdapterTab.ViewHolder> implements VenueAdapterListener<T> {
 	

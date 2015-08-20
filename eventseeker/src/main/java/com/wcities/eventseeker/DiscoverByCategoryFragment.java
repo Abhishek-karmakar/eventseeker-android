@@ -1,8 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -20,8 +17,9 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
-import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import java.util.Calendar;
 
 public class DiscoverByCategoryFragment extends FragmentLoadableFromBackStack {
 	

@@ -1,9 +1,9 @@
 package com.wcities.eventseeker.viewdata;
 
-import java.io.Serializable;
-
 import android.support.v4.view.ViewCompat;
 import android.view.View;
+
+import java.io.Serializable;
 
 public class SharedElement implements Serializable {
 

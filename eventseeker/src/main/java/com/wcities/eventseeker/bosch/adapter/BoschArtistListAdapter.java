@@ -1,7 +1,5 @@
 package com.wcities.eventseeker.bosch.adapter;
 
-import java.util.List;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -25,6 +23,8 @@ import com.wcities.eventseeker.interfaces.ArtistAdapterListener;
 import com.wcities.eventseeker.interfaces.ArtistListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.ViewUtil;
+
+import java.util.List;
 
 public class BoschArtistListAdapter<T> extends BaseAdapter implements ArtistAdapterListener<T> {
 	

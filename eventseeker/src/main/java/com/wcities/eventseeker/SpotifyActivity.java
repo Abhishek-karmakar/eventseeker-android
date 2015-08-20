@@ -1,17 +1,9 @@
 package com.wcities.eventseeker;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.drivemode.spotify.ClientConfig;
 import com.drivemode.spotify.SpotifyApi;
@@ -28,6 +20,14 @@ import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.Enums.Service;
 import com.wcities.eventseeker.viewdata.ServiceAccount;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class SpotifyActivity extends Activity implements AuthenticationListener {
 	

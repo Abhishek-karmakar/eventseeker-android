@@ -1,18 +1,31 @@
 /*     */ package com.android.gm.api.lib;
 /*     */ 
-/*     */ import android.os.Handler;
-/*     */ import android.os.Looper;
-/*     */ import android.os.Message;
+/*     */
 
-/*     */ import java.io.IOException;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 
-/*     */ import org.apache.http.Header;
-/*     */ import org.apache.http.HttpEntity;
-/*     */ import org.apache.http.HttpResponse;
-/*     */ import org.apache.http.StatusLine;
-/*     */ import org.apache.http.client.HttpResponseException;
-/*     */ import org.apache.http.entity.BufferedHttpEntity;
-/*     */ import org.apache.http.util.EntityUtils;
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpResponseException;
+import org.apache.http.entity.BufferedHttpEntity;
+import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
+
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
 /*     */ 
 /*     */ public class AsyncHttpResponseHandler
 /*     */ {

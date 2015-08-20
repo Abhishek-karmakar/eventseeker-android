@@ -1,7 +1,5 @@
 package com.wcities.eventseeker.bosch.adapter;
 
-import java.util.List;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -31,6 +29,8 @@ import com.wcities.eventseeker.viewdata.DateWiseEventList;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.EventListItem;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.LIST_ITEM_TYPE;
 
+import java.util.List;
+
 public class BoschDateWiseEventListAdapter extends BaseAdapter implements DateWiseEventParentAdapterListener {
 
 	private static final String DATE_FORMAT = "EEE, MMMM d";
@@ -44,7 +44,7 @@ public class BoschDateWiseEventListAdapter extends BaseAdapter implements DateWi
     private int eventsAlreadyRequested;
 	private boolean isMoreDataAvailable = true;
 	private LoadItemsInBackgroundListener mListener;
-	
+
     public BoschDateWiseEventListAdapter(Context context, DateWiseEventList dateWiseEvtList, 
     		AsyncTask<Void, Void, List<Event>> loadDateWiseEvents, LoadItemsInBackgroundListener mListener) {
     	mContext = context;
@@ -112,7 +112,7 @@ public class BoschDateWiseEventListAdapter extends BaseAdapter implements DateWi
 			final Event event = getItem(position).getEvent();
 			String title = event.getName();
 			
-			TextView txtEvtLocation = (TextView)convertView.findViewById(R.id.txtEvtLocation);
+			final TextView txtEvtLocation = (TextView)convertView.findViewById(R.id.txtEvtLocation);
 			if (event.getSchedule() != null) {
 				Schedule schedule = event.getSchedule();
 				
@@ -133,8 +133,27 @@ public class BoschDateWiseEventListAdapter extends BaseAdapter implements DateWi
 					: R.drawable.ic_location_off;
 			txtEvtLocation.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(
 					leftDrawableId), null, null, null);
-			((TextView)convertView.findViewById(R.id.txtTitle)).setText(title);
-			
+			/* 20 August, 2015
+			After discussing the issue of text cut off with amir,
+			we came across the solution of marquee effect for title as well as location*/
+			txtEvtLocation.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+				@Override
+				public void onLayoutChange(View v, int left, int top, int right,
+				int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+					txtEvtLocation.setSelected(true);
+				}
+			});
+
+			final TextView txtTitle = (TextView)convertView.findViewById(R.id.txtTitle);
+			txtTitle.setText(title);
+			txtTitle.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+				@Override
+				public void onLayoutChange(View v, int left, int top, int right,
+				int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+					txtTitle.setSelected(true);
+				}
+			});
+
 			BitmapCacheable bitmapCacheable = null;
 			/**
 			 * added this try catch as if event will not have valid url and schedule object then
@@ -160,7 +179,7 @@ public class BoschDateWiseEventListAdapter extends BaseAdapter implements DateWi
 			        		ImgResolution.LOW, (AdapterView) parent, position, bitmapCacheable);
 			    }
 			}
-			
+
 			convertView.setOnClickListener(new OnClickListener() {
 				
 				@Override

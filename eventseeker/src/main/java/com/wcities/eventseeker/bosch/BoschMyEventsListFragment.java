@@ -1,8 +1,5 @@
 package com.wcities.eventseeker.bosch;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -23,6 +20,9 @@ import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BoschMyEventsListFragment extends ListFragment implements OnClickListener, LoadItemsInBackgroundListener, 
 	BoschOnChildFragmentDisplayModeChangedListener {

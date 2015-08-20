@@ -1,4 +1,4 @@
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
+<resources>
 
 	<!-- Custom actionbar tabs style for landscape -->
 	<!-- <style name="CustomTabBar" parent="@android:style/Widget.Button">

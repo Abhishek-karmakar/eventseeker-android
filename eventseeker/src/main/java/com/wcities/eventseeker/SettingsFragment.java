@@ -1,10 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -25,6 +20,11 @@ import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.ViewUtil;
+
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class SettingsFragment extends ListFragmentLoadableFromBackStack {
 	

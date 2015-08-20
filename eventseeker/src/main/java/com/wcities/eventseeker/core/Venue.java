@@ -1,13 +1,13 @@
 package com.wcities.eventseeker.core;
 
-import java.io.Serializable;
-
 import android.location.Location;
 import android.util.Log;
 
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.app.EventSeekr.ProximityUnit;
 import com.wcities.eventseeker.cache.BitmapCacheable;
+
+import java.io.Serializable;
 
 public class Venue implements Serializable, BitmapCacheable {
 	

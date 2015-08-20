@@ -1,12 +1,12 @@
 package com.wcities.eventseeker.exception;
 
-import java.lang.Thread.UncaughtExceptionHandler;
-
 import android.content.Intent;
 import android.util.Log;
 
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.BundleKeys;
+
+import java.lang.Thread.UncaughtExceptionHandler;
 
 public class DefaultUncaughtExceptionHandler implements	UncaughtExceptionHandler {
 	

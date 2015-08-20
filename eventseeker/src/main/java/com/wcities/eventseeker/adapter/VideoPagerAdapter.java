@@ -1,11 +1,5 @@
 package com.wcities.eventseeker.adapter;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -18,6 +12,12 @@ import com.wcities.eventseeker.VideoFragment;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Video;
 import com.wcities.eventseeker.custom.view.RelativeLayoutCenterScale;
+
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 public class VideoPagerAdapter extends FragmentStatePagerAdapter implements OnPageChangeListener {
 	

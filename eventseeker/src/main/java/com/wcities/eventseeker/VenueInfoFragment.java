@@ -1,11 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.io.IOException;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -42,6 +36,12 @@ import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.jsonparser.RecordApiJSONParser;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 public class VenueInfoFragment extends Fragment implements OnClickListener, AsyncLoadImageListener {
 	

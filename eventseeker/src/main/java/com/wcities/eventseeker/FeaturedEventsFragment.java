@@ -1,8 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,6 +18,9 @@ import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class FeaturedEventsFragment extends Fragment {
 	

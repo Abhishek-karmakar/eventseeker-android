@@ -1,10 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -31,6 +26,11 @@ import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.SyncArtistListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.ServiceAccount;
+
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import de.umass.lastfm.Artist;
 import de.umass.lastfm.Caller;

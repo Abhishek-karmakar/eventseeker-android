@@ -32,7 +32,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.login.LoginResult;
 import com.wcities.eventseeker.AddressMapFragment;

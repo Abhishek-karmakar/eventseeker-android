@@ -1,7 +1,5 @@
 package com.wcities.eventseeker.adapter;
 
-import java.util.List;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -30,6 +28,8 @@ import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.EventListItem;
 import com.wcities.eventseeker.viewdata.DateWiseEventList.LIST_ITEM_TYPE;
+
+import java.util.List;
 
 public class DateWiseEventListAdapter extends BaseAdapter implements DateWiseEventParentAdapterListener {
 

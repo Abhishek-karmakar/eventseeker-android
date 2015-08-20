@@ -1,8 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -24,6 +21,9 @@ import com.wcities.eventseeker.custom.fragment.FragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.SyncArtistListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.ServiceAccount;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DeviceLibraryFragment extends FragmentLoadableFromBackStack implements OnClickListener {
 	

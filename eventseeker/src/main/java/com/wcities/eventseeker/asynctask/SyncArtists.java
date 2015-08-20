@@ -1,12 +1,5 @@
 package com.wcities.eventseeker.asynctask;
 
-import java.io.IOException;
-import java.util.List;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.os.AsyncTask;
 
 import com.wcities.eventseeker.api.ArtistApi;
@@ -14,6 +7,13 @@ import com.wcities.eventseeker.api.ArtistApi.Method;
 import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.Enums.Service;
 import com.wcities.eventseeker.jsonparser.ArtistApiJSONParser;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.List;
 
 public class SyncArtists extends AsyncTask<Void, Void, Void> {
 	

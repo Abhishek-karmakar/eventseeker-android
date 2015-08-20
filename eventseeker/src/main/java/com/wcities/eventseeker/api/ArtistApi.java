@@ -1,15 +1,15 @@
 package com.wcities.eventseeker.api;
 
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.util.List;
+import com.wcities.eventseeker.constants.AppConstants;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.wcities.eventseeker.constants.AppConstants;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.util.List;
 
 public class ArtistApi extends Api {
 	

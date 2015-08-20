@@ -1,10 +1,5 @@
 package com.wcities.eventseeker.widget;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Iterator;
-import java.util.List;
-
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -28,6 +23,11 @@ import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.widget.EventseekerWidget.UpdateType;
 import com.wcities.eventseeker.widget.EventseekerWidgetService.LoadType;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Iterator;
+import java.util.List;
 
 public class EventseekerWidgetProvider extends AppWidgetProvider {
 	

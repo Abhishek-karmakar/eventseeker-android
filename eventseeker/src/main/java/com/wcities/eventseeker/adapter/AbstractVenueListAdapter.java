@@ -1,7 +1,5 @@
 package com.wcities.eventseeker.adapter;
 
-import java.util.List;
-
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
@@ -9,11 +7,12 @@ import android.view.LayoutInflater;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 
-import com.wcities.eventseeker.asynctask.LoadVenues;
 import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.interfaces.VenueAdapterListener;
+
+import java.util.List;
 
 public abstract class AbstractVenueListAdapter<T> extends BaseAdapter implements VenueAdapterListener<T> {
 	

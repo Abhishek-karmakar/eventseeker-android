@@ -1,8 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.io.IOException;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.location.Address;
@@ -36,6 +33,9 @@ import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GeoUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
+
+import java.io.IOException;
+import java.util.List;
 
 public class ChangeLocationFragment extends FragmentLoadableFromBackStack implements OnQueryTextListener, 
 		GeoUtilListener, OnClickListener {
