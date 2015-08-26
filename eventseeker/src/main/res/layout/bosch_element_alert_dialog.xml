@@ -3,17 +3,32 @@
     android:id="@+id/rltRootLyt"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@android:color/black"
-    android:padding="@dimen/b_rlt_root_lyt_pad_bosch_element_alert_dialog" >
+    android:layout_gravity="center"
+    android:background="@android:color/transparent"
+    android:padding="@dimen/b_rlt_root_lyt_pad_bosch_element_alert_dialog">
 
     <TextView
         android:id="@+id/txtTitle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_height="@dimen/b_ht_bosch_element_alert_dialog_txt"
         android:ellipsize="end"
-        android:gravity="center"
+        android:paddingBottom="@dimen/b_rlt_root_lyt_pad_bosch_element_alert_dialog"
+        android:background="@android:color/black"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical|center_horizontal"
         android:textColor="@android:color/white"
         android:textSize="@dimen/b_txt_title_txt_size_bosch_element_alert_dialog" />
+
+    <TextView
+        android:id="@+id/textOk"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/b_ht_bosch_element_alert_dialog_ok"
+        android:text="OK"
+        android:gravity="center_horizontal|center_vertical"
+        android:layout_below="@+id/txtTitle"
+        android:textStyle="bold"
+        android:background="@android:color/darker_gray"
+        android:textColor="@android:color/black" />
 
 </RelativeLayout>

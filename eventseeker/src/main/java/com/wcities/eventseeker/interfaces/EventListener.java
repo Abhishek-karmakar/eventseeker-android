@@ -1,11 +1,9 @@
 package com.wcities.eventseeker.interfaces;
 
-import java.util.List;
-
-import android.view.View;
-
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.viewdata.SharedElement;
+
+import java.util.List;
 
 public interface EventListener {
 	public void onEventSelected(Event event);

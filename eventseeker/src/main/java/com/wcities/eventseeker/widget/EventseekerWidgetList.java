@@ -1,12 +1,12 @@
 package com.wcities.eventseeker.widget;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import android.util.Log;
 
 import com.wcities.eventseeker.core.Event;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class EventseekerWidgetList {
 

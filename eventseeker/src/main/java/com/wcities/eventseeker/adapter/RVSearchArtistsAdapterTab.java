@@ -1,8 +1,5 @@
 package com.wcities.eventseeker.adapter;
 
-import java.lang.ref.WeakReference;
-import java.util.List;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -33,6 +30,9 @@ import com.wcities.eventseeker.interfaces.ArtistAdapterListener;
 import com.wcities.eventseeker.interfaces.ArtistListenerTab;
 import com.wcities.eventseeker.interfaces.FullScrnProgressListener;
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import java.lang.ref.WeakReference;
+import java.util.List;
 
 public class RVSearchArtistsAdapterTab<T> extends RVAdapterBase<RVSearchArtistsAdapterTab.ViewHolder> implements 
 		ArtistAdapterListener<T> {

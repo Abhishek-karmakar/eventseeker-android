@@ -1,5 +1,11 @@
 package com.wcities.eventseeker.viewdata;
 
+import android.os.AsyncTask;
+
+import com.wcities.eventseeker.constants.AppConstants;
+import com.wcities.eventseeker.core.Event;
+import com.wcities.eventseeker.util.ConversionUtil;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,12 +15,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
-
-import android.os.AsyncTask;
-
-import com.wcities.eventseeker.constants.AppConstants;
-import com.wcities.eventseeker.core.Event;
-import com.wcities.eventseeker.util.ConversionUtil;
 
 public class DateWiseEventList {
 

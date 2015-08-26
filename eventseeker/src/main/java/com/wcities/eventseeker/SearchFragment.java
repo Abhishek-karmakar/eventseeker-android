@@ -1,8 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.Iterator;
-import java.util.List;
-
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -20,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.wcities.eventseeker.adapter.SwipeTabsAdapter;
-import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
@@ -31,6 +27,9 @@ import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
+
+import java.util.Iterator;
+import java.util.List;
 
 public class SearchFragment extends FragmentLoadableFromBackStack implements OnClickListener, 
 		CustomSharedElementTransitionSource {

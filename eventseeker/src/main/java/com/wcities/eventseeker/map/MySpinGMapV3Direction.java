@@ -1,10 +1,8 @@
 package com.wcities.eventseeker.map;
 
-import java.io.InputStream;
-import java.util.ArrayList;
+import android.util.Log;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import com.bosch.myspin.serversdk.maps.MySpinLatLng;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -16,9 +14,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import android.util.Log;
+import java.io.InputStream;
+import java.util.ArrayList;
 
-import com.bosch.myspin.serversdk.maps.MySpinLatLng;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 public class MySpinGMapV3Direction {
     public final static String MODE_DRIVING = "driving";

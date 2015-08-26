@@ -1,14 +1,14 @@
 package com.wcities.eventseeker;
 
-import com.wcities.eventseeker.api.UserInfoApi.LoginType;
-import com.wcities.eventseeker.constants.ScreenNames;
-import com.wcities.eventseeker.core.registration.Registration.RegistrationListener;
-import com.wcities.eventseeker.util.FragmentUtil;
-
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.wcities.eventseeker.api.UserInfoApi.LoginType;
+import com.wcities.eventseeker.constants.ScreenNames;
+import com.wcities.eventseeker.core.registration.Registration.RegistrationListener;
+import com.wcities.eventseeker.util.FragmentUtil;
 
 public class SignUpActivityTab extends BaseActivityTab implements RegistrationListener {
 

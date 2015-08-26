@@ -1,57 +1,106 @@
 /*     */ package com.android.gm.api.lib;
 /*     */ 
-/*     */ import android.content.Context;
+/*     */
+
+import android.content.Context;
 import android.util.Log;
 
-/*     */ import java.io.IOException;
-/*     */ import java.io.InputStream;
-/*     */ import java.lang.ref.WeakReference;
-/*     */ import java.util.HashMap;
-/*     */ import java.util.LinkedList;
-/*     */ import java.util.List;
-/*     */ import java.util.Map;
-/*     */ import java.util.WeakHashMap;
-/*     */ import java.util.concurrent.Executors;
-/*     */ import java.util.concurrent.Future;
-/*     */ import java.util.concurrent.ThreadPoolExecutor;
-/*     */ import java.util.zip.GZIPInputStream;
+import org.apache.http.Header;
+import org.apache.http.HeaderElement;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpRequestInterceptor;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpResponseInterceptor;
+import org.apache.http.HttpVersion;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CookieStore;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.conn.params.ConnManagerParams;
+import org.apache.http.conn.params.ConnPerRouteBean;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.entity.HttpEntityWrapper;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.protocol.SyncBasicHttpContext;
 
-/*     */ import org.apache.http.Header;
-/*     */ import org.apache.http.HeaderElement;
-/*     */ import org.apache.http.HttpEntity;
-/*     */ import org.apache.http.HttpRequest;
-/*     */ import org.apache.http.HttpRequestInterceptor;
-/*     */ import org.apache.http.HttpResponse;
-/*     */ import org.apache.http.HttpResponseInterceptor;
-/*     */ import org.apache.http.HttpVersion;
-/*     */ import org.apache.http.auth.AuthScope;
-/*     */ import org.apache.http.auth.UsernamePasswordCredentials;
-/*     */ import org.apache.http.client.CookieStore;
-/*     */ import org.apache.http.client.CredentialsProvider;
-/*     */ import org.apache.http.client.HttpClient;
-/*     */ import org.apache.http.client.methods.HttpDelete;
-/*     */ import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
-/*     */ import org.apache.http.client.methods.HttpGet;
-/*     */ import org.apache.http.client.methods.HttpPost;
-/*     */ import org.apache.http.client.methods.HttpPut;
-/*     */ import org.apache.http.client.methods.HttpUriRequest;
-/*     */ import org.apache.http.conn.ClientConnectionManager;
-/*     */ import org.apache.http.conn.params.ConnManagerParams;
-/*     */ import org.apache.http.conn.params.ConnPerRouteBean;
-/*     */ import org.apache.http.conn.scheme.PlainSocketFactory;
-/*     */ import org.apache.http.conn.scheme.Scheme;
-/*     */ import org.apache.http.conn.scheme.SchemeRegistry;
-/*     */ import org.apache.http.conn.ssl.SSLSocketFactory;
-/*     */ import org.apache.http.entity.HttpEntityWrapper;
-/*     */ import org.apache.http.impl.client.DefaultHttpClient;
-/*     */ import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-/*     */ import org.apache.http.params.BasicHttpParams;
-/*     */ import org.apache.http.params.HttpConnectionParams;
-/*     */ import org.apache.http.params.HttpParams;
-/*     */ import org.apache.http.params.HttpProtocolParams;
-/*     */ import org.apache.http.protocol.BasicHttpContext;
-/*     */ import org.apache.http.protocol.HttpContext;
-/*     */ import org.apache.http.protocol.SyncBasicHttpContext;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.zip.GZIPInputStream;
+
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
 /*     */ 
 /*     */ public class AsyncHttpClient
 /*     */ {

@@ -1,9 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.io.File;
-import java.util.Iterator;
-import java.util.List;
-
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -44,6 +40,10 @@ import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FileUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
+
+import java.io.File;
+import java.util.Iterator;
+import java.util.List;
 
 public class EventDetailsFragment1 extends FragmentLoadableFromBackStack implements OnClickListener, 
 		OnEventUpdatedListner {

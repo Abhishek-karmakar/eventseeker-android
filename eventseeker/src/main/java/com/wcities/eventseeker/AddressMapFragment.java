@@ -1,11 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.w3c.dom.Document;
-
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Address;
@@ -41,6 +35,12 @@ import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.GeoUtil;
 import com.wcities.eventseeker.util.GeoUtil.GeoUtilListener;
+
+import org.w3c.dom.Document;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddressMapFragment extends SupportMapFragment implements GeoUtilListener {
 	

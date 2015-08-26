@@ -1,11 +1,11 @@
 package com.wcities.eventseeker.util;
 
+import android.graphics.drawable.Drawable;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-
-import android.graphics.drawable.Drawable;
 
 public class DrawableUtil {
 

@@ -1,12 +1,20 @@
 /*     */ package com.android.gm.api.lib;
 /*     */ 
-/*     */ import android.content.Context;
-/*     */ import android.os.Message;
+/*     */
 
-/*     */ import org.apache.http.HttpResponse;
-/*     */ import org.apache.http.client.methods.HttpUriRequest;
-/*     */ import org.apache.http.impl.client.DefaultHttpClient;
-/*     */ import org.apache.http.protocol.HttpContext;
+import android.content.Context;
+import android.os.Message;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.HttpContext;
+
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
 /*     */ 
 /*     */ public abstract class SyncHttpClient extends AsyncHttpClient
 /*     */ {

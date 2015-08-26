@@ -1,8 +1,6 @@
 
 package com.wcities.eventseeker.bosch;
 
-import java.util.Calendar;
-
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -23,6 +21,8 @@ import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
+
+import java.util.Calendar;
 
 public class BoschSearchEventsFragment extends ListFragment implements LoadItemsInBackgroundListener,
 	OnClickListener, BoschOnChildFragmentDisplayModeChangedListener {

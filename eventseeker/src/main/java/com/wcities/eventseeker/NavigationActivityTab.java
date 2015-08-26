@@ -1,9 +1,9 @@
 package com.wcities.eventseeker;
 
+import android.os.Bundle;
+
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.util.FragmentUtil;
-
-import android.os.Bundle;
 
 public class NavigationActivityTab extends BaseActivityTab {
 	

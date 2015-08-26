@@ -1,9 +1,5 @@
 package com.wcities.eventseeker.bosch;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -20,6 +16,10 @@ import android.widget.TextView;
 
 import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BoschDrawerListFragment extends ListFragment {
 

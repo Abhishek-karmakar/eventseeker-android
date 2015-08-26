@@ -1,16 +1,16 @@
 package com.wcities.eventseeker.asynctask;
 
-import java.io.IOException;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.os.AsyncTask;
 
 import com.wcities.eventseeker.api.RecordApi;
 import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.jsonparser.RecordApiJSONParser;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 public class LoadVenueDetails extends AsyncTask<Void, Void, Void> {
 	

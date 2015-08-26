@@ -1,13 +1,9 @@
 package com.wcities.eventseeker;
 
-import java.util.Iterator;
-import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,6 +18,9 @@ import com.wcities.eventseeker.interfaces.SearchFragmentChildListener;
 import com.wcities.eventseeker.interfaces.SwipeTabVisibilityListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
+
+import java.util.Iterator;
+import java.util.List;
 
 public class SearchFragmentTab extends FragmentRetainingChildFragmentManager implements OnClickListener, 
 		SwipeTabsAdapterListener {

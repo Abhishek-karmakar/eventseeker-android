@@ -1,25 +1,26 @@
 package com.wcities.eventseeker.asynctask;
 
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.widget.BaseAdapter;
 
 import com.wcities.eventseeker.api.EventApi;
 import com.wcities.eventseeker.api.EventApi.MoreInfo;
+import com.wcities.eventseeker.bosch.interfaces.BoschAsyncTaskListener;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.interfaces.DateWiseEventParentAdapterListener;
 import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoadDateWiseEvents extends AsyncTask<Void, Void, List<Event>> {
 	
@@ -38,6 +39,7 @@ public class LoadDateWiseEvents extends AsyncTask<Void, Void, List<Event>> {
 	private String wcitiesId, oauthToken;
 	
 	private DateWiseEventParentAdapterListener eventListAdapter;
+	private BoschAsyncTaskListener boschAsyncTaskListener;
 	
 	private LoadDateWiseEvents(String oauthToken, DateWiseEventList eventList, DateWiseEventParentAdapterListener eventListAdapter, 
 			double lat, double lon, String wcitiesId) {
@@ -64,6 +66,10 @@ public class LoadDateWiseEvents extends AsyncTask<Void, Void, List<Event>> {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.categoryId = categoryId;
+	}
+
+	public void setBoschAsyncTaskListener(BoschAsyncTaskListener boschAsyncTaskListener) {
+		this.boschAsyncTaskListener = boschAsyncTaskListener;
 	}
 
 	@Override
@@ -129,6 +135,7 @@ public class LoadDateWiseEvents extends AsyncTask<Void, Void, List<Event>> {
 		
 		if (eventListAdapter instanceof BaseAdapter) {
 			((BaseAdapter)eventListAdapter).notifyDataSetChanged();
+		// boschAsyncTaskListener.onTaskCompleted();
 			
 		} else {
 			((RecyclerView.Adapter)eventListAdapter).notifyDataSetChanged();

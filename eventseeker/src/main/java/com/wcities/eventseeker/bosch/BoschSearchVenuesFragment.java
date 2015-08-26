@@ -1,8 +1,5 @@
 package com.wcities.eventseeker.bosch;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask.Status;
@@ -33,6 +30,9 @@ import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.ViewUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BoschSearchVenuesFragment extends ListFragment implements LoadItemsInBackgroundListener, OnClickListener, 
 		BoschOnChildFragmentDisplayModeChangedListener {

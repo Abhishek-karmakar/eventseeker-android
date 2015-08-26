@@ -1,9 +1,10 @@
 package com.wcities.eventseeker.bosch;
 
-import java.text.SimpleDateFormat;
-
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,10 @@ import com.wcities.eventseeker.core.Artist;
 import com.wcities.eventseeker.core.Date;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.core.Venue;
+import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import java.text.SimpleDateFormat;
 
 public class BoschInfoFragment extends BoschFragmentLoadableFromBackStack implements View.OnClickListener, 
 		OnCarStationaryStatusChangedListener, OnDisplayModeChangedListener {
@@ -32,9 +36,11 @@ public class BoschInfoFragment extends BoschFragmentLoadableFromBackStack implem
 	private Venue venue;
 	
 	private ScrollView scrlContent;
-	private TextView txtDescription;
+	private TextView txtDescription , txtActionBarTitle;
 	private TextView txtAddress;
 	private TextView txtDate;
+
+	private Resources res;
 	
 	private String fullDescription;
 	
@@ -49,6 +55,8 @@ public class BoschInfoFragment extends BoschFragmentLoadableFromBackStack implem
 		} else if (getArguments().containsKey(BundleKeys.VENUE)) {
 			venue = (Venue) getArguments().getSerializable(BundleKeys.VENUE);
 		}
+
+		res = FragmentUtil.getResources(this);
 	}
 	
 	@Override
@@ -110,7 +118,7 @@ public class BoschInfoFragment extends BoschFragmentLoadableFromBackStack implem
 		updateDescriptionLines();
 		
 		updateColors();
-		
+
 		return view;
 	}
 
@@ -124,10 +132,37 @@ public class BoschInfoFragment extends BoschFragmentLoadableFromBackStack implem
 		} else {
 			title = venue.getName();
 		}
-		
 		super.onResume(AppConstants.INVALID_INDEX, title);
+		((BoschMainActivity) FragmentUtil.getActivity(this)).setMarqueeEnabledActionBar(true);
 	}
-	
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		((BoschMainActivity) FragmentUtil.getActivity(this)).setMarqueeEnabledActionBar(false);
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		txtActionBarTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(
+				R.dimen.b_txt_actionbar_title_txt_size_bosch_actionbar_titleview));
+	}
+
+
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+
+	txtActionBarTitle = (TextView) ((ActionBarActivity)FragmentUtil.getActivity(this)).getSupportActionBar()
+			.getCustomView().findViewById(R.id.txtActionBarTitle);
+	txtActionBarTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(
+			R.dimen.b_txt_actionbar_title_txt_size_bosch_actionbar_titleview) - ConversionUtil.toPx(res,
+			AppConstants.REDUCE_TITLE_TXT_SIZE_BY_SP_FOR_BOSCH_DETAIL_SCREENS));
+
+	}
+
 	private void updateDescriptionLines() {
 		if (AppConstants.IS_CAR_STATIONARY) {
 			((BoschMainActivity)FragmentUtil.getActivity(this)).dismissDialog();

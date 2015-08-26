@@ -1,18 +1,18 @@
 package com.wcities.eventseeker.asynctask;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.os.AsyncTask;
 
 import com.wcities.eventseeker.api.EventApi;
 import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.jsonparser.EventApiJSONParser;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoadFeaturedEvts extends AsyncTask<Void, Void, List<Event>> {
 	

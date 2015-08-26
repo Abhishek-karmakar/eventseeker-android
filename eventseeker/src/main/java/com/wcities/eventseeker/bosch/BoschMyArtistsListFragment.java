@@ -1,10 +1,5 @@
 package com.wcities.eventseeker.bosch;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -27,6 +22,11 @@ import com.wcities.eventseeker.interfaces.LoadArtistsListener;
 import com.wcities.eventseeker.interfaces.LoadItemsInBackgroundListener;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class BoschMyArtistsListFragment extends ListFragment implements OnClickListener, 
 		LoadItemsInBackgroundListener, BoschOnChildFragmentDisplayModeChangedListener, LoadArtistsListener {

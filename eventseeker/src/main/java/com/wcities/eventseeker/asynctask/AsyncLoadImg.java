@@ -1,11 +1,5 @@
 package com.wcities.eventseeker.asynctask;
 
-import java.io.FileNotFoundException;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -27,6 +21,12 @@ import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.BitmapUtil;
 import com.wcities.eventseeker.widget.EventseekerWidget;
+
+import java.io.FileNotFoundException;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class AsyncLoadImg extends AsyncTask<Void, ImgDetails, Void> {
 

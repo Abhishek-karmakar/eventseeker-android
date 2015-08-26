@@ -1,7 +1,5 @@
 package com.wcities.eventseeker.bosch;
 
-import java.util.List;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +19,8 @@ import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import java.util.List;
 
 public class BoschFeaturedEventsFragment extends BoschListFragmentLoadableFromBackStack implements
 		OnClickListener, OnDisplayModeChangedListener {

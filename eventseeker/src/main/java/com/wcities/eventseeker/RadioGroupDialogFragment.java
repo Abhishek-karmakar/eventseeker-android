@@ -1,7 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.io.Serializable;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -14,6 +12,8 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import java.io.Serializable;
 
 public class RadioGroupDialogFragment extends DialogFragment implements OnCheckedChangeListener {
 

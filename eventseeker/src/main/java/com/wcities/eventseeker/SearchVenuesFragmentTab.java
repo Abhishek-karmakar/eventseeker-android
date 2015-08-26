@@ -1,8 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -34,6 +31,9 @@ import com.wcities.eventseeker.util.AsyncTaskUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.ItemDecorationItemOffset;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SearchVenuesFragmentTab extends Fragment implements SearchFragmentChildListener, LoadItemsInBackgroundListener, 
 		AsyncTaskListener<Void>, FullScrnProgressListener, SwipeTabVisibilityListener {

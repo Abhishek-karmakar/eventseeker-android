@@ -1,8 +1,8 @@
 package com.wcities.eventseeker.core;
 
-import java.util.Date;
-
 import com.wcities.eventseeker.cache.BitmapCacheable;
+
+import java.util.Date;
 
 public class ArtistNewsItem implements BitmapCacheable {
 	

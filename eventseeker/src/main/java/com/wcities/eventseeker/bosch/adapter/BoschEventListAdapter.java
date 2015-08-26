@@ -1,7 +1,5 @@
 package com.wcities.eventseeker.bosch.adapter;
 
-import java.util.List;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.app.Fragment;
@@ -21,6 +19,8 @@ import com.wcities.eventseeker.core.Event;
 import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.ViewUtil;
+
+import java.util.List;
 
 public class BoschEventListAdapter extends BaseAdapter {
 
@@ -57,8 +57,20 @@ public class BoschEventListAdapter extends BaseAdapter {
 			vhEventList = new VHEventList();
 			
 			vhEventList.imgEvent = (ImageView) convertView.findViewById(R.id.imgEvent);
-			vhEventList.txtTitle = (TextView) convertView.findViewById(R.id.txtTitle); 
-			convertView.findViewById(R.id.txtEvtLocation).setVisibility(View.GONE);
+			vhEventList.txtTitle = (TextView) convertView.findViewById(R.id.txtTitle);
+			vhEventList.txtEvtLocation = (TextView) convertView.findViewById(R.id.txtEvtLocation);
+			vhEventList.txtEvtLocation.setVisibility(View.GONE);
+			/* 20 August, 2015
+			After discussing the issue of text cut off with amir,
+			we came across the solution of marquee effect for title*/
+			final VHEventList finalVhEventList = vhEventList;
+			vhEventList.txtTitle.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+				@Override
+				public void onLayoutChange(View v, int left, int top, int right,
+				int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+					finalVhEventList.txtTitle.setSelected(true);
+				}
+			});
 			
 			convertView.setTag(vhEventList);
 		
@@ -105,6 +117,7 @@ public class BoschEventListAdapter extends BaseAdapter {
 		
 		public ImageView imgEvent;
 		public TextView txtTitle;
+		public TextView txtEvtLocation;
 		
 	}
 	

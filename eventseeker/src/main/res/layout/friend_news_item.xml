@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-   	xmlns:app="http://schemas.android.com/apk/res-auto"
-   	android:id="@+id/rltLayoutActivityItemContainer"
+    android:id="@+id/rltLayoutActivityItemContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="@dimen/rlt_layout_news_item_container_pad_artist_news_item"

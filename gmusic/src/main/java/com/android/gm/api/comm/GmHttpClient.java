@@ -1,10 +1,10 @@
 package com.android.gm.api.comm;
 
-import org.apache.http.HttpEntity;
+import android.content.Context;
 
 import com.android.gm.api.lib.SyncHttpClient;
 
-import android.content.Context;
+import org.apache.http.HttpEntity;
 
 public class GmHttpClient extends SyncHttpClient
 {

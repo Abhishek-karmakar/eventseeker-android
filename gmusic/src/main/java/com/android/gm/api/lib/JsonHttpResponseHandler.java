@@ -1,11 +1,20 @@
 /*     */ package com.android.gm.api.lib;
 /*     */ 
-/*     */ import android.os.Message;
-/*     */ import org.apache.http.Header;
-/*     */ import org.json.JSONArray;
-/*     */ import org.json.JSONException;
-/*     */ import org.json.JSONObject;
-/*     */ import org.json.JSONTokener;
+/*     */
+
+import android.os.Message;
+
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+/*     */
+/*     */
+/*     */
+/*     */
+/*     */
 /*     */ 
 /*     */ public class JsonHttpResponseHandler extends AsyncHttpResponseHandler
 /*     */ {

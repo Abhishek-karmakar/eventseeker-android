@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rltLayoutRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="@dimen/common_margin_padding_b_list_item_language"
     android:paddingLeft="@dimen/common_margin_padding_l_list_item_language"
     android:paddingRight="@dimen/common_margin_padding_r_list_item_language"
-    android:paddingTop="@dimen/common_margin_padding_t_list_item_language" >
+    android:paddingTop="@dimen/common_margin_padding_t_list_item_language">
 
     <ImageView
         android:id="@+id/imgSelected"

@@ -1,14 +1,14 @@
 package com.wcities.eventseeker.jsonparser;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.wcities.eventseeker.core.Category;
+import com.wcities.eventseeker.core.Subcategory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.wcities.eventseeker.core.Category;
-import com.wcities.eventseeker.core.Subcategory;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InfoApiJSONParser {
 	

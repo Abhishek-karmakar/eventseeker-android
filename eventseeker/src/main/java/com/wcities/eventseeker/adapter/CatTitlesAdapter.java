@@ -1,7 +1,5 @@
 package com.wcities.eventseeker.adapter;
 
-import java.util.List;
-
 import android.graphics.Typeface;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,6 +14,8 @@ import com.wcities.eventseeker.R;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Category;
 import com.wcities.eventseeker.custom.view.CategoryTitleLinearLayout;
+
+import java.util.List;
 
 public class CatTitlesAdapter extends FragmentPagerAdapter implements ViewPager.OnPageChangeListener {
 

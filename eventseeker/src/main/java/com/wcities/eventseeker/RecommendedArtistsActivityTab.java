@@ -2,7 +2,6 @@ package com.wcities.eventseeker;
 
 import android.os.Bundle;
 
-import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.constants.BundleKeys;
 import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.util.FragmentUtil;

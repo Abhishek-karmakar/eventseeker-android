@@ -1,7 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.List;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -19,6 +17,8 @@ import com.wcities.eventseeker.constants.ScreenNames;
 import com.wcities.eventseeker.custom.fragment.ListFragmentLoadableFromBackStack;
 import com.wcities.eventseeker.interfaces.OnLocaleChangedListener;
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import java.util.List;
 
 public class LanguageFragment extends ListFragmentLoadableFromBackStack {
 

@@ -1,8 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.Calendar;
-import java.util.List;
-
 import android.os.Bundle;
 import android.widget.BaseAdapter;
 
@@ -18,6 +15,9 @@ import com.wcities.eventseeker.util.ConversionUtil;
 import com.wcities.eventseeker.util.DeviceUtil;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.DateWiseEventList;
+
+import java.util.Calendar;
+import java.util.List;
 
 public abstract class DateWiseEventListParentFragment extends PublishEventListFragment 
 		implements LoadItemsInBackgroundListener {

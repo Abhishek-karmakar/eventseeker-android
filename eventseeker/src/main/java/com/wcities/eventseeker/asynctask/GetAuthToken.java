@@ -1,7 +1,5 @@
 package com.wcities.eventseeker.asynctask;
 
-import java.io.IOException;
-
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 
@@ -11,6 +9,8 @@ import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import java.io.IOException;
 
 public class GetAuthToken extends AsyncTask<String, Void, String> {
 	

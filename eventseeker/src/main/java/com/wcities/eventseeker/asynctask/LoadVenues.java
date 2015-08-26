@@ -1,21 +1,9 @@
 package com.wcities.eventseeker.asynctask;
 
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.os.AsyncTask;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.widget.BaseAdapter;
 
-import com.wcities.eventseeker.adapter.AbstractVenueListAdapter;
-import com.wcities.eventseeker.adapter.RVSearchArtistsAdapterTab;
 import com.wcities.eventseeker.adapter.RVSearchVenuesAdapterTab;
 import com.wcities.eventseeker.api.RecordApi;
 import com.wcities.eventseeker.constants.AppConstants;
@@ -23,6 +11,15 @@ import com.wcities.eventseeker.core.Venue;
 import com.wcities.eventseeker.interfaces.AsyncTaskListener;
 import com.wcities.eventseeker.interfaces.VenueAdapterListener;
 import com.wcities.eventseeker.jsonparser.RecordApiJSONParser;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoadVenues extends AsyncTask<String, Void, List<Venue>> {
 	

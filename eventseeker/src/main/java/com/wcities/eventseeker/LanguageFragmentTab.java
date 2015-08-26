@@ -1,7 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.List;
-
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,6 +24,8 @@ import com.wcities.eventseeker.interfaces.OnLocaleChangedListener;
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
+
+import java.util.List;
 
 public class LanguageFragmentTab extends ListFragment {
 

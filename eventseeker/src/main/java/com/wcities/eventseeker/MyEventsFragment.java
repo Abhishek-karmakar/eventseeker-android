@@ -1,8 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.util.Iterator;
-import java.util.List;
-
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -33,6 +30,9 @@ import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.VersionUtil;
 import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
+
+import java.util.Iterator;
+import java.util.List;
 
 public class MyEventsFragment extends FragmentLoadableFromBackStack implements OnClickListener, DrawerListener,
 		SwipeTabsAdapterListener, CustomSharedElementTransitionSource {

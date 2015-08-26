@@ -39,7 +39,7 @@ repositories {
 
 dependencies {
     compile project(':gmusic')
-    compile project(':serverSDK')
+    //compile project(':serverSDK')
     compile project(':endlessViewPager')
     compile project(':floatingActionButton')
     compile project(':viewPagerIndicator')
@@ -73,6 +73,7 @@ dependencies {
     compile files('libs/com-twitter-sdk-android_twitter-core-classes.jar')
     compile files('libs/io-fabric-sdk-android_fabric-classes.jar')
     compile files('libs/AppLinkSDKAndroid-2-3-2.jar')
+
     // for rdio
     compile 'com.rdio.android.sdk:rdioandroidsdk:v3.0.2@aar'
     compile 'com.google.guava:guava:18.0'
@@ -80,4 +81,7 @@ dependencies {
     compile 'com.google.http-client:google-http-client-android:1.18.0-rc'
     compile 'com.google.oauth-client:google-oauth-client:1.18.0-rc'
     compile 'com.google.code.gson:gson:2.3.1'
+
+    // for Bosch
+    compile files('libs/MySpinSDK.jar')
 }

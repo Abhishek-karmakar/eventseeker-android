@@ -1,13 +1,5 @@
 package com.wcities.eventseeker;
 
-import java.lang.ref.WeakReference;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
-/*import us.feras.ecogallery.EcoGallery;
-import us.feras.ecogallery.EcoGalleryAdapterView;
-import us.feras.ecogallery.EcoGalleryAdapterView.OnItemClickListener;
-import us.feras.ecogallery.EcoGalleryAdapterView.OnItemSelectedListener;*/
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -30,8 +22,16 @@ import com.wcities.eventseeker.cache.BitmapCache;
 import com.wcities.eventseeker.cache.BitmapCacheable.ImgResolution;
 import com.wcities.eventseeker.constants.AppConstants;
 import com.wcities.eventseeker.core.Event;
-import com.wcities.eventseeker.interfaces.EventListener;
 import com.wcities.eventseeker.util.FragmentUtil;
+
+import java.lang.ref.WeakReference;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
+/*import us.feras.ecogallery.EcoGallery;
+import us.feras.ecogallery.EcoGalleryAdapterView;
+import us.feras.ecogallery.EcoGalleryAdapterView.OnItemClickListener;
+import us.feras.ecogallery.EcoGalleryAdapterView.OnItemSelectedListener;*/
 
 public class DiscoverFragmentTab1 extends DiscoverParentFragment /*implements OnItemClickListener*/ {
 

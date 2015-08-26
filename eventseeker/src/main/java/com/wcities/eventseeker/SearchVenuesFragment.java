@@ -1,13 +1,8 @@
 package com.wcities.eventseeker;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -41,6 +36,10 @@ import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.util.ViewUtil;
 import com.wcities.eventseeker.viewdata.SharedElement;
 import com.wcities.eventseeker.viewdata.SharedElementPosition;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class SearchVenuesFragment extends ListFragment implements SearchFragmentChildListener, 
 		LoadItemsInBackgroundListener, CustomSharedElementTransitionSource, AsyncTaskListener<Void> {

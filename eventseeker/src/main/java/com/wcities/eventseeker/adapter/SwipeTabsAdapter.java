@@ -1,8 +1,5 @@
 package com.wcities.eventseeker.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
@@ -14,6 +11,9 @@ import com.wcities.eventseeker.custom.fragment.FragmentRetainingChildFragmentMan
 import com.wcities.eventseeker.util.FragmentUtil;
 import com.wcities.eventseeker.viewdata.TabBar;
 import com.wcities.eventseeker.viewdata.TabBar.Tab;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SwipeTabsAdapter extends FragmentPagerAdapter implements TabBar.Tab.TabListener, 
 		ViewPager.OnPageChangeListener {

@@ -1,20 +1,8 @@
 package com.wcities.eventseeker;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.AsyncTask.Status;
-import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 /*import com.freethinking.beats.sdk.data.Artist;
 import com.freethinking.beats.sdk.data.Artists;

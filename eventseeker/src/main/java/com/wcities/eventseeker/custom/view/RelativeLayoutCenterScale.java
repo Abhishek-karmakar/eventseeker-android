@@ -3,11 +3,7 @@ package com.wcities.eventseeker.custom.view;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.RelativeLayout;
-
-import com.wcities.eventseeker.R;
-import com.wcities.eventseeker.adapter.FeaturingArtistPagerAdapter;
 
 public class RelativeLayoutCenterScale extends RelativeLayout {
 	

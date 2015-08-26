@@ -1,11 +1,5 @@
 package com.wcities.eventseeker.core.registration;
 
-import java.io.IOException;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.util.Log;
 
 import com.wcities.eventseeker.api.Api;
@@ -15,6 +9,12 @@ import com.wcities.eventseeker.app.EventSeekr;
 import com.wcities.eventseeker.gcm.GcmUtil;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser;
 import com.wcities.eventseeker.jsonparser.UserInfoApiJSONParser.SignupResponse;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 public class EmailLogin extends Registration {
 

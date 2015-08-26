@@ -1,12 +1,12 @@
 package com.wcities.eventseeker.api;
 
-import java.io.IOException;
+import android.util.Log;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
+import java.io.IOException;
 
 public class CityApi extends Api {
 	

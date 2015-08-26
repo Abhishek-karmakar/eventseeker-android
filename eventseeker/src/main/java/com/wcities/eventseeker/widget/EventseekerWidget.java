@@ -1,8 +1,8 @@
 package com.wcities.eventseeker.widget;
 
-import java.io.Serializable;
-
 import com.wcities.eventseeker.core.Event;
+
+import java.io.Serializable;
 
 public class EventseekerWidget implements Serializable {
 

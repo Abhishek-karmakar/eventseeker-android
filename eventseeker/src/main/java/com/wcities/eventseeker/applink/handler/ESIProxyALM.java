@@ -52,9 +52,8 @@ import com.ford.syncV4.proxy.rpc.SystemRequestResponse;
 import com.ford.syncV4.proxy.rpc.UnsubscribeButtonResponse;
 import com.ford.syncV4.proxy.rpc.UnsubscribeVehicleDataResponse;
 import com.ford.syncV4.proxy.rpc.enums.SyncDisconnectedReason;
-import com.wcities.eventseeker.applink.util.EventALUtil;
 import com.wcities.eventseeker.applink.util.CommandsUtil.Command;
-import com.wcities.eventseeker.logger.Logger;
+import com.wcities.eventseeker.applink.util.EventALUtil;
 
 public abstract class ESIProxyALM implements IProxyListenerALM {
 
